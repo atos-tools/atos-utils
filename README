@@ -1,0 +1,7 @@
+This software package contains the Auto Tuning Optimization SSystem (ATOS) tools.
+
+After installation (see INSTALL file) the following tools are available:
+
+Ã* atos-audit: auditing tool for a build system that generates a build template to be used by atos-optimize (see atos-audit -h)
+* atos-optimize: automatic optimization system for a build and run system that generate a build configuration to be used by atos-play (see atos-optimize -h)
+* atos-play: build system optimizer for a build system (see atos-play -h)

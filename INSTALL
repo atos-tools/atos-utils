@@ -1,0 +1,5 @@
+Install with:
+make
+make PREFIX=<prefix> install
+
+Default PREFIX is /usr/local.

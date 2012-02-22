@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+#
+# Copyright (C) STMicroelectronics Ltd. 2012
+#
+# This file is part of ATOS.
+#
+# ATOS is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License v2.0
+# as published by the Free Software Foundation
+#
+# ATOS is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
+#
+#
+# Usage: get usage with atos-audit -h
+#
+
+set -e
+[ "$DEBUG" = "" ] || set -x
+
+dir=`dirname $0`
+dir=`cd $dir; pwd`
+PROOT=${PROOT:-proot}
+
+version() {
+    echo "atos-audit version @VERSION@"
+}
+
+usage() {
+    cat <<EOF
+
+Usage: atos-audit [options] [--] [command...]
+
+Audit Options:
+      -c <ccdriver> : specify the co,piler driver to be audited [default: gcc]
+
+Output File Options:
+      -o <outfile> : output audit file into <file> [default: :stderr]
+
+Misc Options
+      -h : output usage
+      -v : output version
+
+EOF
+}
+
+cleanup() {
+    :
+}
+trap "cleanup; exit 3" TERM STOP
+trap "cleanup" EXIT
+
+outfile=:stderr
+ccdriver=gcc
+while getopts vhc:o: opt; do
+    case $opt in
+	o) outfile="$OPTARG"
+	    ;;
+	c) ccdriver="$OPTARG"
+	    ;;
+	v) version; exit 0
+	    ;;
+	h) usage; exit 0
+	    ;;
+	?) usage; exit 2
+	    ;;
+    esac
+done
+
+shift $((OPTIND - 1))
+
+exec env PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_DEPS_OUTPUT="$outfile" PROOT_ADDON_CC_DEPS_DRIVER="$ccdriver" $PROOT -w $PWD / ${1+"$@"}

@@ -27,6 +27,9 @@ dir=`dirname $0`
 dir=`cd $dir; pwd`
 PROOT=${PROOT:-proot}
 
+outfile=:stderr
+ccregexp="^\(gcc\|g++\|cc\|c++\)\$"
+
 version() {
     echo "atos-audit version @VERSION@"
 }
@@ -37,10 +40,11 @@ usage() {
 Usage: atos-audit [options] [--] [command...]
 
 Audit Options:
-      -c <ccdriver> : specify the co,piler driver to be audited [default: gcc]
+      -r <ccdriver_re> : specify the compiler driver as a regexp for the basename [default: $ccregexp]
+      -c <ccdriver> : alternatively specify the exact compiler driver basename
 
 Output File Options:
-      -o <outfile> : output audit file into <file> [default: :stderr]
+      -o <outfile> : output audit file into <file> [default: $outfile]
 
 Misc Options
       -h : output usage
@@ -55,13 +59,13 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-outfile=:stderr
-ccdriver=gcc
-while getopts vhc:o: opt; do
+while getopts vhc:r:o: opt; do
     case $opt in
 	o) outfile="$OPTARG"
 	    ;;
-	c) ccdriver="$OPTARG"
+	c) ccregexp="^$OPTARG\$"
+	    ;;
+	r) ccregexp="$OPTARG"
 	    ;;
 	v) version; exit 0
 	    ;;
@@ -74,4 +78,4 @@ done
 
 shift $((OPTIND - 1))
 
-exec env PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_DEPS_OUTPUT="$outfile" PROOT_ADDON_CC_DEPS_DRIVER="$ccdriver" $PROOT -w $PWD / ${1+"$@"}
+exec env PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_DEPS_OUTPUT="$outfile" PROOT_ADDON_CC_DEPS_CCRE="$ccregexp" $PROOT -w $PWD / ${1+"$@"}

@@ -1,0 +1,258 @@
+#!/usr/bin/env python
+#
+# Copyright (C) STMicroelectronics Ltd. 2012
+#
+# This file is part of ATOS.
+#
+# ATOS is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License v2.0
+# as published by the Free Software Foundation
+#
+# ATOS is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
+#
+# Usage: get usage with atos-deps -h
+#
+
+VERSION="@VERSION@"
+
+import re
+import os
+import sys
+from pygraph.classes.digraph import digraph
+from pygraph.readwrite.dot import write
+from sets import Set
+import gv
+
+class DependencyGraph:
+    """ A class implementing a dependency graph. """
+    def __init__(self, dg = None):
+        """ Constrcutor. Optionally pass a pygraph.classes.digraph as argument.  """
+        self.dg = dg
+        if self.dg == None:
+            self.dg = digraph()
+            
+    def add_node(self, node, attrs = None):
+        """ Add a node. """
+        self.dg.add_node(node, attrs = attrs)
+
+    def add_edge(self, src, dst):
+        """ Add an edge. """
+        self.dg.add_edge((src, dst))
+
+    def graph(self):
+        """ Get the graph as a nodes, edges map. """
+        return { 'nodes': self.dg.nodes(), 'edges': self.dg.edges() }
+
+    def node_attributes(self):
+        """ Get the node attributes. """
+        return self.dg.node_attr
+
+    def get_dot(self):
+        """ Get a dot grapth string to be used with graphviz. """
+        return write(self.dg)
+        
+class DependencyGraphBuilder:
+    """ Class for building dependency list. """
+    def __init__(self, deplist, targets):
+        """ Constructor. Takes a DependencyList as argument and a list of output_file targets. """
+        self.graph = DependencyGraph()
+        self.deplist = deplist
+        self.targets = targets
+
+    def target_match(self, target, output):
+        """ Check if output matches a target. Assume that target is a suffix of output. """
+        m = re.search(os.path.normpath(target) + "$", output)
+        return m != None
+
+    def build_graph(self):
+        """ Builds Add a dependency consisting of a node and input/output lists. """
+        self.graph.add_node("ROOT")
+        unmatched_targets = Set(self.targets)
+        available_inputs = {}
+
+        for i in range(len(self.deplist)):
+            dependency = self.deplist[len(self.deplist)-i-1]
+            if len(dependency['outputs']) != 1:
+                raise Exception("TODO: multiple output support is not implemented in dependency: " + str(dependency))
+            output = dependency['outputs'][0]
+            found = False
+            for target in unmatched_targets:
+                if self.target_match(target, output):
+                    found = True
+                    self.graph.add_node(target, attrs = [('target', output), ('dependency', dependency)])
+                    self.graph.add_edge("ROOT", target)
+                    for inp in dependency['inputs']:
+                        available_inputs[inp] = target
+            if found:
+                unmatched_targets.remove(target)
+            else:
+                if output in available_inputs:
+                    edge_src = available_inputs[output]
+                    available_inputs.pop(output)
+                    edge_dst = os.path.basename(output)
+                    self.graph.add_node(edge_dst, attrs = [('target', output), ('dependency', dependency)])
+                    self.graph.add_edge(edge_src, edge_dst)
+                    for inp in dependency['inputs']:
+                        available_inputs[inp] = target
+            
+        # Check for unmatched targets
+        if len(unmatched_targets) > 0:
+            raise Exception("Unmatched target in dependency graph: " + str(unmatched_targets))
+
+    def get_graph(self):
+        """ Returns the dependency graph. """
+        return self.graph
+
+class DependencyListBuilder:
+    """ Class for building dependency list. """
+    def __init__(self):
+        """ Constructor. """
+        self.deps = []
+
+    def add_dependency(self, command, inputs, outputs):
+        """ Add a dependency consisting of a node and input/output lists. """
+        self.deps.append({ 'command': command, 'inputs': inputs, 'outputs': outputs })
+
+    def get_dependencies(self):
+        """ Returns the dependency list. """
+        return self.deps
+
+class SimpleCmdInterpreter:
+    """ Returns information on a command line for compilations tools. """
+    def __init__(self):
+        """ Constructor. """
+
+    def select_interpreter(self, command):
+        """ Returns a suitable interpreter for the given command. """
+        basename = os.path.basename(command['args'][0])
+        # TODO: put this regexps in a configuration file
+        m = re.search("^(.*-)?(gcc|cc)", basename)
+        if m != None and m.group(2) != None:
+            return SimpleCCInterpreter(command)
+        raise Exception("unrecognized command: " + basename)
+
+    def get_input_files(self, command):
+        """ Get input files from command line args. """
+        return self.select_interpreter(command).get_input_files(command)
+
+    def get_output_files(self, command):
+        """ Get output files from command line args. """
+        return self.select_interpreter(command).get_output_files(command)
+
+class SimpleCCInterpreter:
+    """ Returns information on a command line for a CC compiler driver. """
+    def __init__(self, command):
+        """ Constructor. """
+        self.command = command
+
+    def get_input_files(self, command):
+        """ Get input files from CC command line args. """
+        inputs = []
+        args = command['args']
+        for i in range(len(args[1:])):
+            m = re.search("\.(c|cc|cxx|cpp|s|S|i|ii|o)$", args[i+1])
+            if m != None and m.group(1) != None and (i == 0 or args[i] != "-o"):
+                    inputs.append(os.path.normpath(os.path.join(command['cwd'], args[i+1])))
+        if len(inputs) == 0:
+            raise Exception("not input file found on in command args: " + str(args))
+        return inputs
+
+    def get_output_files(self, command):
+        """ Get output files from CC command line args. """
+        args = command['args']
+        for i in range(len(args[1:])):
+            if args[i+1] == "-o" and i+2 < len(args):
+                outputs = [ os.path.normpath(os.path.join(command['cwd'], args[i+2])) ]
+        if len(outputs) == 0:
+            raise Exception("not output file found on in command args: " + str(args))
+        return outputs
+
+class CommandDependencyListFactory:
+    """ Creates a build dependency from a command parser and a command interpreter. """
+    def __init__(self, parser, interpreter):
+        """ Constructor. """
+        self.deps = DependencyListBuilder()
+        self.parser = parser
+        self.interpreter = interpreter
+
+    def get_dependencies(self):
+        """ Returns the build dependencies. """
+        return self.deps.get_dependencies()
+    
+    def build_dependencies(self):
+        """ Compute dependencies.  """
+        self.parser.parse()
+        commands = self.parser.get_commands()
+        for command in commands:
+            input_files = self.interpreter.get_input_files(command)
+            output_files = self.interpreter.get_output_files(command)
+            self.deps.add_dependency(command, input_files, output_files)
+                
+class CCDEPSParser:
+    """ Parses the output of a cc_deps addon file. """
+    def __init__(self, input_file):
+        """ Constructor, takes the input_file as argument. """
+        self.input_file = input_file
+        self.commands = []
+        
+    def parse(self):
+        """ Parses the input_file. """
+        for line in self.input_file:
+            self.commands.append(self.parse_line(line))
+
+    def parse_line(self, line):
+        """ Parses a single input_file. """
+        try:
+            m = re.search("^CC_DEPS: \"([^\"]*)\": (.*): : \"([^\"]*)\"$", line)
+            arg0 = m.group(1)
+            args = m.group(2)
+            cwd = m.group(3)
+            len(arg0)
+            len(args)
+            len(cwd)
+        except Exception:
+            raise Exception("unexpected cc_deps command line: " + line)
+        arg_list = args.split(", ")
+        command = {'arg0': arg0, 'args': [], 'cwd': cwd}
+        for arg in arg_list:
+            try:
+                m = re.search("^\"(.*)\"$", arg)
+                opt = m.group(1)
+                len(opt)
+            except Exception:
+                raise Exception("unexpected argument in command: " + arg)
+            command['args'].append(opt)
+        if len(command['args']) == 0:
+            raise Exception("unexpected empty command: " + str(arg_list))
+        return command
+
+    def get_commands(self):
+        """ Returns the constructed command list.  """
+        return self.commands
+
+if len(sys.argv) >= 3:
+    target = sys.argv[1]
+    input_file = open(sys.argv[2])
+else:
+    raise Exception("Missing input file.")
+
+factory = CommandDependencyListFactory(CCDEPSParser(input_file), SimpleCmdInterpreter())
+factory.build_dependencies()
+dependencies = factory.get_dependencies()
+builder = DependencyGraphBuilder(dependencies, [ target ])
+builder.build_graph()
+graph = builder.get_graph()
+print str(dependencies)
+print str(graph.graph())
+print str(graph.node_attributes())
+dot = graph.get_dot()
+gvv = gv.readstring(dot)
+gv.layout(gvv,'dot')
+gv.render(gvv,'png', target + '.graph.png')
+

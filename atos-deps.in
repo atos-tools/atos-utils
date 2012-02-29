@@ -57,6 +57,13 @@ class DependencyGraph:
         """ Get a dot grapth string to be used with graphviz. """
         return write(self.dg)
         
+    def get_makedep(self):
+        """ Get a makefile like output. """
+        mk = ""
+        for node in self.dg.nodes():
+           mk = mk + node + ": " + " ".join(self.dg.neighbors(node)) + "\n"
+        return mk
+
 class DependencyGraphBuilder:
     """ Class for building dependency list. """
     def __init__(self, deplist, targets):
@@ -79,7 +86,7 @@ class DependencyGraphBuilder:
         for i in range(len(self.deplist)):
             dependency = self.deplist[len(self.deplist)-i-1]
             if len(dependency['outputs']) != 1:
-                raise Exception("TODO: multiple output support is not implemented in dependency: " + str(dependency))
+                continue
             output = dependency['outputs'][0]
             found = False
             for target in unmatched_targets:
@@ -132,8 +139,8 @@ class SimpleCmdInterpreter:
         """ Returns a suitable interpreter for the given command. """
         basename = os.path.basename(command['args'][0])
         # TODO: put this regexps in a configuration file
-        m = re.search("^(.*-)?(gcc|cc)", basename)
-        if m != None and m.group(2) != None:
+        m = re.search("^(gcc|g\+\+|cc|c\+\+)$", basename)
+        if m != None and m.group(1) != None:
             return SimpleCCInterpreter(command)
         raise Exception("unrecognized command: " + basename)
 
@@ -152,25 +159,26 @@ class SimpleCCInterpreter:
         self.command = command
 
     def get_input_files(self, command):
-        """ Get input files from CC command line args. """
+        """ Get input files from CC command line args (C/C++ sources or object files). """
         inputs = []
         args = command['args']
         for i in range(len(args[1:])):
-            m = re.search("\.(c|cc|cxx|cpp|s|S|i|ii|o)$", args[i+1])
+            m = re.search("\\.(c|cc|cxx|cpp|c\+\+|C|i|ii|o)$", args[i+1])
             if m != None and m.group(1) != None and (i == 0 or args[i] != "-o"):
                     inputs.append(os.path.normpath(os.path.join(command['cwd'], args[i+1])))
-        if len(inputs) == 0:
-            raise Exception("not input file found on in command args: " + str(args))
         return inputs
 
     def get_output_files(self, command):
         """ Get output files from CC command line args. """
         args = command['args']
+        outputs = []
         for i in range(len(args[1:])):
             if args[i+1] == "-o" and i+2 < len(args):
                 outputs = [ os.path.normpath(os.path.join(command['cwd'], args[i+2])) ]
-        if len(outputs) == 0:
-            raise Exception("not output file found on in command args: " + str(args))
+            else:
+                m = re.search("^-o(.+)$", args[i+1])
+                if m != None and m.group(1) != None:
+                    outputs = [ os.path.normpath(os.path.join(command['cwd'], m.group(1))) ]
         return outputs
 
 class CommandDependencyListFactory:
@@ -248,11 +256,12 @@ dependencies = factory.get_dependencies()
 builder = DependencyGraphBuilder(dependencies, [ target ])
 builder.build_graph()
 graph = builder.get_graph()
-print str(dependencies)
-print str(graph.graph())
-print str(graph.node_attributes())
-dot = graph.get_dot()
-gvv = gv.readstring(dot)
-gv.layout(gvv,'dot')
-gv.render(gvv,'png', target + '.graph.png')
+#print str(dependencies)
+#print str(graph.graph())
+#print str(graph.node_attributes())
+#dot = graph.get_dot()
+#gvv = gv.readstring(dot)
+#gv.layout(gvv,'dot')
+#gv.render(gvv,'png', target + '.graph.png')
+print graph.get_makedep()
 

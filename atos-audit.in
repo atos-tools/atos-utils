@@ -28,7 +28,7 @@ dir=`cd $dir; pwd`
 PROOT=${PROOT:-proot}
 
 outfile=:stderr
-ccregexp="^\(gcc\|g++\|cc\|c++\)\$"
+ccregexp="^\(gcc\|g++\|cc\|c++\|ar\)\$"
 
 version() {
     echo "atos-audit version @VERSION@"

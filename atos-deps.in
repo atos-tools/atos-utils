@@ -29,20 +29,28 @@ from pygraph.readwrite.dot import write
 from sets import Set
 import gv
 
+VERBOSE=0
+
 class DependencyGraph:
     """ A class implementing a dependency graph. """
     def __init__(self, dg = None):
         """ Constrcutor. Optionally pass a pygraph.classes.digraph as argument.  """
+        global VERBOSE
         self.dg = dg
         if self.dg == None:
             self.dg = digraph()
-            
+        self.verbose = VERBOSE
+
     def add_node(self, node, attrs = None):
         """ Add a node. """
+        if self.verbose:
+            print "ADD_NODE: " + node
         self.dg.add_node(node, attrs = attrs)
 
     def add_edge(self, src, dst):
         """ Add an edge. """
+        if self.verbose:
+            print "ADD_EDGE: " + src + " " + dst
         self.dg.add_edge((src, dst))
 
     def graph(self):
@@ -106,7 +114,7 @@ class DependencyGraphBuilder:
                     self.graph.add_node(edge_dst, attrs = [('target', output), ('dependency', dependency)])
                     self.graph.add_edge(edge_src, edge_dst)
                     for inp in dependency['inputs']:
-                        available_inputs[inp] = target
+                        available_inputs[inp] = edge_dst
             
         # Check for unmatched targets
         if len(unmatched_targets) > 0:
@@ -138,10 +146,13 @@ class SimpleCmdInterpreter:
     def select_interpreter(self, command):
         """ Returns a suitable interpreter for the given command. """
         basename = os.path.basename(command['args'][0])
-        # TODO: put this regexps in a configuration file
+        # TODO: put these regexps in a configuration file
         m = re.search("^(gcc|g\+\+|cc|c\+\+)$", basename)
         if m != None and m.group(1) != None:
             return SimpleCCInterpreter(command)
+        m = re.search("^(ar)$", basename)
+        if m != None and m.group(1) != None:
+            return SimpleARInterpreter(command)
         raise Exception("unrecognized command: " + basename)
 
     def get_input_files(self, command):
@@ -153,7 +164,11 @@ class SimpleCmdInterpreter:
         return self.select_interpreter(command).get_output_files(command)
 
 class SimpleCCInterpreter:
-    """ Returns information on a command line for a CC compiler driver. """
+    """ Returns information on a command line for a CC compiler driver.
+    There are a number of limitations:
+    - only well known extensions are searched for input files
+    - output file is matched only in case of -o option, no stdout support
+    """
     def __init__(self, command):
         """ Constructor. """
         self.command = command
@@ -163,7 +178,7 @@ class SimpleCCInterpreter:
         inputs = []
         args = command['args']
         for i in range(len(args[1:])):
-            m = re.search("\\.(c|cc|cxx|cpp|c\+\+|C|i|ii|o)$", args[i+1])
+            m = re.search("\\.(c|cc|cxx|cpp|c\+\+|C|i|ii|o|a)$", args[i+1])
             if m != None and m.group(1) != None and (i == 0 or args[i] != "-o"):
                     inputs.append(os.path.normpath(os.path.join(command['cwd'], args[i+1])))
         return inputs
@@ -179,6 +194,43 @@ class SimpleCCInterpreter:
                 m = re.search("^-o(.+)$", args[i+1])
                 if m != None and m.group(1) != None:
                     outputs = [ os.path.normpath(os.path.join(command['cwd'], m.group(1))) ]
+        return outputs
+
+
+class SimpleARInterpreter:
+    """ Returns information on a command line for a AR archiver. 
+    There qre q number of limitations:
+    - only .o files are searched for input
+    - only 'ar ...r... input_files...' form is recognized 
+    """
+    def __init__(self, command):
+        """ Constructor. """
+        self.command = command
+
+    def get_input_files(self, command):
+        """ Get input files from AR command line (object files only). """
+        inputs = []
+        args = command['args']
+        for i in range(len(args[1:])):
+            m = re.search("\\.(o)$", args[i+1])
+            if m != None and m.group(1) != None and i >= 2:
+                    inputs.append(os.path.normpath(os.path.join(command['cwd'], args[i+1])))
+        return inputs
+
+    def get_output_files(self, command):
+        """ Get output file from AR command line args. """
+        args = command['args']
+        outputs = []
+        update = False
+        for i in range(len(args[1:])):
+            if i == 0:
+                m = re.search("r", args[i+1])
+                if m != None:
+                    update = True
+            elif i == 1 and update:
+                outputs = [ os.path.normpath(os.path.join(command['cwd'], args[i+1])) ]
+            else:
+                break
         return outputs
 
 class CommandDependencyListFactory:

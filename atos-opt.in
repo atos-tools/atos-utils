@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+#
+# Copyright (C) STMicroelectronics Ltd. 2012
+#
+# This file is part of ATOS.
+#
+# ATOS is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License v2.0
+# as published by the Free Software Foundation
+#
+# ATOS is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
+#
+#
+# Usage: get usage with atos-opt -h
+#
+
+set -e
+[ "$DEBUG" = "" ] || set -x
+
+dir=`dirname $0`
+dir=`cd $dir; pwd`
+PROOT=${PROOT:-proot}
+
+options=""
+ccregexp="^\(gcc\|g++\|cc\|c++\)\$"
+
+version() {
+    echo "atos-opt version @VERSION@"
+}
+
+usage() {
+    cat <<EOF
+
+Usage: atos-opt [options] [--] [command...]
+
+Driver Options:
+      -r <ccdriver_re> : specify the compiler driver as a regexp for the basename [default: $ccregexp]
+      -c <ccdriver> : alternatively specify the exact compiler driver basename
+
+Optimization Options:
+      -a "options" : append given options to the compilation commands [default: $options]
+
+Misc Options
+      -h : output usage
+      -v : output version
+
+EOF
+}
+
+cleanup() {
+    :
+}
+trap "cleanup; exit 3" TERM STOP
+trap "cleanup" EXIT
+
+while getopts vhc:r:a: opt; do
+    case $opt in
+	a) options="$OPTARG"
+	    ;;
+	c) ccregexp="^$OPTARG\$"
+	    ;;
+	r) ccregexp="$OPTARG"
+	    ;;
+	v) version; exit 0
+	    ;;
+	h) usage; exit 0
+	    ;;
+	?) usage; exit 2
+	    ;;
+    esac
+done
+
+shift $((OPTIND - 1))
+
+exec env PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT -w $PWD / ${1+"$@"}

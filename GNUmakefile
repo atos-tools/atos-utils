@@ -22,7 +22,7 @@ srcdir:=$(dir $(lastword $(MAKEFILE_LIST)))
 VERSION:=$(shell $(srcdir)/config/get_version.sh)
 PREFIX=/usr/local
 
-CONFIG_SCRIPTS_IN=atos-audit.in atos-deps.in
+CONFIG_SCRIPTS_IN=atos-audit.in atos-deps.in atos-opt.in
 CONFIG_SCRIPTS=$(CONFIG_SCRIPTS_IN:%.in=%)
 
 ALL_CONFIG_FILES_IN=$(CONFIG_SCRIPTS_IN)

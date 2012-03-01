@@ -19,8 +19,9 @@
 #
 
 srcdir:=$(dir $(lastword $(MAKEFILE_LIST)))
-VERSION:=$(shell $(srcdir)/config/get_version.sh)
 PREFIX=/usr/local
+VSTAMP=version.stamp
+VERSION:=$(shell $(srcdir)/config/update_version.sh $(VSTAMP))
 
 CONFIG_SCRIPTS_IN=atos-audit.in atos-deps.in atos-opt.in atos-instr.in atos-profile.in atos-explore.in
 CONFIG_SCRIPTS=$(CONFIG_SCRIPTS_IN:%.in=%)
@@ -51,6 +52,7 @@ check: check-python-dependencies
 #
 # Rules for config files
 #
+$(CONFIG_SCRIPTS): $(VSTAMP)
 $(CONFIG_SCRIPTS): %: %.in
 	$(QUIET_IN)sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
 

@@ -29,10 +29,14 @@ ALL_CONFIG_FILES_IN=$(CONFIG_SCRIPTS_IN)
 
 ALL_CONFIG_FILES=$(ALL_CONFIG_FILES_IN:%.in=%)
 
+ALL_FILES=$(ALL_CONFIG_FILES)
+
 INSTALL_EXES=atos-audit atos-deps
 INSTALLED_EXES=$(addprefix $(PREFIX)/bin/,$(INSTALL_EXES))
 
-all: $(ALL_CONFIG_FILES)
+.PHONY: all clean distclean install check check-python-dependencies
+
+all: $(ALL_FILES)
 
 clean:
 	$(QUIET_CLEAN)rm -f *.tmp
@@ -42,12 +46,19 @@ distclean:
 
 install: $(INSTALLED_EXES)
 
+check: check-python-dependencies
 
 #
 # Rules for config files
 #
 $(CONFIG_SCRIPTS): %: %.in
 	$(QUIET_IN)sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
+
+#
+# Rules for python-checks
+#
+check-python-dependencies: config/python_checks
+	$(QUIET_CHECK)$<
 
 #
 # Rules for installation
@@ -69,12 +80,14 @@ QUIET_CLEAN=
 QUIET_DISTCLEAN=
 QUIET_INSTALL_DIR=
 QUIET_INSTALL_EXE=
+QUIET_CHECK=
 else
 QUIET_IN=@echo "CONFIGURE $@" &&
 QUIET_CLEAN=@echo "CLEAN" &&
 QUIET_DISTCLEAN=@echo "DISTCLEAN" &&
 QUIET_INSTALL_DIR=@echo "INSTALL DIR $@" &&
 QUIET_INSTALL_EXE=@echo "INSTALL EXE $@" &&
+QUIET_CHECK=@echo "CHECK $@" &&
 endif
 
 

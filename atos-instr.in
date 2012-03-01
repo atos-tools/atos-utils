@@ -28,9 +28,12 @@ dir=`cd $dir; pwd`
 PROOT=${PROOT:-proot}
 
 executable=""
+identifier=""
+variant="REF"
+fd=2
 
 version() {
-    echo "atos-audit version @VERSION@"
+    echo "atos-instr version @VERSION@"
 }
 
 usage() {
@@ -41,6 +44,13 @@ Usage: atos-instr [options] [--] [command...]
 Executable File Options:
       -e <executable> : executable to be instrumented [default: first arg of command]
 
+Identification options:
+      -i <identifier> : identifier of run [default: executable basename]
+      -w <variant> : identifier of variant [default: $variant]
+
+Output options:
+      -f fd : fd reference for appending results [default: $fd]
+
 Misc Options
       -h : output usage
       -v : output version
@@ -50,15 +60,23 @@ EOF
 
 cleanup() {
     [ ! -f "$tmpfile" ] || rm -f "$tmpfile"
+    [ ! -f "$tmpfile2" ] || rm -f "$tmpfile2"
 }
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 tmpfile=`mktemp /tmp/atos-inst.XXXXXX`
+tmpfile2=`mktemp /tmp/atos-inst.XXXXXX`
 
 
-while getopts vhe: opt; do
+while getopts vhf:e:i:w: opt; do
     case $opt in
 	e) executable="$OPTARG"
+	    ;;
+	i) identifier="$OPTARG"
+	    ;;
+	w) variant="$OPTARG"
+	    ;;
+	f) fd="$OPTARG"
 	    ;;
 	v) version; exit 0
 	    ;;
@@ -80,16 +98,20 @@ if [ "$executable" = "" ]; then
     exit 1
 fi
 
+if [ "$identifier" = "" ]; then
+    identifier=`basename "$executable"`
+fi
+
 get_size() {
     local exe="${1?}"
     exe="`which "$exe"`"
-    /usr/bin/size "$exe" | tail -1 | awk '{print "ATOS_SIZE:", $4;}'
+    /usr/bin/size "$exe" | tail -1 | awk '{print "ATOS: '"$identifier"' : '"$variant"': size: ", $4;}' >&$fd
 }
 
 get_time() {
     local exe="${1?}"
     /usr/bin/time -p ${1+"$@"} 2>&1 | tee $tmpfile | sed -e '/^real /d' -e '/^user /d' -e '/^sys /d'
-    tail -3 $tmpfile | awk '{if ($1 == "user") { print "ATOS_TIME:", int($2 * 1000); }}'
+    tail -3 $tmpfile | awk '{if ($1 == "user") { print "ATOS: '"$identifier"' : '"$variant"': time: ", int($2 * 1000); }}' >&$fd
 }
 
 get_time ${1+"$@"}

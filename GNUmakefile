@@ -22,7 +22,7 @@ srcdir:=$(dir $(lastword $(MAKEFILE_LIST)))
 VERSION:=$(shell $(srcdir)/config/get_version.sh)
 PREFIX=/usr/local
 
-CONFIG_SCRIPTS_IN=atos-audit.in atos-deps.in atos-opt.in atos-instr.in
+CONFIG_SCRIPTS_IN=atos-audit.in atos-deps.in atos-opt.in atos-instr.in atos-profile.in atos-explore.in
 CONFIG_SCRIPTS=$(CONFIG_SCRIPTS_IN:%.in=%)
 
 ALL_CONFIG_FILES_IN=$(CONFIG_SCRIPTS_IN)
@@ -31,7 +31,7 @@ ALL_CONFIG_FILES=$(ALL_CONFIG_FILES_IN:%.in=%)
 
 ALL_FILES=$(ALL_CONFIG_FILES)
 
-INSTALL_EXES=atos-audit atos-deps atos-opt atos-instr
+INSTALL_EXES=atos-audit atos-deps atos-opt atos-instr atos-profile atos-explore
 INSTALLED_EXES=$(addprefix $(PREFIX)/bin/,$(INSTALL_EXES))
 
 .PHONY: all clean distclean install check check-python-dependencies

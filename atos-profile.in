@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+#
+# Copyright (C) STMicroelectronics Ltd. 2012
+#
+# This file is part of ATOS.
+#
+# ATOS is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License v2.0
+# as published by the Free Software Foundation
+#
+# ATOS is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
+#
+#
+# Usage: get usage with atos-profile -h
+#
+
+set -e
+[ "$DEBUG" = "" ] || set -x
+
+dir=`dirname $0`
+dir=`cd $dir; pwd`
+PROOT=${PROOT:-proot}
+
+profile_path="atos-profiles"
+
+version() {
+    echo "atos-profile version @VERSION@"
+}
+
+usage() {
+    cat <<EOF
+
+Usage: atos-profile [options] [--] [command...]
+
+Profile path options:
+      -p <path> : path to profile files
+
+Misc Options
+      -h : output usage
+      -v : output version
+
+EOF
+}
+
+cleanup() {
+	  :
+}
+trap "cleanup; exit 3" TERM STOP
+trap "cleanup" EXIT
+
+while getopts vhp: opt; do
+    case $opt in
+	p) profile_path="$OPTARG"
+	    ;;
+	v) version; exit 0
+	    ;;
+	h) usage; exit 0
+	    ;;
+	?) usage; exit 2
+	    ;;
+    esac
+done
+
+shift $((OPTIND - 1))
+
+if [ "$profile_path" != "" ]; then
+   mkdir -p "$profile_path"
+   profile_path=`cd "$profile_path"; pwd`
+   find "$profile_path" -name '*.gcda' | xargs rm -f
+fi
+
+$dir/atos-opt -a "-O2 -fprofile-generate ${profile_path:+-fprofile-dir=$profile_path}" ${1+"$@"}

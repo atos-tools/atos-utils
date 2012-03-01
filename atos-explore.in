@@ -1,0 +1,144 @@
+#!/usr/bin/env bash
+#
+# Copyright (C) STMicroelectronics Ltd. 2012
+#
+# This file is part of ATOS.
+#
+# ATOS is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License v2.0
+# as published by the Free Software Foundation
+#
+# ATOS is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
+#
+#
+# Usage: get usage with atos-explore -h
+#
+
+set -e
+[ "$DEBUG" = "" ] || set -x
+
+dir=`dirname $0`
+dir=`cd $dir; pwd`
+PROOT=${PROOT:-proot}
+
+run_script="./exec.sh"
+executable=""
+configuration_path="./atos-configurations"
+verbose="0"
+quiet="0"
+
+version() {
+    echo "atos-explore version @VERSION@"
+}
+
+usage() {
+    cat <<EOF
+
+Usage: atos-explore [options] [--] [command...]
+
+Run Options
+      -r <run_script> : run_script to be executed [default: $run_script]
+
+Executable File Options:
+      -e <executable> : executable to be instrumented [default: first arg of command]
+
+Configuration Options:
+      -c <path> : configuration path [default: $configuration_path]
+
+Misc Options
+      -q : quiet output
+      -d : debug mode
+      -h : output usage
+      -v : output version
+
+EOF
+}
+
+cleanup() {
+    [ ! -f "$tmpfile" ] || rm -f "$tmpfile"
+}
+trap "cleanup; exit 3" TERM STOP
+trap "cleanup" EXIT
+tmpfile=`mktemp /tmp/atos-inst.XXXXXX`
+
+
+while getopts vhdqe:r:c: opt; do
+    case $opt in
+	e) executable="$OPTARG"
+	    ;;
+	c) configuration_path="$OPTARG"
+	    ;;
+	r) run_script="$OPTARG"
+	    ;;
+	d) verbose=1
+	    ;;
+	q) quiet=1
+	    ;;
+	v) version; exit 0
+	    ;;
+	h) usage; exit 0
+	    ;;
+	?) usage; exit 2
+	    ;;
+    esac
+done
+
+shift $((OPTIND - 1))
+
+if [ "$executable" = "" ]; then
+    echo "`basename $0`: error: missing executable" >&2
+    exit 1
+fi
+
+if [ "$configuration_path" = "" ]; then
+    echo "`basename $0`: error: missing configuration path" >&2
+    exit 1
+fi
+
+if [ "$run_script" = "" ]; then
+    echo "`basename $0`: error: missing run script" >&2
+    exit 1
+fi
+
+mkdir -p "$configuration_path"
+rm -rf "$configuration_path"/*
+configuration_path=`cd "$configuration_path"; pwd`
+profile_path="$configuration_path/profiles"
+identifier=`basename "$executable"`
+results_log="$configuration_path/results.log"
+
+[ "$quiet" = "1" ] || echo "Auditing build..."
+$dir/atos-audit -o "$configuration_path/build.audit" ${1+"$@"} 2>&1 | tee "$configuration_path/build-REF.log"
+
+[ "$quiet" = "1" ] || echo "Computing build dependencies..."
+$dir/atos-deps "$executable" "$configuration_path/build.audit" >"$configuration_path/build.deps"
+
+[ "$quiet" = "1" ] || echo "Running reference execution ($identifier:REF)..."
+variant=REF
+options=
+echo "ATOS: _VERSION_: `$0 -v`" >$results_log
+echo "ATOS: $identifier: $variant: $options" >>"$results_log"
+$dir/atos-instr -f 3 -i "$identifier" -w "REF" -e "$executable" $run_script 3>>"$results_log"
+
+[ "$quiet" = "1" ] || echo "Instrumenting build..."
+$dir/atos-profile -p "$profile_path" ${1+"$@"} >"$configuration_path/build-profile.log" 2>&1
+
+[ "$quiet" = "1" ] || echo "Generating profiles..."
+$run_script
+
+for opts in "-O2" "-Os" "-O3" "-Os -flto" "-O2 -flto" "-O3 -flto"; do
+    options="-fprofile-use $opts"
+    variant=OPT-`echo $options | sed 's/ //g'`
+    options="$options -fprofile-correction -Wno-error=coverage-mismatch -fprofile-dir=$profile_path"
+    [ "$quiet" = "1" ] || echo "Building ($identifier:$variant)..."
+    $dir/atos-opt -a "$options -v"  ${1+"$@"} >"$configuration_path/build-$variant.log"  2>&1 # TODO, reuse build sequence from build audit
+    [ "$quiet" = "1" ] || echo "Running ($identifier:$variant)..."
+    echo "ATOS: $identifier: $variant: $options" >>"$results_log"
+    $dir/atos-instr -f 3 -i "$identifier" -w "$variant" -e "$executable" $run_script 3>>"$results_log"
+done

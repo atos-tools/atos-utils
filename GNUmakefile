@@ -31,7 +31,7 @@ ALL_CONFIG_FILES=$(ALL_CONFIG_FILES_IN:%.in=%)
 
 ALL_FILES=$(ALL_CONFIG_FILES)
 
-INSTALL_EXES=atos-audit atos-deps
+INSTALL_EXES=atos-audit atos-deps atos-opt
 INSTALLED_EXES=$(addprefix $(PREFIX)/bin/,$(INSTALL_EXES))
 
 .PHONY: all clean distclean install check check-python-dependencies

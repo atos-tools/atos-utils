@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+#
+# Copyright (C) STMicroelectronics Ltd. 2012
+#
+# This file is part of ATOS.
+#
+# ATOS is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License v2.0
+# as published by the Free Software Foundation
+#
+# ATOS is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
+#
+#
+# Usage: get usage with atos-instr -h
+#
+
+set -e
+[ "$DEBUG" = "" ] || set -x
+
+dir=`dirname $0`
+dir=`cd $dir; pwd`
+PROOT=${PROOT:-proot}
+
+executable=""
+
+version() {
+    echo "atos-audit version @VERSION@"
+}
+
+usage() {
+    cat <<EOF
+
+Usage: atos-instr [options] [--] [command...]
+
+Executable File Options:
+      -e <executable> : executable to be instrumented [default: first arg of command]
+
+Misc Options
+      -h : output usage
+      -v : output version
+
+EOF
+}
+
+cleanup() {
+    [ ! -f "$tmpfile" ] || rm -f "$tmpfile"
+}
+trap "cleanup; exit 3" TERM STOP
+trap "cleanup" EXIT
+tmpfile=`mktemp /tmp/atos-inst.XXXXXX`
+
+
+while getopts vhe: opt; do
+    case $opt in
+	e) executable="$OPTARG"
+	    ;;
+	v) version; exit 0
+	    ;;
+	h) usage; exit 0
+	    ;;
+	?) usage; exit 2
+	    ;;
+    esac
+done
+
+shift $((OPTIND - 1))
+
+if [ "$executable" = "" ]; then
+    executable="${1}"
+fi
+
+if [ "$executable" = "" ]; then
+    echo "`basename $0`: error: missing command arguments" >&2
+    exit 1
+fi
+
+get_size() {
+    local exe="${1?}"
+    exe="`which "$exe"`"
+    /usr/bin/size "$exe" | tail -1 | awk '{print "ATOS_SIZE:", $4;}'
+}
+
+get_time() {
+    local exe="${1?}"
+    /usr/bin/time -p ${1+"$@"} 2>&1 | tee $tmpfile | sed -e '/^real /d' -e '/^user /d' -e '/^sys /d'
+    tail -3 $tmpfile | awk '{if ($1 == "user") { print "ATOS_TIME:", int($2 * 1000); }}'
+}
+
+get_time ${1+"$@"}
+get_size "$executable"

@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+#
+# Copyright (C) STMicroelectronics Ltd. 2012
+#
+# This file is part of ATOS.
+#
+# ATOS is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License v2.0
+# as published by the Free Software Foundation
+#
+# ATOS is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
+#
+#
+# Usage: get usage with atos-play -h
+#
+
+set -e
+[ "$DEBUG" = "" ] || set -x
+
+dir=`dirname $0`
+dir=`cd $dir; pwd`
+PROOT=${PROOT:-proot}
+
+configuration_path="./atos-configurations"
+objective=time
+executable=""
+quiet="0"
+
+version() {
+    echo "atos-play version @VERSION@"
+}
+
+usage() {
+    cat <<EOF
+
+Usage: atos-play [options] [--] [command...]
+
+Objective Options:
+      -f <objective> : defined the objective function [default: $objective]
+
+Configuration Options:
+      -C <path> : configuration path [default: $configuration_path]
+      -e <executable>: executable target [default: inferred from configuration]
+
+Misc Options
+      -q : quiet output
+      -h : output usage
+      -v : output version
+
+EOF
+}
+
+cleanup() {
+    :
+}
+trap "cleanup; exit 3" TERM STOP
+trap "cleanup" EXIT
+
+while getopts vhqC:f:e: opt; do
+    case $opt in
+	f) objective="$OPTARG"
+	    ;;
+	C) configuration_path="$OPTARG"
+	    ;;
+	e) executable="$OPTARG"
+	    ;;
+	q) quiet=1
+	    ;;
+	v) version; exit 0
+	    ;;
+	h) usage; exit 0
+	    ;;
+	?) usage; exit 2
+	    ;;
+    esac
+done
+
+shift $((OPTIND - 1))
+
+results_db=$configuration_path/results.db
+if [ ! -f "$results_db" ]; then
+    echo "error: `basename $0`: configuration missing: $results_db" >&2
+    exit 1
+fi
+
+if [ "$executable" = "" ]; then
+    executable=`head -1 $configuration_path/targets`
+fi
+
+if [ "$executable" = "" ]; then
+    echo "error: `basename $0`: not target specified" >&2
+    exit 1
+fi
+
+if [ "$objective" != time -a "$objective" != size ]; then
+    echo "error: `basename $0`: unknown objective: $objective" >&2
+    exit 1
+fi
+
+identifier=`basename "$executable"`
+
+best() {
+    grep "^ATOS: $identifier:" $results_db  | grep " $objective:" | sort -n -k 5 | head -1 | awk '{print $3}' | sed 's/:$//'
+}
+
+get_options() {
+    grep "^ATOS: $identifier: $configuration: conf:" $results_db | sed "s/ATOS: $identifier: $configuration: conf: //"
+}
+
+configuration=`best`
+options=`get_options`
+[ "$quiet" = "1" ] || echo "Playing optimized build $identifier:$configuration..."
+exec $dir/atos-opt -a "$options"
+
+
+

@@ -27,7 +27,8 @@ dir=`dirname $0`
 dir=`cd $dir; pwd`
 PROOT=${PROOT:-proot}
 
-run_script="./exec.sh"
+run_script=""
+build_script=""
 executable=""
 configuration_path="./atos-configurations"
 verbose="0"
@@ -40,7 +41,10 @@ version() {
 usage() {
     cat <<EOF
 
-Usage: atos-explore [options] [--] [command...]
+Usage: atos-explore [options] [executables...]
+
+Run Options
+      -b <build_script> : build_script to be executed [default: $build_script]
 
 Run Options
       -r <run_script> : run_script to be executed [default: $run_script]
@@ -49,7 +53,7 @@ Executable File Options:
       -e <executable> : executable to be instrumented [default: first arg of command]
 
 Configuration Options:
-      -c <path> : configuration path [default: $configuration_path]
+      -C <path> : configuration path [default: $configuration_path]
 
 Misc Options
       -q : quiet output
@@ -68,13 +72,15 @@ trap "cleanup" EXIT
 tmpfile=`mktemp /tmp/atos-inst.XXXXXX`
 
 
-while getopts vhdqe:r:c: opt; do
+while getopts vhdqe:r:b:C: opt; do
     case $opt in
 	e) executable="$OPTARG"
 	    ;;
-	c) configuration_path="$OPTARG"
+	C) configuration_path="$OPTARG"
 	    ;;
 	r) run_script="$OPTARG"
+	    ;;
+	b) build_script="$OPTARG"
 	    ;;
 	d) verbose=1
 	    ;;
@@ -91,54 +97,63 @@ done
 
 shift $((OPTIND - 1))
 
-if [ "$executable" = "" ]; then
-    echo "`basename $0`: error: missing executable" >&2
-    exit 1
-fi
+[ "$executable" != "" ] || executable="$1"
 
 if [ "$configuration_path" = "" ]; then
     echo "`basename $0`: error: missing configuration path" >&2
     exit 1
 fi
 
-if [ "$run_script" = "" ]; then
-    echo "`basename $0`: error: missing run script" >&2
+mkdir -p "$configuration_path"
+if [ "$build_script" != "" -a "$run_script" != "" ]; then
+    rm -rf "$configuration_path"/*
+fi
+configuration_path=`cd "$configuration_path"; pwd`
+profile_path="$configuration_path/profiles"
+results_db="$configuration_path/results.db"
+
+if [ -f "$configuration_path/targets" ]; then
+    executable=`head -1 "$configuration_path/targets"`
+fi
+if [ "$executable" = "" ]; then
+    echo "`basename $0`: error: missing executable" >&2
     exit 1
 fi
 
-mkdir -p "$configuration_path"
-rm -rf "$configuration_path"/*
-configuration_path=`cd "$configuration_path"; pwd`
-profile_path="$configuration_path/profiles"
 identifier=`basename "$executable"`
-results_log="$configuration_path/results.log"
 
-[ "$quiet" = "1" ] || echo "Auditing build..."
-$dir/atos-audit -o "$configuration_path/build.audit" ${1+"$@"} 2>&1 | tee "$configuration_path/build-REF.log"
+
+if [ "$build_script" != "" ]; then
+    [ "$quiet" = "1" ] || echo "Auditing build..."
+    $dir/atos-audit $build_script
+fi
+
+if [ "$run_script" != "" ]; then
+    [ "$quiet" = "1" ] || echo "Auditing run..."
+    $dir/atos-raudit $run_script
+fi
 
 [ "$quiet" = "1" ] || echo "Computing build dependencies..."
-$dir/atos-deps "$executable" "$configuration_path/build.audit" >"$configuration_path/build.deps"
+$dir/atos-deps "$executable"
 
 [ "$quiet" = "1" ] || echo "Running reference execution ($identifier:REF)..."
 variant=REF
 options=
-echo "ATOS: _VERSION_: `$0 -v`" >$results_log
-echo "ATOS: $identifier: $variant: $options" >>"$results_log"
-$dir/atos-instr -f 3 -i "$identifier" -w "REF" -e "$executable" $run_script 3>>"$results_log"
+echo "ATOS: _version_: `$0 -v`" >"$results_db"
+echo "ATOS: $identifier: $variant: conf: $options" >>"$results_db"
+$dir/atos-run -f 3 -i "$identifier" -w "REF" 3>>"$results_db"
 
-[ "$quiet" = "1" ] || echo "Instrumenting build..."
-$dir/atos-profile -p "$profile_path" ${1+"$@"} >"$configuration_path/build-profile.log" 2>&1
-
-[ "$quiet" = "1" ] || echo "Generating profiles..."
-$run_script
-
-for opts in "-O2" "-Os" "-O3" "-Os -flto" "-O2 -flto" "-O3 -flto"; do
-    options="-fprofile-use $opts"
-    variant=OPT-`echo $options | sed 's/ //g'`
-    options="$options -fprofile-correction -Wno-error=coverage-mismatch -fprofile-dir=$profile_path"
-    [ "$quiet" = "1" ] || echo "Building ($identifier:$variant)..."
-    $dir/atos-opt -a "$options -v"  ${1+"$@"} >"$configuration_path/build-$variant.log"  2>&1 # TODO, reuse build sequence from build audit
-    [ "$quiet" = "1" ] || echo "Running ($identifier:$variant)..."
-    echo "ATOS: $identifier: $variant: $options" >>"$results_log"
-    $dir/atos-instr -f 3 -i "$identifier" -w "$variant" -e "$executable" $run_script 3>>"$results_log"
+for gopt in "-O2" "-Os" "-O3"; do
+    [ "$quiet" = "1" ] || echo "Profiling build $gopt..."
+    $dir/atos-profile -a "$gopt" -p $profile_path$gopt >"$configuration_path/profile$gopt.log" 2>&1
+    for opts in "" "-flto"; do
+	options="-fprofile-use $gopt $opts"
+	variant=OPT`echo $options | sed 's/ //g'`
+	options="$options -fprofile-correction -Wno-error=coverage-mismatch -fprofile-dir=$profile_path$gopt"
+	[ "$quiet" = "1" ] || echo "Building ($identifier:$variant)..."
+	$dir/atos-opt -a "$options -v" >"$configuration_path/build-$variant.log"  2>&1
+	[ "$quiet" = "1" ] || echo "Running ($identifier:$variant)..."
+	echo "ATOS: $identifier: $variant: conf: $options" >>"$results_db"
+	$dir/atos-run -f 3 -i "$identifier" -w "$variant" 3>>"$results_db"
+    done
 done

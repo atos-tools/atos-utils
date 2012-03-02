@@ -17,7 +17,7 @@
 # v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# Usage: get usage with atos-instr -h
+# Usage: get usage with atos-run -h
 #
 
 set -e
@@ -31,15 +31,16 @@ executable=""
 identifier=""
 variant="REF"
 fd=2
+configuration_path="./atos-configurations"
 
 version() {
-    echo "atos-instr version @VERSION@"
+    echo "atos-run version @VERSION@"
 }
 
 usage() {
     cat <<EOF
 
-Usage: atos-instr [options] [--] [command...]
+Usage: atos-run [options] [--] [command...]
 
 Executable File Options:
       -e <executable> : executable to be instrumented [default: first arg of command]
@@ -50,6 +51,9 @@ Identification options:
 
 Output options:
       -f fd : fd reference for appending results [default: $fd]
+
+Configuration Options:
+      -C <path> : configuration path [default: $configuration_path]
 
 Misc Options
       -h : output usage
@@ -68,7 +72,7 @@ tmpfile=`mktemp /tmp/atos-inst.XXXXXX`
 tmpfile2=`mktemp /tmp/atos-inst.XXXXXX`
 
 
-while getopts vhf:e:i:w: opt; do
+while getopts vhf:e:i:w:C: opt; do
     case $opt in
 	e) executable="$OPTARG"
 	    ;;
@@ -77,6 +81,8 @@ while getopts vhf:e:i:w: opt; do
 	w) variant="$OPTARG"
 	    ;;
 	f) fd="$OPTARG"
+	    ;;
+	C) configuration_path="$OPTARG"
 	    ;;
 	v) version; exit 0
 	    ;;
@@ -88,6 +94,10 @@ while getopts vhf:e:i:w: opt; do
 done
 
 shift $((OPTIND - 1))
+
+if [ -f "$configuration_path/targets" ]; then
+    executable=`head -1 $configuration_path/targets`
+fi
 
 if [ "$executable" = "" ]; then
     executable="${1}"
@@ -105,14 +115,17 @@ fi
 get_size() {
     local exe="${1?}"
     exe="`which "$exe"`"
-    /usr/bin/size "$exe" | tail -1 | awk '{print "ATOS: '"$identifier"' : '"$variant"': size: ", $4;}' >&$fd
+    /usr/bin/size "$exe" | tail -1 | awk '{print "ATOS: '"$identifier"': '"$variant"': size: ", $4;}' >&$fd
 }
 
 get_time() {
-    local exe="${1?}"
     /usr/bin/time -p ${1+"$@"} 2>&1 | tee $tmpfile | sed -e '/^real /d' -e '/^user /d' -e '/^sys /d'
-    tail -3 $tmpfile | awk '{if ($1 == "user") { print "ATOS: '"$identifier"' : '"$variant"': time: ", int($2 * 1000); }}' >&$fd
+    tail -3 $tmpfile | awk '{if ($1 == "user") { print "ATOS: '"$identifier"': '"$variant"': time: ", int($2 * 1000); }}' >&$fd
 }
 
-get_time ${1+"$@"}
+if [ -f "$configuration_path/run.sh" ]; then
+    get_time "$configuration_path/run.sh"
+else
+    get_time ${1+"$@"}
+fi
 get_size "$executable"

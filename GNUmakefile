@@ -23,7 +23,7 @@ PREFIX=/usr/local
 VSTAMP=version.stamp
 VERSION:=$(shell $(srcdir)/config/update_version.sh $(VSTAMP))
 
-CONFIG_SCRIPTS_IN=atos-audit.in atos-deps.in atos-opt.in atos-instr.in atos-profile.in atos-explore.in
+CONFIG_SCRIPTS_IN=atos-audit.in atos-raudit.in atos-deps.in atos-opt.in atos-run.in atos-profile.in atos-explore.in atos-play.in
 CONFIG_SCRIPTS=$(CONFIG_SCRIPTS_IN:%.in=%)
 
 ALL_CONFIG_FILES_IN=$(CONFIG_SCRIPTS_IN)
@@ -32,7 +32,7 @@ ALL_CONFIG_FILES=$(ALL_CONFIG_FILES_IN:%.in=%)
 
 ALL_FILES=$(ALL_CONFIG_FILES)
 
-INSTALL_EXES=atos-audit atos-deps atos-opt atos-instr atos-profile atos-explore
+INSTALL_EXES=atos-audit atos-raudit atos-deps atos-opt atos-run atos-profile atos-explore atos-play
 INSTALLED_EXES=$(addprefix $(PREFIX)/bin/,$(INSTALL_EXES))
 
 .PHONY: all clean distclean install check check-python-dependencies
@@ -43,7 +43,7 @@ clean:
 	$(QUIET_CLEAN)rm -f *.tmp
 
 distclean:
-	$(QUIET_DISTCLEAN)rm -f $(ALL_CONFIG_FILES)
+	$(QUIET_DISTCLEAN)rm -f $(ALL_CONFIG_FILES) $(VSTAMP)
 
 install: $(INSTALLED_EXES)
 

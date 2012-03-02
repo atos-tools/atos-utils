@@ -29,6 +29,8 @@ PROOT=${PROOT:-proot}
 
 options=""
 ccregexp="^\(gcc\|g++\|cc\|c++\)\$"
+configuration_path="./atos-configurations"
+jobs=4
 
 version() {
     echo "atos-opt version @VERSION@"
@@ -46,6 +48,12 @@ Driver Options:
 Optimization Options:
       -a "options" : append given options to the compilation commands [default: $options]
 
+Configuration Options:
+      -C <path> : configuration path [default: $configuration_path]
+
+Build options:
+      -j <jobs>: use <jobs> parallel thread when possible for building [default: $jobs]
+
 Misc Options
       -h : output usage
       -v : output version
@@ -59,13 +67,17 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts vhc:r:a: opt; do
+while getopts vhC:j:c:r:a: opt; do
     case $opt in
 	a) options="$OPTARG"
 	    ;;
 	c) ccregexp="^$OPTARG\$"
 	    ;;
 	r) ccregexp="$OPTARG"
+	    ;;
+	j) jobs="$OPTARG"
+	    ;;
+	C) configuration_path="$OPTARG"
 	    ;;
 	v) version; exit 0
 	    ;;
@@ -78,4 +90,9 @@ done
 
 shift $((OPTIND - 1))
 
-exec env PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT -w $PWD / ${1+"$@"}
+# If the configuration path contains a build.mk execute it
+if [ -f "$configuration_path/build.mk" ]; then
+    exec make -j $JOBS -f $configuration_path/build.mk ACFLAGS="$options"
+else
+    exec env PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT -w $PWD / ${1+"$@"}
+fi

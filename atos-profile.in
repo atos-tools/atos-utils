@@ -27,7 +27,9 @@ dir=`dirname $0`
 dir=`cd $dir; pwd`
 PROOT=${PROOT:-proot}
 
-profile_path="atos-profiles"
+configuration_path="./atos-configurations"
+profile_path=""
+options=""
 
 version() {
     echo "atos-profile version @VERSION@"
@@ -39,7 +41,13 @@ usage() {
 Usage: atos-profile [options] [--] [command...]
 
 Profile path options:
-      -p <path> : path to profile files
+      -p <path> : path to profile files [default: $configuration_path/profiles]
+
+Optimization Options:
+      -a "options" : append given options to the compilation commands [default: $options]
+
+Configuration Options:
+      -C <path> : configuration path [default: $configuration_path]
 
 Misc Options
       -h : output usage
@@ -54,9 +62,13 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts vhp: opt; do
+while getopts vha:p:C: opt; do
     case $opt in
+	a) options="$OPTARG"
+	    ;;
 	p) profile_path="$OPTARG"
+	    ;;
+	C) configuration_path="$OPTARG"
 	    ;;
 	v) version; exit 0
 	    ;;
@@ -69,10 +81,13 @@ done
 
 shift $((OPTIND - 1))
 
+[ "$profile_path" != "" ] || profile_path="$configuration_path/profiles"
+
 if [ "$profile_path" != "" ]; then
    mkdir -p "$profile_path"
    profile_path=`cd "$profile_path"; pwd`
    find "$profile_path" -name '*.gcda' | xargs rm -f
 fi
 
-$dir/atos-opt -a "-O2 -fprofile-generate ${profile_path:+-fprofile-dir=$profile_path}" ${1+"$@"}
+$dir/atos-opt -a "$options -fprofile-generate ${profile_path:+-fprofile-dir=$profile_path}"
+$dir/atos-run

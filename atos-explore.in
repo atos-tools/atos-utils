@@ -124,36 +124,40 @@ identifier=`basename "$executable"`
 
 
 if [ "$build_script" != "" ]; then
-    [ "$quiet" = "1" ] || echo "Auditing build..."
+    [ "$quiet" = "1" ] || echo "Auditing build ($identifier)..."
     $dir/atos-audit $build_script
 fi
 
 if [ "$run_script" != "" ]; then
-    [ "$quiet" = "1" ] || echo "Auditing run..."
+    [ "$quiet" = "1" ] || echo "Auditing run ($identifier)..."
     $dir/atos-raudit $run_script
 fi
 
-[ "$quiet" = "1" ] || echo "Computing build dependencies..."
+[ "$quiet" = "1" ] || echo "Computing build dependencies ($identifier)..."
 $dir/atos-deps "$executable"
 
-[ "$quiet" = "1" ] || echo "Running reference execution ($identifier:REF)..."
-variant=REF
-options=
-echo "ATOS: _version_: `$0 -v`" >"$results_db"
-echo "ATOS: $identifier: $variant: conf: $options" >>"$results_db"
-$dir/atos-run -f 3 -i "$identifier" -w "REF" 3>>"$results_db"
+[ "$quiet" = "1" ] || echo "Running reference execution ($identifier: REF)..."
+$dir/atos-run -r
 
-for gopt in "-O2" "-Os" "-O3"; do
-    [ "$quiet" = "1" ] || echo "Profiling build $gopt..."
-    $dir/atos-profile -a "$gopt" -p $profile_path$gopt >"$configuration_path/profile$gopt.log" 2>&1
+for gopt in "-O1" "-O2" "-Os" "-O3"; do
+    [ "$quiet" = "1" ] || echo "Profiling build ($identifier: -fprofile-generate $gopt)..."
+    pvariant=`echo $gopts | sed 's/ //g'`
+    $dir/atos-profile -g "$gopt" >"$configuration_path/build-fprofile-generate$pvariant.log" 2>&1
     for opts in "" "-flto"; do
-	options="-fprofile-use $gopt $opts"
-	variant=OPT`echo $options | sed 's/ //g'`
-	options="$options -fprofile-correction -Wno-error=coverage-mismatch -fprofile-dir=$profile_path$gopt"
-	[ "$quiet" = "1" ] || echo "Building ($identifier:$variant)..."
-	$dir/atos-opt -a "$options -v" >"$configuration_path/build-$variant.log"  2>&1
-	[ "$quiet" = "1" ] || echo "Running ($identifier:$variant)..."
-	echo "ATOS: $identifier: $variant: conf: $options" >>"$results_db"
-	$dir/atos-run -f 3 -i "$identifier" -w "$variant" 3>>"$results_db"
+	options="$gopt $opts"
+	variant=`echo $options | sed 's/ //g'`
+	[ "$quiet" = "1" ] || echo "Building ($identifier:-fprofile-use $options)..."
+	$dir/atos-opt -u "$gopt" -a "$options" >"$configuration_path/build-fprofile-use$pvariant$variant.log"  2>&1
+	[ "$quiet" = "1" ] || echo "Running ($identifier:-fprofile-use $options)..."
+	$dir/atos-run -r -u "$gopt" -a "$options" >"$configuration_path/run-fprofile-use$pvariant$variant.log"  2>&1
     done
 done
+if [ "$quiet" != "1" ]; then
+    echo "Best performance variant ($identifier)..."
+    $dir-atos-play -f time
+    echo "Best size variant ($identifier)..."
+    $dir-atos-play -f size
+fi
+if [ "$quiet" != "1" ]; then
+    echo "Completed ($identifier)."
+fi

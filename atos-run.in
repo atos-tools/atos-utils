@@ -29,9 +29,14 @@ PROOT=${PROOT:-proot}
 
 executable=""
 identifier=""
-variant="REF"
-fd=2
+variant=""
+fd=""
 configuration_path="./atos-configurations"
+record=0
+u_set=0
+uopts=""
+g_set=0
+gopts=""
 
 version() {
     echo "atos-run version @VERSION@"
@@ -47,13 +52,22 @@ Executable File Options:
 
 Identification options:
       -i <identifier> : identifier of run [default: executable basename]
-      -w <variant> : identifier of variant [default: $variant]
+      -w <variant> : identifier of variant [default: REF]
+      -a <options> : if specified, infer variant from option set
 
 Output options:
-      -f fd : fd reference for appending results [default: $fd]
+      -o file : file reference for appending results [default: none]
+      -f fd : fd reference for appending results [default: 2]
 
 Configuration Options:
       -C <path> : configuration path [default: $configuration_path]
+
+Recordiong options:
+      -r : record results
+
+Profile options:
+      -u "$opts" : use profile variant deduced by $opts [default: none]
+      -g "$opts" : use profile variant deduced by $opts [default: none]
 
 Misc Options
       -h : output usage
@@ -72,7 +86,7 @@ tmpfile=`mktemp /tmp/atos-inst.XXXXXX`
 tmpfile2=`mktemp /tmp/atos-inst.XXXXXX`
 
 
-while getopts vhf:e:i:w:C: opt; do
+while getopts vhro:f:e:a:i:w:u:g:C: opt; do
     case $opt in
 	e) executable="$OPTARG"
 	    ;;
@@ -80,9 +94,19 @@ while getopts vhf:e:i:w:C: opt; do
 	    ;;
 	w) variant="$OPTARG"
 	    ;;
+	a) options="$OPTARG"
+	    ;;
+	u) u_set=1; uopts="$OPTARG"
+	    ;;
+	g) g_set=1; gopts="$OPTARG"
+	    ;;
 	f) fd="$OPTARG"
 	    ;;
+	o) file="$OPTARG"
+	    ;;
 	C) configuration_path="$OPTARG"
+	    ;;
+	r) record=1
 	    ;;
 	v) version; exit 0
 	    ;;
@@ -95,33 +119,90 @@ done
 
 shift $((OPTIND - 1))
 
-if [ -f "$configuration_path/targets" ]; then
-    executable=`head -1 $configuration_path/targets`
-fi
-
 if [ "$executable" = "" ]; then
-    executable="${1}"
-fi
-
-if [ "$executable" = "" ]; then
-    echo "`basename $0`: error: missing command arguments" >&2
-    exit 1
+    if [ -f "$configuration_path/targets" ]; then
+	executable=`head -1 $configuration_path/targets`
+    else
+	echo "`basename $0`: error: missing command arguments" >&2
+	exit 1
+    fi
 fi
 
 if [ "$identifier" = "" ]; then
     identifier=`basename "$executable"`
 fi
 
+if [ "$g_set" = 1 -a "$u_set" = 1 ]; then
+    echo "`basename $0`: error: options -u and -g cannot by specified at the same time" >&2
+    exit 1
+fi    
+
+if [ "$g_set" = 1 ]; then
+    pvariant=
+    if [ "$gopts" != "" ]; then
+	pvariant=-fprofile-generate`echo $gopts | sed 's/ //g'`
+    fi
+fi
+
+if [ "$u_set" = 1 ]; then
+    pvariant=
+    if [ "$uopts" != "" ]; then
+	pvariant=-fprofile-use`echo $uopts | sed 's/ //g'`
+    fi
+fi
+
+if [ "$variant" = "" ]; then
+    if [ "$options" != "" -o "$pvariant" != "" ]; then
+	variant=OPT$pvariant`echo $options | sed 's/ //g'`
+    else
+	variant=REF
+    fi
+fi
+
+if [ "$file" = "" -a "$fd" = "" ]; then
+    if [ "$record" = 1 ]; then
+	file=$configuration_path/results.db
+    else
+	fd=2 # stderr by default
+    fi
+fi
+
+if [ "$file" != "" ]; then
+    touch "$file"
+fi
+
+if [ "$file" != "" -a "$fd" != "" ]; then
+    echo "`basename $0`: error: options -o and -f cannot by specified at the same time" >&2
+    exit 1
+fi
+
+
 get_size() {
     local exe="${1?}"
     exe="`which "$exe"`"
-    /usr/bin/size "$exe" | tail -1 | awk '{print "ATOS: '"$identifier"': '"$variant"': size: ", $4;}' >&$fd
+    if [ "$file" != "" ]; then
+	/usr/bin/size "$exe" | tail -1 | awk '{print "ATOS: '"$identifier"': '"$variant"': size: ", $4;}' >>"$file"
+    else
+	/usr/bin/size "$exe" | tail -1 | awk '{print "ATOS: '"$identifier"': '"$variant"': size: ", $4;}' >&$fd
+    fi
 }
 
 get_time() {
     /usr/bin/time -p ${1+"$@"} 2>&1 | tee $tmpfile | sed -e '/^real /d' -e '/^user /d' -e '/^sys /d'
-    tail -3 $tmpfile | awk '{if ($1 == "user") { print "ATOS: '"$identifier"': '"$variant"': time: ", int($2 * 1000); }}' >&$fd
+    if [ "$file" != "" ]; then
+	tail -3 $tmpfile | awk '{if ($1 == "user") { print "ATOS: '"$identifier"': '"$variant"': time: ", int($2 * 1000); }}' >>"$file"
+    else
+	tail -3 $tmpfile | awk '{if ($1 == "user") { print "ATOS: '"$identifier"': '"$variant"': time: ", int($2 * 1000); }}' >&$fd
+    fi
 }
+
+if [ "$file" != "" ]; then
+    echo "ATOS: $identifier: $variant: version: `$0 -v | awk '{print $3;}'`" >>"$file"
+    echo "ATOS: $identifier: $variant: conf: $options" >>"$file"
+else
+    echo "ATOS: $identifier: $variant: version: `$0 -v`" >&$fd
+    echo "ATOS: $identifier: $variant: conf: $options" >&$fd
+fi
 
 if [ -f "$configuration_path/run.sh" ]; then
     get_time "$configuration_path/run.sh"

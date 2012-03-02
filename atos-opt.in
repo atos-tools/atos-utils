@@ -32,6 +32,10 @@ ccregexp="^\(gcc\|g++\|cc\|c++\)\$"
 configuration_path="./atos-configurations"
 jobs=4
 dryrun=""
+u_set=0
+uopts=""
+g_set=0
+gopts=""
 
 version() {
     echo "atos-opt version @VERSION@"
@@ -56,6 +60,11 @@ Build options:
       -j <jobs>: use <jobs> parallel thread when possible for building [default: $jobs]
       -n : dry run, output build commands only
 
+Profile options:
+      -u "$opts" : use profile variant deduced by $opts [default: none]
+      -g "$opts" : use profile variant deduced by $opts [default: none]
+      -p <path> : path to profile files [default: $configuration_path/profiles/<pvariant>]
+
 Misc Options
       -h : output usage
       -v : output version
@@ -69,7 +78,7 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts vhnC:j:c:r:a: opt; do
+while getopts vhnC:j:c:r:a:u:g:p: opt; do
     case $opt in
 	a) options="$OPTARG"
 	    ;;
@@ -78,6 +87,12 @@ while getopts vhnC:j:c:r:a: opt; do
 	r) ccregexp="$OPTARG"
 	    ;;
 	j) jobs="$OPTARG"
+	    ;;
+	p) profile_path="$OPTARG"
+	    ;;
+	u) u_set=1; uopts="$OPTARG"
+	    ;;
+	g) g_set=1; gopts="$OPTARG"
 	    ;;
 	n) dryrun=1
 	    ;;
@@ -94,9 +109,40 @@ done
 
 shift $((OPTIND - 1))
 
+if [ "$g_set" = 1 -a "$u_set" = 1 ]; then
+    echo "`basename $0`: error: options -u and -g cannot by specified at the same time" >&2
+    exit 1
+fi    
+
+if [ "$g_set" = 1 ]; then
+    pvariant=REF
+    if [ "$gopts" != "" ]; then
+	pvariant=OPT`echo $gopts | sed 's/ //g'`
+	
+    fi
+    if [ "$profile_path" = "" ]; then
+	profile_path="$configuration_path/profiles/$pvariant"
+    fi
+    mkdir -p "$profile_path"
+    profile_path=`cd "$profile_path"; pwd`
+    find "$profile_path" -name '*.gcda' | xargs rm -f
+    APFLAGS="-fprofile-generate -fprofile-dir=$profile_path"
+fi
+
+if [ "$u_set" = 1 ]; then
+    pvariant=REF
+    if [ "$uopts" != "" ]; then
+	pvariant=OPT`echo $uopts | sed 's/ //g'`
+    fi
+    if [ "$profile_path" = "" ]; then
+	profile_path="$configuration_path/profiles/$pvariant"
+    fi
+    APFLAGS="-fprofile-use -fprofile-correction -Wno-error=coverage-mismatch -fprofile-dir=$profile_path"
+fi
+
 # If the configuration path contains a build.mk execute it
 if [ -f "$configuration_path/build.mk" ]; then
-    exec make ${dryrun:+-n} -j $JOBS -f $configuration_path/build.mk ACFLAGS="$options"
+    exec make ${dryrun:+-n} -j $JOBS -f $configuration_path/build.mk ACFLAGS="$APFLAGS $options"
 else
-    exec env PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT -w $PWD / ${1+"$@"}
+    exec env PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$APFLAGS $options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT -w $PWD / ${1+"$@"}
 fi

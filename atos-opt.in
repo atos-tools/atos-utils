@@ -31,6 +31,7 @@ options=""
 ccregexp="^\(gcc\|g++\|cc\|c++\)\$"
 configuration_path="./atos-configurations"
 jobs=4
+dryrun=""
 
 version() {
     echo "atos-opt version @VERSION@"
@@ -53,6 +54,7 @@ Configuration Options:
 
 Build options:
       -j <jobs>: use <jobs> parallel thread when possible for building [default: $jobs]
+      -n : dry run, output build commands only
 
 Misc Options
       -h : output usage
@@ -67,7 +69,7 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts vhC:j:c:r:a: opt; do
+while getopts vhnC:j:c:r:a: opt; do
     case $opt in
 	a) options="$OPTARG"
 	    ;;
@@ -76,6 +78,8 @@ while getopts vhC:j:c:r:a: opt; do
 	r) ccregexp="$OPTARG"
 	    ;;
 	j) jobs="$OPTARG"
+	    ;;
+	n) dryrun=1
 	    ;;
 	C) configuration_path="$OPTARG"
 	    ;;
@@ -92,7 +96,7 @@ shift $((OPTIND - 1))
 
 # If the configuration path contains a build.mk execute it
 if [ -f "$configuration_path/build.mk" ]; then
-    exec make -j $JOBS -f $configuration_path/build.mk ACFLAGS="$options"
+    exec make ${dryrun:+-n} -j $JOBS -f $configuration_path/build.mk ACFLAGS="$options"
 else
     exec env PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT -w $PWD / ${1+"$@"}
 fi

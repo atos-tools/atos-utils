@@ -31,6 +31,8 @@ configuration_path="./atos-configurations"
 objective=time
 executable=""
 quiet="0"
+dryrun=""
+print=""
 
 version() {
     echo "atos-play version @VERSION@"
@@ -48,6 +50,10 @@ Configuration Options:
       -C <path> : configuration path [default: $configuration_path]
       -e <executable>: executable target [default: inferred from configuration]
 
+Build Configuration:
+      -n : dry run, output build commands only
+      -p : print configuration only
+
 Misc Options
       -q : quiet output
       -h : output usage
@@ -62,13 +68,17 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts vhqC:f:e: opt; do
+while getopts vhqnpC:f:e: opt; do
     case $opt in
 	f) objective="$OPTARG"
 	    ;;
 	C) configuration_path="$OPTARG"
 	    ;;
 	e) executable="$OPTARG"
+	    ;;
+	n) dryrun=1
+	    ;;
+	p) print=1
 	    ;;
 	q) quiet=1
 	    ;;
@@ -114,9 +124,15 @@ get_options() {
 }
 
 configuration=`best`
+
+if [ "$print" = 1 ]; then
+    grep "^ATOS: $identifier: $configuration:" $results_db
+    exit 0
+fi
+
 options=`get_options`
 [ "$quiet" = "1" ] || echo "Playing optimized build $identifier:$configuration..."
-exec $dir/atos-opt -a "$options"
+exec $dir/atos-opt ${dryrun:+-n} -a "$options"
 
 
 

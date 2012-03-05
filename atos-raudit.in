@@ -75,14 +75,23 @@ done
 
 shift $((OPTIND - 1))
 
+if [ "$1" = "" ]; then
+    echo "error: `basename $0`: missing run command" >&2
+    exit 1
+fi
+
 if [ "$outfile" = "" ]; then
     mkdir -p $configuration_path
     outfile="$configuration_path/run.audit"
     run_sh="$configuration_path/run.sh"
     echo "#!/bin/sh" >$run_sh
-    echo "cd $PWD && \$ARUN" ${1+"$@"} >>$run_sh
+    echo -n "cd $PWD && \$ARUN"  >>$run_sh
+    for a in "$@"; do
+	echo -n " \"$a\""  >>$run_sh
+    done
+    echo >>$run_sh
     chmod 755 $run_sh
 fi
 
 
-exec ${1+"$@"}
+exec "$@"

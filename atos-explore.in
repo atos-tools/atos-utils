@@ -140,6 +140,14 @@ $dir/atos-deps "$executable"
 $dir/atos-run -r
 
 for gopt in "-O1" "-O2" "-Os" "-O3"; do
+    for opts in "" "-flto"; do
+	options="$gopt $opts"
+	variant=`echo $options | sed 's/ //g'`
+	[ "$quiet" = "1" ] || echo "Building ($identifier:$options)..."
+	$dir/atos-opt -a "$options" >"$configuration_path/build$variant.log"  2>&1
+	[ "$quiet" = "1" ] || echo "Running ($identifier: $options)..."
+	$dir/atos-run -r -a "$options" >"$configuration_path/run$variant.log"  2>&1
+    done
     [ "$quiet" = "1" ] || echo "Profiling build ($identifier: -fprofile-generate $gopt)..."
     pvariant=`echo $gopts | sed 's/ //g'`
     $dir/atos-profile -g "$gopt" >"$configuration_path/build-fprofile-generate$pvariant.log" 2>&1

@@ -162,9 +162,9 @@ for gopt in "-O1" "-O2" "-Os" "-O3"; do
 done
 if [ "$quiet" != "1" ]; then
     echo "Best performance variant ($identifier)..."
-    $dir-atos-play -f time
+    $dir/atos-play -p -f time
     echo "Best size variant ($identifier)..."
-    $dir-atos-play -f size
+    $dir/atos-play -p -f size
 fi
 if [ "$quiet" != "1" ]; then
     echo "Completed ($identifier)."

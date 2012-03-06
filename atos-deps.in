@@ -283,7 +283,9 @@ class SimpleCCInterpreter:
                     outputs = [ os.path.normpath(os.path.join(command['cwd'], m.group(1))) ]
         if len(outputs) == 0 and len(self.get_input_files(command)) > 0:
             if self.get_kind(command) == "CC" and len(self.get_input_files(command)) == 1:
-                outputs = [ os.path.normpath(os.path.join(command['cwd'], re.sub("\\.[^.]+$", ".o", os.path.basename(self.get_input_files(command)[0])))) ]
+                outputs = []
+                for inp in self.get_input_files(command):
+                    outputs.append(os.path.normpath(os.path.join(command['cwd'], re.sub("\\.[^.]+$", ".o", os.path.basename(inp)))))
             elif self.get_kind(command) == "CCLD":
                 outputs = [ os.path.normpath(os.path.join(command['cwd'], "a.out")) ]
             else:

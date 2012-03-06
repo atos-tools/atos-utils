@@ -109,8 +109,6 @@ if [ "$build_script" != "" -a "$run_script" != "" ]; then
     rm -rf "$configuration_path"/*
 fi
 configuration_path=`cd "$configuration_path"; pwd`
-profile_path="$configuration_path/profiles"
-results_db="$configuration_path/results.db"
 
 if [ -f "$configuration_path/targets" ]; then
     executable=`head -1 "$configuration_path/targets"`
@@ -135,6 +133,12 @@ fi
 
 [ "$quiet" = "1" ] || echo "Computing build dependencies ($identifier)..."
 $dir/atos-deps "$executable"
+
+[ "$quiet" = "1" ] || echo "Cleaning all profiles..."
+rm -rf "$configuration_path"/profiles
+
+[ "$quiet" = "1" ] || echo "Cleaning all results..."
+rm -rf "$configuration_path"/results.db
 
 [ "$quiet" = "1" ] || echo "Running reference execution ($identifier: REF)..."
 $dir/atos-run -r

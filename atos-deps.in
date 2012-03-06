@@ -24,6 +24,7 @@ VERSION="@VERSION@"
 import re
 import os
 import sys
+import getopt
 from pygraph.classes.digraph import digraph
 from pygraph.readwrite.dot import write
 from sets import Set
@@ -394,21 +395,43 @@ class CCDEPSParser:
         """ Returns the constructed command list.  """
         return self.commands
 
-if len(sys.argv) >= 2:
-    target = sys.argv[1]
-    input_name = "./atos-configurations/build.audit"
-    if len(sys.argv) >= 3:
-        input_name = sys.argv[2]
-    output_name = "./atos-configurations/build.mk"
-    if len(sys.argv) >= 4:
-        output_name = sys.argv[3]
-else:
-    raise Exception("Missing input file.")
+def usage():
+    print "Usage: " + os.path.basename(sys.argv[0])
+    print
+
+def version():
+    print os.path.basename(sys.argv[0]) + " version " + VERSION
+
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "hvo:i:")
+except getopt.GetoptError, err:
+        print(str(err), sys.stderr)
+        sys.exit(1)
+
+input_name = "./atos-configurations/build.audit"
+output_name = "./atos-configurations/build.mk"
+for o, a in opts:
+    if o == "-o":
+        output_name = a
+    if o == "-i":
+        input_name = a
+    elif o == "-h":
+        usage()
+        sys.exit()
+    elif o == "-v":
+        version()
+        sys.exit()
+
+    
+if len(args) == 0:
+    raise Exception("Missing target file list.")
+
+targets = args
 
 factory = CommandDependencyListFactory(CCDEPSParser(open(input_name)), SimpleCmdInterpreter())
 factory.build_dependencies()
 dependencies = factory.get_dependencies()
-builder = DependencyGraphBuilder(dependencies, [ target ])
+builder = DependencyGraphBuilder(dependencies, targets)
 builder.build_graph()
 graph = builder.get_graph()
 #print str(dependencies)

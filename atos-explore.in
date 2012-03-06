@@ -155,7 +155,7 @@ for gopt in "-O1" "-O2" "-Os" "-O3"; do
     [ "$quiet" = "1" ] || echo "Profiling build ($identifier: -fprofile-generate $gopt)..."
     pvariant=`echo $gopts | sed 's/ //g'`
     $dir/atos-profile -g "$gopt" >"$configuration_path/build-fprofile-generate$pvariant.log" 2>&1
-    for opts in "" "-flto"; do
+    for opts in "" "-flto" "-funroll-loops" "-flto -funroll-loops"; do
 	options="$gopt $opts"
 	variant=`echo $options | sed 's/ //g'`
 	[ "$quiet" = "1" ] || echo "Building ($identifier:-fprofile-use $options)..."

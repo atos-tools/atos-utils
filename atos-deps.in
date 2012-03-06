@@ -98,6 +98,7 @@ class DependencyGraph:
                 if attr == "target":
                     target = value
                 if attr == "dependency":
+                    append=""
                     if value['kind'] == "CC":
                         append=" $(ACFLAGS)"
                     if value['kind'] == "CCLD":

@@ -144,17 +144,17 @@ class DependencyGraphBuilder:
             for target in unmatched_targets:
                 if self.target_match(target, output):
                     found = True
-                    self.graph.add_node(target, attrs = [('target', output), ('dependency', dependency)])
-                    self.graph.add_edge("ROOT", target)
+                    self.graph.add_node(output, attrs = [('target', output), ('dependency', dependency)])
+                    self.graph.add_edge("ROOT", output)
                     for inp in dependency['inputs']:
-                        available_inputs[inp] = target
+                        available_inputs[inp] = output
             if found:
                 unmatched_targets.remove(target)
             else:
                 if output in available_inputs:
                     edge_src = available_inputs[output]
                     available_inputs.pop(output)
-                    edge_dst = os.path.basename(output)
+                    edge_dst = output
                     self.graph.add_node(edge_dst, attrs = [('target', output), ('dependency', dependency)])
                     self.graph.add_edge(edge_src, edge_dst)
                     for inp in dependency['inputs']:

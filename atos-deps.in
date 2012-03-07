@@ -197,7 +197,8 @@ class DependencyGraphBuilder:
                         self.graph.add_edge(output, inp)
         # Check for unmatched targets
         if len(unmatched_targets) > 0:
-            raise Exception("Unmatched target in dependency graph: " + str(unmatched_targets))
+            for target in unmatched_targets:
+                print >> sys.stderr, "warning: unmatched target executable, will not be optimized: " + target
         # Prune nodes with no recipe (remove speculated inputs)
         for node in self.graph.nodes():
             if node == "ROOT":
@@ -479,7 +480,7 @@ def version():
 try:
     opts, args = getopt.getopt(sys.argv[1:], "hvo:i:")
 except getopt.GetoptError, err:
-        print(str(err), sys.stderr)
+        print >> sys.stderr, str(err)
         sys.exit(1)
 
 input_name = "./atos-configurations/build.audit"

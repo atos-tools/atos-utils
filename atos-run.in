@@ -27,7 +27,7 @@ dir=`dirname $0`
 dir=`cd $dir; pwd`
 PROOT=${PROOT:-proot}
 
-executable=""
+executables=""
 identifier=""
 variant=""
 fd=""
@@ -48,10 +48,10 @@ usage() {
 Usage: atos-run [options] [--] [command...]
 
 Executable File Options:
-      -e <executable> : executable to be instrumented [default: first arg of command]
+      -e <executables> : executables to be instrumented [default: first arg of command]
 
 Identification options:
-      -i <identifier> : identifier of run [default: executable basename]
+      -i <identifier> : identifier of run [default: executables basename]
       -w <variant> : identifier of variant [default: REF]
       -a <options> : if specified, infer variant from option set
 
@@ -88,7 +88,7 @@ tmpfile2=`mktemp /tmp/atos-inst.XXXXXX`
 
 while getopts vhro:f:e:a:i:w:u:g:C: opt; do
     case $opt in
-	e) executable="$OPTARG"
+	e) executables="$OPTARG"
 	    ;;
 	i) identifier="$OPTARG"
 	    ;;
@@ -119,17 +119,22 @@ done
 
 shift $((OPTIND - 1))
 
-if [ "$executable" = "" ]; then
+if [ "$executables" = "" ]; then
     if [ -f "$configuration_path/targets" ]; then
-	executable=`head -1 $configuration_path/targets`
+	executables=`cat "$configuration_path/targets"`
     else
-	echo "`basename $0`: error: missing command arguments" >&2
+	echo "error: `basename $0`: error: no target executable specified" >&2
 	exit 1
     fi
 fi
 
 if [ "$identifier" = "" ]; then
-    identifier=`basename "$executable"`
+    identifier=""
+    sep=""
+    for i in $executables; do
+	identifier="$identifier$sep"`basename "$i"`
+	sep="-"
+    done
 fi
 
 if [ "$g_set" = 1 -a "$u_set" = 1 ]; then
@@ -178,21 +183,28 @@ fi
 
 
 get_size() {
-    local exe="${1?}"
-    exe="`which "$exe"`"
+    local exes="${1?}"
+    local -i size=0
+    for exe in $exes; do
+	exe="`which "$exe"`"
+	local -i exe_size=`/usr/bin/size "$exe" | tail -1 | awk '{print $4;}'`
+	size=$((size+exe_size))
+    done
     if [ "$file" != "" ]; then
-	/usr/bin/size "$exe" | tail -1 | awk '{print "ATOS: '"$identifier"': '"$variant"': size: ", $4;}' >>"$file"
+	echo "ATOS: $identifier: $variant: size: $size" >>"$file"
     else
-	/usr/bin/size "$exe" | tail -1 | awk '{print "ATOS: '"$identifier"': '"$variant"': size: ", $4;}' >&$fd
+	echo "ATOS: $identifier: $variant: size: $size" >&$fd
     fi
 }
 
 get_time() {
+    local -i time
     /usr/bin/time -p ${1+"$@"} 2>&1 | tee $tmpfile | sed -e '/^real /d' -e '/^user /d' -e '/^sys /d'
+    time=`tail -3 $tmpfile | awk '{if ($1 == "user") { print int($2 * 1000); }}'`
     if [ "$file" != "" ]; then
-	tail -3 $tmpfile | awk '{if ($1 == "user") { print "ATOS: '"$identifier"': '"$variant"': time: ", int($2 * 1000); }}' >>"$file"
+	echo "ATOS: $identifier: $variant: time: $time" >>"$file"
     else
-	tail -3 $tmpfile | awk '{if ($1 == "user") { print "ATOS: '"$identifier"': '"$variant"': time: ", int($2 * 1000); }}' >&$fd
+	echo "ATOS: $identifier: $variant: time: $time" >&$fd
     fi
 }
 
@@ -209,4 +221,4 @@ if [ -f "$configuration_path/run.sh" ]; then
 else
     get_time ${1+"$@"}
 fi
-get_size "$executable"
+get_size "$executables"

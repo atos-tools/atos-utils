@@ -29,10 +29,12 @@ PROOT=${PROOT:-proot}
 
 configuration_path="./atos-configurations"
 objective=time
-executable=""
+executables=""
+identifier=""
 quiet="0"
 dryrun=""
 print=""
+ref=0
 
 version() {
     echo "atos-play version @VERSION@"
@@ -45,10 +47,12 @@ Usage: atos-play [options] [--] [command...]
 
 Objective Options:
       -f <objective> : defined the objective function [default: $objective]
+      -r : get reference results
 
 Configuration Options:
       -C <path> : configuration path [default: $configuration_path]
-      -e <executable>: executable target [default: inferred from configuration]
+      -e <executables>: executables targets [default: inferred from configuration]
+      -i <identifier> : identifier of run [default: executables basename]
 
 Build Configuration:
       -n : dry run, output build commands only
@@ -68,17 +72,21 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts vhqnpC:f:e: opt; do
+while getopts vhqnprC:f:e:i: opt; do
     case $opt in
 	f) objective="$OPTARG"
 	    ;;
 	C) configuration_path="$OPTARG"
 	    ;;
-	e) executable="$OPTARG"
+	e) executables="$OPTARG"
+	    ;;
+	i) identifier="$OPTARG"
 	    ;;
 	n) dryrun=1
 	    ;;
 	p) print=1
+	    ;;
+	r) ref=1
 	    ;;
 	q) quiet=1
 	    ;;
@@ -99,21 +107,27 @@ if [ ! -f "$results_db" ]; then
     exit 1
 fi
 
-if [ "$executable" = "" ]; then
-    executable=`head -1 $configuration_path/targets`
-fi
-
-if [ "$executable" = "" ]; then
-    echo "error: `basename $0`: not target specified" >&2
-    exit 1
+if [ "$identifier" = "" ]; then
+    if [ "$executables" = "" ]; then
+	if [ -f "$configuration_path/targets" ]; then
+	    executables=`cat "$configuration_path/targets"`
+	else
+	    echo "error: `basename $0`: error: no target executable and no identifier specified" >&2
+	    exit 1
+	fi
+    fi
+    identifier=""
+    sep=""
+    for i in $executables; do
+	identifier="$identifier$sep"`basename "$i"`
+	sep="-"
+    done
 fi
 
 if [ "$objective" != time -a "$objective" != size ]; then
     echo "error: `basename $0`: unknown objective: $objective" >&2
     exit 1
 fi
-
-identifier=`basename "$executable"`
 
 best() {
     grep "^ATOS: $identifier:" $results_db  | grep " $objective:" | sort -n -k 5 | head -1 | awk '{print $3}' | sed 's/:$//'
@@ -123,14 +137,19 @@ get_options() {
     grep "^ATOS: $identifier: $configuration: conf:" $results_db | sed "s/ATOS: $identifier: $configuration: conf: //"
 }
 
-configuration=`best`
+if [ "$ref" = 1 ]; then
+    configuration=REF
+    options=""
+else
+    configuration=`best`
+    options=`get_options`
+fi
 
 if [ "$print" = 1 ]; then
     grep "^ATOS: $identifier: $configuration:" $results_db
     exit 0
 fi
 
-options=`get_options`
 [ "$quiet" = "1" ] || echo "Playing optimized build $identifier:$configuration..."
 exec $dir/atos-opt ${dryrun:+-n} -a "$options"
 

@@ -50,7 +50,7 @@ Run Options
       -r <run_script> : run_script to be executed [default: $run_script]
 
 Executable File Options:
-      -e <executable> : executable to be instrumented [default: first arg of command]
+      -e <executables> : executables to be instrumented [default: args of command]
 
 Configuration Options:
       -C <path> : configuration path [default: $configuration_path]
@@ -74,7 +74,7 @@ tmpfile=`mktemp /tmp/atos-inst.XXXXXX`
 
 while getopts vhdqe:r:b:C: opt; do
     case $opt in
-	e) executable="$OPTARG"
+	e) executables="$OPTARG"
 	    ;;
 	C) configuration_path="$OPTARG"
 	    ;;
@@ -97,7 +97,7 @@ done
 
 shift $((OPTIND - 1))
 
-[ "$executable" != "" ] || executable="$1"
+[ "$executables" != "" ] || executables="$@"
 
 if [ "$configuration_path" = "" ]; then
     echo "`basename $0`: error: missing configuration path" >&2
@@ -111,15 +111,19 @@ fi
 configuration_path=`cd "$configuration_path"; pwd`
 
 if [ -f "$configuration_path/targets" ]; then
-    executable=`head -1 "$configuration_path/targets"`
+    executables=`cat "$configuration_path/targets"`
 fi
-if [ "$executable" = "" ]; then
-    echo "`basename $0`: error: missing executable" >&2
+if [ "$executables" = "" ]; then
+    echo "error: `basename $0`: missing executable target" >&2
     exit 1
 fi
 
-identifier=`basename "$executable"`
-
+identifier=""
+sep=""
+for i in $executables; do
+    identifier="$identifier$sep"`basename "$i"`
+    sep="-"
+done
 
 if [ "$build_script" != "" ]; then
     [ "$quiet" = "1" ] || echo "Auditing build ($identifier)..."
@@ -132,7 +136,7 @@ if [ "$run_script" != "" ]; then
 fi
 
 [ "$quiet" = "1" ] || echo "Computing build dependencies ($identifier)..."
-$dir/atos-deps "$executable"
+$dir/atos-deps $executables
 
 [ "$quiet" = "1" ] || echo "Cleaning all profiles..."
 rm -rf "$configuration_path"/profiles

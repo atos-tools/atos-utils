@@ -142,7 +142,7 @@ fi
 
 # If the configuration path contains a build.mk execute it
 if [ -f "$configuration_path/build.mk" ]; then
-    exec make ${dryrun:+-n} -j $JOBS -f $configuration_path/build.mk ACFLAGS="$APFLAGS $options"
+    exec make ${dryrun:+-n} -j $jobs -f $configuration_path/build.mk ACFLAGS="$APFLAGS $options"
 else
     exec env PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$APFLAGS $options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT -w $PWD / ${1+"$@"}
 fi

@@ -48,6 +48,10 @@ class DependencyGraph:
             print "ADD_NODE: " + node
         self.dg.add_node(node, attrs = attrs)
 
+    def del_node(self, node):
+        """ Delete a node and related edges. """
+        self.dg.del_node(node)
+
 
     def has_node(self, node):
         """ Returns whether the graph contains the node. """
@@ -59,9 +63,21 @@ class DependencyGraph:
             print "ADD_EDGE: " + src + " " + dst
         self.dg.add_edge((src, dst))
 
+    def del_edge(self, src, dst):
+        """ Delete an edge. """
+        self.dg.del_edge((src, dst))
+
+    def nodes(self):
+        """ Returns the list of nodes. """
+        return self.dg.nodes()
+
+    def edges(self):
+        """ Returns the list of edges. """
+        return self.dg.edges()
+
     def graph(self):
         """ Get the graph as a nodes, edges map. """
-        return { 'nodes': self.dg.nodes(), 'edges': self.dg.edges() }
+        return { 'nodes': self.nodes(), 'edges': self.edges() }
 
     def node_attributes(self):
         """ Get the node attributes. """
@@ -112,6 +128,7 @@ class DependencyGraph:
                         append=" $(ACFLAGS) $(ALDFLAGS)"
                     # TODO: handle quotes in command
                     recipe = "$(QUIET)cd " + value['command']['cwd'] + " && " + " ".join(value['command']['args']) + append
+                    recipe = re.sub(r'(["\'])', r'\\\1', recipe)
             deps = []
             for dep in self.dg.neighbors(node):
                 for attr,value in self.dg.node_attr[dep]:
@@ -140,8 +157,8 @@ class DependencyGraphBuilder:
     def build_graph(self):
         """ Builds Add a dependency consisting of a node and input/output lists. """
         self.graph.add_node("ROOT")
-        unmatched_targets = Set(self.targets)
-        available_inputs = {}
+        unmatched_targets = self.targets
+        available_inputs = Set()
         referenced_outputs = Set()
 
         for i in range(len(self.deplist)):
@@ -154,35 +171,44 @@ class DependencyGraphBuilder:
                 if self.target_match(target, output):
                     if output in referenced_outputs:
                         raise Exception("Output file referenced several times: " + output)
+                    unmatched_targets.remove(target)
                     found = True
                     referenced_outputs.add(output)
                     self.graph.add_node(output, attrs = [('target', output), ('dependency', dependency)])
                     self.graph.add_edge("ROOT", output)
                     for inp in dependency['inputs']:
-                        available_inputs[inp] = output
+                        available_inputs.add(inp)
                         if not self.graph.has_node(inp):
                             self.graph.add_node(inp, attrs = [('target', inp)])
                         self.graph.add_edge(output, inp)
-            if found:
-                unmatched_targets.remove(target)
-            else:
+            if not found:
                 if output in available_inputs:
                     if output in referenced_outputs:
                         raise Exception("Output file referenced several times: " + output)
                     referenced_outputs.add(output)
-                    available_inputs.pop(output)
+                    available_inputs.remove(output)
                     if not self.graph.has_node(output):
                         raise Exception("Expected to have seen output in dependencies: " + output)
                     self.graph.node_attributes()[output] = [('target', output), ('dependency', dependency)]
                     for inp in dependency['inputs']:
-                        available_inputs[inp] = output
+                        available_inputs.add(inp)
                         if not self.graph.has_node(inp):
                             self.graph.add_node(inp, attrs = [('target', inp)])
                         self.graph.add_edge(output, inp)
         # Check for unmatched targets
         if len(unmatched_targets) > 0:
             raise Exception("Unmatched target in dependency graph: " + str(unmatched_targets))
-
+        # Prune nodes with no recipe (remove speculated inputs)
+        for node in self.graph.nodes():
+            if node == "ROOT":
+                continue
+            real = False
+            for attr,value in self.graph.node_attributes()[node]:
+                if attr == "dependency":
+                    real = True
+            if not real:
+                self.graph.del_node(node)
+        
     def get_graph(self):
         """ Returns the dependency graph. """
         return self.graph
@@ -262,10 +288,48 @@ class SimpleCCInterpreter:
             return self.input_files
         inputs = []
         args = command['args']
-        for i in range(len(args[1:])):
-            m = re.search("\\.(c|cc|cxx|cpp|c\+\+|C|i|ii|o|a)$", args[i+1])
-            if m != None and m.group(1) != None and (i == 0 or args[i] != "-o"):
-                    inputs.append(os.path.normpath(os.path.join(command['cwd'], args[i+1])))
+        lpath = []
+        i = 1
+        while i < len(args):
+            m = re.search("^-o(.*)$", args[i])
+            if m != None:
+                if m.group(1) == "":
+                    i = i + 2
+                else:
+                    i = i + 1
+                continue
+            m = re.search("\\.(c|cc|cxx|cpp|c\+\+|C|i|ii|o|a)$", args[i])
+            if m != None:
+                inputs.append(os.path.normpath(os.path.join(command['cwd'], args[i])))
+                i = i + 1
+                continue
+            m = re.search("^-L(.*)$", args[i])
+            if m != None:
+                path = m.group(1)
+                if path == "":
+                    if i+1 < len(args):
+                        path = args[i+1]
+                    i = i + 2
+                else:
+                    i = i + 1
+                if path != "":
+                    lpath.append(os.path.normpath(os.path.join(command['cwd'], path)))
+                continue
+            m = re.search("^-l(.*)$", args[i])
+            if m != None:
+                lib = m.group(1)
+                if lib == "":
+                    if i+1 < len(args):
+                        lib = args[i+1]
+                    i = i + 2
+                else:
+                    i = i + 1
+                if lib != "":
+                    for path in lpath:
+                        inputs.append(os.path.join(path, "lib" + lib + ".a"))
+                continue
+            i = i + 1
+
         return inputs
 
     def get_output_files(self, command):
@@ -274,13 +338,21 @@ class SimpleCCInterpreter:
             return self.output_files
         args = command['args']
         outputs = []
-        for i in range(len(args[1:])):
-            if args[i+1] == "-o" and i+2 < len(args):
-                outputs = [ os.path.normpath(os.path.join(command['cwd'], args[i+2])) ]
-            else:
-                m = re.search("^-o(.+)$", args[i+1])
-                if m != None and m.group(1) != None:
-                    outputs = [ os.path.normpath(os.path.join(command['cwd'], m.group(1))) ]
+        i = 1
+        while i < len(args):
+            m = re.search("^-o(.*)$", args[i])
+            if m != None:
+                output = m.group(1)
+                if output == "":
+                    if i+1 < len(args):
+                        output = args[i+1]
+                    i = i + 2
+                else:
+                    i = i + 1
+                outputs = [ os.path.normpath(os.path.join(command['cwd'], output)) ]
+                continue
+            i = i + 1
+
         if len(outputs) == 0 and len(self.get_input_files(command)) > 0:
             if self.get_kind(command) == "CC":
                 outputs = []

@@ -1,7 +1,33 @@
-This software package contains the Auto Tuning Optimization SSystem (ATOS) tools.
+This software package contains the Auto Tuning Optimization System (ATOS) tools.
 
 After installation (see INSTALL file) the following tools are available:
+* Top level tools:
+ * atos-explore: automatic optimization system for a build and run system that generate a build configuration to be used by atos-play (see atos-explore -h)
+ * atos-play: build system optimizer for a build system (see atos-play -h)
 
-Ã* atos-audit: auditing tool for a build system that generates a build template to be used by atos-optimize (see atos-audit -h)
-* atos-optimize: automatic optimization system for a build and run system that generate a build configuration to be used by atos-play (see atos-optimize -h)
-* atos-play: build system optimizer for a build system (see atos-play -h)
+* Companion tools:
+ * atos-audit: auditing tool for a build system that generates a build template to be used by atos-opt (see atos-audit -h)
+ * atos-raudit: auditing tool for a run system that generates a run template to be used by atos-run (see atos-raudit -h)
+ * atos-deps: specify executables targets and complete the auditing process (see atos-deps -h)
+ * atos-opt: replay build audited by atos-audit with custome options injection (see atos-opt -h)
+ * atos-run: rerun benchmark audited by atos-raudit (see atos-opt -h) 
+ * atos-profile: specific rebuild!rerun for genrating application profiles (see atos-profile -h)
+
+* Typical usage:
+A simple usage of the atos-explore tool is to provide a script for building
+the application (compile.sh for instance) and a script for running the
+benchmarks (exec.sh for instance), then run the atos-explore tool with the
+executable(s) to instrument as argument.
+For instance:
+$ atos-explore -b ./compile.sh -r ./exec.sh bzip2
+....
+Best Size configuration: ...
+Best performance configuration: ...
+
+Then in order to replay the build for best size or best perf, use the
+atos-play tool:
+$ atos-play
+... compile your application for best performance
+$ atos-play -f size
+... compile your application for best code size
+  

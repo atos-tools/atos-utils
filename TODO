@@ -1,0 +1,5 @@
+* CAutomatize detection of target executables: would avoid atos-deps <executables> command. Possibly use interposition in raudit and auto detect execution of programs under the current dir.
+* Run exploration also for one executable at a time, instead of all at once when multiple executables are specified.
+* Find a solution for makefiles that remove intermediate targets .c files. For instance mibench/office/ghostscript remove some .c files and thus atos-opt does not work.
+* Use interposition for instrumenting executable instead of /usr/bin/time of top level run script.
+* Validate atos-explore on EEMBC, Spec and Webkit.

@@ -3,3 +3,5 @@
 * Find a solution for makefiles that remove intermediate targets .c files. For instance mibench/office/ghostscript remove some .c files and thus atos-opt does not work.
 * Use interposition for instrumenting executable instead of /usr/bin/time of top level run script.
 * Validate atos-explore on EEMBC, Spec and Webkit.
+* Handle executables that are links. For instance mibench/telecom/gsm as a ln toast untoast command, hence untoast cannot be audited.
+* Check build dependencies in mibench/telecom/gsm, it seems that toast build is missing .o recompilation.v

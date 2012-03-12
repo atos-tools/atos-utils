@@ -181,40 +181,26 @@ if [ "$file" != "" -a "$fd" != "" ]; then
     exit 1
 fi
 
+exe_time=0
+exe_size=0
+failure=false
 
 get_size() {
     local exes="${1?}"
-    local -i size=0
+    exe_size=0
     for exe in $exes; do
-	exe="`which "$exe"`"
-	local -i exe_size=`/usr/bin/size "$exe" | tail -1 | awk '{print $4;}'`
-	size=$((size+exe_size))
+	exe="`which "$exe" 2>/dev/null`"
+	[ "$exe" != "" ] || failure=true
+	local -i size=`/usr/bin/size "$exe" | tail -1 | awk '{print $4;}'`
+	exe_size=$((exe_size+size))
     done
-    if [ "$file" != "" ]; then
-	echo "ATOS: $identifier: $variant: size: $size" >>"$file"
-    else
-	echo "ATOS: $identifier: $variant: size: $size" >&$fd
-    fi
 }
 
 get_time() {
-    local -i time
     /usr/bin/time -p ${1+"$@"} 2>&1 | tee $tmpfile | sed -e '/^real /d' -e '/^user /d' -e '/^sys /d'
-    time=`tail -3 $tmpfile | awk '{if ($1 == "user") { print int($2 * 1000); }}'`
-    if [ "$file" != "" ]; then
-	echo "ATOS: $identifier: $variant: time: $time" >>"$file"
-    else
-	echo "ATOS: $identifier: $variant: time: $time" >&$fd
-    fi
+    [ ${PIPESTATUS[0]} = 0 ] || failure=true
+    exe_time=`tail -3 $tmpfile | awk '{if ($1 == "user") { print int($2 * 1000); }}'`
 }
-
-if [ "$file" != "" ]; then
-    echo "ATOS: $identifier: $variant: version: `$0 -v | awk '{print $3;}'`" >>"$file"
-    echo "ATOS: $identifier: $variant: conf: $options" >>"$file"
-else
-    echo "ATOS: $identifier: $variant: version: `$0 -v`" >&$fd
-    echo "ATOS: $identifier: $variant: conf: $options" >&$fd
-fi
 
 if [ -f "$configuration_path/run.sh" ]; then
     get_time "$configuration_path/run.sh"
@@ -222,3 +208,21 @@ else
     get_time ${1+"$@"}
 fi
 get_size "$executables"
+
+if $failure; then
+    exe_size=FAILURE
+    exe_time=FAILURE
+fi
+
+if [ "$file" != "" ]; then
+    echo "ATOS: $identifier: $variant: version: `$0 -v | awk '{print $3;}'`" >>"$file"
+    echo "ATOS: $identifier: $variant: conf: $options" >>"$file"
+    echo "ATOS: $identifier: $variant: size: $exe_size" >>"$file"
+    echo "ATOS: $identifier: $variant: time: $exe_time" >>"$file"
+else
+    echo "ATOS: $identifier: $variant: version: `$0 -v`" >&$fd
+    echo "ATOS: $identifier: $variant: conf: $options" >&$fd
+    echo "ATOS: $identifier: $variant: size: $exe_size" >&$fd
+    echo "ATOS: $identifier: $variant: time: $exe_time" >&$fd
+fi
+

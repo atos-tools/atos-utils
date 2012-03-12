@@ -226,3 +226,6 @@ else
     echo "ATOS: $identifier: $variant: time: $exe_time" >&$fd
 fi
 
+if $failure; then
+    exit 2
+fi

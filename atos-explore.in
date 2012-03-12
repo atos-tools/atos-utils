@@ -138,35 +138,39 @@ fi
 [ "$quiet" = "1" ] || echo "Computing build dependencies ($identifier)..."
 $dir/atos-deps $executables
 
-[ "$quiet" = "1" ] || echo "Cleaning all profiles..."
+[ "$quiet" = "1" ] || echo "Cleaning all profiles ($identifier)..."
 rm -rf "$configuration_path"/profiles
 
-[ "$quiet" = "1" ] || echo "Cleaning all results..."
+[ "$quiet" = "1" ] || echo "Cleaning all results ($identifier)..."
 rm -rf "$configuration_path"/results.db
 
 [ "$quiet" = "1" ] || echo "Running reference execution ($identifier: REF)..."
-$dir/atos-run -r
+$dir/atos-run -r || echo "Variant run FAILURE ($identifier: REF)" 
 
 for gopt in "-O1" "-O2" "-Os" "-O3"; do
     for opts in "" "-flto"; do
 	options="$gopt $opts"
 	variant=`echo $options | sed 's/ //g'`
-	[ "$quiet" = "1" ] || echo "Building ($identifier:$options)..."
-	$dir/atos-opt -a "$options" >"$configuration_path/build$variant.log"  2>&1
+	[ "$quiet" = "1" ] || echo "Building ($identifier: $options)..."
+	$dir/atos-opt -a "$options" >"$configuration_path/build$variant.log" 2>&1 || echo "Variant build FAILURE ($identifier: $options)" 
 	[ "$quiet" = "1" ] || echo "Running ($identifier: $options)..."
-	$dir/atos-run -r -a "$options" >"$configuration_path/run$variant.log"  2>&1
+	$dir/atos-run -r -a "$options" >"$configuration_path/run$variant.log" 2>&1 || echo "Variant run FAILURE ($identifier: $options)" 
     done
     [ "$quiet" = "1" ] || echo "Profiling build ($identifier: -fprofile-generate $gopt)..."
     pvariant=`echo $gopts | sed 's/ //g'`
-    $dir/atos-profile -g "$gopt" >"$configuration_path/build-fprofile-generate$pvariant.log" 2>&1
-    for opts in "" "-flto" "-funroll-loops" "-flto -funroll-loops"; do
-	options="$gopt $opts"
-	variant=`echo $options | sed 's/ //g'`
-	[ "$quiet" = "1" ] || echo "Building ($identifier:-fprofile-use $options)..."
-	$dir/atos-opt -u "$gopt" -a "$options" >"$configuration_path/build-fprofile-use$pvariant$variant.log"  2>&1
-	[ "$quiet" = "1" ] || echo "Running ($identifier:-fprofile-use $options)..."
-	$dir/atos-run -r -u "$gopt" -a "$options" >"$configuration_path/run-fprofile-use$pvariant$variant.log"  2>&1
-    done
+    $dir/atos-profile -g "$gopt" >"$configuration_path/build-fprofile-generate$pvariant.log" 2>&1 || failure=true
+    if $failure; then
+	echo "Variant profiling FAILURE ($identifier: -fprofile-generate $gopt)" 
+    else
+	for opts in "" "-flto" "-funroll-loops" "-flto -funroll-loops"; do
+	    options="$gopt $opts"
+	    variant=`echo $options | sed 's/ //g'`
+	    [ "$quiet" = "1" ] || echo "Building ($identifier: -fprofile-use $options)..."
+	    $dir/atos-opt -u "$gopt" -a "$options" >"$configuration_path/build-fprofile-use$pvariant$variant.log" 2>&1 || echo "Variant build FAILURE ($identifier: -fprofile-use $options)" 
+	    [ "$quiet" = "1" ] || echo "Running ($identifier: -fprofile-use $options)..."
+	    $dir/atos-run -r -u "$gopt" -a "$options" >"$configuration_path/run-fprofile-use$pvariant$variant.log" 2>&1 || echo "Variant run FAILURE ($identifier: -fprofile-use $options)" 
+	done
+    fi
 done
 if [ "$quiet" != "1" ]; then
     echo "Best performance variant ($identifier)..."

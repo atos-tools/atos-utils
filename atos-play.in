@@ -130,7 +130,7 @@ if [ "$objective" != time -a "$objective" != size ]; then
 fi
 
 best() {
-    grep "^ATOS: $identifier:" $results_db  | grep " $objective:" | sort -n -k 5 | head -1 | awk '{print $3}' | sed 's/:$//'
+    grep "^ATOS: $identifier:" $results_db  | grep " $objective:" | grep -v " $objective: FAILURE" | sort -n -k 5 | head -1 | awk '{print $3}' | sed 's/:$//'
 }
 
 get_options() {

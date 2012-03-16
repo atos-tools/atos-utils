@@ -28,7 +28,7 @@ import getopt
 from pygraph.classes.digraph import digraph
 from pygraph.readwrite.dot import write
 from sets import Set
-import gv
+# import gv
 
 VERBOSE=0
 

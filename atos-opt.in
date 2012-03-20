@@ -142,6 +142,8 @@ if [ "$u_set" = 1 ]; then
     if [ "$profile_path" = "" ]; then
 	profile_path="$configuration_path/profiles/`variant_hash $pvariant`"
     fi
+    mkdir -p "$profile_path"
+    profile_path=`cd "$profile_path"; pwd`
     APFLAGS="-fprofile-use -fprofile-correction -Wno-error=coverage-mismatch -fprofile-dir=$profile_path"
 fi
 

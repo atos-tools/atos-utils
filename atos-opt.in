@@ -109,6 +109,10 @@ done
 
 shift $((OPTIND - 1))
 
+variant_hash() {
+    echo "$1" | md5sum | cut -f 1 -d ' '
+}
+
 if [ "$g_set" = 1 -a "$u_set" = 1 ]; then
     echo "`basename $0`: error: options -u and -g cannot by specified at the same time" >&2
     exit 1
@@ -121,9 +125,10 @@ if [ "$g_set" = 1 ]; then
 	
     fi
     if [ "$profile_path" = "" ]; then
-	profile_path="$configuration_path/profiles/$pvariant"
+	profile_path="$configuration_path/profiles/`variant_hash $pvariant`"
     fi
     mkdir -p "$profile_path"
+    echo $pvariant > $profile_path/variant.txt
     profile_path=`cd "$profile_path"; pwd`
     find "$profile_path" -name '*.gcda' | xargs rm -f
     APFLAGS="-fprofile-generate -fprofile-dir=$profile_path"
@@ -135,7 +140,7 @@ if [ "$u_set" = 1 ]; then
 	pvariant=OPT`echo $uopts | sed 's/ //g'`
     fi
     if [ "$profile_path" = "" ]; then
-	profile_path="$configuration_path/profiles/$pvariant"
+	profile_path="$configuration_path/profiles/`variant_hash $pvariant`"
     fi
     APFLAGS="-fprofile-use -fprofile-correction -Wno-error=coverage-mismatch -fprofile-dir=$profile_path"
 fi

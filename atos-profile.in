@@ -81,5 +81,5 @@ done
 
 shift $((OPTIND - 1))
 
-$dir/atos-opt -p "$profile_path" -g "$options"
+$dir/atos-opt -p "$profile_path" -g "$options" -a "$options"
 $dir/atos-run

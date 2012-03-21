@@ -151,14 +151,14 @@ if [ "$g_set" = 1 -a "$u_set" = 1 ]; then
 fi    
 
 if [ "$g_set" = 1 ]; then
-    pvariant=
+    pvariant=-fprofile-generate
     if [ "$gopts" != "" ]; then
 	pvariant=-fprofile-generate`echo $gopts | sed 's/ //g'`
     fi
 fi
 
 if [ "$u_set" = 1 ]; then
-    pvariant=
+    pvariant=-fprofile-use
     if [ "$uopts" != "" ]; then
 	pvariant=-fprofile-use`echo $uopts | sed 's/ //g'`
     fi

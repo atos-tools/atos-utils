@@ -34,6 +34,7 @@ configuration_path="./atos-configurations"
 verbose="0"
 quiet="0"
 clean="0"
+opt_q=""
 
 version() {
     echo "atos-explore version @VERSION@"
@@ -88,7 +89,7 @@ while getopts vhdqce:r:b:C: opt; do
 	    ;;
 	d) verbose=1
 	    ;;
-	q) quiet=1
+	q) quiet=1; opt_q=-q
 	    ;;
 	v) version; exit 0
 	    ;;
@@ -110,8 +111,13 @@ fi
 
 mkdir -p "$configuration_path"
 configuration_path=`cd "$configuration_path"; pwd`
+if [ "$clean" = "1" ]; then
+    [ "$quiet" = "1" ] || echo "Cleaning all profiles..."
+    rm -rf "$configuration_path"/profiles
+    [ "$quiet" = "1" ] || echo "Cleaning all results..."
+    rm -rf "$configuration_path"/results.db
+fi
 
-identifier="session-$$"
 if [ -f "$configuration_path/targets" ]; then
     executables=`cat "$configuration_path/targets"`
 fi
@@ -122,59 +128,40 @@ if [ "$executables" = "" ]; then
 fi
 
 if [ "$build_script" != "" ]; then
-    [ "$quiet" = "1" ] || echo "Auditing build ($identifier)..."
-    $dir/atos-audit $build_script
+    $dir/atos-audit $opt_q $build_script
 fi
 
 if [ "$run_script" != "" ]; then
-    [ "$quiet" = "1" ] || echo "Auditing run ($identifier)..."
-    $dir/atos-raudit $run_script
+    $dir/atos-raudit $opt_q $run_script
 fi
 
-[ "$quiet" = "1" ] || echo "Computing build dependencies ($identifier)..."
-$dir/atos-deps $executables
+$dir/atos-deps $opt_q $executables
 
-if [ "$clean" = "1" ]; then
-    [ "$quiet" = "1" ] || echo "Cleaning all profiles ($identifier)..."
-    rm -rf "$configuration_path"/profiles
-    [ "$quiet" = "1" ] || echo "Cleaning all results ($identifier)..."
-    rm -rf "$configuration_path"/results.db
-fi
-
-[ "$quiet" = "1" ] || echo "Running reference execution ($identifier: REF)..."
-$dir/atos-run -r || echo "Variant run FAILURE ($identifier: REF)" 
+$dir/atos-run $opt_q -r # Will stop there if reference run fails
 
 for gopt in "-O1" "-O2" "-Os" "-O3"; do
     for opts in "" "-flto"; do
 	options="$gopt $opts"
-	variant=`echo $options | sed 's/ //g'`
-	[ "$quiet" = "1" ] || echo "Building ($identifier: $options)..."
-	$dir/atos-opt -a "$options" >"$configuration_path/build$variant.log" 2>&1 || echo "Variant build FAILURE ($identifier: $options)" 
-	[ "$quiet" = "1" ] || echo "Running ($identifier: $options)..."
-	$dir/atos-run -r -a "$options" >"$configuration_path/run$variant.log" 2>&1 || echo "Variant run FAILURE ($identifier: $options)" 
+	$dir/atos-opt $opt_q -a "$options" && $dir/atos-run $opt_q -r -a "$options" || true
     done
-    [ "$quiet" = "1" ] || echo "Profiling build ($identifier: -fprofile-generate $gopt)..."
-    pvariant=`echo $gopts | sed 's/ //g'`
-    $dir/atos-profile -g "$gopt" >"$configuration_path/build-fprofile-generate$pvariant.log" 2>&1 || failure=true
+    failure=false
+    $dir/atos-profile $opt_q -g "$gopt" || failure=true
     if $failure; then
-	echo "Variant profiling FAILURE ($identifier: -fprofile-generate $gopt)" 
+	# skipping profile variants
+	:
     else
 	for opts in "" "-flto" "-funroll-loops" "-flto -funroll-loops"; do
 	    options="$gopt $opts"
-	    variant=`echo $options | sed 's/ //g'`
-	    [ "$quiet" = "1" ] || echo "Building ($identifier: -fprofile-use $options)..."
-	    $dir/atos-opt -u "$gopt" -a "$options" >"$configuration_path/build-fprofile-use$pvariant$variant.log" 2>&1 || echo "Variant build FAILURE ($identifier: -fprofile-use $options)" 
-	    [ "$quiet" = "1" ] || echo "Running ($identifier: -fprofile-use $options)..."
-	    $dir/atos-run -r -u "$gopt" -a "$options" >"$configuration_path/run-fprofile-use$pvariant$variant.log" 2>&1 || echo "Variant run FAILURE ($identifier: -fprofile-use $options)" 
+	    $dir/atos-opt $opt_q -u "$gopt" -a "$options" && $dir/atos-run $opt_q -r -u "$gopt" -a "$options" || true
 	done
     fi
 done
 if [ "$quiet" != "1" ]; then
-    echo "Best performance variant ($identifier)..."
+    echo "Best performance variant..."
     $dir/atos-play -p -f time
-    echo "Best size variant ($identifier)..."
+    echo "Best size variant..."
     $dir/atos-play -p -f size
 fi
 if [ "$quiet" != "1" ]; then
-    echo "Completed ($identifier)."
+    echo "Completed."
 fi

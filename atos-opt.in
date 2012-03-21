@@ -36,6 +36,8 @@ u_set=0
 uopts=""
 g_set=0
 gopts=""
+quiet=0
+variant=""
 
 version() {
     echo "atos-opt version @VERSION@"
@@ -52,6 +54,7 @@ Driver Options:
 
 Optimization Options:
       -a "options" : append given options to the compilation commands [default: $options]
+      -w <variant> : identifier of variant [default: REF or infered from -a]
 
 Configuration Options:
       -C <path> : configuration path [default: $configuration_path]
@@ -66,6 +69,7 @@ Profile options:
       -p <path> : path to profile files [default: $configuration_path/profiles/<pvariant>]
 
 Misc Options
+      -q : quiet output
       -h : output usage
       -v : output version
 
@@ -78,7 +82,7 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts vhnC:j:c:r:a:u:g:p: opt; do
+while getopts vhqnw:C:j:c:r:a:u:g:p: opt; do
     case $opt in
 	a) options="$OPTARG"
 	    ;;
@@ -94,7 +98,11 @@ while getopts vhnC:j:c:r:a:u:g:p: opt; do
 	    ;;
 	g) g_set=1; gopts="$OPTARG"
 	    ;;
+	w) variant="$OPTARG"
+	    ;;
 	n) dryrun=1
+	    ;;
+	q) quiet=1
 	    ;;
 	C) configuration_path="$OPTARG"
 	    ;;
@@ -128,7 +136,7 @@ if [ "$g_set" = 1 ]; then
 	profile_path="$configuration_path/profiles/`variant_hash $pvariant`"
     fi
     mkdir -p "$profile_path"
-    echo $pvariant > $profile_path/variant.txt
+    echo "$pvariant" > "$profile_path/variant.txt"
     profile_path=`cd "$profile_path"; pwd`
     find "$profile_path" -name '*.gcda' | xargs rm -f
     APFLAGS="-fprofile-generate -fprofile-dir=$profile_path"
@@ -147,9 +155,30 @@ if [ "$u_set" = 1 ]; then
     APFLAGS="-fprofile-use -fprofile-correction -Wno-error=coverage-mismatch -fprofile-dir=$profile_path"
 fi
 
-# If the configuration path contains a build.mk execute it
+if [ "$variant" = "" ]; then
+    if [ "$options" != "" -o "$pvariant" != "" ]; then
+	if [ "$g_set" = 1 ]; then
+	    variant=OPT-fprofile-generate$pvariant`echo $options | sed 's/ //g'`
+	elif [ "$u_set" = 1 ]; then
+	    variant=OPT-fprofile-use$pvariant`echo $options | sed 's/ //g'`
+	else
+	    variant=OPT$pvariant`echo $options | sed 's/ //g'`
+	fi
+    else
+	variant=REF
+    fi
+fi
+
+failure=false
+mkdir -p "$configuration_path/logs"
+[ "$quiet" = "1" ] || echo "Building variant $variant..."
 if [ -f "$configuration_path/build.mk" ]; then
-    exec make ${dryrun:+-n} -j $jobs -f $configuration_path/build.mk ACFLAGS="$APFLAGS $options"
+    # If the configuration path contains a build.mk execute it
+    make ${dryrun:+-n} -j $jobs -f $configuration_path/build.mk ACFLAGS="$APFLAGS $options" >"$configuration_path/logs/build-$variant.log" 2>&1 || failure=true
 else
-    exec env PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$APFLAGS $options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT -w $PWD / ${1+"$@"}
+    env PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$APFLAGS $options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT -w $PWD / ${1+"$@"}  >"$configuration_path/logs/build-$variant.log"  2>&1 || failure=true
+fi
+if $failure; then
+    [ "$quiet" = 1 ] || echo "FAILURE while building variant $variant..."
+    exit 2
 fi

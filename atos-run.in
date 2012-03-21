@@ -37,6 +37,8 @@ u_set=0
 uopts=""
 g_set=0
 gopts=""
+quiet=0
+silent=0
 
 version() {
     echo "atos-run version @VERSION@"
@@ -64,12 +66,14 @@ Configuration Options:
 
 Recordiong options:
       -r : record results
+      -s : silent mode, do not emit pers/size results
 
 Profile options:
       -u "$opts" : use profile variant deduced by $opts [default: none]
       -g "$opts" : use profile variant deduced by $opts [default: none]
 
 Misc Options
+      -q : quiet output
       -h : output usage
       -v : output version
 
@@ -86,7 +90,7 @@ tmpfile=`mktemp /tmp/atos-inst.XXXXXX`
 tmpfile2=`mktemp /tmp/atos-inst.XXXXXX`
 
 
-while getopts vhro:f:e:a:i:w:u:g:C: opt; do
+while getopts vhqrso:f:e:a:i:w:u:g:C: opt; do
     case $opt in
 	e) executables="$OPTARG"
 	    ;;
@@ -107,6 +111,10 @@ while getopts vhro:f:e:a:i:w:u:g:C: opt; do
 	C) configuration_path="$OPTARG"
 	    ;;
 	r) record=1
+	    ;;
+	s) silent=1
+	    ;;
+	q) quiet=1
 	    ;;
 	v) version; exit 0
 	    ;;
@@ -181,6 +189,7 @@ if [ "$file" != "" -a "$fd" != "" ]; then
     exit 1
 fi
 
+[ "$quiet" = 1 ] || echo "Running variant $variant..."
 exe_time=0
 exe_size=0
 failure=false
@@ -202,30 +211,35 @@ get_time() {
     exe_time=`tail -3 $tmpfile | awk '{if ($1 == "user") { print int($2 * 1000); }}'`
 }
 
+mkdir -p "$configuration_path/logs"
+
 if [ -f "$configuration_path/run.sh" ]; then
-    get_time "$configuration_path/run.sh"
+    get_time "$configuration_path/run.sh" > "$configuration_path/logs/run-$variant.log" 2>&1
 else
-    get_time ${1+"$@"}
+    get_time ${1+"$@"} > "$configuration_path/logs/run-$variant.log" 2>&1
 fi
-get_size "$executables"
+get_size "$executables" >> "$configuration_path/logs/run-$variant.log" 2>&1
 
 if $failure; then
     exe_size=FAILURE
     exe_time=FAILURE
 fi
 
-if [ "$file" != "" ]; then
-    echo "ATOS: $identifier: $variant: version: `$0 -v | awk '{print $3;}'`" >>"$file"
-    echo "ATOS: $identifier: $variant: conf: $options" >>"$file"
-    echo "ATOS: $identifier: $variant: size: $exe_size" >>"$file"
-    echo "ATOS: $identifier: $variant: time: $exe_time" >>"$file"
-else
-    echo "ATOS: $identifier: $variant: version: `$0 -v`" >&$fd
-    echo "ATOS: $identifier: $variant: conf: $options" >&$fd
-    echo "ATOS: $identifier: $variant: size: $exe_size" >&$fd
-    echo "ATOS: $identifier: $variant: time: $exe_time" >&$fd
+if [ "$silent" != 1 ]; then
+    if [ "$file" != "" ]; then
+	echo "ATOS: $identifier: $variant: version: `$0 -v | awk '{print $3;}'`" >>"$file"
+	echo "ATOS: $identifier: $variant: conf: $options" >>"$file"
+	echo "ATOS: $identifier: $variant: size: $exe_size" >>"$file"
+	echo "ATOS: $identifier: $variant: time: $exe_time" >>"$file"
+    else
+	echo "ATOS: $identifier: $variant: version: `$0 -v`" >&$fd
+	echo "ATOS: $identifier: $variant: conf: $options" >&$fd
+	echo "ATOS: $identifier: $variant: size: $exe_size" >&$fd
+	echo "ATOS: $identifier: $variant: time: $exe_time" >&$fd
+    fi
 fi
 
 if $failure; then
+    [ "$quiet" = 1 ] || echo "FAILURE while running variant $variant..."
     exit 2
 fi

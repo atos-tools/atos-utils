@@ -29,6 +29,7 @@ PROOT=${PROOT:-proot}
 
 configuration_path="./atos-configurations"
 outfile=""
+quiet=0
 
 version() {
     echo "atos-raudit version @VERSION@"
@@ -46,6 +47,7 @@ Configuration Options:
       -C <path> : configuration path [default: $configuration_path]
 
 Misc Options
+      -q : quiet output
       -h : output usage
       -v : output version
 
@@ -58,11 +60,13 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts vho:C: opt; do
+while getopts vhqo:C: opt; do
     case $opt in
 	o) outfile="$OPTARG"
 	    ;;
 	C) configuration_path="$OPTARG"
+	    ;;
+	q) quiet=1
 	    ;;
 	v) version; exit 0
 	    ;;
@@ -80,6 +84,7 @@ if [ "$1" = "" ]; then
     exit 1
 fi
 
+[ "$quiet" = "1" ] || echo "Auditing run..."
 if [ "$outfile" = "" ]; then
     mkdir -p $configuration_path
     outfile="$configuration_path/run.audit"
@@ -92,6 +97,5 @@ if [ "$outfile" = "" ]; then
     echo >>$run_sh
     chmod 755 $run_sh
 fi
-
 
 exec "$@"

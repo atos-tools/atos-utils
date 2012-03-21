@@ -30,6 +30,8 @@ PROOT=${PROOT:-proot}
 configuration_path="./atos-configurations"
 profile_path=""
 options=""
+quiet=0
+opt_q=""
 
 version() {
     echo "atos-profile version @VERSION@"
@@ -50,6 +52,7 @@ Configuration Options:
       -C <path> : configuration path [default: $configuration_path]
 
 Misc Options
+      -q : quiet output
       -h : output usage
       -v : output version
 
@@ -62,7 +65,7 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts vhg:p:C: opt; do
+while getopts vhqg:p:C: opt; do
     case $opt in
 	g) options="$OPTARG"
 	    ;;
@@ -74,6 +77,9 @@ while getopts vhg:p:C: opt; do
 	    ;;
 	h) usage; exit 0
 	    ;;
+	q) quiet=1
+	    opt_q=-q
+	    ;;
 	?) usage; exit 2
 	    ;;
     esac
@@ -81,5 +87,7 @@ done
 
 shift $((OPTIND - 1))
 
-$dir/atos-opt -p "$profile_path" -g "$options" -a "$options"
-$dir/atos-run
+[ "$quiet" = "1" ] || echo "Profiling..."
+$dir/atos-opt $opt_q -p "$profile_path" -g "$options" -a "$options"
+$dir/atos-run $opt_q -s -g "$options" -a "$options"
+

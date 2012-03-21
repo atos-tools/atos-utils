@@ -496,6 +496,7 @@ def usage():
     print "  -o <build_description>: output build description suitable for atos-opt [default: " + default_output_name + "]"
     print "  -l : use last build target in the build audit as the default target, use it when you know that the build system creates a single executable for instance"
     print "  -a : use all build targets the build audit as the default targets, use it when you know that all built executable need to be optimized"
+    print "  -q : quiet output"
     print "  -v : output version string"
     print "  -h : print this help screen"
 
@@ -504,7 +505,7 @@ def version():
     print os.path.basename(sys.argv[0]) + " version " + VERSION
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "hvo:i:al")
+    opts, args = getopt.getopt(sys.argv[1:], "hvqo:i:al")
 except getopt.GetoptError, err:
         print >> sys.stderr, str(err)
         sys.exit(1)
@@ -512,6 +513,7 @@ except getopt.GetoptError, err:
 input_name = default_input_name
 output_name = default_output_name
 targets = None
+quiet = 0
 for o, a in opts:
     if o == "-o":
         output_name = a
@@ -521,6 +523,8 @@ for o, a in opts:
         targets = "all"
     if o == "-l":
         targets = "last"
+    elif o == "q":
+        quiet = 1
     elif o == "-h":
         usage()
         sys.exit()
@@ -534,6 +538,9 @@ if len(args) == 0:
         raise Exception("Missing target file list.")
 else:
     targets = args
+
+if quiet != 1:
+    print "Computing build dependencies..."
 
 factory = CommandDependencyListFactory(CCDEPSParser(open(input_name)), SimpleCmdInterpreter())
 factory.build_dependencies()

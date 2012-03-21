@@ -65,7 +65,7 @@ Build options:
 
 Profile options:
       -u "$opts" : use profile variant deduced by $opts [default: none]
-      -g "$opts" : use profile variant deduced by $opts [default: none]
+      -g "$opts" : generate profile variant deduced by $opts [default: none]
       -p <path> : path to profile files [default: $configuration_path/profiles/<pvariant>]
 
 Misc Options
@@ -158,11 +158,11 @@ fi
 if [ "$variant" = "" ]; then
     if [ "$options" != "" -o "$pvariant" != "" ]; then
 	if [ "$g_set" = 1 ]; then
-	    variant=OPT-fprofile-generate$pvariant`echo $options | sed 's/ //g'`
+	    variant=OPT-fprofile-generate`echo $gopts $options | sed 's/ //g'`
 	elif [ "$u_set" = 1 ]; then
-	    variant=OPT-fprofile-use$pvariant`echo $options | sed 's/ //g'`
+	    variant=OPT-fprofile-use`echo $uopts $options | sed 's/ //g'`
 	else
-	    variant=OPT$pvariant`echo $options | sed 's/ //g'`
+	    variant=OPT`echo $options | sed 's/ //g'`
 	fi
     else
 	variant=REF

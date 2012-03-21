@@ -2,6 +2,7 @@
 * Installation:
 Install atos-utils tools with:
 $ make
+$ make check
 $ sudo make install
 
 Default installation prefix is /usr/local.

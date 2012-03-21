@@ -5,3 +5,5 @@
 * Validate atos-explore on EEMBC, Spec and Webkit.
 * Handle executables that are links. For instance mibench/telecom/gsm as a ln toast untoast command, hence untoast cannot be audited.
 * Check build dependencies in mibench/telecom/gsm, it seems that toast build is missing .o recompilation.v
+* Remove results output in atos-profile, for this add a -s option to atos-run for silent operation.
+* If no exe is passed to atos-explore use -a option for atos-deps

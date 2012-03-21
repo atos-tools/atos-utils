@@ -33,6 +33,7 @@ executable=""
 configuration_path="./atos-configurations"
 verbose="0"
 quiet="0"
+clean="0"
 
 version() {
     echo "atos-explore version @VERSION@"
@@ -54,6 +55,7 @@ Executable File Options:
 
 Configuration Options:
       -C <path> : configuration path [default: $configuration_path]
+      -c : clean results and profiles before exploration
 
 Misc Options
       -q : quiet output
@@ -72,7 +74,7 @@ trap "cleanup" EXIT
 tmpfile=`mktemp /tmp/atos-inst.XXXXXX`
 
 
-while getopts vhdqe:r:b:C: opt; do
+while getopts vhdqce:r:b:C: opt; do
     case $opt in
 	e) executables="$OPTARG"
 	    ;;
@@ -81,6 +83,8 @@ while getopts vhdqe:r:b:C: opt; do
 	r) run_script="$OPTARG"
 	    ;;
 	b) build_script="$OPTARG"
+	    ;;
+	c) clean=1
 	    ;;
 	d) verbose=1
 	    ;;
@@ -105,25 +109,17 @@ if [ "$configuration_path" = "" ]; then
 fi
 
 mkdir -p "$configuration_path"
-if [ "$build_script" != "" -a "$run_script" != "" ]; then
-    rm -rf "$configuration_path"/*
-fi
 configuration_path=`cd "$configuration_path"; pwd`
 
+identifier="session-$$"
 if [ -f "$configuration_path/targets" ]; then
     executables=`cat "$configuration_path/targets"`
 fi
-if [ "$executables" = "" ]; then
-    echo "error: `basename $0`: missing executable target" >&2
-    exit 1
-fi
 
-identifier=""
-sep=""
-for i in $executables; do
-    identifier="$identifier$sep"`basename "$i"`
-    sep="-"
-done
+if [ "$executables" = "" ]; then
+    # By default audit all generated executables 
+    executables=-a
+fi
 
 if [ "$build_script" != "" ]; then
     [ "$quiet" = "1" ] || echo "Auditing build ($identifier)..."
@@ -138,11 +134,12 @@ fi
 [ "$quiet" = "1" ] || echo "Computing build dependencies ($identifier)..."
 $dir/atos-deps $executables
 
-[ "$quiet" = "1" ] || echo "Cleaning all profiles ($identifier)..."
-rm -rf "$configuration_path"/profiles
-
-[ "$quiet" = "1" ] || echo "Cleaning all results ($identifier)..."
-rm -rf "$configuration_path"/results.db
+if [ "$clean" = "1" ]; then
+    [ "$quiet" = "1" ] || echo "Cleaning all profiles ($identifier)..."
+    rm -rf "$configuration_path"/profiles
+    [ "$quiet" = "1" ] || echo "Cleaning all results ($identifier)..."
+    rm -rf "$configuration_path"/results.db
+fi
 
 [ "$quiet" = "1" ] || echo "Running reference execution ($identifier: REF)..."
 $dir/atos-run -r || echo "Variant run FAILURE ($identifier: REF)" 

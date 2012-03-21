@@ -88,6 +88,7 @@ fi
 if [ "$outfile" = "" ]; then
     mkdir -p $configuration_path
     outfile="$configuration_path/run.audit"
+    touch "$outfile"
     run_sh="$configuration_path/run.sh"
     echo "#!/bin/sh" >$run_sh
     echo -n "cd $PWD && \$ARUN"  >>$run_sh

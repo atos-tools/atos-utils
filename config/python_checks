@@ -41,11 +41,18 @@ except:
     print "not installed: please install from: http://code.google.com/p/python-graph"
     errors += 1
 try:
-    print "Check python pylab...",
+    print "Check python pylab matplotlib...",
     import pylab
     print "ok"
 except:
-    print "not installed: please install from: http://www.scipy.org/PyLab"
+    print "not installed: please install from: http://www.scipy.org/PyLab or from your package manager python-matplotlib"
+    errors += 1
+try:
+    print "Check python pylab matplotlib tk backend...",
+    import matplotlib.backends.backend_tkagg
+    print "ok"
+except:
+    print "not installed: please install from: http://www.scipy.org/PyLab or from your package manager python-matplotlib-tk"
     errors += 1
 
 if errors:

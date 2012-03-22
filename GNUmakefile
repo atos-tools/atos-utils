@@ -35,7 +35,7 @@ ALL_FILES=$(ALL_CONFIG_FILES)
 INSTALL_EXES=atos-audit atos-raudit atos-deps atos-opt atos-run atos-profile atos-explore atos-play atos-graph
 INSTALLED_EXES=$(addprefix $(PREFIX)/bin/,$(INSTALL_EXES))
 
-.PHONY: all clean distclean install check check-python-dependencies
+.PHONY: all clean distclean install check check-python-dependencies examples
 
 all: $(ALL_FILES)
 
@@ -49,15 +49,18 @@ install: $(INSTALLED_EXES)
 
 check: check-python-dependencies
 
-examples: all check
-	@echo "Running examples, should take around 1-2 minutes per example, the resulting graph is displayed for each example"
+examples:
+	@echo "   Running examples."
+	@echo "   Should take around 1-2 minutes per example"
+	@echo "   The resulting graph is displayed for each example"
+	$(MAKE) all check
 	$(MAKE) examples-sha1-c examples-sha1
 
 examples-sha1-c:
-	cd examples/sha1-c && ../../atos-explore -b "gcc -O2 -o sha1-c sha.c sha1.c" -r ./run.sh && ../../atos-graph
+	cd examples/sha1-c && ../../atos-explore -b "gcc -O2 -o sha1-c sha.c sha1.c" -r ./run.sh && (../../atos-graph &)
 
 examples-sha1:
-	cd examples/sha1 && ../../atos-explore -b "make sha" -r ./run.sh && ../../atos-graph
+	cd examples/sha1 && ../../atos-explore -b "make sha" -r ./run.sh && (../../atos-graph &)
 
 
 #

@@ -1,0 +1,7 @@
+Downloaded from: http://www.packetizer.com/security/sha1/sha1-c.zip
+sha1sum: 43a368a64feef8339ccf389a5ce9f1b4c5d5637a sha1-c.zip
+
+Run example with:
+$ atos-explore -b ./compile.sh -r ./run.sh
+$ atos-graph
+

@@ -49,6 +49,9 @@ install: $(INSTALLED_EXES)
 
 check: check-python-dependencies
 
+examples: all check
+	cd examples/sha1-c && ../../atos-explore -b ./compile.sh -r ./run.sh && ../../atos-graph
+
 #
 # Rules for config files
 #

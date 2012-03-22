@@ -1,0 +1,331 @@
+#!/usr/bin/env python
+#
+# Copyright (C) STMicroelectronics Ltd. 2012
+#
+# This file is part of ATOS.
+#
+# ATOS is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License v2.0
+# as published by the Free Software Foundation
+#
+# ATOS is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
+#
+# Usage: get usage with atos-graph -h
+#
+
+VERSION="@VERSION@"
+
+class optcase():
+
+    def __init__(self, runtime=0.0, binsize=0, caseid=None, flags=None, local_id=None):
+        self.runtime = float(runtime)
+        self.binsize = int(binsize)
+        self.caseid = caseid
+        self.flags = flags
+        self.local_id = local_id
+
+    def compute_speedup(self, ref):
+        self.speedup = ((ref.runtime / self.runtime) - 1.0)
+        self.sizered = (1.0 - (float(self.binsize) / float(ref.binsize)))
+
+
+class optspace():
+
+    def __init__(self):
+        self.cases = { } # { compile_id : optcase }
+        self.refid = None
+
+    def compute_speedups(self):
+        assert self.refid
+        for c in self.cases.values():
+            c.compute_speedup(self.cases[self.refid])
+
+    def compute_frontier(self):
+        import itertools
+        maybe_on_frontier, mustbe_on_frontier = set(self.cases.values()), set()
+        for c in self.cases.values():
+            onfrontier = True
+            maybe_on_frontier.remove(c)
+            for c2 in itertools.chain(mustbe_on_frontier, maybe_on_frontier):
+                if c2.speedup >= c.speedup and c2.sizered >= c.sizered:
+                    onfrontier = False
+                    break
+            if onfrontier: mustbe_on_frontier.add(c)
+            c.onfront = onfrontier
+
+    @staticmethod
+    def mergeruns(allcases):
+        casedict = {} # { compile_id : [ list_of_runs ] }
+        for c in allcases:
+            casedict.setdefault(c.caseid, []).append(c)
+        for c, runs in casedict.items():
+            rt = [ r.runtime for r in runs ]
+            runs[0].runtime = sum(rt) / len(rt)
+        return [ r[0] for r in casedict.values() ]
+
+    def read_ccc_run(self, filename):
+        def read_one_run(lines):
+            size, time, compid = None, None, None
+            while lines:
+                line = lines.pop(0).strip()
+                eqpos = line.find('=')
+                if eqpos == 0: break # invalid line or separator (====)
+                key, val = line[:eqpos].lower(), line[eqpos + 1:]
+                if key == 'run_time': time = val
+                elif key == 'bin_size': size = val
+                elif key == 'compile_id': compid = val
+                else: pass
+            return time, size, compid
+        # skip 1st line (====)
+        allcases, lines = [], open(filename).readlines()[1:]
+        # read all optimization cases
+        while lines:
+            c = read_one_run(lines)
+            if c: allcases += [ optcase(*c) ]
+        # remove cases with runtime of zero
+        allcases = [ c for c in allcases if c.runtime > 0.0 ]
+        # first case is the reference
+        self.refid = allcases[0].caseid
+        # merge all runs of a same binary
+        allcases = optspace.mergeruns(allcases)
+        # create all optimization case points
+        self.cases = dict([ (c.caseid, c) for c in allcases ])
+        # compute speedups, codesize reductions and space frontier
+        self.compute_speedups()
+        self.compute_frontier()
+        return self
+
+    def read_atos_db(self, filename, refid='REF', binname=None, filter=None):
+        import re
+        # ATOS: 401.bzip2: REF: version: 22028858
+        # ATOS: 401.bzip2: REF: conf: -O2 -inline
+        # ATOS: 401.bzip2: REF: size: 63005
+        # ATOS: 401.bzip2: REF: time: 12760
+        def read_one_run(lines):
+            size, time, flags = None, None, None
+            while lines:
+                words = re.split('[\s:]*', lines.pop(0).strip())
+                (bin, compile_id, key), values = words[1:4], words[4:]
+                if binname and binname != bin: continue
+                if words[-1] == 'FAILURE': continue
+                if key == 'conf': flags = values
+                elif key == 'size': size = values[0]
+                elif key == 'time':
+                    time = values[0]
+                    if not 'FAILURE' in [size, time]: break
+                    size, time, flags = None, None, None
+                else: pass # version, ...
+            if not (size and time): return None
+            return (time, size, compile_id, flags)
+        # read all optimization cases
+        allcases, lines = [], open(filename).readlines()
+        local_id = 0
+        while lines:
+            c = read_one_run(lines)
+            if c: allcases += [ optcase(*c, local_id = local_id) ]
+            local_id += 1
+        # merge all runs of a same config
+        allcases = optspace.mergeruns(allcases)
+        # remove cases with runtime of zero
+        allcases = [ c for c in allcases if c.runtime > 0.0 ]
+        # set cases and reference
+        self.cases = dict([ (c.caseid, c) for c in allcases ])
+        self.refid = refid
+        # compute speedups, codesize reductions and space frontier
+        self.compute_speedups()
+        self.compute_frontier()
+        # filter
+        if filter:
+            import re
+            self.filter = filter
+            self.cases = dict(
+                [(c.caseid,c) for c in allcases if re.search(filter,c.caseid)])
+        return self
+
+    def graph(self, show=False, outfile=None, xd=0):
+        import pylab as pl
+        fg = pl.figure()
+        ax = fg.add_subplot(111)
+        # http://matplotlib.sourceforge.net/index.html
+        optcases = self.cases.values()
+        if xd == 0: # simple graph
+            # optcases not on frontier
+            xy = zip(*[ (c.sizered, c.speedup) for c in optcases if not c.onfront])
+            ax.scatter(*xy, s=20, c='b', label='opt case')
+            # optcases on frontier
+            xy = zip(*sorted([ (c.sizered, c.speedup) for c in optcases if c.onfront]))
+            # ax.scatter(*xy, s=20, c='r', label='frontier')
+            ax.plot(xy[0], xy[1], c='r', label='frontier',
+                    marker='o', linestyle='dashed')
+        if xd == 1: # optimization level scatter
+            cols = {'': 'black', '-Os' : 'green', '-O0' : 'white',
+                    '-O1' : 'cyan', '-O2' : 'blue', '-O3' : 'red'}
+            for opt in cols.keys():
+                xy = zip(*[ (c.sizered, c.speedup) for c in optcases
+                            if c.flags and c.flags[0] == opt])
+                if len(xy) == 0: continue
+                lbl = '%s' % (opt and '[%s]' % opt or '_nolegend_')
+                ax.scatter(*xy, s=20, c=cols[opt], marker='o',
+                            label=lbl, zorder=2)
+        if xd == 2: # graph with more details
+            # build variant scatter
+            def getv(c):
+                lto = c.caseid.find('-flto') != -1
+                fdo = c.caseid.find('-fprofile-use') != -1
+                return ((lto and fdo) and 'fdo+lto'
+                        or (lto and 'lto' or (fdo and 'fdo' or '')))
+            cols = { '': 'white', 'fdo' : 'blue', 'lto' : 'green', 'fdo+lto' : 'red' }
+            for opt in cols.keys():
+                xy = zip(*[ (c.sizered, c.speedup) for c in optcases
+                            if getv(c)==opt])
+                if len(xy) == 0: continue
+                lbl = '%s' % (opt and '[%s]' % opt or '_nolegend_')
+                ax.scatter(*xy, s=20, c=cols[opt], marker='o',
+                            label=lbl, zorder=1)
+        if xd == 3: # graph with more details
+            # build O2/O3/fdo/fdo+lto scatter
+            def getv(c):
+                lto = c.caseid.find('-flto') != -1
+                fdo = c.caseid.find('-fprofile-use') != -1
+                opl = ((c.flags and c.flags[0] in ['-O2', '-O3'])
+                        and c.flags[0][1:] or '')
+                vrt = (lto and fdo) and 'fdo+lto' or (fdo and 'fdo' or '')
+                return (opl and vrt) and ('%s %s' % (opl, vrt)) or ''
+            cols = { '': 'white',
+                     'O2 fdo' : 'cyan', 'O2 fdo+lto' : 'green',
+                     'O3 fdo' : 'blue', 'O3 fdo+lto' : 'red' }
+            for opt in cols.keys():
+                xy = zip(*[ (c.sizered, c.speedup) for c in optcases
+                            if getv(c)==opt])
+                if len(xy) == 0: continue
+                lbl = '%s' % (opt and '[%s]' % opt or '_nolegend_')
+                ax.scatter(*xy, s=20, c=cols[opt], marker='o',
+                            label=lbl, zorder=1)
+        if xd >= 1: # graph with more details
+            # frontier
+            xy = zip(*sorted([ (c.sizered, c.speedup) for c in optcases if c.onfront]))
+            ax.plot(xy[0], xy[1], c='r', label='_nolegend_', zorder=0,
+                    marker='x', markersize=9, markeredgewidth=2,
+                    linewidth=2, linestyle='dashed')
+        # dynamic annotations
+        def on_pick(event):
+            def closest(x, y):
+                import math
+                dp = [(math.hypot(a-x,b-y),(a,b,c)) for (a,b,c) in self.allpts ]
+                return sorted(dp)[0][1]
+            def highlight((x, y, c)):
+                # print point on console
+                optspace.printpoint(c)
+                # highlight point
+                self.sl.set_visible(True)
+                self.sl.set_data(x, y)
+                # selected point legend
+                sc = (len(c.caseid) >= 45
+                      and c.caseid[:25] + '...' + c.caseid[-15:] or c.caseid)
+                if c.local_id != None:
+                    tt = 'local_id=%s\n' % (c.local_id)
+                else:
+                    tt = ""
+                tt+= 'speedup=%.2f%% runtime=%.2f\n' % (c.speedup * 100.0, c.runtime)
+                tt+= 'reduction=%.2f%% binsize=%d\n' % (c.sizered * 100.0, c.binsize)
+                tt+= 'id=%s' % (sc)
+                lp = pl.legend([self.sl], [tt], loc='lower right', numpoints=1)
+                pl.setp(lp.get_texts(), fontsize='medium')
+                lp.get_frame().set_alpha(0.5)
+                pl.gca().add_artist(self.lg)
+                fg.canvas.draw()
+            highlight(closest(event.mouseevent.xdata, event.mouseevent.ydata))
+        if show:
+            self.allpts = [ (c.sizered, c.speedup, c) for c in optcases ]
+            # workaround pb with pick_event event ind (4000)
+            self.sl, = ax.plot(
+                [x[0] for x in self.allpts], [x[1] for x in self.allpts],
+                marker='o', ms=20, alpha=0.4, color='b', visible=False,
+                picker=4000)
+            fg.canvas.mpl_connect('pick_event', on_pick)
+        # redraw axis, set labels, legend, grid, ...
+        def labelfmt(x, pos=0): return '%.2f%%' % (100.0 * x)
+        ax.xaxis.set_major_formatter(pl.FuncFormatter(labelfmt))
+        ax.yaxis.set_major_formatter(pl.FuncFormatter(labelfmt))
+        pl.axhspan(0.0, 0.0)
+        pl.axvspan(0.0, 0.0)
+        ptitle = 'optimization space'
+        if self.refid:
+            ptitle += ' [ref=%s]' % self.refid
+        if getattr(self, 'filter', None):
+            ptitle += ' [filter=%s]' % self.filter
+        pl.title(ptitle)
+        pl.xlabel('size reduction (higher is better) -->')
+        pl.ylabel('speedup (higher is better) -->')
+        pl.grid(True)
+        self.lg = ax.legend(loc='lower left')
+        #
+        if outfile: pl.savefig(outfile)
+        if show: pl.show()
+
+    @staticmethod
+    def printpoint(c):
+        print '-' * 40
+        if c.local_id != None:
+            print 'local_id: %s' % c.local_id
+        print 'id: %s' % c.caseid
+        print '\tspeedup: %.2f%% runtime: %f' % (c.speedup * 100.0, c.runtime)
+        print '\treduction: %.2f%% binsize: %d' % (c.sizered * 100.0, c.binsize)
+        print '\tflags: %s' % " ".join(c.flags)
+
+    def printfrontier(self):
+        optcases = self.cases.values()
+        optcf = reversed(sorted([ (c.speedup, c) for c in optcases if c.onfront ]))
+        for (s, c) in optcf: optspace.printpoint(c)
+
+
+# ####################################################################
+
+
+if __name__ == "__main__":
+
+    import optparse, os
+    parser = optparse.OptionParser(
+        description='Process optimization space exploration results',
+        usage='%prog [options] [file]',
+        version="atos-graph version " + VERSION)
+    parser.add_option('-o', '--outfile', dest='outfile',
+                      action='store', type='string', default=None,
+                      help='set the output file name (default: None)')
+    parser.add_option('-e', '--exec', dest='execname',
+                  action='store', type='string', default=None,
+                      help='set the executable name (default: None)')
+    parser.add_option('-r', '--refid', dest='refid',
+                      action='store', type='string', default='REF',
+                      help='set the atos reference run id (default: REF)')
+    parser.add_option('-d', '--hide', dest='show',
+                      action='store_false', default=True,
+                      help='do not show resulting graph (default: False)')
+    parser.add_option('-f', dest='filter',
+                      action='store', type='string', default=None,
+                      help=optparse.SUPPRESS_HELP)
+    parser.add_option('-x', dest='xd',
+                      action='store', type='int', default=0,
+                      help=optparse.SUPPRESS_HELP)
+
+    (opts, args) = parser.parse_args()
+    if not args: parser.error('no input files')
+    infilename = args[0]
+    if os.path.basename(infilename).startswith('_run'):
+        sp = optspace().read_ccc_run(args[0])
+    else:
+        sp = optspace().read_atos_db(
+            args[0], opts.refid, opts.execname, opts.filter)
+    sp.printfrontier()
+    sp.graph(opts.show, opts.outfile, xd=opts.xd)
+
+
+
+
+

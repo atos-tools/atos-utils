@@ -50,7 +50,15 @@ install: $(INSTALLED_EXES)
 check: check-python-dependencies
 
 examples: all check
-	cd examples/sha1-c && ../../atos-explore -b ./compile.sh -r ./run.sh && ../../atos-graph
+	@echo "Running examples, should take around 1-2 minutes per example, the resulting graph is displayed for each example"
+	$(MAKE) examples-sha1-c examples-sha1
+
+examples-sha1-c:
+	cd examples/sha1-c && ../../atos-explore -b "gcc -O2 -o sha1-c sha.c sha1.c" -r ./run.sh && ../../atos-graph
+
+examples-sha1:
+	cd examples/sha1 && ../../atos-explore -b "make sha" -r ./run.sh && ../../atos-graph
+
 
 #
 # Rules for config files

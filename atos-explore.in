@@ -118,10 +118,6 @@ if [ "$clean" = "1" ]; then
     rm -rf "$configuration_path"/results.db
 fi
 
-if [ -f "$configuration_path/targets" ]; then
-    executables=`cat "$configuration_path/targets"`
-fi
-
 if [ "$executables" = "" ]; then
     # By default audit all generated executables 
     executables=-a

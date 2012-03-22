@@ -148,7 +148,7 @@ class optspace():
                 [(c.caseid,c) for c in allcases if re.search(filter,c.caseid)])
         return self
 
-    def graph(self, show=False, outfile=None, xd=0):
+    def graph(self, show=False, outfile=None, xd=0, app_id=None):
         import pylab as pl
         fg = pl.figure()
         ax = fg.add_subplot(111)
@@ -255,7 +255,9 @@ class optspace():
         ax.yaxis.set_major_formatter(pl.FuncFormatter(labelfmt))
         pl.axhspan(0.0, 0.0)
         pl.axvspan(0.0, 0.0)
-        ptitle = 'optimization space'
+        ptitle = 'Optimization Space'
+        if app_id != None:
+            ptitle+= ' for %s' % app_id
         if self.refid:
             ptitle += ' [ref=%s]' % self.refid
         if getattr(self, 'filter', None):
@@ -291,7 +293,6 @@ class optspace():
 if __name__ == "__main__":
 
     import optparse, os
-    default_infilename = "./atos-configurations/results.db"
     parser = optparse.OptionParser(
         description='Process optimization space exploration results',
         usage='%prog [options] [file]',
@@ -302,6 +303,9 @@ if __name__ == "__main__":
     parser.add_option('-e', '--exec', dest='execname',
                   action='store', type='string', default=None,
                       help='set the executable name (default: None)')
+    parser.add_option('-i', '--app_id', dest='identifier',
+                  action='store', type='string', default=None,
+                      help='set the application identifier (default: inferred from executable)')
     parser.add_option('-r', '--refid', dest='refid',
                       action='store', type='string', default='REF',
                       help='set the atos reference run id (default: REF)')
@@ -314,16 +318,31 @@ if __name__ == "__main__":
     parser.add_option('-x', dest='xd',
                       action='store', type='int', default=0,
                       help=optparse.SUPPRESS_HELP)
+    parser.add_option('-C', dest='configuration_path',
+                      action='store', type='string', default="./atos-configurations",
+                      help='set configuration path (default: ./atos-configurations)')
 
     (opts, args) = parser.parse_args()
+
+    default_infilename = os.path.join(opts.configuration_path, "results.db")
+    default_targets = os.path.join(opts.configuration_path, "targets")
+
     if len(args) == 0:
         infilename = default_infilename
     else:
         infilename = args[0]
+    if opts.execname == None:
+        try:
+            targetfile = open(default_targets)
+            bases = [ os.path.basename(exe) for exe in targetfile.readlines()]
+            opts.identifier  = "-".join(bases)
+            targetfile.close()
+        except:
+            pass
     if os.path.basename(infilename).startswith('_run'):
         sp = optspace().read_ccc_run(infilename)
     else:
         sp = optspace().read_atos_db(
             infilename, opts.refid, opts.execname, opts.filter)
     sp.printfrontier()
-    sp.graph(opts.show, opts.outfile, xd=opts.xd)
+    sp.graph(opts.show, opts.outfile, xd=opts.xd, app_id=opts.identifier)

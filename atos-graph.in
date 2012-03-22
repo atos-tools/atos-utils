@@ -291,6 +291,7 @@ class optspace():
 if __name__ == "__main__":
 
     import optparse, os
+    default_infilename = "./atos-configurations/results.db"
     parser = optparse.OptionParser(
         description='Process optimization space exploration results',
         usage='%prog [options] [file]',
@@ -315,17 +316,14 @@ if __name__ == "__main__":
                       help=optparse.SUPPRESS_HELP)
 
     (opts, args) = parser.parse_args()
-    if not args: parser.error('no input files')
-    infilename = args[0]
+    if len(args) == 0:
+        infilename = default_infilename
+    else:
+        infilename = args[0]
     if os.path.basename(infilename).startswith('_run'):
-        sp = optspace().read_ccc_run(args[0])
+        sp = optspace().read_ccc_run(infilename)
     else:
         sp = optspace().read_atos_db(
-            args[0], opts.refid, opts.execname, opts.filter)
+            infilename, opts.refid, opts.execname, opts.filter)
     sp.printfrontier()
     sp.graph(opts.show, opts.outfile, xd=opts.xd)
-
-
-
-
-

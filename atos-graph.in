@@ -113,14 +113,12 @@ class optspace():
                 words = re.split('[\s:]*', lines.pop(0).strip())
                 (bin, compile_id, key), values = words[1:4], words[4:]
                 if binname and binname != bin: continue
-                if words[-1] == 'FAILURE': continue
                 if key == 'conf': flags = values
                 elif key == 'size': size = values[0]
-                elif key == 'time':
-                    time = values[0]
+                elif key == 'time': time = values[0]
+                if size != None and time != None:
                     if not 'FAILURE' in [size, time]: break
                     size, time, flags = None, None, None
-                else: pass # version, ...
             if not (size and time): return None
             return (time, size, compile_id, flags)
         # read all optimization cases
@@ -331,7 +329,7 @@ if __name__ == "__main__":
         infilename = default_infilename
     else:
         infilename = args[0]
-    if opts.execname == None:
+    if opts.identifier == None and opts.execname == None:
         try:
             targetfile = open(default_targets)
             bases = [ os.path.basename(exe) for exe in targetfile.readlines()]

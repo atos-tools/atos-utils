@@ -35,6 +35,7 @@ quiet="0"
 dryrun=""
 print=""
 ref=0
+local_id=""
 
 version() {
     echo "atos-play version @VERSION@"
@@ -48,6 +49,7 @@ Usage: atos-play [options] [--] [command...]
 Objective Options:
       -f <objective> : defined the objective function [default: $objective]
       -r : get reference results
+      -l : get result identified by local_id
 
 Configuration Options:
       -C <path> : configuration path [default: $configuration_path]
@@ -72,7 +74,7 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts vhqnprC:f:e:i: opt; do
+while getopts vhqnprl:C:f:e:i: opt; do
     case $opt in
 	f) objective="$OPTARG"
 	    ;;
@@ -89,6 +91,8 @@ while getopts vhqnprC:f:e:i: opt; do
 	r) ref=1
 	    ;;
 	q) quiet=1
+	    ;;
+	l) local_id="$OPTARG"
 	    ;;
 	v) version; exit 0
 	    ;;
@@ -129,7 +133,14 @@ if [ "$objective" != time -a "$objective" != size ]; then
     exit 1
 fi
 
+get_local_id() {
+    local -i line
+    line=$(($1+1))
+    egrep "^ATOS: $identifier: [^:]*: version:" $results_db | head -n $line | tail -n 1 | awk '{print $3}' | sed 's/:$//'
+}
+ 
 best() {
+    local objective=$1
     grep "^ATOS: $identifier:" $results_db  | grep " $objective:" | grep -v " $objective: FAILURE" | sort -n -k 5 | head -1 | awk '{print $3}' | sed 's/:$//'
 }
 
@@ -140,8 +151,11 @@ get_options() {
 if [ "$ref" = 1 ]; then
     configuration=REF
     options=""
+elif [ "$local_id" != "" ]; then
+    configuration=`get_local_id $local_id`
+    options=`get_options`
 else
-    configuration=`best`
+    configuration=`best $objective`
     options=`get_options`
 fi
 

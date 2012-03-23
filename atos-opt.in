@@ -170,13 +170,21 @@ if [ "$variant" = "" ]; then
 fi
 
 failure=false
-mkdir -p "$configuration_path/logs"
+[ "$dryrun" = 1 ] || mkdir -p "$configuration_path/logs"
 [ "$quiet" = "1" ] || echo "Building variant $variant..."
-if [ -f "$configuration_path/build.mk" ]; then
+if [ "$1" = "" -a -f "$configuration_path/build.mk" ]; then
     # If the configuration path contains a build.mk execute it
-    make ${dryrun:+-n} -j $jobs -f $configuration_path/build.mk ACFLAGS="$APFLAGS $options" >"$configuration_path/logs/build-$variant.log" 2>&1 || failure=true
+    if [ "$dryrun" = 1 ]; then
+	make -n -f $configuration_path/build.mk ACFLAGS="$APFLAGS $options"
+    else
+	make ${dryrun:+-n} -j $jobs -f $configuration_path/build.mk ACFLAGS="$APFLAGS $options" >"$configuration_path/logs/build-$variant.log" 2>&1 || failure=true
+    fi
 else
-    env PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$APFLAGS $options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT -w $PWD / ${1+"$@"}  >"$configuration_path/logs/build-$variant.log"  2>&1 || failure=true
+    if [ "$dryrun" = 1 ]; then
+	echo "Executing: " ${1+"$@"}
+    else
+	env PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$APFLAGS $options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT -w $PWD / ${1+"$@"}  >"$configuration_path/logs/build-$variant.log"  2>&1 || failure=true
+    fi
 fi
 if $failure; then
     [ "$quiet" = 1 ] || echo "FAILURE while building variant $variant..."

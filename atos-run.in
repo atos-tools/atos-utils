@@ -229,11 +229,24 @@ if [ "$silent" != 1 ]; then
     if [ "$file" != "" ]; then
 	echo "ATOS: $identifier: $variant: version: `$0 -v | awk '{print $3;}'`" >>"$file"
 	echo "ATOS: $identifier: $variant: conf: $options" >>"$file"
+	if [ "$u_set" = 1 ]; then
+	    echo "ATOS: $identifier: $variant: uconf: $uopts" >>"$file"
+	fi
+	if [ "$g_set" = 1 ]; then
+	    echo "ATOS: $identifier: $variant: gconf: $uopts" >>"$file"
+	fi
+	echo "ATOS: $identifier: $variant: conf: $options" >>"$file"
 	echo "ATOS: $identifier: $variant: size: $exe_size" >>"$file"
 	echo "ATOS: $identifier: $variant: time: $exe_time" >>"$file"
     else
 	echo "ATOS: $identifier: $variant: version: `$0 -v`" >&$fd
 	echo "ATOS: $identifier: $variant: conf: $options" >&$fd
+	if [ "$u_set" = 1 ]; then
+	    echo "ATOS: $identifier: $variant: uconf: $uopts" >>"$file"
+	fi
+	if [ "$g_set" = 1 ]; then
+	    echo "ATOS: $identifier: $variant: gconf: $uopts" >>"$file"
+	fi
 	echo "ATOS: $identifier: $variant: size: $exe_size" >&$fd
 	echo "ATOS: $identifier: $variant: time: $exe_time" >&$fd
     fi

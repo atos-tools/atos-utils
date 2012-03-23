@@ -2,6 +2,6 @@ Downloaded from: http://www.packetizer.com/security/sha1/sh1.zip
 sha1sum: da58fa3c0501283f09385a912c844b1b82afef34 sha1.zip
 
 Run example with:
-$ atos-explore -b "make sha" -r ./run.sh
+$ atos-explore -b "make clean sha" -r ./run.sh
 $ atos-graph
 

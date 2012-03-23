@@ -60,7 +60,7 @@ examples-sha1-c:
 	cd examples/sha1-c && ../../atos-explore -b "gcc -O2 -o sha1-c sha.c sha1.c" -r ./run.sh -c && (../../atos-graph &)
 
 examples-sha1:
-	cd examples/sha1 && ../../atos-explore -b "make sha" -r ./run.sh -c && (../../atos-graph &)
+	cd examples/sha1 && ../../atos-explore -b "make clean sha" -r ./run.sh -c && (../../atos-graph &)
 
 
 #

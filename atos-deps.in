@@ -27,7 +27,6 @@ import sys
 import getopt
 from pygraph.classes.digraph import digraph
 from pygraph.readwrite.dot import write
-from sets import Set
 # import gv
 
 VERBOSE=0
@@ -170,8 +169,8 @@ class DependencyGraphBuilder:
         else:
             targets = self.targets
         unmatched_targets = targets
-        available_inputs = Set()
-        referenced_outputs = Set()
+        available_inputs = set()
+        referenced_outputs = set()
 
         for i in range(len(self.deplist)):
             dependency = self.deplist[len(self.deplist)-i-1]

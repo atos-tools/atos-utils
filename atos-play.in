@@ -145,18 +145,49 @@ best() {
 }
 
 get_options() {
-    grep "^ATOS: $identifier: $configuration: conf:" $results_db | sed "s/ATOS: $identifier: $configuration: conf: //"
+    grep "^ATOS: $identifier: $configuration: conf:" $results_db | sed "s/ATOS: $identifier: $configuration: conf: //" | tail -n 1
 }
 
+get_uset() {
+    local set=1
+    grep "^ATOS: $identifier: $configuration: uconf:" $results_db >/dev/null || set=0
+    echo $set
+}
+
+get_uopts() {
+    grep "^ATOS: $identifier: $configuration: uconf:" $results_db | sed "s/ATOS: $identifier: $configuration: uconf: //" | tail -n 1
+}
+
+get_gset() {
+    local set=1
+    grep "^ATOS: $identifier: $configuration: gconf:" $results_db >/dev/null || set=0
+    echo $set
+}
+
+get_gopts() {
+    grep "^ATOS: $identifier: $configuration: gconf:" $results_db | sed "s/ATOS: $identifier: $configuration: gconf: //" | tail -n 1
+}
+
+u_set=0
+g_set=0
 if [ "$ref" = 1 ]; then
     configuration=REF
     options=""
-elif [ "$local_id" != "" ]; then
-    configuration=`get_local_id $local_id`
-    options=`get_options`
 else
-    configuration=`best $objective`
+    if [ "$local_id" != "" ]; then
+	configuration=`get_local_id $local_id`
+    else
+	configuration=`best $objective`
+	options=`get_options`
+    fi
     options=`get_options`
+    u_set=`get_uset`
+    g_set=`get_gset`
+    if [ "$u_set" = 1 ]; then
+	uopts=`get_uopts`
+    elif [ "$g_set" = 1 ]; then
+	gopts=`get_gopts`
+    fi
 fi
 
 if [ "$print" = 1 ]; then
@@ -165,7 +196,14 @@ if [ "$print" = 1 ]; then
 fi
 
 [ "$quiet" = "1" ] || echo "Playing optimized build $identifier:$configuration..."
-exec $dir/atos-opt ${dryrun:+-n} -a "$options"
+if [ "$u_set" = 1 ]; then
+    exec $dir/atos-opt ${dryrun:+-n} -a "$options" -u "$uopts" ${1+"$@"}
+elif [ "$g_set" = 1 ]; then
+    exec $dir/atos-opt ${dryrun:+-n} -a "$options" -g "$gopts" ${1+"$@"}
+else
+    exec $dir/atos-opt ${dryrun:+-n} -a "$options" ${1+"$@"}
+fi
+
 
 
 

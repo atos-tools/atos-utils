@@ -127,6 +127,10 @@ done
 
 shift $((OPTIND - 1))
 
+variant_hash() {
+    echo "$1" | md5sum | cut -f 1 -d ' '
+}
+
 if [ "$executables" = "" ]; then
     if [ -f "$configuration_path/targets" ]; then
 	executables=`cat "$configuration_path/targets"`
@@ -212,13 +216,15 @@ get_time() {
 }
 
 mkdir -p "$configuration_path/logs"
+logfile="$configuration_path/logs/run-`variant_hash $variant`.log"
+echo "Running variant $variant" >"$logfile"
 
 if [ -f "$configuration_path/run.sh" ]; then
-    get_time "$configuration_path/run.sh" > "$configuration_path/logs/run-$variant.log" 2>&1
+    get_time "$configuration_path/run.sh" >> "$logfile" 2>&1
 else
-    get_time ${1+"$@"} > "$configuration_path/logs/run-$variant.log" 2>&1
+    get_time ${1+"$@"} >> "$logfile" 2>&1
 fi
-get_size "$executables" >> "$configuration_path/logs/run-$variant.log" 2>&1
+get_size "$executables" >> "$logfile" 2>&1
 
 if $failure; then
     exe_size=FAILURE
@@ -254,5 +260,8 @@ fi
 
 if $failure; then
     [ "$quiet" = 1 ] || echo "FAILURE while running variant $variant..."
+    echo "FAILURE while running variant $variant" >>"$logfile"
     exit 2
+else
+    echo "SUCCESS running variant $variant" >>"$logfile"
 fi

@@ -39,6 +39,7 @@ g_set=0
 gopts=""
 quiet=0
 silent=0
+remote_profile=0
 
 version() {
     echo "atos-run version @VERSION@"
@@ -90,7 +91,7 @@ tmpfile=`mktemp /tmp/atos-inst.XXXXXX`
 tmpfile2=`mktemp /tmp/atos-inst.XXXXXX`
 
 
-while getopts vhqrso:f:e:a:i:w:u:g:C: opt; do
+while getopts vhqrsbo:f:e:a:i:w:u:g:C: opt; do
     case $opt in
 	e) executables="$OPTARG"
 	    ;;
@@ -109,6 +110,8 @@ while getopts vhqrso:f:e:a:i:w:u:g:C: opt; do
 	o) file="$OPTARG"
 	    ;;
 	C) configuration_path="$OPTARG"
+	    ;;
+	b) remote_profile=1
 	    ;;
 	r) record=1
 	    ;;
@@ -209,10 +212,28 @@ get_size() {
     done
 }
 
+profile_path() {
+    lpvariant=REF
+    if [ "$gopts" != "" ]; then
+	lpvariant=OPT`echo $gopts | sed 's/ //g'`
+    fi
+    echo "$configuration_path/profiles/`variant_hash $lpvariant`"
+}
+
 get_time() {
     /usr/bin/time -p ${1+"$@"} 2>&1 | tee $tmpfile | sed -e '/^real /d' -e '/^user /d' -e '/^sys /d'
     [ ${PIPESTATUS[0]} = 0 ] || failure=true
     exe_time=`tail -3 $tmpfile | awk '{if ($1 == "user") { print int($2 * 1000); }}'`
+    if [ "$remote_profile" = "1" ]; then
+        # prefer time info from log
+	if [ `grep -c "^user " $tmpfile` -ge 2 ]; then
+	    exe_time=`grep "^user " $tmpfile | tail -2 | head -1 | awk '{ print int($2 * 1000); }'`
+	fi
+        # move profile info
+	if [ `grep -c "^profile_dir=" $tmpfile` -ge 1 ]; then
+	    cp -fr `grep "^profile_dir=" $tmpfile | sed 's/.*=//'`/* `profile_path`
+	fi
+    fi
 }
 
 mkdir -p "$configuration_path/logs"
@@ -241,17 +262,16 @@ if [ "$silent" != 1 ]; then
 	if [ "$g_set" = 1 ]; then
 	    echo "ATOS: $identifier: $variant: gconf: $uopts" >>"$file"
 	fi
-	echo "ATOS: $identifier: $variant: conf: $options" >>"$file"
 	echo "ATOS: $identifier: $variant: size: $exe_size" >>"$file"
 	echo "ATOS: $identifier: $variant: time: $exe_time" >>"$file"
     else
 	echo "ATOS: $identifier: $variant: version: `$0 -v`" >&$fd
 	echo "ATOS: $identifier: $variant: conf: $options" >&$fd
 	if [ "$u_set" = 1 ]; then
-	    echo "ATOS: $identifier: $variant: uconf: $uopts" >>"$file"
+	    echo "ATOS: $identifier: $variant: uconf: $uopts" >&$fd
 	fi
 	if [ "$g_set" = 1 ]; then
-	    echo "ATOS: $identifier: $variant: gconf: $uopts" >>"$file"
+	    echo "ATOS: $identifier: $variant: gconf: $uopts" >&$fd
 	fi
 	echo "ATOS: $identifier: $variant: size: $exe_size" >&$fd
 	echo "ATOS: $identifier: $variant: time: $exe_time" >&$fd

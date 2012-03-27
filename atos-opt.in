@@ -38,6 +38,8 @@ g_set=0
 gopts=""
 quiet=0
 variant=""
+profile_path=""
+remote_profile_path=""
 
 version() {
     echo "atos-opt version @VERSION@"
@@ -82,7 +84,7 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts vhqnw:C:j:c:r:a:u:g:p: opt; do
+while getopts vhqnw:C:j:c:r:a:u:g:b:p: opt; do
     case $opt in
 	a) options="$OPTARG"
 	    ;;
@@ -93,6 +95,8 @@ while getopts vhqnw:C:j:c:r:a:u:g:p: opt; do
 	j) jobs="$OPTARG"
 	    ;;
 	p) profile_path="$OPTARG"
+	    ;;
+	b) remote_profile_path="$OPTARG"
 	    ;;
 	u) u_set=1; uopts="$OPTARG"
 	    ;;
@@ -138,7 +142,11 @@ if [ "$g_set" = 1 ]; then
     echo "$pvariant" > "$profile_path/variant.txt"
     profile_path=`cd "$profile_path"; pwd`
     find "$profile_path" -name '*.gcda' | xargs rm -f
-    APFLAGS="-fprofile-generate -fprofile-dir=$profile_path"
+    if [ "$remote_profile_path" != "" ]; then
+	APFLAGS="-fprofile-generate -fprofile-dir=$remote_profile_path"
+    else
+	APFLAGS="-fprofile-generate -fprofile-dir=$profile_path"
+    fi
 fi
 
 if [ "$u_set" = 1 ]; then

@@ -184,10 +184,11 @@ logfile="$configuration_path/logs/build-`variant_hash $variant`.log"
 
 if [ "$1" = "" -a -f "$configuration_path/build.mk" ]; then
     # If the configuration path contains a build.mk execute it
+    [ `echo $options | grep -c -e "-flto"` -ne 0 ] && lto_option="LTO=1" || lto_option=""
     if [ "$dryrun" = 1 ]; then
-	make -n -f $configuration_path/build.mk ACFLAGS="$APFLAGS $options"
+	make -n -f $configuration_path/build.mk ACFLAGS="$APFLAGS $options" $lto_option
     else
-	make ${dryrun:+-n} -j $jobs -f $configuration_path/build.mk ACFLAGS="$APFLAGS $options" >>"$logfile" 2>&1 || failure=true
+	make ${dryrun:+-n} -j $jobs -f $configuration_path/build.mk ACFLAGS="$APFLAGS $options" $lto_option >>"$logfile" 2>&1 || failure=true
     fi
 else
     if [ "$dryrun" = 1 ]; then

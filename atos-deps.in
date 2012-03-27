@@ -102,6 +102,16 @@ class DependencyGraph:
                     targets.append(value)
         return targets
 
+    def get_lto_opts(self):
+        """ Get the list of options that should be passed to linker in case of LTO build. """
+        def is_lto_opt(arg): return (arg.startswith('-m') or arg.startswith('-f'))
+        optflags = []
+        for node in self.dg.nodes():
+            for attr, value in self.dg.node_attr[node]:
+                if attr != 'dependency' or value['kind'] != 'CC': continue
+                optflags += [x for x in value['command']['args'] if is_lto_opt(x) and x not in optflags]
+        return optflags
+
     def output_makefile(self,makefile):
         """ Get a parallelizable makefile for rebuilding the target. """
         mkfile = open(makefile,"w")
@@ -113,6 +123,9 @@ class DependencyGraph:
         mkfile.write(".SUFFIXES:\n")
         mkfile.write("all: ROOT\n")
         mkfile.write("FORCE:\n")
+        mkfile.write("ifeq ($(LTO),1)\n")
+        mkfile.write("LTOFLAGS=%s\n" % (' '.join(self.get_lto_opts())))
+        mkfile.write("endif\n")
         for node in self.dg.nodes():
             target = node
             recipe = None
@@ -124,7 +137,7 @@ class DependencyGraph:
                     if value['kind'] == "CC":
                         append=" $(ACFLAGS)"
                     if value['kind'] == "CCLD":
-                        append=" $(ACFLAGS) $(ALDFLAGS)"
+                        append=" $(LTOFLAGS) $(ACFLAGS) $(ALDFLAGS)"
                     # TODO: handle quotes in command
                     recipe = "$(QUIET)cd " + value['command']['cwd'] + " && " + " ".join(value['command']['args']) + append
                     recipe = re.sub(r'(["\'])', r'\\\1', recipe)

@@ -28,7 +28,7 @@ dir=`cd $dir; pwd`
 PROOT=${PROOT:-proot}
 
 options=""
-ccregexp="^\(gcc\|g++\|cc\|c++\)\$"
+ccregexp="\(gcc\|g++\|cc\|c++\)\$"
 configuration_path="./atos-configurations"
 jobs=4
 dryrun=""
@@ -130,7 +130,6 @@ if [ "$g_set" = 1 ]; then
     pvariant=REF
     if [ "$gopts" != "" ]; then
 	pvariant=OPT`echo $gopts | sed 's/ //g'`
-	
     fi
     if [ "$profile_path" = "" ]; then
 	profile_path="$configuration_path/profiles/`variant_hash $pvariant`"

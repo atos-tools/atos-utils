@@ -27,7 +27,7 @@ dir=`dirname $0`
 dir=`cd $dir; pwd`
 PROOT=${PROOT:-proot}
 
-ccregexp="^\(gcc\|g++\|cc\|c++\|ar\)\$"
+ccregexp="\(gcc\|g++\|cc\|c++\|ar\)\$"
 configuration_path="./atos-configurations"
 outfile=""
 quiet=0

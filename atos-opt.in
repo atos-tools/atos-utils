@@ -40,6 +40,7 @@ quiet=0
 variant=""
 profile_path=""
 remote_profile_path=""
+opt_rebuild=""
 
 version() {
     echo "atos-opt version @VERSION@"
@@ -64,6 +65,7 @@ Configuration Options:
 Build options:
       -j <jobs>: use <jobs> parallel thread when possible for building [default: $jobs]
       -n : dry run, output build commands only
+      -f : force rebuild by running build script instead of audited build
 
 Profile options:
       -u "$opts" : use profile variant deduced by $opts [default: none]
@@ -84,7 +86,7 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts vhqnw:C:j:c:r:a:u:g:b:p: opt; do
+while getopts vhqnfw:C:j:c:r:a:u:g:b:p: opt; do
     case $opt in
 	a) options="$OPTARG"
 	    ;;
@@ -109,6 +111,8 @@ while getopts vhqnw:C:j:c:r:a:u:g:b:p: opt; do
 	q) quiet=1
 	    ;;
 	C) configuration_path="$OPTARG"
+	    ;;
+	f) opt_rebuild=1
 	    ;;
 	v) version; exit 0
 	    ;;
@@ -182,13 +186,23 @@ logfile="$configuration_path/logs/build-`variant_hash $variant`.log"
 [ "$quiet" = 1 ] || echo "Building variant $variant..."
 [ "$dryrun" = 1 ] || echo "Building variant $variant" >"$logfile"
 
-if [ "$1" = "" -a -f "$configuration_path/build.mk" ]; then
+if [ "$opt_rebuild" = "" -a -f "$configuration_path/build.force" ]; then
+    opt_rebuild=`cat "$configuration_path/build.force"`
+fi
+
+if [ "$1" = "" -a "$opt_rebuild" != 1 -a -f "$configuration_path/build.mk" ]; then
     # If the configuration path contains a build.mk execute it
     [ `echo $options | grep -c -e "-flto"` -ne 0 ] && lto_option="LTO=1" || lto_option=""
     if [ "$dryrun" = 1 ]; then
 	make -n -f $configuration_path/build.mk ACFLAGS="$APFLAGS $options" $lto_option
     else
 	make ${dryrun:+-n} -j $jobs -f $configuration_path/build.mk ACFLAGS="$APFLAGS $options" $lto_option >>"$logfile" 2>&1 || failure=true
+    fi
+elif [ "$1" = "" -a "$opt_rebuild" = 1 -a -f "$configuration_path/build.sh" ]; then
+    if [ "$dryrun" = 1 ]; then
+	echo "Executing: $configuration_path/build.sh"
+    else
+	env PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$APFLAGS $options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT -w $PWD / "$configuration_path/build.sh"  >>"$logfile"  2>&1 || failure=true
     fi
 else
     if [ "$dryrun" = 1 ]; then

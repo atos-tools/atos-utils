@@ -224,11 +224,11 @@ get_time() {
     /usr/bin/time -p ${1+"$@"} 2>&1 | tee $tmpfile | sed -e '/^real /d' -e '/^user /d' -e '/^sys /d'
     [ ${PIPESTATUS[0]} = 0 ] || failure=true
     exe_time=`tail -3 $tmpfile | awk '{if ($1 == "user") { print int($2 * 1000); }}'`
+    # prefer time info from log
+    if [ `grep -c "^user " $tmpfile` -ge 2 ]; then
+	exe_time=`grep "^user " $tmpfile | tail -2 | head -1 | awk '{ print int($2 * 1000); }'`
+    fi
     if [ "$remote_profile" = "1" ]; then
-        # prefer time info from log
-	if [ `grep -c "^user " $tmpfile` -ge 2 ]; then
-	    exe_time=`grep "^user " $tmpfile | tail -2 | head -1 | awk '{ print int($2 * 1000); }'`
-	fi
         # move profile info
 	if [ `grep -c "^profile_dir=" $tmpfile` -ge 1 ]; then
 	    cp -fr `grep "^profile_dir=" $tmpfile | sed 's/.*=//'`/* `profile_path`

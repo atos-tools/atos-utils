@@ -27,10 +27,11 @@ dir=`dirname $0`
 dir=`cd $dir; pwd`
 PROOT=${PROOT:-proot}
 
-ccregexp="\(gcc\|g++\|cc\|c++\|ar\)\$"
+ccregexp="-\?\(gcc\|g++\|cc\|c++\|ar\)\$"
 configuration_path="./atos-configurations"
 outfile=""
 quiet=0
+opt_rebuild=0
 
 version() {
     echo "atos-audit version @VERSION@"
@@ -44,6 +45,7 @@ Usage: atos-audit [options] [--] [command...]
 Audit Options:
       -r <ccdriver_re> : specify the compiler driver as a regexp for the basename [default: $ccregexp]
       -c <ccdriver> : alternatively specify the exact compiler driver basename
+      -f : force rebuild by running build script instead of audited build
 
 Output File Options:
       -o <outfile> : output audit file into <file> [default: $configuration_path/build.audit]
@@ -65,7 +67,7 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts vhqc:r:o: opt; do
+while getopts vhqfc:r:o: opt; do
     case $opt in
 	o) outfile="$OPTARG"
 	    ;;
@@ -76,6 +78,8 @@ while getopts vhqc:r:o: opt; do
 	C) configuration_path="$OPTARG"
 	    ;;
 	q) quiet=1
+	    ;;
+	f) opt_rebuild=1
 	    ;;
 	v) version; exit 0
 	    ;;
@@ -93,6 +97,16 @@ shift $((OPTIND - 1))
 if [ "$outfile" = "" ]; then
     mkdir -p $configuration_path
     outfile="$configuration_path/build.audit"
+    touch "$outfile"
+    build_sh="$configuration_path/build.sh"
+    echo "#!/bin/sh" >$build_sh
+    echo -n "cd $PWD && \$ARUN"  >>$build_sh
+    for a in "$@"; do
+	echo -n " \"$a\""  >>$build_sh
+    done
+    echo >>$build_sh
+    chmod 755 $build_sh
+    echo "$opt_rebuild" >"$configuration_path/build.force"
 fi
 
 exec env PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_DEPS_OUTPUT="$outfile" PROOT_ADDON_CC_DEPS_CCRE="$ccregexp" $PROOT -w $PWD / ${1+"$@"}

@@ -35,6 +35,7 @@ verbose="0"
 quiet="0"
 clean="0"
 opt_q=""
+opt_rebuild=""
 
 version() {
     echo "atos-explore version @VERSION@"
@@ -45,8 +46,9 @@ usage() {
 
 Usage: atos-explore [options] [executables...]
 
-Run Options
+Build Options
       -b <build_script> : build_script to be executed [default: $build_script]
+      -f : force rebuild by running build script instead of audited build
 
 Run Options
       -r <run_script> : run_script to be executed [default: $run_script]
@@ -75,7 +77,7 @@ trap "cleanup" EXIT
 tmpfile=`mktemp /tmp/atos-inst.XXXXXX`
 
 
-while getopts vhdqce:r:b:C: opt; do
+while getopts vhdqcfe:r:b:C: opt; do
     case $opt in
 	e) executables="$OPTARG"
 	    ;;
@@ -90,6 +92,8 @@ while getopts vhdqce:r:b:C: opt; do
 	d) verbose=1
 	    ;;
 	q) quiet=1; opt_q=-q
+	    ;;
+	f) opt_rebuild=-f
 	    ;;
 	v) version; exit 0
 	    ;;
@@ -112,19 +116,22 @@ fi
 mkdir -p "$configuration_path"
 configuration_path=`cd "$configuration_path"; pwd`
 if [ "$clean" = "1" ]; then
+    if [ "$build_script" != "" ]; then
+	[ "$quiet" = "1" ] || echo "Cleaning build audit..."
+	rm -f "$configuration_path"/build.*
+    fi
+    if [ "$run_script" != "" ]; then
+	[ "$quiet" = "1" ] || echo "Cleaning run audit..."
+	rm -f "$configuration_path"/run.*
+    fi
     [ "$quiet" = "1" ] || echo "Cleaning all profiles..."
     rm -rf "$configuration_path"/profiles
     [ "$quiet" = "1" ] || echo "Cleaning all results..."
     rm -rf "$configuration_path"/results.db
 fi
 
-if [ "$executables" = "" ]; then
-    # By default audit all generated executables 
-    executables=-a
-fi
-
 if [ "$build_script" != "" ]; then
-    $dir/atos-audit $opt_q $build_script
+    $dir/atos-audit $opt_q $opt_rebuild $build_script
 elif [ ! -f "$configuration_path/build.audit" ]; then
     echo "`basename $0`: error: missing build audit, use -b option for specifying build script or use atos-audit tool" >&2
     exit 1
@@ -137,6 +144,10 @@ elif [ ! -f "$configuration_path/run.audit" ]; then
     exit 1
 fi
 
+if [ "$executables" = "" ]; then
+    # By default audit all generated executables 
+    executables=-a
+fi
 $dir/atos-deps $opt_q $executables
 
 $dir/atos-run $opt_q -r # Will stop there if reference run fails

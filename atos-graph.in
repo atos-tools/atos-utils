@@ -34,6 +34,15 @@ class optcase():
         self.speedup = ((ref.runtime / self.runtime) - 1.0)
         self.sizered = (1.0 - (float(self.binsize) / float(ref.binsize)))
 
+    def printpoint(self):
+        print '-' * 40
+        if self.local_id != None:
+            print 'local_id: %s' % self.local_id
+        print 'id: %s' % self.caseid
+        print '\tspeedup: %.2f%% runtime: %f' % (self.speedup * 100.0, self.runtime)
+        print '\treduction: %.2f%% binsize: %d' % (self.sizered * 100.0, self.binsize)
+        print '\tflags: %s' % " ".join(self.flags)
+
 
 class optspace():
 
@@ -101,7 +110,7 @@ class optspace():
         self.compute_frontier()
         return self
 
-    def read_atos_db(self, filename, refid='REF', binname=None, filter=None):
+    def read_atos_db(self, filename, refid='REF', binname=None, filter=None, merge=True):
         import re
         # ATOS: 401.bzip2: REF: version: 22028858
         # ATOS: 401.bzip2: REF: conf: -O2 -inline
@@ -129,7 +138,7 @@ class optspace():
             if c: allcases += [ optcase(*c, local_id = local_id) ]
             local_id += 1
         # merge all runs of a same config
-        allcases = optspace.mergeruns(allcases)
+        if merge: allcases = optspace.mergeruns(allcases)
         # remove cases with runtime of zero
         allcases = [ c for c in allcases if c.runtime > 0.0 ]
         # set cases and reference
@@ -219,7 +228,7 @@ class optspace():
                 return sorted(dp)[0][1]
             def highlight((x, y, c)):
                 # print point on console
-                optspace.printpoint(c)
+                c.printpoint()
                 # highlight point
                 self.sl.set_visible(True)
                 self.sl.set_data(x, y)
@@ -269,20 +278,20 @@ class optspace():
         if outfile: pl.savefig(outfile)
         if show: pl.show()
 
-    @staticmethod
-    def printpoint(c):
-        print '-' * 40
-        if c.local_id != None:
-            print 'local_id: %s' % c.local_id
-        print 'id: %s' % c.caseid
-        print '\tspeedup: %.2f%% runtime: %f' % (c.speedup * 100.0, c.runtime)
-        print '\treduction: %.2f%% binsize: %d' % (c.sizered * 100.0, c.binsize)
-        print '\tflags: %s' % " ".join(c.flags)
-
     def printfrontier(self):
         optcases = self.cases.values()
         optcf = reversed(sorted([ (c.speedup, c) for c in optcases if c.onfront ]))
-        for (s, c) in optcf: optspace.printpoint(c)
+        for (s, c) in optcf: c.printpoint()
+        print '-' * 40
+        print '%d points, %d on frontier' % (
+            len(optcases), len([c for c in optcases if c.onfront ]))
+
+    def get_point(self, local_id=None, case_id=None):
+        # return the last point that match
+        for p in reversed(self.cases.values()):
+            if local_id and p.local_id == local_id: return p
+            if case_id and p.caseid == case_id: return p
+        return None
 
 
 # ####################################################################

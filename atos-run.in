@@ -39,7 +39,7 @@ g_set=0
 gopts=""
 quiet=0
 silent=0
-remote_profile=0
+remote_profile_path=""
 
 version() {
     echo "atos-run version @VERSION@"
@@ -91,7 +91,7 @@ tmpfile=`mktemp /tmp/atos-inst.XXXXXX`
 tmpfile2=`mktemp /tmp/atos-inst.XXXXXX`
 
 
-while getopts vhqrsbo:f:e:a:i:w:u:g:C: opt; do
+while getopts vhqrsb:o:f:e:a:i:w:u:g:C: opt; do
     case $opt in
 	e) executables="$OPTARG"
 	    ;;
@@ -111,7 +111,7 @@ while getopts vhqrsbo:f:e:a:i:w:u:g:C: opt; do
 	    ;;
 	C) configuration_path="$OPTARG"
 	    ;;
-	b) remote_profile=1
+	b) remote_profile_path="$OPTARG"
 	    ;;
 	r) record=1
 	    ;;
@@ -221,6 +221,10 @@ profile_path() {
 }
 
 get_time() {
+    if [ "$remote_profile_path" != "" ]; then
+	export REMOTE_PROFILE_DIR=$remote_profile_path
+	export LOCAL_PROFILE_DIR=`profile_path`
+    fi
     /usr/bin/time -p ${1+"$@"} 2>&1 | tee $tmpfile | sed -e '/^real /d' -e '/^user /d' -e '/^sys /d'
     [ ${PIPESTATUS[0]} = 0 ] || failure=true
     exe_time=`tail -3 $tmpfile | awk '{if ($1 == "user") { print int($2 * 1000); }}'`
@@ -228,12 +232,7 @@ get_time() {
     if [ `grep -c "^user " $tmpfile` -ge 2 ]; then
 	exe_time=`grep "^user " $tmpfile | tail -2 | head -1 | awk '{ print int($2 * 1000); }'`
     fi
-    if [ "$remote_profile" = "1" ]; then
-        # move profile info
-	if [ `grep -c "^profile_dir=" $tmpfile` -ge 1 ]; then
-	    cp -fr `grep "^profile_dir=" $tmpfile | sed 's/.*=//'`/* `profile_path`
-	fi
-    fi
+    unset REMOTE_PROFILE_DIR LOCAL_PROFILE_DIR
 }
 
 mkdir -p "$configuration_path/logs"

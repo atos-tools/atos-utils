@@ -21,6 +21,8 @@
 
 VERSION="@VERSION@"
 
+import re
+
 class optcase():
 
     def __init__(self, runtime=0.0, binsize=0, caseid=None, flags=None, local_id=None):
@@ -111,7 +113,6 @@ class optspace():
         return self
 
     def read_atos_db(self, filename, refid='REF', binname=None, filter=None, highlight=None, merge=True):
-        import re
         # ATOS: 401.bzip2: REF: version: 22028858
         # ATOS: 401.bzip2: REF: conf: -O2 -inline
         # ATOS: 401.bzip2: REF: size: 63005
@@ -149,18 +150,16 @@ class optspace():
         self.compute_frontier()
         # filter
         if filter:
-            import re
             self.filter = filter
             self.cases = dict(
                 [(c.caseid,c) for c in allcases if re.search(filter,c.caseid)])
         if highlight:
-            import re
             self.highlight = highlight
             self.highcases = dict(
                 [(c.caseid,c) for c in allcases if re.search(highlight,c.caseid)])
         return self
 
-    def graph(self, show=False, outfile=None, xd=0, app_id=None):
+    def graph(self, show=False, outfile=None, app_id=None, xd=0, yd=0):
         import pylab as pl
         fg = pl.figure()
         ax = fg.add_subplot(111)
@@ -236,12 +235,22 @@ class optspace():
                 import math
                 dp = [(math.hypot(a-x,b-y),(a,b,c)) for (a,b,c) in self.allpts ]
                 return sorted(dp)[0][1]
+            def basepoint(c):
+                if yd == 0: return [c.sizered], [c.speedup]
+                x = re.match('^(OPT)(-fprofile-use-O.)?.*?(-O.).*?(-flto)?$', c.caseid)
+                if not x: return [c.sizered], [c.speedup]
+                baseid = ''.join([s for s in x.groups() if s is not None])
+                allpts = [ x for x in optcases ]
+                basept = [ x for x in allpts if x.caseid == baseid ]
+                res = [c] + (basept and [basept[0]] or [])
+                return [x.sizered for x in res], [x.speedup for x in res]
             def highlight((x, y, c)):
                 # print point on console
                 c.printpoint()
                 # highlight point
                 self.sl.set_visible(True)
-                self.sl.set_data(x, y)
+                self.sl.set_data(*basepoint(c))
+                # self.sl.set_data(x, y)
                 # selected point legend
                 sc = (len(c.caseid) >= 45
                       and c.caseid[:25] + '...' + c.caseid[-15:] or c.caseid)
@@ -354,6 +363,9 @@ if __name__ == "__main__":
     parser.add_option('-x', dest='xd',
                       action='store', type='int', default=0,
                       help=optparse.SUPPRESS_HELP)
+    parser.add_option('-y', dest='yd',
+                      action='store', type='int', default=0,
+                      help=optparse.SUPPRESS_HELP)
     parser.add_option('-C', dest='configuration_path',
                       action='store', type='string', default="./atos-configurations",
                       help='set configuration path (default: ./atos-configurations)')
@@ -381,5 +393,5 @@ if __name__ == "__main__":
         sp = optspace().read_atos_db(
             infilename, opts.refid, opts.execname, opts.filter, opts.highlight)
     sp.printfrontier()
-    sp.graph(opts.show, opts.outfile, xd=opts.xd, app_id=opts.identifier)
+    sp.graph(opts.show, opts.outfile, app_id=opts.identifier, xd=opts.xd, yd=opts.yd)
     # sp.report()

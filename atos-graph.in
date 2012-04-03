@@ -21,6 +21,8 @@
 
 VERSION="@VERSION@"
 
+import re
+
 class optcase():
 
     def __init__(self, runtime=0.0, binsize=0, caseid=None, flags=None, local_id=None):
@@ -111,8 +113,7 @@ class optspace():
         return self
 
     def read_atos_db(self, filename, opts = {}):
-        import re
-        # ATOS: 401.bzip2: REF: version: 22028858
+         # ATOS: 401.bzip2: REF: version: 22028858
         # ATOS: 401.bzip2: REF: conf: -O2 -inline
         # ATOS: 401.bzip2: REF: size: 63005
         # ATOS: 401.bzip2: REF: time: 12760
@@ -149,12 +150,10 @@ class optspace():
         self.compute_frontier()
         # filter
         if opts.filter:
-            import re
             self.filter = opts.filter
             self.cases = dict(
                 [(c.caseid,c) for c in allcases if re.search(opts.filter,c.caseid)])
         if opts.highlight:
-            import re
             self.highlight = opts.highlight
             self.highcases = dict(
                 [(c.caseid,c) for c in allcases if re.search(opts.highlight,c.caseid)])
@@ -173,7 +172,7 @@ class optspace():
             # optcases on frontier
             xy = zip(*sorted([ (c.sizered, c.speedup) for c in optcases if c.onfront]))
             # ax.scatter(*xy, s=20, c='r', label='frontier')
-            ax.plot(xy[0], xy[1], ms=6, c='r', label='frontier',
+            ax.plot(xy[0], xy[1], ms=8, c='r', label='frontier',
                     marker='o', linestyle='dashed', zorder=10)
         if opts.xd == 1: # optimization level scatter
             cols = {'': 'black', '-Os' : 'green', '-O0' : 'white',
@@ -228,20 +227,30 @@ class optspace():
         # Highlight points if requested
         if getattr(self, 'highlight', None) and len(self.highcases) > 0:
             xy = zip(*[ (c.sizered, c.speedup) for c in self.highcases.values()])
-            ax.scatter(*xy, c='y', s=40, label='ref cases', zorder=20)
-            
+            ax.scatter(*xy, s=40, c='y', label='ref cases', zorder=20)
+
         # dynamic annotations
         def on_pick(event):
             def closest(x, y):
                 import math
                 dp = [(math.hypot(a-x,b-y),(a,b,c)) for (a,b,c) in self.allpts]
                 return sorted(dp)[0][1]
+            def basepoint(c):
+                if opts.yd == 0: return [c.sizered], [c.speedup]
+                x = re.match('^(OPT)(-fprofile-use-O.)?.*?(-O.).*?(-flto)?$', c.caseid)
+                if not x: return [c.sizered], [c.speedup]
+                baseid = ''.join([s for s in x.groups() if s is not None])
+                allpts = [ x for x in optcases ]
+                basept = [ x for x in allpts if x.caseid == baseid ]
+                res = [c] + (basept and [basept[0]] or [])
+                return [x.sizered for x in res], [x.speedup for x in res]
             def highlight((x, y, c)):
                 # print point on console
                 c.printpoint()
                 # highlight point
                 self.sl.set_visible(True)
-                self.sl.set_data(x, y)
+                self.sl.set_data(*basepoint(c))
+                # self.sl.set_data(x, y)
                 # selected point legend
                 sc = (len(c.caseid) >= 45
                       and c.caseid[:25] + '...' + c.caseid[-15:] or c.caseid)
@@ -297,6 +306,22 @@ class optspace():
         print '%d points, %d on frontier' % (
             len(optcases), len([c for c in optcases if c.onfront ]))
 
+    def report(self):
+        # print all base point
+        for optlev in ['-Os', '-O0', '-O1', '-O2', '-O3']:
+            for optprof in ['', '-fprofile-use' + optlev]:
+                for optlto in ['', '-flto']:
+                    caseid = 'OPT%s%s%s' % (optprof, optlev, optlto)
+                    point = self.get_point(case_id=caseid)
+                    if not point: continue
+                    point.printpoint()
+        # print frontier points
+        frontier = [(c.speedup, c) for c in self.cases.values() if c.onfront]
+        frontier = reversed(sorted(frontier))
+        frontier = [x[1] for x in frontier]
+        for point in frontier:
+            point.printpoint()
+
     def get_point(self, local_id=None, case_id=None):
         # return the last point that match
         for p in reversed(self.cases.values()):
@@ -332,16 +357,19 @@ if __name__ == "__main__":
                       help='do not show resulting graph (default: False)')
     parser.add_option('-f', dest='filter',
                       action='store', type='string', default=None,
-                      help=optparse.SUPPRESS_HELP)
+                      help='filter out the points given by the regexp')
     parser.add_option('-H', dest='highlight',
                       action='store', type='string', default=None,
-                      help=optparse.SUPPRESS_HELP)
+                      help='highlight points givena regexp')
     parser.add_option('-F', dest='frontier_only',
                       action='store_true', default=False,
-                      help='Graph only the frontier')
+                      help='display frontier only')
     parser.add_option('-x', dest='xd',
                       action='store', type='int', default=0,
-                      help=optparse.SUPPRESS_HELP)
+                      help='highlight different options sets -x[0123]')
+    parser.add_option('-y', dest='yd',
+                      action='store', type='int', default=0,
+                      help='display base points when picking a configuration -y[01]')
     parser.add_option('-C', dest='configuration_path',
                       action='store', type='string', default="./atos-configurations",
                       help='set configuration path (default: ./atos-configurations)')
@@ -375,3 +403,4 @@ if __name__ == "__main__":
         sp = optspace().read_atos_db(infilename, opts)
     sp.printfrontier()
     sp.graph(opts.show, opts.outfile, opts)
+    # sp.report()

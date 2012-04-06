@@ -45,6 +45,7 @@ Usage: atos-profile [options] [--] [command...]
 
 Profile path options:
       -p <path> : path to profile files [default: $configuration_path/profiles]
+      -b <path> : remote path to profile files [default: none]
 
 Profile Options:
       -g "options" : append given options to the compilation commands [default: $options]

@@ -218,7 +218,8 @@ profile_path() {
     if [ "$gopts" != "" ]; then
 	lpvariant=OPT`echo $gopts | sed 's/ //g'`
     fi
-    echo "$configuration_path/profiles/`variant_hash $lpvariant`"
+    absolute_configuration_path=`cd $configuration_path; pwd`
+    echo "$absolute_configuration_path/profiles/`variant_hash $lpvariant`"
 }
 
 get_time() {

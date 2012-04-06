@@ -36,6 +36,7 @@ quiet="0"
 clean="0"
 opt_q=""
 opt_rebuild=""
+get_results_script=""
 
 version() {
     echo "atos-explore version @VERSION@"
@@ -52,6 +53,7 @@ Build Options
 
 Run Options
       -r <run_script> : run_script to be executed [default: $run_script]
+      -t <get_results_script> : get_results_script to be executed [default: none]
 
 Executable File Options:
       -e <executables> : executables to be instrumented [default: args of command]
@@ -77,7 +79,7 @@ trap "cleanup" EXIT
 tmpfile=`mktemp /tmp/atos-inst.XXXXXX`
 
 
-while getopts vhdqcfe:r:b:C: opt; do
+while getopts vhdqcfe:r:b:t:C: opt; do
     case $opt in
 	e) executables="$OPTARG"
 	    ;;
@@ -86,6 +88,8 @@ while getopts vhdqcfe:r:b:C: opt; do
 	r) run_script="$OPTARG"
 	    ;;
 	b) build_script="$OPTARG"
+	    ;;
+	t) get_results_script="$OPTARG"
 	    ;;
 	c) clean=1
 	    ;;
@@ -138,7 +142,7 @@ elif [ ! -f "$configuration_path/build.audit" ]; then
 fi
 
 if [ "$run_script" != "" ]; then
-    $dir/atos-raudit $opt_q $run_script
+    $dir/atos-raudit $opt_q -t "$get_results_script" $run_script
 elif [ ! -f "$configuration_path/run.audit" ]; then
     echo "`basename $0`: error: missing run audit, use -r option for specifying run script or use atos-raudit tool" >&2
     exit 1

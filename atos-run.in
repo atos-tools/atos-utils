@@ -40,6 +40,7 @@ gopts=""
 quiet=0
 silent=0
 remote_profile_path=""
+get_results_script=""
 
 version() {
     echo "atos-run version @VERSION@"
@@ -68,6 +69,7 @@ Configuration Options:
 Recording options:
       -r : record results
       -s : silent mode, do not emit perf/size results
+      -t <get_results_script> : get_results_script to be executed [default: none]
 
 Profile options:
       -u "opts" : use profile variant deduced by opts [default: none]
@@ -92,7 +94,7 @@ tmpfile=`mktemp /tmp/atos-inst.XXXXXX`
 tmpfile2=`mktemp /tmp/atos-inst.XXXXXX`
 
 
-while getopts vhqrsb:o:f:e:a:i:w:u:g:C: opt; do
+while getopts vhqrsb:t:o:f:e:a:i:w:u:g:C: opt; do
     case $opt in
 	e) executables="$OPTARG"
 	    ;;
@@ -113,6 +115,8 @@ while getopts vhqrsb:o:f:e:a:i:w:u:g:C: opt; do
 	C) configuration_path="$OPTARG"
 	    ;;
 	b) remote_profile_path="$OPTARG"
+	    ;;
+	t) get_results_script="$OPTARG"
 	    ;;
 	r) record=1
 	    ;;
@@ -253,29 +257,43 @@ if $failure; then
     exe_time=FAILURE
 fi
 
-if [ "$silent" != 1 ]; then
+db_entry() {
+    echo "ATOS: $identifier: $variant: version: `$0 -v | awk '{print $3;}'`"
+    echo "ATOS: $identifier: $variant: conf: $options"
+    if [ "$u_set" = 1 ]; then
+	echo "ATOS: $identifier: $variant: uconf: $uopts"
+    fi
+    if [ "$g_set" = 1 ]; then
+	echo "ATOS: $identifier: $variant: gconf: $uopts"
+    fi
+    echo "ATOS: $identifier: $variant: size: $exe_size"
+    echo "ATOS: $identifier: $variant: time: $exe_time"
+}
+
+print_db_entry() {
     if [ "$file" != "" ]; then
-	echo "ATOS: $identifier: $variant: version: `$0 -v | awk '{print $3;}'`" >>"$file"
-	echo "ATOS: $identifier: $variant: conf: $options" >>"$file"
-	if [ "$u_set" = 1 ]; then
-	    echo "ATOS: $identifier: $variant: uconf: $uopts" >>"$file"
-	fi
-	if [ "$g_set" = 1 ]; then
-	    echo "ATOS: $identifier: $variant: gconf: $uopts" >>"$file"
-	fi
-	echo "ATOS: $identifier: $variant: size: $exe_size" >>"$file"
-	echo "ATOS: $identifier: $variant: time: $exe_time" >>"$file"
+	db_entry >>"$file"
     else
-	echo "ATOS: $identifier: $variant: version: `$0 -v`" >&$fd
-	echo "ATOS: $identifier: $variant: conf: $options" >&$fd
-	if [ "$u_set" = 1 ]; then
-	    echo "ATOS: $identifier: $variant: uconf: $uopts" >&$fd
-	fi
-	if [ "$g_set" = 1 ]; then
-	    echo "ATOS: $identifier: $variant: gconf: $uopts" >&$fd
-	fi
-	echo "ATOS: $identifier: $variant: size: $exe_size" >&$fd
-	echo "ATOS: $identifier: $variant: time: $exe_time" >&$fd
+	db_entry >&$fd
+    fi
+}
+
+if [ "$silent" != 1 ]; then
+    if [ "$get_results_script" != "" ]; then
+	$get_results_script >>$tmpfile 2>&1
+    elif [ -f "$configuration_path/get_res.sh" ]; then
+	$configuration_path/get_res.sh >>$tmpfile 2>&1
+    fi
+    if [ `grep -c "^ATOS: " $tmpfile` -ge 1 ]; then
+	identifiers=`grep "^ATOS: " $tmpfile | awk '{ print $2 }' | sed 's/://' | sort -u`
+	for identifier in $identifiers; do
+	    exe_time=`grep "^ATOS: $identifier: time: " $tmpfile | awk '{ print $4 }'`
+	    exe_size=`grep "^ATOS: $identifier: size: " $tmpfile | awk '{ print $4 }'`
+	    [ "$exe_time" == "" -o "$exe_size" == "" ] && continue
+	    print_db_entry
+	done
+    else
+	print_db_entry
     fi
 fi
 

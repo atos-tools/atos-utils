@@ -30,6 +30,7 @@ PROOT=${PROOT:-proot}
 configuration_path="./atos-configurations"
 outfile=""
 quiet=0
+get_results_script=""
 
 version() {
     echo "atos-raudit version @VERSION@"
@@ -45,6 +46,7 @@ Output File Options:
 
 Configuration Options:
       -C <path> : configuration path [default: $configuration_path]
+      -t <get_results_script> : get_results_script to be executed [default: none]
 
 Misc Options
       -q : quiet output
@@ -60,11 +62,13 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts vhqo:C: opt; do
+while getopts vhqo:C:t: opt; do
     case $opt in
 	o) outfile="$OPTARG"
 	    ;;
 	C) configuration_path="$OPTARG"
+	    ;;
+	t) get_results_script="$OPTARG"
 	    ;;
 	q) quiet=1
 	    ;;
@@ -97,6 +101,12 @@ if [ "$outfile" = "" ]; then
     done
     echo >>$run_sh
     chmod 755 $run_sh
+    if [ "$get_results_script" != "" ]; then
+	res_sh="$configuration_path/get_res.sh"
+	echo "#!/bin/sh" >$res_sh
+	echo "cd $PWD && $get_results_script" >>$res_sh
+	chmod 755 $res_sh
+    fi
 fi
 
 exec "$@"

@@ -68,9 +68,10 @@ Build options:
       -f : force rebuild by running build script instead of audited build
 
 Profile options:
-      -u "$opts" : use profile variant deduced by $opts [default: none]
-      -g "$opts" : generate profile variant deduced by $opts [default: none]
+      -u "opts" : use profile variant deduced by opts [default: none]
+      -g "opts" : generate profile variant deduced by opts [default: none]
       -p <path> : path to profile files [default: $configuration_path/profiles/<pvariant>]
+      -b <path> : remote path to profile files [default: none]
 
 Misc Options
       -q : quiet output

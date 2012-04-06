@@ -65,13 +65,14 @@ Output options:
 Configuration Options:
       -C <path> : configuration path [default: $configuration_path]
 
-Recordiong options:
+Recording options:
       -r : record results
-      -s : silent mode, do not emit pers/size results
+      -s : silent mode, do not emit perf/size results
 
 Profile options:
-      -u "$opts" : use profile variant deduced by $opts [default: none]
-      -g "$opts" : use profile variant deduced by $opts [default: none]
+      -u "opts" : use profile variant deduced by opts [default: none]
+      -g "opts" : use profile variant deduced by opts [default: none]
+      -b <path> : remote path to profile files [default: none]
 
 Misc Options
       -q : quiet output

@@ -112,7 +112,8 @@ class optspace():
         self.compute_frontier()
         return self
 
-    def read_atos_db(self, filename, refid='REF', binname=None, filter=None, highlight=None, merge=True):
+    def read_atos_db(self, filename, refid='REF', binname=None, filter=None,
+                     highlight=None, merge=True, speedups=True):
         # ATOS: 401.bzip2: REF: version: 22028858
         # ATOS: 401.bzip2: REF: conf: -O2 -inline
         # ATOS: 401.bzip2: REF: size: 63005
@@ -146,8 +147,9 @@ class optspace():
         self.cases = dict([ (c.caseid, c) for c in allcases ])
         self.refid = refid
         # compute speedups, codesize reductions and space frontier
-        self.compute_speedups()
-        self.compute_frontier()
+        if speedups:
+            self.compute_speedups()
+            self.compute_frontier()
         # filter
         if filter:
             self.filter = filter
@@ -320,6 +322,13 @@ class optspace():
         frontier = [x[1] for x in frontier]
         for point in frontier:
             point.printpoint()
+
+    def get_frontier(self):
+        # return frontier points, biggest speedups first
+        frontier = [(c.speedup, c) for c in self.cases.values() if c.onfront]
+        frontier = reversed(sorted(frontier))
+        frontier = [x[1] for x in frontier]
+        return frontier
 
     def get_point(self, local_id=None, case_id=None):
         # return the last point that match

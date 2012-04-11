@@ -117,27 +117,24 @@ class optspace():
         # ATOS: 401.bzip2: REF: conf: -O2 -inline
         # ATOS: 401.bzip2: REF: size: 63005
         # ATOS: 401.bzip2: REF: time: 12760
-        def read_one_run(lines):
-            size, time, flags = None, None, None
-            while lines:
-                words = re.split('[\s:]*', lines.pop(0).strip())
-                (bin, compile_id, key), values = words[1:4], words[4:]
-                if opts.execname and opts.execname != bin: continue
-                if key == 'conf': flags = values
-                elif key == 'size': size = values[0]
-                elif key == 'time': time = values[0]
-                if size != None and time != None:
-                    if not 'FAILURE' in [size, time]: break
-                    size, time, flags = None, None, None
-            if not (size and time): return None
-            return (time, size, compile_id, flags)
         # read all optimization cases
-        allcases, lines = [], open(filename).readlines()
-        local_id = 0
-        while lines:
-            c = read_one_run(lines)
-            if c: allcases += [ optcase(*c, local_id = local_id) ]
-            local_id += 1
+        allcases, local_id = [], 0
+        size, time, flags = None, None, None
+        execname = kwargs.get('execname', None)
+        for line in open(filename):
+            words = sum([w.split() for w in line.strip().split(':')], [])
+            (bin, compile_id, key), values = words[1:4], words[4:]
+            if execname and execname != bin: continue
+            if key == 'conf': flags = values
+            elif key == 'size': size = values[0]
+            elif key == 'time': time = values[0]
+            if size != None and time != None:
+                if 'FAILURE' not in [size, time]:
+                    allcases += [
+                        optcase(time, size, compile_id, flags,
+                                local_id = local_id) ]
+                size, time, flags = None, None, None
+                local_id += 1
         # merge all runs of a same config
         if kwargs.get('merge', True): allcases = optspace.mergeruns(allcases)
         # remove cases with runtime of zero

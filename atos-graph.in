@@ -112,7 +112,7 @@ class optspace():
         self.compute_frontier()
         return self
 
-    def read_atos_db(self, filename, opts = {}):
+    def read_atos_db(self, filename, **kwargs):
         # ATOS: 401.bzip2: REF: version: 22028858
         # ATOS: 401.bzip2: REF: conf: -O2 -inline
         # ATOS: 401.bzip2: REF: size: 63005
@@ -139,43 +139,51 @@ class optspace():
             if c: allcases += [ optcase(*c, local_id = local_id) ]
             local_id += 1
         # merge all runs of a same config
-        if opts.merge: allcases = optspace.mergeruns(allcases)
+        if kwargs.get('merge', True): allcases = optspace.mergeruns(allcases)
         # remove cases with runtime of zero
         allcases = [ c for c in allcases if c.runtime > 0.0 ]
         # set cases and reference
         self.cases = dict([ (c.caseid, c) for c in allcases ])
-        self.refid = opts.refid
+        self.refid = kwargs.get('refid', 'REF')
         # compute speedups, codesize reductions and space frontier
-        if speedups:
+        if kwargs.get('speedups', True):
             self.compute_speedups()
             self.compute_frontier()
         # filter
-        if opts.filter:
-            self.filter = opts.filter
+        filter_re = kwargs.get('filter', None)
+        if filter_re:
+            self.filter = filter_re
             self.cases = dict(
-                [(c.caseid,c) for c in allcases if re.search(opts.filter,c.caseid)])
-        if opts.highlight:
-            self.highlight = opts.highlight
+                [(c.caseid,c) for c in allcases if re.search(filter_re,c.caseid)])
+        highlight_re = kwargs.get('highlight', None)
+        if highlight_re:
+            self.highlight = highlight_re
             self.highcases = dict(
-                [(c.caseid,c) for c in allcases if re.search(opts.highlight,c.caseid)])
+                [(c.caseid,c) for c in allcases if re.search(highlight_re,c.caseid)])
         return self
 
-    def graph(self, show=False, outfile=None, opts = {}):
+    def graph(self, show=False, outfile=None, **kwargs):
         import pylab as pl
+        # optional keywords arguments
+        xd = kwargs.get('xd', 0)
+        yd = kwargs.get('yd', 0)
+        identifier = kwargs.get('identifier', None)
+        #
         fg = pl.figure()
         ax = fg.add_subplot(111)
         # http://matplotlib.sourceforge.net/index.html
         optcases = self.cases.values()
-        if opts.xd == 0: # simple graph
+        if xd == 0: # simple graph
             # optcases not on frontier
             xy = zip(*[ (c.sizered, c.speedup) for c in optcases if not c.onfront])
-            ax.scatter(*xy, s=20, c='b', label='opt cases', zorder=5, visible=(not opts.frontier_only))
+            ax.scatter(*xy, s=20, c='b', label='opt cases', zorder=5,
+                        visible=(not kwargs.get('frontier_only', False)))
             # optcases on frontier
             xy = zip(*sorted([ (c.sizered, c.speedup) for c in optcases if c.onfront]))
             # ax.scatter(*xy, s=20, c='r', label='frontier')
             ax.plot(xy[0], xy[1], ms=8, c='r', label='frontier',
                     marker='o', linestyle='dashed', zorder=10)
-        if opts.xd == 1: # optimization level scatter
+        if xd == 1: # optimization level scatter
             cols = {'': 'black', '-Os' : 'green', '-O0' : 'white',
                     '-O1' : 'cyan', '-O2' : 'blue', '-O3' : 'red'}
             for opt in cols.keys():
@@ -185,7 +193,7 @@ class optspace():
                 lbl = '%s' % (opt and '[%s]' % opt or '_nolegend_')
                 ax.scatter(*xy, s=20, c=cols[opt], marker='o',
                             label=lbl, zorder=5)
-        if opts.xd == 2: # graph with more details
+        if xd == 2: # graph with more details
             # build variant scatter
             def getv(c):
                 lto = c.caseid.find('-flto') != -1
@@ -200,7 +208,7 @@ class optspace():
                 lbl = '%s' % (opt and '[%s]' % opt or '_nolegend_')
                 ax.scatter(*xy, s=20, c=cols[opt], marker='o',
                             label=lbl, zorder=5)
-        if opts.xd == 3: # graph with more details
+        if xd == 3: # graph with more details
             # build O2/O3/fdo/fdo+lto scatter
             def getv(c):
                 lto = c.caseid.find('-flto') != -1
@@ -219,10 +227,10 @@ class optspace():
                 lbl = '%s' % (opt and '[%s]' % opt or '_nolegend_')
                 ax.scatter(*xy, s=20, c=cols[opt], marker='o',
                             label=lbl, zorder=5)
-        if opts.xd >= 1: # graph with more details
+        if xd >= 1: # graph with more details
             # frontier
             xy = zip(*sorted([ (c.sizered, c.speedup) for c in optcases if c.onfront]))
-            ax.plot(xy[0], xy[1], c='r', label='_nolegend_', zorder=10,
+            ax.plot(xy[0], xy[1], c='r', label='_nolegend_', zorder=1,
                     marker='x', markersize=9, markeredgewidth=2,
                     linewidth=2, linestyle='dashed')
         # Highlight points if requested
@@ -237,7 +245,7 @@ class optspace():
                 dp = [(math.hypot(a-x,b-y),(a,b,c)) for (a,b,c) in self.allpts]
                 return sorted(dp)[0][1]
             def basepoint(c):
-                if opts.yd == 0: return [c.sizered], [c.speedup]
+                if yd == 0: return [c.sizered], [c.speedup]
                 x = re.match('^(OPT)(-fprofile-use-O.)?.*?(-O.).*?(-flto)?$', c.caseid)
                 if not x: return [c.sizered], [c.speedup]
                 baseid = ''.join([s for s in x.groups() if s is not None])
@@ -261,7 +269,7 @@ class optspace():
                     tt = ""
                 tt+= 'speedup=%.2f%% runtime=%.2f\n' % (c.speedup * 100.0, c.runtime)
                 tt+= 'reduction=%.2f%% binsize=%d\n' % (c.sizered * 100.0, c.binsize)
-                if not opts.anonymous:
+                if not kwargs.get('anonymous', False):
                     tt+= 'id=%s' % (sc)
                 lp = pl.legend([self.sl], [tt], loc='lower right', numpoints=1)
                 pl.setp(lp.get_texts(), fontsize='medium')
@@ -284,8 +292,8 @@ class optspace():
         pl.axhspan(0.0, 0.0)
         pl.axvspan(0.0, 0.0)
         ptitle = 'Optimization Space'
-        if opts.identifier != None:
-            ptitle+= ' for %s' % opts.identifier
+        if identifier:
+            ptitle+= ' for %s' % identifier
         if self.refid:
             ptitle += ' [ref=%s]' % self.refid
         if getattr(self, 'filter', None):
@@ -408,7 +416,7 @@ if __name__ == "__main__":
     if os.path.basename(infilename).startswith('_run'):
         sp = optspace().read_ccc_run(infilename)
     else:
-        sp = optspace().read_atos_db(infilename, opts)
+        sp = optspace().read_atos_db(infilename, **vars(opts))
     sp.printfrontier()
-    sp.graph(opts.show, opts.outfile, opts)
+    sp.graph(**vars(opts))
     # sp.report()

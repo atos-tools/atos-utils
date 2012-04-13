@@ -21,14 +21,14 @@
 
 VERSION="@VERSION@"
 
-import re
+import re, itertools, math
 
 class optcase():
 
-    def __init__(self, runtime=0.0, binsize=0, caseid=None, flags=None, local_id=None):
+    def __init__(self, runtime, binsize, variant_id=None, flags=None, local_id=None):
         self.runtime = float(runtime)
         self.binsize = int(binsize)
-        self.caseid = caseid
+        self.variant_id = variant_id
         self.flags = flags
         self.local_id = local_id
 
@@ -40,7 +40,7 @@ class optcase():
         print '-' * 40
         if self.local_id != None:
             print 'local_id: %s' % self.local_id
-        print 'id: %s' % self.caseid
+        print 'id: %s' % self.variant_id
         print '\tspeedup: %.2f%% runtime: %f' % (self.speedup * 100.0, self.runtime)
         print '\treduction: %.2f%% binsize: %d' % (self.sizered * 100.0, self.binsize)
         print '\tflags: %s' % " ".join(self.flags)
@@ -49,127 +49,92 @@ class optcase():
 class optspace():
 
     def __init__(self):
-        self.cases = { } # { compile_id : optcase }
-        self.refid = None
+        self.allcases = {} # { target : { variant : [ optcase ] } }
+        self.refid = None # variant used as reference for speedups
+        self.targets = []
+        self.cases = {} # { target : { variant : optcase } }
 
-    def compute_speedups(self):
-        assert self.refid
-        for c in self.cases.values():
-            c.compute_speedup(self.cases[self.refid])
+    def compute_speedups(self, refid='REF'):
+        self.refid = refid
+        for target in self.targets:
+            allcases = set()
+            # speedup and codesize
+            for (variant, optcase) in self.cases[target].items():
+                optcase.compute_speedup(self.cases[target][self.refid])
+                allcases.add(optcase)
+            # compute frontier
+            maybe_on_frontier, mustbe_on_frontier = allcases, set()
+            for (variant, c) in self.cases[target].items():
+                onfrontier = True
+                maybe_on_frontier.remove(c)
+                for c2 in itertools.chain(mustbe_on_frontier, maybe_on_frontier):
+                    if c2.speedup >= c.speedup and c2.sizered >= c.sizered:
+                        onfrontier = False
+                        break
+                if onfrontier: mustbe_on_frontier.add(c)
+                c.onfront = onfrontier
 
-    def compute_frontier(self):
-        import itertools
-        maybe_on_frontier, mustbe_on_frontier = set(self.cases.values()), set()
-        for c in self.cases.values():
-            onfrontier = True
-            maybe_on_frontier.remove(c)
-            for c2 in itertools.chain(mustbe_on_frontier, maybe_on_frontier):
-                if c2.speedup >= c.speedup and c2.sizered >= c.sizered:
-                    onfrontier = False
-                    break
-            if onfrontier: mustbe_on_frontier.add(c)
-            c.onfront = onfrontier
+    def mergeruns(self):
+        for target in self.targets:
+            for (variant, optcases) in self.allcases[target].items():
+                rt = [ c.runtime for c in optcases ]
+                nc = optcase(sum(rt) / len(rt),
+                        optcases[0].binsize, optcases[0].variant_id,
+                        optcases[0].flags, optcases[0].local_id)
+                self.cases.setdefault(target, {})[variant] = nc
 
-    @staticmethod
-    def mergeruns(allcases):
-        casedict = {} # { compile_id : [ list_of_runs ] }
-        for c in allcases:
-            casedict.setdefault(c.caseid, []).append(c)
-        for c, runs in casedict.items():
-            rt = [ r.runtime for r in runs ]
-            runs[0].runtime = sum(rt) / len(rt)
-        return [ r[0] for r in casedict.values() ]
-
-    def read_ccc_run(self, filename):
-        def read_one_run(lines):
-            size, time, compid = None, None, None
-            while lines:
-                line = lines.pop(0).strip()
-                eqpos = line.find('=')
-                if eqpos == 0: break # invalid line or separator (====)
-                key, val = line[:eqpos].lower(), line[eqpos + 1:]
-                if key == 'run_time': time = val
-                elif key == 'bin_size': size = val
-                elif key == 'compile_id': compid = val
-                else: pass
-            return time, size, compid
-        # skip 1st line (====)
-        allcases, lines = [], open(filename).readlines()[1:]
-        # read all optimization cases
-        while lines:
-            c = read_one_run(lines)
-            if c: allcases += [ optcase(*c) ]
-        # remove cases with runtime of zero
-        allcases = [ c for c in allcases if c.runtime > 0.0 ]
-        # first case is the reference
-        self.refid = allcases[0].caseid
-        # merge all runs of a same binary
-        allcases = optspace.mergeruns(allcases)
-        # create all optimization case points
-        self.cases = dict([ (c.caseid, c) for c in allcases ])
-        # compute speedups, codesize reductions and space frontier
-        self.compute_speedups()
-        self.compute_frontier()
-        return self
-
-    def read_atos_db(self, filename, **kwargs):
+    def read_atos_db(self, filename, filter=None):
         # ATOS: 401.bzip2: REF: version: 22028858
         # ATOS: 401.bzip2: REF: conf: -O2 -inline
         # ATOS: 401.bzip2: REF: size: 63005
         # ATOS: 401.bzip2: REF: time: 12760
         # read all optimization cases
-        allcases, local_id = [], 0
+        local_id = 0
         size, time, flags = None, None, None
-        execname = kwargs.get('execname', None)
+        self.filter_re = filter
         for line in open(filename):
             words = sum([w.split() for w in line.strip().split(':')], [])
-            (bin, compile_id, key), values = words[1:4], words[4:]
-            if execname and execname != bin: continue
+            (target, variant_id, key), values = words[1:4], words[4:]
+            filtered = (self.filter_re and not re.search(self.filter_re, variant_id))
             if key == 'conf': flags = values
             elif key == 'size': size = values[0]
             elif key == 'time': time = values[0]
-            if size != None and time != None:
-                if 'FAILURE' not in [size, time]:
-                    allcases += [
-                        optcase(time, size, compile_id, flags,
-                                local_id = local_id) ]
+            else: continue
+            if size and time:
+                if 'FAILURE' not in [size, time] and not filtered:
+                    newcase = optcase(time, size, variant_id, flags, local_id)
+                    self.allcases.setdefault(
+                        target, {}).setdefault(variant_id, []).append(newcase)
                 size, time, flags = None, None, None
                 local_id += 1
-        # merge all runs of a same config
-        if kwargs.get('merge', True): allcases = optspace.mergeruns(allcases)
-        # remove cases with runtime of zero
-        allcases = [ c for c in allcases if c.runtime > 0.0 ]
-        # set cases and reference
-        self.cases = dict([ (c.caseid, c) for c in allcases ])
-        self.refid = kwargs.get('refid', 'REF')
-        # compute speedups, codesize reductions and space frontier
-        if kwargs.get('speedups', True):
-            self.compute_speedups()
-            self.compute_frontier()
-        # filter
-        filter_re = kwargs.get('filter', None)
-        if filter_re:
-            self.filter = filter_re
-            self.cases = dict(
-                [(c.caseid,c) for c in allcases if re.search(filter_re,c.caseid)])
-        highlight_re = kwargs.get('highlight', None)
-        if highlight_re:
-            self.highlight = highlight_re
-            self.highcases = dict(
-                [(c.caseid,c) for c in allcases if re.search(highlight_re,c.caseid)])
+                if target not in self.targets: self.targets += [target]
+        self.mergeruns()
         return self
 
-    def graph(self, show=False, outfile=None, **kwargs):
+    def graph(self, **kwargs):
+        # http://matplotlib.sourceforge.net/index.html
         import pylab as pl
-        # optional keywords arguments
+        # keywords arguments
+        show = kwargs.get('show', False)
+        outfile = kwargs.get('outfile', None)
         xd = kwargs.get('xd', 0)
         yd = kwargs.get('yd', 0)
         identifier = kwargs.get('identifier', None)
+        # select target
+        execname = kwargs.get('execname', None)
+        if not execname: execname = self.targets[-1]
+        optcases = self.cases[execname].values()
+        identifier = kwargs.get('identifier', None)
+        if not identifier: identifier = execname
+        # higlighted points
+        highcases = kwargs.get('highlight', None)
+        if highcases: highcases = [
+            c for c in optcases if re.search(highcases, c.variant_id)]
+        # all points coordinates
+        allpts = [ (c.sizered, c.speedup, c) for c in optcases ]
         #
         fg = pl.figure()
         ax = fg.add_subplot(111)
-        # http://matplotlib.sourceforge.net/index.html
-        optcases = self.cases.values()
         if xd == 0: # simple graph
             # optcases not on frontier
             xy = zip(*[ (c.sizered, c.speedup) for c in optcases if not c.onfront])
@@ -193,8 +158,8 @@ class optspace():
         if xd == 2: # graph with more details
             # build variant scatter
             def getv(c):
-                lto = c.caseid.find('-flto') != -1
-                fdo = c.caseid.find('-fprofile-use') != -1
+                lto = c.variant_id.find('-flto') != -1
+                fdo = c.variant_id.find('-fprofile-use') != -1
                 return ((lto and fdo) and 'fdo+lto'
                         or (lto and 'lto' or (fdo and 'fdo' or '')))
             cols = { '': 'white', 'fdo' : 'blue', 'lto' : 'green', 'fdo+lto' : 'red' }
@@ -208,8 +173,8 @@ class optspace():
         if xd == 3: # graph with more details
             # build O2/O3/fdo/fdo+lto scatter
             def getv(c):
-                lto = c.caseid.find('-flto') != -1
-                fdo = c.caseid.find('-fprofile-use') != -1
+                lto = c.variant_id.find('-flto') != -1
+                fdo = c.variant_id.find('-fprofile-use') != -1
                 opl = ((c.flags and c.flags[0] in ['-O2', '-O3'])
                         and c.flags[0][1:] or '')
                 vrt = (lto and fdo) and 'fdo+lto' or (fdo and 'fdo' or '')
@@ -231,35 +196,31 @@ class optspace():
                     marker='x', markersize=9, markeredgewidth=2,
                     linewidth=2, linestyle='dashed')
         # Highlight points if requested
-        if getattr(self, 'highlight', None) and len(self.highcases) > 0:
-            xy = zip(*[ (c.sizered, c.speedup) for c in self.highcases.values()])
+        if highcases:
+            xy = zip(*[ (c.sizered, c.speedup) for c in highcases])
             ax.scatter(*xy, s=40, c='y', label='ref cases', zorder=20)
-
         # dynamic annotations
         def on_pick(event):
             def closest(x, y):
-                import math
-                dp = [(math.hypot(a-x,b-y),(a,b,c)) for (a,b,c) in self.allpts]
+                dp = [(math.hypot(a-x,b-y),(a,b,c)) for (a,b,c) in allpts]
                 return sorted(dp)[0][1]
             def basepoint(c):
                 if yd == 0: return [c.sizered], [c.speedup]
-                x = re.match('^(OPT)(-fprofile-use-O.)?.*?(-O.).*?(-flto)?$', c.caseid)
+                x = re.match('^(OPT)(-fprofile-use-O.)?.*?(-O.).*?(-flto)?$', c.variant_id)
                 if not x: return [c.sizered], [c.speedup]
                 baseid = ''.join([s for s in x.groups() if s is not None])
-                allpts = [ x for x in optcases ]
-                basept = [ x for x in allpts if x.caseid == baseid ]
+                basept = [ x for x in optcases if x.variant_id == baseid ]
                 res = [c] + (basept and [basept[0]] or [])
                 return [x.sizered for x in res], [x.speedup for x in res]
             def highlight((x, y, c)):
                 # print point on console
                 c.printpoint()
                 # highlight point
-                self.sl.set_visible(True)
-                self.sl.set_data(*basepoint(c))
-                # self.sl.set_data(x, y)
+                selected_points.set_visible(True)
+                selected_points.set_data(*basepoint(c))
                 # selected point legend
-                sc = (len(c.caseid) >= 45
-                      and c.caseid[:25] + '...' + c.caseid[-15:] or c.caseid)
+                sc = (len(c.variant_id) >= 45
+                      and c.variant_id[:25] + '...' + c.variant_id[-15:] or c.variant_id)
                 if c.local_id != None:
                     tt = 'local_id=%s\n' % (c.local_id)
                 else:
@@ -268,17 +229,16 @@ class optspace():
                 tt+= 'reduction=%.2f%% binsize=%d\n' % (c.sizered * 100.0, c.binsize)
                 if not kwargs.get('anonymous', False):
                     tt+= 'id=%s' % (sc)
-                lp = pl.legend([self.sl], [tt], loc='lower right', numpoints=1)
+                lp = pl.legend([selected_points], [tt], loc='lower right', numpoints=1)
                 pl.setp(lp.get_texts(), fontsize='medium')
                 lp.get_frame().set_alpha(0.5)
-                pl.gca().add_artist(self.lg)
+                pl.gca().add_artist(main_legend)
                 fg.canvas.draw()
             highlight(closest(event.mouseevent.xdata, event.mouseevent.ydata))
         if show:
-            self.allpts = [ (c.sizered, c.speedup, c) for c in optcases ]
             # workaround pb with pick_event event ind (4000)
-            self.sl, = ax.plot(
-                [x[0] for x in self.allpts], [x[1] for x in self.allpts],
+            selected_points, = ax.plot(
+                [x[0] for x in allpts], [x[1] for x in allpts],
                 marker='o', ms=20, alpha=0.4, color='b', visible=False,
                 picker=4000)
             fg.canvas.mpl_connect('pick_event', on_pick)
@@ -288,58 +248,45 @@ class optspace():
         ax.yaxis.set_major_formatter(pl.FuncFormatter(labelfmt))
         pl.axhspan(0.0, 0.0)
         pl.axvspan(0.0, 0.0)
-        ptitle = 'Optimization Space'
-        if identifier:
-            ptitle+= ' for %s' % identifier
+        ptitle = 'Optimization Space for %s' % identifier
         if self.refid:
             ptitle += ' [ref=%s]' % self.refid
-        if getattr(self, 'filter', None):
-            ptitle += ' [filter=%s]' % self.filter
+        if self.filter_re:
+            ptitle += ' [filter=%s]' % self.filter_re
         pl.title(ptitle)
         pl.xlabel('size reduction (higher is better) -->')
         pl.ylabel('speedup (higher is better) -->')
         pl.grid(True)
-        self.lg = ax.legend(loc='lower left')
+        main_legend = ax.legend(loc='lower left')
         #
         if outfile: pl.savefig(outfile)
         if show: pl.show()
 
-    def printfrontier(self):
-        optcases = self.cases.values()
-        optcf = reversed(sorted([ (c.speedup, c) for c in optcases if c.onfront ]))
+    def printfrontier(self, target=None):
+        if not target: target = self.targets[-1]
+        optcases = self.cases[target].values()
+        frontier = [c for c in optcases if c.onfront]
+        optcf = reversed(sorted([ (c.speedup, c) for c in frontier]))
         for (s, c) in optcf: c.printpoint()
         print '-' * 40
-        print '%d points, %d on frontier' % (
-            len(optcases), len([c for c in optcases if c.onfront ]))
+        print '%d points, %d on frontier' % (len(optcases), len(frontier))
 
-    def report(self):
-        # print all base point
-        for optlev in ['-Os', '-O0', '-O1', '-O2', '-O3']:
-            for optprof in ['', '-fprofile-use' + optlev]:
-                for optlto in ['', '-flto']:
-                    caseid = 'OPT%s%s%s' % (optprof, optlev, optlto)
-                    point = self.get_point(case_id=caseid)
-                    if not point: continue
-                    point.printpoint()
-        # print frontier points
-        frontier = [(c.speedup, c) for c in self.cases.values() if c.onfront]
-        frontier = reversed(sorted(frontier))
-        frontier = [x[1] for x in frontier]
-        for point in frontier:
-            point.printpoint()
-
-    def get_frontier(self):
+    def get_frontier(self, target=None):
         # return frontier points, biggest speedups first
-        frontier = [(c.speedup, c) for c in self.cases.values() if c.onfront]
+        target = target or self.targets[-1]
+        optcases = self.cases[target].values()
+        frontier = [(c.speedup, c) for c in optcases if c.onfront]
         frontier = reversed(sorted(frontier))
-        frontier = [x[1] for x in frontier]
-        return frontier
+        return [x[1] for x in frontier]
 
-    def get_point(self, local_id=None, case_id=None):
+    def get_point(self, ptid, target=None):
         # return the last point that match
-        for p in reversed(self.cases.values()):
-            if local_id and p.local_id == local_id: return p
-            if case_id and p.caseid == case_id: return p
+        target = target or self.targets[-1]
+        optlists = self.allcases[target].values()
+        for optcases in reversed(optlists):
+            optcase = optcases[-1]
+            if ptid == optcase.local_id or ptid == optcase.variant_id:
+                return optcase
         return None
 
 
@@ -353,24 +300,19 @@ if __name__ == "__main__":
         description='Process optimization space exploration results',
         usage='%prog [options] [file]',
         version="atos-graph version " + VERSION)
+    #
     parser.add_option('-o', '--outfile', dest='outfile',
                       action='store', type='string', default=None,
                       help='set the output file name (default: None)')
-    parser.add_option('-e', '--exec', dest='execname',
-                  action='store', type='string', default=None,
-                      help='set the executable name (default: None)')
-    parser.add_option('-i', '--app_id', dest='identifier',
-                  action='store', type='string', default=None,
-                      help='set the application identifier (default: inferred from executable)')
-    parser.add_option('-r', '--refid', dest='refid',
-                      action='store', type='string', default='REF',
-                      help='set the atos reference run id (default: REF)')
     parser.add_option('-d', '--hide', dest='show',
                       action='store_false', default=True,
                       help='do not show resulting graph (default: False)')
-    parser.add_option('-f', dest='filter',
-                      action='store', type='string', default=None,
-                      help='filter out the points given by the regexp')
+    parser.add_option('-i', '--app_id', dest='identifier',
+                  action='store', type='string', default=None,
+                      help='set the application identifier (default: inferred from executable)')
+    parser.add_option('-e', '--exec', dest='execname',
+                  action='store', type='string', default=None,
+                      help='set the executable name (default: None)')
     parser.add_option('-H', dest='highlight',
                       action='store', type='string', default=None,
                       help='highlight points givena regexp')
@@ -383,15 +325,19 @@ if __name__ == "__main__":
     parser.add_option('-y', dest='yd',
                       action='store', type='int', default=0,
                       help='display base points when picking a configuration -y[01]')
-    parser.add_option('-C', dest='configuration_path',
-                      action='store', type='string', default="./atos-configurations",
-                      help='set configuration path (default: ./atos-configurations)')
     parser.add_option('-a', dest='anonymous',
                       action='store_true', default=False,
                       help='anonymous configuration, omit configuration id on graph')
-    parser.add_option('-m', dest='merge',
-                      action='store_true', default=False,
-                      help='merge multiple runs')
+    #
+    parser.add_option('-r', '--refid', dest='refid',
+                      action='store', type='string', default='REF',
+                      help='set the atos reference run id (default: REF)')
+    parser.add_option('-f', dest='filter',
+                      action='store', type='string', default=None,
+                      help='filter out the points given by the regexp')
+    parser.add_option('-C', dest='configuration_path',
+                      action='store', type='string', default="./atos-configurations",
+                      help='set configuration path (default: ./atos-configurations)')
 
     (opts, args) = parser.parse_args()
 
@@ -402,18 +348,7 @@ if __name__ == "__main__":
         infilename = default_infilename
     else:
         infilename = args[0]
-    if opts.identifier == None and opts.execname == None:
-        try:
-            targetfile = open(default_targets)
-            bases = [ os.path.basename(exe) for exe in targetfile.readlines()]
-            opts.identifier  = "-".join(bases)
-            targetfile.close()
-        except:
-            pass
-    if os.path.basename(infilename).startswith('_run'):
-        sp = optspace().read_ccc_run(infilename)
-    else:
-        sp = optspace().read_atos_db(infilename, **vars(opts))
-    sp.printfrontier()
+    sp = optspace().read_atos_db(infilename, opts.filter)
+    sp.compute_speedups(opts.refid)
+    sp.printfrontier(opts.execname)
     sp.graph(**vars(opts))
-    # sp.report()

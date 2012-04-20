@@ -1,5 +1,5 @@
 
-* Installation:
+*** Installation:
 Install atos-utils tools with:
 $ make
 $ make check
@@ -10,15 +10,29 @@ Default installation prefix is /usr/local.
 Change installation prefix with for instance:
 $ make PREFIX=/home/myself/local install
 
-* Requirements:
+You do not need root access to use atos afterward.
+
+*** Requirements:
 atos-utils requires the following packages to be installed on your system:
-* PRoot with addons support: 
-  Obtain it with: git clone user@hostname/gitroot/qemu/proot-dev-guillon.git
+
+** PRoot with addons support: 
+  Obtain it with: git clone gitolite@hostname:proot/u/christophe_guillon/proot.git
   Build it with:
   $ make -C src ENABLE_ADDONS="cc_deps cc_opts"
   $ sudo make -C src install
-* Python pygraph modules:
+  By default this will install proot in /usr/local/bin/proot (PREFIX=/usr/local).
+  If you do not have root access, specify the PREFIX with
+  $ make -C src install PREFIX=/home/myself/local
+  You do not need root access to execute proot afterward.
+
+** Python pygraph modules:
   Obtain them from: http://code.google.com/p/python-graph/
   Dowload and install:
   * python-graph-core-1.8.1.tar.gz
   * python-graph-dot-1.8.1.tar.gz
+
+** Python pylab modules (for atos-graph only):
+  * python-mathplotlib: http://www.scipy.org/PyLab or from your package
+    manager python-matplotlib
+  * python-mathplotlib-tk:  http://www.scipy.org/PyLab or from your package
+    manager python-matplotlib-tk

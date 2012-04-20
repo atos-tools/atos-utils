@@ -15,8 +15,10 @@ After installation (see INSTALL file) the following tools are available:
  * atos-profile: specific rebuild!rerun for genrating application profiles (see atos-profile -h)
 
 * Example:
-Execute 'make example' for an example epxloration on sha1sum.
+Execute 'make examples' for an example epxloration on two version of sha1sum
+(C and C++ versions).
 It will do the exploration and open the optimization space graph.
+See the INSTALL file if any trouble.
 
 * Typical usage:
 A simple usage of the atos-explore tool is to provide a script for building

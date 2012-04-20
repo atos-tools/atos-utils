@@ -12,6 +12,9 @@ $ make PREFIX=/home/myself/local install
 
 You do not need root access to use atos afterward.
 
+Further check using embedded examples (needs installed dependencies listed below):
+$ make examples
+
 *** Requirements:
 atos-utils requires the following packages to be installed on your system:
 

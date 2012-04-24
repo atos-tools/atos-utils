@@ -34,13 +34,6 @@ except:
     print "not installed: please install from: http://code.google.com/p/python-graph"
     errors += 1
 try:
-    print "Check python pygraph-dot...",
-    import pygraph.readwrite.dot
-    print "ok"
-except:
-    print "not installed: please install from: http://code.google.com/p/python-graph"
-    errors += 1
-try:
     print "Check python pylab matplotlib...",
     import pylab
     print "ok"

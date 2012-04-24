@@ -67,7 +67,7 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts vhqfc:r:o: opt; do
+while getopts vhqfC:c:r:o: opt; do
     case $opt in
 	o) outfile="$OPTARG"
 	    ;;

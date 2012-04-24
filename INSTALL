@@ -15,8 +15,11 @@ You do not need root access to use atos afterward.
 Further check using embedded examples (needs installed dependencies listed below):
 $ make examples
 
+Note that you may check the contrib/jenkins/validate.sh scripts that does a 
+build with dependencies and a validation for an example of local installation.
+
 *** Requirements:
-atos-utils requires the following packages to be installed on your system:
+atos-utils requires the packages described below to be installed on your system.
 
 ** PRoot with addons support: 
   Obtain it with: git clone gitolite@codex.cro.st.com:proot/u/christophe_guillon/proot.git
@@ -37,3 +40,4 @@ atos-utils requires the following packages to be installed on your system:
     manager python-matplotlib
   * python-mathplotlib-tk:  http://www.scipy.org/PyLab or from your package
     manager python-matplotlib-tk
+

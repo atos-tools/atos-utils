@@ -35,7 +35,7 @@ ALL_FILES=$(ALL_CONFIG_FILES)
 INSTALL_EXES=atos-audit atos-raudit atos-deps atos-opt atos-run atos-profile atos-explore atos-play atos-graph
 INSTALLED_EXES=$(addprefix $(PREFIX)/bin/,$(INSTALL_EXES))
 
-.PHONY: all clean distclean install check check-python-dependencies examples
+.PHONY: all clean distclean install check check-python-dependencies examples examples-nograph
 
 all: $(ALL_FILES)
 
@@ -56,11 +56,17 @@ examples:
 	$(MAKE) all check
 	$(MAKE) examples-sha1-c examples-sha1
 
+examples-nograph:
+	@echo "   Running examples."
+	@echo "   Should take around 1-2 minutes per example"
+	$(MAKE) all check
+	$(MAKE) NOGRAPH=1 examples-sha1-c examples-sha1
+
 examples-sha1-c:
-	cd examples/sha1-c && ../../atos-explore -f -b "gcc -O2 -o sha1-c sha.c sha1.c" -r ./run.sh -c && (../../atos-graph &)
+	cd examples/sha1-c && ../../atos-explore -f -b "gcc -O2 -o sha1-c sha.c sha1.c" -r ./run.sh -c && [ "$(NOGRAPH)" = 1 ] || (../../atos-graph &)
 
 examples-sha1:
-	cd examples/sha1 && ../../atos-explore -b "make clean sha" -r ./run.sh -c && (../../atos-graph &)
+	cd examples/sha1 && ../../atos-explore -b "make clean sha" -r ./run.sh -c && [ "$(NOGRAPH)" = 1 ] || (../../atos-graph &)
 
 
 #

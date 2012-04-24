@@ -26,8 +26,6 @@ import os
 import sys
 import getopt
 from pygraph.classes.digraph import digraph
-from pygraph.readwrite.dot import write
-# import gv
 
 VERBOSE=0
 
@@ -82,10 +80,6 @@ class DependencyGraph:
         """ Get the node attributes. """
         return self.dg.node_attr
 
-    def get_dot(self):
-        """ Get a dot grapth string to be used with graphviz. """
-        return write(self.dg)
-        
     def get_makedep(self):
         """ Get a makefile like output. """
         mk = ""

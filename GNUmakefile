@@ -35,7 +35,7 @@ ALL_FILES=$(ALL_CONFIG_FILES)
 INSTALL_EXES=atos-audit atos-raudit atos-deps atos-opt atos-run atos-profile atos-explore atos-play atos-graph
 INSTALLED_EXES=$(addprefix $(PREFIX)/bin/,$(INSTALL_EXES))
 
-.PHONY: all clean distclean install check check-python-dependencies examples examples-nograph
+.PHONY: all clean distclean install check tests check-python-dependencies examples examples-nograph
 
 all: $(ALL_FILES)
 
@@ -48,6 +48,9 @@ distclean:
 install: $(INSTALLED_EXES)
 
 check: check-python-dependencies
+
+tests: all
+	$(MAKE) -C tests
 
 examples:
 	@echo "   Running examples."

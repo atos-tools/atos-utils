@@ -58,7 +58,7 @@ Run Options
       -t <get_results_script> : get_results_script to be executed [default: none]
 
 Executable File Options:
-      -e <executables> : executables to be instrumented [default: args of command]
+      -e <executables> : executables to be instrumented [default: args of command or all generated executables]
 
 Configuration Options:
       -C <path> : configuration path [default: $configuration_path]
@@ -121,6 +121,16 @@ if [ "$configuration_path" = "" ]; then
     exit 1
 fi
 
+if [ "$opt_rebuild" = -f -a "$get_results_script" = "" -a "$executables" = "" ]; then
+    echo "`basename $0`: error: when using forced mode (-f) with no custom results script (-t) the list of executables must be specified (-e option)" >&2
+    exit 1
+fi
+
+if [ "$executables" = "" ]; then
+    # By default audit all generated executables 
+    executables=-a
+fi
+
 mkdir -p "$configuration_path"
 configuration_path=`cd "$configuration_path"; pwd`
 if [ "$clean" = "1" ]; then
@@ -152,12 +162,14 @@ elif [ ! -f "$configuration_path/run.audit" ]; then
     exit 1
 fi
 
-if [ "$executables" = "" ]; then
-    # By default audit all generated executables 
-    executables=-a
+if [ "$opt_rebuild" = "" ]; then
+    $dir/atos-deps $opt_q $executables
+else
+    if [ "$get_results_script" = "" ]; then
+	echo "$executables" >"$configuration_path"/targets
+    fi
 fi
-$dir/atos-deps $opt_q $executables
-
+	
 $dir/atos-run $opt_q -r # Will stop there if reference run fails
 
 for gopt in "-O1" "-O2" "-Os" "-O3"; do

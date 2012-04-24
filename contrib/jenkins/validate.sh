@@ -58,6 +58,7 @@ echo "Building atos-utils..."
 cd $GITROOT
 make all 2>&1 | tee $LOGS/make.log.txt
 make check | tee $LOGS/check.log.txt
+make tests | tee $LOGS/tests.log.txt
 make examples-nograph | tee $LOGS/examples.log.txt
 make install PREFIX=$DEVIMAGE/usr/local | tee $LOGS/install.log.txt
 

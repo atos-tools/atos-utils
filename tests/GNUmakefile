@@ -19,15 +19,25 @@
 #
 
 TESTS:=$(wildcard test*.sh)
-DEPS=$(addprefix dep_,$(TESTS))
+DEPS=$(TESTS:.sh=)
+ifeq ($(V),)
+V_RUN=@
+endif
 
-.PHONY: all $(DEPS)
+.PHONY: all tests clean $(DEPS)
 
-all: $(DEPS)
+all: tests
 
-$(DEPS): dep_%: %
-	./$<
+tests: $(DEPS)
+
+clean:
+	rm -f *.out
+
+# Force MAKEFLAGS= as we may run make in tests
+# and we do not want to inherit -jxx option
+$(DEPS): %: %.sh
+	$(V_RUN)env MAKEFLAGS= ./$< >$(<:.sh=.out)
 
 # Describe here possible tests dependencies
-# For instance: dep_testYYY.sh: dep_testYYY.sh
-$(filter-out dep_test001.sh,$(DEPS)): dep_test001.sh
+# For instance to put all tests under dependency of test001: 
+# $(filter-out test001,$(DEPS)): test001

@@ -1,9 +1,13 @@
 set -e
-ROOT=${ROOT:-`cd .. && pwd`}
+DIRNAME=`dirname $0`
+ROOT=${ROOT:-`cd $DIRNAME/.. && pwd`}
 TEST=`basename $0 .sh`
+TMPDIR=${TMPDIR:-/tmp}
+KEEPTEST=${KEEPTEST:-0}
 
 cleanup() {
     local exit=$?
+    [ ! -d "$TMPTEST" -o "$KEEPTEST" != 0 ] || rm -rf $TMPTEST
     [ $exit != 0 ] || success
     [ $exit = 0 -o $exit -ge 128 ] || failure
     [ $exit = 0 -o $exit -lt 128 ] || interrupted && trap - EXIT && exit $exit
@@ -28,3 +32,7 @@ skip() {
 }
 
 [ "$DEBUG" = "" ] || set -x
+
+TMPTEST=`mktemp -d $TMPDIR/atos-test.XXXXXX`
+[ "$KEEPTEST" = 0 ] || echo "Keeping test directory in: $TMPTEST"
+cd $TMPTEST

@@ -1,0 +1,15 @@
+Run all regression tests with:
+make -j8 tests
+
+Each regression test can be run in isolation:
+./test001.sh
+
+Each test creates its own working directory in a tmp dir, use
+env KEEPTEST=1 ./test001.sh
+in order to keep the working directory, in this case
+the directory name is outputed to stdout.
+
+For debugging, use 
+env DEBUG=1 KEEPTEST=1 ./test001.sh
+for verbose output (it does a set -x).
+

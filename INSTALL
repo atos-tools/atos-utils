@@ -13,7 +13,7 @@ $ make PREFIX=/home/myself/local install
 You do not need root access to use atos afterward.
 
 Regression test suite can be run with:
-$ make tests
+$ make -j8 tests
 
 Further check using embedded examples (needs installed dependencies listed below):
 $ make examples

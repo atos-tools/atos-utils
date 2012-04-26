@@ -59,17 +59,22 @@ examples:
 	$(MAKE) all check
 	$(MAKE) examples-sha1-c examples-sha1
 
-examples-nograph:
+examples-nograph: all check
 	@echo "   Running examples."
 	@echo "   Should take around 1-2 minutes per example"
-	$(MAKE) all check
 	$(MAKE) NOGRAPH=1 examples-sha1-c examples-sha1
 
-examples-sha1-c:
-	cd examples/sha1-c && ../../atos-explore -f -b "gcc -O2 -o sha1-c sha.c sha1.c" -r ./run.sh -c && [ "$(NOGRAPH)" = 1 ] || (../../atos-graph &)
+examples-sha1-c: examples-sha1-c-play
+	[ "$(NOGRAPH)" = 1 ] || (cd examples/sha1-c && ../../atos-graph &)
 
-examples-sha1:
-	cd examples/sha1 && ../../atos-explore -b "make clean sha" -r ./run.sh -c && [ "$(NOGRAPH)" = 1 ] || (../../atos-graph &)
+examples-sha1-c-play:
+	cd examples/sha1-c && ../../atos-explore -f -e ./sha1-c -b "gcc -O2 -o sha1-c sha.c sha1.c" -r ./run.sh -c
+
+examples-sha1: examples-sha1-play
+	[ "$(NOGRAPH)" = 1 ] || (cd examples/sha1-c && ../../atos-graph &)
+
+examples-sha1-play:
+	cd examples/sha1 && ../../atos-explore -b "make clean sha" -r ./run.sh -c
 
 
 #

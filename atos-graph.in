@@ -68,13 +68,23 @@ class optspace():
                 onfrontier = True
                 maybe_on_frontier.remove(c)
                 for c2 in itertools.chain(mustbe_on_frontier, maybe_on_frontier):
-                    if c2.speedup >= c.speedup and c2.sizered >= c.sizered:
+                    if c2.speedup == c.speedup and c2.sizered == c.sizered:
+                        pass
+                    elif c2.speedup >= c.speedup and c2.sizered >= c.sizered:
                         onfrontier = False
                         break
                 if onfrontier: mustbe_on_frontier.add(c)
                 c.onfront = onfrontier
+            # filter - keep simplest points (smallest variant_id for now)
+            front = {}
+            for c in mustbe_on_frontier:
+                front.setdefault((c.speedup, c.sizered), []).append(c)
+            for pts in front.values():
+                simplest = sorted([(len(c.variant_id), c) for c in pts])[0][1]
+                for p in pts: p.onfront = (p == simplest)
 
     def mergeruns(self):
+        self.cases = {}
         for target in self.targets:
             for (variant, optcases) in self.allcases[target].items():
                 rt = [ c.runtime for c in optcases ]
@@ -105,11 +115,21 @@ class optspace():
                     newcase = optcase(time, size, variant_id, flags, local_id)
                     self.allcases.setdefault(
                         target, {}).setdefault(variant_id, []).append(newcase)
+                    if target not in self.targets: self.targets += [target]
                 size, time, flags = None, None, None
                 local_id += 1
-                if target not in self.targets: self.targets += [target]
         self.mergeruns()
+        self.db_filename = filename
+        self.last_local_id = local_id
         return self
+
+    def update_db(self):
+        # todo: read new db lines only
+        old_last = self.last_local_id
+        self.read_atos_db(self.db_filename, self.filter_re)
+        if old_last == self.last_local_id: return False
+        self.compute_speedups(self.refid)
+        return True
 
     def graph(self, **kwargs):
         # http://matplotlib.sourceforge.net/index.html
@@ -285,7 +305,7 @@ class optspace():
         optlists = self.allcases[target].values()
         for optcases in reversed(optlists):
             optcase = optcases[-1]
-            if ptid == optcase.local_id or ptid == optcase.variant_id:
+            if ptid == str(optcase.local_id) or ptid == optcase.variant_id:
                 return optcase
         return None
 

@@ -139,22 +139,29 @@ variant_hash() {
     echo "$1" | md5sum | cut -f 1 -d ' '
 }
 
-if [ "$executables" = "" ]; then
-    if [ -f "$configuration_path/targets" ]; then
-	executables=`cat "$configuration_path/targets"`
-    else
-	echo "error: `basename $0`: error: no target executable specified" >&2
-	exit 1
-    fi
+if [ "$get_results_script" = "" -a -f "$configuration_path/get_res.sh" ]; then
+    get_results_script="$configuration_path/get_res.sh"
 fi
 
-if [ "$identifier" = "" ]; then
-    identifier=""
-    sep=""
-    for i in $executables; do
-	identifier="$identifier$sep"`basename "$i"`
-	sep="-"
-    done
+if [ "$get_results_script" = "" ]; then
+    if [ "$executables" = "" ]; then
+	if [ -f "$configuration_path/targets" ]; then
+	    executables=`cat "$configuration_path/targets"`
+	else
+	    echo "error: `basename $0`: error: no target executable specified" >&2
+	    exit 1
+	fi
+    fi
+    if [ "$identifier" = "" ]; then
+	identifier=""
+	sep=""
+	for i in $executables; do
+	    identifier="$identifier$sep"`basename "$i"`
+	    sep="-"
+	done
+    fi
+else
+    executables=""
 fi
 
 if [ "$g_set" = 1 -a "$u_set" = 1 ]; then
@@ -250,11 +257,8 @@ if [ -f "$configuration_path/run.sh" ]; then
 else
     get_time ${1+"$@"} >> "$logfile" 2>&1
 fi
-get_size "$executables" >> "$logfile" 2>&1
-
-if $failure; then
-    exe_size=FAILURE
-    exe_time=FAILURE
+if [ "$executables" != "" ]; then
+    get_size "$executables" >> "$logfile" 2>&1
 fi
 
 db_entry() {
@@ -278,22 +282,32 @@ print_db_entry() {
     fi
 }
 
+if $failure; then
+    exe_size=FAILURE
+    exe_time=FAILURE
+fi
+
 if [ "$silent" != 1 ]; then
-    if [ "$get_results_script" != "" ]; then
-	$get_results_script >>$tmpfile 2>&1
-    elif [ -f "$configuration_path/get_res.sh" ]; then
-	$configuration_path/get_res.sh >>$tmpfile 2>&1
-    fi
-    if [ `grep -c "^ATOS: " $tmpfile` -ge 1 ]; then
-	identifiers=`grep "^ATOS: " $tmpfile | awk '{ print $2 }' | sed 's/://' | sort -u`
-	for identifier in $identifiers; do
-	    exe_time=`grep "^ATOS: $identifier: time: " $tmpfile | awk '{ print $4 }'`
-	    exe_size=`grep "^ATOS: $identifier: size: " $tmpfile | awk '{ print $4 }'`
-	    [ "$exe_time" == "" -o "$exe_size" == "" ] && continue
-	    print_db_entry
-	done
-    else
+    if $failure; then
 	print_db_entry
+    else
+	if [ "$get_results_script" != "" ]; then
+	    $get_results_script >>$tmpfile 2>&1 || failure=true
+	fi
+	if [ `grep -c "^ATOS: " $tmpfile` -ge 1 ]; then
+	    identifiers=`grep "^ATOS: " $tmpfile | awk '{ print $2 }' | sed 's/://' | sort -u`
+	    for identifier in $identifiers; do
+		exe_time=`grep "^ATOS: $identifier: time: " $tmpfile | awk '{ print $4 }'`
+		exe_size=`grep "^ATOS: $identifier: size: " $tmpfile | awk '{ print $4 }'`
+		if [ "$exe_time" == "" -o "$exe_size" == "" ]; then
+		    exe_size=FAILURE
+		    exe_time=FAILURE
+		fi
+		print_db_entry
+	    done
+	else
+	    print_db_entry
+	fi
     fi
 fi
 

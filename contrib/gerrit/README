@@ -1,0 +1,50 @@
+
+This directory contains some helper scripts for gerrit code review.
+
+* Pushing a new change for review: push-change
+
+Once you have in your HEAD some commits ready for review, execute the command:
+$ contrib/jenkins/push-change
+Pushing new changes on ref HEAD to remote ssh://hostname:29418/atos.
+...
+remote: New Changes:
+remote:   http://hostname:9000/16
+...
+
+An optional ref to be pushed can be given as additional argument (defaults to HEAD).
+
+* Updating the patchset for an existing change: update-change
+
+If you have to modify a patchset, amend your commit and push a new patchset for the change:
+$ contrib/jenkins/update-change 16
+Updating patchset 16 with ref HEAD to remote ssh://hostname:29418/atos.
+...
+remote: Processing changes: updated: 1, refs: 1, done
+...
+
+An optional ref to be pushed can be given as additional argument (defaults to HEAD).
+
+* Gerrit configuration
+
+The gerrit configuration is located in file contrib/gerrit/config.sh
+If you have to locally change the configuration, override any parameter there
+into a local file contrib/gerrit/local.sh.
+
+Note also that you may define yourself your gerrit remote with for instance
+git remote add gerrit ssh://hostname:29418/atos
+in this case the gerrit remote will take precedence over the server & project
+parameters defined in config.sh
+
+* Default behavior
+
+The default behavior is to simply push changes for the master branch, i.e.
+equivalent to:
+$ git push gerrit HEAD:refs/for/master
+or
+$ git push $server/$project HEAD:refs/for/master
+
+In addition it sets the reviewers list as defined in the config.sh parameters.
+
+You can still use the standard git/gerrit commands instead of these helper scripts,
+they are provided for ease of use, they do not perform change in the standard
+gerrit flow.

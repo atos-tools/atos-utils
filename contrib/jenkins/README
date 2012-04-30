@@ -1,0 +1,21 @@
+
+This directory contains helper scripts for validations with a build scheduler.
+
+* Local validation
+
+One can launch the validation script from its user environment with:
+$ env DEBUG=1 WORKSPACE=<existing_tmpdir> GITROOT=<source_tree> validate.sh
+
+WORKSPACE must be a temporary directory for the build.
+GITROOT must point to the source root tree.
+
+* Jenkins validation
+
+For instance in a Jenkins project where the git trigger is configured to track
+the atos-utils repository, one can directly call from the Jenkins shell script:
+$GITROOT/contrib/jenkins/validate.sh
+
+Jenkins will have set for you the WORKSPACE and GITROOT envvars.
+
+
+

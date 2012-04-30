@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+#
+# Usage: push-change [ref]
+#
+# Push a ref for review (default: HEAD).
+# This will create a new patchset for review on gerrit.
+#
+# If the gerrit remote is defined, use it, otherwise
+# push directly to the server defined in config.sh.
+#
+# User email is excluded from the reviewer list.
+#
+
+set -e
+ref=${1:-HEAD}
+
+source `dirname $0`/common.sh
+source `dirname $0`/config.sh
+[ ! -f `dirname $0`/local.sh ] || source `dirname $0`/local.sh
+
+# Forge reviewer options from reviewers list
+reviewer_options=`forge_reviewer_options "$reviewers"`
+
+# Forge actual remote if the first one does not exits
+remote=`forge_remote_parameter $remote $server/$project`
+
+# Update patchset
+echo "Pushing new changes on ref $ref to remote $remote."
+echo "Executing: git push --receive-pack=\"git receive-pack $reviewer_options\" $remote $ref:refs/for/$branch"
+git push --receive-pack="git receive-pack $reviewer_options" $remote $ref:refs/for/$branch

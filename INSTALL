@@ -1,9 +1,9 @@
 
 *** Installation:
 Install atos-utils tools with:
-$ make
-$ make check
-$ sudo make install
+$ make -j4 all		# Build all
+$ make -j4 check	# Verify dependencies (see below) and run tests
+$ sudo make install	# Install tools in /usr/local prefix
 
 Default installation prefix is /usr/local.
 
@@ -12,14 +12,11 @@ $ make PREFIX=/home/myself/local install
 
 You do not need root access to use atos afterward.
 
-Regression test suite can be run with:
-$ make -j8 tests
-
-Further check using embedded examples (needs installed dependencies listed below):
+Further check using embedded examples:
 $ make examples
 
-Note that you may check the contrib/jenkins/validate.sh scripts that does a 
-build with dependencies and a validation for an example of local installation.
+Note that you may run or inspect the contrib/jenkins/validate.sh scripts
+that gets dependencies and runs tests.
 
 *** Requirements:
 atos-utils requires the packages described below to be installed on your system.

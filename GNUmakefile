@@ -49,19 +49,16 @@ distclean:
 
 install: $(INSTALLED_FILES)
 
-check: check-python-dependencies
-
-tests: all
+check tests: all check-python-dependencies
 	$(MAKE) -C tests
 
-examples:
+examples: all check-python-dependencies
 	@echo "   Running examples."
 	@echo "   Should take around 1-2 minutes per example"
 	@echo "   The resulting graph is displayed for each example"
-	$(MAKE) all check
 	$(MAKE) examples-sha1-c examples-sha1
 
-examples-nograph: all check
+examples-nograph: all check-python-dependencies
 	@echo "   Running examples."
 	@echo "   Should take around 1-2 minutes per example"
 	$(MAKE) NOGRAPH=1 examples-sha1-c examples-sha1
@@ -73,7 +70,7 @@ examples-sha1-c-play:
 	cd examples/sha1-c && ../../bin/atos-explore -f -e ./sha1-c -b "gcc -O2 -o sha1-c sha.c sha1.c" -r ./run.sh -c
 
 examples-sha1: examples-sha1-play
-	[ "$(NOGRAPH)" = 1 ] || (cd examples/sha1-c && ../../bin/atos-graph &)
+	[ "$(NOGRAPH)" = 1 ] || (cd examples/sha1 && ../../bin/atos-graph &)
 
 examples-sha1-play:
 	cd examples/sha1 && ../../bin/atos-explore -b "make clean sha" -r ./run.sh -c

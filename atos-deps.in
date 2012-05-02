@@ -39,7 +39,7 @@ class DependencyGraph:
             self.dg = digraph()
         self.verbose = VERBOSE
 
-    def add_node(self, node, attrs = None):
+    def add_node(self, node, attrs = []):
         """ Add a node. """
         if self.verbose:
             print "ADD_NODE: " + node

@@ -45,6 +45,14 @@ class optcase():
         print '\treduction: %.2f%% binsize: %d' % (self.sizered * 100.0, self.binsize)
         print '\tflags: %s' % " ".join(self.flags)
 
+def average(l):
+    return sum(l) / len(l)
+
+def geometric_mean(l):
+    # does not wotk on big numbers (long int too large to convert to float)
+    # print l, (10 ** (sum(map(math.log10, l)) / len(l)))
+    # return (reduce(lambda x, y: x * y, l)) ** (1.0 / len(l))
+    return (10 ** (sum(map(math.log10, l)) / len(l)))
 
 class optspace():
 
@@ -53,6 +61,32 @@ class optspace():
         self.refid = None # variant used as reference for speedups
         self.targets = []
         self.cases = {} # { target : { variant : optcase } }
+
+    # groups: 'g1:b1+b2+b3,g2=b1+b4,g3=g2+b1'
+    def add_groups(self, groups):
+        if groups == None: return
+        groups = groups.split(',')
+        # done after merging / before speedups
+        for group in groups:
+            name, targlist = group.split(':')
+            targlist = targlist.split('+')
+            common_variants = set(self.cases[targlist[0]].keys())
+            for target in targlist[1:]:
+                common_variants = common_variants.intersection(
+                    self.cases[target].keys())
+            for v in common_variants:
+                time = geometric_mean(
+                    [self.cases[t][v].runtime for t in targlist])
+                size = sum(
+                    [self.cases[t][v].binsize for t in targlist])
+                newcase = optcase(
+                    time, size, v, self.cases[targlist[0]][v].flags,
+                    # local_id of 1st target
+                    self.cases[targlist[0]][v].local_id)
+                self.allcases.setdefault(
+                    name, {}).setdefault(v, []).append(newcase)
+                self.cases.setdefault(name, {})[v] = newcase
+                if name not in self.targets: self.targets += [name]
 
     def compute_speedups(self, refid='REF'):
         self.refid = refid
@@ -355,6 +389,9 @@ if __name__ == "__main__":
     parser.add_option('-f', dest='filter',
                       action='store', type='string', default=None,
                       help='filter out the points given by the regexp')
+    parser.add_option('-g', '--groups', dest='groups',
+                      action='store', type='string', default=None,
+                      help='add groups of targets (ex: g1:t1+t2,g2:t3) (default: None)')
     parser.add_option('-C', dest='configuration_path',
                       action='store', type='string', default="./atos-configurations",
                       help='set configuration path (default: ./atos-configurations)')
@@ -369,6 +406,7 @@ if __name__ == "__main__":
     else:
         infilename = args[0]
     sp = optspace().read_atos_db(infilename, opts.filter)
+    sp.add_groups(opts.groups)
     sp.compute_speedups(opts.refid)
     sp.printfrontier(opts.execname)
     sp.graph(**vars(opts))

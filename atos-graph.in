@@ -234,7 +234,7 @@ def draw_graph(getgraph, title, opts):
     graph_plots, all_points = [], []
 
     def draw_all():
-        global graph_plots, all_points, selected_points # :(
+        global graph_plots, all_points, selected_points, similar_points # :(
 
         # remove old plots
         old_points = [(p.sizered, p.speedup, p.local_id) for p in all_points]
@@ -274,6 +274,10 @@ def draw_graph(getgraph, title, opts):
             selected_points, = \
                 ax.plot(xy[0], xy[1], visible=False, picker=4000, **attrsmap)
             graph_plots.append(selected_points)
+            # similar point plot
+            attrsmap.update({'color' : 'g'})
+            similar_points, = ax.plot(None, None, visible=False, **attrsmap)
+            graph_plots.append(selected_points)
 
         # highlight new points
         if opts.follow and old_points:
@@ -302,6 +306,11 @@ def draw_graph(getgraph, title, opts):
             # highlight point
             selected_points.set_visible(True)
             selected_points.set_data(p.sizered, p.speedup)
+            # highlight similar points (same variant_id)
+            sim = zip(*([(c.sizered, c.speedup) for c in all_points
+                         if c.variant_id == p.variant_id and c != p]))
+            similar_points.set_visible(True)
+            similar_points.set_data(sim and sim[0], sim and sim[1])
             # selected point legend
             main_legend = ax.legend_
             lg = p.tostring(short=True, no_id=opts.anonymous)

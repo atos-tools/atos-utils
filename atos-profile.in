@@ -92,6 +92,6 @@ done
 shift $((OPTIND - 1))
 
 [ "$quiet" = "1" ] || echo "Profiling..."
-$dir/atos-opt $opt_q -p "$profile_path" -g "$options" -a "$options" -b "$remote_profile_path"
-$dir/atos-run $opt_q -s -g "$options" -a "$options" -b "$remote_profile_path"
+$dir/atos-opt -C "$configuration_path" $opt_q -p "$profile_path" -g "$options" -a "$options" -b "$remote_profile_path"
+$dir/atos-run -C "$configuration_path" $opt_q -s -g "$options" -a "$options" -b "$remote_profile_path"
 

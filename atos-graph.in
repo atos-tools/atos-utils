@@ -430,6 +430,34 @@ def optgraph(dbfile, opts):
     return scatters, frontiers
 
 
+def multgraph(dbfiles, opts):
+
+    nbdb = len(dbfiles)
+    optcasesl = [getoptcases(f, opts) for f in dbfiles]
+
+    scatters, frontiers = [], []
+
+    # dbfiles labels and colors
+    labels = [str(x) for x in range(nbdb)]
+    if opts.labels: labels = opts.labels.split(',')
+    colors = ['red', 'blue', 'green', 'magenta']
+
+    # scatters list
+    if not opts.frontier_only:
+        for i in range(nbdb):
+            attrs = {'color' : colors[i], 'label' : labels[i]}
+            scatters += [(optcasesl[i], attrs)]
+
+    # frontiers
+    attrs = {'marker' : 'x', 'zorder' : 1, 'mew' : 2}
+    for i in range(nbdb):
+        attrs.update({'color' : colors[i]})
+        if opts.frontier_only: attrs.update({'label' : 'frontier-' + labels[i]})
+        frontiers += [([c for c in optcasesl[i] if c.onfront], dict(attrs))]
+
+    return scatters, frontiers
+
+
 # ####################################################################
 
 
@@ -466,6 +494,9 @@ if __name__ == "__main__":
     parser.add_option('-a', dest='anonymous',
                       action='store_true', default=False,
                       help='anonymous configuration, omit configuration id on graph')
+    parser.add_option('-l', '--cfglbl', dest='labels',
+                      action='store', type='string', default='',
+                      help='atos-configurations labels')
     # atos options
     parser.add_option('-e', '--exec', dest='execname',
                   action='store', type='string', default=None,
@@ -482,6 +513,9 @@ if __name__ == "__main__":
     parser.add_option('-C', dest='configuration_path',
                       action='store', type='string', default="./atos-configurations",
                       help='set configuration path (default: ./atos-configurations)')
+    parser.add_option('-D', dest='configuration_path_2',
+                      action='append', type='string', default=[],
+                      help='set additional configuration path for frontier graph (default: None)')
 
     (opts, args) = parser.parse_args()
 
@@ -489,13 +523,22 @@ if __name__ == "__main__":
     dbfile = (args[0] if len(args) >= 1
               else os.path.join(opts.configuration_path, "results.db"))
 
+    dbfiles = []
+    for configuration_path in opts.configuration_path_2:
+        dbfiles.append(os.path.join(configuration_path, "results.db"))
+
     # graph title
     title = 'Optimization Space for %s' % (opts.identifier or opts.execname)
     if opts.refid: title += ' [ref=%s]' % opts.refid
     if opts.filter: title += ' [filter=%s]' % opts.filter
 
-    # classic optimization space graph
-    get_graph_f = (lambda: optgraph(dbfile, opts))
+    if dbfiles:
+        # frontier graph
+        get_graph_f = (lambda: multgraph([dbfile] + dbfiles, opts))
+
+    else:
+        # classic optimization space graph
+        get_graph_f = (lambda: optgraph(dbfile, opts))
 
     draw_graph(get_graph_f, title=title, opts=opts)
 

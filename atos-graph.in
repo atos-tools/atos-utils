@@ -38,20 +38,25 @@ class optcase():
 
     def printpoint(self):
         print '-' * 40
-        if self.local_id != None:
-            print 'local_id: %s' % self.local_id
-        print 'id: %s' % self.variant_id
-        print '\tspeedup: %.2f%% runtime: %f' % (self.speedup * 100.0, self.runtime)
-        print '\treduction: %.2f%% binsize: %d' % (self.sizered * 100.0, self.binsize)
-        print '\tflags: %s' % " ".join(self.flags)
+        print self.tostring()
+
+    def tostring(self, short=False, no_id=False):
+        res = ''
+        if self.local_id:
+            res += 'local_id=%s\n' % (self.local_id)
+        res += 'speedup=%.2f%% runtime=%.2f\n' % (self.speedup * 100, self.runtime)
+        res += 'reduction=%.2f%% binsize=%d' % (self.sizered * 100, self.binsize)
+        if not no_id:
+            if short and len(self.variant_id) >= 45:
+                legend_id = self.variant_id[:25] + '...' + self.variant_id[-15:]
+            else: legend_id = self.variant_id
+            res += '\nid=' + legend_id
+        return res
 
 def average(l):
     return sum(l) / len(l)
 
 def geometric_mean(l):
-    # does not wotk on big numbers (long int too large to convert to float)
-    # print l, (10 ** (sum(map(math.log10, l)) / len(l)))
-    # return (reduce(lambda x, y: x * y, l)) ** (1.0 / len(l))
     return (10 ** (sum(map(math.log10, l)) / len(l)))
 
 class optspace():
@@ -157,165 +162,6 @@ class optspace():
         self.last_local_id = local_id
         return self
 
-    def update_db(self):
-        # todo: read new db lines only
-        old_last = self.last_local_id
-        self.read_atos_db(self.db_filename, self.filter_re)
-        if old_last == self.last_local_id: return False
-        self.compute_speedups(self.refid)
-        return True
-
-    def graph(self, **kwargs):
-        # http://matplotlib.sourceforge.net/index.html
-        import pylab as pl
-        # keywords arguments
-        show = kwargs.get('show', False)
-        outfile = kwargs.get('outfile', None)
-        xd = kwargs.get('xd', 0)
-        yd = kwargs.get('yd', 0)
-        identifier = kwargs.get('identifier', None)
-        # select target
-        execname = kwargs.get('execname', None)
-        if not execname: execname = self.targets[-1]
-        optcases = self.cases[execname].values()
-        identifier = kwargs.get('identifier', None)
-        if not identifier: identifier = execname
-        # higlighted points
-        highcases = kwargs.get('highlight', None)
-        if highcases: highcases = [
-            c for c in optcases if re.search(highcases, c.variant_id)]
-        # all points coordinates
-        allpts = [ (c.sizered, c.speedup, c) for c in optcases ]
-        #
-        fg = pl.figure()
-        ax = fg.add_subplot(111)
-        if xd == 0: # simple graph
-            # optcases not on frontier
-            xy = zip(*[ (c.sizered, c.speedup) for c in optcases if not c.onfront])
-            ax.scatter(*xy, s=20, c='b', label='opt cases', zorder=5,
-                        visible=(not kwargs.get('frontier_only', False)))
-            # optcases on frontier
-            xy = zip(*sorted([ (c.sizered, c.speedup) for c in optcases if c.onfront]))
-            # ax.scatter(*xy, s=20, c='r', label='frontier')
-            ax.plot(xy[0], xy[1], ms=8, c='r', label='frontier',
-                    marker='o', linestyle='dashed', zorder=10)
-        if xd == 1: # optimization level scatter
-            cols = {'': 'black', '-Os' : 'green', '-O0' : 'white',
-                    '-O1' : 'cyan', '-O2' : 'blue', '-O3' : 'red'}
-            for opt in cols.keys():
-                xy = zip(*[ (c.sizered, c.speedup) for c in optcases
-                            if c.flags and c.flags[0] == opt])
-                if len(xy) == 0: continue
-                lbl = '%s' % (opt and '[%s]' % opt or '_nolegend_')
-                ax.scatter(*xy, s=20, c=cols[opt], marker='o',
-                            label=lbl, zorder=5)
-        if xd == 2: # graph with more details
-            # build variant scatter
-            def getv(c):
-                lto = c.variant_id.find('-flto') != -1
-                fdo = c.variant_id.find('-fprofile-use') != -1
-                return ((lto and fdo) and 'fdo+lto'
-                        or (lto and 'lto' or (fdo and 'fdo' or '')))
-            cols = { '': 'white', 'fdo' : 'blue', 'lto' : 'green', 'fdo+lto' : 'red' }
-            for opt in cols.keys():
-                xy = zip(*[ (c.sizered, c.speedup) for c in optcases
-                            if getv(c)==opt])
-                if len(xy) == 0: continue
-                lbl = '%s' % (opt and '[%s]' % opt or '_nolegend_')
-                ax.scatter(*xy, s=20, c=cols[opt], marker='o',
-                            label=lbl, zorder=5)
-        if xd == 3: # graph with more details
-            # build O2/O3/fdo/fdo+lto scatter
-            def getv(c):
-                lto = c.variant_id.find('-flto') != -1
-                fdo = c.variant_id.find('-fprofile-use') != -1
-                opl = ((c.flags and c.flags[0] in ['-O2', '-O3'])
-                        and c.flags[0][1:] or '')
-                vrt = (lto and fdo) and 'fdo+lto' or (fdo and 'fdo' or '')
-                return (opl and vrt) and ('%s %s' % (opl, vrt)) or ''
-            cols = { '': 'white',
-                     'O2 fdo' : 'cyan', 'O2 fdo+lto' : 'green',
-                     'O3 fdo' : 'blue', 'O3 fdo+lto' : 'red' }
-            for opt in cols.keys():
-                xy = zip(*[ (c.sizered, c.speedup) for c in optcases
-                            if getv(c)==opt])
-                if len(xy) == 0: continue
-                lbl = '%s' % (opt and '[%s]' % opt or '_nolegend_')
-                ax.scatter(*xy, s=20, c=cols[opt], marker='o',
-                            label=lbl, zorder=5)
-        if xd >= 1: # graph with more details
-            # frontier
-            xy = zip(*sorted([ (c.sizered, c.speedup) for c in optcases if c.onfront]))
-            ax.plot(xy[0], xy[1], c='r', label='_nolegend_', zorder=1,
-                    marker='x', markersize=9, markeredgewidth=2,
-                    linewidth=2, linestyle='dashed')
-        # Highlight points if requested
-        if highcases:
-            xy = zip(*[ (c.sizered, c.speedup) for c in highcases])
-            ax.scatter(*xy, s=40, c='y', label='ref cases', zorder=20)
-        # dynamic annotations
-        def on_pick(event):
-            def closest(x, y):
-                dp = [(math.hypot(a-x,b-y),(a,b,c)) for (a,b,c) in allpts]
-                return sorted(dp)[0][1]
-            def basepoint(c):
-                if yd == 0: return [c.sizered], [c.speedup]
-                x = re.match('^(OPT)(-fprofile-use-O.)?.*?(-O.).*?(-flto)?$', c.variant_id)
-                if not x: return [c.sizered], [c.speedup]
-                baseid = ''.join([s for s in x.groups() if s is not None])
-                basept = [ x for x in optcases if x.variant_id == baseid ]
-                res = [c] + (basept and [basept[0]] or [])
-                return [x.sizered for x in res], [x.speedup for x in res]
-            def highlight((x, y, c)):
-                # print point on console
-                c.printpoint()
-                # highlight point
-                selected_points.set_visible(True)
-                selected_points.set_data(*basepoint(c))
-                # selected point legend
-                sc = (len(c.variant_id) >= 45
-                      and c.variant_id[:25] + '...' + c.variant_id[-15:] or c.variant_id)
-                if c.local_id != None:
-                    tt = 'local_id=%s\n' % (c.local_id)
-                else:
-                    tt = ""
-                tt+= 'speedup=%.2f%% runtime=%.2f\n' % (c.speedup * 100.0, c.runtime)
-                tt+= 'reduction=%.2f%% binsize=%d\n' % (c.sizered * 100.0, c.binsize)
-                if not kwargs.get('anonymous', False):
-                    tt+= 'id=%s' % (sc)
-                lp = pl.legend([selected_points], [tt], loc='lower right', numpoints=1)
-                pl.setp(lp.get_texts(), fontsize='medium')
-                lp.get_frame().set_alpha(0.5)
-                pl.gca().add_artist(main_legend)
-                fg.canvas.draw()
-            highlight(closest(event.mouseevent.xdata, event.mouseevent.ydata))
-        if show:
-            # workaround pb with pick_event event ind (4000)
-            selected_points, = ax.plot(
-                [x[0] for x in allpts], [x[1] for x in allpts],
-                marker='o', ms=20, alpha=0.4, color='b', visible=False,
-                picker=4000)
-            fg.canvas.mpl_connect('pick_event', on_pick)
-        # redraw axis, set labels, legend, grid, ...
-        def labelfmt(x, pos=0): return '%.2f%%' % (100.0 * x)
-        ax.xaxis.set_major_formatter(pl.FuncFormatter(labelfmt))
-        ax.yaxis.set_major_formatter(pl.FuncFormatter(labelfmt))
-        pl.axhspan(0.0, 0.0)
-        pl.axvspan(0.0, 0.0)
-        ptitle = 'Optimization Space for %s' % identifier
-        if self.refid:
-            ptitle += ' [ref=%s]' % self.refid
-        if self.filter_re:
-            ptitle += ' [filter=%s]' % self.filter_re
-        pl.title(ptitle)
-        pl.xlabel('size reduction (higher is better) -->')
-        pl.ylabel('speedup (higher is better) -->')
-        pl.grid(True)
-        main_legend = ax.legend(loc='lower left')
-        #
-        if outfile: pl.savefig(outfile)
-        if show: pl.show()
-
     def printfrontier(self, target=None):
         if not target: target = self.targets[-1]
         optcases = self.cases[target].values()
@@ -347,6 +193,153 @@ class optspace():
 # ####################################################################
 
 
+def draw_graph(scatters, frontiers, selectpts, title, opts):
+    # http://matplotlib.sourceforge.net/index.html
+    import pylab as pl
+    fg = pl.figure()
+    ax = fg.add_subplot(111)
+
+    # draw scatters
+    for (points, attrs) in scatters:
+        attrsmap = {
+            's' : 20, 'label' : '_nolegend_', 'zorder' : 2,
+            'color' : 'r', 'edgecolor' : 'k' }
+        attrsmap.update(attrs)
+        xy = zip(*[(p.sizered, p.speedup) for p in points])
+        ax.scatter(*xy, **attrsmap)
+
+    # draw frontiers
+    for (points, attrs) in frontiers:
+        attrsmap = {
+            'color' : 'r', 'marker' : 'o', 'label' : '_nolegend_', 'zorder' : 2,
+            'markersize' : 7, 'linestyle' : 'dashed',  'linewidth' : 2 }
+        attrsmap.update(attrs)
+        xy = zip(*sorted([(p.sizered, p.speedup) for p in points]))
+        ax.plot(xy[0], xy[1], **attrsmap)
+
+    # dynamic annotations
+    def on_pick(event):
+        def closest(x, y):
+            dp = [(math.hypot(a-x,b-y),(a,b,c,d)) for (a,b,c,d) in selectpts]
+            return sorted(dp)[0][1]
+        def highlight((x, y, l, f)):
+            # callback for selected point (print point on console)
+            if f: f()
+            # highlight point
+            selected_points.set_visible(True)
+            selected_points.set_data(x, y)
+            # selected point legend
+            lp = pl.legend([selected_points], [l], loc='lower right', numpoints=1)
+            pl.setp(lp.get_texts(), fontsize='medium')
+            lp.get_frame().set_alpha(0.5)
+            pl.gca().add_artist(main_legend)
+            fg.canvas.draw()
+        highlight(closest(event.mouseevent.xdata, event.mouseevent.ydata))
+
+    if opts.show and selectpts:
+        # workaround pb with pick_event event ind (4000)
+        attrsmap = {
+            'color'  : 'b', 'marker': 'o', 'markersize' : 20, 'alpha' : 0.4 }
+        xy = zip(*[(x[0], x[1]) for x in selectpts])
+        selected_points, = \
+            ax.plot(xy[0], xy[1], visible=False, picker=4000, **attrsmap)
+        fg.canvas.mpl_connect('pick_event', on_pick)
+
+    # redraw axis, set labels, legend, grid, ...
+    def labelfmt(x, pos=0): return '%.2f%%' % (100.0 * x)
+    ax.xaxis.set_major_formatter(pl.FuncFormatter(labelfmt))
+    ax.yaxis.set_major_formatter(pl.FuncFormatter(labelfmt))
+    pl.axhspan(0.0, 0.0)
+    pl.axvspan(0.0, 0.0)
+    pl.title(title)
+    pl.xlabel('size reduction (higher is better) -->')
+    pl.ylabel('speedup (higher is better) -->')
+    pl.grid(True)
+    main_legend = ax.legend(loc='lower left')
+
+    if opts.outfile: fg.savefig(opts.outfile)
+    if opts.show: pl.show()
+
+
+def graph(optcases, opts):
+
+    scatters, frontiers = [], []
+
+    # scatters definition
+    scatters_def = []
+    if opts.highlight:
+        scatters_def += [
+            (opts.highlight, {
+                    's' : 40, 'color' : 'y', 'label' : 'ref cases', 'zorder' : 4})
+            ]
+    if opts.xd == 0:
+        scatters_def += [
+            ('.*', {'label' : 'opt cases', 'color' : 'b'})
+            ]
+    elif opts.xd == 1:
+        scatters_def += [
+            ('OPT(-fprofile-use)?-Os.*$', {'label' : '[-Os]', 'color' : 'green'}),
+            ('OPT(-fprofile-use)?-O1.*$', {'label' : '[-O1]', 'color' : 'cyan'}),
+            ('OPT(-fprofile-use)?-O2.*$', {'label' : '[-O2]', 'color' : 'blue'}),
+            ('OPT(-fprofile-use)?-O3.*$', {'label' : '[-O3]', 'color' : 'red'}),
+            ('.*', {'label' : '_nolegend_', 'color' : 'white'})
+            ]
+    elif opts.xd == 2:
+        scatters_def += [
+            ('OPT-fprofile-use.*-flto$', {'label' : '[fdo+lto]', 'color' : 'red'}),
+            ('OPT-fprofile-use.*$', {'label' : '[fdo]', 'color' : 'blue'}),
+            ('.*-flto$', {'label' : '[lto]', 'color' : 'green'}),
+            ('.*', {'label' : '_nolegend_', 'color' : 'white'})
+            ]
+    elif opts.xd == 3:
+        scatters_def += [
+            ('OPT-fprofile-use-O3.*-flto$', {'label' : '[O3 fdo+lto]', 'color' : 'red'}),
+            ('OPT-fprofile-use-O2.*-flto$', {'label' : '[O2 fdo+lto]', 'color' : 'green'}),
+            ('OPT-fprofile-use-O3.*$', {'label' : '[O3 fdo]', 'color' : 'blue'}),
+            ('OPT-fprofile-use-O2.*$', {'label' : '[O2 fdo]', 'color' : 'cyan'}),
+            ('.*', {'label' : '_nolegend_', 'color' : 'white'})
+            ]
+
+    # scatters list
+    if not opts.frontier_only:
+        # partionning of points into scatters
+        partitions, attrs_values = {}, dict(scatters_def)
+        for c in optcases:
+            for (opt, val) in scatters_def:
+                if not re.match(opt, c.variant_id): continue
+                partitions.setdefault(opt, []).append(c)
+                break
+        partkeys = [x[0] for x in scatters_def if x[0] in partitions.keys()]
+        for opt in partkeys:
+            scatters += [(partitions[opt], attrs_values[opt])]
+
+    # frontiers list
+    attrs = { 'label' : 'frontier' }
+    if opts.xd != 0:
+        attrs = {'marker' : 'x', 'zorder' : 1, 'mew' : 2,
+                 'markersize' : 9, 'label' : '_nolegend_'}
+    frontiers += [([c for c in optcases if c.onfront], attrs)]
+
+    # point selection (coords, legend, callback)
+    allpts = sum([x[0] for x in scatters + frontiers], [])
+    selectpts = [
+        (c.sizered, c.speedup, c.tostring(short=True, no_id=opts.anonymous),
+         c.printpoint) for c in allpts]
+
+    # graph title
+    title = 'Optimization Space for %s' % (opts.identifier or opts.execname)
+    if opts.refid: title += ' [ref=%s]' % opts.refid
+    if opts.filter: title += ' [filter=%s]' % opts.filter
+
+    draw_graph(
+        scatters=scatters, frontiers=frontiers,
+        title=title, selectpts=selectpts, opts=opts)
+
+
+
+# ####################################################################
+
+
 if __name__ == "__main__":
 
     import optparse, os
@@ -354,7 +347,7 @@ if __name__ == "__main__":
         description='Process optimization space exploration results',
         usage='%prog [options] [file]',
         version="atos-graph version " + VERSION)
-    #
+    # general graph options
     parser.add_option('-o', '--outfile', dest='outfile',
                       action='store', type='string', default=None,
                       help='set the output file name (default: None)')
@@ -362,11 +355,9 @@ if __name__ == "__main__":
                       action='store_false', default=True,
                       help='do not show resulting graph (default: False)')
     parser.add_option('-i', '--app_id', dest='identifier',
-                  action='store', type='string', default=None,
+                      action='store', type='string', default=None,
                       help='set the application identifier (default: inferred from executable)')
-    parser.add_option('-e', '--exec', dest='execname',
-                  action='store', type='string', default=None,
-                      help='set the executable name (default: None)')
+    # optimization space graph options
     parser.add_option('-H', dest='highlight',
                       action='store', type='string', default=None,
                       help='highlight points givena regexp')
@@ -376,13 +367,13 @@ if __name__ == "__main__":
     parser.add_option('-x', dest='xd',
                       action='store', type='int', default=0,
                       help='highlight different options sets -x[0123]')
-    parser.add_option('-y', dest='yd',
-                      action='store', type='int', default=0,
-                      help='display base points when picking a configuration -y[01]')
     parser.add_option('-a', dest='anonymous',
                       action='store_true', default=False,
                       help='anonymous configuration, omit configuration id on graph')
-    #
+    # atos options
+    parser.add_option('-e', '--exec', dest='execname',
+                  action='store', type='string', default=None,
+                      help='set the executable name (default: None)')
     parser.add_option('-r', '--refid', dest='refid',
                       action='store', type='string', default='REF',
                       help='set the atos reference run id (default: REF)')
@@ -398,15 +389,12 @@ if __name__ == "__main__":
 
     (opts, args) = parser.parse_args()
 
-    default_infilename = os.path.join(opts.configuration_path, "results.db")
-    default_targets = os.path.join(opts.configuration_path, "targets")
-
-    if len(args) == 0:
-        infilename = default_infilename
-    else:
-        infilename = args[0]
+    infilename = (args[0] if len(args) >= 1
+                  else os.path.join(opts.configuration_path, "results.db"))
     sp = optspace().read_atos_db(infilename, opts.filter)
     sp.add_groups(opts.groups)
     sp.compute_speedups(opts.refid)
+    opts.execname = opts.execname or sp.targets[-1]
+
     sp.printfrontier(opts.execname)
-    sp.graph(**vars(opts))
+    graph(sp.cases[opts.execname].values(), opts)

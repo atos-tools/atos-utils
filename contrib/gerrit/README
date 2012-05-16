@@ -4,7 +4,7 @@ This directory contains some helper scripts for gerrit code review.
 * Pushing a new change for review: push-change
 
 Once you have in your HEAD some commits ready for review, execute the command:
-$ contrib/jenkins/push-change
+$ contrib/gerrit/push-change
 Pushing new changes on ref HEAD to remote ssh://hostname:29418/atos.
 ...
 remote: New Changes:
@@ -16,7 +16,7 @@ An optional ref to be pushed can be given as additional argument (defaults to HE
 * Updating the patchset for an existing change: update-change
 
 If you have to modify a patchset, amend your commit and push a new patchset for the change:
-$ contrib/jenkins/update-change 16
+$ contrib/gerrit/update-change 16
 Updating patchset 16 with ref HEAD to remote ssh://hostname:29418/atos.
 ...
 remote: Processing changes: updated: 1, refs: 1, done

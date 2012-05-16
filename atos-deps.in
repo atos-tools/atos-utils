@@ -106,6 +106,38 @@ class DependencyGraph:
                 optflags += [x for x in value['command']['args'] if is_lto_opt(x) and x not in optflags]
         return optflags
 
+    def common_relative_profdir_prefix(self):
+        """ Get the common path prefix of all targets of cc commands designated with a relative path. """
+        outputs = []
+        for node in self.dg.nodes():
+            for attr, value in self.dg.node_attr[node]:
+                if attr != 'dependency': continue
+                if value['kind'] == 'CCLD':
+                    # consider that gcda files can be generated in cwd
+                    # (CCLD commands could be ignored here if no source files in input)
+                    outputs.append(value['command']['cwd'])
+                elif value['kind'] == 'CC':
+                    output_value = SimpleCCInterpreter.get_output_option_value(value['command']['args'])
+                    # ignore output if designated with an absolute path
+                    # (profdir will be prof_dir/full_path)
+                    if output_value and os.path.isabs(output_value): continue
+                    outputs.extend(value['outputs'])
+                    # no common prefix longer than cwd
+                    outputs.append(value['command']['cwd'])
+                else: pass
+        return os.path.commonprefix(outputs)
+
+    def get_profdir_suffix(self, value):
+        """ Get the profile dir suffix for a CC/CCLD dependency """
+        if not hasattr(self, 'common_profdir_prefix_len'):
+            self.common_profdir_prefix_len = len(self.common_relative_profdir_prefix())
+        if value['kind'] == "CC":
+            output_value = SimpleCCInterpreter.get_output_option_value(value['command']['args'])
+            if output_value and os.path.isabs(output_value): return ''
+        if value['kind'] == "CC" or value['kind'] == "CCLD":
+            return value['command']['cwd'][self.common_profdir_prefix_len:]
+        else: assert 0
+
     def output_makefile(self,makefile):
         """ Get a parallelizable makefile for rebuilding the target. """
         mkfile = open(makefile,"w")
@@ -120,6 +152,9 @@ class DependencyGraph:
         mkfile.write("ifeq ($(LTO),1)\n")
         mkfile.write("LTOFLAGS=%s\n" % (' '.join(self.get_lto_opts())))
         mkfile.write("endif\n")
+        mkfile.write("define profdir\n")
+        mkfile.write("$(if $(PROFILE_DIR),-fprofile-dir=$(PROFILE_DIR)/$(1),)\n")
+        mkfile.write("endef\n")
         for node in self.dg.nodes():
             target = node
             recipe = None
@@ -129,9 +164,9 @@ class DependencyGraph:
                 if attr == "dependency":
                     append=""
                     if value['kind'] == "CC":
-                        append=" $(ACFLAGS)"
+                        append=" $(ACFLAGS) $(call profdir," + self.get_profdir_suffix(value) + ")"
                     if value['kind'] == "CCLD":
-                        append=" $(LTOFLAGS) $(ACFLAGS) $(ALDFLAGS)"
+                        append=" $(LTOFLAGS) $(ACFLAGS) $(ALDFLAGS) $(call profdir," + self.get_profdir_suffix(value) + ")"
                     # TODO: handle quotes in command
                     recipe = "$(QUIET)cd " + value['command']['cwd'] + " && " + " ".join(value['command']['args']) + append
                     recipe = re.sub(r'(["\'])', r'\\\1', recipe)
@@ -302,7 +337,7 @@ class SimpleCCInterpreter:
         return kind
 
     def get_input_files(self, command):
-        """ Get input files from CC command line args (C/C++ sources or object files). """
+        """ Get input files from a CC command line args (C/C++ sources or object files). """
         if self.input_files != None:
             return self.input_files
         inputs = []
@@ -351,12 +386,10 @@ class SimpleCCInterpreter:
 
         return inputs
 
-    def get_output_files(self, command):
-        """ Get output files from CC command line args. """
-        if self.output_files != None:
-            return self.output_files
-        args = command['args']
-        outputs = []
+    @staticmethod
+    def get_output_option_value(args):
+        """ Get value of -o option from CC command line args. """
+        output = None
         i = 1
         while i < len(args):
             m = re.search("^-o(.*)$", args[i])
@@ -368,9 +401,18 @@ class SimpleCCInterpreter:
                     i = i + 2
                 else:
                     i = i + 1
-                outputs = [ os.path.normpath(os.path.join(command['cwd'], output)) ]
                 continue
             i = i + 1
+        return output
+
+    def get_output_files(self, command):
+        """ Get output files from CC command line args. """
+        if self.output_files != None:
+            return self.output_files
+        args = command['args']
+
+        output = SimpleCCInterpreter.get_output_option_value(command['args'])
+        outputs = [os.path.normpath(os.path.join(command['cwd'], output))] if output else []
 
         if len(outputs) == 0 and len(self.get_input_files(command)) > 0:
             if self.get_kind(command) == "CC":

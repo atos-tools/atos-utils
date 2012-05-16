@@ -277,7 +277,7 @@ def draw_graph(getgraph, title, opts):
             # similar point plot
             attrsmap.update({'color' : 'g'})
             similar_points, = ax.plot(None, None, visible=False, **attrsmap)
-            graph_plots.append(selected_points)
+            graph_plots.append(similar_points)
 
         # highlight new points
         if opts.follow and old_points:

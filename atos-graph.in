@@ -67,7 +67,7 @@ class optspace():
         self.targets = []
         self.cases = {} # { target : { variant : optcase } }
 
-    # groups: 'g1:b1+b2+b3,g2=b1+b4,g3=g2+b1'
+    # groups: 'g1:b1+b2+b3,g2:b1+b4,g3:g2+b1'
     def add_groups(self, groups):
         if groups == None: return
         groups = groups.split(',')

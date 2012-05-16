@@ -41,6 +41,7 @@ quiet=0
 silent=0
 remote_profile_path=""
 get_results_script=""
+nbruns="1"
 
 version() {
     echo "atos-run version @VERSION@"
@@ -76,6 +77,9 @@ Profile options:
       -g "opts" : use profile variant deduced by opts [default: none]
       -b <path> : remote path to profile files [default: none]
 
+Run Options:
+      -n <nb> : number of executions [default: $nbruns]
+
 Misc Options
       -q : quiet output
       -h : output usage
@@ -94,7 +98,7 @@ tmpfile=`mktemp /tmp/atos-inst.XXXXXX`
 tmpfile2=`mktemp /tmp/atos-inst.XXXXXX`
 
 
-while getopts vhqrsb:t:o:f:e:a:i:w:u:g:C: opt; do
+while getopts vhqrsb:t:o:f:e:a:i:w:u:g:C:n: opt; do
     case $opt in
 	e) executables="$OPTARG"
 	    ;;
@@ -117,6 +121,8 @@ while getopts vhqrsb:t:o:f:e:a:i:w:u:g:C: opt; do
 	b) remote_profile_path="$OPTARG"
 	    ;;
 	t) get_results_script="$OPTARG"
+	    ;;
+	n) nbruns="$OPTARG"
 	    ;;
 	r) record=1
 	    ;;
@@ -248,19 +254,6 @@ get_time() {
     unset REMOTE_PROFILE_DIR LOCAL_PROFILE_DIR
 }
 
-mkdir -p "$configuration_path/logs"
-logfile="$configuration_path/logs/run-`variant_hash $variant`.log"
-echo "Running variant $variant" >"$logfile"
-
-if [ -f "$configuration_path/run.sh" ]; then
-    get_time "$configuration_path/run.sh" >> "$logfile" 2>&1
-else
-    get_time ${1+"$@"} >> "$logfile" 2>&1
-fi
-if [ "$executables" != "" ]; then
-    get_size "$executables" >> "$logfile" 2>&1
-fi
-
 db_entry() {
     echo "ATOS: $identifier: $variant: version: `$0 -v | awk '{print $3;}'`"
     echo "ATOS: $identifier: $variant: conf: $options"
@@ -282,39 +275,57 @@ print_db_entry() {
     fi
 }
 
-if $failure; then
-    exe_size=FAILURE
-    exe_time=FAILURE
+mkdir -p "$configuration_path/logs"
+logfile="$configuration_path/logs/run-`variant_hash $variant`.log"
+
+if [ "$executables" != "" ]; then
+    get_size "$executables" >> "$logfile" 2>&1
 fi
 
-if [ "$silent" != 1 ]; then
-    if $failure; then
-	print_db_entry
+n=1
+while [ "$n" -le "$nbruns" ]; do
+    echo "Running variant $variant" >>"$logfile"
+    if [ -f "$configuration_path/run.sh" ]; then
+	get_time "$configuration_path/run.sh" >> "$logfile" 2>&1
     else
-	if [ "$get_results_script" != "" ]; then
-	    $get_results_script >>$tmpfile 2>&1 || failure=true
-	fi
-	if [ `grep -c "^ATOS: " $tmpfile` -ge 1 ]; then
-	    identifiers=`grep "^ATOS: " $tmpfile | awk '{ print $2 }' | sed 's/://' | sort -u`
-	    for identifier in $identifiers; do
-		exe_time=`grep "^ATOS: $identifier: time: " $tmpfile | awk '{ print $4 }'`
-		exe_size=`grep "^ATOS: $identifier: size: " $tmpfile | awk '{ print $4 }'`
-		if [ "$exe_time" == "" -o "$exe_size" == "" ]; then
-		    exe_size=FAILURE
-		    exe_time=FAILURE
-		fi
-		print_db_entry
-	    done
-	else
+	get_time ${1+"$@"} >> "$logfile" 2>&1
+    fi
+
+    if $failure; then
+	exe_size=FAILURE
+	exe_time=FAILURE
+    fi
+
+    if [ "$silent" != 1 ]; then
+	if $failure; then
 	    print_db_entry
+	else
+	    if [ "$get_results_script" != "" ]; then
+		$get_results_script >>$tmpfile 2>&1 || failure=true
+	    fi
+	    if [ `grep -c "^ATOS: " $tmpfile` -ge 1 ]; then
+		identifiers=`grep "^ATOS: " $tmpfile | awk '{ print $2 }' | sed 's/://' | sort -u`
+		for identifier in $identifiers; do
+		    exe_time=`grep "^ATOS: $identifier: time: " $tmpfile | awk '{ print $4 }'`
+		    exe_size=`grep "^ATOS: $identifier: size: " $tmpfile | awk '{ print $4 }'`
+		    if [ "$exe_time" == "" -o "$exe_size" == "" ]; then
+			exe_size=FAILURE
+			exe_time=FAILURE
+		    fi
+		    print_db_entry
+		done
+	    else
+		print_db_entry
+	    fi
 	fi
     fi
-fi
 
-if $failure; then
-    [ "$quiet" = 1 ] || echo "FAILURE while running variant $variant..."
-    echo "FAILURE while running variant $variant" >>"$logfile"
-    exit 2
-else
-    echo "SUCCESS running variant $variant" >>"$logfile"
-fi
+    if $failure; then
+	[ "$quiet" = 1 ] || echo "FAILURE while running variant $variant..."
+	echo "FAILURE while running variant $variant" >>"$logfile"
+	exit 2
+    else
+	echo "SUCCESS running variant $variant" >>"$logfile"
+    fi
+    n=`expr $n + 1`
+done

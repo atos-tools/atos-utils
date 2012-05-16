@@ -213,6 +213,7 @@ class DependencyGraphBuilder:
         unmatched_targets = targets
         available_inputs = set()
         referenced_outputs = set()
+        last_target_node = None
 
         for i in range(len(self.deplist)):
             dependency = self.deplist[len(self.deplist)-i-1]
@@ -229,6 +230,11 @@ class DependencyGraphBuilder:
                     referenced_outputs.add(output)
                     self.graph.add_node(output, attrs = [('target', output), ('dependency', dependency)])
                     self.graph.add_edge("ROOT", output)
+                    # Ensure that targets are serialized, this ensure that shared libraries are
+                    # compiled before executables as for now we do not track shared lib dependencies
+                    if last_target_node:
+                        self.graph.add_edge(last_target_node, output)
+                    last_target_node = output
                     for inp in dependency['inputs']:
                         available_inputs.add(inp)
                         if not self.graph.has_node(inp):

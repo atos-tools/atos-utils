@@ -50,8 +50,8 @@ cat > ./run.sh <<EOF
   done
 EOF
 
-$ROOT/atos-audit sh -x ./build.sh
-$ROOT/atos-raudit sh -x ./run.sh
+$ROOT/atos-audit sh ./build.sh
+$ROOT/atos-raudit sh ./run.sh
 $ROOT/atos-deps -a
 $ROOT/atos-profile -g -O2
 $ROOT/atos-opt -a -O2 -u -O2
@@ -76,8 +76,8 @@ cat > ./run.2.sh <<EOF
   ( dd if=/dev/urandom status=noxfer iflag=fullblock bs=320 count=32 2> /dev/null) | ./TMP7/sha1-c
 EOF
 
-$ROOT/atos-audit -C atos-configurations-2 sh -x ./build.2.sh
-$ROOT/atos-raudit -C atos-configurations-2 sh -x ./run.2.sh
+$ROOT/atos-audit -C atos-configurations-2 sh ./build.2.sh
+$ROOT/atos-raudit -C atos-configurations-2 sh ./run.2.sh
 $ROOT/atos-deps -a -C atos-configurations-2
 $ROOT/atos-profile -C atos-configurations-2 -g -O2
 $ROOT/atos-opt -C atos-configurations-2 -a -O2 -u -O2
@@ -100,8 +100,8 @@ cat > ./run.3.sh <<EOF
   ( dd if=/dev/urandom status=noxfer iflag=fullblock bs=320 count=32 2> /dev/null) | ./TMP8/sha1-c
 EOF
 
-$ROOT/atos-audit -C atos-configurations-3 sh -x ./build.3.sh
-$ROOT/atos-raudit -C atos-configurations-3 sh -x ./run.3.sh
+$ROOT/atos-audit -C atos-configurations-3 sh ./build.3.sh
+$ROOT/atos-raudit -C atos-configurations-3 sh ./run.3.sh
 $ROOT/atos-deps -a -C atos-configurations-3
 $ROOT/atos-profile -C atos-configurations-3 -g -O2
 $ROOT/atos-opt -C atos-configurations-3 -a -O2 -u -O2

@@ -135,6 +135,8 @@ if [ "$g_set" = 1 -a "$u_set" = 1 ]; then
     exit 1
 fi    
 
+profdir_option=""
+
 if [ "$g_set" = 1 ]; then
     pvariant=REF
     if [ "$gopts" != "" ]; then
@@ -147,10 +149,11 @@ if [ "$g_set" = 1 ]; then
     echo "$pvariant" > "$profile_path/variant.txt"
     profile_path=`cd "$profile_path"; pwd`
     find "$profile_path" -name '*.gcda' | xargs rm -f
+    APFLAGS="-fprofile-generate"
     if [ "$remote_profile_path" != "" ]; then
-	APFLAGS="-fprofile-generate -fprofile-dir=$remote_profile_path"
+	profdir_option="PROFILE_DIR=$remote_profile_path"
     else
-	APFLAGS="-fprofile-generate -fprofile-dir=$profile_path"
+	profdir_option="PROFILE_DIR=$profile_path"
     fi
 fi
 
@@ -164,7 +167,8 @@ if [ "$u_set" = 1 ]; then
     fi
     mkdir -p "$profile_path"
     profile_path=`cd "$profile_path"; pwd`
-    APFLAGS="-fprofile-use -fprofile-correction -Wno-error=coverage-mismatch -fprofile-dir=$profile_path"
+    APFLAGS="-fprofile-use -fprofile-correction -Wno-error=coverage-mismatch"
+    profdir_option="PROFILE_DIR=$profile_path"
 fi
 
 if [ "$variant" = "" ]; then
@@ -195,9 +199,9 @@ if [ "$1" = "" -a "$opt_rebuild" != 1 -a -f "$configuration_path/build.mk" ]; th
     # If the configuration path contains a build.mk execute it
     [ `echo $options | grep -c -e "-flto"` -ne 0 ] && lto_option="LTO=1" || lto_option=""
     if [ "$dryrun" = 1 ]; then
-	make -n -f $configuration_path/build.mk ACFLAGS="$APFLAGS $options" $lto_option
+	make -n -f $configuration_path/build.mk ACFLAGS="$APFLAGS $options" $lto_option $profdir_option
     else
-	make ${dryrun:+-n} -j $jobs -f $configuration_path/build.mk ACFLAGS="$APFLAGS $options" $lto_option >>"$logfile" 2>&1 || failure=true
+	make ${dryrun:+-n} -j $jobs -f $configuration_path/build.mk ACFLAGS="$APFLAGS $options" $lto_option $profdir_option >>"$logfile" 2>&1 || failure=true
     fi
 elif [ "$1" = "" -a "$opt_rebuild" = 1 -a -f "$configuration_path/build.sh" ]; then
     if [ "$dryrun" = 1 ]; then

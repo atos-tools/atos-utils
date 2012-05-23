@@ -6,6 +6,8 @@ source `dirname $0`/common.sh
 
 TEST_CASE="ATOS deps PROFILE_DIR"
 
+mkdir TMPDIR; cd TMPDIR
+
 cat > ./build.sh <<EOF
   # CCLD command
   gcc -o sha1-c $ROOT/examples/sha1-c/sha.c $ROOT/examples/sha1-c/sha1.c

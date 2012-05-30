@@ -23,14 +23,10 @@ PREFIX=/usr/local
 VSTAMP=version.stamp
 VERSION:=$(shell $(srcdir)/config/update_version.sh $(VSTAMP))
 
-CONFIG_SCRIPTS_IN=atos-audit.in atos-raudit.in atos-deps.in atos-opt.in atos-run.in atos-profile.in atos-explore.in atos-play.in atos-graph.in
-CONFIG_SCRIPTS=$(CONFIG_SCRIPTS_IN:%.in=%)
+CONFIG_SCRIPTS_EXE_IN=atos-audit.in atos-raudit.in atos-deps.in atos-opt.in atos-run.in atos-profile.in atos-explore.in atos-play.in atos-graph.in
+CONFIG_SCRIPTS_EXE=$(CONFIG_SCRIPTS_EXE_IN:%.in=bin/%)
 
-ALL_CONFIG_FILES_IN=$(CONFIG_SCRIPTS_IN)
-
-ALL_CONFIG_FILES=$(ALL_CONFIG_FILES_IN:%.in=%)
-
-ALL_FILES=$(ALL_CONFIG_FILES)
+ALL_FILES=$(CONFIG_SCRIPTS_EXE)
 
 INSTALL_EXES=atos-audit atos-raudit atos-deps atos-opt atos-run atos-profile atos-explore atos-play atos-graph
 INSTALLED_EXES=$(addprefix $(PREFIX)/bin/,$(INSTALL_EXES))
@@ -43,7 +39,7 @@ clean:
 	$(QUIET_CLEAN)rm -f *.tmp
 
 distclean:
-	$(QUIET_DISTCLEAN)rm -f $(ALL_CONFIG_FILES) $(VSTAMP)
+	$(QUIET_DISTCLEAN)rm -fr $(srcdir)/bin $(srcdir)/lib $(VSTAMP)
 
 install: $(INSTALLED_EXES)
 
@@ -65,23 +61,27 @@ examples-nograph: all check
 	$(MAKE) NOGRAPH=1 examples-sha1-c examples-sha1
 
 examples-sha1-c: examples-sha1-c-play
-	[ "$(NOGRAPH)" = 1 ] || (cd examples/sha1-c && ../../atos-graph &)
+	[ "$(NOGRAPH)" = 1 ] || (cd examples/sha1-c && ../../bin/atos-graph &)
 
 examples-sha1-c-play:
-	cd examples/sha1-c && ../../atos-explore -f -e ./sha1-c -b "gcc -O2 -o sha1-c sha.c sha1.c" -r ./run.sh -c
+	cd examples/sha1-c && ../../bin/atos-explore -f -e ./sha1-c -b "gcc -O2 -o sha1-c sha.c sha1.c" -r ./run.sh -c
 
 examples-sha1: examples-sha1-play
-	[ "$(NOGRAPH)" = 1 ] || (cd examples/sha1-c && ../../atos-graph &)
+	[ "$(NOGRAPH)" = 1 ] || (cd examples/sha1-c && ../../bin/atos-graph &)
 
 examples-sha1-play:
-	cd examples/sha1 && ../../atos-explore -b "make clean sha" -r ./run.sh -c
+	cd examples/sha1 && ../../bin/atos-explore -b "make clean sha" -r ./run.sh -c
 
 
 #
 # Rules for config files
 #
-$(CONFIG_SCRIPTS): $(VSTAMP)
-$(CONFIG_SCRIPTS): %: %.in
+$(srcdir)/bin $(srcdir)/lib:
+	$(QUIET_IN)mkdir $@
+
+$(CONFIG_SCRIPTS_EXE): $(VSTAMP) $(srcdir)/bin $(srcdir)/lib
+
+$(CONFIG_SCRIPTS_EXE): bin/%: %.in
 	$(QUIET_IN)sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
 
 #
@@ -96,9 +96,9 @@ check-python-dependencies: config/python_checks
 $(PREFIX)/bin $(PREFIX)/lib:
 	$(QUIET_INSTALL_DIR)install -d $@
 
-$(INSTALLED_EXES): $(PREFIX)/bin
+$(INSTALLED_EXES): $(PREFIX)/bin $(PREFIX)/lib
 
-$(INSTALLED_EXES): $(PREFIX)/bin/%: %
+$(INSTALLED_EXES): $(PREFIX)/%: %
 	$(QUIET_INSTALL_EXE)install -m 755 $< $(PREFIX)/bin
 
 #

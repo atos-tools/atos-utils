@@ -52,11 +52,11 @@ cat > ./run.sh <<EOF
   done
 EOF
 
-$ROOT/atos-audit sh ./build.sh
-$ROOT/atos-raudit sh ./run.sh
-$ROOT/atos-deps -a
-$ROOT/atos-profile -g -O2
-$ROOT/atos-opt -a -O2 -u -O2
+$ROOT/bin/atos-audit sh ./build.sh
+$ROOT/bin/atos-raudit sh ./run.sh
+$ROOT/bin/atos-deps -a
+$ROOT/bin/atos-profile -g -O2
+$ROOT/bin/atos-opt -a -O2 -u -O2
 [ `find atos-configurations/profiles -name *.gcda | wc -l` -eq 12 ]
 [ `find atos-configurations/logs -name *.log -exec grep "gcda not found" {} ";" | wc -l` -eq 0 ]
 [ `ls atos-configurations/profiles | grep gcda | wc -l` -eq 0 ]
@@ -78,11 +78,11 @@ cat > ./run.2.sh <<EOF
   ( dd if=/dev/urandom status=noxfer iflag=fullblock bs=320 count=32 2> /dev/null) | ./TMP7/sha1-c
 EOF
 
-$ROOT/atos-audit -C atos-configurations-2 sh ./build.2.sh
-$ROOT/atos-raudit -C atos-configurations-2 sh ./run.2.sh
-$ROOT/atos-deps -a -C atos-configurations-2
-$ROOT/atos-profile -C atos-configurations-2 -g -O2
-$ROOT/atos-opt -C atos-configurations-2 -a -O2 -u -O2
+$ROOT/bin/atos-audit -C atos-configurations-2 sh ./build.2.sh
+$ROOT/bin/atos-raudit -C atos-configurations-2 sh ./run.2.sh
+$ROOT/bin/atos-deps -a -C atos-configurations-2
+$ROOT/bin/atos-profile -C atos-configurations-2 -g -O2
+$ROOT/bin/atos-opt -C atos-configurations-2 -a -O2 -u -O2
 [ `find atos-configurations-2/profiles -name *.gcda | wc -l` -eq 2 ]
 [ `find atos-configurations-2/logs -name *.log -exec grep "gcda not found" {} ";" | wc -l` -eq 0 ]
 [ `ls atos-configurations-2/profiles | grep gcda | wc -l` -eq 0 ]
@@ -102,11 +102,11 @@ cat > ./run.3.sh <<EOF
   ( dd if=/dev/urandom status=noxfer iflag=fullblock bs=320 count=32 2> /dev/null) | ./TMP8/sha1-c
 EOF
 
-$ROOT/atos-audit -C atos-configurations-3 sh ./build.3.sh
-$ROOT/atos-raudit -C atos-configurations-3 sh ./run.3.sh
-$ROOT/atos-deps -a -C atos-configurations-3
-$ROOT/atos-profile -C atos-configurations-3 -g -O2
-$ROOT/atos-opt -C atos-configurations-3 -a -O2 -u -O2
+$ROOT/bin/atos-audit -C atos-configurations-3 sh ./build.3.sh
+$ROOT/bin/atos-raudit -C atos-configurations-3 sh ./run.3.sh
+$ROOT/bin/atos-deps -a -C atos-configurations-3
+$ROOT/bin/atos-profile -C atos-configurations-3 -g -O2
+$ROOT/bin/atos-opt -C atos-configurations-3 -a -O2 -u -O2
 [ `find atos-configurations-3/profiles -name *.gcda | wc -l` -eq 2 ]
 [ `find atos-configurations-3/logs -name *.log -exec grep "gcda not found" {} ";" | wc -l` -eq 0 ]
 [ `ls atos-configurations-3/profiles | grep gcda | wc -l` -eq 0 ]

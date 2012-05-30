@@ -21,7 +21,7 @@
 
 VERSION="@VERSION@"
 
-import re, itertools, math, threading, atexit
+import os, re, itertools, math, threading, atexit
 
 class optcase():
 
@@ -140,6 +140,7 @@ class optspace():
         # read all optimization cases
         local_id = 0
         size, time, flags = None, None, None
+        if not os.path.exists(filename): return self
         self.filter_re = filter
         for line in open(filename):
             words = sum([w.split() for w in line.strip().split(':')], [])
@@ -265,7 +266,7 @@ def draw_graph(getgraph, title, opts):
             graph_plots.append(gr)
 
         # draw selected points (hidden)
-        if opts.show:
+        if opts.show and all_points:
             # workaround pb with pick_event event ind (4000)
             attrsmap = {
                 'color'  : 'b', 'marker': 'o', 'markersize' : 20, 'linewidth' : 0,
@@ -358,6 +359,7 @@ def getoptcases(dbfile, opts):
     sp = optspace().read_atos_db(dbfile, opts.filter)
     sp.add_groups(opts.groups)
     sp.compute_speedups(opts.refid)
+    if not sp.targets: return []
     opts.execname = opts.execname or sp.targets[-1]
     optcases = sp.cases[opts.execname].values()
     frontier = [c for c in optcases if c.onfront]
@@ -425,7 +427,8 @@ def optgraph(dbfile, opts):
     if opts.xd != 0:
         attrs = {'marker' : 'x', 'zorder' : 1, 'mew' : 2,
                  'markersize' : 9, 'label' : '_nolegend_'}
-    frontiers += [([c for c in optcases if c.onfront], attrs)]
+    if optcases:
+        frontiers += [([c for c in optcases if c.onfront], attrs)]
 
     return scatters, frontiers
 

@@ -1,0 +1,542 @@
+#!/usr/bin/env python
+#
+# Copyright (C) STMicroelectronics Ltd. 2012
+#
+# This file is part of ATOS.
+#
+# ATOS is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License v2.0
+# as published by the Free Software Foundation
+#
+# ATOS is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
+#
+#
+# Usage: get usage with atos-toolkit -h
+#
+
+import sys, os, itertools, math
+
+from random import randint, choice, sample, seed
+
+from logging import debug, info, warning, error
+
+
+# ####################################################################
+
+
+class opt_flag():
+
+    def __init__(self, frange=None, fchoice=None):
+        assert bool(frange) ^ bool(fchoice)
+        self.range, self.choice = None, None
+        if frange:
+            min, max, flag = frange
+            self.range = (flag, int(min), int(max))
+        if fchoice:
+            self.choice = fchoice
+
+    def __repr__(self):
+        return (self.range or self.choice)[0]
+
+    def rand(self):
+        if self.range:
+            flag, min, max = self.range
+            return '%s%d' % (flag, randint(min, max))
+        elif self.choice:
+            return choice(self.choice)
+        else: assert 0
+
+    def values(self):
+        if self.range:
+            def frange(min, max, step):
+                val = float(min)
+                while int(val) <= max:
+                    yield int(val)
+                    val = val + step
+            nbvalues = 10
+            flag, min, max = self.range
+            return ['%s%d' % (flag, v) for v in frange(
+                    min, max, float(max - min) / (nbvalues - 1))]
+        elif self.choice:
+            return list(self.choice)
+        else: assert 0
+
+    def isoptlevel(self):
+        return self.rand()[:-1] == '-O'
+
+    @staticmethod
+    def optlevel(opt):
+        return opt_flag(fchoice=opt)
+
+    @staticmethod
+    def list_from_ccc_file(filename):
+        # CTuning Compiler optimization file format
+        #   http://ctuning.org/wiki/index.php/
+        #   CTools:CCC:Documentation:CCC_V2.5#Compiler_optimization_file_format
+        #   1 - optimization flag that takes parameter
+        #       1, <start_parameter>, <end_parameter>, flag
+        #   2 - optimization flag is on or off
+        #       2, flag
+        #   3 - select on flag from a list of flags
+        #       3, number of flags in a list, flags separated by comma
+        flag_list = []
+        for line in open(filename):
+            words = [w.strip() for w in line.strip().split(',')]
+            if not words: continue
+            if words[0] == '1':
+                flag_list += [opt_flag(frange=words[1:])]
+            elif words[0] == '2':
+                flag_list += [opt_flag(fchoice=[words[1], ''])]
+            elif words[0] == '3':
+                flag_list += [opt_flag(fchoice=words[2:])]
+            else: pass
+        # filter optimization level option
+        return [ f for f in flag_list if not f.isoptlevel() ]
+
+
+# ####################################################################
+
+
+class generator():
+
+    optlist, optlevel, variants = None, None, None
+    generators = []
+
+    def __init__(self, func):
+        self.func = func
+        generator.generators += [self]
+
+    def __call__(self, *args):
+        return self.func(*args)
+
+    def descr(self):
+        option_name = '--' + self.func.func_name.replace('_', '-')
+        option_narg = self.func.func_code.co_argcount
+        option_help = self.func.func_doc
+        option_args = option_narg and ','.join(
+            self.func.func_code.co_varnames[:option_narg]).upper()
+        return option_name, option_narg and 1 or 0, option_help, option_args
+
+
+
+# ####################################################################
+
+
+def average(l):
+    return sum(l) / len(l)
+
+
+def standard_deviation(l):
+    avg = average(l)
+    variance = average([((x - avg) ** 2) for x in l])
+    return math.sqrt(variance)
+
+
+def coef_variation(l):
+    return (standard_deviation(l) / average(l))
+
+
+# ####################################################################
+
+# Empirical iterative feedback-directed compilation plugins
+#   http://ctuning.org/wiki/index.php/
+#   CTools:CCC:Documentation:CCC_V2.5
+#   #Empirical_iterative_feedback-directed_compilation_plugins
+
+
+@generator
+def gen_base():
+    '''generate basic configurations'''
+    for f in generator.optlevel.values():
+        results = yield f
+
+
+@generator
+def gen_stdev(nbrun='10'):
+    '''compute standard deviation of results'''
+    info('start stdev')
+    flags, variant = '-O2', 'base'
+    results = []
+    for n in range(int(nbrun)):
+        result = yield flags, variant
+        results += [ result[1] ]
+    debug('*** results: %s' % str(results))
+    debug('*** average: %s' % str(average(results)))
+    debug('*** stddev : %s' % str(standard_deviation(results)))
+    info('end stdev -> [%.1f%%]' % (coef_variation(results) * 100))
+
+
+@generator
+def gen_rnd_uniform():
+    '''generate random combinations of compiler flags'''
+    while True:
+        flags = [ generator.optlevel.rand() ]
+        flags += [ f.rand() for f in generator.optlist if randint(0, 1) ]
+        result = yield ' '.join(flags)
+
+
+@generator
+def gen_rnd_fixed(seqlen='5'):
+    '''generate random combinations of fixed length'''
+    while True:
+        flags = [ generator.optlevel.rand() ]
+        flags += [ f.rand() for f in sample(generator.optlist, int(seqlen)) ]
+        result = yield ' '.join(flags)
+
+
+@generator
+def gen_one_by_one(optlevel):
+    '''try all flags one by one'''
+    for flag in generator.optlist:
+        for flagval in flag.values():
+            result = yield ' '.join([ optlevel, flagval ])
+
+
+@generator
+def gen_one_off_rnd(variantid, epsilon='0.001'):
+    '''try removing flags from the configuration one by one'''
+    print variantid, epsilon
+    baseflags = atos_get_variant(variantid).flags
+    optlevel, flags = '', []
+    # prepare flags list
+    i, n = 0, len(baseflags)
+    while i < n:
+        flag = baseflags[i]
+        if flag == '--param':
+            flag += ' ' + baseflags[i + 1]; i += 1
+        flags += [flag]; i += 1
+    # extract variant
+    info('gen_one_off [%s]' % variantid)
+    fdo = (variantid.find('-fprofile-use') != -1)
+    lto = (variantid.find('-flto') != -1)
+    variant = (fdo and lto) and 'fdo+lto' or (
+        fdo and 'fdo' or (lto and 'lto' or 'base'))
+    # extract optlevel and remove useless options from flags
+    if flags and flags[0].startswith('-O'): optlevel = flags.pop(0)
+    if lto: flags.remove('-flto')
+    # run initial sequence
+    debug('*** running initial sequence for reference')
+    orig_result = base_result = yield ' '.join([optlevel] + flags), variant
+    debug('*** reference=%s' % (str(base_result)))
+    # try to remove flags one by one
+    curflags, removed = list(flags), []
+    for flag in flags:
+        debug('*** running without flag "%s"' % flag)
+        testflags = list(curflags)
+        testflags.remove(flag)
+        result = yield ' '.join([optlevel] + testflags), variant
+        debug('*** result=%s reference=%s orig-ref=%s' % (
+                str(result), str(base_result), str(orig_result)))
+        speedup = ((float(base_result[1]) / result[1]) - 1.0) * 100
+        sizered = (1.0 - (float(result[0]) / float(base_result[0]))) * 100
+        debug('*** speedup=%.2f%% sizered=%.2f%%' % (speedup, sizered))
+        # compare to minimal allowed speedup (%)
+        useless = not ((speedup < -float(epsilon)) or (sizered < 0))
+        if useless:
+            curflags.remove(flag)
+            removed.append(flag)
+            base_result = result
+        debug('*** flag "%s" seems %s (speedup=%.2f%%, sizered=%.2f%%)' % (
+                flag, useless and 'useless' or 'useful', speedup, sizered))
+    debug('*** resulting list: [%s]' % ' '.join(curflags))
+    debug('*** removed flags: [%s]' % ' '.join(removed))
+    info('gen_one_off [%s] -> useful=[%s] useless=[%s]' % (
+            variantid, ' '.join(curflags), ' '.join(removed)))
+
+
+@generator
+def gen_simplf():
+    '''get useful flag list from frontier points'''
+    info('gen_simplf')
+    old_front_points = []
+    while True:
+        old_front_points_ids = [p.local_id for p in old_front_points]
+        cur_front_points = atos_get_variant('frontier')
+        new_front_points = [p for p in cur_front_points
+                            if p.local_id not in old_front_points_ids]
+        info('gen_simplf - new points: [%s]' % (
+                ','.join([str(p.local_id) for p in new_front_points])))
+        if new_front_points == []: break
+        old_front_points.extend(cur_front_points)
+        for p in new_front_points:
+            info('gen_simplf - point: [%s]' % (str(p.local_id)))
+            generator = gen_one_off_rnd(p.variant_id)
+            result = None
+            while True:
+                try: flags, variant = generator.send(result)
+                except StopIteration: break
+                result = yield flags, variant
+
+
+
+# ####################################################################
+
+
+def exploration_loop(generators, step=None, maxiter=None):
+    for gen in generators:
+        result = None
+        for ic in itertools.count():
+            if ic == maxiter: break
+            try:
+                fv = gen.send(result)
+            except StopIteration: break
+            if isinstance(fv, tuple):
+                flags, variant = fv
+                result = step(flags, variant)
+            else:
+                flags = fv; result = {}
+                for variant in generator.variants:
+                    result[variant] = step(flags, variant)
+
+
+# ####################################################################
+
+
+def system(cmd, check_status=False, debug_out=True):
+    from commands import getstatusoutput
+    debug('command [%s]' % cmd)
+    if opts.dryrun: return True, None
+    status, output = getstatusoutput(cmd)
+    debug('command [%s] -> %s' % (cmd, str(status)))
+    if debug_out: debug('\n  | ' + '\n  | '.join(output.split('\n')))
+    assert (not check_status or status == 0), 'command failed [%s]' % cmd
+    return (status == 0), output
+
+
+def atos_init(build, run, getres,
+              config, restart, force=None, nbrun=None):
+    info('atos-init')
+    dbfile = os.path.join(config, 'results.db')
+    if restart and os.path.exists(dbfile):
+        system('/bin/rm -fr %s' % os.path.dirname(dbfile))
+    if os.path.exists(dbfile): return
+    #
+    opt_getres = getres and ('-t ' + getres) or ''
+    opt_config = config and ('-C %s' % config) or ''
+    opt_force = force and '-f' or ''
+    opt_nbrun = nbrun and ('-n %d' % nbrun) or ''
+    # atos initialization
+    system('atos-audit %s %s %s' % (
+            opt_config, opt_force, build), check_status=True)
+    system('atos-raudit %s %s %s' % (
+            opt_config, opt_getres, run), check_status=True)
+    system('atos-deps %s -a' % (
+        opt_config), check_status=True)
+    # reference run
+    system('atos-run %s %s -r' % (
+        opt_config, opt_nbrun), check_status=True)
+
+
+def atos_opt_get_variant(variant, config, target, groups):
+    # import atos-graph python code:
+    import imp, commands
+    status, output = commands.getstatusoutput('which atos-graph')
+    assert status == 0, 'atos-graph not found in path'
+    atos_graph = imp.load_source('', output)
+    #
+    dbfile = os.path.join(config, 'results.db')
+    sp = atos_graph.optspace().read_atos_db(dbfile)
+    sp.add_groups(groups)
+    if variant == 'frontier':
+        sp.compute_speedups()
+        return sp.get_frontier(target)
+    return sp.get_point(variant, target)
+
+
+def atos_get_old_results(variant, flags, config):
+    lto = (variant == 'lto') or (variant == 'fdo+lto')
+    fdo = (variant == 'fdo') or (variant == 'fdo+lto')
+    flags += (variant == 'lipo') and ' -fripa' or ''
+    sflags = '-a "%s%s"' % (flags, lto and ' -flto' or '')
+    sflags = sflags + (fdo and (' -u "%s"' % flags) or '')
+    opt_config = config and ('-C %s' % config) or ''
+    status, output = system(
+        'atos-opt %s -n %s' % (opt_config, sflags), debug_out=False)
+    variantid = output.split('\n')[0].split()[-1][:-3]
+    oldres = atos_get_variant(variantid)
+    oldres = oldres and (oldres.binsize, oldres.runtime) or None
+    debug('results for %s: %s' % (variantid, str(oldres)))
+    return oldres
+
+
+def atos_opt_run(flags, variant, profdir, noreplay, config, nbrun):
+    def get_res(var):
+        pt = atos_get_variant(var)
+        res = (pt.binsize, pt.runtime)
+        debug('RES ' + str(res))
+        return res
+    def one_run(sflags):
+        opt_config = config and ('-C %s' % config) or ''
+        opt_nbrun = nbrun and ('-n %d' % nbrun) or ''
+        if not system('atos-opt %s %s' % (opt_config, sflags))[0]: return
+        status, output = system('atos-run %s %s -r %s' % (
+                opt_config, opt_nbrun, sflags))
+        if output: return get_res(output.split()[-1][:-3])
+        return
+    def profile(flags):
+        opt_config = config and ('-C %s' % config) or ''
+        opt_prof = profdir and ('-b %s' % profdir) or ''
+        sflags = '-g "%s"' % flags
+        return system('atos-profile %s %s %s' % (
+                opt_config, opt_prof, sflags))[0]
+    info('RUN [%s] [%s]' % (variant, flags))
+    if noreplay:
+        oldres = atos_get_old_results(variant, flags, config)
+        if oldres != None: return oldres
+    if variant == 'base':
+        return one_run('-a "%s"' % flags)
+    elif variant == 'lto':
+        return one_run('-a "%s -flto"' % flags)
+    elif variant == 'fdo':
+        if not profile(flags): return
+        return one_run('-a "%s" -u "%s"' % (flags, flags))
+    elif variant == 'fdo+lto':
+        if not profile(flags): return
+        return one_run('-a "%s -flto" -u "%s"' % (flags, flags))
+    elif variant == 'lipo':
+        flags = flags + ' ' + '-fripa'
+        if not profile(flags): return
+        return one_run('-a "%s" -u "%s"' % (flags, flags))
+    return None
+
+
+def atos_get_variant_wrapper(config, target, groups):
+    return lambda v: atos_opt_get_variant(v, config, target, groups)
+
+
+def atos_run_wrapper(profdir, noreplay, config, nbrun):
+    return lambda f, v: atos_opt_run(f, v, profdir, noreplay, config, nbrun)
+
+
+if __name__ == '__main__':
+
+    import optparse, logging
+    parser = optparse.OptionParser(
+        description='Optimization space exploration loop')
+
+    # general options
+    parser.add_option('-d', '--debug', dest='debug',
+                      action='store_const', const=10, default=20,
+                      help='print debug information (default: False)')
+    parser.add_option('-c', '--restart', dest='restart',
+                      action='store_true', default=False,
+                      help='remove old results (default: False)')
+    parser.add_option('--dryrun', dest='dryrun',
+                      action='store_true', default=False,
+                      help='only print commands (default: False)')
+    parser.add_option('--log', dest='logfile',
+                      action='store', type='string', default='expl.log',
+                      help='log output to file (default: expl.log)')
+    parser.add_option('--max', dest='max',
+                     action='store', type='int', default=None,
+                     help='maximum number of iterations (default: None)')
+    parser.add_option('--noreplay', dest='noreplay',
+                     action='store_true', default=False,
+                     help='do not replay configurations (default: False)')
+    parser.add_option('--seed', dest='seed',
+                     action='store', type='int', default=None,
+                     help='set the seed for random generator (default: None)')
+
+    # atos loop option
+    group = optparse.OptionGroup(
+        parser, 'ATOS Options', 'Configuration of ATOS exploration loop')
+    group.add_option('-b', '--build', dest='build',
+                     action='store', type='string', default='./build.sh',
+                     help='build script name (default: ./build.sh)')
+    group.add_option('-B', '--profdir', dest='profdir',
+                     action='store', type='string', default=None,
+                     help='profile dir name (default: None)')
+    group.add_option('-f', '--force', dest='force',
+                     action='store_true', default=False,
+                     help='force rebuild (default: ./build.sh)')
+    group.add_option('-r', '--run', dest='run',
+                     action='store', type='string', default='./run.sh',
+                     help='run script name (default: ./run.sh)')
+    group.add_option('-t', '--res', dest='getres',
+                     action='store', type='string', default=None,
+                     help='get_results script name (default: None)')
+    group.add_option('-n', dest='nbrun',
+                     action='store', type='int', default=None,
+                     help='number of executions of run script (default: 1)')
+    group.add_option('--target', dest='target',
+                     action='store', type='string', default=None,
+                     help='target name for results (default: None)')
+    group.add_option('-C', dest='atos_configurations',
+                     action='store', type='string', default=None,
+                     help='configuration path (default: ./atos-configurations)')
+    group.add_option('-g', '--groups', dest='groups',
+                     action='store', type='string', default=None,
+                     help='add groups of targets(default: None)')
+    parser.add_option_group(group)
+
+    # generator options
+    group = optparse.OptionGroup(
+        parser, 'Generator Options', 'Options common to all generators')
+    group.add_option('--flags', dest='flags',
+                     action='store', type='string', default=None,
+                     help='flags list file name (default: None)')
+    group.add_option('--optlvl', dest='optlvl',
+                     action='store', type='string', default='-Os,-O2,-O3',
+                     help='optimization levels (default: -Os,-O2,-O3)')
+    group.add_option('--variants', dest='variants',
+                     action='store', type='string',
+                     default='base,fdo,lto,fdo+lto',
+                     help='list of variants (default: base,fdo,lto,fdo+lto)')
+    parser.add_option_group(group)
+
+    # generators
+    group = optparse.OptionGroup(
+        parser, 'Generators', 'List of available generators')
+    parser.set_defaults(generators=[])
+    def optcallback(option, opt, value, parser, args):
+        genargs = value and value.split(',') or []
+        parser.values.generators += [args(*genargs)]
+    for gen in generator.generators:
+        name, nargs, help, meta = gen.descr()
+        group.add_option(name, nargs=nargs, help=help,
+                         type=(nargs and 'string' or None), metavar=meta,
+                         action='callback',
+                         callback=optcallback, callback_args=(gen,))
+    parser.add_option_group(group)
+
+    (opts, args) = parser.parse_args()
+
+    # generators setup
+    generator.optlist = (
+        opts.flags != None and opt_flag.list_from_ccc_file(opts.flags))
+    generator.optlevel = opt_flag.optlevel(opts.optlvl.split(','))
+    generator.variants = opts.variants.split(',')
+
+    # logging setup
+    fmtlog = '# %(asctime)-15s %(levelname)s: %(message)s'
+    fmtdate='[%d-%m %H:%M:%S]'
+    logging.getLogger().setLevel(0)
+    conslog = logging.StreamHandler()
+    conslog.setLevel(opts.debug)
+    conslog.setFormatter(logging.Formatter(fmtlog, fmtdate))
+    logging.getLogger().addHandler(conslog)
+    if opts.logfile:
+        filelog = logging.FileHandler(
+            opts.logfile, mode=(opts.restart and 'w' or 'a'))
+        filelog.setFormatter(logging.Formatter(fmtlog, fmtdate))
+        logging.getLogger().addHandler(filelog)
+
+    # exploration loop
+    atos_get_variant = atos_get_variant_wrapper(
+        opts.atos_configurations, opts.target, opts.groups)
+
+    seed(opts.seed)
+
+    atos_init(opts.build, opts.run, opts.getres,
+              opts.atos_configurations, opts.restart, opts.force, opts.nbrun)
+
+    exploration_loop(opts.generators, maxiter=opts.max,
+                     step=atos_run_wrapper(
+            opts.profdir, opts.noreplay, opts.atos_configurations, opts.nbrun))
+

@@ -24,12 +24,16 @@ VSTAMP=version.stamp
 VERSION:=$(shell $(srcdir)/config/update_version.sh $(VSTAMP))
 
 CONFIG_SCRIPTS_EXE_IN=atos-audit.in atos-raudit.in atos-deps.in atos-opt.in atos-run.in atos-profile.in atos-explore.in atos-play.in atos-graph.in
+CONFIG_SCRIPTS_LIB_IN=atos-toolkit.in
+
 CONFIG_SCRIPTS_EXE=$(CONFIG_SCRIPTS_EXE_IN:%.in=bin/%)
+CONFIG_SCRIPTS_LIB=$(CONFIG_SCRIPTS_LIB_IN:%.in=lib/atos/%)
 
-ALL_FILES=$(CONFIG_SCRIPTS_EXE)
+CONFIG_SCRIPTS=$(CONFIG_SCRIPTS_EXE) $(CONFIG_SCRIPTS_LIB)
 
-INSTALL_EXES=atos-audit atos-raudit atos-deps atos-opt atos-run atos-profile atos-explore atos-play atos-graph
-INSTALLED_EXES=$(addprefix $(PREFIX)/bin/,$(INSTALL_EXES))
+ALL_FILES=$(CONFIG_SCRIPTS)
+
+INSTALLED_FILES=$(addprefix $(PREFIX)/,$(CONFIG_SCRIPTS))
 
 .PHONY: all clean distclean install check tests check-python-dependencies examples examples-nograph
 
@@ -41,7 +45,7 @@ clean:
 distclean:
 	$(QUIET_DISTCLEAN)rm -fr $(srcdir)/bin $(srcdir)/lib $(VSTAMP)
 
-install: $(INSTALLED_EXES)
+install: $(INSTALLED_FILES)
 
 check: check-python-dependencies
 
@@ -76,12 +80,15 @@ examples-sha1-play:
 #
 # Rules for config files
 #
-$(srcdir)/bin $(srcdir)/lib:
-	$(QUIET_IN)mkdir $@
+$(srcdir)/bin $(srcdir)/lib/atos:
+	$(QUIET_IN)mkdir -p $@
 
-$(CONFIG_SCRIPTS_EXE): $(VSTAMP) $(srcdir)/bin $(srcdir)/lib
+$(CONFIG_SCRIPTS): $(VSTAMP) $(srcdir)/bin $(srcdir)/lib/atos
 
 $(CONFIG_SCRIPTS_EXE): bin/%: %.in
+	$(QUIET_IN)sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
+
+$(CONFIG_SCRIPTS_LIB): lib/atos/%: %.in
 	$(QUIET_IN)sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
 
 #
@@ -93,13 +100,13 @@ check-python-dependencies: config/python_checks
 #
 # Rules for installation
 #
-$(PREFIX)/bin $(PREFIX)/lib:
+$(PREFIX)/bin $(PREFIX)/lib $(PREFIX)/lib/atos:
 	$(QUIET_INSTALL_DIR)install -d $@
 
-$(INSTALLED_EXES): $(PREFIX)/bin $(PREFIX)/lib
+$(INSTALLED_FILES): $(PREFIX)/bin $(PREFIX)/lib $(PREFIX)/lib/atos
 
-$(INSTALLED_EXES): $(PREFIX)/%: %
-	$(QUIET_INSTALL_EXE)install -m 755 $< $(PREFIX)/bin
+$(INSTALLED_FILES): $(PREFIX)/%: %
+	$(QUIET_INSTALL_EXE)install -m 755 $< $(PREFIX)/$<
 
 #
 # Manage verbose output

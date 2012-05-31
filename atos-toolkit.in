@@ -468,7 +468,7 @@ if __name__ == '__main__':
                      action='store', type='string', default=None,
                      help='target name for results (default: None)')
     group.add_option('-C', dest='atos_configurations',
-                     action='store', type='string', default=None,
+                     action='store', type='string', default='./atos-configurations',
                      help='configuration path (default: ./atos-configurations)')
     group.add_option('-g', '--groups', dest='groups',
                      action='store', type='string', default=None,

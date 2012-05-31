@@ -454,7 +454,7 @@ if __name__ == '__main__':
                      help='profile dir name (default: None)')
     group.add_option('-f', '--force', dest='force',
                      action='store_true', default=False,
-                     help='force rebuild (default: ./build.sh)')
+                     help='force rebuild (default: False)')
     group.add_option('-r', '--run', dest='run',
                      action='store', type='string', default='./run.sh',
                      help='run script name (default: ./run.sh)')

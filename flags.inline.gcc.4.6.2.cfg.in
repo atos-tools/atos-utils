@@ -1,0 +1,28 @@
+# gcc-4.6.2 inlining flags
+3, 2, -fearly-inlining, -fno-early-inlining
+3, 2, -findirect-inlining, -fno-indirect-inlining
+3, 2, -finline-functions, -fno-inline-functions
+3, 2, -finline-functions-called-once, -fno-inline-functions-called-once
+3, 2, -finline-small-functions, -fno-inline-small-functions
+3, 2, -fpartial-inlining,-fno-partial-inlining
+1, 5, 64, --param early-inlining-insns=
+1, 50, 200, --param large-function-growth=
+1, 500, 2000, --param large-stack-frame-growth=
+1, 256, 1024, --param max-inline-insns-single=
+1, 32, 256, --param max-inline-insns-auto=
+1, 2, 64, -finline-limit=
+#
+1, 5, 20, --param max-early-inliner-iterations=
+1, 16, 64, --param inline-unit-growth=
+1, 4, 16, --param max-inline-recursive-depth=
+1, 4, 16, --param max-inline-recursive-depth-auto=
+1, 4, 32, --param min-inline-recursive-probability=
+1, 128, 1024, --param max-inline-insns-recursive=
+1, 128, 1024, --param max-inline-insns-recursive-auto=
+#
+1, 1024, 4096, --param large-function-insns=
+1, 128, 512, --param large-stack-frame=
+1, 4096, 32768, --param large-unit-insns=
+1, 1, 99, --param partial-inlining-entry-probability=
+1, 100, 10000, --param hot-bb-frequency-fraction=
+1, 1000, 100000, --param hot-bb-count-fraction=

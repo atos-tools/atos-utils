@@ -23,13 +23,15 @@ PREFIX=/usr/local
 VSTAMP=version.stamp
 VERSION:=$(shell $(srcdir)/config/update_version.sh $(VSTAMP))
 
-CONFIG_SCRIPTS_EXE_IN=atos-audit.in atos-raudit.in atos-deps.in atos-opt.in atos-run.in atos-profile.in atos-explore.in atos-play.in atos-graph.in
+CONFIG_SCRIPTS_EXE_IN=atos-audit.in atos-raudit.in atos-deps.in atos-opt.in atos-run.in atos-profile.in atos-explore.in atos-play.in atos-graph.in atos-inline.in
 CONFIG_SCRIPTS_LIB_IN=atos-toolkit.in
+CONFIG_SCRIPTS_CFG_IN=flags.inline.gcc.4.6.2.cfg.in
 
 CONFIG_SCRIPTS_EXE=$(CONFIG_SCRIPTS_EXE_IN:%.in=bin/%)
 CONFIG_SCRIPTS_LIB=$(CONFIG_SCRIPTS_LIB_IN:%.in=lib/atos/%)
+CONFIG_SCRIPTS_CFG=$(CONFIG_SCRIPTS_CFG_IN:%.in=lib/atos/config/%)
 
-CONFIG_SCRIPTS=$(CONFIG_SCRIPTS_EXE) $(CONFIG_SCRIPTS_LIB)
+CONFIG_SCRIPTS=$(CONFIG_SCRIPTS_EXE) $(CONFIG_SCRIPTS_LIB) $(CONFIG_SCRIPTS_CFG)
 
 ALL_FILES=$(CONFIG_SCRIPTS)
 
@@ -80,16 +82,19 @@ examples-sha1-play:
 #
 # Rules for config files
 #
-$(srcdir)/bin $(srcdir)/lib/atos:
+$(srcdir)/bin $(srcdir)/lib/atos $(srcdir)/lib/atos/config:
 	$(QUIET_IN)mkdir -p $@
 
-$(CONFIG_SCRIPTS): $(VSTAMP) $(srcdir)/bin $(srcdir)/lib/atos
+$(CONFIG_SCRIPTS): $(VSTAMP) $(srcdir)/bin $(srcdir)/lib/atos $(srcdir)/lib/atos/config
 
 $(CONFIG_SCRIPTS_EXE): bin/%: %.in
 	$(QUIET_IN)sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
 
 $(CONFIG_SCRIPTS_LIB): lib/atos/%: %.in
 	$(QUIET_IN)sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
+
+$(CONFIG_SCRIPTS_CFG): lib/atos/config/%: %.in
+	$(QUIET_IN) cp $< $@
 
 #
 # Rules for python-checks

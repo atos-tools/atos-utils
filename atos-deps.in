@@ -64,6 +64,10 @@ class DependencyGraph:
         """ Delete an edge. """
         self.dg.del_edge((src, dst))
 
+    def has_edge(self, src, dst):
+        """ Returns whether the graph contains the edge. """
+        return self.dg.has_edge((src, dst))
+
     def nodes(self):
         """ Returns the list of nodes. """
         return self.dg.nodes()
@@ -239,7 +243,8 @@ class DependencyGraphBuilder:
                         available_inputs.add(inp)
                         if not self.graph.has_node(inp):
                             self.graph.add_node(inp, attrs = [('target', inp)])
-                        self.graph.add_edge(output, inp)
+                        if not self.graph.has_edge(output, inp):
+                            self.graph.add_edge(output, inp)
             if not found:
                 if output in available_inputs:
                     if output in referenced_outputs:
@@ -253,7 +258,8 @@ class DependencyGraphBuilder:
                         available_inputs.add(inp)
                         if not self.graph.has_node(inp):
                             self.graph.add_node(inp, attrs = [('target', inp)])
-                        self.graph.add_edge(output, inp)
+                        if not self.graph.has_edge(output, inp):
+                            self.graph.add_edge(output, inp)
         # Check for unmatched targets
         if len(unmatched_targets) > 0:
             for target in unmatched_targets:
@@ -346,6 +352,8 @@ class SimpleCCInterpreter:
         """ Get input files from a CC command line args (C/C++ sources or object files). """
         if self.input_files != None:
             return self.input_files
+        kind = self.get_kind(command)
+        static_link = False
         inputs = []
         args = command['args']
         lpath = []
@@ -363,8 +371,11 @@ class SimpleCCInterpreter:
                 inputs.append(os.path.normpath(os.path.join(command['cwd'], args[i])))
                 i = i + 1
                 continue
+            if kind == "CCLD" and args[i] == "-static":
+                static_link = True
+                continue
             m = re.search("^-L(.*)$", args[i])
-            if m != None:
+            if kind == "CCLD" and m != None:
                 path = m.group(1)
                 if path == "":
                     if i+1 < len(args):
@@ -376,7 +387,7 @@ class SimpleCCInterpreter:
                     lpath.append(os.path.normpath(os.path.join(command['cwd'], path)))
                 continue
             m = re.search("^-l(.*)$", args[i])
-            if m != None:
+            if kind == "CCLD" and m != None:
                 lib = m.group(1)
                 if lib == "":
                     if i+1 < len(args):
@@ -386,7 +397,16 @@ class SimpleCCInterpreter:
                     i = i + 1
                 if lib != "":
                     for path in lpath:
-                        inputs.append(os.path.join(path, "lib" + lib + ".a"))
+                        # TODO: this way of finding archives is approximate, we
+                        # should use an enhanced PRoot plugin for detecting actual
+                        # dependencies at build audit time.
+                        file_base = os.path.join(path, "lib" + lib)
+                        if not static_link and os.access(file_base + ".so", os.R_OK):
+                            # Skip shared objects for now
+                            break
+                        if os.access(file_base + ".a", os.R_OK):
+                            inputs.append(file_base + ".a")
+                            break
                 continue
             i = i + 1
 

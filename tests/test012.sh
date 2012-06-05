@@ -14,10 +14,10 @@ c++ sha1.cpp -c
 ar cru sha1.a sha1.o
 c++ -o sha sha.cpp sha1.a
 EOF
-$ROOT/atos-audit sh ./build.sh
-$ROOT/atos-deps sha
+$ROOT/bin/atos-audit sh ./build.sh
+$ROOT/bin/atos-deps sha
 rm *.o *.a
-$ROOT/atos-opt
+$ROOT/bin/atos-opt
 rm *.o *.a
 
 # -l specified .a with multiple -L
@@ -26,10 +26,10 @@ c++ sha1.cpp -c
 ar cru libsha1.a sha1.o
 c++ -o sha sha.cpp -Lfoo -L.. -L. -L. -lsha1
 EOF
-$ROOT/atos-audit sh ./build.sh
-$ROOT/atos-deps sha
+$ROOT/bin/atos-audit sh ./build.sh
+$ROOT/bin/atos-deps sha
 rm *.o *.a
-$ROOT/atos-opt
+$ROOT/bin/atos-opt
 rm *.o *.a
 
 # multiple -l specified .a with multiple -L
@@ -40,9 +40,9 @@ mkdir foo
 cp libsha1.a foo
 c++ -o sha sha.cpp -Lfoo -lsha1 -L.. -L. -lsha1 libsha1.a
 EOF
-$ROOT/atos-audit sh ./build.sh
-$ROOT/atos-deps sha
+$ROOT/bin/atos-audit sh ./build.sh
+$ROOT/bin/atos-deps sha
 rm *.o *.a
-$ROOT/atos-opt
+$ROOT/bin/atos-opt
 rm *.o *.a
 

@@ -56,15 +56,14 @@ export PYTHONPATH=$DEVIMAGE/usr/local/lib/python
 
 echo "Building atos-utils..."
 cd $GITROOT
-make all 2>&1 | tee $LOGS/make.log.txt
-make check | tee $LOGS/check.log.txt
-make tests | tee $LOGS/tests.log.txt
-make examples-nograph | tee $LOGS/examples.log.txt
-make install PREFIX=$DEVIMAGE/usr/local | tee $LOGS/install.log.txt
+make all
+make check
+make tests
+make examples-nograph
+make install PREFIX=$DEVIMAGE/usr/local
 
 echo "Archiving atos-utils..."
 cd $DEVIMAGE
 tar cvzf $WORKSPACE/atos-utils-devimage.tgz usr
 
 echo "Completed."
-

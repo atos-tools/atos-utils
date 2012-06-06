@@ -507,6 +507,11 @@ if __name__ == '__main__':
 
     (opts, args) = parser.parse_args()
 
+    # add atos bin directory in PATH
+    atos_bin = os.path.abspath(os.path.join(
+            os.path.dirname(sys.argv[0]), '..', '..', 'bin'))
+    os.environ['PATH'] = atos_bin + ':' + os.environ.get('PATH', '')
+
     # generators setup
     generator.optlist = (
         opts.flags != None and opt_flag.list_from_ccc_file(opts.flags))

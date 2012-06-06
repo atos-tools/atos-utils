@@ -28,5 +28,5 @@ libdir=`cd $dir/../lib/atos; pwd`
 
 config_file=$libdir/config/flags.inline.gcc.4.6.2.cfg
 
-$libdir/atos-toolkit --flags=$config_file --gen-rnd-uniform "$@"
+$libdir/atos_toolkit.py --flags=$config_file --gen-rnd-uniform "$@"
 

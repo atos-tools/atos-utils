@@ -44,3 +44,13 @@ atos-utils requires the packages described below to be installed on your system.
   * python-mathplotlib-tk:  http://www.scipy.org/PyLab or from your package
     manager python-matplotlib-tk
 
+** Python jsonlib module:
+  * jsonpath: http://pypi.python.org/pypi/jsonpath
+    Download and install: jsonpath-0.53.tar.gz
+    It can be installed with:
+    $ ./setup.py install --user
+  * jsonlib: https://github.com/guillon/python-jsonlib
+    Download and install: jsonlib-0.1.tar.gz
+    It can be installed with:
+    $ ./setup.py install --user
+

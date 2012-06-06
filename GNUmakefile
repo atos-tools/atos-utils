@@ -105,13 +105,13 @@ check-python-dependencies: config/python_checks
 #
 # Rules for installation
 #
-$(PREFIX)/bin $(PREFIX)/lib $(PREFIX)/lib/atos:
+$(PREFIX)/bin $(PREFIX)/lib/atos:
 	$(QUIET_INSTALL_DIR)install -d $@
 
-$(INSTALLED_FILES): $(PREFIX)/bin $(PREFIX)/lib $(PREFIX)/lib/atos
+$(INSTALLED_FILES): $(PREFIX)/bin $(PREFIX)/lib/atos
 
 $(INSTALLED_FILES): $(PREFIX)/%: %
-	$(QUIET_INSTALL_EXE)install -m 755 $< $(PREFIX)/$<
+	$(QUIET_INSTALL_EXE)install -D -m 755 $< $(PREFIX)/$<
 
 #
 # Manage verbose output

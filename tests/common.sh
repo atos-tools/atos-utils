@@ -29,6 +29,7 @@ success() {
 
 skip() {
     echo "SKIPPED: $TEST: $TEST_CASE" >&2
+    trap - EXIT && exit 0
 }
 
 [ "$DEBUG" = "" ] || set -x

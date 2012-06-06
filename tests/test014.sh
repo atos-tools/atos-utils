@@ -6,6 +6,10 @@ source `dirname $0`/common.sh
 
 TEST_CASE="ATOS inline exploration"
 
+# test temporarily skipped
+# until atos-inline can determine compiler version
+skip
+
 $ROOT/bin/atos-inline \
     -r "$ROOT/examples/sha1-c/run.sh" \
     -b "gcc -o sha1-c $ROOT/examples/sha1-c/sha.c $ROOT/examples/sha1-c/sha1.c" \

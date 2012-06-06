@@ -52,6 +52,11 @@ export PATH=$PATH:$DEVIMAGE/usr/local/bin
 echo "Retrieving binary build of python-graph package..."
 wget -q -O python-graph-core.tgz http://aci-hostname:8000/job/cec-okla-python-graph/lastStableBuild/artifact/python-graph-core.tgz
 tar xvzf python-graph-core.tgz -C $DEVIMAGE
+
+echo "Retrieving binary build of python-jsonlib package..."
+wget -q -O python-jsonlib.tgz http://aci-hostname:8000/job/cec-okla-python-jsonlib/lastStableBuild/artifact/python-jsonlib.tgz
+tar xvzf python-jsonlib.tgz -C $DEVIMAGE
+
 export PYTHONPATH=$DEVIMAGE/usr/local/lib/python
 
 echo "Building atos-utils..."

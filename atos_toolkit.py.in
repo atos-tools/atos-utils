@@ -336,7 +336,7 @@ def atos_get_old_results(variant, flags, config):
     sflags = sflags + (fdo and (' -u "%s"' % flags) or '')
     opt_config = config and ('-C %s' % config) or ''
     status, output = system(
-        'atos-opt %s -n %s' % (opt_config, sflags), debug_out=False)
+        'atos-build %s -n %s' % (opt_config, sflags), debug_out=False)
     variantid = output.split('\n')[0].split()[-1][:-3]
     oldres = atos_get_variant(variantid)
     oldres = oldres and (oldres.size, oldres.time) or None
@@ -353,7 +353,7 @@ def atos_opt_run(flags, variant, profdir, noreplay, config, nbrun):
     def one_run(sflags):
         opt_config = config and ('-C %s' % config) or ''
         opt_nbrun = nbrun and ('-n %d' % nbrun) or ''
-        if not system('atos-opt %s %s' % (opt_config, sflags))[0]: return
+        if not system('atos-build %s %s' % (opt_config, sflags))[0]: return
         status, output = system('atos-run %s %s -r %s' % (
                 opt_config, opt_nbrun, sflags))
         if output: return get_res(output.split()[-1][:-3])

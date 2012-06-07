@@ -17,7 +17,7 @@
 # v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# Usage: get usage with atos-opt -h
+# Usage: get usage with atos-build -h
 #
 
 set -e
@@ -43,13 +43,13 @@ remote_profile_path=""
 opt_rebuild=""
 
 version() {
-    echo "atos-opt version @VERSION@"
+    echo "atos-build version @VERSION@"
 }
 
 usage() {
     cat <<EOF
 
-Usage: atos-opt [options] [--] [command...]
+Usage: atos-build [options] [--] [command...]
 
 Driver Options:
       -r <ccdriver_re> : specify the compiler driver as a regexp for the basename [default: $ccregexp]

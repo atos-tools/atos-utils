@@ -197,11 +197,11 @@ fi
 
 [ "$quiet" = "1" ] || echo "Playing optimized build $identifier:$configuration..."
 if [ "$u_set" = 1 ]; then
-    exec $dir/atos-opt ${dryrun:+-n} -a "$options" -u "$uopts" ${1+"$@"}
+    exec $dir/atos-build ${dryrun:+-n} -a "$options" -u "$uopts" ${1+"$@"}
 elif [ "$g_set" = 1 ]; then
-    exec $dir/atos-opt ${dryrun:+-n} -a "$options" -g "$gopts" ${1+"$@"}
+    exec $dir/atos-build ${dryrun:+-n} -a "$options" -g "$gopts" ${1+"$@"}
 else
-    exec $dir/atos-opt ${dryrun:+-n} -a "$options" ${1+"$@"}
+    exec $dir/atos-build ${dryrun:+-n} -a "$options" ${1+"$@"}
 fi
 
 

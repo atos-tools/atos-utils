@@ -12,4 +12,4 @@ $ROOT/bin/atos-audit make clean sha-shared
 $ROOT/bin/atos-deps sha.so sha-shared
 rm *.o *.so
 # Will fail if shared lib (sha.so) is built after executable (sha-shared)
-$ROOT/bin/atos-opt
+$ROOT/bin/atos-build

@@ -179,7 +179,7 @@ $dir/atos-run -C "$configuration_path" -n "$nbruns" $opt_q -r # Will stop there 
 for gopt in "-O1" "-O2" "-Os" "-O3"; do
     for opts in "" "-flto"; do
 	options="$gopt $opts"
-	$dir/atos-opt -C "$configuration_path" $opt_q -a "$options" && $dir/atos-run -C "$configuration_path" -n "$nbruns" $opt_q -r -a "$options" || true
+	$dir/atos-build -C "$configuration_path" $opt_q -a "$options" && $dir/atos-run -C "$configuration_path" -n "$nbruns" $opt_q -r -a "$options" || true
     done
     failure=false
     $dir/atos-profile -C "$configuration_path" $opt_q -b "$remote_profile_path" -g "$gopt" || failure=true
@@ -189,7 +189,7 @@ for gopt in "-O1" "-O2" "-Os" "-O3"; do
     else
 	for opts in "" "-flto" "-funroll-loops" "-flto -funroll-loops"; do
 	    options="$gopt $opts"
-	    $dir/atos-opt -C "$configuration_path" $opt_q -u "$gopt" -a "$options" && $dir/atos-run -C "$configuration_path" -n "$nbruns" $opt_q -b "$remote_profile_path" -r -u "$gopt" -a "$options" || true
+	    $dir/atos-build -C "$configuration_path" $opt_q -u "$gopt" -a "$options" && $dir/atos-run -C "$configuration_path" -n "$nbruns" $opt_q -b "$remote_profile_path" -r -u "$gopt" -a "$options" || true
 	done
     fi
 done

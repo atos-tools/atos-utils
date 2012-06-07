@@ -74,6 +74,7 @@ class atos_db_file(atos_db):
     def __init__(self, db_file):
         self.db_file = db_file
         self.results = []
+        self._create()
         self._read_results()
 
     def get_results(self, query=None):
@@ -113,6 +114,10 @@ class atos_db_file(atos_db):
             self.results += [result_entry(curdict)]
             curdict, size, time = {}, None, None
 
+    def _create(self):
+        if os.path.exists(self.db_file): return
+        open(self.db_file, 'w').write('')
+
 
 # ####################################################################
 
@@ -122,6 +127,7 @@ class atos_db_json(atos_db):
     def __init__(self, db_file):
         self.db_file = db_file
         self.results = []
+        self._create()
         self._read_results()
 
     def get_results(self, query=None):
@@ -130,12 +136,16 @@ class atos_db_json(atos_db):
     def add_results(self, entries):
         with open_locked(self.db_file, 'r+') as db_file:
             self.results = json.load(db_file)
+            db_file.seek(0); db_file.truncate()
             self.results.extend(entries)
             json.dump(self.results, db_file)
 
     def _read_results(self):
-        if os.path.exists(self.db_file):
-            self.results = json.load(open_locked(self.db_file))
+        self.results = json.load(open_locked(self.db_file))
+
+    def _create(self):
+        if os.path.exists(self.db_file): return
+        json.dump([], open(self.db_file, 'w'))
 
 
 # ####################################################################
@@ -146,6 +156,7 @@ class atos_db_pickle(atos_db):
     def __init__(self, db_file):
         self.db_file = db_file
         self.results = []
+        self._create()
         self._read_results()
 
     def get_results(self, query=None):
@@ -153,13 +164,17 @@ class atos_db_pickle(atos_db):
 
     def add_results(self, entries):
         with open_locked(self.db_file, 'r+') as db_file:
-            self.results = json.load(db_file)
+            self.results = pickle.load(db_file)
+            db_file.seek(0); db_file.truncate()
             self.results.extend(entries)
             pickle.dump(self.results, db_file, -1)
 
     def _read_results(self):
-        if os.path.exists(self.db_file):
-            self.results = pickle.load(open_locked(self.db_file))
+        self.results = pickle.load(open_locked(self.db_file))
+
+    def _create(self):
+        if os.path.exists(self.db_file): return
+        pickle.dump([], open(self.db_file, 'w'), -1)
 
 
 # ####################################################################
@@ -487,7 +502,6 @@ if __name__ == '__main__':
             db_file = os.path.join(opts.configuration_path, 'results.pkl')
             db = atos_db_pickle(db_file)
         else: assert 0
-        db.add_results([])
         info('created new database in "%s"' % db_file)
 
 

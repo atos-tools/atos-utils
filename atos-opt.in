@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+#
+# Copyright (C) STMicroelectronics Ltd. 2012
+#
+# This file is part of ATOS.
+#
+# ATOS is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License v2.0
+# as published by the Free Software Foundation
+#
+# ATOS is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
+#
+#
+# Usage: get usage with atos-opt -h
+#
+
+set -e
+[ "$DEBUG" = "" ] || set -x
+
+dir=`cd \`dirname $0\`; pwd`
+PROOT=${PROOT:-proot}
+
+options=""
+configuration_path="./atos-configurations"
+u_set=0
+l_set=0
+uopts=""
+opt_q=""
+opt_r=""
+nbruns=1
+remote_profile_path=""
+
+version() {
+    echo "atos-opt version @VERSION@"
+}
+
+usage() {
+    cat <<EOF
+
+Usage: atos-opt [options] [--] [command...]
+
+Configuration Options:
+      -C <path> : configuration path [default: $configuration_path]
+
+Optimization Options:
+      -a "options" : append given options to the compilation commands [default: $options]
+      -A "options" : append given options to the compilation commands,
+                     excepted during instrumentation build [default: $uopts]
+      -u : use feedback directed optimizations [default: no]
+      -l : use link time optimizations [default: no]
+
+Profile options:
+      -b <path> : remote path to profile files [default: none]
+
+Run Options:
+      -n <nb> : number of executions [default: $nbruns]
+
+Results options:
+      -r : record results
+
+Misc Options
+      -q : quiet output
+      -h : output usage
+      -v : output version
+
+EOF
+}
+
+cleanup() {
+    :
+}
+trap "cleanup; exit 3" TERM STOP
+trap "cleanup" EXIT
+
+while getopts C:a:A:lub:n:rqvh opt; do
+    case $opt in
+	C) configuration_path="$OPTARG"
+	    ;;
+	a) options="$OPTARG"
+	    ;;
+	A) uopts="$OPTARG"
+	    ;;
+	l) l_set=1
+	    ;;
+	u) u_set=1
+	    ;;
+	b) remote_profile_path="$OPTARG"
+	    ;;
+	n) nbruns="$OPTARG"
+	    ;;
+	r) opt_r=-r
+	    ;;
+	q) opt_q=-q
+	    ;;
+	v) version; exit 0
+	    ;;
+	h) usage; exit 0
+	    ;;
+	?) usage; exit 2
+	    ;;
+    esac
+done
+
+shift $((OPTIND - 1))
+
+[ "$l_set" = 0 ] || uopts="$uopts -flto"
+
+if [ "$u_set" = 1 ]; then
+    $dir/atos-profile -C "$configuration_path" $opt_q -b "$remote_profile_path" -g "$options"
+    $dir/atos-build -C "$configuration_path" $opt_q -u "$options" -a "$options $uopts"
+    $dir/atos-run -C "$configuration_path" $opt_q $opt_r -n "$nbruns" -u "$options" -a "$options $uopts"
+else
+    $dir/atos-build -C "$configuration_path" $opt_q -a "$options $uopts"
+    $dir/atos-run -C "$configuration_path" $opt_q $opt_r -n "$nbruns" -a "$options $uopts"
+fi

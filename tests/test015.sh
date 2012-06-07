@@ -16,7 +16,7 @@ $ROOT/bin/atos-run -r -a -O3
 
 (
 # simple jsonpath query (must return 2 sizes)
-[ `$ROOT/lib/atos/atos_lib.py query -q'$[?(@.target="sha1-c")].size' | wc -l` -eq 4 ]
+[ `$ROOT/lib/atos/atos_lib.py query -q'$[?(@.target="sha1-c")].size' | wc -l` -eq 2 ]
 
 # db push (must export 2 results)
 $ROOT/lib/atos/atos_lib.py create_db -C NEWDB

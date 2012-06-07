@@ -425,11 +425,14 @@ def open_locked(filename, mode='r'):
         time.sleep(1)
 
 def pprint_list(list):
-    print '['
+    if not list: print None; return
+    # one result per line
+    print '[',
     nb_elems = len(list)
     for i in range(nb_elems):
-        print '  %s%s' % (
-            json.dumps(list[i]), ((i + 1) < nb_elems) and ',' or '')
+        print '%s%s%s' % (
+            i>0 and '  ' or '',
+            json.dumps(list[i]), ((i + 1) < nb_elems) and ',\n' or ''),
     print ']'
 
 def info(msg):

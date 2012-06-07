@@ -490,6 +490,10 @@ if __name__ == '__main__':
                 choices=['results_db', 'json', 'pickle'],
                 help='database type '
                      '[results_db|json|pickle] (default: results_db)')
+        subparser.add_option('--shared', dest='shared',
+                action='store_true', default=False,
+                help='create a shared database '
+                             '(group has write permission) (default: False)')
         subparser.epilog = 'Example: create_db -C. -tjson'
         (opts, args) = subparser.parse_args(sys.argv[1:])
 
@@ -505,6 +509,7 @@ if __name__ == '__main__':
             db_file = os.path.join(opts.configuration_path, 'results.pkl')
             db = atos_db_pickle(db_file)
         else: assert 0
+        if opts.shared: os.chmod(db_file, 0660)
         info('created new database in "%s"' % db_file)
 
 

@@ -197,7 +197,7 @@ class atos_client_results():
         def merge_targets(group_name, results):
             newobj = atos_client_results.result(results[0].__dict__)
             # geometric mean of execution times, sum of binary sizes
-            newobj.time = geomean(map(lambda x: x.time, results))
+            newobj.time = geometric_mean(map(lambda x: x.time, results))
             newobj.size = sum(map(lambda x: x.size, results))
             newobj.target = group_name
             newobj.results = results
@@ -235,16 +235,17 @@ class atos_client_results():
         assert variant in self.results.keys()
         return self.results[variant].results[-1]
 
-    def get_results(self, only_frontier=False, only_last=False):
+    def get_results(self, only_frontier=False, only_last=False, objects=False):
         results = {}
         for variant, result in self.results.items():
             if only_frontier and not result.on_frontier:
                 continue
             if only_last:
                 result = result.results[-1]
-            result = dict(
-                filter(lambda x: x[0] != 'results', result.__dict__.items()))
-            results.setdefault(variant, []).append(result)
+            if not objects:
+                result = dict(
+                    filter(lambda x: x[0] != 'results', result.__dict__.items()))
+            results[variant] = result
         return results
 
     def _get_group_results(self, group_targets, group_name, query):
@@ -351,8 +352,17 @@ def timer(func):
 def average(l):
     return sum(l) / len(l)
 
-def geomean(l):
+def geometric_mean(l):
     return (10 ** (sum(map(math.log10, l)) / len(l)))
+
+def standard_deviation(l):
+    avg = average(l)
+    variance = average([((x - avg) ** 2) for x in l])
+    return math.sqrt(variance)
+
+def variation_coefficient(l):
+    return (standard_deviation(l) / average(l))
+
 
 def strtodict(s):
     # 'aa:xx,bb:yy' -> {'aa':'xx','bb':'yy'}
@@ -385,7 +395,7 @@ def results_filter(results, query):
 def result_entry(d):
     try:
         d['time'] = float(d['time'])
-        d['size'] = int(d['time'])
+        d['size'] = int(d['size'])
     except:
         d['time'] = d['size'] = 'FAILURE'
     return d
@@ -666,8 +676,8 @@ if __name__ == '__main__':
         if opts.frontier:
             client.compute_frontier()
 
-        for variant, results in client.get_results(opts.frontier, opts.last).items():
-            print variant, pformat(results)
+        for variant, result in client.get_results(opts.frontier, opts.last).items():
+            print variant, pformat(result)
 
 
     # ################################################################

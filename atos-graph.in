@@ -21,174 +21,16 @@
 
 VERSION="@VERSION@"
 
-import os, re, itertools, math, threading, atexit
+import os, re, math, threading, atexit, sys
 
-class optcase():
+atos_bin = os.path.dirname(__file__)
+atos_lib = os.path.abspath(os.path.join(atos_bin, '..', 'lib', 'atos'))
+sys.path.append(atos_lib)
 
-    def __init__(self, runtime, binsize, variant_id=None, flags=None, local_id=None):
-        self.runtime = float(runtime)
-        self.binsize = int(binsize)
-        self.variant_id = variant_id
-        self.flags = flags
-        self.local_id = local_id
+import atos_lib
 
-    def compute_speedup(self, ref):
-        self.speedup = ((ref.runtime / self.runtime) - 1.0)
-        self.sizered = (1.0 - (float(self.binsize) / float(ref.binsize)))
 
-    def printpoint(self):
-        print '-' * 40
-        print self.tostring()
-
-    def tostring(self, short=False, no_id=False):
-        res = ''
-        if self.local_id:
-            res += 'local_id=%s\n' % (self.local_id)
-        res += 'speedup=%.2f%% runtime=%.2f\n' % (self.speedup * 100, self.runtime)
-        res += 'reduction=%.2f%% binsize=%d' % (self.sizered * 100, self.binsize)
-        if not no_id:
-            if short and len(self.variant_id) >= 45:
-                legend_id = self.variant_id[:25] + '...' + self.variant_id[-15:]
-            else: legend_id = self.variant_id
-            res += '\nid=' + legend_id
-        return res
-
-def average(l):
-    return sum(l) / len(l)
-
-def geometric_mean(l):
-    return (10 ** (sum(map(math.log10, l)) / len(l)))
-
-class optspace():
-
-    def __init__(self):
-        self.allcases = {} # { target : { variant : [ optcase ] } }
-        self.refid = None # variant used as reference for speedups
-        self.targets = []
-        self.cases = {} # { target : { variant : optcase } }
-
-    # groups: 'g1:b1+b2+b3,g2:b1+b4,g3:g2+b1'
-    def add_groups(self, groups):
-        if groups == None: return
-        groups = groups.split(',')
-        # done after merging / before speedups
-        for group in groups:
-            name, targlist = group.split(':')
-            targlist = targlist.split('+')
-            common_variants = set(self.cases[targlist[0]].keys())
-            for target in targlist[1:]:
-                common_variants = common_variants.intersection(
-                    self.cases[target].keys())
-            for v in common_variants:
-                time = geometric_mean(
-                    [self.cases[t][v].runtime for t in targlist])
-                size = sum(
-                    [self.cases[t][v].binsize for t in targlist])
-                newcase = optcase(
-                    time, size, v, self.cases[targlist[0]][v].flags,
-                    # local_id of 1st target
-                    self.cases[targlist[0]][v].local_id)
-                self.allcases.setdefault(
-                    name, {}).setdefault(v, []).append(newcase)
-                self.cases.setdefault(name, {})[v] = newcase
-                if name not in self.targets: self.targets += [name]
-
-    def compute_speedups(self, refid='REF'):
-        self.refid = refid
-        for target in self.targets:
-            allcases = set()
-            # speedup and codesize
-            for (variant, optcase) in self.cases[target].items():
-                optcase.compute_speedup(self.cases[target][self.refid])
-                allcases.add(optcase)
-            # compute frontier
-            maybe_on_frontier, mustbe_on_frontier = allcases, set()
-            for (variant, c) in self.cases[target].items():
-                onfrontier = True
-                maybe_on_frontier.remove(c)
-                for c2 in itertools.chain(mustbe_on_frontier, maybe_on_frontier):
-                    if c2.speedup == c.speedup and c2.sizered == c.sizered:
-                        pass
-                    elif c2.speedup >= c.speedup and c2.sizered >= c.sizered:
-                        onfrontier = False
-                        break
-                if onfrontier: mustbe_on_frontier.add(c)
-                c.onfront = onfrontier
-            # filter - keep simplest points (smallest variant_id for now)
-            front = {}
-            for c in mustbe_on_frontier:
-                front.setdefault((c.speedup, c.sizered), []).append(c)
-            for pts in front.values():
-                simplest = sorted([(len(c.variant_id), c) for c in pts])[0][1]
-                for p in pts: p.onfront = (p == simplest)
-
-    def mergeruns(self):
-        self.cases = {}
-        for target in self.targets:
-            for (variant, optcases) in self.allcases[target].items():
-                rt = [ c.runtime for c in optcases ]
-                nc = optcase(sum(rt) / len(rt),
-                        optcases[0].binsize, optcases[0].variant_id,
-                        optcases[0].flags, optcases[0].local_id)
-                self.cases.setdefault(target, {})[variant] = nc
-
-    def read_atos_db(self, filename, filter=None):
-        # ATOS: 401.bzip2: REF: version: 22028858
-        # ATOS: 401.bzip2: REF: conf: -O2 -inline
-        # ATOS: 401.bzip2: REF: size: 63005
-        # ATOS: 401.bzip2: REF: time: 12760
-        # read all optimization cases
-        local_id = 0
-        size, time, flags = None, None, None
-        if not os.path.exists(filename): return self
-        self.filter_re = filter
-        for line in open(filename):
-            words = sum([w.split() for w in line.strip().split(':')], [])
-            (target, variant_id, key), values = words[1:4], words[4:]
-            filtered = (self.filter_re and not re.search(self.filter_re, variant_id))
-            if key == 'conf': flags = values
-            elif key == 'size': size = values[0]
-            elif key == 'time': time = values[0]
-            else: continue
-            if size and time:
-                if 'FAILURE' not in [size, time] and not filtered:
-                    newcase = optcase(time, size, variant_id, flags, local_id)
-                    self.allcases.setdefault(
-                        target, {}).setdefault(variant_id, []).append(newcase)
-                    if target not in self.targets: self.targets += [target]
-                size, time, flags = None, None, None
-                local_id += 1
-        self.mergeruns()
-        self.db_filename = filename
-        self.last_local_id = local_id
-        return self
-
-    def printfrontier(self, target=None):
-        if not target: target = self.targets[-1]
-        optcases = self.cases[target].values()
-        frontier = [c for c in optcases if c.onfront]
-        optcf = reversed(sorted([ (c.speedup, c) for c in frontier]))
-        for (s, c) in optcf: c.printpoint()
-        print '-' * 40
-        print '%d points, %d on frontier' % (len(optcases), len(frontier))
-
-    def get_frontier(self, target=None):
-        # return frontier points, biggest speedups first
-        target = target or self.targets[-1]
-        optcases = self.cases[target].values()
-        frontier = [(c.speedup, c) for c in optcases if c.onfront]
-        frontier = reversed(sorted(frontier))
-        return [x[1] for x in frontier]
-
-    def get_point(self, ptid, target=None):
-        # return the last point that match
-        target = target or self.targets[-1]
-        optlists = self.allcases[target].values()
-        for optcases in reversed(optlists):
-            optcase = optcases[-1]
-            if ptid == str(optcase.local_id) or ptid == optcase.variant_id:
-                return optcase
-        return None
+# ####################################################################
 
 
 class repeattimer():
@@ -238,7 +80,7 @@ def draw_graph(getgraph, title, opts):
         global graph_plots, all_points, selected_points, similar_points # :(
 
         # remove old plots
-        old_points = [(p.sizered, p.speedup, p.local_id) for p in all_points]
+        old_points = [(p.sizered, p.speedup, p.variant) for p in all_points]
         for x in list(graph_plots): graph_plots.remove(x); x.remove()
 
         # get graph values
@@ -283,7 +125,7 @@ def draw_graph(getgraph, title, opts):
         # highlight new points
         if opts.follow and old_points:
             new_points = [p for p in all_points if (
-                    (p.sizered, p.speedup, p.local_id) not in old_points)]
+                    (p.sizered, p.speedup, p.variant) not in old_points)]
             attrsmap = {
                 'color'  : 'r', 'marker': 'o', 'markersize' : 20, 'linewidth' : 0,
                 'alpha' : 0.4, 'zorder' : 1 }
@@ -303,18 +145,18 @@ def draw_graph(getgraph, title, opts):
             return sorted(dp)[0][1]
         def highlight(p):
             # print point on console
-            p.printpoint()
+            print '-' * 40 + '\n' + point_str(p)
             # highlight point
             selected_points.set_visible(True)
             selected_points.set_data(p.sizered, p.speedup)
-            # highlight similar points (same variant_id)
+            # highlight similar points (same variant)
             sim = zip(*([(c.sizered, c.speedup) for c in all_points
-                         if c.variant_id == p.variant_id and c != p]))
+                         if c.variant == p.variant and c != p]))
             similar_points.set_visible(True)
             similar_points.set_data(sim and sim[0], sim and sim[1])
             # selected point legend
             main_legend = ax.legend_
-            lg = p.tostring(short=True, no_id=opts.anonymous)
+            lg = point_str(p, short=True, no_id=opts.anonymous)
             lp = pl.legend([selected_points], [lg], loc='lower right', numpoints=1)
             pl.setp(lp.get_texts(), fontsize='medium')
             lp.get_frame().set_alpha(0.5)
@@ -355,22 +197,35 @@ def draw_graph(getgraph, title, opts):
 # ####################################################################
 
 
-def getoptcases(dbfile, opts):
-    sp = optspace().read_atos_db(dbfile, opts.filter)
-    sp.add_groups(opts.groups)
-    sp.compute_speedups(opts.refid)
-    if not sp.targets: return []
-    opts.execname = opts.execname or sp.targets[-1]
-    optcases = sp.cases[opts.execname].values()
-    frontier = [c for c in optcases if c.onfront]
-    print '%s: %d points, %d on frontier' % (
-        dbfile, len(optcases), len(frontier))
+def point_str(point, short=False, no_id=False):
+    res = ''
+    res += 'speedup=%.2f%% runtime=%.2f\n' % (
+        point.speedup * 100, point.time)
+    res += 'reduction=%.2f%% binsize=%d' % (
+        point.sizered * 100, point.size)
+    if not no_id:
+        if short and len(point.variant) >= 45:
+            legend_id = point.variant[:25] + '...' + point.variant[-15:]
+        else: legend_id = point.variant
+        res += '\nid=' + legend_id
+    return res
+
+
+def getoptcases(dbpath, opts):
+    db = atos_lib.atos_db.db(dbpath)
+    targets = (opts.targets and opts.targets.split(',')
+               or list(set(db.get_results('$[*].target')))[-1:])
+    client = atos_lib.atos_client_results(db, targets, {}, opts.identifier)
+    client.compute_speedups(opts.refid)
+    frontier = client.compute_frontier()
+    optcases = client.get_results(objects=True).values()
+    print '%d points, %d on frontier' % (len(optcases), len(frontier))
     return optcases
 
 
-def optgraph(dbfile, opts):
+def optgraph(dbpath, opts):
 
-    optcases = getoptcases(dbfile, opts)
+    optcases = getoptcases(dbpath, opts)
 
     scatters, frontiers = [], []
 
@@ -415,7 +270,7 @@ def optgraph(dbfile, opts):
         partitions, attrs_values = {}, dict(scatters_def)
         for c in optcases:
             for (opt, val) in scatters_def:
-                if not re.match(opt, c.variant_id): continue
+                if not re.match(opt, c.variant): continue
                 partitions.setdefault(opt, []).append(c)
                 break
         partkeys = [x[0] for x in scatters_def if x[0] in partitions.keys()]
@@ -428,15 +283,15 @@ def optgraph(dbfile, opts):
         attrs = {'marker' : 'x', 'zorder' : 1, 'mew' : 2,
                  'markersize' : 9, 'label' : '_nolegend_'}
     if optcases:
-        frontiers += [([c for c in optcases if c.onfront], attrs)]
+        frontiers += [([c for c in optcases if c.on_frontier], attrs)]
 
     return scatters, frontiers
 
 
-def multgraph(dbfiles, opts):
+def multgraph(dbpathes, opts):
 
-    nbdb = len(dbfiles)
-    optcasesl = [getoptcases(f, opts) for f in dbfiles]
+    nbdb = len(dbpathes)
+    optcasesl = [getoptcases(f, opts) for f in dbpathes]
 
     scatters, frontiers = [], []
 
@@ -456,7 +311,7 @@ def multgraph(dbfiles, opts):
     for i in range(nbdb):
         attrs.update({'color' : colors[i]})
         if opts.frontier_only: attrs.update({'label' : 'frontier-' + labels[i]})
-        frontiers += [([c for c in optcasesl[i] if c.onfront], dict(attrs))]
+        frontiers += [([c for c in optcasesl[i] if c.on_frontier], dict(attrs))]
 
     return scatters, frontiers
 
@@ -501,49 +356,38 @@ if __name__ == "__main__":
                       action='store', type='string', default='',
                       help='atos-configurations labels')
     # atos options
-    parser.add_option('-e', '--exec', dest='execname',
+    parser.add_option('-t', '--targets', dest='targets',
                   action='store', type='string', default=None,
-                      help='set the executable name (default: None)')
+                      help='set the target list (default: None)')
     parser.add_option('-r', '--refid', dest='refid',
                       action='store', type='string', default='REF',
                       help='set the atos reference run id (default: REF)')
     parser.add_option('-f', dest='filter',
                       action='store', type='string', default=None,
                       help='filter out the points given by the regexp')
-    parser.add_option('-g', '--groups', dest='groups',
-                      action='store', type='string', default=None,
-                      help='add groups of targets (ex: g1:t1+t2,g2:t3) (default: None)')
     parser.add_option('-C', dest='configuration_path',
                       action='store', type='string', default="./atos-configurations",
                       help='set configuration path (default: ./atos-configurations)')
-    parser.add_option('-D', dest='configuration_path_2',
+    parser.add_option('-D', dest='configuration_pathes',
                       action='append', type='string', default=[],
                       help='set additional configuration path for frontier graph (default: None)')
 
     (opts, args) = parser.parse_args()
 
     #
-    dbfile = (args[0] if len(args) >= 1
-              else os.path.join(opts.configuration_path, "results.db"))
-
-    dbfiles = []
-    for configuration_path in opts.configuration_path_2:
-        dbfiles.append(os.path.join(configuration_path, "results.db"))
+    dbpath = args[0] if len(args) >= 1 else opts.configuration_path
 
     # graph title
-    title = 'Optimization Space for %s' % (opts.identifier or opts.execname)
+    title = 'Optimization Space for %s' % (opts.identifier or opts.targets)
     if opts.refid: title += ' [ref=%s]' % opts.refid
     if opts.filter: title += ' [filter=%s]' % opts.filter
 
-    if dbfiles:
+    if opts.configuration_pathes:
         # frontier graph
-        get_graph_f = (lambda: multgraph([dbfile] + dbfiles, opts))
+        get_graph_f = (lambda: multgraph([dbpath] + opts.configuration_pathes, opts))
 
     else:
         # classic optimization space graph
-        get_graph_f = (lambda: optgraph(dbfile, opts))
+        get_graph_f = (lambda: optgraph(dbpath, opts))
 
     draw_graph(get_graph_f, title=title, opts=opts)
-
-
-

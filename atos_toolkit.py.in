@@ -26,6 +26,8 @@ from random import randint, choice, sample, seed
 
 from logging import debug, info, warning, error
 
+import atos_lib
+
 
 # ####################################################################
 
@@ -127,23 +129,6 @@ class generator():
 
 # ####################################################################
 
-
-def average(l):
-    return sum(l) / len(l)
-
-
-def standard_deviation(l):
-    avg = average(l)
-    variance = average([((x - avg) ** 2) for x in l])
-    return math.sqrt(variance)
-
-
-def coef_variation(l):
-    return (standard_deviation(l) / average(l))
-
-
-# ####################################################################
-
 # Empirical iterative feedback-directed compilation plugins
 #   http://ctuning.org/wiki/index.php/
 #   CTools:CCC:Documentation:CCC_V2.5
@@ -154,7 +139,7 @@ def coef_variation(l):
 def gen_base():
     '''generate basic configurations'''
     for f in generator.optlevel.values():
-        results = yield f
+        yield f
 
 
 @generator
@@ -167,9 +152,10 @@ def gen_stdev(nbrun='10'):
         result = yield flags, variant
         results += [ result[1] ]
     debug('*** results: %s' % str(results))
-    debug('*** average: %s' % str(average(results)))
-    debug('*** stddev : %s' % str(standard_deviation(results)))
-    info('end stdev -> [%.1f%%]' % (coef_variation(results) * 100))
+    debug('*** average: %s' % str(atos_lib.average(results)))
+    debug('*** stddev : %s' % str(atos_lib.standard_deviation(results)))
+    info('end stdev -> [%.1f%%]' % (atos_lib.variation_coefficient(
+                results) * 100))
 
 
 @generator
@@ -178,7 +164,7 @@ def gen_rnd_uniform():
     while True:
         flags = [ generator.optlevel.rand() ]
         flags += [ f.rand() for f in generator.optlist if randint(0, 1) ]
-        result = yield ' '.join(flags)
+        yield ' '.join(flags)
 
 
 @generator
@@ -187,7 +173,7 @@ def gen_rnd_fixed(seqlen='5'):
     while True:
         flags = [ generator.optlevel.rand() ]
         flags += [ f.rand() for f in sample(generator.optlist, int(seqlen)) ]
-        result = yield ' '.join(flags)
+        yield ' '.join(flags)
 
 
 @generator
@@ -195,14 +181,13 @@ def gen_one_by_one(optlevel):
     '''try all flags one by one'''
     for flag in generator.optlist:
         for flagval in flag.values():
-            result = yield ' '.join([ optlevel, flagval ])
+            yield ' '.join([ optlevel, flagval ])
 
 
 @generator
 def gen_one_off_rnd(variantid, epsilon='0.001'):
     '''try removing flags from the configuration one by one'''
-    print variantid, epsilon
-    baseflags = atos_get_variant(variantid).flags
+    baseflags = atos_get_variant(variantid).conf.split()
     optlevel, flags = '', []
     # prepare flags list
     i, n = 0, len(baseflags)
@@ -256,17 +241,17 @@ def gen_simplf():
     info('gen_simplf')
     old_front_points = []
     while True:
-        old_front_points_ids = [p.local_id for p in old_front_points]
+        old_front_points_ids = [p.variant for p in old_front_points]
         cur_front_points = atos_get_variant('frontier')
         new_front_points = [p for p in cur_front_points
-                            if p.local_id not in old_front_points_ids]
+                            if p.variant not in old_front_points_ids]
         info('gen_simplf - new points: [%s]' % (
-                ','.join([str(p.local_id) for p in new_front_points])))
+                ','.join([p.variant for p in new_front_points])))
         if new_front_points == []: break
         old_front_points.extend(cur_front_points)
         for p in new_front_points:
-            info('gen_simplf - point: [%s]' % (str(p.local_id)))
-            generator = gen_one_off_rnd(p.variant_id)
+            info('gen_simplf - point: [%s]' % (p.variant))
+            generator = gen_one_off_rnd(p.variant)
             result = None
             while True:
                 try: flags, variant = generator.send(result)
@@ -333,20 +318,14 @@ def atos_init(build, run, getres,
         opt_config, opt_nbrun), check_status=True)
 
 
-def atos_opt_get_variant(variant, config, target, groups):
-    # import atos-graph python code:
-    import imp, commands
-    status, output = commands.getstatusoutput('which atos-graph')
-    assert status == 0, 'atos-graph not found in path'
-    atos_graph = imp.load_source('', output)
-    #
-    dbfile = os.path.join(config, 'results.db')
-    sp = atos_graph.optspace().read_atos_db(dbfile)
-    sp.add_groups(groups)
+def atos_opt_get_variant(variant, config, targets):
+    db = atos_lib.atos_db.db(config)
+    targets = (targets and targets.split(',')
+               or list(set(db.get_results('$[*].target')))[-1:])
+    client = atos_lib.atos_client_results(db, targets)
     if variant == 'frontier':
-        sp.compute_speedups()
-        return sp.get_frontier(target)
-    return sp.get_point(variant, target)
+        return client.compute_frontier()
+    return client.get_last_result(variant)
 
 
 def atos_get_old_results(variant, flags, config):
@@ -360,7 +339,7 @@ def atos_get_old_results(variant, flags, config):
         'atos-opt %s -n %s' % (opt_config, sflags), debug_out=False)
     variantid = output.split('\n')[0].split()[-1][:-3]
     oldres = atos_get_variant(variantid)
-    oldres = oldres and (oldres.binsize, oldres.runtime) or None
+    oldres = oldres and (oldres.size, oldres.time) or None
     debug('results for %s: %s' % (variantid, str(oldres)))
     return oldres
 
@@ -368,7 +347,7 @@ def atos_get_old_results(variant, flags, config):
 def atos_opt_run(flags, variant, profdir, noreplay, config, nbrun):
     def get_res(var):
         pt = atos_get_variant(var)
-        res = (pt.binsize, pt.runtime)
+        res = (pt.size, pt.time)
         debug('RES ' + str(res))
         return res
     def one_run(sflags):
@@ -406,8 +385,8 @@ def atos_opt_run(flags, variant, profdir, noreplay, config, nbrun):
     return None
 
 
-def atos_get_variant_wrapper(config, target, groups):
-    return lambda v: atos_opt_get_variant(v, config, target, groups)
+def atos_get_variant_wrapper(config, targets):
+    return lambda v: atos_opt_get_variant(v, config, targets)
 
 
 def atos_run_wrapper(profdir, noreplay, config, nbrun):
@@ -464,15 +443,12 @@ if __name__ == '__main__':
     group.add_option('-n', dest='nbrun',
                      action='store', type='int', default=None,
                      help='number of executions of run script (default: 1)')
-    group.add_option('--target', dest='target',
+    group.add_option('--targets', dest='targets',
                      action='store', type='string', default=None,
-                     help='target name for results (default: None)')
+                     help='target list for results (default: None)')
     group.add_option('-C', dest='atos_configurations',
                      action='store', type='string', default='./atos-configurations',
                      help='configuration path (default: ./atos-configurations)')
-    group.add_option('-g', '--groups', dest='groups',
-                     action='store', type='string', default=None,
-                     help='add groups of targets(default: None)')
     parser.add_option_group(group)
 
     # generator options
@@ -534,7 +510,7 @@ if __name__ == '__main__':
 
     # exploration loop
     atos_get_variant = atos_get_variant_wrapper(
-        opts.atos_configurations, opts.target, opts.groups)
+        opts.atos_configurations, opts.targets)
 
     seed(opts.seed)
 

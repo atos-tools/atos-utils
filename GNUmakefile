@@ -23,7 +23,7 @@ PREFIX=/usr/local
 VSTAMP=version.stamp
 VERSION:=$(shell $(srcdir)/config/update_version.sh $(VSTAMP))
 
-CONFIG_SCRIPTS_EXE_IN=atos-audit.in atos-raudit.in atos-deps.in atos-opt.in atos-run.in atos-profile.in atos-explore.in atos-play.in atos-graph.in atos-inline.in
+CONFIG_SCRIPTS_EXE_IN=atos-audit.in atos-raudit.in atos-deps.in atos-build.in atos-run.in atos-profile.in atos-explore.in atos-play.in atos-graph.in atos-inline.in
 CONFIG_SCRIPTS_LIB_IN=atos_toolkit.py.in atos_lib.py.in
 CONFIG_SCRIPTS_CFG_IN=flags.inline.gcc.4.6.2.cfg.in
 

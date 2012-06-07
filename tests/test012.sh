@@ -17,7 +17,7 @@ EOF
 $ROOT/bin/atos-audit sh ./build.sh
 $ROOT/bin/atos-deps sha
 rm *.o *.a
-$ROOT/bin/atos-opt
+$ROOT/bin/atos-build
 rm *.o *.a
 
 # -l specified .a with multiple -L
@@ -29,7 +29,7 @@ EOF
 $ROOT/bin/atos-audit sh ./build.sh
 $ROOT/bin/atos-deps sha
 rm *.o *.a
-$ROOT/bin/atos-opt
+$ROOT/bin/atos-build
 rm *.o *.a
 
 # multiple -l specified .a with multiple -L
@@ -43,6 +43,6 @@ EOF
 $ROOT/bin/atos-audit sh ./build.sh
 $ROOT/bin/atos-deps sha
 rm *.o *.a
-$ROOT/bin/atos-opt
+$ROOT/bin/atos-build
 rm *.o *.a
 

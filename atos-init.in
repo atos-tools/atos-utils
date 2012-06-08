@@ -26,7 +26,7 @@ set -e
 dir=`cd \`dirname $0\`; pwd`
 PROOT=${PROOT:-proot}
 
-executable=""
+executables=""
 configuration_path="./atos-configurations"
 opt_rebuild=""
 get_results_script=""
@@ -39,7 +39,7 @@ nbruns="1"
 verbose="0"
 
 version() {
-    echo "atos-explore version @VERSION@"
+    echo "atos-init version @VERSION@"
 }
 
 usage() {

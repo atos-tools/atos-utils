@@ -219,7 +219,7 @@ def getoptcases(dbpath, opts):
         db, targets, atos_lib.strtoquery(opts.query), opts.identifier)
     client.compute_speedups(opts.refid)
     frontier = client.compute_frontier()
-    optcases = client.get_results(objects=True).values()
+    optcases = client.get_results(objects=True)
     print '%d points, %d on frontier' % (len(optcases), len(frontier))
     return optcases
 

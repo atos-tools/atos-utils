@@ -192,8 +192,11 @@ class atos_client_results():
             return '<%s:%s>' % (self.target, self.variant)
 
         def __str__(self):
-            res = filter(lambda x: x[0] != 'results', self.__dict__.items())
-            return str(dict(res))
+            return str(self.dict())
+
+        def dict(self):
+            return dict(
+                filter(lambda x: x[0][0] != '_', self.__dict__.items()))
 
         def speedup(self, ref):
             self.speedup = ((ref.time / self.time) - 1.0)
@@ -205,7 +208,7 @@ class atos_client_results():
             newobj = atos_client_results.result(results[0].__dict__)
             # average of execution times
             newobj.time = average(map(lambda x: x.time, results))
-            newobj.results = results
+            newobj._results = results
             return newobj
 
         @staticmethod
@@ -216,17 +219,18 @@ class atos_client_results():
             newobj.size = sum(map(lambda x: x.size, results))
             newobj.target = group_name
             # last group results - last result of each target
-            newobj.last = atos_client_results.result(newobj.__dict__)
-            newobj.last.time = geometric_mean(
-                map(lambda x: x.results[-1].time, results))
-            #
-            newobj.results = results
+            newobj._last = atos_client_results.result(newobj.__dict__)
+            newobj._last.time = geometric_mean(
+                map(lambda x: x._results[-1].time, results))
+            newobj._results = results
             return newobj
 
     def __init__(self, atos_db, group_targets, query={}, group_name=None):
         self.db = atos_db
-        self.values = (group_targets, query)
+        if not group_targets:
+            group_targets = list(set(self.db.get_results('$[*].target')))
         group_name = group_name or '+'.join(group_targets)
+        self.values = (group_targets, query, group_name)
         # results: { variant : [ result_obj ] }
         self.results = self._get_group_results(group_targets, group_name, query)
 
@@ -243,6 +247,7 @@ class atos_client_results():
                     break
             if on_frontier: mustbe_on_frontier.add(c1)
             c1.on_frontier = on_frontier
+        self.frontier = mustbe_on_frontier
         return mustbe_on_frontier
 
     def compute_speedups(self, ref_variant='REF'):
@@ -253,19 +258,16 @@ class atos_client_results():
 
     def get_last_result(self, variant):
         assert variant in self.results.keys()
-        return self.results[variant].last
+        return self.results[variant]._last
 
-    def get_results(self, only_frontier=False, only_last=False, objects=False):
-        results = {}
-        for variant, result in self.results.items():
-            if only_frontier and not result.on_frontier:
-                continue
-            if only_last:
-                result = result.results[-1]
-            if not objects:
-                result = dict(
-                    filter(lambda x: x[0] != 'results', result.__dict__.items()))
-            results[variant] = result
+    def get_results(self, only_frontier=False, objects=False):
+        if only_frontier:
+            if not hasattr(self, 'frontier'):
+                self.compute_frontier()
+            results = self.frontier
+        else: results = self.results.values()
+        if not objects:
+            results = map(lambda x: x.dict(), results)
         return results
 
     def _get_group_results(self, group_targets, group_name, query):
@@ -312,30 +314,7 @@ class atos_client_db():
         self.db = atos_db
 
     def query(self, query={}, replacement={}):
-        results = self.db.get_results(query)
-        if replacement:
-            for result in results:
-                result.update(replacement)
-        return results
-
-    def push(self, other_db, query={}, replacement={}, force=False):
-        results = self.query(query, replacement)
-        return atos_client_db._transfer(other_db, results, force)
-
-    def pull(self, other_db, query={}, replacement={}, force=False):
-        results = atos_client_db(other_db).query(query, replacement)
-        return atos_client_db._transfer(self.db, results, force)
-
-    # dump results to file
-    def dump(self, outf, query={}):
-        results = self.db.get_results(query)
-        pprint_list(results)
-        return True, len(results)
-
-    # load new results from file
-    def load(self, inf, force=False):
-        results = json.load(inf)
-        return atos_client_db._transfer(self.db, results, force)
+        return atos_client_db.db_query(self.db, query, replacement)
 
     def add_result(self, entry):
         required_fields = set(atos_db.required_fields)
@@ -346,7 +325,24 @@ class atos_client_db():
         return True, entry
 
     @staticmethod
-    def _transfer(db, results, force):
+    def db_load(inf):
+        return json.load(inf)
+
+    @staticmethod
+    def db_dump(results, outf):
+        pprint_list(results, outf)
+        return True, len(results)
+
+    @staticmethod
+    def db_query(db, query={}, replacement={}):
+        results = db.get_results(query)
+        if replacement:
+            for result in results:
+                result.update(replacement)
+        return results
+
+    @staticmethod
+    def db_transfer(db, results, force):
         required_keys, missing_keys = set(atos_db.required_keys), set()
         if not force:
             for result in results:
@@ -429,16 +425,19 @@ def open_locked(filename, mode='r'):
         except: outf.close()
         time.sleep(1)
 
-def pprint_list(list):
-    if not list: print None; return
-    # one result per line
-    print '[',
+def pprint_list(list, out=None, text=False):
+    out = out or sys.stdout
+    if not list: print >>out, None; return
+    if text:
+        for x in list: print x
+        return
+    print >>out, '[',
     nb_elems = len(list)
     for i in range(nb_elems):
-        print '%s%s%s' % (
+        print >>out, '%s%s%s' % (
             i>0 and '  ' or '',
             json.dumps(list[i]), ((i + 1) < nb_elems) and ',\n' or ''),
-    print ']'
+    print >>out, ']'
 
 def info(msg):
     # do not print info on stdout (as it can be used for dump/load)
@@ -531,6 +530,9 @@ if __name__ == '__main__':
         subparser.add_option('-q', '--query', dest='query',
                 action='store', type='string', default='',
                 help='results query values (default: None)')
+        subparser.add_option('-t', '--text', dest='text',
+                action='store_true', default=False,
+                help='text output format (default: json)')
         subparser.epilog = 'Examples: \n' \
             '    query -q "variant:REF,compiler:gcc-4.*"\n' \
             '    query -q "$[?(@.target="aaa" && @.variant="REF")]"\n' \
@@ -538,9 +540,15 @@ if __name__ == '__main__':
         subparser.format_epilog = lambda x: subparser.epilog
         (opts, args) = subparser.parse_args(sys.argv[1:])
 
-        client = atos_client_db(atos_db.db(opts.configuration_path))
-        results = client.query(strtoquery(opts.query))
-        pprint_list(results)
+        if opts.configuration_path == '-':
+            results = results_filter(
+                atos_client_db.db_load(sys.stdin), strtoquery(opts.query))
+
+        else:
+            client = atos_client_db(atos_db.db(opts.configuration_path))
+            results = client.query(strtoquery(opts.query))
+
+        pprint_list(results, text=opts.text)
 
 
     # ################################################################
@@ -598,17 +606,16 @@ if __name__ == '__main__':
             subparser.error(
                 'expected a remote configuration_path (set with -R option)')
 
-        client = atos_client_db(atos_db.db(opts.configuration_path))
+        db = atos_db.db(opts.configuration_path)
+        results = atos_client_db.db_query(
+            db, strtoquery(opts.query), strtodict(opts.replacement))
 
         if opts.remote_configuration_path == '-':
-            status, output = client.dump(
-                sys.stdout, strtoquery(opts.query))
-
+            status, output = atos_client_db.db_dump(results, sys.stdout)
         else:
             other_db = atos_db.db(opts.remote_configuration_path)
-            status, output = client.push(
-                other_db, strtoquery(opts.query), strtodict(opts.replacement),
-                opts.force)
+            status, output = atos_client_db.db_transfer(
+                other_db, results, opts.force)
 
         if status:
             info('exported %d results' % (output))
@@ -645,16 +652,16 @@ if __name__ == '__main__':
             subparser.error(
                 'expected a remote configuration_path (set with -R option)')
 
-        client = atos_client_db(atos_db.db(opts.configuration_path))
+        db = atos_db.db(opts.configuration_path)
 
         if opts.remote_configuration_path == '-':
-            status, output = client.load(sys.stdin, opts.force)
-
+            results = atos_client_db.db_load(sys.stdin)
         else:
             other_db = atos_db.db(opts.remote_configuration_path)
-            status, output = client.pull(
-                other_db, strtoquery(opts.query), strtodict(opts.replacement),
-                opts.force)
+            results = atos_client_db.db_query(
+                other_db, strtoquery(opts.query), strtodict(opts.replacement))
+
+        status, output = atos_client_db.db_transfer(db, results, opts.force)
 
         if status:
             info('imported %d results' % (output))
@@ -682,29 +689,23 @@ if __name__ == '__main__':
                 action='store', type='string', default=None,
                 help='target group name (default: None)')
         subparser.add_option('-r', '--refid', dest='ref',
-                action='store', type='string', default=None,
+                action='store', type='string', default='REF',
                 help='reference variant id (default: None)')
         subparser.add_option('-f', '--frontier', dest='frontier',
                 action='store_true', default=False,
                 help='only print frontier points (default: False)')
-        subparser.add_option('-l', '--last', dest='last',
-                action='store_true', default=False,
-                help='only print last result (default: False)')
         subparser.epilog = \
             'Example: speedups -C. -q"target:bzip2,compiler:gcc" -rREF -f'
         (opts, args) = subparser.parse_args(sys.argv[1:])
 
         client = atos_client_results(
             atos_db.db(opts.configuration_path),
-            strtolist(opts.targets), strtodict(opts.query), opts.group_name)
+            opts.targets and strtolist(opts.targets),
+            strtoquery(opts.query), opts.group_name)
 
-        if opts.ref or opts.frontier:
-            client.compute_speedups(opts.ref)
-        if opts.frontier:
-            client.compute_frontier()
+        if opts.ref: client.compute_speedups(opts.ref)
 
-        for variant, result in client.get_results(opts.frontier, opts.last).items():
-            print variant, pformat(result)
+        pprint_list(client.get_results(opts.frontier))
 
 
     # ################################################################

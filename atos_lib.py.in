@@ -215,6 +215,11 @@ class atos_client_results():
             newobj.time = geometric_mean(map(lambda x: x.time, results))
             newobj.size = sum(map(lambda x: x.size, results))
             newobj.target = group_name
+            # last group results - last result of each target
+            newobj.last = atos_client_results.result(newobj.__dict__)
+            newobj.last.time = geometric_mean(
+                map(lambda x: x.results[-1].time, results))
+            #
             newobj.results = results
             return newobj
 
@@ -248,7 +253,7 @@ class atos_client_results():
 
     def get_last_result(self, variant):
         assert variant in self.results.keys()
-        return self.results[variant].results[-1]
+        return self.results[variant].last
 
     def get_results(self, only_frontier=False, only_last=False, objects=False):
         results = {}

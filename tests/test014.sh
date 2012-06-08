@@ -6,15 +6,28 @@ source `dirname $0`/common.sh
 
 TEST_CASE="ATOS inline exploration"
 
-# test temporarily skipped
-# until atos-inline can determine compiler version
-skip
+flags_list=""
 
-$ROOT/bin/atos-inline \
+# temporary fix
+# atos should be able to know compiler version
+
+gcc_version=`gcc --version | head -1 | sed 's/.* //'`
+if [ "$gcc_version" = "4.4.3" ]; then
+    flags_list=$ROOT/lib/atos/config/flags.inline.gcc.4.4.3.cfg
+elif [ "$gcc_version" = "4.6.2" ]; then
+    flags_list=$ROOT/lib/atos/config/flags.inline.gcc.4.6.2.cfg
+else
+    skip
+fi
+
+(
+$ROOT/bin/atos-init \
     -r "$ROOT/examples/sha1-c/run.sh" \
     -b "gcc -o sha1-c $ROOT/examples/sha1-c/sha.c $ROOT/examples/sha1-c/sha1.c" \
-    --max 5 --variants=base 2>&1
+
+$ROOT/bin/atos-inline -M5 -Vbase,fdo -F $flags_list
+) 2>&1
     
 [ -d atos-configurations ]
-[ `cat ./atos-configurations/results.db | grep "time: " | wc -l` -eq 6 ]
+[ `$ROOT/lib/atos/atos_lib.py query -q'variant:OPT-.*' | wc -l` -eq 10 ]
 

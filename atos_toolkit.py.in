@@ -28,6 +28,8 @@ from logging import debug, info, warning, error
 
 import atos_lib
 
+libdir = os.path.dirname(__file__)
+bindir = os.path.abspath(os.path.join(libdir, '..', '..', 'bin'))
 
 # ####################################################################
 
@@ -187,7 +189,7 @@ def gen_one_by_one(optlevel):
 @generator
 def gen_one_off_rnd(variantid, epsilon='0.001'):
     '''try removing flags from the configuration one by one'''
-    baseflags = atos_get_variant(variantid).conf.split()
+    baseflags = atos_get_result(variantid).conf.split()
     optlevel, flags = '', []
     # prepare flags list
     i, n = 0, len(baseflags)
@@ -242,7 +244,7 @@ def gen_simplf():
     old_front_points = []
     while True:
         old_front_points_ids = [p.variant for p in old_front_points]
-        cur_front_points = atos_get_variant('frontier')
+        cur_front_points = atos_get_result('frontier')
         new_front_points = [p for p in cur_front_points
                             if p.variant not in old_front_points_ids]
         info('gen_simplf - new points: [%s]' % (
@@ -294,31 +296,7 @@ def system(cmd, check_status=False, debug_out=True):
     return (status == 0), output
 
 
-def atos_init(build, run, getres,
-              config, restart, force=None, nbrun=None):
-    info('atos-init')
-    dbfile = os.path.join(config, 'results.db')
-    if restart and os.path.exists(dbfile):
-        system('/bin/rm -fr %s' % os.path.dirname(dbfile))
-    if os.path.exists(dbfile): return
-    #
-    opt_getres = getres and ('-t ' + getres) or ''
-    opt_config = config and ('-C %s' % config) or ''
-    opt_force = force and '-f' or ''
-    opt_nbrun = nbrun and ('-n %d' % nbrun) or ''
-    # atos initialization
-    system('atos-audit %s %s %s' % (
-            opt_config, opt_force, build), check_status=True)
-    system('atos-raudit %s %s %s' % (
-            opt_config, opt_getres, run), check_status=True)
-    system('atos-deps %s -a' % (
-        opt_config), check_status=True)
-    # reference run
-    system('atos-run %s %s -r' % (
-        opt_config, opt_nbrun), check_status=True)
-
-
-def atos_opt_get_variant(variant, config, targets):
+def atos_opt_get_result(variant, config, targets):
     db = atos_lib.atos_db.db(config)
     targets = (targets and targets.split(',')
                or list(set(db.get_results('$[*].target')))[-1:])
@@ -328,69 +306,39 @@ def atos_opt_get_variant(variant, config, targets):
     return client.get_last_result(variant)
 
 
-def atos_get_old_results(variant, flags, config):
-    lto = (variant == 'lto') or (variant == 'fdo+lto')
-    fdo = (variant == 'fdo') or (variant == 'fdo+lto')
-    flags += (variant == 'lipo') and ' -fripa' or ''
-    sflags = '-a "%s%s"' % (flags, lto and ' -flto' or '')
-    sflags = sflags + (fdo and (' -u "%s"' % flags) or '')
-    opt_config = config and ('-C %s' % config) or ''
-    status, output = system(
-        'atos-build %s -n %s' % (opt_config, sflags), debug_out=False)
-    variantid = output.split('\n')[0].split()[-1][:-3]
-    oldres = atos_get_variant(variantid)
-    oldres = oldres and (oldres.size, oldres.time) or None
-    debug('results for %s: %s' % (variantid, str(oldres)))
-    return oldres
-
-
-def atos_opt_run(flags, variant, profdir, noreplay, config, nbrun):
-    def get_res(var):
-        pt = atos_get_variant(var)
-        res = (pt.size, pt.time)
-        debug('RES ' + str(res))
-        return res
-    def one_run(sflags):
-        opt_config = config and ('-C %s' % config) or ''
-        opt_nbrun = nbrun and ('-n %d' % nbrun) or ''
-        if not system('atos-build %s %s' % (opt_config, sflags))[0]: return
-        status, output = system('atos-run %s %s -r %s' % (
-                opt_config, opt_nbrun, sflags))
-        if output: return get_res(output.split()[-1][:-3])
-        return
-    def profile(flags):
-        opt_config = config and ('-C %s' % config) or ''
-        opt_prof = profdir and ('-b %s' % profdir) or ''
-        sflags = '-g "%s"' % flags
-        return system('atos-profile %s %s %s' % (
-                opt_config, opt_prof, sflags))[0]
+def atos_opt_run(flags, variant, profdir, config, nbrun):
+    variant_options_flags = {
+        'base' : ('', ''),
+        'fdo' : ('-u', ''),
+        'lto' : ('-l', ''),
+        'fdo+lto' : ('-u -l', ''),
+        'lipo' : ('-u', '-fripa')}
     info('RUN [%s] [%s]' % (variant, flags))
-    if noreplay:
-        oldres = atos_get_old_results(variant, flags, config)
-        if oldres != None: return oldres
-    if variant == 'base':
-        return one_run('-a "%s"' % flags)
-    elif variant == 'lto':
-        return one_run('-a "%s -flto"' % flags)
-    elif variant == 'fdo':
-        if not profile(flags): return
-        return one_run('-a "%s" -u "%s"' % (flags, flags))
-    elif variant == 'fdo+lto':
-        if not profile(flags): return
-        return one_run('-a "%s -flto" -u "%s"' % (flags, flags))
-    elif variant == 'lipo':
-        flags = flags + ' ' + '-fripa'
-        if not profile(flags): return
-        return one_run('-a "%s" -u "%s"' % (flags, flags))
-    return None
+    profdir_option = profdir and ('-b %s' % profdir) or ''
+    variant_options, variant_flags = variant_options_flags[variant]
+    status, output = system(
+        '%s/atos-opt -C %s -n %s %s -r -a "%s %s" %s' % (
+            bindir, config, nbrun, profdir_option,
+            flags, variant_flags, variant_options))
+    if not (status and output):
+        info('FAILURE [%s] [%s]' % (variant, flags))
+        return None
+    variant_id = output.split()[-1][:-3]
+    result_point = atos_get_result(variant_id)
+    result = (result_point.size, result_point.time)
+    debug('RES ' + str(result))
+    return result
 
 
-def atos_get_variant_wrapper(config, targets):
-    return lambda v: atos_opt_get_variant(v, config, targets)
+def atos_get_result_wrapper(config, targets):
+    return lambda v: atos_opt_get_result(v, config, targets)
 
 
-def atos_run_wrapper(profdir, noreplay, config, nbrun):
-    return lambda f, v: atos_opt_run(f, v, profdir, noreplay, config, nbrun)
+def atos_run_wrapper(profdir, config, nbrun):
+    return lambda f, v: atos_opt_run(f, v, profdir, config, nbrun)
+
+
+# ####################################################################
 
 
 if __name__ == '__main__':
@@ -403,21 +351,15 @@ if __name__ == '__main__':
     parser.add_option('-d', '--debug', dest='debug',
                       action='store_const', const=10, default=20,
                       help='print debug information (default: False)')
-    parser.add_option('-c', '--restart', dest='restart',
-                      action='store_true', default=False,
-                      help='remove old results (default: False)')
     parser.add_option('--dryrun', dest='dryrun',
                       action='store_true', default=False,
                       help='only print commands (default: False)')
     parser.add_option('--log', dest='logfile',
-                      action='store', type='string', default='expl.log',
-                      help='log output to file (default: expl.log)')
+                      action='store', type='string', default=None,
+                      help='log output to file (default: None)')
     parser.add_option('--max', dest='max',
                      action='store', type='int', default=None,
                      help='maximum number of iterations (default: None)')
-    parser.add_option('--noreplay', dest='noreplay',
-                     action='store_true', default=False,
-                     help='do not replay configurations (default: False)')
     parser.add_option('--seed', dest='seed',
                      action='store', type='int', default=None,
                      help='set the seed for random generator (default: None)')
@@ -425,23 +367,11 @@ if __name__ == '__main__':
     # atos loop option
     group = optparse.OptionGroup(
         parser, 'ATOS Options', 'Configuration of ATOS exploration loop')
-    group.add_option('-b', '--build', dest='build',
-                     action='store', type='string', default='./build.sh',
-                     help='build script name (default: ./build.sh)')
     group.add_option('-B', '--profdir', dest='profdir',
                      action='store', type='string', default=None,
                      help='profile dir name (default: None)')
-    group.add_option('-f', '--force', dest='force',
-                     action='store_true', default=False,
-                     help='force rebuild (default: False)')
-    group.add_option('-r', '--run', dest='run',
-                     action='store', type='string', default='./run.sh',
-                     help='run script name (default: ./run.sh)')
-    group.add_option('-t', '--res', dest='getres',
-                     action='store', type='string', default=None,
-                     help='get_results script name (default: None)')
     group.add_option('-n', dest='nbrun',
-                     action='store', type='int', default=None,
+                     action='store', type='int', default=1,
                      help='number of executions of run script (default: 1)')
     group.add_option('--targets', dest='targets',
                      action='store', type='string', default=None,
@@ -483,11 +413,6 @@ if __name__ == '__main__':
 
     (opts, args) = parser.parse_args()
 
-    # add atos bin directory in PATH
-    atos_bin = os.path.abspath(os.path.join(
-            os.path.dirname(sys.argv[0]), '..', '..', 'bin'))
-    os.environ['PATH'] = atos_bin + ':' + os.environ.get('PATH', '')
-
     # generators setup
     generator.optlist = (
         opts.flags != None and opt_flag.list_from_ccc_file(opts.flags))
@@ -503,21 +428,16 @@ if __name__ == '__main__':
     conslog.setFormatter(logging.Formatter(fmtlog, fmtdate))
     logging.getLogger().addHandler(conslog)
     if opts.logfile:
-        filelog = logging.FileHandler(
-            opts.logfile, mode=(opts.restart and 'w' or 'a'))
+        filelog = logging.FileHandler(opts.logfile, mode='a')
         filelog.setFormatter(logging.Formatter(fmtlog, fmtdate))
         logging.getLogger().addHandler(filelog)
 
     # exploration loop
-    atos_get_variant = atos_get_variant_wrapper(
+    atos_get_result = atos_get_result_wrapper(
         opts.atos_configurations, opts.targets)
 
     seed(opts.seed)
 
-    atos_init(opts.build, opts.run, opts.getres,
-              opts.atos_configurations, opts.restart, opts.force, opts.nbrun)
-
     exploration_loop(opts.generators, maxiter=opts.max,
                      step=atos_run_wrapper(
-            opts.profdir, opts.noreplay, opts.atos_configurations, opts.nbrun))
-
+            opts.profdir, opts.atos_configurations, opts.nbrun))

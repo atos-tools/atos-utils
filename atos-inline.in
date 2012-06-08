@@ -25,8 +25,101 @@ set -e
 
 dir=`cd \`dirname $0\`; pwd`
 libdir=`cd $dir/../lib/atos; pwd`
+PROOT=${PROOT:-proot}
 
-config_file=$libdir/config/flags.inline.gcc.4.6.2.cfg
+configuration_path="./atos-configurations"
+opt_seed=""
+opt_debug=""
+opt_profdir=""
+nb_iter=100
+nb_runs=1
+flags_file=$libdir/config/flags.inline.gcc.4.6.2.cfg
+opt_levels="-Os,-O2,-O3"
+opt_variants="base,fdo,lto,fdo+lto"
 
-$libdir/atos_toolkit.py --flags=$config_file --gen-rnd-uniform "$@"
+#######################
+
+version() {
+    echo "atos-inline version @VERSION@"
+}
+
+usage() {
+    cat <<EOF
+
+Usage: atos-inline [options]
+
+Configuration Options:
+      -C <path> : configuration path [default: $configuration_path]
+      -n <nb> : number of executions of <run_script> [default: $nb_runs]
+      -b <path> : remote path to profile files [default: none]
+
+Exploration Options:
+      -F <flags_filename> : flags list filename [default: $flags_file]
+      -O <optim_levels> : optimization levels [default: $opt_levels]
+      -V <variants> : list of optimization variants [default: $opt_variants]
+      -S <seed> : seed for random generator [default: none]
+      -M <nb> : number of exploration loop iterations [default: $nb_iter]
+
+Misc Options
+      -q : quiet output
+      -d : debug mode
+      -h : output usage
+      -v : output version
+
+EOF
+}
+
+cleanup() {
+    :
+}
+trap "cleanup; exit 3" TERM STOP
+trap "cleanup" EXIT
+
+while getopts C:n:b:F:O:V:S:M:qdvh opt; do
+    case $opt in
+	C) configuration_path="$OPTARG"
+	    ;;
+	n) nb_runs="$OPTARG"
+	    ;;
+	b) opt_profdir="-B $OPTARG"
+	    ;;
+	F) flags_file="$OPTARG"
+	    ;;
+	O) opt_levels="$OPTARG"
+	    ;;
+	V) opt_variants="$OPTARG"
+	    ;;
+	S) opt_seed="--seed=$OPTARG"
+	    ;;
+	M) nb_iter="$OPTARG"
+	    ;;
+	q) quiet=1; opt_q=-q
+	    ;;
+	d) verbose=1; opt_debug="-d"
+	    ;;
+	v) version; exit 0
+	    ;;
+	h) usage; exit 0
+	    ;;
+	?) usage; exit 2
+	    ;;
+    esac
+done
+
+shift $((OPTIND - 1))
+
+if [ "$configuration_path" = "" ]; then
+    echo "`basename $0`: error: missing configuration path" >&2
+    exit 1
+fi
+
+if [ ! -f "$configuration_path/build.audit" -o ! -f "$configuration_path/run.audit" ]; then
+    echo "`basename $0`: error: missing build/run audit, use atos-init tool for the initial setup" >&2
+    exit 1
+fi
+
+$libdir/atos_toolkit.py -C $configuration_path \
+    $opt_debug $opt_seed $opt_profdir --max=$nb_iter -n $nb_runs \
+    --optlvl=$opt_levels --variants=$opt_variants --flags=$flags_file \
+    --gen-rnd-uniform "$@"
 

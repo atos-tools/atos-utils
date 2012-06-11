@@ -93,9 +93,9 @@ while getopts C:n:b:F:O:V:S:M:qdvh opt; do
 	    ;;
 	M) nb_iter="$OPTARG"
 	    ;;
-	q) quiet=1; opt_q=-q
+	q) opt_debug="-q"
 	    ;;
-	d) verbose=1; opt_debug="-d"
+	d) opt_debug="-d"
 	    ;;
 	v) version; exit 0
 	    ;;

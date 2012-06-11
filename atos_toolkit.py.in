@@ -351,6 +351,9 @@ if __name__ == '__main__':
     parser.add_option('-d', '--debug', dest='debug',
                       action='store_const', const=10, default=20,
                       help='print debug information (default: False)')
+    parser.add_option('-q', '--quiet', dest='debug',
+                      action='store_const', const=30,
+                      help='quiet mode (default: False)')
     parser.add_option('--dryrun', dest='dryrun',
                       action='store_true', default=False,
                       help='only print commands (default: False)')

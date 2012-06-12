@@ -11,11 +11,13 @@ flags_list=""
 # temporary fix
 # atos should be able to know compiler version
 
-gcc_version=`gcc --version | head -1 | sed 's/.* //'`
-if [ "$gcc_version" = "4.4.3" ]; then
-    flags_list=$ROOT/lib/atos/config/flags.inline.gcc.4.4.3.cfg
-elif [ "$gcc_version" = "4.6.2" ]; then
-    flags_list=$ROOT/lib/atos/config/flags.inline.gcc.4.6.2.cfg
+gcc_version=`gcc --version | head -1 | sed 's/.* //' | sed 's/\.[^.]*$//'`
+if [ "$gcc_version" = "4.4" ]; then
+    flags_list=$ROOT/lib/atos/config/flags.inline.gcc.4.4.cfg
+elif [ "$gcc_version" = "4.5" ]; then
+    flags_list=$ROOT/lib/atos/config/flags.inline.gcc.4.5.cfg
+elif [ "$gcc_version" = "4.6" ]; then
+    flags_list=$ROOT/lib/atos/config/flags.inline.gcc.4.6.cfg
 else
     skip
 fi

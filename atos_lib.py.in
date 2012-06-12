@@ -320,8 +320,8 @@ class atos_client_db():
         required_fields = set(atos_db.required_fields)
         if not set(entry.keys()).issuperset(required_fields):
             return False, list(required_fields.difference(set(entry.keys())))
-        entry = result_entry(opts.result)
-        db.add_results([entry])
+        entry = result_entry(entry)
+        self.db.add_results([entry])
         return True, entry
 
     @staticmethod

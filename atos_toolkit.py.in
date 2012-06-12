@@ -309,10 +309,10 @@ def atos_opt_get_result(variant, config, targets):
 def atos_opt_run(flags, variant, profdir, config, nbrun):
     variant_options_flags = {
         'base' : ('', ''),
-        'fdo' : ('-u', ''),
+        'fdo' : ('-f', ''),
         'lto' : ('-l', ''),
-        'fdo+lto' : ('-u -l', ''),
-        'lipo' : ('-u', '-fripa')}
+        'fdo+lto' : ('-f -l', ''),
+        'lipo' : ('-f', '-fripa')}
     info('RUN [%s] [%s]' % (variant, flags))
     profdir_option = profdir and ('-b %s' % profdir) or ''
     variant_options, variant_flags = variant_options_flags[variant]

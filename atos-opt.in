@@ -31,6 +31,7 @@ configuration_path="./atos-configurations"
 u_set=0
 l_set=0
 uopts=""
+aopts=""
 opt_q=""
 opt_r=""
 nbruns=1
@@ -50,9 +51,8 @@ Configuration Options:
 
 Optimization Options:
       -a "options" : append given options to the compilation commands [default: $options]
-      -A "options" : append given options to the compilation commands,
-                     excepted during instrumentation build [default: $uopts]
-      -u : use feedback directed optimizations [default: no]
+      -u "options" : use profile variant deduced by opts [default: $uopts]
+      -f : use feedback directed optimizations [default: no]
       -l : use link time optimizations [default: no]
 
 Profile options:
@@ -78,17 +78,17 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts C:a:A:lub:n:rqvh opt; do
+while getopts C:a:lu:fb:n:rqvh opt; do
     case $opt in
 	C) configuration_path="$OPTARG"
 	    ;;
 	a) options="$OPTARG"
 	    ;;
-	A) uopts="$OPTARG"
+	u) u_set=1; uopts="$OPTARG"
+	    ;;
+	f) u_set=1
 	    ;;
 	l) l_set=1
-	    ;;
-	u) u_set=1
 	    ;;
 	b) remote_profile_path="$OPTARG"
 	    ;;

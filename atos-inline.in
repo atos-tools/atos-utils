@@ -33,7 +33,7 @@ opt_debug=""
 opt_profdir=""
 nb_iter=100
 nb_runs=1
-flags_file=$libdir/config/flags.inline.gcc.4.6.2.cfg
+flags_file=$libdir/config/flags.inline.gcc.4.6.cfg
 opt_levels="-Os,-O2,-O3"
 opt_variants="base,fdo,lto,fdo+lto"
 

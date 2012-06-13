@@ -46,7 +46,7 @@ version() {
 usage() {
     cat <<EOF
 
-Usage: atos-inline [options]
+Usage: atos-inline [options] [variant]
 
 Configuration Options:
       -C <path> : configuration path [default: $configuration_path]

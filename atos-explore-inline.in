@@ -17,7 +17,7 @@
 # v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# Usage: get usage with atos-inline -h
+# Usage: get usage with atos-explore-inline -h
 #
 
 set -e
@@ -40,13 +40,13 @@ opt_variants="base,fdo,lto,fdo+lto"
 #######################
 
 version() {
-    echo "atos-inline version @VERSION@"
+    echo "atos-explore-inline version @VERSION@"
 }
 
 usage() {
     cat <<EOF
 
-Usage: atos-inline [options] [variant]
+Usage: atos-explore-inline [options] [variant]
 
 Configuration Options:
       -C <path> : configuration path [default: $configuration_path]

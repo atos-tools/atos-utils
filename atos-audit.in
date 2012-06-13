@@ -109,4 +109,4 @@ if [ "$outfile" = "" ]; then
     echo "$opt_rebuild" >"$configuration_path/build.force"
 fi
 
-exec env PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_DEPS_OUTPUT="$outfile" PROOT_ADDON_CC_DEPS_CCRE="$ccregexp" $PROOT -w $PWD / ${1+"$@"}
+exec env PROOT_IGNORE_ELF_INTERPRETER=1 PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_DEPS_OUTPUT="$outfile" PROOT_ADDON_CC_DEPS_CCRE="$ccregexp" $PROOT -w $PWD / ${1+"$@"}

@@ -207,13 +207,13 @@ elif [ "$1" = "" -a "$opt_rebuild" = 1 -a -f "$configuration_path/build.sh" ]; t
     if [ "$dryrun" = 1 ]; then
 	echo "Executing: $configuration_path/build.sh"
     else
-	env PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$APFLAGS $options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT -w $PWD / "$configuration_path/build.sh"  >>"$logfile"  2>&1 || failure=true
+	env PROOT_IGNORE_ELF_INTERPRETER=1 PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$APFLAGS $options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT -w $PWD / "$configuration_path/build.sh"  >>"$logfile"  2>&1 || failure=true
     fi
 else
     if [ "$dryrun" = 1 ]; then
 	echo "Executing: " ${1+"$@"}
     else
-	env PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$APFLAGS $options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT -w $PWD / ${1+"$@"}  >>"$logfile"  2>&1 || failure=true
+	env PROOT_IGNORE_ELF_INTERPRETER=1 PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$APFLAGS $options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT -w $PWD / ${1+"$@"}  >>"$logfile"  2>&1 || failure=true
     fi
 fi
 

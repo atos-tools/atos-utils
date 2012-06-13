@@ -284,11 +284,11 @@ fi
 
 n=1
 while [ "$n" -le "$nbruns" ]; do
-    echo "Running variant $variant" >>"$logfile"
+    echo "Running variant $variant $n/$nbruns" >>"$logfile"
     if [ -f "$configuration_path/run.sh" ]; then
-	get_time "$configuration_path/run.sh" >> "$logfile" 2>&1
+	get_time "$configuration_path/run.sh" >> "$logfile.$n" 2>&1
     else
-	get_time ${1+"$@"} >> "$logfile" 2>&1
+	get_time ${1+"$@"} >> "$logfile.$n" 2>&1
     fi
 
     if $failure; then
@@ -301,7 +301,7 @@ while [ "$n" -le "$nbruns" ]; do
 	    print_db_entry
 	else
 	    if [ "$get_results_script" != "" ]; then
-		$get_results_script >>$tmpfile 2>&1 || failure=true
+		$get_results_script < "$logfile.$n" >>$tmpfile 2>&1 || failure=true
 	    fi
 	    if [ `grep -c "^ATOS: " $tmpfile` -ge 1 ]; then
 		identifiers=`grep "^ATOS: " $tmpfile | awk '{ print $2 }' | sed 's/://' | sort -u`
@@ -319,7 +319,8 @@ while [ "$n" -le "$nbruns" ]; do
 	    fi
 	fi
     fi
-
+    cat "$logfile.$n" >> "$logfile"
+    rm "$logfile.$n"
     if $failure; then
 	[ "$quiet" = 1 ] || echo "FAILURE while running variant $variant..."
 	echo "FAILURE while running variant $variant" >>"$logfile"

@@ -34,7 +34,7 @@ $ROOT/bin/atos-opt -r -a "-O3"
 
 nb_frontier=`$ROOT/lib/atos/atos_lib.py speedups -C atos-configurations -f | wc -l`
 
-$ROOT/bin/atos-inline -q -M1 -F $flags_list frontier OPT-O2
+$ROOT/bin/atos-explore-inline -q -M1 -F $flags_list frontier OPT-O2
 
 [ -d atos-configurations ]
 

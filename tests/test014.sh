@@ -27,7 +27,7 @@ $ROOT/bin/atos-init \
     -r "$ROOT/examples/sha1-c/run.sh" \
     -b "gcc -o sha1-c $ROOT/examples/sha1-c/sha.c $ROOT/examples/sha1-c/sha1.c" \
 
-$ROOT/bin/atos-inline -M5 -Vbase,fdo -F $flags_list
+$ROOT/bin/atos-explore-inline -M5 -Vbase,fdo -F $flags_list
 ) 2>&1
     
 [ -d atos-configurations ]

@@ -202,22 +202,23 @@ class DependencyGraphBuilder:
     def build_graph(self):
         """ Builds Add a dependency consisting of a node and input/output lists. """
         self.graph.add_node("ROOT")
+        referenced_outputs = set()
         if self.targets == "all" or self.targets == "last":
-            targets = []
             for i in range(len(self.deplist)):
                 dependency = self.deplist[len(self.deplist)-i-1]
                 if len(dependency['outputs']) != 1:
                     continue
                 if dependency['kind'] == "CCLD" and len(dependency['outputs']) == 1:
-                    targets.append(dependency['outputs'][0])
+                    referenced_outputs.add(dependency['outputs'][0])
                     if self.targets == "last":
                         break
+            targets = list(referenced_outputs)
         else:
             targets = self.targets
         unmatched_targets = targets
         available_inputs = set()
-        referenced_outputs = set()
         last_target_node = None
+        referenced_outputs = set()
 
         for i in range(len(self.deplist)):
             dependency = self.deplist[len(self.deplist)-i-1]

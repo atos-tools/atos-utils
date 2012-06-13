@@ -20,6 +20,8 @@
 # Usage: get usage with atos-toolkit -h
 #
 
+VERSION="@VERSION@"
+
 import sys, os, itertools, math
 
 from random import randint, choice, sample, seed
@@ -306,20 +308,43 @@ def atos_opt_get_result(variant, config, targets):
     return client.get_last_result(variant)
 
 
-def atos_opt_run(flags, variant, profdir, config, nbrun):
+def atos_opt_get_variant_conf(variant, config, base_opts):
+    db = atos_lib.atos_db.db(config)
+    client = atos_lib.atos_client_db(db)
+    results = client.query({'variant' : variant})
+    if not results: return None
+    conf_opts = results[0].get('conf', ''), results[0].get('uconf', '')
+    base_opts = base_opts or ['', '']
+    conf_opts = map(lambda (x,y): '%s%s%s' % (x, x and ' ' or '', y),
+                    zip(base_opts, conf_opts))
+    return conf_opts
+
+
+def atos_opt_get_frontier(config, targets, query={}):
+    db = atos_lib.atos_db.db(config)
+    client = atos_lib.atos_client_results(
+        db, targets and atos_lib.strtolist(targets), query)
+    results = client.get_results(only_frontier = True)
+    return map(lambda x: x.get('variant', ''), results)
+
+
+def atos_opt_run(flags, variant, profdir, config, nbrun, baseopts):
     variant_options_flags = {
         'base' : ('', ''),
         'fdo' : ('-f', ''),
         'lto' : ('-l', ''),
         'fdo+lto' : ('-f -l', ''),
         'lipo' : ('-f', '-fripa')}
-    info('RUN [%s] [%s]' % (variant, flags))
+    info('RUN [%s] [%s] %s' % (variant, flags, baseopts or ''))
     profdir_option = profdir and ('-b %s' % profdir) or ''
     variant_options, variant_flags = variant_options_flags[variant]
+    base_flags, base_uflags = '', ''
+    if baseopts: base_flags, base_uflags = baseopts
+    base_uflags = base_uflags and '-u ' + base_uflags or ''
     status, output = system(
-        '%s/atos-opt -C %s -n %s %s -r -a "%s %s" %s' % (
+        '%s/atos-opt -C %s -n %s %s -r -a "%s %s %s" %s %s' % (
             bindir, config, nbrun, profdir_option,
-            flags, variant_flags, variant_options))
+            base_flags, flags, variant_flags, variant_options, base_uflags))
     if not (status and output):
         info('FAILURE [%s] [%s]' % (variant, flags))
         return None
@@ -334,8 +359,8 @@ def atos_get_result_wrapper(config, targets):
     return lambda v: atos_opt_get_result(v, config, targets)
 
 
-def atos_run_wrapper(profdir, config, nbrun):
-    return lambda f, v: atos_opt_run(f, v, profdir, config, nbrun)
+def atos_run_wrapper(profdir, config, nbrun, baseopts):
+    return lambda f, v: atos_opt_run(f, v, profdir, config, nbrun, baseopts)
 
 
 # ####################################################################
@@ -345,7 +370,9 @@ if __name__ == '__main__':
 
     import optparse, logging
     parser = optparse.OptionParser(
-        description='Optimization space exploration loop')
+        description='Optimization space exploration loop',
+        usage='%prog action [options] [variants]',
+        version="%prog version " + VERSION)
 
     # general options
     parser.add_option('-d', '--debug', dest='debug',
@@ -397,6 +424,9 @@ if __name__ == '__main__':
                      action='store', type='string',
                      default='base,fdo,lto,fdo+lto',
                      help='list of variants (default: base,fdo,lto,fdo+lto)')
+    group.add_option('--base-opts', dest='base_opts',
+                     action='store', type='string', default=None,
+                     help='options to be set for each build (default: None)')
     parser.add_option_group(group)
 
     # generators
@@ -422,6 +452,14 @@ if __name__ == '__main__':
     generator.optlevel = opt_flag.optlevel(opts.optlvl.split(','))
     generator.variants = opts.variants.split(',')
 
+    if opts.base_opts:
+        opts.base_opts = opts.base_opts.split(',')
+        if len(opts.base_opts) < 2: opts.base_opts += ['']
+
+    if opts.base_opts or args:
+        generator.optlevel = opt_flag.optlevel([''])
+        generator.variants = ['base']
+
     # logging setup
     fmtlog = '# %(asctime)-15s %(levelname)s: %(message)s'
     fmtdate='[%d-%m %H:%M:%S]'
@@ -441,6 +479,21 @@ if __name__ == '__main__':
 
     seed(opts.seed)
 
-    exploration_loop(opts.generators, maxiter=opts.max,
-                     step=atos_run_wrapper(
-            opts.profdir, opts.atos_configurations, opts.nbrun))
+    if args:
+        for variant in args:
+            if variant == 'frontier':
+                args.extend(atos_opt_get_frontier(
+                        opts.atos_configurations, opts.targets))
+                continue
+            base_opts = atos_opt_get_variant_conf(
+                variant, opts.atos_configurations, opts.base_opts)
+            if not base_opts:
+                warning('variant not found: ' + variant)
+                continue
+            exploration_loop(opts.generators, maxiter=opts.max,
+                             step=atos_run_wrapper(
+                    opts.profdir, opts.atos_configurations, opts.nbrun, base_opts))
+    else:
+        exploration_loop(opts.generators, maxiter=opts.max,
+                         step=atos_run_wrapper(
+                opts.profdir, opts.atos_configurations, opts.nbrun, opts.base_opts))

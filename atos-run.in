@@ -278,6 +278,7 @@ fi
 n=1
 while [ "$n" -le "$nbruns" ]; do
     echo "Running variant $variant $n/$nbruns" >>"$logfile"
+    rm -f "$logfile.$n"
     if [ -f "$configuration_path/run.sh" ]; then
 	get_time "$configuration_path/run.sh" >> "$logfile.$n" 2>&1
     else

@@ -1,0 +1,103 @@
+#if (defined(GCC) && (MAJOR >= 4) && (MINOR >= 4))
+# flags for 4.4
+3, 2, -ftree-dce, -fno-tree-dce
+3, 2, -ftree-loop-optimize, -fno-tree-loop-optimize
+3, 2, -fivopts, -fno-ivopts
+3, 2, -fmove-loop-invariants, -fno-move-loop-invariants
+3, 2, -fpeel-loops, -fno-peel-loops
+3, 2, -ftree-loop-distribution, -fno-tree-loop-distribution
+3, 2, -ftree-loop-im, -fno-tree-loop-im
+3, 2, -ftree-loop-ivcanon, -fno-tree-loop-ivcanon
+3, 2, -ftree-vectorize, -fno-tree-vectorize
+3, 2, -funroll-loops, -fno-unroll-loops
+3, 2, -funroll-all-loops, -fno-unroll-all-loops
+3, 2, -funswitch-loops, -fno-unswitch-loops
+3, 2, -ftree-scev-cprop, -fno-tree-scev-cprop
+3, 2, -fcheck-data-deps, -fno-check-data-deps
+3, 2, -fprefetch-loop-arrays, -fno-prefetch-loop-arrays
+1, 1, 1000, --param min-vect-loop-bound=
+1, 1, 1000, --param max-unrolled-insns=
+1, 1, 128, --param max-unroll-times=
+1, 1, 1000, --param max-average-unrolled-insns=
+1, 1, 5000, --param max-once-peeled-insns=
+1, 1, 5000, --param max-peeled-insns=
+1, 1, 128, --param max-peel-times=
+1, 1, 5000, --param max-completely-peeled-insns=
+1, 1, 128, --param max-completely-peel-times=
+1, 1, 1000, --param max-unswitch-insns=
+1, 1, 10, --param max-unswitch-level=
+1, 1, 10, --param max-variable-expansions-in-unroller=
+1, 1, 500, --param lim-expensive=
+1, 1, 100, --param max-iterations-computation-cost=
+1, 1, 100, --param iv-consider-all-candidates-bound=
+1, 1, 5000, --param iv-max-considered-uses=
+1, 1, 50, --param iv-always-prune-cand-set-bound=
+1, 1, 64, -falign-loops=
+1, 1, 64, -ftree-parallelize-loops=
+3, 2, -fexpensive-optimizations, -fno-expensive-optimizations
+3, 2, -frerun-cse-after-loop, -fno-rerun-cse-after-loop
+3, 2, -funsafe-loop-optimizations, -fno-unsafe-loop-optimizations
+3, 2, -fsplit-ivs-in-unroller, -fno-split-ivs-in-unroller
+3, 2, -ftree-vect-loop-version, -fno-tree-vect-loop-version
+3, 2, -fvariable-expansion-in-unroller, -fno-variable-expansion-in-unroller
+3, 2, -fvect-cost-model, -fno-vect-cost-model
+3, 2, -fpredictive-commoning, -fno-predictive-commoning
+#if defined(GRAPHITE_ENABLED)
+3, 2, -floop-block, -fno-loop-block
+3, 2, -floop-interchange, -fno-loop-interchange
+3, 2, -floop-strip-mine, -fno-loop-strip-mine
+3, 2, -ftree-loop-linear, -fno-tree-loop-linear
+3, 2, -fgraphite-identity, -fno-graphite-identity
+#endif
+#endif
+
+#if (defined(GCC) && (MAJOR >= 4) && (MINOR >= 5))
+# 4.5 4.6
+3, 2, -ftree-slp-vectorize, -fno-tree-slp-vectorize
+1, 1, 128, --param max-completely-peel-loop-nest-depth=
+#if defined(GRAPHITE_ENABLED)
+3, 2, -floop-flatten, -fno-loop-flatten
+1, 4, 128, --param graphite-max-nb-scop-params=
+1, 32, 1024, --param graphite-max-bbs-per-function=
+1, 4, 256, --param loop-block-tile-size=
+#endif
+#endif
+
+#if 0
+# unused for now
+#
+# 4.4
+#
+# freschedule-modulo-scheduled-loops
+# fsel-sched-pipelining
+# fsel-sched-pipelining-outer-loops
+#
+# max-iterations-to-track
+# sms-max-ii-factor
+# sms-dfa-history
+# sms-loop-average-count-threshold
+# align-loop-iterations
+# max-predicted-iterations
+# vect-max-version-for-alignment-checks
+# vect-max-version-for-alias-checks
+# loop-invariant-max-bbs-in-loop
+#
+# sms-min-sc (not in 4.5)
+#
+# 4.5 4.6
+#
+# floop-parallelize-all
+# ftree-loop-if-convert
+# fira-loop-pressure
+#
+# ira-loop-reserved-regs
+# min-insn-to-prefetch-ratio
+# prefetch-min-insn-to-mem-ratio
+#
+# 4.6
+#
+# ftree-loop-if-convert-stores
+# ftree-loop-distribute-patterns
+#
+#endif
+

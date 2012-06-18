@@ -1,0 +1,169 @@
+#!/usr/bin/env bash
+#
+# Copyright (C) STMicroelectronics Ltd. 2012
+#
+# This file is part of ATOS.
+#
+# ATOS is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License v2.0
+# as published by the Free Software Foundation
+#
+# ATOS is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
+#
+#
+# Usage: get usage with atos-config -h
+#
+
+set -e
+[ "$DEBUG" = "" ] || set -x
+dir=`cd \`dirname $0\`; pwd`
+libdir=`cd $dir/../lib/atos; pwd`
+
+configuration_path="./atos-configurations"
+
+
+#######################
+
+version() {
+    echo "atos-config version @VERSION@"
+}
+
+usage() {
+    cat <<EOF
+
+Usage: atos-config [options]
+
+Configuration Options:
+      -C <path> : configuration path [default: $configuration_path]
+
+Misc Options
+      -h : output usage
+      -v : output version
+
+EOF
+}
+
+cleanup() {
+    [ ! -f "$tmpfile" ] || rm -f "$tmpfile"
+    [ ! -f "$tstfile" ] || rm -f "$tstfile"
+}
+trap "cleanup; exit 3" TERM STOP
+trap "cleanup" EXIT
+tmpfile=`mktemp /tmp/atos-inst.XXXXXX`
+tstfile=`mktemp /tmp/atos-inst.XXXXXX`
+
+
+while getopts C:q:cvh opt; do
+    case $opt in
+	C) configuration_path="$OPTARG"
+	    ;;
+	v) version; exit 0
+	    ;;
+	h) usage; exit 0
+	    ;;
+	?) usage; exit 2
+	    ;;
+    esac
+done
+
+shift $((OPTIND - 1))
+
+if [ "$configuration_path" = "" -o ! -d "$configuration_path" ]; then
+    echo "`basename $0`: error: missing or inexistent configuration path" >&2
+    exit 1
+fi
+
+
+#######################
+
+compiler_test()
+{
+    compiler=$1
+
+    echo "int main(void) { return 0; }" > $tstfile
+
+    # for now, it probably works only for gcc
+
+    # compiler id
+    name=`$compiler -v 2>&1 | tail -1 | cut -d' ' -f1`
+    target=`$compiler -dumpmachine`
+    version=`$compiler -dumpversion`
+    echo "id $name-$target-$version"
+
+    # compiler name
+    echo "name $name"
+
+    # version number (major.minor.patchlevel)
+    echo "version $version"
+
+    # target machine
+    echo "target $target"
+
+    # driver version string
+    result=`echo \`$compiler -v 2>&1\``
+    echo "driver_version $result"
+
+    # lto
+    result=`$compiler -xc -flto $tstfile 2>/dev/null && echo 1 || echo 0`
+    echo "lto_enabled $result"
+
+    # plugins
+    result=`$compiler -v --help 2>&1 | grep -e "-fplugin=" | wc -l`
+    echo "plugins_enabled $result"
+
+    # graphite
+    result=`$compiler -xc -floop-block $tstfile 2>/dev/null && echo 1 || echo 0`
+    echo "graphite_enabled $result"
+}
+
+json_config_flags_file()
+{
+    pycmd="import atos_lib;"
+    pycmd="$pycmd cfg = atos_lib.json_config(\"$config_file\");"
+    pycmd="$pycmd print cfg.flags_for_flagfiles()"
+    python -c "$pycmd"
+}
+
+json_config_add_compiler()
+{
+    descr_file=$1
+    pycmd="import atos_lib;"
+    pycmd="$pycmd cfg = atos_lib.json_config(\"$config_file\");"
+    pycmd="$pycmd cfg.add_compiler(\"$descr_file\")"
+    python -c "$pycmd"
+}
+
+prepare_flag_files()
+{
+    preprocessor=`cat $configuration_path/compilers | head -1`
+    [ -f $preprocessor ] || return
+
+    flagsdefs=`json_config_flags_file`
+    for flags in $libdir/config/flags.*.cfg; do
+	dest=$configuration_path/`basename $flags`
+	$preprocessor -xassembler-with-cpp -P -E $flagsdefs - < $flags > $dest
+    done
+}
+
+
+export PYTHONPATH=$libdir:$PYTHONPATH
+
+config_file=$configuration_path/config.json
+
+/bin/rm -f $config_file
+
+if [ -f "$configuration_path/compilers" ]; then
+    for compiler in `cat $configuration_path/compilers`; do
+	compiler_test $compiler > $tmpfile
+	json_config_add_compiler $tmpfile
+    done
+    prepare_flag_files
+fi
+
+

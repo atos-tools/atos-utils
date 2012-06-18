@@ -22,6 +22,7 @@
 VERSION="@VERSION@"
 
 import os, sys, re, math, itertools, time, fcntl, json
+import jsonlib
 import cPickle as pickle
 from pprint import pprint, pformat
 
@@ -356,6 +357,68 @@ class atos_client_db():
 # ####################################################################
 
 
+class json_config():
+
+    def __init__(self, filename):
+        self.filename = filename
+        self._create()
+        with open(self.filename) as inf:
+            self.config = json.load(inf)
+
+    def _create(self):
+        if os.path.exists(self.filename): return
+        self.config = {}
+        self._dump()
+
+    def _dump(self):
+        json.dump(self.config, open(self.filename, 'w'))
+
+    def _compiler_features(self):
+        feature_sets = []
+        for compiler in self.config.setdefault('compilers', []):
+            feature_sets += [
+                set([ k for (k,v) in compiler.items() if k.endswith('_enabled')
+                      and v == '1'])]
+        if not feature_sets: return []
+        enabled = feature_sets[0]
+        for features in feature_sets:
+            enabled = enabled.intersection(features)
+        return enabled
+
+    def query(self, query, print_res=False):
+        results = jsonlib.search(self.config, query)
+        if print_res: pprint_list(results, text=True)
+        return results
+
+    def add_compiler(self, descr_file):
+        new_cpl = {}
+        for line in open(descr_file):
+            k, v = line.strip().split(' ', 1)
+            new_cpl[k] = v
+        self.config.setdefault('compilers', []).append(new_cpl)
+        self._dump()
+
+    def flags_for_flagfiles(self):
+        flags = []
+        first_compiler = self.config.get('compilers', [None])[0]
+        if first_compiler:
+            # compiler name
+            flags += ['-D%s' % first_compiler['name'].upper()]
+            # compiler version
+            version = first_compiler['version'].split('.', 2)
+            if len(version) >= 1:
+                flags += ['-DMAJOR=%s' % version[0]]
+            if len(version) >= 2:
+                flags += ['-DMINOR=%s' % version[1]]
+            if len(version) >= 3:
+                flags += ['-DPATCH_LEVEL=%s' % version[2]]
+        # compiler features
+        flags.extend(['-D%s' % (f.upper()) for f in self._compiler_features()])
+        return ' '.join(flags)
+
+# ####################################################################
+
+
 def timer(func):
     def wrapper(*args, **kwargs):
         t0 = time.time()
@@ -402,7 +465,6 @@ def strtolist(s):
 def results_filter(results, query):
     if not query: return results
     if isinstance(query, str):
-        import jsonlib
         return jsonlib.search(results, query)
     return (filter(lambda x: all(
                 map(lambda (k,v): re.match('^%s$' % v, x.get(k, '')),

@@ -16,4 +16,5 @@ $ROOT/lib/atos/atos_lib.py speedups -f \
     | $ROOT/lib/atos/atos_lib.py query -C- -t -q'$[*].variant' \
     > frontier.variant.txt
 
-[ `cat frontier.variant.txt` = "OPT-O2" ]
+# frontier can be the REF point
+[ `cat frontier.variant.txt | wc -l` -ne 0 ]

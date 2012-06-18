@@ -86,7 +86,13 @@ compiler_test()
 {
     compiler=$1
 
-    echo "int main(void) { return 0; }" > $tstfile
+    cat > $tstfile <<EOF
+#include <stdio.h>
+int main(void) {
+  int i; for (i = 0; i < 10; i++) printf("hello\n");
+  return 0;
+}
+EOF
 
     # for now, it probably works only for gcc
 
@@ -110,7 +116,7 @@ compiler_test()
     echo "driver_version $result"
 
     # lto
-    result=`$compiler -xc -flto $tstfile 2>/dev/null && echo 1 || echo 0`
+    result=`$compiler -O2 -xc -flto $tstfile 2>/dev/null && echo 1 || echo 0`
     echo "lto_enabled $result"
 
     # plugins
@@ -118,7 +124,7 @@ compiler_test()
     echo "plugins_enabled $result"
 
     # graphite
-    result=`$compiler -xc -floop-block $tstfile 2>/dev/null && echo 1 || echo 0`
+    result=`$compiler -O2 -xc -floop-block $tstfile 2>/dev/null && echo 1 || echo 0`
     echo "graphite_enabled $result"
 }
 

@@ -168,5 +168,7 @@ else
     fi
 fi
 
+$dir/atos-config -C "$configuration_path"
+
 # reference run	
 $dir/atos-run -C "$configuration_path" -n "$nbruns" $opt_q -r

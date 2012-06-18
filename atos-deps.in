@@ -142,6 +142,16 @@ class DependencyGraph:
             return value['command']['cwd'][self.common_profdir_prefix_len:]
         else: assert 0
 
+    def get_compilers(self):
+        """ Get the list of compilers. """
+        compilers = set()
+        for node in self.dg.nodes():
+            for attr, value in self.dg.node_attr[node]:
+                if attr != 'dependency' or value['kind'] not in ["CC", "CCLD"]:
+                    continue
+                compilers.add(value['command']['arg0'])
+        return list(compilers)
+
     def output_makefile(self,makefile):
         """ Get a parallelizable makefile for rebuilding the target. """
         mkfile = open(makefile,"w")
@@ -631,11 +641,19 @@ graph = builder.get_graph()
 graph.output_makefile(output_name)
 
 # For now only write targets if configuration dir is there
-skip=False
 try:
     f = open(os.path.join(configuration_path, "targets"), "w")
-except Exception:
-    skip=True
-if not skip:
+except:
+    pass
+else:
     f.write("\n".join(graph.get_targets()) + "\n")
+    f.close()
+
+# For now only write compilers if configuration dir is there
+try:
+    f = open(os.path.join(configuration_path, "compilers"), "w")
+except:
+    pass
+else:
+    f.write('\n'.join(graph.get_compilers()) + '\n')
     f.close()

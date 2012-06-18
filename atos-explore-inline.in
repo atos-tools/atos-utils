@@ -33,7 +33,7 @@ opt_debug=""
 opt_profdir=""
 nb_iter=100
 nb_runs=1
-flags_file=$libdir/config/flags.inline.gcc.4.6.cfg
+flags_file=""
 opt_levels="-Os,-O2,-O3"
 opt_variants="base,fdo,lto,fdo+lto"
 
@@ -54,7 +54,7 @@ Configuration Options:
       -b <path> : remote path to profile files [default: none]
 
 Exploration Options:
-      -F <flags_filename> : flags list filename [default: $flags_file]
+      -F <flags_filename> : flags list filename [default: <configuration_path>/flags.inline.cfg]
       -O <optim_levels> : optimization levels [default: $opt_levels]
       -V <variants> : list of optimization variants [default: $opt_variants]
       -S <seed> : seed for random generator [default: none]
@@ -113,8 +113,15 @@ if [ "$configuration_path" = "" ]; then
     exit 1
 fi
 
+[ "$flags_file" != "" ] || flags_file=$configuration_path/flags.inline.cfg
+
 if [ ! -f "$configuration_path/build.audit" -o ! -f "$configuration_path/run.audit" ]; then
     echo "`basename $0`: error: missing build/run audit, use atos-init tool for the initial setup" >&2
+    exit 1
+fi
+
+if [ ! -f "$flags_file" ]; then
+    echo "`basename $0`: error: file not found: $flags_file" >&2
     exit 1
 fi
 

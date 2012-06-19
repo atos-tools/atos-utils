@@ -30,6 +30,7 @@ options=""
 configuration_path="./atos-configurations"
 u_set=0
 l_set=0
+f_set=0
 uopts=""
 aopts=""
 opt_q=""
@@ -86,7 +87,7 @@ while getopts C:a:lu:fb:n:rqvh opt; do
 	    ;;
 	u) u_set=1; uopts="$OPTARG"
 	    ;;
-	f) u_set=1
+	f) u_set=1; f_set=1
 	    ;;
 	l) l_set=1
 	    ;;
@@ -109,13 +110,14 @@ done
 
 shift $((OPTIND - 1))
 
-[ "$l_set" = 0 ] || uopts="$uopts -flto"
+[ "$f_set" = 0 -o "$uopts" != "" ] || uopts="$options"
+[ "$l_set" = 0 ] || options="$options -flto"
 
 if [ "$u_set" = 1 ]; then
-    $dir/atos-profile -C "$configuration_path" $opt_q -b "$remote_profile_path" -g "$options"
-    $dir/atos-build -C "$configuration_path" $opt_q -u "$options" -a "$options $uopts"
-    $dir/atos-run -C "$configuration_path" $opt_q $opt_r -n "$nbruns" -u "$options" -a "$options $uopts"
+    $dir/atos-profile -C "$configuration_path" $opt_q -b "$remote_profile_path" -g "$uopts"
+    $dir/atos-build -C "$configuration_path" $opt_q -u "$uopts" -a "$options"
+    $dir/atos-run -C "$configuration_path" $opt_q $opt_r -n "$nbruns" -u "$uopts" -a "$options"
 else
-    $dir/atos-build -C "$configuration_path" $opt_q -a "$options $uopts"
-    $dir/atos-run -C "$configuration_path" $opt_q $opt_r -n "$nbruns" -a "$options $uopts"
+    $dir/atos-build -C "$configuration_path" $opt_q -a "$options"
+    $dir/atos-run -C "$configuration_path" $opt_q $opt_r -n "$nbruns" -a "$options"
 fi

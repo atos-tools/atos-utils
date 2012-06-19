@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 #
-
+KEEPTEST=1
 source `dirname $0`/common.sh
 
 TEST_CASE="ATOS opt build/run"
@@ -24,7 +24,7 @@ if [ `gcc -v --help 2>&1 | grep "\-flto" | wc -l` -ne 0 ]; then
 
     $ROOT/bin/atos-opt -C atos-config -r -a "-O2" -f -l
 
-    $ROOT/bin/atos-opt -C atos-config -r -a "-O2" -f -u "-flto"
+    $ROOT/bin/atos-opt -C atos-config -r -a "-O2" -f -u "-O2"
 
     [ `$ROOT/lib/atos/atos_lib.py query -C atos-config | grep target | wc -l` -eq 6 ]
 

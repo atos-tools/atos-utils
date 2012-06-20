@@ -1,4 +1,4 @@
-#if (defined(GCC) && (MAJOR >= 4) && (MINOR >= 4))
+#if GCC_VERSION >= 40400
 # flags for 4.4
 3, 2, -ftree-dce, -fno-tree-dce
 3, 2, -ftree-loop-optimize, -fno-tree-loop-optimize
@@ -51,7 +51,7 @@
 #endif
 #endif
 
-#if (defined(GCC) && (MAJOR >= 4) && (MINOR >= 5))
+#if GCC_VERSION >= 40500
 # 4.5 4.6
 3, 2, -ftree-slp-vectorize, -fno-tree-slp-vectorize
 1, 1, 128, --param max-completely-peel-loop-nest-depth=

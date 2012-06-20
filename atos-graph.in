@@ -76,6 +76,29 @@ def draw_graph(getgraph, title, opts):
     global graph_plots, all_points
     graph_plots, all_points = [], []
 
+    def draw_tradeoff_plots(ratio, points, attrs):
+        # select tradeoff given ratio
+        best = atos_lib.atos_client_results.select_tradeoff(points, ratio)
+        # graph limits
+        xmin = min([p.sizered for p in points])
+        xmax = max([p.sizered for p in points])
+        ymin = min([p.speedup for p in points])
+        ymax = max([p.speedup for p in points])
+        # number of points on ratio line
+        nbtk = int((ratio >= 1 and 2 or 1 / ratio) * 32)
+        # ratio line points coordinates
+        xtks = [xmin + i * ((xmax - xmin) / nbtk) for i in range(nbtk + 1)]
+        ytks = [best.speedup + (1.0/ratio) * (best.sizered-x) for x in xtks]
+        coords = filter(lambda (x,y): y >= ymin and y <= ymax, zip(xtks, ytks))
+        # first plot: selected tradeoff point
+        attrs.update({'label' : '_nolegend_'})
+        attrs.update({'markersize' : 20, 'linewidth' : 0, 'alpha' : 0.4})
+        plots = [(([best.sizered], [best.speedup]), dict(attrs))]
+        # second plot: ratio line
+        attrs.update({'marker' : '', 'linewidth' : 2, 'linestyle' : 'solid'})
+        plots += [((zip(*coords)[0], zip(*coords)[1]), dict(attrs))]
+        return plots
+
     def draw_all():
         global graph_plots, all_points, selected_points, similar_points # :(
 
@@ -106,6 +129,11 @@ def draw_graph(getgraph, title, opts):
             xy = zip(*sorted([(p.sizered, p.speedup) for p in points]))
             gr, = ax.plot(xy[0], xy[1], **attrsmap)
             graph_plots.append(gr)
+            # show tradeoffs for each frontier
+            for ratio in opts.tradeoffs:
+                for ((xcrd, ycrd), attrs) in \
+                        draw_tradeoff_plots(ratio, points, dict(attrsmap)):
+                    graph_plots.append(ax.plot(xcrd, ycrd, **attrs)[0])
 
         # draw selected points (hidden)
         if opts.show and all_points:
@@ -215,6 +243,7 @@ def getoptcases(dbpath, opts):
     db = atos_lib.atos_db.db(dbpath)
     targets = (opts.targets and opts.targets.split(',')
                or list(set(db.get_results('$[*].target')))[-1:])
+    opts.query = opts.query or (opts.filter and 'variant:' + opts.filter)
     client = atos_lib.atos_client_results(
         db, targets, atos_lib.strtoquery(opts.query), opts.identifier)
     client.compute_speedups(opts.refid)
@@ -356,6 +385,9 @@ if __name__ == "__main__":
     parser.add_option('-l', '--cfglbl', dest='labels',
                       action='store', type='string', default='',
                       help='atos-configurations labels')
+    parser.add_option('-s', '--tradeoff', dest='tradeoffs',
+                      action='append', type='float', default=[],
+                      help='selected tradeoff given size/perf ratio')
     # atos options
     parser.add_option('-t', '--targets', dest='targets',
                   action='store', type='string', default=None,

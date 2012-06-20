@@ -64,7 +64,7 @@ class atos_db():
         if os.path.exists(db_file): return atos_db_json(db_file)
         # results.db   loadtime:  5.70s  filesize: 579M
         db_file = os.path.join(atos_configuration, 'results.db')
-        if os.path.exists(db_file): return atos_db_file(db_file)
+        return atos_db_file(db_file)
 
 
 # ####################################################################
@@ -86,14 +86,8 @@ class atos_db_file(atos_db):
         self._write_entries(entries)
 
     def _write_entries(self, entries):
-        entries_str = ''
-        for entry in entries:
-            # last line must be one of the required field (time or size)
-            entry_keys = list(entry.keys())
-            entry_keys.remove('time'); entry_keys += ['time']
-            for key in entry_keys:
-                entries_str += 'ATOS: %s: %s: %s: %s\n' % (
-                    entry['target'], entry['variant'], key, entry[key])
+        entries_str = ''.join(
+            atos_db_file.entry_str(entry) for entry in entries)
         with open_locked(self.db_file, 'a') as db_file:
             db_file.write(entries_str)
 
@@ -118,6 +112,19 @@ class atos_db_file(atos_db):
     def _create(self):
         if os.path.exists(self.db_file): return
         open(self.db_file, 'w').write('')
+
+    @staticmethod
+    def entry_str(entry):
+        entry_str = ''
+        entry_keys = list(entry.keys())
+        # no need for target and variant lines
+        entry_keys.remove('target'); entry_keys.remove('variant')
+        # last line must be one of the required field (time or size)
+        entry_keys.remove('time'); entry_keys += ['time']
+        for key in entry_keys:
+            entry_str += 'ATOS: %s: %s: %s: %s\n' % (
+                entry['target'], entry['variant'], key, entry[key])
+        return entry_str
 
 
 # ####################################################################
@@ -344,7 +351,9 @@ class atos_client_db():
     def add_result(self, entry):
         required_fields = set(atos_db.required_fields)
         if not set(entry.keys()).issuperset(required_fields):
-            return False, list(required_fields.difference(set(entry.keys())))
+            missing_fields = list(
+                required_fields.difference(set(entry.keys())))
+            return False, 'missing fields: %s' % str(missing_fields)
         entry = result_entry(entry)
         self.db.add_results([entry])
         return True, entry
@@ -373,7 +382,8 @@ class atos_client_db():
             for result in results:
                 if not set(result.keys()).issuperset(required_keys):
                     missing_keys |= required_keys.difference(set(result.keys()))
-        if missing_keys: return False, list(missing_keys)
+        if missing_keys:
+            return False, 'missing keys: %s' % str(missing_keys)
         db.add_results(results)
         return True, len(results)
 
@@ -544,6 +554,12 @@ def info(msg):
     # could be replaced by logging.info
     print >> sys.stderr, msg
 
+def fatal(msg):
+    print >> sys.stderr, '%s:' % (os.path.basename(sys.argv[0])),
+    print >> sys.stderr, 'error:',
+    print >> sys.stderr, msg
+    sys.exit(1)
+
 
 # ####################################################################
 
@@ -599,7 +615,7 @@ if __name__ == '__main__':
                 help='create a shared database '
                              '(group has write permission) (default: False)')
         subparser.epilog = 'Example: create_db -C. -tjson'
-        (opts, args) = subparser.parse_args(sys.argv[1:])
+        (opts, args) = subparser.parse_args(sys.argv[2:])
 
         if not os.path.exists(opts.configuration_path):
             os.makedirs(opts.configuration_path)
@@ -638,7 +654,7 @@ if __name__ == '__main__':
             '    query -q "$[?(@.target="aaa" && @.variant="REF")]"\n' \
             '    query -q "$[?(@.target="aaa")].size"\n'
         subparser.format_epilog = lambda x: subparser.epilog
-        (opts, args) = subparser.parse_args(sys.argv[1:])
+        (opts, args) = subparser.parse_args(sys.argv[2:])
 
         if opts.configuration_path == '-':
             results = results_filter(
@@ -657,7 +673,7 @@ if __name__ == '__main__':
 
         subparser = optparse.OptionParser(
             description = 'Add result to database',
-            usage='%%prog %s [options]' % args[0])
+            usage='%%prog %s [options] [dbfile]' % args[0])
         subparser.add_option('-C', dest='configuration_path',
                 action='store', type='string', default='./atos-configurations',
                 help='configuration path (default: ./atos-configurations)')
@@ -665,16 +681,18 @@ if __name__ == '__main__':
                 action='store', type='string', default='',
                 help='results values (default: None)')
         subparser.epilog = 'Example: addres -r"target:X,compiler:gcc,time:12"'
-        (opts, args) = subparser.parse_args(sys.argv[1:])
+        (opts, args) = subparser.parse_args(sys.argv[2:])
 
-        client = atos_client_db(atos_db.db(opts.configuration_path))
+        result = strtodict(opts.result)
 
-        status, output = client.add_result(strtodict(opts.result))
+        if opts.configuration_path == '-':
+            print atos_db_file.entry_str(result),
 
-        if status:
-            info('new result entry: %s' % pformat(output))
         else:
-            info('missing fields: %s' % str(output))
+            db = (args and atos_db_file(args[0])
+                  or atos_db.db(opts.configuration_path))
+            status, output = atos_client_db(db).add_result(result)
+            if not status: fatal(output)
 
 
     # ################################################################
@@ -701,7 +719,7 @@ if __name__ == '__main__':
                 help='ignore missing keys (default: False)')
         subparser.epilog = 'Example: ' \
             'push -q"compiler:gcc,variant=OPT.*" -renvironment:u8500'
-        (opts, args) = subparser.parse_args(sys.argv[1:])
+        (opts, args) = subparser.parse_args(sys.argv[2:])
         if not opts.remote_configuration_path:
             subparser.error(
                 'expected a remote configuration_path (set with -R option)')
@@ -720,7 +738,7 @@ if __name__ == '__main__':
         if status:
             info('exported %d results' % (output))
         else:
-            info('missing fields: %s (use -f option to ignore)' % (str(output)))
+            fatal(output)
 
 
     # ################################################################
@@ -747,7 +765,7 @@ if __name__ == '__main__':
                 help='ignore missing keys (default: False)')
         subparser.epilog = 'Example: ' \
             'pull -q"compiler:gcc,variant=OPT.*" -renvironment:u8500'
-        (opts, args) = subparser.parse_args(sys.argv[1:])
+        (opts, args) = subparser.parse_args(sys.argv[2:])
         if not opts.remote_configuration_path:
             subparser.error(
                 'expected a remote configuration_path (set with -R option)')
@@ -766,7 +784,7 @@ if __name__ == '__main__':
         if status:
             info('imported %d results' % (output))
         else:
-            info('missing fields: %s (use -f option to ignore)' % (str(output)))
+            fatal(output)
 
 
     # ################################################################
@@ -796,7 +814,7 @@ if __name__ == '__main__':
                 help='only print frontier points (default: False)')
         subparser.epilog = \
             'Example: speedups -C. -q"target:bzip2,compiler:gcc" -rREF -f'
-        (opts, args) = subparser.parse_args(sys.argv[1:])
+        (opts, args) = subparser.parse_args(sys.argv[2:])
 
         client = atos_client_results(
             atos_db.db(opts.configuration_path),

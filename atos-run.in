@@ -25,6 +25,7 @@ set -e
 
 dir=`dirname $0`
 dir=`cd $dir; pwd`
+libdir=`cd $dir/../lib/atos; pwd`
 PROOT=${PROOT:-proot}
 
 executables=""
@@ -145,6 +146,8 @@ variant_hash() {
     echo "$1" | md5sum | cut -f 1 -d ' '
 }
 
+export PYTHONPATH=$libdir:$PYTHONPATH
+
 if [ "$get_results_script" = "" -a -f "$configuration_path/get_res.sh" ]; then
     get_results_script="$configuration_path/get_res.sh"
 fi
@@ -197,16 +200,8 @@ if [ "$variant" = "" ]; then
     fi
 fi
 
-if [ "$file" = "" -a "$fd" = "" ]; then
-    if [ "$record" = 1 ]; then
-	file=$configuration_path/results.db
-    else
-	fd=2 # stderr by default
-    fi
-fi
-
-if [ "$file" != "" ]; then
-    touch "$file"
+if [ "$file" = "" -a "$fd" = "" -a "$record" = 0 ]; then
+    fd=2 # stderr by default
 fi
 
 if [ "$file" != "" -a "$fd" != "" ]; then
@@ -254,24 +249,22 @@ get_time() {
     unset REMOTE_PROFILE_DIR LOCAL_PROFILE_DIR
 }
 
-db_entry() {
-    echo "ATOS: $identifier: $variant: version: `$0 -v | awk '{print $3;}'`"
-    echo "ATOS: $identifier: $variant: conf: $options"
-    if [ "$u_set" = 1 ]; then
-	echo "ATOS: $identifier: $variant: uconf: $uopts"
-    fi
-    if [ "$g_set" = 1 ]; then
-	echo "ATOS: $identifier: $variant: gconf: $uopts"
-    fi
-    echo "ATOS: $identifier: $variant: size: $exe_size"
-    echo "ATOS: $identifier: $variant: time: $exe_time"
-}
+output_run_result() {
+    entry="target:$identifier"
+    entry="$entry,variant:$variant"
+    entry="$entry,version:@VERSION@"
+    entry="$entry,conf:$options"
+    [ "$u_set" = 0 ] || entry="$entry,uconf:$uopts"
+    [ "$g_set" = 0 ] || entry="$entry,gconf:$uopts"
+    entry="$entry,size:$exe_size"
+    entry="$entry,time:$exe_time"
 
-print_db_entry() {
     if [ "$file" != "" ]; then
-	db_entry >>"$file"
+	$libdir/atos_lib.py add_result -r "$entry" $file
+    elif [ "$fd" != "" ]; then
+	$libdir/atos_lib.py add_result -r "$entry" -C- >&$fd
     else
-	db_entry >&$fd
+	$libdir/atos_lib.py add_result -r "$entry" -C $configuration_path 
     fi
 }
 
@@ -298,7 +291,7 @@ while [ "$n" -le "$nbruns" ]; do
 
     if [ "$silent" != 1 ]; then
 	if $failure; then
-	    print_db_entry
+	    output_run_result
 	else
 	    if [ "$get_results_script" != "" ]; then
 		$get_results_script < "$logfile.$n" >>$tmpfile 2>&1 || failure=true
@@ -312,10 +305,10 @@ while [ "$n" -le "$nbruns" ]; do
 			exe_size=FAILURE
 			exe_time=FAILURE
 		    fi
-		    print_db_entry
+		    output_run_result
 		done
 	    else
-		print_db_entry
+		output_run_result
 	    fi
 	fi
     fi

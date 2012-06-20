@@ -199,7 +199,7 @@ class atos_client_results():
             return dict(
                 filter(lambda x: x[0][0] != '_', self.__dict__.items()))
 
-        def speedup(self, ref):
+        def compute_speedup(self, ref):
             self.speedup = ((ref.time / self.time) - 1.0)
             self.sizered = (1.0 - (float(self.size) / float(ref.size)))
             return self.speedup, self.sizered
@@ -248,13 +248,14 @@ class atos_client_results():
                     break
             if on_frontier: mustbe_on_frontier.add(c1)
             c1.on_frontier = on_frontier
-        self.frontier = mustbe_on_frontier
-        return mustbe_on_frontier
+        self.frontier = sorted(
+            mustbe_on_frontier, key=lambda x: x.size)
+        return self.frontier
 
     def compute_speedups(self, ref_variant='REF'):
         assert ref_variant in self.results.keys()
         for (variant, result) in self.results.items():
-            result.speedup(self.results[ref_variant])
+            result.compute_speedup(self.results[ref_variant])
         return self.results.values()
 
     def get_last_result(self, variant):
@@ -270,6 +271,29 @@ class atos_client_results():
         if not objects:
             results = map(lambda x: x.dict(), results)
         return results
+
+    def select_tradeoff(self, perf_size_ratio=4):
+        return atos_client_results.select_tradeoff(
+            self.frontier or self.compute_frontier(), perf_size_ratio)
+
+    @staticmethod
+    def select_tradeoff(frontier, perf_size_ratio=4):
+        # copy frontier points
+        frontier_orig = sorted(
+            frontier, key=lambda x: x.size)
+        frontier_copy = map(
+            lambda x: atos_client_results.result(x.dict()), frontier_orig)
+        # fake reference
+        ref = atos_client_results.result(
+            {'time' : frontier_copy[0].time, 'size' : frontier_copy[-1].size})
+        # compute speedups/sizereds
+        map(lambda x: x.compute_speedup(ref), frontier_copy)
+        # find best tradeoff (ratio * sizered + speedup)
+        tradeoff = sorted(map(lambda x: (
+                    (perf_size_ratio * x.speedup) + x.sizered
+                    , x), frontier_copy))[-1][1]
+        # return corresponding point
+        return frontier_orig[frontier_copy.index(tradeoff)]
 
     def _get_group_results(self, group_targets, group_name, query):
         # get results for each target of the group

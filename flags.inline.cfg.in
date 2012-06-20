@@ -1,4 +1,4 @@
-#if (defined(GCC) && (MAJOR >= 4) && (MINOR >= 4))
+#if GCC_VERSION >= 40400
 # flags for 4.4 / 4.5 / 4.6
 3, 2, -fearly-inlining, -fno-early-inlining
 3, 2, -findirect-inlining, -fno-indirect-inlining
@@ -23,18 +23,18 @@
 1, 1000, 100000, --param hot-bb-count-fraction=
 #endif
 
-#if (defined(GCC) && (MAJOR >= 4) && (MINOR == 4))
+#if GCC_VERSION >= 40400 && GCC_MAX_VERSION < 40500
 # flags for 4.4 only
 1, 4, 32, --param inline-call-cost=
 #endif
 
-#if (defined(GCC) && (MAJOR >= 4) && (MINOR >= 5))
+#if GCC_VERSION >= 40500
 # flags for 4.5 / 4.6
 1, 5, 64, --param early-inlining-insns=
 1, 5, 20, --param max-early-inliner-iterations=
 #endif
 
-#if (defined(GCC) && (MAJOR >= 4) && (MINOR >= 6))
+#if GCC_VERSION >= 40600
 # flags for 4.6
 3, 2, -fpartial-inlining,-fno-partial-inlining
 1, 1, 99, --param partial-inlining-entry-probability=

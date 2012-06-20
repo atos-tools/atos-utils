@@ -423,22 +423,36 @@ class json_config():
         self._dump()
 
     def flags_for_flagfiles(self):
+        compilers = self.config.get('compilers', [])
+        if not compilers: return ''
         flags = []
-        first_compiler = self.config.get('compilers', [None])[0]
-        if first_compiler:
-            # compiler name
-            flags += ['-D%s' % first_compiler['name'].upper()]
-            # compiler version
-            version = first_compiler['version'].split('.', 2)
-            if len(version) >= 1:
-                flags += ['-DMAJOR=%s' % version[0]]
-            if len(version) >= 2:
-                flags += ['-DMINOR=%s' % version[1]]
-            if len(version) >= 3:
-                flags += ['-DPATCH_LEVEL=%s' % version[2]]
+        # compiler name
+        # temporary fix for multiple compilers pb
+        compiler_name = '_'.join(
+            sorted(list(set([c['name'].upper() for c in compilers]))))
+        flags.append('-D%s' % compiler_name.upper())
+        # compiler versions
+        versions = sorted([c['version'] for c in compilers])
+        try:
+            # min version
+            minv = versions[0].split('.', 2)
+            major = int((len(minv) >= 1) and minv[0] or 0)
+            minor = int((len(minv) >= 2) and minv[1] or 0)
+            patch = int((len(minv) >= 3) and minv[2] or 0)
+            flags += ['-D%s_VERSION=%d%02d%02d' % (
+                    compiler_name, major, minor, patch)]
+            # max version
+            maxv = versions[-1].split('.', 2)
+            major = int((len(maxv) >= 1) and maxv[0] or 0)
+            minor = int((len(maxv) >= 2) and maxv[1] or 0)
+            patch = int((len(maxv) >= 3) and maxv[2] or 0)
+            flags += ['-D%s_MAX_VERSION=%d%02d%02d' % (
+                    compiler_name, major, minor, patch)]
+        except: raise
         # compiler features
         flags.extend(['-D%s' % (f.upper()) for f in self._compiler_features()])
         return ' '.join(flags)
+
 
 # ####################################################################
 

@@ -35,7 +35,7 @@ nb_iter=100
 nb_runs=1
 flags_file=""
 opt_levels="-Os,-O2,-O3"
-opt_variants="base,fdo,lto,fdo+lto"
+opt_variants="base"
 
 #######################
 
@@ -46,7 +46,7 @@ version() {
 usage() {
     cat <<EOF
 
-Usage: atos-explore-inline [options] [variant]
+Usage: atos-explore-inline [options] [variants]
 
 Configuration Options:
       -C <path> : configuration path [default: $configuration_path]
@@ -56,7 +56,7 @@ Configuration Options:
 Exploration Options:
       -F <flags_filename> : flags list filename [default: <configuration_path>/flags.inline.cfg]
       -O <optim_levels> : optimization levels [default: $opt_levels]
-      -V <variants> : list of optimization variants [default: $opt_variants]
+      -V <variants> : list of optimization variants [ex: base,fdo,lto,fdo+lto] [default: $opt_variants]
       -S <seed> : seed for random generator [default: none]
       -M <nb> : number of exploration loop iterations [default: $nb_iter]
 

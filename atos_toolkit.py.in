@@ -328,7 +328,7 @@ def atos_opt_get_frontier(config, targets, query={}):
     return map(lambda x: x.get('variant', ''), results)
 
 
-def atos_opt_run(flags, variant, profdir, config, nbrun, baseopts):
+def atos_opt_run(flags, variant, profdir, config, nbrun, baseopts, no_replay):
     variant_options_flags = {
         'base' : ('', ''),
         'fdo' : ('-f', ''),
@@ -337,13 +337,14 @@ def atos_opt_run(flags, variant, profdir, config, nbrun, baseopts):
         'lipo' : ('-f', '-fripa')}
     info('RUN [%s] [%s] %s' % (variant, flags, baseopts or ''))
     profdir_option = profdir and ('-b %s' % profdir) or ''
+    replay_option = no_replay and '-k' or ''
     variant_options, variant_flags = variant_options_flags[variant]
     base_flags, base_uflags = '', ''
     if baseopts: base_flags, base_uflags = baseopts
     base_uflags = base_uflags and '-u ' + base_uflags or ''
     status, output = system(
-        '%s/atos-opt -C %s -n %s %s -r -a "%s %s %s" %s %s' % (
-            bindir, config, nbrun, profdir_option,
+        '%s/atos-opt -C %s -n %s %s %s -r -a "%s %s %s" %s %s' % (
+            bindir, config, nbrun, replay_option, profdir_option,
             base_flags, flags, variant_flags, variant_options, base_uflags))
     if not (status and output):
         info('FAILURE [%s] [%s]' % (variant, flags))
@@ -359,8 +360,9 @@ def atos_get_result_wrapper(config, targets):
     return lambda v: atos_opt_get_result(v, config, targets)
 
 
-def atos_run_wrapper(profdir, config, nbrun, baseopts):
-    return lambda f, v: atos_opt_run(f, v, profdir, config, nbrun, baseopts)
+def atos_run_wrapper(profdir, config, nbrun, baseopts, no_replay):
+    return lambda f, v: atos_opt_run(
+        f, v, profdir, config, nbrun, baseopts, no_replay)
 
 
 # ####################################################################
@@ -403,6 +405,9 @@ if __name__ == '__main__':
     group.add_option('-n', dest='nbrun',
                      action='store', type='int', default=1,
                      help='number of executions of run script (default: 1)')
+    group.add_option('-k', dest='no_replay',
+                     action='store_true', default=False,
+                     help='do not replay existing configurations (default: False)')
     group.add_option('--targets', dest='targets',
                      action='store', type='string', default=None,
                      help='target list for results (default: None)')
@@ -492,8 +497,8 @@ if __name__ == '__main__':
                 continue
             exploration_loop(opts.generators, maxiter=opts.max,
                              step=atos_run_wrapper(
-                    opts.profdir, opts.atos_configurations, opts.nbrun, base_opts))
+                    opts.profdir, opts.atos_configurations, opts.nbrun, base_opts, opts.no_replay))
     else:
         exploration_loop(opts.generators, maxiter=opts.max,
                          step=atos_run_wrapper(
-                opts.profdir, opts.atos_configurations, opts.nbrun, opts.base_opts))
+                opts.profdir, opts.atos_configurations, opts.nbrun, opts.base_opts, opts.no_replay))

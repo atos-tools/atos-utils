@@ -24,6 +24,7 @@ set -e
 [ "$DEBUG" = "" ] || set -x
 
 dir=`cd \`dirname $0\`; pwd`
+libdir=`cd $dir/../lib/atos; pwd`
 PROOT=${PROOT:-proot}
 
 options=""
@@ -36,6 +37,7 @@ aopts=""
 opt_q=""
 opt_r=""
 nbruns=1
+no_replay=0
 remote_profile_path=""
 
 version() {
@@ -61,6 +63,7 @@ Profile options:
 
 Run Options:
       -n <nb> : number of executions [default: $nbruns]
+      -k : keep existing results if any [default: false]
 
 Results options:
       -r : record results
@@ -79,7 +82,7 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts C:a:lu:fb:n:rqvh opt; do
+while getopts C:a:lu:fb:n:krqvh opt; do
     case $opt in
 	C) configuration_path="$OPTARG"
 	    ;;
@@ -94,6 +97,8 @@ while getopts C:a:lu:fb:n:rqvh opt; do
 	b) remote_profile_path="$OPTARG"
 	    ;;
 	n) nbruns="$OPTARG"
+	    ;;
+	k) no_replay=1
 	    ;;
 	r) opt_r=-r
 	    ;;
@@ -112,6 +117,21 @@ shift $((OPTIND - 1))
 
 [ "$f_set" = 0 -o "$uopts" != "" ] || uopts="$options"
 [ "$l_set" = 0 ] || options="$options -flto"
+
+if [ "$no_replay" = "1" ]; then
+    if [ "$u_set" = 1 ]; then
+	variant=OPT-fprofile-use`echo $uopts $options | sed 's/ //g'`
+    elif [ "$options" != "" ]; then
+	variant=OPT`echo $options | sed 's/ //g'`
+    else
+	variant=REF
+    fi
+    results=`$libdir/atos_lib.py query -q "variant:$variant"`
+    if [ "$results" != "None" ]; then
+	echo "Skipping variant $variant..."
+	exit 0
+    fi
+fi
 
 if [ "$u_set" = 1 ]; then
     $dir/atos-profile -C "$configuration_path" $opt_q -b "$remote_profile_path" -g "$uopts"

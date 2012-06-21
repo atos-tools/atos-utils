@@ -22,7 +22,7 @@
 
 VERSION="@VERSION@"
 
-import sys, os, itertools, math
+import sys, os, itertools, math, re
 
 from random import randint, choice, sample, seed
 
@@ -349,7 +349,12 @@ def atos_opt_run(flags, variant, profdir, config, nbrun, baseopts, no_replay):
     if not (status and output):
         info('FAILURE [%s] [%s]' % (variant, flags))
         return None
-    variant_id = output.split()[-1][:-3]
+    variant_id = None
+    for line in output.split('\n'):
+        res = re.match(
+            '(Running|Skipping) variant (.*)\.\.\.', line)
+        if res: variant_id = res.groups()[-1]
+    assert variant_id
     result_point = atos_get_result(variant_id)
     result = (result_point.size, result_point.time)
     debug('RES ' + str(result))

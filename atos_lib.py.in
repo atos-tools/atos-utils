@@ -260,6 +260,7 @@ class atos_client_results():
         return self.frontier
 
     def compute_speedups(self, ref_variant='REF'):
+        if not self.results: return []
         assert ref_variant in self.results.keys()
         for (variant, result) in self.results.items():
             result.compute_speedup(self.results[ref_variant])
@@ -279,9 +280,10 @@ class atos_client_results():
             results = map(lambda x: x.dict(), results)
         return results
 
-    def select_tradeoff(self, perf_size_ratio=4):
+    def tradeoff(self, perf_size_ratio=4):
         return atos_client_results.select_tradeoff(
-            self.frontier or self.compute_frontier(), perf_size_ratio)
+            getattr(self, 'frontier', None) or self.compute_frontier(),
+            perf_size_ratio)
 
     @staticmethod
     def select_tradeoff(frontier, perf_size_ratio=4):
@@ -812,6 +814,10 @@ if __name__ == '__main__':
         subparser.add_option('-f', '--frontier', dest='frontier',
                 action='store_true', default=False,
                 help='only print frontier points (default: False)')
+        subparser.add_option('-s', '--tradeoff', dest='tradeoffs',
+                action='append', type='float', default=[],
+                help='selected tradeoff given size/perf ratio')
+
         subparser.epilog = \
             'Example: speedups -C. -q"target:bzip2,compiler:gcc" -rREF -f'
         (opts, args) = subparser.parse_args(sys.argv[2:])
@@ -823,7 +829,11 @@ if __name__ == '__main__':
 
         if opts.ref: client.compute_speedups(opts.ref)
 
-        pprint_list(client.get_results(opts.frontier))
+        if opts.tradeoffs:
+            pprint_list(
+                map(lambda x: client.tradeoff(x).dict(), opts.tradeoffs))
+        else:
+            pprint_list(client.get_results(opts.frontier))
 
 
     # ################################################################

@@ -100,6 +100,21 @@ class DependencyGraph:
                     targets.append(value)
         return targets
 
+    def get_objects(self):
+        """ Get the list of object files. """
+        objects = []
+        for node in self.dg.nodes():
+            target = None
+            dep = None
+            for attr,value in self.dg.node_attr[node]:
+                if attr == "target":
+                    target = value
+                if attr == "dependency":
+                    dep = value
+            if dep and dep['kind'] == "CC":
+                objects.append(target)
+        return objects
+
     def get_lto_opts(self):
         """ Get the list of options that should be passed to linker in case of LTO build. """
         def is_lto_opt(arg): return (arg.startswith('-m') or arg.startswith('-f'))
@@ -647,6 +662,13 @@ except:
     pass
 else:
     f.write("\n".join(graph.get_targets()) + "\n")
+    f.close()
+try:
+    f = open(os.path.join(configuration_path, "objects"), "w")
+except:
+    pass
+else:
+    f.write("\n".join(graph.get_objects()) + "\n")
     f.close()
 
 # For now only write compilers if configuration dir is there

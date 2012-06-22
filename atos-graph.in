@@ -221,8 +221,66 @@ def draw_graph(getgraph, title, opts):
         if opts.follow: repeatth.stop()
 
 
+def draw_correl_graph(getgraph, title, opts):
+    # http://matplotlib.sourceforge.net/index.html
+    import pylab as pl
+    fg = pl.figure()
+    ax = fg.add_subplot(111)
+
+    bars = getgraph()
+
+    for (values, attrs) in bars:
+        indexes, width = pl.arange(len(values)), 1.0 / len(bars)
+
+        yvalues = [x.speedup for x in values]
+        xoffset = width * bars.index((values, attrs))
+        ax.bar(indexes + xoffset, yvalues, width, picker=4000, **attrs)
+
+        ax.legend(loc='lower left')
+        fg.canvas.draw()
+
+    # dynamic annotations
+    def on_pick(event):
+        ind = int(event.mouseevent.xdata)
+        point = bars[0][0][ind]
+        tooltip.set_position(
+            (event.mouseevent.xdata, event.mouseevent.ydata))
+        tooltip.set_text(point_descr(point))
+        tooltip.set_visible(True)
+        fg.canvas.draw()
+
+    tooltip = ax.text(
+        0, 0, "undef", bbox=dict(facecolor='white', alpha=0.8),
+        verticalalignment='bottom', visible=False)
+    # redraw axis, set labels, legend, grid, ...
+    def labelfmt(x, pos=0): return '%.2f%%' % (100.0 * x)
+    ax.yaxis.set_major_formatter(pl.FuncFormatter(labelfmt))
+    pl.ylabel('speedup (higher is better) -->')
+
+    pl.xlabel('Configurations (ordered by decreasing speedup of '
+              + bars[0][1]['label'] + ') -->')
+    pl.title(title)
+    pl.axhspan(0.0, 0.0)
+    pl.axvspan(0.0, 0.0)
+    pl.grid(True)
+
+    if opts.outfile:
+        fg.savefig(opts.outfile)
+
+    if opts.show:
+        fg.canvas.mpl_connect('pick_event', on_pick)
+        pl.show()
+
 
 # ####################################################################
+
+
+def point_descr(point):
+    res = point.target + ' '
+    res += (len(point.variant) >= 45
+            and point.variant[:25] + '...' + point.variant[-15:]
+            or point.variant)
+    return res
 
 
 def point_str(point, short=False, no_id=False):
@@ -326,24 +384,70 @@ def multgraph(dbpathes, opts):
     scatters, frontiers = [], []
 
     # dbfiles labels and colors
-    labels = [str(x) for x in range(nbdb)]
-    if opts.labels: labels = opts.labels.split(',')
+    labels = opts.labels and opts.labels.split(',') or []
+    for i in range(nbdb - len(labels)): labels.append(str(i))
     colors = ['red', 'blue', 'green', 'magenta']
 
     # scatters list
     if not opts.frontier_only:
         for i in range(nbdb):
-            attrs = {'color' : colors[i], 'label' : labels[i]}
+            attrs = {'color' : colors[i % len(colors)], 'label' : labels[i]}
             scatters += [(optcasesl[i], attrs)]
 
     # frontiers
     attrs = {'marker' : 'x', 'zorder' : 1, 'mew' : 2}
     for i in range(nbdb):
-        attrs.update({'color' : colors[i]})
+        attrs.update({'color' : colors[i % len(colors)]})
         if opts.frontier_only: attrs.update({'label' : 'frontier-' + labels[i]})
         frontiers += [([c for c in optcasesl[i] if c.on_frontier], dict(attrs))]
 
     return scatters, frontiers
+
+
+def correlgraph(dbpathes, opts):
+
+    # load results from all databases
+    optcasesl = []
+    targets = opts.targets and opts.targets.split('+') or None
+    for dbpath in dbpathes:
+        client = atos_lib.atos_client_results(
+            atos_lib.atos_db.db(dbpath),
+            targets and targets.split(',') or None,
+            atos_lib.strtoquery(opts.query), opts.identifier)
+        client.compute_speedups(opts.refid)
+        optcasesl.append({ client.values[2] : client.results })
+
+    # dbfiles labels and colors
+    nbdb = len(dbpathes)
+    labels = opts.labels and opts.labels.split(',') or []
+    for i in range(nbdb - len(labels)): labels.append(str(i))
+    colors = ['red', 'blue', 'green', 'magenta']
+
+    # targets common to all dbs
+    common_targets = (
+        list(reduce(lambda acc, s: acc.intersection(s),
+                    map(lambda d: set(d.keys()), optcasesl))))
+
+    # couples of (target, variant) common to all dbs, REF removed
+    common_target_variant = list(
+        reduce(lambda acc, s: acc.intersection(s),
+               map(lambda c: set([(t, v) for t in common_targets
+                                  for v in c[t].keys() if v != opts.refid]),
+                   optcasesl)))
+
+    # couples of common (target, variant), sorted by speedups
+    sorted_common_target_variant = list(reversed(
+            sorted(common_target_variant, key=lambda (t,v): optcasesl[0][t][v].speedup)))
+
+    #
+    bars = []
+    for i in range(nbdb):
+        attrs = { 'color' : colors[i % len(colors)], 'label' : labels[i] }
+        optcs = map(
+            lambda (t, v): optcasesl[i][t][v], sorted_common_target_variant)
+        bars += [(optcs, attrs)]
+
+    return bars
 
 
 # ####################################################################
@@ -351,7 +455,7 @@ def multgraph(dbpathes, opts):
 
 if __name__ == "__main__":
 
-    import optparse, os
+    import optparse
     parser = optparse.OptionParser(
         description='Process optimization space exploration results',
         usage='%prog [options] [file]',
@@ -369,6 +473,9 @@ if __name__ == "__main__":
     parser.add_option('--follow', dest='follow',
                       action='store_true', default=False,
                       help='continuously update graph with new results (default: False)')
+    parser.add_option('--correl', dest='correlation_graph',
+                      action='store_true', default=False,
+                      help='show correlation graph (default: False)')
     # optimization space graph options
     parser.add_option('-H', dest='highlight',
                       action='store', type='string', default=None,
@@ -418,12 +525,17 @@ if __name__ == "__main__":
     if opts.refid: title += ' [ref=%s]' % opts.refid
     if opts.filter: title += ' [filter=%s]' % opts.filter
 
-    if opts.configuration_pathes:
+    if opts.correlation_graph:
+        title = 'Correlation Graph for %s' % (opts.identifier or opts.targets)
+        get_graph_f = (lambda: correlgraph([dbpath] + opts.configuration_pathes, opts))
+        draw_correl_graph(get_graph_f, title=title, opts=opts)
+
+    elif opts.configuration_pathes:
         # frontier graph
         get_graph_f = (lambda: multgraph([dbpath] + opts.configuration_pathes, opts))
+        draw_graph(get_graph_f, title=title, opts=opts)
 
     else:
         # classic optimization space graph
         get_graph_f = (lambda: optgraph(dbpath, opts))
-
-    draw_graph(get_graph_f, title=title, opts=opts)
+        draw_graph(get_graph_f, title=title, opts=opts)

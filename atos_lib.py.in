@@ -904,7 +904,8 @@ if __name__ == '__main__':
                     group_targets += [spl[0].split(',')]
                     group_names += ['+'.join(group_targets[-1])]
         else:
-            group_targets = sorted([list(set(db.get_results('$[*].target')))])
+            results = db.get_results(strtoquery(opts.query))
+            group_targets = sorted([list(set(results_filter(results, '$[*].target')))])
             group_names = map(lambda g: '+'.join(g), group_targets)
 
         # groups not supported in stdev mode

@@ -552,6 +552,27 @@ def pprint_list(list, out=None, text=False):
             json.dumps(list[i]), ((i + 1) < nb_elems) and ',\n' or ''),
     print >>out, ']'
 
+def pprint_table(results, out=None, reverse=False):
+    out = out or sys.stdout
+    xmax, ymax = len(results[0]), len(results)
+    # swap line/columns
+    if reverse: results = [
+        [(results[y] and results[y][x] or '')
+         for y in range(ymax)] for x in range(xmax)]
+    # max col width
+    xmax, ymax = len(results[0]), len(results)
+    colwidth = [
+        max([(results[y] and len(results[y][x]) or 0) for y in range(ymax)])
+        for x in range(xmax)]
+    for y in range(ymax):
+        print >>out, ' ',
+        if not results[y]: print ''; continue
+        for x in range(xmax):
+            fmt = ('%%%s%ds' % ((x==0)and'-'or'', colwidth[x]))
+            print >>out, fmt % ('%s' % (results[y][x])),
+            if x < xmax-1: print >>out, '|',
+        print >>out, ''
+
 def info(msg):
     # do not print info on stdout (as it can be used for dump/load)
     # could be replaced by logging.info
@@ -818,7 +839,6 @@ if __name__ == '__main__':
         subparser.add_option('-s', '--tradeoff', dest='tradeoffs',
                 action='append', type='float', default=[],
                 help='selected tradeoff given size/perf ratio')
-
         subparser.epilog = \
             'Example: speedups -C. -q"target:bzip2,compiler:gcc" -rREF -f'
         (opts, args) = subparser.parse_args(sys.argv[2:])
@@ -835,6 +855,112 @@ if __name__ == '__main__':
                 map(lambda x: client.tradeoff(x).dict(), opts.tradeoffs))
         else:
             pprint_list(client.get_results(opts.frontier))
+
+
+    # ################################################################
+
+    elif args[0] == 'report':
+
+        subparser = optparse.OptionParser(
+            description = 'Print results',
+            usage='%%prog %s [options]' % args[0])
+        subparser.add_option('-C', dest='configuration_path',
+                action='store', type='string', default='./atos-configurations',
+                help='configuration path (default: ./atos-configurations)')
+        subparser.add_option('-t', '--targets', dest='targets',
+                action='store', type='string', default='',
+                help='target list (default: ALL)')
+        subparser.add_option('-v', '--variants', dest='variants',
+                action='store', type='string', default=None,
+                help='variants list (default: ALL)')
+        subparser.add_option('-q', '--query', dest='query',
+                action='store', type='string', default='',
+                help='results query values (default: None)')
+        subparser.add_option('-r', '--refid', dest='ref',
+                action='store', type='string', default='REF',
+                help='reference variant id (default: None)')
+        subparser.add_option('-X', dest='reverse',
+                action='store_true', default=False,
+                help='swap line/columns')
+        subparser.add_option('-m', '--mode', dest='mode',
+                action='store', type='choice', default='speedup',
+                choices=['speedup', 'sizered', 'stdev'],
+                help='report type [speedup|sizered|stdev] (default: speedup)')
+        subparser.epilog = \
+            'Example: report -C. -rREF --stdev'
+        (opts, args) = subparser.parse_args(sys.argv[2:])
+
+        db = atos_db.db(opts.configuration_path)
+
+        # targets 'group1:targ1,targ2,targ3+group2:targ4,targ5+targ6'
+        group_targets, group_names = [], []
+        if opts.targets:
+            for group in opts.targets.split('+'):
+                spl = group.split(':')
+                if len(spl) > 1:
+                    group_targets += [spl[1].split(',')]
+                    group_names += [spl[0]]
+                else:
+                    group_targets += [spl[0].split(',')]
+                    group_names += ['+'.join(group_targets[-1])]
+        else:
+            group_targets = sorted([list(set(db.get_results('$[*].target')))])
+            group_names = map(lambda g: '+'.join(g), group_targets)
+
+        # groups not supported in stdev mode
+        assert (opts.mode != 'stdev') or all(map(lambda g: len(g) == 1, group_targets))
+
+        # results
+        all_results = {}
+        for num in range(len(group_targets)):
+            targets, name = group_targets[num], group_names[num]
+            client = atos_client_results(db, targets, strtoquery(opts.query), name)
+            if opts.ref: client.compute_speedups(opts.ref)
+            all_results[group_names[num]] = client.results
+
+        # variants
+        variants = opts.variants and opts.variants.split(',') or sorted(list(
+            reduce(lambda acc, s: acc.intersection(s),
+                   map(lambda v: set(v.keys()), all_results.values()))))
+
+        table = (opts.mode != 'stdev') and [[''] + group_names] or []
+
+        for variant in variants:
+
+            table += [[variant]]
+            if opts.mode == 'stdev':
+                table[-1] += ['AVG', 'NOISE', 'STDEV']
+
+            for target in group_names:
+
+                if opts.mode == 'speedup':
+                    table[-1] += ['%.0f %+6.1f%%' % (
+                            all_results[target][variant].time,
+                            all_results[target][variant].speedup * 100)]
+
+                elif opts.mode == 'sizered':
+                    table[-1] += ['%.0f %+6.1f%%' % (
+                            all_results[target][variant].size,
+                            all_results[target][variant].sizered * 100)]
+
+                elif opts.mode == 'stdev':
+                    table += [[target]]
+                    results = map(
+                        lambda r: r.time,
+                        all_results[target][variant]._results[0]._results)
+                    avg_res, min_res, max_res = (
+                        average(results), min(results), max(results))
+                    max_avg_diff = max(avg_res - min_res, max_res - avg_res)
+                    table[-1] += ['%.2f' % avg_res]
+                    table[-1] += ['%.2f%%' % ((max_avg_diff/avg_res) * 100)]
+                    table[-1] += ['%.2f%%' % (
+                            (standard_deviation(results)/avg_res) * 100)]
+
+                else: assert 0
+
+            if opts.mode == 'stdev': table += [None]
+
+        pprint_table(table, reverse=opts.reverse)
 
 
     # ################################################################

@@ -301,7 +301,8 @@ def getoptcases(dbpath, opts):
     db = atos_lib.atos_db.db(dbpath)
     targets = (opts.targets and opts.targets.split(',')
                or list(set(db.get_results('$[*].target')))[-1:])
-    opts.query = opts.query or (opts.filter and 'variant:' + opts.filter)
+    opts.query = opts.query and strtoquery(opts.query) or (
+        opts.filter and 'variant:' + opts.filter)
     client = atos_lib.atos_client_results(
         db, targets, atos_lib.strtoquery(opts.query), opts.identifier)
     client.compute_speedups(opts.refid)
@@ -507,7 +508,7 @@ if __name__ == "__main__":
                       help='filter out the points given by the regexp')
     parser.add_option('-q', dest='query',
                       action='store', type='string', default=None,
-                      help='query for filtering database resulgs')
+                      help='query for filtering database results')
     parser.add_option('-C', dest='configuration_path',
                       action='store', type='string', default="./atos-configurations",
                       help='set configuration path (default: ./atos-configurations)')

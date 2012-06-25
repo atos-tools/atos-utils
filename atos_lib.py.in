@@ -330,6 +330,7 @@ class atos_client_results():
         # create results dict
         results = {} # { variant : [ result_obj ] }
         for res in reslist:
+            if 'FAILURE' in [res['size'], res['time']]: continue
             results.setdefault(res['variant'], []).append(
                 atos_client_results.result(res))
         # merge multiple runs (average execution times)

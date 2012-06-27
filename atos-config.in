@@ -126,6 +126,10 @@ EOF
     # graphite
     result=`$compiler -O2 -xc -floop-block $tstfile 2>/dev/null && echo 1 || echo 0`
     echo "graphite_enabled $result"
+
+    # libgomp
+    result=`$compiler -O2 -xc -ftree-parallelize-loops=16 -lc -nostdlib $tstfile 2>/dev/null && echo 1 || echo 0`
+    echo "libgomp_enabled $result"
 }
 
 json_config_flags_file()

@@ -33,7 +33,6 @@
 1, 1, 5000, --param iv-max-considered-uses=
 1, 1, 50, --param iv-always-prune-cand-set-bound=
 1, 1, 64, -falign-loops=
-1, 1, 64, -ftree-parallelize-loops=
 3, 2, -fexpensive-optimizations, -fno-expensive-optimizations
 3, 2, -frerun-cse-after-loop, -fno-rerun-cse-after-loop
 3, 2, -funsafe-loop-optimizations, -fno-unsafe-loop-optimizations
@@ -42,6 +41,9 @@
 3, 2, -fvariable-expansion-in-unroller, -fno-variable-expansion-in-unroller
 3, 2, -fvect-cost-model, -fno-vect-cost-model
 3, 2, -fpredictive-commoning, -fno-predictive-commoning
+#if defined(LIBGOMP_ENABLED)
+1, 1, 64, -ftree-parallelize-loops=
+#endif
 #if defined(GRAPHITE_ENABLED)
 3, 2, -floop-block, -fno-loop-block
 3, 2, -floop-interchange, -fno-loop-interchange

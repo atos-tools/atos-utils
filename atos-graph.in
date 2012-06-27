@@ -67,7 +67,7 @@ class repeattimer():
 # ####################################################################
 
 
-def draw_graph(getgraph, title, opts):
+def draw_graph(getgraph, opts):
     # http://matplotlib.sourceforge.net/index.html
     import pylab as pl
     fg = pl.figure()
@@ -200,6 +200,12 @@ def draw_graph(getgraph, title, opts):
     # draw graph for the first time
     draw_all()
 
+    # graph title
+    title = 'Optimization Space for %s' % (
+        opts.identifier or opts.targets or (all_points and all_points[0].target))
+    if opts.refid: title += ' [ref=%s]' % opts.refid
+    if opts.filter: title += ' [filter=%s]' % opts.filter
+
     # redraw axis, set labels, legend, grid, ...
     def labelfmt(x, pos=0): return '%.2f%%' % (100.0 * x)
     ax.xaxis.set_major_formatter(pl.FuncFormatter(labelfmt))
@@ -221,7 +227,7 @@ def draw_graph(getgraph, title, opts):
         if opts.follow: repeatth.stop()
 
 
-def draw_correl_graph(getgraph, title, opts):
+def draw_correl_graph(getgraph, opts):
     # http://matplotlib.sourceforge.net/index.html
     import pylab as pl
     fg = pl.figure()
@@ -252,6 +258,13 @@ def draw_correl_graph(getgraph, title, opts):
     tooltip = ax.text(
         0, 0, "undef", bbox=dict(facecolor='white', alpha=0.8),
         verticalalignment='bottom', visible=False)
+
+    # graph title
+    try:
+        title = 'Correlation Graph for %s' % (
+            opts.identifier or opts.targets or bars[0][0][0].target)
+    except: title = 'Correlation Graph'
+
     # redraw axis, set labels, legend, grid, ...
     def labelfmt(x, pos=0): return '%.2f%%' % (100.0 * x)
     ax.yaxis.set_major_formatter(pl.FuncFormatter(labelfmt))
@@ -521,22 +534,16 @@ if __name__ == "__main__":
     #
     dbpath = args[0] if len(args) >= 1 else opts.configuration_path
 
-    # graph title
-    title = 'Optimization Space for %s' % (opts.identifier or opts.targets)
-    if opts.refid: title += ' [ref=%s]' % opts.refid
-    if opts.filter: title += ' [filter=%s]' % opts.filter
-
     if opts.correlation_graph:
-        title = 'Correlation Graph for %s' % (opts.identifier or opts.targets)
         get_graph_f = (lambda: correlgraph([dbpath] + opts.configuration_pathes, opts))
-        draw_correl_graph(get_graph_f, title=title, opts=opts)
+        draw_correl_graph(get_graph_f, opts=opts)
 
     elif opts.configuration_pathes:
         # frontier graph
         get_graph_f = (lambda: multgraph([dbpath] + opts.configuration_pathes, opts))
-        draw_graph(get_graph_f, title=title, opts=opts)
+        draw_graph(get_graph_f, opts=opts)
 
     else:
         # classic optimization space graph
         get_graph_f = (lambda: optgraph(dbpath, opts))
-        draw_graph(get_graph_f, title=title, opts=opts)
+        draw_graph(get_graph_f, opts=opts)

@@ -146,7 +146,7 @@ class atos_db_json(atos_db):
             self.results = json.load(db_file)
             db_file.seek(0); db_file.truncate()
             self.results.extend(entries)
-            json.dump(self.results, db_file)
+            json.dump(self.results, db_file, sort_keys=True, indent=4)
 
     def _read_results(self):
         self.results = json.load(open_locked(self.db_file))
@@ -408,7 +408,8 @@ class json_config():
         self._dump()
 
     def _dump(self):
-        json.dump(self.config, open(self.filename, 'w'))
+        json.dump(self.config, open(self.filename, 'w'),
+                  sort_keys=True, indent=4)
 
     def _compiler_features(self):
         feature_sets = []

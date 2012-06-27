@@ -45,7 +45,7 @@ version() {
 usage() {
     cat <<EOF
 
-Usage: atos-init [options]
+Usage: atos-init [options] [executables...]
 
 Configuration Options:
       -C <path> : configuration path [default: $configuration_path]
@@ -110,6 +110,8 @@ while getopts C:e:b:fr:t:n:cqdvh opt; do
 done
 
 shift $((OPTIND - 1))
+
+[ "$executables" != "" ] || executables="$@"
 
 if [ "$configuration_path" = "" ]; then
     echo "`basename $0`: error: missing configuration path" >&2

@@ -313,7 +313,7 @@ def point_str(point, short=False, no_id=False):
 def getoptcases(dbpath, opts):
     db = atos_lib.atos_db.db(dbpath)
     targets = (opts.targets and opts.targets.split(',')
-               or list(set(db.get_results('$[*].target')))[-1:])
+               or list(set(db.get_results('$[*].target'))))
     opts.query = opts.query and strtoquery(opts.query) or (
         opts.filter and 'variant:' + opts.filter)
     client = atos_lib.atos_client_results(

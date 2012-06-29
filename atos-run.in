@@ -291,6 +291,7 @@ while [ "$n" -le "$nbruns" ]; do
 
     if [ "$silent" != 1 ]; then
 	if $failure; then
+	    [ "$get_results_script" = "" ] || identifier=FAILURE
 	    output_run_result
 	else
 	    if [ "$get_results_script" != "" ]; then

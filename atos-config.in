@@ -123,7 +123,7 @@ EOF
     echo "lto_enabled $result"
 
     # plugins
-    result=`$compiler -O2 -shared -o $tmpdir/empty_plugin.so $tmpdir/empty_plugin.c 2>/dev/null && echo 1 || echo 0`     
+    result=`$compiler -fPIC -O2 -shared -o $tmpdir/empty_plugin.so $tmpdir/empty_plugin.c 2>/dev/null && echo 1 || echo 0`     
     [ "$result" = 0 ] || result=`$compiler -O2 -fplugin=$tmpdir/empty_plugin.so -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
     echo "plugins_enabled $result"
 

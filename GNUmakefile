@@ -19,12 +19,13 @@
 #
 
 srcdir:=$(dir $(lastword $(MAKEFILE_LIST)))
+pluginsdir:=$(srcdir/plugin)
 PREFIX=/usr/local
 VSTAMP=version.stamp
 VERSION:=$(shell $(srcdir)/config/update_version.sh $(VSTAMP))
 
-CONFIG_SCRIPTS_EXE_IN=atos-audit.in atos-raudit.in atos-deps.in atos-build.in atos-run.in atos-profile.in atos-explore.in atos-play.in atos-graph.in atos-explore-inline.in atos-explore-loop.in atos-explore-optim.in atos-opt.in atos-init.in atos-replay.in atos-config.in
-CONFIG_SCRIPTS_LIB_IN=atos_toolkit.py.in atos_lib.py.in
+CONFIG_SCRIPTS_EXE_IN=atos-audit.in atos-raudit.in atos-deps.in atos-build.in atos-run.in atos-profile.in atos-explore.in atos-play.in atos-graph.in atos-explore-inline.in atos-explore-loop.in atos-explore-optim.in atos-opt.in atos-init.in atos-replay.in atos-config.in atos-explore-acf.in
+CONFIG_SCRIPTS_LIB_IN=atos_toolkit.py.in atos_lib.py.in atos-acf-oprofile.py.in
 CONFIG_SCRIPTS_CFG_IN=flags.inline.cfg.in flags.loop.cfg.in flags.optim.cfg.in
 
 CONFIG_SCRIPTS_EXE=$(CONFIG_SCRIPTS_EXE_IN:%.in=bin/%)
@@ -39,15 +40,21 @@ INSTALLED_FILES=$(addprefix $(PREFIX)/,$(CONFIG_SCRIPTS))
 
 .PHONY: all clean distclean install check tests check-python-dependencies examples examples-nograph
 
-all: $(ALL_FILES)
+all: $(ALL_FILES) all_plugins
+
+all_plugins:
+	$(MAKE) -C plugins/acf-plugin all
 
 clean:
 	$(QUIET_CLEAN)rm -f *.tmp
+	$(MAKE) -C plugins/acf-plugin clean
 
 distclean:
 	$(QUIET_DISTCLEAN)rm -fr $(srcdir)/bin $(srcdir)/lib $(VSTAMP)
+	$(MAKE) -C plugins/acf-plugin clean
 
 install: $(INSTALLED_FILES)
+	$(MAKE) -C plugins/acf-plugin install
 
 check tests: all check-python-dependencies
 	$(MAKE) -C tests

@@ -1,0 +1,53 @@
+_Z5func2Pi,optimize,O3
+_Z8tab_initPi,optimize,O0
+_Z9tab_printPi,noinline
+_Z5func1Pi,optimize,O2
+_Z5func2Pi,optimize,O1
+main,optimize,Os
+_Z9tab_printPi,optimize,Os
+main,cold
+_Z6squarei,optimize,O3
+square,optimize,O3
+square,hot
+tab_print,optimize,3
+func1,optimize,unroll-loops
+_Z5func2Pi,cold,,
+_Z5func2Pi,cold,
+_Z5func2Pi,cold
+
+Should match file
+_Z5func2Pi,optimize,unroll-loops,hello-cpp.cpp
+_Z6squarei,optimize,2,hello-cpp.cpp
+square,optimize,Os,hello.c
+main,optimize,s,hello.c
+_Z5func2Pi,optimize,s,hello-cpp.cpp
+func2,noinline,,hello.c
+_Z5func2Pi,optimize,O0,hello-cpp.cpp
+
+Should not match file
+_Z5func2Pi,enum-int-equiv,,/
+_Z5func2Pi,enum-int-equiv,,/usr/XXXX/YYYYY/blocksort.c
+_Z5func2Pi,enum-int-equiv,,/path/file,
+_Z6squarei,enum-int-equiv,,toto.c
+_Z5func2Pi,optimize,unroll-loops,/xxx/yyy/zzz/hello-cpp.cpp
+_Z6squarei,optimize,2,/xxx/yyy/zzz/hello-cpp.cpp
+_Z6squarei,optimize,Os,/xxx/yyy/zzz/hello.c
+main,optimize,s,/xxx/yyy/zzz/hello.c
+_Z5func2Pi,noinline,,/xxx/yyy/zzz/hello.c
+_Z5func2Pi,optimize,O0,/xxx/yyy/zzz/hello-cpp.cpp
+
+Bad lines 
+,,
+,,,,
+XXX,  , 
+XXX,    ,
+,xx,
+XXX,, 
+XXX,,zz
+,  ,  ,   ,  ,
+XXX,YY,ZZ,TT,II
+XXX,YY,ZZ,TT,II,
+XXX,YY,ZZ,TT,II,,
+_Z5func2Pi,cold,,,,
+_Z5func2Pi,optimize,O2,/path/file,,
+

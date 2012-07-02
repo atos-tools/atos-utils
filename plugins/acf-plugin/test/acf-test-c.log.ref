@@ -1,0 +1,25 @@
+acf_plugin warning: discard icomplete line 18
+acf_plugin warning: discard icomplete line 27
+acf_plugin warning: discard icomplete line 39
+acf_plugin warning: discarded line 40: function name unspecified
+acf_plugin warning: discarded line 40: attribute unspecified
+acf_plugin warning: discarded line 41: function name unspecified
+acf_plugin warning: discarded line 41: attribute unspecified
+acf_plugin warning: discarded line 44: function name unspecified
+acf_plugin warning: discarded line 45: attribute unspecified
+acf_plugin warning: discarded line 46: attribute unspecified
+acf_plugin warning: discarded line 47: function name unspecified
+acf_plugin warning: discarded line 48: more than 4 entries
+acf_plugin warning: discarded line 49: more than 4 entries
+acf_plugin warning: discarded line 50: more than 4 entries
+acf_plugin warning: discarded line 51: more than 4 entries
+acf_plugin warning: discarded line 52: more than 4 entries
+acf_plugin: Attaching attribute to function square: optimize O3
+acf_plugin: Attaching attribute to function square: hot (null)
+acf_plugin: Attaching attribute to function square: optimize Os (file: hello.c)
+acf_plugin: Attaching attribute to function tab_print: optimize 3
+acf_plugin: Attaching attribute to function func1: optimize unroll-loops
+acf_plugin: Attaching attribute to function func2: noinline (null) (file: hello.c)
+acf_plugin: Attaching attribute to function main: optimize Os
+acf_plugin: Attaching attribute to function main: cold (null)
+acf_plugin: Attaching attribute to function main: optimize s (file: hello.c)

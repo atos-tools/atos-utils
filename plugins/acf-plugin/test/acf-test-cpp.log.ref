@@ -1,0 +1,32 @@
+acf_plugin warning: discard icomplete line 18
+acf_plugin warning: discard icomplete line 27
+acf_plugin warning: discard icomplete line 39
+acf_plugin warning: discarded line 40: function name unspecified
+acf_plugin warning: discarded line 40: attribute unspecified
+acf_plugin warning: discarded line 41: function name unspecified
+acf_plugin warning: discarded line 41: attribute unspecified
+acf_plugin warning: discarded line 44: function name unspecified
+acf_plugin warning: discarded line 45: attribute unspecified
+acf_plugin warning: discarded line 46: attribute unspecified
+acf_plugin warning: discarded line 47: function name unspecified
+acf_plugin warning: discarded line 48: more than 4 entries
+acf_plugin warning: discarded line 49: more than 4 entries
+acf_plugin warning: discarded line 50: more than 4 entries
+acf_plugin warning: discarded line 51: more than 4 entries
+acf_plugin warning: discarded line 52: more than 4 entries
+acf_plugin: Attaching attribute to function _Z8tab_initPi: optimize O0
+acf_plugin: Attaching attribute to function _Z6squarei: optimize O3
+acf_plugin: Attaching attribute to function _Z6squarei: optimize 2 (file: hello-cpp.cpp)
+acf_plugin: Attaching attribute to function _Z9tab_printPi: noinline (null)
+acf_plugin: Attaching attribute to function _Z9tab_printPi: optimize Os
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize O2
+acf_plugin: Attaching attribute to function _Z5func2Pi: optimize O3
+acf_plugin: Attaching attribute to function _Z5func2Pi: optimize O1
+acf_plugin: Attaching attribute to function _Z5func2Pi: cold (null)
+acf_plugin: Attaching attribute to function _Z5func2Pi: cold (null)
+acf_plugin: Attaching attribute to function _Z5func2Pi: cold (null)
+acf_plugin: Attaching attribute to function _Z5func2Pi: optimize unroll-loops (file: hello-cpp.cpp)
+acf_plugin: Attaching attribute to function _Z5func2Pi: optimize s (file: hello-cpp.cpp)
+acf_plugin: Attaching attribute to function _Z5func2Pi: optimize O0 (file: hello-cpp.cpp)
+acf_plugin: Attaching attribute to function main: optimize Os
+acf_plugin: Attaching attribute to function main: cold (null)

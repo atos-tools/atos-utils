@@ -176,8 +176,8 @@ fi
 	
 $dir/atos-run -C "$configuration_path" -n "$nbruns" $opt_q -r # Will stop there if reference run fails
 
-for gopt in "-O1" "-O2" "-Os" "-O3"; do
-    for opts in "" "-flto"; do
+for gopt in "-O2" "-Os" "-O3"; do
+    for opts in "" "-flto" "-funroll-loops" "-flto -funroll-loops"; do
 	options="$gopt $opts"
 	$dir/atos-build -C "$configuration_path" $opt_q -a "$options" && $dir/atos-run -C "$configuration_path" -n "$nbruns" $opt_q -r -a "$options" || true
     done

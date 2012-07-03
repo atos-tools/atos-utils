@@ -193,12 +193,7 @@ for gopt in "-O1" "-O2" "-Os" "-O3"; do
 	done
     fi
 done
-if [ "$quiet" != "1" ]; then
-    echo "Best performance variant..."
-    $dir/atos-play -C "$configuration_path" -p -f time
-    echo "Best size variant..."
-    $dir/atos-play -C "$configuration_path" -p -f size
-fi
+
 if [ "$quiet" != "1" ]; then
     echo "Completed."
 fi

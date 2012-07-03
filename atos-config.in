@@ -50,13 +50,11 @@ EOF
 }
 
 cleanup() {
-    [ ! -f "$tmpfile" ] || rm -f "$tmpfile"
-    [ ! -f "$tstfile" ] || rm -f "$tstfile"
+    [ ! -d "$tmpdir" ] || rm -rf "$tmpdir"
 }
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
-tmpfile=`mktemp /tmp/atos-inst.XXXXXX`
-tstfile=`mktemp /tmp/atos-inst.XXXXXX`
+tmpdir=`mktemp -d /tmp/atos-config.XXXXXX`
 
 
 while getopts C:q:cvh opt; do
@@ -86,12 +84,17 @@ compiler_test()
 {
     compiler=$1
 
-    cat > $tstfile <<EOF
+    cat > $tmpdir/test.c <<EOF
 #include <stdio.h>
 int main(void) {
   int i; for (i = 0; i < 10; i++) printf("hello\n");
   return 0;
 }
+EOF
+
+    cat > $tmpdir/empty_plugin.c <<EOF
+int plugin_is_GPL_compatible;
+int plugin_init(void *p1, void *p2) {}
 EOF
 
     # for now, it probably works only for gcc
@@ -116,19 +119,20 @@ EOF
     echo "driver_version $result"
 
     # lto
-    result=`$compiler -O2 -xc -flto $tstfile 2>/dev/null && echo 1 || echo 0`
+    result=`$compiler -O2 -flto -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
     echo "lto_enabled $result"
 
     # plugins
-    result=`$compiler -v --help 2>&1 | grep -e "-fplugin=" | wc -l`
+    result=`$compiler -O2 -shared -o $tmpdir/empty_plugin.so $tmpdir/empty_plugin.c 2>/dev/null && echo 1 || echo 0`     
+    [ "$result" = 0 ] || result=`$compiler -O2 -fplugin=$tmpdir/empty_plugin.so -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
     echo "plugins_enabled $result"
 
     # graphite
-    result=`$compiler -O2 -xc -floop-block $tstfile 2>/dev/null && echo 1 || echo 0`
+    result=`$compiler -O2 -floop-block -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
     echo "graphite_enabled $result"
 
     # libgomp
-    result=`$compiler -O2 -xc -ftree-parallelize-loops=16 -lc -nostdlib $tstfile 2>/dev/null && echo 1 || echo 0`
+    result=`$compiler -O2 -ftree-parallelize-loops=16 -lc -nostdlib -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
     echo "libgomp_enabled $result"
 }
 
@@ -170,8 +174,8 @@ config_file=$configuration_path/config.json
 
 if [ -f "$configuration_path/compilers" ]; then
     for compiler in `cat $configuration_path/compilers`; do
-	compiler_test $compiler > $tmpfile
-	json_config_add_compiler $tmpfile
+	compiler_test $compiler > $tmpdir/config.txt
+	json_config_add_compiler $tmpdir/config.txt
     done
     prepare_flag_files
 fi

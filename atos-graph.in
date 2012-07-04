@@ -215,6 +215,8 @@ def draw_graph(getgraph, opts):
     pl.title(title)
     pl.xlabel('size reduction (higher is better) -->')
     pl.ylabel('speedup (higher is better) -->')
+    if opts.xlim: pl.xlim([float(l) for l in opts.xlim.split(",")])
+    if opts.ylim: pl.ylim([float(l) for l in opts.ylim.split(",")])
     pl.grid(True)
 
     if opts.outfile:
@@ -528,6 +530,12 @@ if __name__ == "__main__":
     parser.add_option('-D', dest='configuration_pathes',
                       action='append', type='string', default=[],
                       help='set additional configuration path for frontier graph (default: None)')
+    parser.add_option('--xlim', dest='xlim',
+                      action='store', type='string', default=None,
+                      help='defines the x axis limits')
+    parser.add_option('--ylim', dest='ylim',
+                      action='store', type='string', default=None,
+                      help='defines the y axis limits')
 
     (opts, args) = parser.parse_args()
 

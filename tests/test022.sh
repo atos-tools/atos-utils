@@ -12,7 +12,7 @@ $ROOT/bin/atos-init \
 
 [ -f atos-configurations/flags.inline.cfg ]
 
-$ROOT/bin/atos-explore-inline -q -M5 -Vbase
+$ROOT/bin/atos-explore-inline -q -S0 -M5 -Vbase
 
 [ `$ROOT/lib/atos/atos_lib.py query -q'variant:OPT-.*' | wc -l` -eq 5 ]
 

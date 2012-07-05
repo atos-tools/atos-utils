@@ -11,5 +11,5 @@ $ROOT/bin/atos-init \
     -b "gcc -o sha1-c $ROOT/examples/sha1-c/sha.c $ROOT/examples/sha1-c/sha1.c"
 
 (
-    DEBUG=1 $ROOT/bin/atos-explore-inline -M1
+    DEBUG=1 $ROOT/bin/atos-explore-inline -M1 -S0
 ) 2>&1

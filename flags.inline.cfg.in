@@ -1,41 +1,244 @@
 #if GCC_VERSION >= 40400
-# flags for 4.4 / 4.5 / 4.6
-3, 2, -fearly-inlining, -fno-early-inlining
-3, 2, -findirect-inlining, -fno-indirect-inlining
-3, 2, -finline-functions, -fno-inline-functions
-3, 2, -finline-functions-called-once, -fno-inline-functions-called-once
-3, 2, -finline-small-functions, -fno-inline-small-functions
-1, 50, 200, --param large-function-growth=
-1, 500, 2000, --param large-stack-frame-growth=
-1, 256, 1024, --param max-inline-insns-single=
-1, 32, 256, --param max-inline-insns-auto=
-1, 2, 64, -finline-limit=
-1, 16, 64, --param inline-unit-growth=
-1, 4, 16, --param max-inline-recursive-depth=
-1, 4, 16, --param max-inline-recursive-depth-auto=
-1, 4, 32, --param min-inline-recursive-probability=
-1, 128, 1024, --param max-inline-insns-recursive=
-1, 128, 1024, --param max-inline-insns-recursive-auto=
-1, 1024, 4096, --param large-function-insns=
-1, 128, 512, --param large-stack-frame=
-1, 4096, 32768, --param large-unit-insns=
-1, 100, 10000, --param hot-bb-frequency-fraction=
-1, 1000, 100000, --param hot-bb-count-fraction=
-#endif
+
+# Inline functions marked by always_inline and functions whose body
+# seems smaller than the function call overhead early before doing
+# -fprofile-generate instrumentation and real inlining pass. Doing so
+# makes profiling significantly cheaper and usually inlining faster on
+# programs having large chains of nested wrapper functions.
+# Enabled by default.
+-fearly-inlining|-fno-early-inlining
+
+#if GCC_VERSION >= 40500
+
+# Specify growth that early inliner can make. In effect it increases
+# amount of inlining for code having large abstraction penalty. The
+# default value is 10.
+--param early-inlining-insns=[5..64]
+
+# Limit of iterations of early inliner. This basically bounds number of
+# nested indirect calls early inliner can resolve. Deeper chains are
+# still handled by late inlining. The default value is 10.
+--param max-early-inliner-iterations=[5..20]
+
+#endif // GCC_VERSION >= 40500
+
+# Inline also indirect calls that are discovered to be known at compile
+# time thanks to previous inlining. This option has any effect only when
+# inlining itself is turned on by the -finline-functions or
+# -finline-small-functions options.
+# Enabled at level -O2.
+-findirect-inlining|-fno-indirect-inlining
+
+# Integrate all simple functions into their callers. The compiler
+# heuristically decides which functions are simple enough to be worth
+# integrating in this way.  If all calls to a given function are
+# integrated, and the function is declared static, then the function is
+# normally not output as assembler code in its own right.
+# Enabled at level -O3.
+-finline-functions|-fno-inline-functions
+
+# Consider all static functions called once for inlining into their
+# caller even if they are not marked inline. If a call to a given
+# function is integrated, then the function is not output as assembler
+# code in its own right.
+# Enabled at levels -O1, -O2, -O3 and -Os.
+-finline-functions-called-once|-fno-inline-functions-called-once
+
+# Integrate functions into their callers when their body is smaller than
+# expected function call code (so overall size of program gets
+# smaller). The compiler heuristically decides which functions are
+# simple enough to be worth integrating in this way.
+# Enabled at level -O2.
+-finline-small-functions|-fno-inline-small-functions
+
+# Specifies maximal growth of large function caused by inlining in
+# percents. The default value is 100 which limits large function growth
+# to 2.0 times the original size.
+--param large-function-growth=[50..200]
+
+# Specifies maximal growth of large stack frames caused by inlining in
+# percents. The default value is 1000 which limits large stack frame
+# growth to 11 times the original size.
+--param large-stack-frame-growth=[500..2000]
+
+# Several parameters control the tree inliner used in gcc. This number
+# sets the maximum number of instructions (counted in GCC's internal
+# representation) in a single function that the tree inliner will
+# consider for inlining. This only affects functions declared inline and
+# methods implemented in a class declaration (C++). The default value is
+# 400.
+--param max-inline-insns-single=[256..1024]
+
+# When you use -finline-functions (included in -O3), a lot of functions
+# that would otherwise not be considered for inlining by the compiler
+# will be investigated. To those functions, a different (more
+# restrictive) limit compared to functions declared inline can be
+# applied. The default value is 40.
+--param max-inline-insns-auto=[32..256]
+
+# Specifies maximal overall growth of the compilation unit caused by
+# inlining. The default value is 30 which limits unit growth to 1.3
+# times the original size.
+--param inline-unit-growth=[16..64]
+
+# Specifies maximum recursion depth used by the recursive inlining.  For
+# functions declared inline --param max-inline-recursive-depth is taken
+# into account. For function not declared inline, recursive inlining
+# happens only when -finline-functions (included in -O3) is enabled and
+# --param max-inline-recursive-depth-auto is used. The default value is
+# 8.
+--param max-inline-recursive-depth=[4..16]
+--param max-inline-recursive-depth-auto=[4..16]
+
+# Recursive inlining is profitable only for function having deep
+# recursion in average and can hurt for function having little recursion
+# depth by increasing the prologue size or complexity of function body
+# to other optimizers.  When profile feedback is available (see
+# -fprofile-generate) the actual recursion depth can be guessed from
+# probability that function will recurse via given call expression. This
+# parameter limits inlining only to call expression whose probability
+# exceeds given threshold (in percents). The default value is 10.
+--param min-inline-recursive-probability=[4..32]
+
+# Specifies maximum number of instructions out-of-line copy of self
+# recursive inline function can grow into by performing recursive
+# inlining.  For functions declared inline --param
+# max-inline-insns-recursive is taken into account. For function not
+# declared inline, recursive inlining happens only when
+# -finline-functions (included in -O3) is enabled and --param
+# max-inline-insns-recursive-auto is used. The default value is 450.
+--param max-inline-insns-recursive=[128..1024]
+--param max-inline-insns-recursive-auto=[128..1024]
+
+# The limit specifying really large functions. For functions larger than
+# this limit after inlining, inlining is constrained by --param
+# large-function-growth. This parameter is useful primarily to avoid
+# extreme compilation time caused by non-linear algorithms used by the
+# backend. The default value is 2700.
+--param large-function-insns=[1024..4096]
+
+# The limit specifying large stack frames. While inlining the algorithm
+# is trying to not grow past this limit too much. Default value is 256
+# bytes.
+--param large-stack-frame=[128..512]
+
+# The limit specifying large translation unit. Growth caused by inlining
+# of units larger than this limit is limited by --param
+# inline-unit-growth. For small units this might be too tight (consider
+# unit consisting of function A that is inline and B that just calls A
+# three time. If B is small relative to A, the growth of unit is 300\%
+# and yet such inlining is very sane. For very large units consisting of
+# small inlineable functions however the overall unit growth limit is
+# needed to avoid exponential explosion of code size. Thus for smaller
+# units, the size is increased to --param large-unit-insns before
+# applying --param inline-unit-growth. The default is 10000
+--param large-unit-insns=[4096..32768]
+
+# Select fraction of the entry block frequency of executions of basic
+# block in function given basic block needs to have to be considered
+# hot. The default is 1000
+--param hot-bb-frequency-fraction=[100..10000]
+
+# Select fraction of the maximal count of repetitions of basic block in
+# program given basic block needs to have to be considered hot. The
+# default is 10000
+--param hot-bb-count-fraction=[1000..100000]
+#endif // GCC_VERSION >= 40400
 
 #if GCC_VERSION >= 40400 && GCC_MAX_VERSION < 40500
 # flags for 4.4 only
-1, 4, 32, --param inline-call-cost=
-#endif
 
-#if GCC_VERSION >= 40500
-# flags for 4.5 / 4.6
-1, 5, 64, --param early-inlining-insns=
-1, 5, 20, --param max-early-inliner-iterations=
-#endif
+# Specify cost of call instruction relative to simple arithmetics
+# operations (having cost of 1). Increasing this cost disqualifies
+# inlining of non-leaf functions and at the same time increases size of
+# leaf function that is believed to reduce function size by being
+# inlined. In effect it increases amount of inlining for code having
+# large abstraction penalty (many functions that just pass the arguments
+# to other functions) and decrease inlining for code with low
+# abstraction penalty. The default value is 12.
+--param inline-call-cost=[4..32]
+#endif // GCC_VERSION >= 40400 && GCC_MAX_VERSION < 40500
 
 #if GCC_VERSION >= 40600
-# flags for 4.6
-3, 2, -fpartial-inlining,-fno-partial-inlining
-1, 1, 99, --param partial-inlining-entry-probability=
+
+# Inline parts of functions. This option has any effect only when
+# inlining itself is turned on by the -finline-functions or
+# -finline-small-functions options.
+# Enabled at level -O2.
+-fpartial-inlining|-fno-partial-inlining
+--param partial-inlining-entry-probability=[1..99]
+
 #endif
+
+#if 0
+
+# Don't pay attention to the inline keyword. Normally this option is
+# used to keep the compiler from expanding any functions inline. Note
+# that if you are not optimizing, no functions can be expanded inline.
+# -finline
+
+# By default, GCC limits the size of functions that can be inlined. This
+# flag allows coarse control of this limit. n is the size of functions
+# that can be inlined in number of pseudo instructions.  Inlining is
+# actually controlled by a number of parameters, which may be specified
+# individually by using --param name=value. The -finline-limit=n option
+# sets some of these parameters as follows: max-inline-insns-single is
+# set to n/2.  max-inline-insns-auto is set to n/2.  See below for a
+# documentation of the individual parameters controlling inlining and
+# for the defaults of these parameters.  Note: there may be no value to
+# -finline-limit that results in default behavior.  Note: pseudo
+# instruction represents, in this particular context, an abstract
+# measurement of function's size. In no way does it represent a count of
+# assembly instructions and as such its exact meaning might change from
+# one release to an another.
+# disabled: dup of max-inline-insns-single and max-inline-insns-auto
+# -finline-limit=[2..64]
+
+#endif
+
+# flag dependencies
+
+-finline: -fearly-inlining
+-finline: -finline-functions
+-finline: -finline-functions-called-once
+-finline: -finline-small-functions
+-finline-functions: -findirect-inlining
+-finline-functions: -fpartial-inlining
+-finline-small-functions: -findirect-inlining
+-finline-small-functions: -fpartial-inlining
+-fearly-inlining: --param early-inlining-insns=
+-fearly-inlining: --param max-early-inliner-iterations=
+-fpartial-inlining: --param partial-inlining-entry-probability=
+-Os, -O1, -O2, -O3, -Ofast: --param max-inline-recursive-depth=
+-Os, -O1, -O2, -O3, -Ofast: --param max-inline-recursive-depth-auto=
+-Os, -O1, -O2, -O3, -Ofast: --param min-inline-recursive-probability=
+-Os, -O1, -O2, -O3, -Ofast: --param max-inline-insns-recursive=
+-Os, -O1, -O2, -O3, -Ofast: --param max-inline-insns-recursive-auto=
+-finline: --param max-inline-insns-single=
+-finline: --param max-inline-insns-auto=
+-finline: --param inline-call-cost=
+-finline: --param inline-unit-growth=
+-finline: --param large-function-growth=
+-finline: --param large-stack-frame-growth=
+-finline: --param large-function-insns=
+-finline: --param large-stack-frame=
+-finline: --param large-unit-insns=
+-fprofile-use, -fguess-branch-probability: --param hot-bb-frequency-fraction=
+-fprofile-use, -fguess-branch-probability: --param hot-bb-count-fraction=
+
+# flag default values (useful for dep roots)
+
+=> -O0
+-O0 => -fearly-inlining
+-O0 => -fno-inline, -fno-inline-small-functions
+-O0 => -fno-partial-inlining, -fno-inline-functions
+-O1 => -finline, -fno-inline-small-functions
+-O1 => -fno-partial-inlining, -fno-inline-functions
+-O2 => -finline, -finline-small-functions
+-O2 => -fpartial-inlining, -fno-inline-functions
+-Os => -finline, -finline-small-functions
+-Os => -fpartial-inlining, -fno-inline-functions
+-O3 => -finline, -finline-small-functions
+-O3 => -fpartial-inlining, -finline-functions
+-Ofast => -finline, -finline-small-functions
+-Ofast => -fpartial-inlining, -finline-functions

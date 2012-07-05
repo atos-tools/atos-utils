@@ -23,11 +23,18 @@ VERSION="@VERSION@"
 
 import os, re, math, threading, atexit, sys
 
+try:
+    import pylab as pl
+except:
+    print "pylab matplotlib module is not installed"
+    sys.exit(1)
+
 atos_bin = os.path.dirname(__file__)
 atos_lib = os.path.abspath(os.path.join(atos_bin, '..', 'lib', 'atos'))
 sys.path.append(atos_lib)
 
 import atos_lib
+
 
 
 # ####################################################################
@@ -69,7 +76,6 @@ class repeattimer():
 
 def draw_graph(getgraph, opts):
     # http://matplotlib.sourceforge.net/index.html
-    import pylab as pl
     fg = pl.figure()
     ax = fg.add_subplot(111)
 
@@ -231,7 +237,6 @@ def draw_graph(getgraph, opts):
 
 def draw_correl_graph(getgraph, opts):
     # http://matplotlib.sourceforge.net/index.html
-    import pylab as pl
     fg = pl.figure()
     ax = fg.add_subplot(111)
 

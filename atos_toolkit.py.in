@@ -42,13 +42,13 @@ class opt_flag():
         assert bool(frange) ^ bool(fchoice)
         self.range, self.choice = None, None
         if frange:
-            min, max, flag = frange
+            flag, min, max = frange
             self.range = (flag, int(min), int(max))
         if fchoice:
             self.choice = fchoice
 
     def __repr__(self):
-        return (self.range or self.choice)[0]
+        return self.optname()
 
     def rand(self):
         if self.range:
@@ -74,36 +74,122 @@ class opt_flag():
         else: assert 0
 
     def isoptlevel(self):
-        return self.rand()[:-1] == '-O'
+        return self.optname() == '-O'
 
     @staticmethod
     def optlevel(opt):
         return opt_flag(fchoice=opt)
 
+    def optname(self):
+        return opt_flag.foptname(self.rand())
+
     @staticmethod
-    def list_from_ccc_file(filename):
-        # CTuning Compiler optimization file format
-        #   http://ctuning.org/wiki/index.php/
-        #   CTools:CCC:Documentation:CCC_V2.5#Compiler_optimization_file_format
-        #   1 - optimization flag that takes parameter
-        #       1, <start_parameter>, <end_parameter>, flag
-        #   2 - optimization flag is on or off
-        #       2, flag
-        #   3 - select on flag from a list of flags
-        #       3, number of flags in a list, flags separated by comma
-        flag_list = []
+    def soptname(s):
+        eqidx = s.find('=')
+        if eqidx != -1:
+            s = s[:eqidx+1]
+        return s
+
+    @staticmethod
+    def foptname(s):
+        s = opt_flag.soptname(s)
+        if s.startswith('-fno-'):
+            s = s.replace('no-', '', 1)
+        if s.startswith('-O'):
+            s = '-O'
+        return s
+
+
+class opt_flag_list():
+
+    def __init__(self, filename):
+        self.load_from_file(filename)
+
+    def available_flags(self, cmdline=''):
+        result = []
+        # options that have no dependencies
+        result.extend(self.dependencies.get('', []))
+        # options that are enabled by command line
+        cmdflags = self.expand_command_line(cmdline)
+        for flag in cmdflags:
+            result.extend(self.dependencies.get(
+                    opt_flag.soptname(flag), []))
+        # filter options already set ?
+        return set(result)
+
+    def expand_command_line(self, cmdline):
+        def parse_line(cmdline):
+            cmd = [x.strip() for x in cmdline.split(' ')]
+            result, idx, cmdlen = [], 0, len(cmd)
+            while idx < cmdlen:
+                flag = cmd[idx]
+                if flag == '--param' and idx + 1 < cmdlen:
+                    flag += ' ' + cmd[idx+1]; idx += 1
+                result += [flag]; idx += 1
+            return result
+        def handle_flag(flag, explicit):
+            if not flag: return
+            flag_name = opt_flag.foptname(flag)
+            explicitly_set = flag_isset.get(flag_name, False)
+            if explicitly_set and not explicit: return
+            flag_isset[flag_name] = explicit
+            flag_value[flag_name] = flag
+            flag_index[flag_name] = flag_idx
+        flag_isset, flag_value, flag_index = {}, {}, {}
+        # initial options
+        flag_list, flag_idx = [''], 0
+        # command line flags
+        flag_list.extend(parse_line(cmdline))
+        # expand aliases
+        for flag in flag_list:
+            handle_flag(flag, True)
+            flag_aliases = self.aliases.get(flag, [])
+            flag_idx += 1
+            while flag_aliases:
+                handle_flag(flag_aliases.pop(0), False)
+                flag_idx += 1
+        # return ordered and simplified flag list
+        return sorted(flag_value.values(),
+                      key=lambda x: flag_index[opt_flag.foptname(x)])
+
+    def load_from_file(self, filename):
+        flag_list, rev_dependencies, aliases = [], {}, {}
+        # parse flags file
         for line in open(filename):
-            words = [w.strip() for w in line.strip().split(',')]
-            if not words: continue
-            if words[0] == '1':
-                flag_list += [opt_flag(frange=words[1:])]
-            elif words[0] == '2':
-                flag_list += [opt_flag(fchoice=[words[1], ''])]
-            elif words[0] == '3':
-                flag_list += [opt_flag(fchoice=words[2:])]
-            else: pass
-        # filter optimization level option
-        return [ f for f in flag_list if not f.isoptlevel() ]
+            line = line.split('#', 1)[0].strip()
+            if not line: continue
+            # dependency
+            reobj = re.match('^(.*):(.*)', line)
+            if reobj:
+                ldeps = [x.strip() for x in reobj.group(1).split(',')]
+                rdeps = [x.strip() for x in reobj.group(2).split(',')]
+                [rev_dependencies.setdefault(r, []).append(
+                        l) for l in ldeps for r in rdeps]
+                continue
+            # alias
+            reobj = re.match('^(.*)=>(.*)', line)
+            if reobj:
+                lalias = [x.strip() for x in reobj.group(1).split(',')]
+                ralias = [x.strip() for x in reobj.group(2).split(',')]
+                [aliases.setdefault(l, []).append(
+                        r) for l in lalias for r in ralias]
+                continue
+            # range flag
+            reobj = re.match('^(.*)\[(.*)\.\.(.*)\]', line)
+            if reobj:
+                flag_list += [opt_flag(frange=reobj.groups())]
+                continue
+            # choice flag
+            choices = [w.strip() for w in line.split('|')]
+            flag_list += [opt_flag(fchoice=choices)]
+        # dependency dict
+        dependencies = {}
+        for flag in flag_list:
+            for dep_parent in rev_dependencies.get(flag.optname(), ['']):
+                dependencies.setdefault(dep_parent, []).append(flag)
+        self.flag_list = flag_list
+        self.dependencies = dependencies
+        self.aliases = aliases
 
 
 # ####################################################################
@@ -111,7 +197,7 @@ class opt_flag():
 
 class generator():
 
-    optlist, optlevel, variants = None, None, None
+    optlist, optlevel, variants, baseopts = None, None, None, None
     generators = []
 
     def __init__(self, func):
@@ -167,8 +253,27 @@ def gen_rnd_uniform():
     '''generate random combinations of compiler flags'''
     while True:
         flags = [ generator.optlevel.rand() ]
-        flags += [ f.rand() for f in generator.optlist if randint(0, 1) ]
+        flags += [ f.rand() for f in generator.optlist.flag_list if randint(0, 1) ]
         yield ' '.join(flags)
+
+
+@generator
+def gen_rnd_uniform_deps():
+    '''generate random meaningful combination of compiler flags using dependencies'''
+    while True:
+        handled_flags = set()
+        available_flags = generator.optlist.available_flags(
+            generator.baseopts or '')
+        flags = generator.baseopts or generator.optlevel.rand()
+        while True:
+            for f in sorted(list(available_flags)):
+                if randint(0, 1): continue
+                flags += ' ' + f.rand()
+            handled_flags |= available_flags
+            available_flags = (
+                generator.optlist.available_flags(flags) - handled_flags)
+            if not available_flags: break
+        yield flags
 
 
 @generator
@@ -176,14 +281,14 @@ def gen_rnd_fixed(seqlen='5'):
     '''generate random combinations of fixed length'''
     while True:
         flags = [ generator.optlevel.rand() ]
-        flags += [ f.rand() for f in sample(generator.optlist, int(seqlen)) ]
+        flags += [ f.rand() for f in sample(generator.optlist.flag_list, int(seqlen)) ]
         yield ' '.join(flags)
 
 
 @generator
 def gen_one_by_one(optlevel):
     '''try all flags one by one'''
-    for flag in generator.optlist:
+    for flag in generator.optlist.flag_list:
         for flagval in flag.values():
             yield ' '.join([ optlevel, flagval ])
 
@@ -328,6 +433,35 @@ def atos_opt_get_frontier(config, targets, query={}):
     return map(lambda x: x.get('variant', ''), results)
 
 
+def atos_base_flags(flags, variant, baseopts):
+    if not baseopts: return flags, variant
+    variantd = {
+        (0, 0, 0) : variant,
+        (0, 0, 1) : 'lipo',
+        (1, 0, 0) : 'fdo',
+        (0, 1, 0) : 'lto',
+        (1, 1, 0) : 'fdo+lto' }
+    base_flags, base_uflags = baseopts or ('', '')
+    fdo_set = base_uflags != ''
+    lto_set = (base_flags.find('-flto') != -1)
+    lipo_set = (base_flags.find('-fripa') != -1)
+    base_flags.replace('-flto', '')
+    base_flags.replace('-fripa', '')
+    return base_flags + ' ' + flags, variantd[(fdo_set, lto_set, lipo_set)]
+
+
+def atos_exp_base_flags(baseopts):
+    new_opts = {
+        'base' : '',
+        'fdo'  : ' -fprofile-use',
+        'lto'  : ' -flto',
+        'fdo+lto' : ' -fprofile-use -flto',
+        'lipo'  : '-fprofile-use -fripa',
+        }
+    flags, variant = atos_base_flags('', 'base', baseopts)
+    return flags + new_opts[variant]
+
+
 def atos_opt_run(flags, variant, profdir, config, nbrun, baseopts, no_replay):
     variant_options_flags = {
         'base' : ('', ''),
@@ -338,14 +472,12 @@ def atos_opt_run(flags, variant, profdir, config, nbrun, baseopts, no_replay):
     info('RUN [%s] [%s] %s' % (variant, flags, baseopts or ''))
     profdir_option = profdir and ('-b %s' % profdir) or ''
     replay_option = no_replay and '-k' or ''
+    flags, variant = atos_base_flags(flags, variant, baseopts)
     variant_options, variant_flags = variant_options_flags[variant]
-    base_flags, base_uflags = '', ''
-    if baseopts: base_flags, base_uflags = baseopts
-    base_uflags = base_uflags and '-u ' + base_uflags or ''
     status, output = system(
-        '%s/atos-opt -C %s -n %s %s %s -r -a "%s %s %s" %s %s' % (
+        '%s/atos-opt -C %s -n %s %s %s -r -a "%s %s" %s' % (
             bindir, config, nbrun, replay_option, profdir_option,
-            base_flags, flags, variant_flags, variant_options, base_uflags))
+            flags, variant_flags, variant_options))
     if not (status and output):
         info('FAILURE [%s] [%s]' % (variant, flags))
         return None
@@ -368,6 +500,7 @@ def atos_get_result_wrapper(config, targets):
 def atos_run_wrapper(profdir, config, nbrun, baseopts, no_replay):
     return lambda f, v: atos_opt_run(
         f, v, profdir, config, nbrun, baseopts, no_replay)
+
 
 
 # ####################################################################
@@ -458,13 +591,14 @@ if __name__ == '__main__':
 
     # generators setup
     generator.optlist = (
-        opts.flags != None and opt_flag.list_from_ccc_file(opts.flags))
+        opts.flags != None and opt_flag_list(opts.flags))
     generator.optlevel = opt_flag.optlevel(opts.optlvl.split(','))
     generator.variants = opts.variants.split(',')
 
     if opts.base_opts:
         opts.base_opts = opts.base_opts.split(',')
         if len(opts.base_opts) < 2: opts.base_opts += ['']
+        generator.baseopts = atos_exp_base_flags(opts.base_opts)
 
     if opts.base_opts or args:
         generator.optlevel = opt_flag.optlevel([''])
@@ -500,10 +634,13 @@ if __name__ == '__main__':
             if not base_opts:
                 warning('variant not found: ' + variant)
                 continue
+            generator.baseopts = atos_exp_base_flags(base_opts)
             exploration_loop(opts.generators, maxiter=opts.max,
                              step=atos_run_wrapper(
-                    opts.profdir, opts.atos_configurations, opts.nbrun, base_opts, opts.no_replay))
+                    opts.profdir, opts.atos_configurations, opts.nbrun,
+                    base_opts, opts.no_replay))
     else:
         exploration_loop(opts.generators, maxiter=opts.max,
                          step=atos_run_wrapper(
-                opts.profdir, opts.atos_configurations, opts.nbrun, opts.base_opts, opts.no_replay))
+                opts.profdir, opts.atos_configurations, opts.nbrun,
+                opts.base_opts, opts.no_replay))

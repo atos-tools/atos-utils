@@ -128,5 +128,5 @@ fi
 $libdir/atos_toolkit.py -C $configuration_path \
     $opt_debug $opt_seed $opt_profdir --max=$nb_iter -n $nb_runs \
     --optlvl=$opt_levels --variants=$opt_variants --flags=$flags_file \
-    --gen-rnd-uniform "$@"
+    --gen-rnd-uniform-deps "$@"
 

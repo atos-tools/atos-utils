@@ -63,7 +63,6 @@ echo "Building atos-utils..."
 cd $GITROOT
 make all
 make check
-make tests
 make examples-nograph
 make install PREFIX=$DEVIMAGE/usr/local
 

@@ -99,7 +99,7 @@ echo "echo 0400b20     894  0.0447  sha1-c main >> oprof.out" >> $oprof_out_scri
 
 chmod +x $oprof_out_script
 
-$ROOT/bin/atos-explore-acf -q -e ./sha1-c -p $oprof_out_script -x 70 -y 30 -Y "-Os noinline cold"
+$ROOT/bin/atos-explore-acf -q -e ./sha1-c -p ./$oprof_out_script -x 70 -y 30 -Y "-Os noinline cold"
 
 [ -d atos-configurations ]
 

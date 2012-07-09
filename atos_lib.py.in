@@ -22,9 +22,13 @@
 VERSION="@VERSION@"
 
 import os, sys, re, math, itertools, time, fcntl, json
-import jsonlib
 import cPickle as pickle
-from pprint import pprint, pformat
+
+atos_libdir = os.path.dirname(__file__)
+python_libs = os.path.abspath(os.path.join(atos_libdir, '..', 'python'))
+sys.path.append(python_libs)
+
+import jsonlib
 
 
 # ####################################################################

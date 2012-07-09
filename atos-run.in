@@ -26,7 +26,6 @@ set -e
 dir=`dirname $0`
 dir=`cd $dir; pwd`
 libdir=`cd $dir/../lib/atos; pwd`
-PROOT=${PROOT:-proot}
 
 executables=""
 identifier=""

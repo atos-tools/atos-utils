@@ -25,7 +25,6 @@ set -e
 
 dir=`dirname $0`
 dir=`cd $dir; pwd`
-PROOT=${PROOT:-proot}
 
 run_script=""
 build_script=""

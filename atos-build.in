@@ -25,7 +25,6 @@ set -e
 
 dir=`dirname $0`
 dir=`cd $dir; pwd`
-PROOT=${PROOT:-proot}
 
 options=""
 ccregexp="-\?\(gcc\|g++\|cc\|c++\)\$"
@@ -125,6 +124,24 @@ while getopts vhqnfw:C:j:c:r:a:u:g:b:p: opt; do
 done
 
 shift $((OPTIND - 1))
+
+proot_atos() {
+    uname=`uname -m`
+    case $uname in
+	i386|i486|i586|i686) arch=i386
+	    ;;
+	x86_64) arch=$uname
+	    ;;
+	*) arch=$uname
+	    ;;
+    esac
+    if [ -x "$libdir/$arch/proot" ]; then
+	echo $libdir/$arch/proot
+    else
+	echo ${PROOT:-proot}
+    fi
+}
+PROOT=`proot_atos`
 
 variant_hash() {
     echo "$1" | md5sum | cut -f 1 -d ' '

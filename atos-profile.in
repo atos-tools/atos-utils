@@ -25,7 +25,6 @@ set -e
 
 dir=`dirname $0`
 dir=`cd $dir; pwd`
-PROOT=${PROOT:-proot}
 
 configuration_path="./atos-configurations"
 profile_path=""

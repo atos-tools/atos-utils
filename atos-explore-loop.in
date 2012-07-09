@@ -25,7 +25,6 @@ set -e
 
 dir=`cd \`dirname $0\`; pwd`
 libdir=`cd $dir/../lib/atos; pwd`
-PROOT=${PROOT:-proot}
 
 configuration_path="./atos-configurations"
 opt_seed=""

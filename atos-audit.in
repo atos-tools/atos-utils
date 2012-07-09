@@ -25,7 +25,7 @@ set -e
 
 dir=`dirname $0`
 dir=`cd $dir; pwd`
-PROOT=${PROOT:-proot}
+libdir=`cd $dir/../lib/atos; pwd`
 
 ccregexp="-\?\(gcc\|g++\|cc\|c++\|ar\)\$"
 configuration_path="./atos-configurations"
@@ -91,6 +91,24 @@ while getopts vhqfC:c:r:o: opt; do
 done
 
 shift $((OPTIND - 1))
+
+proot_atos() {
+    uname=`uname -m`
+    case $uname in
+	i386|i486|i586|i686) arch=i386
+	    ;;
+	x86_64) arch=$uname
+	    ;;
+	*) arch=$uname
+	    ;;
+    esac
+    if [ -x "$libdir/$arch/proot" ]; then
+	echo $libdir/$arch/proot
+    else
+	echo ${PROOT:-proot}
+    fi
+}
+PROOT=`proot_atos`
 
 [ "$quiet" = "1" ] || echo "Auditing build..."
 

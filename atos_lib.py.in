@@ -21,7 +21,7 @@
 
 VERSION="@VERSION@"
 
-import os, sys, re, math, itertools, time, fcntl, json
+import os, sys, re, math, itertools, time, fcntl, json, hashlib
 import cPickle as pickle
 
 atos_libdir = os.path.dirname(__file__)
@@ -498,6 +498,9 @@ def standard_deviation(l):
 def variation_coefficient(l):
     return (standard_deviation(l) / average(l))
 
+def hashid(s):
+    # return same results as 'echo s | md5sum'
+    return hashlib.md5(s + '\n').hexdigest()
 
 def strtodict(s):
     # 'aa:xx,bb:yy' -> {'aa':'xx','bb':'yy'}

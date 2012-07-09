@@ -305,15 +305,17 @@ def point_descr(point):
 
 def point_str(point, short=False, no_id=False):
     res = ''
+    if not no_id:
+        if short and len(point.variant) >= 45:
+            legend_id = point.variant[:25] + '...' + point.variant[-15:]
+        else: legend_id = point.variant
+        res = legend_id + '\n'
     res += 'speedup=%.2f%% runtime=%.2f\n' % (
         point.speedup * 100, point.time)
     res += 'reduction=%.2f%% binsize=%d' % (
         point.sizered * 100, point.size)
     if not no_id:
-        if short and len(point.variant) >= 45:
-            legend_id = point.variant[:25] + '...' + point.variant[-15:]
-        else: legend_id = point.variant
-        res += '\nid=' + legend_id
+        res += '\nid=%s' % (atos_lib.hashid(point.variant))
     return res
 
 

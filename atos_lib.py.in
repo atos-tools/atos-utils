@@ -530,6 +530,7 @@ def result_entry(d):
     try:
         d['time'] = float(d['time'])
         d['size'] = int(d['size'])
+        assert d['time'] and d['size']
     except:
         d['time'] = d['size'] = 'FAILURE'
     return d

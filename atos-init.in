@@ -24,7 +24,6 @@ set -e
 [ "$DEBUG" = "" ] || set -x
 
 dir=`cd \`dirname $0\`; pwd`
-PROOT=${PROOT:-proot}
 
 executables=""
 configuration_path="./atos-configurations"

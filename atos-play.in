@@ -25,6 +25,7 @@ set -e
 
 dir=`dirname $0`
 dir=`cd $dir; pwd`
+libdir=`cd $dir/../lib/atos; pwd`
 
 configuration_path="./atos-configurations"
 objective=time
@@ -83,9 +84,9 @@ while getopts vhqnprl:C:f:e:i: opt; do
 	    ;;
 	i) identifier="$OPTARG"
 	    ;;
-	n) dryrun=1
+	n) dryrun="-n"
 	    ;;
-	p) print=1
+	p) print="-p"
 	    ;;
 	r) ref=1
 	    ;;
@@ -104,9 +105,8 @@ done
 
 shift $((OPTIND - 1))
 
-results_db=$configuration_path/results.db
-if [ ! -f "$results_db" ]; then
-    echo "error: `basename $0`: configuration missing: $results_db" >&2
+if [ ! -d "$configuration_path" ]; then
+    echo "error: `basename $0`: configuration missing: $configuration_path" >&2
     exit 1
 fi
 
@@ -128,81 +128,19 @@ if [ "$identifier" = "" ]; then
 fi
 
 if [ "$objective" != time -a "$objective" != size ]; then
-    echo "error: `basename $0`: unknown objective: $objective" >&2
+    echo "`basename $0`: error: unknown objective: $objective" >&2
     exit 1
 fi
 
-get_local_id() {
-    local -i line
-    line=$(($1+1))
-    egrep "^ATOS: $identifier: [^:]*: version:" $results_db | head -n $line | tail -n 1 | awk '{print $3}' | sed 's/:$//'
-}
- 
-best() {
-    local objective=$1
-    grep "^ATOS: $identifier:" $results_db  | grep " $objective:" | grep -v " $objective: FAILURE" | sort -n -k 5 | head -1 | awk '{print $3}' | sed 's/:$//'
-}
-
-get_options() {
-    grep "^ATOS: $identifier: $configuration: conf:" $results_db | sed "s/ATOS: $identifier: $configuration: conf: //" | tail -n 1
-}
-
-get_uset() {
-    local set=1
-    grep "^ATOS: $identifier: $configuration: uconf:" $results_db >/dev/null || set=0
-    echo $set
-}
-
-get_uopts() {
-    grep "^ATOS: $identifier: $configuration: uconf:" $results_db | sed "s/ATOS: $identifier: $configuration: uconf: //" | tail -n 1
-}
-
-get_gset() {
-    local set=1
-    grep "^ATOS: $identifier: $configuration: gconf:" $results_db >/dev/null || set=0
-    echo $set
-}
-
-get_gopts() {
-    grep "^ATOS: $identifier: $configuration: gconf:" $results_db | sed "s/ATOS: $identifier: $configuration: gconf: //" | tail -n 1
-}
-
-u_set=0
-g_set=0
-if [ "$ref" = 1 ]; then
-    configuration=REF
-    options=""
+if [ "$ref" = "1" ]; then
+    select_opt="--variant=REF"
+elif [ "$local_id" != "" ]; then
+    select_opt="--hash=$local_id"
+elif [ "$objective" == "size" ]; then
+    select_opt="--tradeoff=0.2"
 else
-    if [ "$local_id" != "" ]; then
-	configuration=`get_local_id $local_id`
-    else
-	configuration=`best $objective`
-	options=`get_options`
-    fi
-    options=`get_options`
-    u_set=`get_uset`
-    g_set=`get_gset`
-    if [ "$u_set" = 1 ]; then
-	uopts=`get_uopts`
-    elif [ "$g_set" = 1 ]; then
-	gopts=`get_gopts`
-    fi
+    select_opt="--tradeoff=5.0"
 fi
 
-if [ "$print" = 1 ]; then
-    grep "^ATOS: $identifier: $configuration:" $results_db
-    exit 0
-fi
-
-[ "$quiet" = "1" ] || echo "Playing optimized build $identifier:$configuration..."
-if [ "$u_set" = 1 ]; then
-    exec $dir/atos-build ${dryrun:+-n} -a "$options" -u "$uopts" ${1+"$@"}
-elif [ "$g_set" = 1 ]; then
-    exec $dir/atos-build ${dryrun:+-n} -a "$options" -g "$gopts" ${1+"$@"}
-else
-    exec $dir/atos-build ${dryrun:+-n} -a "$options" ${1+"$@"}
-fi
-
-
-
-
+$libdir/atos_lib.py play \
+    -C $configuration_path -i $identifier $select_opt $print $dryrun "$@"

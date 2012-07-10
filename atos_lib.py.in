@@ -21,12 +21,14 @@
 
 VERSION="@VERSION@"
 
-import os, sys, re, math, itertools, time, fcntl, json, hashlib
+import os, sys, re, math, itertools, time, fcntl, json, hashlib, subprocess
 import cPickle as pickle
 
 atos_libdir = os.path.dirname(__file__)
 python_libs = os.path.abspath(os.path.join(atos_libdir, '..', 'python'))
 sys.path.append(python_libs)
+atos_bindir = os.path.abspath(
+    os.path.join(atos_libdir, '..', '..', 'bin'))
 
 import jsonlib
 
@@ -291,6 +293,7 @@ class atos_client_results():
 
     @staticmethod
     def select_tradeoff(frontier, perf_size_ratio=4):
+        if not frontier: return None
         # copy frontier points
         frontier_orig = sorted(
             frontier, key=lambda x: x.size)
@@ -506,6 +509,10 @@ def strtodict(s):
     # 'aa:xx,bb:yy' -> {'aa':'xx','bb':'yy'}
     d = {}
     if s == '': return d
+    if s[0] == '[':
+        return json.loads(s)[0]
+    if s[0] == '{':
+        return json.loads(s)
     for kv in s.split(','):
         k, v = kv.split(':')
         d[k] = v
@@ -972,6 +979,84 @@ if __name__ == '__main__':
 
         pprint_table(table, reverse=opts.reverse)
 
+
+    # ################################################################
+
+    elif args[0] == 'play':
+
+        subparser = optparse.OptionParser(prog='atos-play')
+        subparser.add_option('-C', dest='configuration_path',
+            action='store', type='string', default="./atos-configurations",
+            help='set configuration path (default: ./atos-configurations)')
+        subparser.add_option('-t', '--tradeoff', dest='tradeoff',
+            action='store', type='float', default=5.0,
+            help='selected tradeoff given size/perf ratio')
+        subparser.add_option('-v', '--variant', dest='variant',
+            action='store', type='string', default=None,
+            help='selected variant')
+        subparser.add_option('-a', '--hash', dest='hash_id',
+            action='store', type='string', default=None,
+            help='selected variant hash_id')
+        subparser.add_option('-i', dest='identifier',
+            action='store', type='string', default=None,
+            help='identifier of run (default: executables basename)')
+        subparser.add_option('-n', dest='dryrun',
+            action='store_true', default=False,
+            help='dry run, output build commands only')
+        subparser.add_option('-p', dest='print_config',
+            action='store_true', default=False,
+            help='print configuration only')
+        subparser.add_option('-q', dest='quiet',
+            action='store_true', default=False,
+            help='quiet mode')
+
+        (opts, args) = subparser.parse_args(sys.argv[2:])
+
+        atos_db = atos_db.db(opts.configuration_path)
+
+        result = None
+
+        if opts.variant:
+            results = atos_client_db(atos_db).query(
+                { 'variant' : opts.variant, 'target' : opts.identifier })
+            result = results and results[0] or None
+
+        elif opts.hash_id:
+            results = atos_client_db(atos_db).query(
+                { 'target' : opts.identifier })
+            results = filter(
+                lambda x: hashid(x['variant']).startswith(opts.hash_id), results)
+            if len(results) > 1:
+                subparser.error('ambiguous local_id: %s' % opts.hash_id)
+            result = results and results[0] or None
+
+        else:
+            result = atos_client_results(
+                atos_db, [opts.identifier]).tradeoff(opts.tradeoff)
+            result = result and result.dict() or None
+
+        if not result:
+            subparser.error('no result found')
+
+        if opts.print_config:
+            print atos_db_file.entry_str(result),
+
+        else:
+            if not opts.quiet:
+                print 'Playing optimized build %s:%s...' % (
+                    opts.identifier, result['variant'])
+
+            atos_build = os.path.join(atos_bindir, 'atos-build')
+            command = ['-a', result.get('conf', '')]
+            if result.has_key('uconf'):
+                command += ['-u', result['uconf']]
+            elif result.has_key('gconf'):
+                command += ['-g', result['gconf']]
+            if opts.dryrun:
+                command += ['-n']
+
+            rcode = subprocess.call([atos_build] + command + args)
+            sys.exit(rcode)
 
     # ################################################################
 

@@ -28,7 +28,7 @@ import getopt
 
 atos_bindir = os.path.dirname(__file__)
 python_libs = os.path.abspath(
-    os.path.join(atos_bindir, '..', 'lib', 'python'))
+    os.path.join(atos_bindir, '..', 'lib', 'atos', 'python'))
 sys.path.append(python_libs)
 
 from pygraph.classes.digraph import digraph

@@ -65,6 +65,7 @@ make all
 make check
 make examples-nograph
 make install PREFIX=$DEVIMAGE/usr/local
+ROOT=$DEVIMAGE/usr/local make check
 
 echo "Archiving atos-utils..."
 cd $DEVIMAGE

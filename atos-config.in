@@ -26,7 +26,7 @@ dir=`cd \`dirname $0\`; pwd`
 libdir=`cd $dir/../lib/atos; pwd`
 
 configuration_path="./atos-configurations"
-
+ppflags=""
 
 #######################
 
@@ -56,10 +56,11 @@ trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 tmpdir=`mktemp -d /tmp/atos-config.XXXXXX`
 
-
-while getopts C:q:cvh opt; do
+while getopts C:D:q:cvh opt; do
     case $opt in
 	C) configuration_path="$OPTARG"
+	    ;;
+	D) ppflags="$ppflags -D$OPTARG"
 	    ;;
 	v) version; exit 0
 	    ;;
@@ -161,10 +162,9 @@ prepare_flag_files()
     flagsdefs=`json_config_flags_file`
     for flags in $libdir/config/flags.*.cfg; do
 	dest=$configuration_path/`basename $flags`
-	$preprocessor -xassembler-with-cpp -P -E $flagsdefs - < $flags > $dest
+	$preprocessor -xassembler-with-cpp -P -E $flagsdefs $ppflags - < $flags > $dest
     done
 }
-
 
 export PYTHONPATH=$libdir:$PYTHONPATH
 

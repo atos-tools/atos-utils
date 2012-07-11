@@ -1,51 +1,10 @@
 #if GCC_VERSION >= 40400
 
-# ############################################################################
-
 # Combine increments or decrements of addresses with memory
 # accesses. This pass is always skipped on architectures that do not
 # have instructions to support this. Enabled by default at -O and higher
 # on architectures that support this.
 -fauto-inc-dec|-fno-auto-inc-dec
-
-# When enabled, this option states that a range reduction step is not
-# needed when performing complex division. Also, there is no checking
-# whether the result of a complex multiplication or division is NaN +
-# I*NaN, with an attempt to rescue the situation in that case. The
-# default is -fno-cx-limited-range, but is enabled by -ffast-math.  This
-# option controls the default setting of the ISO C99 CX_LIMITED_RANGE
-# pragma. Nevertheless, the option applies to all languages.
--fcx-limited-range|-fno-cx-limited-range
-
-# Disable transformations and optimizations that assume default floating
-# point rounding behavior. This is round-to-zero for all floating point
-# to integer conversions, and round-to-nearest for all other arithmetic
-# truncations. This option should be specified for programs that change
-# the FP rounding mode dynamically, or that may be executed with a
-# non-default rounding mode. This option disables constant folding of
-# floating point expressions at compile-time (which may be affected by
-# rounding mode) and arithmetic transformations that are unsafe in the
-# presence of sign-dependent rounding modes.  The default is
-# -fno-rounding-math.  This option is experimental and does not
-# currently guarantee to disable all GCC optimizations that are affected
-# by rounding mode. Future versions of GCC may provide finer control of
-# this setting using C99's FENV_ACCESS pragma. This command line option
-# will be used to specify the default state for FENV_ACCESS.
--frounding-math|-fno-rounding-math
-
-# Allow re-association of operands in series of floating-point
-# operations. This violates the ISO C and C++ language standard by
-# possibly changing computation result. NOTE: re-ordering may change the
-# sign of zero as well as ignore NaNs and inhibit or create underflow or
-# overflow (and thus cannot be used on a code which relies on rounding
-# behavior like (x + 2**52) - 2**52). May also reorder floating-point
-# comparisons and thus may not be used when ordered comparisons are
-# required. This option requires that both -fno-signed-zeros and
-# -fno-trapping-math be in effect. Moreover, it doesn't make much sense
-# with -frounding-math. For Fortran the option is automatically enabled
-# when both -fno-signed-zeros and -fno-trapping-math are in effect.  The
-# default is -fno-associative-math.
--fassociative-math|-fno-associative-math
 
 # Always pop the arguments to each function call as soon as that
 # function returns. For machines which must pop arguments after a
@@ -88,15 +47,6 @@
 # -fno-merge-constants to inhibit this behavior.  Enabled at levels -O,
 # -O2, -O3, -Os.
 -fmerge-constants|-fno-merge-constants
-
-# Attempt to merge identical constants and identical variables.  This
-# option implies -fmerge-constants. In addition to -fmerge-constants
-# this considers e.g. even constant initialized arrays or initialized
-# constant variables with integral or floating point types. Languages
-# like C or C++ require each variable, including multiple instances of
-# the same variable in recursive calls, to have distinct locations, so
-# using this option will result in non-conforming behavior.
--fmerge-all-constants|-fno-merge-all-constants
 
 # Perform swing modulo scheduling immediately before the first
 # scheduling pass. This pass looks at innermost loops and reorders their
@@ -524,15 +474,6 @@
 # Enabled at levels -O2, -O3.
 -freorder-blocks|-fno-reorder-blocks
 
-# In addition to reordering basic blocks in the compiled function, in
-# order to reduce number of taken branches, partitions hot and cold
-# basic blocks into separate sections of the assembly and .o files, to
-# improve paging and cache locality performance.  This optimization is
-# automatically turned off in the presence of exception handling, for
-# linkonce sections, for functions with a user-defined section attribute
-# and on any architecture that does not support named sections.
--freorder-blocks-and-partition|-fno-reorder-blocks-and-partition
-
 # Reorder functions in the object file in order to improve code
 # locality. This is implemented by using special subsections .text.hot
 # for most frequently executed functions and .text.unlikely for unlikely
@@ -542,73 +483,6 @@
 # this option effective. See -fprofile-arcs for details.
 # Enabled at levels -O2, -O3, -Os.
 -freorder-functions|-fno-reorder-functions
-
-# Allow the compiler to assume the strictest aliasing rules applicable
-# to the language being compiled. For C (and C++), this activates
-# optimizations based on the type of expressions. In particular, an
-# object of one type is assumed never to reside at the same address as
-# an object of a different type, unless the types are almost the
-# same. For example, an unsigned int can alias an int, but not a void*
-# or a double. A character type may alias any other type.  Pay special
-# attention to code like this:
-#           union a_union {
-#             int i;
-#             double d;
-#           };
-#           int f() {
-#             union a_union t;
-#             t.d = 3.0;
-#             return t.i;
-#           }
-# The practice of reading from a different union member than the one
-# most recently written to (called "type-punning") is common. Even with
-# -fstrict-aliasing, type-punning is allowed, provided the memory is
-# accessed through the union type. So, the code above will work as
-# expected. See Structures unions enumerations and bit-fields
-# implementation. However, this code might not:
-#           int f() {
-#             union a_union t;
-#             int* ip;
-#             t.d = 3.0;
-#             ip = &t.i;
-#             return *ip;
-#           }
-# Similarly, access by taking the address, casting the resulting pointer
-# and dereferencing the result has undefined behavior, even if the cast
-# uses a union type, e.g.:
-#           int f() {
-#             double d = 3.0;
-#             return ((union a_union *) &d)->i;
-#           }
-# The -fstrict-aliasing option is enabled at levels -O2, -O3, -Os.
--fstrict-aliasing|-fno-strict-aliasing
-
-# Allow the compiler to assume strict signed overflow rules, depending
-# on the language being compiled. For C (and C++) this means that
-# overflow when doing arithmetic with signed numbers is undefined, which
-# means that the compiler may assume that it will not happen. This
-# permits various optimizations. For example, the compiler will assume
-# that an expression like i + 10 > i will always be true for signed
-# i. This assumption is only valid if signed overflow is undefined, as
-# the expression is false if i + 10 overflows when using twos complement
-# arithmetic. When this option is in effect any attempt to determine
-# whether an operation on signed numbers will overflow must be written
-# carefully to not actually involve overflow.  This option also allows
-# the compiler to assume strict pointer semantics: given a pointer to an
-# object, if adding an offset to that pointer does not produce a pointer
-# to the same object, the addition is undefined. This permits the
-# compiler to conclude that p + u > p is always true for a pointer p and
-# unsigned integer u. This assumption is only valid because pointer
-# wraparound is undefined, as the expression is false if p + u overflows
-# using twos complement arithmetic.  See also the -fwrapv option. Using
-# -fwrapv means that integer signed overflow is fully defined: it
-# wraps. When -fwrapv is used, there is no difference between
-# -fstrict-overflow and -fno-strict-overflow for integers. With -fwrapv
-# certain types of overflow are permitted. For example, if the compiler
-# gets an overflow when doing arithmetic on constants, the overflowed
-# value can still be used with -fwrapv, but not otherwise.  The
-# -fstrict-overflow option is enabled at levels -O2, -O3, -Os.
--fstrict-overflow|-fno-strict-overflow
 
 # -falign-functions=n
 # Align the start of functions to the next power-of-two greater than n,
@@ -683,43 +557,6 @@
 # computations into variables.
 -ffloat-store|-fno-float-store
 
-# Sets -fno-math-errno, -funsafe-math-optimizations, -ffinite-math-only,
-# -fno-rounding-math, -fno-signaling-nans and -fcx-limited-range.  This
-# option causes the preprocessor macro __FAST_MATH__ to be defined.
-# This option is not turned on by any -O option besides -Ofast since it
-# can result in incorrect output for programs which depend on an exact
-# implementation of IEEE or ISO rules/specifications for math
-# functions. It may, however, yield faster code for programs that do not
-# require the guarantees of these specifications.
--ffast-math|-fno-fast-math
-
-# Do not set ERRNO after calling math functions that are executed with a
-# single instruction, e.g., sqrt. A program that relies on IEEE
-# exceptions for math error handling may want to use this flag for speed
-# while maintaining IEEE arithmetic compatibility.  This option is not
-# turned on by any -O option since it can result in incorrect output for
-# programs which depend on an exact implementation of IEEE or ISO
-# rules/specifications for math functions. It may, however, yield faster
-# code for programs that do not require the guarantees of these
-# specifications.  The default is -fmath-errno.  On Darwin systems, the
-# math library never sets errno. There is therefore no reason for the
-# compiler to consider the possibility that it might, and
-# -fno-math-errno is the default.
--fmath-errno|-fno-math-errno
-
-# Allow optimizations for floating-point arithmetic that (a) assume that
-# arguments and results are valid and (b) may violate IEEE or ANSI
-# standards. When used at link-time, it may include libraries or startup
-# files that change the default FPU control word or other similar
-# optimizations.  This option is not turned on by any -O option since it
-# can result in incorrect output for programs which depend on an exact
-# implementation of IEEE or ISO rules/specifications for math
-# functions. It may, however, yield faster code for programs that do not
-# require the guarantees of these specifications. Enables
-# -fno-signed-zeros, -fno-trapping-math, -fassociative-math and
-# -freciprocal-math.  The default is -fno-unsafe-math-optimizations.
--funsafe-math-optimizations|-fno-unsafe-math-optimizations
-
 # Allow the reciprocal of a value to be used instead of dividing by the
 # value if this enables optimizations. For example x / y can be replaced
 # with x * (1/y) which is useful if (1/y) is subject to common
@@ -727,34 +564,6 @@
 # increases the number of flops operating on the value.  The default is
 # -fno-reciprocal-math.
 -freciprocal-math|-fno-reciprocal-math
-
-# Allow optimizations for floating-point arithmetic that assume that
-# arguments and results are not NaNs or +-Infs.  This option is not
-# turned on by any -O option since it can result in incorrect output for
-# programs which depend on an exact implementation of IEEE or ISO
-# rules/specifications for math functions. It may, however, yield faster
-# code for programs that do not require the guarantees of these
-# specifications.  The default is -fno-finite-math-only.
--ffinite-math-only|-fno-finite-math-only
-
-# Allow optimizations for floating point arithmetic that ignore the
-# signedness of zero. IEEE arithmetic specifies the behavior of distinct
-# +0.0 and -0.0 values, which then prohibits simplification of
-# expressions such as x+0.0 or 0.0*x (even with
-# -ffinite-math-only). This option implies that the sign of a zero
-# result isn't significant.  The default is -fsigned-zeros.
--fsigned-zeros|-fno-signed-zeros
-
-# Compile code assuming that floating-point operations cannot generate
-# user-visible traps. These traps include division by zero, overflow,
-# underflow, inexact result and invalid operation. This option requires
-# that -fno-signaling-nans be in effect. Setting this option may allow
-# faster code if one relies on "non-stop" IEEE arithmetic, for example.
-# This option should never be turned on by any -O option since it can
-# result in incorrect output for programs which depend on an exact
-# implementation of IEEE or ISO rules/specifications for math functions.
-# The default is -ftrapping-math.
--ftrapping-math|-fno-trapping-math
 
 # Treat floating point constant as single precision constant instead of
 # implicitly converting it to double precision constant.
@@ -1027,26 +836,6 @@
 # pass is enabled by default at -O and higher.
 -ftree-phiprop|-fno-tree-phiprop
 
-# This option allows further control over excess precision on machines
-# where floating-point registers have more precision than the IEEE float
-# and double types and the processor does not support operations
-# rounding to those types. By default, -fexcess-precision=fast is in
-# effect; this means that operations are carried out in the precision of
-# the registers and that it is unpredictable when rounding to the types
-# specified in the source code takes place. When compiling C, if
-# -fexcess-precision=standard is specified then excess precision will
-# follow the rules specified in ISO C99; in particular, both casts and
-# assignments cause values to be rounded to their semantic types
-# (whereas -ffloat-store only affects assignments). This option is
-# enabled by default for C if a strict conformance option such as
-# -std=c99 is used.  -fexcess-precision=standard is not implemented for
-# languages other than C, and has no effect if
-# -funsafe-math-optimizations or -ffast-math is specified. On the x86,
-# it also has no effect if -mfpmath=sse or -mfpmath=sse+387 is
-# specified; in the former case, IEEE semantics apply without excess
-# precision, and in the latter, rounding is unpredictable.
--fexcess-precision=standard|-fexcess-precision=fast
-
 # IRA can be used to evaluate more accurate register pressure in loops
 # for decision to move loop invariants (see -O3). The number of
 # available registers reserved for some other purposes is described by
@@ -1110,16 +899,6 @@
 # vectorization is enabled.
 -ftree-loop-if-convert|-fno-tree-loop-if-convert
 
-# Attempt to also if-convert conditional jumps containing memory
-# writes. This transformation can be unsafe for multi-threaded programs
-# as it transforms conditional memory writes into unconditional memory
-# writes. For example,
-#   for (i = 0; i < N; i++) if (cond) A[i] = expr;
-# would be transformed to
-#   for (i = 0; i < N; i++) A[i] = cond ? expr : A[i];
-# potentially producing data races.
--ftree-loop-if-convert-stores|-fno-tree-loop-if-convert-stores
-
 # Perform loop distribution of patterns that can be code generated with
 # calls to a library. This flag is enabled by default at -O3.  This pass
 # distributes the initialization loops and generates a call to memset
@@ -1146,6 +925,15 @@
 # comparison operation before register allocation is complete.
 # Enabled at levels -O, -O2, -O3, -Os.
 -fcompare-elim|-fno-compare-elim
+
+# In addition to reordering basic blocks in the compiled function, in
+# order to reduce number of taken branches, partitions hot and cold
+# basic blocks into separate sections of the assembly and .o files, to
+# improve paging and cache locality performance.  This optimization is
+# automatically turned off in the presence of exception handling, for
+# linkonce sections, for functions with a user-defined section attribute
+# and on any architecture that does not support named sections.
+-freorder-blocks-and-partition|-fno-reorder-blocks-and-partition
 
 # If the ratio of expression insertions to deletions is larger than this
 # value for any expression, then RTL PRE will insert or remove the
@@ -1182,6 +970,223 @@
 --param devirt-type-list-size=[2..32]
 
 #endif // GCC_VERSION >= 40600
+
+#ifdef UNSAFE_OPTIMS
+
+#if GCC_VERSION >= 40400
+
+# Allow re-association of operands in series of floating-point
+# operations. This violates the ISO C and C++ language standard by
+# possibly changing computation result. NOTE: re-ordering may change the
+# sign of zero as well as ignore NaNs and inhibit or create underflow or
+# overflow (and thus cannot be used on a code which relies on rounding
+# behavior like (x + 2**52) - 2**52). May also reorder floating-point
+# comparisons and thus may not be used when ordered comparisons are
+# required. This option requires that both -fno-signed-zeros and
+# -fno-trapping-math be in effect. Moreover, it doesn't make much sense
+# with -frounding-math. For Fortran the option is automatically enabled
+# when both -fno-signed-zeros and -fno-trapping-math are in effect.  The
+# default is -fno-associative-math.
+-fassociative-math|-fno-associative-math
+
+# Attempt to merge identical constants and identical variables.  This
+# option implies -fmerge-constants. In addition to -fmerge-constants
+# this considers e.g. even constant initialized arrays or initialized
+# constant variables with integral or floating point types. Languages
+# like C or C++ require each variable, including multiple instances of
+# the same variable in recursive calls, to have distinct locations, so
+# using this option will result in non-conforming behavior.
+-fmerge-all-constants|-fno-merge-all-constants
+
+# Allow the compiler to assume the strictest aliasing rules applicable
+# to the language being compiled. For C (and C++), this activates
+# optimizations based on the type of expressions. In particular, an
+# object of one type is assumed never to reside at the same address as
+# an object of a different type, unless the types are almost the
+# same. For example, an unsigned int can alias an int, but not a void*
+# or a double. A character type may alias any other type.  Pay special
+# attention to code like this:
+#           union a_union {
+#             int i;
+#             double d;
+#           };
+#           int f() {
+#             union a_union t;
+#             t.d = 3.0;
+#             return t.i;
+#           }
+# The practice of reading from a different union member than the one
+# most recently written to (called "type-punning") is common. Even with
+# -fstrict-aliasing, type-punning is allowed, provided the memory is
+# accessed through the union type. So, the code above will work as
+# expected. See Structures unions enumerations and bit-fields
+# implementation. However, this code might not:
+#           int f() {
+#             union a_union t;
+#             int* ip;
+#             t.d = 3.0;
+#             ip = &t.i;
+#             return *ip;
+#           }
+# Similarly, access by taking the address, casting the resulting pointer
+# and dereferencing the result has undefined behavior, even if the cast
+# uses a union type, e.g.:
+#           int f() {
+#             double d = 3.0;
+#             return ((union a_union *) &d)->i;
+#           }
+# The -fstrict-aliasing option is enabled at levels -O2, -O3, -Os.
+-fstrict-aliasing|-fno-strict-aliasing
+
+# Allow the compiler to assume strict signed overflow rules, depending
+# on the language being compiled. For C (and C++) this means that
+# overflow when doing arithmetic with signed numbers is undefined, which
+# means that the compiler may assume that it will not happen. This
+# permits various optimizations. For example, the compiler will assume
+# that an expression like i + 10 > i will always be true for signed
+# i. This assumption is only valid if signed overflow is undefined, as
+# the expression is false if i + 10 overflows when using twos complement
+# arithmetic. When this option is in effect any attempt to determine
+# whether an operation on signed numbers will overflow must be written
+# carefully to not actually involve overflow.  This option also allows
+# the compiler to assume strict pointer semantics: given a pointer to an
+# object, if adding an offset to that pointer does not produce a pointer
+# to the same object, the addition is undefined. This permits the
+# compiler to conclude that p + u > p is always true for a pointer p and
+# unsigned integer u. This assumption is only valid because pointer
+# wraparound is undefined, as the expression is false if p + u overflows
+# using twos complement arithmetic.  See also the -fwrapv option. Using
+# -fwrapv means that integer signed overflow is fully defined: it
+# wraps. When -fwrapv is used, there is no difference between
+# -fstrict-overflow and -fno-strict-overflow for integers. With -fwrapv
+# certain types of overflow are permitted. For example, if the compiler
+# gets an overflow when doing arithmetic on constants, the overflowed
+# value can still be used with -fwrapv, but not otherwise.  The
+# -fstrict-overflow option is enabled at levels -O2, -O3, -Os.
+-fstrict-overflow|-fno-strict-overflow
+
+# Sets -fno-math-errno, -funsafe-math-optimizations, -ffinite-math-only,
+# -fno-rounding-math, -fno-signaling-nans and -fcx-limited-range.  This
+# option causes the preprocessor macro __FAST_MATH__ to be defined.
+# This option is not turned on by any -O option besides -Ofast since it
+# can result in incorrect output for programs which depend on an exact
+# implementation of IEEE or ISO rules/specifications for math
+# functions. It may, however, yield faster code for programs that do not
+# require the guarantees of these specifications.
+-ffast-math|-fno-fast-math
+
+# When enabled, this option states that a range reduction step is not
+# needed when performing complex division. Also, there is no checking
+# whether the result of a complex multiplication or division is NaN +
+# I*NaN, with an attempt to rescue the situation in that case. The
+# default is -fno-cx-limited-range, but is enabled by -ffast-math.  This
+# option controls the default setting of the ISO C99 CX_LIMITED_RANGE
+# pragma. Nevertheless, the option applies to all languages.
+-fcx-limited-range|-fno-cx-limited-range
+
+# Do not set ERRNO after calling math functions that are executed with a
+# single instruction, e.g., sqrt. A program that relies on IEEE
+# exceptions for math error handling may want to use this flag for speed
+# while maintaining IEEE arithmetic compatibility.  This option is not
+# turned on by any -O option since it can result in incorrect output for
+# programs which depend on an exact implementation of IEEE or ISO
+# rules/specifications for math functions. It may, however, yield faster
+# code for programs that do not require the guarantees of these
+# specifications.  The default is -fmath-errno.  On Darwin systems, the
+# math library never sets errno. There is therefore no reason for the
+# compiler to consider the possibility that it might, and
+# -fno-math-errno is the default.
+-fmath-errno|-fno-math-errno
+
+# Allow optimizations for floating-point arithmetic that (a) assume that
+# arguments and results are valid and (b) may violate IEEE or ANSI
+# standards. When used at link-time, it may include libraries or startup
+# files that change the default FPU control word or other similar
+# optimizations.  This option is not turned on by any -O option since it
+# can result in incorrect output for programs which depend on an exact
+# implementation of IEEE or ISO rules/specifications for math
+# functions. It may, however, yield faster code for programs that do not
+# require the guarantees of these specifications. Enables
+# -fno-signed-zeros, -fno-trapping-math, -fassociative-math and
+# -freciprocal-math.  The default is -fno-unsafe-math-optimizations.
+-funsafe-math-optimizations|-fno-unsafe-math-optimizations
+
+# Allow optimizations for floating-point arithmetic that assume that
+# arguments and results are not NaNs or +-Infs.  This option is not
+# turned on by any -O option since it can result in incorrect output for
+# programs which depend on an exact implementation of IEEE or ISO
+# rules/specifications for math functions. It may, however, yield faster
+# code for programs that do not require the guarantees of these
+# specifications.  The default is -fno-finite-math-only.
+-ffinite-math-only|-fno-finite-math-only
+
+# Allow optimizations for floating point arithmetic that ignore the
+# signedness of zero. IEEE arithmetic specifies the behavior of distinct
+# +0.0 and -0.0 values, which then prohibits simplification of
+# expressions such as x+0.0 or 0.0*x (even with
+# -ffinite-math-only). This option implies that the sign of a zero
+# result isn't significant.  The default is -fsigned-zeros.
+-fsigned-zeros|-fno-signed-zeros
+
+# Compile code assuming that floating-point operations cannot generate
+# user-visible traps. These traps include division by zero, overflow,
+# underflow, inexact result and invalid operation. This option requires
+# that -fno-signaling-nans be in effect. Setting this option may allow
+# faster code if one relies on "non-stop" IEEE arithmetic, for example.
+# This option should never be turned on by any -O option since it can
+# result in incorrect output for programs which depend on an exact
+# implementation of IEEE or ISO rules/specifications for math functions.
+# The default is -ftrapping-math.
+-ftrapping-math|-fno-trapping-math
+
+# If given, the loop optimizer will assume that loop indices do not
+# overflow, and that the loops with nontrivial exit condition are not
+# infinite. This enables a wider range of loop optimizations even if the
+# loop optimizer itself cannot prove that these assumptions are
+# valid.
+-funsafe-loop-optimizations|-fno-unsafe-loop-optimizations
+
+#endif // GCC_VERSION >= 40400
+
+#if GCC_VERSION >= 40500
+
+# This option allows further control over excess precision on machines
+# where floating-point registers have more precision than the IEEE float
+# and double types and the processor does not support operations
+# rounding to those types. By default, -fexcess-precision=fast is in
+# effect; this means that operations are carried out in the precision of
+# the registers and that it is unpredictable when rounding to the types
+# specified in the source code takes place. When compiling C, if
+# -fexcess-precision=standard is specified then excess precision will
+# follow the rules specified in ISO C99; in particular, both casts and
+# assignments cause values to be rounded to their semantic types
+# (whereas -ffloat-store only affects assignments). This option is
+# enabled by default for C if a strict conformance option such as
+# -std=c99 is used.  -fexcess-precision=standard is not implemented for
+# languages other than C, and has no effect if
+# -funsafe-math-optimizations or -ffast-math is specified. On the x86,
+# it also has no effect if -mfpmath=sse or -mfpmath=sse+387 is
+# specified; in the former case, IEEE semantics apply without excess
+# precision, and in the latter, rounding is unpredictable.
+-fexcess-precision=standard|-fexcess-precision=fast
+
+#endif // GCC_VERSION >= 40500
+
+#if GCC_VERSION >= 40600
+
+# Attempt to also if-convert conditional jumps containing memory
+# writes. This transformation can be unsafe for multi-threaded programs
+# as it transforms conditional memory writes into unconditional memory
+# writes. For example,
+#   for (i = 0; i < N; i++) if (cond) A[i] = expr;
+# would be transformed to
+#   for (i = 0; i < N; i++) A[i] = cond ? expr : A[i];
+# potentially producing data races.
+-ftree-loop-if-convert-stores|-fno-tree-loop-if-convert-stores
+
+#endif // GCC_VERSION >= 40600
+
+#endif // UNSAFE_OPTIMS
 
 #if 0
 

@@ -54,7 +54,7 @@ distclean:
 	$(MAKE) -C plugins/acf-plugin clean
 
 install: $(INSTALLED_FILES)
-	$(MAKE) -C plugins/acf-plugin install
+	$(MAKE) -C plugins/acf-plugin all install
 
 check tests: all check-python-dependencies
 	$(MAKE) -C tests

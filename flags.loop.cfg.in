@@ -95,13 +95,6 @@
 # Enabled at levels -O2, -O3, -Os.
 -frerun-cse-after-loop|-fno-rerun-cse-after-loop
 
-# If given, the loop optimizer will assume that loop indices do not
-# overflow, and that the loops with nontrivial exit condition are not
-# infinite. This enables a wider range of loop optimizations even if the
-# loop optimizer itself cannot prove that these assumptions are
-# valid.
--funsafe-loop-optimizations|-fno-unsafe-loop-optimizations
-
 # Enables expressing of values of induction variables in later
 # iterations of the unrolled loop using the value in the first
 # iteration. This breaks long dependency chains, thus improving

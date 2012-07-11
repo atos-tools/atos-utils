@@ -6,8 +6,8 @@ source `dirname $0`/common.sh
 
 TEST_CASE="ATOS lib query/push/pull"
 
-$ROOT/bin/atos-audit gcc -o sha1-c $ROOT/examples/sha1-c/sha.c $ROOT/examples/sha1-c/sha1.c
-$ROOT/bin/atos-raudit $ROOT/examples/sha1-c/run.sh
+$ROOT/bin/atos-audit gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c
+$ROOT/bin/atos-raudit $SRCDIR/examples/sha1-c/run.sh
 $ROOT/bin/atos-deps -a
 $ROOT/bin/atos-build -a -O2
 $ROOT/bin/atos-run -r -a -O2

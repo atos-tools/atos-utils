@@ -6,7 +6,7 @@ source `dirname $0`/common.sh
 
 TEST_CASE="ATOS deps serial targets"
 
-cp -a $ROOT/examples/sha1 .
+cp -a $SRCDIR/examples/sha1 .
 cd sha1
 $ROOT/bin/atos-audit make clean sha-shared
 $ROOT/bin/atos-deps sha.so sha-shared

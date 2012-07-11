@@ -21,7 +21,7 @@ EOF
 gcc -o gcc gcc.c
 
 # Audit a build with this surdriver
-$ROOT/bin/atos-audit ./gcc -o sha1-c  $ROOT/examples/sha1-c/sha.c $ROOT/examples/sha1-c/sha1.c
+$ROOT/bin/atos-audit ./gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c
 [ -f atos-configurations/build.audit ]
 
 # Check that we recorded a single gcc invocation

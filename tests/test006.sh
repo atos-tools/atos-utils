@@ -6,11 +6,11 @@ source `dirname $0`/common.sh
 
 TEST_CASE="ATOS deps -C option"
 
-$ROOT/bin/atos-audit gcc -o sha1-c  $ROOT/examples/sha1-c/sha.c $ROOT/examples/sha1-c/sha1.c
+$ROOT/bin/atos-audit gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c
 $ROOT/bin/atos-deps -a
 [ -f atos-configurations/build.mk ]
 
-$ROOT/bin/atos-audit -C atos-configurations-1 gcc -o sha1-c $ROOT/examples/sha1-c/sha.c $ROOT/examples/sha1-c/sha1.c
+$ROOT/bin/atos-audit -C atos-configurations-1 gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c
 $ROOT/bin/atos-deps -a -C atos-configurations-1
 [ -f atos-configurations-1/build.mk -a -f atos-configurations-1/targets ]
 [ `diff atos-configurations-1/build.mk atos-configurations/build.mk | wc -l` -eq 0 ]

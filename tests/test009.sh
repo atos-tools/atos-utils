@@ -10,38 +10,38 @@ mkdir TMPDIR; cd TMPDIR
 
 cat > ./build.sh <<EOF
   # CCLD command
-  gcc -o sha1-c $ROOT/examples/sha1-c/sha.c $ROOT/examples/sha1-c/sha1.c
+  gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c
 
   # CCLD command in another directory
   ( mkdir TMP2; cd TMP2
-    gcc -o sha1-c $ROOT/examples/sha1-c/sha.c $ROOT/examples/sha1-c/sha1.c
+    gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c
   )
 
   # CC command
   ( mkdir TMP3; cd TMP3
-    gcc -c -o sha.o $ROOT/examples/sha1-c/sha.c
-    gcc -c -o sha1.o $ROOT/examples/sha1-c/sha1.c
+    gcc -c -o sha.o $SRCDIR/examples/sha1-c/sha.c
+    gcc -c -o sha1.o $SRCDIR/examples/sha1-c/sha1.c
     gcc -o sha1-c sha.o sha1.o
   )
 
   # CC command with relative outputs
   ( mkdir TMP4; cd TMP4; mkdir -p TMP2/TMP3
-    gcc -c -o TMP2/sha.o $ROOT/examples/sha1-c/sha.c
-    gcc -c -o ../TMP4/TMP2/TMP3/sha1.o $ROOT/examples/sha1-c/sha1.c
+    gcc -c -o TMP2/sha.o $SRCDIR/examples/sha1-c/sha.c
+    gcc -c -o ../TMP4/TMP2/TMP3/sha1.o $SRCDIR/examples/sha1-c/sha1.c
     gcc -o sha1-c TMP2/sha.o TMP2/TMP3/sha1.o
   )
 
   # CC command with absolute outputs
   ( mkdir TMP5; cd TMP5; mkdir TMP2
-    gcc -c -o \$PWD/TMP2/sha.o $ROOT/examples/sha1-c/sha.c
-    gcc -c -o \$PWD/TMP2/../sha1.o $ROOT/examples/sha1-c/sha1.c
+    gcc -c -o \$PWD/TMP2/sha.o $SRCDIR/examples/sha1-c/sha.c
+    gcc -c -o \$PWD/TMP2/../sha1.o $SRCDIR/examples/sha1-c/sha1.c
     gcc -o sha1-c \$PWD/TMP2/sha.o sha1.o
   )
 
   # CC command with output in upper level
   ( mkdir TMP6
-    gcc -c -o ../sha.o $ROOT/examples/sha1-c/sha.c
-    gcc -c -o ../sha1.o $ROOT/examples/sha1-c/sha1.c
+    gcc -c -o ../sha.o $SRCDIR/examples/sha1-c/sha.c
+    gcc -c -o ../sha1.o $SRCDIR/examples/sha1-c/sha1.c
     gcc -o TMP6/sha1-c ../sha.o ../sha1.o
   )
 EOF
@@ -67,8 +67,8 @@ cat > ./build.2.sh <<EOF
 
   # common relative target prefix longer than cwd common prefix
   ( mkdir TMP7; cd TMP7; mkdir -p TMP2/TMP3/TMP4
-    gcc -c -o TMP2/TMP3/TMP4/sha.o $ROOT/examples/sha1-c/sha.c
-    gcc -c -o TMP2/TMP3/TMP4/sha1.o $ROOT/examples/sha1-c/sha1.c
+    gcc -c -o TMP2/TMP3/TMP4/sha.o $SRCDIR/examples/sha1-c/sha.c
+    gcc -c -o TMP2/TMP3/TMP4/sha1.o $SRCDIR/examples/sha1-c/sha1.c
     gcc -o sha1-c TMP2/TMP3/TMP4/sha.o TMP2/TMP3/TMP4/sha1.o
   )
 
@@ -92,8 +92,8 @@ $ROOT/bin/atos-build -C atos-configurations-2 -a -O2 -u -O2
 cat > ./build.3.sh <<EOF
   # relative targets in parent directories of cwd
   ( mkdir TMP8; cd TMP8
-    gcc -c -o ../../sha.o $ROOT/examples/sha1-c/sha.c
-    gcc -c -o ../../sha1.o $ROOT/examples/sha1-c/sha1.c
+    gcc -c -o ../../sha.o $SRCDIR/examples/sha1-c/sha.c
+    gcc -c -o ../../sha1.o $SRCDIR/examples/sha1-c/sha1.c
     gcc -o sha1-c ../../sha.o ../../sha1.o
   )
 EOF

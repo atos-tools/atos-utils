@@ -22,8 +22,8 @@ tradeoff_variants() {
 
 $ROOT/bin/atos-init \
     -n 0 \
-    -r "$ROOT/examples/sha1-c/run.sh" \
-    -b "gcc -o sha1-c $ROOT/examples/sha1-c/sha.c $ROOT/examples/sha1-c/sha1.c"
+    -r "$SRCDIR/examples/sha1-c/run.sh" \
+    -b "gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c"
 
 $ROOT/lib/atos/atos_lib.py create_db --type=json
 

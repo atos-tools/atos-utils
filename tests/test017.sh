@@ -6,8 +6,8 @@ source `dirname $0`/common.sh
 
 TEST_CASE="ATOS opt build/run"
 
-$ROOT/bin/atos-audit -C atos-config gcc -o sha1-c $ROOT/examples/sha1-c/sha.c $ROOT/examples/sha1-c/sha1.c
-$ROOT/bin/atos-raudit -C atos-config $ROOT/examples/sha1-c/run.sh
+$ROOT/bin/atos-audit -C atos-config gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c
+$ROOT/bin/atos-raudit -C atos-config $SRCDIR/examples/sha1-c/run.sh
 $ROOT/bin/atos-deps -C atos-config -a
 
 $ROOT/bin/atos-opt -C atos-config -r

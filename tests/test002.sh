@@ -6,7 +6,7 @@ source `dirname $0`/common.sh
 
 TEST_CASE="ATOS audit -f option"
 
-$ROOT/bin/atos-audit -f gcc -o sha1-c  $ROOT/examples/sha1-c/sha.c $ROOT/examples/sha1-c/sha1.c
+$ROOT/bin/atos-audit -f gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c
 mv sha1-c sha1-c.ref
 [ -f atos-configurations/build.sh ]
 [ -f atos-configurations/build.force ]

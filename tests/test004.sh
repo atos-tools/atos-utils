@@ -6,7 +6,7 @@ source `dirname $0`/common.sh
 
 TEST_CASE="ATOS deps target/-l/-a"
 
-$ROOT/bin/atos-audit gcc -o sha1-c  $ROOT/examples/sha1-c/sha.c $ROOT/examples/sha1-c/sha1.c
+$ROOT/bin/atos-audit gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c
 $ROOT/bin/atos-deps sha1-c
 [ -f atos-configurations/targets ]
 [ -f atos-configurations/objects ]
@@ -23,7 +23,7 @@ $ROOT/bin/atos-deps -l
 make -f atos-configurations/build.mk sha1-c
 cmp sha1-c sha1-c.ref
 
-cp -a $ROOT/examples/sha1 .
+cp -a $SRCDIR/examples/sha1 .
 cd sha1
 make clean
 $ROOT/bin/atos-audit make all

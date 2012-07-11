@@ -67,8 +67,8 @@ if [ "${acf_plugin_path}" == "" ]; then
 fi
 
 $ROOT/bin/atos-init \
-    -r "$ROOT/examples/sha1-c/run.sh" \
-    -b "gcc -o sha1-c $ROOT/examples/sha1-c/sha.c $ROOT/examples/sha1-c/sha1.c"
+    -r "$SRCDIR/examples/sha1-c/run.sh" \
+    -b "gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c"
 
 # Check if host compiler has plugin support 
 export PYTHONPATH=$ROOT/lib/atos:$PYTHONPATH

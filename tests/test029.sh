@@ -19,14 +19,11 @@ tradeoff_variants() {
 	| grep "$regexp" | sed "s/$regexp/\1/" | sort -u
 }
 
-
-$ROOT/bin/atos-init \
-    -n 0 \
-    -r "$SRCDIR/examples/sha1-c/run.sh" \
-    -b "gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c"
-
 $ROOT/lib/atos/atos_lib.py create_db --type=json
 
+$ROOT/bin/atos-init \
+    -r "$SRCDIR/examples/sha1-c/run.sh" \
+    -b "gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c"
 
 echo "# atos-explore..."
 $ROOT/bin/atos-explore -q

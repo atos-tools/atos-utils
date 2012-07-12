@@ -1058,6 +1058,34 @@ if __name__ == '__main__':
             rcode = subprocess.call([atos_build] + command + args)
             sys.exit(rcode)
 
+
+    # ################################################################
+
+    elif args[0] == 'config':
+
+        subparser = optparse.OptionParser()
+        subparser.add_option('-C', dest='configuration_path',
+            action='store', type='string', default="./atos-configurations",
+            help='set configuration path (default: ./atos-configurations)')
+        subparser.add_option('-q', '--query', dest='query',
+                action='store', type='string', default='',
+                help='results query values (default: None)')
+        subparser.add_option('-t', '--text', dest='text',
+                action='store_true', default=False,
+                help='text output format (default: json)')
+        subparser.add_option('-u', '--uniq', dest='uniq',
+                action='store_true', default=False,
+                help='omit repeated results (default: False)')
+        (opts, args) = subparser.parse_args(sys.argv[2:])
+
+        client = json_config(os.path.join(opts.configuration_path, 'config.json'))
+
+        if opts.query:
+            results = client.query(strtoquery(opts.query))
+            if opts.uniq: results = list(set(results))
+            pprint_list(results, text=opts.text)
+
+
     # ################################################################
 
     else:

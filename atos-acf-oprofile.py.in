@@ -94,7 +94,7 @@ def find_binary_in_path(image_name):
 
 def check_format():
     oprofile_format = None
-    
+
     for line in open(opts.oprof_output):
         if re.match(r'vma +samples +% +image[ _]name +symbol[ _]name *', line):
             # vma samples  %   image name  symbol name
@@ -131,7 +131,7 @@ def parse_binary_list(oprofile_format):
                 # handle (no-location-information) case
                 #   0000000 156636 9.4180 (no location information) no-vmlinux
                 image_name = (words[3] == '(no') and words[6] or words[4]
-                
+
             # detect if we are in an interesting region of the profile file
             if image_name != 'anon':
                 if os.path.basename(image_name) == os.path.basename(opts.binary):
@@ -191,7 +191,7 @@ def parse_profile(binary_list, oprofile_format):
                             linenr = words[3]
                             app_name = word[5]
                             sym = words[6]
-                            
+
                     # Merge multiple entries for same image_name/sym
                     sym_found = False
                     if image_name in samples.keys():
@@ -282,7 +282,6 @@ def create_debug_info_list(binary_file, addr_file_path):
             words = line.split(':')
             dbg_info[current_addr] = (current_func, words[0], words[1])
     addr_file.close()
-
     return dbg_info
 
 # returns the basename of the file
@@ -335,7 +334,7 @@ binary_list = parse_binary_list(oprofile_format)
 
 if not oprofile_format:
     print 'Error: oprofile outpout format not supported'
-    sys.exit(1)    
+    sys.exit(1)
 
 samples = parse_profile(binary_list, oprofile_format)
 

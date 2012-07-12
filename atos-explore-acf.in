@@ -27,21 +27,16 @@ dir=`cd \`dirname $0\`; pwd`
 libdir=`cd $dir/../lib/atos; pwd`
 
 configuration_path="./atos-configurations"
-opt_seed=""
 opt_debug=""
 opt_profdir=""
-nb_iter=100
 nb_runs=1
-#flags_file=$libdir/config/flags.loop.cfg
 flags_file=""
-opt_levels="-Os,-O2,-O3"
-opt_variants="base,fdo,lto,fdo+lto"
 executables=""
 profiling_script=""
 acf_plugin="acf_plugin.so"
 acf_plugin_path=""
 acf_hot_th=70
-acf_cold_th=30
+acf_cold_th=""
 acf_cold_opts="-Os noinline cold"
 
 #######################
@@ -61,16 +56,12 @@ Configuration Options:
       -b <path> : remote path to profile files [default: none]
       -e <executables> : executables to be instrumented [default: none]
       -p <profiling_script> : script to get profile information [default: none]
-      -x <hot_th> : Hot functions treshold percentage [default: 70]
-      -y <cold_th> : Cold functions treshold percentage [default: 30]
-      -Y "<cold_opts>" : Cold functions options [default: "-Os noinline cold"]
 
 Exploration Options:
       -F <flags_filename> : flags list filename [default: $flags_file]
-      -O <optim_levels> : optimization levels [default: $opt_levels]
-      -V <variants> : list of optimization variants [default: $opt_variants]
-      -S <seed> : seed for random generator [default: none]
-      -M <nb> : number of exploration loop iterations [default: $nb_iter]
+      -x <hot_th> : Hot functions treshold percentage [default: $acf_hot_th]
+      -y <cold_th> : Cold functions treshold percentage [default: `expr 100 - $acf_hot_th`]
+      -Y "<cold_opts>" : Cold functions options [default: "$acf_cold_opts"]
 
 Misc Options
       -q : quiet output
@@ -87,7 +78,7 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts C:e:p:x:y:Y:n:b:F:O:V:S:M:qdvh opt; do
+while getopts C:e:p:x:y:Y:n:b:F:O:qdvh opt; do
     case $opt in
 	C) configuration_path="$OPTARG"
 	    ;;
@@ -106,15 +97,7 @@ while getopts C:e:p:x:y:Y:n:b:F:O:V:S:M:qdvh opt; do
 	b) opt_profdir="-B $OPTARG"
 	    ;;
 	F) flags_file="$OPTARG"
-	    ;;
-	O) opt_levels="$OPTARG"
-	    ;;
-	V) opt_variants="$OPTARG"
-	    ;;
-	S) opt_seed="--seed=$OPTARG"
-	    ;;
-	M) nb_iter="$OPTARG"
-	    ;;
+            ;;
 	q) opt_debug="-q"
 	    ;;
 	d) opt_debug="-d"
@@ -140,27 +123,37 @@ if [ ! -f "$configuration_path/build.audit" -o ! -f "$configuration_path/run.aud
     exit 1
 fi
 
-if [ "$executables" = "" ]; then
-    echo "error: `basename $0`: error: executables not specified" >&2
+imagepath="$executables"
+
+if [ "$imagepath" = "" -a -f $configuration_path/targets ]; then
+    dirnames=`for i in \`cat $configuration_path/targets\`; do dirname $i; done | uniq`
+    imagepath=`echo $dirnames | sed 's/ /:/g'`
+fi
+
+if [ "$imagepath" = "" ]; then
+    echo "`basename $0`: error: executables not specified" >&2
     exit 1
 fi
 
 if [[ "$profiling_script" == "" || ! -x $profiling_script ]]; then
-    echo "error: `basename $0`: error: profiling script not specified" >&2
+    echo "`basename $0`: error: profiling script not specified" >&2
     exit 1
 fi
 
-# Identify which acf_plugin.so to use based on host compiler
-path_to_gcc=`which gcc`
-if [ "$?" == "1" ]; then
-    echo "error: gcc compiler not found" >&2
+config_query() {
+    $libdir/atos_lib.py config -C $configuration_path -u -t -q $*
+}
+
+if [ "`config_query '$.compilers[*].name'`" != "gcc" ]; then
+    echo "`basename $0`: error: acf only usable with gcc compiler" >&2
     exit 1
 fi
 
-gcc_version=`gcc -dumpversion`
-machine=`gcc -dumpmachine`
+gcc_version=`config_query '$.compilers[*].version'`
 
-case "${machine}" in
+gcc_machine=`config_query '$.compilers[*].target'`
+
+case "${gcc_machine}" in
     x86_64-*)
       machine_dir=x86_64
       ;;
@@ -174,7 +167,7 @@ case "${machine}" in
       machine_dir=sh4
       ;;
     *)
-      echo "error: host machine ${machine} not supported by acf plugin"
+      echo "error: host machine ${gcc_machine} not supported by acf plugin"
       exit 1
       ;;
 esac
@@ -182,12 +175,8 @@ esac
 # for gcc version, only take into account Major/Minor numbers
 if [ ! -f ${libdir}/plugins/gcc-${gcc_version}/${machine_dir}/${acf_plugin} ]; then
     # get short version limited to Major/Minor
-    major=`echo $gcc_version | sed -e 's/^\([0-9]*\)\.\([0-9]*\).*/\1/g'`
-    minor=`echo $gcc_version | sed -e 's/^\([0-9]*\)\.\([0-9]*\).*/\2/g'`
-    vers=$major.$minor
-
+    vers=`echo $gcc_version | sed 's/\([0-9]*\.[0-9]*\).*/\1/'`
     gcc_list=`\ls -d ${libdir}/plugins/gcc-${vers}* 2>/dev/null| sort -r`
-
     # Take more recent gcc version matching Major/Minor
     for gcc_el in ${gcc_list}; do
 	if [ -f ${gcc_el}/${machine_dir}/${acf_plugin} ]; then
@@ -208,14 +197,8 @@ if [ ! -f ${acf_plugin_path} ]; then
     exit 1
 fi
 
-if [ "$flags_file" == "" ]; then
-    FLAGS_OPT=
-else
-    FLAGS_OPT=--flags=$flags_file
-fi
+[ "$acf_cold_th" != "" ] || acf_cold_th=`expr 100 - $acf_hot_th`
 
 $libdir/atos_toolkit.py --log=./acf.log -C $configuration_path \
-    $opt_debug $opt_seed $opt_profdir --max=$nb_iter -n $nb_runs \
-    --optlvl=$opt_levels --variants=$opt_variants $FLAGS_OPT \
-    --gen-acf=$executables,$profiling_script,$acf_plugin_path,$acf_hot_th,$acf_cold_th,"$acf_cold_opts" "$@"
-
+    $opt_debug $opt_profdir -n $nb_runs \
+    --gen-acf=$imagepath,$profiling_script,$acf_plugin_path,$acf_hot_th,$acf_cold_th,"$acf_cold_opts",$flags_file "$@"

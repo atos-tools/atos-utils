@@ -27,7 +27,7 @@ dir=`dirname $0`
 dir=`cd $dir; pwd`
 
 options=""
-ccregexp="-\?\(gcc\|g++\|cc\|c++\)\$"
+ccregexp="-\?\(clang\|gcc\|g++\|cc\|c++\)\$"
 configuration_path="./atos-configurations"
 jobs=4
 dryrun=""

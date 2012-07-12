@@ -22,7 +22,7 @@
 
 VERSION="@VERSION@"
 
-import sys, os, itertools, math, re
+import sys, os, itertools, math, re, string
 
 from random import randint, choice, sample, seed
 
@@ -117,16 +117,18 @@ class opt_flag_list():
         # filter options already set ?
         return set(result)
 
+    @staticmethod
+    def parse_line(cmdline):
+        cmd = [x.strip() for x in cmdline.split(' ')]
+        result, idx, cmdlen = [], 0, len(cmd)
+        while idx < cmdlen:
+            flag = cmd[idx]
+            if flag == '--param' and idx + 1 < cmdlen:
+                flag += ' ' + cmd[idx+1]; idx += 1
+            result += [flag]; idx += 1
+        return result
+
     def expand_command_line(self, cmdline):
-        def parse_line(cmdline):
-            cmd = [x.strip() for x in cmdline.split(' ')]
-            result, idx, cmdlen = [], 0, len(cmd)
-            while idx < cmdlen:
-                flag = cmd[idx]
-                if flag == '--param' and idx + 1 < cmdlen:
-                    flag += ' ' + cmd[idx+1]; idx += 1
-                result += [flag]; idx += 1
-            return result
         def handle_flag(flag, explicit):
             if not flag: return
             flag_name = opt_flag.foptname(flag)
@@ -139,7 +141,7 @@ class opt_flag_list():
         # initial options
         flag_list, flag_idx = [''], 0
         # command line flags
-        flag_list.extend(parse_line(cmdline))
+        flag_list.extend(opt_flag_list.parse_line(cmdline))
         # expand aliases
         for flag in flag_list:
             handle_flag(flag, True)
@@ -369,35 +371,68 @@ def gen_simplf():
 
 
 @generator
-def gen_acf(binary, oprof_script, acf_plugin,
-            acf_hot_th=70, acf_cold_th=30, acf_cold_opts='-Os noinline cold'):
+def gen_acf(imgpath, oprof_script, acf_plugin,
+            acf_hot_th=70, acf_cold_th=30, acf_cold_opts='-Os noinline cold',
+            acf_flags_file=None):
     '''perform per function exploration'''
-    info('gen_acf')
 
     def create_csv_name(options, funcname):
         max_file_path_size = 128
         csv_name = 'acf-plugin-csv-' + funcname + options.replace(' ','_')
         if len(csv_name) > max_file_path_size:
             csv_name = csv_name[:max_file_path_size] + '-' + str(time.time())
-    
         #print 'CSV file name: ' , csv_name
         return csv_name
 
+    def call_acf_oprofile(hot_th=acf_hot_th, cold_th=acf_cold_th,
+                          cold_opts=None, hot_opts=None):
+        imgopt = os.path.isdir(imgpath.split(':')[0]) and '-p' or '-e'
+        cmd = [acf_oprofile, imgopt, imgpath, '-i', oprof_out,
+               '--acf-hot-th', str(hot_th), '--acf-cold-th', str(cold_th)]
+        if cold_opts: cmd += ['--acf-cold-opts', '"%s"' % cold_opts]
+        if hot_opts: cmd += ['--acf-hot-opts', '"%s"' % hot_opts]
+        status, output = system(' '.join(cmd)) # check status ?
+        return output
 
-    def_opts = '-Os'
+    def write_csv_file(options, funcname, *args):
+        csv_name = create_csv_name(options, funcname)
+        debug('*** CSV name created for %s: %s' % (funcname, csv_name))
+        csv_path = os.path.join(csv_dir, csv_name)
+        csv_file = open(csv_path, 'w')
+        for a in args: csv_file.write(a)
+        csv_file.close()
+        return csv_path
+
+    def filteropt(flag_str):
+        flag_list = opt_flag_list.parse_line(flag_str)
+        filter_in = ['^-f', '^-O', '^[^-]']
+        flag_list = filter(
+            lambda f: any(map(lambda i: re.match(i, f), filter_in)), flag_list)
+        filter_out = ['^-fprofile', '^-flto', '^--param']
+        flag_list = filter(
+            lambda f: all(map(lambda i: not re.match(i, f), filter_out)), flag_list)
+        return ' '.join(flag_list)
+
+    info('gen_acf')
+
+    def_opts = ''
     acf_oprofile = os.path.join(libdir, 'atos-acf-oprofile.py')
     oprof_out = os.path.join('.', 'oprof.out')
-    
-    if binary == None:
-        debug('*** Error: binary unspecified')
-        return
+    csv_dir = os.path.join('.', 'atos-configurations', 'acf_csv_dir')
+    acf_cold_opts = filteropt(acf_cold_opts)
 
-    debug('*** gen_acf params: binary: %s, oprofile script: %s,  hot function threshold: %s'
-          ', cold function treshold: %s, cold function options: %s' %
-          (binary, oprof_script, acf_hot_th, acf_cold_th, acf_cold_opts))
+    debug('*** gen_acf params: imgpath: %s, oprofile script: %s, '
+          'hot function threshold: %s, cold function treshold: %s, '
+          'cold function options: %s' % (
+            imgpath, oprof_script, acf_hot_th, acf_cold_th, acf_cold_opts))
 
-    if oprof_script == None:
-        oprof_script = os.path.join('.', 'android-qemu-profile.sh')
+    if not os.path.isdir(csv_dir):
+        os.mkdir(csv_dir)
+
+    if False: # do not clean-up csv dir by default
+        for file in os.listdir(csv_dir):
+            os.remove(os.path.join(csv_dir, file))
+
     # generate oprof.out in current dir
     (p_status, p_output) = system(oprof_script)
     debug('*** profile run status: %s' % str(p_status))
@@ -412,70 +447,40 @@ def gen_acf(binary, oprof_script, acf_plugin,
         debug('*** profile run failed: output file not found: %s' % oprof_out)
         return
 
+    # build with default options
+    yield def_opts, 'base'
+
     # Parse oprof.out for cold functions
-    cmd = (acf_oprofile + ' --exec ' + binary + ' -i ' + oprof_out +
-           ' --acf-hot-th=0 --acf-cold-th=' + str(acf_cold_th) +
-           ' --acf-cold-opts=\"' + acf_cold_opts + '\"')
-    status,  acf_csv_cold = system(cmd)
+    acf_csv_cold = call_acf_oprofile(hot_th=0, cold_opts=acf_cold_opts)
     debug('*** Cold functions:\n%s' % acf_csv_cold)
-    
-    csv_dir = os.path.join('.', 'atos-configurations', 'acf_csv_dir')
+    csv_path = write_csv_file(def_opts, 'reference_run', acf_csv_cold)
 
-    # Clean-up csv dir
-    if os.path.isdir(csv_dir):
-        fl = os.listdir(csv_dir)
-        for file in fl:
-            os.remove(os.path.join(csv_dir, file))
-    else:
-        os.mkdir(csv_dir)
-
-    csv_name = create_csv_name(def_opts, 'reference_run')
-    debug('*** CSV name created for ref run: %s' % csv_name) #####
-    csv_path = os.path.join(csv_dir, csv_name)
-    # Write cold functions options in ref csv file
-    csv_file = open(csv_path, 'w')
-    csv_file.write(acf_csv_cold)
-    csv_file.close()
-    
     acf_po = (' -fplugin=' + acf_plugin +
               ' -fplugin-arg-acf_plugin-verbose -fplugin-arg-acf_plugin-csv_file=')
-    
+
     # Build-Run for reference results with cold functions
     result_ref = yield def_opts + acf_po + csv_path, 'base'
 
     final_hot_csv = ''
     previous_hot_csv = ''
 
-    acf_opt_flag_list = []
-    opt_lvl_list = generator.optlevel.values()
+    acf_opt_flag_list = ( # explore on given flags if any
+        acf_flags_file and map(
+            filteropt, map(string.strip, open(acf_flags_file).readlines()))
+        or [])
 
-    if generator.optlist:
-        for opt_lvl in opt_lvl_list:
-            for opt_flag in generator.optlist:
-                for opt_flagval in opt_flag.values():
-                    acf_opt_flag_list += [' '.join([ opt_lvl, opt_flagval ])]
-    else:
-        acf_opt_flag_list = opt_lvl_list
-
-    # acf_opt_flag_list = ['-Os', '-O2, '-O2 -funroll-loops', '-O3']
-
-    all_hot_processed = False
     hot_functions_processed = []
     first_iteration = True
-    
-    while not all_hot_processed:
+
+    while True:
         # Avoid profile generation for first iteration, already generated for cold functions
         if not first_iteration:
             # generate oprof.out in current dir
             (p_status, p_output) = system(oprof_script)
-
         first_iteration = False
 
         # Parse oprof.out for hot functions
-        cmd = (acf_oprofile + ' --exec ' + binary + ' -i ' + oprof_out +
-               ' --acf-hot-th=' + str(acf_hot_th) +
-               ' --acf-hot-opts=0XXX0 --acf-cold-th=0')
-        status,  acf_csv_hot = system(cmd)
+        acf_csv_hot = call_acf_oprofile(cold_th=0, hot_opts='0XXX0')
         debug('*** Hot functions:\n%s' % acf_csv_hot)
 
         hot_functions = []
@@ -488,9 +493,8 @@ def gen_acf(binary, oprof_script, acf_plugin,
         # Discard already processed hot functions
         hot_functions_unprocessed = [ f for f in hot_functions if not f in hot_functions_processed]
         debug('*** Hot functions not yet processed= %s' % hot_functions_unprocessed)
-        
+
         if not hot_functions_unprocessed:
-            all_hot_processed = True
             debug('*** All hot functions processed')
             break
         else:
@@ -498,17 +502,13 @@ def gen_acf(binary, oprof_script, acf_plugin,
             hot_functions_processed += [function]
 
         debug ('*** Current function: %s' % function)
-        
-        result = None
+
         best_function_csv = ''
         best_function_result = 0
         first_result = True
         for flg in acf_opt_flag_list:
             # Generate CSV file for the current hot function plus the cold functions
-            cmd = (acf_oprofile + ' --exec ' + binary + ' -i ' + oprof_out +
-                   ' --acf-hot-th=' + str(acf_hot_th) + ' --acf-hot-opts=\"' +
-                   flg + '\" --acf-cold-th=0')
-            status,  acf_csv_all_hot = system(cmd)
+            acf_csv_all_hot = call_acf_oprofile(cold_th=0, hot_opts=flg)
             debug('*** Current CSV for all hot functions:\n%s' % acf_csv_all_hot)
 
             acf_csv = ''
@@ -517,58 +517,37 @@ def gen_acf(binary, oprof_script, acf_plugin,
                 if function in csv_line:
                     acf_csv += csv_line + '\n'
             debug('*** Current CSV for function %s:\n%s' % (function, acf_csv))
-                
-            csv_name = create_csv_name(flg, function)
-            debug('*** CSV name created for current function run: %s' % csv_name)
-            csv_path = os.path.join(csv_dir, csv_name)
-            # Write current function options in current csv file, plus the cold functions
-            csv_file = open(csv_path, 'w')
-            csv_file.write(acf_csv)
-            csv_file.write(previous_hot_csv)
-            csv_file.write(acf_csv_cold)
-            csv_file.close()
-            
+            csv_path = write_csv_file(flg, function, acf_csv, previous_hot_csv, acf_csv_cold)
+
             # Build-Run for results with current hot function
             current_cmd = flg + acf_po + csv_path
             result = yield current_cmd, 'base'
             if result == None:
                 debug('*** Error during execution of command: %s' % current_cmd)
-            else:
-                debug('*** Best result=%s, new result=%s' % (
+                continue
+
+            debug('*** Best result=%s, new result=%s' % (
                     str(best_function_result), str(result)))
-                if first_result:
-                    # Initial step, always take first run
-                    best_function_csv = acf_csv
-                    best_function_result = result
-                    first_result = False
-                    debug('*** Initial CSV for function %s (perf= %s):\n%s' % (
+            if first_result or (result[1] < best_function_result[1]):
+                # Keep these options for the current function
+                best_function_csv = acf_csv
+                best_function_result = result
+                debug('*** Best CSV for function %s (perf= %s):\n%s' % (
                         function, str(best_function_result[1]), best_function_csv))
-                else:
-                    if (result[1] < best_function_result[1]):
-                        # Keep these options for the current function
-                        best_function_csv = acf_csv
-                        best_function_result = result
-                        debug('*** Best CSV for function %s (perf= %s):\n%s' % (
-                            function, str(best_function_result[1]), best_function_csv))
+            first_result = False
+
         # Record the best for this function
         previous_hot_csv += best_function_csv
         final_hot_csv += best_function_csv
 
     # Run the best csv for all hot functions together
-    csv_name = create_csv_name(def_opts, 'best_hot_results')
-    debug('*** CSV name created for best run: %s' % csv_name)
-    csv_path = os.path.join(csv_dir, csv_name)
-    # Write best function options in current csv file, plus the cold functions
-    csv_file = open(csv_path, 'w')
-    csv_file.write(final_hot_csv)
-    csv_file.write(acf_csv_cold)
-    csv_file.close()
+    csv_path = write_csv_file(def_opts, 'best_hot_results', final_hot_csv, acf_csv_cold)
 
     # Build-Run for results with best hot functions options
     final_cmd =  def_opts + acf_po + csv_path
     result = yield final_cmd, 'base'
     debug('*** Final result= %s' % str(result))
-    
+
     debug('*** Final CSV:\n%s' % str(final_hot_csv))
 
 

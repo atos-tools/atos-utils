@@ -6,25 +6,24 @@ source `dirname $0`/common.sh
 
 TEST_CASE="ATOS ACF plugin"
 
-plugins_enabled()
-{
-     pycmd="import atos_lib;"
-     pycmd="$pycmd cfg_file = \"atos-configurations/config.json\"; "
-     pycmd="$pycmd cfg = atos_lib.json_config(cfg_file);"
-     pycmd="$pycmd print int('plugins_enabled' in cfg._compiler_features())"
-     python -c "$pycmd"
-}
-
-
 # Check if there is an ACF plugin for the host compiler version
 acf_plugin="acf_plugin.so"
 acf_plugin_path=""
 libdir="$ROOT/lib/atos"
 
-gcc_version=`gcc -dumpversion`
-machine=`gcc -dumpmachine`
+config_query() {
+    $libdir/atos_lib.py config -u -t -q $*
+}
 
-case "${machine}" in
+$ROOT/bin/atos-init \
+    -r "$SRCDIR/examples/sha1-c/run.sh" \
+    -b "gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c"
+
+gcc_version=`config_query '$.compilers[*].version'`
+
+gcc_machine=`config_query '$.compilers[*].target'`
+
+case "${gcc_machine}" in
     x86_64-*)
       machine_dir=x86_64
       ;;
@@ -38,19 +37,16 @@ case "${machine}" in
       machine_dir=sh4
       ;;
     *)
-    echo machine
-      skip
+      echo "error: host machine ${gcc_machine} not supported by acf plugin"
+      exit 1
       ;;
 esac
 
+# for gcc version, only take into account Major/Minor numbers
 if [ ! -f ${libdir}/plugins/gcc-${gcc_version}/${machine_dir}/${acf_plugin} ]; then
     # get short version limited to Major/Minor
-    major=`echo $gcc_version | sed -e 's/^\([0-9]*\)\.\([0-9]*\).*/\1/g'`
-    minor=`echo $gcc_version | sed -e 's/^\([0-9]*\)\.\([0-9]*\).*/\2/g'`
-    vers=$major.$minor
-
+    vers=`echo $gcc_version | sed 's/\([0-9]*\.[0-9]*\).*/\1/'`
     gcc_list=`\ls -d ${libdir}/plugins/gcc-${vers}* 2>/dev/null| sort -r`
-
     # Take more recent gcc version matching Major/Minor
     for gcc_el in ${gcc_list}; do
 	if [ -f ${gcc_el}/${machine_dir}/${acf_plugin} ]; then
@@ -66,16 +62,8 @@ if [ "${acf_plugin_path}" == "" ]; then
     skip
 fi
 
-$ROOT/bin/atos-init \
-    -r "$SRCDIR/examples/sha1-c/run.sh" \
-    -b "gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c"
-
 # Check if host compiler has plugin support 
-export PYTHONPATH=$ROOT/lib/atos:$PYTHONPATH
-plugins_ok=0
-plugins_ok=`plugins_enabled`
-
-if [ "$plugins_ok" == "0" ]; then
+if [ "`config_query '$.compilers[*].plugins_enabled'`" != "1" ]; then
     skip
 fi
 
@@ -99,7 +87,7 @@ echo "echo 0400b20     894  0.0447  sha1-c main >> oprof.out" >> $oprof_out_scri
 
 chmod +x $oprof_out_script
 
-$ROOT/bin/atos-explore-acf -q -e ./sha1-c -p ./$oprof_out_script -x 70 -y 30 -Y "-Os noinline cold"
+$ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 -Y "-Os noinline cold" 2>&1
 
 [ -d atos-configurations ]
 
@@ -107,4 +95,27 @@ $ROOT/bin/atos-explore-acf -q -e ./sha1-c -p ./$oprof_out_script -x 70 -y 30 -Y 
 nb_played=`$ROOT/lib/atos/atos_lib.py query | wc -l`
 
 # 2 hot functions for default treshold hot=70, cold=30
-[ "`expr $nb_played`" == "12" ]
+# -> only 3 new runs without list of flags to explore (base, ref, best)
+[ "`expr $nb_played`" == "7" ]
+
+echo "-O2 -finline-functions" > flags.txt
+echo "-O3 -funroll-loops"     >> flags.txt
+
+$ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 -Y "-Os noinline cold" -F flags.txt 2>&1
+
+nb_played=`$ROOT/lib/atos/atos_lib.py query | wc -l`
+# 7 +  (base, ref, best) + (2 flag_list * 2 hot_functions)
+[ "`expr $nb_played`" == "14" ]
+
+# try with perf ref point
+$ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 OPT-O2 2>&1
+
+$ROOT/bin/atos-opt -r -a "-O2" -f
+
+$ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 OPT-fprofile-use-O2-O2 2>&1
+
+$ROOT/bin/atos-opt -r -a "-O2" -f -l
+
+$ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 OPT-fprofile-use-O2-O2-flto 2>&1
+
+

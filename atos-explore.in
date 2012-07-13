@@ -35,6 +35,7 @@ quiet="0"
 clean="0"
 nbruns="1"
 opt_q=""
+opt_c=""
 opt_rebuild=""
 get_results_script=""
 remote_profile_path=""
@@ -98,7 +99,7 @@ while getopts vhdqcfe:r:b:B:t:C:n: opt; do
 	    ;;
 	n) nbruns="$OPTARG"
 	    ;;
-	c) clean=1
+	c) clean=1; opt_c=-c
 	    ;;
 	d) verbose=1
 	    ;;
@@ -119,57 +120,9 @@ shift $((OPTIND - 1))
 
 [ "$executables" != "" ] || executables="$@"
 
-if [ "$configuration_path" = "" ]; then
-    echo "`basename $0`: error: missing configuration path" >&2
-    exit 1
-fi
-
-if [ "$opt_rebuild" = -f -a "$get_results_script" = "" -a "$executables" = "" ]; then
-    echo "`basename $0`: error: when using forced mode (-f) with no custom results script (-t) the list of executables must be specified (-e option)" >&2
-    exit 1
-fi
-
-if [ "$executables" = "" ]; then
-    # By default audit all generated executables 
-    executables=-a
-fi
-
-mkdir -p "$configuration_path"
-configuration_path=`cd "$configuration_path"; pwd`
-if [ "$clean" = "1" ]; then
-    if [ "$build_script" != "" ]; then
-	[ "$quiet" = "1" ] || echo "Cleaning build audit..."
-	rm -f "$configuration_path"/build.*
-    fi
-    if [ "$run_script" != "" ]; then
-	[ "$quiet" = "1" ] || echo "Cleaning run audit..."
-	rm -f "$configuration_path"/run.*
-    fi
-    [ "$quiet" = "1" ] || echo "Cleaning all profiles..."
-    rm -rf "$configuration_path"/profiles
-    [ "$quiet" = "1" ] || echo "Cleaning all results..."
-    rm -rf "$configuration_path"/results.db
-fi
-
-if [ "$build_script" != "" ]; then
-    $dir/atos-audit -C "$configuration_path" $opt_q $opt_rebuild $build_script
-    if [ "$opt_rebuild" = "" ]; then
-	$dir/atos-deps -C "$configuration_path" $opt_q $executables
-    elif [ "$get_results_script" = "" ]; then
-	echo "$executables" >"$configuration_path"/targets
-    fi
-elif [ ! -f "$configuration_path/build.audit" ]; then
-    echo "`basename $0`: error: missing build audit, use -b option for specifying build script or use atos-audit tool" >&2
-    exit 1
-fi
-
-if [ "$run_script" != "" ]; then
-    $dir/atos-raudit -C "$configuration_path" $opt_q -t "$get_results_script" $run_script
-    $dir/atos-run -C "$configuration_path" -n "$nbruns" $opt_q -r # Will stop there if reference run fails
-elif [ ! -f "$configuration_path/run.audit" ]; then
-    echo "`basename $0`: error: missing run audit, use -r option for specifying run script or use atos-raudit tool" >&2
-    exit 1
-fi
+$dir/atos-init -C "$configuration_path" \
+    -b "$build_script" -r "$run_script" -t "$get_results_script" \
+    -B "$remote_profile_path" -e "$executables" -n "$nbruns" $opt_rebuild $opt_q $opt_c
 
 for gopt in "-O2" "-Os" "-O3"; do
     for opts in "" "-flto" "-funroll-loops" "-flto -funroll-loops"; do

@@ -36,6 +36,7 @@ run_script=""
 opt_q=""
 nbruns="1"
 verbose="0"
+remote_profile_path=""
 
 version() {
     echo "atos-init version @VERSION@"
@@ -56,6 +57,7 @@ Executable File Options:
 Build Options
       -b <build_script> : build_script to be executed [default: $build_script]
       -f : force rebuild by running build script instead of audited build
+      -B <path> : remote path to profile files [default: none]
 
 Run Options
       -r <run_script> : run_script to be executed [default: $run_script]
@@ -77,7 +79,7 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts C:e:b:fr:t:n:cqdvh opt; do
+while getopts C:e:b:fr:t:B:n:cqdvh opt; do
     case $opt in
 	C) configuration_path="$OPTARG"
 	    ;;
@@ -90,6 +92,8 @@ while getopts C:e:b:fr:t:n:cqdvh opt; do
 	r) run_script="$OPTARG"
 	    ;;
 	t) get_results_script="$OPTARG"
+	    ;;
+	B) remote_profile_path="$OPTARG"
 	    ;;
 	n) nbruns="$OPTARG"
 	    ;;
@@ -149,6 +153,7 @@ if [ "$build_script" != "" ]; then
     $dir/atos-audit -C "$configuration_path" $opt_q $opt_rebuild $build_script
     if [ "$opt_rebuild" = "" ]; then
 	$dir/atos-deps -C "$configuration_path" $opt_q $executables
+	$dir/atos-config -C "$configuration_path"
     elif [ "$get_results_script" = "" ]; then
 	echo "$executables" >"$configuration_path"/targets
     fi
@@ -160,13 +165,11 @@ fi
 
 if [ "$run_script" != "" ]; then
     $dir/atos-raudit -C "$configuration_path" $opt_q -t "$get_results_script" $run_script
+    # reference run
+    $dir/atos-run -C "$configuration_path" -n "$nbruns" $opt_q -r
 elif [ ! -f "$configuration_path/run.audit" ]; then
     echo "`basename $0`: error: missing run audit, use -r option for specifying " \
     	 "run script or use atos-raudit tool" >&2
     exit 1
 fi
 
-$dir/atos-config -C "$configuration_path"
-
-# reference run	
-$dir/atos-run -C "$configuration_path" -n "$nbruns" $opt_q -r

@@ -135,6 +135,21 @@ EOF
     # libgomp
     result=`$compiler -O2 -ftree-parallelize-loops=16 -lc -nostdlib -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
     echo "libgomp_enabled $result"
+
+    # acf plugin
+    acf_plugin="acf_plugin.so"
+    machine_dir=`echo $target | sed 's/-.*//'`
+    [ "$machine_dir" != "i686" ] || machine_dir="i386"
+    [ "$machine_dir" != "sh" ] || machine_dir="sh4"
+    acfpath=${libdir}/plugins/gcc-${version}/${machine_dir}/${acf_plugin}
+    if [ ! -f "$acfpath" ]; then
+        # use only major/minor version numbers
+	vers=`echo $version | sed 's/\([0-9]*\.[0-9]*\).*/\1/'`
+	acfpath=`\ls -d1 ${libdir}/plugins/gcc-${vers}*/${machine_dir}/${acf_plugin} | sort -r | head -1`
+    fi 2>/dev/null
+    [ -f "$acfpath" ] || acfpath="none"
+    echo "plugin_acf $acfpath"
+
 }
 
 json_config_flags_file()

@@ -19,46 +19,9 @@ $ROOT/bin/atos-init \
     -r "$SRCDIR/examples/sha1-c/run.sh" \
     -b "gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c"
 
-gcc_version=`config_query '$.compilers[*].version'`
 
-gcc_machine=`config_query '$.compilers[*].target'`
-
-case "${gcc_machine}" in
-    x86_64-*)
-      machine_dir=x86_64
-      ;;
-    i386-* | i686-*)
-      machine_dir=i386
-      ;;
-    arm-*)
-      machine_dir=arm
-      ;;
-    sh-*)
-      machine_dir=sh4
-      ;;
-    *)
-      echo "error: host machine ${gcc_machine} not supported by acf plugin"
-      exit 1
-      ;;
-esac
-
-# for gcc version, only take into account Major/Minor numbers
-if [ ! -f ${libdir}/plugins/gcc-${gcc_version}/${machine_dir}/${acf_plugin} ]; then
-    # get short version limited to Major/Minor
-    vers=`echo $gcc_version | sed 's/\([0-9]*\.[0-9]*\).*/\1/'`
-    gcc_list=`\ls -d ${libdir}/plugins/gcc-${vers}* 2>/dev/null| sort -r`
-    # Take more recent gcc version matching Major/Minor
-    for gcc_el in ${gcc_list}; do
-	if [ -f ${gcc_el}/${machine_dir}/${acf_plugin} ]; then
-	    acf_plugin_path=${gcc_el}/${machine_dir}/${acf_plugin}
-	    break;
-	fi
-    done
-else
-    acf_plugin_path=${libdir}/plugins/gcc-${gcc_version}/${machine_dir}/${acf_plugin}
-fi
-
-if [ "${acf_plugin_path}" == "" ]; then
+# Check if acf plugin is available for host compiler
+if [ ! -f "`config_query '$.compilers[*].plugin_acf'`" ]; then
     skip
 fi
 

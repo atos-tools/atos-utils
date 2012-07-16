@@ -31,7 +31,7 @@ opt_seed=""
 opt_debug=""
 opt_profdir=""
 nb_iter=100
-nb_runs=1
+opt_nbruns=""
 flags_file=""
 opt_levels="-Os,-O2,-O3"
 opt_variants="base"
@@ -49,7 +49,7 @@ Usage: atos-explore-inline [options] [variants]
 
 Configuration Options:
       -C <path> : configuration path [default: $configuration_path]
-      -n <nb> : number of executions of <run_script> [default: $nb_runs]
+      -n <nb> : number of executions of <run_script> [default: 1]
       -b <path> : remote path to profile files [default: none]
 
 Exploration Options:
@@ -78,7 +78,7 @@ while getopts C:n:b:F:O:V:S:M:qdvh opt; do
     case $opt in
 	C) configuration_path="$OPTARG"
 	    ;;
-	n) nb_runs="$OPTARG"
+	n) opt_nbruns="-n $OPTARG"
 	    ;;
 	b) opt_profdir="-B $OPTARG"
 	    ;;
@@ -125,7 +125,7 @@ if [ ! -f "$flags_file" ]; then
 fi
 
 $libdir/atos_toolkit.py -C $configuration_path \
-    $opt_debug $opt_seed $opt_profdir --max=$nb_iter -n $nb_runs \
+    $opt_debug $opt_seed $opt_profdir --max=$nb_iter $opt_nbruns \
     --optlvl=$opt_levels --variants=$opt_variants --flags=$flags_file \
     --gen-rnd-uniform-deps "$@"
 

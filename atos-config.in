@@ -154,19 +154,12 @@ EOF
 
 json_config_flags_file()
 {
-    pycmd="import atos_lib;"
-    pycmd="$pycmd cfg = atos_lib.json_config(\"$config_file\");"
-    pycmd="$pycmd print cfg.flags_for_flagfiles()"
-    python -c "$pycmd"
+    $libdir/atos_lib.py config -C $configuration_path --cpl-flags
 }
 
 json_config_add_compiler()
 {
-    descr_file=$1
-    pycmd="import atos_lib;"
-    pycmd="$pycmd cfg = atos_lib.json_config(\"$config_file\");"
-    pycmd="$pycmd cfg.add_compiler(\"$descr_file\")"
-    python -c "$pycmd"
+    $libdir/atos_lib.py config -C $configuration_path --add-cpl $1
 }
 
 prepare_flag_files()
@@ -181,11 +174,7 @@ prepare_flag_files()
     done
 }
 
-export PYTHONPATH=$libdir:$PYTHONPATH
-
-config_file=$configuration_path/config.json
-
-/bin/rm -f $config_file
+/bin/rm -f $configuration_path/config.json
 
 if [ -f "$configuration_path/compilers" ]; then
     for compiler in `cat $configuration_path/compilers`; do
@@ -194,5 +183,3 @@ if [ -f "$configuration_path/compilers" ]; then
     done
     prepare_flag_files
 fi
-
-

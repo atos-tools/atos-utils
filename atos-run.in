@@ -40,8 +40,10 @@ gopts=""
 quiet=0
 silent=0
 remote_profile_path=""
+b_set=0
 get_results_script=""
 nbruns="1"
+n_set=0
 
 version() {
     echo "atos-run version @VERSION@"
@@ -118,11 +120,11 @@ while getopts vhqrsb:t:o:f:e:a:i:w:u:g:C:n: opt; do
 	    ;;
 	C) configuration_path="$OPTARG"
 	    ;;
-	b) remote_profile_path="$OPTARG"
+	b) remote_profile_path="$OPTARG"; b_set=1
 	    ;;
 	t) get_results_script="$OPTARG"
 	    ;;
-	n) nbruns="$OPTARG"
+	n) nbruns="$OPTARG"; n_set=1
 	    ;;
 	r) record=1
 	    ;;
@@ -145,7 +147,9 @@ variant_hash() {
     echo "$1" | md5sum | cut -f 1 -d ' '
 }
 
-export PYTHONPATH=$libdir:$PYTHONPATH
+get_config() {
+    $libdir/atos_lib.py config -C $configuration_path --get "$1"
+}
 
 if [ "$get_results_script" = "" -a -f "$configuration_path/get_res.sh" ]; then
     get_results_script="$configuration_path/get_res.sh"
@@ -190,6 +194,8 @@ if [ "$u_set" = 1 ]; then
 	pvariant=-fprofile-use`echo $uopts | sed 's/ //g'`
     fi
 fi
+
+[ "$b_set" = "1" ] || remote_profile_path=`get_config default_values.remote_profile_path`
 
 if [ "$variant" = "" ]; then
     if [ "$options" != "" -o "$pvariant" != "" ]; then
@@ -273,6 +279,9 @@ logfile="$configuration_path/logs/run-`variant_hash $variant`.log"
 if [ "$executables" != "" ]; then
     get_size "$executables" >> "$logfile" 2>&1
 fi
+
+[ "$n_set" = 1 ] || nbruns=`get_config default_values.nb_runs`
+[ "$nbruns" != "" ] || nbruns=1
 
 n=1
 while [ "$n" -le "$nbruns" ]; do

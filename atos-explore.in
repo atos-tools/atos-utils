@@ -33,12 +33,12 @@ configuration_path="./atos-configurations"
 verbose="0"
 quiet="0"
 clean="0"
-nbruns="1"
+opt_nbruns=""
 opt_q=""
 opt_c=""
 opt_rebuild=""
 get_results_script=""
-remote_profile_path=""
+opt_remote_profile_path=""
 
 version() {
     echo "atos-explore version @VERSION@"
@@ -57,7 +57,7 @@ Build Options
 Run Options
       -r <run_script> : run_script to be executed [default: $run_script]
       -t <get_results_script> : get_results_script to be executed [default: none]
-      -n <nb> : number of executions of <run_script> [default: $nbruns]
+      -n <nb> : number of executions of <run_script> [default: 1]
 
 Executable File Options:
       -e <executables> : executables to be instrumented [default: args of command or all generated executables]
@@ -93,11 +93,11 @@ while getopts vhdqcfe:r:b:B:t:C:n: opt; do
 	    ;;
 	b) build_script="$OPTARG"
 	    ;;
-	B) remote_profile_path="$OPTARG"
+	B) opt_remote_profile_path="-B $OPTARG"
 	    ;;
 	t) get_results_script="$OPTARG"
 	    ;;
-	n) nbruns="$OPTARG"
+	n) opt_nbruns="-n $OPTARG"
 	    ;;
 	c) clean=1; opt_c=-c
 	    ;;
@@ -122,22 +122,22 @@ shift $((OPTIND - 1))
 
 $dir/atos-init -C "$configuration_path" \
     -b "$build_script" -r "$run_script" -t "$get_results_script" \
-    -B "$remote_profile_path" -e "$executables" -n "$nbruns" $opt_rebuild $opt_q $opt_c
+    $opt_remote_profile_path -e "$executables" $opt_nbruns $opt_rebuild $opt_q $opt_c
 
 for gopt in "-O2" "-Os" "-O3"; do
     for opts in "" "-flto" "-funroll-loops" "-flto -funroll-loops"; do
 	options="$gopt $opts"
-	$dir/atos-build -C "$configuration_path" $opt_q -a "$options" && $dir/atos-run -C "$configuration_path" -n "$nbruns" $opt_q -r -a "$options" || true
+	$dir/atos-build -C "$configuration_path" $opt_q -a "$options" && $dir/atos-run -C "$configuration_path" $opt_q -r -a "$options" || true
     done
     failure=false
-    $dir/atos-profile -C "$configuration_path" $opt_q -b "$remote_profile_path" -g "$gopt" || failure=true
+    $dir/atos-profile -C "$configuration_path" $opt_q -g "$gopt" || failure=true
     if $failure; then
 	# skipping profile variants
 	:
     else
 	for opts in "" "-flto" "-funroll-loops" "-flto -funroll-loops"; do
 	    options="$gopt $opts"
-	    $dir/atos-build -C "$configuration_path" $opt_q -u "$gopt" -a "$options" && $dir/atos-run -C "$configuration_path" -n "$nbruns" $opt_q -b "$remote_profile_path" -r -u "$gopt" -a "$options" || true
+	    $dir/atos-build -C "$configuration_path" $opt_q -u "$gopt" -a "$options" && $dir/atos-run -C "$configuration_path" $opt_q -r -u "$gopt" -a "$options" || true
 	done
     fi
 done

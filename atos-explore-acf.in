@@ -29,7 +29,7 @@ libdir=`cd $dir/../lib/atos; pwd`
 configuration_path="./atos-configurations"
 opt_debug=""
 opt_profdir=""
-nb_runs=1
+opt_nbruns=""
 flags_file=""
 executables=""
 profiling_script=""
@@ -52,7 +52,7 @@ Usage: atos-explore-acf [options] [variant]
 
 Configuration Options:
       -C <path> : configuration path [default: $configuration_path]
-      -n <nb> : number of executions of <run_script> [default: $nb_runs]
+      -n <nb> : number of executions of <run_script> [default: 1]
       -b <path> : remote path to profile files [default: none]
       -e <executables> : executables to be instrumented [default: none]
       -p <profiling_script> : script to get profile information [default: none]
@@ -92,7 +92,7 @@ while getopts C:e:p:x:y:Y:n:b:F:O:qdvh opt; do
 	    ;;
 	Y) acf_cold_opts="$OPTARG"
 	    ;;
-	n) nb_runs="$OPTARG"
+	n) opt_nbruns="-n $OPTARG"
 	    ;;
 	b) opt_profdir="-B $OPTARG"
 	    ;;
@@ -159,5 +159,5 @@ fi
 [ "$acf_cold_th" != "" ] || acf_cold_th=`expr 100 - $acf_hot_th`
 
 $libdir/atos_toolkit.py --log=./acf.log -C $configuration_path \
-    $opt_debug $opt_profdir -n $nb_runs \
+    $opt_debug $opt_profdir $opt_nbruns \
     --gen-acf=$imagepath,$profiling_script,$acf_plugin_path,$acf_hot_th,$acf_cold_th,"$acf_cold_opts",$flags_file "$@"

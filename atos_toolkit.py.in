@@ -659,10 +659,11 @@ def atos_opt_run(flags, variant, profdir, config, nbrun, baseopts, no_replay):
     info('RUN [%s] [%s] %s' % (variant, flags, baseopts or ''))
     profdir_option = profdir and ('-b %s' % profdir) or ''
     replay_option = no_replay and '-k' or ''
+    nbrun_option = nbrun and ('-n %d' % nbrun) or ''
     variant_options, variant_flags = variant_options_flags[variant]
     status, output = system(
-        '%s/atos-opt -C %s -n %s %s %s -r -a "%s %s" %s' % (
-            bindir, config, nbrun, replay_option, profdir_option,
+        '%s/atos-opt -C %s %s %s %s -r -a "%s %s" %s' % (
+            bindir, config, nbrun_option, replay_option, profdir_option,
             flags, variant_flags, variant_options))
     if not (status and output):
         info('FAILURE [%s] [%s]' % (variant, flags))
@@ -727,7 +728,7 @@ if __name__ == '__main__':
                      action='store', type='string', default=None,
                      help='profile dir name (default: None)')
     group.add_option('-n', dest='nbrun',
-                     action='store', type='int', default=1,
+                     action='store', type='int', default=None,
                      help='number of executions of run script (default: 1)')
     group.add_option('-k', dest='no_replay',
                      action='store_true', default=False,

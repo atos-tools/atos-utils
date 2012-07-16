@@ -443,6 +443,13 @@ class json_config():
         self.config.setdefault('compilers', []).append(new_cpl)
         self._dump()
 
+    def add_value(self, key, value):
+        jsonlib.add_item(self.config, key, value)
+        self._dump()
+
+    def get_value(self, key):
+        return jsonlib.get_item(self.config, key)
+
     def flags_for_flagfiles(self):
         compilers = self.config.get('compilers', [])
         if not compilers: return ''
@@ -1076,14 +1083,50 @@ if __name__ == '__main__':
         subparser.add_option('-u', '--uniq', dest='uniq',
                 action='store_true', default=False,
                 help='omit repeated results (default: False)')
+        subparser.add_option('-a', '--add', dest='add_item',
+                action='store', type='string', default=None,
+                help='add config item (key:value) (default: None)')
+        subparser.add_option('-g', '--get', dest='get_item',
+                action='store', type='string', default=None,
+                help='get config item (default: None)')
+        subparser.add_option('--add-cpl', dest='add_cpl',
+                action='store', type='string', default=None,
+                help='add compiler description (default: None)')
+        subparser.add_option('--cpl-flags', dest='cpl_flags',
+                action='store_true', default=False,
+                help='print flags for flags file (default: False)')
+
         (opts, args) = subparser.parse_args(sys.argv[2:])
 
-        client = json_config(os.path.join(opts.configuration_path, 'config.json'))
+        config_file = os.path.join(opts.configuration_path, 'config.json')
 
         if opts.query:
+            client = json_config(config_file)
             results = client.query(strtoquery(opts.query))
             if opts.uniq: results = list(set(results))
             pprint_list(results, text=opts.text)
+
+        elif opts.add_item:
+            client = json_config(config_file)
+            key, value = opts.add_item.split(':')
+            client.add_value(key, value)
+
+        elif opts.get_item:
+            if os.path.isfile(config_file):
+                client = json_config(config_file)
+                print client.get_value(opts.get_item) or ''
+
+        elif opts.add_cpl:
+            client = json_config(config_file)
+            client.add_compiler(opts.add_cpl)
+
+        elif opts.cpl_flags:
+            if os.path.isfile(config_file):
+                client = json_config(config_file)
+                print client.flags_for_flagfiles()
+
+        else: pass
+
 
 
     # ################################################################

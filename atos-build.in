@@ -25,6 +25,7 @@ set -e
 
 dir=`dirname $0`
 dir=`cd $dir; pwd`
+libdir=`cd $dir/../lib/atos; pwd`
 
 options=""
 ccregexp="-\?\(clang\|gcc\|g++\|cc\|c++\)\$"
@@ -39,6 +40,7 @@ quiet=0
 variant=""
 profile_path=""
 remote_profile_path=""
+b_set=0
 opt_rebuild=""
 
 version() {
@@ -98,7 +100,7 @@ while getopts vhqnfw:C:j:c:r:a:u:g:b:p: opt; do
 	    ;;
 	p) profile_path="$OPTARG"
 	    ;;
-	b) remote_profile_path="$OPTARG"
+	b) remote_profile_path="$OPTARG"; b_set=1
 	    ;;
 	u) u_set=1; uopts="$OPTARG"
 	    ;;
@@ -147,6 +149,10 @@ variant_hash() {
     echo "$1" | md5sum | cut -f 1 -d ' '
 }
 
+get_config() {
+    $libdir/atos_lib.py config -C $configuration_path --get "$1"
+}
+
 if [ "$g_set" = 1 -a "$u_set" = 1 ]; then
     echo "`basename $0`: error: options -u and -g cannot by specified at the same time" >&2
     exit 1
@@ -167,6 +173,7 @@ if [ "$g_set" = 1 ]; then
     profile_path=`cd "$profile_path"; pwd`
     find "$profile_path" -name '*.gcda' | xargs rm -f
     APFLAGS="-fprofile-generate"
+    [ "$b_set" = "1" ] || remote_profile_path=`get_config default_values.remote_profile_path`
     if [ "$remote_profile_path" != "" ]; then
 	profdir_option="PROFILE_DIR=$remote_profile_path"
     else

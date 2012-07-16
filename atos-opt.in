@@ -35,9 +35,9 @@ uopts=""
 aopts=""
 opt_q=""
 opt_r=""
-nbruns=1
+opt_nbruns=""
 no_replay=0
-remote_profile_path=""
+opt_remote_profile_path=""
 
 version() {
     echo "atos-opt version @VERSION@"
@@ -61,7 +61,7 @@ Profile options:
       -b <path> : remote path to profile files [default: none]
 
 Run Options:
-      -n <nb> : number of executions [default: $nbruns]
+      -n <nb> : number of executions [default: 1]
       -k : keep existing results if any [default: false]
 
 Results options:
@@ -93,9 +93,9 @@ while getopts C:a:lu:fb:n:krqvh opt; do
 	    ;;
 	l) l_set=1
 	    ;;
-	b) remote_profile_path="$OPTARG"
+	b) opt_remote_profile_path="-b $OPTARG"
 	    ;;
-	n) nbruns="$OPTARG"
+	n) opt_nbruns="-n $OPTARG"
 	    ;;
 	k) no_replay=1
 	    ;;
@@ -133,10 +133,10 @@ if [ "$no_replay" = "1" ]; then
 fi
 
 if [ "$u_set" = 1 ]; then
-    $dir/atos-profile -C "$configuration_path" $opt_q -b "$remote_profile_path" -g "$uopts"
+    $dir/atos-profile -C "$configuration_path" $opt_q $opt_remote_profile_path -g "$uopts"
     $dir/atos-build -C "$configuration_path" $opt_q -u "$uopts" -a "$options"
-    $dir/atos-run -C "$configuration_path" $opt_q $opt_r -n "$nbruns" -u "$uopts" -a "$options"
+    $dir/atos-run -C "$configuration_path" $opt_q $opt_r $opt_nbruns -u "$uopts" -a "$options"
 else
     $dir/atos-build -C "$configuration_path" $opt_q -a "$options"
-    $dir/atos-run -C "$configuration_path" $opt_q $opt_r -n "$nbruns" -a "$options"
+    $dir/atos-run -C "$configuration_path" $opt_q $opt_r $opt_nbruns -a "$options"
 fi

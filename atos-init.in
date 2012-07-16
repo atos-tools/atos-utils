@@ -24,6 +24,7 @@ set -e
 [ "$DEBUG" = "" ] || set -x
 
 dir=`cd \`dirname $0\`; pwd`
+libdir=`cd $dir/../lib/atos; pwd`
 
 executables=""
 configuration_path="./atos-configurations"
@@ -155,7 +156,7 @@ if [ "$build_script" != "" ]; then
 	$dir/atos-deps -C "$configuration_path" $opt_q $executables
 	$dir/atos-config -C "$configuration_path"
     elif [ "$get_results_script" = "" ]; then
-	echo "$executables" >"$configuration_path"/targets
+	echo "$executables" > "$configuration_path"/targets
     fi
 elif [ ! -f "$configuration_path/build.audit" ]; then
     echo "`basename $0`: error: missing build audit, use -b option for specifying " \
@@ -163,13 +164,18 @@ elif [ ! -f "$configuration_path/build.audit" ]; then
     exit 1
 fi
 
+$libdir/atos_lib.py config -C $configuration_path \
+    --add "default_values.remote_profile_path:$remote_profile_path"
+
+$libdir/atos_lib.py config -C $configuration_path \
+    --add "default_values.nb_runs:$nbruns"
+
 if [ "$run_script" != "" ]; then
     $dir/atos-raudit -C "$configuration_path" $opt_q -t "$get_results_script" $run_script
     # reference run
-    $dir/atos-run -C "$configuration_path" -n "$nbruns" $opt_q -r
+    $dir/atos-run -C "$configuration_path" $opt_q -r
 elif [ ! -f "$configuration_path/run.audit" ]; then
     echo "`basename $0`: error: missing run audit, use -r option for specifying " \
     	 "run script or use atos-raudit tool" >&2
     exit 1
 fi
-

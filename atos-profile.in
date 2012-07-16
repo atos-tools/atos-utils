@@ -28,7 +28,8 @@ dir=`cd $dir; pwd`
 
 configuration_path="./atos-configurations"
 profile_path=""
-remote_profile_path=""
+opt_remote_profile_path=""
+b_set=0
 options=""
 quiet=0
 opt_q=""
@@ -72,7 +73,7 @@ while getopts vhqg:b:p:C: opt; do
 	    ;;
 	p) profile_path="$OPTARG"
 	    ;;
-	b) remote_profile_path="$OPTARG"
+	b) opt_remote_profile_path="-b $OPTARG"
 	    ;;
 	C) configuration_path="$OPTARG"
 	    ;;
@@ -91,6 +92,6 @@ done
 shift $((OPTIND - 1))
 
 [ "$quiet" = "1" ] || echo "Profiling..."
-$dir/atos-build -C "$configuration_path" $opt_q -p "$profile_path" -g "$options" -a "$options" -b "$remote_profile_path"
-$dir/atos-run -C "$configuration_path" $opt_q -s -g "$options" -a "$options" -b "$remote_profile_path"
+$dir/atos-build -C "$configuration_path" $opt_q -p "$profile_path" -g "$options" -a "$options" $opt_remote_profile_path
+$dir/atos-run -C "$configuration_path" $opt_q -s -g "$options" -a "$options" $opt_remote_profile_path
 

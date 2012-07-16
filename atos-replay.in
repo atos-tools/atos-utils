@@ -31,7 +31,7 @@ qualif_config_path="./atos-qualif"
 executables=""
 run_script=""
 get_results_script=""
-nbruns="1"
+opt_nbruns=""
 quiet=0
 opt_q=""
 
@@ -56,7 +56,7 @@ Executable File Options:
 Run Options:
       -r <run_script> : run_script to be executed [default: $run_script]
       -t <get_results_script> : get_results_script to be executed [default: none]
-      -n <nb> : number of executions [default: $nbruns]
+      -n <nb> : number of executions [default: 1]
 
 Misc Options
       -q : quiet output
@@ -84,7 +84,7 @@ while getopts C:R:e:r:t:n:qvh opt; do
 	    ;;
 	t) get_results_script="$OPTARG"
 	    ;;
-	n) nbruns="$OPTARG"
+	n) opt_nbruns="-n $OPTARG"
 	    ;;
 	q) quiet=1; opt_q=-q
 	    ;;
@@ -126,7 +126,7 @@ get_frontier_records()
 
 # reference build/run
 $dir/atos-build -C "$configuration_path" $opt_q
-$dir/atos-run -C "$qualif_config_path" $opt_q -t "$get_results_script" -n "$nbruns" -e "$executables" -r $run_script
+$dir/atos-run -C "$qualif_config_path" $opt_q -t "$get_results_script" $opt_nbruns -e "$executables" -r $run_script
 
 while read line; do
 
@@ -136,11 +136,11 @@ while read line; do
 
     if [ "$u_opts" != "" ]; then
 	$dir/atos-build -C "$configuration_path" $opt_q -a "$a_opts" -u "$u_opts" \
-	    && $dir/atos-run -C "$qualif_config_path" $opt_q -r -t "$get_results_script" -n "$nbruns" -a "$a_opts" -u "$u_opts" -e "$executables" $run_script \
+	    && $dir/atos-run -C "$qualif_config_path" $opt_q -r -t "$get_results_script" $opt_nbruns -a "$a_opts" -u "$u_opts" -e "$executables" $run_script \
 	    || true
     else
 	$dir/atos-build -C "$configuration_path" $opt_q -a "$a_opts" \
-	    && $dir/atos-run -C "$qualif_config_path" $opt_q -r -t "$get_results_script" -n "$nbruns" -a "$a_opts" -e "$executables" $run_script \
+	    && $dir/atos-run -C "$qualif_config_path" $opt_q -r -t "$get_results_script" $opt_nbruns -a "$a_opts" -e "$executables" $run_script \
 	    || true
     fi
 

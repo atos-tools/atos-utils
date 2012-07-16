@@ -145,7 +145,7 @@ class opt_flag_list():
         # expand aliases
         for flag in flag_list:
             handle_flag(flag, True)
-            flag_aliases = self.aliases.get(flag, [])
+            flag_aliases = list(self.aliases.get(flag, []))
             flag_idx += 1
             while flag_aliases:
                 handle_flag(flag_aliases.pop(0), False)

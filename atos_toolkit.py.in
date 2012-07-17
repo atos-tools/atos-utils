@@ -372,13 +372,14 @@ def gen_simplf():
 
 @generator
 def gen_acf(imgpath, oprof_script, acf_plugin,
-            acf_hot_th=70, acf_cold_th=30, acf_cold_opts='-Os noinline cold',
+            acf_hot_th='70', acf_cold_th='30', acf_cold_opts='-Os noinline cold',
             acf_flags_file=None):
     '''perform per function exploration'''
 
     def create_csv_name(options, funcname):
         max_file_path_size = 128
-        csv_name = 'acf-plugin-csv-' + funcname + options.replace(' ','_')
+        csv_name = 'acf-plugin-csv-%s-%s' % (
+            acf_hot_th, funcname + options.replace(' ','_'))
         if len(csv_name) > max_file_path_size:
             csv_name = csv_name[:max_file_path_size] + '-' + str(time.time())
         #print 'CSV file name: ' , csv_name
@@ -453,7 +454,7 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
     # Parse oprof.out for cold functions
     acf_csv_cold = call_acf_oprofile(hot_th=0, cold_opts=acf_cold_opts)
     debug('*** Cold functions:\n%s' % acf_csv_cold)
-    csv_path = write_csv_file(def_opts, 'reference_run', acf_csv_cold)
+    csv_path = write_csv_file(def_opts, 'cold_run', acf_csv_cold)
 
     acf_po = (' -fplugin=' + acf_plugin +
               ' -fplugin-arg-acf_plugin-verbose -fplugin-arg-acf_plugin-csv_file=')
@@ -656,7 +657,7 @@ def atos_opt_run(flags, variant, profdir, config, nbrun, baseopts, no_replay):
         'fdo+lto' : ('-f -l', ''),
         'lipo' : ('-f', '-fripa')}
     flags, variant = atos_base_flags(flags, variant, baseopts)
-    info('RUN [%s] [%s] %s' % (variant, flags, baseopts or ''))
+    info('RUN [%s] [%s]' % (variant, flags))
     profdir_option = profdir and ('-b %s' % profdir) or ''
     replay_option = no_replay and '-k' or ''
     nbrun_option = nbrun and ('-n %d' % nbrun) or ''

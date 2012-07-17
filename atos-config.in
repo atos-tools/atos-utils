@@ -93,11 +93,6 @@ int main(void) {
 }
 EOF
 
-    cat > $tmpdir/empty_plugin.c <<EOF
-int plugin_is_GPL_compatible;
-int plugin_init(void *p1, void *p2) {}
-EOF
-
     # for now, it probably works only for gcc
 
     # compiler id
@@ -123,11 +118,6 @@ EOF
     result=`$compiler -O2 -flto -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
     echo "lto_enabled $result"
 
-    # plugins
-    result=`$compiler -fPIC -O2 -shared -o $tmpdir/empty_plugin.so $tmpdir/empty_plugin.c 2>/dev/null && echo 1 || echo 0`     
-    [ "$result" = 0 ] || result=`$compiler -O2 -fplugin=$tmpdir/empty_plugin.so -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
-    echo "plugins_enabled $result"
-
     # graphite
     result=`$compiler -O2 -floop-block -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
     echo "graphite_enabled $result"
@@ -150,6 +140,13 @@ EOF
     [ -f "$acfpath" ] || acfpath="none"
     echo "plugin_acf $acfpath"
 
+    # plugins
+    if [ -f "$acfpath" ]; then
+	result=`$compiler -O2 -fplugin=$acfpath -fplugin-arg-acf_plugin-test -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
+	echo "plugins_enabled $result"
+    else
+	echo "plugins_enabled 0"
+    fi
 }
 
 json_config_flags_file()

@@ -200,6 +200,8 @@ class opt_flag_list():
 class generator():
 
     optlist, optlevel, variants, baseopts = None, None, None, None
+    atos_config = None
+
     generators = []
 
     def __init__(self, func):
@@ -415,6 +417,18 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
         return ' '.join(flag_list)
 
     info('gen_acf')
+
+    if generator.baseopts and generator.atos_config:
+        lto_set = (generator.baseopts.find('-flto') != -1)
+        compiler_versions = atos_lib.json_config(generator.atos_config).query(
+            atos_lib.strtoquery('$.compilers[*].version'))
+        compiler_min_version = (
+            compiler_versions and atos_lib.json_config.compiler_version_number(
+                sorted(compiler_versions)[0]) or None)
+        # no acf in lto mode if gcc version < 4.7
+        if lto_set and compiler_min_version and compiler_min_version < 40700:
+            warning('acf incompatible with lto for gcc < 4.7')
+            return
 
     def_opts = ''
     acf_oprofile = os.path.join(libdir, 'atos-acf-oprofile.py')
@@ -782,6 +796,7 @@ if __name__ == '__main__':
         opts.flags != None and opt_flag_list(opts.flags))
     generator.optlevel = opt_flag.optlevel(opts.optlvl.split(','))
     generator.variants = opts.variants.split(',')
+    generator.atos_config = opts.atos_configurations
 
     if opts.base_opts:
         opts.base_opts = opts.base_opts.split(',')

@@ -403,7 +403,9 @@ class atos_client_db():
 
 class json_config():
 
-    def __init__(self, filename):
+    def __init__(self, cfgpath):
+        filename = os.path.isdir(cfgpath) and os.path.join(
+            cfgpath, 'config.json') or cfgpath
         self.filename = filename
         self._create()
         with open(self.filename) as inf:
@@ -450,6 +452,15 @@ class json_config():
     def get_value(self, key):
         return jsonlib.get_item(self.config, key)
 
+    @staticmethod
+    def compiler_version_number(version_str):
+        vspl = version_str.split('.', 2)
+        major = int((len(vspl) >= 1) and vspl[0] or 0)
+        minor = int((len(vspl) >= 2) and vspl[1] or 0)
+        patch = int((len(vspl) >= 3) and vspl[2] or 0)
+        nstr = '%d%02d%02d' % (major, minor, patch)
+        return int(nstr)
+
     def flags_for_flagfiles(self):
         compilers = self.config.get('compilers', [])
         if not compilers: return ''
@@ -461,22 +472,15 @@ class json_config():
         flags.append('-D%s' % compiler_name.upper())
         # compiler versions
         versions = sorted([c['version'] for c in compilers])
-        try:
+        if versions:
             # min version
-            minv = versions[0].split('.', 2)
-            major = int((len(minv) >= 1) and minv[0] or 0)
-            minor = int((len(minv) >= 2) and minv[1] or 0)
-            patch = int((len(minv) >= 3) and minv[2] or 0)
-            flags += ['-D%s_VERSION=%d%02d%02d' % (
-                    compiler_name, major, minor, patch)]
+            flags += ['-D%s_VERSION=%d' % (
+                    compiler_name,
+                    json_config.compiler_version_number(versions[0]))]
             # max version
-            maxv = versions[-1].split('.', 2)
-            major = int((len(maxv) >= 1) and maxv[0] or 0)
-            minor = int((len(maxv) >= 2) and maxv[1] or 0)
-            patch = int((len(maxv) >= 3) and maxv[2] or 0)
-            flags += ['-D%s_MAX_VERSION=%d%02d%02d' % (
-                    compiler_name, major, minor, patch)]
-        except: raise
+            flags += ['-D%s_MAX_VERSION=%d' % (
+                    compiler_name,
+                    json_config.compiler_version_number(versions[-1]))]
         # compiler features
         flags.extend(['-D%s' % (f.upper()) for f in self._compiler_features()])
         return ' '.join(flags)

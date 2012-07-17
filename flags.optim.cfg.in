@@ -608,6 +608,7 @@
 # branch target registers in within any basic block.
 -fbtr-bb-exclusive|-fno-btr-bb-exclusive
 
+#if GCC_VERSION <= 40700
 # The threshold ratio (as a percentage) between a structure frequency
 # and the frequency of the hottest structure in the program. This
 # parameter is used by struct-reorg optimization enabled by
@@ -616,6 +617,7 @@
 # program is less than this parameter, then structure reorganization is
 # not applied to this structure. The default is 10.
 --param struct-reorg-cold-struct-ratio=[0..100]
+#endif // GCC_VERSION <= 40700
 
 # When branch is predicted to be taken with probability lower than this
 # threshold (in percent), then it is considered well predictable. The
@@ -963,11 +965,13 @@
 # down compilation of huge functions. The default value is 30.
 --param max-hoist-depth=[0..60]
 
+#if GCC_VERSION <= 40700
 # IPA-CP attempts to track all possible types passed to a function's
 # parameter in order to perform devirtualization. devirt-type-list-size
 # is the maximum number of types it stores per a single formal parameter
 # of a function. Default value is 8.
 --param devirt-type-list-size=[2..32]
+#endif // GCC_VERSION <= 40700
 
 #endif // GCC_VERSION >= 40600
 

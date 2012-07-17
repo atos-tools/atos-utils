@@ -24,7 +24,7 @@ installsrcdir:=$(srcdir)/../..
 PREFIX=/usr/local
 VSTAMP=version.stamp
 
-ALL_FILES_SUB=gcc-4.5.2/i386/acf_plugin.so gcc-4.5.2/x86_64/acf_plugin.so gcc-4.5.2/sh4/acf_plugin.so gcc-4.6.2/i386/acf_plugin.so gcc-4.6.2/x86_64/acf_plugin.so gcc-4.6.2/sh4/acf_plugin.so gcc-4.6.2/arm/acf_plugin.so gcc-4.7.0/i386/acf_plugin.so gcc-4.7.0/x86_64/acf_plugin.so
+ALL_FILES_SUB=gcc-4.5.2/i386/acf_plugin.so gcc-4.5.2/x86_64/acf_plugin.so gcc-4.5.2/sh4/acf_plugin.so gcc-4.6.2/i386/acf_plugin.so gcc-4.6.2/x86_64/acf_plugin.so gcc-4.6.2/sh4/acf_plugin.so gcc-4.6.2/arm/acf_plugin.so gcc-4.7.0/i386/acf_plugin.so gcc-4.7.0/x86_64/acf_plugin.so gcc-4.7.1/arm/acf_plugin.so
 
 ALL_FILES=$(addprefix $(builddir)/,$(ALL_FILES_SUB))
 

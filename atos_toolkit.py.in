@@ -588,14 +588,28 @@ def exploration_loop(generators, step=None, maxiter=None):
 
 # ####################################################################
 
+def subcall(cmd, outf=None):
+    import subprocess, shlex
+    process = subprocess.Popen(
+        shlex.split(cmd), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    output = ''
+    while True:
+        terminated = process.poll() is not None
+        outline = process.stdout.readline()
+        outf and outf.write(outline)
+        output += outline
+        if terminated and not outline: break
+    status = process.poll()
+    return status, output
 
-def system(cmd, check_status=False, debug_out=True):
-    from commands import getstatusoutput
+def system(cmd, check_status=False, print_out=False):
     debug('command [%s]' % cmd)
     if opts.dryrun: return True, None
-    status, output = getstatusoutput(cmd)
+    outf = (print_out and not (opts.quiet or opts.debug)) and (
+        sys.stdout) or None
+    status, output = subcall(cmd, outf)
+    debug('\n  | ' + '\n  | '.join(output.split('\n')))
     debug('command [%s] -> %s' % (cmd, str(status)))
-    if debug_out: debug('\n  | ' + '\n  | '.join(output.split('\n')))
     assert (not check_status or status == 0), 'command failed [%s]' % cmd
     return (status == 0), output
 
@@ -679,7 +693,7 @@ def atos_opt_run(flags, variant, profdir, config, nbrun, baseopts, no_replay):
     status, output = system(
         '%s/atos-opt -C %s %s %s %s -r -a "%s %s" %s' % (
             bindir, config, nbrun_option, replay_option, profdir_option,
-            flags, variant_flags, variant_options))
+            flags, variant_flags, variant_options), print_out=True)
     if not (status and output):
         info('FAILURE [%s] [%s]' % (variant, flags))
         return None
@@ -718,10 +732,10 @@ if __name__ == '__main__':
 
     # general options
     parser.add_option('-d', '--debug', dest='debug',
-                      action='store_const', const=10, default=20,
+                      action='store_true', default=False,
                       help='print debug information (default: False)')
-    parser.add_option('-q', '--quiet', dest='debug',
-                      action='store_const', const=30,
+    parser.add_option('-q', '--quiet', dest='quiet',
+                      action='store_true', default=False,
                       help='quiet mode (default: False)')
     parser.add_option('--dryrun', dest='dryrun',
                       action='store_true', default=False,
@@ -796,7 +810,6 @@ if __name__ == '__main__':
         opts.flags != None and opt_flag_list(opts.flags))
     generator.optlevel = opt_flag.optlevel(opts.optlvl.split(','))
     generator.variants = opts.variants.split(',')
-    generator.atos_config = opts.atos_configurations
 
     if opts.base_opts:
         opts.base_opts = opts.base_opts.split(',')
@@ -812,7 +825,7 @@ if __name__ == '__main__':
     fmtdate='[%d-%m %H:%M:%S]'
     logging.getLogger().setLevel(0)
     conslog = logging.StreamHandler()
-    conslog.setLevel(opts.debug)
+    conslog.setLevel(opts.debug and 10 or 30)
     conslog.setFormatter(logging.Formatter(fmtlog, fmtdate))
     logging.getLogger().addHandler(conslog)
     if opts.logfile:

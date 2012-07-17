@@ -49,9 +49,9 @@ int is_lto(){
 	return is_lto_cache;
 }
 
-void cpp_include(const char *file){
-	cpp_push_include(parse_in,file);
-}
+
+
+
 
 #if __GCC_VERSION__>=40600
 bool is_targetable_decl(tree decl){

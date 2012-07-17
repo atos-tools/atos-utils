@@ -28,7 +28,7 @@ dir=`cd $dir; pwd`
 
 run_script=""
 build_script=""
-executable=""
+executables=""
 configuration_path="./atos-configurations"
 verbose="0"
 quiet="0"

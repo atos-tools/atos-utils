@@ -279,7 +279,10 @@ int plugin_init(struct plugin_name_args *plugin_na,
 	bad = true;
 	break;
     case 1:
-	if (strcmp(plugin_na->argv[0].key, acf_csv_file_key) == 0) {
+	if (strcmp(plugin_na->argv[0].key, "test") == 0) {
+	  fprintf(stderr, "test OK\n");
+	  return 0;
+	} else if (strcmp(plugin_na->argv[0].key, acf_csv_file_key) == 0) {
 	    csv_arg_pos = 0;
 	} else {
 	    bad = true;

@@ -101,9 +101,9 @@ EOF
     # for now, it probably works only for gcc
 
     # compiler id
-    name=`$compiler -v 2>&1 | tail -1 | cut -d' ' -f1`
+    name=`$compiler -v 2>&1 | grep " version " | cut -d' ' -f1`
     target=`$compiler -dumpmachine`
-    version=`$compiler -dumpversion`
+    version=`$compiler -v 2>&1 | grep " version " | cut -d' ' -f3`
     echo "id $name-$target-$version"
 
     # compiler name

@@ -512,9 +512,12 @@ def standard_deviation(l):
 def variation_coefficient(l):
     return (standard_deviation(l) / average(l))
 
+def md5sum(s):
+    return hashlib.md5(s).hexdigest()
+
 def hashid(s):
     # return same results as 'echo s | md5sum'
-    return hashlib.md5(s + '\n').hexdigest()
+    return md5sum(s + '\n')
 
 def strtodict(s):
     # 'aa:xx,bb:yy' -> {'aa':'xx','bb':'yy'}

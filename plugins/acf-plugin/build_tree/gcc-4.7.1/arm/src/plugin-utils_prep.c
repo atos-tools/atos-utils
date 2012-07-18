@@ -17174,9 +17174,6 @@ int is_lto(){
  }
  return is_lto_cache;
 }
-void cpp_include(const char *file){
- cpp_push_include(parse_in,file);
-}
 # 72 "../../../src/plugin-utils.c"
 unsigned char comparison_set_rtx_1(rtx match_input,rtx *cc_op,rtx *op1,rtx *op2){
  if(((enum rtx_code) (match_input)->code)==SET){

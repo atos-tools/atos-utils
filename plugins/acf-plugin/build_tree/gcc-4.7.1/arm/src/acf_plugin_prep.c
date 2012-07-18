@@ -18516,7 +18516,10 @@ int plugin_init(struct plugin_name_args *plugin_na,
  bad = 1;
  break;
     case 1:
- if (strcmp(plugin_na->argv[0].key, acf_csv_file_key) == 0) {
+ if (strcmp(plugin_na->argv[0].key, "test") == 0) {
+   fprintf(stderr, "test OK\n");
+   return 0;
+ } else if (strcmp(plugin_na->argv[0].key, acf_csv_file_key) == 0) {
      csv_arg_pos = 0;
  } else {
      bad = 1;
@@ -18569,6 +18572,6 @@ int plugin_init(struct plugin_name_args *plugin_na,
         PLUGIN_PRE_GENERICIZE,
         &attribute_injector_finish_decl_callback,
         &pre_genericize);
-# 352 "../../../src/acf_plugin.c"
+# 355 "../../../src/acf_plugin.c"
     return 0;
 }

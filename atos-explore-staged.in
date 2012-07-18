@@ -1,0 +1,180 @@
+#!/usr/bin/env bash
+#
+# Copyright (C) STMicroelectronics Ltd. 2012
+#
+# This file is part of ATOS.
+#
+# ATOS is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License v2.0
+# as published by the Free Software Foundation
+#
+# ATOS is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
+#
+#
+# Usage: get usage with atos-explore-staged -h
+#
+
+set -e
+[ "$DEBUG" = "" ] || set -x
+
+dir=`cd \`dirname $0\`; pwd`
+libdir=`cd $dir/../lib/atos; pwd`
+
+configuration_path="./atos-configurations"
+build_script=""
+opt_remote_profile_path=""
+opt_rebuild=""
+executables=""
+run_script=""
+profiling_script=""
+get_results_script=""
+opt_nbruns=""
+nb_iter=100
+opt_seed=""
+opt_quiet=""
+opt_debug=""
+
+version() {
+    echo "atos-explore-staged version @VERSION@"
+}
+
+usage() {
+    cat <<EOF
+
+Usage: atos-explore-staged [options] [executables...]
+
+Configuration Options
+      -C <path> : configuration path [default: $configuration_path]
+
+Build Options
+      -b <build_script> : build_script to be executed [default: $build_script]
+      -B <path> : remote path to profile files [default: none]
+      -f : force rebuild by running build script instead of audited build
+      -e <executables> : executables to be instrumented [default: args of command or all generated executables]
+
+Run Options
+      -r <run_script> : run_script to be executed [default: $run_script]
+      -p <profiling_script> : script to get profile information [default: none]
+      -t <get_results_script> : get_results_script to be executed [default: none]
+      -n <nb> : number of executions of <run_script> [default: $nbruns]
+
+Exploration Options
+      -M <nb> : number of exploration loop iterations [default: $nb_iter]
+      -S <seed> : seed for random generator [default: none]
+
+Misc Options
+      -q : quiet output
+      -d : debug mode
+      -h : output usage
+      -v : output version
+
+EOF
+}
+
+cleanup() {
+    :
+}
+trap "cleanup; exit 3" TERM STOP
+trap "cleanup" EXIT
+
+while getopts C:b:B:fe:r:p:t:n:M:S:qdvh opt; do
+    case $opt in
+	C) configuration_path="$OPTARG"
+	    ;;
+	b) build_script="$OPTARG"
+	    ;;
+	B) opt_remote_profile_path="-B $OPTARG"
+	    ;;
+	f) opt_rebuild=-f
+	    ;;
+	e) executables="$OPTARG"
+	    ;;
+	r) run_script="$OPTARG"
+	    ;;
+	p) profiling_script="$OPTARG"
+	    ;;
+	t) get_results_script="$OPTARG"
+	    ;;
+	n) opt_nbruns="-n $OPTARG"
+	    ;;
+	M) nb_iter="$OPTARG"
+	    ;;
+	S) opt_seed="--seed=$OPTARG"
+	    ;;
+	q) opt_quiet="-q"
+	    ;;
+	d) opt_debug="-d"
+	    ;;
+	v) version; exit 0
+	    ;;
+	h) usage; exit 0
+	    ;;
+	?) usage; exit 2
+	    ;;
+    esac
+done
+
+shift $((OPTIND - 1))
+
+[ "$executables" != "" ] || executables="$@"
+
+
+tradeoff_variants() {
+    regexp="^.*[\"\']variant[\"\']: [\"\']\([^\"\']*\)[\"\'].*$"
+    $libdir/atos_lib.py speedups --tradeoff=5 --tradeoff=1 --tradeoff=0.2 \
+	| grep "$regexp" | sed "s/$regexp/\1/" | sort -u
+}
+
+config_query() {
+    $libdir/atos_lib.py config -C $configuration_path -u -t -q $*
+}
+
+perf_variant() {
+    regexp="^.*[\"\']variant[\"\']: [\"\']\([^\"\']*\)[\"\'].*$"
+    $libdir/atos_lib.py speedups --tradeoff=5 \
+	| grep "$regexp" | sed "s/$regexp/\1/"
+}
+
+size_flags() {
+    regexp="^.*[\"\']conf[\"\']: [\"\']\([^\"\']*\)[\"\'].*$"
+    $libdir/atos_lib.py speedups --tradeoff=0.2 \
+	| grep "$regexp" | sed "s/$regexp/\1/"
+}
+
+$dir/atos-init -C "$configuration_path" \
+    -b "$build_script" -r "$run_script" -t "$get_results_script" \
+    $opt_remote_profile_path $opt_rebuild -e "$executables" $opt_nbruns $opt_quiet
+
+
+$dir/atos-explore -C "$configuration_path"
+
+
+tradeoffs=`tradeoff_variants`
+$dir/atos-explore-inline -C "$configuration_path" -M $nb_iter $opt_seed $opt_debug $opt_quiet $tradeoffs
+
+
+tradeoffs=`tradeoff_variants`
+$dir/atos-explore-loop -C "$configuration_path" -M $nb_iter $opt_seed $opt_debug $opt_quiet $tradeoffs
+
+
+tradeoffs=`tradeoff_variants`
+$dir/atos-explore-optim -C "$configuration_path" -M $nb_iter $opt_seed $opt_debug $opt_quiet $tradeoffs
+
+
+acf_plugin_path=`config_query '$.compilers[*].plugin_acf'`
+
+if [ "$acf_plugin_path" != "" -a "$profiling_script" != "" ]; then
+
+    for ratio in 20 70 80 90; do
+	$dir/atos-explore-acf -C "$configuration_path" $opt_seed $opt_debug $opt_quiet \
+	    -p $profiling_script \
+	    -x $ratio -Y "`size_flags`" `perf_variant`
+    done
+
+fi

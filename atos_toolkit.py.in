@@ -268,14 +268,15 @@ def gen_rnd_uniform_deps():
         handled_flags = set()
         available_flags = generator.optlist.available_flags(
             generator.baseopts or '')
-        flags = generator.baseopts or generator.optlevel.rand()
+        baseflags, flags = generator.baseopts or '', ''
+        if not baseflags: flags += generator.optlevel.rand()
         while True:
             for f in sorted(list(available_flags)):
                 if randint(0, 1): continue
                 flags += ' ' + f.rand()
             handled_flags |= available_flags
             available_flags = (
-                generator.optlist.available_flags(flags) - handled_flags)
+                generator.optlist.available_flags(baseflags + ' ' + flags) - handled_flags)
             if not available_flags: break
         yield flags
 
@@ -378,15 +379,6 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
             acf_flags_file=None):
     '''perform per function exploration'''
 
-    def create_csv_name(options, funcname):
-        max_file_path_size = 128
-        csv_name = 'acf-plugin-csv-%s-%s' % (
-            acf_hot_th, funcname + options.replace(' ','_'))
-        if len(csv_name) > max_file_path_size:
-            csv_name = csv_name[:max_file_path_size] + '-' + str(time.time())
-        #print 'CSV file name: ' , csv_name
-        return csv_name
-
     def call_acf_oprofile(hot_th=acf_hot_th, cold_th=acf_cold_th,
                           cold_opts=None, hot_opts=None):
         imgopt = os.path.isdir(imgpath.split(':')[0]) and '-p' or '-e'
@@ -398,7 +390,8 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
         return output
 
     def write_csv_file(options, funcname, *args):
-        csv_name = create_csv_name(options, funcname)
+        csv_name = 'acf-%s-%s-%s.csv' % (
+            acf_hot_th, funcname, atos_lib.md5sum('\n'.join(args)))
         debug('*** CSV name created for %s: %s' % (funcname, csv_name))
         csv_path = os.path.join(csv_dir, csv_name)
         csv_file = open(csv_path, 'w')
@@ -501,6 +494,7 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
         hot_functions = []
         # Filter hot functions names
         for csv_line in acf_csv_hot.split('\n'):
+            if not csv_line: continue # handle empty lines
             word = csv_line.split(',')
             hot_functions += [word[0]]
         debug('*** Hot functions names= %s' % hot_functions)

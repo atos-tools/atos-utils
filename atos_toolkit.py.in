@@ -123,7 +123,7 @@ class opt_flag_list():
         result, idx, cmdlen = [], 0, len(cmd)
         while idx < cmdlen:
             flag = cmd[idx]
-            if flag == '--param' and idx + 1 < cmdlen:
+            if flag in ['--param', '-mllvm'] and idx + 1 < cmdlen:
                 flag += ' ' + cmd[idx+1]; idx += 1
             result += [flag]; idx += 1
         return result
@@ -307,7 +307,7 @@ def gen_one_off_rnd(variantid, epsilon='0.001'):
     i, n = 0, len(baseflags)
     while i < n:
         flag = baseflags[i]
-        if flag == '--param':
+        if flag in ['--param','-mllvm']:
             flag += ' ' + baseflags[i + 1]; i += 1
         flags += [flag]; i += 1
     # extract variant

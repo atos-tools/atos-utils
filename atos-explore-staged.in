@@ -170,11 +170,11 @@ $dir/atos-explore-optim -C "$configuration_path" -M $nb_iter $opt_seed $opt_debu
 acf_plugin_path=`config_query '$.compilers[*].plugin_acf'`
 
 if [ "$acf_plugin_path" != "" -a "$profiling_script" != "" ]; then
-
+    variant=`perf_variant`
     for ratio in 20 70 80 90; do
 	$dir/atos-explore-acf -C "$configuration_path" $opt_seed $opt_debug $opt_quiet \
 	    -p $profiling_script \
-	    -x $ratio -Y "`size_flags`" `perf_variant`
+	    -x $ratio -Y "`size_flags`" $variant
     done
 
 fi

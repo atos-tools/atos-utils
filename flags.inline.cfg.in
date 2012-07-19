@@ -170,14 +170,11 @@
 
 #endif
 
-#if CLANG_VERSION >= 0
+#if CLANG_VERSION > 0
 # Control the amount of inlining to perform (default = 225)
 -mllvm -inline-threshold=[100..500]
 
-# Inliner for always_inline functions
--mllvm -always-inline
-
-#endif //CLANG_VERSION >= 0
+#endif //CLANG_VERSION > 0
 
 #if 0
 

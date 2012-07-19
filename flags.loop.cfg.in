@@ -404,7 +404,7 @@
 #endif
 
 
-# if CLANG_VERSION >= 0
+# if CLANG_VERSION > 0
 
 # Allows loops to be partially unrolled until
 # -unroll-threshold loop size is reached.

@@ -194,6 +194,7 @@ def parse_profile(binary_list, oprofile_format):
 
                     # Merge multiple entries for same image_name/sym
                     sym_found = False
+                    sym = sym.split('.')[0]
                     if image_name in samples.keys():
                         for (vma_c, samps_c, percent_c, linenr_c,
                              image_name_c, app_name_c, sym_c) in samples[image_name]:

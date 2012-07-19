@@ -403,6 +403,17 @@
 
 #endif
 
+
+# if CLANG_VERSION >= 0
+
+# Allows loops to be partially unrolled until
+# -unroll-threshold loop size is reached.
+-mllvm -unroll-allow-partial 
+
+# The cut-off point for automatic loop unrolling
+-mllvm -unroll-threshold=[100..300]
+#endif
+
 # flag dependencies
 
 -ftree-loop-optimize: -fcheck-data-deps

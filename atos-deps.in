@@ -603,11 +603,12 @@ def version():
     print os.path.basename(sys.argv[0]) + " version " + VERSION
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "hvqC:o:i:al")
+    opts, args = getopt.getopt(sys.argv[1:], "hvqC:o:i:alf")
 except getopt.GetoptError, err:
         print >> sys.stderr, str(err)
         sys.exit(1)
 
+force_mode = False
 input_name = None
 output_name = None
 targets = None
@@ -617,6 +618,8 @@ for o, a in opts:
         configuration_path = a
     if o == "-o":
         output_name = a
+    if o == "-f":
+        force_mode = True
     if o == "-i":
         input_name = a
     if o == "-a":
@@ -659,7 +662,9 @@ graph = builder.get_graph()
 #gvv = gv.readstring(dot)
 #gv.layout(gvv,'dot')
 #gv.render(gvv,'png', target + '.graph.png')
-graph.output_makefile(output_name)
+
+if not force_mode:
+    graph.output_makefile(output_name)
 
 # For now only write targets if configuration dir is there
 try:
@@ -667,7 +672,7 @@ try:
 except:
     pass
 else:
-    f.write("\n".join(graph.get_targets()) + "\n")
+    f.write("\n".join(targets if force_mode else graph.get_targets()) + "\n")
     f.close()
 try:
     f = open(os.path.join(configuration_path, "objects"), "w")

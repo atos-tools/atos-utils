@@ -156,12 +156,8 @@ fi
 
 if [ "$build_script" != "" ]; then
     $dir/atos-audit -C "$configuration_path" $opt_q $opt_rebuild $build_script
-    if [ "$opt_rebuild" = "" ]; then
-	$dir/atos-deps -C "$configuration_path" $opt_q $executables
-	$dir/atos-config -C "$configuration_path"
-    elif [ "$get_results_script" = "" ]; then
-	echo "$executables" > "$configuration_path"/targets
-    fi
+    $dir/atos-deps -C "$configuration_path" $opt_q $opt_rebuild $executables
+    $dir/atos-config -C "$configuration_path"
 elif [ ! -f "$configuration_path/build.audit" ]; then
     echo "`basename $0`: error: missing build audit, use -b option for specifying " \
     	 "build script or use atos-audit tool" >&2

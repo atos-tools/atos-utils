@@ -38,6 +38,7 @@ opt_q=""
 nbruns="1"
 verbose="0"
 remote_profile_path=""
+profiling_script=""
 
 version() {
     echo "atos-init version @VERSION@"
@@ -64,6 +65,7 @@ Run Options
       -r <run_script> : run_script to be executed [default: $run_script]
       -t <get_results_script> : get_results_script to be executed [default: none]
       -n <nb> : number of executions of <run_script> [default: $nbruns]
+      -p <profiling_script> : script to get profile information [default: none]
 
 Misc Options
       -q : quiet output
@@ -80,7 +82,7 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts C:e:b:fr:t:B:n:cqdvh opt; do
+while getopts C:e:b:fr:t:B:n:p:cqdvh opt; do
     case $opt in
 	C) configuration_path="$OPTARG"
 	    ;;
@@ -93,6 +95,8 @@ while getopts C:e:b:fr:t:B:n:cqdvh opt; do
 	r) run_script="$OPTARG"
 	    ;;
 	t) get_results_script="$OPTARG"
+	    ;;
+	p) profiling_script="$OPTARG"
 	    ;;
 	B) remote_profile_path="$OPTARG"
 	    ;;
@@ -178,4 +182,11 @@ elif [ ! -f "$configuration_path/run.audit" ]; then
     echo "`basename $0`: error: missing run audit, use -r option for specifying " \
     	 "run script or use atos-raudit tool" >&2
     exit 1
+fi
+
+if [ "$profiling_script" != "" ]; then
+    prof_sh="$configuration_path/profile.sh"
+    echo "#!/bin/sh" > $prof_sh
+    echo "cd $PWD && $profiling_script" >> $prof_sh
+    chmod 755 $prof_sh
 fi

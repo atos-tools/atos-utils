@@ -135,6 +135,10 @@ if [ "$imagepath" = "" ]; then
     exit 1
 fi
 
+if [ "$profiling_script" = "" -a -f "$configuration_path/profile.sh" ]; then
+    profiling_script="$configuration_path/profile.sh"
+fi
+
 if [[ "$profiling_script" == "" || ! -x $profiling_script ]]; then
     echo "`basename $0`: error: profiling script not specified" >&2
     exit 1

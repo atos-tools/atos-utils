@@ -672,7 +672,7 @@ try:
 except:
     pass
 else:
-    f.write("\n".join(targets if force_mode else graph.get_targets()) + "\n")
+    f.write("\n".join(args if force_mode else graph.get_targets()) + "\n")
     f.close()
 try:
     f = open(os.path.join(configuration_path, "objects"), "w")

@@ -160,7 +160,7 @@ if [ "`config_query '$.compilers[*].plugins_enabled'`" != "1" ]; then
     exit 1
 fi
 
-[ "$acf_cold_th" != "" ] || acf_cold_th=`expr 100 - $acf_hot_th`
+[ "$acf_cold_th" != "" ] || acf_cold_th=`expr 100 - $acf_hot_th` || true
 
 $libdir/atos_toolkit.py --log=./acf.log -C $configuration_path \
     $opt_debug $opt_profdir $opt_nbruns \

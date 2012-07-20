@@ -31,10 +31,6 @@ atos-utils requires the packages described below to be installed on your system.
   $ make -C src install PREFIX=/home/myself/local
   You do not need root access to execute proot afterward.
 
-** Python pygraph module:
-  * python-graph: http://code.google.com/p/python-graph/
-    Dowload and install: python-graph-core-1.8.1.tar.gz
-
 ** Python pylab modules (for atos-graph only):
   * python-mathplotlib: http://www.scipy.org/PyLab or from your package
     manager python-matplotlib
@@ -50,4 +46,3 @@ atos-utils requires the packages described below to be installed on your system.
     Download and install: jsonlib-0.1.tar.gz
     It can be installed with:
     $ ./setup.py install --user
-

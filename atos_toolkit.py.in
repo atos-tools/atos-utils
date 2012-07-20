@@ -22,7 +22,15 @@
 
 VERSION="@VERSION@"
 
-import sys, os, itertools, math, re, string
+import sys
+
+try:
+    assert sys.hexversion >= 0x02060000
+except:
+    print >>sys.stderr, 'error: python version >= 2.6 is required by ATOS tools'
+    sys.exit(1)
+
+import os, itertools, math, re, string
 
 from random import randint, choice, sample, seed
 

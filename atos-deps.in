@@ -21,9 +21,16 @@
 
 VERSION="@VERSION@"
 
+import sys
+
+try:
+    assert sys.hexversion >= 0x02060000
+except:
+    print >>sys.stderr, 'error: python version >= 2.6 is required by ATOS tools'
+    sys.exit(1)
+
 import re
 import os
-import sys
 import getopt
 
 atos_bindir = os.path.dirname(__file__)

@@ -21,7 +21,15 @@
 
 VERSION="@VERSION@"
 
-import os, sys, re, math, itertools, time, fcntl, json, hashlib, subprocess
+import sys
+
+try:
+    assert sys.hexversion >= 0x02060000
+except:
+    print >>sys.stderr, 'error: python version >= 2.6 is required by ATOS tools'
+    sys.exit(1)
+
+import os, re, math, itertools, time, fcntl, json, hashlib, subprocess
 import cPickle as pickle
 
 atos_libdir = os.path.dirname(__file__)

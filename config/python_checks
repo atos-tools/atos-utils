@@ -27,13 +27,6 @@
 
 errors=0
 try:
-    print "Check python pygraph...",
-    import pygraph
-    print "ok"
-except:
-    print "not installed: please install from: http://code.google.com/p/python-graph"
-    errors += 1
-try:
     print "Check python jsonlib...",
     import jsonlib
     print "ok"

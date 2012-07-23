@@ -250,13 +250,14 @@ class atos_client_results():
     def __init__(self, atos_db, group_targets, query={}, group_name=None):
         self.db = atos_db
         if not group_targets:
-            group_targets = list(set(self.db.get_results('$[*].target')))
+            group_targets = list(set(self.db.get_results('$[*].target') or []))
         group_name = group_name or '+'.join(group_targets)
         self.values = (group_targets, query, group_name)
         # results: { variant : [ result_obj ] }
         self.results = self._get_group_results(group_targets, group_name, query)
 
     def compute_frontier(self):
+        if not self.results: return []
         maybe_on_frontier, mustbe_on_frontier = self.results.values(), set()
         for (variant, c1) in self.results.items():
             on_frontier = True
@@ -320,6 +321,7 @@ class atos_client_results():
         return frontier_orig[frontier_copy.index(tradeoff)]
 
     def _get_group_results(self, group_targets, group_name, query):
+        if not group_targets: return {}
         # get results for each target of the group
         results, target_results = {}, {}
         for target in group_targets:

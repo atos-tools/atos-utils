@@ -50,7 +50,7 @@ echo "echo 0400b20     894  0.0447  sha1-c main >> oprof.out" >> $oprof_out_scri
 
 chmod +x $oprof_out_script
 
-$ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 -Y "-Os noinline cold" 2>&1
+$ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 -Y "-Os noinline cold"
 
 [ -d atos-configurations ]
 
@@ -64,21 +64,21 @@ nb_played=`$ROOT/lib/atos/atos_lib.py query | wc -l`
 echo "-O2 -finline-functions" > flags.txt
 echo "-O3 -funroll-loops"     >> flags.txt
 
-$ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 -Y "-Os noinline cold" -F flags.txt 2>&1
+$ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 -Y "-Os noinline cold" -F flags.txt
 
 nb_played=`$ROOT/lib/atos/atos_lib.py query | wc -l`
 # 7 +  (base, ref, best) + (2 flag_list * 2 hot_functions)
 [ "`expr $nb_played`" == "14" ]
 
 # try with perf ref point
-$ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 OPT-O2 2>&1
+$ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 OPT-O2
 
 $ROOT/bin/atos-opt -r -a "-O2" -f
 
-$ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 OPT-fprofile-use-O2-O2 2>&1
+$ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 OPT-fprofile-use-O2-O2
 
 $ROOT/bin/atos-opt -r -a "-O2" -f -l
 
-$ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 OPT-fprofile-use-O2-O2-flto 2>&1
+$ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 OPT-fprofile-use-O2-O2-flto
 
 

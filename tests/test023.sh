@@ -10,7 +10,7 @@ $ROOT/bin/atos-init \
     -r "$SRCDIR/examples/sha1-c/run.sh" \
     -b "gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c" \
 
-$ROOT/bin/atos-explore-loop -q -M5 -S0 -Vbase,fdo
+$ROOT/bin/atos-explore-loop -M5 -S0 -Vbase,fdo
 
 [ -d atos-configurations ]
 [ `$ROOT/lib/atos/atos_lib.py query -q'variant:OPT-.*' | wc -l` -eq 10 ]

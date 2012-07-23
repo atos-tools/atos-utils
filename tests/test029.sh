@@ -26,7 +26,7 @@ $ROOT/bin/atos-init \
     -b "gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c"
 
 echo "# atos-explore..."
-$ROOT/bin/atos-explore -q
+$ROOT/bin/atos-explore
 
 
 $ROOT/bin/atos-graph -x1 -t sha1-c --tradeoff=5 --tradeoff=1 --tradeoff=0.2 --follow > /dev/null &
@@ -34,18 +34,18 @@ $ROOT/bin/atos-graph -x1 -t sha1-c --tradeoff=5 --tradeoff=1 --tradeoff=0.2 --fo
 
 echo "# atos-explore-inline..."
 tradeoff_variants
-$ROOT/bin/atos-explore-inline -q -M20 `tradeoff_variants`
+$ROOT/bin/atos-explore-inline -M20 `tradeoff_variants`
 
 
 echo "# atos-explore-loop..."
 tradeoff_variants
-$ROOT/bin/atos-explore-loop -q -M20 `tradeoff_variants`
+$ROOT/bin/atos-explore-loop -M20 `tradeoff_variants`
 
 
 echo "# simplifying selected points..."
 tradeoff_variants
 for v in `tradeoff_variants`; do
-    $ROOT/lib/atos/atos_toolkit.py -q -k --gen-one-off-rnd=$v,3
+    $ROOT/lib/atos/atos_toolkit.py -k --gen-one-off-rnd=$v,3
 done
 
 

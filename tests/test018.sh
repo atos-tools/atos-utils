@@ -9,7 +9,7 @@ TEST_CASE="ATOS init audits"
 $ROOT/bin/atos-init -C atos-config \
     -r "$SRCDIR/examples/sha1-c/run.sh" \
     -b "gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c" \
-    -q -n 2
+    -n 2
 
 [ `$ROOT/lib/atos/atos_lib.py query -C atos-config | grep target | wc -l` -eq 2 ]
 

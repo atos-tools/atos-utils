@@ -303,6 +303,12 @@ class atos_client_results():
 
     @staticmethod
     def select_tradeoff(frontier, perf_size_ratio=4):
+        res_point = atos_client_results.select_tradeoffs(
+            frontier, perf_size_ratio, 1)
+        return res_point and res_point[0] or None
+
+    @staticmethod
+    def select_tradeoffs(frontier, perf_size_ratio=4, nb_points=3):
         if not frontier: return None
         # copy frontier points
         frontier_orig = sorted(
@@ -315,11 +321,14 @@ class atos_client_results():
         # compute speedups/sizereds
         map(lambda x: x.compute_speedup(ref), frontier_copy)
         # find best tradeoff (ratio * sizered + speedup)
-        tradeoff = sorted(map(lambda x: (
+        tradeoffs = sorted(map(lambda x: (
                     (perf_size_ratio * x.speedup) + x.sizered
-                    , x), frontier_copy))[-1][1]
-        # return corresponding point
-        return frontier_orig[frontier_copy.index(tradeoff)]
+                    , x), frontier_copy))
+        tradeoffs = map(lambda x: x[1], tradeoffs[-nb_points:])
+        # return corresponding points
+        tradeoffs_points = map(
+            lambda x: frontier_orig[frontier_copy.index(x)], tradeoffs)
+        return tradeoffs_points
 
     def _get_group_results(self, group_targets, group_name, query):
         if not group_targets: return {}
@@ -1013,9 +1022,12 @@ if __name__ == '__main__':
         subparser.add_option('-C', dest='configuration_path',
             action='store', type='string', default="./atos-configurations",
             help='set configuration path (default: ./atos-configurations)')
-        subparser.add_option('-t', '--tradeoff', dest='tradeoff',
-            action='store', type='float', default=5.0,
+        subparser.add_option('-s', '--tradeoff', dest='tradeoffs',
+            action='append', type='float', default=[],
             help='selected tradeoff given size/perf ratio')
+        subparser.add_option('-N', '--nb', dest='nb',
+            action='store', type='int', default=1,
+            help='get nb points (default: 1)')
         subparser.add_option('-v', '--variant', dest='variant',
             action='store', type='string', default=None,
             help='selected variant')
@@ -1031,6 +1043,9 @@ if __name__ == '__main__':
         subparser.add_option('-p', dest='print_config',
             action='store_true', default=False,
             help='print configuration only')
+        subparser.add_option('-P', dest='print_variant',
+            action='store_true', default=False,
+            help='print configuration only')
         subparser.add_option('-q', dest='quiet',
             action='store_true', default=False,
             help='quiet mode')
@@ -1039,48 +1054,59 @@ if __name__ == '__main__':
 
         atos_db = atos_db.db(opts.configuration_path)
 
-        result = None
+        results = []
 
         if opts.variant:
             results = atos_client_db(atos_db).query(
                 { 'variant' : opts.variant, 'target' : opts.identifier })
-            result = results and results[0] or None
 
         elif opts.hash_id:
             results = atos_client_db(atos_db).query(
-                { 'target' : opts.identifier })
+                { 'target' : opts.identifier }) or []
             results = filter(
                 lambda x: hashid(x['variant']).startswith(opts.hash_id), results)
             if len(results) > 1:
                 subparser.error('ambiguous local_id: %s' % opts.hash_id)
-            result = results and results[0] or None
 
         else:
-            result = atos_client_results(
-                atos_db, [opts.identifier]).tradeoff(opts.tradeoff)
-            result = result and result.dict() or None
+            all_points = list(atos_client_results(
+                atos_db, [opts.identifier]).results.values())
+            nbtr = max(1, opts.nb / len(opts.tradeoffs))
+            results = []
+            for trade in opts.tradeoffs:
+                selected = atos_client_results.select_tradeoffs(
+                    all_points, trade, nbtr) or []
+                results.extend(selected)
+                map(all_points.remove, selected)
+            results = map(lambda x: x.dict(), results)
 
-        if not result:
-            subparser.error('no result found')
+        if not results:
+            subparser.error('no results found')
 
-        if opts.print_config:
-            print atos_db_file.entry_str(result),
+        if opts.print_variant:
+            for result in results:
+                print result['variant']
+
+        elif opts.print_config:
+            for result in results:
+                print atos_db_file.entry_str(result),
 
         else:
-            if not opts.quiet:
-                print 'Playing optimized build %s:%s...' % (
-                    opts.identifier, result['variant'])
+            rcode = 0
+            for result in results:
+                if not opts.quiet:
+                    print 'Playing optimized build %s:%s...' % (
+                        opts.identifier, result['variant'])
 
-            atos_build = os.path.join(atos_bindir, 'atos-build')
-            command = ['-a', result.get('conf', '')]
-            if result.has_key('uconf'):
-                command += ['-u', result['uconf']]
-            elif result.has_key('gconf'):
-                command += ['-g', result['gconf']]
-            if opts.dryrun:
-                command += ['-n']
-
-            rcode = subprocess.call([atos_build] + command + args)
+                atos_build = os.path.join(atos_bindir, 'atos-build')
+                command = ['-a', result.get('conf', '')]
+                if result.has_key('uconf'):
+                    command += ['-u', result['uconf']]
+                elif result.has_key('gconf'):
+                    command += ['-g', result['gconf']]
+                if opts.dryrun:
+                    command += ['-n']
+                rcode = max(subprocess.call([atos_build] + command + args), rcode)
             sys.exit(rcode)
 
 

@@ -706,7 +706,7 @@ def atos_opt_run(flags, variant, profdir, config, nbrun, baseopts, no_replay):
         if res: variant_id = res.groups()[-1]
     assert variant_id
     result_point = atos_get_result(variant_id)
-    result = (result_point.size, result_point.time)
+    result = result_point and (result_point.size, result_point.time) or None
     debug('RES ' + str(result))
     return result
 

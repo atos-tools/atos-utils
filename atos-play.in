@@ -36,6 +36,9 @@ dryrun=""
 print=""
 ref=0
 local_id=""
+opt_tradeoffs=""
+opt_nb=""
+f_set=0
 
 version() {
     echo "atos-play version @VERSION@"
@@ -48,6 +51,8 @@ Usage: atos-play [options] [--] [command...]
 
 Objective Options:
       -f <objective> : defined the objective function [default: $objective]
+      -s <tradeoff> : get best tradeoff results
+      -N <nb> : get nb best points given objective or tradeoff [default: 1]
       -r : get reference results
       -l : get result identified by local_id
 
@@ -59,6 +64,7 @@ Configuration Options:
 Build Configuration:
       -n : dry run, output build commands only
       -p : print configuration only
+      -P : print configuration variant id only
 
 Misc Options
       -q : quiet output
@@ -74,9 +80,9 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts vhqnprl:C:f:e:i: opt; do
+while getopts vhqnpPrl:C:f:e:i:s:N: opt; do
     case $opt in
-	f) objective="$OPTARG"
+	f) objective="$OPTARG"; f_set=1
 	    ;;
 	C) configuration_path="$OPTARG"
 	    ;;
@@ -84,9 +90,15 @@ while getopts vhqnprl:C:f:e:i: opt; do
 	    ;;
 	i) identifier="$OPTARG"
 	    ;;
+	s) opt_tradeoffs="$opt_tradeoffs --tradeoff=$OPTARG"
+	    ;;
+	N) opt_nb="-N $OPTARG"
+	    ;;
 	n) dryrun="-n"
 	    ;;
 	p) print="-p"
+	    ;;
+	P) print="-P"
 	    ;;
 	r) ref=1
 	    ;;
@@ -132,10 +144,17 @@ if [ "$objective" != time -a "$objective" != size ]; then
     exit 1
 fi
 
+if [ "$f_set" = "1" -a "$opt_tradeoffs" != "" ]; then
+    echo "`basename $0`: error:  options -f and -s cannot by specified at the same time" >&2
+    exit 1
+fi
+
 if [ "$ref" = "1" ]; then
     select_opt="--variant=REF"
 elif [ "$local_id" != "" ]; then
     select_opt="--hash=$local_id"
+elif [ "$opt_tradeoffs" != "" ]; then
+    select_opt="$opt_tradeoffs"
 elif [ "$objective" == "size" ]; then
     select_opt="--tradeoff=0.2"
 else
@@ -143,4 +162,4 @@ else
 fi
 
 $libdir/atos_lib.py play \
-    -C $configuration_path -i $identifier $select_opt $print $dryrun "$@"
+    -C $configuration_path -i $identifier $select_opt $opt_nb $print $dryrun "$@"

@@ -195,7 +195,7 @@ if [ "$u_set" = 1 ]; then
     fi
 fi
 
-[ "$b_set" = "1" ] || remote_profile_path=`get_config default_values.remote_profile_path`
+[ "$g_set" = "0" -o "$b_set" = "1" ] || remote_profile_path=`get_config default_values.remote_profile_path`
 
 if [ "$variant" = "" ]; then
     if [ "$options" != "" -o "$pvariant" != "" ]; then

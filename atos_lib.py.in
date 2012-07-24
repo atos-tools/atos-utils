@@ -282,7 +282,8 @@ class atos_client_results():
         return self.results.values()
 
     def get_last_result(self, variant):
-        assert variant in self.results.keys()
+        if variant not in self.results.keys():
+            return None
         return self.results[variant]._last
 
     def get_results(self, only_frontier=False, objects=False):

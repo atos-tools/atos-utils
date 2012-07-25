@@ -86,7 +86,7 @@ examples-sha1-play:
 # Installation of doc and examples
 #
 
-SHARED_DIRS=examples/sha1 examples/sha1-c
+SHARED_DIRS=examples/sha1 examples/sha1-c doc
 
 SHARED_FILES=$(shell find $(SHARED_DIRS) -type f)
 

@@ -272,6 +272,7 @@ def gen_rnd_uniform():
 @generator
 def gen_rnd_uniform_deps():
     '''generate random meaningful combination of compiler flags using dependencies'''
+    if not generator.optlist.flag_list: return
     while True:
         handled_flags = set()
         available_flags = generator.optlist.available_flags(

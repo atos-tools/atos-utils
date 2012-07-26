@@ -38,7 +38,7 @@ ALL_FILES=$(CONFIG_SCRIPTS)
 
 INSTALLED_FILES=$(addprefix $(PREFIX)/,$(CONFIG_SCRIPTS))
 
-.PHONY: all clean distclean install check tests check-python-dependencies examples examples-nograph
+.PHONY: all clean distclean install check tests check-python-dependencies examples examples-nograph install-shared
 
 all: $(ALL_FILES) all_plugins
 
@@ -82,6 +82,20 @@ examples-sha1: examples-sha1-play
 examples-sha1-play:
 	cd examples/sha1 && ../../bin/atos-explore -b "make clean sha" -r ./run.sh -c
 
+#
+# Installation of doc and examples
+#
+
+SHARED_DIRS=examples/sha1 examples/sha1-c
+
+SHARED_FILES=$(shell find $(SHARED_DIRS) -type f)
+
+INSTALLED_SHARED_FILES=$(addprefix $(PREFIX)/share/atos/,$(SHARED_FILES))
+
+install-shared: $(INSTALLED_SHARED_FILES)
+
+$(INSTALLED_SHARED_FILES): $(PREFIX)/share/atos/%: %
+	$(QUIET_INSTALL_FILE)install -D -m 755 $< $(PREFIX)/share/atos/$<
 
 #
 # Rules for config files
@@ -126,13 +140,14 @@ QUIET_CLEAN=
 QUIET_DISTCLEAN=
 QUIET_INSTALL_DIR=
 QUIET_INSTALL_EXE=
+QUIET_INSTALL_FILE=
 QUIET_CHECK=
 else
 QUIET_IN=@echo "CONFIGURE $@" &&
 QUIET_CLEAN=@echo "CLEAN" &&
 QUIET_DISTCLEAN=@echo "DISTCLEAN" &&
 QUIET_INSTALL_DIR=@echo "INSTALL DIR $@" &&
-QUIET_INSTALL_EXE=@echo "INSTALL EXE $@" &&
+QUIET_INSTALL_FILE=@echo "INSTALL FILE $@" &&
 QUIET_CHECK=@echo "CHECK $@" &&
 endif
 

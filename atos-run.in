@@ -280,7 +280,7 @@ if [ "$executables" != "" ]; then
     get_size "$executables" >> "$logfile" 2>&1
 fi
 
-[ "$n_set" = 1 ] || nbruns=`get_config default_values.nb_runs`
+[ "$g_set" = "1" -o "$n_set" = 1 ] || nbruns=`get_config default_values.nb_runs`
 [ "$nbruns" != "" ] || nbruns=1
 
 n=1

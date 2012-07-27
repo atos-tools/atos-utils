@@ -552,7 +552,8 @@ Such a run script can look like:
   $ cat run_remote.sh
   #!/usr/bin/env bash
   set -e
-  [ "$REMOTE_PROFILE_DIR" = "" ] || ssh /bin/rm remote_machine:$REMOTE_PROFILE_DIR/*
+  [ "$REMOTE_PROFILE_DIR" = "" ] || ssh remote_machine /bin/rm -fr $REMOTE_PROFILE_DIR
+  [ "$REMOTE_PROFILE_DIR" = "" ] || ssh remote_machine mkdir -p $REMOTE_PROFILE_DIR
   scp sha remote_machine:/tmp/sha
   ssh remote_machine "/bin/dd if=/dev/urandom bs=4K count=1K 2>/dev/null | time -p /tmp/sha"
   [ ${PIPESTATUS[0]} = 0 ] || exit 1

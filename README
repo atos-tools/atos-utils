@@ -12,10 +12,10 @@ After installation (see INSTALL file) the following tools are available:
  * atos-deps: specify executables targets and complete the auditing process (see atos-deps -h)
  * atos-build: replay build audited by atos-audit with custome options injection (see atos-build -h)
  * atos-run: rerun benchmark audited by atos-raudit (see atos-run -h)
- * atos-profile: specific rebuild!rerun for genrating application profiles (see atos-profile -h)
+ * atos-profile: specific rebuild!rerun for generating application profiles (see atos-profile -h)
 
 * Example:
-Execute 'make examples' for an example epxloration on two version of sha1sum
+Execute 'make examples' for an example exploration on two version of sha1sum
 (C and C++ versions).
 It will do the exploration and open the optimization space graph.
 See the INSTALL file if any trouble.
@@ -36,9 +36,9 @@ $ atos-graph
 By clicking on the best trade-off point that you choose on the drawn
 optimization space frontier, get the local_id and pass it to atos-play.
 
-Last, in order to replay the build for your choosen configuration local_id:
+Last, in order to replay the build for your chosen configuration local_id:
 $ atos-play -l <local_id>
-... compile your application for your choosen best trade-off
+... compile your application for your chosen best trade-off
 
 Or simply for best size or best perf:
 $ atos-play -f time

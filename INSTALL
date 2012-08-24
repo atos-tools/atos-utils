@@ -46,3 +46,9 @@ atos-utils requires the packages described below to be installed on your system.
     Download and install: jsonlib-0.1.tar.gz
     It can be installed with:
     $ ./setup.py install --user
+
+** Python argparse module (provided with python >= 2.7):
+  * argparse: http://pypi.python.org/pypi/argparse
+    Download and install argparse-1.2.1.tar.gz
+    It can be installed with:
+    $ python ./setup.py install --home $PREFIX

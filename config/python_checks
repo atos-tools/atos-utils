@@ -41,6 +41,13 @@ except:
     print "not installed: please install from: http://pypi.python.org/pypi/jsonpath"
     errors += 1
 try:
+    print "Check python argparse...",
+    import argparse
+    print "ok"
+except:
+    print "not installed: please install from: http://pypi.python.org/pypi/argparse"
+    errors += 1
+try:
     print "Check python pylab matplotlib...",
     import pylab
     print "ok"

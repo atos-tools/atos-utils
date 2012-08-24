@@ -57,14 +57,24 @@ echo "Retrieving binary build of python-jsonlib package..."
 wget -q -O python-jsonlib.tgz http://aci-hostname:8000/job/cec-okla-python-jsonlib/lastStableBuild/artifact/python-jsonlib.tgz
 tar xvzf python-jsonlib.tgz -C $DEVIMAGE
 
+echo "Retrieving binary build of python-argparse package..."
+wget -q -O python-argparse.tgz http://aci-hostname:8000/job/cec-okla-python-argparse/lastStableBuild/artifact/python-argparse.tgz
+tar xvzf python-argparse.tgz -C $DEVIMAGE
+
 export PYTHONPATH=$DEVIMAGE/usr/local/lib/python
 
 echo "Building atos-utils..."
 cd $GITROOT
 make all
+
+echo "Checking atos-utils..."
 make check
 make examples-nograph
+
+echo "Installing atos-utils..."
 make install PREFIX=$DEVIMAGE/usr/local
+
+echo "Checking installed version of atos-utils..."
 ROOT=$DEVIMAGE/usr/local make check
 
 echo "Archiving atos-utils..."

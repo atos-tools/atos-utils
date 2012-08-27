@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python
 #
 # Copyright (C) STMicroelectronics Ltd. 2012
 #
@@ -20,111 +20,115 @@
 # Usage: get usage with atos-audit -h
 #
 
-set -e
-[ "$DEBUG" = "" ] || set -x
+import sys
 
-dir=`dirname $0`
-dir=`cd $dir; pwd`
-libdir=`cd $dir/../lib/atos; pwd`
+try:
+    assert sys.hexversion >= 0x02060000
+except:
+    print >>sys.stderr, 'error: python version >= 2.6 is required by ATOS tools'
+    sys.exit(1)
 
-ccregexp="-\?\(clang\|gcc\|g++\|cc\|c++\|ar\)\$"
-configuration_path="./atos-configurations"
-outfile=""
-quiet=0
-opt_rebuild=0
+import stat
+import os
 
-version() {
-    echo "atos-audit version @VERSION@"
-}
+atos_bindir = os.path.dirname(__file__)
+python_libs = os.path.abspath(
+    os.path.join(atos_bindir, '..', 'lib', 'atos'))
+sys.path.append(python_libs)
 
-usage() {
-    cat <<EOF
+import argparse
+import atos_lib
 
-Usage: atos-audit [options] [--] [command...]
+parser = argparse.ArgumentParser(description='atos-audit: auditing tool for a '
+                                 'build system that generates a build template to be used by atos-build',
+                                 formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser.add_argument("commands",
+                    nargs=argparse.REMAINDER,
+                    help="commands to audit")
+audit_group = parser.add_argument_group('Audit Options')
+audit_group.add_argument("-r",
+                         dest="ccregexp",
+                         metavar="<ccdriver_re>",
+                         help="specify the compiler driver as a regexp for the basename",
+                         default="-\?\(clang\|gcc\|g++\|cc\|c++\|ar\)$")
+audit_group.add_argument("-c",
+                         metavar="<ccdriver>",
+                         help="alternatively specify the exact compiler driver basename")
+audit_group.add_argument("-f", "--force",
+                         help="force rebuild by running build script instead of audited build",
+                         action="store_true")
+output_group = parser.add_argument_group('Output File Options')
+output_group.add_argument("-o", dest="outfile",
+                          metavar="<outfile>",
+                          help="output audit file into <outfile>",
+                          default="build.audit")
+conf_group = parser.add_argument_group('Configuration Options')
+conf_group.add_argument("-C", dest="configuration_path",
+                        metavar="<path>",
+                        help="configuration path",
+                        default="./atos-configurations")
+misc_group = parser.add_argument_group('Misc Options')
+misc_group.add_argument("-q", "--quiet",
+                        help="quiet output",
+                        action="store_true")
+misc_group.add_argument("-n", "--dryrun",
+                        help="dry run, output commands only",
+                        action="store_true")
+misc_group.add_argument("-v","--version",
+                        help="output version string",
+                        action="version",
+                        version='%(prog)s @VERSION@')
+args = parser.parse_args()
 
-Audit Options:
-      -r <ccdriver_re> : specify the compiler driver as a regexp for the basename [default: $ccregexp]
-      -c <ccdriver> : alternatively specify the exact compiler driver basename
-      -f : force rebuild by running build script instead of audited build
+if args.c:
+    args.ccregexp = '^' + args.c + '$'
 
-Output File Options:
-      -o <outfile> : output audit file into <file> [default: $configuration_path/build.audit]
+# ####################################################################
 
-Configuration Options:
-      -C <path> : configuration path [default: $configuration_path]
+def proot_atos():
+    status, uname = atos_lib.subcall('uname -m')
+    arch = 'i386' if uname in ['i386', 'i486', 'i586', 'i686'] else uname
+    proot_exec = os.path.join(python_libs, arch, 'proot')
+    if os.path.isfile(proot_exec):
+        return os.path.join(python_libs, arch, "proot")
+    else:
+        return "proot"
 
-Misc Options
-      -q : quiet output
-      -h : output usage
-      -v : output version
+PROOT = proot_atos()
 
-EOF
-}
+# ####################################################################
+if args.quiet != 1:
+    print "Auditing build..."
 
-cleanup() {
-    :
-}
-trap "cleanup; exit 3" TERM STOP
-trap "cleanup" EXIT
+if args.outfile == "build.audit":
+    args.outfile = os.path.join(args.configuration_path, args.outfile)
+    if not args.dryrun:
+        if not os.path.isdir(args.configuration_path):
+            os.mkdir(args.configuration_path)
+        atos_lib.subcall("touch " + args.outfile)
+        build_sh = os.path.join(args.configuration_path, "build.sh")
+        f = open(build_sh, 'w')
+        f.write("#!/bin/sh\n")
+        f.write("cd ")
+        f.write(os.getcwd())
+        f.write(" && $ARUN ")
+        f.write(" ".join(args.commands))
+        f.write("\n")
+        f.close()
+        os.chmod(build_sh,stat.S_IRWXU|stat.S_IRGRP|stat.S_IXGRP|stat.S_IROTH|stat.S_IXOTH)
+        force_sh = os.path.join(args.configuration_path, "build.force")
+        f = open(force_sh, 'w')
+        f.write(str(int(args.force)))
+        f.close()
+    else:
+        print "mkdir -p " + args.configuration_path
+        print "touch " + args.outfile
+        print "fill " + args.configuration_path + "/build.sh"
+        print "fill " + args.configuration_path + "/build.force"
 
-while getopts vhqfC:c:r:o: opt; do
-    case $opt in
-	o) outfile="$OPTARG"
-	    ;;
-	c) ccregexp="^$OPTARG\$"
-	    ;;
-	r) ccregexp="$OPTARG"
-	    ;;
-	C) configuration_path="$OPTARG"
-	    ;;
-	q) quiet=1
-	    ;;
-	f) opt_rebuild=1
-	    ;;
-	v) version; exit 0
-	    ;;
-	h) usage; exit 0
-	    ;;
-	?) usage; exit 2
-	    ;;
-    esac
-done
 
-shift $((OPTIND - 1))
-
-proot_atos() {
-    uname=`uname -m`
-    case $uname in
-	i386|i486|i586|i686) arch=i386
-	    ;;
-	x86_64) arch=$uname
-	    ;;
-	*) arch=$uname
-	    ;;
-    esac
-    if [ -x "$libdir/$arch/proot" ]; then
-	echo $libdir/$arch/proot
-    else
-	echo ${PROOT:-proot}
-    fi
-}
-PROOT=`proot_atos`
-
-[ "$quiet" = "1" ] || echo "Auditing build..."
-
-if [ "$outfile" = "" ]; then
-    mkdir -p $configuration_path
-    outfile="$configuration_path/build.audit"
-    touch "$outfile"
-    build_sh="$configuration_path/build.sh"
-    echo "#!/bin/sh" >$build_sh
-    echo -n "cd $PWD && \$ARUN"  >>$build_sh
-    for a in "$@"; do
-	echo -n " \"$a\""  >>$build_sh
-    done
-    echo >>$build_sh
-    chmod 755 $build_sh
-    echo "$opt_rebuild" >"$configuration_path/build.force"
-fi
-
-exec env PROOT_IGNORE_ELF_INTERPRETER=1 PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_DEPS_OUTPUT="$outfile" PROOT_ADDON_CC_DEPS_CCRE="$ccregexp" $PROOT -w $PWD / ${1+"$@"}
+command = ("env PROOT_IGNORE_ELF_INTERPRETER=1 PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_DEPS_OUTPUT=\"" +
+           args.outfile + "\" PROOT_ADDON_CC_DEPS_CCRE=\"" + args.ccregexp + "\" " +
+           PROOT +" -w " + os.getcwd() + " / ")
+command += " ".join(args.commands)
+atos_lib.system(command, True, False)

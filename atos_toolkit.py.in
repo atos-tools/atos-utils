@@ -395,7 +395,7 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
                '--acf-hot-th', str(hot_th), '--acf-cold-th', str(cold_th)]
         if cold_opts: cmd += ['--acf-cold-opts', '"%s"' % cold_opts]
         if hot_opts: cmd += ['--acf-hot-opts', '"%s"' % hot_opts]
-        status, output = system(' '.join(cmd)) # check status ?
+        status, output = atos_lib.system(' '.join(cmd)) # check status ?
         return output
 
     def write_csv_file(options, funcname, *args):
@@ -451,7 +451,7 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
             os.remove(os.path.join(csv_dir, file))
 
     # generate oprof.out in current dir
-    (p_status, p_output) = system(oprof_script)
+    (p_status, p_output) = atos_lib.system(oprof_script)
     debug('*** profile run status: %s' % str(p_status))
 
     if not p_status:
@@ -493,7 +493,7 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
         # Avoid profile generation for first iteration, already generated for cold functions
         if not first_iteration:
             # generate oprof.out in current dir
-            (p_status, p_output) = system(oprof_script)
+            (p_status, p_output) = atos_lib.system(oprof_script)
         first_iteration = False
 
         # Parse oprof.out for hot functions
@@ -591,31 +591,6 @@ def exploration_loop(generators, step=None, maxiter=None):
 
 # ####################################################################
 
-def subcall(cmd, outf=None):
-    import subprocess, shlex
-    process = subprocess.Popen(
-        shlex.split(cmd), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    output = ''
-    while True:
-        terminated = process.poll() is not None
-        outline = process.stdout.readline()
-        outf and outf.write(outline)
-        output += outline
-        if terminated and not outline: break
-    status = process.poll()
-    return status, output
-
-def system(cmd, check_status=False, print_out=False):
-    debug('command [%s]' % cmd)
-    if opts.dryrun: return True, None
-    outf = (print_out and not (opts.quiet or opts.debug)) and (
-        sys.stdout) or None
-    status, output = subcall(cmd, outf)
-    debug('\n  | ' + '\n  | '.join(output.split('\n')))
-    debug('command [%s] -> %s' % (cmd, str(status)))
-    assert (not check_status or status == 0), 'command failed [%s]' % cmd
-    return (status == 0), output
-
 
 def atos_opt_get_result(variant, config, targets):
     db = atos_lib.atos_db.db(config)
@@ -693,7 +668,7 @@ def atos_opt_run(flags, variant, profdir, config, nbrun, baseopts, no_replay):
     replay_option = no_replay and '-k' or ''
     nbrun_option = nbrun and ('-n %d' % nbrun) or ''
     variant_options, variant_flags = variant_options_flags[variant]
-    status, output = system(
+    status, output = atos_lib.system(
         '%s/atos-opt -C %s %s %s %s -r -a "%s %s" %s' % (
             bindir, config, nbrun_option, replay_option, profdir_option,
             flags, variant_flags, variant_options), print_out=True)

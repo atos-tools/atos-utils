@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python
 #
 # Copyright (C) STMicroelectronics Ltd. 2012
 #
@@ -20,128 +20,152 @@
 # Usage: get usage with atos-explore -h
 #
 
-set -e
-[ "$DEBUG" = "" ] || set -x
+import sys
 
-dir=`dirname $0`
-dir=`cd $dir; pwd`
+try:
+    assert sys.hexversion >= 0x02060000
+except:
+    print >>sys.stderr, 'error: python version >= 2.6 is required by ATOS tools'
+    sys.exit(1)
 
-run_script=""
-build_script=""
-executables=""
-configuration_path="./atos-configurations"
-verbose="0"
-quiet="0"
-clean="0"
-opt_nbruns=""
-opt_q=""
-opt_c=""
-opt_rebuild=""
-get_results_script=""
-opt_remote_profile_path=""
+import os
 
-version() {
-    echo "atos-explore version @VERSION@"
-}
+atos_bindir = os.path.dirname(__file__)
+python_libs = os.path.abspath(
+    os.path.join(atos_bindir, '..', 'lib', 'atos'))
+sys.path.append(python_libs)
+python_libs = os.path.abspath(
+    os.path.join(atos_bindir, '..', 'lib', 'atos', 'python'))
+sys.path.append(python_libs)
 
-usage() {
-    cat <<EOF
-
-Usage: atos-explore [options] [executables...]
-
-Build Options
-      -b <build_script> : build_script to be executed [default: $build_script]
-      -f : force rebuild by running build script instead of audited build
-      -B <path> : remote path to profile files [default: none]
-
-Run Options
-      -r <run_script> : run_script to be executed [default: $run_script]
-      -t <get_results_script> : get_results_script to be executed [default: none]
-      -n <nb> : number of executions of <run_script> [default: 1]
-
-Executable File Options:
-      -e <executables> : executables to be instrumented [default: args of command or all generated executables]
-
-Configuration Options:
-      -C <path> : configuration path [default: $configuration_path]
-      -c : clean results and profiles before exploration
-
-Misc Options
-      -q : quiet output
-      -d : debug mode
-      -h : output usage
-      -v : output version
-
-EOF
-}
-
-cleanup() {
-    [ ! -f "$tmpfile" ] || rm -f "$tmpfile"
-}
-trap "cleanup; exit 3" TERM STOP
-trap "cleanup" EXIT
-tmpfile=`mktemp /tmp/atos-inst.XXXXXX`
+import atos_lib
+import argparse
 
 
-while getopts vhdqcfe:r:b:B:t:C:n: opt; do
-    case $opt in
-	e) executables="$OPTARG"
-	    ;;
-	C) configuration_path="$OPTARG"
-	    ;;
-	r) run_script="$OPTARG"
-	    ;;
-	b) build_script="$OPTARG"
-	    ;;
-	B) opt_remote_profile_path="-B $OPTARG"
-	    ;;
-	t) get_results_script="$OPTARG"
-	    ;;
-	n) opt_nbruns="-n $OPTARG"
-	    ;;
-	c) clean=1; opt_c=-c
-	    ;;
-	d) verbose=1
-	    ;;
-	q) quiet=1; opt_q=-q
-	    ;;
-	f) opt_rebuild=-f
-	    ;;
-	v) version; exit 0
-	    ;;
-	h) usage; exit 0
-	    ;;
-	?) usage; exit 2
-	    ;;
-    esac
-done
+parser = argparse.ArgumentParser(description='atos-explore',
+                                 formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser.add_argument("commands",
+                    nargs=argparse.REMAINDER,
+                    help="commands to audit")
+build_group = parser.add_argument_group('Build Options')
+build_group.add_argument("-b",
+                         dest="build_script",
+                         metavar="<build_script>",
+                         help="build_script to be executed")
+build_group.add_argument("-f", "--force",
+                         help="force rebuild by running build script instead of audited build",
+                         action="store_true")
+build_group.add_argument("-B",
+                         metavar="<path>",
+                         help="remote path to profile files",
+                         default="")
+run_group = parser.add_argument_group('Run Options')
+run_group.add_argument("-r",
+                       dest="run_script",
+                       metavar="<run_script>",
+                       help="run_script to be executed")
+run_group.add_argument("-t",
+                       dest="get_results_script",
+                       metavar="<get_results_script>",
+                       help="get_results_script to be executed")
+run_group.add_argument("-n",
+                       metavar="<nb>",
+                       help="number of executions of <run_script>",
+                       type=int,
+                       default=1)
+exec_group = parser.add_argument_group('Executable File Options')
+exec_group.add_argument("-e",
+                        metavar="<executables>",
+                        help=" executables to be instrumented [default: args of command or all generated executables]")
+conf_group = parser.add_argument_group('Configuration Options')
+conf_group.add_argument("-C", dest="configuration_path",
+                        metavar="<path>",
+                        help="configuration path",
+                        default="./atos-configurations")
+conf_group.add_argument("-c",
+                        help="clean results and profiles before exploration",
+                        action="store_true")
+misc_group = parser.add_argument_group('Misc Options')
+misc_group.add_argument("-q", "--quiet",
+                        help="quiet output",
+                        action="store_true")
+misc_group.add_argument("-d", "--debug",
+                        help="debug mode",
+                        action="store_true")
+misc_group.add_argument("--dryrun",
+                        help="dyrun mode",
+                        action="store_true")
+misc_group.add_argument("-v","--version",
+                        help="output version string",
+                        action="version",
+                        version='%(prog)s @VERSION@')
+args = parser.parse_args()
 
-shift $((OPTIND - 1))
+if args.build_script:
+    opt_build = " -b \"" + args.build_script + "\""
+else:
+    opt_build = ""
 
-[ "$executables" != "" ] || executables="$@"
+if args.run_script:
+    opt_run = " -r \"" + args.run_script + "\""
+else:
+    opt_run = ""
 
-$dir/atos-init -C "$configuration_path" \
-    -b "$build_script" -r "$run_script" -t "$get_results_script" \
-    $opt_remote_profile_path -e "$executables" $opt_nbruns $opt_rebuild $opt_q $opt_c
+if args.get_results_script:
+    opt_results = " -t" + args.get_results_script
+else:
+    opt_results = ""
 
-for gopt in "-O2" "-Os" "-O3"; do
-    for opts in "" "-flto" "-funroll-loops" "-flto -funroll-loops"; do
-	options="$gopt $opts"
-	$dir/atos-build -C "$configuration_path" $opt_q -a "$options" && $dir/atos-run -C "$configuration_path" $opt_q -r -a "$options" || true
-    done
-    failure=false
-    $dir/atos-profile -C "$configuration_path" $opt_q -g "$gopt" || failure=true
-    if $failure; then
-	# skipping profile variants
-	:
-    else
-	for opts in "" "-flto" "-funroll-loops" "-flto -funroll-loops"; do
-	    options="$gopt $opts"
-	    $dir/atos-build -C "$configuration_path" $opt_q -u "$gopt" -a "$options" && $dir/atos-run -C "$configuration_path" $opt_q -r -u "$gopt" -a "$options" || true
-	done
-    fi
-done
+if args.e:
+    executables = " -e " + args.e
+elif args.commands:
+    executables = " -e " + args.commands
+else:
+    executables = ""
 
-if [ "$quiet" != "1" ]; then
-    echo "Completed."
-fi
+if args.B:
+    opt_remote_profile_path = " -B " + args.B
+else:
+    opt_remote_profile_path = ""
+
+opt_nbruns = " -n " + str(args.n)
+if args.quiet:
+    opt_q = " -q"
+else:
+    opt_q = ""
+
+if args.c:
+    opt_c = " -c"
+else:
+    opt_c = ""
+
+if args.force:
+    opt_rebuild = " -f"
+else:
+    opt_rebuild = ""
+
+command = os.path.join(atos_bindir,"atos-init") + " -C " + args.configuration_path \
+          + opt_build + opt_run \
+          + opt_results + opt_remote_profile_path + executables + opt_nbruns \
+          + opt_rebuild + opt_q + opt_c
+atos_lib.system(command, print_out=True, check_status=True)
+
+for gopt in ['-O2', '-Os', '-O3']:
+    for opts in ['', ' -flto', ' -funroll-loops', ' -flto -funroll-loops']:
+        command_build = os.path.join(atos_bindir,"atos-build") + " -C " + args.configuration_path + opt_q + " -a'" + gopt + opts + "'"
+        status, output = atos_lib.system(command_build, print_out=True)
+        if status:
+            command_run = os.path.join(atos_bindir,"atos-run") + " -C " + args.configuration_path + opt_q + " -r -a'" + gopt + opts + "'"
+            atos_lib.system(command_run, print_out=True)
+
+    command_prof = os.path.join(atos_bindir,"atos-profile") +  " -C " + args.configuration_path + opt_q + " -g'" + gopt + "'"
+    if not atos_lib.system(command_prof, print_out=True)[0]: continue
+    for opts in ['', ' -flto', ' -funroll-loops', ' -flto -funroll-loops']:
+        command_build = os.path.join(atos_bindir, "atos-build") + " -C " + args.configuration_path + opt_q + " -u'" + gopt + "' -a'" + gopt + opts + "'"
+        status,output = atos_lib.system(command_build, print_out=True)
+        if status:
+            command_run = os.path.join(atos_bindir, "atos-run") + " -C " + args.configuration_path + opt_q + " -r -u'" + gopt + "' -a'" + gopt + opts + "'"
+            atos_lib.system(command_run, print_out=True)
+
+if not args.quiet:
+    print "Completed."

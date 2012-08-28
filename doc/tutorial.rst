@@ -133,7 +133,7 @@ Thus, for starting a new experiment on the SHA1 C++ example, do:
 
   $ cp -a atos-configurations atos-configurations-first
   $ rm -rf atos-configurations
-  $ atos-init -b "make clean all" -r "run.sh"
+  $ atos-init -b "make clean all" -r "./run.sh"
 
 In this case, the initialization was done explicitly with the ``atos-init``
 tool, which was implicitly called in the previous section by the basic

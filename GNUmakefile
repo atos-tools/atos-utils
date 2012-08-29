@@ -95,24 +95,21 @@ INSTALLED_SHARED_FILES=$(addprefix $(PREFIX)/share/atos/,$(SHARED_FILES))
 install-shared: $(INSTALLED_SHARED_FILES)
 
 $(INSTALLED_SHARED_FILES): $(PREFIX)/share/atos/%: %
-	$(QUIET_INSTALL_FILE)install -D -m 755 $< $(PREFIX)/share/atos/$<
+	$(QUIET_INSTALL_FILE)install -D -m 755 $< $@
 
 #
-# Rules for config files
+# Rules for exes, libs and config files
 #
-$(srcdir)/bin $(srcdir)/lib/atos $(srcdir)/lib/atos/config:
-	$(QUIET_IN)mkdir -p $@
-
-$(CONFIG_SCRIPTS): $(VSTAMP) $(srcdir)/bin $(srcdir)/lib/atos $(srcdir)/lib/atos/config
+$(CONFIG_SCRIPTS): $(VSTAMP)
 
 $(CONFIG_SCRIPTS_EXE): bin/%: %.in
-	$(QUIET_IN)sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
+	$(QUIET_IN)install -d $(dir $@) && sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
 
 $(CONFIG_SCRIPTS_LIB): lib/atos/%: %.in
-	$(QUIET_IN)sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
+	$(QUIET_IN)install -d $(dir $@) && sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
 
 $(CONFIG_SCRIPTS_CFG): lib/atos/config/%: %.in
-	$(QUIET_IN) cp $< $@
+	$(QUIET_IN)install -D $< $@
 
 #
 # Rules for python-checks
@@ -123,11 +120,6 @@ check-python-dependencies: config/python_checks
 #
 # Rules for installation
 #
-$(PREFIX)/bin $(PREFIX)/lib/atos:
-	$(QUIET_INSTALL_DIR)install -d $@
-
-$(INSTALLED_FILES): $(PREFIX)/bin $(PREFIX)/lib/atos
-
 $(INSTALLED_FILES): $(PREFIX)/%: %
 	$(QUIET_INSTALL_EXE)install -D -m 755 $< $(PREFIX)/$<
 

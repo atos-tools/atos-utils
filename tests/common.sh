@@ -1,6 +1,6 @@
 set -e
 DIRNAME=`dirname $0`
-SRCDIR=`cd $DIRNAME/.. && pwd`
+SRCDIR=${SRCDIR:-`cd $DIRNAME/.. && pwd`}
 ROOT=${ROOT:-$SRCDIR}
 TEST=`basename $0 .sh`
 TMPDIR=${TMPDIR:-/tmp}

@@ -18,11 +18,10 @@
 # Makefile for ATOS tools
 #
 
-srcdir:=$(dir $(lastword $(MAKEFILE_LIST)))
-pluginsdir:=$(srcdir/plugin)
+srcdir:=$(dir $(firstword $(MAKEFILE_LIST)))
 PREFIX=/usr/local
 VSTAMP=version.stamp
-VERSION:=$(shell $(srcdir)/config/update_version.sh $(VSTAMP))
+VERSION:=$(shell $(srcdir)config/update_version.sh $(VSTAMP))
 
 CONFIG_SCRIPTS_EXE_IN=atos-audit.in atos-raudit.in atos-deps.in atos-build.in atos-run.in atos-profile.in atos-explore.in atos-play.in atos-graph.in atos-explore-inline.in atos-explore-loop.in atos-explore-optim.in atos-opt.in atos-init.in atos-replay.in atos-config.in atos-explore-acf.in atos-explore-staged.in
 CONFIG_SCRIPTS_LIB_IN=atos_toolkit.py.in atos_lib.py.in atos-acf-oprofile.py.in
@@ -40,47 +39,74 @@ INSTALLED_FILES=$(addprefix $(PREFIX)/,$(CONFIG_SCRIPTS))
 
 .PHONY: all clean distclean install check tests check-python-dependencies examples examples-nograph install-shared
 
-all: $(ALL_FILES) all_plugins
+all: all-local all-plugins
 
-all_plugins:
-	$(MAKE) -C plugins/acf-plugin all
+all-local: $(ALL_FILES)
 
-clean:
+all-plugins:
+	$(MAKE) -C $(srcdir)plugins/acf-plugin install PREFIX=$(abspath .)
+
+clean: clean-local clean-plugin clean-test
+
+clean-local:
 	$(QUIET_CLEAN)rm -f *.tmp
-	$(MAKE) -C plugins/acf-plugin clean
 
-distclean:
-	$(QUIET_DISTCLEAN)rm -fr $(srcdir)/bin $(srcdir)/lib $(VSTAMP)
-	$(MAKE) -C plugins/acf-plugin clean
+clean-plugin:
+	$(MAKE) -C $(srcdir)plugins/acf-plugin clean
 
-install: $(INSTALLED_FILES)
-	$(MAKE) -C plugins/acf-plugin all install
+clean-test:
+	install -d tests && $(MAKE) -C tests -f $(abspath $(srcdir)tests/GNUmakefile) clean
 
-check tests: all check-python-dependencies
-	$(MAKE) -C tests
+distclean: distclean-local distclean-plugin distclean-test
+
+distclean-local:
+	$(QUIET_DISTCLEAN)rm -fr bin lib $(VSTAMP)
+
+distclean-plugin:
+	$(MAKE) -C $(srcdir)plugins/acf-plugin distclean
+
+distclean-test:
+	install -d tests && $(MAKE) -C tests -f $(abspath $(srcdir)tests/GNUmakefile) distclean
+
+install: $(INSTALLED_FILES) install-plugins
+
+install-plugins:
+	$(MAKE) -C $(srcdir)plugins/acf-plugin install PREFIX=$(abspath $(PREFIX))
+
+tests: check
+
+check: check-local check-plugin check-tests
+
+check-local: check-python-dependencies
+
+check-tests: all check-python-dependencies
+	install -d tests && $(MAKE) -C tests -f $(abspath $(srcdir)tests/GNUmakefile)
+
+check-plugin:
+	$(MAKE) -C $(srcdir)plugins/acf-plugin check
 
 examples: all check-python-dependencies
 	@echo "   Running examples."
 	@echo "   Should take around 1-2 minutes per example"
 	@echo "   The resulting graph is displayed for each example"
-	$(MAKE) examples-sha1-c examples-sha1
+	$(MAKE) -f $(abspath $(srcdir)GNUmakefile) examples-sha1-c examples-sha1
 
 examples-nograph: all check-python-dependencies
 	@echo "   Running examples."
 	@echo "   Should take around 1-2 minutes per example"
-	$(MAKE) NOGRAPH=1 examples-sha1-c examples-sha1
+	$(MAKE) -f $(abspath $(srcdir)GNUmakefile) NOGRAPH=1 examples-sha1-c examples-sha1
 
 examples-sha1-c: examples-sha1-c-play
-	[ "$(NOGRAPH)" = 1 ] || (cd examples/sha1-c && ../../bin/atos-graph &)
+	[ "$(NOGRAPH)" = 1 ] || (cd $(srcdir)examples/sha1-c && $(abspath bin/atos-graph) &)
 
 examples-sha1-c-play:
-	cd examples/sha1-c && ../../bin/atos-explore -f -e ./sha1-c -b "gcc -O2 -o sha1-c sha.c sha1.c" -r ./run.sh -c
+	cd $(srcdir)examples/sha1-c && $(abspath bin/atos-explore) -f -e ./sha1-c -b "gcc -O2 -o sha1-c sha.c sha1.c" -r ./run.sh -c
 
 examples-sha1: examples-sha1-play
-	[ "$(NOGRAPH)" = 1 ] || (cd examples/sha1 && ../../bin/atos-graph &)
+	[ "$(NOGRAPH)" = 1 ] || (cd $(srcdir)examples/sha1 && $(abspath bin/atos-graph) &)
 
 examples-sha1-play:
-	cd examples/sha1 && ../../bin/atos-explore -b "make clean sha" -r ./run.sh -c
+	cd $(srcdir)examples/sha1 && $(abspath bin/atos-explore) -b "make clean sha" -r ./run.sh -c
 
 #
 # Installation of doc and examples
@@ -88,13 +114,13 @@ examples-sha1-play:
 
 SHARED_DIRS=examples/sha1 examples/sha1-c doc
 
-SHARED_FILES=$(shell find $(SHARED_DIRS) -type f)
+SHARED_FILES=$(shell cd $(srcdir) && find $(SHARED_DIRS) -type f)
 
 INSTALLED_SHARED_FILES=$(addprefix $(PREFIX)/share/atos/,$(SHARED_FILES))
 
 install-shared: $(INSTALLED_SHARED_FILES)
 
-$(INSTALLED_SHARED_FILES): $(PREFIX)/share/atos/%: %
+$(INSTALLED_SHARED_FILES): $(PREFIX)/share/atos/%: $(srcdir)%
 	$(QUIET_INSTALL_FILE)install -D -m 755 $< $@
 
 #
@@ -102,19 +128,19 @@ $(INSTALLED_SHARED_FILES): $(PREFIX)/share/atos/%: %
 #
 $(CONFIG_SCRIPTS): $(VSTAMP)
 
-$(CONFIG_SCRIPTS_EXE): bin/%: %.in
+$(CONFIG_SCRIPTS_EXE): bin/%: $(srcdir)%.in
 	$(QUIET_IN)install -d $(dir $@) && sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
 
-$(CONFIG_SCRIPTS_LIB): lib/atos/%: %.in
+$(CONFIG_SCRIPTS_LIB): lib/atos/%: $(srcdir)%.in
 	$(QUIET_IN)install -d $(dir $@) && sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
 
-$(CONFIG_SCRIPTS_CFG): lib/atos/config/%: %.in
+$(CONFIG_SCRIPTS_CFG): lib/atos/config/%: $(srcdir)%.in
 	$(QUIET_IN)install -D $< $@
 
 #
 # Rules for python-checks
 #
-check-python-dependencies: config/python_checks
+check-python-dependencies: $(srcdir)config/python_checks
 	$(QUIET_CHECK)$<
 
 #

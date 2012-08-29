@@ -18,25 +18,21 @@
 # Makefile for ATOS tools
 #
 
-srcdir:=$(dir $(lastword $(MAKEFILE_LIST)))
-builddir:=$(srcdir)build_tree
-installsrcdir:=$(srcdir)/../..
+srcdir:=$(dir $(firstword $(MAKEFILE_LIST)))
+builddir=$(srcdir)build_tree
 PREFIX=/usr/local
+PLUGIN_PREFIX=$(PREFIX)/lib/atos/plugins
 VSTAMP=version.stamp
 
 ALL_FILES_SUB=gcc-4.5.2/i386/acf_plugin.so gcc-4.5.2/x86_64/acf_plugin.so gcc-4.5.2/sh4/acf_plugin.so gcc-4.6.2/i386/acf_plugin.so gcc-4.6.2/x86_64/acf_plugin.so gcc-4.6.2/sh4/acf_plugin.so gcc-4.6.2/arm/acf_plugin.so gcc-4.7.0/i386/acf_plugin.so gcc-4.7.0/x86_64/acf_plugin.so gcc-4.7.1/arm/acf_plugin.so
 
 ALL_FILES=$(addprefix $(builddir)/,$(ALL_FILES_SUB))
 
-ALL_FILES_INST=$(ALL_FILES_SUB:%=lib/atos/plugins/%)
-
-INSTALLED_FILES_IN_SRC=$(addprefix $(installsrcdir)/,$(ALL_FILES_INST))
-
-INSTALLED_FILES=$(addprefix $(PREFIX)/,$(ALL_FILES_INST))
+INSTALLED_FILES=$(addprefix $(PLUGIN_PREFIX)/,$(ALL_FILES_SUB))
 
 .PHONY: all clean distclean install check tests
 
-all: $(ALL_FILES) $(INSTALLED_FILES_IN_SRC)
+all: $(ALL_FILES)
 
 $(builddir)/%/acf_plugin.so:
 	$(MAKE) -C $(builddir)/$* all
@@ -44,28 +40,19 @@ $(builddir)/%/acf_plugin.so:
 clean: $(dir $(ALL_FILES))
 	for direc in $^; do make -C $${direc} clean ; done
 
+distclean: clean
+
 install: $(INSTALLED_FILES) 
+
+check: all
+
+tests: check
 
 #
 # Rules for installation
 #
-$(ALL_FILES_SUB):
-
-$(installsrcdir)/lib/atos/plugins:
-	$(QUIET_LOCAL_INSTALL_DIR)install -d $@
-
-$(INSTALLED_FILES_IN_SRC): $(installsrcdir)/lib/atos/plugins
-
-$(INSTALLED_FILES_IN_SRC): $(installsrcdir)/lib/atos/plugins/%: %
-	$(QUIET_LOCAL_INSTALL_EXE)install -D -m 755 $(builddir)/$< $(installsrcdir)/lib/atos/plugins/$<
-
-$(PREFIX)/lib/atos/plugins:
-	$(QUIET_INSTALL_DIR)install -d $@
-
-$(INSTALLED_FILES): $(PREFIX)/lib/atos/plugins
-
-$(INSTALLED_FILES): $(PREFIX)/lib/atos/plugins/%: %
-	$(QUIET_INSTALL_EXE)install -D -m 755 $(builddir)/$< $(PREFIX)/lib/atos/plugins/$<
+$(INSTALLED_FILES): $(PLUGIN_PREFIX)/%: $(builddir)/%
+	$(QUIET_INSTALL_EXE)install -D -m 755 $< $@
 
 #
 # Manage verbose output

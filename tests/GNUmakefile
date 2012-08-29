@@ -18,13 +18,14 @@
 # Makefile for ATOS tests
 #
 
-TESTS:=$(wildcard test*.sh)
+srcdir:=$(dir $(firstword $(MAKEFILE_LIST)))
+TESTS:=$(notdir $(wildcard $(srcdir)test*.sh))
 DEPS=$(TESTS:.sh=)
 ifeq ($(V),)
 V_RUN=@
 endif
 
-.PHONY: all tests clean $(DEPS)
+.PHONY: all tests clean distclean $(DEPS)
 
 all: tests
 
@@ -33,10 +34,12 @@ tests: $(DEPS)
 clean:
 	rm -f *.out
 
+distclean: clean
+
 # Force MAKEFLAGS= as we may run make in tests
 # and we do not want to inherit -jxx option
-$(DEPS): %: %.sh
-	$(V_RUN)env MAKEFLAGS= ./$< >$(<:.sh=.out)
+$(DEPS): %: $(srcdir)%.sh
+	$(V_RUN)env MAKEFLAGS= ROOT=$${ROOT:-$(abspath ..)} SRCDIR=$${SRCDIR:-$(abspath $(srcdir)..)} $(srcdir)$*.sh >$*.out
 
 # Describe here possible tests dependencies
 # For instance to put all tests under dependency of test001: 

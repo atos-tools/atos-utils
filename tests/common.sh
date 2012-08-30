@@ -17,11 +17,12 @@ cleanup() {
 trap "cleanup" INT QUIT TERM EXIT
 
 interrupted() {
-    echo "INTERRUPTED: $TEST: $TEST_CASE" >&2
+    echo "***INTERRUPTED: $TEST: $TEST_CASE" >&2
 }
 
 failure() {
-    echo "FAILURE: $TEST: $TEST_CASE" >&2
+    local reason=${1+": $1"}
+    echo "***FAIL: $TEST: $TEST_CASE$reason" >&2
 }
 
 success() {
@@ -29,7 +30,8 @@ success() {
 }
 
 skip() {
-    echo "SKIPPED: $TEST: $TEST_CASE" >&2
+    local reason=${1+": $1"}
+    echo "---SKIP: $TEST: $TEST_CASE$reason" >&2
     trap - EXIT && exit 0
 }
 

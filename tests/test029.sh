@@ -7,7 +7,7 @@ source `dirname $0`/common.sh
 TEST_CASE="ATOS exploration loop test"
 
 # this test must only be run manually
-[ "$MAKELEVEL" == "" ] || skip
+[ "$MAKELEVEL" == "" ] || skip "interactive test"
 
 echo "Running test in: $TMPTEST"
 

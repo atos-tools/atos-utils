@@ -21,7 +21,11 @@
 
 VERSION="@VERSION@"
 
-import os, re, math, threading, atexit, sys
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(
+            os.path.dirname(__file__), '..', 'lib', 'atos', 'python')))
+
+import re, math, threading, atexit
 
 try:
     import pylab as pl
@@ -29,11 +33,7 @@ except:
     print "pylab matplotlib module is not installed"
     sys.exit(1)
 
-atos_bin = os.path.dirname(__file__)
-atos_lib = os.path.abspath(os.path.join(atos_bin, '..', 'lib', 'atos'))
-sys.path.append(atos_lib)
-
-import atos_lib
+from atos import atos_lib
 
 
 

@@ -41,7 +41,7 @@ audit_group.add_argument("-r",
                          dest="ccregexp",
                          metavar="<ccdriver_re>",
                          help="specify the compiler driver as a regexp for the basename",
-                         default="-\?\(clang\|gcc\|g++\|cc\|c++\|ar\)$")
+                         default="-\?\(clang\|gcc\|g++\|cc\|armlink\|c++\|ar\)$")
 audit_group.add_argument("-c",
                          metavar="<ccdriver>",
                          help="alternatively specify the exact compiler driver basename")

@@ -1,975 +1,975 @@
 #if GCC_VERSION >= 40400
 
-# Combine increments or decrements of addresses with memory
-# accesses. This pass is always skipped on architectures that do not
-# have instructions to support this. Enabled by default at -O and higher
-# on architectures that support this.
+// Combine increments or decrements of addresses with memory
+// accesses. This pass is always skipped on architectures that do not
+// have instructions to support this. Enabled by default at -O and higher
+// on architectures that support this.
 -fauto-inc-dec|-fno-auto-inc-dec
 
-# Always pop the arguments to each function call as soon as that
-# function returns. For machines which must pop arguments after a
-# function call, the compiler normally lets arguments accumulate on the
-# stack for several function calls and pops them all at once.
-# Disabled at levels -O, -O2, -O3, -Os.
+// Always pop the arguments to each function call as soon as that
+// function returns. For machines which must pop arguments after a
+// function call, the compiler normally lets arguments accumulate on the
+// stack for several function calls and pops them all at once.
+// Disabled at levels -O, -O2, -O3, -Os.
 -fdefer-pop|-fno-defer-pop
 
-# Perform a forward propagation pass on RTL. The pass tries to combine
-# two instructions and checks if the result can be simplified. If loop
-# unrolling is active, two passes are performed and the second is
-# scheduled after loop unrolling.
-# This option is enabled by default at optimization levels -O, -O2, -O3, -Os.
+// Perform a forward propagation pass on RTL. The pass tries to combine
+// two instructions and checks if the result can be simplified. If loop
+// unrolling is active, two passes are performed and the second is
+// scheduled after loop unrolling.
+// This option is enabled by default at optimization levels -O, -O2, -O3, -Os.
 -fforward-propagate|-fno-forward-propagate
 
-# Don't keep the frame pointer in a register for functions that don't
-# need one. This avoids the instructions to save, set up and restore
-# frame pointers; it also makes an extra register available in many
-# functions. It also makes debugging impossible on some machines.  On
-# some machines, such as the VAX, this flag has no effect, because the
-# standard calling sequence automatically handles the frame pointer and
-# nothing is saved by pretending it doesn't exist. The
-# machine-description macro FRAME_POINTER_REQUIRED controls whether a
-# target machine supports this flag. See Register Usage.  Starting with
-# GCC version 4.6, the default setting (when not optimizing for size)
-# for 32-bit Linux x86 and 32-bit Darwin x86 targets has been changed to
-# -fomit-frame-pointer. The default can be reverted to
-# -fno-omit-frame-pointer by configuring GCC with the
-# --enable-frame-pointer configure option.
-# Enabled at levels -O, -O2, -O3, -Os.
+// Don't keep the frame pointer in a register for functions that don't
+// need one. This avoids the instructions to save, set up and restore
+// frame pointers; it also makes an extra register available in many
+// functions. It also makes debugging impossible on some machines.  On
+// some machines, such as the VAX, this flag has no effect, because the
+// standard calling sequence automatically handles the frame pointer and
+// nothing is saved by pretending it doesn't exist. The
+// machine-description macro FRAME_POINTER_REQUIRED controls whether a
+// target machine supports this flag. See Register Usage.  Starting with
+// GCC version 4.6, the default setting (when not optimizing for size)
+// for 32-bit Linux x86 and 32-bit Darwin x86 targets has been changed to
+// -fomit-frame-pointer. The default can be reverted to
+// -fno-omit-frame-pointer by configuring GCC with the
+// --enable-frame-pointer configure option.
+// Enabled at levels -O, -O2, -O3, -Os.
 -fomit-frame-pointer|-fno-omit-frame-pointer
 
-# Optimize sibling and tail recursive calls.
-# Enabled at levels -O2, -O3, -Os.
+// Optimize sibling and tail recursive calls.
+// Enabled at levels -O2, -O3, -Os.
 -foptimize-sibling-calls|-fno-optimize-sibling-calls
 
-# Attempt to merge identical constants (string constants and floating
-# point constants) across compilation units.  This option is the default
-# for optimized compilation if the assembler and linker support it. Use
-# -fno-merge-constants to inhibit this behavior.  Enabled at levels -O,
-# -O2, -O3, -Os.
+// Attempt to merge identical constants (string constants and floating
+// point constants) across compilation units.  This option is the default
+// for optimized compilation if the assembler and linker support it. Use
+// -fno-merge-constants to inhibit this behavior.  Enabled at levels -O,
+// -O2, -O3, -Os.
 -fmerge-constants|-fno-merge-constants
 
-# Perform swing modulo scheduling immediately before the first
-# scheduling pass. This pass looks at innermost loops and reorders their
-# instructions by overlapping different iterations.
+// Perform swing modulo scheduling immediately before the first
+// scheduling pass. This pass looks at innermost loops and reorders their
+// instructions by overlapping different iterations.
 -fmodulo-sched|-fno-modulo-sched
 
-# Perform more aggressive SMS based modulo scheduling with register
-# moves allowed. By setting this flag certain anti-dependences edges
-# will be deleted which will trigger the generation of reg-moves based
-# on the life-range analysis. This option is effective only with
-# -fmodulo-sched enabled.
+// Perform more aggressive SMS based modulo scheduling with register
+// moves allowed. By setting this flag certain anti-dependences edges
+// will be deleted which will trigger the generation of reg-moves based
+// on the life-range analysis. This option is effective only with
+// -fmodulo-sched enabled.
 -fmodulo-sched-allow-regmoves|-fmodulo-sched-allow-regmoves
 
-# Do not put function addresses in registers; make each instruction that
-# calls a constant function contain the function's address explicitly.
-# This option results in less efficient code, but some strange hacks
-# that alter the assembler output may be confused by the optimizations
-# performed when this option is not used.
-# The default is -ffunction-cse
+// Do not put function addresses in registers; make each instruction that
+// calls a constant function contain the function's address explicitly.
+// This option results in less efficient code, but some strange hacks
+// that alter the assembler output may be confused by the optimizations
+// performed when this option is not used.
+// The default is -ffunction-cse
 -ffunction-cse|-fno-function-cse
 
-# Perform optimizations where we check to see if a jump branches to a
-# location where another comparison subsumed by the first is found. If
-# so, the first branch is redirected to either the destination of the
-# second branch or a point immediately following it, depending on
-# whether the condition is known to be true or false.
-# Enabled at levels -O2, -O3, -Os.
+// Perform optimizations where we check to see if a jump branches to a
+// location where another comparison subsumed by the first is found. If
+// so, the first branch is redirected to either the destination of the
+// second branch or a point immediately following it, depending on
+// whether the condition is known to be true or false.
+// Enabled at levels -O2, -O3, -Os.
 -fthread-jumps|-fno-thread-jumps
 
-# When using a type that occupies multiple registers, such as long long
-# on a 32-bit system, split the registers apart and allocate them
-# independently. This normally generates better code for those types,
-# but may make debugging more difficult.
-# Enabled at levels -O, -O2, -O3, -Os.
+// When using a type that occupies multiple registers, such as long long
+// on a 32-bit system, split the registers apart and allocate them
+// independently. This normally generates better code for those types,
+// but may make debugging more difficult.
+// Enabled at levels -O, -O2, -O3, -Os.
 -fsplit-wide-types|-fno-split-wide-types
 
-# In common subexpression elimination (CSE), scan through jump
-# instructions when the target of the jump is not reached by any other
-# path. For example, when CSE encounters an if statement with an else
-# clause, CSE will follow the jump when the condition tested is false.
-# Enabled at levels -O2, -O3, -Os.
+// In common subexpression elimination (CSE), scan through jump
+// instructions when the target of the jump is not reached by any other
+// path. For example, when CSE encounters an if statement with an else
+// clause, CSE will follow the jump when the condition tested is false.
+// Enabled at levels -O2, -O3, -Os.
 -fcse-follow-jumps|-fno-cse-follow-jumps
 
-# This is similar to -fcse-follow-jumps, but causes CSE to follow jumps
-# which conditionally skip over blocks. When CSE encounters a simple if
-# statement with no else clause, -fcse-skip-blocks causes CSE to follow
-# the jump around the body of the if.
-# Enabled at levels -O2, -O3, -Os.
+// This is similar to -fcse-follow-jumps, but causes CSE to follow jumps
+// which conditionally skip over blocks. When CSE encounters a simple if
+// statement with no else clause, -fcse-skip-blocks causes CSE to follow
+// the jump around the body of the if.
+// Enabled at levels -O2, -O3, -Os.
 -fcse-skip-blocks|-fno-cse-skip-blocks
 
-# Perform a global common subexpression elimination pass. This pass also
-# performs global constant and copy propagation.  Note: When compiling a
-# program using computed gotos, a GCC extension, you may get better
-# runtime performance if you disable the global common subexpression
-# elimination pass by adding -fno-gcse to the command line.
-# Enabled at levels -O2, -O3, -Os.
+// Perform a global common subexpression elimination pass. This pass also
+// performs global constant and copy propagation.  Note: When compiling a
+// program using computed gotos, a GCC extension, you may get better
+// runtime performance if you disable the global common subexpression
+// elimination pass by adding -fno-gcse to the command line.
+// Enabled at levels -O2, -O3, -Os.
 -fgcse|-fno-gcse
 
-# When -fgcse-lm is enabled, global common subexpression elimination
-# will attempt to move loads which are only killed by stores into
-# themselves. This allows a loop containing a load/store sequence to be
-# changed to a load outside the loop, and a copy/store within the loop.
-# Enabled by default when gcse is enabled.
+// When -fgcse-lm is enabled, global common subexpression elimination
+// will attempt to move loads which are only killed by stores into
+// themselves. This allows a loop containing a load/store sequence to be
+// changed to a load outside the loop, and a copy/store within the loop.
+// Enabled by default when gcse is enabled.
 -fgcse-lm|-fno-gcse-lm
 
-# When -fgcse-sm is enabled, a store motion pass is run after global
-# common subexpression elimination. This pass will attempt to move
-# stores out of loops. When used in conjunction with -fgcse-lm, loops
-# containing a load/store sequence can be changed to a load before the
-# loop and a store after the loop.
-# Not enabled at any optimization level.
+// When -fgcse-sm is enabled, a store motion pass is run after global
+// common subexpression elimination. This pass will attempt to move
+// stores out of loops. When used in conjunction with -fgcse-lm, loops
+// containing a load/store sequence can be changed to a load before the
+// loop and a store after the loop.
+// Not enabled at any optimization level.
 -fgcse-sm|-fno-gcse-sm
 
-# When -fgcse-las is enabled, the global common subexpression
-# elimination pass eliminates redundant loads that come after stores to
-# the same memory location (both partial and full redundancies).
-# Not enabled at any optimization level.
+// When -fgcse-las is enabled, the global common subexpression
+// elimination pass eliminates redundant loads that come after stores to
+// the same memory location (both partial and full redundancies).
+// Not enabled at any optimization level.
 -fgcse-las|-fno-gcse-las
 
-# When -fgcse-after-reload is enabled, a redundant load elimination pass
-# is performed after reload. The purpose of this pass is to cleanup
-# redundant spilling.
+// When -fgcse-after-reload is enabled, a redundant load elimination pass
+// is performed after reload. The purpose of this pass is to cleanup
+// redundant spilling.
 -fgcse-after-reload|-fno-gcse-after-reload
 
-# Perform cross-jumping transformation. This transformation unifies
-# equivalent code and save code size. The resulting code may or may not
-# perform better than without cross-jumping.
-# Enabled at levels -O2, -O3, -Os.
+// Perform cross-jumping transformation. This transformation unifies
+// equivalent code and save code size. The resulting code may or may not
+// perform better than without cross-jumping.
+// Enabled at levels -O2, -O3, -Os.
 -fcrossjumping|-fno-crossjumping
 
-# Perform dead code elimination (DCE) on RTL. Enabled by default at -O
-# and higher.
+// Perform dead code elimination (DCE) on RTL. Enabled by default at -O
+// and higher.
 -fdce|-fno-dce
 
-# Perform dead store elimination (DSE) on RTL. Enabled by default at -O
-# and higher.
+// Perform dead store elimination (DSE) on RTL. Enabled by default at -O
+// and higher.
 -fdse|-fno-dse
 
-# Attempt to transform conditional jumps into branch-less
-# equivalents. This include use of conditional moves, min, max, set
-# flags and abs instructions, and some tricks doable by standard
-# arithmetics. The use of conditional execution on chips where it is
-# available is controlled by if-conversion2.
-# Enabled at levels -O, -O2, -O3, -Os.
+// Attempt to transform conditional jumps into branch-less
+// equivalents. This include use of conditional moves, min, max, set
+// flags and abs instructions, and some tricks doable by standard
+// arithmetics. The use of conditional execution on chips where it is
+// available is controlled by if-conversion2.
+// Enabled at levels -O, -O2, -O3, -Os.
 -fif-conversion|-fno-if-conversion
 
-# Use conditional execution (where available) to transform conditional
-# jumps into branch-less equivalents.
-# Enabled at levels -O, -O2, -O3, -Os.
+// Use conditional execution (where available) to transform conditional
+// jumps into branch-less equivalents.
+// Enabled at levels -O, -O2, -O3, -Os.
 -fif-conversion2|-fno-if-conversion2
 
-# Attempt to reassign register numbers in move instructions and as
-# operands of other simple instructions in order to maximize the amount
-# of register tying. This is especially helpful on machines with
-# two-operand instructions.  Note -fregmove and -foptimize-register-move
-# are the same optimization.
-# Enabled at levels -O2, -O3, -Os.
-# -foptimize-register-move
+// Attempt to reassign register numbers in move instructions and as
+// operands of other simple instructions in order to maximize the amount
+// of register tying. This is especially helpful on machines with
+// two-operand instructions.  Note -fregmove and -foptimize-register-move
+// are the same optimization.
+// Enabled at levels -O2, -O3, -Os.
+// -foptimize-register-move
 -fregmove|-fno-regmove
 
-# Use specified coloring algorithm for the integrated register
-# allocator. The algorithm argument should be priority or CB. The first
-# algorithm specifies Chow's priority coloring, the second one specifies
-# Chaitin-Briggs coloring. The second algorithm can be unimplemented for
-# some architectures. If it is implemented, it is the default because
-# Chaitin-Briggs coloring as a rule generates a better code.
+// Use specified coloring algorithm for the integrated register
+// allocator. The algorithm argument should be priority or CB. The first
+// algorithm specifies Chow's priority coloring, the second one specifies
+// Chaitin-Briggs coloring. The second algorithm can be unimplemented for
+// some architectures. If it is implemented, it is the default because
+// Chaitin-Briggs coloring as a rule generates a better code.
 -fira-algorithm=priority|-fira-algorithm=CB
 
-# Use specified regions for the integrated register allocator. The
-# region argument should be one of all, mixed, or one. The first value
-# means using all loops as register allocation regions, the second value
-# which is the default means using all loops except for loops with small
-# register pressure as the regions, and third one means using all
-# function as a single region. The first value can give best result for
-# machines with small size and irregular register set, the third one
-# results in faster and generates decent code and the smallest size
-# code, and the default value usually give the best results in most
-# cases and for most architectures.
+// Use specified regions for the integrated register allocator. The
+// region argument should be one of all, mixed, or one. The first value
+// means using all loops as register allocation regions, the second value
+// which is the default means using all loops except for loops with small
+// register pressure as the regions, and third one means using all
+// function as a single region. The first value can give best result for
+// machines with small size and irregular register set, the third one
+// results in faster and generates decent code and the smallest size
+// code, and the default value usually give the best results in most
+// cases and for most architectures.
 -fira-region=all|-fira-region=mixed|-fira-region=one
 
-# Switch off sharing stack slots used for saving call used hard
-# registers living through a call. Each hard register will get a
-# separate stack slot and as a result function stack frame will be
-# bigger.
+// Switch off sharing stack slots used for saving call used hard
+// registers living through a call. Each hard register will get a
+// separate stack slot and as a result function stack frame will be
+// bigger.
 -fira-share-save-slots|-fno-ira-share-save-slots
 
-# Switch off sharing stack slots allocated for pseudo-registers. Each
-# pseudo-register which did not get a hard register will get a separate
-# stack slot and as a result function stack frame will be bigger.
+// Switch off sharing stack slots allocated for pseudo-registers. Each
+// pseudo-register which did not get a hard register will get a separate
+// stack slot and as a result function stack frame will be bigger.
 -fira-share-spill-slots|-fno-ira-share-spill-slots
 
-# If supported for the target machine, attempt to reorder instructions
-# to exploit instruction slots available after delayed branch
-# instructions.
-# Enabled at levels -O, -O2, -O3, -Os.
+// If supported for the target machine, attempt to reorder instructions
+// to exploit instruction slots available after delayed branch
+// instructions.
+// Enabled at levels -O, -O2, -O3, -Os.
 -fdelayed-branch|-fno-delayed-branch
 
-# If supported for the target machine, attempt to reorder instructions
-# to eliminate execution stalls due to required data being
-# unavailable. This helps machines that have slow floating point or
-# memory load instructions by allowing other instructions to be issued
-# until the result of the load or floating point instruction is
-# required.
-# Enabled at levels -O2, -O3.
+// If supported for the target machine, attempt to reorder instructions
+// to eliminate execution stalls due to required data being
+// unavailable. This helps machines that have slow floating point or
+// memory load instructions by allowing other instructions to be issued
+// until the result of the load or floating point instruction is
+// required.
+// Enabled at levels -O2, -O3.
 -fschedule-insns|-fno-schedule-insns
 
-# Similar to -fschedule-insns, but requests an additional pass of
-# instruction scheduling after register allocation has been done. This
-# is especially useful on machines with a relatively small number of
-# registers and where memory load instructions take more than one cycle.
-# Enabled at levels -O2, -O3, -Os.
+// Similar to -fschedule-insns, but requests an additional pass of
+// instruction scheduling after register allocation has been done. This
+// is especially useful on machines with a relatively small number of
+// registers and where memory load instructions take more than one cycle.
+// Enabled at levels -O2, -O3, -Os.
 -fschedule-insns2|-fno-schedule-insns2
 
-# Don't schedule instructions across basic blocks. This is normally
-# enabled by default when scheduling before register allocation,
-# i.e. with -fschedule-insns or at -O2 or higher.
+// Don't schedule instructions across basic blocks. This is normally
+// enabled by default when scheduling before register allocation,
+// i.e. with -fschedule-insns or at -O2 or higher.
 -fsched-interblock|-fno-sched-interblock
 
-# Don't allow speculative motion of non-load instructions. This is
-# normally enabled by default when scheduling before register
-# allocation, i.e. with -fschedule-insns or at -O2 or higher.
+// Don't allow speculative motion of non-load instructions. This is
+// normally enabled by default when scheduling before register
+// allocation, i.e. with -fschedule-insns or at -O2 or higher.
 -fsched-spec|-fno-sched-spec
 
-# Allow speculative motion of some load instructions. This only makes
-# sense when scheduling before register allocation, i.e. with
-# -fschedule-insns or at -O2 or higher.
+// Allow speculative motion of some load instructions. This only makes
+// sense when scheduling before register allocation, i.e. with
+// -fschedule-insns or at -O2 or higher.
 -fsched-spec-load|-fno-sched-spec-load
 
-# Allow speculative motion of more load instructions. This only makes
-# sense when scheduling before register allocation, i.e. with
-# -fschedule-insns or at -O2 or higher.
+// Allow speculative motion of more load instructions. This only makes
+// sense when scheduling before register allocation, i.e. with
+// -fschedule-insns or at -O2 or higher.
 -fsched-spec-load-dangerous|-fno-sched-spec-load-dangerous
 
-# Define how many insns (if any) can be moved prematurely from the queue
-# of stalled insns into the ready list, during the second scheduling
-# pass. -fno-sched-stalled-insns means that no insns will be moved
-# prematurely, -fsched-stalled-insns=0 means there is no limit on how
-# many queued insns can be moved prematurely. -fsched-stalled-insns
-# without a value is equivalent to -fsched-stalled-insns=1.
-# -fsched-stalled-insns
+// Define how many insns (if any) can be moved prematurely from the queue
+// of stalled insns into the ready list, during the second scheduling
+// pass. -fno-sched-stalled-insns means that no insns will be moved
+// prematurely, -fsched-stalled-insns=0 means there is no limit on how
+// many queued insns can be moved prematurely. -fsched-stalled-insns
+// without a value is equivalent to -fsched-stalled-insns=1.
+// -fsched-stalled-insns
 -fsched-stalled-insns|-fsched-stalled-insns=0|-fno-sched-stalled-insns
 
-# Define how many insn groups (cycles) will be examined for a dependency
-# on a stalled insn that is candidate for premature removal from the
-# queue of stalled insns. This has an effect only during the second
-# scheduling pass, and only if -fsched-stalled-insns is
-# used. -fno-sched-stalled-insns-dep is equivalent to
-# -fsched-stalled-insns-dep=0. -fsched-stalled-insns-dep without a value
-# is equivalent to -fsched-stalled-insns-dep=1.
+// Define how many insn groups (cycles) will be examined for a dependency
+// on a stalled insn that is candidate for premature removal from the
+// queue of stalled insns. This has an effect only during the second
+// scheduling pass, and only if -fsched-stalled-insns is
+// used. -fno-sched-stalled-insns-dep is equivalent to
+// -fsched-stalled-insns-dep=0. -fsched-stalled-insns-dep without a value
+// is equivalent to -fsched-stalled-insns-dep=1.
 -fsched-stalled-insns-dep|-fno-sched-stalled-insns-dep
 
-# When scheduling after register allocation, do use superblock
-# scheduling algorithm. Superblock scheduling allows motion across basic
-# block boundaries resulting on faster schedules. This option is
-# experimental, as not all machine descriptions used by GCC model the
-# CPU closely enough to avoid unreliable results from the algorithm.
-# This only makes sense when scheduling after register allocation,
-# i.e. with -fschedule-insns2 or at -O2 or higher.
+// When scheduling after register allocation, do use superblock
+// scheduling algorithm. Superblock scheduling allows motion across basic
+// block boundaries resulting on faster schedules. This option is
+// experimental, as not all machine descriptions used by GCC model the
+// CPU closely enough to avoid unreliable results from the algorithm.
+// This only makes sense when scheduling after register allocation,
+// i.e. with -fschedule-insns2 or at -O2 or higher.
 -fsched2-use-superblocks|-fno-sched2-use-superblocks
 
-# The modulo scheduling comes before the traditional scheduling, if a
-# loop was modulo scheduled we may want to prevent the later scheduling
-# passes from changing its schedule, we use this option to control that.
+// The modulo scheduling comes before the traditional scheduling, if a
+// loop was modulo scheduled we may want to prevent the later scheduling
+// passes from changing its schedule, we use this option to control that.
 -freschedule-modulo-scheduled-loops|-fno-reschedule-modulo-scheduled-loops
 
-# Schedule instructions using selective scheduling algorithm. Selective
-# scheduling runs instead of the first scheduler pass.
+// Schedule instructions using selective scheduling algorithm. Selective
+// scheduling runs instead of the first scheduler pass.
 -fselective-scheduling|-fno-selective-scheduling
 
-# Schedule instructions using selective scheduling algorithm. Selective
-# scheduling runs instead of the second scheduler pass.
+// Schedule instructions using selective scheduling algorithm. Selective
+// scheduling runs instead of the second scheduler pass.
 -fselective-scheduling2|-fno-selective-scheduling2
 
-# Enable software pipelining of innermost loops during selective
-# scheduling. This option has no effect until one of
-# -fselective-scheduling or -fselective-scheduling2 is turned on.
+// Enable software pipelining of innermost loops during selective
+// scheduling. This option has no effect until one of
+// -fselective-scheduling or -fselective-scheduling2 is turned on.
 -fsel-sched-pipelining|-fno-sel-sched-pipelining
 
-# When pipelining loops during selective scheduling, also pipeline outer
-# loops. This option has no effect until -fsel-sched-pipelining is
-# turned on.
+// When pipelining loops during selective scheduling, also pipeline outer
+// loops. This option has no effect until -fsel-sched-pipelining is
+// turned on.
 -fsel-sched-pipelining-outer-loops|-fno-sel-sched-pipelining-outer-loops
 
-# Enable values to be allocated in registers that will be clobbered by
-# function calls, by emitting extra instructions to save and restore the
-# registers around such calls. Such allocation is done only when it
-# seems to result in better code than would otherwise be produced.  This
-# option is always enabled by default on certain machines, usually those
-# which have no call-preserved registers to use instead.
-# Enabled at levels -O2, -O3, -Os.
+// Enable values to be allocated in registers that will be clobbered by
+// function calls, by emitting extra instructions to save and restore the
+// registers around such calls. Such allocation is done only when it
+// seems to result in better code than would otherwise be produced.  This
+// option is always enabled by default on certain machines, usually those
+// which have no call-preserved registers to use instead.
+// Enabled at levels -O2, -O3, -Os.
 -fcaller-saves|-fno-caller-saves
 
-# Attempt to minimize stack usage. The compiler will attempt to use less
-# stack space, even if that makes the program slower. This option
-# implies setting the large-stack-frame parameter to 100 and the
-# large-stack-frame-growth parameter to 400.
+// Attempt to minimize stack usage. The compiler will attempt to use less
+// stack space, even if that makes the program slower. This option
+// implies setting the large-stack-frame parameter to 100 and the
+// large-stack-frame-growth parameter to 400.
 -fconserve-stack|-fno-conserve-stack
 
-# Perform reassociation on trees. This flag is enabled by default at -O
-# and higher.
+// Perform reassociation on trees. This flag is enabled by default at -O
+// and higher.
 -ftree-reassoc|-fno-tree-reassoc
 
-# Perform partial redundancy elimination (PRE) on trees. This flag is
-# enabled by default at -O2 and -O3.
+// Perform partial redundancy elimination (PRE) on trees. This flag is
+// enabled by default at -O2 and -O3.
 -ftree-pre|-fno-tree-pre
 
-# Perform full redundancy elimination (FRE) on trees. The difference
-# between FRE and PRE is that FRE only considers expressions that are
-# computed on all paths leading to the redundant computation. This
-# analysis is faster than PRE, though it exposes fewer
-# redundancies. This flag is enabled by default at -O and higher.
+// Perform full redundancy elimination (FRE) on trees. The difference
+// between FRE and PRE is that FRE only considers expressions that are
+// computed on all paths leading to the redundant computation. This
+// analysis is faster than PRE, though it exposes fewer
+// redundancies. This flag is enabled by default at -O and higher.
 -ftree-fre|-fno-tree-fre
 
-# Perform copy propagation on trees. This pass eliminates unnecessary
-# copy operations. This flag is enabled by default at -O and higher.
+// Perform copy propagation on trees. This pass eliminates unnecessary
+// copy operations. This flag is enabled by default at -O and higher.
 -ftree-copy-prop|-fno-tree-copy-prop
 
-# Discover which functions are pure or constant. Enabled by default at
-# -O and higher.
+// Discover which functions are pure or constant. Enabled by default at
+// -O and higher.
 -fipa-pure-const|-fno-ipa-pure-const
 
-# Discover which static variables do not escape cannot escape the
-# compilation unit. Enabled by default at -O and higher.
+// Discover which static variables do not escape cannot escape the
+// compilation unit. Enabled by default at -O and higher.
 -fipa-reference|-fno-ipa-reference
 
-# Perform structure reorganization optimization, that change C-like
-# structures layout in order to better utilize spatial locality. This
-# transformation is affective for programs containing arrays of
-# structures. Available in two compilation modes: profile-based (enabled
-# with -fprofile-generate) or static (which uses built-in
-# heuristics). It works only in whole program mode, so it requires
-# -fwhole-program to be enabled. Structures considered `cold' by this
-# transformation are not affected (see --param
-# struct-reorg-cold-struct-ratio=value).  With this flag, the program
-# debug info reflects a new structure layout.
+// Perform structure reorganization optimization, that change C-like
+// structures layout in order to better utilize spatial locality. This
+// transformation is affective for programs containing arrays of
+// structures. Available in two compilation modes: profile-based (enabled
+// with -fprofile-generate) or static (which uses built-in
+// heuristics). It works only in whole program mode, so it requires
+// -fwhole-program to be enabled. Structures considered `cold' by this
+// transformation are not affected (see --param
+// struct-reorg-cold-struct-ratio=value).  With this flag, the program
+// debug info reflects a new structure layout.
 -fipa-struct-reorg|-fno-ipa-struct-reorg
 
-# Perform interprocedural pointer analysis and interprocedural
-# modification and reference analysis. This option can cause excessive
-# memory and compile-time usage on large compilation units. It is not
-# enabled by default at any optimization level.
+// Perform interprocedural pointer analysis and interprocedural
+// modification and reference analysis. This option can cause excessive
+// memory and compile-time usage on large compilation units. It is not
+// enabled by default at any optimization level.
 -fipa-pta|-fno-ipa-pta
 
-# Perform interprocedural constant propagation. This optimization
-# analyzes the program to determine when values passed to functions are
-# constants and then optimizes accordingly. This optimization can
-# substantially increase performance if the application has constants
-# passed to functions. This flag is enabled by default at -O2, -Os and
-# -O3.
+// Perform interprocedural constant propagation. This optimization
+// analyzes the program to determine when values passed to functions are
+// constants and then optimizes accordingly. This optimization can
+// substantially increase performance if the application has constants
+// passed to functions. This flag is enabled by default at -O2, -Os and
+// -O3.
 -fipa-cp|-fno-ipa-cp
 
-# Perform function cloning to make interprocedural constant propagation
-# stronger. When enabled, interprocedural constant propagation will
-# perform function cloning when externally visible function can be
-# called with constant arguments. Because this optimization can create
-# multiple copies of functions, it may significantly increase code size
-# (see --param ipcp-unit-growth=value).
-# This flag is enabled by default at -O3.
+// Perform function cloning to make interprocedural constant propagation
+// stronger. When enabled, interprocedural constant propagation will
+// perform function cloning when externally visible function can be
+// called with constant arguments. Because this optimization can create
+// multiple copies of functions, it may significantly increase code size
+// (see --param ipcp-unit-growth=value).
+// This flag is enabled by default at -O3.
 -fipa-cp-clone|-fno-ipa-cp-clone
 
-# Perform matrix flattening and transposing. Matrix flattening tries to
-# replace an m-dimensional matrix with its equivalent n-dimensional
-# matrix, where n < m. This reduces the level of indirection needed for
-# accessing the elements of the matrix. The second optimization is
-# matrix transposing that attempts to change the order of the matrix's
-# dimensions in order to improve cache locality. Both optimizations need
-# the -fwhole-program flag. Transposing is enabled only if profiling
-# information is available.
+// Perform matrix flattening and transposing. Matrix flattening tries to
+// replace an m-dimensional matrix with its equivalent n-dimensional
+// matrix, where n < m. This reduces the level of indirection needed for
+// accessing the elements of the matrix. The second optimization is
+// matrix transposing that attempts to change the order of the matrix's
+// dimensions in order to improve cache locality. Both optimizations need
+// the -fwhole-program flag. Transposing is enabled only if profiling
+// information is available.
 -fipa-matrix-reorg|-fno-ipa-matrix-reorg
 
-# Perform forward store motion on trees. This flag is enabled by default
-# at -O and higher.
+// Perform forward store motion on trees. This flag is enabled by default
+// at -O and higher.
 -ftree-sink|-fno-tree-sink
 
-# Perform sparse conditional constant propagation (CCP) on trees. This
-# pass only operates on local scalar variables and is enabled by default
-# at -O and higher.
+// Perform sparse conditional constant propagation (CCP) on trees. This
+// pass only operates on local scalar variables and is enabled by default
+// at -O and higher.
 -ftree-ccp|-fno-tree-ccp
 
-# Perform conversion of simple initializations in a switch to
-# initializations from a scalar array. This flag is enabled by default
-# at -O2 and higher.
+// Perform conversion of simple initializations in a switch to
+// initializations from a scalar array. This flag is enabled by default
+// at -O2 and higher.
 -ftree-switch-conversion|-fno-tree-switch-conversion
 
-# Perform conditional dead code elimination (DCE) for calls to builtin
-# functions that may set errno but are otherwise side-effect free. This
-# flag is enabled by default at -O2 and higher if -Os is not also
-# specified.
+// Perform conditional dead code elimination (DCE) for calls to builtin
+// functions that may set errno but are otherwise side-effect free. This
+// flag is enabled by default at -O2 and higher if -Os is not also
+// specified.
 -ftree-builtin-call-dce|-fno-tree-builtin-call-dce
 
-# Perform a variety of simple scalar cleanups (constant/copy
-# propagation, redundancy elimination, range propagation and expression
-# simplification) based on a dominator tree traversal. This also
-# performs jump threading (to reduce jumps to jumps). This flag is
-# enabled by default at -O and higher.
+// Perform a variety of simple scalar cleanups (constant/copy
+// propagation, redundancy elimination, range propagation and expression
+// simplification) based on a dominator tree traversal. This also
+// performs jump threading (to reduce jumps to jumps). This flag is
+// enabled by default at -O and higher.
 -ftree-dominator-opts|-fno-tree-dominator-opts
 
-# Perform dead store elimination (DSE) on trees. A dead store is a store
-# into a memory location which will later be overwritten by another
-# store without any intervening loads. In this case the earlier store
-# can be deleted. This flag is enabled by default at -O and higher.
+// Perform dead store elimination (DSE) on trees. A dead store is a store
+// into a memory location which will later be overwritten by another
+// store without any intervening loads. In this case the earlier store
+// can be deleted. This flag is enabled by default at -O and higher.
 -ftree-dse|-fno-tree-dse
 
-# Perform loop header copying on trees. This is beneficial since it
-# increases effectiveness of code motion optimizations. It also saves
-# one jump. This flag is enabled by default at -O and higher. It is not
-# enabled for -Os, since it usually increases code size.
+// Perform loop header copying on trees. This is beneficial since it
+// increases effectiveness of code motion optimizations. It also saves
+// one jump. This flag is enabled by default at -O and higher. It is not
+// enabled for -Os, since it usually increases code size.
 -ftree-ch|-fno-tree-ch
 
-# Perform scalar replacement of aggregates. This pass replaces structure
-# references with scalars to prevent committing structures to memory too
-# early. This flag is enabled by default at -O and higher.
+// Perform scalar replacement of aggregates. This pass replaces structure
+// references with scalars to prevent committing structures to memory too
+// early. This flag is enabled by default at -O and higher.
 -ftree-sra|-fno-tree-sra
 
-# Perform copy renaming on trees. This pass attempts to rename compiler
-# temporaries to other variables at copy locations, usually resulting in
-# variable names which more closely resemble the original
-# variables. This flag is enabled by default at -O and higher.
+// Perform copy renaming on trees. This pass attempts to rename compiler
+// temporaries to other variables at copy locations, usually resulting in
+// variable names which more closely resemble the original
+// variables. This flag is enabled by default at -O and higher.
 -ftree-copyrename|-fno-tree-copyrename
 
-# Perform temporary expression replacement during the SSA->normal
-# phase. Single use/single def temporaries are replaced at their use
-# location with their defining expression. This results in non-GIMPLE
-# code, but gives the expanders much more complex trees to work on
-# resulting in better RTL generation. This is enabled by default at -O
-# and higher.
+// Perform temporary expression replacement during the SSA->normal
+// phase. Single use/single def temporaries are replaced at their use
+// location with their defining expression. This results in non-GIMPLE
+// code, but gives the expanders much more complex trees to work on
+// resulting in better RTL generation. This is enabled by default at -O
+// and higher.
 -ftree-ter|-fno-tree-ter
 
-# Perform Value Range Propagation on trees. This is similar to the
-# constant propagation pass, but instead of values, ranges of values are
-# propagated. This allows the optimizers to remove unnecessary range
-# checks like array bound checks and null pointer checks. This is
-# enabled by default at -O2 and higher. Null pointer check elimination
-# is only done if -fdelete-null-pointer-checks is enabled.
+// Perform Value Range Propagation on trees. This is similar to the
+// constant propagation pass, but instead of values, ranges of values are
+// propagated. This allows the optimizers to remove unnecessary range
+// checks like array bound checks and null pointer checks. This is
+// enabled by default at -O2 and higher. Null pointer check elimination
+// is only done if -fdelete-null-pointer-checks is enabled.
 -ftree-vrp|-fno-tree-vrp
 
-# Perform tail duplication to enlarge superblock size. This
-# transformation simplifies the control flow of the function allowing
-# other optimizations to do better job.
+// Perform tail duplication to enlarge superblock size. This
+// transformation simplifies the control flow of the function allowing
+// other optimizations to do better job.
 -ftracer|-fno-tracer
 
-# Disable any machine-specific peephole optimizations. The difference
-# between -fno-peephole and -fno-peephole2 is in how they are
-# implemented in the compiler; some targets use one, some use the other,
-# a few use both. -fpeephole is enabled by default. -fpeephole2 enabled
-# at levels -O2, -O3, -Os.
+// Disable any machine-specific peephole optimizations. The difference
+// between -fno-peephole and -fno-peephole2 is in how they are
+// implemented in the compiler; some targets use one, some use the other,
+// a few use both. -fpeephole is enabled by default. -fpeephole2 enabled
+// at levels -O2, -O3, -Os.
 -fpeephole|-fno-peephole
 -fpeephole2|-fno-peephole2
 
-# Do not guess branch probabilities using heuristics.  GCC will use
-# heuristics to guess branch probabilities if they are not provided by
-# profiling feedback (-fprofile-arcs). These heuristics are based on the
-# control flow graph. If some branch probabilities are specified by
-# `__builtin_expect', then the heuristics will be used to guess branch
-# probabilities for the rest of the control flow graph, taking the
-# `__builtin_expect' info into account. The interactions between the
-# heuristics and `__builtin_expect' can be complex, and in some cases,
-# it may be useful to disable the heuristics so that the effects of
-# `__builtin_expect' are easier to understand.  The default is
-# -fguess-branch-probability at levels -O, -O2, -O3, -Os.
+// Do not guess branch probabilities using heuristics.  GCC will use
+// heuristics to guess branch probabilities if they are not provided by
+// profiling feedback (-fprofile-arcs). These heuristics are based on the
+// control flow graph. If some branch probabilities are specified by
+// `__builtin_expect', then the heuristics will be used to guess branch
+// probabilities for the rest of the control flow graph, taking the
+// `__builtin_expect' info into account. The interactions between the
+// heuristics and `__builtin_expect' can be complex, and in some cases,
+// it may be useful to disable the heuristics so that the effects of
+// `__builtin_expect' are easier to understand.  The default is
+// -fguess-branch-probability at levels -O, -O2, -O3, -Os.
 -fguess-branch-probability|-fno-guess-branch-probability
 
-# Reorder basic blocks in the compiled function in order to reduce
-# number of taken branches and improve code locality.
-# Enabled at levels -O2, -O3.
+// Reorder basic blocks in the compiled function in order to reduce
+// number of taken branches and improve code locality.
+// Enabled at levels -O2, -O3.
 -freorder-blocks|-fno-reorder-blocks
 
-# Reorder functions in the object file in order to improve code
-# locality. This is implemented by using special subsections .text.hot
-# for most frequently executed functions and .text.unlikely for unlikely
-# executed functions. Reordering is done by the linker so object file
-# format must support named sections and linker must place them in a
-# reasonable way.  Also profile feedback must be available in to make
-# this option effective. See -fprofile-arcs for details.
-# Enabled at levels -O2, -O3, -Os.
+// Reorder functions in the object file in order to improve code
+// locality. This is implemented by using special subsections .text.hot
+// for most frequently executed functions and .text.unlikely for unlikely
+// executed functions. Reordering is done by the linker so object file
+// format must support named sections and linker must place them in a
+// reasonable way.  Also profile feedback must be available in to make
+// this option effective. See -fprofile-arcs for details.
+// Enabled at levels -O2, -O3, -Os.
 -freorder-functions|-fno-reorder-functions
 
-# -falign-functions=n
-# Align the start of functions to the next power-of-two greater than n,
-# skipping up to n bytes. For instance, -falign-functions=32 aligns
-# functions to the next 32-byte boundary, but -falign-functions=24 would
-# align to the next 32-byte boundary only if this can be done by
-# skipping 23 bytes or less.  -fno-align-functions and
-# -falign-functions=1 are equivalent and mean that functions will not be
-# aligned.  Some assemblers only support this flag when n is a power of
-# two; in that case, it is rounded up.  If n is not specified or is
-# zero, use a machine-dependent default.
-# Enabled at levels -O2, -O3.
+// -falign-functions=n
+// Align the start of functions to the next power-of-two greater than n,
+// skipping up to n bytes. For instance, -falign-functions=32 aligns
+// functions to the next 32-byte boundary, but -falign-functions=24 would
+// align to the next 32-byte boundary only if this can be done by
+// skipping 23 bytes or less.  -fno-align-functions and
+// -falign-functions=1 are equivalent and mean that functions will not be
+// aligned.  Some assemblers only support this flag when n is a power of
+// two; in that case, it is rounded up.  If n is not specified or is
+// zero, use a machine-dependent default.
+// Enabled at levels -O2, -O3.
 -falign-functions|-fno-align-functions
 
-# Align all branch targets to a power-of-two boundary, skipping up to n
-# bytes like -falign-functions. This option can easily make code slower,
-# because it must insert dummy operations for when the branch target is
-# reached in the usual flow of the code.  -fno-align-labels and
-# -falign-labels=1 are equivalent and mean that labels will not be
-# aligned.  If -falign-loops or -falign-jumps are applicable and are
-# greater than this value, then their values are used instead.  If n is
-# not specified or is zero, use a machine-dependent default which is
-# very likely to be `1', meaning no alignment.
-# Enabled at levels -O2, -O3.
-#-falign-labels=n
+// Align all branch targets to a power-of-two boundary, skipping up to n
+// bytes like -falign-functions. This option can easily make code slower,
+// because it must insert dummy operations for when the branch target is
+// reached in the usual flow of the code.  -fno-align-labels and
+// -falign-labels=1 are equivalent and mean that labels will not be
+// aligned.  If -falign-loops or -falign-jumps are applicable and are
+// greater than this value, then their values are used instead.  If n is
+// not specified or is zero, use a machine-dependent default which is
+// very likely to be `1', meaning no alignment.
+// Enabled at levels -O2, -O3.
+// -falign-labels=n
 -falign-labels|-fno-align-labels
 
-# Align branch targets to a power-of-two boundary, for branch targets
-# where the targets can only be reached by jumping, skipping up to n
-# bytes like -falign-functions. In this case, no dummy operations need
-# be executed.  -fno-align-jumps and -falign-jumps=1 are equivalent and
-# mean that loops will not be aligned.  If n is not specified or is
-# zero, use a machine-dependent default.
-# Enabled at levels -O2, -O3.
-# -falign-jumps=n
+// Align branch targets to a power-of-two boundary, for branch targets
+// where the targets can only be reached by jumping, skipping up to n
+// bytes like -falign-functions. In this case, no dummy operations need
+// be executed.  -fno-align-jumps and -falign-jumps=1 are equivalent and
+// mean that loops will not be aligned.  If n is not specified or is
+// zero, use a machine-dependent default.
+// Enabled at levels -O2, -O3.
+// -falign-jumps=n
 -falign-jumps|-fno-align-jumps
 
-# Do not reorder top-level functions, variables, and asm
-# statements. Output them in the same order that they appear in the
-# input file. When this option is used, unreferenced static variables
-# will not be removed. This option is intended to support existing code
-# which relies on a particular ordering. For new code, it is better to
-# use attributes.  Enabled at level -O0. When disabled explicitly, it
-# also imply -fno-section-anchors that is otherwise enabled at -O0 on
-# some targets.
+// Do not reorder top-level functions, variables, and asm
+// statements. Output them in the same order that they appear in the
+// input file. When this option is used, unreferenced static variables
+// will not be removed. This option is intended to support existing code
+// which relies on a particular ordering. For new code, it is better to
+// use attributes.  Enabled at level -O0. When disabled explicitly, it
+// also imply -fno-section-anchors that is otherwise enabled at -O0 on
+// some targets.
 -ftoplevel-reorder|-fno-toplevel-reorder
 
-# Constructs webs as commonly used for register allocation purposes and
-# assign each web individual pseudo register. This allows the register
-# allocation pass to operate on pseudos directly, but also strengthens
-# several other optimization passes, such as CSE, loop optimizer and
-# trivial dead code remover. It can, however, make debugging impossible,
-# since variables will no longer stay in a "home register".
-# Enabled by default with -funroll-loops.
+// Constructs webs as commonly used for register allocation purposes and
+// assign each web individual pseudo register. This allows the register
+// allocation pass to operate on pseudos directly, but also strengthens
+// several other optimization passes, such as CSE, loop optimizer and
+// trivial dead code remover. It can, however, make debugging impossible,
+// since variables will no longer stay in a "home register".
+// Enabled by default with -funroll-loops.
 -fweb|-fno-web
 
-# After register allocation and post-register allocation instruction
-# splitting, we perform a copy-propagation pass to try to reduce
-# scheduling dependencies and occasionally eliminate the copy.
-# Enabled at levels -O, -O2, -O3, -Os.
+// After register allocation and post-register allocation instruction
+// splitting, we perform a copy-propagation pass to try to reduce
+// scheduling dependencies and occasionally eliminate the copy.
+// Enabled at levels -O, -O2, -O3, -Os.
 -fcprop-registers|-fno-cprop-registers
 
-# Do not store floating point variables in registers, and inhibit other
-# options that might change whether a floating point value is taken from
-# a register or memory.  This option prevents undesirable excess
-# precision on machines such as the 68000 where the floating registers
-# (of the 68881) keep more precision than a double is supposed to
-# have. Similarly for the x86 architecture. For most programs, the
-# excess precision does only good, but a few programs rely on the
-# precise definition of IEEE floating point. Use -ffloat-store for such
-# programs, after modifying them to store all pertinent intermediate
-# computations into variables.
+// Do not store floating point variables in registers, and inhibit other
+// options that might change whether a floating point value is taken from
+// a register or memory.  This option prevents undesirable excess
+// precision on machines such as the 68000 where the floating registers
+// (of the 68881) keep more precision than a double is supposed to
+// have. Similarly for the x86 architecture. For most programs, the
+// excess precision does only good, but a few programs rely on the
+// precise definition of IEEE floating point. Use -ffloat-store for such
+// programs, after modifying them to store all pertinent intermediate
+// computations into variables.
 -ffloat-store|-fno-float-store
 
-# Allow the reciprocal of a value to be used instead of dividing by the
-# value if this enables optimizations. For example x / y can be replaced
-# with x * (1/y) which is useful if (1/y) is subject to common
-# subexpression elimination. Note that this loses precision and
-# increases the number of flops operating on the value.  The default is
-# -fno-reciprocal-math.
+// Allow the reciprocal of a value to be used instead of dividing by the
+// value if this enables optimizations. For example x / y can be replaced
+// with x * (1/y) which is useful if (1/y) is subject to common
+// subexpression elimination. Note that this loses precision and
+// increases the number of flops operating on the value.  The default is
+// -fno-reciprocal-math.
 -freciprocal-math|-fno-reciprocal-math
 
-# Treat floating point constant as single precision constant instead of
-# implicitly converting it to double precision constant.
+// Treat floating point constant as single precision constant instead of
+// implicitly converting it to double precision constant.
 -fsingle-precision-constant|-fno-single-precision-constant
 
-# Attempt to avoid false dependencies in scheduled code by making use of
-# registers left over after register allocation. This optimization will
-# most benefit processors with lots of registers. Depending on the debug
-# information format adopted by the target, however, it can make
-# debugging impossible, since variables will no longer stay in a "home
-# register".
-# Enabled by default with -funroll-loops and -fpeel-loops.
+// Attempt to avoid false dependencies in scheduled code by making use of
+// registers left over after register allocation. This optimization will
+// most benefit processors with lots of registers. Depending on the debug
+// information format adopted by the target, however, it can make
+// debugging impossible, since variables will no longer stay in a "home
+// register".
+// Enabled by default with -funroll-loops and -fpeel-loops.
 -frename-registers|-fno-rename-registers
 
-# Place each function or data item into its own section in the output
-# file if the target supports arbitrary sections. The name of the
-# function or the name of the data item determines the section's name in
-# the output file.  Use these options on systems where the linker can
-# perform optimizations to improve locality of reference in the
-# instruction space. Most systems using the ELF object format and SPARC
-# processors running Solaris 2 have linkers with such optimizations. AIX
-# may have these optimizations in the future.  Only use these options
-# when there are significant benefits from doing so. When you specify
-# these options, the assembler and linker will create larger object and
-# executable files and will also be slower. You will not be able to use
-# gprof on all systems if you specify this option and you may have
-# problems with debugging if you specify both this option and -g.
+// Place each function or data item into its own section in the output
+// file if the target supports arbitrary sections. The name of the
+// function or the name of the data item determines the section's name in
+// the output file.  Use these options on systems where the linker can
+// perform optimizations to improve locality of reference in the
+// instruction space. Most systems using the ELF object format and SPARC
+// processors running Solaris 2 have linkers with such optimizations. AIX
+// may have these optimizations in the future.  Only use these options
+// when there are significant benefits from doing so. When you specify
+// these options, the assembler and linker will create larger object and
+// executable files and will also be slower. You will not be able to use
+// gprof on all systems if you specify this option and you may have
+// problems with debugging if you specify both this option and -g.
 -ffunction-sections|-fno-function-sections
 -fdata-sections|-fno-data-sections
 
-# Perform branch target register load optimization before prologue /
-# epilogue threading. The use of target registers can typically be
-# exposed only during reload, thus hoisting loads out of loops and doing
-# inter-block scheduling needs a separate optimization pass.
+// Perform branch target register load optimization before prologue /
+// epilogue threading. The use of target registers can typically be
+// exposed only during reload, thus hoisting loads out of loops and doing
+// inter-block scheduling needs a separate optimization pass.
 -fbranch-target-load-optimize|-fno-branch-target-load-optimize
 
-# Perform branch target register load optimization after prologue /
-# epilogue threading.
+// Perform branch target register load optimization after prologue /
+// epilogue threading.
 -fbranch-target-load-optimize2|-fno-branch-target-load-optimize2
 
-# When performing branch target register load optimization, don't reuse
-# branch target registers in within any basic block.
+// When performing branch target register load optimization, don't reuse
+// branch target registers in within any basic block.
 -fbtr-bb-exclusive|-fno-btr-bb-exclusive
 
 #if GCC_VERSION <= 40700
-# The threshold ratio (as a percentage) between a structure frequency
-# and the frequency of the hottest structure in the program. This
-# parameter is used by struct-reorg optimization enabled by
-# -fipa-struct-reorg. We say that if the ratio of a structure frequency,
-# calculated by profiling, to the hottest structure frequency in the
-# program is less than this parameter, then structure reorganization is
-# not applied to this structure. The default is 10.
+// The threshold ratio (as a percentage) between a structure frequency
+// and the frequency of the hottest structure in the program. This
+// parameter is used by struct-reorg optimization enabled by
+// -fipa-struct-reorg. We say that if the ratio of a structure frequency,
+// calculated by profiling, to the hottest structure frequency in the
+// program is less than this parameter, then structure reorganization is
+// not applied to this structure. The default is 10.
 --param struct-reorg-cold-struct-ratio=[0..100]
 #endif // GCC_VERSION <= 40700
 
-# When branch is predicted to be taken with probability lower than this
-# threshold (in percent), then it is considered well predictable. The
-# default is 10.
+// When branch is predicted to be taken with probability lower than this
+// threshold (in percent), then it is considered well predictable. The
+// default is 10.
 --param predictable-branch-outcome=[0..50]
 
-# The maximum number of incoming edges to consider for crossjumping. The
-# algorithm used by -fcrossjumping is O(N^2) in the number of edges
-# incoming to each block. Increasing values mean more aggressive
-# optimization, making the compile time increase with probably small
-# improvement in executable size. The default value is 100.
+// The maximum number of incoming edges to consider for crossjumping. The
+// algorithm used by -fcrossjumping is O(N^2) in the number of edges
+// incoming to each block. Increasing values mean more aggressive
+// optimization, making the compile time increase with probably small
+// improvement in executable size. The default value is 100.
 --param max-crossjump-edges=[50..500]
 
-# The minimum number of instructions which must be matched at the end of
-# two blocks before crossjumping will be performed on them. This value
-# is ignored in the case where all instructions in the block being
-# crossjumped from are matched. The default value is 5.
+// The minimum number of instructions which must be matched at the end of
+// two blocks before crossjumping will be performed on them. This value
+// is ignored in the case where all instructions in the block being
+// crossjumped from are matched. The default value is 5.
 --param min-crossjump-insns=[2..10]
 
-# Select fraction of the maximal count of repetitions of basic block in
-# program given basic block needs to have to be considered hot.
+// Select fraction of the maximal count of repetitions of basic block in
+// program given basic block needs to have to be considered hot.
 --param hot-bb-count-fraction=[1000..100000]
 
-# Select fraction of the entry block frequency of executions of basic
-# block in function given basic block needs to have to be considered hot
+// Select fraction of the entry block frequency of executions of basic
+// block in function given basic block needs to have to be considered hot
 --param hot-bb-frequency-fraction=[100..10000]
 
-# This value is used to limit superblock formation once the given
-# percentage of executed instructions is covered. This limits
-# unnecessary code size expansion.  The tracer-dynamic-coverage-feedback
-# is used only when profile feedback is available. The real profiles (as
-# opposed to statically estimated ones) are much less balanced allowing
-# the threshold to be larger value. Default values: 75, 95
+// This value is used to limit superblock formation once the given
+// percentage of executed instructions is covered. This limits
+// unnecessary code size expansion.  The tracer-dynamic-coverage-feedback
+// is used only when profile feedback is available. The real profiles (as
+// opposed to statically estimated ones) are much less balanced allowing
+// the threshold to be larger value. Default values: 75, 95
 --param tracer-dynamic-coverage=[50..100]
 --param tracer-dynamic-coverage-feedback=[50..100]
 
-# Stop tail duplication once code growth has reached given
-# percentage. This is rather hokey argument, as most of the duplicates
-# will be eliminated later in cross jumping, so it may be set to much
-# higher values than is the desired code growth.
-# The default value is 100.
+// Stop tail duplication once code growth has reached given
+// percentage. This is rather hokey argument, as most of the duplicates
+// will be eliminated later in cross jumping, so it may be set to much
+// higher values than is the desired code growth.
+// The default value is 100.
 --param tracer-max-code-growth=[20..500]
 
-# Stop forward growth if the best edge do have probability lower than
-# this threshold.  Similarly to tracer-dynamic-coverage two values are
-# present, one for compilation for profile feedback and one for
-# compilation without. The value for compilation with profile feedback
-# needs to be more conservative (higher) in order to make tracer
-# effective. Default values: 10
+// Stop forward growth if the best edge do have probability lower than
+// this threshold.  Similarly to tracer-dynamic-coverage two values are
+// present, one for compilation for profile feedback and one for
+// compilation without. The value for compilation with profile feedback
+// needs to be more conservative (higher) in order to make tracer
+// effective. Default values: 10
 --param tracer-min-branch-ratio=[0..100]
-# Stop forward growth if the probability of best edge is less than
-# this threshold (in percent). Used when profile feedback is / is not
-# available
-# Default values: 80, 50
+// Stop forward growth if the probability of best edge is less than
+// this threshold (in percent). Used when profile feedback is / is not
+// available
+// Default values: 80, 50
 --param tracer-min-branch-probability=[0..100]
 --param tracer-min-branch-probability-feedback=[0..100]
 
-# Maximum number of basic blocks on path that cse considers. The default
-# is 10.
+// Maximum number of basic blocks on path that cse considers. The default
+// is 10.
 --param max-cse-path-length=[5..50]
 
-# The maximum instructions CSE process before flushing. The default is
-# 1000.
+// The maximum instructions CSE process before flushing. The default is
+// 1000.
 --param max-cse-insns=[200..5000]
 
-# The maximum number of memory locations cselib should take into
-# account. Increasing values mean more aggressive optimization, making
-# the compile time increase with probably slightly better
-# performance. The default value is 500.
+// The maximum number of memory locations cselib should take into
+// account. Increasing values mean more aggressive optimization, making
+// the compile time increase with probably slightly better
+// performance. The default value is 500.
 --param max-cselib-memory-locations=[400..800]
 
-# The maximum number of instructions ready to be issued the scheduler
-# should consider at any given time during the first scheduling
-# pass. Increasing values mean more thorough searches, making the
-# compilation time increase with probably little benefit. The default
-# value is 100.
+// The maximum number of instructions ready to be issued the scheduler
+// should consider at any given time during the first scheduling
+// pass. Increasing values mean more thorough searches, making the
+// compilation time increase with probably little benefit. The default
+// value is 100.
 --param max-sched-ready-insns=[80..200]
 
-# The maximum number of blocks in a region to be considered for
-# interblock scheduling. The default value is 10.
+// The maximum number of blocks in a region to be considered for
+// interblock scheduling. The default value is 10.
 --param max-sched-region-blocks=[5..40]
 
-# The maximum number of blocks in a region to be considered for
-# pipelining in the selective scheduler. The default value is 15.
+// The maximum number of blocks in a region to be considered for
+// pipelining in the selective scheduler. The default value is 15.
 --param max-pipeline-region-blocks=[10..40]
 
-# The maximum number of insns in a region to be considered for
-# interblock scheduling. The default value is 100.
+// The maximum number of insns in a region to be considered for
+// interblock scheduling. The default value is 100.
 --param max-sched-region-insns=[50..400]
 
-# The maximum number of insns in a region to be considered for
-# pipelining in the selective scheduler. The default value is 200.
+// The maximum number of insns in a region to be considered for
+// pipelining in the selective scheduler. The default value is 200.
 --param max-pipeline-region-insns=[100..500]
 
-# The minimum probability (in percents) of reaching a source block for
-# interblock speculative scheduling. The default value is 40.
+// The minimum probability (in percents) of reaching a source block for
+// interblock speculative scheduling. The default value is 40.
 --param min-spec-prob=[0..100]
 
-# The maximum number of iterations through CFG to extend regions. 0 -
-# disable region extension, N - do at most N iterations. The default
-# value is 0.
+// The maximum number of iterations through CFG to extend regions. 0 -
+// disable region extension, N - do at most N iterations. The default
+// value is 0.
 --param max-sched-extend-regions-iters=[0..5]
 
-# The maximum conflict delay for an insn to be considered for
-# speculative motion. The default value is 3.
+// The maximum conflict delay for an insn to be considered for
+// speculative motion. The default value is 3.
 --param max-sched-insn-conflict-delay=[1..6]
 
-# The minimal probability of speculation success (in percents), so that
-# speculative insn will be scheduled. The default value is 40.
+// The minimal probability of speculation success (in percents), so that
+// speculative insn will be scheduled. The default value is 40.
 --param sched-spec-prob-cutoff=[0..100]
 
-# Minimal distance (in CPU cycles) between store and load targeting same
-# memory locations. The default value is 1.
+// Minimal distance (in CPU cycles) between store and load targeting same
+// memory locations. The default value is 1.
 --param sched-mem-true-dep-cost=[0..3]
 
-# The maximum size of the lookahead window of selective scheduling. It
-# is a depth of search for available instructions. The default value is
-# 50.
+// The maximum size of the lookahead window of selective scheduling. It
+// is a depth of search for available instructions. The default value is
+// 50.
 --param selsched-max-lookahead=[40..80]
 
-# The maximum number of times that an instruction will be scheduled
-# during selective scheduling. This is the limit on the number of
-# iterations through which the instruction may be pipelined. The default
-# value is 2.
+// The maximum number of times that an instruction will be scheduled
+// during selective scheduling. This is the limit on the number of
+// iterations through which the instruction may be pipelined. The default
+// value is 2.
 --param selsched-max-sched-times=[1..4]
 
-# The maximum number of best instructions in the ready list that are
-# considered for renaming in the selective scheduler. The default value
-# is 2.
+// The maximum number of best instructions in the ready list that are
+// considered for renaming in the selective scheduler. The default value
+// is 2.
 --param selsched-insns-to-rename=[1..4]
 
-# Maximum number of statements allowed in a block that needs to be
-# duplicated when threading jumps. Default value is 15.
+// Maximum number of statements allowed in a block that needs to be
+// duplicated when threading jumps. Default value is 15.
 --param max-jump-thread-duplication-stmts=[10..30]
 
-# Switch initialization conversion will refuse to create arrays that are
-# bigger than switch-conversion-max-branch-ratio times the number of
-# branches in the switch. Default value: 8.
+// Switch initialization conversion will refuse to create arrays that are
+// bigger than switch-conversion-max-branch-ratio times the number of
+// branches in the switch. Default value: 8.
 --param switch-conversion-max-branch-ratio=[4..16]
 
-# Maximum length of the partial antic set computed during the tree
-# partial redundancy elimination optimization (-ftree-pre) when
-# optimizing at -O3 and above. For some sorts of source code the
-# enhanced partial redundancy elimination optimization can run away,
-# consuming all of the memory available on the host machine. This
-# parameter sets a limit on the length of the sets that are computed,
-# which prevents the runaway behavior. Setting a value of 0 for this
-# parameter will allow an unlimited set length. Default value: 100.
+// Maximum length of the partial antic set computed during the tree
+// partial redundancy elimination optimization (-ftree-pre) when
+// optimizing at -O3 and above. For some sorts of source code the
+// enhanced partial redundancy elimination optimization can run away,
+// consuming all of the memory available on the host machine. This
+// parameter sets a limit on the length of the sets that are computed,
+// which prevents the runaway behavior. Setting a value of 0 for this
+// parameter will allow an unlimited set length. Default value: 100.
 --param max-partial-antic-length=[0..200]
 
 #endif // GCC_VERSION >= 40400
 
 #if GCC_VERSION >= 40500
 
-# Perform interprocedural scalar replacement of aggregates, removal of
-# unused parameters and replacement of parameters passed by reference by
-# parameters passed by value.
-# Enabled at levels -O2, -O3 and -Os.
+// Perform interprocedural scalar replacement of aggregates, removal of
+// unused parameters and replacement of parameters passed by reference by
+// parameters passed by value.
+// Enabled at levels -O2, -O3 and -Os.
 -fipa-sra|-fno-ipa-sra
 
-# Use IRA to evaluate register pressure in loops for decision to move
-# loop invariants. Usage of this option usually results in generation of
-# faster and smaller code on machines with big register files (>= 32
-# registers) but it can slow compiler down.
-# This option is enabled at level -O3 for some targets.
+// Use IRA to evaluate register pressure in loops for decision to move
+// loop invariants. Usage of this option usually results in generation of
+// faster and smaller code on machines with big register files (>= 32
+// registers) but it can slow compiler down.
+// This option is enabled at level -O3 for some targets.
 -fira-loop-pressure|-fno-ira-loop-pressure
 
-# Enable register pressure sensitive insn scheduling before the register
-# allocation. This only makes sense when scheduling before register
-# allocation is enabled, i.e. with -fschedule-insns or at -O2 or
-# higher. Usage of this option can improve the generated code and
-# decrease its size by preventing register pressure increase above the
-# number of available hard registers and as a consequence register
-# spills in the register allocation.
+// Enable register pressure sensitive insn scheduling before the register
+// allocation. This only makes sense when scheduling before register
+// allocation is enabled, i.e. with -fschedule-insns or at -O2 or
+// higher. Usage of this option can improve the generated code and
+// decrease its size by preventing register pressure increase above the
+// number of available hard registers and as a consequence register
+// spills in the register allocation.
 -fsched-pressure|-fno-sched-pressure
 
-# Enable the group heuristic in the scheduler. This heuristic favors the
-# instruction that belongs to a schedule group. This is enabled by
-# default when scheduling is enabled, i.e. with -fschedule-insns or
-# -fschedule-insns2 or at -O2 or higher.
+// Enable the group heuristic in the scheduler. This heuristic favors the
+// instruction that belongs to a schedule group. This is enabled by
+// default when scheduling is enabled, i.e. with -fschedule-insns or
+// -fschedule-insns2 or at -O2 or higher.
 -fsched-group-heuristic|-fno-sched-group-heuristic
 
-# Enable the critical-path heuristic in the scheduler. This heuristic
-# favors instructions on the critical path. This is enabled by default
-# when scheduling is enabled, i.e. with -fschedule-insns or
-# -fschedule-insns2 or at -O2 or higher.
+// Enable the critical-path heuristic in the scheduler. This heuristic
+// favors instructions on the critical path. This is enabled by default
+// when scheduling is enabled, i.e. with -fschedule-insns or
+// -fschedule-insns2 or at -O2 or higher.
 -fsched-critical-path-heuristic|-fno-sched-critical-path-heuristic
 
-# Enable the speculative instruction heuristic in the scheduler. This
-# heuristic favors speculative instructions with greater dependency
-# weakness. This is enabled by default when scheduling is enabled,
-# i.e. with -fschedule-insns or -fschedule-insns2 or at -O2 or higher.
+// Enable the speculative instruction heuristic in the scheduler. This
+// heuristic favors speculative instructions with greater dependency
+// weakness. This is enabled by default when scheduling is enabled,
+// i.e. with -fschedule-insns or -fschedule-insns2 or at -O2 or higher.
 -fsched-spec-insn-heuristic|-fno-sched-spec-insn-heuristic
 
-# Enable the rank heuristic in the scheduler. This heuristic favors the
-# instruction belonging to a basic block with greater size or
-# frequency. This is enabled by default when scheduling is enabled,
-# i.e. with -fschedule-insns or -fschedule-insns2 or at -O2 or higher.
+// Enable the rank heuristic in the scheduler. This heuristic favors the
+// instruction belonging to a basic block with greater size or
+// frequency. This is enabled by default when scheduling is enabled,
+// i.e. with -fschedule-insns or -fschedule-insns2 or at -O2 or higher.
 -fsched-rank-heuristic|-fno-sched-rank-heuristic
 
-# Enable the last-instruction heuristic in the scheduler. This heuristic
-# favors the instruction that is less dependent on the last instruction
-# scheduled. This is enabled by default when scheduling is enabled,
-# i.e. with -fschedule-insns or -fschedule-insns2 or at -O2 or higher.
+// Enable the last-instruction heuristic in the scheduler. This heuristic
+// favors the instruction that is less dependent on the last instruction
+// scheduled. This is enabled by default when scheduling is enabled,
+// i.e. with -fschedule-insns or -fschedule-insns2 or at -O2 or higher.
 -fsched-last-insn-heuristic|-fno-sched-last-insn-heuristic
 
-# Enable the dependent-count heuristic in the scheduler. This heuristic
-# favors the instruction that has more instructions depending on
-# it. This is enabled by default when scheduling is enabled, i.e. with
-# -fschedule-insns or -fschedule-insns2 or at -O2 or higher.
+// Enable the dependent-count heuristic in the scheduler. This heuristic
+// favors the instruction that has more instructions depending on
+// it. This is enabled by default when scheduling is enabled, i.e. with
+// -fschedule-insns or -fschedule-insns2 or at -O2 or higher.
 -fsched-dep-count-heuristic|-fno-sched-dep-count-heuristic
 
-# Perform function-local points-to analysis on trees. This flag is
-# enabled by default at -O and higher.
+// Perform function-local points-to analysis on trees. This flag is
+// enabled by default at -O and higher.
 -ftree-pta|-fno-tree-pta
 
-# Perform hoisting of loads from conditional pointers on trees. This
-# pass is enabled by default at -O and higher.
+// Perform hoisting of loads from conditional pointers on trees. This
+// pass is enabled by default at -O and higher.
 -ftree-phiprop|-fno-tree-phiprop
 
-# IRA can be used to evaluate more accurate register pressure in loops
-# for decision to move loop invariants (see -O3). The number of
-# available registers reserved for some other purposes is described by
-# this parameter. The default value of the parameter is 2 which is
-# minimal number of registers needed for execution of typical
-# instruction. This value is the best found from numerous experiments.
+// IRA can be used to evaluate more accurate register pressure in loops
+// for decision to move loop invariants (see -O3). The number of
+// available registers reserved for some other purposes is described by
+// this parameter. The default value of the parameter is 2 which is
+// minimal number of registers needed for execution of typical
+// instruction. This value is the best found from numerous experiments.
 --param ira-loop-reserved-regs=[1..6]
 
-# IPA-SRA will replace a pointer to an aggregate with one or more new
-# parameters only when their cumulative size is less or equal to
-# ipa-sra-ptr-growth-factor times the size of the original pointer
-# parameter. Default value is 2.
+// IPA-SRA will replace a pointer to an aggregate with one or more new
+// parameters only when their cumulative size is less or equal to
+// ipa-sra-ptr-growth-factor times the size of the original pointer
+// parameter. Default value is 2.
 --param ipa-sra-ptr-growth-factor=[1..6]
 
 #endif // GCC_VERSION >= 40500
 
 #if GCC_VERSION >= 40600
 
-# -ffp-contract=off disables floating-point expression
-#  contraction. -ffp-contract=fast enables floating-point expression
-#  contraction such as forming of fused multiply-add operations if the
-#  target has native support for them. -ffp-contract=on enables
-#  floating-point expression contraction if allowed by the language
-#  standard. This is currently not implemented and treated equal to
-#  -ffp-contract=off.
-# The default is -ffp-contract=fast.
+// -ffp-contract=off disables floating-point expression
+//  contraction. -ffp-contract=fast enables floating-point expression
+//  contraction such as forming of fused multiply-add operations if the
+//  target has native support for them. -ffp-contract=on enables
+//  floating-point expression contraction if allowed by the language
+//  standard. This is currently not implemented and treated equal to
+//  -ffp-contract=off.
+// The default is -ffp-contract=fast.
 -ffp-contract=off|-ffp-contract=fast
 
-# Attempt to convert calls to virtual functions to direct calls. This is
-# done both within a procedure and interprocedurally as part of indirect
-# inlining (-findirect-inlining) and interprocedural constant
-# propagation (-fipa-cp). Enabled at levels -O2, -O3, -Os.
+// Attempt to convert calls to virtual functions to direct calls. This is
+// done both within a procedure and interprocedurally as part of indirect
+// inlining (-findirect-inlining) and interprocedural constant
+// propagation (-fipa-cp). Enabled at levels -O2, -O3, -Os.
 -fdevirtualize|-fno-devirtualize
 
-# Tracks stack adjustments (pushes and pops) and stack memory references
-# and then tries to find ways to combine them.
-# Enabled by default at -O1 and higher.
+// Tracks stack adjustments (pushes and pops) and stack memory references
+// and then tries to find ways to combine them.
+// Enabled by default at -O1 and higher.
 -fcombine-stack-adjustments|-fno-combine-stack-adjustments
 
-# Perform forward propagation on trees. This flag is enabled by default
-# at -O and higher.
+// Perform forward propagation on trees. This flag is enabled by default
+// at -O and higher.
 -ftree-forwprop|-fno-tree-forwprop
 
-# Perform interprocedural profile propagation. The functions called only
-# from cold functions are marked as cold. Also functions executed once
-# (such as cold, noreturn, static constructors or destructors) are
-# identified. Cold functions and loop less parts of functions executed
-# once are then optimized for size. Enabled by default at -O and higher.
+// Perform interprocedural profile propagation. The functions called only
+// from cold functions are marked as cold. Also functions executed once
+// (such as cold, noreturn, static constructors or destructors) are
+// identified. Cold functions and loop less parts of functions executed
+// once are then optimized for size. Enabled by default at -O and higher.
 -fipa-profile|-fno-ipa-profile
 
-# Perform sparse conditional bit constant propagation on trees and
-# propagate pointer alignment information. This pass only operates on
-# local scalar variables and is enabled by default at -O and higher. It
-# requires that -ftree-ccp is enabled.
+// Perform sparse conditional bit constant propagation on trees and
+// propagate pointer alignment information. This pass only operates on
+// local scalar variables and is enabled by default at -O and higher. It
+// requires that -ftree-ccp is enabled.
 -ftree-bit-ccp|-fno-tree-bit-ccp
 
-# Attempt to transform conditional jumps in the innermost loops to
-# branch-less equivalents. The intent is to remove control-flow from the
-# innermost loops in order to improve the ability of the vectorization
-# pass to handle these loops. This is enabled by default if
-# vectorization is enabled.
+// Attempt to transform conditional jumps in the innermost loops to
+// branch-less equivalents. The intent is to remove control-flow from the
+// innermost loops in order to improve the ability of the vectorization
+// pass to handle these loops. This is enabled by default if
+// vectorization is enabled.
 -ftree-loop-if-convert|-fno-tree-loop-if-convert
 
-# Perform loop distribution of patterns that can be code generated with
-# calls to a library. This flag is enabled by default at -O3.  This pass
-# distributes the initialization loops and generates a call to memset
-# zero. For example, the loop
-#           DO I = 1, N
-#             A(I) = 0
-#             B(I) = A(I) + I
-#           ENDDO
-# is transformed to
-#           DO I = 1, N
-#              A(I) = 0
-#           ENDDO
-#           DO I = 1, N
-#              B(I) = A(I) + I
-#           ENDDO
-# and the initialization loop is transformed into a call to memset zero.
+// Perform loop distribution of patterns that can be code generated with
+// calls to a library. This flag is enabled by default at -O3.  This pass
+// distributes the initialization loops and generates a call to memset
+// zero. For example, the loop
+//           DO I = 1, N
+//             A(I) = 0
+//             B(I) = A(I) + I
+//           ENDDO
+// is transformed to
+//           DO I = 1, N
+//              A(I) = 0
+//           ENDDO
+//           DO I = 1, N
+//              B(I) = A(I) + I
+//           ENDDO
+// and the initialization loop is transformed into a call to memset zero.
 -ftree-loop-distribute-patterns|-fno-tree-loop-distribute-patterns
 
-# After register allocation and post-register allocation instruction
-# splitting, identify arithmetic instructions that compute processor
-# flags similar to a comparison operation based on that arithmetic. If
-# possible, eliminate the explicit comparison operation.  This pass only
-# applies to certain targets that cannot explicitly represent the
-# comparison operation before register allocation is complete.
-# Enabled at levels -O, -O2, -O3, -Os.
+// After register allocation and post-register allocation instruction
+// splitting, identify arithmetic instructions that compute processor
+// flags similar to a comparison operation based on that arithmetic. If
+// possible, eliminate the explicit comparison operation.  This pass only
+// applies to certain targets that cannot explicitly represent the
+// comparison operation before register allocation is complete.
+// Enabled at levels -O, -O2, -O3, -Os.
 -fcompare-elim|-fno-compare-elim
 
-# In addition to reordering basic blocks in the compiled function, in
-# order to reduce number of taken branches, partitions hot and cold
-# basic blocks into separate sections of the assembly and .o files, to
-# improve paging and cache locality performance.  This optimization is
-# automatically turned off in the presence of exception handling, for
-# linkonce sections, for functions with a user-defined section attribute
-# and on any architecture that does not support named sections.
+// In addition to reordering basic blocks in the compiled function, in
+// order to reduce number of taken branches, partitions hot and cold
+// basic blocks into separate sections of the assembly and .o files, to
+// improve paging and cache locality performance.  This optimization is
+// automatically turned off in the presence of exception handling, for
+// linkonce sections, for functions with a user-defined section attribute
+// and on any architecture that does not support named sections.
 -freorder-blocks-and-partition|-fno-reorder-blocks-and-partition
 
-# If the ratio of expression insertions to deletions is larger than this
-# value for any expression, then RTL PRE will insert or remove the
-# expression and thus leave partially redundant computations in the
-# instruction stream. The default value is 20.
+// If the ratio of expression insertions to deletions is larger than this
+// value for any expression, then RTL PRE will insert or remove the
+// expression and thus leave partially redundant computations in the
+// instruction stream. The default value is 20.
 --param max-gcse-insertion-ratio=[5..80]
 
-# Scaling factor in calculation of maximum distance an expression can be
-# moved by GCSE optimizations. This is currently supported only in the
-# code hoisting pass. The bigger the ratio, the more aggressive code
-# hoisting will be with simple expressions, i.e., the expressions which
-# have cost less than gcse-unrestricted-cost. Specifying 0 will disable
-# hoisting of simple expressions. The default value is 10.
+// Scaling factor in calculation of maximum distance an expression can be
+// moved by GCSE optimizations. This is currently supported only in the
+// code hoisting pass. The bigger the ratio, the more aggressive code
+// hoisting will be with simple expressions, i.e., the expressions which
+// have cost less than gcse-unrestricted-cost. Specifying 0 will disable
+// hoisting of simple expressions. The default value is 10.
 --param gcse-cost-distance-ratio=[0..50]
 
-# Cost, roughly measured as the cost of a single typical machine
-# instruction, at which GCSE optimizations will not constrain the
-# distance an expression can travel. This is currently supported only in
-# the code hoisting pass. The lesser the cost, the more aggressive code
-# hoisting will be. Specifying 0 will allow all expressions to travel
-# unrestricted distances. The default value is 3.
+// Cost, roughly measured as the cost of a single typical machine
+// instruction, at which GCSE optimizations will not constrain the
+// distance an expression can travel. This is currently supported only in
+// the code hoisting pass. The lesser the cost, the more aggressive code
+// hoisting will be. Specifying 0 will allow all expressions to travel
+// unrestricted distances. The default value is 3.
 --param gcse-unrestricted-cost=[0..9]
 
-# The depth of search in the dominator tree for expressions to
-# hoist. This is used to avoid quadratic behavior in hoisting
-# algorithm. The value of 0 will avoid limiting the search, but may slow
-# down compilation of huge functions. The default value is 30.
+// The depth of search in the dominator tree for expressions to
+// hoist. This is used to avoid quadratic behavior in hoisting
+// algorithm. The value of 0 will avoid limiting the search, but may slow
+// down compilation of huge functions. The default value is 30.
 --param max-hoist-depth=[0..60]
 
 #if GCC_VERSION <= 40700
-# IPA-CP attempts to track all possible types passed to a function's
-# parameter in order to perform devirtualization. devirt-type-list-size
-# is the maximum number of types it stores per a single formal parameter
-# of a function. Default value is 8.
+// IPA-CP attempts to track all possible types passed to a function's
+// parameter in order to perform devirtualization. devirt-type-list-size
+// is the maximum number of types it stores per a single formal parameter
+// of a function. Default value is 8.
 --param devirt-type-list-size=[2..32]
 #endif // GCC_VERSION <= 40700
 
@@ -979,213 +979,213 @@
 
 #if GCC_VERSION >= 40400
 
-# Allow re-association of operands in series of floating-point
-# operations. This violates the ISO C and C++ language standard by
-# possibly changing computation result. NOTE: re-ordering may change the
-# sign of zero as well as ignore NaNs and inhibit or create underflow or
-# overflow (and thus cannot be used on a code which relies on rounding
-# behavior like (x + 2**52) - 2**52). May also reorder floating-point
-# comparisons and thus may not be used when ordered comparisons are
-# required. This option requires that both -fno-signed-zeros and
-# -fno-trapping-math be in effect. Moreover, it doesn't make much sense
-# with -frounding-math. For Fortran the option is automatically enabled
-# when both -fno-signed-zeros and -fno-trapping-math are in effect.  The
-# default is -fno-associative-math.
+// Allow re-association of operands in series of floating-point
+// operations. This violates the ISO C and C++ language standard by
+// possibly changing computation result. NOTE: re-ordering may change the
+// sign of zero as well as ignore NaNs and inhibit or create underflow or
+// overflow (and thus cannot be used on a code which relies on rounding
+// behavior like (x + 2**52) - 2**52). May also reorder floating-point
+// comparisons and thus may not be used when ordered comparisons are
+// required. This option requires that both -fno-signed-zeros and
+// -fno-trapping-math be in effect. Moreover, it doesn't make much sense
+// with -frounding-math. For Fortran the option is automatically enabled
+// when both -fno-signed-zeros and -fno-trapping-math are in effect.  The
+// default is -fno-associative-math.
 -fassociative-math|-fno-associative-math
 
-# Attempt to merge identical constants and identical variables.  This
-# option implies -fmerge-constants. In addition to -fmerge-constants
-# this considers e.g. even constant initialized arrays or initialized
-# constant variables with integral or floating point types. Languages
-# like C or C++ require each variable, including multiple instances of
-# the same variable in recursive calls, to have distinct locations, so
-# using this option will result in non-conforming behavior.
+// Attempt to merge identical constants and identical variables.  This
+// option implies -fmerge-constants. In addition to -fmerge-constants
+// this considers e.g. even constant initialized arrays or initialized
+// constant variables with integral or floating point types. Languages
+// like C or C++ require each variable, including multiple instances of
+// the same variable in recursive calls, to have distinct locations, so
+// using this option will result in non-conforming behavior.
 -fmerge-all-constants|-fno-merge-all-constants
 
-# Allow the compiler to assume the strictest aliasing rules applicable
-# to the language being compiled. For C (and C++), this activates
-# optimizations based on the type of expressions. In particular, an
-# object of one type is assumed never to reside at the same address as
-# an object of a different type, unless the types are almost the
-# same. For example, an unsigned int can alias an int, but not a void*
-# or a double. A character type may alias any other type.  Pay special
-# attention to code like this:
-#           union a_union {
-#             int i;
-#             double d;
-#           };
-#           int f() {
-#             union a_union t;
-#             t.d = 3.0;
-#             return t.i;
-#           }
-# The practice of reading from a different union member than the one
-# most recently written to (called "type-punning") is common. Even with
-# -fstrict-aliasing, type-punning is allowed, provided the memory is
-# accessed through the union type. So, the code above will work as
-# expected. See Structures unions enumerations and bit-fields
-# implementation. However, this code might not:
-#           int f() {
-#             union a_union t;
-#             int* ip;
-#             t.d = 3.0;
-#             ip = &t.i;
-#             return *ip;
-#           }
-# Similarly, access by taking the address, casting the resulting pointer
-# and dereferencing the result has undefined behavior, even if the cast
-# uses a union type, e.g.:
-#           int f() {
-#             double d = 3.0;
-#             return ((union a_union *) &d)->i;
-#           }
-# The -fstrict-aliasing option is enabled at levels -O2, -O3, -Os.
+// Allow the compiler to assume the strictest aliasing rules applicable
+// to the language being compiled. For C (and C++), this activates
+// optimizations based on the type of expressions. In particular, an
+// object of one type is assumed never to reside at the same address as
+// an object of a different type, unless the types are almost the
+// same. For example, an unsigned int can alias an int, but not a void*
+// or a double. A character type may alias any other type.  Pay special
+// attention to code like this:
+//           union a_union {
+//             int i;
+//             double d;
+//           };
+//           int f() {
+//             union a_union t;
+//             t.d = 3.0;
+//             return t.i;
+//           }
+// The practice of reading from a different union member than the one
+// most recently written to (called "type-punning") is common. Even with
+// -fstrict-aliasing, type-punning is allowed, provided the memory is
+// accessed through the union type. So, the code above will work as
+// expected. See Structures unions enumerations and bit-fields
+// implementation. However, this code might not:
+//           int f() {
+//             union a_union t;
+//             int* ip;
+//             t.d = 3.0;
+//             ip = &t.i;
+//             return *ip;
+//           }
+// Similarly, access by taking the address, casting the resulting pointer
+// and dereferencing the result has undefined behavior, even if the cast
+// uses a union type, e.g.:
+//           int f() {
+//             double d = 3.0;
+//             return ((union a_union *) &d)->i;
+//           }
+// The -fstrict-aliasing option is enabled at levels -O2, -O3, -Os.
 -fstrict-aliasing|-fno-strict-aliasing
 
-# Allow the compiler to assume strict signed overflow rules, depending
-# on the language being compiled. For C (and C++) this means that
-# overflow when doing arithmetic with signed numbers is undefined, which
-# means that the compiler may assume that it will not happen. This
-# permits various optimizations. For example, the compiler will assume
-# that an expression like i + 10 > i will always be true for signed
-# i. This assumption is only valid if signed overflow is undefined, as
-# the expression is false if i + 10 overflows when using twos complement
-# arithmetic. When this option is in effect any attempt to determine
-# whether an operation on signed numbers will overflow must be written
-# carefully to not actually involve overflow.  This option also allows
-# the compiler to assume strict pointer semantics: given a pointer to an
-# object, if adding an offset to that pointer does not produce a pointer
-# to the same object, the addition is undefined. This permits the
-# compiler to conclude that p + u > p is always true for a pointer p and
-# unsigned integer u. This assumption is only valid because pointer
-# wraparound is undefined, as the expression is false if p + u overflows
-# using twos complement arithmetic.  See also the -fwrapv option. Using
-# -fwrapv means that integer signed overflow is fully defined: it
-# wraps. When -fwrapv is used, there is no difference between
-# -fstrict-overflow and -fno-strict-overflow for integers. With -fwrapv
-# certain types of overflow are permitted. For example, if the compiler
-# gets an overflow when doing arithmetic on constants, the overflowed
-# value can still be used with -fwrapv, but not otherwise.  The
-# -fstrict-overflow option is enabled at levels -O2, -O3, -Os.
+// Allow the compiler to assume strict signed overflow rules, depending
+// on the language being compiled. For C (and C++) this means that
+// overflow when doing arithmetic with signed numbers is undefined, which
+// means that the compiler may assume that it will not happen. This
+// permits various optimizations. For example, the compiler will assume
+// that an expression like i + 10 > i will always be true for signed
+// i. This assumption is only valid if signed overflow is undefined, as
+// the expression is false if i + 10 overflows when using twos complement
+// arithmetic. When this option is in effect any attempt to determine
+// whether an operation on signed numbers will overflow must be written
+// carefully to not actually involve overflow.  This option also allows
+// the compiler to assume strict pointer semantics: given a pointer to an
+// object, if adding an offset to that pointer does not produce a pointer
+// to the same object, the addition is undefined. This permits the
+// compiler to conclude that p + u > p is always true for a pointer p and
+// unsigned integer u. This assumption is only valid because pointer
+// wraparound is undefined, as the expression is false if p + u overflows
+// using twos complement arithmetic.  See also the -fwrapv option. Using
+// -fwrapv means that integer signed overflow is fully defined: it
+// wraps. When -fwrapv is used, there is no difference between
+// -fstrict-overflow and -fno-strict-overflow for integers. With -fwrapv
+// certain types of overflow are permitted. For example, if the compiler
+// gets an overflow when doing arithmetic on constants, the overflowed
+// value can still be used with -fwrapv, but not otherwise.  The
+// -fstrict-overflow option is enabled at levels -O2, -O3, -Os.
 -fstrict-overflow|-fno-strict-overflow
 
-# Sets -fno-math-errno, -funsafe-math-optimizations, -ffinite-math-only,
-# -fno-rounding-math, -fno-signaling-nans and -fcx-limited-range.  This
-# option causes the preprocessor macro __FAST_MATH__ to be defined.
-# This option is not turned on by any -O option besides -Ofast since it
-# can result in incorrect output for programs which depend on an exact
-# implementation of IEEE or ISO rules/specifications for math
-# functions. It may, however, yield faster code for programs that do not
-# require the guarantees of these specifications.
+// Sets -fno-math-errno, -funsafe-math-optimizations, -ffinite-math-only,
+// -fno-rounding-math, -fno-signaling-nans and -fcx-limited-range.  This
+// option causes the preprocessor macro __FAST_MATH__ to be defined.
+// This option is not turned on by any -O option besides -Ofast since it
+// can result in incorrect output for programs which depend on an exact
+// implementation of IEEE or ISO rules/specifications for math
+// functions. It may, however, yield faster code for programs that do not
+// require the guarantees of these specifications.
 -ffast-math|-fno-fast-math
 
-# When enabled, this option states that a range reduction step is not
-# needed when performing complex division. Also, there is no checking
-# whether the result of a complex multiplication or division is NaN +
-# I*NaN, with an attempt to rescue the situation in that case. The
-# default is -fno-cx-limited-range, but is enabled by -ffast-math.  This
-# option controls the default setting of the ISO C99 CX_LIMITED_RANGE
-# pragma. Nevertheless, the option applies to all languages.
+// When enabled, this option states that a range reduction step is not
+// needed when performing complex division. Also, there is no checking
+// whether the result of a complex multiplication or division is NaN +
+// I*NaN, with an attempt to rescue the situation in that case. The
+// default is -fno-cx-limited-range, but is enabled by -ffast-math.  This
+// option controls the default setting of the ISO C99 CX_LIMITED_RANGE
+// pragma. Nevertheless, the option applies to all languages.
 -fcx-limited-range|-fno-cx-limited-range
 
-# Do not set ERRNO after calling math functions that are executed with a
-# single instruction, e.g., sqrt. A program that relies on IEEE
-# exceptions for math error handling may want to use this flag for speed
-# while maintaining IEEE arithmetic compatibility.  This option is not
-# turned on by any -O option since it can result in incorrect output for
-# programs which depend on an exact implementation of IEEE or ISO
-# rules/specifications for math functions. It may, however, yield faster
-# code for programs that do not require the guarantees of these
-# specifications.  The default is -fmath-errno.  On Darwin systems, the
-# math library never sets errno. There is therefore no reason for the
-# compiler to consider the possibility that it might, and
-# -fno-math-errno is the default.
+// Do not set ERRNO after calling math functions that are executed with a
+// single instruction, e.g., sqrt. A program that relies on IEEE
+// exceptions for math error handling may want to use this flag for speed
+// while maintaining IEEE arithmetic compatibility.  This option is not
+// turned on by any -O option since it can result in incorrect output for
+// programs which depend on an exact implementation of IEEE or ISO
+// rules/specifications for math functions. It may, however, yield faster
+// code for programs that do not require the guarantees of these
+// specifications.  The default is -fmath-errno.  On Darwin systems, the
+// math library never sets errno. There is therefore no reason for the
+// compiler to consider the possibility that it might, and
+// -fno-math-errno is the default.
 -fmath-errno|-fno-math-errno
 
-# Allow optimizations for floating-point arithmetic that (a) assume that
-# arguments and results are valid and (b) may violate IEEE or ANSI
-# standards. When used at link-time, it may include libraries or startup
-# files that change the default FPU control word or other similar
-# optimizations.  This option is not turned on by any -O option since it
-# can result in incorrect output for programs which depend on an exact
-# implementation of IEEE or ISO rules/specifications for math
-# functions. It may, however, yield faster code for programs that do not
-# require the guarantees of these specifications. Enables
-# -fno-signed-zeros, -fno-trapping-math, -fassociative-math and
-# -freciprocal-math.  The default is -fno-unsafe-math-optimizations.
+// Allow optimizations for floating-point arithmetic that (a) assume that
+// arguments and results are valid and (b) may violate IEEE or ANSI
+// standards. When used at link-time, it may include libraries or startup
+// files that change the default FPU control word or other similar
+// optimizations.  This option is not turned on by any -O option since it
+// can result in incorrect output for programs which depend on an exact
+// implementation of IEEE or ISO rules/specifications for math
+// functions. It may, however, yield faster code for programs that do not
+// require the guarantees of these specifications. Enables
+// -fno-signed-zeros, -fno-trapping-math, -fassociative-math and
+// -freciprocal-math.  The default is -fno-unsafe-math-optimizations.
 -funsafe-math-optimizations|-fno-unsafe-math-optimizations
 
-# Allow optimizations for floating-point arithmetic that assume that
-# arguments and results are not NaNs or +-Infs.  This option is not
-# turned on by any -O option since it can result in incorrect output for
-# programs which depend on an exact implementation of IEEE or ISO
-# rules/specifications for math functions. It may, however, yield faster
-# code for programs that do not require the guarantees of these
-# specifications.  The default is -fno-finite-math-only.
+// Allow optimizations for floating-point arithmetic that assume that
+// arguments and results are not NaNs or +-Infs.  This option is not
+// turned on by any -O option since it can result in incorrect output for
+// programs which depend on an exact implementation of IEEE or ISO
+// rules/specifications for math functions. It may, however, yield faster
+// code for programs that do not require the guarantees of these
+// specifications.  The default is -fno-finite-math-only.
 -ffinite-math-only|-fno-finite-math-only
 
-# Allow optimizations for floating point arithmetic that ignore the
-# signedness of zero. IEEE arithmetic specifies the behavior of distinct
-# +0.0 and -0.0 values, which then prohibits simplification of
-# expressions such as x+0.0 or 0.0*x (even with
-# -ffinite-math-only). This option implies that the sign of a zero
-# result isn't significant.  The default is -fsigned-zeros.
+// Allow optimizations for floating point arithmetic that ignore the
+// signedness of zero. IEEE arithmetic specifies the behavior of distinct
+// +0.0 and -0.0 values, which then prohibits simplification of
+// expressions such as x+0.0 or 0.0*x (even with
+// -ffinite-math-only). This option implies that the sign of a zero
+// result isn't significant.  The default is -fsigned-zeros.
 -fsigned-zeros|-fno-signed-zeros
 
-# Compile code assuming that floating-point operations cannot generate
-# user-visible traps. These traps include division by zero, overflow,
-# underflow, inexact result and invalid operation. This option requires
-# that -fno-signaling-nans be in effect. Setting this option may allow
-# faster code if one relies on "non-stop" IEEE arithmetic, for example.
-# This option should never be turned on by any -O option since it can
-# result in incorrect output for programs which depend on an exact
-# implementation of IEEE or ISO rules/specifications for math functions.
-# The default is -ftrapping-math.
+// Compile code assuming that floating-point operations cannot generate
+// user-visible traps. These traps include division by zero, overflow,
+// underflow, inexact result and invalid operation. This option requires
+// that -fno-signaling-nans be in effect. Setting this option may allow
+// faster code if one relies on "non-stop" IEEE arithmetic, for example.
+// This option should never be turned on by any -O option since it can
+// result in incorrect output for programs which depend on an exact
+// implementation of IEEE or ISO rules/specifications for math functions.
+// The default is -ftrapping-math.
 -ftrapping-math|-fno-trapping-math
 
-# If given, the loop optimizer will assume that loop indices do not
-# overflow, and that the loops with nontrivial exit condition are not
-# infinite. This enables a wider range of loop optimizations even if the
-# loop optimizer itself cannot prove that these assumptions are
-# valid.
+// If given, the loop optimizer will assume that loop indices do not
+// overflow, and that the loops with nontrivial exit condition are not
+// infinite. This enables a wider range of loop optimizations even if the
+// loop optimizer itself cannot prove that these assumptions are
+// valid.
 -funsafe-loop-optimizations|-fno-unsafe-loop-optimizations
 
 #endif // GCC_VERSION >= 40400
 
 #if GCC_VERSION >= 40500
 
-# This option allows further control over excess precision on machines
-# where floating-point registers have more precision than the IEEE float
-# and double types and the processor does not support operations
-# rounding to those types. By default, -fexcess-precision=fast is in
-# effect; this means that operations are carried out in the precision of
-# the registers and that it is unpredictable when rounding to the types
-# specified in the source code takes place. When compiling C, if
-# -fexcess-precision=standard is specified then excess precision will
-# follow the rules specified in ISO C99; in particular, both casts and
-# assignments cause values to be rounded to their semantic types
-# (whereas -ffloat-store only affects assignments). This option is
-# enabled by default for C if a strict conformance option such as
-# -std=c99 is used.  -fexcess-precision=standard is not implemented for
-# languages other than C, and has no effect if
-# -funsafe-math-optimizations or -ffast-math is specified. On the x86,
-# it also has no effect if -mfpmath=sse or -mfpmath=sse+387 is
-# specified; in the former case, IEEE semantics apply without excess
-# precision, and in the latter, rounding is unpredictable.
+// This option allows further control over excess precision on machines
+// where floating-point registers have more precision than the IEEE float
+// and double types and the processor does not support operations
+// rounding to those types. By default, -fexcess-precision=fast is in
+// effect; this means that operations are carried out in the precision of
+// the registers and that it is unpredictable when rounding to the types
+// specified in the source code takes place. When compiling C, if
+// -fexcess-precision=standard is specified then excess precision will
+// follow the rules specified in ISO C99; in particular, both casts and
+// assignments cause values to be rounded to their semantic types
+// (whereas -ffloat-store only affects assignments). This option is
+// enabled by default for C if a strict conformance option such as
+// -std=c99 is used.  -fexcess-precision=standard is not implemented for
+// languages other than C, and has no effect if
+// -funsafe-math-optimizations or -ffast-math is specified. On the x86,
+// it also has no effect if -mfpmath=sse or -mfpmath=sse+387 is
+// specified; in the former case, IEEE semantics apply without excess
+// precision, and in the latter, rounding is unpredictable.
 -fexcess-precision=standard|-fexcess-precision=fast
 
 #endif // GCC_VERSION >= 40500
 
 #if GCC_VERSION >= 40600
 
-# Attempt to also if-convert conditional jumps containing memory
-# writes. This transformation can be unsafe for multi-threaded programs
-# as it transforms conditional memory writes into unconditional memory
-# writes. For example,
-#   for (i = 0; i < N; i++) if (cond) A[i] = expr;
-# would be transformed to
-#   for (i = 0; i < N; i++) A[i] = cond ? expr : A[i];
-# potentially producing data races.
+// Attempt to also if-convert conditional jumps containing memory
+// writes. This transformation can be unsafe for multi-threaded programs
+// as it transforms conditional memory writes into unconditional memory
+// writes. For example,
+//   for (i = 0; i < N; i++) if (cond) A[i] = expr;
+// would be transformed to
+//   for (i = 0; i < N; i++) A[i] = cond ? expr : A[i];
+// potentially producing data races.
 -ftree-loop-if-convert-stores|-fno-tree-loop-if-convert-stores
 
 #endif // GCC_VERSION >= 40600
@@ -1194,136 +1194,137 @@
 
 #if 0
 
-# Try to reduce the number of symbolic address calculations by using
-# shared "anchor" symbols to address nearby objects. This transformation
-# can help to reduce the number of GOT entries and GOT accesses on some
-# targets.  For example, the implementation of the following function
-# foo:
-#           static int a, b, c;
-#           int foo (void) { return a + b + c; }
-# would usually calculate the addresses of all three variables, but if
-# you compile it with -fsection-anchors, it will access the variables
-# from a common anchor point instead. The effect is similar to the
-# following pseudocode (which isn't valid C):
-#           int foo (void)
-#           {
-#             register int *xr = &x;
-#             return xr[&a - &x] + xr[&b - &x] + xr[&c - &x];
-#           }
-# Not all targets support this option.
-# -fsection-anchors|-fno-section-anchors
+// Try to reduce the number of symbolic address calculations by using
+// shared "anchor" symbols to address nearby objects. This transformation
+// can help to reduce the number of GOT entries and GOT accesses on some
+// targets.  For example, the implementation of the following function
+// foo:
+//           static int a, b, c;
+//           int foo (void) { return a + b + c; }
+// would usually calculate the addresses of all three variables, but if
+// you compile it with -fsection-anchors, it will access the variables
+// from a common anchor point instead. The effect is similar to the
+// following pseudocode (which isn't valid C):
+//           int foo (void)
+//           {
+//             register int *xr = &x;
+//             return xr[&a - &x] + xr[&b - &x] + xr[&c - &x];
+//           }
+// Not all targets support this option.
+// -fsection-anchors|-fno-section-anchors
 
-# The maximum number of instructions to consider when looking for an
-# instruction to fill a delay slot. If more than this arbitrary number
-# of instructions is searched, the time savings from filling the delay
-# slot will be minimal so stop searching. Increasing values mean more
-# aggressive optimization, making the compile time increase with
-# probably small improvement in executable run time.
-# The default value is 100.
-# --param max-delay-slot-insn-search=[75..300]
+// The maximum number of instructions to consider when looking for an
+// instruction to fill a delay slot. If more than this arbitrary number
+// of instructions is searched, the time savings from filling the delay
+// slot will be minimal so stop searching. Increasing values mean more
+// aggressive optimization, making the compile time increase with
+// probably small improvement in executable run time.
+// The default value is 100.
+// --param max-delay-slot-insn-search=[75..300]
 
-# When trying to fill delay slots, the maximum number of instructions to
-# consider when searching for a block with valid live register
-# information. Increasing this arbitrarily chosen value means more
-# aggressive optimization, increasing the compile time. This parameter
-# should be removed when the delay slot code is rewritten to maintain
-# the control-flow graph. The default value is 333.
-# --param max-delay-slot-live-search=[250..500]
+// When trying to fill delay slots, the maximum number of instructions to
+// consider when searching for a block with valid live register
+// information. Increasing this arbitrarily chosen value means more
+// aggressive optimization, increasing the compile time. This parameter
+// should be removed when the delay slot code is rewritten to maintain
+// the control-flow graph. The default value is 333.
+// --param max-delay-slot-live-search=[250..500]
 
-# Used by basic block reordering pass to decide whether to use
-# unconditional branch or duplicate the code on its destination. Code is
-# duplicated when its estimated size is smaller than this value
-# multiplied by the estimated size of unconditional jump in the hot
-# spots of the program.  The reorder-block-duplicate-feedback is used
-# only when profile feedback is available and may be set to higher
-# values than reorder-block-duplicate since information about the hot
-# spots is more accurate.
-# reorder-blocks-duplicate
-# reorder-blocks-duplicate-feedback
+// Used by basic block reordering pass to decide whether to use
+// unconditional branch or duplicate the code on its destination. Code is
+// duplicated when its estimated size is smaller than this value
+// multiplied by the estimated size of unconditional jump in the hot
+// spots of the program.  The reorder-block-duplicate-feedback is used
+// only when profile feedback is available and may be set to higher
+// values than reorder-block-duplicate since information about the hot
+// spots is more accurate.
+// reorder-blocks-duplicate
+// reorder-blocks-duplicate-feedback
 
-# Estimate on average number of instructions that are executed before
-# prefetch finishes. The distance we prefetch ahead is proportional to
-# this constant. Increasing this number may also lead to less streams
-# being prefetched (see simultaneous-prefetches).
-# prefetch-latency
+// Estimate on average number of instructions that are executed before
+// prefetch finishes. The distance we prefetch ahead is proportional to
+// this constant. Increasing this number may also lead to less streams
+// being prefetched (see simultaneous-prefetches).
+// prefetch-latency
 
-# Maximum number of fields in a structure we will treat in a field
-# sensitive manner during pointer analysis. The default is zero for -O0,
-# and -O1 and 100 for -Os, -O2, and -O3.
-# --param max-fields-for-field-sensitive=[50..500]
+// Maximum number of fields in a structure we will treat in a field
+// sensitive manner during pointer analysis. The default is zero for -O0,
+// and -O1 and 100 for -Os, -O2, and -O3.
+// --param max-fields-for-field-sensitive=[50..500]
 
-# Specifies the minimum number of virtual mappings in the incremental
-# SSA updater that should be registered to trigger the virtual mappings
-# heuristic defined by virtual-mappings-ratio. The default value is 100.
-# --param min-virtual-mappings=[50..200]
+// Specifies the minimum number of virtual mappings in the incremental
+// SSA updater that should be registered to trigger the virtual mappings
+// heuristic defined by virtual-mappings-ratio. The default value is 100.
+// --param min-virtual-mappings=[50..200]
 
-# If the number of virtual mappings is virtual-mappings-ratio bigger
-# than the number of virtual symbols to be updated, then the incremental
-# SSA updater switches to a full update for those symbols. The default
-# ratio is 3.
-# --param virtual-mappings-ratio=[1..6]
+// If the number of virtual mappings is virtual-mappings-ratio bigger
+// than the number of virtual symbols to be updated, then the incremental
+// SSA updater switches to a full update for those symbols. The default
+// ratio is 3.
+// --param virtual-mappings-ratio=[1..6]
 
-# The maximum size measured as number of RTLs that can be recorded in an
-# expression in combiner for a pseudo register as last known value of
-# that register. The default is 10000.
-# --param max-last-value-rtl=[2000..50000]
+// The maximum size measured as number of RTLs that can be recorded in an
+// expression in combiner for a pseudo register as last known value of
+// that register. The default is 10000.
+// --param max-last-value-rtl=[2000..50000]
 
-# The maximum number of instruction reload should look backward for
-# equivalent register. Increasing values mean more aggressive
-# optimization, making the compile time increase with probably slightly
-# better performance. The default value is 100.
-# --param max-reload-search-insns=[75..200]
+// The maximum number of instruction reload should look backward for
+// equivalent register. Increasing values mean more aggressive
+// optimization, making the compile time increase with probably slightly
+// better performance. The default value is 100.
+// --param max-reload-search-insns=[75..200]
 
-# Select fraction of the maximal frequency of executions of basic block
-# in function given basic block will get aligned.
-# The default value is 100.
-# --param align-threshold=[20..500]
+// Select fraction of the maximal frequency of executions of basic block
+// in function given basic block will get aligned.
+// The default value is 100.
+// --param align-threshold=[20..500]
 
-# The maximum number of loop iterations we predict statically. This is
-# useful in cases where function contain single loop with known bound
-# and other loop with unknown. We predict the known number of iterations
-# correctly, while the unknown number of iterations average to roughly
-# 10. This means that the loop without bounds would appear artificially
-# cold relative to the other one. The default value is 100.
-# --param max-predicted-iterations=[20..500]
+// The maximum number of loop iterations we predict statically. This is
+// useful in cases where function contain single loop with known bound
+// and other loop with unknown. We predict the known number of iterations
+// correctly, while the unknown number of iterations average to roughly
+// 10. This means that the loop without bounds would appear artificially
+// cold relative to the other one. The default value is 100.
+// --param max-predicted-iterations=[20..500]
 
-# The maximum number of iterations of a loop the brute force algorithm
-# for analysis of # of iterations of the loop tries to evaluate.
-# The default value is 1000.
-# --param max-iterations-to-track=[200..5000]
+// The maximum number of iterations of a loop the brute force algorithm
+// for analysis of // of iterations of the loop tries to evaluate.
+// The default value is 1000.
+// --param max-iterations-to-track=[200..5000]
 
-# IRA uses a regional register allocation by default. If a function
-# contains loops more than number given by the parameter, only at most
-# given number of the most frequently executed loops will form regions
-# for the regional register allocation. The default value of the
-# parameter is 100.
-# --param ira-max-loops-num=[20..500]
+// IRA uses a regional register allocation by default. If a function
+// contains loops more than number given by the parameter, only at most
+// given number of the most frequently executed loops will form regions
+// for the regional register allocation. The default value of the
+// parameter is 100.
+// --param ira-max-loops-num=[20..500]
 
-# Although IRA uses a sophisticated algorithm of compression conflict
-# table, the table can be still big for huge functions. If the conflict
-# table for a function could be more than size in MB given by the
-# parameter, the conflict table is not built and faster, simpler, and
-# lower quality register allocation algorithm will be used. The
-# algorithm do not use pseudo-register conflicts. The default value of
-# the parameter is 2000.
-# --param ira-max-conflict-table-size=[500..5000]
+// Although IRA uses a sophisticated algorithm of compression conflict
+// table, the table can be still big for huge functions. If the conflict
+// table for a function could be more than size in MB given by the
+// parameter, the conflict table is not built and faster, simpler, and
+// lower quality register allocation algorithm will be used. The
+// algorithm do not use pseudo-register conflicts. The default value of
+// the parameter is 2000.
+// --param ira-max-conflict-table-size=[500..5000]
 
-# The maximum code size expansion factor when copying basic blocks
-# instead of jumping. The expansion is relative to a jump
-# instruction. The default value is 8.
-# --param max-grow-copy-bb-insns=[2..32]
+// The maximum code size expansion factor when copying basic blocks
+// instead of jumping. The expansion is relative to a jump
+// instruction. The default value is 8.
+// --param max-grow-copy-bb-insns=[2..32]
 
-# The maximum number of instructions to duplicate to a block that jumps
-# to a computed goto. To avoid O(N^2) behavior in a number of passes,
-# GCC factors computed gotos early in the compilation process, and
-# unfactors them as late as possible. Only computed jumps at the end of
-# a basic blocks with no more than max-goto-duplication-insns are
-# unfactored. The default value is 8.
-# --param max-goto-duplication-insns=[4..32]
+// The maximum number of instructions to duplicate to a block that jumps
+// to a computed goto. To avoid O(N^2) behavior in a number of passes,
+// GCC factors computed gotos early in the compilation process, and
+// unfactors them as late as possible. Only computed jumps at the end of
+// a basic blocks with no more than max-goto-duplication-insns are
+// unfactored. The default value is 8.
+// --param max-goto-duplication-insns=[4..32]
 
 #endif
 
-# flag dependencies
+#if GCC_VERSION >= 40400
+// flag dependencies
 
 -fwhole-program: -fipa-struct-reorg
 -fgcse: --param max-gcse-insertion-ratio=, --param gcse-cost-distance-ratio=
@@ -1359,7 +1360,7 @@
 -fprofile-use, -fguess-branch-probability: --param hot-bb-frequency-fraction=
 -fprofile-use, -fguess-branch-probability: --param hot-bb-count-fraction=
 
-# flag default values (useful for dep roots)
+// flag default values (useful for dep roots)
 
 => -O0
 -O0 => -fno-gcse, -fno-rerun-cse-after-loop, -fno-crossjumping
@@ -1382,3 +1383,62 @@
 -funroll-loops, -funroll-all-loops => -frerun-cse-after-loop
 -fprofile-use => -ftracer
 -fschedule-insns => -fsched-interblock
+
+#endif // GCC_VERSION >= 40400
+
+#if RVCT_VERSION >= 10000
+
+// The -Ospace option instructs the compiler to perform optimizations to reduce
+// image size at the expense of a possible increase in execution time.
+// Use this option if code size is more critical than performance. For
+// example, when the -Ospace option is selected, large structure copies
+// are done by out-of-line function calls instead of inline code. 
+//
+// The -Otime option instructs the compiler to perform optimizations to reduce
+// execution time at the expense of a possible increase in image size.
+// Use this option if execution time is more critical than code size.
+//
+// If required, you can compile the time-critical parts of your code with
+// -Otime, and the rest with -Ospace.
+-Otime|-Ospace
+
+
+// This option configures the compiler to target the Thumb instruction
+// set.
+--thumb
+
+// This option forces all inline functions to be treated as if they are
+// qualified with __forceinline.
+// Inline functions are functions that are qualified with inline or
+// __inline. In C++, inline functions are functions that are defined
+// inside a struct, class, or union definition.
+// If you use --forceinline, the compiler always attempts to inline
+// those functions, if possible. However, it does not inline a function
+// if doing so causes problems. For example, a recursive function is
+// inlined into itself only once.  __forceinline behaves like __inline
+// except that the compiler tries harder to do the inlining.
+--forceinline
+
+// This option instructs the compiler to create objects in an
+// intermediate format so that Link-Time Code Generation (LTCG)
+// optimizations can be performed. The optimizations applied include
+// cross-module inlining to improve performance, and sharing of base
+// addresses to reduce code size.
+--ltcg
+
+// This option enables the efficient elimination of unused functions, and
+// on the ARMv4T architecture, enables reduction of compilation required
+// for interworking.
+--feedback=feedback.txt
+
+// This option instructs the compiler to generate one ELF section for
+// each function in the source file.
+// Output sections are named with the same name as the function that
+// generates the section, but with an i. prefix.
+--split_sections
+
+// This option enables the generation of NEON vector 
+// instructions directly from C or C++ code.
+--vectorize
+
+#endif // RVCT_VERSION >= 10000

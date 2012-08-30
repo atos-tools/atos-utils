@@ -29,7 +29,7 @@ libdir=`cd $dir/../lib/atos; pwd`
 pythondir="$libdir/python"
 
 options=""
-ccregexp="-\?\(clang\|gcc\|g++\|cc\|c++\)\$"
+ccregexp="-\?\(clang\|gcc\|g++\|armlink\|cc\|c++\)\$"
 configuration_path="./atos-configurations"
 jobs=4
 dryrun=""

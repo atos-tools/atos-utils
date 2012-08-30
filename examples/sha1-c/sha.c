@@ -22,7 +22,6 @@
 #ifdef WIN32
 #include <io.h>
 #endif
-#include <fcntl.h>
 #include "sha1.h"
 
 /*

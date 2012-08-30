@@ -142,16 +142,16 @@ for gopt in ['-O2', '-Os', '-O3']:
     for opts in ['', ' -flto', ' -funroll-loops', ' -flto -funroll-loops']:
         command_build = os.path.join(globals.BINDIR,"atos-build") + " -C " + args.configuration_path + opt_q + " -a'" + gopt + opts + "'"
         status, output = atos_lib.system(command_build, print_out=True)
-        if status:
+        if (status ==0):
             command_run = os.path.join(globals.BINDIR,"atos-run") + " -C " + args.configuration_path + opt_q + " -r -a'" + gopt + opts + "'"
             atos_lib.system(command_run, print_out=True)
 
     command_prof = os.path.join(globals.BINDIR,"atos-profile") +  " -C " + args.configuration_path + opt_q + " -g'" + gopt + "'"
-    if not atos_lib.system(command_prof, print_out=True)[0]: continue
+    if atos_lib.system(command_prof, print_out=True)[0]: continue
     for opts in ['', ' -flto', ' -funroll-loops', ' -flto -funroll-loops']:
         command_build = os.path.join(globals.BINDIR, "atos-build") + " -C " + args.configuration_path + opt_q + " -u'" + gopt + "' -a'" + gopt + opts + "'"
         status,output = atos_lib.system(command_build, print_out=True)
-        if status:
+        if (status ==0):
             command_run = os.path.join(globals.BINDIR, "atos-run") + " -C " + args.configuration_path + opt_q + " -r -u'" + gopt + "' -a'" + gopt + opts + "'"
             atos_lib.system(command_run, print_out=True)
 

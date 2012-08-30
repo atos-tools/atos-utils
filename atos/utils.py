@@ -17,14 +17,17 @@
 #
 
 import sys, os
+import globals
 import atos
+import atos_lib
 
 def invoque(tool, args):
     """ Dispatcher that invoques the given tool and returns. """
     functions = {
         "atos": run_atos,
         "atos-help": run_atos_help,
-        "atos-deps": run_atos_deps
+        "atos-deps": run_atos_deps,
+        "atos-profile": run_atos_profile
         }
     return functions[tool](args)
 
@@ -123,3 +126,39 @@ def run_atos_deps(args):
         print "fill " + args.configuration_path + "/compilers"
 
     return 0
+
+def run_atos_profile(args):
+    """ ATOS profile tool implementation. """
+
+    if args.quiet:
+        opt_q = " -q"
+    else:
+        opt_q = ""
+
+    if args.path:
+        opt_profile_path = " -p " + args.path
+    else:
+        opt_profile_path = " -p ''"
+
+    if args.options:
+        g_opt = " -g '" + args.options + "'"
+        a_opt = " -a '" + args.options + "'"
+    else:
+        g_opt = " -g ''"
+        a_opt = " -a ''"
+
+    if args.remote_path:
+        opt_remote_profile_path = " -b " + args.remote_path
+    else:
+        opt_remote_profile_path = ""
+    
+    if not args.quiet:
+        print "Profiling..."
+
+    command_build = os.path.join(globals.BINDIR, "atos-build") + " -C " + args.configuration_path + opt_q + opt_profile_path + g_opt + a_opt + opt_remote_profile_path
+    command_run = os.path.join(globals.BINDIR, "atos-run") + " -C " + args.configuration_path + opt_q + " -s" + g_opt + a_opt + opt_remote_profile_path
+
+    status, output = atos_lib.system(command_build, print_out=True)
+    if (status == 0):
+        status, output = atos_lib.system(command_run, print_out=True)
+    return status

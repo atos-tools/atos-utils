@@ -16,6 +16,7 @@
 # v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
 #
 
+import re
 import globals
 import argparse
 
@@ -27,7 +28,8 @@ def parser(tool):
     factories = {
         "atos": parsers.atos,
         "atos-help": parsers.atos_help,
-        "atos-deps": parsers.atos_deps
+        "atos-deps": parsers.atos_deps,
+        "atos-profile": parsers.atos_profile
         }
     return factories[tool]()
 
@@ -64,6 +66,9 @@ class parsers:
 
         sub = subs.add_parser("dep", help="generate the build system from a previous build audit")
         parsers.atos_deps(sub)
+
+        sub = subs.add_parser("prof", help="generate the profile build")
+        parsers.atos_profile(sub)
         return parser
 
     @staticmethod
@@ -73,6 +78,7 @@ class parsers:
             parser = argparse.ArgumentParser(prog="atos-help",
                                              description="ATOS help tool",
                                              formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        parser._negative_number_matcher = re.compile(r'^-.+$')
         args.version(parser)
         return parser
 
@@ -89,6 +95,24 @@ class parsers:
         args.atos_deps.output(parser)
         args.atos_deps.last(parser)
         args.atos_deps.all(parser)
+        args.force(parser)
+        args.quiet(parser)
+        args.dryrun(parser)
+        args.version(parser)
+        return parser
+
+    @staticmethod
+    def atos_profile(parser=None):
+        """ atos profile arguments parser factory. """
+        if parser == None:
+            parser = argparse.ArgumentParser(prog="atos-profile",
+                                             description="ATOS profile generation tool",
+                                             formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        parser._negative_number_matcher = re.compile(r'^-.+$')
+        args.configuration_path(parser)
+        args.atos_profile.path(parser)
+        args.atos_profile.remote_path(parser)
+        args.atos_profile.options(parser)
         args.force(parser)
         args.quiet(parser)
         args.dryrun(parser)
@@ -174,3 +198,25 @@ class args:
                                  dest="all",
                                  help="use all build targets as the default targets, use it when all built executables need to be optimized",
                                  action="store_true")
+
+    class atos_profile:
+        """ Namespace for non common atos-profile arguments. """
+
+        @staticmethod
+        def path(parser, args=("-p", "--path")):
+            parser.add_argument(*args,
+                                 dest="path",
+                                 help="path to profile files")
+
+        @staticmethod
+        def remote_path(parser, args=("-b", "--remote_path")):
+            parser.add_argument(*args,
+                                 dest="remote_path",
+                                 help="remote path to profile files")
+
+        @staticmethod
+        def options(parser, args=("-g", "--options")):
+            parser.add_argument(*args,
+                                 dest="options",
+                                 help="append given options to the compilation commands")
+

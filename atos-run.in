@@ -224,7 +224,10 @@ get_size() {
     local exes="${1?}"
     exe_size=0
     for exe in $exes; do
-	exe="`which "$exe" 2>/dev/null`"
+	# check if exe is an absolute path
+	if [ "${exe:0:1}" != "/" ]; then
+	    exe="`which "$exe" 2>/dev/null`"
+        fi
 	[ "$exe" != "" ] || failure=true
 	local -i size=`/usr/bin/size "$exe" | tail -1 | awk '{print $4;}'`
 	exe_size=$((exe_size+size))

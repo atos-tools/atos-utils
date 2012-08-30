@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #
 # Copyright (C) STMicroelectronics Ltd. 2012
 #
@@ -15,16 +16,16 @@
 # You should have received a copy of the GNU General Public License
 # v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
 #
+#
+# Usage: get usage with atos-deps -h
+#
 
 import sys, os
+sys.path.append(os.path.abspath(os.path.join(
+            os.path.dirname(__file__), '..', 'lib', 'atos', 'python')))
+from atos import arguments
+from atos import utils
 
-VERSION="@VERSION@"
+args = arguments.parser("atos-deps").parse_args()
+utils.execute("atos-deps", args)
 
-# This file is installed in PREFIX/lib/atos/python/atos/
-PREFIX=os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..'))
-BINDIR=os.path.join(PREFIX, 'bin')
-LIBDIR=os.path.join(PREFIX, 'lib/atos')
-PYTHONDIR=os.path.join(LIBDIR, 'python')
-sys.path.append(PYTHONDIR)
-
-DEFAULT_CONFIGURATION_PATH="./atos-configurations"

@@ -152,6 +152,7 @@ class opt_flag_list():
         # parse flags file
         for line in open(filename):
             line = line.split('#', 1)[0].strip()
+            line = line.split('//', 1)[0].strip()
             if not line: continue
             # dependency
             reobj = re.match('^(.*):(.*)', line)

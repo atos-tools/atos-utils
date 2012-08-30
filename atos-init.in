@@ -25,6 +25,7 @@ set -e
 
 dir=`cd \`dirname $0\`; pwd`
 libdir=`cd $dir/../lib/atos; pwd`
+pythondir="$libdir/python"
 
 executables=""
 configuration_path="./atos-configurations"
@@ -164,10 +165,10 @@ elif [ ! -f "$configuration_path/build.audit" ]; then
     exit 1
 fi
 
-$libdir/atos_lib.py config -C $configuration_path \
+$pythondir/atos/atos_lib.py config -C $configuration_path \
     --add "default_values.remote_profile_path:$remote_profile_path"
 
-$libdir/atos_lib.py config -C $configuration_path \
+$pythondir/atos/atos_lib.py config -C $configuration_path \
     --add "default_values.nb_runs:$nbruns"
 
 if [ "$run_script" != "" ]; then

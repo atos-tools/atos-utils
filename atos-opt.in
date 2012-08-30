@@ -25,6 +25,7 @@ set -e
 
 dir=`cd \`dirname $0\`; pwd`
 libdir=`cd $dir/../lib/atos; pwd`
+pythondir="$libdir/python"
 
 options=""
 configuration_path="./atos-configurations"
@@ -125,7 +126,7 @@ if [ "$no_replay" = "1" ]; then
     else
 	variant=REF
     fi
-    results=`$libdir/atos_lib.py query -q "variant:$variant"`
+    results=`$pythondir/atos/atos_lib.py query -q "variant:$variant"`
     if [ "$results" != "None" ]; then
 	echo "Skipping variant $variant..."
 	exit 0

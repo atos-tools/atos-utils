@@ -26,6 +26,7 @@ set -e
 dir=`dirname $0`
 dir=`cd $dir; pwd`
 libdir=`cd $dir/../lib/atos; pwd`
+pythondir="$libdir/python"
 
 configuration_path="./atos-configurations"
 objective=time
@@ -161,5 +162,5 @@ else
     select_opt="--tradeoff=5.0"
 fi
 
-$libdir/atos_lib.py play \
+$pythondir/atos/atos_lib.py play \
     -C $configuration_path -i $identifier $select_opt $opt_nb $print $dryrun "$@"

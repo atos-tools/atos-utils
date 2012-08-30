@@ -20,26 +20,14 @@
 # Usage: get usage with atos-explore -h
 #
 
-import sys
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(
+            os.path.dirname(__file__), '..', 'lib', 'atos', 'python')))
+from atos import globals
 
-try:
-    assert sys.hexversion >= 0x02060000
-except:
-    print >>sys.stderr, 'error: python version >= 2.6 is required by ATOS tools'
-    sys.exit(1)
-
-import os
-
-atos_bindir = os.path.dirname(__file__)
-python_libs = os.path.abspath(
-    os.path.join(atos_bindir, '..', 'lib', 'atos'))
-sys.path.append(python_libs)
-python_libs = os.path.abspath(
-    os.path.join(atos_bindir, '..', 'lib', 'atos', 'python'))
-sys.path.append(python_libs)
-
-import atos_lib
+import re
 import argparse
+from atos import atos_lib
 
 
 parser = argparse.ArgumentParser(description='atos-explore',
@@ -98,7 +86,7 @@ misc_group.add_argument("--dryrun",
 misc_group.add_argument("-v","--version",
                         help="output version string",
                         action="version",
-                        version='%(prog)s @VERSION@')
+                        version='%(prog)s version ' + globals.VERSION)
 args = parser.parse_args()
 
 if args.build_script:
@@ -144,7 +132,7 @@ if args.force:
 else:
     opt_rebuild = ""
 
-command = os.path.join(atos_bindir,"atos-init") + " -C " + args.configuration_path \
+command = os.path.join(globals.BINDIR,"atos-init") + " -C " + args.configuration_path \
           + opt_build + opt_run \
           + opt_results + opt_remote_profile_path + executables + opt_nbruns \
           + opt_rebuild + opt_q + opt_c
@@ -152,19 +140,19 @@ atos_lib.system(command, print_out=True, check_status=True)
 
 for gopt in ['-O2', '-Os', '-O3']:
     for opts in ['', ' -flto', ' -funroll-loops', ' -flto -funroll-loops']:
-        command_build = os.path.join(atos_bindir,"atos-build") + " -C " + args.configuration_path + opt_q + " -a'" + gopt + opts + "'"
+        command_build = os.path.join(globals.BINDIR,"atos-build") + " -C " + args.configuration_path + opt_q + " -a'" + gopt + opts + "'"
         status, output = atos_lib.system(command_build, print_out=True)
         if status:
-            command_run = os.path.join(atos_bindir,"atos-run") + " -C " + args.configuration_path + opt_q + " -r -a'" + gopt + opts + "'"
+            command_run = os.path.join(globals.BINDIR,"atos-run") + " -C " + args.configuration_path + opt_q + " -r -a'" + gopt + opts + "'"
             atos_lib.system(command_run, print_out=True)
 
-    command_prof = os.path.join(atos_bindir,"atos-profile") +  " -C " + args.configuration_path + opt_q + " -g'" + gopt + "'"
+    command_prof = os.path.join(globals.BINDIR,"atos-profile") +  " -C " + args.configuration_path + opt_q + " -g'" + gopt + "'"
     if not atos_lib.system(command_prof, print_out=True)[0]: continue
     for opts in ['', ' -flto', ' -funroll-loops', ' -flto -funroll-loops']:
-        command_build = os.path.join(atos_bindir, "atos-build") + " -C " + args.configuration_path + opt_q + " -u'" + gopt + "' -a'" + gopt + opts + "'"
+        command_build = os.path.join(globals.BINDIR, "atos-build") + " -C " + args.configuration_path + opt_q + " -u'" + gopt + "' -a'" + gopt + opts + "'"
         status,output = atos_lib.system(command_build, print_out=True)
         if status:
-            command_run = os.path.join(atos_bindir, "atos-run") + " -C " + args.configuration_path + opt_q + " -r -u'" + gopt + "' -a'" + gopt + opts + "'"
+            command_run = os.path.join(globals.BINDIR, "atos-run") + " -C " + args.configuration_path + opt_q + " -r -u'" + gopt + "' -a'" + gopt + opts + "'"
             atos_lib.system(command_run, print_out=True)
 
 if not args.quiet:

@@ -24,6 +24,7 @@ set -e
 [ "$DEBUG" = "" ] || set -x
 dir=`cd \`dirname $0\`; pwd`
 libdir=`cd $dir/../lib/atos; pwd`
+pythondir="$libdir/python"
 
 configuration_path="./atos-configurations"
 ppflags=""
@@ -151,12 +152,12 @@ EOF
 
 json_config_flags_file()
 {
-    $libdir/atos_lib.py config -C $configuration_path --cpl-flags
+    $pythondir/atos/atos_lib.py config -C $configuration_path --cpl-flags
 }
 
 json_config_add_compiler()
 {
-    $libdir/atos_lib.py config -C $configuration_path --add-cpl $1
+    $pythondir/atos/atos_lib.py config -C $configuration_path --add-cpl $1
 }
 
 prepare_flag_files()

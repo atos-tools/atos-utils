@@ -17,7 +17,7 @@ $ROOT/bin/atos-opt -r -a "-O3"
 
 $ROOT/bin/atos-replay -C atos-configurations -R atos-config-replay -r "$SRCDIR/examples/sha1-c/run.sh"
 
-nb_replayed=`$ROOT/lib/atos/atos_lib.py query -C atos-config-replay | grep -v REF | wc -l`
-nb_frontier=`$ROOT/lib/atos/atos_lib.py speedups -C atos-configurations -f | grep -v REF | wc -l`
+nb_replayed=`$ROOT/lib/atos/python/atos/atos_lib.py query -C atos-config-replay | grep -v REF | wc -l`
+nb_frontier=`$ROOT/lib/atos/python/atos/atos_lib.py speedups -C atos-configurations -f | grep -v REF | wc -l`
 
 [ $nb_replayed -eq $nb_frontier ]

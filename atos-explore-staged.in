@@ -25,6 +25,7 @@ set -e
 
 dir=`cd \`dirname $0\`; pwd`
 libdir=`cd $dir/../lib/atos; pwd`
+pythondir="$libdir/python"
 
 configuration_path="./atos-configurations"
 build_script=""
@@ -127,23 +128,23 @@ shift $((OPTIND - 1))
 
 tradeoff_variants() {
     regexp="^.*[\"\']variant[\"\']: [\"\']\([^\"\']*\)[\"\'].*$"
-    $libdir/atos_lib.py speedups --tradeoff=5 --tradeoff=1 --tradeoff=0.2 \
+    $pythondir/atos/atos_lib.py speedups --tradeoff=5 --tradeoff=1 --tradeoff=0.2 \
 	| grep "$regexp" | sed "s/$regexp/\1/" | sort -u
 }
 
 config_query() {
-    $libdir/atos_lib.py config -C $configuration_path -u -t -q $*
+    $pythondir/atos/atos_lib.py config -C $configuration_path -u -t -q $*
 }
 
 perf_variant() {
     regexp="^.*[\"\']variant[\"\']: [\"\']\([^\"\']*\)[\"\'].*$"
-    $libdir/atos_lib.py speedups --tradeoff=5 \
+    $pythondir/atos/atos_lib.py speedups --tradeoff=5 \
 	| grep "$regexp" | sed "s/$regexp/\1/"
 }
 
 size_flags() {
     regexp="^.*[\"\']conf[\"\']: [\"\']\([^\"\']*\)[\"\'].*$"
-    $libdir/atos_lib.py speedups --tradeoff=0.2 \
+    $pythondir/atos/atos_lib.py speedups --tradeoff=0.2 \
 	| grep "$regexp" | sed "s/$regexp/\1/"
 }
 

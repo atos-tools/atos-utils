@@ -4,12 +4,32 @@
 
 source `dirname $0`/common.sh
 
-TEST_CASE="ATOS nb profile run"
+TEST_CASE="atos -v/-h/help options"
 
-$ROOT/bin/atos-init \
-    -r "$SRCDIR/examples/sha1-c/run.sh" -n 2 \
-    -b "gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c"
+version=`$ROOT/bin/atos -v 2>&1 | awk '{print $1, $2;}'`
+[ "$version" == "atos version" ]
+version=`$ROOT/bin/atos --version 2>&1 | awk '{print $1, $2;}'`
+[ "$version" == "atos version" ]
 
-$ROOT/bin/atos-opt -f -r -a -O2
+version=`$ROOT/bin/atos help -v 2>&1 | awk '{print $1, $2;}'`
+[ "$version" == "atos version" ]
+version=`$ROOT/bin/atos help --version 2>&1 | awk '{print $1, $2;}'`
+[ "$version" == "atos version" ]
 
-[ `cat atos-configurations/logs/run-* | grep "Running variant OPT-fprofile-generate-O2-O2" | wc -l` -eq 1 ]
+usage=`$ROOT/bin/atos -h 2>&1 | head -n 1 | awk '{print $1, $2;}'`
+[ "$usage" == "usage: atos" ]
+usage=`$ROOT/bin/atos --help 2>&1 | head -n 1 | awk '{print $1, $2;}'`
+[ "$usage" == "usage: atos" ]
+
+version=`$ROOT/bin/atos help -v 2>&1 | awk '{print $1, $2;}'`
+[ "$version" == "atos version" ]
+version=`$ROOT/bin/atos help --version 2>&1 | awk '{print $1, $2;}'`
+[ "$version" == "atos version" ]
+
+usage=`$ROOT/bin/atos help -h 2>&1 | head -n 1 | awk '{print $1, $2, $3;}'`
+[ "$usage" == "usage: atos help" ]
+usage=`$ROOT/bin/atos help --help 2>&1 | head -n 1 | awk '{print $1, $2, $3;}'`
+[ "$usage" == "usage: atos help" ]
+
+help=`$ROOT/bin/atos help | grep "ATOS auto tuning optimization system manual"`
+[ "$help" != "" ]

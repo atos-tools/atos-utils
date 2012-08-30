@@ -13,5 +13,5 @@ $ROOT/bin/atos-init \
 $ROOT/bin/atos-explore-inline -S0 -M5 -Vbase,fdo
     
 [ -d atos-configurations ]
-[ `$ROOT/lib/atos/atos_lib.py query -q'variant:OPT-.*' | wc -l` -eq 10 ]
+[ `$ROOT/lib/atos/python/atos/atos_lib.py query -q'variant:OPT-.*' | wc -l` -eq 10 ]
 

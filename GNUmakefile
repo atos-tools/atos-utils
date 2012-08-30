@@ -24,14 +24,20 @@ VSTAMP=version.stamp
 VERSION:=$(shell $(srcdir)config/update_version.sh $(VSTAMP))
 
 CONFIG_SCRIPTS_EXE_IN=atos-audit.in atos-raudit.in atos-deps.in atos-build.in atos-run.in atos-profile.in atos-explore.in atos-play.in atos-graph.in atos-explore-inline.in atos-explore-loop.in atos-explore-optim.in atos-opt.in atos-init.in atos-replay.in atos-config.in atos-explore-acf.in atos-explore-staged.in
-CONFIG_SCRIPTS_LIB_IN=atos_toolkit.py.in atos_lib.py.in atos-acf-oprofile.py.in
+CONFIG_SCRIPTS_LIB_IN=atos-acf-oprofile.py.in
 CONFIG_SCRIPTS_CFG_IN=flags.inline.cfg.in flags.loop.cfg.in flags.optim.cfg.in
+PYTHON_LIB_SCRIPTS_IN=$(addprefix atos/, __init__.py globals.py utils.py arguments.py)
+PYTHON_LIB_EXE_SCRIPTS_IN=$(addprefix atos/, atos_lib.py atos_toolkit.py)
+PYTHON_SCRIPTS_IN=atos.py atos-help.py
 
 CONFIG_SCRIPTS_EXE=$(CONFIG_SCRIPTS_EXE_IN:%.in=bin/%)
 CONFIG_SCRIPTS_LIB=$(CONFIG_SCRIPTS_LIB_IN:%.in=lib/atos/%)
 CONFIG_SCRIPTS_CFG=$(CONFIG_SCRIPTS_CFG_IN:%.in=lib/atos/config/%)
+PYTHON_LIB_SCRIPTS=$(PYTHON_LIB_SCRIPTS_IN:%.py=lib/atos/python/%.py)
+PYTHON_LIB_EXE_SCRIPTS=$(PYTHON_LIB_EXE_SCRIPTS_IN:%.py=lib/atos/python/%.py)
+PYTHON_SCRIPTS=$(PYTHON_SCRIPTS_IN:%.py=bin/%)
 
-CONFIG_SCRIPTS=$(CONFIG_SCRIPTS_EXE) $(CONFIG_SCRIPTS_LIB) $(CONFIG_SCRIPTS_CFG)
+CONFIG_SCRIPTS=$(CONFIG_SCRIPTS_EXE) $(CONFIG_SCRIPTS_LIB) $(CONFIG_SCRIPTS_CFG) $(PYTHON_LIB_SCRIPTS) $(PYTHON_LIB_EXE_SCRIPTS) $(PYTHON_SCRIPTS)
 
 ALL_FILES=$(CONFIG_SCRIPTS)
 
@@ -136,6 +142,15 @@ $(CONFIG_SCRIPTS_LIB): lib/atos/%: $(srcdir)%.in
 
 $(CONFIG_SCRIPTS_CFG): lib/atos/config/%: $(srcdir)%.in
 	$(QUIET_IN)install -D $< $@
+
+$(PYTHON_SCRIPTS): bin/%: $(srcdir)%.py
+	$(QUIET_IN)install -d $(dir $@) && sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
+
+$(PYTHON_LIB_SCRIPTS): lib/atos/python/%.py: $(srcdir)%.py
+	$(QUIET_IN)install -d $(dir $@) && sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && mv $@.tmp $@
+
+$(PYTHON_LIB_EXE_SCRIPTS): lib/atos/python/%.py: $(srcdir)%.py
+	$(QUIET_IN)install -d $(dir $@) && sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
 
 #
 # Rules for python-checks

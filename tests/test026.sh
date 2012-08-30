@@ -18,6 +18,6 @@ $ROOT/bin/atos-opt -r -a "-O2" -k
 
 $ROOT/bin/atos-opt -r -a "-O2" -k
 
-nb_played=`$ROOT/lib/atos/atos_lib.py query | wc -l`
+nb_played=`$ROOT/lib/atos/python/atos/atos_lib.py query | wc -l`
 
 [ "$nb_played" == "3" ] # REF + Os + O2

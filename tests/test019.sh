@@ -12,8 +12,8 @@ $ROOT/bin/atos-init \
 
 $ROOT/bin/atos-opt -r -a "-O2"
 
-$ROOT/lib/atos/atos_lib.py speedups -f \
-    | $ROOT/lib/atos/atos_lib.py query -C- -t -q'$[*].variant' \
+$ROOT/lib/atos/python/atos/atos_lib.py speedups -f \
+    | $ROOT/lib/atos/python/atos/atos_lib.py query -C- -t -q'$[*].variant' \
     > frontier.variant.txt
 
 # frontier can be the REF point

@@ -25,6 +25,7 @@ set -e
 
 dir=`cd \`dirname $0\`; pwd`
 libdir=`cd $dir/../lib/atos; pwd`
+pythondir="$libdir/python"
 
 configuration_path="./atos-configurations"
 qualif_config_path="./atos-qualif"
@@ -114,12 +115,12 @@ getfield()
 
 get_frontier_records()
 {
-    $libdir/atos_lib.py speedups -C $configuration_path --frontier
+    $pythondir/atos/atos_lib.py speedups -C $configuration_path --frontier
 }
 
 
 [ -f $qualif_config_path/results.db ] || \
-    $libdir/atos_lib.py create_db -C $qualif_config_path --type results_db 2>&1
+    $pythondir/atos/atos_lib.py create_db -C $qualif_config_path --type results_db 2>&1
 
 [ "$executables" != "" -a ! -f "$configuration_path/targets" -a -f "$qualif_config_path/targets" ] \
     || cp $configuration_path/targets $qualif_config_path

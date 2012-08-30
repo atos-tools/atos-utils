@@ -648,14 +648,14 @@ def system(cmd, check_status=False, print_out=False):
     debug('command [%s]' % cmd)
     if getarg('dryrun'):
         print cmd
-        return True, None
+        return 0, None
     outf = (print_out and not (getarg('quiet') or getarg('debug'))) and (
         sys.stdout) or None
     status, output = subcall(cmd, outf)
     debug('\n  | ' + '\n  | '.join(output.split('\n')))
     debug('command [%s] -> %s' % (cmd, str(status)))
     assert (not check_status or status == 0), 'command failed [%s]' % cmd
-    return (status == 0), output
+    return status, output
 
 
 

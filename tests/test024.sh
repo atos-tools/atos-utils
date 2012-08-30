@@ -19,12 +19,12 @@ graph()
 {
     CFGNAME="CFG-$RANDOM"
     NBPOINTS=25
-    $ROOT/lib/atos/atos_lib.py create_db -C $CFGNAME
-    $ROOT/lib/atos/atos_lib.py add_result -C $CFGNAME \
+    $ROOT/lib/atos/python/atos/atos_lib.py create_db -C $CFGNAME
+    $ROOT/lib/atos/python/atos/atos_lib.py add_result -C $CFGNAME \
 	-r "target:X,variant:REF,time:100,size:100"
     N=0
     while [ $N -lt $NBPOINTS ]; do
-	$ROOT/lib/atos/atos_lib.py add_result -C $CFGNAME \
+	$ROOT/lib/atos/python/atos/atos_lib.py add_result -C $CFGNAME \
 	    -r "target:X,variant:VN$N,time:`rnd`,size:`rnd`"
 	N=`expr $N + 1`
     done

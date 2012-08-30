@@ -16,22 +16,22 @@ $ROOT/bin/atos-run -r -a -O3
 
 (
 # simple jsonpath query (must return 2 sizes)
-[ `$ROOT/lib/atos/atos_lib.py query -q'$[?(@.target="sha1-c")].size' | wc -l` -eq 2 ]
+[ `$ROOT/lib/atos/python/atos/atos_lib.py query -q'$[?(@.target="sha1-c")].size' | wc -l` -eq 2 ]
 
 # db push (must export 2 results)
-$ROOT/lib/atos/atos_lib.py create_db -C NEWDB
-$ROOT/lib/atos/atos_lib.py push -R NEWDB --force
-[ `$ROOT/lib/atos/atos_lib.py query -C NEWDB | grep target | wc -l` -eq 2 ]
+$ROOT/lib/atos/python/atos/atos_lib.py create_db -C NEWDB
+$ROOT/lib/atos/python/atos/atos_lib.py push -R NEWDB --force
+[ `$ROOT/lib/atos/python/atos/atos_lib.py query -C NEWDB | grep target | wc -l` -eq 2 ]
 
 # db pull (must import 2 results)
-$ROOT/lib/atos/atos_lib.py create_db -C NEWDB2
-$ROOT/lib/atos/atos_lib.py pull -C NEWDB2 -R NEWDB --force
-[ `$ROOT/lib/atos/atos_lib.py query -C NEWDB2 | grep target | wc -l` -eq 2 ]
+$ROOT/lib/atos/python/atos/atos_lib.py create_db -C NEWDB2
+$ROOT/lib/atos/python/atos/atos_lib.py pull -C NEWDB2 -R NEWDB --force
+[ `$ROOT/lib/atos/python/atos/atos_lib.py query -C NEWDB2 | grep target | wc -l` -eq 2 ]
 
 # db dump/load on standard input/output
-$ROOT/lib/atos/atos_lib.py create_db -C NEWDB3
-$ROOT/lib/atos/atos_lib.py push -CNEWDB2 -R- \
-    | $ROOT/lib/atos/atos_lib.py pull -C NEWDB3 -R- --force
-[ `$ROOT/lib/atos/atos_lib.py query -C NEWDB3 | grep target | wc -l` -eq 2 ]
+$ROOT/lib/atos/python/atos/atos_lib.py create_db -C NEWDB3
+$ROOT/lib/atos/python/atos/atos_lib.py push -CNEWDB2 -R- \
+    | $ROOT/lib/atos/python/atos/atos_lib.py pull -C NEWDB3 -R- --force
+[ `$ROOT/lib/atos/python/atos/atos_lib.py query -C NEWDB3 | grep target | wc -l` -eq 2 ]
 ) 2>&1
 

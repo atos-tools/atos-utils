@@ -16,30 +16,15 @@
 # You should have received a copy of the GNU General Public License
 # v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
 #
-#
-# Usage: get usage with atos-toolkit -h
-#
 
-VERSION="@VERSION@"
-
-import sys
-
-try:
-    assert sys.hexversion >= 0x02060000
-except:
-    print >>sys.stderr, 'error: python version >= 2.6 is required by ATOS tools'
-    sys.exit(1)
-
-import os, itertools, math, re, string
+import sys, os, itertools, math, re, string
 
 from random import randint, choice, sample, seed
 
 from logging import debug, info, warning, error
 
+import globals
 import atos_lib
-
-libdir = os.path.dirname(__file__)
-bindir = os.path.abspath(os.path.join(libdir, '..', '..', 'bin'))
 
 # ####################################################################
 
@@ -433,7 +418,7 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
             return
 
     def_opts = ''
-    acf_oprofile = os.path.join(libdir, 'atos-acf-oprofile.py')
+    acf_oprofile = os.path.join(globals.LIBDIR, 'atos-acf-oprofile.py')
     oprof_out = os.path.join('.', 'oprof.out')
     csv_dir = os.path.join('.', 'atos-configurations', 'acf_csv_dir')
     acf_cold_opts = filteropt(acf_cold_opts)
@@ -670,7 +655,7 @@ def atos_opt_run(flags, variant, profdir, config, nbrun, baseopts, no_replay):
     variant_options, variant_flags = variant_options_flags[variant]
     status, output = atos_lib.system(
         '%s/atos-opt -C %s %s %s %s -r -a "%s %s" %s' % (
-            bindir, config, nbrun_option, replay_option, profdir_option,
+            globals.BINDIR, config, nbrun_option, replay_option, profdir_option,
             flags, variant_flags, variant_options), print_out=True)
     if not (status and output):
         info('FAILURE [%s] [%s]' % (variant, flags))
@@ -706,7 +691,7 @@ if __name__ == '__main__':
     parser = optparse.OptionParser(
         description='Optimization space exploration loop',
         usage='%prog action [options] [variants]',
-        version="%prog version " + VERSION)
+        version="%prog version " + globals.VERSION)
 
     # general options
     parser.add_option('-d', '--debug', dest='debug',

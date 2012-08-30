@@ -26,6 +26,7 @@ set -e
 dir=`dirname $0`
 dir=`cd $dir; pwd`
 libdir=`cd $dir/../lib/atos; pwd`
+pythondir="$libdir/python"
 
 options=""
 ccregexp="-\?\(clang\|gcc\|g++\|cc\|c++\)\$"
@@ -150,7 +151,7 @@ variant_hash() {
 }
 
 get_config() {
-    $libdir/atos_lib.py config -C $configuration_path --get "$1"
+    $pythondir/atos/atos_lib.py config -C $configuration_path --get "$1"
 }
 
 if [ "$g_set" = 1 -a "$u_set" = 1 ]; then

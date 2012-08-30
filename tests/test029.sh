@@ -14,12 +14,12 @@ echo "Running test in: $TMPTEST"
 
 tradeoff_variants() {
     regexp="^.*[\"\']variant[\"\']: [\"\']\([^\"\']*\)[\"\'].*$"
-    $ROOT/lib/atos/atos_lib.py speedups \
+    $ROOT/lib/atos/python/atos/atos_lib.py speedups \
 	--tradeoff=5 --tradeoff=1 --tradeoff=0.2 \
 	| grep "$regexp" | sed "s/$regexp/\1/" | sort -u
 }
 
-$ROOT/lib/atos/atos_lib.py create_db --type=json
+$ROOT/lib/atos/python/atos/atos_lib.py create_db --type=json
 
 $ROOT/bin/atos-init \
     -r "$SRCDIR/examples/sha1-c/run.sh" \
@@ -45,7 +45,7 @@ $ROOT/bin/atos-explore-loop -M20 `tradeoff_variants`
 echo "# simplifying selected points..."
 tradeoff_variants
 for v in `tradeoff_variants`; do
-    $ROOT/lib/atos/atos_toolkit.py -k --gen-one-off-rnd=$v,3
+    $ROOT/lib/atos/python/atos/atos_toolkit.py -k --gen-one-off-rnd=$v,3
 done
 
 

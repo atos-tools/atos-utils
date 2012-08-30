@@ -25,6 +25,7 @@ set -e
 
 dir=`cd \`dirname $0\`; pwd`
 libdir=`cd $dir/../lib/atos; pwd`
+pythondir="$libdir/python"
 
 configuration_path="./atos-configurations"
 opt_seed=""
@@ -124,7 +125,7 @@ if [ ! -f "$flags_file" ]; then
     exit 1
 fi
 
-$libdir/atos_toolkit.py -C $configuration_path \
+$pythondir/atos/atos_toolkit.py -C $configuration_path \
     $opt_debug $opt_seed $opt_profdir --max=$nb_iter $opt_nbruns \
     --optlvl=$opt_levels --variants=$opt_variants --flags=$flags_file \
     --gen-rnd-uniform-deps "$@"

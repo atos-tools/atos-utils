@@ -19,23 +19,12 @@
 # Usage: get usage with atos-deps -h
 #
 
-import sys
-
-try:
-    assert sys.hexversion >= 0x02060000
-except:
-    print >>sys.stderr, 'error: python version >= 2.6 is required by ATOS tools'
-    sys.exit(1)
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(
+            os.path.dirname(__file__), '..', 'lib', 'atos', 'python')))
+from atos import globals
 
 import re
-import os
-
-atos_bindir = os.path.dirname(__file__)
-python_libs = os.path.abspath(
-    os.path.join(atos_bindir, '..', 'lib', 'atos', 'python'))
-sys.path.append(python_libs)
-
-# Local modules
 import argparse
 
 
@@ -697,7 +686,7 @@ parser.add_argument("-n", "--dryrun",
 parser.add_argument("-v","--version",
                     help="output version string",
                     action="version",
-                    version='%(prog)s @VERSION@')
+                    version='%(prog)s version ' + globals.VERSION)
 args = parser.parse_args()
 
 if args.input_name == None:

@@ -19,29 +19,14 @@
 # Usage: get usage with atos-lib -h
 #
 
-VERSION="@VERSION@"
 
-import sys
-
-try:
-    assert sys.hexversion >= 0x02060000
-except:
-    print >>sys.stderr, 'error: python version >= 2.6 is required by ATOS tools'
-    sys.exit(1)
-
-import os, re, math, itertools, time, fcntl, json, hashlib, subprocess
+import sys, os, re, math, itertools, time, fcntl, json, hashlib, subprocess
 import cPickle as pickle
 
 from logging import debug, info, warning, error
 
-atos_libdir = os.path.dirname(__file__)
-python_libs = os.path.abspath(os.path.join(atos_libdir, 'python'))
-sys.path.append(python_libs)
-atos_bindir = os.path.abspath(
-    os.path.join(atos_libdir, '..', '..', 'bin'))
-
+import globals
 import jsonlib
-
 
 # ####################################################################
 
@@ -700,7 +685,7 @@ if __name__ == '__main__':
             os.path.basename(sys.argv[0])), '']
 
     parser = optparse.OptionParser(
-        usage='%prog action [options]', version="%prog version " + VERSION)
+        usage='%prog action [options]', version="%prog version " + globals.VERSION)
     parser.format_epilog = lambda x: '\n'.join(help_lines)
 
     if len(sys.argv) < 2: parser.error('action expected')
@@ -1137,7 +1122,7 @@ if __name__ == '__main__':
                     print 'Playing optimized build %s:%s...' % (
                         opts.identifier, result['variant'])
 
-                atos_build = os.path.join(atos_bindir, 'atos-build')
+                atos_build = os.path.join(globals.BINDIR, 'atos-build')
                 command = ['-a', result.get('conf', '')]
                 if result.has_key('uconf'):
                     command += ['-u', result['uconf']]

@@ -26,6 +26,7 @@ set -e
 dir=`dirname $0`
 dir=`cd $dir; pwd`
 libdir=`cd $dir/../lib/atos; pwd`
+pythondir="$libdir/python"
 
 executables=""
 identifier=""
@@ -148,7 +149,7 @@ variant_hash() {
 }
 
 get_config() {
-    $libdir/atos_lib.py config -C $configuration_path --get "$1"
+    $pythondir/atos/atos_lib.py config -C $configuration_path --get "$1"
 }
 
 if [ "$get_results_script" = "" -a -f "$configuration_path/get_res.sh" ]; then
@@ -265,11 +266,11 @@ output_run_result() {
     entry="$entry,time:$exe_time"
 
     if [ "$file" != "" ]; then
-	$libdir/atos_lib.py add_result -r "$entry" $file
+	$pythondir/atos/atos_lib.py add_result -r "$entry" $file
     elif [ "$fd" != "" ]; then
-	$libdir/atos_lib.py add_result -r "$entry" -C- >&$fd
+	$pythondir/atos/atos_lib.py add_result -r "$entry" -C- >&$fd
     else
-	$libdir/atos_lib.py add_result -r "$entry" -C $configuration_path 
+	$pythondir/atos/atos_lib.py add_result -r "$entry" -C $configuration_path 
     fi
 }
 

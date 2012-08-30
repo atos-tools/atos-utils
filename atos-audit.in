@@ -20,27 +20,15 @@
 # Usage: get usage with atos-audit -h
 #
 
-import sys
-
-try:
-    assert sys.hexversion >= 0x02060000
-except:
-    print >>sys.stderr, 'error: python version >= 2.6 is required by ATOS tools'
-    sys.exit(1)
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(
+            os.path.dirname(__file__), '..', 'lib', 'atos', 'python')))
+from atos import globals
 
 import stat
 import os
-
-atos_bindir = os.path.dirname(__file__)
-python_libs = os.path.abspath(
-    os.path.join(atos_bindir, '..', 'lib', 'atos'))
-sys.path.append(python_libs)
-python_libs = os.path.abspath(
-    os.path.join(atos_bindir, '..', 'lib', 'atos', 'python'))
-sys.path.append(python_libs)
-
 import argparse
-import atos_lib
+from atos import atos_lib
 
 parser = argparse.ArgumentParser(description='atos-audit: auditing tool for a '
                                  'build system that generates a build template to be used by atos-build',
@@ -91,9 +79,9 @@ if args.c:
 def proot_atos():
     status, uname = atos_lib.subcall('uname -m')
     arch = 'i386' if uname in ['i386', 'i486', 'i586', 'i686'] else uname
-    proot_exec = os.path.join(python_libs, arch, 'proot')
+    proot_exec = os.path.join(globals.LIBDIR, arch, 'proot')
     if os.path.isfile(proot_exec):
-        return os.path.join(python_libs, arch, "proot")
+        return os.path.join(globals.LIBDIR, arch, "proot")
     else:
         return "proot"
 

@@ -94,59 +94,93 @@ int main(void) {
 }
 EOF
 
-    # for now, it probably works only for gcc
+    if [[ `basename $compiler` ==  arm*  ]]; then
 
-    # compiler id
-    name=`$compiler -v 2>&1 | grep " version " | cut -d' ' -f1`
-    target=`$compiler -dumpmachine`
-    version=`$compiler -v 2>&1 | grep " version " | cut -d' ' -f3`
-    echo "id $name-$target-$version"
+        # compiler id
+	name="rvct"
+	target="ARM"
+	if [[ `basename $compiler` ==  armcc ]]; then
+	    version=`$compiler | head -1 | cut -d' ' -f4`
+	else
+	    version=`$compiler | head -1 | cut -d' ' -f3`
+	fi
+	echo "id $name-$target-$version"
 
-    # compiler name
-    echo "name $name"
+        # compiler name
+	echo "name $name"
 
-    # version number (major.minor.patchlevel)
-    echo "version $version"
+        # version number (major.minor.patchlevel)
+	echo "version $version"
 
-    # target machine
-    echo "target $target"
+        # target machine
+	echo "target $target"
 
-    # driver version string
-    result=`echo \`$compiler -v 2>&1\``
-    echo "driver_version $result"
+        # driver version string
+	result=`$compiler | head -1`
+	echo "driver_version $result"
 
-    # lto
-    result=`$compiler -O2 -flto -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
-    echo "lto_enabled $result"
-
-    # graphite
-    result=`$compiler -O2 -floop-block -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
-    echo "graphite_enabled $result"
-
-    # libgomp
-    result=`$compiler -O2 -ftree-parallelize-loops=16 -lc -nostdlib -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
-    echo "libgomp_enabled $result"
-
-    # acf plugin
-    acf_plugin="acf_plugin.so"
-    machine_dir=`echo $target | sed 's/-.*//'`
-    [ "$machine_dir" != "i686" ] || machine_dir="i386"
-    [ "$machine_dir" != "sh" ] || machine_dir="sh4"
-    acfpath=${libdir}/plugins/gcc-${version}/${machine_dir}/${acf_plugin}
-    if [ ! -f "$acfpath" ]; then
-        # use only major/minor version numbers
-	vers=`echo $version | sed 's/\([0-9]*\.[0-9]*\).*/\1/'`
-	acfpath=`\ls -d1 ${libdir}/plugins/gcc-${vers}*/${machine_dir}/${acf_plugin} | sort -r | head -1`
-    fi 2>/dev/null
-    [ -f "$acfpath" ] || acfpath="none"
-    echo "plugin_acf $acfpath"
-
-    # plugins
-    if [ -f "$acfpath" ]; then
-	result=`$compiler -O2 -fplugin=$acfpath -fplugin-arg-acf_plugin-test -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
-	echo "plugins_enabled $result"
-    else
+        # unsupported features
+	echo "lto_enabled 0"
+	echo "graphite_enabled 0"
+	echo "libgomp_enabled 0"
+	echo "plugin_acf none"
 	echo "plugins_enabled 0"
+
+    else
+        # should work at least for gcc & clang/llvm
+
+        # compiler id
+	name=`$compiler -v 2>&1 | grep " version " | cut -d' ' -f1`
+	target=`$compiler -dumpmachine`
+	version=`$compiler -v 2>&1 | grep " version " | cut -d' ' -f3`
+	echo "id $name-$target-$version"
+
+        # compiler name
+	echo "name $name"
+
+        # version number (major.minor.patchlevel)
+	echo "version $version"
+
+        # target machine
+	echo "target $target"
+
+        # driver version string
+	result=`echo \`$compiler -v 2>&1\``
+	echo "driver_version $result"
+
+        # lto
+	result=`$compiler -O2 -flto -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
+	echo "lto_enabled $result"
+
+        # graphite
+	result=`$compiler -O2 -floop-block -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
+	echo "graphite_enabled $result"
+
+        # libgomp
+	result=`$compiler -O2 -ftree-parallelize-loops=16 -lc -nostdlib -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
+	echo "libgomp_enabled $result"
+
+        # acf plugin
+	acf_plugin="acf_plugin.so"
+	machine_dir=`echo $target | sed 's/-.*//'`
+	[ "$machine_dir" != "i686" ] || machine_dir="i386"
+	[ "$machine_dir" != "sh" ] || machine_dir="sh4"
+	acfpath=${libdir}/plugins/gcc-${version}/${machine_dir}/${acf_plugin}
+	if [ ! -f "$acfpath" ]; then
+        # use only major/minor version numbers
+	    vers=`echo $version | sed 's/\([0-9]*\.[0-9]*\).*/\1/'`
+	    acfpath=`\ls -d1 ${libdir}/plugins/gcc-${vers}*/${machine_dir}/${acf_plugin} | sort -r | head -1`
+	fi 2>/dev/null
+	[ -f "$acfpath" ] || acfpath="none"
+	echo "plugin_acf $acfpath"
+
+        # plugins
+	if [ -f "$acfpath" ]; then
+	    result=`$compiler -O2 -fplugin=$acfpath -fplugin-arg-acf_plugin-test -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
+	    echo "plugins_enabled $result"
+	else
+	    echo "plugins_enabled 0"
+	fi
     fi
 }
 
@@ -162,22 +196,23 @@ json_config_add_compiler()
 
 prepare_flag_files()
 {
-    preprocessor=`cat $configuration_path/compilers | head -1`
+    preprocessor=`cat $configuration_path/compilers | egrep -i "cc|\+\+"|head -1`
     [ -f $preprocessor ] || return
 
     flagsdefs=`json_config_flags_file`
     for flags in $libdir/config/flags.*.cfg; do
 	dest=$configuration_path/`basename $flags`
-	$preprocessor -xassembler-with-cpp -P -E $flagsdefs $ppflags - < $flags > $dest
+	tmpflags=$tmpdir/`basename $flags`.c
+	cp $flags $tmpflags
+	$preprocessor -C -P -E $flagsdefs $ppflags $tmpflags > $dest
     done
 }
 
 /bin/rm -f $configuration_path/config.json
-
 if [ -f "$configuration_path/compilers" ]; then
     for compiler in `cat $configuration_path/compilers`; do
-	compiler_test $compiler > $tmpdir/config.txt
-	json_config_add_compiler $tmpdir/config.txt
+	    compiler_test $compiler > $tmpdir/config.txt
+	    json_config_add_compiler $tmpdir/config.txt
     done
     prepare_flag_files
 fi

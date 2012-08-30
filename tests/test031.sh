@@ -21,12 +21,12 @@ $ROOT/bin/atos-init \
 
 # Check if acf plugin is available for host compiler
 if [ ! -f "`config_query '$.compilers[*].plugin_acf'`" ]; then
-    skip
+    skip "acf plugins not available for compiler"
 fi
 
 # Check if host compiler has plugin support 
 if [ "`config_query '$.compilers[*].plugins_enabled'`" != "1" ]; then
-    skip
+    skip "plugins not supported by compiler"
 fi
 
 $ROOT/bin/atos-opt -r -a "-Os"

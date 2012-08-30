@@ -7,7 +7,7 @@ source `dirname $0`/common.sh
 TEST_CASE="ATOS empty graph"
 
 # this test must only be run manually
-[ "$MAKELEVEL" == "" ] || skip
+[ "$MAKELEVEL" == "" ] || skip "interactive test"
 
 # $ROOT/bin/atos-graph --version 2>/dev/null || skip
 

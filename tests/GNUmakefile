@@ -21,26 +21,30 @@
 srcdir:=$(dir $(firstword $(MAKEFILE_LIST)))
 TESTS:=$(notdir $(wildcard $(srcdir)test*.sh))
 DEPS=$(TESTS:.sh=)
+ERRS=$(TESTS:.sh=.err)
 ifeq ($(V),)
 V_RUN=@
 endif
+FORCE=.FORCE
 
-.PHONY: all tests clean distclean $(DEPS)
+.PHONY: all tests clean distclean $(DEPS) .FORCE
 
 all: tests
 
-tests: $(DEPS)
+tests: tests_report
 
 clean:
-	rm -f *.out
+	rm -f *.out *.err tests_report.txt
 
 distclean: clean
 
+tests_report: $(srcdir)test_report.sh $(ERRS)
+	$(V_RUN)cat $(ERRS) | $(srcdir)test_report.sh >tests_report.txt; \
+	res=$$?; cat tests_report.txt; exit $$res
+
+$(DEPS): %: %.err
+
 # Force MAKEFLAGS= as we may run make in tests
 # and we do not want to inherit -jxx option
-$(DEPS): %: $(srcdir)%.sh
-	$(V_RUN)env MAKEFLAGS= ROOT=$${ROOT:-$(abspath ..)} SRCDIR=$${SRCDIR:-$(abspath $(srcdir)..)} $(srcdir)$*.sh >$*.out
-
-# Describe here possible tests dependencies
-# For instance to put all tests under dependency of test001: 
-# $(filter-out test001,$(DEPS)): test001
+$(ERRS): %.err: $(srcdir)%.sh $(FORCE)
+	$(V_RUN)env MAKEFLAGS= ROOT=$${ROOT:-$(abspath ..)} SRCDIR=$${SRCDIR:-$(abspath $(srcdir)..)} $(srcdir)$*.sh 2>&1 >$*.out | tee $*.err

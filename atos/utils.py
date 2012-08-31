@@ -16,7 +16,7 @@
 # v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
 #
 
-import sys, os
+import sys, os, stat
 import globals
 import atos
 import atos_lib
@@ -26,6 +26,7 @@ def invoque(tool, args):
     functions = {
         "atos": run_atos,
         "atos-help": run_atos_help,
+        "atos-audit": run_atos_audit,
         "atos-deps": run_atos_deps,
         "atos-profile": run_atos_profile
         }
@@ -49,6 +50,48 @@ def run_atos_help(args):
     print "- should output the per command man page when invoqued with 'atos help COMMAND'"
     print
     return 0
+
+def run_atos_audit(args):
+    """ ATOS audit tool implementation. """
+
+    if args.quiet != 1:
+        print "Auditing build..."
+
+    if args.ccname:
+        args.ccregexp = '^' + args.ccname + '$'
+    if args.output_file == None:
+        args.output_file = os.path.join(args.configuration_path, "build.audit")
+
+    if not args.dryrun:
+        if not os.path.isdir(args.configuration_path):
+            os.mkdir(args.configuration_path)
+        atos_lib.subcall("touch " + args.output_file)
+        build_sh = os.path.join(args.configuration_path, "build.sh")
+        f = open(build_sh, 'w')
+        f.write("#!/bin/sh\n")
+        f.write("cd ")
+        f.write(os.getcwd())
+        f.write(" && $ARUN ")
+        f.write(" ".join(args.executables))
+        f.write("\n")
+        f.close()
+        os.chmod(build_sh,stat.S_IRWXU|stat.S_IRGRP|stat.S_IXGRP|stat.S_IROTH|stat.S_IXOTH)
+        force_sh = os.path.join(args.configuration_path, "build.force")
+        f = open(force_sh, 'w')
+        f.write(str(int(args.force)))
+        f.close()
+    else:
+        print "mkdir -p " + args.configuration_path
+        print "touch " + args.output_file
+        print "fill " + args.configuration_path + "/build.sh"
+        print "fill " + args.configuration_path + "/build.force"
+
+    command = ("env PROOT_IGNORE_ELF_INTERPRETER=1 PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_DEPS_OUTPUT=\"" +
+               args.output_file + "\" PROOT_ADDON_CC_DEPS_CCRE=\"" + args.ccregexp + "\" " +
+               atos_lib.proot_atos() +" -w " + os.getcwd() + " / ")
+    command += " ".join(args.executables)
+    status, output = atos_lib.system(command, True, False)
+    return status
 
 def run_atos_deps(args):
     """ ATOS deps tool implementation. """
@@ -151,7 +194,7 @@ def run_atos_profile(args):
         opt_remote_profile_path = " -b " + args.remote_path
     else:
         opt_remote_profile_path = ""
-    
+
     if not args.quiet:
         print "Profiling..."
 

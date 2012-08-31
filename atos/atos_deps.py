@@ -19,6 +19,7 @@
 #
 
 import sys, os, re
+import globals
 
 VERBOSE=0
 
@@ -400,7 +401,7 @@ class SimpleCmdInterpreter:
         """ Returns a suitable interpreter for the given command. """
         basename = os.path.basename(command['args'][0])
         # TODO: put these regexps in a configuration file
-        m = re.search("(clang|gcc|g\+\+|cc|armlink|c\+\+)$", basename)
+        m = re.search(globals.DEFAULT_DRIVER_PYREGEXP, basename)
         if m != None and m.group(1) != None:
             return SimpleCCInterpreter(command)
         m = re.search("(ar)$", basename)

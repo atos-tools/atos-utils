@@ -28,6 +28,7 @@ def parser(tool):
     factories = {
         "atos": parsers.atos,
         "atos-help": parsers.atos_help,
+        "atos-audit": parsers.atos_audit,
         "atos-deps": parsers.atos_deps,
         "atos-profile": parsers.atos_profile
         }
@@ -64,6 +65,9 @@ class parsers:
         sub = subs.add_parser("help", help="get full ATOS tools manual")
         parsers.atos_help(sub)
 
+        sub = subs.add_parser("audit", help="audit and generate a build template to be used by atos-build")
+        parsers.atos_audit(sub)
+
         sub = subs.add_parser("dep", help="generate the build system from a previous build audit")
         parsers.atos_deps(sub)
 
@@ -79,6 +83,24 @@ class parsers:
                                              description="ATOS help tool",
                                              formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         parser._negative_number_matcher = re.compile(r'^-.+$')
+        args.version(parser)
+        return parser
+
+    @staticmethod
+    def atos_audit(parser=None):
+        """ atos audit arguments parser factory. """
+        if parser == None:
+            parser = argparse.ArgumentParser(prog="atos-audit",
+                                             description="ATOS audit tool",
+                                             formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        args.executables(parser)
+        args.configuration_path(parser)
+        args.atos_audit.ccregexp(parser)
+        args.atos_audit.ccname(parser)
+        args.atos_audit.output(parser)
+        args.force(parser)
+        args.quiet(parser)
+        args.dryrun(parser)
         args.version(parser)
         return parser
 
@@ -169,6 +191,28 @@ class args:
         parser.add_argument("executables",
                             nargs=argparse.REMAINDER,
                             help="default executables list to optimize")
+
+    class atos_audit:
+        """ Namespace for non common atos-deps arguments. """
+
+        @staticmethod
+        def output(parser, args=("-o", "--output")):
+            parser.add_argument(*args,
+                                 dest="output_file",
+                                 help="audit description file, defaults to CONFIGURATION/build.audit")
+
+        @staticmethod
+        def ccregexp(parser, args=("-r", "--ccregexp")):
+            parser.add_argument(*args,
+                                 dest="ccregexp",
+                                 help="specify the compiler tools as a regexp for the basename",
+                                 default=globals.DEFAULT_TOOLS_CREGEXP)
+
+        @staticmethod
+        def ccname(parser, args=("-c", "--ccname")):
+            parser.add_argument(*args,
+                                 dest="ccname",
+                                 help="specify the exact compiler driver basename")
 
     class atos_deps:
         """ Namespace for non common atos-deps arguments. """

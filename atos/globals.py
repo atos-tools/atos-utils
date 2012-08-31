@@ -27,4 +27,12 @@ LIBDIR=os.path.join(PREFIX, 'lib/atos')
 PYTHONDIR=os.path.join(LIBDIR, 'python')
 sys.path.append(PYTHONDIR)
 
+# Default atos configuration directory.
 DEFAULT_CONFIGURATION_PATH="./atos-configurations"
+
+# Default tools regexp. This is a C regexp, not a python one.
+DEFAULT_TOOLS_CREGEXP="-\?\(clang\|gcc\|g++\|cc\|armlink\|c++\|ar\)$"
+
+# Default compiler driver/linker python regexp.
+DEFAULT_DRIVER_PYREGEXP="(clang|gcc|g\+\+|cc|armlink|c\+\+)$"
+

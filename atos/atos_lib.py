@@ -657,6 +657,14 @@ def system(cmd, check_status=False, print_out=False):
     assert (not check_status or status == 0), 'command failed [%s]' % cmd
     return status, output
 
+def proot_atos():
+    status, uname = subcall('uname -m')
+    arch = 'i386' if uname in ['i386', 'i486', 'i586', 'i686'] else uname
+    proot_exec = os.path.join(globals.LIBDIR, arch, 'proot')
+    if os.path.isfile(proot_exec):
+        return os.path.join(globals.LIBDIR, arch, "proot")
+    else:
+        return "proot"
 
 
 # ####################################################################

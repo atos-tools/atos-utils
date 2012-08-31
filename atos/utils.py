@@ -28,6 +28,7 @@ def invoque(tool, args):
         "atos-help": run_atos_help,
         "atos-audit": run_atos_audit,
         "atos-deps": run_atos_deps,
+        "atos-explore": run_atos_explore,
         "atos-profile": run_atos_profile
         }
     return functions[tool](args)
@@ -170,6 +171,81 @@ def run_atos_deps(args):
 
     return 0
 
+def run_atos_explore(args):
+    """ ATOS explore tool implementation. """
+
+    if args.build_script:
+        opt_build = " -b \"" + args.build_script + "\""
+    else:
+        opt_build = ""
+
+    if args.run_script:
+        opt_run = " -r \"" + args.run_script + "\""
+    else:
+        opt_run = ""
+
+    if args.results_script:
+        opt_results = " -t \"" + args.results_script + "\""
+    else:
+        opt_results = ""
+
+    if args.exe:
+        executables = " -e \"" + args.exe + "\""
+    elif args.executables:
+        executables = " -e \"" + " ".join(args.executables) + "\""
+    else:
+        executables = ""
+
+    if args.remote_path:
+        opt_remote_profile_path = " -B \"" + args.remote_path + "\""
+    else:
+        opt_remote_profile_path = ""
+
+    opt_nbruns = " -n " + str(args.nbruns)
+    if args.quiet:
+        opt_q = " -q"
+    else:
+        opt_q = ""
+
+    if args.clean:
+        opt_c = " -c"
+    else:
+        opt_c = ""
+
+    if args.force:
+        opt_rebuild = " -f"
+    else:
+        opt_rebuild = ""
+
+    status = 0
+    command = os.path.join(globals.BINDIR,"atos-init") + " -C " + args.configuration_path \
+              + opt_build + opt_run \
+              + opt_results + opt_remote_profile_path + executables + opt_nbruns \
+              + opt_rebuild + opt_q + opt_c
+    status,output = atos_lib.system(command, print_out=True, check_status=True)
+
+    for gopt in ['-O2', '-Os', '-O3']:
+        for opts in ['', ' -flto', ' -funroll-loops', ' -flto -funroll-loops']:
+            command_build = os.path.join(globals.BINDIR,"atos-build") + " -C " + args.configuration_path + opt_q + " -a'" + gopt + opts + "'"
+            status, output = atos_lib.system(command_build, print_out=True)
+            if status == 0:
+                command_run = os.path.join(globals.BINDIR,"atos-run") + " -C " + args.configuration_path + opt_q + " -r -a'" + gopt + opts + "'"
+                status, output = atos_lib.system(command_run, print_out=True)
+
+        command_prof = os.path.join(globals.BINDIR,"atos-profile") +  " -C " + args.configuration_path + opt_q + " -g'" + gopt + "'"
+        status, output = atos_lib.system(command_prof, print_out=True)
+        if status != 0: continue
+        for opts in ['', ' -flto', ' -funroll-loops', ' -flto -funroll-loops']:
+            command_build = os.path.join(globals.BINDIR, "atos-build") + " -C " + args.configuration_path + opt_q + " -u'" + gopt + "' -a'" + gopt + opts + "'"
+            status,output = atos_lib.system(command_build, print_out=True)
+            if status == 0:
+                command_run = os.path.join(globals.BINDIR, "atos-run") + " -C " + args.configuration_path + opt_q + " -r -u'" + gopt + "' -a'" + gopt + opts + "'"
+                status,output = atos_lib.system(command_run, print_out=True)
+
+    if not args.quiet:
+        print "Completed."
+    return 0
+
 def run_atos_profile(args):
     """ ATOS profile tool implementation. """
 
@@ -202,6 +278,6 @@ def run_atos_profile(args):
     command_run = os.path.join(globals.BINDIR, "atos-run") + " -C " + args.configuration_path + opt_q + " -s" + g_opt + a_opt + opt_remote_profile_path
 
     status, output = atos_lib.system(command_build, print_out=True)
-    if (status == 0):
+    if status == 0:
         status, output = atos_lib.system(command_run, print_out=True)
     return status

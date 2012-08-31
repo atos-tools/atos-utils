@@ -440,9 +440,8 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
     (p_status, p_output) = atos_lib.system(oprof_script)
     debug('*** profile run status: %s' % str(p_status))
 
-    if not p_status:
-        # Profile run failed: script not found
-        debug('*** profile run failed: script not found: %s' % oprof_script)
+    if p_status != 0:
+        debug('*** profile run failed: script failed or not found: %s' % oprof_script)
         return
 
     if not os.path.exists(oprof_out):
@@ -658,7 +657,7 @@ def atos_opt_run(flags, variant, profdir, config, nbrun, baseopts, no_replay):
         '%s/atos-opt -C %s %s %s %s -r -a "%s %s" %s' % (
             globals.BINDIR, config, nbrun_option, replay_option, profdir_option,
             flags, variant_flags, variant_options), print_out=True)
-    if not (status and output):
+    if not (status == 0 and output):
         info('FAILURE [%s] [%s]' % (variant, flags))
         return None
     variant_id = None

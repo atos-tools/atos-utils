@@ -38,8 +38,8 @@ clean:
 
 distclean: clean
 
-tests_report: $(srcdir)test_report.sh $(ERRS)
-	$(V_RUN)cat $(ERRS) | $(srcdir)test_report.sh >tests_report.txt; \
+tests_report: $(srcdir)report.sh $(ERRS)
+	$(V_RUN)cat $(ERRS) | $(srcdir)report.sh >tests_report.txt; \
 	res=$$?; cat tests_report.txt; exit $$res
 
 $(DEPS): %: %.err

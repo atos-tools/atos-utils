@@ -558,7 +558,8 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
 
 
 def exploration_loop(generators, step=None, maxiter=None):
-    for gen in generators:
+    for (gen_fct, gen_args) in generators:
+        gen = gen_fct(*gen_args)
         result = None
         for ic in itertools.count():
             if ic == maxiter: break
@@ -757,7 +758,7 @@ if __name__ == '__main__':
     parser.set_defaults(generators=[])
     def optcallback(option, opt, value, parser, args):
         genargs = value and value.split(',') or []
-        parser.values.generators += [args(*genargs)]
+        parser.values.generators += [(args,genargs)]
     for gen in generator.generators:
         name, nargs, help, meta = gen.descr()
         group.add_option(name, nargs=nargs, help=help,

@@ -705,11 +705,12 @@ def system(cmd, check_status=False, print_out=False):
     return status, output
 
 def proot_atos():
-    status, uname = subcall('uname -m')
-    arch = 'i386' if uname in ['i386', 'i486', 'i586', 'i686'] else uname
-    proot_exec = os.path.join(globals.LIBDIR, arch, 'proot')
+    status, uname = subcall('/bin/uname -m')
+    arch = uname.rstrip('\n')
+    if arch in ['i386', 'i486', 'i586', 'i686']: arch = 'i386'
+    proot_exec = os.path.join(globals.LIBDIR, arch, 'bin', 'proot')
     if os.path.isfile(proot_exec):
-        return os.path.join(globals.LIBDIR, arch, "proot")
+        return proot_exec
     else:
         return "proot"
 

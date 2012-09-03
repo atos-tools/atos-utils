@@ -33,21 +33,30 @@
 set -e
 [ "$DEBUG" = "" ] || set -x
 
+dir=`dirname $0`
+dir=`cd $dir && pwd`
+srcdir=`cd $dir/../.. && pwd`
+
 echo "Getting parameters..."
 WORKSPACE=${WORKSPACE:-$PWD}
-GITROOT=${GITROOT:-$WORKSPACE/atos-utils}
+GITROOT=${GITROOT:-$srcdir}
+
+echo "Setting clean environment"
+export PATH=/usr/local/bin:/usr/bin:/bin
+unset LD_LIBRARY_PATH
+unset PYTHONPATH
 
 echo "Preparing workspace..."
 cd $WORKSPACE
 LOGS=$WORKSPACE/logs
 DEVIMAGE=$WORKSPACE/devimage
-mkdir -p $LOGS $DEVIMAGE
-rm -rf $LOGS/* $DEVIMAGE/*
+BUILD=$WORKSPACE/build
+mkdir -p $LOGS $DEVIMAGE $BUILD
+rm -rf $LOGS/* $DEVIMAGE/* $BUILD/* atos-utils-devimage.tgz
 
 echo "Retrieving binary build of proot tool..."
 wget -q -O proot-devimage.tgz http://aci-hostname:8000/job/cec-okla-proot-dev-guillon/lastStableBuild/artifact/proot-devimage.tgz
 tar xvzf proot-devimage.tgz -C $DEVIMAGE
-export PATH=$PATH:$DEVIMAGE/usr/local/bin
 
 echo "Retrieving binary build of python-graph package..."
 wget -q -O python-graph-core.tgz http://aci-hostname:8000/job/cec-okla-python-graph/lastStableBuild/artifact/python-graph-core.tgz
@@ -61,21 +70,25 @@ echo "Retrieving binary build of python-argparse package..."
 wget -q -O python-argparse.tgz http://aci-hostname:8000/job/cec-okla-python-argparse/lastStableBuild/artifact/python-argparse.tgz
 tar xvzf python-argparse.tgz -C $DEVIMAGE
 
+
+echo "Adding local PATH/PYTHONPATH"
+export PATH=$DEVIMAGE/usr/local/bin:$PATH
 export PYTHONPATH=$DEVIMAGE/usr/local/lib/python
 
 echo "Building atos-utils..."
-cd $GITROOT
-make all
+cd $BUILD
+make -f $GITROOT/GNUmakefile -j 4 distclean
+make -f $GITROOT/GNUmakefile -j 4 all
 
 echo "Checking atos-utils..."
-make check
-make examples-nograph
+make -f $GITROOT/GNUmakefile -j 4 check
+make -f $GITROOT/GNUmakefile examples-nograph
 
 echo "Installing atos-utils..."
-make install PREFIX=$DEVIMAGE/usr/local
+make -f $GITROOT/GNUmakefile -j 4 install PREFIX=$DEVIMAGE/usr/local
 
 echo "Checking installed version of atos-utils..."
-ROOT=$DEVIMAGE/usr/local make check
+ROOT=$DEVIMAGE/usr/local make -f $GITROOT/GNUmakefile -j 4 check
 
 echo "Archiving atos-utils..."
 cd $DEVIMAGE

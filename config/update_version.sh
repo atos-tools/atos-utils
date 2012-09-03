@@ -49,7 +49,7 @@ trap "cleanup; exit 3" TERM INT
 trap "cleanup" EXIT
 tmpfile=`mktemp /tmp/update.XXXXXX`
 file="${1?}"
-"$dir"/get_version.sh >"$tmpfile"
+(cd "$dir" && ./get_version.sh) >"$tmpfile"
 [ -f "$file" ] || cp "$tmpfile" "$file"
 diff "$file" "$tmpfile" >/dev/null || cp "$tmpfile" "$file"
 cat < "$file"

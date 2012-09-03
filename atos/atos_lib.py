@@ -635,6 +635,53 @@ def subcall(cmd, outf=None):
     status = process.poll()
     return status, output
 
+def execpath(file):
+    """
+    Gets the full executable path for the given file.
+    Returns None if the command is not found or not executable.
+    """
+    import subprocess
+    proc = subprocess.Popen(["which", file], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    output = proc.communicate()[0]
+    if output == "": return None
+    return output.rstrip("\n")
+
+def pager_cmd():
+    """
+    Gets a cmd array for executing a pager.
+    Returns None if no pager is available
+    """
+    import shlex
+    pager = os.getenv("ATOS_PAGER")
+    if pager == None:
+        pager = os.getenv("PAGER")
+    if pager == "":
+        return None
+    if pager != None:
+        return shlex.split(pager)
+    pager = "less"
+    if execpath(pager) != None:
+        return [pager]
+    pager = "more"
+    if execpath(pager) != None:
+        return [pager]
+    return None
+
+def pagercall(cmd):
+    """
+    Executes a command and page the output.
+    Returns the exit status
+    """
+    pager_args = pager_cmd()
+    if pager_args != None:
+        cmd = '%s | %s' % (cmd, ' '.join(pager_args))
+    try:
+        status = os.system(cmd)
+    except Exception:
+        print >>sys.stderr, "error during pager command: " + cmd
+        sys.exit(1)
+    return status
+
 def getarg(key, default=None):
     # TODO: to be removed when argument parsing will be factorized
     import inspect

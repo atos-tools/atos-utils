@@ -106,6 +106,9 @@ class parsers:
         if parser == None:
             parser = ATOSArgumentParser(prog="atos-help",
                                              description="ATOS help tool")
+        parser.add_argument("topic",
+                            nargs=argparse.REMAINDER,
+                            help="help topic")
         args.version(parser)
         return parser
 

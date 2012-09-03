@@ -29,6 +29,7 @@ CONFIG_SCRIPTS_CFG_IN=flags.inline.cfg.in flags.loop.cfg.in flags.optim.cfg.in
 PYTHON_LIB_SCRIPTS_IN=$(addprefix atos/, __init__.py globals.py utils.py arguments.py atos_deps.py)
 PYTHON_LIB_EXE_SCRIPTS_IN=$(addprefix atos/, atos_lib.py atos_toolkit.py)
 PYTHON_SCRIPTS_IN=atos.py atos-help.py atos-audit.py atos-deps.py atos-explore.py atos-profile.py
+SHARED_DOCS_IN=$(addprefix doc/, intro.rst tutorial.rst)
 
 CONFIG_SCRIPTS_EXE=$(CONFIG_SCRIPTS_EXE_IN:%.in=bin/%)
 CONFIG_SCRIPTS_LIB=$(CONFIG_SCRIPTS_LIB_IN:%.in=lib/atos/%)
@@ -36,8 +37,9 @@ CONFIG_SCRIPTS_CFG=$(CONFIG_SCRIPTS_CFG_IN:%.in=lib/atos/config/%)
 PYTHON_LIB_SCRIPTS=$(PYTHON_LIB_SCRIPTS_IN:%.py=lib/atos/python/%.py)
 PYTHON_LIB_EXE_SCRIPTS=$(PYTHON_LIB_EXE_SCRIPTS_IN:%.py=lib/atos/python/%.py)
 PYTHON_SCRIPTS=$(PYTHON_SCRIPTS_IN:%.py=bin/%)
+SHARED_DOCS=$(SHARED_DOCS_IN:%=share/atos/%)
 
-CONFIG_SCRIPTS=$(CONFIG_SCRIPTS_EXE) $(CONFIG_SCRIPTS_LIB) $(CONFIG_SCRIPTS_CFG) $(PYTHON_LIB_SCRIPTS) $(PYTHON_LIB_EXE_SCRIPTS) $(PYTHON_SCRIPTS)
+CONFIG_SCRIPTS=$(CONFIG_SCRIPTS_EXE) $(CONFIG_SCRIPTS_LIB) $(CONFIG_SCRIPTS_CFG) $(PYTHON_LIB_SCRIPTS) $(PYTHON_LIB_EXE_SCRIPTS) $(PYTHON_SCRIPTS) $(SHARED_DOCS)
 
 ALL_FILES=$(CONFIG_SCRIPTS)
 
@@ -66,7 +68,7 @@ clean-test:
 distclean: distclean-local distclean-plugin distclean-test
 
 distclean-local:
-	$(QUIET_DISTCLEAN)rm -fr bin lib $(VSTAMP)
+	$(QUIET_DISTCLEAN)rm -fr bin lib share $(VSTAMP)
 
 distclean-plugin:
 	$(MAKE) -C $(srcdir)plugins/acf-plugin distclean
@@ -151,6 +153,9 @@ $(PYTHON_LIB_SCRIPTS): lib/atos/python/%.py: $(srcdir)%.py
 
 $(PYTHON_LIB_EXE_SCRIPTS): lib/atos/python/%.py: $(srcdir)%.py
 	$(QUIET_IN)install -d $(dir $@) && sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
+
+$(SHARED_DOCS): share/atos/%: $(srcdir)%
+	$(QUIET_IN)install -d $(dir $@) && sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && mv $@.tmp $@
 
 #
 # Rules for python-checks

@@ -23,7 +23,8 @@ VERSION="@VERSION@"
 # This file is installed in PREFIX/lib/atos/python/atos/
 PREFIX=os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..'))
 BINDIR=os.path.join(PREFIX, 'bin')
-LIBDIR=os.path.join(PREFIX, 'lib/atos')
+LIBDIR=os.path.join(PREFIX, 'lib', 'atos')
+SHAREDIR=os.path.join(PREFIX, 'share', 'atos')
 PYTHONDIR=os.path.join(LIBDIR, 'python')
 sys.path.append(PYTHONDIR)
 

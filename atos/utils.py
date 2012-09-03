@@ -43,14 +43,28 @@ def run_atos(args):
 
 def run_atos_help(args):
     """ ATOS help tool implementation. """
-    print
-    print "ATOS auto tuning optimization system manual"
-    print
-    print "To be done:"
-    print "- should output a one page description and"
-    print "- should output the per command man page when invoqued with 'atos help COMMAND'"
-    print
-    return 0
+    if not args.topic:
+        print ""
+        print "ATOS auto tuning optimization system manual"
+        print "==========================================="
+        print
+        print "Browse the manual with the following commands:"
+        print
+        print " atos help intro    : displays ATOS short introduction"
+        print " atos help tutorial : displays ATOS tutorial"
+        print
+        print " atos help COMMAND  : display manual for the given atos COMMAND"
+        print
+        return 0
+    if args.topic[0] == "intro":
+        doc = "intro.rst"
+    elif args.topic[0] == "tutorial":
+        doc = "tutorial.rst"
+    else:
+        # For now the per command manual does not exist, it may end with
+        # a call to man atos-<cmd> for instance
+        doc = args.topic[0] + ".rst"
+    return atos_lib.pagercall("cat " + os.path.join(globals.SHAREDIR, "doc", doc))
 
 def run_atos_audit(args):
     """ ATOS audit tool implementation. """

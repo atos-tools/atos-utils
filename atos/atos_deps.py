@@ -19,7 +19,9 @@
 #
 
 import sys, os, re
+
 import globals
+import atos_lib
 
 VERBOSE=0
 
@@ -208,7 +210,7 @@ class DependencyGraph:
                     # (CCLD commands could be ignored here if no source files in input)
                     outputs.append(value['command']['cwd'])
                 elif value['kind'] == 'CC':
-                    output_value = SimpleCCInterpreter.get_output_option_value(value['command']['args'])
+                    output_value = atos_lib.get_output_option_value(value['command']['args'])
                     # ignore output if designated with an absolute path
                     # (profdir will be prof_dir/full_path)
                     if output_value and os.path.isabs(output_value): continue
@@ -223,7 +225,7 @@ class DependencyGraph:
         if not hasattr(self, 'common_profdir_prefix_len'):
             self.common_profdir_prefix_len = len(self.common_relative_profdir_prefix())
         if value['kind'] == "CC":
-            output_value = SimpleCCInterpreter.get_output_option_value(value['command']['args'])
+            output_value = atos_lib.get_output_option_value(value['command']['args'])
             if output_value and os.path.isabs(output_value): return ''
         if value['kind'] == "CC" or value['kind'] == "CCLD":
             return value['command']['cwd'][self.common_profdir_prefix_len:]
@@ -256,6 +258,7 @@ class DependencyGraph:
         mkfile.write("define profdir\n")
         mkfile.write("$(if $(PROFILE_DIR),-fprofile-dir=$(PROFILE_DIR)/$(1),)\n")
         mkfile.write("endef\n")
+        mkfile.write("\n")
         for node in self.dg.nodes():
             target = node
             recipe = None
@@ -269,7 +272,7 @@ class DependencyGraph:
                     if value['kind'] == "CCLD":
                         append=" $(LTOFLAGS) $(ACFLAGS) $(ALDFLAGS) $(call profdir," + self.get_profdir_suffix(value) + ")"
                     # TODO: handle quotes in command
-                    recipe = "$(QUIET)cd " + value['command']['cwd'] + " && " + " ".join(value['command']['args']) + append
+                    recipe = "$(QUIET)cd " + value['command']['cwd'] + " && $(ATOS_DRIVER) " + " ".join(value['command']['args']) + append
                     recipe = re.sub(r'(["\'])', r'\\\1', recipe)
             deps = []
             for dep in self.dg.neighbors(node):
@@ -372,7 +375,7 @@ class DependencyGraphBuilder:
                     real = True
             if not real:
                 self.graph.del_node(node)
-        
+
     def get_graph(self):
         """ Returns the dependency graph. """
         return self.graph
@@ -412,7 +415,7 @@ class SimpleCmdInterpreter:
     def get_kind(self, command):
         """ Get command kind from command line args. """
         return self.select_interpreter(command).get_kind(command)
-        
+
     def get_input_files(self, command):
         """ Get input files from command line args. """
         return self.select_interpreter(command).get_input_files(command)
@@ -502,30 +505,13 @@ class SimpleCCInterpreter:
 
         return inputs
 
-    @staticmethod
-    def get_output_option_value(args):
-        """ Get value of -o option from CC command line args. """
-        output = None
-        i = 0
-        while i + 1 < len(args):
-            i = i + 1
-            m = re.search("^-o(.*)$", args[i])
-            if m != None:
-                output = m.group(1)
-                if output == "":
-                    if i + 1 < len(args):
-                        output = args[i+1]
-                    i = i + 1
-                continue
-        return output
-
     def get_output_files(self, command):
         """ Get output files from CC command line args. """
         if self.output_files != None:
             return self.output_files
         args = command['args']
 
-        output = SimpleCCInterpreter.get_output_option_value(command['args'])
+        output = atos_lib.get_output_option_value(command['args'])
         outputs = [os.path.normpath(os.path.join(command['cwd'], output))] if output else []
 
         if len(outputs) == 0 and len(self.get_input_files(command)) > 0:
@@ -591,7 +577,7 @@ class CommandDependencyListFactory:
     def get_dependencies(self):
         """ Returns the build dependencies. """
         return self.deps.get_dependencies()
-    
+
     def build_dependencies(self):
         """ Compute dependencies.  """
         self.parser.parse()
@@ -601,14 +587,14 @@ class CommandDependencyListFactory:
             output_files = self.interpreter.get_output_files(command)
             kind = self.interpreter.get_kind(command)
             self.deps.add_dependency(command, kind, input_files, output_files)
-                
+
 class CCDEPSParser:
     """ Parses the output of a cc_deps addon file. """
     def __init__(self, input_file):
         """ Constructor, takes the input_file as argument. """
         self.input_file = input_file
         self.commands = []
-        
+
     def parse(self):
         """ Parses the input_file. """
         for line in self.input_file:

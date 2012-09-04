@@ -554,6 +554,54 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
     debug('*** Final CSV:\n%s' % str(final_hot_csv))
 
 
+@generator
+def gen_file_by_file(cold_th, cold_opts, file_list, flags_file=None):
+    '''perform per file exploration'''
+
+    info('gen_file_by_file')
+
+    # get object/sample_count list
+    obj_list = []
+    for line in open(file_list):
+        obj, count, part = line.split()
+        obj_list.append((obj, int(count), float(part)))
+    obj_list.sort(key=lambda x: x[1])
+
+    # build cold objects list
+    cold_list, curr_part = [], 0.0
+    for (obj, count, part)  in obj_list:
+        if curr_part + part > float(cold_th): break
+        curr_part += part
+        cold_list.append(obj)
+
+    # default options for all hot files
+    base_flags = atos_base_flags(
+        '', 'base', (generator.baseopts or '', ''))[0].strip()
+
+    # flag list from flags file if any
+    opt_flag_list = (
+        flags_file and map(string.strip, open(flags_file).readlines())
+        or [])
+    if len(opt_flag_list) == 0: opt_flag_list = ['']
+
+    csv_dir = os.path.join('.', 'atos-configurations', 'acf_csv_dir')
+    if not os.path.isdir(csv_dir): os.mkdir(csv_dir)
+
+    for hot_flags in opt_flag_list:
+        if base_flags:
+            hot_flags = ('%s %s' % (base_flags, hot_flags)).strip()
+        # build option file containing flags for each objs
+        sum_flags = atos_lib.md5sum('%s\n%s' % (cold_opts, hot_flags))
+        csv_name = os.path.join(csv_dir, 'fbf-%s-%s.csv' % (cold_th, sum_flags))
+        with open(csv_name, 'w') as opt_file:
+            for obj in cold_list:
+                opt_file.write('%s,%s\n' % (obj, cold_opts))
+            if hot_flags: opt_file.write('*,%s\n' % (hot_flags))
+
+        # build and run using that option list
+        yield '--atos-optfile %s' % csv_name, 'basemin'
+
+
 # ####################################################################
 
 
@@ -609,6 +657,8 @@ def atos_opt_get_frontier(config, targets, query={}):
 
 
 def atos_base_flags(flags, variant, baseopts):
+    basemin_variant = (variant == 'basemin')
+    variant = variant.replace('basemin', 'base')
     if not baseopts: return flags, variant
     variantd = {
         (0, 0, 0) : variant,
@@ -626,6 +676,10 @@ def atos_base_flags(flags, variant, baseopts):
     base_flags = base_flags.replace('-fprofile-use', '')
     base_flags = base_flags.replace('-fripa', '')
     base_flags = re.sub('\ [\ ]*', ' ', base_flags)
+    if basemin_variant:
+        # keep only interesting flags (lto, fdo, ...) from
+        # variant-flags given on command line
+        return flags, variantd[(fdo_set, lto_set, lipo_set)]
     return base_flags, variantd[(fdo_set, lto_set, lipo_set)]
 
 
@@ -769,6 +823,8 @@ if __name__ == '__main__':
 
     (opts, args) = parser.parse_args()
 
+    atos_lib.setup_logging(opts.debug and 10 or 30, opts.logfile)
+
     # generators setup
     generator.optlist = (
         opts.flags != None and opt_flag_list(opts.flags))
@@ -783,19 +839,6 @@ if __name__ == '__main__':
     if opts.base_opts or args:
         generator.optlevel = opt_flag.optlevel([''])
         generator.variants = ['base']
-
-    # logging setup
-    fmtlog = '# %(asctime)-15s %(levelname)s: %(message)s'
-    fmtdate='[%d-%m %H:%M:%S]'
-    logging.getLogger().setLevel(0)
-    conslog = logging.StreamHandler()
-    conslog.setLevel(opts.debug and 10 or 30)
-    conslog.setFormatter(logging.Formatter(fmtlog, fmtdate))
-    logging.getLogger().addHandler(conslog)
-    if opts.logfile:
-        filelog = logging.FileHandler(opts.logfile, mode='a')
-        filelog.setFormatter(logging.Formatter(fmtlog, fmtdate))
-        logging.getLogger().addHandler(filelog)
 
     # exploration loop
     atos_get_result = atos_get_result_wrapper(

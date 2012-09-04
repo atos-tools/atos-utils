@@ -94,7 +94,8 @@ int main(void) {
 }
 EOF
 
-    if [[ `basename $compiler` ==  arm*  ]]; then
+    compiler_base=`basename $compiler`
+    if [[ $compiler_base == armcc || $compiler_base ==  armlink ]]; then
 
         # compiler id
 	name="rvct"

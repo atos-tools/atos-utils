@@ -26,7 +26,7 @@ BINDIR=os.path.join(PREFIX, 'bin')
 LIBDIR=os.path.join(PREFIX, 'lib', 'atos')
 SHAREDIR=os.path.join(PREFIX, 'share', 'atos')
 PYTHONDIR=os.path.join(LIBDIR, 'python')
-sys.path.append(PYTHONDIR)
+sys.path.insert(0, PYTHONDIR)
 
 # Default atos configuration directory.
 DEFAULT_CONFIGURATION_PATH="./atos-configurations"

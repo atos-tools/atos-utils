@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 #
-KEEPTEST=1
+
 source `dirname $0`/common.sh
 
 TEST_CASE="ATOS opt build/run"

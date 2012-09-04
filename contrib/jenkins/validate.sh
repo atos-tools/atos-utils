@@ -70,6 +70,10 @@ echo "Retrieving binary build of python-argparse package..."
 wget -q -O python-argparse.tgz http://aci-cec.gnb.st.com:8000/job/cec-okla-python-argparse/lastStableBuild/artifact/python-argparse.tgz
 tar xvzf python-argparse.tgz -C $DEVIMAGE
 
+echo "Retrieving binary build of python-docutils package..."
+wget -q -O python-docutils.tgz http://aci-cec.gnb.st.com:8000/job/cec-okla-python-docutils/lastStableBuild/artifact/python-docutils.tgz
+tar xvzf python-docutils.tgz -C $DEVIMAGE
+
 
 echo "Adding local PATH/PYTHONPATH"
 export PATH=$DEVIMAGE/usr/local/bin:$PATH
@@ -78,14 +82,14 @@ export PYTHONPATH=$DEVIMAGE/usr/local/lib/python
 echo "Building atos-utils..."
 cd $BUILD
 make -f $GITROOT/GNUmakefile -j 4 distclean
-make -f $GITROOT/GNUmakefile -j 4 all
+make -f $GITROOT/GNUmakefile -j 4 all doc
 
 echo "Checking atos-utils..."
 make -f $GITROOT/GNUmakefile -j 4 check
 make -f $GITROOT/GNUmakefile examples-nograph
 
 echo "Installing atos-utils..."
-make -f $GITROOT/GNUmakefile -j 4 install PREFIX=$DEVIMAGE/usr/local
+make -f $GITROOT/GNUmakefile -j 4 install install-doc PREFIX=$DEVIMAGE/usr/local
 
 echo "Checking installed version of atos-utils..."
 ROOT=$DEVIMAGE/usr/local make -f $GITROOT/GNUmakefile -j 4 check

@@ -65,7 +65,7 @@ all: all-local all-plugins
 
 all-local: $(ALL_EXES) $(ALL_DATAS)
 
-all-doc: $(ALL_DOCS)
+doc: $(ALL_DOCS)
 
 all-plugins:
 	$(MAKE) -C $(srcdir)plugins/acf-plugin install PREFIX=$(abspath .)

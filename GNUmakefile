@@ -23,13 +23,19 @@ PREFIX=/usr/local
 VSTAMP=version.stamp
 VERSION:=$(shell $(srcdir)config/update_version.sh $(VSTAMP))
 
+RST2MAN=$(srcdir)config/docutils rst2man --report=3 # Filter warning with images
+RST2HTML=$(srcdir)config/docutils rst2html
+
 CONFIG_SCRIPTS_EXE_IN=atos-raudit.in atos-build.in atos-run.in atos-play.in atos-graph.in atos-explore-inline.in atos-explore-loop.in atos-explore-optim.in atos-opt.in atos-init.in atos-replay.in atos-config.in atos-explore-acf.in atos-explore-staged.in
 CONFIG_SCRIPTS_LIB_IN=atos-acf-oprofile.py.in
 CONFIG_SCRIPTS_CFG_IN=flags.inline.cfg.in flags.loop.cfg.in flags.optim.cfg.in
 PYTHON_LIB_SCRIPTS_IN=$(addprefix atos/, __init__.py globals.py utils.py arguments.py atos_deps.py)
 PYTHON_LIB_EXE_SCRIPTS_IN=$(addprefix atos/, atos_lib.py atos_toolkit.py)
 PYTHON_SCRIPTS_IN=atos.py atos-help.py atos-audit.py atos-deps.py atos-explore.py atos-profile.py
-SHARED_DOCS_IN=$(addprefix doc/, intro.rst tutorial.rst)
+SHARED_RSTS_IN=$(addprefix doc/, intro.rst tutorial.rst)
+SHARED_MANS_IN=$(SHARED_RSTS_IN)
+SHARED_HTMLS_IN=$(SHARED_RSTS_IN)
+SHARED_IMAGES_IN=$(addprefix doc/images/, graph-sha1-first.png graph-sha1-staged.png)
 
 CONFIG_SCRIPTS_EXE=$(CONFIG_SCRIPTS_EXE_IN:%.in=bin/%)
 CONFIG_SCRIPTS_LIB=$(CONFIG_SCRIPTS_LIB_IN:%.in=lib/atos/%)
@@ -37,19 +43,29 @@ CONFIG_SCRIPTS_CFG=$(CONFIG_SCRIPTS_CFG_IN:%.in=lib/atos/config/%)
 PYTHON_LIB_SCRIPTS=$(PYTHON_LIB_SCRIPTS_IN:%.py=lib/atos/python/%.py)
 PYTHON_LIB_EXE_SCRIPTS=$(PYTHON_LIB_EXE_SCRIPTS_IN:%.py=lib/atos/python/%.py)
 PYTHON_SCRIPTS=$(PYTHON_SCRIPTS_IN:%.py=bin/%)
-SHARED_DOCS=$(SHARED_DOCS_IN:%=share/atos/%)
+SHARED_RSTS=$(SHARED_RSTS_IN:%=share/atos/%)
+SHARED_MANS=$(SHARED_MANS_IN:doc/%.rst=share/atos/man/man1/atos-%.1)
+SHARED_HTMLS=$(SHARED_HTMLS_IN:doc/%.rst=share/atos/doc/%.html)
+SHARED_IMAGES=$(SHARED_IMAGES_IN:%=share/atos/%)
 
-CONFIG_SCRIPTS=$(CONFIG_SCRIPTS_EXE) $(CONFIG_SCRIPTS_LIB) $(CONFIG_SCRIPTS_CFG) $(PYTHON_LIB_SCRIPTS) $(PYTHON_LIB_EXE_SCRIPTS) $(PYTHON_SCRIPTS) $(SHARED_DOCS)
+CONFIG_SCRIPTS=$(CONFIG_SCRIPTS_EXE) $(CONFIG_SCRIPTS_LIB) $(CONFIG_SCRIPTS_CFG) $(PYTHON_LIB_SCRIPTS) $(PYTHON_LIB_EXE_SCRIPTS) $(PYTHON_SCRIPTS) $(SHARED_RSTS)
 
 ALL_FILES=$(CONFIG_SCRIPTS)
+INSTALLED_FILES=$(addprefix $(PREFIX)/,$(ALL_FILES))
 
-INSTALLED_FILES=$(addprefix $(PREFIX)/,$(CONFIG_SCRIPTS))
+ALL_DATAS=$(SHARED_IMAGES) $(SHARED_RST)
+INSTALLED_DATAS=$(addprefix $(PREFIX)/,$(ALL_DATAS))
+
+ALL_DOCS=$(SHARED_MANS) $(SHARED_HTMLS)
+INSTALLED_DOCS=$(addprefix $(PREFIX)/,$(ALL_DOCS))
 
 .PHONY: all clean distclean install check tests check-python-dependencies examples examples-nograph install-shared
 
 all: all-local all-plugins
 
-all-local: $(ALL_FILES)
+all-local: $(ALL_FILES) $(ALL_DATAS)
+
+all-doc: $(ALL_DOCS)
 
 all-plugins:
 	$(MAKE) -C $(srcdir)plugins/acf-plugin install PREFIX=$(abspath .)
@@ -76,10 +92,12 @@ distclean-plugin:
 distclean-test:
 	install -d tests && $(MAKE) -C tests -f $(abspath $(srcdir)tests/GNUmakefile) distclean
 
-install: $(INSTALLED_FILES) install-plugins
+install: $(INSTALLED_FILES) $(INSTALLED_DATAS) install-plugins
 
 install-plugins:
 	$(MAKE) -C $(srcdir)plugins/acf-plugin install PREFIX=$(abspath $(PREFIX))
+
+install-doc: $(INSTALLED_DOCS)
 
 tests: check
 
@@ -131,10 +149,11 @@ install-shared: $(INSTALLED_SHARED_FILES)
 $(INSTALLED_SHARED_FILES): $(PREFIX)/share/atos/%: $(srcdir)%
 	$(QUIET_INSTALL_FILE)install -D -m 755 $< $@
 
+
 #
 # Rules for exes, libs and config files
 #
-$(CONFIG_SCRIPTS): $(VSTAMP)
+$(ALL_FILES) $(ALL_DATAS) $(ALL_DOCS): $(VSTAMP) $(srcdir)GNUmakefile
 
 $(CONFIG_SCRIPTS_EXE): bin/%: $(srcdir)%.in
 	$(QUIET_IN)install -d $(dir $@) && sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
@@ -154,8 +173,17 @@ $(PYTHON_LIB_SCRIPTS): lib/atos/python/%.py: $(srcdir)%.py
 $(PYTHON_LIB_EXE_SCRIPTS): lib/atos/python/%.py: $(srcdir)%.py
 	$(QUIET_IN)install -d $(dir $@) && sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
 
-$(SHARED_DOCS): share/atos/%: $(srcdir)%
+$(SHARED_RSTS): share/atos/%: $(srcdir)%
 	$(QUIET_IN)install -d $(dir $@) && sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && mv $@.tmp $@
+
+$(SHARED_MANS): share/atos/man/man1/atos-%.1: $(srcdir)doc/%.rst
+	$(QUIET_RST2MAN)install -d $(dir $@) && $(RST2MAN) <$< >$@
+
+$(SHARED_HTMLS): share/atos/doc/%.html: $(srcdir)doc/%.rst
+	$(QUIET_RST2HTML)install -d $(dir $@) && $(RST2HTML) <$< >$@
+
+$(SHARED_IMAGES): share/atos/%: $(srcdir)%
+	$(QUIET_CP_DATA)install -d $(dir $@) && cp $< $@
 
 #
 # Rules for python-checks
@@ -169,23 +197,32 @@ check-python-dependencies: $(srcdir)config/python_checks
 $(INSTALLED_FILES): $(PREFIX)/%: %
 	$(QUIET_INSTALL_EXE)install -D -m 755 $< $(PREFIX)/$<
 
+$(INSTALLED_DOCS) $(INSTALLED_DATAS): $(PREFIX)/%: %
+	$(QUIET_INSTALL_DATA)install -D -m 644 $< $(PREFIX)/$<
+
 #
 # Manage verbose output
 #
 ifeq ($(V),1)
 QUIET_IN=
+QUIET_CP=
+QUIET_RST2MAN=
+QUIET_RST2HTML=
 QUIET_CLEAN=
 QUIET_DISTCLEAN=
-QUIET_INSTALL_DIR=
 QUIET_INSTALL_EXE=
+QUIET_INSTALL_DATA=
 QUIET_INSTALL_FILE=
 QUIET_CHECK=
 else
 QUIET_IN=@echo "CONFIGURE $@" &&
+QUIET_CP=@echo "CP $@" &&
+QUIET_RST2MAN=@echo "RST2MAN $@" &&
+QUIET_RST2HTML=@echo "RST2HTML $@" &&
 QUIET_CLEAN=@echo "CLEAN" &&
 QUIET_DISTCLEAN=@echo "DISTCLEAN" &&
-QUIET_INSTALL_DIR=@echo "INSTALL DIR $@" &&
-QUIET_INSTALL_FILE=@echo "INSTALL FILE $@" &&
+QUIET_INSTALL_EXE=@echo "INSTALL EXE $@" &&
+QUIET_INSTALL_DATA=@echo "INSTALL DATA $@" &&
 QUIET_CHECK=@echo "CHECK $@" &&
 endif
 

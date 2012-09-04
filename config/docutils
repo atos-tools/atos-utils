@@ -1,0 +1,26 @@
+#!/bin/sh
+#
+# Wrapper script for docutils.
+# We add this script as docutils may be installed either with .py
+# extension or with no extension.
+# For instance the rst2man exe may be either rst2man.py or rst2man
+#
+# usage: docutils rst2xxx ...
+#
+# example: docutils rst2man <page.tst >page.1
+#
+
+set -e
+
+error() { echo "docutils: $1" >&2; exit 1; }
+
+tool=${1}
+[ "$tool" != "" ] || error "missing argument"
+shift
+
+toolpath=`which $tool.py 2>/dev/null || true`
+[ "$toolpath" != "" ] || toolpath=`which $tool 2>/dev/null || true`
+[ "$toolpath" != "" ] || error "docutils tools not installed"
+
+"$toolpath" ${1+"$@"}
+

@@ -22,245 +22,123 @@
 
 VERSION="@VERSION@"
 
-import sys, os, re, decimal, tempfile
+import sys, os, re, tempfile, commands
 
-def parse_command_line():
-    import optparse
-    parser = optparse.OptionParser(
-        description='oprofile parser for acf plugin',
-        usage='%prog [options]',
-        version="%prog version " + VERSION)
-    parser.add_option('-i', '--infile',
-                      action='store', type='string', dest='oprof_output',
-                      default='oprof.out',
-                      help='set the sample file name (default: oprof.out)')
-    parser.add_option('-e', '--execfile',
-                      action='store', type='string', dest='binary',
-                      default='',
-                      help='set the binary file name (default: "")')
-    parser.add_option('-p', '--binary_path',
-                      action='store', type='string', dest='bin_path',
-                      default='',
-                      help='colon separated path to find binaries not specified'\
-                      ' with --execfile option')
-    parser.add_option('-o', '--acf-hot-th',
-                      action='store', type='int', dest='acf_hot_treshold',
-                      default=50,
-                      help='set the hot function samples % treshold for'\
-                      ' acf plugin (default 50)')
-    parser.add_option('-c', '--acf-cold-th',
-                      action='store', type='int', dest='acf_cold_treshold',
-                      default=30,
-                      help='set the hot function samples treshold for acf plugin')
-    parser.add_option('-O', '--acf-hot-opts',
-                      action='store', type='string', dest='acf_hot_opts',
-                      default="-O3",
-                      help='set the hot function optimizations for acf plugin')
-    parser.add_option('-C', '--acf-cold-opts',
-                      action='store', type='string', dest='acf_cold_opts',
-                      default="-Os cold noinline",
-                      help='set the hot function samples optimizations for acf plugin')
-    parser.add_option('-f', '--with-addr2line',
-                      action='store', type='string', dest='addr2line',
-                      default='addr2line', help='set the path to addr2line')
-    parser.add_option('--debug',
-                      action='store_true', dest='debug', default=False,
-                      help='enable debug mode')
-    (opts, args) = parser.parse_args()
-    if opts.binary and not os.path.isfile(opts.binary):
-        print "Error: binary file not found: '" + opts.binary + "'\n"
-        parser.print_help()
-        sys.exit(1)
-    if not os.path.isfile(opts.oprof_output):
-        print "Error: profile file not found: '" + opts.oprof_output + "'\n"
-        parser.print_help()
-        sys.exit(1)
-    return opts
 
-def exec_command(cmd, stop):
-    import commands
-    status, res = commands.getstatusoutput(cmd)
-    if stop and status != 0:
-        print 'Error: execution problem: ' + cmd , 'failed'
-        sys.exit(1)
-    return res
-
-def find_binary_in_path(image_name):
-    paths = opts.bin_path.split(':')
-    for path in paths:
+def find_binary_in_path(image_name, bin_path):
+    for path in bin_path.split(':'):
         if os.path.isfile(os.path.join(path,image_name)):
             return os.path.join(path,image_name)
-    return ''
+    return None
 
-def check_format():
+def check_format(oprof_output):
     oprofile_format = None
-
-    for line in open(opts.oprof_output):
+    for line in open(oprof_output):
         if re.match(r'vma +samples +% +image[ _]name +symbol[ _]name *', line):
             # vma samples  %   image name  symbol name
             # 04004c0 1424923 85.6763  a.out main
-            #print 'format is 1: vma samples % image name  symbol name'
             oprofile_format = 1
             break
-        elif re.match(r'vma +samples +% +linenr[ _]info +image[ _]name '\
-                      '+symbol[ _]name *', line):
+        elif re.match(r'vma +samples +% +linenr[ _]info +image[ _]name +symbol[ _]name *', line):
             # vma samples  %      linenr info          image name  symbol name
             # 0c144 20626 20.3311 (no localization information)  a.out main
-            #print 'format is 2: vma samples % linenr info  image name  symbol name'
             oprofile_format = 2
             break
-        elif re.match(r'vma +samples +% +linenr[ _]info +image[ _]name '\
-                      '+app[ _]name +symbol[ _]name *', line):
+        elif re.match(r'vma +samples +% +linenr[ _]info +image[ _]name +app[ _]name +symbol[ _]name *', line):
             # vma samples  %      linenr info          image name  app name   symbol name
             # 0x19e 22583 0.0312813 (no location information) libxx.so libxx.so func1
-            #print 'format is 3: vma samples % linenr info  image name  app name  symbol name'
             oprofile_format = 3
             break
-
     return oprofile_format
 
-def parse_binary_list(oprofile_format):
+def parse_binary_list(oprof_output, oprofile_format, binary, bin_path):
     binary_list = []
-    for line in open(opts.oprof_output):
-        if re.match(r'^[0-9a-fA-F]+ +\d+ +[\d\.]+ +.*', line):
-            # we're on a symbol line:
-            words = line.split()
-            if oprofile_format == 1:
-                image_name = words[3]
-            elif oprofile_format == 2 or oprofile_format == 3:
-                # handle (no-location-information) case
-                #   0000000 156636 9.4180 (no location information) no-vmlinux
-                image_name = (words[3] == '(no') and words[6] or words[4]
-
-            # detect if we are in an interesting region of the profile file
-            if image_name != 'anon':
-                if os.path.basename(image_name) == os.path.basename(opts.binary):
-                    # Handle -e <binary> option
-                    if not (image_name, opts.binary) in binary_list:
-                        binary_list += [(image_name, opts.binary)]
-                else:
-                    ret_path = find_binary_in_path(image_name)
-                    if ret_path != '':
-                        if not (image_name, ret_path) in binary_list:
-                            binary_list += [(image_name, ret_path)]
+    for line in open(oprof_output):
+        if not re.match(r'^[0-9a-fA-F]+ +\d+ +[\d\.]+ +.*', line):
+            continue
+        # we're on a symbol line:
+        words = line.split()
+        if oprofile_format == 1:
+            image_name = words[3]
+        elif oprofile_format == 2 or oprofile_format == 3:
+            # handle (no-location-information) case
+            #   0000000 156636 9.4180 (no location information) no-vmlinux
+            image_name = (words[3] == '(no') and words[6] or words[4]
+        # detect if we are in an interesting region of the profile file
+        if image_name != 'anon':
+            if os.path.basename(image_name) == os.path.basename(binary):
+                # Handle -e <binary> option
+                if not (image_name, binary) in binary_list:
+                    binary_list += [(image_name, binary)]
+            else:
+                ret_path = find_binary_in_path(image_name, bin_path)
+                if ret_path and not (image_name, ret_path) in binary_list:
+                    binary_list += [(image_name, ret_path)]
     return binary_list
 
-def parse_profile(binary_list, oprofile_format):
+def parse_profile(oprof_output, oprofile_format, binary_list):
     # read couples of (address, sample_count) from oprofile output
     samples = {}
-
-    in_binary_region = False
-    for line in open(opts.oprof_output):
-        if re.match(r'^[0-9a-fA-F]+ +\d+ +[\d\.]+ +.*', line):
-            # we're on a symbol line:
-            words = line.split()
-            if oprofile_format == 1:
-                image_name = words[3]
-            elif oprofile_format == 2 or oprofile_format == 3:
-                # handle (no-location-information) case
-                #   0000000 156636 9.4180 (no location information) no-vmlinux
-                image_name = (words[3] == '(no') and words[6] or words[4]
-
-            # detect if we are in an interesting region of the profile file
-            for (bin, path) in binary_list:
-                in_binary_region = (os.path.basename(image_name) == os.path.basename(bin))
-                if in_binary_region:
-                    ## Interesting lines
-                    ## sys.stdout.write(line)
-                    vma = words[0]
-                    samps = words[1]
-                    percent = words[2]
-                    if oprofile_format == 1:
-                        linenr = ' '
-                        app_name = ' ' ###
-                        sym = words[4]
-                    elif oprofile_format == 2:
-                        app_name = ' '
-                        if words[3] == '(no':
-                            linenr = words[3]+' '+words[4]+' '+words[5]
-                            sym = words[7]
-                        else:
-                            linenr = words[3]
-                            sym = words[5]
-                    elif oprofile_format == 3:
-                        if words[3] == '(no':
-                            linenr = words[3]+' '+words[4]+' '+words[5]
-                            app_name = word[7]
-                            sym = words[8]
-                        else:
-                            linenr = words[3]
-                            app_name = word[5]
-                            sym = words[6]
-
-                    # Merge multiple entries for same image_name/sym
-                    sym_found = False
-                    sym = sym.split('.')[0]
-                    if image_name in samples.keys():
-                        for (vma_c, samps_c, percent_c, linenr_c,
-                             image_name_c, app_name_c, sym_c) in samples[image_name]:
-                            if sym_c == sym:
-                                # cumulate samples and update list
-                                samples[image_name].remove((vma_c, samps_c,
-                                                            percent_c, linenr_c,
-                                                            image_name_c,
-                                                            app_name_c, sym_c))
-                                samples[image_name].insert(0, (vma,
-                                       str(int(samps) + int(samps_c)),
-                                       str(float(percent) + float(percent_c)),
-                                       linenr, image_name, app_name, sym))
-                                sym_found = True
-                                break
-                    if not sym_found:
-                        samples.setdefault(image_name, []).append((vma,
-                                                                   samps, percent,
-                                                                   linenr, image_name,
-                                                                   app_name, sym))
-                    break
-
-            if in_binary_region:
-                continue
-
-        if not in_binary_region:
+    for line in open(oprof_output):
+        if not re.match(r'^[0-9a-fA-F]+ +\d+ +[\d\.]+ +.*', line):
             continue
-
-#        if not re.match(r'^  \w+ +\d+ +\S+', line):
-#            # filter interesting details lines (starting with 2 spaces)
-#            #   ws ws address samples freq debug_info
-#            continue
-#        addr, count = line.split()[:2]
-#        samples.setdefault(image_name, []).append(\
-#            (addr.lstrip('0x').lower(), int(count)))
-
+        # we're on a symbol line:
+        words = line.split()
+        # handle (no-location-information) case
+        #   0000000 156636 9.4180 (no location information) no-vmlinux
+        if words[3] == '(no':
+            words[3] = ' '.join(words[3:6])
+            del words[4:6]
+        image_name = (oprofile_format == 1) and words[3] or words[4]
+        # detect if we are in an interesting region of the profile file
+        for (bin, path) in binary_list:
+            in_binary_region = (os.path.basename(image_name) == os.path.basename(bin))
+            if not in_binary_region: continue
+            vma, samps, percent = words[0:3]
+            linenr, app_name = ' ', ' '
+            if oprofile_format == 3:
+                app_name = words.pop(5)
+            if oprofile_format in [2, 3]:
+                linenr = words.pop(3)
+            if oprofile_format in [1, 2, 3]:
+                sym = words[4]
+            # merge multiple entries for same image_name/sym
+            sym_found = False
+            sym = sym.split('.')[0]
+            if image_name in samples.keys():
+                for (vma_c, samps_c, percent_c, linenr_c, image_name_c,app_name_c, sym_c
+                     ) in samples[image_name]:
+                    if sym_c != sym: continue
+                    # accumulate samples and update list
+                    samples[image_name].remove(
+                        (vma_c, samps_c, percent_c, linenr_c, image_name_c, app_name_c, sym_c))
+                    samples[image_name].insert(0,
+                        (vma, str(int(samps) + int(samps_c)), str(
+                                float(percent) + float(percent_c)), linenr, image_name, app_name, sym))
+                    sym_found = True
+                    break
+            if not sym_found:
+                samples.setdefault(image_name, []).append(
+                    (vma, samps, percent, linenr, image_name, app_name, sym))
+            break
     return samples
 
 def compiler_opt_to_attribute(opt):
-    csv_opt = []
-
-    if opt.find('-O') == 0:
+    if opt.startswith('-O'):
         # handles -Ox options
-        csv_opt += ['optimize,' + opt[2:]]
-    elif opt.find('-f') == 0:
+        csv_opt = 'optimize,' + opt[2:]
+    elif opt.startswith('-f'):
         # handle -fx options
-        csv_opt += ['optimize,' + opt[2:]]
+        csv_opt = 'optimize,' + opt[2:]
     else:
         # handle direct attributes
-        csv_opt = [opt + ',']
+        csv_opt = opt + ','
     return csv_opt
 
-def compute_total_count(samples):
-    count = 0
-    for line in samples:
-        count += int(line[1])
-
-    return count
-
-def create_debug_info_list(binary_file, addr_file_path):
+def create_debug_info_list(binary_file, addr_file_path, addr2line):
     dbg_info = {}
-
-    # Don't report errors
-    stop = False
-    res = exec_command(opts.addr2line + ' --functions --exe ' + binary_file + \
-                       ' @' + addr_file_path , stop)
+    status, res = commands.getstatusoutput(
+        addr2line + ' --functions --exe ' + binary_file + ' @' + addr_file_path)
     addr_file = open(addr_file_path)
     odd = False
     for line in res.split('\n'):
@@ -277,18 +155,16 @@ def create_debug_info_list(binary_file, addr_file_path):
             # We are on a <file>:<line> line
             odd = False
             if not re.match('^.*:\d+$', line):
-                print 'Warning: malformed debug information (address= ' + \
-                      current-addr + '): discarding ' + line
+                print 'Warning: malformed debug information (address= ' + current-addr + '): discarding ' + line
                 continue
             words = line.split(':')
             dbg_info[current_addr] = (current_func, words[0], words[1])
     addr_file.close()
     return dbg_info
 
-# returns the basename of the file
-def get_file(image_name, debug_info, vma, sym):
-    dbg_info = debug_info[image_name]
-    (debug_func, debug_file, debug_line) = dbg_info[vma]
+def get_file(debug_info, vma):
+    # returns the basename of the file
+    (debug_func, debug_file, debug_line) = debug_info[vma]
     if debug_func == '??' or debug_file == '??':
         # Debug information was not found for this address
         source_file = None
@@ -297,128 +173,171 @@ def get_file(image_name, debug_info, vma, sym):
         # adding a ~ leading character.
         # Only check if debug_func is part of funcname, first removing extra ~
         ### The check fails for functions inlined in .h files for which
-        ### readelf and addr2line report a different function for a given address... 
-        #if not debug_func.lstrip('~') in sym:
-        #print 'Warning: Incorrect debug information discarded for function: '\
-        #      + sym + ' at address:' + vma +' (conflict with ' + debug_func +  ')'
-        #    source_file = None
-        #else:
+        ### readelf and addr2line report a different function for a given address...
+        # if not debug_func.lstrip('~') in sym:
+        #     print 'Warning: Incorrect debug information'
         source_file = os.path.basename(debug_file)
     return source_file
 
-opts = parse_command_line()
+def print_acf_info(samples, binary_list,
+                   acf_hot_treshold, acf_hot_opts, acf_cold_treshold, acf_cold_opts, addr2line):
+    hot_opts_for_csv = []
+    if acf_hot_treshold and acf_hot_opts:
+        # Parse hot options
+        hot_opts = acf_hot_opts.split()
+        hot_opts_for_csv = map(compiler_opt_to_attribute, hot_opts)
 
-hot_opts_for_csv = []
-cold_opts_for_csv = []
+    cold_opts_for_csv = []
+    if acf_cold_treshold and acf_cold_opts:
+        # Parse cold options
+        cold_opts = acf_cold_opts.split()
+        cold_opts_for_csv = map(compiler_opt_to_attribute, cold_opts)
 
-if (opts.acf_hot_treshold):
-    # Parse hot options
-    if (opts.acf_hot_opts):
-        hot_opts = opts.acf_hot_opts.split()
-        #print 'Hot options=' , hot_opts
-        for opt in hot_opts:
-            hot_opts_for_csv += compiler_opt_to_attribute(opt)
-        #print 'CSV Hot options=' , hot_opts_for_csv
+    for image_name in samples.keys():
 
-if (opts.acf_cold_treshold):
-    # Parse cold options
-    if (opts.acf_cold_opts):
-        cold_opts = opts.acf_cold_opts.split()
-        #print 'Cold options=', cold_opts
-        for opt in cold_opts:
-            cold_opts_for_csv += compiler_opt_to_attribute(opt)
-        #print 'CSV cold options=' , cold_opts_for_csv
+        total_count = sum(map(lambda x: int(x[1]), samples[image_name]))
 
-oprofile_format = check_format()
-
-binary_list = parse_binary_list(oprofile_format)
-
-if not oprofile_format:
-    print 'Error: oprofile outpout format not supported'
-    sys.exit(1)
-
-samples = parse_profile(binary_list, oprofile_format)
-
-total_count = {}
-
-for image_name in samples.keys():
-    # Compute total samples count for binary
-    total_count[image_name] = compute_total_count(samples[image_name])
-    #print 'Total count of', image_name, '=', total_count[image_name]
-
-csv_hot_output = []
-csv_cold_output = []
-
-for image_name in samples.keys():
-    debug_info = {}
-
-    # Get debug information for functions in current binary if available
-    # Source file information is used to avoid ambiguities between functions
-    # with same name in different binaries/libraries inside the GNU acf-plugin
-    for (bin, path) in binary_list:
-        if bin == image_name:
+        # Get debug information for functions in current binary if available
+        # Source file information is used to avoid ambiguities between functions
+        # with same name in different binaries/libraries inside the GNU acf-plugin
+        for (bin, path) in binary_list:
+            if bin != image_name: continue
             # Store all relevant function addresses in a temporary file
             # to get debug information
             address_file = tempfile.NamedTemporaryFile(delete=False)
-            address_file_path = address_file.name
             ### TODO: Remove duplicate addresses
-            for (vma, samps, percent, linenr, image_name, app_name, sym) in\
-            samples[image_name]:
-                address_file.write(vma + '\n')
+            address_file.write('\n'.join(map(lambda x: x[0], samples[image_name])))
             address_file.close()
-            debug_info[image_name] = create_debug_info_list(path, address_file_path)
-            os.remove(address_file_path)
+            debug_info = create_debug_info_list(path, address_file.name, addr2line)
+            os.remove(address_file.name)
             break
 
-    # Generate hot csv lines
-    current_hot_count = 0
-    if (opts.acf_hot_treshold):
-        for (vma, samps, percent, linenr, image_name, app_name, sym) in\
-                samples[image_name]:
-            source_file = get_file(image_name, debug_info, vma, sym)
-            #print 'Function %s (vma= %s): source file: %s' % (sym, vma, source_file)
+        # Generate hot csv lines
+        current_hot_count = 0
+        if acf_hot_treshold:
+            for (vma, samps, percent, linenr, image_name, app_name, sym) in samples[image_name]:
+                current_hot_count += int(samps)
+                if current_hot_count < total_count * (float(acf_hot_treshold) / 100.0):
+                    source_file = get_file(debug_info, vma)
+                    for opt in hot_opts_for_csv:
+                        print sym + ',' + opt + ((',' + source_file) if source_file else '')
+                else: break
 
-            current_hot_count += int(samps)
-            #print total_count[image_name] * (int(opts.acf_hot_treshold) / 100.0)
-            if current_hot_count < total_count[image_name] * \
-                   (float(opts.acf_hot_treshold) / 100.0) :
-                for opt in hot_opts_for_csv:
-                    csv_hot_output += [sym + ',' + opt + ((',' + source_file) \
-                                                          if source_file else '')]
-            else:
-                break
+        # Generate cold csv lines
+        current_cold_count = 0
+        if acf_cold_treshold:
+            for (vma, samps, percent, linenr, image_name, app_name, sym) in samples[image_name]:
+                current_cold_count += int(samps)
+                if current_cold_count < (total_count * ((100.0 - float(acf_cold_treshold)) / 100.0)):
+                    last_cold_count = current_cold_count
+                else:
+                    source_file = get_file(debug_info, vma)
+                    for opt in cold_opts_for_csv:
+                        print sym + ',' + opt + ((',' + source_file) if source_file else '')
 
-    #print 'Total count of', image_name, '=', total_count[image_name], \
-    # 'current=', current_hot_count
-    #print "CSV HOT=", csv_hot_output
+def print_fbf_info(samples, binary_list, fbf_map, readelf):
 
-    # Generate cold csv lines
-    current_cold_count = 0
-    if (opts.acf_cold_treshold):
-        for (vma, samps, percent, linenr, image_name, app_name, sym) in\
-                samples[image_name]:
-            source_file = get_file(image_name, debug_info, vma, sym)
-            #print 'Function %s (vma= %s): source file: %s' % (sym, vma, source_file)
 
-            current_cold_count += int(samps)
-            #print total_count[image_name] * \
-            #      ((100.0 - float(opts.acf_cold_treshold)) / 100.0)
-            if current_cold_count < \
-                   (total_count[image_name] * \
-                    ((100.0 - float(opts.acf_cold_treshold)) / 100.0)) :
-                # nothing
-                last_cold_count = current_cold_count
-            else:
-                for opt in cold_opts_for_csv:
-                    csv_cold_output += [sym + ',' + opt + \
-                                        ((',' + source_file) if source_file else '')]
+    fct_map, obj_list = {}, set()
 
-    #print 'Total count of', image_name, '=', \
-    #      total_count[image_name], 'last=', last_cold_count
-    #print "CSV COLD=", csv_cold_output
+    for line in open(fbf_map):
+        words = line.split()
+        if len(words) < 2: continue
+        obj, fct = words[:2]
+        fct_map.setdefault(fct, []).append(obj)
+        obj_list.add(obj)
 
-    # Output hot and cold CSV options
-    for hot in csv_hot_output:
-        print hot
-    for cold in csv_cold_output:
-        print cold
+    for image_name in samples.keys():
+        obj_samples = dict(map(lambda x: (x, 0), obj_list))
+        for (_, samps, _, _, _, _, sym) in samples[image_name]:
+            objs = fct_map.get(sym, None)
+            if not objs: continue
+            for obj in objs: obj_samples[obj] += int(samps)
+
+        total_count = sum(obj_samples.values())
+        obj_samples = sorted(obj_samples.items(), key=lambda x: x[1])
+        for (obj, count) in reversed(obj_samples):
+            obj_part = float(count) / total_count * 100.0
+            print '%s %d %5.1f' % (obj, float(count), obj_part)
+
+
+if __name__ == '__main__':
+
+    import optparse
+
+    parser = optparse.OptionParser(
+        description='oprofile parser for acf plugin',
+        version="%prog version " + VERSION)
+    # general options
+    parser.add_option('--with-addr2line', dest='addr2line',
+              action='store', type='string', default='addr2line',
+              help='set the path to addr2line')
+    parser.add_option('--with-readelf', dest='readelf',
+              action='store', type='string', default='readelf',
+              help='set the path to readelf')
+    parser.add_option('--debug', dest='debug',
+              action='store_true', default=False,
+              help='enable debug mode')
+    # profile options
+    parser.add_option('-i', '--infile', dest='oprof_output',
+              action='store', type='string', default='oprof.out',
+              help='set the sample file name (default: oprof.out)')
+    parser.add_option('-e', '--execfile', dest='binary',
+              action='store', type='string', default='',
+              help='set the binary file name (default: "")')
+    parser.add_option('-p', '--binary_path', dest='bin_path',
+              action='store', type='string', default='',
+              help='colon separated path to find binaries not specified with --execfile option')
+    # acf options
+    parser.add_option('--acf-hot-th', dest='acf_hot_treshold',
+              action='store', type='int', default=50,
+              help='set the hot function samples % treshold for acf plugin (default 50)')
+    parser.add_option('--acf-cold-th', dest='acf_cold_treshold',
+              action='store', type='int', default=30,
+              help='set the hot function samples treshold for acf plugin')
+    parser.add_option('--acf-hot-opts', dest='acf_hot_opts',
+              action='store', type='string', default="-O3",
+              help='set the hot function optimizations for acf plugin')
+    parser.add_option('--acf-cold-opts', dest='acf_cold_opts',
+              action='store', type='string', default="-Os cold noinline",
+              help='set the hot function samples optimizations for acf plugin')
+    # file-by-file options
+    parser.add_option('--fbf-list', dest='fbf_list',
+              action='store_true', default=False,
+              help='get compilation units sorted by samples %')
+    parser.add_option('--fbf-map', dest='fbf_map',
+              action='store', type='string', default='map.out',
+              help='set the function-object map file name')
+
+    (opts, args) = parser.parse_args()
+
+    if opts.binary and not os.path.isfile(opts.binary):
+        parser.error('binary file not found: "%s"' % opts.binary)
+
+    if not os.path.isfile(opts.oprof_output):
+        parser.error('profile file not found: "%s"' % opts.oprof_output)
+
+    oprofile_format = check_format(opts.oprof_output)
+
+    if not oprofile_format:
+        print>>sys.stderr, '%s: error: oprofile output format not supported' %(
+            os.path.basename(sys.argv[0]))
+        sys.exit(1)
+
+    binary_list = parse_binary_list(
+        opts.oprof_output, oprofile_format, opts.binary, opts.bin_path)
+
+    samples = parse_profile(opts.oprof_output, oprofile_format, binary_list)
+
+    # file partitioning mode
+    if opts.fbf_list:
+        if not opts.fbf_map: parser.error(
+            'func-to-object map file must be given using option --fbf-map')
+        print_fbf_info(samples, binary_list, opts.fbf_map, opts.readelf)
+        sys.exit(0)
+
+    # classic acf mode
+    print_acf_info(samples, binary_list,
+                   opts.acf_hot_treshold, opts.acf_hot_opts,
+                   opts.acf_cold_treshold, opts.acf_cold_opts,
+                   opts.addr2line)

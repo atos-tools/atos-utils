@@ -38,7 +38,9 @@ acf_plugin="acf_plugin.so"
 acf_plugin_path=""
 acf_hot_th=70
 acf_cold_th=""
-acf_cold_opts="-Os noinline cold"
+acf_cold_opts="-Os"
+acf_cold_attrs="noinline cold"
+file_by_file_mode=0
 
 #######################
 
@@ -63,6 +65,8 @@ Exploration Options:
       -x <hot_th> : Hot functions treshold percentage [default: $acf_hot_th]
       -y <cold_th> : Cold functions treshold percentage [default: `expr 100 - $acf_hot_th`]
       -Y "<cold_opts>" : Cold functions options [default: "$acf_cold_opts"]
+      -Z "<cold_attrs>" : Cold functions attributes [default: "$acf_cold_attrs"]
+      -f : Use file-by-file mode [default: false]
 
 Misc Options
       -q : quiet output
@@ -74,12 +78,14 @@ EOF
 }
 
 cleanup() {
+    [ ! -f "$tmpfile" ] || rm -f "$tmpfile"
+    [ ! -f "$mapfile" ] || rm -f "$mapfile"
     :
 }
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts C:e:p:x:y:Y:n:b:F:O:qdvh opt; do
+while getopts C:e:p:x:y:Y:Z:n:b:F:fO:qdvh opt; do
     case $opt in
 	C) configuration_path="$OPTARG"
 	    ;;
@@ -93,12 +99,16 @@ while getopts C:e:p:x:y:Y:n:b:F:O:qdvh opt; do
 	    ;;
 	Y) acf_cold_opts="$OPTARG"
 	    ;;
+	Z) acf_cold_attrs="$OPTARG"
+	    ;;
 	n) opt_nbruns="-n $OPTARG"
 	    ;;
 	b) opt_profdir="-B $OPTARG"
 	    ;;
 	F) flags_file="$OPTARG"
             ;;
+	f) file_by_file_mode=1
+	    ;;
 	q) opt_debug="-q"
 	    ;;
 	d) opt_debug="-d"
@@ -149,20 +159,42 @@ config_query() {
     $pythondir/atos/atos_lib.py config -C $configuration_path -u -t -q $*
 }
 
-acf_plugin_path=`config_query '$.compilers[*].plugin_acf'`
-
-if [ "${acf_plugin_path}" == "" ]; then
-    echo "`basename $0`: error: compiler not supported by acf plugin" >&2
-    exit 1
-fi
-
-if [ "`config_query '$.compilers[*].plugins_enabled'`" != "1" ]; then
-    echo "`basename $0`: error: compiler does not support plugins" >&2
-    exit 1
-fi
-
 [ "$acf_cold_th" != "" ] || acf_cold_th=`expr 100 - $acf_hot_th` || true
 
-$pythondir/atos/atos_toolkit.py --log=./acf.log -C $configuration_path \
-    $opt_debug $opt_profdir $opt_nbruns \
-    --gen-acf=$imagepath,$profiling_script,$acf_plugin_path,$acf_hot_th,$acf_cold_th,"$acf_cold_opts",$flags_file "$@"
+if [ "$file_by_file_mode" = "0" ]; then
+
+    acf_plugin_path=`config_query '$.compilers[*].plugin_acf'`
+
+    if [ "${acf_plugin_path}" == "" ]; then
+	echo "`basename $0`: warning: compiler not supported by acf plugin" >&2
+	echo "`basename $0`: warning: switching to file-by-file exploration" >&2
+	file_by_file_mode=1
+
+    elif [ "`config_query '$.compilers[*].plugins_enabled'`" != "1" ]; then
+	echo "`basename $0`: warning: compiler does not support plugins" >&2
+	echo "`basename $0`: warning: switching to file-by-file exploration" >&2
+	file_by_file_mode=1
+    else
+	$pythondir/atos/atos_toolkit.py --log=./acf.log -C $configuration_path \
+	    $opt_debug $opt_profdir $opt_nbruns \
+	    --gen-acf=$imagepath,$profiling_script,$acf_plugin_path,$acf_hot_th,$acf_cold_th,"$acf_cold_opts $acf_cold_attrs",$flags_file "$@"
+    fi
+fi
+
+if [ "$file_by_file_mode" = "1" ]; then
+
+    tmpfile=`mktemp /tmp/atos-inst.XXXXXX`
+    mapfile=`mktemp /tmp/atos-inst.XXXXXX`
+
+    $dir/atos-build -a "-O2 -g --atos-fctmap $mapfile"
+
+    $profiling_script
+
+    $libdir/atos-acf-oprofile.py -i oprof.out -p "$imagepath" \
+	--fbf-list --fbf-map $mapfile > $tmpfile
+
+    $pythondir/atos/atos_toolkit.py \
+	-C $configuration_path $opt_debug $opt_profdir $opt_nbruns \
+	--gen-file-by-file=$acf_cold_th,"$acf_cold_opts",$tmpfile,$flags_file "$@"
+fi
+

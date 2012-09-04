@@ -23,6 +23,7 @@
 import sys, os, re, math, itertools, time, fcntl, json, hashlib, subprocess
 import cPickle as pickle
 
+import logging
 from logging import debug, info, warning, error
 
 import globals
@@ -743,7 +744,7 @@ def system(cmd, check_status=False, print_out=False):
     status, output = subcall(cmd, outf)
     debug('\n  | ' + '\n  | '.join(output.split('\n')))
     debug('command [%s] -> %s' % (cmd, str(status)))
-    assert (not check_status or status == 0), 'command failed [%s]' % cmd
+    if check_status and status: sys.exit(1)
     return status, output
 
 def proot_atos():
@@ -756,6 +757,49 @@ def proot_atos():
     else:
         return "proot"
 
+def setup_logging(level = 30, logfile = None):
+    fmtlog = '# %(asctime)-15s %(levelname)s: %(message)s'
+    fmtdate='[%d-%m %H:%M:%S]'
+    logging.getLogger().setLevel(0)
+    conslog = logging.StreamHandler()
+    conslog.setLevel(level)
+    conslog.setFormatter(logging.Formatter(fmtlog, fmtdate))
+    logging.getLogger().addHandler(conslog)
+    if logfile:
+        filelog = logging.FileHandler(logfile, mode='a')
+        filelog.setFormatter(logging.Formatter(fmtlog, fmtdate))
+        logging.getLogger().addHandler(filelog)
+
+def get_output_option_value(args):
+    """ Get value of -o option from CC command line args. """
+    output = None
+    i = 0
+    while i + 1 < len(args):
+        i = i + 1
+        m = re.search("^-o(.*)$", args[i])
+        if m != None:
+            output = m.group(1)
+            if output == "":
+                if i + 1 < len(args):
+                    output = args[i+1]
+                    i = i + 1
+                continue
+    return output
+
+def get_input_source_files(args):
+    """ Get input source file of CC command. """
+    inputs = []
+    i = 0
+    while i + 1 < len(args):
+        i = i + 1
+        m = re.search("^-o(.*)$", args[i])
+        if m != None:
+            if m.group(1) == "": i = i + 1
+            continue
+        m = re.search("\\.(c|cc|cxx|cpp|c\+\+|C|i|ii)$", args[i])
+        if m != None:
+            inputs.append(args[i])
+    return inputs
 
 # ####################################################################
 

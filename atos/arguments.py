@@ -79,9 +79,9 @@ class parsers:
         args.dryrun(parser)
         args.version(parser)
         subs = parser.add_subparsers(title="atos commands",
+                                     dest="subcmd",
                                      description="see short description of commands below and " +
                                      "run 'atos COMMAND -h' for each command options",
-                                     dest="command",
                                      help="available atos commands")
 
         sub = subs.add_parser("help", help="get full ATOS tools manual")
@@ -120,12 +120,13 @@ class parsers:
         if parser == None:
             parser = ATOSArgumentParser(prog="atos-audit",
                                         description="ATOS audit tool")
-        args.executables(parser)
+        args.command(parser)
         args.configuration_path(parser)
         args.atos_audit.ccregexp(parser)
         args.atos_audit.ccname(parser)
         args.atos_audit.output(parser)
         args.force(parser)
+        args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser)
         args.version(parser)
@@ -284,6 +285,12 @@ class args:
         parser.add_argument("executables",
                             nargs=argparse.REMAINDER,
                             help="default executables list to optimize")
+
+    @staticmethod
+    def command(parser):
+        parser.add_argument("command",
+                            nargs=argparse.REMAINDER,
+                            help="command to be executed")
 
     class atos_help:
         """ Namespace for non common atos help options. """

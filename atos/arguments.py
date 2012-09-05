@@ -106,9 +106,11 @@ class parsers:
         if parser == None:
             parser = ATOSArgumentParser(prog="atos-help",
                                              description="ATOS help tool")
-        parser.add_argument("topic",
+        parser.add_argument("topics",
                             nargs=argparse.REMAINDER,
-                            help="help topic")
+                            help="help topics. Execute 'atos help' for available topics.")
+        args.atos_help.text(parser)
+        args.atos_help.man(parser)
         args.version(parser)
         return parser
 
@@ -282,6 +284,23 @@ class args:
         parser.add_argument("executables",
                             nargs=argparse.REMAINDER,
                             help="default executables list to optimize")
+
+    class atos_help:
+        """ Namespace for non common atos help options. """
+
+        @staticmethod
+        def man(parser, args=("-m", "--man")):
+            parser.add_argument(*args,
+                                 dest="man",
+                                 action="store_true",
+                                 help="display manpage for TOPICS (default if available)")
+
+        @staticmethod
+        def text(parser, args=("-t", "--text")):
+            parser.add_argument(*args,
+                                 dest="text",
+                                 action="store_true",
+                                 help="display textual manual for TOPICS")
 
     class atos_audit:
         """ Namespace for non common atos-audit arguments. """

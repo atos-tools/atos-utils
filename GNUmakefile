@@ -115,24 +115,24 @@ examples: all check-python-dependencies
 	@echo "   Running examples."
 	@echo "   Should take around 1-2 minutes per example"
 	@echo "   The resulting graph is displayed for each example"
-	$(MAKE) -f $(abspath $(srcdir)GNUmakefile) examples-sha1-c examples-sha1
+	$(MAKE) -f $(abspath $(srcdir)GNUmakefile) examples-sha1-c examples-sha1 examples-bzip2
 
 examples-nograph: all check-python-dependencies
 	@echo "   Running examples."
 	@echo "   Should take around 1-2 minutes per example"
-	$(MAKE) -f $(abspath $(srcdir)GNUmakefile) NOGRAPH=1 examples-sha1-c examples-sha1
+	$(MAKE) -f $(abspath $(srcdir)GNUmakefile) NOGRAPH=1 examples-sha1-c examples-sha1 examples-bzip2
 
-examples-sha1-c: examples-sha1-c-play
-	[ "$(NOGRAPH)" = 1 ] || (cd $(srcdir)examples/sha1-c && $(abspath bin/atos-graph) &)
+examples-sha1-c examples-sha1 examples-bzip2: examples-%: examples-%-play
+	[ "$(NOGRAPH)" = 1 ] || (cd $(srcdir)examples/$* && $(abspath bin/atos-graph) &)
 
 examples-sha1-c-play:
 	cd $(srcdir)examples/sha1-c && $(abspath bin/atos-explore) -f -e ./sha1-c -b "gcc -O2 -o sha1-c sha.c sha1.c" -r ./run.sh -c
 
-examples-sha1: examples-sha1-play
-	[ "$(NOGRAPH)" = 1 ] || (cd $(srcdir)examples/sha1 && $(abspath bin/atos-graph) &)
-
 examples-sha1-play:
 	cd $(srcdir)examples/sha1 && $(abspath bin/atos-explore) -b "make clean sha" -r ./run.sh -c
+
+examples-bzip2-play:
+	cd $(srcdir)examples/bzip2 && $(abspath bin/atos-explore) -b "make clean all" -r ./run.sh -c
 
 #
 # Installation of doc and examples

@@ -20,7 +20,7 @@
 #
 
 
-import sys, os, re, math, itertools, time, fcntl, json, hashlib, subprocess
+import sys, os, re, math, itertools, time, fcntl, json, hashlib, subprocess, shlex
 import cPickle as pickle
 
 import logging
@@ -623,9 +623,10 @@ def fatal(msg):
     sys.exit(1)
 
 def subcall(cmd, outf=None):
-    import subprocess, shlex
-    process = subprocess.Popen(
-        shlex.split(cmd), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    if type(cmd) == type(""):
+        cmd = cmdline2list(cmd)
+    process = subprocess.Popen(cmd,
+                               stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     output = ''
     while True:
         terminated = process.poll() is not None
@@ -641,7 +642,6 @@ def execpath(file):
     Gets the full executable path for the given file.
     Returns None if the command is not found or not executable.
     """
-    import subprocess
     proc = subprocess.Popen(["which", file], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output = proc.communicate()[0]
     if output == "": return None
@@ -652,14 +652,13 @@ def pager_cmd():
     Gets a cmd array for executing a pager.
     Returns None if no pager is available
     """
-    import shlex
     pager = os.getenv("ATOS_PAGER")
     if pager == None:
         pager = os.getenv("PAGER")
     if pager == "":
         return None
     if pager != None:
-        return shlex.split(pager)
+        return cmdline2list(pager)
     pager = "less"
     if execpath(pager) != None:
         return [pager]
@@ -734,16 +733,46 @@ def getarg(key, default=None):
         return eval('lastframe.f_globals["%s"].%s' % (argstruct, key))
     except: return default
 
+def cmdline2list(cmd):
+    """
+    Returns a list of args from the given shell command string.
+    """
+    return shlex.split(cmd)
+
+def list2cmdline(args):
+    """
+    Returns a quoted string suitable for execution from a shell.
+    Ref to http://stackoverflow.com/questions/967443/python-module-to-shellquote-unshellquote.
+    """
+    _quote_pos = re.compile('(?=[^-0-9a-zA-Z_./\n])')
+
+    def quote(arg):
+        r"""
+        >>> quote('\t')
+        '\\\t'
+        >>> quote('foo bar')
+        'foo\\ bar'
+        """
+        # This is the logic emacs uses
+        if arg:
+            return _quote_pos.sub('\\\\', arg).replace('\n',"'\n'")
+        else:
+            return "''"
+    return ' '.join([ quote(a) for a in args ])
+
 def system(cmd, check_status=False, print_out=False):
-    debug('command [%s]' % cmd)
+    printable_cmd = cmd
+    if type(cmd) == type([]):
+        printable_cmd = list2cmdline(cmd)
+    debug('command [%s]' % printable_cmd)
     if getarg('dryrun'):
-        print cmd
+        print printable_cmd
         return 0, None
     outf = (print_out and not (getarg('quiet') or getarg('debug'))) and (
         sys.stdout) or None
     status, output = subcall(cmd, outf)
     debug('\n  | ' + '\n  | '.join(output.split('\n')))
-    debug('command [%s] -> %s' % (cmd, str(status)))
+    debug('command [%s] -> %s' % (printable_cmd, str(status)))
     if check_status and status: sys.exit(1)
     return status, output
 

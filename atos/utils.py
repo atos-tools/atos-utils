@@ -20,6 +20,7 @@ import sys, os, stat
 import globals
 import atos
 import atos_lib
+import logging
 
 def invoque(tool, args):
     """ Dispatcher that invoques the given tool and returns. """
@@ -39,7 +40,7 @@ def execute(tool, args):
 
 def run_atos(args):
     """ Top level atos utility implementation. """
-    return invoque("atos-" + args.command, args)
+    return invoque("atos-" + args.subcmd, args)
 
 def run_atos_help(args):
     """ ATOS help tool implementation. """
@@ -76,6 +77,8 @@ def run_atos_help(args):
 def run_atos_audit(args):
     """ ATOS audit tool implementation. """
 
+    atos_lib.setup_logging(args.debug and logging.DEBUG or logging.WARNING)
+
     if args.quiet != 1:
         print "Auditing build..."
 
@@ -94,7 +97,7 @@ def run_atos_audit(args):
         f.write("cd ")
         f.write(os.getcwd())
         f.write(" && $ARUN ")
-        f.write(" ".join(args.executables))
+        f.write(atos_lib.list2cmdline(args.command))
         f.write("\n")
         f.close()
         os.chmod(build_sh,stat.S_IRWXU|stat.S_IRGRP|stat.S_IXGRP|stat.S_IROTH|stat.S_IXOTH)
@@ -108,11 +111,11 @@ def run_atos_audit(args):
         print "fill " + args.configuration_path + "/build.sh"
         print "fill " + args.configuration_path + "/build.force"
 
-    command = ("env PROOT_IGNORE_ELF_INTERPRETER=1 PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_DEPS_OUTPUT=\"" +
-               args.output_file + "\" PROOT_ADDON_CC_DEPS_CCRE=\"" + args.ccregexp + "\" " +
+    command = ("env PROOT_IGNORE_ELF_INTERPRETER=1 PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_DEPS_OUTPUT='" +
+               args.output_file + "' PROOT_ADDON_CC_DEPS_CCRE='" + args.ccregexp + "' " +
                atos_lib.proot_atos() +" -w " + os.getcwd() + " / ")
-    command += " ".join(args.executables)
-    status, output = atos_lib.system(command, True, False)
+    command += atos_lib.list2cmdline(args.command)
+    status, output = atos_lib.system(command, print_out=True)
     return status
 
 def run_atos_deps(args):
@@ -195,30 +198,32 @@ def run_atos_deps(args):
 def run_atos_explore(args):
     """ ATOS explore tool implementation. """
 
+    atos_lib.setup_logging(args.debug and logging.DEBUG or logging.WARNING)
+
     if args.build_script:
-        opt_build = " -b \"" + args.build_script + "\""
+        opt_build = " -b '" + args.build_script + "'"
     else:
         opt_build = ""
 
     if args.run_script:
-        opt_run = " -r \"" + args.run_script + "\""
+        opt_run = " -r '" + args.run_script + "'"
     else:
         opt_run = ""
 
     if args.results_script:
-        opt_results = " -t \"" + args.results_script + "\""
+        opt_results = " -t '" + args.results_script + "'"
     else:
         opt_results = ""
 
     if args.exe:
-        executables = " -e \"" + args.exe + "\""
+        executables = " -e '" + args.exe + "'"
     elif args.executables:
-        executables = " -e \"" + " ".join(args.executables) + "\""
+        executables = " -e '" + " ".join(args.executables) + "'"
     else:
         executables = ""
 
     if args.remote_path:
-        opt_remote_profile_path = " -B \"" + args.remote_path + "\""
+        opt_remote_profile_path = " -B '" + args.remote_path + "'"
     else:
         opt_remote_profile_path = ""
 

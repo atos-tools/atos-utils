@@ -43,28 +43,35 @@ def run_atos(args):
 
 def run_atos_help(args):
     """ ATOS help tool implementation. """
-    if not args.topic:
-        print ""
+    if not args.topics:
+        # Output rst form for default help page
+        print "==========================================="
         print "ATOS auto tuning optimization system manual"
         print "==========================================="
         print
         print "Browse the manual with the following commands:"
         print
-        print " atos help intro    : displays ATOS short introduction"
-        print " atos help tutorial : displays ATOS tutorial"
+        print "  atos help intro    : displays ATOS short introduction."
+        print "  atos help tutorial : displays ATOS tutorial."
         print
-        print " atos help COMMAND  : display manual for the given atos COMMAND"
+        print "  atos help COMMAND  : display manual for the given atos COMMAND."
+        print "                      Execute ``atos -h`` for available COMMANDs."
         print
         return 0
-    if args.topic[0] == "intro":
-        doc = "intro.rst"
-    elif args.topic[0] == "tutorial":
-        doc = "tutorial.rst"
-    else:
-        # For now the per command manual does not exist, it may end with
-        # a call to man atos-<cmd> for instance
-        doc = args.topic[0] + ".rst"
-    return atos_lib.pagercall("cat " + os.path.join(globals.SHAREDIR, "doc", doc))
+    for topic in args.topics:
+        if args.text:
+            status = atos_lib.help_text(topic)
+        elif args.man:
+            status = atos_lib.help_man(topic)
+        else:
+            status = atos_lib.help_man(topic)
+            if status != 0:
+                status = atos_lib.help_text(topic)
+        if status != 0:
+            print >>sys.stderr, "atos-help: " + "manual not found for topic: " + topic + "."
+            print >>sys.stderr, "Execute 'atos help' for available topics."
+            return 1
+    return 0
 
 def run_atos_audit(args):
     """ ATOS audit tool implementation. """

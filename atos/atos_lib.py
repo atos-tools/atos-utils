@@ -670,7 +670,7 @@ def pager_cmd():
 def pagercall(cmd):
     """
     Executes a command and page the output.
-    Returns the exit status
+    Returns the exit status of the command.
     """
     pager_args = pager_cmd()
     if pager_args != None:
@@ -681,6 +681,48 @@ def pagercall(cmd):
         print >>sys.stderr, "error during pager command: " + cmd
         sys.exit(1)
     return status
+
+def mancall(page):
+    """
+    Execute man for the given page.
+    Returns the exit status of the command.
+    """
+    cmd = "env MANPATH=" + globals.MANDIR + " man " + page
+    try:
+        status = os.system(cmd)
+    except Exception:
+        print >>sys.stderr, "error during man command: " + cmd
+        sys.exit(1)
+    return status
+
+def help_man(topic):
+    """
+    Displays the manpage for topic.
+    Returns non 0 if man command or manpage are not available.
+    Do not return error if the mancall fails. For instance
+    the user may interrupt the display, but this is not an error.
+    """
+    man = execpath("man")
+    page = "atos-" + topic
+    manpage = os.path.join(globals.MANDIR, "man1", page + ".1")
+    if man and os.path.exists(manpage):
+        mancall(page)
+        return 0
+    return 1
+
+
+def help_text(topic):
+    """
+    Displays the textual form of the manual for topic.
+    Returns non 0 if rst file is not available.
+    Do not return error if the pagercall fails. Ref comment in help_man().
+    """
+    rst_file = os.path.join(globals.DOCDIR, topic + ".rst")
+    if os.path.exists(rst_file):
+        pagercall("cat " + rst_file)
+        return 0
+    return 1
+
 
 def getarg(key, default=None):
     # TODO: to be removed when argument parsing will be factorized

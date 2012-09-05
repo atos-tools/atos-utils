@@ -25,6 +25,8 @@ PREFIX=os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..',
 BINDIR=os.path.join(PREFIX, 'bin')
 LIBDIR=os.path.join(PREFIX, 'lib', 'atos')
 SHAREDIR=os.path.join(PREFIX, 'share', 'atos')
+MANDIR=os.path.join(SHAREDIR, 'man')
+DOCDIR=os.path.join(SHAREDIR, 'doc')
 PYTHONDIR=os.path.join(LIBDIR, 'python')
 sys.path.insert(0, PYTHONDIR)
 

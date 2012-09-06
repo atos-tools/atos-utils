@@ -6,8 +6,14 @@
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/gcc-plugin.h" 1
 # 27 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/gcc-plugin.h"
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/config.h" 1
+
+
+
+
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/auto-host.h" 1
 # 7 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/config.h" 2
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/ansidecl.h" 1
 # 9 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/config.h" 2
 # 28 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/gcc-plugin.h" 2
@@ -28,6 +34,8 @@ typedef long unsigned int size_t;
 # 323 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include/stddef.h" 3 4
 typedef int wchar_t;
 # 40 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
+
+
 # 1 "/usr/include/stdio.h" 1 3 4
 # 28 "/usr/include/stdio.h" 3 4
 # 1 "/usr/include/features.h" 1 3 4
@@ -42,35 +50,62 @@ typedef int wchar_t;
 # 347 "/usr/include/features.h" 2 3 4
 # 378 "/usr/include/features.h" 3 4
 # 1 "/usr/include/gnu/stubs.h" 1 3 4
+
+
+
 # 1 "/usr/include/bits/wordsize.h" 1 3 4
 # 5 "/usr/include/gnu/stubs.h" 2 3 4
+
+
+
+
 # 1 "/usr/include/gnu/stubs-64.h" 1 3 4
 # 10 "/usr/include/gnu/stubs.h" 2 3 4
 # 379 "/usr/include/features.h" 2 3 4
 # 29 "/usr/include/stdio.h" 2 3 4
+
+
+
+
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include/stddef.h" 1 3 4
 # 35 "/usr/include/stdio.h" 2 3 4
+
 # 1 "/usr/include/bits/types.h" 1 3 4
 # 28 "/usr/include/bits/types.h" 3 4
 # 1 "/usr/include/bits/wordsize.h" 1 3 4
 # 29 "/usr/include/bits/types.h" 2 3 4
+
+
 typedef unsigned char __u_char;
 typedef unsigned short int __u_short;
 typedef unsigned int __u_int;
 typedef unsigned long int __u_long;
+
+
 typedef signed char __int8_t;
 typedef unsigned char __uint8_t;
 typedef signed short int __int16_t;
 typedef unsigned short int __uint16_t;
 typedef signed int __int32_t;
 typedef unsigned int __uint32_t;
+
 typedef signed long int __int64_t;
 typedef unsigned long int __uint64_t;
+
+
+
+
+
+
+
 typedef long int __quad_t;
 typedef unsigned long int __u_quad_t;
 # 131 "/usr/include/bits/types.h" 3 4
 # 1 "/usr/include/bits/typesizes.h" 1 3 4
 # 132 "/usr/include/bits/types.h" 2 3 4
+
+
 typedef unsigned long int __dev_t;
 typedef unsigned int __uid_t;
 typedef unsigned int __gid_t;
@@ -89,28 +124,59 @@ typedef unsigned int __id_t;
 typedef long int __time_t;
 typedef unsigned int __useconds_t;
 typedef long int __suseconds_t;
+
 typedef int __daddr_t;
 typedef long int __swblk_t;
 typedef int __key_t;
+
+
 typedef int __clockid_t;
+
+
 typedef void * __timer_t;
+
+
 typedef long int __blksize_t;
+
+
+
+
 typedef long int __blkcnt_t;
 typedef long int __blkcnt64_t;
+
+
 typedef unsigned long int __fsblkcnt_t;
 typedef unsigned long int __fsblkcnt64_t;
+
+
 typedef unsigned long int __fsfilcnt_t;
 typedef unsigned long int __fsfilcnt64_t;
+
 typedef long int __ssize_t;
+
+
+
 typedef __off64_t __loff_t;
 typedef __quad_t *__qaddr_t;
 typedef char *__caddr_t;
+
+
 typedef long int __intptr_t;
+
+
 typedef unsigned int __socklen_t;
 # 37 "/usr/include/stdio.h" 2 3 4
 # 45 "/usr/include/stdio.h" 3 4
 struct _IO_FILE;
+
+
+
 typedef struct _IO_FILE FILE;
+
+
+
+
+
 # 65 "/usr/include/stdio.h" 3 4
 typedef struct _IO_FILE __FILE;
 # 75 "/usr/include/stdio.h" 3 4
@@ -120,6 +186,10 @@ typedef struct _IO_FILE __FILE;
 # 15 "/usr/include/_G_config.h" 3 4
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include/stddef.h" 1 3 4
 # 16 "/usr/include/_G_config.h" 2 3 4
+
+
+
+
 # 1 "/usr/include/wchar.h" 1 3 4
 # 83 "/usr/include/wchar.h" 3 4
 typedef struct
@@ -127,11 +197,16 @@ typedef struct
   int __count;
   union
   {
+
     unsigned int __wch;
+
+
+
     char __wchb[4];
   } __value;
 } __mbstate_t;
 # 21 "/usr/include/_G_config.h" 2 3 4
+
 typedef struct
 {
   __off_t __pos;
@@ -152,12 +227,22 @@ typedef unsigned int _G_uint32_t __attribute__ ((__mode__ (__SI__)));
 struct _IO_jump_t; struct _IO_FILE;
 # 180 "/usr/include/libio.h" 3 4
 typedef void _IO_lock_t;
+
+
+
+
+
 struct _IO_marker {
   struct _IO_marker *_next;
   struct _IO_FILE *_sbuf;
+
+
+
   int _pos;
 # 203 "/usr/include/libio.h" 3 4
 };
+
+
 enum __codecvt_result
 {
   __codecvt_ok,
@@ -168,6 +253,10 @@ enum __codecvt_result
 # 271 "/usr/include/libio.h" 3 4
 struct _IO_FILE {
   int _flags;
+
+
+
+
   char* _IO_read_ptr;
   char* _IO_read_end;
   char* _IO_read_base;
@@ -176,17 +265,31 @@ struct _IO_FILE {
   char* _IO_write_end;
   char* _IO_buf_base;
   char* _IO_buf_end;
+
   char *_IO_save_base;
   char *_IO_backup_base;
   char *_IO_save_end;
+
   struct _IO_marker *_markers;
+
   struct _IO_FILE *_chain;
+
   int _fileno;
+
+
+
   int _flags2;
+
   __off_t _old_offset;
+
+
+
   unsigned short _cur_column;
   signed char _vtable_offset;
   char _shortbuf[1];
+
+
+
   _IO_lock_t *_lock;
 # 319 "/usr/include/libio.h" 3 4
   __off64_t _offset;
@@ -196,24 +299,54 @@ struct _IO_FILE {
   void *__pad3;
   void *__pad4;
   size_t __pad5;
+
   int _mode;
+
   char _unused2[15 * sizeof (int) - 4 * sizeof (void *) - sizeof (size_t)];
+
 };
+
+
 typedef struct _IO_FILE _IO_FILE;
+
+
 struct _IO_FILE_plus;
+
 extern struct _IO_FILE_plus _IO_2_1_stdin_;
 extern struct _IO_FILE_plus _IO_2_1_stdout_;
 extern struct _IO_FILE_plus _IO_2_1_stderr_;
 # 364 "/usr/include/libio.h" 3 4
 typedef __ssize_t __io_read_fn (void *__cookie, char *__buf, size_t __nbytes);
+
+
+
+
+
+
+
 typedef __ssize_t __io_write_fn (void *__cookie, __const char *__buf,
      size_t __n);
+
+
+
+
+
+
+
 typedef int __io_seek_fn (void *__cookie, __off64_t *__pos, int __w);
+
+
 typedef int __io_close_fn (void *__cookie);
+
+
+
+
 typedef __io_read_fn cookie_read_function_t;
 typedef __io_write_fn cookie_write_function_t;
 typedef __io_seek_fn cookie_seek_function_t;
 typedef __io_close_fn cookie_close_function_t;
+
+
 typedef struct
 {
   __io_read_fn *read;
@@ -222,9 +355,19 @@ typedef struct
   __io_close_fn *close;
 } _IO_cookie_io_functions_t;
 typedef _IO_cookie_io_functions_t cookie_io_functions_t;
+
 struct _IO_cookie_file;
+
+
 extern void _IO_cookie_init (struct _IO_cookie_file *__cfile, int __read_write,
         void *__cookie, _IO_cookie_io_functions_t __fns);
+
+
+
+
+
+
+
 extern int __underflow (_IO_FILE *);
 extern int __uflow (_IO_FILE *);
 extern int __overflow (_IO_FILE *, int);
@@ -233,7 +376,13 @@ extern int _IO_getc (_IO_FILE *__fp);
 extern int _IO_putc (int __c, _IO_FILE *__fp);
 extern int _IO_feof (_IO_FILE *__fp) __attribute__ ((__nothrow__));
 extern int _IO_ferror (_IO_FILE *__fp) __attribute__ ((__nothrow__));
+
 extern int _IO_peekc_locked (_IO_FILE *__fp);
+
+
+
+
+
 extern void _IO_flockfile (_IO_FILE *) __attribute__ ((__nothrow__));
 extern void _IO_funlockfile (_IO_FILE *) __attribute__ ((__nothrow__));
 extern int _IO_ftrylockfile (_IO_FILE *) __attribute__ ((__nothrow__));
@@ -244,77 +393,213 @@ extern int _IO_vfprintf (_IO_FILE *__restrict, const char *__restrict,
     __gnuc_va_list);
 extern __ssize_t _IO_padn (_IO_FILE *, int, __ssize_t);
 extern size_t _IO_sgetn (_IO_FILE *, void *, size_t);
+
 extern __off64_t _IO_seekoff (_IO_FILE *, __off64_t, int, int);
 extern __off64_t _IO_seekpos (_IO_FILE *, __off64_t, int);
+
 extern void _IO_free_backup_area (_IO_FILE *) __attribute__ ((__nothrow__));
 # 76 "/usr/include/stdio.h" 2 3 4
 # 89 "/usr/include/stdio.h" 3 4
+
+
 typedef _G_fpos_t fpos_t;
+
+
+
+
+
 typedef _G_fpos64_t fpos64_t;
 # 141 "/usr/include/stdio.h" 3 4
 # 1 "/usr/include/bits/stdio_lim.h" 1 3 4
 # 142 "/usr/include/stdio.h" 2 3 4
+
+
+
 extern struct _IO_FILE *stdin;
 extern struct _IO_FILE *stdout;
 extern struct _IO_FILE *stderr;
+
+
+
+
+
+
+
 extern int remove (__const char *__filename) __attribute__ ((__nothrow__));
+
 extern int rename (__const char *__old, __const char *__new) __attribute__ ((__nothrow__));
+
+
+
+
 extern int renameat (int __oldfd, __const char *__old, int __newfd,
        __const char *__new) __attribute__ ((__nothrow__));
+
+
+
+
+
+
+
+
 extern FILE *tmpfile (void) ;
 # 182 "/usr/include/stdio.h" 3 4
 extern FILE *tmpfile64 (void) ;
+
+
+
 extern char *tmpnam (char *__s) __attribute__ ((__nothrow__)) ;
+
+
+
+
+
 extern char *tmpnam_r (char *__s) __attribute__ ((__nothrow__)) ;
 # 204 "/usr/include/stdio.h" 3 4
 extern char *tempnam (__const char *__dir, __const char *__pfx)
      __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) ;
+
+
+
+
+
+
+
+
 extern int fclose (FILE *__stream);
+
+
+
+
 extern int fflush (FILE *__stream);
+
 # 229 "/usr/include/stdio.h" 3 4
 extern int fflush_unlocked (FILE *__stream);
 # 239 "/usr/include/stdio.h" 3 4
 extern int fcloseall (void);
+
+
+
+
+
+
+
+
+
 extern FILE *fopen (__const char *__restrict __filename,
       __const char *__restrict __modes) ;
+
+
+
+
 extern FILE *freopen (__const char *__restrict __filename,
         __const char *__restrict __modes,
         FILE *__restrict __stream) ;
 # 272 "/usr/include/stdio.h" 3 4
+
+
 extern FILE *fopen64 (__const char *__restrict __filename,
         __const char *__restrict __modes) ;
 extern FILE *freopen64 (__const char *__restrict __filename,
    __const char *__restrict __modes,
    FILE *__restrict __stream) ;
+
+
+
+
 extern FILE *fdopen (int __fd, __const char *__modes) __attribute__ ((__nothrow__)) ;
+
+
+
+
+
 extern FILE *fopencookie (void *__restrict __magic_cookie,
      __const char *__restrict __modes,
      _IO_cookie_io_functions_t __io_funcs) __attribute__ ((__nothrow__)) ;
+
+
+
+
 extern FILE *fmemopen (void *__s, size_t __len, __const char *__modes)
   __attribute__ ((__nothrow__)) ;
+
+
+
+
 extern FILE *open_memstream (char **__bufloc, size_t *__sizeloc) __attribute__ ((__nothrow__)) ;
+
+
+
+
+
+
 extern void setbuf (FILE *__restrict __stream, char *__restrict __buf) __attribute__ ((__nothrow__));
+
+
+
 extern int setvbuf (FILE *__restrict __stream, char *__restrict __buf,
       int __modes, size_t __n) __attribute__ ((__nothrow__));
+
+
+
+
+
 extern void setbuffer (FILE *__restrict __stream, char *__restrict __buf,
          size_t __size) __attribute__ ((__nothrow__));
+
+
 extern void setlinebuf (FILE *__stream) __attribute__ ((__nothrow__));
+
+
+
+
+
+
+
+
 extern int fprintf (FILE *__restrict __stream,
       __const char *__restrict __format, ...);
+
+
+
+
 extern int printf (__const char *__restrict __format, ...);
+
 extern int sprintf (char *__restrict __s,
       __const char *__restrict __format, ...) __attribute__ ((__nothrow__));
+
+
+
+
+
 extern int vfprintf (FILE *__restrict __s, __const char *__restrict __format,
        __gnuc_va_list __arg);
+
+
+
+
 extern int vprintf (__const char *__restrict __format, __gnuc_va_list __arg);
+
 extern int vsprintf (char *__restrict __s, __const char *__restrict __format,
        __gnuc_va_list __arg) __attribute__ ((__nothrow__));
+
+
+
+
+
 extern int snprintf (char *__restrict __s, size_t __maxlen,
        __const char *__restrict __format, ...)
      __attribute__ ((__nothrow__)) __attribute__ ((__format__ (__printf__, 3, 4)));
+
 extern int vsnprintf (char *__restrict __s, size_t __maxlen,
         __const char *__restrict __format, __gnuc_va_list __arg)
      __attribute__ ((__nothrow__)) __attribute__ ((__format__ (__printf__, 3, 0)));
+
+
+
+
+
+
 extern int vasprintf (char **__restrict __ptr, __const char *__restrict __f,
         __gnuc_va_list __arg)
      __attribute__ ((__nothrow__)) __attribute__ ((__format__ (__printf__, 2, 0))) ;
@@ -330,41 +615,131 @@ extern int vdprintf (int __fd, __const char *__restrict __fmt,
      __attribute__ ((__format__ (__printf__, 2, 0)));
 extern int dprintf (int __fd, __const char *__restrict __fmt, ...)
      __attribute__ ((__format__ (__printf__, 2, 3)));
+
+
+
+
+
+
+
+
 extern int fscanf (FILE *__restrict __stream,
      __const char *__restrict __format, ...) ;
+
+
+
+
 extern int scanf (__const char *__restrict __format, ...) ;
+
 extern int sscanf (__const char *__restrict __s,
      __const char *__restrict __format, ...) __attribute__ ((__nothrow__));
 # 445 "/usr/include/stdio.h" 3 4
+
+
+
+
+
+
+
+
 extern int vfscanf (FILE *__restrict __s, __const char *__restrict __format,
       __gnuc_va_list __arg)
      __attribute__ ((__format__ (__scanf__, 2, 0))) ;
+
+
+
+
+
 extern int vscanf (__const char *__restrict __format, __gnuc_va_list __arg)
      __attribute__ ((__format__ (__scanf__, 1, 0))) ;
+
+
 extern int vsscanf (__const char *__restrict __s,
       __const char *__restrict __format, __gnuc_va_list __arg)
      __attribute__ ((__nothrow__)) __attribute__ ((__format__ (__scanf__, 2, 0)));
 # 504 "/usr/include/stdio.h" 3 4
+
+
+
+
+
+
+
+
+
 extern int fgetc (FILE *__stream);
 extern int getc (FILE *__stream);
+
+
+
+
+
 extern int getchar (void);
+
 # 532 "/usr/include/stdio.h" 3 4
 extern int getc_unlocked (FILE *__stream);
 extern int getchar_unlocked (void);
 # 543 "/usr/include/stdio.h" 3 4
 extern int fgetc_unlocked (FILE *__stream);
+
+
+
+
+
+
+
+
+
+
+
 extern int fputc (int __c, FILE *__stream);
 extern int putc (int __c, FILE *__stream);
+
+
+
+
+
 extern int putchar (int __c);
+
 # 576 "/usr/include/stdio.h" 3 4
 extern int fputc_unlocked (int __c, FILE *__stream);
+
+
+
+
+
+
+
 extern int putc_unlocked (int __c, FILE *__stream);
 extern int putchar_unlocked (int __c);
+
+
+
+
+
+
 extern int getw (FILE *__stream);
+
+
 extern int putw (int __w, FILE *__stream);
+
+
+
+
+
+
+
+
 extern char *fgets (char *__restrict __s, int __n, FILE *__restrict __stream)
      ;
+
+
+
+
+
+
 extern char *gets (char *__s) ;
+
 # 622 "/usr/include/stdio.h" 3 4
 extern char *fgets_unlocked (char *__restrict __s, int __n,
         FILE *__restrict __stream) ;
@@ -375,16 +750,53 @@ extern __ssize_t __getdelim (char **__restrict __lineptr,
 extern __ssize_t getdelim (char **__restrict __lineptr,
         size_t *__restrict __n, int __delimiter,
         FILE *__restrict __stream) ;
+
+
+
+
+
+
+
 extern __ssize_t getline (char **__restrict __lineptr,
        size_t *__restrict __n,
        FILE *__restrict __stream) ;
+
+
+
+
+
+
+
+
 extern int fputs (__const char *__restrict __s, FILE *__restrict __stream);
+
+
+
+
+
 extern int puts (__const char *__s);
+
+
+
+
+
+
 extern int ungetc (int __c, FILE *__stream);
+
+
+
+
+
+
 extern size_t fread (void *__restrict __ptr, size_t __size,
        size_t __n, FILE *__restrict __stream) ;
+
+
+
+
 extern size_t fwrite (__const void *__restrict __ptr, size_t __size,
         size_t __n, FILE *__restrict __s);
+
 # 699 "/usr/include/stdio.h" 3 4
 extern int fputs_unlocked (__const char *__restrict __s,
       FILE *__restrict __stream);
@@ -393,42 +805,131 @@ extern size_t fread_unlocked (void *__restrict __ptr, size_t __size,
          size_t __n, FILE *__restrict __stream) ;
 extern size_t fwrite_unlocked (__const void *__restrict __ptr, size_t __size,
           size_t __n, FILE *__restrict __stream);
+
+
+
+
+
+
+
+
 extern int fseek (FILE *__stream, long int __off, int __whence);
+
+
+
+
 extern long int ftell (FILE *__stream) ;
+
+
+
+
 extern void rewind (FILE *__stream);
+
 # 746 "/usr/include/stdio.h" 3 4
 extern int fseeko (FILE *__stream, __off_t __off, int __whence);
+
+
+
+
 extern __off_t ftello (FILE *__stream) ;
 # 765 "/usr/include/stdio.h" 3 4
+
+
+
+
+
+
 extern int fgetpos (FILE *__restrict __stream, fpos_t *__restrict __pos);
+
+
+
+
 extern int fsetpos (FILE *__stream, __const fpos_t *__pos);
 # 788 "/usr/include/stdio.h" 3 4
+
+
+
 extern int fseeko64 (FILE *__stream, __off64_t __off, int __whence);
 extern __off64_t ftello64 (FILE *__stream) ;
 extern int fgetpos64 (FILE *__restrict __stream, fpos64_t *__restrict __pos);
 extern int fsetpos64 (FILE *__stream, __const fpos64_t *__pos);
+
+
+
+
 extern void clearerr (FILE *__stream) __attribute__ ((__nothrow__));
+
 extern int feof (FILE *__stream) __attribute__ ((__nothrow__)) ;
+
 extern int ferror (FILE *__stream) __attribute__ ((__nothrow__)) ;
+
+
+
+
 extern void clearerr_unlocked (FILE *__stream) __attribute__ ((__nothrow__));
 extern int feof_unlocked (FILE *__stream) __attribute__ ((__nothrow__)) ;
 extern int ferror_unlocked (FILE *__stream) __attribute__ ((__nothrow__)) ;
+
+
+
+
+
+
+
+
 extern void perror (__const char *__s);
+
+
+
+
+
+
 # 1 "/usr/include/bits/sys_errlist.h" 1 3 4
 # 27 "/usr/include/bits/sys_errlist.h" 3 4
 extern int sys_nerr;
 extern __const char *__const sys_errlist[];
+
+
 extern int _sys_nerr;
 extern __const char *__const _sys_errlist[];
 # 827 "/usr/include/stdio.h" 2 3 4
+
+
+
+
 extern int fileno (FILE *__stream) __attribute__ ((__nothrow__)) ;
+
+
+
+
 extern int fileno_unlocked (FILE *__stream) __attribute__ ((__nothrow__)) ;
 # 846 "/usr/include/stdio.h" 3 4
 extern FILE *popen (__const char *__command, __const char *__modes) ;
+
+
+
+
+
 extern int pclose (FILE *__stream);
+
+
+
+
+
 extern char *ctermid (char *__s) __attribute__ ((__nothrow__));
+
+
+
+
+
 extern char *cuserid (char *__s);
+
+
+
+
 struct obstack;
+
+
 extern int obstack_printf (struct obstack *__restrict __obstack,
       __const char *__restrict __format, ...)
      __attribute__ ((__nothrow__)) __attribute__ ((__format__ (__printf__, 2, 3)));
@@ -436,15 +937,29 @@ extern int obstack_vprintf (struct obstack *__restrict __obstack,
        __const char *__restrict __format,
        __gnuc_va_list __args)
      __attribute__ ((__nothrow__)) __attribute__ ((__format__ (__printf__, 2, 0)));
+
+
+
+
+
+
+
 extern void flockfile (FILE *__stream) __attribute__ ((__nothrow__));
+
+
+
 extern int ftrylockfile (FILE *__stream) __attribute__ ((__nothrow__)) ;
+
+
 extern void funlockfile (FILE *__stream) __attribute__ ((__nothrow__));
 # 916 "/usr/include/stdio.h" 3 4
+
 # 43 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
 # 183 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h"
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/safe-ctype.h" 1
 # 57 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/safe-ctype.h"
 enum {
+
   _sch_isblank = 0x0001,
   _sch_iscntrl = 0x0002,
   _sch_isdigit = 0x0004,
@@ -454,16 +969,23 @@ enum {
   _sch_isspace = 0x0040,
   _sch_isupper = 0x0080,
   _sch_isxdigit = 0x0100,
+
+
   _sch_isidst = 0x0200,
   _sch_isvsp = 0x0400,
   _sch_isnvsp = 0x0800,
+
+
   _sch_isalpha = _sch_isupper|_sch_islower,
   _sch_isalnum = _sch_isalpha|_sch_isdigit,
   _sch_isidnum = _sch_isidst|_sch_isdigit,
   _sch_isgraph = _sch_isalnum|_sch_ispunct,
   _sch_iscppsp = _sch_isvsp|_sch_isnvsp,
   _sch_isbasic = _sch_isprint|_sch_iscppsp
+
 };
+
+
 extern const unsigned short _sch_istable[256];
 # 110 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/safe-ctype.h"
 extern const unsigned char _sch_toupper[256];
@@ -471,6 +993,7 @@ extern const unsigned char _sch_tolower[256];
 # 122 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/safe-ctype.h"
 # 1 "/usr/include/ctype.h" 1 3 4
 # 30 "/usr/include/ctype.h" 3 4
+
 # 41 "/usr/include/ctype.h" 3 4
 # 1 "/usr/include/endian.h" 1 3 4
 # 37 "/usr/include/endian.h" 3 4
@@ -483,6 +1006,12 @@ extern const unsigned char _sch_tolower[256];
 # 29 "/usr/include/bits/byteswap.h" 2 3 4
 # 62 "/usr/include/endian.h" 2 3 4
 # 42 "/usr/include/ctype.h" 2 3 4
+
+
+
+
+
+
 enum
 {
   _ISupper = ((0) < 8 ? ((1 << (0)) << 8) : ((1 << (0)) >> 8)),
@@ -506,6 +1035,12 @@ extern __const __int32_t **__ctype_tolower_loc (void)
 extern __const __int32_t **__ctype_toupper_loc (void)
      __attribute__ ((__nothrow__)) __attribute__ ((__const));
 # 96 "/usr/include/ctype.h" 3 4
+
+
+
+
+
+
 extern int isalnum (int) __attribute__ ((__nothrow__));
 extern int isalpha (int) __attribute__ ((__nothrow__));
 extern int iscntrl (int) __attribute__ ((__nothrow__));
@@ -517,12 +1052,43 @@ extern int ispunct (int) __attribute__ ((__nothrow__));
 extern int isspace (int) __attribute__ ((__nothrow__));
 extern int isupper (int) __attribute__ ((__nothrow__));
 extern int isxdigit (int) __attribute__ ((__nothrow__));
+
+
+
 extern int tolower (int __c) __attribute__ ((__nothrow__));
+
+
 extern int toupper (int __c) __attribute__ ((__nothrow__));
+
+
+
+
+
+
+
+
 extern int isblank (int) __attribute__ ((__nothrow__));
+
+
+
+
+
+
 extern int isctype (int __c, int __mask) __attribute__ ((__nothrow__));
+
+
+
+
+
+
 extern int isascii (int __c) __attribute__ ((__nothrow__));
+
+
+
 extern int toascii (int __c) __attribute__ ((__nothrow__));
+
+
+
 extern int _toupper (int) __attribute__ ((__nothrow__));
 extern int _tolower (int) __attribute__ ((__nothrow__));
 # 233 "/usr/include/ctype.h" 3 4
@@ -530,12 +1096,19 @@ extern int _tolower (int) __attribute__ ((__nothrow__));
 # 28 "/usr/include/xlocale.h" 3 4
 typedef struct __locale_struct
 {
+
   struct locale_data *__locales[13];
+
+
   const unsigned short int *__ctype_b;
   const int *__ctype_tolower;
   const int *__ctype_toupper;
+
+
   const char *__names[13];
 } *__locale_t;
+
+
 typedef __locale_t locale_t;
 # 234 "/usr/include/ctype.h" 2 3 4
 # 247 "/usr/include/ctype.h" 3 4
@@ -550,16 +1123,30 @@ extern int ispunct_l (int, __locale_t) __attribute__ ((__nothrow__));
 extern int isspace_l (int, __locale_t) __attribute__ ((__nothrow__));
 extern int isupper_l (int, __locale_t) __attribute__ ((__nothrow__));
 extern int isxdigit_l (int, __locale_t) __attribute__ ((__nothrow__));
+
 extern int isblank_l (int, __locale_t) __attribute__ ((__nothrow__));
+
+
+
 extern int __tolower_l (int __c, __locale_t __l) __attribute__ ((__nothrow__));
 extern int tolower_l (int __c, __locale_t __l) __attribute__ ((__nothrow__));
+
+
 extern int __toupper_l (int __c, __locale_t __l) __attribute__ ((__nothrow__));
 extern int toupper_l (int __c, __locale_t __l) __attribute__ ((__nothrow__));
 # 323 "/usr/include/ctype.h" 3 4
+
 # 123 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/safe-ctype.h" 2
 # 184 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
+
 # 1 "/usr/include/sys/types.h" 1 3 4
 # 29 "/usr/include/sys/types.h" 3 4
+
+
+
+
+
+
 typedef __u_char u_char;
 typedef __u_short u_short;
 typedef __u_int u_int;
@@ -567,37 +1154,127 @@ typedef __u_long u_long;
 typedef __quad_t quad_t;
 typedef __u_quad_t u_quad_t;
 typedef __fsid_t fsid_t;
+
+
+
+
 typedef __loff_t loff_t;
+
+
+
 typedef __ino_t ino_t;
+
+
+
+
+
+
 typedef __ino64_t ino64_t;
+
+
+
+
 typedef __dev_t dev_t;
+
+
+
+
 typedef __gid_t gid_t;
+
+
+
+
 typedef __mode_t mode_t;
+
+
+
+
 typedef __nlink_t nlink_t;
+
+
+
+
 typedef __uid_t uid_t;
+
+
+
+
+
 typedef __off_t off_t;
+
+
+
+
+
+
 typedef __off64_t off64_t;
+
+
+
+
 typedef __pid_t pid_t;
+
+
+
+
 typedef __id_t id_t;
+
+
+
+
 typedef __ssize_t ssize_t;
+
+
+
+
+
 typedef __daddr_t daddr_t;
 typedef __caddr_t caddr_t;
+
+
+
+
+
 typedef __key_t key_t;
 # 133 "/usr/include/sys/types.h" 3 4
 # 1 "/usr/include/time.h" 1 3 4
 # 58 "/usr/include/time.h" 3 4
+
+
 typedef __clock_t clock_t;
+
+
+
 # 74 "/usr/include/time.h" 3 4
+
+
 typedef __time_t time_t;
+
+
+
 # 92 "/usr/include/time.h" 3 4
 typedef __clockid_t clockid_t;
 # 104 "/usr/include/time.h" 3 4
 typedef __timer_t timer_t;
 # 134 "/usr/include/sys/types.h" 2 3 4
+
+
+
 typedef __useconds_t useconds_t;
+
+
+
 typedef __suseconds_t suseconds_t;
+
+
+
+
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include/stddef.h" 1 3 4
 # 148 "/usr/include/sys/types.h" 2 3 4
+
+
+
 typedef unsigned long int ulong;
 typedef unsigned short int ushort;
 typedef unsigned int uint;
@@ -606,10 +1283,13 @@ typedef int int8_t __attribute__ ((__mode__ (__QI__)));
 typedef int int16_t __attribute__ ((__mode__ (__HI__)));
 typedef int int32_t __attribute__ ((__mode__ (__SI__)));
 typedef int int64_t __attribute__ ((__mode__ (__DI__)));
+
+
 typedef unsigned int u_int8_t __attribute__ ((__mode__ (__QI__)));
 typedef unsigned int u_int16_t __attribute__ ((__mode__ (__HI__)));
 typedef unsigned int u_int32_t __attribute__ ((__mode__ (__SI__)));
 typedef unsigned int u_int64_t __attribute__ ((__mode__ (__DI__)));
+
 typedef int register_t __attribute__ ((__mode__ (__word__)));
 # 220 "/usr/include/sys/types.h" 3 4
 # 1 "/usr/include/sys/select.h" 1 3 4
@@ -619,15 +1299,29 @@ typedef int register_t __attribute__ ((__mode__ (__word__)));
 # 1 "/usr/include/bits/wordsize.h" 1 3 4
 # 24 "/usr/include/bits/select.h" 2 3 4
 # 32 "/usr/include/sys/select.h" 2 3 4
+
+
 # 1 "/usr/include/bits/sigset.h" 1 3 4
 # 24 "/usr/include/bits/sigset.h" 3 4
 typedef int __sig_atomic_t;
+
+
+
+
 typedef struct
   {
     unsigned long int __val[(1024 / (8 * sizeof (unsigned long int)))];
   } __sigset_t;
 # 35 "/usr/include/sys/select.h" 2 3 4
+
+
+
 typedef __sigset_t sigset_t;
+
+
+
+
+
 # 1 "/usr/include/time.h" 1 3 4
 # 120 "/usr/include/time.h" 3 4
 struct timespec
@@ -636,6 +1330,7 @@ struct timespec
     long int tv_nsec;
   };
 # 45 "/usr/include/sys/select.h" 2 3 4
+
 # 1 "/usr/include/bits/time.h" 1 3 4
 # 69 "/usr/include/bits/time.h" 3 4
 struct timeval
@@ -649,10 +1344,25 @@ typedef long int __fd_mask;
 # 67 "/usr/include/sys/select.h" 3 4
 typedef struct
   {
+
+
+
     __fd_mask fds_bits[1024 / (8 * (int) sizeof (__fd_mask))];
+
+
+
+
+
   } fd_set;
+
+
+
+
+
+
 typedef __fd_mask fd_mask;
 # 99 "/usr/include/sys/select.h" 3 4
+
 # 109 "/usr/include/sys/select.h" 3 4
 extern int select (int __nfds, fd_set *__restrict __readfds,
      fd_set *__restrict __writefds,
@@ -664,7 +1374,12 @@ extern int pselect (int __nfds, fd_set *__restrict __readfds,
       fd_set *__restrict __exceptfds,
       const struct timespec *__restrict __timeout,
       const __sigset_t *__restrict __sigmask);
+
+
+
 # 221 "/usr/include/sys/types.h" 2 3 4
+
+
 # 1 "/usr/include/sys/sysmacros.h" 1 3 4
 # 30 "/usr/include/sys/sysmacros.h" 3 4
 __extension__
@@ -678,25 +1393,51 @@ extern unsigned long long int gnu_dev_makedev (unsigned int __major,
             unsigned int __minor)
      __attribute__ ((__nothrow__));
 # 224 "/usr/include/sys/types.h" 2 3 4
+
+
+
+
 typedef __blksize_t blksize_t;
+
+
+
+
+
+
 typedef __blkcnt_t blkcnt_t;
+
+
+
 typedef __fsblkcnt_t fsblkcnt_t;
+
+
+
 typedef __fsfilcnt_t fsfilcnt_t;
 # 262 "/usr/include/sys/types.h" 3 4
 typedef __blkcnt64_t blkcnt64_t;
 typedef __fsblkcnt64_t fsblkcnt64_t;
 typedef __fsfilcnt64_t fsfilcnt64_t;
+
+
+
+
+
 # 1 "/usr/include/bits/pthreadtypes.h" 1 3 4
 # 23 "/usr/include/bits/pthreadtypes.h" 3 4
 # 1 "/usr/include/bits/wordsize.h" 1 3 4
 # 24 "/usr/include/bits/pthreadtypes.h" 2 3 4
 # 50 "/usr/include/bits/pthreadtypes.h" 3 4
 typedef unsigned long int pthread_t;
+
+
 typedef union
 {
   char __size[56];
   long int __align;
 } pthread_attr_t;
+
+
+
 typedef struct __pthread_internal_list
 {
   struct __pthread_internal_list *__prev;
@@ -710,8 +1451,13 @@ typedef union
     int __lock;
     unsigned int __count;
     int __owner;
+
     unsigned int __nusers;
+
+
+
     int __kind;
+
     int __spins;
     __pthread_list_t __list;
 # 101 "/usr/include/bits/pthreadtypes.h" 3 4
@@ -719,11 +1465,16 @@ typedef union
   char __size[40];
   long int __align;
 } pthread_mutex_t;
+
 typedef union
 {
   char __size[4];
   int __align;
 } pthread_mutexattr_t;
+
+
+
+
 typedef union
 {
   struct
@@ -740,15 +1491,28 @@ typedef union
   char __size[48];
   __extension__ long long int __align;
 } pthread_cond_t;
+
 typedef union
 {
   char __size[4];
   int __align;
 } pthread_condattr_t;
+
+
+
 typedef unsigned int pthread_key_t;
+
+
+
 typedef int pthread_once_t;
+
+
+
+
+
 typedef union
 {
+
   struct
   {
     int __lock;
@@ -761,37 +1525,64 @@ typedef union
     int __shared;
     unsigned long int __pad1;
     unsigned long int __pad2;
+
+
     unsigned int __flags;
   } __data;
 # 187 "/usr/include/bits/pthreadtypes.h" 3 4
   char __size[56];
   long int __align;
 } pthread_rwlock_t;
+
 typedef union
 {
   char __size[8];
   long int __align;
 } pthread_rwlockattr_t;
+
+
+
+
+
 typedef volatile int pthread_spinlock_t;
+
+
+
+
 typedef union
 {
   char __size[32];
   long int __align;
 } pthread_barrier_t;
+
 typedef union
 {
   char __size[4];
   int __align;
 } pthread_barrierattr_t;
 # 271 "/usr/include/sys/types.h" 2 3 4
+
+
+
 # 186 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
+
 # 1 "/usr/include/errno.h" 1 3 4
 # 32 "/usr/include/errno.h" 3 4
+
+
+
+
 # 1 "/usr/include/bits/errno.h" 1 3 4
 # 25 "/usr/include/bits/errno.h" 3 4
 # 1 "/usr/include/linux/errno.h" 1 3 4
+
+
+
 # 1 "/usr/include/asm/errno.h" 1 3 4
 # 1 "/usr/include/asm-generic/errno.h" 1 3 4
+
+
+
 # 1 "/usr/include/asm-generic/errno-base.h" 1 3 4
 # 5 "/usr/include/asm-generic/errno.h" 2 3 4
 # 1 "/usr/include/asm/errno.h" 2 3 4
@@ -802,73 +1593,147 @@ extern int *__errno_location (void) __attribute__ ((__nothrow__)) __attribute__ 
 # 37 "/usr/include/errno.h" 2 3 4
 # 55 "/usr/include/errno.h" 3 4
 extern char *program_invocation_name, *program_invocation_short_name;
+
+
+
+
 # 69 "/usr/include/errno.h" 3 4
 typedef int error_t;
 # 188 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
 # 198 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h"
 # 1 "/usr/include/string.h" 1 3 4
 # 28 "/usr/include/string.h" 3 4
+
+
+
+
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include/stddef.h" 1 3 4
 # 34 "/usr/include/string.h" 2 3 4
+
+
+
+
+
+
+
+
+
 extern void *memcpy (void *__restrict __dest,
        __const void *__restrict __src, size_t __n)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
 extern void *memmove (void *__dest, __const void *__src, size_t __n)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
+
+
 extern void *memccpy (void *__restrict __dest, __const void *__restrict __src,
         int __c, size_t __n)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
+
 extern void *memset (void *__s, int __c, size_t __n) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
 extern int memcmp (__const void *__s1, __const void *__s2, size_t __n)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 # 94 "/usr/include/string.h" 3 4
 extern void *memchr (__const void *__s, int __c, size_t __n)
       __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+
+
 # 108 "/usr/include/string.h" 3 4
 extern void *rawmemchr (__const void *__s, int __c)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 # 119 "/usr/include/string.h" 3 4
 extern void *memrchr (__const void *__s, int __c, size_t __n)
       __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
 extern char *strcpy (char *__restrict __dest, __const char *__restrict __src)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
 extern char *strncpy (char *__restrict __dest,
         __const char *__restrict __src, size_t __n)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
 extern char *strcat (char *__restrict __dest, __const char *__restrict __src)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
 extern char *strncat (char *__restrict __dest, __const char *__restrict __src,
         size_t __n) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
 extern int strcmp (__const char *__s1, __const char *__s2)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+
 extern int strncmp (__const char *__s1, __const char *__s2, size_t __n)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
 extern int strcoll (__const char *__s1, __const char *__s2)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+
 extern size_t strxfrm (char *__restrict __dest,
          __const char *__restrict __src, size_t __n)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+
 # 164 "/usr/include/string.h" 3 4
 extern int strcoll_l (__const char *__s1, __const char *__s2, __locale_t __l)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2, 3)));
+
 extern size_t strxfrm_l (char *__dest, __const char *__src, size_t __n,
     __locale_t __l) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 4)));
+
+
+
+
 extern char *strdup (__const char *__s)
      __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
 extern char *strndup (__const char *__string, size_t __n)
      __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) __attribute__ ((__nonnull__ (1)));
 # 208 "/usr/include/string.h" 3 4
+
 # 233 "/usr/include/string.h" 3 4
 extern char *strchr (__const char *__s, int __c)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 # 260 "/usr/include/string.h" 3 4
 extern char *strrchr (__const char *__s, int __c)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+
+
 # 274 "/usr/include/string.h" 3 4
 extern char *strchrnul (__const char *__s, int __c)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
 extern size_t strcspn (__const char *__s, __const char *__reject)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
 extern size_t strspn (__const char *__s, __const char *__accept)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 # 312 "/usr/include/string.h" 3 4
@@ -877,40 +1742,92 @@ extern char *strpbrk (__const char *__s, __const char *__accept)
 # 340 "/usr/include/string.h" 3 4
 extern char *strstr (__const char *__haystack, __const char *__needle)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
 extern char *strtok (char *__restrict __s, __const char *__restrict __delim)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+
+
+
+
 extern char *__strtok_r (char *__restrict __s,
     __const char *__restrict __delim,
     char **__restrict __save_ptr)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 3)));
+
 extern char *strtok_r (char *__restrict __s, __const char *__restrict __delim,
          char **__restrict __save_ptr)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 3)));
 # 371 "/usr/include/string.h" 3 4
 extern char *strcasestr (__const char *__haystack, __const char *__needle)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
+
+
+
 extern void *memmem (__const void *__haystack, size_t __haystacklen,
        __const void *__needle, size_t __needlelen)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 3)));
+
+
+
 extern void *__mempcpy (void *__restrict __dest,
    __const void *__restrict __src, size_t __n)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
 extern void *mempcpy (void *__restrict __dest,
         __const void *__restrict __src, size_t __n)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
+
 extern size_t strlen (__const char *__s)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
 extern size_t strnlen (__const char *__string, size_t __maxlen)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
 extern char *strerror (int __errnum) __attribute__ ((__nothrow__));
+
 # 436 "/usr/include/string.h" 3 4
 extern char *strerror_r (int __errnum, char *__buf, size_t __buflen)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+
+
+
+
+
 extern char *strerror_l (int __errnum, __locale_t __l) __attribute__ ((__nothrow__));
+
+
+
+
+
 extern void __bzero (void *__s, size_t __n) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
 extern void bcopy (__const void *__src, void *__dest, size_t __n)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
 extern void bzero (void *__s, size_t __n) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
 extern int bcmp (__const void *__s1, __const void *__s2, size_t __n)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 # 487 "/usr/include/string.h" 3 4
@@ -919,41 +1836,85 @@ extern char *index (__const char *__s, int __c)
 # 515 "/usr/include/string.h" 3 4
 extern char *rindex (__const char *__s, int __c)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
 extern int ffs (int __i) __attribute__ ((__nothrow__)) __attribute__ ((__const__));
+
+
+
+
 extern int ffsl (long int __l) __attribute__ ((__nothrow__)) __attribute__ ((__const__));
+
 __extension__ extern int ffsll (long long int __ll)
      __attribute__ ((__nothrow__)) __attribute__ ((__const__));
+
+
+
+
 extern int strcasecmp (__const char *__s1, __const char *__s2)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
 extern int strncasecmp (__const char *__s1, __const char *__s2, size_t __n)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
+
 extern int strcasecmp_l (__const char *__s1, __const char *__s2,
     __locale_t __loc)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2, 3)));
+
 extern int strncasecmp_l (__const char *__s1, __const char *__s2,
      size_t __n, __locale_t __loc)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2, 4)));
+
+
+
+
+
 extern char *strsep (char **__restrict __stringp,
        __const char *__restrict __delim)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
 extern char *strsignal (int __sig) __attribute__ ((__nothrow__));
+
+
 extern char *__stpcpy (char *__restrict __dest, __const char *__restrict __src)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
 extern char *stpcpy (char *__restrict __dest, __const char *__restrict __src)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
 extern char *__stpncpy (char *__restrict __dest,
    __const char *__restrict __src, size_t __n)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
 extern char *stpncpy (char *__restrict __dest,
         __const char *__restrict __src, size_t __n)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
 extern int strverscmp (__const char *__s1, __const char *__s2)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
 extern char *strfry (char *__string) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
 extern void *memfrob (void *__s, size_t __n) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
 # 604 "/usr/include/string.h" 3 4
 extern char *basename (__const char *__filename) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
 # 644 "/usr/include/string.h" 3 4
+
 # 199 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
 # 1 "/usr/include/strings.h" 1 3 4
 # 200 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
@@ -962,6 +1923,14 @@ extern char *basename (__const char *__filename) __attribute__ ((__nothrow__)) _
 # 33 "/usr/include/stdlib.h" 3 4
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include/stddef.h" 1 3 4
 # 34 "/usr/include/stdlib.h" 2 3 4
+
+
+
+
+
+
+
+
 # 1 "/usr/include/bits/waitflags.h" 1 3 4
 # 43 "/usr/include/stdlib.h" 2 3 4
 # 1 "/usr/include/bits/waitstatus.h" 1 3 4
@@ -971,16 +1940,31 @@ union wait
     int w_status;
     struct
       {
+
  unsigned int __w_termsig:7;
  unsigned int __w_coredump:1;
  unsigned int __w_retcode:8;
  unsigned int:16;
+
+
+
+
+
+
+
       } __wait_terminated;
     struct
       {
+
  unsigned int __w_stopval:8;
  unsigned int __w_stopsig:8;
  unsigned int:16;
+
+
+
+
+
+
       } __wait_stopped;
   };
 # 44 "/usr/include/stdlib.h" 2 3 4
@@ -991,99 +1975,178 @@ typedef union
     int *__iptr;
   } __WAIT_STATUS __attribute__ ((__transparent_union__));
 # 96 "/usr/include/stdlib.h" 3 4
+
+
 typedef struct
   {
     int quot;
     int rem;
   } div_t;
+
+
+
 typedef struct
   {
     long int quot;
     long int rem;
   } ldiv_t;
+
+
+
+
+
+
+
 __extension__ typedef struct
   {
     long long int quot;
     long long int rem;
   } lldiv_t;
+
+
 # 140 "/usr/include/stdlib.h" 3 4
 extern size_t __ctype_get_mb_cur_max (void) __attribute__ ((__nothrow__)) ;
+
+
+
+
 extern double atof (__const char *__nptr)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
+
 extern int atoi (__const char *__nptr)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
+
 extern long int atol (__const char *__nptr)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
 __extension__ extern long long int atoll (__const char *__nptr)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
 extern double strtod (__const char *__restrict __nptr,
         char **__restrict __endptr)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
 extern float strtof (__const char *__restrict __nptr,
        char **__restrict __endptr) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
 extern long double strtold (__const char *__restrict __nptr,
        char **__restrict __endptr)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
 extern long int strtol (__const char *__restrict __nptr,
    char **__restrict __endptr, int __base)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
 extern unsigned long int strtoul (__const char *__restrict __nptr,
       char **__restrict __endptr, int __base)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
 __extension__
 extern long long int strtoq (__const char *__restrict __nptr,
         char **__restrict __endptr, int __base)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
 __extension__
 extern unsigned long long int strtouq (__const char *__restrict __nptr,
            char **__restrict __endptr, int __base)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
 __extension__
 extern long long int strtoll (__const char *__restrict __nptr,
          char **__restrict __endptr, int __base)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
 __extension__
 extern unsigned long long int strtoull (__const char *__restrict __nptr,
      char **__restrict __endptr, int __base)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
 # 240 "/usr/include/stdlib.h" 3 4
 extern long int strtol_l (__const char *__restrict __nptr,
      char **__restrict __endptr, int __base,
      __locale_t __loc) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 4))) ;
+
 extern unsigned long int strtoul_l (__const char *__restrict __nptr,
         char **__restrict __endptr,
         int __base, __locale_t __loc)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 4))) ;
+
 __extension__
 extern long long int strtoll_l (__const char *__restrict __nptr,
     char **__restrict __endptr, int __base,
     __locale_t __loc)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 4))) ;
+
 __extension__
 extern unsigned long long int strtoull_l (__const char *__restrict __nptr,
        char **__restrict __endptr,
        int __base, __locale_t __loc)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 4))) ;
+
 extern double strtod_l (__const char *__restrict __nptr,
    char **__restrict __endptr, __locale_t __loc)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 3))) ;
+
 extern float strtof_l (__const char *__restrict __nptr,
          char **__restrict __endptr, __locale_t __loc)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 3))) ;
+
 extern long double strtold_l (__const char *__restrict __nptr,
          char **__restrict __endptr,
          __locale_t __loc)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 3))) ;
 # 311 "/usr/include/stdlib.h" 3 4
 extern char *l64a (long int __n) __attribute__ ((__nothrow__)) ;
+
+
 extern long int a64l (__const char *__s)
      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
 # 327 "/usr/include/stdlib.h" 3 4
 extern long int random (void) __attribute__ ((__nothrow__));
+
+
 extern void srandom (unsigned int __seed) __attribute__ ((__nothrow__));
+
+
+
+
+
 extern char *initstate (unsigned int __seed, char *__statebuf,
    size_t __statelen) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+
+
+
 extern char *setstate (char *__statebuf) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
+
 struct random_data
   {
     int32_t *fptr;
@@ -1094,32 +2157,65 @@ struct random_data
     int rand_sep;
     int32_t *end_ptr;
   };
+
 extern int random_r (struct random_data *__restrict __buf,
        int32_t *__restrict __result) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
 extern int srandom_r (unsigned int __seed, struct random_data *__buf)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+
 extern int initstate_r (unsigned int __seed, char *__restrict __statebuf,
    size_t __statelen,
    struct random_data *__restrict __buf)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 4)));
+
 extern int setstate_r (char *__restrict __statebuf,
          struct random_data *__restrict __buf)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
+
+
 extern int rand (void) __attribute__ ((__nothrow__));
+
 extern void srand (unsigned int __seed) __attribute__ ((__nothrow__));
+
+
+
+
 extern int rand_r (unsigned int *__seed) __attribute__ ((__nothrow__));
+
+
+
+
+
+
+
 extern double drand48 (void) __attribute__ ((__nothrow__));
 extern double erand48 (unsigned short int __xsubi[3]) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
 extern long int lrand48 (void) __attribute__ ((__nothrow__));
 extern long int nrand48 (unsigned short int __xsubi[3])
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
 extern long int mrand48 (void) __attribute__ ((__nothrow__));
 extern long int jrand48 (unsigned short int __xsubi[3])
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
 extern void srand48 (long int __seedval) __attribute__ ((__nothrow__));
 extern unsigned short int *seed48 (unsigned short int __seed16v[3])
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
 extern void lcong48 (unsigned short int __param[7]) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
 struct drand48_data
   {
     unsigned short int __x[3];
@@ -1128,11 +2224,15 @@ struct drand48_data
     unsigned short int __init;
     unsigned long long int __a;
   };
+
+
 extern int drand48_r (struct drand48_data *__restrict __buffer,
         double *__restrict __result) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
 extern int erand48_r (unsigned short int __xsubi[3],
         struct drand48_data *__restrict __buffer,
         double *__restrict __result) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
 extern int lrand48_r (struct drand48_data *__restrict __buffer,
         long int *__restrict __result)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
@@ -1140,6 +2240,8 @@ extern int nrand48_r (unsigned short int __xsubi[3],
         struct drand48_data *__restrict __buffer,
         long int *__restrict __result)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
 extern int mrand48_r (struct drand48_data *__restrict __buffer,
         long int *__restrict __result)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
@@ -1147,45 +2249,160 @@ extern int jrand48_r (unsigned short int __xsubi[3],
         struct drand48_data *__restrict __buffer,
         long int *__restrict __result)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
 extern int srand48_r (long int __seedval, struct drand48_data *__buffer)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+
 extern int seed48_r (unsigned short int __seed16v[3],
        struct drand48_data *__buffer) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
 extern int lcong48_r (unsigned short int __param[7],
         struct drand48_data *__buffer)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
+
+
+
+
+
 extern void *malloc (size_t __size) __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) ;
+
 extern void *calloc (size_t __nmemb, size_t __size)
      __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) ;
+
+
+
+
+
+
+
+
+
+
 extern void *realloc (void *__ptr, size_t __size)
      __attribute__ ((__nothrow__)) __attribute__ ((__warn_unused_result__));
+
 extern void free (void *__ptr) __attribute__ ((__nothrow__));
+
+
+
+
 extern void cfree (void *__ptr) __attribute__ ((__nothrow__));
+
+
+
 # 1 "/usr/include/alloca.h" 1 3 4
 # 25 "/usr/include/alloca.h" 3 4
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include/stddef.h" 1 3 4
 # 26 "/usr/include/alloca.h" 2 3 4
+
+
+
+
+
+
+
 extern void *alloca (size_t __size) __attribute__ ((__nothrow__));
+
+
+
+
+
+
 # 498 "/usr/include/stdlib.h" 2 3 4
+
+
+
+
 extern void *valloc (size_t __size) __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) ;
+
+
+
+
 extern int posix_memalign (void **__memptr, size_t __alignment, size_t __size)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
 extern void abort (void) __attribute__ ((__nothrow__)) __attribute__ ((__noreturn__));
+
+
+
 extern int atexit (void (*__func) (void)) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
 # 527 "/usr/include/stdlib.h" 3 4
 extern int at_quick_exit (void (*__func) (void)) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
+
 extern int on_exit (void (*__func) (int __status, void *__arg), void *__arg)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
 extern void exit (int __status) __attribute__ ((__nothrow__)) __attribute__ ((__noreturn__));
+
+
+
+
+
+
+
 extern void quick_exit (int __status) __attribute__ ((__nothrow__)) __attribute__ ((__noreturn__));
+
+
+
+
+
+
+
 extern void _Exit (int __status) __attribute__ ((__nothrow__)) __attribute__ ((__noreturn__));
+
+
+
+
+
+
 extern char *getenv (__const char *__name) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
 extern char *__secure_getenv (__const char *__name)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
 extern int putenv (char *__string) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
 extern int setenv (__const char *__name, __const char *__value, int __replace)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+
+
 extern int unsetenv (__const char *__name) __attribute__ ((__nothrow__));
+
+
+
+
+
+
 extern int clearenv (void) __attribute__ ((__nothrow__));
 # 604 "/usr/include/stdlib.h" 3 4
 extern char *mktemp (char *__template) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
@@ -1210,41 +2427,107 @@ extern int mkostemps (char *__template, int __suffixlen, int __flags)
 # 701 "/usr/include/stdlib.h" 3 4
 extern int mkostemps64 (char *__template, int __suffixlen, int __flags)
      __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
+
+
+
+
 extern int system (__const char *__command) ;
+
+
+
+
+
+
 extern char *canonicalize_file_name (__const char *__name)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
 # 729 "/usr/include/stdlib.h" 3 4
 extern char *realpath (__const char *__restrict __name,
          char *__restrict __resolved) __attribute__ ((__nothrow__)) ;
+
+
+
+
+
+
 typedef int (*__compar_fn_t) (__const void *, __const void *);
+
+
 typedef __compar_fn_t comparison_fn_t;
+
+
+
 typedef int (*__compar_d_fn_t) (__const void *, __const void *, void *);
+
+
+
+
+
 extern void *bsearch (__const void *__key, __const void *__base,
         size_t __nmemb, size_t __size, __compar_fn_t __compar)
      __attribute__ ((__nonnull__ (1, 2, 5))) ;
+
+
+
 extern void qsort (void *__base, size_t __nmemb, size_t __size,
      __compar_fn_t __compar) __attribute__ ((__nonnull__ (1, 4)));
+
 extern void qsort_r (void *__base, size_t __nmemb, size_t __size,
        __compar_d_fn_t __compar, void *__arg)
   __attribute__ ((__nonnull__ (1, 4)));
+
+
+
+
 extern int abs (int __x) __attribute__ ((__nothrow__)) __attribute__ ((__const__)) ;
 extern long int labs (long int __x) __attribute__ ((__nothrow__)) __attribute__ ((__const__)) ;
+
+
+
 __extension__ extern long long int llabs (long long int __x)
      __attribute__ ((__nothrow__)) __attribute__ ((__const__)) ;
+
+
+
+
+
+
+
 extern div_t div (int __numer, int __denom)
      __attribute__ ((__nothrow__)) __attribute__ ((__const__)) ;
 extern ldiv_t ldiv (long int __numer, long int __denom)
      __attribute__ ((__nothrow__)) __attribute__ ((__const__)) ;
+
+
+
+
 __extension__ extern lldiv_t lldiv (long long int __numer,
         long long int __denom)
      __attribute__ ((__nothrow__)) __attribute__ ((__const__)) ;
+
 # 802 "/usr/include/stdlib.h" 3 4
 extern char *ecvt (double __value, int __ndigit, int *__restrict __decpt,
      int *__restrict __sign) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 4))) ;
+
+
+
+
 extern char *fcvt (double __value, int __ndigit, int *__restrict __decpt,
      int *__restrict __sign) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 4))) ;
+
+
+
+
 extern char *gcvt (double __value, int __ndigit, char *__buf)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3))) ;
+
+
+
+
 extern char *qecvt (long double __value, int __ndigit,
       int *__restrict __decpt, int *__restrict __sign)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 4))) ;
@@ -1253,12 +2536,17 @@ extern char *qfcvt (long double __value, int __ndigit,
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 4))) ;
 extern char *qgcvt (long double __value, int __ndigit, char *__buf)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3))) ;
+
+
+
+
 extern int ecvt_r (double __value, int __ndigit, int *__restrict __decpt,
      int *__restrict __sign, char *__restrict __buf,
      size_t __len) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 4, 5)));
 extern int fcvt_r (double __value, int __ndigit, int *__restrict __decpt,
      int *__restrict __sign, char *__restrict __buf,
      size_t __len) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 4, 5)));
+
 extern int qecvt_r (long double __value, int __ndigit,
       int *__restrict __decpt, int *__restrict __sign,
       char *__restrict __buf, size_t __len)
@@ -1267,39 +2555,107 @@ extern int qfcvt_r (long double __value, int __ndigit,
       int *__restrict __decpt, int *__restrict __sign,
       char *__restrict __buf, size_t __len)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 4, 5)));
+
+
+
+
+
+
+
 extern int mblen (__const char *__s, size_t __n) __attribute__ ((__nothrow__)) ;
+
+
 extern int mbtowc (wchar_t *__restrict __pwc,
      __const char *__restrict __s, size_t __n) __attribute__ ((__nothrow__)) ;
+
+
 extern int wctomb (char *__s, wchar_t __wchar) __attribute__ ((__nothrow__)) ;
+
+
+
 extern size_t mbstowcs (wchar_t *__restrict __pwcs,
    __const char *__restrict __s, size_t __n) __attribute__ ((__nothrow__));
+
 extern size_t wcstombs (char *__restrict __s,
    __const wchar_t *__restrict __pwcs, size_t __n)
      __attribute__ ((__nothrow__));
+
+
+
+
+
+
+
+
 extern int rpmatch (__const char *__response) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
 # 890 "/usr/include/stdlib.h" 3 4
 extern int getsubopt (char **__restrict __optionp,
         char *__const *__restrict __tokens,
         char **__restrict __valuep)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2, 3))) ;
+
+
+
+
+
 extern void setkey (__const char *__key) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
+
 extern int posix_openpt (int __oflag) ;
+
+
+
+
+
+
+
 extern int grantpt (int __fd) __attribute__ ((__nothrow__));
+
+
+
 extern int unlockpt (int __fd) __attribute__ ((__nothrow__));
+
+
+
+
 extern char *ptsname (int __fd) __attribute__ ((__nothrow__)) ;
+
+
+
+
+
+
 extern int ptsname_r (int __fd, char *__buf, size_t __buflen)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+
+
 extern int getpt (void);
+
+
+
+
+
+
 extern int getloadavg (double __loadavg[], int __nelem)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
 # 958 "/usr/include/stdlib.h" 3 4
+
 # 212 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
 # 236 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h"
 # 1 "/usr/include/unistd.h" 1 3 4
 # 28 "/usr/include/unistd.h" 3 4
+
 # 203 "/usr/include/unistd.h" 3 4
 # 1 "/usr/include/bits/posix_opt.h" 1 3 4
 # 204 "/usr/include/unistd.h" 2 3 4
+
+
+
 # 1 "/usr/include/bits/environments.h" 1 3 4
 # 23 "/usr/include/bits/environments.h" 3 4
 # 1 "/usr/include/bits/wordsize.h" 1 3 4
@@ -1310,13 +2666,31 @@ extern int getloadavg (double __loadavg[], int __nelem)
 # 228 "/usr/include/unistd.h" 2 3 4
 # 268 "/usr/include/unistd.h" 3 4
 typedef __intptr_t intptr_t;
+
+
+
+
+
+
 typedef __socklen_t socklen_t;
 # 288 "/usr/include/unistd.h" 3 4
 extern int access (__const char *__name, int __type) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
 extern int euidaccess (__const char *__name, int __type)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
 extern int eaccess (__const char *__name, int __type)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
 extern int faccessat (int __fd, __const char *__file, int __type, int __flag)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2))) ;
 # 331 "/usr/include/unistd.h" 3 4
@@ -1324,446 +2698,1093 @@ extern __off_t lseek (int __fd, __off_t __offset, int __whence) __attribute__ ((
 # 342 "/usr/include/unistd.h" 3 4
 extern __off64_t lseek64 (int __fd, __off64_t __offset, int __whence)
      __attribute__ ((__nothrow__));
+
+
+
+
+
+
 extern int close (int __fd);
+
+
+
+
+
+
 extern ssize_t read (int __fd, void *__buf, size_t __nbytes) ;
+
+
+
+
+
 extern ssize_t write (int __fd, __const void *__buf, size_t __n) ;
 # 373 "/usr/include/unistd.h" 3 4
 extern ssize_t pread (int __fd, void *__buf, size_t __nbytes,
         __off_t __offset) ;
+
+
+
+
+
+
 extern ssize_t pwrite (int __fd, __const void *__buf, size_t __n,
          __off_t __offset) ;
 # 401 "/usr/include/unistd.h" 3 4
 extern ssize_t pread64 (int __fd, void *__buf, size_t __nbytes,
    __off64_t __offset) ;
+
+
 extern ssize_t pwrite64 (int __fd, __const void *__buf, size_t __n,
     __off64_t __offset) ;
+
+
+
+
+
+
+
 extern int pipe (int __pipedes[2]) __attribute__ ((__nothrow__)) ;
+
+
+
+
 extern int pipe2 (int __pipedes[2], int __flags) __attribute__ ((__nothrow__)) ;
 # 429 "/usr/include/unistd.h" 3 4
 extern unsigned int alarm (unsigned int __seconds) __attribute__ ((__nothrow__));
 # 441 "/usr/include/unistd.h" 3 4
 extern unsigned int sleep (unsigned int __seconds);
+
+
+
+
+
+
 extern __useconds_t ualarm (__useconds_t __value, __useconds_t __interval)
      __attribute__ ((__nothrow__));
+
+
+
+
+
+
 extern int usleep (__useconds_t __useconds);
 # 465 "/usr/include/unistd.h" 3 4
 extern int pause (void);
+
+
+
 extern int chown (__const char *__file, __uid_t __owner, __gid_t __group)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
 extern int fchown (int __fd, __uid_t __owner, __gid_t __group) __attribute__ ((__nothrow__)) ;
+
+
+
+
 extern int lchown (__const char *__file, __uid_t __owner, __gid_t __group)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
+
 extern int fchownat (int __fd, __const char *__file, __uid_t __owner,
        __gid_t __group, int __flag)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2))) ;
+
+
+
 extern int chdir (__const char *__path) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
 extern int fchdir (int __fd) __attribute__ ((__nothrow__)) ;
 # 507 "/usr/include/unistd.h" 3 4
 extern char *getcwd (char *__buf, size_t __size) __attribute__ ((__nothrow__)) ;
+
+
+
+
+
 extern char *get_current_dir_name (void) __attribute__ ((__nothrow__));
+
+
+
+
+
+
 extern char *getwd (char *__buf)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) __attribute__ ((__deprecated__)) ;
+
+
+
+
 extern int dup (int __fd) __attribute__ ((__nothrow__)) ;
+
+
 extern int dup2 (int __fd, int __fd2) __attribute__ ((__nothrow__));
+
+
+
+
 extern int dup3 (int __fd, int __fd2, int __flags) __attribute__ ((__nothrow__));
+
+
+
 extern char **__environ;
+
 extern char **environ;
+
+
+
+
+
 extern int execve (__const char *__path, char *__const __argv[],
      char *__const __envp[]) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
 extern int fexecve (int __fd, char *__const __argv[], char *__const __envp[])
      __attribute__ ((__nothrow__));
+
+
+
+
 extern int execv (__const char *__path, char *__const __argv[])
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
 extern int execle (__const char *__path, __const char *__arg, ...)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
 extern int execl (__const char *__path, __const char *__arg, ...)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
 extern int execvp (__const char *__file, char *__const __argv[])
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
 extern int execlp (__const char *__file, __const char *__arg, ...)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
 extern int execvpe (__const char *__file, char *__const __argv[],
       char *__const __envp[])
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
 extern int nice (int __inc) __attribute__ ((__nothrow__)) ;
+
+
+
+
 extern void _exit (int __status) __attribute__ ((__noreturn__));
+
+
+
+
+
 # 1 "/usr/include/bits/confname.h" 1 3 4
 # 26 "/usr/include/bits/confname.h" 3 4
 enum
   {
     _PC_LINK_MAX,
+
     _PC_MAX_CANON,
+
     _PC_MAX_INPUT,
+
     _PC_NAME_MAX,
+
     _PC_PATH_MAX,
+
     _PC_PIPE_BUF,
+
     _PC_CHOWN_RESTRICTED,
+
     _PC_NO_TRUNC,
+
     _PC_VDISABLE,
+
     _PC_SYNC_IO,
+
     _PC_ASYNC_IO,
+
     _PC_PRIO_IO,
+
     _PC_SOCK_MAXBUF,
+
     _PC_FILESIZEBITS,
+
     _PC_REC_INCR_XFER_SIZE,
+
     _PC_REC_MAX_XFER_SIZE,
+
     _PC_REC_MIN_XFER_SIZE,
+
     _PC_REC_XFER_ALIGN,
+
     _PC_ALLOC_SIZE_MIN,
+
     _PC_SYMLINK_MAX,
+
     _PC_2_SYMLINKS
+
   };
+
+
 enum
   {
     _SC_ARG_MAX,
+
     _SC_CHILD_MAX,
+
     _SC_CLK_TCK,
+
     _SC_NGROUPS_MAX,
+
     _SC_OPEN_MAX,
+
     _SC_STREAM_MAX,
+
     _SC_TZNAME_MAX,
+
     _SC_JOB_CONTROL,
+
     _SC_SAVED_IDS,
+
     _SC_REALTIME_SIGNALS,
+
     _SC_PRIORITY_SCHEDULING,
+
     _SC_TIMERS,
+
     _SC_ASYNCHRONOUS_IO,
+
     _SC_PRIORITIZED_IO,
+
     _SC_SYNCHRONIZED_IO,
+
     _SC_FSYNC,
+
     _SC_MAPPED_FILES,
+
     _SC_MEMLOCK,
+
     _SC_MEMLOCK_RANGE,
+
     _SC_MEMORY_PROTECTION,
+
     _SC_MESSAGE_PASSING,
+
     _SC_SEMAPHORES,
+
     _SC_SHARED_MEMORY_OBJECTS,
+
     _SC_AIO_LISTIO_MAX,
+
     _SC_AIO_MAX,
+
     _SC_AIO_PRIO_DELTA_MAX,
+
     _SC_DELAYTIMER_MAX,
+
     _SC_MQ_OPEN_MAX,
+
     _SC_MQ_PRIO_MAX,
+
     _SC_VERSION,
+
     _SC_PAGESIZE,
+
+
     _SC_RTSIG_MAX,
+
     _SC_SEM_NSEMS_MAX,
+
     _SC_SEM_VALUE_MAX,
+
     _SC_SIGQUEUE_MAX,
+
     _SC_TIMER_MAX,
+
+
+
+
     _SC_BC_BASE_MAX,
+
     _SC_BC_DIM_MAX,
+
     _SC_BC_SCALE_MAX,
+
     _SC_BC_STRING_MAX,
+
     _SC_COLL_WEIGHTS_MAX,
+
     _SC_EQUIV_CLASS_MAX,
+
     _SC_EXPR_NEST_MAX,
+
     _SC_LINE_MAX,
+
     _SC_RE_DUP_MAX,
+
     _SC_CHARCLASS_NAME_MAX,
+
+
     _SC_2_VERSION,
+
     _SC_2_C_BIND,
+
     _SC_2_C_DEV,
+
     _SC_2_FORT_DEV,
+
     _SC_2_FORT_RUN,
+
     _SC_2_SW_DEV,
+
     _SC_2_LOCALEDEF,
+
+
     _SC_PII,
+
     _SC_PII_XTI,
+
     _SC_PII_SOCKET,
+
     _SC_PII_INTERNET,
+
     _SC_PII_OSI,
+
     _SC_POLL,
+
     _SC_SELECT,
+
     _SC_UIO_MAXIOV,
+
     _SC_IOV_MAX = _SC_UIO_MAXIOV,
+
     _SC_PII_INTERNET_STREAM,
+
     _SC_PII_INTERNET_DGRAM,
+
     _SC_PII_OSI_COTS,
+
     _SC_PII_OSI_CLTS,
+
     _SC_PII_OSI_M,
+
     _SC_T_IOV_MAX,
+
+
+
     _SC_THREADS,
+
     _SC_THREAD_SAFE_FUNCTIONS,
+
     _SC_GETGR_R_SIZE_MAX,
+
     _SC_GETPW_R_SIZE_MAX,
+
     _SC_LOGIN_NAME_MAX,
+
     _SC_TTY_NAME_MAX,
+
     _SC_THREAD_DESTRUCTOR_ITERATIONS,
+
     _SC_THREAD_KEYS_MAX,
+
     _SC_THREAD_STACK_MIN,
+
     _SC_THREAD_THREADS_MAX,
+
     _SC_THREAD_ATTR_STACKADDR,
+
     _SC_THREAD_ATTR_STACKSIZE,
+
     _SC_THREAD_PRIORITY_SCHEDULING,
+
     _SC_THREAD_PRIO_INHERIT,
+
     _SC_THREAD_PRIO_PROTECT,
+
     _SC_THREAD_PROCESS_SHARED,
+
+
     _SC_NPROCESSORS_CONF,
+
     _SC_NPROCESSORS_ONLN,
+
     _SC_PHYS_PAGES,
+
     _SC_AVPHYS_PAGES,
+
     _SC_ATEXIT_MAX,
+
     _SC_PASS_MAX,
+
+
     _SC_XOPEN_VERSION,
+
     _SC_XOPEN_XCU_VERSION,
+
     _SC_XOPEN_UNIX,
+
     _SC_XOPEN_CRYPT,
+
     _SC_XOPEN_ENH_I18N,
+
     _SC_XOPEN_SHM,
+
+
     _SC_2_CHAR_TERM,
+
     _SC_2_C_VERSION,
+
     _SC_2_UPE,
+
+
     _SC_XOPEN_XPG2,
+
     _SC_XOPEN_XPG3,
+
     _SC_XOPEN_XPG4,
+
+
     _SC_CHAR_BIT,
+
     _SC_CHAR_MAX,
+
     _SC_CHAR_MIN,
+
     _SC_INT_MAX,
+
     _SC_INT_MIN,
+
     _SC_LONG_BIT,
+
     _SC_WORD_BIT,
+
     _SC_MB_LEN_MAX,
+
     _SC_NZERO,
+
     _SC_SSIZE_MAX,
+
     _SC_SCHAR_MAX,
+
     _SC_SCHAR_MIN,
+
     _SC_SHRT_MAX,
+
     _SC_SHRT_MIN,
+
     _SC_UCHAR_MAX,
+
     _SC_UINT_MAX,
+
     _SC_ULONG_MAX,
+
     _SC_USHRT_MAX,
+
+
     _SC_NL_ARGMAX,
+
     _SC_NL_LANGMAX,
+
     _SC_NL_MSGMAX,
+
     _SC_NL_NMAX,
+
     _SC_NL_SETMAX,
+
     _SC_NL_TEXTMAX,
+
+
     _SC_XBS5_ILP32_OFF32,
+
     _SC_XBS5_ILP32_OFFBIG,
+
     _SC_XBS5_LP64_OFF64,
+
     _SC_XBS5_LPBIG_OFFBIG,
+
+
     _SC_XOPEN_LEGACY,
+
     _SC_XOPEN_REALTIME,
+
     _SC_XOPEN_REALTIME_THREADS,
+
+
     _SC_ADVISORY_INFO,
+
     _SC_BARRIERS,
+
     _SC_BASE,
+
     _SC_C_LANG_SUPPORT,
+
     _SC_C_LANG_SUPPORT_R,
+
     _SC_CLOCK_SELECTION,
+
     _SC_CPUTIME,
+
     _SC_THREAD_CPUTIME,
+
     _SC_DEVICE_IO,
+
     _SC_DEVICE_SPECIFIC,
+
     _SC_DEVICE_SPECIFIC_R,
+
     _SC_FD_MGMT,
+
     _SC_FIFO,
+
     _SC_PIPE,
+
     _SC_FILE_ATTRIBUTES,
+
     _SC_FILE_LOCKING,
+
     _SC_FILE_SYSTEM,
+
     _SC_MONOTONIC_CLOCK,
+
     _SC_MULTI_PROCESS,
+
     _SC_SINGLE_PROCESS,
+
     _SC_NETWORKING,
+
     _SC_READER_WRITER_LOCKS,
+
     _SC_SPIN_LOCKS,
+
     _SC_REGEXP,
+
     _SC_REGEX_VERSION,
+
     _SC_SHELL,
+
     _SC_SIGNALS,
+
     _SC_SPAWN,
+
     _SC_SPORADIC_SERVER,
+
     _SC_THREAD_SPORADIC_SERVER,
+
     _SC_SYSTEM_DATABASE,
+
     _SC_SYSTEM_DATABASE_R,
+
     _SC_TIMEOUTS,
+
     _SC_TYPED_MEMORY_OBJECTS,
+
     _SC_USER_GROUPS,
+
     _SC_USER_GROUPS_R,
+
     _SC_2_PBS,
+
     _SC_2_PBS_ACCOUNTING,
+
     _SC_2_PBS_LOCATE,
+
     _SC_2_PBS_MESSAGE,
+
     _SC_2_PBS_TRACK,
+
     _SC_SYMLOOP_MAX,
+
     _SC_STREAMS,
+
     _SC_2_PBS_CHECKPOINT,
+
+
     _SC_V6_ILP32_OFF32,
+
     _SC_V6_ILP32_OFFBIG,
+
     _SC_V6_LP64_OFF64,
+
     _SC_V6_LPBIG_OFFBIG,
+
+
     _SC_HOST_NAME_MAX,
+
     _SC_TRACE,
+
     _SC_TRACE_EVENT_FILTER,
+
     _SC_TRACE_INHERIT,
+
     _SC_TRACE_LOG,
+
+
     _SC_LEVEL1_ICACHE_SIZE,
+
     _SC_LEVEL1_ICACHE_ASSOC,
+
     _SC_LEVEL1_ICACHE_LINESIZE,
+
     _SC_LEVEL1_DCACHE_SIZE,
+
     _SC_LEVEL1_DCACHE_ASSOC,
+
     _SC_LEVEL1_DCACHE_LINESIZE,
+
     _SC_LEVEL2_CACHE_SIZE,
+
     _SC_LEVEL2_CACHE_ASSOC,
+
     _SC_LEVEL2_CACHE_LINESIZE,
+
     _SC_LEVEL3_CACHE_SIZE,
+
     _SC_LEVEL3_CACHE_ASSOC,
+
     _SC_LEVEL3_CACHE_LINESIZE,
+
     _SC_LEVEL4_CACHE_SIZE,
+
     _SC_LEVEL4_CACHE_ASSOC,
+
     _SC_LEVEL4_CACHE_LINESIZE,
+
+
+
     _SC_IPV6 = _SC_LEVEL1_ICACHE_SIZE + 50,
+
     _SC_RAW_SOCKETS,
+
+
     _SC_V7_ILP32_OFF32,
+
     _SC_V7_ILP32_OFFBIG,
+
     _SC_V7_LP64_OFF64,
+
     _SC_V7_LPBIG_OFFBIG,
+
+
     _SC_SS_REPL_MAX,
+
+
     _SC_TRACE_EVENT_NAME_MAX,
+
     _SC_TRACE_NAME_MAX,
+
     _SC_TRACE_SYS_MAX,
+
     _SC_TRACE_USER_EVENT_MAX,
+
+
     _SC_XOPEN_STREAMS,
+
+
     _SC_THREAD_ROBUST_PRIO_INHERIT,
+
     _SC_THREAD_ROBUST_PRIO_PROTECT
+
   };
+
+
 enum
   {
     _CS_PATH,
+
+
     _CS_V6_WIDTH_RESTRICTED_ENVS,
+
+
+
     _CS_GNU_LIBC_VERSION,
+
     _CS_GNU_LIBPTHREAD_VERSION,
+
+
     _CS_V5_WIDTH_RESTRICTED_ENVS,
+
+
+
     _CS_V7_WIDTH_RESTRICTED_ENVS,
+
+
+
     _CS_LFS_CFLAGS = 1000,
+
     _CS_LFS_LDFLAGS,
+
     _CS_LFS_LIBS,
+
     _CS_LFS_LINTFLAGS,
+
     _CS_LFS64_CFLAGS,
+
     _CS_LFS64_LDFLAGS,
+
     _CS_LFS64_LIBS,
+
     _CS_LFS64_LINTFLAGS,
+
+
     _CS_XBS5_ILP32_OFF32_CFLAGS = 1100,
+
     _CS_XBS5_ILP32_OFF32_LDFLAGS,
+
     _CS_XBS5_ILP32_OFF32_LIBS,
+
     _CS_XBS5_ILP32_OFF32_LINTFLAGS,
+
     _CS_XBS5_ILP32_OFFBIG_CFLAGS,
+
     _CS_XBS5_ILP32_OFFBIG_LDFLAGS,
+
     _CS_XBS5_ILP32_OFFBIG_LIBS,
+
     _CS_XBS5_ILP32_OFFBIG_LINTFLAGS,
+
     _CS_XBS5_LP64_OFF64_CFLAGS,
+
     _CS_XBS5_LP64_OFF64_LDFLAGS,
+
     _CS_XBS5_LP64_OFF64_LIBS,
+
     _CS_XBS5_LP64_OFF64_LINTFLAGS,
+
     _CS_XBS5_LPBIG_OFFBIG_CFLAGS,
+
     _CS_XBS5_LPBIG_OFFBIG_LDFLAGS,
+
     _CS_XBS5_LPBIG_OFFBIG_LIBS,
+
     _CS_XBS5_LPBIG_OFFBIG_LINTFLAGS,
+
+
     _CS_POSIX_V6_ILP32_OFF32_CFLAGS,
+
     _CS_POSIX_V6_ILP32_OFF32_LDFLAGS,
+
     _CS_POSIX_V6_ILP32_OFF32_LIBS,
+
     _CS_POSIX_V6_ILP32_OFF32_LINTFLAGS,
+
     _CS_POSIX_V6_ILP32_OFFBIG_CFLAGS,
+
     _CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS,
+
     _CS_POSIX_V6_ILP32_OFFBIG_LIBS,
+
     _CS_POSIX_V6_ILP32_OFFBIG_LINTFLAGS,
+
     _CS_POSIX_V6_LP64_OFF64_CFLAGS,
+
     _CS_POSIX_V6_LP64_OFF64_LDFLAGS,
+
     _CS_POSIX_V6_LP64_OFF64_LIBS,
+
     _CS_POSIX_V6_LP64_OFF64_LINTFLAGS,
+
     _CS_POSIX_V6_LPBIG_OFFBIG_CFLAGS,
+
     _CS_POSIX_V6_LPBIG_OFFBIG_LDFLAGS,
+
     _CS_POSIX_V6_LPBIG_OFFBIG_LIBS,
+
     _CS_POSIX_V6_LPBIG_OFFBIG_LINTFLAGS,
+
+
     _CS_POSIX_V7_ILP32_OFF32_CFLAGS,
+
     _CS_POSIX_V7_ILP32_OFF32_LDFLAGS,
+
     _CS_POSIX_V7_ILP32_OFF32_LIBS,
+
     _CS_POSIX_V7_ILP32_OFF32_LINTFLAGS,
+
     _CS_POSIX_V7_ILP32_OFFBIG_CFLAGS,
+
     _CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS,
+
     _CS_POSIX_V7_ILP32_OFFBIG_LIBS,
+
     _CS_POSIX_V7_ILP32_OFFBIG_LINTFLAGS,
+
     _CS_POSIX_V7_LP64_OFF64_CFLAGS,
+
     _CS_POSIX_V7_LP64_OFF64_LDFLAGS,
+
     _CS_POSIX_V7_LP64_OFF64_LIBS,
+
     _CS_POSIX_V7_LP64_OFF64_LINTFLAGS,
+
     _CS_POSIX_V7_LPBIG_OFFBIG_CFLAGS,
+
     _CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS,
+
     _CS_POSIX_V7_LPBIG_OFFBIG_LIBS,
+
     _CS_POSIX_V7_LPBIG_OFFBIG_LINTFLAGS
+
   };
 # 605 "/usr/include/unistd.h" 2 3 4
+
+
 extern long int pathconf (__const char *__path, int __name)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
 extern long int fpathconf (int __fd, int __name) __attribute__ ((__nothrow__));
+
+
 extern long int sysconf (int __name) __attribute__ ((__nothrow__));
+
+
+
 extern size_t confstr (int __name, char *__buf, size_t __len) __attribute__ ((__nothrow__));
+
+
+
+
 extern __pid_t getpid (void) __attribute__ ((__nothrow__));
+
+
 extern __pid_t getppid (void) __attribute__ ((__nothrow__));
+
+
+
+
 extern __pid_t getpgrp (void) __attribute__ ((__nothrow__));
 # 641 "/usr/include/unistd.h" 3 4
 extern __pid_t __getpgid (__pid_t __pid) __attribute__ ((__nothrow__));
+
 extern __pid_t getpgid (__pid_t __pid) __attribute__ ((__nothrow__));
+
+
+
+
+
+
 extern int setpgid (__pid_t __pid, __pid_t __pgid) __attribute__ ((__nothrow__));
 # 667 "/usr/include/unistd.h" 3 4
 extern int setpgrp (void) __attribute__ ((__nothrow__));
 # 684 "/usr/include/unistd.h" 3 4
 extern __pid_t setsid (void) __attribute__ ((__nothrow__));
+
+
+
 extern __pid_t getsid (__pid_t __pid) __attribute__ ((__nothrow__));
+
+
+
 extern __uid_t getuid (void) __attribute__ ((__nothrow__));
+
+
 extern __uid_t geteuid (void) __attribute__ ((__nothrow__));
+
+
 extern __gid_t getgid (void) __attribute__ ((__nothrow__));
+
+
 extern __gid_t getegid (void) __attribute__ ((__nothrow__));
+
+
+
+
 extern int getgroups (int __size, __gid_t __list[]) __attribute__ ((__nothrow__)) ;
+
+
+
 extern int group_member (__gid_t __gid) __attribute__ ((__nothrow__));
+
+
+
+
+
+
 extern int setuid (__uid_t __uid) __attribute__ ((__nothrow__));
+
+
+
+
 extern int setreuid (__uid_t __ruid, __uid_t __euid) __attribute__ ((__nothrow__));
+
+
+
+
 extern int seteuid (__uid_t __uid) __attribute__ ((__nothrow__));
+
+
+
+
+
+
 extern int setgid (__gid_t __gid) __attribute__ ((__nothrow__));
+
+
+
+
 extern int setregid (__gid_t __rgid, __gid_t __egid) __attribute__ ((__nothrow__));
+
+
+
+
 extern int setegid (__gid_t __gid) __attribute__ ((__nothrow__));
+
+
+
+
+
 extern int getresuid (__uid_t *__ruid, __uid_t *__euid, __uid_t *__suid)
      __attribute__ ((__nothrow__));
+
+
+
 extern int getresgid (__gid_t *__rgid, __gid_t *__egid, __gid_t *__sgid)
      __attribute__ ((__nothrow__));
+
+
+
 extern int setresuid (__uid_t __ruid, __uid_t __euid, __uid_t __suid)
      __attribute__ ((__nothrow__));
+
+
+
 extern int setresgid (__gid_t __rgid, __gid_t __egid, __gid_t __sgid)
      __attribute__ ((__nothrow__));
+
+
+
+
+
+
 extern __pid_t fork (void) __attribute__ ((__nothrow__));
+
+
+
+
+
+
 extern __pid_t vfork (void) __attribute__ ((__nothrow__));
+
+
+
+
+
 extern char *ttyname (int __fd) __attribute__ ((__nothrow__));
+
+
+
 extern int ttyname_r (int __fd, char *__buf, size_t __buflen)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2))) ;
+
+
+
 extern int isatty (int __fd) __attribute__ ((__nothrow__));
+
+
+
+
+
 extern int ttyslot (void) __attribute__ ((__nothrow__));
+
+
+
+
 extern int link (__const char *__from, __const char *__to)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2))) ;
+
+
+
+
 extern int linkat (int __fromfd, __const char *__from, int __tofd,
      __const char *__to, int __flags)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 4))) ;
+
+
+
+
 extern int symlink (__const char *__from, __const char *__to)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2))) ;
+
+
+
+
 extern ssize_t readlink (__const char *__restrict __path,
     char *__restrict __buf, size_t __len)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2))) ;
+
+
+
+
 extern int symlinkat (__const char *__from, int __tofd,
         __const char *__to) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 3))) ;
+
+
 extern ssize_t readlinkat (int __fd, __const char *__restrict __path,
       char *__restrict __buf, size_t __len)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 3))) ;
+
+
+
 extern int unlink (__const char *__name) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
 extern int unlinkat (int __fd, __const char *__name, int __flag)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+
+
+
 extern int rmdir (__const char *__path) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
 extern __pid_t tcgetpgrp (int __fd) __attribute__ ((__nothrow__));
+
+
 extern int tcsetpgrp (int __fd, __pid_t __pgrp_id) __attribute__ ((__nothrow__));
+
+
+
+
+
+
 extern char *getlogin (void);
+
+
+
+
+
+
+
 extern int getlogin_r (char *__name, size_t __name_len) __attribute__ ((__nonnull__ (1)));
+
+
+
+
 extern int setlogin (__const char *__name) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
 # 887 "/usr/include/unistd.h" 3 4
 # 1 "/usr/include/getopt.h" 1 3 4
@@ -1771,38 +3792,122 @@ extern int setlogin (__const char *__name) __attribute__ ((__nothrow__)) __attri
 extern char *optarg;
 # 73 "/usr/include/getopt.h" 3 4
 extern int optind;
+
+
+
+
 extern int opterr;
+
+
+
 extern int optopt;
 # 152 "/usr/include/getopt.h" 3 4
 extern int getopt (int ___argc, char *const *___argv, const char *__shortopts)
        __attribute__ ((__nothrow__));
 # 888 "/usr/include/unistd.h" 2 3 4
+
+
+
+
+
+
+
 extern int gethostname (char *__name, size_t __len) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
 extern int sethostname (__const char *__name, size_t __len)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
 extern int sethostid (long int __id) __attribute__ ((__nothrow__)) ;
+
+
+
+
+
 extern int getdomainname (char *__name, size_t __len)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
 extern int setdomainname (__const char *__name, size_t __len)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
 extern int vhangup (void) __attribute__ ((__nothrow__));
+
+
 extern int revoke (__const char *__file) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
+
+
 extern int profil (unsigned short int *__sample_buffer, size_t __size,
      size_t __offset, unsigned int __scale)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
 extern int acct (__const char *__name) __attribute__ ((__nothrow__));
+
+
+
 extern char *getusershell (void) __attribute__ ((__nothrow__));
 extern void endusershell (void) __attribute__ ((__nothrow__));
 extern void setusershell (void) __attribute__ ((__nothrow__));
+
+
+
+
+
 extern int daemon (int __nochdir, int __noclose) __attribute__ ((__nothrow__)) ;
+
+
+
+
+
+
 extern int chroot (__const char *__path) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
 extern char *getpass (__const char *__prompt) __attribute__ ((__nonnull__ (1)));
 # 973 "/usr/include/unistd.h" 3 4
 extern int fsync (int __fd);
+
+
+
+
+
+
 extern long int gethostid (void);
+
+
 extern void sync (void) __attribute__ ((__nothrow__));
+
+
+
+
 extern int getpagesize (void) __attribute__ ((__nothrow__)) __attribute__ ((__const__));
+
+
+
+
 extern int getdtablesize (void) __attribute__ ((__nothrow__));
+
+
+
+
 extern int truncate (__const char *__file, __off_t __length)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
 # 1010 "/usr/include/unistd.h" 3 4
@@ -1814,6 +3919,11 @@ extern int ftruncate (int __fd, __off_t __length) __attribute__ ((__nothrow__)) 
 extern int ftruncate64 (int __fd, __off64_t __length) __attribute__ ((__nothrow__)) ;
 # 1040 "/usr/include/unistd.h" 3 4
 extern int brk (void *__addr) __attribute__ ((__nothrow__)) ;
+
+
+
+
+
 extern void *sbrk (intptr_t __delta) __attribute__ ((__nothrow__));
 # 1061 "/usr/include/unistd.h" 3 4
 extern long int syscall (long int __sysno, ...) __attribute__ ((__nothrow__));
@@ -1823,19 +3933,52 @@ extern int lockf (int __fd, int __cmd, __off_t __len) ;
 extern int lockf64 (int __fd, int __cmd, __off64_t __len) ;
 # 1115 "/usr/include/unistd.h" 3 4
 extern int fdatasync (int __fildes);
+
+
+
+
+
+
+
 extern char *crypt (__const char *__key, __const char *__salt)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
 extern void encrypt (char *__block, int __edflag) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
 extern void swab (__const void *__restrict __from, void *__restrict __to,
     ssize_t __n) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
+
+
+
 extern char *ctermid (char *__s) __attribute__ ((__nothrow__));
 # 1153 "/usr/include/unistd.h" 3 4
+
 # 237 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
+
+
+
 # 1 "/usr/include/sys/param.h" 1 3 4
 # 26 "/usr/include/sys/param.h" 3 4
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include-fixed/limits.h" 1 3 4
 # 34 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include-fixed/limits.h" 3 4
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include-fixed/syslimits.h" 1 3 4
+
+
+
+
+
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include-fixed/limits.h" 1 3 4
 # 169 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include-fixed/limits.h" 3 4
 # 1 "/usr/include/limits.h" 1 3 4
@@ -1848,8 +3991,14 @@ extern char *ctermid (char *__s) __attribute__ ((__nothrow__));
 # 40 "/usr/include/bits/local_lim.h" 2 3 4
 # 158 "/usr/include/bits/posix1_lim.h" 2 3 4
 # 146 "/usr/include/limits.h" 2 3 4
+
+
+
 # 1 "/usr/include/bits/posix2_lim.h" 1 3 4
 # 150 "/usr/include/limits.h" 2 3 4
+
+
+
 # 1 "/usr/include/bits/xopen_lim.h" 1 3 4
 # 34 "/usr/include/bits/xopen_lim.h" 3 4
 # 1 "/usr/include/bits/stdio_lim.h" 1 3 4
@@ -1859,15 +4008,27 @@ extern char *ctermid (char *__s) __attribute__ ((__nothrow__));
 # 8 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include-fixed/syslimits.h" 2 3 4
 # 35 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include-fixed/limits.h" 2 3 4
 # 27 "/usr/include/sys/param.h" 2 3 4
+
 # 1 "/usr/include/linux/param.h" 1 3 4
+
+
+
 # 1 "/usr/include/asm/param.h" 1 3 4
 # 1 "/usr/include/asm-generic/param.h" 1 3 4
 # 1 "/usr/include/asm/param.h" 2 3 4
 # 5 "/usr/include/linux/param.h" 2 3 4
 # 29 "/usr/include/sys/param.h" 2 3 4
 # 241 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
+
+
+
+
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include-fixed/limits.h" 1 3 4
 # 247 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
+
+
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/hwint.h" 1
 # 251 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
 # 280 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h"
@@ -1875,57 +4036,128 @@ extern char *ctermid (char *__s) __attribute__ ((__nothrow__));
 # 27 "/usr/include/sys/time.h" 3 4
 # 1 "/usr/include/time.h" 1 3 4
 # 28 "/usr/include/sys/time.h" 2 3 4
+
 # 1 "/usr/include/bits/time.h" 1 3 4
 # 30 "/usr/include/sys/time.h" 2 3 4
 # 39 "/usr/include/sys/time.h" 3 4
+
 # 57 "/usr/include/sys/time.h" 3 4
 struct timezone
   {
     int tz_minuteswest;
     int tz_dsttime;
   };
+
 typedef struct timezone *__restrict __timezone_ptr_t;
 # 73 "/usr/include/sys/time.h" 3 4
 extern int gettimeofday (struct timeval *__restrict __tv,
     __timezone_ptr_t __tz) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
 extern int settimeofday (__const struct timeval *__tv,
     __const struct timezone *__tz)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
 extern int adjtime (__const struct timeval *__delta,
       struct timeval *__olddelta) __attribute__ ((__nothrow__));
+
+
+
+
 enum __itimer_which
   {
+
     ITIMER_REAL = 0,
+
+
     ITIMER_VIRTUAL = 1,
+
+
+
     ITIMER_PROF = 2
+
   };
+
+
+
 struct itimerval
   {
+
     struct timeval it_interval;
+
     struct timeval it_value;
   };
+
+
+
+
 typedef enum __itimer_which __itimer_which_t;
+
+
+
+
+
+
 extern int getitimer (__itimer_which_t __which,
         struct itimerval *__value) __attribute__ ((__nothrow__));
+
+
+
+
 extern int setitimer (__itimer_which_t __which,
         __const struct itimerval *__restrict __new,
         struct itimerval *__restrict __old) __attribute__ ((__nothrow__));
+
+
+
+
 extern int utimes (__const char *__file, __const struct timeval __tvp[2])
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
 extern int lutimes (__const char *__file, __const struct timeval __tvp[2])
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
 extern int futimes (int __fd, __const struct timeval __tvp[2]) __attribute__ ((__nothrow__));
+
+
+
+
+
+
 extern int futimesat (int __fd, __const char *__file,
         __const struct timeval __tvp[2]) __attribute__ ((__nothrow__));
 # 191 "/usr/include/sys/time.h" 3 4
+
 # 281 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
 # 1 "/usr/include/time.h" 1 3 4
 # 30 "/usr/include/time.h" 3 4
+
+
+
+
+
+
+
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include/stddef.h" 1 3 4
 # 39 "/usr/include/time.h" 2 3 4
+
+
+
 # 1 "/usr/include/bits/time.h" 1 3 4
 # 43 "/usr/include/time.h" 2 3 4
 # 131 "/usr/include/time.h" 3 4
+
+
 struct tm
 {
   int tm_sec;
@@ -1937,78 +4169,206 @@ struct tm
   int tm_wday;
   int tm_yday;
   int tm_isdst;
+
+
   long int tm_gmtoff;
   __const char *tm_zone;
+
+
+
+
 };
+
+
+
+
+
+
+
+
 struct itimerspec
   {
     struct timespec it_interval;
     struct timespec it_value;
   };
+
+
 struct sigevent;
 # 180 "/usr/include/time.h" 3 4
+
+
+
 extern clock_t clock (void) __attribute__ ((__nothrow__));
+
+
 extern time_t time (time_t *__timer) __attribute__ ((__nothrow__));
+
+
 extern double difftime (time_t __time1, time_t __time0)
      __attribute__ ((__nothrow__)) __attribute__ ((__const__));
+
+
 extern time_t mktime (struct tm *__tp) __attribute__ ((__nothrow__));
+
+
+
+
+
 extern size_t strftime (char *__restrict __s, size_t __maxsize,
    __const char *__restrict __format,
    __const struct tm *__restrict __tp) __attribute__ ((__nothrow__));
+
+
+
+
+
 extern char *strptime (__const char *__restrict __s,
          __const char *__restrict __fmt, struct tm *__tp)
      __attribute__ ((__nothrow__));
+
+
+
+
+
+
+
 extern size_t strftime_l (char *__restrict __s, size_t __maxsize,
      __const char *__restrict __format,
      __const struct tm *__restrict __tp,
      __locale_t __loc) __attribute__ ((__nothrow__));
+
+
+
 extern char *strptime_l (__const char *__restrict __s,
     __const char *__restrict __fmt, struct tm *__tp,
     __locale_t __loc) __attribute__ ((__nothrow__));
+
+
+
+
+
+
 extern struct tm *gmtime (__const time_t *__timer) __attribute__ ((__nothrow__));
+
+
+
 extern struct tm *localtime (__const time_t *__timer) __attribute__ ((__nothrow__));
+
+
+
+
+
 extern struct tm *gmtime_r (__const time_t *__restrict __timer,
        struct tm *__restrict __tp) __attribute__ ((__nothrow__));
+
+
+
 extern struct tm *localtime_r (__const time_t *__restrict __timer,
           struct tm *__restrict __tp) __attribute__ ((__nothrow__));
+
+
+
+
+
 extern char *asctime (__const struct tm *__tp) __attribute__ ((__nothrow__));
+
+
 extern char *ctime (__const time_t *__timer) __attribute__ ((__nothrow__));
+
+
+
+
+
+
+
 extern char *asctime_r (__const struct tm *__restrict __tp,
    char *__restrict __buf) __attribute__ ((__nothrow__));
+
+
 extern char *ctime_r (__const time_t *__restrict __timer,
         char *__restrict __buf) __attribute__ ((__nothrow__));
+
+
+
+
 extern char *__tzname[2];
 extern int __daylight;
 extern long int __timezone;
+
+
+
+
 extern char *tzname[2];
+
+
+
 extern void tzset (void) __attribute__ ((__nothrow__));
+
+
+
 extern int daylight;
 extern long int timezone;
+
+
+
+
+
 extern int stime (__const time_t *__when) __attribute__ ((__nothrow__));
 # 313 "/usr/include/time.h" 3 4
 extern time_t timegm (struct tm *__tp) __attribute__ ((__nothrow__));
+
+
 extern time_t timelocal (struct tm *__tp) __attribute__ ((__nothrow__));
+
+
 extern int dysize (int __year) __attribute__ ((__nothrow__)) __attribute__ ((__const__));
 # 328 "/usr/include/time.h" 3 4
 extern int nanosleep (__const struct timespec *__requested_time,
         struct timespec *__remaining);
+
+
+
 extern int clock_getres (clockid_t __clock_id, struct timespec *__res) __attribute__ ((__nothrow__));
+
+
 extern int clock_gettime (clockid_t __clock_id, struct timespec *__tp) __attribute__ ((__nothrow__));
+
+
 extern int clock_settime (clockid_t __clock_id, __const struct timespec *__tp)
      __attribute__ ((__nothrow__));
+
+
+
+
+
+
 extern int clock_nanosleep (clockid_t __clock_id, int __flags,
        __const struct timespec *__req,
        struct timespec *__rem);
+
+
 extern int clock_getcpuclockid (pid_t __pid, clockid_t *__clock_id) __attribute__ ((__nothrow__));
+
+
+
+
 extern int timer_create (clockid_t __clock_id,
     struct sigevent *__restrict __evp,
     timer_t *__restrict __timerid) __attribute__ ((__nothrow__));
+
+
 extern int timer_delete (timer_t __timerid) __attribute__ ((__nothrow__));
+
+
 extern int timer_settime (timer_t __timerid, int __flags,
      __const struct itimerspec *__restrict __value,
      struct itimerspec *__restrict __ovalue) __attribute__ ((__nothrow__));
+
+
 extern int timer_gettime (timer_t __timerid, struct itimerspec *__value)
      __attribute__ ((__nothrow__));
+
+
 extern int timer_getoverrun (timer_t __timerid) __attribute__ ((__nothrow__));
 # 390 "/usr/include/time.h" 3 4
 extern int getdate_err;
@@ -2017,14 +4377,22 @@ extern struct tm *getdate (__const char *__string);
 # 413 "/usr/include/time.h" 3 4
 extern int getdate_r (__const char *__restrict __string,
         struct tm *__restrict __resbufp);
+
+
+
 # 282 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
 # 293 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h"
 # 1 "/usr/include/fcntl.h" 1 3 4
 # 30 "/usr/include/fcntl.h" 3 4
+
+
+
+
 # 1 "/usr/include/bits/fcntl.h" 1 3 4
 # 25 "/usr/include/bits/fcntl.h" 3 4
 # 1 "/usr/include/bits/wordsize.h" 1 3 4
 # 26 "/usr/include/bits/fcntl.h" 2 3 4
+
 # 1 "/usr/include/bits/uio.h" 1 3 4
 # 44 "/usr/include/bits/uio.h" 3 4
 struct iovec
@@ -2038,10 +4406,17 @@ struct flock
   {
     short int l_type;
     short int l_whence;
+
     __off_t l_start;
     __off_t l_len;
+
+
+
+
     __pid_t l_pid;
   };
+
+
 struct flock64
   {
     short int l_type;
@@ -2050,50 +4425,105 @@ struct flock64
     __off64_t l_len;
     __pid_t l_pid;
   };
+
+
+
+
 enum __pid_type
   {
     F_OWNER_TID = 0,
     F_OWNER_PID,
     F_OWNER_GID
   };
+
+
 struct f_owner_ex
   {
     enum __pid_type type;
     __pid_t pid;
   };
 # 257 "/usr/include/bits/fcntl.h" 3 4
+
+
+
+
+
 extern ssize_t readahead (int __fd, __off64_t __offset, size_t __count)
     __attribute__ ((__nothrow__));
+
+
+
 extern int sync_file_range (int __fd, __off64_t __from, __off64_t __to,
        unsigned int __flags);
+
+
+
 extern ssize_t vmsplice (int __fdout, const struct iovec *__iov,
     size_t __count, unsigned int __flags);
+
+
 extern ssize_t splice (int __fdin, __off64_t *__offin, int __fdout,
          __off64_t *__offout, size_t __len,
          unsigned int __flags);
+
+
 extern ssize_t tee (int __fdin, int __fdout, size_t __len,
       unsigned int __flags);
+
+
+
 extern int fallocate (int __fd, int __mode, __off_t __offset, __off_t __len);
 # 297 "/usr/include/bits/fcntl.h" 3 4
 extern int fallocate64 (int __fd, int __mode, __off64_t __offset,
    __off64_t __len);
+
+
+
+
 # 35 "/usr/include/fcntl.h" 2 3 4
+
+
+
 # 1 "/usr/include/sys/stat.h" 1 3 4
 # 105 "/usr/include/sys/stat.h" 3 4
+
+
 # 1 "/usr/include/bits/stat.h" 1 3 4
 # 43 "/usr/include/bits/stat.h" 3 4
 struct stat
   {
     __dev_t st_dev;
+
+
+
+
     __ino_t st_ino;
+
+
+
+
+
+
+
     __nlink_t st_nlink;
     __mode_t st_mode;
+
     __uid_t st_uid;
     __gid_t st_gid;
+
     int __pad0;
+
     __dev_t st_rdev;
+
+
+
+
     __off_t st_size;
+
+
+
     __blksize_t st_blksize;
+
     __blkcnt_t st_blocks;
 # 88 "/usr/include/bits/stat.h" 3 4
     struct timespec st_atim;
@@ -2103,34 +4533,70 @@ struct stat
     long int __unused[3];
 # 112 "/usr/include/bits/stat.h" 3 4
   };
+
+
+
 struct stat64
   {
     __dev_t st_dev;
+
     __ino64_t st_ino;
     __nlink_t st_nlink;
     __mode_t st_mode;
+
+
+
+
+
+
     __uid_t st_uid;
     __gid_t st_gid;
+
     int __pad0;
     __dev_t st_rdev;
     __off_t st_size;
+
+
+
+
+
     __blksize_t st_blksize;
     __blkcnt64_t st_blocks;
+
+
+
+
+
+
+
     struct timespec st_atim;
     struct timespec st_mtim;
     struct timespec st_ctim;
 # 164 "/usr/include/bits/stat.h" 3 4
     long int __unused[3];
+
+
+
   };
 # 108 "/usr/include/sys/stat.h" 2 3 4
 # 209 "/usr/include/sys/stat.h" 3 4
 extern int stat (__const char *__restrict __file,
    struct stat *__restrict __buf) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
 extern int fstat (int __fd, struct stat *__buf) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
 # 228 "/usr/include/sys/stat.h" 3 4
 extern int stat64 (__const char *__restrict __file,
      struct stat64 *__restrict __buf) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
 extern int fstat64 (int __fd, struct stat64 *__buf) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+
+
+
+
+
+
+
 extern int fstatat (int __fd, __const char *__restrict __file,
       struct stat *__restrict __buf, int __flag)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 3)));
@@ -2138,38 +4604,112 @@ extern int fstatat (int __fd, __const char *__restrict __file,
 extern int fstatat64 (int __fd, __const char *__restrict __file,
         struct stat64 *__restrict __buf, int __flag)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 3)));
+
+
+
+
+
+
+
 extern int lstat (__const char *__restrict __file,
     struct stat *__restrict __buf) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
 # 276 "/usr/include/sys/stat.h" 3 4
 extern int lstat64 (__const char *__restrict __file,
       struct stat64 *__restrict __buf)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
+
 extern int chmod (__const char *__file, __mode_t __mode)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
 extern int lchmod (__const char *__file, __mode_t __mode)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
 extern int fchmod (int __fd, __mode_t __mode) __attribute__ ((__nothrow__));
+
+
+
+
+
 extern int fchmodat (int __fd, __const char *__file, __mode_t __mode,
        int __flag)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2))) ;
+
+
+
+
+
+
 extern __mode_t umask (__mode_t __mask) __attribute__ ((__nothrow__));
+
+
+
+
 extern __mode_t getumask (void) __attribute__ ((__nothrow__));
+
+
+
 extern int mkdir (__const char *__path, __mode_t __mode)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
 extern int mkdirat (int __fd, __const char *__path, __mode_t __mode)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+
+
+
+
+
+
 extern int mknod (__const char *__path, __mode_t __mode, __dev_t __dev)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
 extern int mknodat (int __fd, __const char *__path, __mode_t __mode,
       __dev_t __dev) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+
+
+
+
+
 extern int mkfifo (__const char *__path, __mode_t __mode)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
 extern int mkfifoat (int __fd, __const char *__path, __mode_t __mode)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+
+
+
+
+
 extern int utimensat (int __fd, __const char *__path,
         __const struct timespec __times[2],
         int __flags)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+
+
+
+
 extern int futimens (int __fd, __const struct timespec __times[2]) __attribute__ ((__nothrow__));
 # 399 "/usr/include/sys/stat.h" 3 4
 extern int __fxstat (int __ver, int __fildes, struct stat *__stat_buf)
@@ -2191,12 +4731,15 @@ extern int __lxstat64 (int __ver, __const char *__filename,
 extern int __fxstatat64 (int __ver, int __fildes, __const char *__filename,
     struct stat64 *__stat_buf, int __flag)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 4)));
+
 extern int __xmknod (int __ver, __const char *__path, __mode_t __mode,
        __dev_t *__dev) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 4)));
+
 extern int __xmknodat (int __ver, int __fd, __const char *__path,
          __mode_t __mode, __dev_t *__dev)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 5)));
 # 534 "/usr/include/sys/stat.h" 3 4
+
 # 39 "/usr/include/fcntl.h" 2 3 4
 # 64 "/usr/include/fcntl.h" 3 4
 extern int fcntl (int __fd, int __cmd, ...);
@@ -2225,19 +4768,32 @@ extern int posix_fallocate (int __fd, __off_t __offset, __off_t __len);
 # 197 "/usr/include/fcntl.h" 3 4
 extern int posix_fallocate64 (int __fd, __off64_t __offset, __off64_t __len);
 # 208 "/usr/include/fcntl.h" 3 4
+
 # 294 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
 # 331 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h"
 # 1 "/usr/include/sys/wait.h" 1 3 4
 # 29 "/usr/include/sys/wait.h" 3 4
+
+
 # 1 "/usr/include/signal.h" 1 3 4
 # 31 "/usr/include/signal.h" 3 4
+
+
 # 1 "/usr/include/bits/sigset.h" 1 3 4
 # 104 "/usr/include/bits/sigset.h" 3 4
 extern int __sigismember (__const __sigset_t *, int);
 extern int __sigaddset (__sigset_t *, int);
 extern int __sigdelset (__sigset_t *, int);
 # 34 "/usr/include/signal.h" 2 3 4
+
+
+
+
+
+
+
 typedef __sig_atomic_t sig_atomic_t;
+
 # 58 "/usr/include/signal.h" 3 4
 # 1 "/usr/include/bits/signum.h" 1 3 4
 # 59 "/usr/include/signal.h" 2 3 4
@@ -2246,6 +4802,13 @@ typedef __sig_atomic_t sig_atomic_t;
 # 25 "/usr/include/bits/siginfo.h" 3 4
 # 1 "/usr/include/bits/wordsize.h" 1 3 4
 # 26 "/usr/include/bits/siginfo.h" 2 3 4
+
+
+
+
+
+
+
 typedef union sigval
   {
     int sival_int;
@@ -2256,27 +4819,37 @@ typedef struct siginfo
   {
     int si_signo;
     int si_errno;
+
     int si_code;
+
     union
       {
  int _pad[((128 / sizeof (int)) - 4)];
+
+
  struct
    {
      __pid_t si_pid;
      __uid_t si_uid;
    } _kill;
+
+
  struct
    {
      int si_tid;
      int si_overrun;
      sigval_t si_sigval;
    } _timer;
+
+
  struct
    {
      __pid_t si_pid;
      __uid_t si_uid;
      sigval_t si_sigval;
    } _rt;
+
+
  struct
    {
      __pid_t si_pid;
@@ -2285,10 +4858,14 @@ typedef struct siginfo
      __clock_t si_utime;
      __clock_t si_stime;
    } _sigchld;
+
+
  struct
    {
      void *si_addr;
    } _sigfault;
+
+
  struct
    {
      long int si_band;
@@ -2300,70 +4877,129 @@ typedef struct siginfo
 enum
 {
   SI_ASYNCNL = -60,
+
   SI_TKILL = -6,
+
   SI_SIGIO,
+
   SI_ASYNCIO,
+
   SI_MESGQ,
+
   SI_TIMER,
+
   SI_QUEUE,
+
   SI_USER,
+
   SI_KERNEL = 0x80
+
 };
+
+
+
 enum
 {
   ILL_ILLOPC = 1,
+
   ILL_ILLOPN,
+
   ILL_ILLADR,
+
   ILL_ILLTRP,
+
   ILL_PRVOPC,
+
   ILL_PRVREG,
+
   ILL_COPROC,
+
   ILL_BADSTK
+
 };
+
+
 enum
 {
   FPE_INTDIV = 1,
+
   FPE_INTOVF,
+
   FPE_FLTDIV,
+
   FPE_FLTOVF,
+
   FPE_FLTUND,
+
   FPE_FLTRES,
+
   FPE_FLTINV,
+
   FPE_FLTSUB
+
 };
+
+
 enum
 {
   SEGV_MAPERR = 1,
+
   SEGV_ACCERR
+
 };
+
+
 enum
 {
   BUS_ADRALN = 1,
+
   BUS_ADRERR,
+
   BUS_OBJERR
+
 };
+
+
 enum
 {
   TRAP_BRKPT = 1,
+
   TRAP_TRACE
+
 };
+
+
 enum
 {
   CLD_EXITED = 1,
+
   CLD_KILLED,
+
   CLD_DUMPED,
+
   CLD_TRAPPED,
+
   CLD_STOPPED,
+
   CLD_CONTINUED
+
 };
+
+
 enum
 {
   POLL_IN = 1,
+
   POLL_OUT,
+
   POLL_MSG,
+
   POLL_ERR,
+
   POLL_PRI,
+
   POLL_HUP
+
 };
 # 273 "/usr/include/bits/siginfo.h" 3 4
 typedef struct sigevent
@@ -2371,10 +5007,15 @@ typedef struct sigevent
     sigval_t sigev_value;
     int sigev_signo;
     int sigev_notify;
+
     union
       {
  int _pad[((64 / sizeof (int)) - 4)];
+
+
+
  __pid_t _tid;
+
  struct
    {
      void (*_function) (sigval_t);
@@ -2382,31 +5023,91 @@ typedef struct sigevent
    } _sigev_thread;
       } _sigev_un;
   } sigevent_t;
+
+
+
+
+
+
 enum
 {
   SIGEV_SIGNAL = 0,
+
   SIGEV_NONE,
+
   SIGEV_THREAD,
+
+
   SIGEV_THREAD_ID = 4
+
 };
 # 80 "/usr/include/signal.h" 2 3 4
+
+
+
+
 typedef void (*__sighandler_t) (int);
+
+
+
+
 extern __sighandler_t __sysv_signal (int __sig, __sighandler_t __handler)
      __attribute__ ((__nothrow__));
+
 extern __sighandler_t sysv_signal (int __sig, __sighandler_t __handler)
      __attribute__ ((__nothrow__));
+
+
+
+
+
+
+
 extern __sighandler_t signal (int __sig, __sighandler_t __handler)
      __attribute__ ((__nothrow__));
 # 113 "/usr/include/signal.h" 3 4
+
+
+
+
+
 extern __sighandler_t bsd_signal (int __sig, __sighandler_t __handler)
      __attribute__ ((__nothrow__));
+
+
+
+
+
+
 extern int kill (__pid_t __pid, int __sig) __attribute__ ((__nothrow__));
+
+
+
+
+
+
 extern int killpg (__pid_t __pgrp, int __sig) __attribute__ ((__nothrow__));
+
+
+
+
 extern int raise (int __sig) __attribute__ ((__nothrow__));
+
+
+
+
 extern __sighandler_t ssignal (int __sig, __sighandler_t __handler)
      __attribute__ ((__nothrow__));
 extern int gsignal (int __sig) __attribute__ ((__nothrow__));
+
+
+
+
 extern void psignal (int __sig, __const char *__s);
+
+
+
+
 extern void psiginfo (__const siginfo_t *__pinfo, __const char *__s);
 # 168 "/usr/include/signal.h" 3 4
 extern int __sigpause (int __sig_or_mask, int __is_sig);
@@ -2414,80 +5115,170 @@ extern int __sigpause (int __sig_or_mask, int __is_sig);
 extern int sigpause (int __sig) __asm__ ("__xpg_sigpause");
 # 196 "/usr/include/signal.h" 3 4
 extern int sigblock (int __mask) __attribute__ ((__nothrow__)) __attribute__ ((__deprecated__));
+
+
 extern int sigsetmask (int __mask) __attribute__ ((__nothrow__)) __attribute__ ((__deprecated__));
+
+
 extern int siggetmask (void) __attribute__ ((__nothrow__)) __attribute__ ((__deprecated__));
 # 211 "/usr/include/signal.h" 3 4
 typedef __sighandler_t sighandler_t;
+
+
+
+
 typedef __sighandler_t sig_t;
+
+
+
+
+
 extern int sigemptyset (sigset_t *__set) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
 extern int sigfillset (sigset_t *__set) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
 extern int sigaddset (sigset_t *__set, int __signo) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
 extern int sigdelset (sigset_t *__set, int __signo) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
 extern int sigismember (__const sigset_t *__set, int __signo)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
 extern int sigisemptyset (__const sigset_t *__set) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
 extern int sigandset (sigset_t *__set, __const sigset_t *__left,
         __const sigset_t *__right) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2, 3)));
+
+
 extern int sigorset (sigset_t *__set, __const sigset_t *__left,
        __const sigset_t *__right) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2, 3)));
+
+
+
+
 # 1 "/usr/include/bits/sigaction.h" 1 3 4
 # 25 "/usr/include/bits/sigaction.h" 3 4
 struct sigaction
   {
+
+
     union
       {
+
  __sighandler_t sa_handler;
+
  void (*sa_sigaction) (int, siginfo_t *, void *);
       }
     __sigaction_handler;
+
+
+
+
+
+
+
     __sigset_t sa_mask;
+
+
     int sa_flags;
+
+
     void (*sa_restorer) (void);
   };
 # 253 "/usr/include/signal.h" 2 3 4
+
+
 extern int sigprocmask (int __how, __const sigset_t *__restrict __set,
    sigset_t *__restrict __oset) __attribute__ ((__nothrow__));
+
+
+
+
+
+
 extern int sigsuspend (__const sigset_t *__set) __attribute__ ((__nonnull__ (1)));
+
+
 extern int sigaction (int __sig, __const struct sigaction *__restrict __act,
         struct sigaction *__restrict __oact) __attribute__ ((__nothrow__));
+
+
 extern int sigpending (sigset_t *__set) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
 extern int sigwait (__const sigset_t *__restrict __set, int *__restrict __sig)
      __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
+
+
 extern int sigwaitinfo (__const sigset_t *__restrict __set,
    siginfo_t *__restrict __info) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
 extern int sigtimedwait (__const sigset_t *__restrict __set,
     siginfo_t *__restrict __info,
     __const struct timespec *__restrict __timeout)
      __attribute__ ((__nonnull__ (1)));
+
+
+
 extern int sigqueue (__pid_t __pid, int __sig, __const union sigval __val)
      __attribute__ ((__nothrow__));
 # 310 "/usr/include/signal.h" 3 4
 extern __const char *__const _sys_siglist[65];
 extern __const char *__const sys_siglist[65];
+
+
 struct sigvec
   {
     __sighandler_t sv_handler;
     int sv_mask;
+
     int sv_flags;
+
   };
 # 334 "/usr/include/signal.h" 3 4
 extern int sigvec (int __sig, __const struct sigvec *__vec,
      struct sigvec *__ovec) __attribute__ ((__nothrow__));
+
+
+
 # 1 "/usr/include/bits/sigcontext.h" 1 3 4
 # 26 "/usr/include/bits/sigcontext.h" 3 4
 # 1 "/usr/include/bits/wordsize.h" 1 3 4
 # 27 "/usr/include/bits/sigcontext.h" 2 3 4
+
 struct _fpreg
 {
   unsigned short significand[4];
   unsigned short exponent;
 };
+
 struct _fpxreg
 {
   unsigned short significand[4];
   unsigned short exponent;
   unsigned short padding[3];
 };
+
 struct _xmmreg
 {
   __uint32_t element[4];
@@ -2495,6 +5286,7 @@ struct _xmmreg
 # 109 "/usr/include/bits/sigcontext.h" 3 4
 struct _fpstate
 {
+
   __uint16_t cwd;
   __uint16_t swd;
   __uint16_t ftw;
@@ -2507,6 +5299,7 @@ struct _fpstate
   struct _xmmreg _xmm[16];
   __uint32_t padding[24];
 };
+
 struct sigcontext
 {
   unsigned long r8;
@@ -2539,10 +5332,23 @@ struct sigcontext
   unsigned long __reserved1 [8];
 };
 # 340 "/usr/include/signal.h" 2 3 4
+
+
 extern int sigreturn (struct sigcontext *__scp) __attribute__ ((__nothrow__));
+
+
+
+
+
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include/stddef.h" 1 3 4
 # 350 "/usr/include/signal.h" 2 3 4
+
+
+
+
 extern int siginterrupt (int __sig, int __interrupt) __attribute__ ((__nothrow__));
+
 # 1 "/usr/include/bits/sigstack.h" 1 3 4
 # 26 "/usr/include/bits/sigstack.h" 3 4
 struct sigstack
@@ -2550,10 +5356,15 @@ struct sigstack
     void *ss_sp;
     int ss_onstack;
   };
+
+
+
 enum
 {
   SS_ONSTACK = 1,
+
   SS_DISABLE
+
 };
 # 50 "/usr/include/bits/sigstack.h" 3 4
 typedef struct sigaltstack
@@ -2563,6 +5374,8 @@ typedef struct sigaltstack
     size_t ss_size;
   } stack_t;
 # 357 "/usr/include/signal.h" 2 3 4
+
+
 # 1 "/usr/include/sys/ucontext.h" 1 3 4
 # 23 "/usr/include/sys/ucontext.h" 3 4
 # 1 "/usr/include/signal.h" 1 3 4
@@ -2571,45 +5384,81 @@ typedef struct sigaltstack
 # 25 "/usr/include/sys/ucontext.h" 2 3 4
 # 33 "/usr/include/sys/ucontext.h" 3 4
 typedef long int greg_t;
+
+
+
+
+
 typedef greg_t gregset_t[23];
+
+
+
 enum
 {
   REG_R8 = 0,
+
   REG_R9,
+
   REG_R10,
+
   REG_R11,
+
   REG_R12,
+
   REG_R13,
+
   REG_R14,
+
   REG_R15,
+
   REG_RDI,
+
   REG_RSI,
+
   REG_RBP,
+
   REG_RBX,
+
   REG_RDX,
+
   REG_RAX,
+
   REG_RCX,
+
   REG_RSP,
+
   REG_RIP,
+
   REG_EFL,
+
   REG_CSGSFS,
+
   REG_ERR,
+
   REG_TRAPNO,
+
   REG_OLDMASK,
+
   REG_CR2
+
 };
+
+
 struct _libc_fpxreg
 {
   unsigned short int significand[4];
   unsigned short int exponent;
   unsigned short int padding[3];
 };
+
 struct _libc_xmmreg
 {
   __uint32_t element[4];
 };
+
 struct _libc_fpstate
 {
+
   __uint16_t cwd;
   __uint16_t swd;
   __uint16_t ftw;
@@ -2622,13 +5471,20 @@ struct _libc_fpstate
   struct _libc_xmmreg _xmm[16];
   __uint32_t padding[24];
 };
+
+
 typedef struct _libc_fpstate *fpregset_t;
+
+
 typedef struct
   {
     gregset_t gregs;
+
     fpregset_t fpregs;
     unsigned long __reserved1 [8];
 } mcontext_t;
+
+
 typedef struct ucontext
   {
     unsigned long int uc_flags;
@@ -2639,25 +5495,68 @@ typedef struct ucontext
     struct _libc_fpstate __fpregs_mem;
   } ucontext_t;
 # 360 "/usr/include/signal.h" 2 3 4
+
+
+
+
+
 extern int sigstack (struct sigstack *__ss, struct sigstack *__oss)
      __attribute__ ((__nothrow__)) __attribute__ ((__deprecated__));
+
+
+
 extern int sigaltstack (__const struct sigaltstack *__restrict __ss,
    struct sigaltstack *__restrict __oss) __attribute__ ((__nothrow__));
+
+
+
+
+
+
+
 extern int sighold (int __sig) __attribute__ ((__nothrow__));
+
+
 extern int sigrelse (int __sig) __attribute__ ((__nothrow__));
+
+
 extern int sigignore (int __sig) __attribute__ ((__nothrow__));
+
+
 extern __sighandler_t sigset (int __sig, __sighandler_t __disp) __attribute__ ((__nothrow__));
+
+
+
+
+
+
 # 1 "/usr/include/bits/sigthread.h" 1 3 4
 # 31 "/usr/include/bits/sigthread.h" 3 4
 extern int pthread_sigmask (int __how,
        __const __sigset_t *__restrict __newmask,
        __sigset_t *__restrict __oldmask)__attribute__ ((__nothrow__));
+
+
 extern int pthread_kill (pthread_t __threadid, int __signo) __attribute__ ((__nothrow__));
+
+
+
 extern int pthread_sigqueue (pthread_t __threadid, int __signo,
         const union sigval __value) __attribute__ ((__nothrow__));
 # 396 "/usr/include/signal.h" 2 3 4
+
+
+
+
+
+
 extern int __libc_current_sigrtmin (void) __attribute__ ((__nothrow__));
+
 extern int __libc_current_sigrtmax (void) __attribute__ ((__nothrow__));
+
+
+
+
 # 32 "/usr/include/sys/wait.h" 2 3 4
 # 1 "/usr/include/sys/resource.h" 1 3 4
 # 25 "/usr/include/sys/resource.h" 3 4
@@ -2665,73 +5564,203 @@ extern int __libc_current_sigrtmax (void) __attribute__ ((__nothrow__));
 # 33 "/usr/include/bits/resource.h" 3 4
 enum __rlimit_resource
 {
+
   RLIMIT_CPU = 0,
+
+
+
   RLIMIT_FSIZE = 1,
+
+
+
   RLIMIT_DATA = 2,
+
+
+
   RLIMIT_STACK = 3,
+
+
+
   RLIMIT_CORE = 4,
+
+
+
+
+
+
   __RLIMIT_RSS = 5,
+
+
+
   RLIMIT_NOFILE = 7,
   __RLIMIT_OFILE = RLIMIT_NOFILE,
+
+
+
+
   RLIMIT_AS = 9,
+
+
+
   __RLIMIT_NPROC = 6,
+
+
+
   __RLIMIT_MEMLOCK = 8,
+
+
+
   __RLIMIT_LOCKS = 10,
+
+
+
   __RLIMIT_SIGPENDING = 11,
+
+
+
   __RLIMIT_MSGQUEUE = 12,
+
+
+
+
+
   __RLIMIT_NICE = 13,
+
+
+
+
   __RLIMIT_RTPRIO = 14,
+
+
   __RLIMIT_NLIMITS = 15,
   __RLIM_NLIMITS = __RLIMIT_NLIMITS
+
+
 };
 # 127 "/usr/include/bits/resource.h" 3 4
 typedef __rlim_t rlim_t;
+
+
+
+
 typedef __rlim64_t rlim64_t;
+
+
 struct rlimit
   {
+
     rlim_t rlim_cur;
+
     rlim_t rlim_max;
   };
+
+
 struct rlimit64
   {
+
     rlim64_t rlim_cur;
+
     rlim64_t rlim_max;
  };
+
+
+
 enum __rusage_who
 {
+
   RUSAGE_SELF = 0,
+
+
+
   RUSAGE_CHILDREN = -1
+
+
+
   ,
+
   RUSAGE_THREAD = 1
+
+
+
+
 };
+
+
 # 1 "/usr/include/bits/time.h" 1 3 4
 # 176 "/usr/include/bits/resource.h" 2 3 4
+
+
 struct rusage
   {
+
     struct timeval ru_utime;
+
     struct timeval ru_stime;
+
     long int ru_maxrss;
+
+
     long int ru_ixrss;
+
     long int ru_idrss;
+
     long int ru_isrss;
+
+
     long int ru_minflt;
+
     long int ru_majflt;
+
     long int ru_nswap;
+
+
     long int ru_inblock;
+
     long int ru_oublock;
+
     long int ru_msgsnd;
+
     long int ru_msgrcv;
+
     long int ru_nsignals;
+
+
+
     long int ru_nvcsw;
+
+
     long int ru_nivcsw;
   };
+
+
+
+
+
+
+
 enum __priority_which
 {
   PRIO_PROCESS = 0,
+
   PRIO_PGRP = 1,
+
   PRIO_USER = 2
+
 };
 # 26 "/usr/include/sys/resource.h" 2 3 4
+
+
+
+
+
+
+
+
+
+
+
+
+
 typedef enum __rlimit_resource __rlimit_resource_t;
 typedef enum __rusage_who __rusage_who_t;
 typedef enum __priority_which __priority_which_t;
@@ -2741,15 +5770,35 @@ extern int getrlimit (__rlimit_resource_t __resource,
 # 62 "/usr/include/sys/resource.h" 3 4
 extern int getrlimit64 (__rlimit_resource_t __resource,
    struct rlimit64 *__rlimits) __attribute__ ((__nothrow__));
+
+
+
+
+
+
 extern int setrlimit (__rlimit_resource_t __resource,
         __const struct rlimit *__rlimits) __attribute__ ((__nothrow__));
 # 82 "/usr/include/sys/resource.h" 3 4
 extern int setrlimit64 (__rlimit_resource_t __resource,
    __const struct rlimit64 *__rlimits) __attribute__ ((__nothrow__));
+
+
+
+
 extern int getrusage (__rusage_who_t __who, struct rusage *__usage) __attribute__ ((__nothrow__));
+
+
+
+
+
 extern int getpriority (__priority_which_t __which, id_t __who) __attribute__ ((__nothrow__));
+
+
+
 extern int setpriority (__priority_which_t __which, id_t __who, int __prio)
      __attribute__ ((__nothrow__));
+
+
 # 33 "/usr/include/sys/wait.h" 2 3 4
 # 102 "/usr/include/sys/wait.h" 3 4
 typedef enum
@@ -2762,6 +5811,9 @@ typedef enum
 extern __pid_t wait (__WAIT_STATUS __stat_loc);
 # 139 "/usr/include/sys/wait.h" 3 4
 extern __pid_t waitpid (__pid_t __pid, int *__stat_loc, int __options);
+
+
+
 # 1 "/usr/include/bits/siginfo.h" 1 3 4
 # 25 "/usr/include/bits/siginfo.h" 3 4
 # 1 "/usr/include/bits/wordsize.h" 1 3 4
@@ -2770,11 +5822,30 @@ extern __pid_t waitpid (__pid_t __pid, int *__stat_loc, int __options);
 # 155 "/usr/include/sys/wait.h" 3 4
 extern int waitid (idtype_t __idtype, __id_t __id, siginfo_t *__infop,
      int __options);
+
+
+
+
+
 struct rusage;
+
+
+
+
+
+
 extern __pid_t wait3 (__WAIT_STATUS __stat_loc, int __options,
         struct rusage * __usage) __attribute__ ((__nothrow__));
+
+
+
+
 extern __pid_t wait4 (__pid_t __pid, __WAIT_STATUS __stat_loc, int __options,
         struct rusage *__usage) __attribute__ ((__nothrow__));
+
+
+
+
 # 332 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
 # 382 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h"
 extern int getopt (int, char * const *, const char *);
@@ -2784,22 +5855,52 @@ extern int getopt (int, char * const *, const char *);
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include/stddef.h" 1 3 4
 # 26 "/usr/include/malloc.h" 2 3 4
 # 48 "/usr/include/malloc.h" 3 4
+
+
+
 extern void *malloc (size_t __size) __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) ;
+
+
 extern void *calloc (size_t __nmemb, size_t __size) __attribute__ ((__nothrow__))
        __attribute__ ((__malloc__)) ;
+
+
+
+
+
+
 extern void *realloc (void *__ptr, size_t __size) __attribute__ ((__nothrow__))
        __attribute__ ((__warn_unused_result__));
+
+
 extern void free (void *__ptr) __attribute__ ((__nothrow__));
+
+
 extern void cfree (void *__ptr) __attribute__ ((__nothrow__));
+
+
 extern void *memalign (size_t __alignment, size_t __size) __attribute__ ((__nothrow__))
        __attribute__ ((__malloc__)) ;
+
+
 extern void *valloc (size_t __size) __attribute__ ((__nothrow__))
        __attribute__ ((__malloc__)) ;
+
+
+
 extern void * pvalloc (size_t __size) __attribute__ ((__nothrow__))
        __attribute__ ((__malloc__)) ;
+
+
+
 extern void *(*__morecore) (ptrdiff_t __size);
+
+
 extern void *__default_morecore (ptrdiff_t __size) __attribute__ ((__nothrow__))
        __attribute__ ((__malloc__));
+
+
+
 struct mallinfo {
   int arena;
   int ordblks;
@@ -2812,16 +5913,38 @@ struct mallinfo {
   int fordblks;
   int keepcost;
 };
+
+
 extern struct mallinfo mallinfo (void) __attribute__ ((__nothrow__));
 # 135 "/usr/include/malloc.h" 3 4
 extern int mallopt (int __param, int __val) __attribute__ ((__nothrow__));
+
+
+
 extern int malloc_trim (size_t __pad) __attribute__ ((__nothrow__));
+
+
+
 extern size_t malloc_usable_size (void *__ptr) __attribute__ ((__nothrow__));
+
+
 extern void malloc_stats (void) __attribute__ ((__nothrow__));
+
+
 extern int malloc_info (int __options, FILE *__fp);
+
+
 extern void *malloc_get_state (void) __attribute__ ((__nothrow__));
+
+
+
 extern int malloc_set_state (void *__ptr) __attribute__ ((__nothrow__));
+
+
+
+
 extern void (*__malloc_initialize_hook) (void);
+
 extern void (*__free_hook) (void *__ptr, __const void *)
                              ;
 extern void *(*__malloc_hook) (size_t __size, __const void *)
@@ -2829,12 +5952,20 @@ extern void *(*__malloc_hook) (size_t __size, __const void *)
 extern void *(*__realloc_hook) (void *__ptr, size_t __size, __const void *)
                                    ;
 extern void *(*__memalign_hook) (size_t __alignment, size_t __size, __const void *)
+
                                     ;
 extern void (*__after_morecore_hook) (void);
+
+
 extern void __malloc_check_init (void) __attribute__ ((__nothrow__));
+
+
+
 # 403 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
 # 418 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h"
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include/stdint.h" 1 3 4
+
+
 # 1 "/usr/include/stdint.h" 1 3 4
 # 27 "/usr/include/stdint.h" 3 4
 # 1 "/usr/include/bits/wchar.h" 1 3 4
@@ -2844,24 +5975,38 @@ extern void __malloc_check_init (void) __attribute__ ((__nothrow__));
 # 49 "/usr/include/stdint.h" 3 4
 typedef unsigned char uint8_t;
 typedef unsigned short int uint16_t;
+
 typedef unsigned int uint32_t;
+
+
+
 typedef unsigned long int uint64_t;
 # 66 "/usr/include/stdint.h" 3 4
 typedef signed char int_least8_t;
 typedef short int int_least16_t;
 typedef int int_least32_t;
+
 typedef long int int_least64_t;
+
+
+
+
+
+
 typedef unsigned char uint_least8_t;
 typedef unsigned short int uint_least16_t;
 typedef unsigned int uint_least32_t;
+
 typedef unsigned long int uint_least64_t;
 # 91 "/usr/include/stdint.h" 3 4
 typedef signed char int_fast8_t;
+
 typedef long int int_fast16_t;
 typedef long int int_fast32_t;
 typedef long int int_fast64_t;
 # 104 "/usr/include/stdint.h" 3 4
 typedef unsigned char uint_fast8_t;
+
 typedef unsigned long int uint_fast16_t;
 typedef unsigned long int uint_fast32_t;
 typedef unsigned long int uint_fast64_t;
@@ -2872,10 +6017,18 @@ typedef long int intmax_t;
 typedef unsigned long int uintmax_t;
 # 4 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include/stdint.h" 2 3 4
 # 419 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
+
+
+
 # 1 "/usr/include/inttypes.h" 1 3 4
 # 35 "/usr/include/inttypes.h" 3 4
 typedef int __gwchar_t;
 # 274 "/usr/include/inttypes.h" 3 4
+
+
+
+
+
 typedef struct
   {
     long int quot;
@@ -2883,19 +6036,30 @@ typedef struct
   } imaxdiv_t;
 # 298 "/usr/include/inttypes.h" 3 4
 extern intmax_t imaxabs (intmax_t __n) __attribute__ ((__nothrow__)) __attribute__ ((__const__));
+
+
 extern imaxdiv_t imaxdiv (intmax_t __numer, intmax_t __denom)
       __attribute__ ((__nothrow__)) __attribute__ ((__const__));
+
+
 extern intmax_t strtoimax (__const char *__restrict __nptr,
       char **__restrict __endptr, int __base) __attribute__ ((__nothrow__));
+
+
 extern uintmax_t strtoumax (__const char *__restrict __nptr,
        char ** __restrict __endptr, int __base) __attribute__ ((__nothrow__));
+
+
 extern intmax_t wcstoimax (__const __gwchar_t *__restrict __nptr,
       __gwchar_t **__restrict __endptr, int __base)
      __attribute__ ((__nothrow__));
+
+
 extern uintmax_t wcstoumax (__const __gwchar_t *__restrict __nptr,
        __gwchar_t ** __restrict __endptr, int __base)
      __attribute__ ((__nothrow__));
 # 442 "/usr/include/inttypes.h" 3 4
+
 # 423 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
 # 540 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h"
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/filenames.h" 1
@@ -2909,24 +6073,79 @@ extern int filename_cmp (const char *s1, const char *s2);
 # 47 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/libiberty.h" 2
 # 56 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/libiberty.h"
 extern void unlock_stream (FILE *);
+
+
+
+
+
 extern void unlock_std_streams (void);
+
+
+
+
+
 extern FILE *fopen_unlocked (const char *, const char *);
 extern FILE *fdopen_unlocked (int, const char *);
 extern FILE *freopen_unlocked (const char *, const char *, FILE *);
+
+
+
+
 extern char **buildargv (const char *) __attribute__ ((__malloc__));
+
+
+
 extern void freeargv (char **);
+
+
+
+
 extern char **dupargv (char **) __attribute__ ((__malloc__));
+
+
+
 extern void expandargv (int *, char ***);
+
+
+
 extern int writeargv (char **, FILE *);
 # 117 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/libiberty.h"
 extern const char *lbasename (const char *);
+
+
+
 extern char *lrealpath (const char *);
+
+
+
+
+
 extern char *concat (const char *, ...) __attribute__ ((__malloc__)) __attribute__ ((__sentinel__));
 # 136 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/libiberty.h"
 extern char *reconcat (char *, const char *, ...) __attribute__ ((__malloc__)) __attribute__ ((__sentinel__));
+
+
+
+
+
 extern unsigned long concat_length (const char *, ...) __attribute__ ((__sentinel__));
+
+
+
+
+
+
 extern char *concat_copy (char *, const char *, ...) __attribute__ ((__sentinel__));
+
+
+
+
+
+
 extern char *concat_copy2 (const char *, ...) __attribute__ ((__sentinel__));
+
+
+
 extern char *libiberty_concat_ptr;
 # 172 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/libiberty.h"
 extern int fdmatch (int fd1, int fd2);
@@ -2934,34 +6153,114 @@ extern int fdmatch (int fd1, int fd2);
 extern char * getpwd (void);
 # 197 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/libiberty.h"
 extern long get_run_time (void);
+
+
+
+
 extern char *make_relative_prefix (const char *, const char *,
                                    const char *) __attribute__ ((__malloc__));
+
+
+
+
+
 extern char *make_relative_prefix_ignore_links (const char *, const char *,
       const char *) __attribute__ ((__malloc__));
+
+
+
 extern char *choose_temp_base (void) __attribute__ ((__malloc__));
+
+
+
 extern char *make_temp_file (const char *) __attribute__ ((__malloc__));
+
+
+
 extern int unlink_if_ordinary (const char *);
+
+
+
 extern const char *spaces (int count);
+
+
+
+
 extern int errno_max (void);
+
+
+
+
 extern const char *strerrno (int);
+
+
+
 extern int strtoerrno (const char *);
+
+
+
 extern char *xstrerror (int);
+
+
+
+
 extern int signo_max (void);
 # 261 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/libiberty.h"
 extern const char *strsigno (int);
+
+
+
 extern int strtosigno (const char *);
+
+
+
 extern int xatexit (void (*fn) (void));
+
+
+
 extern void xexit (int status) __attribute__ ((__noreturn__));
+
+
+
 extern void xmalloc_set_program_name (const char *);
+
+
 extern void xmalloc_failed (size_t) __attribute__ ((__noreturn__));
+
+
+
+
+
 extern void *xmalloc (size_t) __attribute__ ((__malloc__));
+
+
+
+
+
 extern void *xrealloc (void *, size_t);
+
+
+
+
 extern void *xcalloc (size_t, size_t) __attribute__ ((__malloc__));
+
+
+
 extern char *xstrdup (const char *) __attribute__ ((__malloc__));
+
+
+
 extern char *xstrndup (const char *, size_t) __attribute__ ((__malloc__));
+
+
+
 extern void *xmemdup (const void *, size_t, size_t) __attribute__ ((__malloc__));
+
+
 extern double physmem_total (void);
 extern double physmem_available (void);
+
+
 extern unsigned int xcrc32 (const unsigned char *, int, unsigned int);
 # 360 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/libiberty.h"
 extern const unsigned char _hex_value[256];
@@ -2981,12 +6280,48 @@ extern const char *pex_run_in_environment (struct pex_obj *obj, int flags,
                                            char * const *env,
                               const char *outname,
         const char *errname, int *err);
+
+
+
+
+
 extern FILE *pex_input_file (struct pex_obj *obj, int flags,
                              const char *in_name);
+
+
+
+
+
+
 extern FILE *pex_input_pipe (struct pex_obj *obj, int binary);
+
+
+
+
+
+
+
 extern FILE *pex_read_output (struct pex_obj *, int binary);
+
+
+
+
+
+
+
 extern FILE *pex_read_err (struct pex_obj *, int binary);
+
+
+
+
+
 extern int pex_get_status (struct pex_obj *, int count, int *vector);
+
+
+
+
+
+
 struct pex_time
 {
   unsigned long user_seconds;
@@ -2994,8 +6329,13 @@ struct pex_time
   unsigned long system_seconds;
   unsigned long system_microseconds;
 };
+
 extern int pex_get_times (struct pex_obj *, int count,
      struct pex_time *vector);
+
+
+
+
 extern void pex_free (struct pex_obj *);
 # 571 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/libiberty.h"
 extern const char *pex_one (int flags, const char *executable,
@@ -3005,6 +6345,9 @@ extern const char *pex_one (int flags, const char *executable,
 # 590 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/libiberty.h"
 extern int pexecute (const char *, char * const *, const char *,
                      const char *, char **, char **, int);
+
+
+
 extern int pwait (int, int *, int);
 # 634 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/libiberty.h"
 extern void *C_alloca (size_t) __attribute__ ((__malloc__));
@@ -3013,7 +6356,14 @@ extern void *C_alloca (size_t) __attribute__ ((__malloc__));
 extern void fancy_abort (const char *, int, const char *) __attribute__ ((__noreturn__));
 # 673 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h"
         
+
+
+
+
         
+
+
+
         
 # 716 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h"
         
@@ -3031,49 +6381,115 @@ extern void fancy_abort (const char *, int, const char *) __attribute__ ((__nore
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/hashtab.h" 1
 # 47 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/hashtab.h"
 typedef unsigned int hashval_t;
+
+
+
+
 typedef hashval_t (*htab_hash) (const void *);
+
+
+
+
+
+
 typedef int (*htab_eq) (const void *, const void *);
+
+
+
 typedef void (*htab_del) (void *);
+
+
+
+
+
 typedef int (*htab_trav) (void **, void *);
+
+
+
+
+
 typedef void *(*htab_alloc) (size_t, size_t);
+
+
 typedef void (*htab_free) (void *);
+
+
+
 typedef void *(*htab_alloc_with_arg) (void *, size_t, size_t);
 typedef void (*htab_free_with_arg) (void *, void *);
 # 100 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/hashtab.h"
 struct htab {
+
   htab_hash hash_f;
+
+
   htab_eq eq_f;
+
+
   htab_del del_f;
+
+
   void ** entries;
+
+
   size_t size;
+
+
   size_t n_elements;
+
+
   size_t n_deleted;
+
+
+
   unsigned int searches;
+
+
+
   unsigned int collisions;
+
+
   htab_alloc alloc_f;
   htab_free free_f;
+
+
   void * alloc_arg;
   htab_alloc_with_arg alloc_with_arg_f;
   htab_free_with_arg free_with_arg_f;
+
+
+
   unsigned int size_prime_index;
 };
+
 typedef struct htab *htab_t;
+
+
 enum insert_option {NO_INSERT, INSERT};
+
+
+
 extern htab_t htab_create_alloc (size_t, htab_hash,
                                     htab_eq, htab_del,
                                     htab_alloc, htab_free);
+
 extern htab_t htab_create_alloc_ex (size_t, htab_hash,
                                       htab_eq, htab_del,
                                       void *, htab_alloc_with_arg,
                                       htab_free_with_arg);
+
+
 extern htab_t htab_create (size_t, htab_hash, htab_eq, htab_del);
 extern htab_t htab_try_create (size_t, htab_hash, htab_eq, htab_del);
+
 extern void htab_set_functions_ex (htab_t, htab_hash,
                                        htab_eq, htab_del,
                                        void *, htab_alloc_with_arg,
                                        htab_free_with_arg);
+
 extern void htab_delete (htab_t);
 extern void htab_empty (htab_t);
+
 extern void * htab_find (htab_t, const void *);
 extern void ** htab_find_slot (htab_t, const void *, enum insert_option);
 extern void * htab_find_with_hash (htab_t, const void *, hashval_t);
@@ -3082,57 +6498,125 @@ extern void ** htab_find_slot_with_hash (htab_t, const void *,
 extern void htab_clear_slot (htab_t, void **);
 extern void htab_remove_elt (htab_t, void *);
 extern void htab_remove_elt_with_hash (htab_t, void *, hashval_t);
+
 extern void htab_traverse (htab_t, htab_trav, void *);
 extern void htab_traverse_noresize (htab_t, htab_trav, void *);
+
 extern size_t htab_size (htab_t);
 extern size_t htab_elements (htab_t);
 extern double htab_collisions (htab_t);
+
+
 extern htab_hash htab_hash_pointer;
+
+
 extern htab_eq htab_eq_pointer;
+
+
 extern hashval_t htab_hash_string (const void *);
+
+
 extern hashval_t iterative_hash (const void *, size_t, hashval_t);
 # 31 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/gcc-plugin.h" 2
+
+
 enum plugin_event
 {
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/plugin.def" 1
 # 22 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/plugin.def"
 PLUGIN_PASS_MANAGER_SETUP,
+
+
 PLUGIN_FINISH_TYPE,
+
+
 PLUGIN_FINISH_UNIT,
+
+
 PLUGIN_PRE_GENERICIZE,
+
+
 PLUGIN_FINISH,
+
+
 PLUGIN_INFO,
+
+
 PLUGIN_GGC_START,
+
+
 PLUGIN_GGC_MARKING,
+
+
 PLUGIN_GGC_END,
+
+
 PLUGIN_REGISTER_GGC_ROOTS,
+
+
 PLUGIN_REGISTER_GGC_CACHES,
+
+
 PLUGIN_ATTRIBUTES,
+
+
 PLUGIN_START_UNIT,
+
+
 PLUGIN_PRAGMAS,
+
+
 PLUGIN_ALL_PASSES_START,
+
+
 PLUGIN_ALL_PASSES_END,
+
+
 PLUGIN_ALL_IPA_PASSES_START,
+
+
 PLUGIN_ALL_IPA_PASSES_END,
+
+
 PLUGIN_OVERRIDE_GATE,
+
+
 PLUGIN_PASS_EXECUTION,
+
+
+
 PLUGIN_EARLY_GIMPLE_PASSES_START,
+
+
+
 PLUGIN_EARLY_GIMPLE_PASSES_END,
+
+
 PLUGIN_NEW_PASS,
 # 37 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/gcc-plugin.h" 2
+
   PLUGIN_EVENT_FIRST_DYNAMIC
 };
+
 extern const char **plugin_event_name;
+
 struct plugin_argument
 {
   char *key;
   char *value;
 };
+
+
+
 struct plugin_info
 {
   const char *version;
   const char *help;
 };
+
+
+
 struct plugin_gcc_version
 {
   const char *basever;
@@ -3141,45 +6625,74 @@ struct plugin_gcc_version
   const char *revision;
   const char *configuration_arguments;
 };
+
+
 struct plugin_name_args
 {
   char *base_name;
+
   const char *full_name;
+
   int argc;
+
   struct plugin_argument *argv;
   const char *version;
   const char *help;
 };
+
+
+
 extern unsigned char plugin_default_version_check (struct plugin_gcc_version *,
        struct plugin_gcc_version *);
 # 96 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/gcc-plugin.h"
 typedef int (*plugin_init_func) (struct plugin_name_args *plugin_info,
                                  struct plugin_gcc_version *version);
+
+
+
+
+
+
 extern int plugin_init (struct plugin_name_args *plugin_info,
                         struct plugin_gcc_version *version);
 # 115 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/gcc-plugin.h"
 typedef void (*plugin_callback_func) (void *gcc_data, void *user_data);
 # 128 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/gcc-plugin.h"
 extern int get_event_last (void);
+
 int get_named_event_id (const char *name, enum insert_option insert);
+
+
+
+
+
+
 extern void register_callback (const char *plugin_name,
           int event,
                                plugin_callback_func callback,
                                void *user_data);
+
 extern int unregister_callback (const char *plugin_name, int event);
 # 21 "../../../src/acf_plugin.c" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/plugin-version.h" 1
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/configargs.h" 1
+
 static const char configuration_arguments[] = "/work1/ferranti/releases-gcc/gcc-4.5.2/configure --prefix /work1/ferranti/build-gcc/gcc-4.5.2/install --enable-plugin";
 static const char thread_model[] = "posix";
+
 static const struct {
   const char *name, *value;
 } configure_default_options[] = { { "cpu", "generic" }, { "arch", "x86-64" } };
 # 2 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/plugin-version.h" 2
+
 static char basever[] = "4.5.2";
 static char datestamp[] = "20101216";
 static char devphase[] = "";
 static char revision[] = "";
+
+
+
+
 static struct plugin_gcc_version gcc_version = {basever, datestamp,
       devphase, revision,
       configuration_arguments};
@@ -3211,14 +6724,32 @@ typedef const struct gimple_seq_d *const_gimple_seq;
 struct gimple_seq_node_d;
 typedef struct gimple_seq_node_d *gimple_seq_node;
 typedef const struct gimple_seq_node_d *const_gimple_seq_node;
+
+
 typedef unsigned char addr_space_t;
+
+
+
+
+
+
 enum ir_type {
   IR_GIMPLE,
   IR_RTL_CFGRTL,
   IR_RTL_CFGLAYOUT
 };
+
+
+
+
+
+
 struct cpp_reader;
 struct cpp_token;
+
+
+
+
 enum tls_model {
   TLS_MODEL_NONE,
   TLS_MODEL_EMULATED,
@@ -3228,6 +6759,7 @@ enum tls_model {
   TLS_MODEL_INITIAL_EXEC,
   TLS_MODEL_LOCAL_EXEC
 };
+
 struct edge_def;
 typedef struct edge_def *edge;
 typedef const struct edge_def *const_edge;
@@ -3236,9 +6768,21 @@ typedef struct basic_block_def *basic_block;
 typedef const struct basic_block_def *const_basic_block;
 # 23 "../../../src/acf_plugin.c" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tm.h" 1
+
+
+
+
+
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/options.h" 1
+
+
+
+
+
 extern int target_flags;
 extern int target_flags_explicit;
+
 extern int extra_warnings;
 extern int warn_abi;
 extern int warn_address;
@@ -3636,6 +7180,10 @@ extern int pedantic;
 extern int quiet_flag;
 extern int version_flag;
 extern int inhibit_warnings;
+
+
+
+
 struct cl_optimization
 {
   int align_functions;
@@ -3802,6 +7350,8 @@ struct cl_optimization
   signed char flag_wpa;
   signed char flag_wrapv;
 };
+
+
 struct cl_target_option
 {
   int ix86_isa_flags_explicit;
@@ -3816,11 +7366,24 @@ struct cl_target_option
   unsigned char tune;
   unsigned char tune_defaulted;
 };
+
+
+
 extern void cl_optimization_save (struct cl_optimization *);
+
+
 extern void cl_optimization_restore (struct cl_optimization *);
+
+
 extern void cl_optimization_print (FILE *, int, struct cl_optimization *);
+
+
 extern void cl_target_option_save (struct cl_target_option *);
+
+
 extern void cl_target_option_restore (struct cl_target_option *);
+
+
 extern void cl_target_option_print (FILE *, int, struct cl_target_option *);
 # 723 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/options.h"
 enum opt_code
@@ -4706,6 +8269,8 @@ enum opt_code
 # 75 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/config/i386/i386.h"
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/config/vxworks-dummy.h" 1
 # 76 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/config/i386/i386.h" 2
+
+
 enum stringop_alg
 {
    no_stringop,
@@ -4726,35 +8291,52 @@ struct stringop_algs
     const enum stringop_alg alg;
   } size [4];
 };
+
+
+
 struct processor_costs {
   const int add;
   const int lea;
   const int shift_var;
   const int shift_const;
   const int mult_init[5];
+
   const int mult_bit;
   const int divide[5];
+
   int movsx;
   int movzx;
   const int large_insn;
   const int move_ratio;
+
   const int movzbl_load;
   const int int_load[3];
+
+
   const int int_store[3];
+
   const int fp_move;
   const int fp_load[3];
+
   const int fp_store[3];
+
   const int mmx_move;
   const int mmx_load[2];
+
   const int mmx_store[2];
+
   const int sse_move;
   const int sse_load[3];
+
   const int sse_store[3];
+
   const int mmxsse_to_integer;
+
   const int l1_cache_size;
   const int l2_cache_size;
   const int prefetch_block;
   const int simultaneous_prefetches;
+
   const int branch_cost;
   const int fadd;
   const int fmul;
@@ -4762,19 +8344,27 @@ struct processor_costs {
   const int fabs;
   const int fchs;
   const int fsqrt;
+
+
   struct stringop_algs memcpy[2], memset[2];
   const int scalar_stmt_cost;
+
   const int scalar_load_cost;
   const int scalar_store_cost;
   const int vec_stmt_cost;
+
+
   const int vec_to_scalar_cost;
   const int scalar_to_vec_cost;
   const int vec_align_load_cost;
   const int vec_unalign_load_cost;
   const int vec_store_cost;
   const int cond_taken_branch_cost;
+
   const int cond_not_taken_branch_cost;
+
 };
+
 extern const struct processor_costs *ix86_cost;
 extern const struct processor_costs ix86_size_cost;
 # 246 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/config/i386/i386.h"
@@ -4841,8 +8431,10 @@ enum ix86_tune_indices {
   X86_TUNE_USE_VECTOR_CONVERTS,
   X86_TUNE_FUSE_CMP_AND_BRANCH,
   X86_TUNE_OPT_AGU,
+
   X86_TUNE_LAST
 };
+
 extern unsigned char ix86_tune_features[X86_TUNE_LAST];
 # 399 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/config/i386/i386.h"
 enum ix86_arch_indices {
@@ -4851,8 +8443,10 @@ enum ix86_arch_indices {
   X86_ARCH_CMPXCHG8B,
   X86_ARCH_XADD,
   X86_ARCH_BSWAP,
+
   X86_ARCH_LAST
 };
+
 extern unsigned char ix86_arch_features[X86_ARCH_LAST];
 # 419 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/config/i386/i386.h"
 extern int x86_prefetch_sse;
@@ -4866,6 +8460,8 @@ enum calling_abi
   SYSV_ABI = 0,
   MS_ABI = 1
 };
+
+
 extern enum calling_abi ix86_abi;
 # 510 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/config/i386/i386.h"
 extern const char *host_detect_local_cpu (int argc, const char **argv);
@@ -4873,6 +8469,7 @@ extern const char *host_detect_local_cpu (int argc, const char **argv);
 enum target_cpu_default
 {
   TARGET_CPU_DEFAULT_generic = 0,
+
   TARGET_CPU_DEFAULT_i386,
   TARGET_CPU_DEFAULT_i486,
   TARGET_CPU_DEFAULT_pentium,
@@ -4886,6 +8483,7 @@ enum target_cpu_default
   TARGET_CPU_DEFAULT_nocona,
   TARGET_CPU_DEFAULT_core2,
   TARGET_CPU_DEFAULT_atom,
+
   TARGET_CPU_DEFAULT_geode,
   TARGET_CPU_DEFAULT_k6,
   TARGET_CPU_DEFAULT_k6_2,
@@ -4894,6 +8492,7 @@ enum target_cpu_default
   TARGET_CPU_DEFAULT_athlon_sse,
   TARGET_CPU_DEFAULT_k8,
   TARGET_CPU_DEFAULT_amdfam10,
+
   TARGET_CPU_DEFAULT_max
 };
 # 1188 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/config/i386/i386.h"
@@ -4938,7 +8537,9 @@ typedef struct ix86_args {
   int mmx_regno;
   int maybe_vaarg;
   int float_in_sse;
+
   enum calling_abi call_abi;
+
 } CUMULATIVE_ARGS;
 # 2030 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/config/i386/i386.h"
 extern int const dbx_register_map[53];
@@ -4964,21 +8565,27 @@ enum processor_type
   PROCESSOR_ATOM,
   PROCESSOR_max
 };
+
 extern enum processor_type ix86_tune;
 extern enum processor_type ix86_arch;
+
 enum fpmath_unit
 {
   FPMATH_387 = 1,
   FPMATH_SSE = 2
 };
+
 extern enum fpmath_unit ix86_fpmath;
+
 enum tls_dialect
 {
   TLS_DIALECT_GNU,
   TLS_DIALECT_GNU2,
   TLS_DIALECT_SUN
 };
+
 extern enum tls_dialect ix86_tls_dialect;
+
 enum cmodel {
   CM_32,
   CM_SMALL,
@@ -4989,18 +8596,30 @@ enum cmodel {
   CM_MEDIUM_PIC,
   CM_LARGE_PIC
 };
+
 extern enum cmodel ix86_cmodel;
+
+
+
+
+
+
 enum asm_dialect {
   ASM_ATT,
   ASM_INTEL
 };
+
 extern enum asm_dialect ix86_asm_dialect;
 extern unsigned int ix86_preferred_stack_boundary;
 extern unsigned int ix86_incoming_stack_boundary;
 extern int ix86_branch_cost, ix86_section_threshold;
+
+
 extern enum reg_class const regclass_map[53];
+
 extern rtx ix86_compare_op0;
 extern rtx ix86_compare_op1;
+
 enum ix86_fpcmp_strategy {
   IX86_FPCMP_SAHF,
   IX86_FPCMP_COMI,
@@ -5015,6 +8634,7 @@ enum ix86_entity
   I387_MASK_PM,
   MAX_386_ENTITIES
 };
+
 enum ix86_stack_slot
 {
   SLOT_VIRTUAL = 0,
@@ -5032,20 +8652,39 @@ struct machine_cfa_state
   rtx reg;
   long offset;
 };
+
 struct machine_function {
   struct stack_local_entry *stack_locals;
   const char *some_ld_name;
   int varargs_gpr_size;
   int varargs_fpr_size;
   int optimize_mode_switching[MAX_386_ENTITIES];
+
+
+
   int use_fast_prologue_epilogue_nregs;
+
+
   struct machine_cfa_state cfa;
+
+
+
   enum calling_abi call_abi;
+
+
   unsigned int accesses_prev_frame : 1;
+
+
   unsigned int needs_cld : 1;
+
+
+
   unsigned int use_fast_prologue_epilogue : 1;
 # 2395 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/config/i386/i386.h"
   unsigned int tls_descriptor_call_expanded_p : 1;
+
+
+
   unsigned int static_chain_on_stack : 1;
 };
 # 11 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tm.h" 2
@@ -5071,6 +8710,8 @@ struct machine_function {
 # 945 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/defaults.h"
        
 # 21 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tm.h" 2
+
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/insn-constants.h" 1
 # 24 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tm.h" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/insn-flags.h" 1
@@ -6034,11 +9675,17 @@ extern rtx gen_extzv (rtx, rtx, rtx, rtx);
 extern rtx gen_insv (rtx, rtx, rtx, rtx);
 extern rtx gen_indirect_jump (rtx);
 extern rtx gen_tablejump (rtx, rtx);
+
 extern rtx gen_call_pop (rtx, rtx, rtx, rtx);
+
 extern rtx gen_call (rtx, rtx, rtx);
+
 extern rtx gen_sibcall (rtx, rtx, rtx);
+
 extern rtx gen_call_value_pop (rtx, rtx, rtx, rtx, rtx);
+
 extern rtx gen_call_value (rtx, rtx, rtx, rtx);
+
 extern rtx gen_sibcall_value (rtx, rtx, rtx, rtx);
 extern rtx gen_untyped_call (rtx, rtx, rtx);
 extern rtx gen_memory_blockage (void);
@@ -6662,6 +10309,12 @@ extern rtx gen_sync_compare_and_swapti (rtx, rtx, rtx, rtx);
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/machmode.h" 1
 # 25 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/machmode.h"
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/insn-modes.h" 1
+
+
+
+
+
+
 enum machine_mode
 {
   VOIDmode,
@@ -6752,73 +10405,166 @@ enum machine_mode
   V8DFmode,
   V4TFmode,
   MAX_MACHINE_MODE,
+
   MIN_MODE_RANDOM = VOIDmode,
   MAX_MODE_RANDOM = BLKmode,
+
   MIN_MODE_CC = CCmode,
   MAX_MODE_CC = CCFPUmode,
+
   MIN_MODE_INT = QImode,
   MAX_MODE_INT = OImode,
+
   MIN_MODE_PARTIAL_INT = VOIDmode,
   MAX_MODE_PARTIAL_INT = VOIDmode,
+
   MIN_MODE_FRACT = QQmode,
   MAX_MODE_FRACT = TQmode,
+
   MIN_MODE_UFRACT = UQQmode,
   MAX_MODE_UFRACT = UTQmode,
+
   MIN_MODE_ACCUM = HAmode,
   MAX_MODE_ACCUM = TAmode,
+
   MIN_MODE_UACCUM = UHAmode,
   MAX_MODE_UACCUM = UTAmode,
+
   MIN_MODE_FLOAT = SFmode,
   MAX_MODE_FLOAT = TFmode,
+
   MIN_MODE_DECIMAL_FLOAT = SDmode,
   MAX_MODE_DECIMAL_FLOAT = TDmode,
+
   MIN_MODE_COMPLEX_INT = CQImode,
   MAX_MODE_COMPLEX_INT = COImode,
+
   MIN_MODE_COMPLEX_FLOAT = SCmode,
   MAX_MODE_COMPLEX_FLOAT = TCmode,
+
   MIN_MODE_VECTOR_INT = V2QImode,
   MAX_MODE_VECTOR_INT = V4TImode,
+
   MIN_MODE_VECTOR_FRACT = VOIDmode,
   MAX_MODE_VECTOR_FRACT = VOIDmode,
+
   MIN_MODE_VECTOR_UFRACT = VOIDmode,
   MAX_MODE_VECTOR_UFRACT = VOIDmode,
+
   MIN_MODE_VECTOR_ACCUM = VOIDmode,
   MAX_MODE_VECTOR_ACCUM = VOIDmode,
+
   MIN_MODE_VECTOR_UACCUM = VOIDmode,
   MAX_MODE_VECTOR_UACCUM = VOIDmode,
+
   MIN_MODE_VECTOR_FLOAT = V2SFmode,
   MAX_MODE_VECTOR_FLOAT = V4TFmode,
+
   NUM_MACHINE_MODES = MAX_MACHINE_MODE
 };
 # 26 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/machmode.h" 2
+
+
+
 extern const char * const mode_name[NUM_MACHINE_MODES];
+
+
+
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/mode-classes.def" 1
 # 35 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/machmode.h" 2
+
 enum mode_class { MODE_RANDOM, MODE_CC, MODE_INT, MODE_PARTIAL_INT, MODE_FRACT, MODE_UFRACT, MODE_ACCUM, MODE_UACCUM, MODE_FLOAT, MODE_DECIMAL_FLOAT, MODE_COMPLEX_INT, MODE_COMPLEX_FLOAT, MODE_VECTOR_INT, MODE_VECTOR_FRACT, MODE_VECTOR_UFRACT, MODE_VECTOR_ACCUM, MODE_VECTOR_UACCUM, MODE_VECTOR_FLOAT, MAX_MODE_CLASS };
+
+
+
+
+
+
 extern const unsigned char mode_class[NUM_MACHINE_MODES];
 # 179 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/machmode.h"
 extern unsigned char mode_size[NUM_MACHINE_MODES];
+
+
+
+
 extern const unsigned short mode_precision[NUM_MACHINE_MODES];
+
+
+
 extern const unsigned char mode_ibit[NUM_MACHINE_MODES];
+
+
+
 extern const unsigned char mode_fbit[NUM_MACHINE_MODES];
+
+
+
+
+
 extern const unsigned long mode_mask_array[NUM_MACHINE_MODES];
+
+
+
+
+
 extern const unsigned char mode_inner[NUM_MACHINE_MODES];
 # 216 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/machmode.h"
 extern const unsigned char mode_nunits[NUM_MACHINE_MODES];
+
+
+
+
 extern const unsigned char mode_wider[NUM_MACHINE_MODES];
+
+
 extern const unsigned char mode_2xwider[NUM_MACHINE_MODES];
+
+
+
+
+
+
 extern enum machine_mode mode_for_size (unsigned int, enum mode_class, int);
+
+
+
 extern enum machine_mode smallest_mode_for_size (unsigned int,
        enum mode_class);
+
+
+
+
+
 extern enum machine_mode int_mode_for_mode (enum machine_mode);
+
+
+
 extern enum machine_mode get_best_mode (int, int, unsigned int,
      enum machine_mode, int);
+
+
+
 extern unsigned char mode_base_align[NUM_MACHINE_MODES];
+
 extern unsigned get_mode_alignment (enum machine_mode);
+
+
+
+
+
 extern const unsigned char class_narrowest_mode[MAX_MODE_CLASS];
+
+
+
+
+
+
 extern enum machine_mode byte_mode;
 extern enum machine_mode word_mode;
 extern enum machine_mode ptr_mode;
+
+
 extern void init_adjust_machine_modes (void);
 # 27 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/input.h" 1
@@ -6826,8 +10572,16 @@ extern void init_adjust_machine_modes (void);
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/line-map.h" 1
 # 36 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/line-map.h"
 enum lc_reason {LC_ENTER = 0, LC_LEAVE, LC_RENAME, LC_RENAME_VERBATIM};
+
+
 typedef unsigned int linenum_type;
+
+
+
+
 typedef unsigned int source_location;
+
+
 typedef void *(*line_map_realloc) (void *, size_t);
 # 61 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/line-map.h"
 struct line_map {
@@ -6836,56 +10590,113 @@ struct line_map {
   source_location start_location;
   int included_from;
   __extension__ enum lc_reason reason : 8;
+
   unsigned char sysp;
+
   unsigned int column_bits : 8;
 };
+
+
 struct line_maps {
   struct line_map * maps;
   unsigned int allocated;
   unsigned int used;
+
   unsigned int cache;
+
+
+
+
   int last_listed;
+
+
   unsigned int depth;
+
+
   unsigned char trace_includes;
+
+
   source_location highest_location;
+
+
   source_location highest_line;
+
+
+
   unsigned int max_column_hint;
+
+
+
   line_map_realloc reallocator;
 };
+
+
 extern void linemap_init (struct line_maps *);
+
+
 extern void linemap_free (struct line_maps *);
+
+
+
 extern void linemap_check_files_exited (struct line_maps *);
+
+
+
+
+
+
+
 extern source_location linemap_line_start
 (struct line_maps *set, linenum_type to_line, unsigned int max_column_hint);
 # 137 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/line-map.h"
 extern const struct line_map *linemap_add
   (struct line_maps *, enum lc_reason, unsigned int sysp,
    const char *to_file, linenum_type to_line);
+
+
+
 extern const struct line_map *linemap_lookup
   (struct line_maps *, source_location);
 # 192 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/line-map.h"
 extern source_location
 linemap_position_for_column (struct line_maps *set, unsigned int to_column);
 # 26 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/input.h" 2
+
 extern struct line_maps *line_table;
 # 37 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/input.h"
 extern char builtins_location_check[(((source_location) 1)
          < 2) ? 1 : -1];
+
 typedef struct
 {
+
   const char *file;
+
+
   int line;
+
   int column;
+
+
   unsigned char sysp;
 } expanded_location;
+
 extern expanded_location expand_location (source_location);
+
+
+
 typedef source_location location_t;
+
+
 extern const char *main_input_filename;
+
 extern location_t input_location;
 # 28 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/statistics.h" 1
 # 41 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/statistics.h"
 struct function;
+
+
 extern void statistics_early_init (void);
 extern void statistics_init (void);
 extern void statistics_fini (void);
@@ -6901,6 +10712,7 @@ extern void *vec_gc_o_reserve (void *, int, size_t, size_t );
 extern void *vec_gc_o_reserve_exact (void *, int, size_t, size_t
          );
 extern void ggc_free (void *);
+
 extern void *vec_heap_p_reserve (void *, int );
 extern void *vec_heap_p_reserve_exact (void *, int );
 extern void *vec_heap_o_reserve (void *, int, size_t, size_t );
@@ -6927,38 +10739,74 @@ extern void vec_stack_free (void *);
 # 194 "/usr/include/gmp-x86_64.h" 3 4
 typedef unsigned long int mp_limb_t;
 typedef long int mp_limb_signed_t;
+
+
+
+
+
+
 typedef struct
 {
   int _mp_alloc;
+
   int _mp_size;
+
+
   mp_limb_t *_mp_d;
 } __mpz_struct;
+
+
+
+
 typedef __mpz_struct MP_INT;
 typedef __mpz_struct mpz_t[1];
+
 typedef mp_limb_t * mp_ptr;
 typedef const mp_limb_t * mp_srcptr;
+
+
+
+
+
+
+
 typedef long int mp_size_t;
 typedef long int mp_exp_t;
+
+
 typedef struct
 {
   __mpz_struct _mp_num;
   __mpz_struct _mp_den;
 } __mpq_struct;
+
 typedef __mpq_struct MP_RAT;
 typedef __mpq_struct mpq_t[1];
+
 typedef struct
 {
   int _mp_prec;
+
+
+
   int _mp_size;
+
+
   mp_exp_t _mp_exp;
   mp_limb_t *_mp_d;
 } __mpf_struct;
+
+
 typedef __mpf_struct mpf_t[1];
+
+
 typedef enum
 {
   GMP_RAND_ALG_DEFAULT = 0,
   GMP_RAND_ALG_LC = GMP_RAND_ALG_DEFAULT
 } gmp_randalg_t;
+
+
 typedef struct
 {
   mpz_t _mp_seed;
@@ -6968,6 +10816,9 @@ typedef struct
   } _mp_algdata;
 } __gmp_randstate_struct;
 typedef __gmp_randstate_struct gmp_randstate_t[1];
+
+
+
 typedef const __mpz_struct *mpz_srcptr;
 typedef __mpz_struct *mpz_ptr;
 typedef const __mpf_struct *mpf_srcptr;
@@ -6976,324 +10827,1056 @@ typedef const __mpq_struct *mpq_srcptr;
 typedef __mpq_struct *mpq_ptr;
 # 542 "/usr/include/gmp-x86_64.h" 3 4
  void __gmp_set_memory_functions (void *(*) (size_t), void *(*) (void *, size_t, size_t), void (*) (void *, size_t))
+
                                                    ;
+
+
  void __gmp_get_memory_functions (void *(**) (size_t), void *(**) (void *, size_t, size_t), void (**) (void *, size_t))
+
                                                                                 ;
+
+
  extern const int __gmp_bits_per_limb;
+
+
  extern int __gmp_errno;
+
+
  extern const char * const __gmp_version;
+
+
+
+
+
+
  void __gmp_randinit (gmp_randstate_t, gmp_randalg_t, ...);
+
+
  void __gmp_randinit_default (gmp_randstate_t);
+
+
  void __gmp_randinit_lc_2exp (gmp_randstate_t, mpz_srcptr, unsigned long int, unsigned long int)
+
                           ;
+
+
  int __gmp_randinit_lc_2exp_size (gmp_randstate_t, unsigned long);
+
+
  void __gmp_randinit_mt (gmp_randstate_t);
+
+
  void __gmp_randinit_set (gmp_randstate_t, const __gmp_randstate_struct *);
+
+
  void __gmp_randseed (gmp_randstate_t, mpz_srcptr);
+
+
  void __gmp_randseed_ui (gmp_randstate_t, unsigned long int);
+
+
  void __gmp_randclear (gmp_randstate_t);
+
+
  unsigned long __gmp_urandomb_ui (gmp_randstate_t, unsigned long);
+
+
  unsigned long __gmp_urandomm_ui (gmp_randstate_t, unsigned long);
+
+
+
+
+
  int __gmp_asprintf (char **, const char *, ...);
+
+
+
  int __gmp_fprintf (FILE *, const char *, ...);
 # 621 "/usr/include/gmp-x86_64.h" 3 4
  int __gmp_printf (const char *, ...);
+
+
  int __gmp_snprintf (char *, size_t, const char *, ...);
+
+
  int __gmp_sprintf (char *, const char *, ...);
+
+
+
  int __gmp_vasprintf (char **, const char *, va_list);
+
+
+
+
  int __gmp_vfprintf (FILE *, const char *, va_list);
+
+
+
+
  int __gmp_vprintf (const char *, va_list);
+
+
+
+
  int __gmp_vsnprintf (char *, size_t, const char *, va_list);
+
+
+
+
  int __gmp_vsprintf (char *, const char *, va_list);
+
+
+
+
+
+
+
  int __gmp_fscanf (FILE *, const char *, ...);
+
+
+
  int __gmp_scanf (const char *, ...);
+
+
  int __gmp_sscanf (const char *, const char *, ...);
+
+
+
  int __gmp_vfscanf (FILE *, const char *, va_list);
+
+
+
+
  int __gmp_vscanf (const char *, va_list);
+
+
+
+
  int __gmp_vsscanf (const char *, const char *, va_list);
+
+
+
+
+
+
+
  void *__gmpz_realloc (mpz_ptr, mp_size_t);
+
+
+
  void __gmpz_abs (mpz_ptr, mpz_srcptr);
+
+
+
  void __gmpz_add (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  void __gmpz_add_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  void __gmpz_addmul (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  void __gmpz_addmul_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  void __gmpz_and (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  void __gmpz_array_init (mpz_ptr, mp_size_t, mp_size_t);
+
+
  void __gmpz_bin_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  void __gmpz_bin_uiui (mpz_ptr, unsigned long int, unsigned long int);
+
+
  void __gmpz_cdiv_q (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  void __gmpz_cdiv_q_2exp (mpz_ptr, mpz_srcptr, unsigned long);
+
+
  unsigned long int __gmpz_cdiv_q_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  void __gmpz_cdiv_qr (mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  unsigned long int __gmpz_cdiv_qr_ui (mpz_ptr, mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  void __gmpz_cdiv_r (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  void __gmpz_cdiv_r_2exp (mpz_ptr, mpz_srcptr, unsigned long);
+
+
  unsigned long int __gmpz_cdiv_r_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  unsigned long int __gmpz_cdiv_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
  void __gmpz_clear (mpz_ptr);
+
+
  void __gmpz_clrbit (mpz_ptr, unsigned long int);
+
+
  int __gmpz_cmp (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+
+
  int __gmpz_cmp_d (mpz_srcptr, double) __attribute__ ((__pure__));
+
+
  int __gmpz_cmp_si (mpz_srcptr, signed long int) __attribute__ ((__pure__));
+
+
  int __gmpz_cmp_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
  int __gmpz_cmpabs (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+
+
  int __gmpz_cmpabs_d (mpz_srcptr, double) __attribute__ ((__pure__));
+
+
  int __gmpz_cmpabs_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
  void __gmpz_com (mpz_ptr, mpz_srcptr);
+
+
  void __gmpz_combit (mpz_ptr, unsigned long int);
+
+
  int __gmpz_congruent_p (mpz_srcptr, mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+
+
  int __gmpz_congruent_2exp_p (mpz_srcptr, mpz_srcptr, unsigned long) __attribute__ ((__pure__));
+
+
  int __gmpz_congruent_ui_p (mpz_srcptr, unsigned long, unsigned long) __attribute__ ((__pure__));
+
+
  void __gmpz_divexact (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  void __gmpz_divexact_ui (mpz_ptr, mpz_srcptr, unsigned long);
+
+
  int __gmpz_divisible_p (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+
+
  int __gmpz_divisible_ui_p (mpz_srcptr, unsigned long) __attribute__ ((__pure__));
+
+
  int __gmpz_divisible_2exp_p (mpz_srcptr, unsigned long) __attribute__ ((__pure__));
+
+
  void __gmpz_dump (mpz_srcptr);
+
+
  void *__gmpz_export (void *, size_t *, int, size_t, int, size_t, mpz_srcptr);
+
+
  void __gmpz_fac_ui (mpz_ptr, unsigned long int);
+
+
  void __gmpz_fdiv_q (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  void __gmpz_fdiv_q_2exp (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  unsigned long int __gmpz_fdiv_q_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  void __gmpz_fdiv_qr (mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  unsigned long int __gmpz_fdiv_qr_ui (mpz_ptr, mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  void __gmpz_fdiv_r (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  void __gmpz_fdiv_r_2exp (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  unsigned long int __gmpz_fdiv_r_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  unsigned long int __gmpz_fdiv_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
  void __gmpz_fib_ui (mpz_ptr, unsigned long int);
+
+
  void __gmpz_fib2_ui (mpz_ptr, mpz_ptr, unsigned long int);
+
+
  int __gmpz_fits_sint_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
  int __gmpz_fits_slong_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
  int __gmpz_fits_sshort_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
  int __gmpz_fits_uint_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+
  int __gmpz_fits_ulong_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+
  int __gmpz_fits_ushort_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
  void __gmpz_gcd (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  unsigned long int __gmpz_gcd_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  void __gmpz_gcdext (mpz_ptr, mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  double __gmpz_get_d (mpz_srcptr) __attribute__ ((__pure__));
+
+
  double __gmpz_get_d_2exp (signed long int *, mpz_srcptr);
+
+
  long int __gmpz_get_si (mpz_srcptr) __attribute__ ((__pure__));
+
+
  char *__gmpz_get_str (char *, int, mpz_srcptr);
+
+
+
  unsigned long int __gmpz_get_ui (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+
  mp_limb_t __gmpz_getlimbn (mpz_srcptr, mp_size_t) __attribute__ ((__pure__));
+
+
+
  unsigned long int __gmpz_hamdist (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+
+
  void __gmpz_import (mpz_ptr, size_t, int, size_t, int, size_t, const void *);
+
+
  void __gmpz_init (mpz_ptr);
+
+
  void __gmpz_init2 (mpz_ptr, unsigned long);
+
+
  void __gmpz_init_set (mpz_ptr, mpz_srcptr);
+
+
  void __gmpz_init_set_d (mpz_ptr, double);
+
+
  void __gmpz_init_set_si (mpz_ptr, signed long int);
+
+
  int __gmpz_init_set_str (mpz_ptr, const char *, int);
+
+
  void __gmpz_init_set_ui (mpz_ptr, unsigned long int);
+
+
+
  size_t __gmpz_inp_raw (mpz_ptr, FILE *);
+
+
+
+
  size_t __gmpz_inp_str (mpz_ptr, FILE *, int);
+
+
+
  int __gmpz_invert (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  void __gmpz_ior (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  int __gmpz_jacobi (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+
  int __gmpz_kronecker_si (mpz_srcptr, long) __attribute__ ((__pure__));
+
+
  int __gmpz_kronecker_ui (mpz_srcptr, unsigned long) __attribute__ ((__pure__));
+
+
  int __gmpz_si_kronecker (long, mpz_srcptr) __attribute__ ((__pure__));
+
+
  int __gmpz_ui_kronecker (unsigned long, mpz_srcptr) __attribute__ ((__pure__));
+
+
  void __gmpz_lcm (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  void __gmpz_lcm_ui (mpz_ptr, mpz_srcptr, unsigned long);
+
+
+
+
  void __gmpz_lucnum_ui (mpz_ptr, unsigned long int);
+
+
  void __gmpz_lucnum2_ui (mpz_ptr, mpz_ptr, unsigned long int);
+
+
  int __gmpz_millerrabin (mpz_srcptr, int) __attribute__ ((__pure__));
+
+
  void __gmpz_mod (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+
+
  void __gmpz_mul (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  void __gmpz_mul_2exp (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  void __gmpz_mul_si (mpz_ptr, mpz_srcptr, long int);
+
+
  void __gmpz_mul_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+
  void __gmpz_neg (mpz_ptr, mpz_srcptr);
+
+
+
  void __gmpz_nextprime (mpz_ptr, mpz_srcptr);
+
+
+
  size_t __gmpz_out_raw (FILE *, mpz_srcptr);
+
+
+
+
  size_t __gmpz_out_str (FILE *, int, mpz_srcptr);
+
+
+
  int __gmpz_perfect_power_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
  int __gmpz_perfect_square_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+
  unsigned long int __gmpz_popcount (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
  void __gmpz_pow_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  void __gmpz_powm (mpz_ptr, mpz_srcptr, mpz_srcptr, mpz_srcptr);
+
+
  void __gmpz_powm_ui (mpz_ptr, mpz_srcptr, unsigned long int, mpz_srcptr);
+
+
  int __gmpz_probab_prime_p (mpz_srcptr, int) __attribute__ ((__pure__));
+
+
  void __gmpz_random (mpz_ptr, mp_size_t);
+
+
  void __gmpz_random2 (mpz_ptr, mp_size_t);
+
+
  void __gmpz_realloc2 (mpz_ptr, unsigned long);
+
+
  unsigned long int __gmpz_remove (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  int __gmpz_root (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  void __gmpz_rootrem (mpz_ptr,mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  void __gmpz_rrandomb (mpz_ptr, gmp_randstate_t, unsigned long int);
+
+
  unsigned long int __gmpz_scan0 (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
  unsigned long int __gmpz_scan1 (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
  void __gmpz_set (mpz_ptr, mpz_srcptr);
+
+
  void __gmpz_set_d (mpz_ptr, double);
+
+
  void __gmpz_set_f (mpz_ptr, mpf_srcptr);
+
+
+
  void __gmpz_set_q (mpz_ptr, mpq_srcptr);
+
+
+
  void __gmpz_set_si (mpz_ptr, signed long int);
+
+
  int __gmpz_set_str (mpz_ptr, const char *, int);
+
+
  void __gmpz_set_ui (mpz_ptr, unsigned long int);
+
+
  void __gmpz_setbit (mpz_ptr, unsigned long int);
+
+
+
  size_t __gmpz_size (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
  size_t __gmpz_sizeinbase (mpz_srcptr, int) __attribute__ ((__pure__));
+
+
  void __gmpz_sqrt (mpz_ptr, mpz_srcptr);
+
+
  void __gmpz_sqrtrem (mpz_ptr, mpz_ptr, mpz_srcptr);
+
+
  void __gmpz_sub (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  void __gmpz_sub_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  void __gmpz_ui_sub (mpz_ptr, unsigned long int, mpz_srcptr);
+
+
  void __gmpz_submul (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  void __gmpz_submul_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  void __gmpz_swap (mpz_ptr, mpz_ptr) ;
+
+
  unsigned long int __gmpz_tdiv_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
  void __gmpz_tdiv_q (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  void __gmpz_tdiv_q_2exp (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  unsigned long int __gmpz_tdiv_q_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  void __gmpz_tdiv_qr (mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  unsigned long int __gmpz_tdiv_qr_ui (mpz_ptr, mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  void __gmpz_tdiv_r (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
  void __gmpz_tdiv_r_2exp (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  unsigned long int __gmpz_tdiv_r_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
  int __gmpz_tstbit (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
  void __gmpz_ui_pow_ui (mpz_ptr, unsigned long int, unsigned long int);
+
+
  void __gmpz_urandomb (mpz_ptr, gmp_randstate_t, unsigned long int);
+
+
  void __gmpz_urandomm (mpz_ptr, gmp_randstate_t, mpz_srcptr);
+
+
+
  void __gmpz_xor (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+
+
+
+
  void __gmpq_abs (mpq_ptr, mpq_srcptr);
+
+
+
  void __gmpq_add (mpq_ptr, mpq_srcptr, mpq_srcptr);
+
+
  void __gmpq_canonicalize (mpq_ptr);
+
+
  void __gmpq_clear (mpq_ptr);
+
+
  int __gmpq_cmp (mpq_srcptr, mpq_srcptr) __attribute__ ((__pure__));
+
+
  int __gmpq_cmp_si (mpq_srcptr, long, unsigned long) __attribute__ ((__pure__));
+
+
  int __gmpq_cmp_ui (mpq_srcptr, unsigned long int, unsigned long int) __attribute__ ((__pure__));
+
+
  void __gmpq_div (mpq_ptr, mpq_srcptr, mpq_srcptr);
+
+
  void __gmpq_div_2exp (mpq_ptr, mpq_srcptr, unsigned long);
+
+
  int __gmpq_equal (mpq_srcptr, mpq_srcptr) __attribute__ ((__pure__));
+
+
  void __gmpq_get_num (mpz_ptr, mpq_srcptr);
+
+
  void __gmpq_get_den (mpz_ptr, mpq_srcptr);
+
+
  double __gmpq_get_d (mpq_srcptr) __attribute__ ((__pure__));
+
+
  char *__gmpq_get_str (char *, int, mpq_srcptr);
+
+
  void __gmpq_init (mpq_ptr);
+
+
+
  size_t __gmpq_inp_str (mpq_ptr, FILE *, int);
+
+
+
  void __gmpq_inv (mpq_ptr, mpq_srcptr);
+
+
  void __gmpq_mul (mpq_ptr, mpq_srcptr, mpq_srcptr);
+
+
  void __gmpq_mul_2exp (mpq_ptr, mpq_srcptr, unsigned long);
+
+
+
  void __gmpq_neg (mpq_ptr, mpq_srcptr);
+
+
+
+
  size_t __gmpq_out_str (FILE *, int, mpq_srcptr);
+
+
+
  void __gmpq_set (mpq_ptr, mpq_srcptr);
+
+
  void __gmpq_set_d (mpq_ptr, double);
+
+
  void __gmpq_set_den (mpq_ptr, mpz_srcptr);
+
+
  void __gmpq_set_f (mpq_ptr, mpf_srcptr);
+
+
  void __gmpq_set_num (mpq_ptr, mpz_srcptr);
+
+
  void __gmpq_set_si (mpq_ptr, signed long int, unsigned long int);
+
+
  int __gmpq_set_str (mpq_ptr, const char *, int);
+
+
  void __gmpq_set_ui (mpq_ptr, unsigned long int, unsigned long int);
+
+
  void __gmpq_set_z (mpq_ptr, mpz_srcptr);
+
+
  void __gmpq_sub (mpq_ptr, mpq_srcptr, mpq_srcptr);
+
+
  void __gmpq_swap (mpq_ptr, mpq_ptr) ;
+
+
+
+
+
  void __gmpf_abs (mpf_ptr, mpf_srcptr);
+
+
  void __gmpf_add (mpf_ptr, mpf_srcptr, mpf_srcptr);
+
+
  void __gmpf_add_ui (mpf_ptr, mpf_srcptr, unsigned long int);
+
  void __gmpf_ceil (mpf_ptr, mpf_srcptr);
+
+
  void __gmpf_clear (mpf_ptr);
+
+
  int __gmpf_cmp (mpf_srcptr, mpf_srcptr) __attribute__ ((__pure__));
+
+
  int __gmpf_cmp_d (mpf_srcptr, double) __attribute__ ((__pure__));
+
+
  int __gmpf_cmp_si (mpf_srcptr, signed long int) __attribute__ ((__pure__));
+
+
  int __gmpf_cmp_ui (mpf_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
  void __gmpf_div (mpf_ptr, mpf_srcptr, mpf_srcptr);
+
+
  void __gmpf_div_2exp (mpf_ptr, mpf_srcptr, unsigned long int);
+
+
  void __gmpf_div_ui (mpf_ptr, mpf_srcptr, unsigned long int);
+
+
  void __gmpf_dump (mpf_srcptr);
+
+
  int __gmpf_eq (mpf_srcptr, mpf_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
  int __gmpf_fits_sint_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
  int __gmpf_fits_slong_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
  int __gmpf_fits_sshort_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
  int __gmpf_fits_uint_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
  int __gmpf_fits_ulong_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
  int __gmpf_fits_ushort_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
  void __gmpf_floor (mpf_ptr, mpf_srcptr);
+
+
  double __gmpf_get_d (mpf_srcptr) __attribute__ ((__pure__));
+
+
  double __gmpf_get_d_2exp (signed long int *, mpf_srcptr);
+
+
  unsigned long int __gmpf_get_default_prec (void) __attribute__ ((__pure__));
+
+
  unsigned long int __gmpf_get_prec (mpf_srcptr) __attribute__ ((__pure__));
+
+
  long __gmpf_get_si (mpf_srcptr) __attribute__ ((__pure__));
+
+
  char *__gmpf_get_str (char *, mp_exp_t *, int, size_t, mpf_srcptr);
+
+
  unsigned long __gmpf_get_ui (mpf_srcptr) __attribute__ ((__pure__));
+
+
  void __gmpf_init (mpf_ptr);
+
+
  void __gmpf_init2 (mpf_ptr, unsigned long int);
+
+
  void __gmpf_init_set (mpf_ptr, mpf_srcptr);
+
+
  void __gmpf_init_set_d (mpf_ptr, double);
+
+
  void __gmpf_init_set_si (mpf_ptr, signed long int);
+
+
  int __gmpf_init_set_str (mpf_ptr, const char *, int);
+
+
  void __gmpf_init_set_ui (mpf_ptr, unsigned long int);
+
+
+
  size_t __gmpf_inp_str (mpf_ptr, FILE *, int);
+
+
+
  int __gmpf_integer_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
  void __gmpf_mul (mpf_ptr, mpf_srcptr, mpf_srcptr);
+
+
  void __gmpf_mul_2exp (mpf_ptr, mpf_srcptr, unsigned long int);
+
+
  void __gmpf_mul_ui (mpf_ptr, mpf_srcptr, unsigned long int);
+
+
  void __gmpf_neg (mpf_ptr, mpf_srcptr);
+
+
+
  size_t __gmpf_out_str (FILE *, int, size_t, mpf_srcptr);
+
+
+
  void __gmpf_pow_ui (mpf_ptr, mpf_srcptr, unsigned long int);
+
+
  void __gmpf_random2 (mpf_ptr, mp_size_t, mp_exp_t);
+
+
  void __gmpf_reldiff (mpf_ptr, mpf_srcptr, mpf_srcptr);
+
+
  void __gmpf_set (mpf_ptr, mpf_srcptr);
+
+
  void __gmpf_set_d (mpf_ptr, double);
+
+
  void __gmpf_set_default_prec (unsigned long int) ;
+
+
  void __gmpf_set_prec (mpf_ptr, unsigned long int);
+
+
  void __gmpf_set_prec_raw (mpf_ptr, unsigned long int) ;
+
+
  void __gmpf_set_q (mpf_ptr, mpq_srcptr);
+
+
  void __gmpf_set_si (mpf_ptr, signed long int);
+
+
  int __gmpf_set_str (mpf_ptr, const char *, int);
+
+
  void __gmpf_set_ui (mpf_ptr, unsigned long int);
+
+
  void __gmpf_set_z (mpf_ptr, mpz_srcptr);
+
+
  size_t __gmpf_size (mpf_srcptr) __attribute__ ((__pure__));
+
+
  void __gmpf_sqrt (mpf_ptr, mpf_srcptr);
+
+
  void __gmpf_sqrt_ui (mpf_ptr, unsigned long int);
+
+
  void __gmpf_sub (mpf_ptr, mpf_srcptr, mpf_srcptr);
+
+
  void __gmpf_sub_ui (mpf_ptr, mpf_srcptr, unsigned long int);
+
+
  void __gmpf_swap (mpf_ptr, mpf_ptr) ;
+
+
  void __gmpf_trunc (mpf_ptr, mpf_srcptr);
+
+
  void __gmpf_ui_div (mpf_ptr, unsigned long int, mpf_srcptr);
+
+
  void __gmpf_ui_sub (mpf_ptr, unsigned long int, mpf_srcptr);
+
+
  void __gmpf_urandomb (mpf_t, gmp_randstate_t, unsigned long int);
 # 1480 "/usr/include/gmp-x86_64.h" 3 4
  mp_limb_t __gmpn_add (mp_ptr, mp_srcptr, mp_size_t, mp_srcptr,mp_size_t);
+
+
+
+
  mp_limb_t __gmpn_add_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t) ;
+
+
+
  mp_limb_t __gmpn_add_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+
  mp_limb_t __gmpn_addmul_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
+
+
  mp_limb_t __gmpn_bdivmod (mp_ptr, mp_ptr, mp_size_t, mp_srcptr, mp_size_t, unsigned long int);
+
+
+
  int __gmpn_cmp (mp_srcptr, mp_srcptr, mp_size_t) __attribute__ ((__pure__));
+
+
+
+
+
+
  mp_limb_t __gmpn_divexact_by3c (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
+
+
+
+
+
  mp_limb_t __gmpn_divrem (mp_ptr, mp_size_t, mp_ptr, mp_size_t, mp_srcptr, mp_size_t);
+
+
  mp_limb_t __gmpn_divrem_1 (mp_ptr, mp_size_t, mp_srcptr, mp_size_t, mp_limb_t);
+
+
  mp_limb_t __gmpn_divrem_2 (mp_ptr, mp_size_t, mp_ptr, mp_size_t, mp_srcptr);
+
+
  mp_size_t __gmpn_gcd (mp_ptr, mp_ptr, mp_size_t, mp_ptr, mp_size_t);
+
+
  mp_limb_t __gmpn_gcd_1 (mp_srcptr, mp_size_t, mp_limb_t) __attribute__ ((__pure__));
+
+
  mp_limb_t __gmpn_gcdext_1 (mp_limb_signed_t *, mp_limb_signed_t *, mp_limb_t, mp_limb_t);
+
+
  mp_size_t __gmpn_gcdext (mp_ptr, mp_ptr, mp_size_t *, mp_ptr, mp_size_t, mp_ptr, mp_size_t);
+
+
  size_t __gmpn_get_str (unsigned char *, int, mp_ptr, mp_size_t);
+
+
  unsigned long int __gmpn_hamdist (mp_srcptr, mp_srcptr, mp_size_t) __attribute__ ((__pure__));
+
+
  mp_limb_t __gmpn_lshift (mp_ptr, mp_srcptr, mp_size_t, unsigned int);
+
+
  mp_limb_t __gmpn_mod_1 (mp_srcptr, mp_size_t, mp_limb_t) __attribute__ ((__pure__));
+
+
  mp_limb_t __gmpn_mul (mp_ptr, mp_srcptr, mp_size_t, mp_srcptr, mp_size_t);
+
+
  mp_limb_t __gmpn_mul_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
+
+
  void __gmpn_mul_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+
  void __gmpn_sqr (mp_ptr, mp_srcptr, mp_size_t);
+
+
+
  mp_limb_t __gmpn_neg_n (mp_ptr, mp_srcptr, mp_size_t);
+
+
+
  int __gmpn_perfect_square_p (mp_srcptr, mp_size_t) __attribute__ ((__pure__));
+
+
  unsigned long int __gmpn_popcount (mp_srcptr, mp_size_t) __attribute__ ((__pure__));
+
+
  mp_size_t __gmpn_pow_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t, mp_ptr);
+
+
+
  mp_limb_t __gmpn_preinv_mod_1 (mp_srcptr, mp_size_t, mp_limb_t, mp_limb_t) __attribute__ ((__pure__));
+
+
  void __gmpn_random (mp_ptr, mp_size_t);
+
+
  void __gmpn_random2 (mp_ptr, mp_size_t);
+
+
  mp_limb_t __gmpn_rshift (mp_ptr, mp_srcptr, mp_size_t, unsigned int);
+
+
  unsigned long int __gmpn_scan0 (mp_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
  unsigned long int __gmpn_scan1 (mp_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
  mp_size_t __gmpn_set_str (mp_ptr, const unsigned char *, size_t, int);
+
+
  mp_size_t __gmpn_sqrtrem (mp_ptr, mp_ptr, mp_srcptr, mp_size_t);
+
+
+
  mp_limb_t __gmpn_sub (mp_ptr, mp_srcptr, mp_size_t, mp_srcptr,mp_size_t);
+
+
+
+
  mp_limb_t __gmpn_sub_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t) ;
+
+
+
  mp_limb_t __gmpn_sub_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+
  mp_limb_t __gmpn_submul_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
+
+
  void __gmpn_tdiv_qr (mp_ptr, mp_ptr, mp_size_t, mp_srcptr, mp_size_t, mp_srcptr, mp_size_t);
 # 1632 "/usr/include/gmp-x86_64.h" 3 4
 extern __inline__ void
@@ -7305,34 +11888,61 @@ __gmpz_abs (mpz_ptr __gmp_w, mpz_srcptr __gmp_u)
 }
 # 1656 "/usr/include/gmp-x86_64.h" 3 4
 extern __inline__
+
 int
 __gmpz_fits_uint_p (mpz_srcptr __gmp_z)
 {
   mp_size_t __gmp_n = __gmp_z->_mp_size; mp_ptr __gmp_p = __gmp_z->_mp_d; return (__gmp_n == 0 || (__gmp_n == 1 && __gmp_p[0] <= (~ (unsigned) 0)));;
 }
+
+
+
+
 extern __inline__
+
 int
 __gmpz_fits_ulong_p (mpz_srcptr __gmp_z)
 {
   mp_size_t __gmp_n = __gmp_z->_mp_size; mp_ptr __gmp_p = __gmp_z->_mp_d; return (__gmp_n == 0 || (__gmp_n == 1 && __gmp_p[0] <= (~ (unsigned long) 0)));;
 }
+
+
+
+
 extern __inline__
+
 int
 __gmpz_fits_ushort_p (mpz_srcptr __gmp_z)
 {
   mp_size_t __gmp_n = __gmp_z->_mp_size; mp_ptr __gmp_p = __gmp_z->_mp_d; return (__gmp_n == 0 || (__gmp_n == 1 && __gmp_p[0] <= ((unsigned short) ~0)));;
 }
+
+
+
+
 extern __inline__
+
 unsigned long
 __gmpz_get_ui (mpz_srcptr __gmp_z)
 {
   mp_ptr __gmp_p = __gmp_z->_mp_d;
   mp_size_t __gmp_n = __gmp_z->_mp_size;
   mp_limb_t __gmp_l = __gmp_p[0];
+
+
+
+
+
+
   return (__gmp_n != 0 ? __gmp_l : 0);
 # 1712 "/usr/include/gmp-x86_64.h" 3 4
 }
+
+
+
+
 extern __inline__
+
 mp_limb_t
 __gmpz_getlimbn (mpz_srcptr __gmp_z, mp_size_t __gmp_n)
 {
@@ -7341,6 +11951,9 @@ __gmpz_getlimbn (mpz_srcptr __gmp_z, mp_size_t __gmp_n)
     __gmp_result = __gmp_z->_mp_d[__gmp_n];
   return __gmp_result;
 }
+
+
+
 extern __inline__ void
 __gmpz_neg (mpz_ptr __gmp_w, mpz_srcptr __gmp_u)
 {
@@ -7348,42 +11961,70 @@ __gmpz_neg (mpz_ptr __gmp_w, mpz_srcptr __gmp_u)
     __gmpz_set (__gmp_w, __gmp_u);
   __gmp_w->_mp_size = - __gmp_w->_mp_size;
 }
+
+
+
+
 extern __inline__
+
 int
 __gmpz_perfect_square_p (mpz_srcptr __gmp_a)
 {
   mp_size_t __gmp_asize;
   int __gmp_result;
+
   __gmp_asize = __gmp_a->_mp_size;
   __gmp_result = (__gmp_asize >= 0);
   if (__builtin_expect ((__gmp_asize > 0) != 0, 1))
     __gmp_result = __gmpn_perfect_square_p (__gmp_a->_mp_d, __gmp_asize);
   return __gmp_result;
 }
+
+
+
+
 extern __inline__
+
 unsigned long
 __gmpz_popcount (mpz_srcptr __gmp_u)
 {
   mp_size_t __gmp_usize;
   unsigned long __gmp_result;
+
   __gmp_usize = __gmp_u->_mp_size;
   __gmp_result = (__gmp_usize < 0 ? (~ (unsigned long) 0) : 0);
   if (__builtin_expect ((__gmp_usize > 0) != 0, 1))
     __gmp_result = __gmpn_popcount (__gmp_u->_mp_d, __gmp_usize);
   return __gmp_result;
 }
+
+
+
+
 extern __inline__
+
 void
 __gmpz_set_q (mpz_ptr __gmp_w, mpq_srcptr __gmp_u)
 {
   __gmpz_tdiv_q (__gmp_w, (&((__gmp_u)->_mp_num)), (&((__gmp_u)->_mp_den)));
 }
+
+
+
+
 extern __inline__
+
 size_t
 __gmpz_size (mpz_srcptr __gmp_z)
 {
   return ((__gmp_z->_mp_size) >= 0 ? (__gmp_z->_mp_size) : -(__gmp_z->_mp_size));
 }
+
+
+
+
+
+
 extern __inline__ void
 __gmpq_abs (mpq_ptr __gmp_w, mpq_srcptr __gmp_u)
 {
@@ -7391,6 +12032,9 @@ __gmpq_abs (mpq_ptr __gmp_w, mpq_srcptr __gmp_u)
     __gmpq_set (__gmp_w, __gmp_u);
   __gmp_w->_mp_num._mp_size = ((__gmp_w->_mp_num._mp_size) >= 0 ? (__gmp_w->_mp_num._mp_size) : -(__gmp_w->_mp_num._mp_size));
 }
+
+
+
 extern __inline__ void
 __gmpq_neg (mpq_ptr __gmp_w, mpq_srcptr __gmp_u)
 {
@@ -7400,6 +12044,7 @@ __gmpq_neg (mpq_ptr __gmp_w, mpq_srcptr __gmp_u)
 }
 # 2054 "/usr/include/gmp-x86_64.h" 3 4
 extern __inline__
+
 mp_limb_t
 __gmpn_add (mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize)
 {
@@ -7407,7 +12052,12 @@ __gmpn_add (mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcpt
   do { mp_size_t __gmp_i; mp_limb_t __gmp_x; __gmp_i = (__gmp_ysize); if (__gmp_i != 0) { if (__gmpn_add_n (__gmp_wp, __gmp_xp, __gmp_yp, __gmp_i)) { do { if (__gmp_i >= (__gmp_xsize)) { (__gmp_c) = 1; goto __gmp_done; } __gmp_x = (__gmp_xp)[__gmp_i]; } while ((((__gmp_wp)[__gmp_i++] = (__gmp_x + 1) & ((~ ((mp_limb_t) (0))) >> 0)) == 0)); } } if ((__gmp_wp) != (__gmp_xp)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_xsize); __gmp_j++) (__gmp_wp)[__gmp_j] = (__gmp_xp)[__gmp_j]; } while (0); (__gmp_c) = 0; __gmp_done: ; } while (0);
   return __gmp_c;
 }
+
+
+
+
 extern __inline__
+
 mp_limb_t
 __gmpn_add_1 (mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n)
 {
@@ -7415,7 +12065,12 @@ __gmpn_add_1 (mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_li
   do { mp_size_t __gmp_i; mp_limb_t __gmp_x, __gmp_r; __gmp_x = (__gmp_src)[0]; __gmp_r = __gmp_x + (__gmp_n); (__gmp_dst)[0] = __gmp_r; if (((__gmp_r) < ((__gmp_n)))) { (__gmp_c) = 1; for (__gmp_i = 1; __gmp_i < (__gmp_size);) { __gmp_x = (__gmp_src)[__gmp_i]; __gmp_r = __gmp_x + 1; (__gmp_dst)[__gmp_i] = __gmp_r; ++__gmp_i; if (!((__gmp_r) < (1))) { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; break; } } } else { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (1); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; } } while (0);
   return __gmp_c;
 }
+
+
+
+
 extern __inline__
+
 int
 __gmpn_cmp (mp_srcptr __gmp_xp, mp_srcptr __gmp_yp, mp_size_t __gmp_size)
 {
@@ -7423,7 +12078,12 @@ __gmpn_cmp (mp_srcptr __gmp_xp, mp_srcptr __gmp_yp, mp_size_t __gmp_size)
   do { mp_size_t __gmp_i; mp_limb_t __gmp_x, __gmp_y; (__gmp_result) = 0; __gmp_i = (__gmp_size); while (--__gmp_i >= 0) { __gmp_x = (__gmp_xp)[__gmp_i]; __gmp_y = (__gmp_yp)[__gmp_i]; if (__gmp_x != __gmp_y) { (__gmp_result) = (__gmp_x > __gmp_y ? 1 : -1); break; } } } while (0);
   return __gmp_result;
 }
+
+
+
+
 extern __inline__
+
 mp_limb_t
 __gmpn_sub (mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize)
 {
@@ -7431,7 +12091,12 @@ __gmpn_sub (mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcpt
   do { mp_size_t __gmp_i; mp_limb_t __gmp_x; __gmp_i = (__gmp_ysize); if (__gmp_i != 0) { if (__gmpn_sub_n (__gmp_wp, __gmp_xp, __gmp_yp, __gmp_i)) { do { if (__gmp_i >= (__gmp_xsize)) { (__gmp_c) = 1; goto __gmp_done; } __gmp_x = (__gmp_xp)[__gmp_i]; } while ((((__gmp_wp)[__gmp_i++] = (__gmp_x - 1) & ((~ ((mp_limb_t) (0))) >> 0)), __gmp_x == 0)); } } if ((__gmp_wp) != (__gmp_xp)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_xsize); __gmp_j++) (__gmp_wp)[__gmp_j] = (__gmp_xp)[__gmp_j]; } while (0); (__gmp_c) = 0; __gmp_done: ; } while (0);
   return __gmp_c;
 }
+
+
+
+
 extern __inline__
+
 mp_limb_t
 __gmpn_sub_1 (mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n)
 {
@@ -7439,7 +12104,12 @@ __gmpn_sub_1 (mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_li
   do { mp_size_t __gmp_i; mp_limb_t __gmp_x, __gmp_r; __gmp_x = (__gmp_src)[0]; __gmp_r = __gmp_x - (__gmp_n); (__gmp_dst)[0] = __gmp_r; if (((__gmp_x) < ((__gmp_n)))) { (__gmp_c) = 1; for (__gmp_i = 1; __gmp_i < (__gmp_size);) { __gmp_x = (__gmp_src)[__gmp_i]; __gmp_r = __gmp_x - 1; (__gmp_dst)[__gmp_i] = __gmp_r; ++__gmp_i; if (!((__gmp_x) < (1))) { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; break; } } } else { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (1); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; } } while (0);
   return __gmp_c;
 }
+
+
+
+
 extern __inline__
+
 mp_limb_t
 __gmpn_neg_n (mp_ptr __gmp_rp, mp_srcptr __gmp_up, mp_size_t __gmp_n)
 {
@@ -7463,6 +12133,7 @@ enum
 };
 # 60 "/usr/include/gmp.h" 2 3 4
 # 25 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/double-int.h" 2
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/coretypes.h" 1
 # 27 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/double-int.h" 2
 # 54 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/double-int.h"
@@ -7471,16 +12142,26 @@ typedef struct
   unsigned long low;
   long high;
 } double_int;
+
 union tree_node;
+
+
+
 union tree_node *double_int_to_tree (union tree_node *, double_int);
 unsigned char double_int_fits_to_tree_p (const union tree_node *, double_int);
 double_int tree_to_double_int (const union tree_node *);
+
+
+
+
 static __inline__ double_int
 shwi_to_double_int (long cst)
 {
   double_int r;
+
   r.low = (unsigned long) cst;
   r.high = cst < 0 ? -1 : 0;
+
   return r;
 }
 # 93 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/double-int.h"
@@ -7488,13 +12169,25 @@ static __inline__ double_int
 uhwi_to_double_int (unsigned long cst)
 {
   double_int r;
+
   r.low = cst;
   r.high = 0;
+
   return r;
 }
+
+
+
+
+
+
 double_int double_int_mul (double_int, double_int);
 double_int double_int_add (double_int, double_int);
 double_int double_int_neg (double_int);
+
+
+
+
 unsigned char double_int_fits_in_hwi_p (double_int, unsigned char);
 unsigned char double_int_fits_in_shwi_p (double_int);
 unsigned char double_int_fits_in_uhwi_p (double_int);
@@ -7514,6 +12207,9 @@ int double_int_cmp (double_int, double_int, unsigned char);
 int double_int_scmp (double_int, double_int);
 int double_int_ucmp (double_int, double_int);
 void dump_double_int (FILE *, double_int, unsigned char);
+
+
+
 double_int double_int_ext (double_int, unsigned, unsigned char);
 double_int double_int_sext (double_int, unsigned);
 double_int double_int_zext (double_int, unsigned);
@@ -7524,27 +12220,41 @@ double_int_zero_p (double_int cst)
 {
   return cst.low == 0 && cst.high == 0;
 }
+
+
+
 static __inline__ unsigned char
 double_int_one_p (double_int cst)
 {
   return cst.low == 1 && cst.high == 0;
 }
+
+
+
 static __inline__ unsigned char
 double_int_minus_one_p (double_int cst)
 {
   return (cst.low == (~((unsigned long) 0)) && cst.high == -1);
 }
+
+
+
 static __inline__ unsigned char
 double_int_equal_p (double_int cst1, double_int cst2)
 {
   return cst1.low == cst2.low && cst1.high == cst2.high;
 }
+
+
+
+
 void mpz_set_double_int (mpz_t, double_int, unsigned char);
 double_int mpz_get_double_int (const_tree, mpz_t, unsigned char);
 # 31 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/alias.h" 1
 # 31 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/alias.h"
 typedef int alias_set_type;
+
 extern alias_set_type new_alias_set (void);
 extern alias_set_type get_alias_set (tree);
 extern alias_set_type get_deref_alias_set (tree);
@@ -7560,13 +12270,33 @@ extern int objects_must_conflict_p (tree, tree);
 extern int nonoverlapping_memrefs_p (const_rtx, const_rtx);
 extern unsigned char insn_alias_sets_conflict_p (rtx, rtx);
 # 32 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h" 2
+
+
+
+
+
+
+
 enum tree_code {
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/all-tree.def" 1
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def" 1
 # 42 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 ERROR_MARK,
+
+
+
+
+
 IDENTIFIER_NODE,
+
+
+
+
+
+
 TREE_LIST,
+
+
 TREE_VEC,
 # 79 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 BLOCK,
@@ -7574,58 +12304,161 @@ BLOCK,
 OFFSET_TYPE,
 # 136 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 ENUMERAL_TYPE,
+
+
+
 BOOLEAN_TYPE,
 # 150 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 INTEGER_TYPE,
+
+
+
 REAL_TYPE,
 # 163 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 POINTER_TYPE,
+
+
+
+
 FIXED_POINT_TYPE,
+
+
+
 REFERENCE_TYPE,
 # 181 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 COMPLEX_TYPE,
+
+
+
+
 VECTOR_TYPE,
 # 202 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 ARRAY_TYPE,
 # 212 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 RECORD_TYPE,
+
+
+
+
+
 UNION_TYPE,
+
+
+
+
+
 QUAL_UNION_TYPE,
+
+
+
+
+
+
 VOID_TYPE,
+
+
+
+
+
+
+
 FUNCTION_TYPE,
+
+
+
+
+
+
 METHOD_TYPE,
+
+
+
+
+
 LANG_TYPE,
 # 265 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 INTEGER_CST,
+
+
 REAL_CST,
+
+
 FIXED_CST,
+
+
+
 COMPLEX_CST,
+
+
 VECTOR_CST,
+
+
 STRING_CST,
 # 341 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 FUNCTION_DECL,
 LABEL_DECL,
+
+
+
+
 FIELD_DECL,
 VAR_DECL,
 CONST_DECL,
 PARM_DECL,
 TYPE_DECL,
 RESULT_DECL,
+
+
+
 DEBUG_EXPR_DECL,
+
+
+
 NAMESPACE_DECL,
 # 371 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 IMPORTED_DECL,
+
+
+
 TRANSLATION_UNIT_DECL,
 # 388 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 COMPONENT_REF,
 # 398 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 BIT_FIELD_REF,
+
+
+
 REALPART_EXPR,
 IMAGPART_EXPR,
+
+
+
+
+
+
 ARRAY_REF,
+
+
+
+
 ARRAY_RANGE_REF,
+
+
+
+
+
+
 INDIRECT_REF,
+
+
+
 ALIGN_INDIRECT_REF,
+
+
+
+
+
+
 MISALIGNED_INDIRECT_REF,
 # 445 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 OBJ_TYPE_REF,
@@ -7633,8 +12466,21 @@ OBJ_TYPE_REF,
 CONSTRUCTOR,
 # 471 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 COMPOUND_EXPR,
+
+
 MODIFY_EXPR,
+
+
+
+
 INIT_EXPR,
+
+
+
+
+
+
+
 TARGET_EXPR,
 # 501 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 COND_EXPR,
@@ -7642,37 +12488,87 @@ COND_EXPR,
 VEC_COND_EXPR,
 # 536 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 BIND_EXPR,
+
+
+
+
+
+
+
 CALL_EXPR,
+
+
+
+
+
+
 WITH_CLEANUP_EXPR,
 # 568 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 CLEANUP_POINT_EXPR,
 # 620 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 PLACEHOLDER_EXPR,
+
+
 PLUS_EXPR,
 MINUS_EXPR,
 MULT_EXPR,
+
+
+
 POINTER_PLUS_EXPR,
+
+
 TRUNC_DIV_EXPR,
+
+
 CEIL_DIV_EXPR,
+
+
 FLOOR_DIV_EXPR,
+
+
 ROUND_DIV_EXPR,
+
+
 TRUNC_MOD_EXPR,
 CEIL_MOD_EXPR,
 FLOOR_MOD_EXPR,
 ROUND_MOD_EXPR,
+
+
 RDIV_EXPR,
+
+
+
 EXACT_DIV_EXPR,
+
+
 FIX_TRUNC_EXPR,
+
+
 FLOAT_EXPR,
+
+
 NEGATE_EXPR,
+
+
+
+
 MIN_EXPR,
 MAX_EXPR,
+
+
+
+
+
 ABS_EXPR,
 # 690 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 LSHIFT_EXPR,
 RSHIFT_EXPR,
 LROTATE_EXPR,
 RROTATE_EXPR,
+
+
 BIT_IOR_EXPR,
 BIT_XOR_EXPR,
 BIT_AND_EXPR,
@@ -7684,79 +12580,266 @@ TRUTH_AND_EXPR,
 TRUTH_OR_EXPR,
 TRUTH_XOR_EXPR,
 TRUTH_NOT_EXPR,
+
+
+
+
+
+
+
 LT_EXPR,
 LE_EXPR,
 GT_EXPR,
 GE_EXPR,
 EQ_EXPR,
 NE_EXPR,
+
+
 UNORDERED_EXPR,
 ORDERED_EXPR,
+
+
 UNLT_EXPR,
 UNLE_EXPR,
 UNGT_EXPR,
 UNGE_EXPR,
 UNEQ_EXPR,
+
+
 LTGT_EXPR,
+
 RANGE_EXPR,
+
+
+
 PAREN_EXPR,
+
+
+
+
 CONVERT_EXPR,
+
+
+
 ADDR_SPACE_CONVERT_EXPR,
+
+
+
+
 FIXED_CONVERT_EXPR,
+
+
 NOP_EXPR,
+
+
 NON_LVALUE_EXPR,
 # 780 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 VIEW_CONVERT_EXPR,
+
+
+
+
+
+
 COMPOUND_LITERAL_EXPR,
+
+
+
+
 SAVE_EXPR,
+
+
+
 ADDR_EXPR,
+
+
+
 FDESC_EXPR,
+
+
+
 COMPLEX_EXPR,
+
+
 CONJ_EXPR,
+
+
+
+
 PREDECREMENT_EXPR,
 PREINCREMENT_EXPR,
 POSTDECREMENT_EXPR,
 POSTINCREMENT_EXPR,
+
+
 VA_ARG_EXPR,
+
+
+
+
+
+
 TRY_CATCH_EXPR,
+
+
+
+
 TRY_FINALLY_EXPR,
+
+
+
+
+
 DECL_EXPR,
+
+
+
+
 LABEL_EXPR,
+
+
+
 GOTO_EXPR,
+
+
+
+
+
+
 RETURN_EXPR,
+
+
+
 EXIT_EXPR,
+
+
+
+
 LOOP_EXPR,
 # 875 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 SWITCH_EXPR,
+
+
+
+
+
 CASE_LABEL_EXPR,
+
+
+
+
+
+
 ASM_EXPR,
+
+
+
+
 SSA_NAME,
+
+
+
 CATCH_EXPR,
+
+
+
+
+
 EH_FILTER_EXPR,
+
+
+
 SCEV_KNOWN,
+
+
+
 SCEV_NOT_KNOWN,
+
+
+
 POLYNOMIAL_CHREC,
+
+
+
 STATEMENT_LIST,
 # 938 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 ASSERT_EXPR,
+
+
+
 TREE_BINFO,
+
+
+
+
+
+
 WITH_SIZE_EXPR,
 # 960 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 REALIGN_LOAD_EXPR,
 # 974 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 TARGET_MEM_REF,
+
+
+
+
+
+
+
 OMP_PARALLEL,
+
+
+
+
+
 OMP_TASK,
 # 1009 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 OMP_FOR,
+
+
+
+
 OMP_SECTIONS,
+
+
+
+
 OMP_SINGLE,
+
+
+
 OMP_SECTION,
+
+
+
 OMP_MASTER,
+
+
+
 OMP_ORDERED,
+
+
+
+
 OMP_CRITICAL,
+
+
+
+
+
+
+
 OMP_ATOMIC,
+
+
 OMP_CLAUSE,
+
+
+
+
+
+
+
 REDUC_MAX_EXPR,
 REDUC_MIN_EXPR,
 REDUC_PLUS_EXPR,
@@ -7764,59 +12847,185 @@ REDUC_PLUS_EXPR,
 DOT_PROD_EXPR,
 # 1077 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.def"
 WIDEN_SUM_EXPR,
+
+
+
+
+
+
 WIDEN_MULT_EXPR,
+
+
+
+
 VEC_LSHIFT_EXPR,
 VEC_RSHIFT_EXPR,
+
+
+
+
+
+
 VEC_WIDEN_MULT_HI_EXPR,
 VEC_WIDEN_MULT_LO_EXPR,
+
+
+
+
+
 VEC_UNPACK_HI_EXPR,
 VEC_UNPACK_LO_EXPR,
+
+
+
+
+
 VEC_UNPACK_FLOAT_HI_EXPR,
 VEC_UNPACK_FLOAT_LO_EXPR,
+
+
+
+
+
 VEC_PACK_TRUNC_EXPR,
 VEC_PACK_SAT_EXPR,
+
+
+
+
+
 VEC_PACK_FIX_TRUNC_EXPR,
+
+
 VEC_EXTRACT_EVEN_EXPR,
 VEC_EXTRACT_ODD_EXPR,
+
+
 VEC_INTERLEAVE_HIGH_EXPR,
 VEC_INTERLEAVE_LOW_EXPR,
+
+
+
+
+
+
 PREDICT_EXPR,
+
+
 OPTIMIZATION_NODE,
+
+
 TARGET_OPTION_NODE,
 # 2 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/all-tree.def" 2
 LAST_AND_UNUSED_TREE_CODE,
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/c-common.def" 1
 # 40 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/c-common.def"
 C_MAYBE_CONST_EXPR,
+
+
+
+
+
+
 EXCESS_PRECISION_EXPR,
 # 4 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/all-tree.def" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/ada/gcc-interface/ada-tree.def" 1
 # 29 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/ada/gcc-interface/ada-tree.def"
 UNCONSTRAINED_ARRAY_TYPE,
+
+
+
+
+
 UNCONSTRAINED_ARRAY_REF,
+
+
+
+
 NULL_EXPR,
+
+
+
 PLUS_NOMOD_EXPR,
+
+
+
 MINUS_NOMOD_EXPR,
+
+
+
+
 ATTR_ADDR_EXPR,
 # 62 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/ada/gcc-interface/ada-tree.def"
 STMT_STMT,
+
+
+
+
+
+
 LOOP_STMT,
+
+
+
+
+
 EXIT_STMT,
 # 5 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/all-tree.def" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/cp/cp-tree.def" 1
 # 43 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/cp/cp-tree.def"
 OFFSET_REF,
+
+
+
+
 PTRMEM_CST,
+
+
+
+
+
 NEW_EXPR,
 VEC_NEW_EXPR,
+
+
+
+
 DELETE_EXPR,
 VEC_DELETE_EXPR,
+
+
+
+
 SCOPE_REF,
+
+
+
+
 MEMBER_REF,
+
+
+
 TYPE_EXPR,
+
+
+
+
+
+
 AGGR_INIT_EXPR,
+
+
+
+
 VEC_INIT_EXPR,
+
+
+
 THROW_EXPR,
+
+
+
 EMPTY_CLASS_EXPR,
 # 109 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/cp/cp-tree.def"
 BASELINK,
@@ -7828,17 +13037,58 @@ TEMPLATE_PARM_INDEX,
 TEMPLATE_TEMPLATE_PARM,
 # 179 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/cp/cp-tree.def"
 TEMPLATE_TYPE_PARM,
+
+
+
+
+
 TYPENAME_TYPE,
+
+
+
 TYPEOF_TYPE,
+
+
+
+
+
 BOUND_TEMPLATE_TEMPLATE_PARM,
+
+
+
+
+
 UNBOUND_CLASS_TEMPLATE,
+
+
+
+
+
 USING_DECL,
+
+
 USING_STMT,
+
+
+
+
 DEFAULT_ARG,
+
+
+
+
+
+
 TEMPLATE_ID_EXPR,
+
+
+
 OVERLOAD,
 # 238 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/cp/cp-tree.def"
 PSEUDO_DTOR_EXPR,
+
+
+
 MODOP_EXPR,
 CAST_EXPR,
 REINTERPRET_CAST_EXPR,
@@ -7849,27 +13099,92 @@ DOTSTAR_EXPR,
 TYPEID_EXPR,
 # 260 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/cp/cp-tree.def"
 NON_DEPENDENT_EXPR,
+
+
+
 CTOR_INITIALIZER,
+
 TRY_BLOCK,
+
 EH_SPEC_BLOCK,
+
+
+
+
+
 HANDLER,
+
+
+
 MUST_NOT_THROW_EXPR,
+
+
+
+
 CLEANUP_STMT,
+
+
+
+
+
 IF_STMT,
+
+
+
 FOR_STMT,
+
+
+
 WHILE_STMT,
+
+
+
 DO_STMT,
+
+
 BREAK_STMT,
+
+
 CONTINUE_STMT,
+
+
+
 SWITCH_STMT,
+
+
+
 EXPR_STMT,
+
 TAG_DEFN,
+
+
 OFFSETOF_EXPR,
+
+
 SIZEOF_EXPR,
+
+
 ARROW_EXPR,
+
+
+
 ALIGNOF_EXPR,
+
+
+
+
 STMT_EXPR,
+
+
+
 UNARY_PLUS_EXPR,
+
+
+
+
+
+
+
 STATIC_ASSERT,
 # 366 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/cp/cp-tree.def"
 TYPE_ARGUMENT_PACK,
@@ -7877,9 +13192,19 @@ TYPE_ARGUMENT_PACK,
 NONTYPE_ARGUMENT_PACK,
 # 398 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/cp/cp-tree.def"
 TYPE_PACK_EXPANSION,
+
+
+
+
+
+
 EXPR_PACK_EXPANSION,
 # 417 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/cp/cp-tree.def"
 ARGUMENT_PACK_SELECT,
+
+
+
+
 TRAIT_EXPR,
 # 431 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/cp/cp-tree.def"
 LAMBDA_EXPR,
@@ -7891,31 +13216,48 @@ TEMPLATE_INFO,
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/java/java-tree.def" 1
 # 23 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/java/java-tree.def"
 URSHIFT_EXPR,
+
+
+
 COMPARE_EXPR,
+
+
 COMPARE_L_EXPR,
+
 COMPARE_G_EXPR,
 # 7 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/all-tree.def" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/objc/objc-tree.def" 1
 # 25 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/objc/objc-tree.def"
 CLASS_INTERFACE_TYPE,
 CLASS_IMPLEMENTATION_TYPE,
+
 CATEGORY_INTERFACE_TYPE,
 CATEGORY_IMPLEMENTATION_TYPE,
+
 PROTOCOL_INTERFACE_TYPE,
+
+
 KEYWORD_DECL,
 INSTANCE_METHOD_DECL,
 CLASS_METHOD_DECL,
+
+
 MESSAGE_SEND_EXPR,
 CLASS_REFERENCE_EXPR,
 # 7 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/all-tree.def" 2
 # 41 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h" 2
 MAX_TREE_CODES
 };
+
+
+
+
 extern unsigned char tree_contains_struct[MAX_TREE_CODES][64];
 # 58 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 enum tree_code_class {
   tcc_exceptional,
   tcc_constant,
+
   tcc_type,
   tcc_declaration,
   tcc_reference,
@@ -7923,25 +13265,55 @@ enum tree_code_class {
   tcc_unary,
   tcc_binary,
   tcc_statement,
+
   tcc_vl_exp,
+
   tcc_expression
 };
+
+
+
+
 extern const char *const tree_code_class_strings[];
+
+
+
+
+
+
 extern const enum tree_code_class tree_code_type[];
 # 174 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 extern const unsigned char tree_code_length[];
+
+
+
+
 extern const char *const tree_code_name[];
+
+
 static __inline__ void VEC_tree_must_be_pointer_type (void) { (void)((tree)1 == (void *)1); } typedef struct VEC_tree_base { unsigned num; unsigned alloc; tree vec[1]; } VEC_tree_base; typedef struct VEC_tree_none { VEC_tree_base base; } VEC_tree_none; static __inline__ unsigned VEC_tree_base_length (const VEC_tree_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ tree VEC_tree_base_last (const VEC_tree_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ tree VEC_tree_base_index (const VEC_tree_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_tree_base_iterate (const VEC_tree_base *vec_, unsigned ix_, tree *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (tree) 0; return 0; } } static __inline__ size_t VEC_tree_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_tree_base, vec) + alloc_ * sizeof(tree); } static __inline__ void VEC_tree_base_embedded_init (VEC_tree_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_tree_base_space (VEC_tree_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ tree *VEC_tree_base_quick_push (VEC_tree_base *vec_, tree obj_ ) { tree *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ tree VEC_tree_base_pop (VEC_tree_base *vec_ ) { tree obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_tree_base_truncate (VEC_tree_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ tree VEC_tree_base_replace (VEC_tree_base *vec_, unsigned ix_, tree obj_ ) { tree old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ tree *VEC_tree_base_quick_insert (VEC_tree_base *vec_, unsigned ix_, tree obj_ ) { tree *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (tree)); *slot_ = obj_; return slot_; } static __inline__ tree VEC_tree_base_ordered_remove (VEC_tree_base *vec_, unsigned ix_ ) { tree *slot_; tree obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (tree)); return obj_; } static __inline__ tree VEC_tree_base_unordered_remove (VEC_tree_base *vec_, unsigned ix_ ) { tree *slot_; tree obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_tree_base_block_remove (VEC_tree_base *vec_, unsigned ix_, unsigned len_ ) { tree *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (tree)); } static __inline__ tree *VEC_tree_base_address (VEC_tree_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_tree_base_lower_bound (VEC_tree_base *vec_, const tree obj_, unsigned char (*lessthan_)(const tree, const tree) ) { unsigned int len_ = VEC_tree_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { tree middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_tree_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
 typedef struct VEC_tree_gc { VEC_tree_base base; } VEC_tree_gc; static __inline__ VEC_tree_gc *VEC_tree_gc_alloc (int alloc_ ) { return (VEC_tree_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_tree_gc_free (VEC_tree_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_tree_gc *VEC_tree_gc_copy (VEC_tree_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_tree_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_tree_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (tree) * len_); } return new_vec_; } static __inline__ int VEC_tree_gc_reserve (VEC_tree_gc **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_tree_gc_reserve_exact (VEC_tree_gc **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_tree_gc_safe_grow (VEC_tree_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_tree_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_tree_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_tree_gc_safe_grow_cleared (VEC_tree_gc **vec_, int size_ ) { int oldsize = VEC_tree_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_tree_gc_safe_grow (vec_, size_ ); memset (&(VEC_tree_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (tree) * (size_ - oldsize)); } static __inline__ tree *VEC_tree_gc_safe_push (VEC_tree_gc **vec_, tree obj_ ) { VEC_tree_gc_reserve (vec_, 1 ); return VEC_tree_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ tree *VEC_tree_gc_safe_insert (VEC_tree_gc **vec_, unsigned ix_, tree obj_ ) { VEC_tree_gc_reserve (vec_, 1 ); return VEC_tree_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 typedef struct VEC_tree_heap { VEC_tree_base base; } VEC_tree_heap; static __inline__ VEC_tree_heap *VEC_tree_heap_alloc (int alloc_ ) { return (VEC_tree_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_tree_heap_free (VEC_tree_heap **vec_) { if (*vec_) free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_tree_heap *VEC_tree_heap_copy (VEC_tree_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_tree_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_tree_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (tree) * len_); } return new_vec_; } static __inline__ int VEC_tree_heap_reserve (VEC_tree_heap **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_tree_heap_reserve_exact (VEC_tree_heap **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_tree_heap_safe_grow (VEC_tree_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_tree_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_tree_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_tree_heap_safe_grow_cleared (VEC_tree_heap **vec_, int size_ ) { int oldsize = VEC_tree_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_tree_heap_safe_grow (vec_, size_ ); memset (&(VEC_tree_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (tree) * (size_ - oldsize)); } static __inline__ tree *VEC_tree_heap_safe_push (VEC_tree_heap **vec_, tree obj_ ) { VEC_tree_heap_reserve (vec_, 1 ); return VEC_tree_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ tree *VEC_tree_heap_safe_insert (VEC_tree_heap **vec_, unsigned ix_, tree obj_ ) { VEC_tree_heap_reserve (vec_, 1 ); return VEC_tree_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+
+
+
+
 typedef struct alias_pair
 {
   tree decl;
   tree target;
 } alias_pair;
+
+
 typedef struct VEC_alias_pair_base { unsigned num; unsigned alloc; alias_pair vec[1]; } VEC_alias_pair_base; typedef struct VEC_alias_pair_none { VEC_alias_pair_base base; } VEC_alias_pair_none; static __inline__ unsigned VEC_alias_pair_base_length (const VEC_alias_pair_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ alias_pair *VEC_alias_pair_base_last (VEC_alias_pair_base *vec_ ) { (void)(vec_ && vec_->num); return &vec_->vec[vec_->num - 1]; } static __inline__ alias_pair *VEC_alias_pair_base_index (VEC_alias_pair_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return &vec_->vec[ix_]; } static __inline__ int VEC_alias_pair_base_iterate (VEC_alias_pair_base *vec_, unsigned ix_, alias_pair **ptr) { if (vec_ && ix_ < vec_->num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static __inline__ size_t VEC_alias_pair_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_alias_pair_base, vec) + alloc_ * sizeof(alias_pair); } static __inline__ void VEC_alias_pair_base_embedded_init (VEC_alias_pair_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_alias_pair_base_space (VEC_alias_pair_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ alias_pair *VEC_alias_pair_base_quick_push (VEC_alias_pair_base *vec_, const alias_pair *obj_ ) { alias_pair *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_alias_pair_base_pop (VEC_alias_pair_base *vec_ ) { (void)(vec_->num); --vec_->num; } static __inline__ void VEC_alias_pair_base_truncate (VEC_alias_pair_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ alias_pair *VEC_alias_pair_base_replace (VEC_alias_pair_base *vec_, unsigned ix_, const alias_pair *obj_ ) { alias_pair *slot_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ alias_pair *VEC_alias_pair_base_quick_insert (VEC_alias_pair_base *vec_, unsigned ix_, const alias_pair *obj_ ) { alias_pair *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (alias_pair)); if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_alias_pair_base_ordered_remove (VEC_alias_pair_base *vec_, unsigned ix_ ) { alias_pair *slot_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (alias_pair)); } static __inline__ void VEC_alias_pair_base_unordered_remove (VEC_alias_pair_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->num); vec_->vec[ix_] = vec_->vec[--vec_->num]; } static __inline__ void VEC_alias_pair_base_block_remove (VEC_alias_pair_base *vec_, unsigned ix_, unsigned len_ ) { alias_pair *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (alias_pair)); } static __inline__ alias_pair *VEC_alias_pair_base_address (VEC_alias_pair_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_alias_pair_base_lower_bound (VEC_alias_pair_base *vec_, const alias_pair *obj_, unsigned char (*lessthan_)(const alias_pair *, const alias_pair *) ) { unsigned int len_ = VEC_alias_pair_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { alias_pair *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_alias_pair_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
 typedef struct VEC_alias_pair_gc { VEC_alias_pair_base base; } VEC_alias_pair_gc; static __inline__ VEC_alias_pair_gc *VEC_alias_pair_gc_alloc (int alloc_ ) { return (VEC_alias_pair_gc *) vec_gc_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) ); } static __inline__ VEC_alias_pair_gc *VEC_alias_pair_gc_copy (VEC_alias_pair_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_alias_pair_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_alias_pair_gc *)(vec_gc_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (alias_pair) * len_); } return new_vec_; } static __inline__ void VEC_alias_pair_gc_free (VEC_alias_pair_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_alias_pair_gc_reserve (VEC_alias_pair_gc **vec_, int alloc_ ) { int extend = !VEC_alias_pair_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_alias_pair_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) ); return extend; } static __inline__ int VEC_alias_pair_gc_reserve_exact (VEC_alias_pair_gc **vec_, int alloc_ ) { int extend = !VEC_alias_pair_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_alias_pair_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) ); return extend; } static __inline__ void VEC_alias_pair_gc_safe_grow (VEC_alias_pair_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_alias_pair_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_alias_pair_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_alias_pair_gc_safe_grow_cleared (VEC_alias_pair_gc **vec_, int size_ ) { int oldsize = VEC_alias_pair_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_alias_pair_gc_safe_grow (vec_, size_ ); memset (&(VEC_alias_pair_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (alias_pair) * (size_ - oldsize)); } static __inline__ alias_pair *VEC_alias_pair_gc_safe_push (VEC_alias_pair_gc **vec_, const alias_pair *obj_ ) { VEC_alias_pair_gc_reserve (vec_, 1 ); return VEC_alias_pair_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ alias_pair *VEC_alias_pair_gc_safe_insert (VEC_alias_pair_gc **vec_, unsigned ix_, const alias_pair *obj_ ) { VEC_alias_pair_gc_reserve (vec_, 1 ); return VEC_alias_pair_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
 extern VEC_alias_pair_gc * alias_pairs;
+
+
+
+
 enum built_in_class
 {
   NOT_BUILT_IN = 0,
@@ -7949,7 +13321,14 @@ enum built_in_class
   BUILT_IN_MD,
   BUILT_IN_NORMAL
 };
+
+
 extern const char *const built_in_class_names[4];
+
+
+
+
+
 enum built_in_function
 {
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/builtins.def" 1
@@ -8206,6 +13585,8 @@ BUILT_IN_Y1L,
 BUILT_IN_YN,
 BUILT_IN_YNF,
 BUILT_IN_YNL,
+
+
 BUILT_IN_CABS,
 BUILT_IN_CABSF,
 BUILT_IN_CABSL,
@@ -8278,6 +13659,10 @@ BUILT_IN_CTANH,
 BUILT_IN_CTANHF,
 BUILT_IN_CTANHL,
 BUILT_IN_CTANL,
+
+
+
+
 BUILT_IN_BCMP,
 BUILT_IN_BCOPY,
 BUILT_IN_BZERO,
@@ -8308,6 +13693,8 @@ BUILT_IN_STRPBRK,
 BUILT_IN_STRRCHR,
 BUILT_IN_STRSPN,
 BUILT_IN_STRSTR,
+
+
 BUILT_IN_FPRINTF,
 BUILT_IN_FPRINTF_UNLOCKED,
 BUILT_IN_PUTC,
@@ -8336,6 +13723,8 @@ BUILT_IN_VSCANF,
 BUILT_IN_VSNPRINTF,
 BUILT_IN_VSPRINTF,
 BUILT_IN_VSSCANF,
+
+
 BUILT_IN_ISALNUM,
 BUILT_IN_ISALPHA,
 BUILT_IN_ISASCII,
@@ -8352,6 +13741,8 @@ BUILT_IN_ISXDIGIT,
 BUILT_IN_TOASCII,
 BUILT_IN_TOLOWER,
 BUILT_IN_TOUPPER,
+
+
 BUILT_IN_ISWALNUM,
 BUILT_IN_ISWALPHA,
 BUILT_IN_ISWBLANK,
@@ -8366,6 +13757,8 @@ BUILT_IN_ISWUPPER,
 BUILT_IN_ISWXDIGIT,
 BUILT_IN_TOWLOWER,
 BUILT_IN_TOWUPPER,
+
+
 BUILT_IN_ABORT,
 BUILT_IN_ABS,
 BUILT_IN_AGGREGATE_INCOMING_ADDRESS,
@@ -8474,14 +13867,22 @@ BUILT_IN_VA_ARG_PACK,
 BUILT_IN_VA_ARG_PACK_LEN,
 BUILT_IN__EXIT,
 BUILT_IN__EXIT2,
+
+
 BUILT_IN_INIT_TRAMPOLINE,
 BUILT_IN_ADJUST_TRAMPOLINE,
 BUILT_IN_NONLOCAL_GOTO,
+
+
 BUILT_IN_SETJMP_SETUP,
 BUILT_IN_SETJMP_DISPATCHER,
 BUILT_IN_SETJMP_RECEIVER,
+
+
 BUILT_IN_STACK_SAVE,
 BUILT_IN_STACK_RESTORE,
+
+
 BUILT_IN_OBJECT_SIZE,
 BUILT_IN_MEMCPY_CHK,
 BUILT_IN_MEMMOVE_CHK,
@@ -8500,221 +13901,530 @@ BUILT_IN_FPRINTF_CHK,
 BUILT_IN_PRINTF_CHK,
 BUILT_IN_VFPRINTF_CHK,
 BUILT_IN_VPRINTF_CHK,
+
+
 BUILT_IN_PROFILE_FUNC_ENTER,
 BUILT_IN_PROFILE_FUNC_EXIT,
+
+
 BUILT_IN_EMUTLS_GET_ADDRESS,
+
+
+
+
 BUILT_IN_EMUTLS_REGISTER_COMMON,
+
+
+
+
+
+
 BUILT_IN_UNWIND_RESUME,
 BUILT_IN_CXA_END_CLEANUP,
 BUILT_IN_EH_POINTER,
 BUILT_IN_EH_FILTER,
 BUILT_IN_EH_COPY_VALUES,
+
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/sync-builtins.def" 1
 # 31 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/sync-builtins.def"
 BUILT_IN_FETCH_AND_ADD_N,
+
 BUILT_IN_FETCH_AND_ADD_1,
+
 BUILT_IN_FETCH_AND_ADD_2,
+
 BUILT_IN_FETCH_AND_ADD_4,
+
 BUILT_IN_FETCH_AND_ADD_8,
+
 BUILT_IN_FETCH_AND_ADD_16,
+
+
 BUILT_IN_FETCH_AND_SUB_N,
+
 BUILT_IN_FETCH_AND_SUB_1,
+
 BUILT_IN_FETCH_AND_SUB_2,
+
 BUILT_IN_FETCH_AND_SUB_4,
+
 BUILT_IN_FETCH_AND_SUB_8,
+
 BUILT_IN_FETCH_AND_SUB_16,
+
+
 BUILT_IN_FETCH_AND_OR_N,
+
 BUILT_IN_FETCH_AND_OR_1,
+
 BUILT_IN_FETCH_AND_OR_2,
+
 BUILT_IN_FETCH_AND_OR_4,
+
 BUILT_IN_FETCH_AND_OR_8,
+
 BUILT_IN_FETCH_AND_OR_16,
+
+
 BUILT_IN_FETCH_AND_AND_N,
+
 BUILT_IN_FETCH_AND_AND_1,
+
 BUILT_IN_FETCH_AND_AND_2,
+
 BUILT_IN_FETCH_AND_AND_4,
+
 BUILT_IN_FETCH_AND_AND_8,
+
 BUILT_IN_FETCH_AND_AND_16,
+
+
 BUILT_IN_FETCH_AND_XOR_N,
+
 BUILT_IN_FETCH_AND_XOR_1,
+
 BUILT_IN_FETCH_AND_XOR_2,
+
 BUILT_IN_FETCH_AND_XOR_4,
+
 BUILT_IN_FETCH_AND_XOR_8,
+
 BUILT_IN_FETCH_AND_XOR_16,
+
+
 BUILT_IN_FETCH_AND_NAND_N,
+
 BUILT_IN_FETCH_AND_NAND_1,
+
 BUILT_IN_FETCH_AND_NAND_2,
+
 BUILT_IN_FETCH_AND_NAND_4,
+
 BUILT_IN_FETCH_AND_NAND_8,
+
 BUILT_IN_FETCH_AND_NAND_16,
+
+
 BUILT_IN_ADD_AND_FETCH_N,
+
 BUILT_IN_ADD_AND_FETCH_1,
+
 BUILT_IN_ADD_AND_FETCH_2,
+
 BUILT_IN_ADD_AND_FETCH_4,
+
 BUILT_IN_ADD_AND_FETCH_8,
+
 BUILT_IN_ADD_AND_FETCH_16,
+
+
 BUILT_IN_SUB_AND_FETCH_N,
+
 BUILT_IN_SUB_AND_FETCH_1,
+
 BUILT_IN_SUB_AND_FETCH_2,
+
 BUILT_IN_SUB_AND_FETCH_4,
+
 BUILT_IN_SUB_AND_FETCH_8,
+
 BUILT_IN_SUB_AND_FETCH_16,
+
+
 BUILT_IN_OR_AND_FETCH_N,
+
 BUILT_IN_OR_AND_FETCH_1,
+
 BUILT_IN_OR_AND_FETCH_2,
+
 BUILT_IN_OR_AND_FETCH_4,
+
 BUILT_IN_OR_AND_FETCH_8,
+
 BUILT_IN_OR_AND_FETCH_16,
+
+
 BUILT_IN_AND_AND_FETCH_N,
+
 BUILT_IN_AND_AND_FETCH_1,
+
 BUILT_IN_AND_AND_FETCH_2,
+
 BUILT_IN_AND_AND_FETCH_4,
+
 BUILT_IN_AND_AND_FETCH_8,
+
 BUILT_IN_AND_AND_FETCH_16,
+
+
 BUILT_IN_XOR_AND_FETCH_N,
+
 BUILT_IN_XOR_AND_FETCH_1,
+
 BUILT_IN_XOR_AND_FETCH_2,
+
 BUILT_IN_XOR_AND_FETCH_4,
+
 BUILT_IN_XOR_AND_FETCH_8,
+
 BUILT_IN_XOR_AND_FETCH_16,
+
+
 BUILT_IN_NAND_AND_FETCH_N,
+
 BUILT_IN_NAND_AND_FETCH_1,
+
 BUILT_IN_NAND_AND_FETCH_2,
+
 BUILT_IN_NAND_AND_FETCH_4,
+
 BUILT_IN_NAND_AND_FETCH_8,
+
 BUILT_IN_NAND_AND_FETCH_16,
+
+
 BUILT_IN_BOOL_COMPARE_AND_SWAP_N,
+
+
 BUILT_IN_BOOL_COMPARE_AND_SWAP_1,
+
+
 BUILT_IN_BOOL_COMPARE_AND_SWAP_2,
+
+
 BUILT_IN_BOOL_COMPARE_AND_SWAP_4,
+
+
 BUILT_IN_BOOL_COMPARE_AND_SWAP_8,
+
+
 BUILT_IN_BOOL_COMPARE_AND_SWAP_16,
+
+
+
 BUILT_IN_VAL_COMPARE_AND_SWAP_N,
+
+
 BUILT_IN_VAL_COMPARE_AND_SWAP_1,
+
+
 BUILT_IN_VAL_COMPARE_AND_SWAP_2,
+
+
 BUILT_IN_VAL_COMPARE_AND_SWAP_4,
+
+
 BUILT_IN_VAL_COMPARE_AND_SWAP_8,
+
+
 BUILT_IN_VAL_COMPARE_AND_SWAP_16,
+
+
+
 BUILT_IN_LOCK_TEST_AND_SET_N,
+
 BUILT_IN_LOCK_TEST_AND_SET_1,
+
 BUILT_IN_LOCK_TEST_AND_SET_2,
+
 BUILT_IN_LOCK_TEST_AND_SET_4,
+
 BUILT_IN_LOCK_TEST_AND_SET_8,
+
 BUILT_IN_LOCK_TEST_AND_SET_16,
+
+
 BUILT_IN_LOCK_RELEASE_N,
+
 BUILT_IN_LOCK_RELEASE_1,
+
 BUILT_IN_LOCK_RELEASE_2,
+
 BUILT_IN_LOCK_RELEASE_4,
+
 BUILT_IN_LOCK_RELEASE_8,
+
 BUILT_IN_LOCK_RELEASE_16,
+
+
 BUILT_IN_SYNCHRONIZE,
 # 771 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/builtins.def" 2
+
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/omp-builtins.def" 1
 # 27 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/omp-builtins.def"
 BUILT_IN_OMP_GET_THREAD_NUM,
+
 BUILT_IN_OMP_GET_NUM_THREADS,
+
+
 BUILT_IN_GOMP_ATOMIC_START,
+
 BUILT_IN_GOMP_ATOMIC_END,
+
 BUILT_IN_GOMP_BARRIER,
+
 BUILT_IN_GOMP_TASKWAIT,
+
 BUILT_IN_GOMP_CRITICAL_START,
+
 BUILT_IN_GOMP_CRITICAL_END,
+
 BUILT_IN_GOMP_CRITICAL_NAME_START,
+
+
 BUILT_IN_GOMP_CRITICAL_NAME_END,
+
+
+
+
+
 BUILT_IN_GOMP_LOOP_STATIC_START,
+
+
+
 BUILT_IN_GOMP_LOOP_DYNAMIC_START,
+
+
+
 BUILT_IN_GOMP_LOOP_GUIDED_START,
+
+
+
 BUILT_IN_GOMP_LOOP_RUNTIME_START,
+
+
+
 BUILT_IN_GOMP_LOOP_ORDERED_STATIC_START,
+
+
+
 BUILT_IN_GOMP_LOOP_ORDERED_DYNAMIC_START,
+
+
+
 BUILT_IN_GOMP_LOOP_ORDERED_GUIDED_START,
+
+
+
 BUILT_IN_GOMP_LOOP_ORDERED_RUNTIME_START,
+
+
+
 BUILT_IN_GOMP_LOOP_STATIC_NEXT,
+
 BUILT_IN_GOMP_LOOP_DYNAMIC_NEXT,
+
 BUILT_IN_GOMP_LOOP_GUIDED_NEXT,
+
 BUILT_IN_GOMP_LOOP_RUNTIME_NEXT,
+
 BUILT_IN_GOMP_LOOP_ORDERED_STATIC_NEXT,
+
+
 BUILT_IN_GOMP_LOOP_ORDERED_DYNAMIC_NEXT,
+
+
 BUILT_IN_GOMP_LOOP_ORDERED_GUIDED_NEXT,
+
+
 BUILT_IN_GOMP_LOOP_ORDERED_RUNTIME_NEXT,
+
+
 BUILT_IN_GOMP_LOOP_ULL_STATIC_START,
+
+
+
 BUILT_IN_GOMP_LOOP_ULL_DYNAMIC_START,
+
+
+
 BUILT_IN_GOMP_LOOP_ULL_GUIDED_START,
+
+
+
 BUILT_IN_GOMP_LOOP_ULL_RUNTIME_START,
+
+
+
 BUILT_IN_GOMP_LOOP_ULL_ORDERED_STATIC_START,
+
+
+
 BUILT_IN_GOMP_LOOP_ULL_ORDERED_DYNAMIC_START,
+
+
+
 BUILT_IN_GOMP_LOOP_ULL_ORDERED_GUIDED_START,
+
+
+
 BUILT_IN_GOMP_LOOP_ULL_ORDERED_RUNTIME_START,
+
+
+
 BUILT_IN_GOMP_LOOP_ULL_STATIC_NEXT,
+
 BUILT_IN_GOMP_LOOP_ULL_DYNAMIC_NEXT,
+
 BUILT_IN_GOMP_LOOP_ULL_GUIDED_NEXT,
+
 BUILT_IN_GOMP_LOOP_ULL_RUNTIME_NEXT,
+
 BUILT_IN_GOMP_LOOP_ULL_ORDERED_STATIC_NEXT,
+
+
 BUILT_IN_GOMP_LOOP_ULL_ORDERED_DYNAMIC_NEXT,
+
+
 BUILT_IN_GOMP_LOOP_ULL_ORDERED_GUIDED_NEXT,
+
+
 BUILT_IN_GOMP_LOOP_ULL_ORDERED_RUNTIME_NEXT,
+
+
+
+
+
 BUILT_IN_GOMP_PARALLEL_LOOP_STATIC_START,
+
+
+
 BUILT_IN_GOMP_PARALLEL_LOOP_DYNAMIC_START,
+
+
+
 BUILT_IN_GOMP_PARALLEL_LOOP_GUIDED_START,
+
+
+
 BUILT_IN_GOMP_PARALLEL_LOOP_RUNTIME_START,
+
+
+
 BUILT_IN_GOMP_LOOP_END,
+
 BUILT_IN_GOMP_LOOP_END_NOWAIT,
+
 BUILT_IN_GOMP_ORDERED_START,
+
 BUILT_IN_GOMP_ORDERED_END,
+
 BUILT_IN_GOMP_PARALLEL_START,
+
 BUILT_IN_GOMP_PARALLEL_END,
+
 BUILT_IN_GOMP_TASK,
+
+
 BUILT_IN_GOMP_SECTIONS_START,
+
 BUILT_IN_GOMP_SECTIONS_NEXT,
+
 BUILT_IN_GOMP_PARALLEL_SECTIONS_START,
+
+
 BUILT_IN_GOMP_SECTIONS_END,
+
 BUILT_IN_GOMP_SECTIONS_END_NOWAIT,
+
+
 BUILT_IN_GOMP_SINGLE_START,
+
 BUILT_IN_GOMP_SINGLE_COPY_START,
+
 BUILT_IN_GOMP_SINGLE_COPY_END,
 # 773 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/builtins.def" 2
 # 223 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h" 2
+
+
+
   BUILT_IN_COMPLEX_MUL_MIN,
   BUILT_IN_COMPLEX_MUL_MAX
     = BUILT_IN_COMPLEX_MUL_MIN
       + MAX_MODE_COMPLEX_FLOAT
       - MIN_MODE_COMPLEX_FLOAT,
+
   BUILT_IN_COMPLEX_DIV_MIN,
   BUILT_IN_COMPLEX_DIV_MAX
     = BUILT_IN_COMPLEX_DIV_MIN
       + MAX_MODE_COMPLEX_FLOAT
       - MIN_MODE_COMPLEX_FLOAT,
+
+
   END_BUILTINS
 };
+
+
+
 extern const char * built_in_names[(int) END_BUILTINS];
 # 269 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 extern tree built_in_decls[(int) END_BUILTINS];
 extern tree implicit_built_in_decls[(int) END_BUILTINS];
+
+
+
+
 extern unsigned const char omp_clause_num_ops[];
 extern const char * const omp_clause_code_name[];
+
+
+
 enum omp_clause_code
 {
+
+
   OMP_CLAUSE_ERROR = 0,
+
+
   OMP_CLAUSE_PRIVATE,
+
+
   OMP_CLAUSE_SHARED,
+
+
   OMP_CLAUSE_FIRSTPRIVATE,
+
+
   OMP_CLAUSE_LASTPRIVATE,
 # 305 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
   OMP_CLAUSE_REDUCTION,
+
+
   OMP_CLAUSE_COPYIN,
+
+
   OMP_CLAUSE_COPYPRIVATE,
+
+
   OMP_CLAUSE_IF,
+
+
   OMP_CLAUSE_NUM_THREADS,
+
+
   OMP_CLAUSE_SCHEDULE,
+
+
   OMP_CLAUSE_NOWAIT,
+
+
   OMP_CLAUSE_ORDERED,
+
+
   OMP_CLAUSE_DEFAULT,
+
+
   OMP_CLAUSE_COLLAPSE,
+
+
   OMP_CLAUSE_UNTIED
 };
 # 360 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 struct tree_base {
   __extension__ enum tree_code code : 16;
+
   unsigned side_effects_flag : 1;
   unsigned constant_flag : 1;
   unsigned addressable_flag : 1;
@@ -8723,6 +14433,7 @@ struct tree_base {
   unsigned unsigned_flag : 1;
   unsigned asm_written_flag: 1;
   unsigned nowarning_flag : 1;
+
   unsigned used_flag : 1;
   unsigned nothrow_flag : 1;
   unsigned static_flag : 1;
@@ -8731,6 +14442,7 @@ struct tree_base {
   unsigned protected_flag : 1;
   unsigned deprecated_flag : 1;
   unsigned saturating_flag : 1;
+
   unsigned default_def_flag : 1;
   unsigned lang_flag_0 : 1;
   unsigned lang_flag_1 : 1;
@@ -8739,12 +14451,19 @@ struct tree_base {
   unsigned lang_flag_4 : 1;
   unsigned lang_flag_5 : 1;
   unsigned lang_flag_6 : 1;
+
   unsigned visited : 1;
   unsigned packed_flag : 1;
   unsigned user_align : 1;
+
   unsigned spare : 13;
+
+
+
+
   unsigned address_space : 8;
 };
+
 struct tree_common {
   struct tree_base base;
   tree chain;
@@ -8799,30 +14518,60 @@ struct tree_int_cst {
   struct tree_common common;
   double_int int_cst;
 };
+
+
+
+
 struct real_value;
+
+
+
+
 struct tree_real_cst {
   struct tree_common common;
   struct real_value * real_cst_ptr;
 };
+
+
 struct fixed_value;
+
+
+
+
 struct tree_fixed_cst {
   struct tree_common common;
   struct fixed_value * fixed_cst_ptr;
 };
+
+
+
+
+
+
 struct tree_string {
   struct tree_common common;
   int length;
   char str[1];
 };
+
+
+
+
+
 struct tree_complex {
   struct tree_common common;
   tree real;
   tree imag;
 };
+
+
+
+
 struct tree_vector {
   struct tree_common common;
   tree elements;
 };
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/symtab.h" 1
 # 22 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/symtab.h"
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/obstack.h" 1
@@ -8833,6 +14582,7 @@ struct _obstack_chunk
   struct _obstack_chunk *prev;
   char contents[4];
 };
+
 struct obstack
 {
   long chunk_size;
@@ -8842,13 +14592,24 @@ struct obstack
   char *chunk_limit;
   long int temp;
   int alignment_mask;
+
+
+
   struct _obstack_chunk *(*chunkfun) (void *, long);
   void (*freefun) (void *, struct _obstack_chunk *);
   void *extra_arg;
   unsigned use_extra_arg:1;
   unsigned maybe_empty_object:1;
+
+
+
   unsigned alloc_failed:1;
+
+
 };
+
+
+
 extern void _obstack_newchunk (struct obstack *, int);
 extern void _obstack_free (struct obstack *, void *);
 extern int _obstack_begin (struct obstack *, int, int,
@@ -8857,67 +14618,131 @@ extern int _obstack_begin_1 (struct obstack *, int, int,
         void *(*) (void *, long),
         void (*) (void *, void *), void *);
 extern int _obstack_memory_used (struct obstack *);
+
+
+
+
 void obstack_init (struct obstack *obstack);
+
 void * obstack_alloc (struct obstack *obstack, int size);
+
 void * obstack_copy (struct obstack *obstack, void *address, int size);
 void * obstack_copy0 (struct obstack *obstack, void *address, int size);
+
 void obstack_free (struct obstack *obstack, void *block);
+
 void obstack_blank (struct obstack *obstack, int size);
+
 void obstack_grow (struct obstack *obstack, void *data, int size);
 void obstack_grow0 (struct obstack *obstack, void *data, int size);
+
 void obstack_1grow (struct obstack *obstack, int data_char);
 void obstack_ptr_grow (struct obstack *obstack, void *data);
 void obstack_int_grow (struct obstack *obstack, int data);
+
 void * obstack_finish (struct obstack *obstack);
+
 int obstack_object_size (struct obstack *obstack);
+
 int obstack_room (struct obstack *obstack);
 void obstack_make_room (struct obstack *obstack, int size);
 void obstack_1grow_fast (struct obstack *obstack, int data_char);
 void obstack_ptr_grow_fast (struct obstack *obstack, void *data);
 void obstack_int_grow_fast (struct obstack *obstack, int data);
 void obstack_blank_fast (struct obstack *obstack, int size);
+
 void * obstack_base (struct obstack *obstack);
 void * obstack_next_free (struct obstack *obstack);
 int obstack_alignment_mask (struct obstack *obstack);
 int obstack_chunk_size (struct obstack *obstack);
 int obstack_memory_used (struct obstack *obstack);
+
+
+
+
 extern void (*obstack_alloc_failed_handler) (void);
+
+
 extern int obstack_exit_failure;
 # 23 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/symtab.h" 2
+
+
+
+
+
+
+
 typedef struct ht_identifier ht_identifier;
 struct ht_identifier {
   const unsigned char *str;
   unsigned int len;
   unsigned int hash_value;
 };
+
+
+
+
 typedef struct ht hash_table;
 typedef struct ht_identifier *hashnode;
+
 enum ht_lookup_option {HT_NO_INSERT = 0, HT_ALLOC};
+
+
 struct ht
 {
+
   struct obstack stack;
+
   hashnode *entries;
+
   hashnode (*alloc_node) (hash_table *);
+
+
   void * (*alloc_subobject) (size_t);
+
   unsigned int nslots;
   unsigned int nelements;
+
+
   struct cpp_reader *pfile;
+
+
   unsigned int searches;
   unsigned int collisions;
+
+
   unsigned char entries_owned;
 };
+
+
 extern hash_table *ht_create (unsigned int order);
+
+
 extern void ht_destroy (hash_table *);
+
 extern hashnode ht_lookup (hash_table *, const unsigned char *,
       size_t, enum ht_lookup_option);
 extern hashnode ht_lookup_with_hash (hash_table *, const unsigned char *,
                                      size_t, unsigned int,
                                      enum ht_lookup_option);
+
+
+
+
+
+
 typedef int (*ht_cb) (struct cpp_reader *, hashnode, const void *);
 extern void ht_forall (hash_table *, ht_cb, const void *);
+
+
+
 extern void ht_purge (hash_table *, ht_cb, const void *);
+
+
 extern void ht_load (hash_table *ht, hashnode *entries,
        unsigned int nslots, unsigned int nelements, unsigned char own);
+
+
 extern void ht_dump_statistics (hash_table *);
 # 1443 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h" 2
 # 1460 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
@@ -8925,6 +14750,11 @@ struct tree_identifier {
   struct tree_common common;
   struct ht_identifier id;
 };
+
+
+
+
+
 struct tree_list {
   struct tree_common common;
   tree purpose;
@@ -8941,8 +14771,10 @@ typedef struct constructor_elt_d {
   tree index;
   tree value;
 } constructor_elt;
+
 typedef struct VEC_constructor_elt_base { unsigned num; unsigned alloc; constructor_elt vec[1]; } VEC_constructor_elt_base; typedef struct VEC_constructor_elt_none { VEC_constructor_elt_base base; } VEC_constructor_elt_none; static __inline__ unsigned VEC_constructor_elt_base_length (const VEC_constructor_elt_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ constructor_elt *VEC_constructor_elt_base_last (VEC_constructor_elt_base *vec_ ) { (void)(vec_ && vec_->num); return &vec_->vec[vec_->num - 1]; } static __inline__ constructor_elt *VEC_constructor_elt_base_index (VEC_constructor_elt_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return &vec_->vec[ix_]; } static __inline__ int VEC_constructor_elt_base_iterate (VEC_constructor_elt_base *vec_, unsigned ix_, constructor_elt **ptr) { if (vec_ && ix_ < vec_->num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static __inline__ size_t VEC_constructor_elt_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_constructor_elt_base, vec) + alloc_ * sizeof(constructor_elt); } static __inline__ void VEC_constructor_elt_base_embedded_init (VEC_constructor_elt_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_constructor_elt_base_space (VEC_constructor_elt_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ constructor_elt *VEC_constructor_elt_base_quick_push (VEC_constructor_elt_base *vec_, const constructor_elt *obj_ ) { constructor_elt *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_constructor_elt_base_pop (VEC_constructor_elt_base *vec_ ) { (void)(vec_->num); --vec_->num; } static __inline__ void VEC_constructor_elt_base_truncate (VEC_constructor_elt_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ constructor_elt *VEC_constructor_elt_base_replace (VEC_constructor_elt_base *vec_, unsigned ix_, const constructor_elt *obj_ ) { constructor_elt *slot_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ constructor_elt *VEC_constructor_elt_base_quick_insert (VEC_constructor_elt_base *vec_, unsigned ix_, const constructor_elt *obj_ ) { constructor_elt *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (constructor_elt)); if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_constructor_elt_base_ordered_remove (VEC_constructor_elt_base *vec_, unsigned ix_ ) { constructor_elt *slot_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (constructor_elt)); } static __inline__ void VEC_constructor_elt_base_unordered_remove (VEC_constructor_elt_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->num); vec_->vec[ix_] = vec_->vec[--vec_->num]; } static __inline__ void VEC_constructor_elt_base_block_remove (VEC_constructor_elt_base *vec_, unsigned ix_, unsigned len_ ) { constructor_elt *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (constructor_elt)); } static __inline__ constructor_elt *VEC_constructor_elt_base_address (VEC_constructor_elt_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_constructor_elt_base_lower_bound (VEC_constructor_elt_base *vec_, const constructor_elt *obj_, unsigned char (*lessthan_)(const constructor_elt *, const constructor_elt *) ) { unsigned int len_ = VEC_constructor_elt_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { constructor_elt *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_constructor_elt_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
 typedef struct VEC_constructor_elt_gc { VEC_constructor_elt_base base; } VEC_constructor_elt_gc; static __inline__ VEC_constructor_elt_gc *VEC_constructor_elt_gc_alloc (int alloc_ ) { return (VEC_constructor_elt_gc *) vec_gc_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) ); } static __inline__ VEC_constructor_elt_gc *VEC_constructor_elt_gc_copy (VEC_constructor_elt_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_constructor_elt_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_constructor_elt_gc *)(vec_gc_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (constructor_elt) * len_); } return new_vec_; } static __inline__ void VEC_constructor_elt_gc_free (VEC_constructor_elt_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_constructor_elt_gc_reserve (VEC_constructor_elt_gc **vec_, int alloc_ ) { int extend = !VEC_constructor_elt_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_constructor_elt_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) ); return extend; } static __inline__ int VEC_constructor_elt_gc_reserve_exact (VEC_constructor_elt_gc **vec_, int alloc_ ) { int extend = !VEC_constructor_elt_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_constructor_elt_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) ); return extend; } static __inline__ void VEC_constructor_elt_gc_safe_grow (VEC_constructor_elt_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_constructor_elt_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_constructor_elt_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_constructor_elt_gc_safe_grow_cleared (VEC_constructor_elt_gc **vec_, int size_ ) { int oldsize = VEC_constructor_elt_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_constructor_elt_gc_safe_grow (vec_, size_ ); memset (&(VEC_constructor_elt_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (constructor_elt) * (size_ - oldsize)); } static __inline__ constructor_elt *VEC_constructor_elt_gc_safe_push (VEC_constructor_elt_gc **vec_, const constructor_elt *obj_ ) { VEC_constructor_elt_gc_reserve (vec_, 1 ); return VEC_constructor_elt_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ constructor_elt *VEC_constructor_elt_gc_safe_insert (VEC_constructor_elt_gc **vec_, unsigned ix_, const constructor_elt *obj_ ) { VEC_constructor_elt_gc_reserve (vec_, 1 ); return VEC_constructor_elt_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
 struct tree_constructor {
   struct tree_common common;
   VEC_constructor_elt_gc *elts;
@@ -8958,6 +14790,10 @@ enum omp_clause_schedule_kind
   OMP_CLAUSE_SCHEDULE_AUTO,
   OMP_CLAUSE_SCHEDULE_RUNTIME
 };
+
+
+
+
 enum omp_clause_default_kind
 {
   OMP_CLAUSE_DEFAULT_UNSPECIFIED,
@@ -8966,30 +14802,63 @@ enum omp_clause_default_kind
   OMP_CLAUSE_DEFAULT_PRIVATE,
   OMP_CLAUSE_DEFAULT_FIRSTPRIVATE
 };
+
+
+
+
 struct tree_exp {
   struct tree_common common;
   location_t locus;
   tree block;
   tree
+
     operands[1];
 };
 # 1876 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 struct ptr_info_def;
+
+
+
+
+
+
 typedef struct ssa_use_operand_d {
   struct ssa_use_operand_d* prev;
   struct ssa_use_operand_d* next;
+
+
+
+
+
   union { gimple stmt; tree ssa_name; } loc;
   tree * use;
 } ssa_use_operand_t;
+
+
+
+
 struct tree_ssa_name {
   struct tree_common common;
+
+
   tree var;
+
+
   gimple def_stmt;
+
+
   unsigned int version;
+
+
   struct ptr_info_def *ptr_info;
+
+
   struct ssa_use_operand_d imm_uses;
 };
+
 struct phi_arg_d {
+
+
   struct ssa_use_operand_d imm_use;
   tree def;
   location_t locus;
@@ -9004,19 +14873,29 @@ struct tree_omp_clause {
     enum omp_clause_schedule_kind schedule_kind;
     enum tree_code reduction_code;
   } subcode;
+
+
+
   gimple_seq gimple_reduction_init;
   gimple_seq gimple_reduction_merge;
+
   tree ops[1];
 };
+
+
 struct varray_head_tag;
 # 2008 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 struct tree_block {
   struct tree_common common;
+
   unsigned abstract_flag : 1;
   unsigned block_num : 31;
+
   location_t locus;
+
   tree vars;
   VEC_tree_gc *nonlocalized_vars;
+
   tree subblocks;
   tree supercontext;
   tree abstract_origin;
@@ -9027,6 +14906,7 @@ struct tree_block {
 extern enum machine_mode vector_type_mode (const_tree);
 # 2277 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 struct die_struct;
+
 struct tree_type {
   struct tree_common common;
   tree values;
@@ -9034,13 +14914,16 @@ struct tree_type {
   tree size_unit;
   tree attributes;
   unsigned int uid;
+
   unsigned int precision : 10;
   unsigned no_force_blk_flag : 1;
   unsigned needs_constructing_flag : 1;
   unsigned transparent_aggr_flag : 1;
   unsigned restrict_flag : 1;
   unsigned contains_placeholder_bits : 2;
+
   __extension__ enum machine_mode mode : 8;
+
   unsigned string_flag : 1;
   unsigned lang_flag_0 : 1;
   unsigned lang_flag_1 : 1;
@@ -9049,6 +14932,7 @@ struct tree_type {
   unsigned lang_flag_4 : 1;
   unsigned lang_flag_5 : 1;
   unsigned lang_flag_6 : 1;
+
   unsigned int align;
   alias_set_type alias_set;
   tree pointer_to;
@@ -9067,19 +14951,23 @@ struct tree_type {
   tree binfo;
   tree context;
   tree canonical;
+
   struct lang_type *lang_specific;
 };
 # 2430 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 struct tree_binfo {
   struct tree_common common;
+
   tree offset;
   tree vtable;
   tree virtuals;
   tree vptr_field;
   VEC_tree_gc *base_accesses;
   tree inheritance;
+
   tree vtt_subvtt;
   tree vtt_vptr;
+
   VEC_tree_none base_binfos;
 };
 # 2465 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
@@ -9090,6 +14978,8 @@ enum symbol_visibility
   VISIBILITY_HIDDEN,
   VISIBILITY_INTERNAL
 };
+
+
 struct function;
 # 2507 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 struct tree_decl_minimal {
@@ -9103,7 +14993,9 @@ struct tree_decl_minimal {
 struct tree_decl_common {
   struct tree_decl_minimal common;
   tree size;
+
   __extension__ enum machine_mode mode : 8;
+
   unsigned nonlocal_flag : 1;
   unsigned virtual_flag : 1;
   unsigned ignored_flag : 1;
@@ -9111,6 +15003,7 @@ struct tree_decl_common {
   unsigned artificial_flag : 1;
   unsigned preserve_flag: 1;
   unsigned debug_expr_is_from : 1;
+
   unsigned lang_flag_0 : 1;
   unsigned lang_flag_1 : 1;
   unsigned lang_flag_2 : 1;
@@ -9120,21 +15013,45 @@ struct tree_decl_common {
   unsigned lang_flag_6 : 1;
   unsigned lang_flag_7 : 1;
   unsigned lang_flag_8 : 1;
+
+
+
   unsigned decl_flag_0 : 1;
+
+
+
   unsigned decl_flag_1 : 1;
+
+
   unsigned decl_flag_2 : 1;
+
+
   unsigned gimple_reg_flag : 1;
+
   unsigned decl_by_reference_flag : 1;
+
   unsigned decl_restricted_flag : 1;
+
+
   unsigned decl_common_unused : 2;
+
+
   unsigned int off_align : 8;
+
+
+
+
   unsigned int align;
+
   tree size_unit;
   tree initial;
   tree attributes;
   tree abstract_origin;
+
+
   struct lang_decl *lang_specific;
 };
+
 extern tree decl_value_expr_lookup (tree);
 extern void decl_value_expr_insert (tree, tree);
 # 2758 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
@@ -9145,6 +15062,7 @@ struct tree_decl_with_rtl {
 # 2826 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 struct tree_field_decl {
   struct tree_decl_common common;
+
   tree offset;
   tree bit_field_type;
   tree qualifier;
@@ -9157,11 +15075,13 @@ struct tree_label_decl {
   int label_decl_uid;
   int eh_landing_pad_nr;
 };
+
 struct var_ann_d;
 struct tree_result_decl {
   struct tree_decl_with_rtl common;
   struct var_ann_d *ann;
 };
+
 struct tree_const_decl {
   struct tree_decl_with_rtl common;
 };
@@ -9177,26 +15097,36 @@ struct tree_decl_with_vis {
  tree assembler_name;
  tree section_name;
  tree comdat_group;
+
+
  unsigned defer_output : 1;
  unsigned hard_register : 1;
  unsigned thread_local : 1;
  unsigned common_flag : 1;
  unsigned in_text_section : 1;
  unsigned dllimport_flag : 1;
+
  unsigned shadowed_for_var_p : 1;
+
  unsigned weak_flag : 1;
+
  unsigned seen_in_bind_expr : 1;
  unsigned comdat_flag : 1;
  __extension__ enum symbol_visibility visibility : 2;
  unsigned visibility_specified : 1;
+
  __extension__ enum tls_model tls_model : 3;
+
+
  unsigned init_priority_p : 1;
+
 };
 # 3029 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 extern tree decl_debug_expr_lookup (tree);
 extern void decl_debug_expr_insert (tree, tree);
 # 3041 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 typedef unsigned short priority_type;
+
 extern priority_type decl_init_priority_lookup (tree);
 extern priority_type decl_fini_priority_lookup (tree);
 extern void decl_init_priority_insert (tree, priority_type);
@@ -9210,23 +15140,39 @@ struct tree_var_decl {
 struct
  tree_decl_non_common {
   struct tree_decl_with_vis common;
+
   tree saved_tree;
+
   tree arguments;
+
   tree result;
+
   tree vindex;
 };
 # 3250 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 struct tree_function_decl {
   struct tree_decl_non_common common;
+
   struct function *f;
+
+
   tree personality;
+
+
   tree function_specific_target;
   tree function_specific_optimization;
+
+
+
+
+
   __extension__ enum built_in_function function_code : 11;
   __extension__ enum built_in_class built_in_class : 2;
+
   unsigned static_ctor_flag : 1;
   unsigned static_dtor_flag : 1;
   unsigned uninlinable : 1;
+
   unsigned possibly_inlined : 1;
   unsigned novops_flag : 1;
   unsigned returns_twice_flag : 1;
@@ -9234,16 +15180,21 @@ struct tree_function_decl {
   unsigned operator_new_flag : 1;
   unsigned declared_inline_flag : 1;
   unsigned regdecl_flag : 1;
+
   unsigned no_inline_warning_flag : 1;
   unsigned no_instrument_function_entry_exit : 1;
   unsigned no_limit_stack : 1;
   unsigned disregard_inline_limits : 1;
   unsigned pure_flag : 1;
   unsigned looping_const_or_pure_flag : 1;
+
+
+
 };
 # 3306 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 struct tree_type_decl {
   struct tree_decl_non_common common;
+
 };
 # 3322 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 struct tree_statement_list_node
@@ -9252,22 +15203,50 @@ struct tree_statement_list_node
   struct tree_statement_list_node *next;
   tree stmt;
 };
+
 struct tree_statement_list
  {
   struct tree_common common;
   struct tree_statement_list_node *head;
   struct tree_statement_list_node *tail;
 };
+
+
+
+
 struct tree_optimization_option {
   struct tree_common common;
+
+
   struct cl_optimization opts;
 };
+
+
+
+
+
 extern tree build_optimization_node (void);
+
+
+
 struct tree_target_option {
   struct tree_common common;
+
+
   struct cl_target_option opts;
 };
+
+
+
+
+
 extern tree build_target_option_node (void);
+
+
+
+
+
+
 union
                                              tree_node {
   struct tree_base base;
@@ -9305,6 +15284,9 @@ union
   struct tree_optimization_option optimization;
   struct tree_target_option target_option;
 };
+
+
+
 enum tree_index
 {
   TI_ERROR_MARK,
@@ -9313,38 +15295,49 @@ enum tree_index
   TI_INTSI_TYPE,
   TI_INTDI_TYPE,
   TI_INTTI_TYPE,
+
   TI_UINTQI_TYPE,
   TI_UINTHI_TYPE,
   TI_UINTSI_TYPE,
   TI_UINTDI_TYPE,
   TI_UINTTI_TYPE,
+
   TI_UINT32_TYPE,
   TI_UINT64_TYPE,
+
   TI_INTEGER_ZERO,
   TI_INTEGER_ONE,
   TI_INTEGER_MINUS_ONE,
   TI_NULL_POINTER,
+
   TI_SIZE_ZERO,
   TI_SIZE_ONE,
+
   TI_BITSIZE_ZERO,
   TI_BITSIZE_ONE,
   TI_BITSIZE_UNIT,
+
   TI_PUBLIC,
   TI_PROTECTED,
   TI_PRIVATE,
+
   TI_BOOLEAN_FALSE,
   TI_BOOLEAN_TRUE,
+
   TI_COMPLEX_INTEGER_TYPE,
   TI_COMPLEX_FLOAT_TYPE,
   TI_COMPLEX_DOUBLE_TYPE,
   TI_COMPLEX_LONG_DOUBLE_TYPE,
+
   TI_FLOAT_TYPE,
   TI_DOUBLE_TYPE,
   TI_LONG_DOUBLE_TYPE,
+
   TI_FLOAT_PTR_TYPE,
   TI_DOUBLE_PTR_TYPE,
   TI_LONG_DOUBLE_PTR_TYPE,
   TI_INTEGER_PTR_TYPE,
+
   TI_VOID_TYPE,
   TI_PTR_TYPE,
   TI_CONST_PTR_TYPE,
@@ -9356,14 +15349,18 @@ enum tree_index
   TI_VA_LIST_FPR_COUNTER_FIELD,
   TI_BOOLEAN_TYPE,
   TI_FILEPTR_TYPE,
+
   TI_DFLOAT32_TYPE,
   TI_DFLOAT64_TYPE,
   TI_DFLOAT128_TYPE,
   TI_DFLOAT32_PTR_TYPE,
   TI_DFLOAT64_PTR_TYPE,
   TI_DFLOAT128_PTR_TYPE,
+
   TI_VOID_LIST_NODE,
+
   TI_MAIN_IDENTIFIER,
+
   TI_SAT_SFRACT_TYPE,
   TI_SAT_FRACT_TYPE,
   TI_SAT_LFRACT_TYPE,
@@ -9432,14 +15429,17 @@ enum tree_index
   TI_SAT_USA_TYPE,
   TI_SAT_UDA_TYPE,
   TI_SAT_UTA_TYPE,
+
   TI_OPTIMIZATION_DEFAULT,
   TI_OPTIMIZATION_CURRENT,
   TI_TARGET_OPTION_DEFAULT,
   TI_TARGET_OPTION_CURRENT,
   TI_CURRENT_TARGET_PRAGMA,
   TI_CURRENT_OPTIMIZE_PRAGMA,
+
   TI_MAX
 };
+
 extern tree global_trees[TI_MAX];
 # 3747 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 enum integer_type_kind
@@ -9457,7 +15457,11 @@ enum integer_type_kind
   itk_unsigned_long_long,
   itk_none
 };
+
 typedef enum integer_type_kind integer_type_kind;
+
+
+
 extern tree integer_types[itk_none];
 # 3783 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 extern enum tls_model flag_tls_default;
@@ -9467,34 +15471,90 @@ enum ptrmemfunc_vbit_where_t
   ptrmemfunc_vbit_in_pfn,
   ptrmemfunc_vbit_in_delta
 };
+
+
+
 extern tree decl_assembler_name (tree);
 extern unsigned char decl_assembler_name_equal (tree decl, const_tree asmname);
 extern hashval_t decl_assembler_name_hash (const_tree asmname);
+
+
+
+
 extern size_t tree_size (const_tree);
+
+
+
+
 extern size_t tree_code_size (enum tree_code);
+
+
+
+
+
 extern tree make_node_stat (enum tree_code );
+
+
+
+
 extern tree copy_node_stat (tree );
+
+
+
+
 extern tree copy_list (tree);
+
+
 extern tree make_tree_binfo_stat (unsigned );
+
+
+
+
 extern tree make_tree_vec_stat (int );
+
+
+
+
+
 extern tree get_identifier (const char *);
 # 3870 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 extern tree get_identifier_with_length (const char *, size_t);
+
+
+
+
+
 extern tree maybe_get_identifier (const char *);
+
+
+
 extern tree build_nt (enum tree_code, ...);
 extern tree build_nt_call_list (tree, tree);
 extern tree build_nt_call_vec (tree, VEC_tree_gc *);
+
 extern tree build0_stat (enum tree_code, tree );
+
 extern tree build1_stat (enum tree_code, tree, tree );
+
 extern tree build2_stat (enum tree_code, tree, tree, tree );
+
 extern tree build3_stat (enum tree_code, tree, tree, tree, tree );
+
 extern tree build4_stat (enum tree_code, tree, tree, tree, tree,
     tree );
+
 extern tree build5_stat (enum tree_code, tree, tree, tree, tree, tree,
     tree );
+
 extern tree build6_stat (enum tree_code, tree, tree, tree, tree, tree,
     tree, tree );
+
+
+
 extern tree build_var_debug_value_stat (tree, tree );
+
+
+
 extern tree build_int_cst (tree, long);
 extern tree build_int_cst_type (tree, long);
 extern tree build_int_cstu (tree, unsigned long);
@@ -9511,19 +15571,30 @@ extern tree build_complex (tree, tree, tree);
 extern tree build_one_cst (tree);
 extern tree build_string (int, const char *);
 extern tree build_tree_list_stat (tree, tree );
+
 extern tree build_tree_list_vec_stat (const VEC_tree_gc * );
+
 extern tree build_decl_stat (location_t, enum tree_code,
         tree, tree );
 extern tree build_fn_decl (const char *, tree);
+
 extern tree build_block (tree, tree, tree, tree);
 extern tree build_empty_stmt (location_t);
 extern tree build_omp_clause (location_t, enum omp_clause_code);
+
 extern tree build_vl_exp_stat (enum tree_code, int );
+
+
 extern tree build_call_list (tree, tree, tree);
 extern tree build_call_nary (tree, tree, int, ...);
 extern tree build_call_valist (tree, tree, int, va_list);
+
+
 extern tree build_call_array_loc (location_t, tree, tree, int, const tree *);
 extern tree build_call_vec (tree, tree, VEC_tree_gc *);
+
+
+
 extern tree make_signed_type (int);
 extern tree make_unsigned_type (int);
 extern tree signed_or_unsigned_type_for (int, tree);
@@ -9555,9 +15626,11 @@ extern tree build_complex_type (tree);
 extern tree array_type_nelts (const_tree);
 extern unsigned char in_array_bounds_p (tree);
 extern unsigned char range_in_array_bounds_p (tree);
+
 extern tree value_member (tree, tree);
 extern tree purpose_member (const_tree, tree);
 extern tree chain_index (int, tree);
+
 extern int attribute_list_equal (const_tree, const_tree);
 extern int attribute_list_contained (const_tree, const_tree);
 extern int tree_int_cst_equal (const_tree, const_tree);
@@ -9574,63 +15647,161 @@ extern unsigned char tree_expr_nonnegative_warnv_p (tree, unsigned char *);
 extern unsigned char may_negate_without_overflow_p (const_tree);
 extern tree strip_array_types (tree);
 extern tree excess_precision_type (tree);
+
+
+
 extern tree make_fract_type (int, int, int);
 extern tree make_accum_type (int, int, int);
 # 4035 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 extern tree make_tree (tree, rtx);
+
+
+
+
+
+
+
 extern tree build_type_attribute_variant (tree, tree);
 extern tree build_decl_attribute_variant (tree, tree);
 extern tree build_type_attribute_qual_variant (tree, tree, int);
+
+
 struct attribute_spec
 {
+
+
   const char *const name;
+
   const int min_length;
+
+
   const int max_length;
+
+
+
+
+
+
+
   const unsigned char decl_required;
+
+
   const unsigned char type_required;
+
+
+
+
   const unsigned char function_type_required;
 # 4088 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
   tree (*const handler) (tree *node, tree name, tree args,
      int flags, unsigned char *no_add_attrs);
 };
+
+
+
 enum attribute_flags
 {
+
+
+
   ATTR_FLAG_DECL_NEXT = 1,
+
+
+
   ATTR_FLAG_FUNCTION_NEXT = 2,
+
+
+
   ATTR_FLAG_ARRAY_NEXT = 4,
+
+
   ATTR_FLAG_TYPE_IN_PLACE = 8,
+
+
+
   ATTR_FLAG_BUILT_IN = 16
 };
+
+
+
 extern tree merge_decl_attributes (tree, tree);
 extern tree merge_type_attributes (tree, tree);
+
+
+
+
 extern int is_attribute_p (const char *, const_tree);
+
+
+
+
 extern tree lookup_attribute (const char *, tree);
+
+
+
+
 extern tree remove_attribute (const char *, tree);
+
+
+
 extern tree merge_attributes (tree, tree);
 # 4153 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 extern unsigned char check_qualified_type (const_tree, const_tree, int);
+
+
+
+
+
 extern tree get_qualified_type (tree, int);
+
+
+
+
 extern tree build_qualified_type (tree, int);
 # 4178 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 extern tree build_distinct_type_copy (tree);
 extern tree build_variant_type_copy (tree);
+
+
+
+
 extern void finish_builtin_struct (tree, const char *,
         tree, tree);
+
+
+
+
+
 extern void layout_type (tree);
 # 4200 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 typedef struct record_layout_info_s
 {
+
   tree t;
+
+
   tree offset;
+
   unsigned int offset_align;
+
   tree bitpos;
+
   unsigned int record_align;
+
+
   unsigned int unpacked_align;
+
   tree prev_field;
+
+
   tree pending_statics;
+
   int remaining_in_alignment;
+
+
   int packed_maybe_necessary;
 } *record_layout_info;
+
 extern record_layout_info start_record_layout (tree);
 extern tree bit_from_pos (tree, tree);
 extern tree byte_from_pos (tree, tree);
@@ -9642,12 +15813,33 @@ extern void normalize_rli (record_layout_info);
 extern void place_field (record_layout_info, tree);
 extern void compute_record_mode (tree);
 extern void finish_record_layout (record_layout_info, int);
+
+
+
+
+
+
 extern tree type_hash_canon (unsigned int, tree);
 # 4255 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 extern void layout_decl (tree, unsigned);
+
+
+
+
 extern void relayout_decl (tree);
+
+
+
+
+
+
 extern enum machine_mode mode_for_size_tree (const_tree, enum mode_class, int);
+
+
+
+
 extern tree non_lvalue_loc (location_t, tree);
+
 extern tree convert (tree, tree);
 extern unsigned int expr_align (const_tree);
 extern tree expr_first (tree);
@@ -9660,6 +15852,10 @@ extern tree bit_position (const_tree);
 extern long int_bit_position (const_tree);
 extern tree byte_position (const_tree);
 extern long int_byte_position (const_tree);
+
+
+
+
 enum size_type_kind
 {
   SIZETYPE,
@@ -9667,11 +15863,30 @@ enum size_type_kind
   BITSIZETYPE,
   SBITSIZETYPE,
   TYPE_KIND_LAST};
+
 extern tree sizetype_tab[(int) TYPE_KIND_LAST];
+
+
+
+
+
+
 extern tree size_int_kind (long, enum size_type_kind);
+
+
 extern tree size_binop_loc (location_t, enum tree_code, tree, tree);
+
+
 extern tree size_diffop_loc (location_t, tree, tree);
+
+
+
+
+
+
+
 extern tree round_up_loc (location_t, tree, int);
+
 extern tree round_down_loc (location_t, tree, int);
 extern tree get_pending_sizes (void);
 extern void put_pending_size (tree);
@@ -9679,33 +15894,116 @@ extern void put_pending_sizes (tree);
 extern void finalize_size_functions (void);
 # 4335 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 extern unsigned int maximum_field_alignment;
+
 extern unsigned int initial_max_fld_align;
+
+
+
+
+
 extern tree chainon (tree, tree);
+
+
+
 extern tree tree_cons_stat (tree, tree, tree );
+
+
+
+
 extern tree tree_last (tree);
+
+
+
 extern tree nreverse (tree);
+
+
+
+
 extern int list_length (const_tree);
+
+
+
 extern int fields_length (const_tree);
+
+
+
 extern tree first_field (const_tree);
+
+
+
+
 extern unsigned char initializer_zerop (const_tree);
+
+
+
 extern tree ctor_to_list (tree);
+
+
+
 extern VEC_tree_gc *ctor_to_vec (tree);
 # 4395 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 extern unsigned char categorize_ctor_elements (const_tree, long *, long *,
           unsigned char *);
+
 extern long count_type_elements (const_tree, unsigned char);
+
+
+
 extern int integer_zerop (const_tree);
+
+
+
 extern int integer_onep (const_tree);
+
+
+
+
 extern int integer_all_onesp (const_tree);
+
+
+
+
 extern int integer_pow2p (const_tree);
+
+
+
+
 extern int integer_nonzerop (const_tree);
+
 extern unsigned char cst_and_fits_in_hwi (const_tree);
 extern tree num_ending_zeros (const_tree);
+
+
+
+
 extern int fixed_zerop (const_tree);
+
+
+
+
 extern tree staticp (tree);
+
+
+
+
+
 extern tree save_expr (tree);
+
+
+
+
 extern tree skip_simple_arithmetic (tree);
+
+
+
 enum tree_node_structure_enum tree_node_structure (const_tree);
+
+
+
+
+
+
+
 extern unsigned char contains_placeholder_p (const_tree);
 # 4469 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 extern unsigned char type_contains_placeholder_p (tree);
@@ -9717,10 +16015,35 @@ extern tree substitute_in_expr (tree, tree, tree);
 extern tree substitute_placeholder_in_expr (tree, tree);
 # 4522 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 extern tree variable_size (tree);
+
+
+
+
+
 extern tree stabilize_reference (tree);
+
+
+
+
+
 extern tree stabilize_reference_1 (tree);
+
+
+
+
+
+
 extern tree get_unwidened (tree, tree);
+
+
+
+
+
+
 extern tree get_narrower (tree, int *);
+
+
+
 static __inline__ unsigned char
 handled_component_p (const_tree t)
 {
@@ -9734,51 +16057,119 @@ handled_component_p (const_tree t)
     case REALPART_EXPR:
     case IMAGPART_EXPR:
       return 1;
+
     default:
       return 0;
     }
 }
+
+
+
+
+
 extern tree get_inner_reference (tree, long *, long *,
      tree *, enum machine_mode *, int *, int *,
      unsigned char);
+
+
+
+
+
 extern unsigned char contains_packed_reference (const_tree exp);
+
+
+
+
 extern tree array_ref_element_size (tree);
+
+
+
+
 extern tree array_ref_low_bound (tree);
+
+
+
+
 extern tree array_ref_up_bound (tree);
+
+
+
+
 extern tree component_ref_field_offset (tree);
+
+
+
+
 extern tree get_containing_scope (const_tree);
+
+
+
 extern tree decl_function_context (const_tree);
+
+
+
 extern tree decl_type_context (const_tree);
+
+
 extern int real_zerop (const_tree);
+
+
+
+
+
+
 extern int pedantic_lvalues;
+
+
+
 extern tree current_function_decl;
+
+
 extern const char * current_function_func_begin_label;
+
+
 typedef struct {
   tree fntype;
   tree next;
 } function_args_iterator;
+
+
+
 static __inline__ void
 function_args_iter_init (function_args_iterator *i, tree fntype)
 {
   i->fntype = fntype;
   i->next = ((fntype)->type.values);
 }
+
+
+
+
 static __inline__ tree *
 function_args_iter_cond_ptr (function_args_iterator *i)
 {
   return (i->next) ? &((i->next)->list.value) : ((void *)0);
 }
+
+
+
+
 static __inline__ tree
 function_args_iter_cond (function_args_iterator *i)
 {
   return (i->next) ? ((i->next)->list.value) : (tree) ((void *)0);
 }
+
+
 static __inline__ void
 function_args_iter_next (function_args_iterator *i)
 {
   ((void)(!(i->next != (tree) ((void *)0)) ? fancy_abort ("/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h", 4672, __FUNCTION__), 0 : 0));
   i->next = ((i->next)->common.chain);
 }
+
+
+
 static __inline__ unsigned char
 inlined_function_outer_scope_p (const_tree block)
 {
@@ -9808,36 +16199,87 @@ extern tree tree_strip_nop_conversions (tree);
 extern tree tree_strip_sign_nop_conversions (tree);
 extern tree lhd_gcc_personality (void);
 extern void assign_assembler_name_if_neeeded (tree);
+
+
+
 extern void change_decl_assembler_name (tree, tree);
+
+
 extern tree unshare_expr (tree);
+
+
+
 extern void expand_expr_stmt (tree);
 extern int warn_if_unused_value (const_tree, location_t);
 extern void expand_label (tree);
 extern void expand_goto (tree);
+
 extern rtx expand_stack_save (void);
 extern void expand_stack_restore (tree);
 extern void expand_return (tree);
+
+
 extern void using_eh_for_cleanups (void);
+
+
+
+
+
 extern int folding_initializer;
+
+
 extern int native_encode_expr (const_tree, unsigned char *, int);
 extern tree native_interpret_expr (tree, const unsigned char *, int);
+
+
+
+
+
+
+
 extern tree fold (tree);
+
+
 extern tree fold_unary_loc (location_t, enum tree_code, tree, tree);
+
+
 extern tree fold_unary_ignore_overflow_loc (location_t, enum tree_code, tree, tree);
+
+
 extern tree fold_binary_loc (location_t, enum tree_code, tree, tree, tree);
+
+
 extern tree fold_ternary_loc (location_t, enum tree_code, tree, tree, tree, tree);
+
+
+
+
 extern tree fold_build1_stat_loc (location_t, enum tree_code, tree,
       tree );
+
+
+
+
 extern tree fold_build2_stat_loc (location_t, enum tree_code, tree, tree,
       tree );
+
+
+
+
 extern tree fold_build3_stat_loc (location_t, enum tree_code, tree, tree, tree,
       tree );
 extern tree fold_build1_initializer_loc (location_t, enum tree_code, tree, tree);
 extern tree fold_build2_initializer_loc (location_t, enum tree_code, tree, tree, tree);
 extern tree fold_build3_initializer_loc (location_t, enum tree_code, tree, tree, tree, tree);
+
+
 extern tree fold_build_call_array_loc (location_t, tree, tree, int, tree *);
+
+
 extern tree fold_build_call_array_initializer_loc (location_t, tree, tree, int, tree *);
 extern unsigned char fold_convertible_p (const_tree, const_tree);
+
+
 extern tree fold_convert_loc (location_t, tree, tree);
 extern tree fold_single_bit_test (location_t, enum tree_code, tree, tree, tree);
 extern tree fold_ignored_result (tree);
@@ -9847,20 +16289,26 @@ extern void fold_defer_overflow_warnings (void);
 extern void fold_undefer_overflow_warnings (unsigned char, const_gimple, int);
 extern void fold_undefer_and_ignore_overflow_warnings (void);
 extern unsigned char fold_deferring_overflow_warnings_p (void);
+
 extern tree force_fit_type_double (tree, unsigned long, long,
        int, unsigned char);
+
 extern int fit_double_type (unsigned long, long,
        unsigned long *, long *, const_tree);
 extern int add_double_with_sign (unsigned long, long,
      unsigned long, long,
      unsigned long *, long *,
      unsigned char);
+
+
 extern int neg_double (unsigned long, long,
          unsigned long *, long *);
 extern int mul_double_with_sign (unsigned long, long,
      unsigned long, long,
      unsigned long *, long *,
      unsigned char);
+
+
 extern void lshift_double (unsigned long, long,
       long, unsigned int,
       unsigned long *, long *, int);
@@ -9873,38 +16321,58 @@ extern void lrotate_double (unsigned long, long,
 extern void rrotate_double (unsigned long, long,
        long, unsigned int,
        unsigned long *, long *);
+
 extern int div_and_round_double (enum tree_code, int, unsigned long,
      long, unsigned long,
      long, unsigned long *,
      long *, unsigned long *,
      long *);
+
 enum operand_equal_flag
 {
   OEP_ONLY_CONST = 1,
   OEP_PURE_SAME = 2
 };
+
 extern int operand_equal_p (const_tree, const_tree, unsigned int);
 extern int multiple_of_p (tree, const_tree, const_tree);
+
+
 extern tree omit_one_operand_loc (location_t, tree, tree, tree);
+
+
 extern tree omit_two_operands_loc (location_t, tree, tree, tree, tree);
+
+
 extern tree invert_truthvalue_loc (location_t, tree);
 extern tree fold_truth_not_expr (location_t, tree);
 extern tree fold_unary_to_constant (enum tree_code, tree, tree);
 extern tree fold_binary_to_constant (enum tree_code, tree, tree, tree);
 extern tree fold_read_from_constant_string (tree);
 extern tree int_const_binop (enum tree_code, const_tree, const_tree, int);
+
+
 extern tree build_fold_addr_expr_loc (location_t, tree);
+
+
 extern tree build_fold_addr_expr_with_type_loc (location_t, tree, tree);
 extern tree fold_build_cleanup_point_expr (tree type, tree expr);
 extern tree fold_strip_sign_ops (tree);
+
+
 extern tree build_fold_indirect_ref_loc (location_t, tree);
+
+
 extern tree fold_indirect_ref_loc (location_t, tree);
 extern tree constant_boolean_node (int, tree);
 extern tree div_if_zero_remainder (enum tree_code, const_tree, const_tree);
+
 extern unsigned char tree_swap_operands_p (const_tree, const_tree, unsigned char);
 extern enum tree_code swap_tree_comparison (enum tree_code);
+
 extern unsigned char ptr_difference_const (tree, tree, long *);
 extern enum tree_code invert_tree_comparison (enum tree_code, unsigned char);
+
 extern unsigned char tree_expr_nonzero_p (tree);
 extern unsigned char tree_unary_nonzero_warnv_p (enum tree_code, tree, tree, unsigned char *);
 extern unsigned char tree_binary_nonzero_warnv_p (enum tree_code, tree, tree, tree op1,
@@ -9916,11 +16384,15 @@ extern unsigned char tree_binary_nonnegative_warnv_p (enum tree_code, tree, tree
 extern unsigned char tree_single_nonnegative_warnv_p (tree t, unsigned char *strict_overflow_p);
 extern unsigned char tree_invalid_nonnegative_warnv_p (tree t, unsigned char *strict_overflow_p);
 extern unsigned char tree_call_nonnegative_warnv_p (tree, tree, tree, tree, unsigned char *);
+
 extern unsigned char tree_expr_nonzero_warnv_p (tree, unsigned char *);
+
 extern unsigned char fold_real_zero_addition_p (const_tree, const_tree, int);
 extern tree combine_comparisons (location_t, enum tree_code, enum tree_code,
      enum tree_code, tree, tree, tree);
 extern void debug_fold_checksum (const_tree);
+
+
 static __inline__ unsigned char
 truth_value_p (enum tree_code code)
 {
@@ -9929,6 +16401,9 @@ truth_value_p (enum tree_code code)
    || code == TRUTH_OR_EXPR || code == TRUTH_ORIF_EXPR
    || code == TRUTH_XOR_EXPR || code == TRUTH_NOT_EXPR);
 }
+
+
+
 extern tree fold_call_expr (location_t, tree, unsigned char);
 extern tree fold_builtin_fputs (location_t, tree, tree, unsigned char, unsigned char, tree);
 extern tree fold_builtin_strcpy (location_t, tree, tree, tree, tree);
@@ -9964,12 +16439,18 @@ extern tree build_range_check (location_t, tree, tree, int, tree, tree);
 extern unsigned char merge_ranges (int *, tree *, tree *, int, tree, tree, int,
      tree, tree);
 extern void set_builtin_user_assembler_name (tree decl, const char *asmspec);
+
+
 extern tree strip_float_extensions (tree);
+
+
 extern int really_constant_p (const_tree);
 extern unsigned char decl_address_invariant_p (const_tree);
 extern unsigned char decl_address_ip_invariant_p (const_tree);
 extern int int_fits_type_p (const_tree, const_tree);
+
 extern void get_type_static_bounds (const_tree, mpz_t, mpz_t);
+
 extern unsigned char variably_modified_type_p (tree, tree);
 extern int tree_log2 (const_tree);
 extern int tree_floor_log2 (const_tree);
@@ -9990,6 +16471,7 @@ extern void dump_tree_statistics (void);
 extern void recompute_tree_invariant_for_addr_expr (tree);
 extern unsigned char needs_to_live_in_memory (const_tree);
 extern tree reconstruct_complex_type (tree, tree);
+
 extern int real_onep (const_tree);
 extern int real_twop (const_tree);
 extern int real_minus_onep (const_tree);
@@ -10002,13 +16484,20 @@ extern tree build_range_type (tree, tree, tree);
 extern unsigned char subrange_type_for_debug_p (const_tree, tree *, tree *);
 extern long int_cst_value (const_tree);
 extern long widest_int_cst_value (const_tree);
+
 extern unsigned char fields_compatible_p (const_tree, const_tree);
 extern tree find_compatible_field (tree, tree);
+
 extern tree *tree_block (tree);
 extern location_t *block_nonartificial_location (tree);
 extern location_t tree_nonartificial_location (tree);
+
 extern tree block_ultimate_origin (const_tree);
+
+
 extern tree build_addr (tree, tree);
+
+
 extern void expand_main_function (void);
 extern void expand_function_end (void);
 extern void expand_function_start (tree);
@@ -10031,33 +16520,54 @@ extern int aggregate_value_p (const_tree, const_tree);
 extern void push_function_context (void);
 extern void pop_function_context (void);
 extern gimple_seq gimplify_parameters (void);
+
+
+
 extern void print_rtl (FILE *, const_rtx);
+
+
+
 extern void debug_tree (tree);
+
 extern void dump_addr (FILE*, const char *, const void *);
 extern void print_node (FILE *, const char *, tree, int);
 extern void print_node_brief (FILE *, const char *, const_tree, int);
 extern void indent_to (FILE *, int);
+
+
+
 extern unsigned char debug_find_tree (tree, tree);
+
+
 extern tree unsave_expr_now (tree);
 extern tree build_duplicate_type (tree);
 # 5100 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 extern int flags_from_decl_or_type (const_tree);
 extern int call_expr_flags (const_tree);
+
 extern int setjmp_call_p (const_tree);
 extern unsigned char gimple_alloca_call_p (const_gimple);
 extern unsigned char alloca_call_p (const_tree);
 extern unsigned char must_pass_in_stack_var_size (enum machine_mode, const_tree);
 extern unsigned char must_pass_in_stack_var_size_or_pad (enum machine_mode, const_tree);
+
+
+
 extern const struct attribute_spec *lookup_attribute_spec (tree);
 # 5121 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 extern tree decl_attributes (tree *, tree, int);
+
+
 extern void set_decl_abstract_flags (tree, int);
 extern void set_decl_origin_self (tree);
+
+
 extern void set_min_and_max_values_for_integral_type (tree, int, unsigned char);
 extern void fixup_signed_type (tree);
 extern void internal_reference_types (void);
 extern unsigned int update_alignment_for_field (record_layout_info, tree,
                                                 unsigned int);
+
 extern void make_decl_rtl (tree);
 extern rtx make_decl_rtl_for_debug (tree);
 extern void make_decl_one_only (tree, tree);
@@ -10072,6 +16582,8 @@ extern void finish_aliases_1 (void);
 extern void finish_aliases_2 (void);
 extern tree emutls_decl (tree);
 extern void remove_unreachable_alias_pairs (void);
+
+
 extern void expand_computed_goto (tree);
 extern unsigned char parse_output_constraint (const char **, int, int, int,
          unsigned char *, unsigned char *, unsigned char *);
@@ -10083,16 +16595,46 @@ extern void expand_case (gimple);
 extern void expand_decl (tree);
 # 5170 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 extern char *dwarf2out_cfi_label (unsigned char);
+
+
+
 extern void dwarf2out_def_cfa (const char *, unsigned, long);
+
+
+
 extern void dwarf2out_window_save (const char *);
+
+
+
 extern void dwarf2out_reg_save (const char *, unsigned, long);
+
+
+
 extern void dwarf2out_return_save (const char *, long);
+
+
+
 extern void dwarf2out_return_reg (const char *, unsigned);
+
+
+
 extern void dwarf2out_reg_save_reg (const char *, rtx, rtx);
+
+
+
+
+
 struct pointer_set_t;
+
+
+
 typedef tree (*walk_tree_fn) (tree *, int *, void *);
+
+
+
 typedef tree (*walk_tree_lh) (tree *, int *, tree (*) (tree *, int *, void *),
          void *, struct pointer_set_t*);
+
 extern tree walk_tree_1 (tree*, walk_tree_fn, void*, struct pointer_set_t*,
     walk_tree_lh);
 extern tree walk_tree_without_duplicates_1 (tree*, walk_tree_fn, void*,
@@ -10100,6 +16642,9 @@ extern tree walk_tree_without_duplicates_1 (tree*, walk_tree_fn, void*,
 # 5223 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h"
 extern void set_decl_rtl (tree, rtx);
 extern void set_decl_incoming_rtl (tree, rtx, unsigned char);
+
+
+
 typedef enum
 {
   d_kind,
@@ -10122,48 +16667,103 @@ typedef enum
   omp_clause_kind,
   all_kinds
 } tree_node_kind;
+
 extern int tree_node_counts[];
 extern int tree_node_sizes[];
+
+
+
+
 extern unsigned char in_gimple_form;
+
+
 extern tree get_base_address (tree t);
 extern void mark_addressable (tree);
+
+
 extern void vect_set_verbosity_level (const char *);
+
+
+
 struct tree_map_base {
   tree from;
 };
+
 extern int tree_map_base_eq (const void *, const void *);
 extern unsigned int tree_map_base_hash (const void *);
 extern int tree_map_base_marked_p (const void *);
 extern unsigned char list_equal_p (const_tree, const_tree);
+
+
+
 struct tree_map {
   struct tree_map_base base;
   unsigned int hash;
   tree to;
 };
+
+
 extern unsigned int tree_map_hash (const void *);
+
+
+
+
 struct tree_int_map {
   struct tree_map_base base;
   unsigned int to;
 };
+
+
+
+
+
+
+
 struct tree_priority_map {
   struct tree_map_base base;
   priority_type init;
   priority_type fini;
 };
+
+
+
+
+
+
+
 tree target_for_debug_bind (tree);
+
+
 extern tree maybe_fold_offset_to_reference (location_t, tree, tree, tree);
 extern tree maybe_fold_offset_to_address (location_t, tree, tree, tree);
 extern tree maybe_fold_stmt_addition (location_t, tree, tree, tree);
+
+
 extern tree tree_mem_ref_addr (tree, tree);
 extern void copy_mem_ref_info (tree, tree);
+
+
 extern unsigned char ssa_name_nonnegative_p (const_tree);
+
+
 extern void init_object_sizes (void);
 extern void fini_object_sizes (void);
 extern unsigned long compute_builtin_object_size (tree, int);
+
+
 extern unsigned long highest_pow2_factor (const_tree);
 extern tree build_personality_function (const char *);
+
+
+
 void init_inline_once (void);
+
+
 extern tree memory_identifier_string;
+
+
+
+
 static __inline__ int
 tree_operand_length (const_tree node)
 {
@@ -10172,16 +16772,26 @@ tree_operand_length (const_tree node)
   else
     return tree_code_length[(int) (((enum tree_code) (node)->base.code))];
 }
+
+
+
+
+
+
 typedef struct call_expr_arg_iterator_d {
   tree t;
   int n;
   int i;
 } call_expr_arg_iterator;
+
 typedef struct const_call_expr_arg_iterator_d {
   const_tree t;
   int n;
   int i;
 } const_call_expr_arg_iterator;
+
+
+
 static __inline__ void
 init_call_expr_arg_iterator (tree exp, call_expr_arg_iterator *iter)
 {
@@ -10189,6 +16799,7 @@ init_call_expr_arg_iterator (tree exp, call_expr_arg_iterator *iter)
   iter->n = (((int)((((exp)->exp.operands[0])->int_cst.int_cst).low)) - 3);
   iter->i = 0;
 }
+
 static __inline__ void
 init_const_call_expr_arg_iterator (const_tree exp, const_call_expr_arg_iterator *iter)
 {
@@ -10196,6 +16807,9 @@ init_const_call_expr_arg_iterator (const_tree exp, const_call_expr_arg_iterator 
   iter->n = (((int)((((exp)->exp.operands[0])->int_cst.int_cst).low)) - 3);
   iter->i = 0;
 }
+
+
+
 static __inline__ tree
 next_call_expr_arg (call_expr_arg_iterator *iter)
 {
@@ -10206,6 +16820,7 @@ next_call_expr_arg (call_expr_arg_iterator *iter)
   iter->i++;
   return result;
 }
+
 static __inline__ const_tree
 next_const_call_expr_arg (const_call_expr_arg_iterator *iter)
 {
@@ -10216,23 +16831,33 @@ next_const_call_expr_arg (const_call_expr_arg_iterator *iter)
   iter->i++;
   return result;
 }
+
+
+
+
+
 static __inline__ tree
 first_call_expr_arg (tree exp, call_expr_arg_iterator *iter)
 {
   init_call_expr_arg_iterator (exp, iter);
   return next_call_expr_arg (iter);
 }
+
 static __inline__ const_tree
 first_const_call_expr_arg (const_tree exp, const_call_expr_arg_iterator *iter)
 {
   init_const_call_expr_arg_iterator (exp, iter);
   return next_const_call_expr_arg (iter);
 }
+
+
+
 static __inline__ unsigned char
 more_call_expr_args_p (const call_expr_arg_iterator *iter)
 {
   return (iter->i < iter->n);
 }
+
 static __inline__ unsigned char
 more_const_call_expr_args_p (const const_call_expr_arg_iterator *iter)
 {
@@ -10256,9 +16881,15 @@ enum debug_info_type
   XCOFF_DEBUG,
   VMS_DEBUG,
   VMS_AND_DWARF2_DEBUG
+
 };
+
+
 extern enum debug_info_type write_symbols;
+
+
 extern const char *const debug_type_names[];
+
 enum debug_info_level
 {
   DINFO_LEVEL_NONE,
@@ -10266,6 +16897,8 @@ enum debug_info_level
   DINFO_LEVEL_NORMAL,
   DINFO_LEVEL_VERBOSE
 };
+
+
 extern enum debug_info_level debug_info_level;
 # 65 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/flags.h"
 enum debug_info_usage
@@ -10275,70 +16908,181 @@ enum debug_info_usage
   DINFO_USAGE_IND_USE,
   DINFO_USAGE_NUM_ENUMS
 };
+
 extern unsigned char should_emit_struct_debug (tree type_decl, enum debug_info_usage);
 extern void set_struct_debug_option (const char *value);
+
+
+
 extern unsigned char use_gnu_debug_info_extensions;
 # 94 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/flags.h"
 extern enum symbol_visibility default_visibility;
+
 struct visibility_flags
 {
   unsigned inpragma : 1;
   unsigned inlines_hidden : 1;
 };
+
+
 extern struct visibility_flags visibility_options;
+
+
+
 extern int optimize;
+
+
+
 extern int optimize_size;
+
+
+
+
+
+
 extern unsigned char in_lto_p;
+
+
+
 extern int flag_generate_lto;
 # 131 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/flags.h"
 extern void set_Wstrict_aliasing (int onoff);
+
+
+
+
+
 extern unsigned char warn_larger_than;
 extern long larger_than_size;
+
+
+
+
 extern unsigned char warn_frame_larger_than;
 extern long frame_larger_than_size;
+
+
+
+
 extern int flag_print_asm_name;
+
+
+
+
+
 extern int flag_signed_char;
+
+
+
+
 extern int flag_short_enums;
+
+
+
 extern int flag_pcc_struct_return;
+
+
+
+
+
 extern int flag_complex_method;
+
+
+
 extern int rtl_dump_and_exit;
+
+
+
 extern int flag_gen_aux_info;
+
+
+
+
 extern int flag_dump_unnumbered;
+
+
+
 extern unsigned char final_insns_dump_p;
+
+
+
+
 extern int flag_pedantic_errors;
+
+
+
 extern int flag_permissive;
+
+
+
+
 extern int flag_shlib;
 # 210 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/flags.h"
 extern int flag_debug_asm;
+
+
+
 extern int flag_next_runtime;
+
 extern int flag_dump_rtl_in_asm;
+
+
 enum ira_algorithm
 {
   IRA_ALGORITHM_CB,
   IRA_ALGORITHM_PRIORITY
 };
+
 extern enum ira_algorithm flag_ira_algorithm;
+
+
 enum ira_region
 {
   IRA_REGION_ONE,
   IRA_REGION_ALL,
   IRA_REGION_MIXED
 };
+
 extern enum ira_region flag_ira_region;
+
 extern unsigned int flag_ira_verbose;
+
+
 enum excess_precision
 {
   EXCESS_PRECISION_DEFAULT,
   EXCESS_PRECISION_FAST,
   EXCESS_PRECISION_STANDARD
 };
+
+
+
 extern enum excess_precision flag_excess_precision_cmdline;
+
+
 extern enum excess_precision flag_excess_precision;
+
+
+
+
+
 extern int flag_evaluation_order;
+
+
 extern unsigned long g_switch_value;
 extern unsigned char g_switch_set;
+
+
 extern unsigned char sel_sched_switch_set;
+
+
 extern unsigned char flag_warn_unused_result;
+
+
+
+
+
+
 extern int align_loops_log;
 extern int align_loops_max_skip;
 extern int align_jumps_log;
@@ -10346,22 +17090,50 @@ extern int align_jumps_max_skip;
 extern int align_labels_log;
 extern int align_labels_max_skip;
 extern int align_functions_log;
+
+
 extern int dump_for_graph;
+
+
 enum graph_dump_types
 {
   no_graph = 0,
   vcg
 };
 extern enum graph_dump_types graph_dump_format;
+
+
+
 extern int flag_detailed_statistics;
+
+
+
 extern int flag_remove_unreachable_functions;
+
+
 extern int flag_var_tracking;
+
+
+
 extern unsigned char flag_speculative_prefetching_set;
+
+
 enum stack_check_type
 {
+
   NO_STACK_CHECK = 0,
+
+
+
   GENERIC_STACK_CHECK,
+
+
+
+
   STATIC_BUILTIN_STACK_CHECK,
+
+
+
   FULL_BUILTIN_STACK_CHECK
 };
 extern enum stack_check_type flag_stack_check;
@@ -10370,10 +17142,23 @@ extern unsigned char flag_instrument_functions_exclude_p (tree fndecl);
 # 367 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/flags.h"
 enum warn_strict_overflow_code
 {
+
+
+
   WARN_STRICT_OVERFLOW_ALL = 1,
+
+
+
+
   WARN_STRICT_OVERFLOW_CONDITIONAL = 2,
+
+
   WARN_STRICT_OVERFLOW_COMPARISON = 3,
+
+
   WARN_STRICT_OVERFLOW_MISC = 4,
+
+
   WARN_STRICT_OVERFLOW_MAGNITUDE = 5
 };
 # 26 "../../../src/acf_plugin.c" 2
@@ -10383,135 +17168,406 @@ enum warn_strict_overflow_code
 # 26 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/langhooks.h"
 struct diagnostic_context;
 struct diagnostic_info;
+
 struct gimplify_omp_ctx;
+
 struct array_descr_info;
+
+
 typedef void (*lang_print_tree_hook) (FILE *, tree, int indent);
+
 enum classify_record
   { RECORD_IS_STRUCT, RECORD_IS_CLASS, RECORD_IS_INTERFACE };
+
+
+
+
 struct lang_hooks_for_tree_inlining
 {
   unsigned char (*var_mod_type_p) (tree, tree);
 };
+
 struct lang_hooks_for_callgraph
 {
+
+
   tree (*analyze_expr) (tree *, int *);
 };
+
+
+
 struct lang_hooks_for_tree_dump
 {
+
+
   unsigned char (*dump_tree) (void *, tree);
+
+
   int (*type_quals) (const_tree);
 };
+
+
+
 struct lang_hooks_for_types
 {
+
+
   tree (*make_type) (enum tree_code);
+
+
+
+
   enum classify_record (*classify_record) (tree);
+
+
+
   tree (*type_for_mode) (enum machine_mode, int);
+
+
+
   tree (*type_for_size) (unsigned, int);
+
+
+
   unsigned char (*generic_p) (const_tree);
+
+
   tree (*get_argument_pack_elems) (const_tree);
+
+
+
+
+
   tree (*type_promotes_to) (tree);
 # 107 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/langhooks.h"
   void (*register_builtin_type) (tree, const char *);
+
+
+
+
+
   void (*incomplete_type_error) (const_tree value, const_tree type);
+
+
+
   tree (*max_size) (const_tree);
+
+
+
   void (*omp_firstprivatize_type_sizes) (struct gimplify_omp_ctx *, tree);
+
+
+
+
+
   unsigned char (*type_hash_eq) (const_tree, const_tree);
+
+
+
   unsigned char (*get_array_descr_info) (const_tree, struct array_descr_info *);
+
+
   void (*get_subrange_bounds) (const_tree, tree *, tree *);
+
+
+
+
+
   tree (*reconstruct_complex_type) (tree, tree);
+
+
+
+
   unsigned char hash_types;
 };
+
+
+
 struct lang_hooks_for_decls
 {
+
+
   int (*global_bindings_p) (void);
+
+
+
+
+
   tree (*pushdecl) (tree);
+
+
   tree (*getdecls) (void);
+
+
   unsigned char (*function_decl_explicit_p) (tree);
+
+
+
   unsigned char (*generic_generic_parameter_decl_p) (const_tree);
+
+
+
   unsigned char (*function_parm_expanded_from_pack_p) (tree, tree);
+
+
   tree (*get_generic_function_decl) (const_tree);
+
+
+
   unsigned char (*warn_unused_global) (const_tree);
+
+
+
   void (*final_write_globals) (void);
+
+
   unsigned char (*ok_for_sibcall) (const_tree);
+
+
+
   unsigned char (*omp_privatize_by_reference) (const_tree);
+
+
+
   enum omp_clause_default_kind (*omp_predetermined_sharing) (tree);
+
+
+
   tree (*omp_report_decl) (tree);
+
+
+
+
+
   unsigned char (*omp_disregard_value_expr) (tree, unsigned char);
+
+
+
   unsigned char (*omp_private_debug_clause) (tree, unsigned char);
+
+
+
   unsigned char (*omp_private_outer_ref) (tree);
+
+
+
+
   tree (*omp_clause_default_ctor) (tree clause, tree decl, tree outer);
+
+
   tree (*omp_clause_copy_ctor) (tree clause, tree dst, tree src);
+
+
   tree (*omp_clause_assign_op) (tree clause, tree dst, tree src);
+
+
+
   tree (*omp_clause_dtor) (tree clause, tree decl);
+
+
   void (*omp_finish_clause) (tree clause);
 };
+
+
+
 struct lang_hooks_for_lto
 {
+
   void (*begin_section) (const char *name);
+
+
+
+
+
   void (*append_data) (const void *data, size_t len, void *block);
+
+
   void (*end_section) (void);
 };
+
+
+
 struct lang_hooks
 {
+
   const char *name;
+
+
+
   size_t identifier_size;
+
+
   void (*free_lang_data) (tree);
+
+
+
+
+
   size_t (*tree_size) (enum tree_code);
+
+
+
+
   unsigned int (*init_options) (unsigned int argc, const char **argv);
+
+
+
   void (*initialize_diagnostics) (struct diagnostic_context *);
 # 290 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/langhooks.h"
   int (*handle_option) (size_t code, const char *arg, int value);
+
+
+
   unsigned char (*missing_argument) (const char *opt, size_t code);
 # 304 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/langhooks.h"
   unsigned char (*post_options) (const char **);
+
+
+
+
   unsigned char (*init) (void);
+
+
   void (*finish) (void);
+
+
+
   void (*parse_file) (int);
+
+
   unsigned char (*missing_noreturn_ok_p) (tree);
+
+
+
   alias_set_type (*get_alias_set) (tree);
+
+
+
   void (*finish_incomplete_decl) (tree);
+
+
+
   void (*dup_lang_specific_decl) (tree);
+
+
+
+
+
+
   void (*set_decl_assembler_name) (tree);
+
+
+
   void (*print_statistics) (void);
+
+
+
   lang_print_tree_hook print_xnode;
+
+
+
   lang_print_tree_hook print_decl;
   lang_print_tree_hook print_type;
   lang_print_tree_hook print_identifier;
 # 363 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/langhooks.h"
   const char *(*decl_printable_name) (tree decl, int verbosity);
+
+
+
+
   const char *(*dwarf_name) (tree, int verbosity);
+
+
+
+
   int (*types_compatible_p) (tree x, tree y);
+
+
   void (*print_error_function) (struct diagnostic_context *, const char *,
     struct diagnostic_info *);
 # 386 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/langhooks.h"
   long (*to_target_charset) (long);
+
+
+
+
+
+
   const struct attribute_spec *attribute_table;
   const struct attribute_spec *common_attribute_table;
   const struct attribute_spec *format_attribute_table;
+
   struct lang_hooks_for_tree_inlining tree_inlining;
+
   struct lang_hooks_for_callgraph callgraph;
+
   struct lang_hooks_for_tree_dump tree_dump;
+
   struct lang_hooks_for_decls decls;
+
   struct lang_hooks_for_types types;
+
   struct lang_hooks_for_lto lto;
+
+
+
   tree (*get_innermost_generic_parms) (const_tree);
+
+
+
   tree (*get_innermost_generic_args) (const_tree);
+
+
   unsigned char (*function_parameter_pack_p) (const_tree);
+
+
+
   int (*gimplify_expr) (tree *, gimple_seq *, gimple_seq *);
+
+
+
   tree (*fold_obj_type_ref) (tree, tree);
+
+
   tree (*builtin_function) (tree decl);
+
+
+
+
+
+
+
   tree (*builtin_function_ext_scope) (tree decl);
+
+
   void (*init_ts) (void);
+
+
+
+
   tree (*expr_to_decl) (tree expr, unsigned char *tc, unsigned char *se);
+
+
   tree (*eh_personality) (void);
+
+
   tree (*eh_runtime_type) (tree);
+
+
+
   unsigned char eh_use_cxa_end_cleanup;
+
+
+
 };
+
+
 extern struct lang_hooks lang_hooks;
 extern tree add_builtin_function (const char *name, tree type,
       int function_code, enum built_in_class cl,
       const char *library_name,
       tree attrs);
+
 extern tree add_builtin_function_ext_scope (const char *name, tree type,
          int function_code,
          enum built_in_class cl,
@@ -10532,6 +17588,7 @@ typedef struct cpp_hashnode cpp_hashnode;
 typedef struct cpp_macro cpp_macro;
 typedef struct cpp_callbacks cpp_callbacks;
 typedef struct cpp_dir cpp_dir;
+
 struct answer;
 struct _cpp_file;
 # 143 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/cpplib.h"
@@ -10539,13 +17596,21 @@ enum cpp_ttype
 {
   CPP_EQ, CPP_NOT, CPP_GREATER, CPP_LESS, CPP_PLUS, CPP_MINUS, CPP_MULT, CPP_DIV, CPP_MOD, CPP_AND, CPP_OR, CPP_XOR, CPP_RSHIFT, CPP_LSHIFT, CPP_COMPL, CPP_AND_AND, CPP_OR_OR, CPP_QUERY, CPP_COLON, CPP_COMMA, CPP_OPEN_PAREN, CPP_CLOSE_PAREN, CPP_EOF, CPP_EQ_EQ, CPP_NOT_EQ, CPP_GREATER_EQ, CPP_LESS_EQ, CPP_PLUS_EQ, CPP_MINUS_EQ, CPP_MULT_EQ, CPP_DIV_EQ, CPP_MOD_EQ, CPP_AND_EQ, CPP_OR_EQ, CPP_XOR_EQ, CPP_RSHIFT_EQ, CPP_LSHIFT_EQ, CPP_HASH, CPP_PASTE, CPP_OPEN_SQUARE, CPP_CLOSE_SQUARE, CPP_OPEN_BRACE, CPP_CLOSE_BRACE, CPP_SEMICOLON, CPP_ELLIPSIS, CPP_PLUS_PLUS, CPP_MINUS_MINUS, CPP_DEREF, CPP_DOT, CPP_SCOPE, CPP_DEREF_STAR, CPP_DOT_STAR, CPP_ATSIGN, CPP_NAME, CPP_AT_NAME, CPP_NUMBER, CPP_CHAR, CPP_WCHAR, CPP_CHAR16, CPP_CHAR32, CPP_OTHER, CPP_STRING, CPP_WSTRING, CPP_STRING16, CPP_STRING32, CPP_UTF8STRING, CPP_OBJC_STRING, CPP_HEADER_NAME, CPP_COMMENT, CPP_MACRO_ARG, CPP_PRAGMA, CPP_PRAGMA_EOL, CPP_PADDING,
   N_TTYPES,
+
+
   CPP_LAST_EQ = CPP_LSHIFT,
   CPP_FIRST_DIGRAPH = CPP_HASH,
   CPP_LAST_PUNCTUATOR= CPP_ATSIGN,
   CPP_LAST_CPP_OP = CPP_LESS_EQ
 };
+
+
+
+
 enum c_lang {CLK_GNUC89 = 0, CLK_GNUC99, CLK_STDC89, CLK_STDC94, CLK_STDC99,
       CLK_GNUCXX, CLK_CXX98, CLK_GNUCXX0X, CLK_CXX0X, CLK_ASM};
+
+
 struct cpp_string {
   unsigned int len;
   const unsigned char *text;
@@ -10560,103 +17625,281 @@ enum cpp_token_fld_kind {
   CPP_TOKEN_FLD_PRAGMA,
   CPP_TOKEN_FLD_NONE
 };
+
+
 struct cpp_macro_arg {
+
   unsigned int arg_no;
 };
+
+
 struct cpp_identifier {
+
   cpp_hashnode *
    
+
+
        node;
 };
+
+
+
 struct cpp_token {
   source_location src_loc;
   __extension__ enum cpp_ttype type : 8;
   unsigned short flags;
+
   union cpp_token_u
   {
+
     struct cpp_identifier node;
+
+
     cpp_token * source;
+
+
     struct cpp_string str;
+
+
     struct cpp_macro_arg macro_arg;
+
+
+
     unsigned int token_no;
+
+
     unsigned int pragma;
   } val;
 };
+
+
 extern enum cpp_token_fld_kind cpp_token_val_index (cpp_token *tok);
 # 258 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/cpplib.h"
 typedef unsigned int cppchar_t;
 typedef int cppchar_signed_t;
+
+
 enum cpp_deps_style { DEPS_NONE = 0, DEPS_USER, DEPS_SYSTEM };
+
+
 enum cpp_normalize_level {
+
   normalized_KC = 0,
+
   normalized_C,
+
+
   normalized_identifier_C,
+
   normalized_none
 };
+
+
+
 struct cpp_options
 {
+
   unsigned int tabstop;
+
+
   enum c_lang lang;
+
+
   unsigned char cplusplus;
+
+
   unsigned char cplusplus_comments;
+
+
+
+
   unsigned char objc;
+
+
   unsigned char discard_comments;
+
+
+
   unsigned char discard_comments_in_macro_exp;
+
+
   unsigned char trigraphs;
+
+
   unsigned char digraphs;
+
+
   unsigned char extended_numbers;
+
+
   unsigned char uliterals;
+
+
   unsigned char print_include_names;
+
+
   unsigned char warn_deprecated;
+
+
   unsigned char warn_comments;
+
+
+
   unsigned char warn_missing_include_dirs;
+
+
   unsigned char warn_trigraphs;
+
+
   unsigned char warn_multichar;
+
+
+
   unsigned char warn_traditional;
+
+
   unsigned char warn_long_long;
+
+
   unsigned char warn_endif_labels;
+
+
+
   unsigned char warn_num_sign_change;
+
+
+
   unsigned char warn_variadic_macros;
+
+
+
   unsigned char warn_builtin_macro_redefined;
+
+
+
   unsigned char remap;
+
+
   unsigned char dollars_in_ident;
+
+
   unsigned char extended_identifiers;
+
+
+
   unsigned char warn_dollars;
+
+
   unsigned char warn_undef;
+
+
   unsigned char warn_unused_macros;
+
+
   unsigned char c99;
+
+
   unsigned char std;
+
+
   unsigned char pedantic;
+
+
+
   unsigned char preprocessed;
+
+
   unsigned char show_column;
+
+
   unsigned char operator_names;
+
+
   unsigned char warn_cxx_operator_names;
+
+
   unsigned char traditional;
+
+
   const char *narrow_charset;
+
+
   const char *wide_charset;
+
+
   const char *input_charset;
+
+
+
   enum cpp_normalize_level warn_normalize;
+
+
   unsigned char warn_invalid_pch;
+
+
   unsigned char restore_pch_deps;
+
+
   struct
   {
+
     enum cpp_deps_style style;
+
+
     unsigned char missing_files;
+
+
+
     unsigned char phony_targets;
+
+
     unsigned char ignore_main_file;
+
+
+
     unsigned char need_preprocessor_output;
   } deps;
+
+
+
+
+
   size_t precision, char_precision, int_precision, wchar_precision;
+
+
   unsigned char unsigned_char, unsigned_wchar;
+
+
+
   unsigned char bytes_big_endian;
+
+
   unsigned char stdc_0_in_system_headers;
+
+
   unsigned char directives_only;
 };
+
+
+
+
+
+
+
 typedef const char *(*missing_header_cb)(cpp_reader *, const char *header, cpp_dir **);
+
+
 struct cpp_callbacks
 {
+
   void (*line_change) (cpp_reader *, const cpp_token *, int);
+
+
+
+
+
   void (*file_change) (cpp_reader *, const struct line_map *);
+
   void (*dir_change) (cpp_reader *, const char *);
   void (*include) (cpp_reader *, unsigned int, const unsigned char *,
      const char *, int, const cpp_token **);
@@ -10667,26 +17910,61 @@ struct cpp_callbacks
   int (*valid_pch) (cpp_reader *, const char *, int);
   void (*read_pch) (cpp_reader *, const char *, int, const char *);
   missing_header_cb missing_header;
+
+
+
   cpp_hashnode * (*macro_to_expand) (cpp_reader *, const cpp_token *);
+
+
+
   unsigned char (*error) (cpp_reader *, int, source_location, unsigned int,
    const char *, va_list *)
        __attribute__ ((__format__ (__printf__, 5, 0))) __attribute__ ((__nonnull__ (5)));
+
+
+
   void (*used_define) (cpp_reader *, unsigned int, cpp_hashnode *);
   void (*used_undef) (cpp_reader *, unsigned int, cpp_hashnode *);
+
+
   void (*before_define) (cpp_reader *);
+
+
   void (*used) (cpp_reader *, source_location, cpp_hashnode *);
 };
 # 523 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/cpplib.h"
 struct cpp_dir
 {
+
   struct cpp_dir *next;
+
+
   char *name;
   unsigned int len;
+
+
+
   unsigned char sysp;
+
+
   unsigned char user_supplied_p;
+
+
+
   char *canonical_name;
+
+
+
   const char **name_map;
+
+
+
+
+
   char *(*construct) (const char *header, cpp_dir *dir);
+
+
+
   ino_t ino;
   dev_t dev;
 };
@@ -10697,6 +17975,9 @@ enum node_type
   NT_MACRO,
   NT_ASSERTION
 };
+
+
+
 enum cpp_builtin_type
 {
   BT_SPECLINE = 0,
@@ -10720,36 +18001,89 @@ enum {
 };
 # 633 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/cpplib.h"
 union _cpp_hashnode_value {
+
   cpp_macro * macro;
+
   struct answer * answers;
+
   enum cpp_builtin_type builtin;
+
   unsigned short arg_index;
 };
+
 struct cpp_hashnode {
   struct ht_identifier ident;
   unsigned int is_directive : 1;
   unsigned int directive_index : 7;
+
+
   unsigned char rid_code;
   __extension__ enum node_type type : 6;
   unsigned int flags : 10;
+
   union _cpp_hashnode_value value;
 };
+
+
+
+
+
+
+
 extern cpp_reader *cpp_create_reader (enum c_lang, struct ht *,
           struct line_maps *);
+
+
+
 extern void cpp_set_line_map (cpp_reader *, struct line_maps *);
+
+
+
 extern void cpp_set_lang (cpp_reader *, enum c_lang);
+
+
 extern void cpp_set_include_chains (cpp_reader *, cpp_dir *, cpp_dir *, int);
+
+
+
+
+
+
 extern cpp_options *cpp_get_options (cpp_reader *);
 extern cpp_callbacks *cpp_get_callbacks (cpp_reader *);
 extern void cpp_set_callbacks (cpp_reader *, cpp_callbacks *);
 extern struct deps *cpp_get_deps (cpp_reader *);
+
+
+
+
+
+
 extern const char *cpp_read_main_file (cpp_reader *, const char *);
+
+
+
 extern void cpp_init_special_builtins (cpp_reader *);
+
+
 extern void cpp_init_builtins (cpp_reader *, int);
+
+
+
 extern void cpp_post_options (cpp_reader *);
+
+
 extern void cpp_init_iconv (cpp_reader *);
+
+
+
+
 extern void cpp_finish (cpp_reader *, FILE *deps_stream);
+
+
+
 extern void cpp_destroy (cpp_reader *);
+
 extern unsigned int cpp_token_len (const cpp_token *);
 extern unsigned char *cpp_token_as_text (cpp_reader *, const cpp_token *);
 extern unsigned char *cpp_spell_token (cpp_reader *, const cpp_token *,
@@ -10767,27 +18101,42 @@ extern const unsigned char *cpp_macro_definition (cpp_reader *,
         const cpp_hashnode *);
 extern void _cpp_backup_tokens (cpp_reader *, unsigned int);
 extern const cpp_token *cpp_peek_token (cpp_reader *, int);
+
+
 extern cppchar_t cpp_interpret_charconst (cpp_reader *, const cpp_token *,
        unsigned int *, int *);
+
 extern unsigned char cpp_interpret_string (cpp_reader *,
       const cpp_string *, size_t,
       cpp_string *, enum cpp_ttype);
 extern unsigned char cpp_interpret_string_notranslate (cpp_reader *,
            const cpp_string *, size_t,
            cpp_string *, enum cpp_ttype);
+
+
 extern cppchar_t cpp_host_to_exec_charset (cpp_reader *, cppchar_t);
+
+
+
 extern void cpp_define (cpp_reader *, const char *);
 extern void cpp_define_formatted (cpp_reader *pfile,
       const char *fmt, ...) __attribute__ ((__format__ (__printf__, 2, 3))) __attribute__ ((__nonnull__ (2)));
 extern void cpp_assert (cpp_reader *, const char *);
 extern void cpp_undef (cpp_reader *, const char *);
 extern void cpp_unassert (cpp_reader *, const char *);
+
 extern cpp_macro *cpp_push_definition (cpp_reader *, const char *);
 extern void cpp_pop_definition (cpp_reader *, const char *, cpp_macro *);
+
+
 extern void cpp_undef_all (cpp_reader *);
+
 extern cpp_buffer *cpp_push_buffer (cpp_reader *, const unsigned char *,
         size_t, int);
 extern int cpp_defined (cpp_reader *, const unsigned char *, int);
+
+
+
 typedef unsigned long cpp_num_part;
 typedef struct cpp_num cpp_num;
 struct cpp_num
@@ -10799,43 +18148,90 @@ struct cpp_num
 };
 # 818 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/cpplib.h"
 extern unsigned cpp_classify_number (cpp_reader *, const cpp_token *);
+
+
 extern cpp_num cpp_interpret_integer (cpp_reader *, const cpp_token *,
           unsigned int type);
+
+
+
 cpp_num cpp_num_sign_extend (cpp_num, size_t);
 # 849 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/cpplib.h"
 extern unsigned char cpp_error (cpp_reader *, int, const char *msgid, ...)
   __attribute__ ((__format__ (__printf__, 3, 4))) __attribute__ ((__nonnull__ (3)));
+
+
+
 extern unsigned char cpp_errno (cpp_reader *, int, const char *msgid);
+
+
+
+
 extern unsigned char cpp_error_with_line (cpp_reader *, int, source_location, unsigned,
      const char *msgid, ...) __attribute__ ((__format__ (__printf__, 5, 6))) __attribute__ ((__nonnull__ (5)));
+
+
 extern int cpp_ideq (const cpp_token *, const char *);
 extern void cpp_output_line (cpp_reader *, FILE *);
 extern unsigned char *cpp_output_line_to_string (cpp_reader *,
        const unsigned char *);
 extern void cpp_output_token (const cpp_token *, FILE *);
 extern const char *cpp_type2name (enum cpp_ttype, unsigned char flags);
+
+
+
+
+
 extern cppchar_t cpp_parse_escape (cpp_reader *, const unsigned char ** pstr,
        const unsigned char *limit, int wide);
+
+
+
+
 typedef struct
 {
+
   char *comment;
+
+
   source_location sloc;
 } cpp_comment;
+
+
+
 typedef struct
 {
+
   cpp_comment *entries;
+
+
   int count;
+
+
   int allocated;
 } cpp_comment_table;
+
+
+
 extern cpp_comment_table *cpp_get_comments (cpp_reader *);
+
+
+
+
+
 extern cpp_hashnode *cpp_lookup (cpp_reader *, const unsigned char *,
      unsigned int);
+
 typedef int (*cpp_cb) (cpp_reader *, cpp_hashnode *, void *);
 extern void cpp_forall_identifiers (cpp_reader *, cpp_cb, void *);
+
+
 extern void cpp_scan_nooutput (cpp_reader *);
 extern int cpp_sys_macro_p (cpp_reader *);
 extern unsigned char *cpp_quote_string (unsigned char *, const unsigned char *,
      unsigned int);
+
+
 extern unsigned char cpp_included (cpp_reader *, const char *);
 extern unsigned char cpp_included_before (cpp_reader *, const char *, source_location);
 extern void cpp_make_system_header (cpp_reader *, int, int);
@@ -10847,6 +18243,8 @@ extern cpp_buffer *cpp_get_buffer (cpp_reader *);
 extern struct _cpp_file *cpp_get_file (cpp_buffer *);
 extern cpp_buffer *cpp_get_prev (cpp_buffer *);
 extern void cpp_clear_file_cache (cpp_reader *);
+
+
 struct save_macro_data;
 extern int cpp_save_state (cpp_reader *, FILE *);
 extern int cpp_write_pch_deps (cpp_reader *, FILE *);
@@ -10856,8 +18254,12 @@ extern void cpp_prepare_state (cpp_reader *, struct save_macro_data **);
 extern int cpp_read_state (cpp_reader *, const char *, FILE *,
       struct save_macro_data *);
 # 25 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/c-pragma.h" 2
+
+
+
 typedef enum pragma_kind {
   PRAGMA_NONE = 0,
+
   PRAGMA_OMP_ATOMIC,
   PRAGMA_OMP_BARRIER,
   PRAGMA_OMP_CRITICAL,
@@ -10874,11 +18276,18 @@ typedef enum pragma_kind {
   PRAGMA_OMP_TASK,
   PRAGMA_OMP_TASKWAIT,
   PRAGMA_OMP_THREADPRIVATE,
+
   PRAGMA_GCC_PCH_PREPROCESS,
+
   PRAGMA_FIRST_EXTERNAL
 } pragma_kind;
+
+
+
+
 typedef enum pragma_omp_clause {
   PRAGMA_OMP_CLAUSE_NONE = 0,
+
   PRAGMA_OMP_CLAUSE_COLLAPSE,
   PRAGMA_OMP_CLAUSE_COPYIN,
   PRAGMA_OMP_CLAUSE_COPYPRIVATE,
@@ -10895,24 +18304,31 @@ typedef enum pragma_omp_clause {
   PRAGMA_OMP_CLAUSE_SHARED,
   PRAGMA_OMP_CLAUSE_UNTIED
 } pragma_omp_clause;
+
 extern struct cpp_reader* parse_in;
 # 98 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/c-pragma.h"
 extern void push_visibility (const char *, int);
 extern unsigned char pop_visibility (int);
+
 extern void init_pragma (void);
+
+
 typedef void (*pragma_handler)(struct cpp_reader *);
 extern void c_register_pragma (const char *, const char *, pragma_handler);
 extern void c_register_pragma_with_expansion (const char *, const char *,
            pragma_handler);
 extern void c_invoke_pragma_handler (unsigned int);
+
 extern void maybe_apply_pragma_weak (tree);
 extern void maybe_apply_pending_pragma_weaks (void);
 extern tree maybe_apply_renaming_pragma (tree, tree);
 extern void add_to_renaming_pragma_list (tree, tree);
+
 extern enum cpp_ttype pragma_lex (tree *);
 # 128 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/c-pragma.h"
 extern enum cpp_ttype c_lex_with_flags (tree *, location_t *, unsigned char *,
      int);
+
 extern void c_pp_lookup_pragma (unsigned int, const char **, const char **);
 # 39 "../../../src/plugin-utils.h" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/c-common.h" 1
@@ -10924,29 +18340,72 @@ extern void c_pp_lookup_pragma (unsigned int, const char **, const char **);
 # 62 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/splay-tree.h"
 typedef libi_uhostptr_t splay_tree_key;
 typedef libi_uhostptr_t splay_tree_value;
+
+
 typedef struct splay_tree_node_s *splay_tree_node;
+
+
+
 typedef int (*splay_tree_compare_fn) (splay_tree_key, splay_tree_key);
+
+
+
 typedef void (*splay_tree_delete_key_fn) (splay_tree_key);
+
+
+
 typedef void (*splay_tree_delete_value_fn) (splay_tree_value);
+
+
 typedef int (*splay_tree_foreach_fn) (splay_tree_node, void*);
+
+
+
+
+
 typedef void *(*splay_tree_allocate_fn) (int, void *);
+
+
+
+
+
 typedef void (*splay_tree_deallocate_fn) (void *, void *);
+
+
 struct splay_tree_node_s {
+
   splay_tree_key key;
+
+
   splay_tree_value value;
+
+
   splay_tree_node left;
   splay_tree_node right;
 };
+
+
 struct splay_tree_s {
+
   splay_tree_node root;
+
+
   splay_tree_compare_fn comp;
+
+
   splay_tree_delete_key_fn delete_key;
+
+
   splay_tree_delete_value_fn delete_value;
+
+
   splay_tree_allocate_fn allocate;
   splay_tree_deallocate_fn deallocate;
   void * allocate_data;
 };
+
 typedef struct splay_tree_s *splay_tree;
+
 extern splay_tree splay_tree_new (splay_tree_compare_fn,
       splay_tree_delete_key_fn,
       splay_tree_delete_value_fn);
@@ -10976,7 +18435,14 @@ extern int splay_tree_compare_pointers (splay_tree_key, splay_tree_key);
 # 30 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/ggc.h"
 extern const char empty_string[];
 extern const char digit_vector[];
+
+
+
+
+
+
 typedef void (*gt_pointer_operator) (void *, void *);
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/gtype-desc.h" 1
 # 23 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/gtype-desc.h"
 enum gt_types_enum {
@@ -11199,175 +18665,692 @@ enum gt_types_enum {
  gt_e_P9tree_node4htab,
  gt_types_enum_last
 };
+
+
+
+
+
+
 extern void gt_ggc_mx_interface_tuple (void *);
+
+
+
 extern void gt_ggc_mx_volatilized_type (void *);
+
+
+
 extern void gt_ggc_mx_string_descriptor (void *);
+
+
+
 extern void gt_ggc_mx_c_inline_static (void *);
+
+
+
 extern void gt_ggc_mx_VEC_c_goto_bindings_p_gc (void *);
+
+
+
 extern void gt_ggc_mx_c_goto_bindings (void *);
+
+
+
 extern void gt_ggc_mx_c_scope (void *);
+
+
+
 extern void gt_ggc_mx_c_binding (void *);
+
+
+
 extern void gt_ggc_mx_c_label_vars (void *);
+
+
+
 extern void gt_ggc_mx_c_parser (void *);
+
+
+
 extern void gt_ggc_mx_imp_entry (void *);
+
+
+
 extern void gt_ggc_mx_hashed_attribute (void *);
+
+
+
 extern void gt_ggc_mx_hashed_entry (void *);
+
+
+
 extern void gt_ggc_mx_type_assertion (void *);
+
+
+
 extern void gt_ggc_mx_treetreehash_entry (void *);
+
+
+
 extern void gt_ggc_mx_CPool (void *);
+
+
+
 extern void gt_ggc_mx_JCF (void *);
+
+
+
 extern void gt_ggc_mx_module_htab_entry (void *);
+
+
+
 extern void gt_ggc_mx_binding_level (void *);
+
+
+
 extern void gt_ggc_mx_opt_stack (void *);
+
+
+
 extern void gt_ggc_mx_align_stack (void *);
+
+
+
 extern void gt_ggc_mx_VEC_tree_gc_vec_gc (void *);
+
+
+
 extern void gt_ggc_mx_VEC_const_char_p_gc (void *);
+
+
+
 extern void gt_ggc_mx_pending_abstract_type (void *);
+
+
+
 extern void gt_ggc_mx_VEC_tree_int_gc (void *);
+
+
+
 extern void gt_ggc_mx_cp_parser (void *);
+
+
+
 extern void gt_ggc_mx_cp_parser_context (void *);
+
+
+
 extern void gt_ggc_mx_cp_lexer (void *);
+
+
+
 extern void gt_ggc_mx_tree_check (void *);
+
+
+
 extern void gt_ggc_mx_VEC_deferred_access_gc (void *);
+
+
+
 extern void gt_ggc_mx_spec_entry (void *);
+
+
+
 extern void gt_ggc_mx_pending_template (void *);
+
+
+
 extern void gt_ggc_mx_named_label_use_entry (void *);
+
+
+
 extern void gt_ggc_mx_VEC_deferred_access_check_gc (void *);
+
+
+
 extern void gt_ggc_mx_sorted_fields_type (void *);
+
+
+
 extern void gt_ggc_mx_VEC_tree_pair_s_gc (void *);
+
+
+
 extern void gt_ggc_mx_named_label_entry (void *);
+
+
+
 extern void gt_ggc_mx_VEC_qualified_typedef_usage_t_gc (void *);
+
+
+
 extern void gt_ggc_mx_cp_token_cache (void *);
+
+
+
 extern void gt_ggc_mx_saved_scope (void *);
+
+
+
 extern void gt_ggc_mx_cxx_int_tree_map (void *);
+
+
+
 extern void gt_ggc_mx_VEC_cp_class_binding_gc (void *);
+
+
+
 extern void gt_ggc_mx_VEC_cxx_saved_binding_gc (void *);
+
+
+
 extern void gt_ggc_mx_cp_binding_level (void *);
+
+
+
 extern void gt_ggc_mx_cxx_binding (void *);
+
+
+
 extern void gt_ggc_mx_binding_entry_s (void *);
+
+
+
 extern void gt_ggc_mx_binding_table_s (void *);
+
+
+
 extern void gt_ggc_mx_tinst_level (void *);
+
+
+
 extern void gt_ggc_mx_VEC_tinfo_s_gc (void *);
+
+
+
 extern void gt_ggc_mx_gnat_binding_level (void *);
+
+
+
 extern void gt_ggc_mx_elab_info (void *);
+
+
+
 extern void gt_ggc_mx_stmt_group (void *);
+
+
+
 extern void gt_ggc_mx_VEC_parm_attr_gc (void *);
+
+
+
 extern void gt_ggc_mx_parm_attr_d (void *);
+
+
+
 extern void gt_ggc_mx_VEC_ipa_edge_args_t_gc (void *);
+
+
+
 extern void gt_ggc_mx_lto_symtab_entry_def (void *);
+
+
+
 extern void gt_ggc_mx_ssa_operand_memory_d (void *);
+
+
+
 extern void gt_ggc_mx_scev_info_str (void *);
+
+
+
 extern void gt_ggc_mx_VEC_mem_addr_template_gc (void *);
+
+
+
 extern void gt_ggc_mx_VEC_gimple_gc (void *);
+
+
+
 extern void gt_ggc_mx_type_hash (void *);
+
+
+
 extern void gt_ggc_mx_string_pool_data (void *);
+
+
+
 extern void gt_ggc_mx_libfunc_entry (void *);
+
+
+
 extern void gt_ggc_mx_temp_slot_address_entry (void *);
+
+
+
 extern void gt_ggc_mx_throw_stmt_node (void *);
+
+
+
 extern void gt_ggc_mx_VEC_eh_landing_pad_gc (void *);
+
+
+
 extern void gt_ggc_mx_VEC_eh_region_gc (void *);
+
+
+
 extern void gt_ggc_mx_eh_catch_d (void *);
+
+
+
 extern void gt_ggc_mx_eh_landing_pad_d (void *);
+
+
+
 extern void gt_ggc_mx_eh_region_d (void *);
+
+
+
 extern void gt_ggc_mx_vcall_insn (void *);
+
+
+
 extern void gt_ggc_mx_VEC_vcall_entry_gc (void *);
+
+
+
 extern void gt_ggc_mx_VEC_dcall_entry_gc (void *);
+
+
+
 extern void gt_ggc_mx_var_loc_list_def (void *);
+
+
+
 extern void gt_ggc_mx_var_loc_node (void *);
+
+
+
 extern void gt_ggc_mx_VEC_die_arg_entry_gc (void *);
+
+
+
 extern void gt_ggc_mx_limbo_die_struct (void *);
+
+
+
 extern void gt_ggc_mx_VEC_pubname_entry_gc (void *);
+
+
+
 extern void gt_ggc_mx_VEC_dw_attr_node_gc (void *);
+
+
+
 extern void gt_ggc_mx_comdat_type_struct (void *);
+
+
+
 extern void gt_ggc_mx_dw_ranges_by_label_struct (void *);
+
+
+
 extern void gt_ggc_mx_dw_ranges_struct (void *);
+
+
+
 extern void gt_ggc_mx_dw_separate_line_info_struct (void *);
+
+
+
 extern void gt_ggc_mx_dw_line_info_struct (void *);
+
+
+
 extern void gt_ggc_mx_VEC_deferred_locations_gc (void *);
+
+
+
 extern void gt_ggc_mx_dw_loc_list_struct (void *);
+
+
+
 extern void gt_ggc_mx_dwarf_file_data (void *);
+
+
+
 extern void gt_ggc_mx_queued_reg_save (void *);
+
+
+
 extern void gt_ggc_mx_indirect_string_node (void *);
+
+
+
 extern void gt_ggc_mx_dw_loc_descr_struct (void *);
+
+
+
 extern void gt_ggc_mx_dw_fde_struct (void *);
+
+
+
 extern void gt_ggc_mx_dw_cfi_struct (void *);
+
+
+
 extern void gt_ggc_mx_typeinfo (void *);
+
+
+
 extern void gt_ggc_mx_VEC_alias_set_entry_gc (void *);
+
+
+
 extern void gt_ggc_mx_alias_set_entry_d (void *);
+
+
+
 extern void gt_ggc_mx_constant_descriptor_tree (void *);
+
+
+
 extern void gt_ggc_mx_cgraph_asm_node (void *);
+
+
+
 extern void gt_ggc_mx_varpool_node (void *);
+
+
+
 extern void gt_ggc_mx_VEC_cgraph_node_set_gc (void *);
+
+
+
 extern void gt_ggc_mx_cgraph_node_set_def (void *);
+
+
+
 extern void gt_ggc_mx_cgraph_node_set_element_def (void *);
+
+
+
 extern void gt_ggc_mx_VEC_cgraph_node_ptr_gc (void *);
+
+
+
 extern void gt_ggc_mx_cgraph_edge (void *);
+
+
+
 extern void gt_ggc_mx_VEC_ipa_replace_map_p_gc (void *);
+
+
+
 extern void gt_ggc_mx_ipa_replace_map (void *);
+
+
+
 extern void gt_ggc_mx_cgraph_node (void *);
+
+
+
 extern void gt_ggc_mx_VEC_basic_block_gc (void *);
+
+
+
 extern void gt_ggc_mx_gimple_bb_info (void *);
+
+
+
 extern void gt_ggc_mx_rtl_bb_info (void *);
+
+
+
 extern void gt_ggc_mx_VEC_edge_gc (void *);
+
+
+
 extern void gt_ggc_mx_cselib_val_struct (void *);
+
+
+
 extern void gt_ggc_mx_elt_loc_list (void *);
+
+
+
 extern void gt_ggc_mx_VEC_loop_p_gc (void *);
+
+
+
 extern void gt_ggc_mx_loop (void *);
+
+
+
 extern void gt_ggc_mx_loop_exit (void *);
+
+
+
 extern void gt_ggc_mx_nb_iter_bound (void *);
+
+
+
 extern void gt_ggc_mx_types_used_by_vars_entry (void *);
+
+
+
 extern void gt_ggc_mx_language_function (void *);
+
+
+
 extern void gt_ggc_mx_loops (void *);
+
+
+
 extern void gt_ggc_mx_control_flow_graph (void *);
+
+
+
 extern void gt_ggc_mx_eh_status (void *);
+
+
+
 extern void gt_ggc_mx_initial_value_struct (void *);
+
+
+
 extern void gt_ggc_mx_rtx_constant_pool (void *);
+
+
+
 extern void gt_ggc_mx_VEC_temp_slot_p_gc (void *);
+
+
+
 extern void gt_ggc_mx_temp_slot (void *);
+
+
+
 extern void gt_ggc_mx_gimple_df (void *);
+
+
+
 extern void gt_ggc_mx_VEC_call_site_record_gc (void *);
+
+
+
 extern void gt_ggc_mx_call_site_record_d (void *);
+
+
+
 extern void gt_ggc_mx_sequence_stack (void *);
+
+
+
 extern void gt_ggc_mx_elt_list (void *);
+
+
+
 extern void gt_ggc_mx_tree_priority_map (void *);
+
+
+
 extern void gt_ggc_mx_tree_int_map (void *);
+
+
+
 extern void gt_ggc_mx_tree_map (void *);
+
+
+
 extern void gt_ggc_mx_lang_tree_node (void *);
+
+
+
 extern void gt_ggc_mx_tree_statement_list_node (void *);
+
+
+
 extern void gt_ggc_mx_var_ann_d (void *);
+
+
+
 extern void gt_ggc_mx_lang_decl (void *);
+
+
+
 extern void gt_ggc_mx_lang_type (void *);
+
+
+
 extern void gt_ggc_mx_die_struct (void *);
+
+
+
 extern void gt_ggc_mx_varray_head_tag (void *);
+
+
+
 extern void gt_ggc_mx_ptr_info_def (void *);
+
+
+
 extern void gt_ggc_mx_VEC_constructor_elt_gc (void *);
+
+
+
 extern void gt_ggc_mx_VEC_alias_pair_gc (void *);
+
+
+
 extern void gt_ggc_mx_VEC_tree_gc (void *);
+
+
+
 extern void gt_ggc_mx_VEC_uchar_gc (void *);
+
+
+
 extern void gt_ggc_mx_function (void *);
+
+
+
 extern void gt_ggc_mx_constant_descriptor_rtx (void *);
+
+
+
 extern void gt_ggc_mx_fixed_value (void *);
+
+
+
 extern void gt_ggc_mx_real_value (void *);
+
+
+
 extern void gt_ggc_mx_VEC_rtx_gc (void *);
+
+
+
 extern void gt_ggc_mx_object_block (void *);
+
+
+
 extern void gt_ggc_mx_reg_attrs (void *);
+
+
+
 extern void gt_ggc_mx_mem_attrs (void *);
+
+
+
 extern void gt_ggc_mx_bitmap_obstack (void *);
+
+
+
 extern void gt_ggc_mx_bitmap_element_def (void *);
+
+
+
 extern void gt_ggc_mx_machine_function (void *);
+
+
+
 extern void gt_ggc_mx_stack_local_entry (void *);
+
+
+
 extern void gt_ggc_mx_basic_block_def (void *);
+
+
+
 extern void gt_ggc_mx_edge_def (void *);
+
+
+
 extern void gt_ggc_mx_gimple_seq_node_d (void *);
+
+
+
 extern void gt_ggc_mx_gimple_seq_d (void *);
+
+
+
 extern void gt_ggc_mx_section (void *);
+
+
+
 extern void gt_ggc_mx_gimple_statement_d (void *);
+
+
+
 extern void gt_ggc_mx_rtvec_def (void *);
+
+
+
 extern void gt_ggc_mx_rtx_def (void *);
+
+
+
 extern void gt_ggc_mx_bitmap_head_def (void *);
+
+
+
+
+
+
+
 extern void gt_ggc_mx_answer (void *);
+
+
+
 extern void gt_ggc_mx_cpp_macro (void *);
+
+
+
 extern void gt_ggc_mx_cpp_token (void *);
+
+
+
 extern void gt_ggc_mx_line_maps (void *);
 extern void gt_ggc_m_II17splay_tree_node_s (void *);
 extern void gt_ggc_m_SP9tree_node17splay_tree_node_s (void *);
@@ -11417,174 +19400,685 @@ extern void gt_ggc_m_P24types_used_by_vars_entry4htab (void *);
 extern void gt_ggc_m_P9tree_node4htab (void *);
 # 984 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/gtype-desc.h"
 extern void gt_pch_nx_interface_tuple (void *);
+
+
+
 extern void gt_pch_nx_volatilized_type (void *);
+
+
+
 extern void gt_pch_nx_string_descriptor (void *);
+
+
+
 extern void gt_pch_nx_c_inline_static (void *);
+
+
+
 extern void gt_pch_nx_VEC_c_goto_bindings_p_gc (void *);
+
+
+
 extern void gt_pch_nx_c_goto_bindings (void *);
+
+
+
 extern void gt_pch_nx_c_scope (void *);
+
+
+
 extern void gt_pch_nx_c_binding (void *);
+
+
+
 extern void gt_pch_nx_c_label_vars (void *);
+
+
+
 extern void gt_pch_nx_c_parser (void *);
+
+
+
 extern void gt_pch_nx_imp_entry (void *);
+
+
+
 extern void gt_pch_nx_hashed_attribute (void *);
+
+
+
 extern void gt_pch_nx_hashed_entry (void *);
+
+
+
 extern void gt_pch_nx_type_assertion (void *);
+
+
+
 extern void gt_pch_nx_treetreehash_entry (void *);
+
+
+
 extern void gt_pch_nx_CPool (void *);
+
+
+
 extern void gt_pch_nx_JCF (void *);
+
+
+
 extern void gt_pch_nx_module_htab_entry (void *);
+
+
+
 extern void gt_pch_nx_binding_level (void *);
+
+
+
 extern void gt_pch_nx_opt_stack (void *);
+
+
+
 extern void gt_pch_nx_align_stack (void *);
+
+
+
 extern void gt_pch_nx_VEC_tree_gc_vec_gc (void *);
+
+
+
 extern void gt_pch_nx_VEC_const_char_p_gc (void *);
+
+
+
 extern void gt_pch_nx_pending_abstract_type (void *);
+
+
+
 extern void gt_pch_nx_VEC_tree_int_gc (void *);
+
+
+
 extern void gt_pch_nx_cp_parser (void *);
+
+
+
 extern void gt_pch_nx_cp_parser_context (void *);
+
+
+
 extern void gt_pch_nx_cp_lexer (void *);
+
+
+
 extern void gt_pch_nx_tree_check (void *);
+
+
+
 extern void gt_pch_nx_VEC_deferred_access_gc (void *);
+
+
+
 extern void gt_pch_nx_spec_entry (void *);
+
+
+
 extern void gt_pch_nx_pending_template (void *);
+
+
+
 extern void gt_pch_nx_named_label_use_entry (void *);
+
+
+
 extern void gt_pch_nx_VEC_deferred_access_check_gc (void *);
+
+
+
 extern void gt_pch_nx_sorted_fields_type (void *);
+
+
+
 extern void gt_pch_nx_VEC_tree_pair_s_gc (void *);
+
+
+
 extern void gt_pch_nx_named_label_entry (void *);
+
+
+
 extern void gt_pch_nx_VEC_qualified_typedef_usage_t_gc (void *);
+
+
+
 extern void gt_pch_nx_cp_token_cache (void *);
+
+
+
 extern void gt_pch_nx_saved_scope (void *);
+
+
+
 extern void gt_pch_nx_cxx_int_tree_map (void *);
+
+
+
 extern void gt_pch_nx_VEC_cp_class_binding_gc (void *);
+
+
+
 extern void gt_pch_nx_VEC_cxx_saved_binding_gc (void *);
+
+
+
 extern void gt_pch_nx_cp_binding_level (void *);
+
+
+
 extern void gt_pch_nx_cxx_binding (void *);
+
+
+
 extern void gt_pch_nx_binding_entry_s (void *);
+
+
+
 extern void gt_pch_nx_binding_table_s (void *);
+
+
+
 extern void gt_pch_nx_tinst_level (void *);
+
+
+
 extern void gt_pch_nx_VEC_tinfo_s_gc (void *);
+
+
+
 extern void gt_pch_nx_gnat_binding_level (void *);
+
+
+
 extern void gt_pch_nx_elab_info (void *);
+
+
+
 extern void gt_pch_nx_stmt_group (void *);
+
+
+
 extern void gt_pch_nx_VEC_parm_attr_gc (void *);
+
+
+
 extern void gt_pch_nx_parm_attr_d (void *);
+
+
+
 extern void gt_pch_nx_VEC_ipa_edge_args_t_gc (void *);
+
+
+
 extern void gt_pch_nx_lto_symtab_entry_def (void *);
+
+
+
 extern void gt_pch_nx_ssa_operand_memory_d (void *);
+
+
+
 extern void gt_pch_nx_scev_info_str (void *);
+
+
+
 extern void gt_pch_nx_VEC_mem_addr_template_gc (void *);
+
+
+
 extern void gt_pch_nx_VEC_gimple_gc (void *);
+
+
+
 extern void gt_pch_nx_type_hash (void *);
+
+
+
 extern void gt_pch_nx_string_pool_data (void *);
+
+
+
 extern void gt_pch_nx_libfunc_entry (void *);
+
+
+
 extern void gt_pch_nx_temp_slot_address_entry (void *);
+
+
+
 extern void gt_pch_nx_throw_stmt_node (void *);
+
+
+
 extern void gt_pch_nx_VEC_eh_landing_pad_gc (void *);
+
+
+
 extern void gt_pch_nx_VEC_eh_region_gc (void *);
+
+
+
 extern void gt_pch_nx_eh_catch_d (void *);
+
+
+
 extern void gt_pch_nx_eh_landing_pad_d (void *);
+
+
+
 extern void gt_pch_nx_eh_region_d (void *);
+
+
+
 extern void gt_pch_nx_vcall_insn (void *);
+
+
+
 extern void gt_pch_nx_VEC_vcall_entry_gc (void *);
+
+
+
 extern void gt_pch_nx_VEC_dcall_entry_gc (void *);
+
+
+
 extern void gt_pch_nx_var_loc_list_def (void *);
+
+
+
 extern void gt_pch_nx_var_loc_node (void *);
+
+
+
 extern void gt_pch_nx_VEC_die_arg_entry_gc (void *);
+
+
+
 extern void gt_pch_nx_limbo_die_struct (void *);
+
+
+
 extern void gt_pch_nx_VEC_pubname_entry_gc (void *);
+
+
+
 extern void gt_pch_nx_VEC_dw_attr_node_gc (void *);
+
+
+
 extern void gt_pch_nx_comdat_type_struct (void *);
+
+
+
 extern void gt_pch_nx_dw_ranges_by_label_struct (void *);
+
+
+
 extern void gt_pch_nx_dw_ranges_struct (void *);
+
+
+
 extern void gt_pch_nx_dw_separate_line_info_struct (void *);
+
+
+
 extern void gt_pch_nx_dw_line_info_struct (void *);
+
+
+
 extern void gt_pch_nx_VEC_deferred_locations_gc (void *);
+
+
+
 extern void gt_pch_nx_dw_loc_list_struct (void *);
+
+
+
 extern void gt_pch_nx_dwarf_file_data (void *);
+
+
+
 extern void gt_pch_nx_queued_reg_save (void *);
+
+
+
 extern void gt_pch_nx_indirect_string_node (void *);
+
+
+
 extern void gt_pch_nx_dw_loc_descr_struct (void *);
+
+
+
 extern void gt_pch_nx_dw_fde_struct (void *);
+
+
+
 extern void gt_pch_nx_dw_cfi_struct (void *);
+
+
+
 extern void gt_pch_nx_typeinfo (void *);
+
+
+
 extern void gt_pch_nx_VEC_alias_set_entry_gc (void *);
+
+
+
 extern void gt_pch_nx_alias_set_entry_d (void *);
+
+
+
 extern void gt_pch_nx_constant_descriptor_tree (void *);
+
+
+
 extern void gt_pch_nx_cgraph_asm_node (void *);
+
+
+
 extern void gt_pch_nx_varpool_node (void *);
+
+
+
 extern void gt_pch_nx_VEC_cgraph_node_set_gc (void *);
+
+
+
 extern void gt_pch_nx_cgraph_node_set_def (void *);
+
+
+
 extern void gt_pch_nx_cgraph_node_set_element_def (void *);
+
+
+
 extern void gt_pch_nx_VEC_cgraph_node_ptr_gc (void *);
+
+
+
 extern void gt_pch_nx_cgraph_edge (void *);
+
+
+
 extern void gt_pch_nx_VEC_ipa_replace_map_p_gc (void *);
+
+
+
 extern void gt_pch_nx_ipa_replace_map (void *);
+
+
+
 extern void gt_pch_nx_cgraph_node (void *);
+
+
+
 extern void gt_pch_nx_VEC_basic_block_gc (void *);
+
+
+
 extern void gt_pch_nx_gimple_bb_info (void *);
+
+
+
 extern void gt_pch_nx_rtl_bb_info (void *);
+
+
+
 extern void gt_pch_nx_VEC_edge_gc (void *);
+
+
+
 extern void gt_pch_nx_cselib_val_struct (void *);
+
+
+
 extern void gt_pch_nx_elt_loc_list (void *);
+
+
+
 extern void gt_pch_nx_VEC_loop_p_gc (void *);
+
+
+
 extern void gt_pch_nx_loop (void *);
+
+
+
 extern void gt_pch_nx_loop_exit (void *);
+
+
+
 extern void gt_pch_nx_nb_iter_bound (void *);
+
+
+
 extern void gt_pch_nx_types_used_by_vars_entry (void *);
+
+
+
 extern void gt_pch_nx_language_function (void *);
+
+
+
 extern void gt_pch_nx_loops (void *);
+
+
+
 extern void gt_pch_nx_control_flow_graph (void *);
+
+
+
 extern void gt_pch_nx_eh_status (void *);
+
+
+
 extern void gt_pch_nx_initial_value_struct (void *);
+
+
+
 extern void gt_pch_nx_rtx_constant_pool (void *);
+
+
+
 extern void gt_pch_nx_VEC_temp_slot_p_gc (void *);
+
+
+
 extern void gt_pch_nx_temp_slot (void *);
+
+
+
 extern void gt_pch_nx_gimple_df (void *);
+
+
+
 extern void gt_pch_nx_VEC_call_site_record_gc (void *);
+
+
+
 extern void gt_pch_nx_call_site_record_d (void *);
+
+
+
 extern void gt_pch_nx_sequence_stack (void *);
+
+
+
 extern void gt_pch_nx_elt_list (void *);
+
+
+
 extern void gt_pch_nx_tree_priority_map (void *);
+
+
+
 extern void gt_pch_nx_tree_int_map (void *);
+
+
+
 extern void gt_pch_nx_tree_map (void *);
+
+
+
 extern void gt_pch_nx_lang_tree_node (void *);
+
+
+
 extern void gt_pch_nx_tree_statement_list_node (void *);
+
+
+
 extern void gt_pch_nx_var_ann_d (void *);
+
+
+
 extern void gt_pch_nx_lang_decl (void *);
+
+
+
 extern void gt_pch_nx_lang_type (void *);
+
+
+
 extern void gt_pch_nx_die_struct (void *);
+
+
+
 extern void gt_pch_nx_varray_head_tag (void *);
+
+
+
 extern void gt_pch_nx_ptr_info_def (void *);
+
+
+
 extern void gt_pch_nx_VEC_constructor_elt_gc (void *);
+
+
+
 extern void gt_pch_nx_VEC_alias_pair_gc (void *);
+
+
+
 extern void gt_pch_nx_VEC_tree_gc (void *);
+
+
+
 extern void gt_pch_nx_VEC_uchar_gc (void *);
+
+
+
 extern void gt_pch_nx_function (void *);
+
+
+
 extern void gt_pch_nx_constant_descriptor_rtx (void *);
+
+
+
 extern void gt_pch_nx_fixed_value (void *);
+
+
+
 extern void gt_pch_nx_real_value (void *);
+
+
+
 extern void gt_pch_nx_VEC_rtx_gc (void *);
+
+
+
 extern void gt_pch_nx_object_block (void *);
+
+
+
 extern void gt_pch_nx_reg_attrs (void *);
+
+
+
 extern void gt_pch_nx_mem_attrs (void *);
+
+
+
 extern void gt_pch_nx_bitmap_obstack (void *);
+
+
+
 extern void gt_pch_nx_bitmap_element_def (void *);
+
+
+
 extern void gt_pch_nx_machine_function (void *);
+
+
+
 extern void gt_pch_nx_stack_local_entry (void *);
+
+
+
 extern void gt_pch_nx_basic_block_def (void *);
+
+
+
 extern void gt_pch_nx_edge_def (void *);
+
+
+
 extern void gt_pch_nx_gimple_seq_node_d (void *);
+
+
+
 extern void gt_pch_nx_gimple_seq_d (void *);
+
+
+
 extern void gt_pch_nx_section (void *);
+
+
+
 extern void gt_pch_nx_gimple_statement_d (void *);
+
+
+
 extern void gt_pch_nx_rtvec_def (void *);
+
+
+
 extern void gt_pch_nx_rtx_def (void *);
+
+
+
 extern void gt_pch_nx_bitmap_head_def (void *);
+
+
+
+
+
+
+
 extern void gt_pch_nx_answer (void *);
+
+
+
 extern void gt_pch_nx_cpp_macro (void *);
+
+
+
 extern void gt_pch_nx_cpp_token (void *);
+
+
+
 extern void gt_pch_nx_line_maps (void *);
 extern void gt_pch_n_II17splay_tree_node_s (void *);
 extern void gt_pch_n_SP9tree_node17splay_tree_node_s (void *);
@@ -11632,6 +20126,10 @@ extern void gt_pch_n_P11cgraph_edge4htab (void *);
 extern void gt_pch_n_P9loop_exit4htab (void *);
 extern void gt_pch_n_P24types_used_by_vars_entry4htab (void *);
 extern void gt_pch_n_P9tree_node4htab (void *);
+
+
+
+
 extern void gt_pch_p_15interface_tuple
     (void *, void *, gt_pointer_operator, void *);
 extern void gt_pch_p_16volatilized_type
@@ -11964,6 +20462,7 @@ extern void gt_pch_p_7rtx_def
     (void *, void *, gt_pointer_operator, void *);
 extern void gt_pch_p_15bitmap_head_def
     (void *, void *, gt_pointer_operator, void *);
+
 extern void gt_pch_p_6answer
     (void *, void *, gt_pointer_operator, void *);
 extern void gt_pch_p_9cpp_macro
@@ -12065,14 +20564,34 @@ extern void gt_pch_p_P24types_used_by_vars_entry4htab
 extern void gt_pch_p_P9tree_node4htab
     (void *, void *, gt_pointer_operator, void *);
 # 41 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/ggc.h" 2
+
+
+
+
 typedef void (*gt_note_pointers) (void *, void *, gt_pointer_operator,
       void *);
+
+
+
+
+
+
 typedef void (*gt_handle_reorder) (void *, void *, gt_pointer_operator,
        void *);
+
+
 extern int gt_pch_note_object (void *, void *, gt_note_pointers,
           enum gt_types_enum);
+
+
+
 extern void gt_pch_note_reorder (void *, void *, gt_handle_reorder);
+
+
 typedef void (*gt_pointer_walker) (void *);
+
+
+
 struct ggc_root_tab {
   void *base;
   size_t nelt;
@@ -12080,10 +20599,14 @@ struct ggc_root_tab {
   gt_pointer_walker cb;
   gt_pointer_walker pchw;
 };
+
+
 extern const struct ggc_root_tab * const gt_ggc_rtab[];
 extern const struct ggc_root_tab * const gt_ggc_deletable_rtab[];
 extern const struct ggc_root_tab * const gt_pch_cache_rtab[];
 extern const struct ggc_root_tab * const gt_pch_scalar_rtab[];
+
+
 struct htab;
 struct ggc_cache_tab {
   struct htab * *base;
@@ -12093,66 +20616,183 @@ struct ggc_cache_tab {
   gt_pointer_walker pchw;
   int (*marked_p) (const void *);
 };
+
+
 extern const struct ggc_cache_tab * const gt_ggc_cache_rtab[];
 # 114 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/ggc.h"
 extern int ggc_set_mark (const void *);
+
+
+
+
 extern int ggc_marked_p (const void *);
+
+
 extern void ggc_mark_stringpool (void);
+
+
 extern void ggc_purge_stringpool (void);
+
+
+
 extern void ggc_mark_roots (void);
+
+
+
 extern void gt_pch_save_stringpool (void);
 extern void gt_pch_fixup_stringpool (void);
 extern void gt_pch_restore_stringpool (void);
+
+
+
 extern void gt_pch_p_S (void *, void *, gt_pointer_operator, void *);
 extern void gt_pch_n_S (const void *);
 extern void gt_ggc_m_S (const void *);
+
+
 extern void init_stringpool (void);
+
+
+
+
+
 struct alloc_zone;
+
+
 extern void init_ggc (void);
+
+
 extern struct alloc_zone *new_ggc_zone (const char *);
+
+
 extern void destroy_ggc_zone (struct alloc_zone *);
+
 struct ggc_pch_data;
+
+
 extern struct ggc_pch_data *init_ggc_pch (void);
+
+
+
+
+
 extern void ggc_pch_count_object (struct ggc_pch_data *, void *, size_t, unsigned char,
       enum gt_types_enum);
+
+
+
 extern size_t ggc_pch_total_size (struct ggc_pch_data *);
+
+
+
 extern void ggc_pch_this_base (struct ggc_pch_data *, void *);
+
+
+
+
 extern char *ggc_pch_alloc_object (struct ggc_pch_data *, void *, size_t, unsigned char,
        enum gt_types_enum);
+
+
 extern void ggc_pch_prepare_write (struct ggc_pch_data *, FILE *);
+
+
 extern void ggc_pch_write_object (struct ggc_pch_data *, FILE *, void *,
       void *, size_t, unsigned char);
+
+
 extern void ggc_pch_finish (struct ggc_pch_data *, FILE *);
+
+
+
 extern void ggc_pch_read (FILE *, void *);
+
+
+
+
+
 extern unsigned char ggc_force_collect;
+
+
+
+
+
 extern unsigned char ggc_protect_identifiers;
+
+
 extern void *ggc_alloc_stat (size_t );
+
+
 extern void *ggc_alloc_typed_stat (enum gt_types_enum, size_t );
+
+
 extern void *ggc_alloc_cleared_stat (size_t );
+
+
 extern void *ggc_realloc_stat (void *, size_t );
+
+
 extern void *ggc_calloc (size_t, size_t);
+
 extern void ggc_free (void *);
+
 extern void ggc_record_overhead (size_t, size_t, void * );
 extern void ggc_free_overhead (void *);
 extern void ggc_prune_overhead_list (void);
+
 extern void dump_ggc_loc_statistics (unsigned char);
 # 259 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/ggc.h"
 extern void *ggc_splay_alloc (int, void *);
 extern void ggc_splay_dont_free (void *, void *);
+
+
+
+
 extern const char *ggc_alloc_string (const char *contents, int length);
+
+
+
+
+
+
 extern void ggc_collect (void);
+
+
+
 extern void ggc_register_root_tab (const struct ggc_root_tab *);
+
+
+
 extern void ggc_register_cache_tab (const struct ggc_cache_tab *);
+
+
 extern size_t ggc_get_size (const void *);
+
+
 extern void gt_pch_save (FILE *f);
+
+
 extern void gt_pch_restore (FILE *f);
+
+
+
+
+
 typedef struct ggc_statistics
 {
+
   int unused;
 } ggc_statistics;
+
+
+
 extern void ggc_print_common_statistics (FILE *, ggc_statistics *);
+
+
 extern void ggc_print_statistics (void);
 extern void stringpool_statistics (void);
+
+
 extern int ggc_min_expand_heuristic (void);
 extern int ggc_min_heapsize_heuristic (void);
 extern void init_ggc_heuristics (void);
@@ -12160,26 +20800,48 @@ extern void init_ggc_heuristics (void);
 # 48 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/c-common.h"
 enum rid
 {
+
+
   RID_STATIC = 0,
   RID_UNSIGNED, RID_LONG, RID_CONST, RID_EXTERN,
   RID_REGISTER, RID_TYPEDEF, RID_SHORT, RID_INLINE,
   RID_VOLATILE, RID_SIGNED, RID_AUTO, RID_RESTRICT,
+
+
   RID_COMPLEX, RID_THREAD, RID_SAT,
+
+
   RID_FRIEND, RID_VIRTUAL, RID_EXPLICIT, RID_EXPORT, RID_MUTABLE,
+
+
   RID_IN, RID_OUT, RID_INOUT, RID_BYCOPY, RID_BYREF, RID_ONEWAY,
+
+
+
   RID_IMAGINARY,
+
+
   RID_INT, RID_CHAR, RID_FLOAT, RID_DOUBLE, RID_VOID,
   RID_ENUM, RID_STRUCT, RID_UNION, RID_IF, RID_ELSE,
   RID_WHILE, RID_DO, RID_FOR, RID_SWITCH, RID_CASE,
   RID_DEFAULT, RID_BREAK, RID_CONTINUE, RID_RETURN, RID_GOTO,
   RID_SIZEOF,
+
+
   RID_ASM, RID_TYPEOF, RID_ALIGNOF, RID_ATTRIBUTE, RID_VA_ARG,
   RID_EXTENSION, RID_IMAGPART, RID_REALPART, RID_LABEL, RID_CHOOSE_EXPR,
   RID_TYPES_COMPATIBLE_P,
   RID_DFLOAT32, RID_DFLOAT64, RID_DFLOAT128,
   RID_FRACT, RID_ACCUM,
+
+
+
   RID_CXX_COMPAT_WARN,
+
+
   RID_FUNCTION_NAME, RID_PRETTY_FUNCTION_NAME, RID_C99_FUNCTION_NAME,
+
+
   RID_BOOL, RID_WCHAR, RID_CLASS,
   RID_PUBLIC, RID_PRIVATE, RID_PROTECTED,
   RID_TEMPLATE, RID_NULL, RID_CATCH,
@@ -12188,7 +20850,11 @@ enum rid
   RID_THIS, RID_THROW, RID_TRUE,
   RID_TRY, RID_TYPENAME, RID_TYPEID,
   RID_USING, RID_CHAR16, RID_CHAR32,
+
+
   RID_CONSTCAST, RID_DYNCAST, RID_REINTCAST, RID_STATCAST,
+
+
   RID_HAS_NOTHROW_ASSIGN, RID_HAS_NOTHROW_CONSTRUCTOR,
   RID_HAS_NOTHROW_COPY, RID_HAS_TRIVIAL_ASSIGN,
   RID_HAS_TRIVIAL_CONSTRUCTOR, RID_HAS_TRIVIAL_COPY,
@@ -12199,7 +20865,11 @@ enum rid
   RID_IS_POD, RID_IS_POLYMORPHIC,
   RID_IS_STD_LAYOUT, RID_IS_TRIVIAL,
   RID_IS_UNION,
+
+
   RID_STATIC_ASSERT, RID_CONSTEXPR, RID_DECLTYPE,
+
+
   RID_AT_ENCODE, RID_AT_END,
   RID_AT_CLASS, RID_AT_ALIAS, RID_AT_DEFS,
   RID_AT_PRIVATE, RID_AT_PROTECTED, RID_AT_PUBLIC,
@@ -12208,6 +20878,11 @@ enum rid
   RID_AT_FINALLY, RID_AT_SYNCHRONIZED,
   RID_AT_INTERFACE,
   RID_AT_IMPLEMENTATION,
+
+
+
+
+
   RID_ADDR_SPACE_0,
   RID_ADDR_SPACE_1,
   RID_ADDR_SPACE_2,
@@ -12224,11 +20899,15 @@ enum rid
   RID_ADDR_SPACE_13,
   RID_ADDR_SPACE_14,
   RID_ADDR_SPACE_15,
+
   RID_FIRST_ADDR_SPACE = RID_ADDR_SPACE_0,
   RID_LAST_ADDR_SPACE = RID_ADDR_SPACE_15,
+
   RID_MAX,
+
   RID_FIRST_MODIFIER = RID_STATIC,
   RID_LAST_MODIFIER = RID_ONEWAY,
+
   RID_FIRST_CXX0X = RID_STATIC_ASSERT,
   RID_LAST_CXX0X = RID_DECLTYPE,
   RID_FIRST_AT = RID_AT_ENCODE,
@@ -12238,6 +20917,9 @@ enum rid
 };
 # 176 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/c-common.h"
 extern tree *ridpointers;
+
+
+
 enum c_tree_index
 {
     CTI_CHAR16_TYPE,
@@ -12251,6 +20933,9 @@ enum c_tree_index
     CTI_UINTMAX_TYPE,
     CTI_WIDEST_INT_LIT_TYPE,
     CTI_WIDEST_UINT_LIT_TYPE,
+
+
+
     CTI_SIG_ATOMIC_TYPE,
     CTI_INT8_TYPE,
     CTI_INT16_TYPE,
@@ -12278,6 +20963,7 @@ enum c_tree_index
     CTI_UINT_FAST64_TYPE,
     CTI_INTPTR_TYPE,
     CTI_UINTPTR_TYPE,
+
     CTI_CHAR_ARRAY_TYPE,
     CTI_CHAR16_ARRAY_TYPE,
     CTI_CHAR32_ARRAY_TYPE,
@@ -12285,16 +20971,24 @@ enum c_tree_index
     CTI_INT_ARRAY_TYPE,
     CTI_STRING_TYPE,
     CTI_CONST_STRING_TYPE,
+
+
     CTI_TRUTHVALUE_TYPE,
     CTI_TRUTHVALUE_TRUE,
     CTI_TRUTHVALUE_FALSE,
+
     CTI_DEFAULT_FUNCTION_TYPE,
+
+
     CTI_FUNCTION_NAME_DECL,
     CTI_PRETTY_FUNCTION_NAME_DECL,
     CTI_C99_FUNCTION_NAME_DECL,
     CTI_SAVED_FUNCTION_NAME_DECLS,
+
     CTI_VOID_ZERO,
+
     CTI_NULL,
+
     CTI_MAX
 };
 # 261 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/c-common.h"
@@ -12302,6 +20996,9 @@ struct c_common_identifier {
   struct tree_common common;
   struct cpp_hashnode node;
 };
+
+
+
 struct c_common_resword
 {
   const char *const word;
@@ -12310,13 +21007,23 @@ struct c_common_resword
 };
 # 295 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/c-common.h"
 extern const struct c_common_resword c_common_reswords[];
+
+
 extern const unsigned int num_c_common_reswords;
 # 365 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/c-common.h"
 extern tree c_global_trees[CTI_MAX];
+
+
+
 struct sorted_fields_type {
   int len;
   tree elts[1];
 };
+
+
+
+
+
 typedef enum c_language_kind
 {
   clk_c = 0,
@@ -12325,25 +21032,50 @@ typedef enum c_language_kind
   clk_objcxx = 3
 }
 c_language_kind;
+
+
+
 extern c_language_kind c_language;
+
+
+
+
+
 typedef enum ref_operator {
+
   RO_NULL,
+
   RO_ARRAY_INDEXING,
+
   RO_UNARY_STAR,
+
   RO_ARROW,
+
   RO_IMPLICIT_CONVERSION
 } ref_operator;
+
+
+
 struct stmt_tree_s {
+
   tree x_cur_stmt_list;
 # 428 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/c-common.h"
   int stmts_are_full_exprs_p;
 };
+
 typedef struct stmt_tree_s *stmt_tree;
+
+
+
+
 struct c_language_function {
+
+
   struct stmt_tree_s x_stmt_tree;
 };
 # 452 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/c-common.h"
 extern void (*lang_post_pch_load) (void);
+
 extern void push_file_scope (void);
 extern void pop_file_scope (void);
 extern stmt_tree current_stmt_tree (void);
@@ -12356,79 +21088,314 @@ extern tree pushdecl (tree);
 extern tree build_modify_expr (location_t, tree, tree, enum tree_code,
           location_t, tree, tree);
 extern tree build_indirect_ref (location_t, tree, ref_operator);
+
 extern int c_expand_decl (tree);
+
 extern int field_decl_cmp (const void *, const void *);
 extern void resort_sorted_fields (void *, void *, gt_pointer_operator,
       void *);
 extern unsigned char has_c_linkage (const_tree decl);
+
+
+
+
+
 extern int flag_preprocess_only;
+
+
+
+
 extern int flag_nil_receivers;
+
+
+
 extern int flag_objc_exceptions;
+
+
 extern int flag_objc_sjlj_exceptions;
+
+
+
+
 extern int flag_zero_link;
+
+
+
+
 extern int flag_replace_objc_classes;
+
+
+
 extern char flag_no_line_commands;
+
+
+
+
 extern char flag_no_output;
+
+
+
+
 extern char flag_dump_macros;
+
+
+
 extern char flag_dump_includes;
+
+
+
 extern unsigned char flag_pch_preprocess;
+
+
+
+
 extern const char *pch_file;
+
+
+
+
 extern int flag_iso;
+
+
+
+
 extern int flag_undef;
+
+
+
 extern int flag_no_builtin;
+
+
+
+
 extern int flag_no_nonansi_builtin;
+
+
+
 extern int flag_short_double;
+
+
+
 extern int flag_short_wchar;
+
+
+
 extern int flag_lax_vector_conversions;
+
+
 extern int flag_ms_extensions;
+
+
+
 extern int flag_no_asm;
+
+
+
+
 extern int flag_const_strings;
+
+
+
 extern int flag_signed_bitfields;
+
+
+
 extern int warn_unknown_pragmas;
+
+
+
+
 extern int warn_format;
 # 592 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/c-common.h"
 extern int flag_cond_mismatch;
+
+
+
 extern int flag_isoc94;
+
+
+
 extern int flag_isoc99;
+
+
+
 extern int flag_hosted;
+
+
+
+
+
+
+
 extern int flag_gen_declaration;
+
+
+
+
+
 extern int print_struct_values;
+
+
+
 extern const char *constant_string_class_name;
+
+
+
+
+
+
+
 extern int flag_no_gnu_keywords;
+
+
+
+
 extern int flag_implement_inlines;
+
+
+
 extern int flag_implicit_templates;
+
+
+
+
+
 extern int flag_implicit_inline_templates;
+
+
+
+
 extern int flag_use_repository;
+
+
+
+
 extern int flag_optional_diags;
+
+
+
 extern int flag_elide_constructors;
+
+
+
+
 extern int flag_default_inline;
+
+
+
+
 extern int flag_rtti;
+
+
+
+
+
+
 extern int flag_conserve_space;
+
+
+
 extern int flag_access_control;
+
+
+
+
 extern int flag_check_new;
+
+
+
 enum cxx_dialect {
+
   cxx98,
+
+
   cxx0x
 };
+
+
 extern enum cxx_dialect cxx_dialect;
 # 707 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/c-common.h"
 extern int flag_new_for_scope;
+
+
+
+
+
 extern int flag_weak;
+
+
+
+
+
+
 extern int flag_working_directory;
+
+
+
+
 extern int flag_use_cxa_atexit;
+
+
+
+
 extern int flag_use_cxa_get_exception_ptr;
+
+
+
+
+
+
 extern int flag_enforce_eh_specs;
+
+
+
+
 extern int flag_threadsafe_statics;
+
+
+
+
 extern int flag_pretty_templates;
+
+
+
 extern int warn_implicit;
+
+
+
+
+
 extern int warn_strict_null_sentinel;
+
+
+
+
+
 extern int max_tinst_depth;
+
+
+
+
+
+
+
 extern int c_inhibit_evaluation_warnings;
+
+
+
+
 extern unsigned char done_lexing;
 # 795 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/c-common.h"
 extern const struct attribute_spec c_common_attribute_table[];
 extern const struct attribute_spec c_common_format_attribute_table[];
+
+
+
+
+
+
 extern tree (*make_fname_decl) (location_t, tree, int);
+
 extern unsigned char in_late_binary_op;
 extern const char *c_addr_space_name (addr_space_t as);
 extern tree identifier_global_value (tree);
@@ -12438,6 +21405,7 @@ extern void start_fname_decls (void);
 extern void finish_fname_decls (void);
 extern const char *fname_as_string (int);
 extern tree fname_decl (location_t, unsigned, tree);
+
 extern void check_function_arguments (tree, int, tree *, tree);
 extern void check_function_arguments_recurse (void (*)
            (void *, tree,
@@ -12468,6 +21436,8 @@ extern tree c_common_truthvalue_conversion (location_t, tree);
 extern void c_apply_type_quals_to_decl (int, tree);
 extern tree c_sizeof_or_alignof_type (location_t, tree, unsigned char, int);
 extern tree c_alignof_expr (location_t, tree);
+
+
 extern void binary_op_error (location_t, enum tree_code, tree, tree);
 extern tree fix_string_type (tree);
 struct varray_head_tag;
@@ -12487,14 +21457,33 @@ extern unsigned char valid_location_for_stdc_pragma_p (void);
 extern void set_float_const_decimal64 (void);
 extern void clear_float_const_decimal64 (void);
 extern unsigned char float_const_decimal64_p (void);
+
+
+
+
+
 extern tree shorten_binary_op (tree result_type, tree op0, tree op1, unsigned char bitwise);
+
+
+
+
 extern tree shorten_compare (tree *, tree *, tree *, enum tree_code *);
+
 extern tree pointer_int_sum (location_t, enum tree_code, tree, tree);
+
+
 extern tree c_build_qualified_type (tree, int);
+
+
+
 extern void c_common_nodes_and_builtins (void);
+
 extern void disable_builtin_function (const char *);
+
 extern void set_compound_literal_name (tree decl);
+
 extern tree build_va_arg (location_t, tree, tree);
+
 extern unsigned int c_common_init_options (unsigned int, const char **);
 extern unsigned char c_common_post_options (const char **);
 extern unsigned char c_common_init (void);
@@ -12507,48 +21496,101 @@ extern int self_promoting_args_p (const_tree);
 extern tree strip_pointer_operator (tree);
 extern tree strip_pointer_or_array_types (tree);
 extern long c_common_to_target_charset (long);
+
+
 extern void c_parse_file (void);
+
 extern void finish_file (void);
 # 946 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/c-common.h"
 extern tree do_case (location_t, tree, tree);
 extern tree build_stmt (location_t, enum tree_code, ...);
 extern tree build_case_label (location_t, tree, tree, tree);
+
+
+
+
 extern tree build_unary_op (location_t, enum tree_code, tree, int);
 extern tree build_binary_op (location_t, enum tree_code, tree, tree, int);
 extern tree perform_integral_promotions (tree);
+
+
+
+
 extern tree default_conversion (tree);
+
+
+
+
 extern tree common_type (tree, tree);
+
 extern tree decl_constant_value (tree);
+
+
 extern tree boolean_increment (enum tree_code, tree);
+
 extern int case_compare (splay_tree_key, splay_tree_key);
+
 extern tree c_add_case_label (location_t, splay_tree, tree, tree, tree, tree);
+
 extern void c_do_switch_warnings (splay_tree, location_t, tree, tree);
+
 extern tree build_function_call (location_t, tree, tree);
+
 extern tree build_function_call_vec (location_t, tree,
              VEC_tree_gc *, VEC_tree_gc *);
+
 extern tree resolve_overloaded_builtin (location_t, tree, VEC_tree_gc *);
+
 extern tree finish_label_address_expr (tree, location_t);
+
+
+
 extern tree lookup_label (tree);
 extern tree lookup_name (tree);
 extern unsigned char lvalue_p (const_tree);
+
 extern unsigned char vector_targets_convertible_p (const_tree t1, const_tree t2);
 extern unsigned char vector_types_convertible_p (const_tree t1, const_tree t2, unsigned char emit_lax_note);
+
 extern rtx c_expand_expr (tree, rtx, enum machine_mode, int, rtx *);
+
 extern void init_c_lex (void);
+
 extern void c_cpp_builtins (cpp_reader *);
 extern void c_cpp_builtins_optimize_pragma (cpp_reader *, tree, tree);
+
+
+
 extern int pending_lang_change;
+
+
+
 struct c_fileinfo
 {
   int time;
+
+
+
+
+
+
+
   short interface_only;
   short interface_unknown;
 };
+
 struct c_fileinfo *get_fileinfo (const char *);
 extern void dump_time_statistics (void);
+
 extern unsigned char c_dump_tree (void *, tree);
+
 extern void verify_sequence_points (tree);
+
 extern tree fold_offsetof (tree, tree);
+
+
+
+
 enum lvalue_use {
   lv_assign,
   lv_increment,
@@ -12556,9 +21598,13 @@ enum lvalue_use {
   lv_addressof,
   lv_asm
 };
+
 extern void lvalue_error (enum lvalue_use);
+
 extern int complete_array_type (tree *, tree, unsigned char);
+
 extern tree builtin_type_for_size (int, unsigned char);
+
 extern void warn_array_subscript_with_type_char (tree);
 extern void warn_about_parentheses (enum tree_code,
         enum tree_code, tree,
@@ -12576,9 +21622,13 @@ extern VEC_tree_gc *make_tree_vector (void);
 extern void release_tree_vector (VEC_tree_gc *);
 extern VEC_tree_gc *make_tree_vector_single (tree);
 extern VEC_tree_gc *make_tree_vector_copy (const VEC_tree_gc *);
+
+
 extern void c_genericize (tree);
 extern int c_gimplify_expr (tree *, gimple_seq *, gimple_seq *);
 extern tree c_build_bind_expr (location_t, tree, tree);
+
+
 extern void pch_init (void);
 extern int c_common_valid_pch (cpp_reader *pfile, const char *name, int fd);
 extern void c_common_read_pch (cpp_reader *pfile, const char *name, int fd,
@@ -12587,12 +21637,21 @@ extern void c_common_write_pch (void);
 extern void c_common_no_more_pch (void);
 extern void c_common_pch_pragma (cpp_reader *pfile, const char *);
 extern void c_common_print_pch_checksum (FILE *f);
+
+
 extern const unsigned char executable_checksum[16];
+
+
 extern void builtin_define_std (const char *macro);
 extern void builtin_define_with_value (const char *, const char *, int);
 extern void c_stddef_cpp_builtins (void);
 extern void fe_file_change (const struct line_map *);
 extern void c_parse_error (const char *, enum cpp_ttype, tree, unsigned char);
+
+
+
+
+
 extern tree objc_is_class_name (tree);
 extern tree objc_is_object_ptr (tree);
 extern void objc_check_decl (tree);
@@ -12645,13 +21704,20 @@ extern tree objc_build_synchronized (location_t, tree, tree);
 extern int objc_static_init_needed_p (void);
 extern tree objc_generate_static_init_call (tree);
 extern tree objc_generate_write_barrier (tree, enum tree_code, tree);
+
+
+
 extern void *objc_get_current_scope (void);
 extern void objc_mark_locals_volatile (void *);
+
+
 extern void init_pp_output (FILE *);
 extern void preprocess_file (cpp_reader *);
 extern void pp_file_change (const struct line_map *);
 extern void pp_dir_change (cpp_reader *, const char *);
 extern unsigned char check_missing_format_attribute (tree, tree);
+
+
 extern tree c_finish_omp_master (location_t, tree);
 extern tree c_finish_omp_critical (location_t, tree, tree);
 extern tree c_finish_omp_ordered (location_t, tree);
@@ -12662,64 +21728,147 @@ extern void c_finish_omp_taskwait (location_t);
 extern tree c_finish_omp_for (location_t, tree, tree, tree, tree, tree, tree);
 extern void c_split_parallel_clauses (location_t, tree, tree *, tree *);
 extern enum omp_clause_default_kind c_omp_predetermined_sharing (tree);
+
+
 extern unsigned char c_omp_sharing_predetermined (tree);
 extern tree c_omp_remap_decl (tree, unsigned char);
 extern void record_types_used_by_current_var_decl (tree);
 # 40 "../../../src/plugin-utils.h" 2
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/function.h" 1
 # 25 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/function.h"
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree.h" 1
 # 26 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/function.h" 2
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/vecprim.h" 1
 # 23 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/vecprim.h"
 static __inline__ void VEC_char_must_be_integral_type (void) { (void)~(char)0; } typedef struct VEC_char_base { unsigned num; unsigned alloc; char vec[1]; } VEC_char_base; typedef struct VEC_char_none { VEC_char_base base; } VEC_char_none; static __inline__ unsigned VEC_char_base_length (const VEC_char_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ char VEC_char_base_last (const VEC_char_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ char VEC_char_base_index (const VEC_char_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_char_base_iterate (const VEC_char_base *vec_, unsigned ix_, char *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (char) 0; return 0; } } static __inline__ size_t VEC_char_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_char_base, vec) + alloc_ * sizeof(char); } static __inline__ void VEC_char_base_embedded_init (VEC_char_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_char_base_space (VEC_char_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ char *VEC_char_base_quick_push (VEC_char_base *vec_, char obj_ ) { char *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ char VEC_char_base_pop (VEC_char_base *vec_ ) { char obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_char_base_truncate (VEC_char_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ char VEC_char_base_replace (VEC_char_base *vec_, unsigned ix_, char obj_ ) { char old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ char *VEC_char_base_quick_insert (VEC_char_base *vec_, unsigned ix_, char obj_ ) { char *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (char)); *slot_ = obj_; return slot_; } static __inline__ char VEC_char_base_ordered_remove (VEC_char_base *vec_, unsigned ix_ ) { char *slot_; char obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (char)); return obj_; } static __inline__ char VEC_char_base_unordered_remove (VEC_char_base *vec_, unsigned ix_ ) { char *slot_; char obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_char_base_block_remove (VEC_char_base *vec_, unsigned ix_, unsigned len_ ) { char *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (char)); } static __inline__ char *VEC_char_base_address (VEC_char_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_char_base_lower_bound (VEC_char_base *vec_, const char obj_, unsigned char (*lessthan_)(const char, const char) ) { unsigned int len_ = VEC_char_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { char middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_char_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
 typedef struct VEC_char_heap { VEC_char_base base; } VEC_char_heap; static __inline__ VEC_char_heap *VEC_char_heap_alloc (int alloc_ ) { return (VEC_char_heap *) vec_heap_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) ); } static __inline__ VEC_char_heap *VEC_char_heap_copy (VEC_char_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_char_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_char_heap *)(vec_heap_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (char) * len_); } return new_vec_; } static __inline__ void VEC_char_heap_free (VEC_char_heap **vec_) { if (*vec_) free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_char_heap_reserve (VEC_char_heap **vec_, int alloc_ ) { int extend = !VEC_char_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_char_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) ); return extend; } static __inline__ int VEC_char_heap_reserve_exact (VEC_char_heap **vec_, int alloc_ ) { int extend = !VEC_char_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_char_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) ); return extend; } static __inline__ void VEC_char_heap_safe_grow (VEC_char_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_char_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_char_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_char_heap_safe_grow_cleared (VEC_char_heap **vec_, int size_ ) { int oldsize = VEC_char_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_char_heap_safe_grow (vec_, size_ ); memset (&(VEC_char_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (char) * (size_ - oldsize)); } static __inline__ char *VEC_char_heap_safe_push (VEC_char_heap **vec_, const char obj_ ) { VEC_char_heap_reserve (vec_, 1 ); return VEC_char_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ char *VEC_char_heap_safe_insert (VEC_char_heap **vec_, unsigned ix_, const char obj_ ) { VEC_char_heap_reserve (vec_, 1 ); return VEC_char_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
 typedef unsigned char uchar;
 static __inline__ void VEC_uchar_must_be_integral_type (void) { (void)~(uchar)0; } typedef struct VEC_uchar_base { unsigned num; unsigned alloc; uchar vec[1]; } VEC_uchar_base; typedef struct VEC_uchar_none { VEC_uchar_base base; } VEC_uchar_none; static __inline__ unsigned VEC_uchar_base_length (const VEC_uchar_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ uchar VEC_uchar_base_last (const VEC_uchar_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ uchar VEC_uchar_base_index (const VEC_uchar_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_uchar_base_iterate (const VEC_uchar_base *vec_, unsigned ix_, uchar *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (uchar) 0; return 0; } } static __inline__ size_t VEC_uchar_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_uchar_base, vec) + alloc_ * sizeof(uchar); } static __inline__ void VEC_uchar_base_embedded_init (VEC_uchar_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_uchar_base_space (VEC_uchar_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ uchar *VEC_uchar_base_quick_push (VEC_uchar_base *vec_, uchar obj_ ) { uchar *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ uchar VEC_uchar_base_pop (VEC_uchar_base *vec_ ) { uchar obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_uchar_base_truncate (VEC_uchar_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ uchar VEC_uchar_base_replace (VEC_uchar_base *vec_, unsigned ix_, uchar obj_ ) { uchar old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ uchar *VEC_uchar_base_quick_insert (VEC_uchar_base *vec_, unsigned ix_, uchar obj_ ) { uchar *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (uchar)); *slot_ = obj_; return slot_; } static __inline__ uchar VEC_uchar_base_ordered_remove (VEC_uchar_base *vec_, unsigned ix_ ) { uchar *slot_; uchar obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (uchar)); return obj_; } static __inline__ uchar VEC_uchar_base_unordered_remove (VEC_uchar_base *vec_, unsigned ix_ ) { uchar *slot_; uchar obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_uchar_base_block_remove (VEC_uchar_base *vec_, unsigned ix_, unsigned len_ ) { uchar *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (uchar)); } static __inline__ uchar *VEC_uchar_base_address (VEC_uchar_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_uchar_base_lower_bound (VEC_uchar_base *vec_, const uchar obj_, unsigned char (*lessthan_)(const uchar, const uchar) ) { unsigned int len_ = VEC_uchar_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { uchar middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_uchar_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
 typedef struct VEC_uchar_heap { VEC_uchar_base base; } VEC_uchar_heap; static __inline__ VEC_uchar_heap *VEC_uchar_heap_alloc (int alloc_ ) { return (VEC_uchar_heap *) vec_heap_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) ); } static __inline__ VEC_uchar_heap *VEC_uchar_heap_copy (VEC_uchar_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_uchar_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_uchar_heap *)(vec_heap_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (uchar) * len_); } return new_vec_; } static __inline__ void VEC_uchar_heap_free (VEC_uchar_heap **vec_) { if (*vec_) free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_uchar_heap_reserve (VEC_uchar_heap **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) ); return extend; } static __inline__ int VEC_uchar_heap_reserve_exact (VEC_uchar_heap **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) ); return extend; } static __inline__ void VEC_uchar_heap_safe_grow (VEC_uchar_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_uchar_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_uchar_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_uchar_heap_safe_grow_cleared (VEC_uchar_heap **vec_, int size_ ) { int oldsize = VEC_uchar_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_uchar_heap_safe_grow (vec_, size_ ); memset (&(VEC_uchar_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (uchar) * (size_ - oldsize)); } static __inline__ uchar *VEC_uchar_heap_safe_push (VEC_uchar_heap **vec_, const uchar obj_ ) { VEC_uchar_heap_reserve (vec_, 1 ); return VEC_uchar_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ uchar *VEC_uchar_heap_safe_insert (VEC_uchar_heap **vec_, unsigned ix_, const uchar obj_ ) { VEC_uchar_heap_reserve (vec_, 1 ); return VEC_uchar_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 typedef struct VEC_uchar_gc { VEC_uchar_base base; } VEC_uchar_gc; static __inline__ VEC_uchar_gc *VEC_uchar_gc_alloc (int alloc_ ) { return (VEC_uchar_gc *) vec_gc_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) ); } static __inline__ VEC_uchar_gc *VEC_uchar_gc_copy (VEC_uchar_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_uchar_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_uchar_gc *)(vec_gc_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (uchar) * len_); } return new_vec_; } static __inline__ void VEC_uchar_gc_free (VEC_uchar_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_uchar_gc_reserve (VEC_uchar_gc **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) ); return extend; } static __inline__ int VEC_uchar_gc_reserve_exact (VEC_uchar_gc **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) ); return extend; } static __inline__ void VEC_uchar_gc_safe_grow (VEC_uchar_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_uchar_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_uchar_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_uchar_gc_safe_grow_cleared (VEC_uchar_gc **vec_, int size_ ) { int oldsize = VEC_uchar_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_uchar_gc_safe_grow (vec_, size_ ); memset (&(VEC_uchar_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (uchar) * (size_ - oldsize)); } static __inline__ uchar *VEC_uchar_gc_safe_push (VEC_uchar_gc **vec_, const uchar obj_ ) { VEC_uchar_gc_reserve (vec_, 1 ); return VEC_uchar_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ uchar *VEC_uchar_gc_safe_insert (VEC_uchar_gc **vec_, unsigned ix_, const uchar obj_ ) { VEC_uchar_gc_reserve (vec_, 1 ); return VEC_uchar_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
 static __inline__ void VEC_int_must_be_integral_type (void) { (void)~(int)0; } typedef struct VEC_int_base { unsigned num; unsigned alloc; int vec[1]; } VEC_int_base; typedef struct VEC_int_none { VEC_int_base base; } VEC_int_none; static __inline__ unsigned VEC_int_base_length (const VEC_int_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ int VEC_int_base_last (const VEC_int_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ int VEC_int_base_index (const VEC_int_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_int_base_iterate (const VEC_int_base *vec_, unsigned ix_, int *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (int) 0; return 0; } } static __inline__ size_t VEC_int_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_int_base, vec) + alloc_ * sizeof(int); } static __inline__ void VEC_int_base_embedded_init (VEC_int_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_int_base_space (VEC_int_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ int *VEC_int_base_quick_push (VEC_int_base *vec_, int obj_ ) { int *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ int VEC_int_base_pop (VEC_int_base *vec_ ) { int obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_int_base_truncate (VEC_int_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ int VEC_int_base_replace (VEC_int_base *vec_, unsigned ix_, int obj_ ) { int old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ int *VEC_int_base_quick_insert (VEC_int_base *vec_, unsigned ix_, int obj_ ) { int *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (int)); *slot_ = obj_; return slot_; } static __inline__ int VEC_int_base_ordered_remove (VEC_int_base *vec_, unsigned ix_ ) { int *slot_; int obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (int)); return obj_; } static __inline__ int VEC_int_base_unordered_remove (VEC_int_base *vec_, unsigned ix_ ) { int *slot_; int obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_int_base_block_remove (VEC_int_base *vec_, unsigned ix_, unsigned len_ ) { int *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (int)); } static __inline__ int *VEC_int_base_address (VEC_int_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_int_base_lower_bound (VEC_int_base *vec_, const int obj_, unsigned char (*lessthan_)(const int, const int) ) { unsigned int len_ = VEC_int_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { int middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_int_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
 typedef struct VEC_int_heap { VEC_int_base base; } VEC_int_heap; static __inline__ VEC_int_heap *VEC_int_heap_alloc (int alloc_ ) { return (VEC_int_heap *) vec_heap_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) ); } static __inline__ VEC_int_heap *VEC_int_heap_copy (VEC_int_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_int_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_int_heap *)(vec_heap_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (int) * len_); } return new_vec_; } static __inline__ void VEC_int_heap_free (VEC_int_heap **vec_) { if (*vec_) free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_int_heap_reserve (VEC_int_heap **vec_, int alloc_ ) { int extend = !VEC_int_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_int_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) ); return extend; } static __inline__ int VEC_int_heap_reserve_exact (VEC_int_heap **vec_, int alloc_ ) { int extend = !VEC_int_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_int_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) ); return extend; } static __inline__ void VEC_int_heap_safe_grow (VEC_int_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_int_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_int_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_int_heap_safe_grow_cleared (VEC_int_heap **vec_, int size_ ) { int oldsize = VEC_int_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_int_heap_safe_grow (vec_, size_ ); memset (&(VEC_int_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (int) * (size_ - oldsize)); } static __inline__ int *VEC_int_heap_safe_push (VEC_int_heap **vec_, const int obj_ ) { VEC_int_heap_reserve (vec_, 1 ); return VEC_int_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ int *VEC_int_heap_safe_insert (VEC_int_heap **vec_, unsigned ix_, const int obj_ ) { VEC_int_heap_reserve (vec_, 1 ); return VEC_int_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
 static __inline__ void VEC_unsigned_must_be_integral_type (void) { (void)~(unsigned)0; } typedef struct VEC_unsigned_base { unsigned num; unsigned alloc; unsigned vec[1]; } VEC_unsigned_base; typedef struct VEC_unsigned_none { VEC_unsigned_base base; } VEC_unsigned_none; static __inline__ unsigned VEC_unsigned_base_length (const VEC_unsigned_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ unsigned VEC_unsigned_base_last (const VEC_unsigned_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ unsigned VEC_unsigned_base_index (const VEC_unsigned_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_unsigned_base_iterate (const VEC_unsigned_base *vec_, unsigned ix_, unsigned *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (unsigned) 0; return 0; } } static __inline__ size_t VEC_unsigned_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_unsigned_base, vec) + alloc_ * sizeof(unsigned); } static __inline__ void VEC_unsigned_base_embedded_init (VEC_unsigned_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_unsigned_base_space (VEC_unsigned_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ unsigned *VEC_unsigned_base_quick_push (VEC_unsigned_base *vec_, unsigned obj_ ) { unsigned *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ unsigned VEC_unsigned_base_pop (VEC_unsigned_base *vec_ ) { unsigned obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_unsigned_base_truncate (VEC_unsigned_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ unsigned VEC_unsigned_base_replace (VEC_unsigned_base *vec_, unsigned ix_, unsigned obj_ ) { unsigned old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ unsigned *VEC_unsigned_base_quick_insert (VEC_unsigned_base *vec_, unsigned ix_, unsigned obj_ ) { unsigned *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (unsigned)); *slot_ = obj_; return slot_; } static __inline__ unsigned VEC_unsigned_base_ordered_remove (VEC_unsigned_base *vec_, unsigned ix_ ) { unsigned *slot_; unsigned obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (unsigned)); return obj_; } static __inline__ unsigned VEC_unsigned_base_unordered_remove (VEC_unsigned_base *vec_, unsigned ix_ ) { unsigned *slot_; unsigned obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_unsigned_base_block_remove (VEC_unsigned_base *vec_, unsigned ix_, unsigned len_ ) { unsigned *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (unsigned)); } static __inline__ unsigned *VEC_unsigned_base_address (VEC_unsigned_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_unsigned_base_lower_bound (VEC_unsigned_base *vec_, const unsigned obj_, unsigned char (*lessthan_)(const unsigned, const unsigned) ) { unsigned int len_ = VEC_unsigned_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { unsigned middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_unsigned_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
 typedef struct VEC_unsigned_heap { VEC_unsigned_base base; } VEC_unsigned_heap; static __inline__ VEC_unsigned_heap *VEC_unsigned_heap_alloc (int alloc_ ) { return (VEC_unsigned_heap *) vec_heap_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); } static __inline__ VEC_unsigned_heap *VEC_unsigned_heap_copy (VEC_unsigned_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_unsigned_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_unsigned_heap *)(vec_heap_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (unsigned) * len_); } return new_vec_; } static __inline__ void VEC_unsigned_heap_free (VEC_unsigned_heap **vec_) { if (*vec_) free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_unsigned_heap_reserve (VEC_unsigned_heap **vec_, int alloc_ ) { int extend = !VEC_unsigned_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_unsigned_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); return extend; } static __inline__ int VEC_unsigned_heap_reserve_exact (VEC_unsigned_heap **vec_, int alloc_ ) { int extend = !VEC_unsigned_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_unsigned_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); return extend; } static __inline__ void VEC_unsigned_heap_safe_grow (VEC_unsigned_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_unsigned_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_unsigned_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_unsigned_heap_safe_grow_cleared (VEC_unsigned_heap **vec_, int size_ ) { int oldsize = VEC_unsigned_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_unsigned_heap_safe_grow (vec_, size_ ); memset (&(VEC_unsigned_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (unsigned) * (size_ - oldsize)); } static __inline__ unsigned *VEC_unsigned_heap_safe_push (VEC_unsigned_heap **vec_, const unsigned obj_ ) { VEC_unsigned_heap_reserve (vec_, 1 ); return VEC_unsigned_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ unsigned *VEC_unsigned_heap_safe_insert (VEC_unsigned_heap **vec_, unsigned ix_, const unsigned obj_ ) { VEC_unsigned_heap_reserve (vec_, 1 ); return VEC_unsigned_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 # 28 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/function.h" 2
+
+
+
+
+
+
 struct sequence_stack {
+
   rtx first;
   rtx last;
   struct sequence_stack *next;
 };
+
 struct emit_status {
+
+
   int x_reg_rtx_no;
+
+
   int x_first_label_num;
+
+
+
+
+
+
   rtx x_first_insn;
   rtx x_last_insn;
+
+
+
+
+
   struct sequence_stack *sequence_stack;
+
+
+
   int x_cur_insn_uid;
+
+
+
   int x_cur_debug_insn_uid;
+
+
+
   location_t x_last_location;
+
+
+
+
+
   int regno_pointer_align_length;
+
+
+
+
   unsigned char * regno_pointer_align;
 };
+
+
+
+
+
+
+
 extern rtx * regno_reg_rtx;
+
+
+
+
+
+
+
 struct expr_status {
+
+
   int x_pending_stack_adjust;
 # 121 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/function.h"
   int x_inhibit_defer_pop;
+
+
+
+
+
   int x_stack_pointer_delta;
+
+
+
+
   rtx x_saveregs_value;
+
+
   rtx x_apply_args_value;
+
+
   rtx x_forced_labels;
 };
+
 typedef struct call_site_record_d *call_site_record;
 static __inline__ void VEC_call_site_record_must_be_pointer_type (void) { (void)((call_site_record)1 == (void *)1); } typedef struct VEC_call_site_record_base { unsigned num; unsigned alloc; call_site_record vec[1]; } VEC_call_site_record_base; typedef struct VEC_call_site_record_none { VEC_call_site_record_base base; } VEC_call_site_record_none; static __inline__ unsigned VEC_call_site_record_base_length (const VEC_call_site_record_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ call_site_record VEC_call_site_record_base_last (const VEC_call_site_record_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ call_site_record VEC_call_site_record_base_index (const VEC_call_site_record_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_call_site_record_base_iterate (const VEC_call_site_record_base *vec_, unsigned ix_, call_site_record *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (call_site_record) 0; return 0; } } static __inline__ size_t VEC_call_site_record_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_call_site_record_base, vec) + alloc_ * sizeof(call_site_record); } static __inline__ void VEC_call_site_record_base_embedded_init (VEC_call_site_record_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_call_site_record_base_space (VEC_call_site_record_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ call_site_record *VEC_call_site_record_base_quick_push (VEC_call_site_record_base *vec_, call_site_record obj_ ) { call_site_record *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ call_site_record VEC_call_site_record_base_pop (VEC_call_site_record_base *vec_ ) { call_site_record obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_call_site_record_base_truncate (VEC_call_site_record_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ call_site_record VEC_call_site_record_base_replace (VEC_call_site_record_base *vec_, unsigned ix_, call_site_record obj_ ) { call_site_record old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ call_site_record *VEC_call_site_record_base_quick_insert (VEC_call_site_record_base *vec_, unsigned ix_, call_site_record obj_ ) { call_site_record *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (call_site_record)); *slot_ = obj_; return slot_; } static __inline__ call_site_record VEC_call_site_record_base_ordered_remove (VEC_call_site_record_base *vec_, unsigned ix_ ) { call_site_record *slot_; call_site_record obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (call_site_record)); return obj_; } static __inline__ call_site_record VEC_call_site_record_base_unordered_remove (VEC_call_site_record_base *vec_, unsigned ix_ ) { call_site_record *slot_; call_site_record obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_call_site_record_base_block_remove (VEC_call_site_record_base *vec_, unsigned ix_, unsigned len_ ) { call_site_record *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (call_site_record)); } static __inline__ call_site_record *VEC_call_site_record_base_address (VEC_call_site_record_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_call_site_record_base_lower_bound (VEC_call_site_record_base *vec_, const call_site_record obj_, unsigned char (*lessthan_)(const call_site_record, const call_site_record) ) { unsigned int len_ = VEC_call_site_record_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { call_site_record middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_call_site_record_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
 typedef struct VEC_call_site_record_gc { VEC_call_site_record_base base; } VEC_call_site_record_gc; static __inline__ VEC_call_site_record_gc *VEC_call_site_record_gc_alloc (int alloc_ ) { return (VEC_call_site_record_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_call_site_record_gc_free (VEC_call_site_record_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_call_site_record_gc *VEC_call_site_record_gc_copy (VEC_call_site_record_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_call_site_record_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_call_site_record_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (call_site_record) * len_); } return new_vec_; } static __inline__ int VEC_call_site_record_gc_reserve (VEC_call_site_record_gc **vec_, int alloc_ ) { int extend = !VEC_call_site_record_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_call_site_record_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_call_site_record_gc_reserve_exact (VEC_call_site_record_gc **vec_, int alloc_ ) { int extend = !VEC_call_site_record_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_call_site_record_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_call_site_record_gc_safe_grow (VEC_call_site_record_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_call_site_record_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_call_site_record_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_call_site_record_gc_safe_grow_cleared (VEC_call_site_record_gc **vec_, int size_ ) { int oldsize = VEC_call_site_record_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_call_site_record_gc_safe_grow (vec_, size_ ); memset (&(VEC_call_site_record_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (call_site_record) * (size_ - oldsize)); } static __inline__ call_site_record *VEC_call_site_record_gc_safe_push (VEC_call_site_record_gc **vec_, call_site_record obj_ ) { VEC_call_site_record_gc_reserve (vec_, 1 ); return VEC_call_site_record_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ call_site_record *VEC_call_site_record_gc_safe_insert (VEC_call_site_record_gc **vec_, unsigned ix_, call_site_record obj_ ) { VEC_call_site_record_gc_reserve (vec_, 1 ); return VEC_call_site_record_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+
 struct rtl_eh {
   rtx ehr_stackadj;
   rtx ehr_handler;
   rtx ehr_label;
+
   rtx sjlj_fc;
   rtx sjlj_exit_after;
+
   VEC_uchar_gc *action_record_data;
+
   VEC_call_site_record_gc *call_site_record[2];
 };
 # 166 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/function.h"
@@ -12727,36 +21876,82 @@ struct gimple_df;
 struct temp_slot;
 typedef struct temp_slot *temp_slot_p;
 struct call_site_record_d;
+
 static __inline__ void VEC_temp_slot_p_must_be_pointer_type (void) { (void)((temp_slot_p)1 == (void *)1); } typedef struct VEC_temp_slot_p_base { unsigned num; unsigned alloc; temp_slot_p vec[1]; } VEC_temp_slot_p_base; typedef struct VEC_temp_slot_p_none { VEC_temp_slot_p_base base; } VEC_temp_slot_p_none; static __inline__ unsigned VEC_temp_slot_p_base_length (const VEC_temp_slot_p_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ temp_slot_p VEC_temp_slot_p_base_last (const VEC_temp_slot_p_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ temp_slot_p VEC_temp_slot_p_base_index (const VEC_temp_slot_p_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_temp_slot_p_base_iterate (const VEC_temp_slot_p_base *vec_, unsigned ix_, temp_slot_p *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (temp_slot_p) 0; return 0; } } static __inline__ size_t VEC_temp_slot_p_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_temp_slot_p_base, vec) + alloc_ * sizeof(temp_slot_p); } static __inline__ void VEC_temp_slot_p_base_embedded_init (VEC_temp_slot_p_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_temp_slot_p_base_space (VEC_temp_slot_p_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ temp_slot_p *VEC_temp_slot_p_base_quick_push (VEC_temp_slot_p_base *vec_, temp_slot_p obj_ ) { temp_slot_p *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ temp_slot_p VEC_temp_slot_p_base_pop (VEC_temp_slot_p_base *vec_ ) { temp_slot_p obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_temp_slot_p_base_truncate (VEC_temp_slot_p_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ temp_slot_p VEC_temp_slot_p_base_replace (VEC_temp_slot_p_base *vec_, unsigned ix_, temp_slot_p obj_ ) { temp_slot_p old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ temp_slot_p *VEC_temp_slot_p_base_quick_insert (VEC_temp_slot_p_base *vec_, unsigned ix_, temp_slot_p obj_ ) { temp_slot_p *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (temp_slot_p)); *slot_ = obj_; return slot_; } static __inline__ temp_slot_p VEC_temp_slot_p_base_ordered_remove (VEC_temp_slot_p_base *vec_, unsigned ix_ ) { temp_slot_p *slot_; temp_slot_p obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (temp_slot_p)); return obj_; } static __inline__ temp_slot_p VEC_temp_slot_p_base_unordered_remove (VEC_temp_slot_p_base *vec_, unsigned ix_ ) { temp_slot_p *slot_; temp_slot_p obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_temp_slot_p_base_block_remove (VEC_temp_slot_p_base *vec_, unsigned ix_, unsigned len_ ) { temp_slot_p *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (temp_slot_p)); } static __inline__ temp_slot_p *VEC_temp_slot_p_base_address (VEC_temp_slot_p_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_temp_slot_p_base_lower_bound (VEC_temp_slot_p_base *vec_, const temp_slot_p obj_, unsigned char (*lessthan_)(const temp_slot_p, const temp_slot_p) ) { unsigned int len_ = VEC_temp_slot_p_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { temp_slot_p middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_temp_slot_p_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
 typedef struct VEC_temp_slot_p_gc { VEC_temp_slot_p_base base; } VEC_temp_slot_p_gc; static __inline__ VEC_temp_slot_p_gc *VEC_temp_slot_p_gc_alloc (int alloc_ ) { return (VEC_temp_slot_p_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_temp_slot_p_gc_free (VEC_temp_slot_p_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_temp_slot_p_gc *VEC_temp_slot_p_gc_copy (VEC_temp_slot_p_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_temp_slot_p_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_temp_slot_p_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (temp_slot_p) * len_); } return new_vec_; } static __inline__ int VEC_temp_slot_p_gc_reserve (VEC_temp_slot_p_gc **vec_, int alloc_ ) { int extend = !VEC_temp_slot_p_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_temp_slot_p_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_temp_slot_p_gc_reserve_exact (VEC_temp_slot_p_gc **vec_, int alloc_ ) { int extend = !VEC_temp_slot_p_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_temp_slot_p_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_temp_slot_p_gc_safe_grow (VEC_temp_slot_p_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_temp_slot_p_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_temp_slot_p_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_temp_slot_p_gc_safe_grow_cleared (VEC_temp_slot_p_gc **vec_, int size_ ) { int oldsize = VEC_temp_slot_p_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_temp_slot_p_gc_safe_grow (vec_, size_ ); memset (&(VEC_temp_slot_p_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (temp_slot_p) * (size_ - oldsize)); } static __inline__ temp_slot_p *VEC_temp_slot_p_gc_safe_push (VEC_temp_slot_p_gc **vec_, temp_slot_p obj_ ) { VEC_temp_slot_p_gc_reserve (vec_, 1 ); return VEC_temp_slot_p_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ temp_slot_p *VEC_temp_slot_p_gc_safe_insert (VEC_temp_slot_p_gc **vec_, unsigned ix_, temp_slot_p obj_ ) { VEC_temp_slot_p_gc_reserve (vec_, 1 ); return VEC_temp_slot_p_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 struct ipa_opt_pass_d;
 typedef struct ipa_opt_pass_d *ipa_opt_pass;
+
 static __inline__ void VEC_ipa_opt_pass_must_be_pointer_type (void) { (void)((ipa_opt_pass)1 == (void *)1); } typedef struct VEC_ipa_opt_pass_base { unsigned num; unsigned alloc; ipa_opt_pass vec[1]; } VEC_ipa_opt_pass_base; typedef struct VEC_ipa_opt_pass_none { VEC_ipa_opt_pass_base base; } VEC_ipa_opt_pass_none; static __inline__ unsigned VEC_ipa_opt_pass_base_length (const VEC_ipa_opt_pass_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ ipa_opt_pass VEC_ipa_opt_pass_base_last (const VEC_ipa_opt_pass_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ ipa_opt_pass VEC_ipa_opt_pass_base_index (const VEC_ipa_opt_pass_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_ipa_opt_pass_base_iterate (const VEC_ipa_opt_pass_base *vec_, unsigned ix_, ipa_opt_pass *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (ipa_opt_pass) 0; return 0; } } static __inline__ size_t VEC_ipa_opt_pass_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_ipa_opt_pass_base, vec) + alloc_ * sizeof(ipa_opt_pass); } static __inline__ void VEC_ipa_opt_pass_base_embedded_init (VEC_ipa_opt_pass_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_ipa_opt_pass_base_space (VEC_ipa_opt_pass_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ ipa_opt_pass *VEC_ipa_opt_pass_base_quick_push (VEC_ipa_opt_pass_base *vec_, ipa_opt_pass obj_ ) { ipa_opt_pass *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ ipa_opt_pass VEC_ipa_opt_pass_base_pop (VEC_ipa_opt_pass_base *vec_ ) { ipa_opt_pass obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_ipa_opt_pass_base_truncate (VEC_ipa_opt_pass_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ ipa_opt_pass VEC_ipa_opt_pass_base_replace (VEC_ipa_opt_pass_base *vec_, unsigned ix_, ipa_opt_pass obj_ ) { ipa_opt_pass old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ ipa_opt_pass *VEC_ipa_opt_pass_base_quick_insert (VEC_ipa_opt_pass_base *vec_, unsigned ix_, ipa_opt_pass obj_ ) { ipa_opt_pass *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (ipa_opt_pass)); *slot_ = obj_; return slot_; } static __inline__ ipa_opt_pass VEC_ipa_opt_pass_base_ordered_remove (VEC_ipa_opt_pass_base *vec_, unsigned ix_ ) { ipa_opt_pass *slot_; ipa_opt_pass obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (ipa_opt_pass)); return obj_; } static __inline__ ipa_opt_pass VEC_ipa_opt_pass_base_unordered_remove (VEC_ipa_opt_pass_base *vec_, unsigned ix_ ) { ipa_opt_pass *slot_; ipa_opt_pass obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_ipa_opt_pass_base_block_remove (VEC_ipa_opt_pass_base *vec_, unsigned ix_, unsigned len_ ) { ipa_opt_pass *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (ipa_opt_pass)); } static __inline__ ipa_opt_pass *VEC_ipa_opt_pass_base_address (VEC_ipa_opt_pass_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_ipa_opt_pass_base_lower_bound (VEC_ipa_opt_pass_base *vec_, const ipa_opt_pass obj_, unsigned char (*lessthan_)(const ipa_opt_pass, const ipa_opt_pass) ) { unsigned int len_ = VEC_ipa_opt_pass_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { ipa_opt_pass middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_ipa_opt_pass_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
 typedef struct VEC_ipa_opt_pass_heap { VEC_ipa_opt_pass_base base; } VEC_ipa_opt_pass_heap; static __inline__ VEC_ipa_opt_pass_heap *VEC_ipa_opt_pass_heap_alloc (int alloc_ ) { return (VEC_ipa_opt_pass_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_ipa_opt_pass_heap_free (VEC_ipa_opt_pass_heap **vec_) { if (*vec_) free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_ipa_opt_pass_heap *VEC_ipa_opt_pass_heap_copy (VEC_ipa_opt_pass_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_ipa_opt_pass_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_ipa_opt_pass_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (ipa_opt_pass) * len_); } return new_vec_; } static __inline__ int VEC_ipa_opt_pass_heap_reserve (VEC_ipa_opt_pass_heap **vec_, int alloc_ ) { int extend = !VEC_ipa_opt_pass_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_ipa_opt_pass_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_ipa_opt_pass_heap_reserve_exact (VEC_ipa_opt_pass_heap **vec_, int alloc_ ) { int extend = !VEC_ipa_opt_pass_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_ipa_opt_pass_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_ipa_opt_pass_heap_safe_grow (VEC_ipa_opt_pass_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_ipa_opt_pass_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_ipa_opt_pass_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_ipa_opt_pass_heap_safe_grow_cleared (VEC_ipa_opt_pass_heap **vec_, int size_ ) { int oldsize = VEC_ipa_opt_pass_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_ipa_opt_pass_heap_safe_grow (vec_, size_ ); memset (&(VEC_ipa_opt_pass_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (ipa_opt_pass) * (size_ - oldsize)); } static __inline__ ipa_opt_pass *VEC_ipa_opt_pass_heap_safe_push (VEC_ipa_opt_pass_heap **vec_, ipa_opt_pass obj_ ) { VEC_ipa_opt_pass_heap_reserve (vec_, 1 ); return VEC_ipa_opt_pass_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ ipa_opt_pass *VEC_ipa_opt_pass_heap_safe_insert (VEC_ipa_opt_pass_heap **vec_, unsigned ix_, ipa_opt_pass obj_ ) { VEC_ipa_opt_pass_heap_reserve (vec_, 1 ); return VEC_ipa_opt_pass_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
 enum function_frequency {
+
+
   FUNCTION_FREQUENCY_UNLIKELY_EXECUTED,
+
   FUNCTION_FREQUENCY_NORMAL,
+
+
   FUNCTION_FREQUENCY_HOT
 };
+
 struct varasm_status {
+
   struct rtx_constant_pool *pool;
+
+
+
   unsigned int deferred_constants;
 };
+
+
 struct incoming_args {
+
+
+
   int pops_args;
+
+
+
+
   int size;
+
+
+
+
   int pretend_args_size;
+
+
+
   rtx arg_offset_rtx;
+
+
+
   CUMULATIVE_ARGS info;
+
+
   rtx internal_arg_pointer;
 };
+
+
 struct function_subsections {
+
+
+
+
   const char *hot_section_label;
   const char *cold_section_label;
   const char *hot_section_end_label;
   const char *cold_section_end_label;
+
+
+
+
   const char *unlikely_text_section_name;
 };
+
+
 struct rtl_data {
   struct expr_status expr;
   struct emit_status emit;
@@ -12764,50 +21959,181 @@ struct rtl_data {
   struct incoming_args args;
   struct function_subsections subsections;
   struct rtl_eh eh;
+
+
+
+
+
   int outgoing_args_size;
+
+
+
+
+
   rtx return_rtx;
+
+
+
   struct initial_value_struct *hard_reg_initial_vals;
+
+
+
   tree stack_protect_guard;
+
+
+
   rtx x_nonlocal_goto_handler_labels;
+
+
+
+
   rtx x_return_label;
+
+
+
+
   rtx x_naked_return_label;
+
+
+
   rtx x_stack_slot_list;
+
+
   rtx x_stack_check_probe_note;
+
+
+
+
+
   rtx x_arg_pointer_save_area;
+
+
   rtx drap_reg;
+
+
+
+
   long x_frame_offset;
+
+
   rtx x_parm_birth_insn;
+
+
   VEC_temp_slot_p_gc *x_used_temp_slots;
+
+
   struct temp_slot *x_avail_temp_slots;
+
+
   int x_temp_slot_level;
+
+
+
   unsigned int stack_alignment_needed;
+
+
+
   unsigned int preferred_stack_boundary;
+
+
   unsigned int parm_stack_boundary;
+
+
   unsigned int max_used_stack_slot_alignment;
 # 342 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/function.h"
   unsigned int stack_alignment_estimated;
+
+
+
+
+
   rtx epilogue_delay_list;
+
+
+
   unsigned char accesses_prior_frames;
+
+
   unsigned char calls_eh_return;
+
+
+
   unsigned char saves_all_registers;
+
+
+
   unsigned char has_nonlocal_goto;
+
+
   unsigned char has_asm_statement;
+
+
+
+
+
+
   unsigned char all_throwers_are_sibcalls;
+
+
+
   unsigned char limit_stack;
+
+
   unsigned char profile;
+
+
   unsigned char uses_const_pool;
+
+
   unsigned char uses_pic_offset_table;
+
+
   unsigned char uses_eh_lsda;
+
+
   unsigned char tail_call_emit;
+
+
   unsigned char arg_pointer_save_area_init;
+
+
+
   unsigned char frame_pointer_needed;
+
+
   unsigned char maybe_hot_insn_p;
+
+
+
+
+
+
   unsigned char stack_realign_needed;
+
+
+
+
   unsigned char stack_realign_tried;
+
+
+
   unsigned char need_drap;
+
+
+
+
   unsigned char stack_realign_processed;
+
+
+
   unsigned char stack_realign_finalized;
+
+
   unsigned char dbr_scheduled_p;
+
+
+
+
   unsigned char nothrow;
 };
 # 453 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/function.h"
@@ -12815,79 +22141,229 @@ extern struct rtl_data x_rtl;
 # 463 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/function.h"
 struct function {
   struct eh_status *eh;
+
+
   struct control_flow_graph *cfg;
+
+
   struct gimple_seq_d *gimple_body;
+
+
   struct gimple_df *gimple_df;
+
+
   struct loops *x_current_loops;
+
+
   htab_t value_histograms;
+
+
+
+
   tree decl;
+
+
+
   tree static_chain_decl;
+
+
+
+
   tree nonlocal_goto_save_area;
+
+
   tree local_decls;
+
+
+
+
   struct machine_function * machine;
+
+
   struct language_function * language;
+
+
   htab_t used_types_hash;
+
+
   int last_stmt_uid;
+
+
   int funcdef_no;
+
+
   location_t function_start_locus;
+
+
   location_t function_end_locus;
+
+
   unsigned int curr_properties;
   unsigned int last_verified;
+
+
+
+
   const char * cannot_be_copied_reason;
+
+
+
+
+
+
   unsigned int va_list_gpr_size : 8;
+
+
+
   unsigned int va_list_fpr_size : 8;
+
+
+
   __extension__ enum function_frequency function_frequency : 2;
+
+
   unsigned int calls_setjmp : 1;
+
+
+
   unsigned int calls_alloca : 1;
+
+
+
   unsigned int has_nonlocal_label : 1;
+
+
+
+
   unsigned int cannot_be_copied_set : 1;
+
+
   unsigned int stdarg : 1;
 # 571 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/function.h"
   unsigned int dont_save_pending_sizes_p : 1;
+
   unsigned int after_inlining : 1;
   unsigned int always_inline_functions_inlined : 1;
+
+
+
+
+
+
   unsigned int returns_struct : 1;
+
+
+
   unsigned int returns_pcc_struct : 1;
+
+
   unsigned int after_tree_profile : 1;
+
+
+
   unsigned int has_local_explicit_reg_vars : 1;
+
+
+
+
+
   unsigned int is_thunk : 1;
 };
+
+
+
+
+
+
+
 extern struct function *cfun;
+
+
+
+
+
+
+
 extern int virtuals_instantiated;
+
+
 extern int trampolines_created;
+
 struct types_used_by_vars_entry {
   tree type;
   tree var_decl;
 };
+
+
+
+
+
+
 extern htab_t
   types_used_by_vars_hash;
+
 hashval_t types_used_by_vars_do_hash (const void*);
 int types_used_by_vars_eq (const void *, const void *);
 void types_used_by_var_decl_insert (tree type, tree var_decl);
+
+
+
 extern tree types_used_by_cur_var_decl;
+
+
+
 extern void set_cfun (struct function *new_cfun);
 extern void push_cfun (struct function *new_cfun);
 extern void pop_cfun (void);
 extern void instantiate_decl_rtl (rtx x);
 # 658 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/function.h"
 extern void reorder_blocks (void);
+
+
 extern void number_blocks (tree);
+
 extern void clear_block_marks (tree);
 extern tree blocks_nreverse (tree);
+
+
+
+
 extern long get_frame_size (void);
+
+
+
+
 extern unsigned char frame_offset_overflow (long, tree);
+
+
+
 extern struct machine_function * (*init_machine_status) (void);
+
+
 extern void free_after_parsing (struct function *);
 extern void free_after_compilation (struct function *);
+
 extern void init_varasm_status (void);
+
+
+
+
+
+
 extern rtx get_arg_pointer_save_area (void);
+
+
 extern const char *current_function_name (void);
+
 extern void do_warn_unused_parameter (tree);
+
 extern unsigned char pass_by_reference (CUMULATIVE_ARGS *, enum machine_mode,
           tree, unsigned char);
 extern unsigned char reference_callee_copied (CUMULATIVE_ARGS *, enum machine_mode,
          tree, unsigned char);
+
 extern void used_types_insert (tree);
+
 extern int get_next_funcdef_no (void);
 # 42 "../../../src/plugin-utils.h" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h" 1
@@ -12904,12 +22380,19 @@ typedef enum {
   GMP_RNDU,
   GMP_RNDD,
   GMP_RND_MAX,
+
   GMP_RNDNA=-1
 } mpfr_rnd_t;
 # 96 "/usr/include/mpfr.h" 3 4
 typedef unsigned long mpfr_prec_t;
 # 106 "/usr/include/mpfr.h" 3 4
 typedef int mpfr_sign_t;
+
+
+
+
+
+
 typedef struct {
   mpfr_prec_t _mpfr_prec;
   mpfr_sign_t _mpfr_sign;
@@ -12928,6 +22411,7 @@ typedef enum {
 # 204 "/usr/include/mpfr.h" 3 4
  const char * mpfr_get_version (void);
  const char * mpfr_get_patches (void);
+
  mp_exp_t mpfr_get_emin (void);
  int mpfr_set_emin (mp_exp_t);
  mp_exp_t mpfr_get_emin_min (void);
@@ -12936,42 +22420,51 @@ typedef enum {
  int mpfr_set_emax (mp_exp_t);
  mp_exp_t mpfr_get_emax_min (void);
  mp_exp_t mpfr_get_emax_max (void);
+
  void mpfr_set_default_rounding_mode (mpfr_rnd_t);
  mpfr_rnd_t mpfr_get_default_rounding_mode (void);
  const char *
    mpfr_print_rnd_mode (mpfr_rnd_t);
+
  void mpfr_clear_flags (void);
  void mpfr_clear_underflow (void);
  void mpfr_clear_overflow (void);
  void mpfr_clear_nanflag (void);
  void mpfr_clear_inexflag (void);
  void mpfr_clear_erangeflag (void);
+
  void mpfr_set_underflow (void);
  void mpfr_set_overflow (void);
  void mpfr_set_nanflag (void);
  void mpfr_set_inexflag (void);
  void mpfr_set_erangeflag (void);
+
  int mpfr_underflow_p (void);
  int mpfr_overflow_p (void);
  int mpfr_nanflag_p (void);
  int mpfr_inexflag_p (void);
  int mpfr_erangeflag_p (void);
+
  int
   mpfr_check_range (mpfr_ptr, int, mpfr_rnd_t);
+
  void mpfr_init2 (mpfr_ptr, mpfr_prec_t);
  void mpfr_init (mpfr_ptr);
  void mpfr_clear (mpfr_ptr);
+
  void
   mpfr_inits2 (mpfr_prec_t, mpfr_ptr, ...) __attribute__ ((sentinel));
  void
   mpfr_inits (mpfr_ptr, ...) __attribute__ ((sentinel));
  void
   mpfr_clears (mpfr_ptr, ...) __attribute__ ((sentinel));
+
  int
   mpfr_prec_round (mpfr_ptr, mpfr_prec_t, mpfr_rnd_t);
  int
   mpfr_can_round (mpfr_srcptr, mp_exp_t, mpfr_rnd_t, mpfr_rnd_t, mpfr_prec_t)
                                             ;
+
  mp_exp_t mpfr_get_exp (mpfr_srcptr);
  int mpfr_set_exp (mpfr_ptr, mp_exp_t);
  mpfr_prec_t mpfr_get_prec (mpfr_srcptr);
@@ -12979,7 +22472,12 @@ typedef enum {
  void mpfr_set_prec_raw (mpfr_ptr, mpfr_prec_t);
  void mpfr_set_default_prec (mpfr_prec_t);
  mpfr_prec_t mpfr_get_default_prec (void);
+
  int mpfr_set_d (mpfr_ptr, double, mpfr_rnd_t);
+
+
+
+
  int
   mpfr_set_ld (mpfr_ptr, long double, mpfr_rnd_t);
  int
@@ -13025,8 +22523,14 @@ typedef enum {
   __gmpfr_set_uj_2exp (mpfr_t, uintmax_t, intmax_t, mpfr_rnd_t);
  intmax_t __gmpfr_mpfr_get_sj (mpfr_srcptr, mpfr_rnd_t);
  uintmax_t __gmpfr_mpfr_get_uj (mpfr_srcptr, mpfr_rnd_t);
+
+
  mp_exp_t mpfr_get_z_exp (mpz_ptr, mpfr_srcptr);
  double mpfr_get_d (mpfr_srcptr, mpfr_rnd_t);
+
+
+
+
  long double mpfr_get_ld (mpfr_srcptr, mpfr_rnd_t)
                                                                   ;
  double mpfr_get_d1 (mpfr_srcptr);
@@ -13041,19 +22545,29 @@ typedef enum {
                                                                          ;
  void mpfr_get_z (mpz_ptr z, mpfr_srcptr f, mpfr_rnd_t)
                                                           ;
+
  void mpfr_free_str (char *);
+
+
  void mpfr_random (mpfr_ptr);
  void mpfr_random2 (mpfr_ptr,mp_size_t,mp_exp_t);
  int mpfr_urandomb (mpfr_ptr, gmp_randstate_t);
+
  void mpfr_nextabove (mpfr_ptr);
  void mpfr_nextbelow (mpfr_ptr);
  void mpfr_nexttoward (mpfr_ptr, mpfr_srcptr);
+
+
+
+
  size_t __gmpfr_inp_str (mpfr_ptr, FILE*, int, mpfr_rnd_t)
                                                               ;
  size_t __gmpfr_out_str (FILE*, int, size_t, mpfr_srcptr, mpfr_rnd_t)
                                                                            ;
+
  int __gmpfr_fprintf (FILE*, const char*, ...)
                                                     ;
+
  int mpfr_printf (const char*, ...);
  int mpfr_asprintf (char**, const char*, ...)
                                                      ;
@@ -13061,8 +22575,17 @@ typedef enum {
                                                     ;
  int mpfr_snprintf (char*, size_t, const char*, ...)
                                                                         ;
+
+
+
+
  int __gmpfr_vfprintf (FILE*, const char*, va_list)
                                                          ;
+
+
+
+
+
  int __gmpfr_vprintf (const char*, va_list);
  int __gmpfr_vasprintf (char**, const char*, va_list)
                                                           ;
@@ -13070,6 +22593,8 @@ typedef enum {
                                                         ;
  int __gmpfr_vsnprintf (char*, size_t, const char*, va_list)
                                                                             ;
+
+
  int mpfr_pow (mpfr_ptr, mpfr_srcptr, mpfr_srcptr, mpfr_rnd_t)
                                                                     ;
  int mpfr_pow_si (mpfr_ptr, mpfr_srcptr, long int, mpfr_rnd_t)
@@ -13082,12 +22607,14 @@ typedef enum {
                                                                        ;
  int mpfr_pow_z (mpfr_ptr, mpfr_srcptr, mpz_srcptr, mpfr_rnd_t)
                                                                      ;
+
  int mpfr_sqrt (mpfr_ptr, mpfr_srcptr, mpfr_rnd_t)
                                                         ;
  int mpfr_sqrt_ui (mpfr_ptr, unsigned long, mpfr_rnd_t)
                                                            ;
  int mpfr_rec_sqrt (mpfr_ptr, mpfr_srcptr, mpfr_rnd_t)
                                                             ;
+
  int mpfr_add (mpfr_ptr, mpfr_srcptr, mpfr_srcptr, mpfr_rnd_t)
                                                                     ;
  int mpfr_sub (mpfr_ptr, mpfr_srcptr, mpfr_srcptr, mpfr_rnd_t)
@@ -13096,6 +22623,7 @@ typedef enum {
                                                                     ;
  int mpfr_div (mpfr_ptr, mpfr_srcptr, mpfr_srcptr, mpfr_rnd_t)
                                                                     ;
+
  int mpfr_add_ui (mpfr_ptr, mpfr_srcptr, unsigned long, mpfr_rnd_t)
                                                                          ;
  int mpfr_sub_ui (mpfr_ptr, mpfr_srcptr, unsigned long, mpfr_rnd_t)
@@ -13108,6 +22636,7 @@ typedef enum {
                                                                          ;
  int mpfr_ui_div (mpfr_ptr, unsigned long, mpfr_srcptr, mpfr_rnd_t)
                                                                        ;
+
  int mpfr_add_si (mpfr_ptr, mpfr_srcptr, long int, mpfr_rnd_t)
                                                                     ;
  int mpfr_sub_si (mpfr_ptr, mpfr_srcptr, long int, mpfr_rnd_t)
@@ -13120,6 +22649,7 @@ typedef enum {
                                                                     ;
  int mpfr_si_div (mpfr_ptr, long int, mpfr_srcptr, mpfr_rnd_t)
                                                                        ;
+
  int mpfr_add_d (mpfr_ptr, mpfr_srcptr, double, mpfr_rnd_t)
                                                                   ;
  int mpfr_sub_d (mpfr_ptr, mpfr_srcptr, double, mpfr_rnd_t)
@@ -13132,19 +22662,24 @@ typedef enum {
                                                                   ;
  int mpfr_d_div (mpfr_ptr, double, mpfr_srcptr, mpfr_rnd_t)
                                                                        ;
+
  int mpfr_sqr (mpfr_ptr, mpfr_srcptr,mpfr_rnd_t);
+
  int mpfr_const_pi (mpfr_ptr, mpfr_rnd_t);
  int mpfr_const_log2 (mpfr_ptr, mpfr_rnd_t);
  int mpfr_const_euler (mpfr_ptr, mpfr_rnd_t);
  int mpfr_const_catalan (mpfr_ptr, mpfr_rnd_t);
+
  int mpfr_agm (mpfr_ptr, mpfr_srcptr, mpfr_srcptr, mpfr_rnd_t)
                                                        ;
+
  int mpfr_log (mpfr_ptr, mpfr_srcptr,mpfr_rnd_t);
  int mpfr_log2 (mpfr_ptr,mpfr_srcptr,mpfr_rnd_t);
  int mpfr_log10 (mpfr_ptr, mpfr_srcptr, mpfr_rnd_t)
                                                          ;
  int mpfr_log1p (mpfr_ptr, mpfr_srcptr, mpfr_rnd_t)
                                                          ;
+
  int mpfr_exp (mpfr_ptr, mpfr_srcptr,mpfr_rnd_t);
  int mpfr_exp2 (mpfr_ptr,mpfr_srcptr,mpfr_rnd_t);
  int mpfr_exp10 (mpfr_ptr, mpfr_srcptr, mpfr_rnd_t)
@@ -13153,6 +22688,7 @@ typedef enum {
                                                          ;
  int mpfr_eint (mpfr_ptr,mpfr_srcptr,mpfr_rnd_t);
  int mpfr_li2 (mpfr_ptr,mpfr_srcptr,mpfr_rnd_t);
+
  int mpfr_cmp (mpfr_srcptr, mpfr_srcptr);
  int mpfr_cmp3 (mpfr_srcptr, mpfr_srcptr, int);
  int mpfr_cmp_d (mpfr_srcptr, double);
@@ -13169,6 +22705,7 @@ typedef enum {
  int mpfr_eq (mpfr_srcptr, mpfr_srcptr, unsigned long)
                                                         ;
  int mpfr_sgn (mpfr_srcptr);
+
  int mpfr_mul_2exp (mpfr_ptr, mpfr_srcptr, unsigned long, mpfr_rnd_t)
                                                                            ;
  int mpfr_div_2exp (mpfr_ptr, mpfr_srcptr, unsigned long, mpfr_rnd_t)
@@ -13181,6 +22718,7 @@ typedef enum {
                                                                  ;
  int mpfr_div_2si (mpfr_ptr, mpfr_srcptr, long, mpfr_rnd_t)
                                                                  ;
+
  int mpfr_rint (mpfr_ptr,mpfr_srcptr, mpfr_rnd_t);
  int mpfr_round (mpfr_ptr, mpfr_srcptr);
  int mpfr_trunc (mpfr_ptr, mpfr_srcptr);
@@ -13203,6 +22741,7 @@ typedef enum {
                                                                         ;
  int mpfr_fmod (mpfr_ptr, mpfr_srcptr, mpfr_srcptr, mpfr_rnd_t)
                                                                         ;
+
  int mpfr_fits_ulong_p (mpfr_srcptr, mpfr_rnd_t);
  int mpfr_fits_slong_p (mpfr_srcptr, mpfr_rnd_t);
  int mpfr_fits_uint_p (mpfr_srcptr, mpfr_rnd_t);
@@ -13211,15 +22750,18 @@ typedef enum {
  int mpfr_fits_sshort_p (mpfr_srcptr, mpfr_rnd_t);
  int mpfr_fits_uintmax_p (mpfr_srcptr,mpfr_rnd_t);
  int mpfr_fits_intmax_p (mpfr_srcptr, mpfr_rnd_t);
+
  void mpfr_extract (mpz_ptr, mpfr_srcptr, unsigned int)
                                                               ;
  void mpfr_swap (mpfr_ptr, mpfr_ptr);
  void mpfr_dump (mpfr_srcptr);
+
  int mpfr_nan_p (mpfr_srcptr);
  int mpfr_inf_p (mpfr_srcptr);
  int mpfr_number_p (mpfr_srcptr);
  int mpfr_integer_p (mpfr_srcptr);
  int mpfr_zero_p (mpfr_srcptr);
+
  int mpfr_greater_p (mpfr_srcptr, mpfr_srcptr);
  int mpfr_greaterequal_p (mpfr_srcptr, mpfr_srcptr)
                                                                    ;
@@ -13228,6 +22770,7 @@ typedef enum {
  int mpfr_lessgreater_p (mpfr_srcptr,mpfr_srcptr);
  int mpfr_equal_p (mpfr_srcptr, mpfr_srcptr);
  int mpfr_unordered_p (mpfr_srcptr, mpfr_srcptr);
+
  int mpfr_atanh (mpfr_ptr,mpfr_srcptr,mpfr_rnd_t);
  int mpfr_acosh (mpfr_ptr,mpfr_srcptr,mpfr_rnd_t);
  int mpfr_asinh (mpfr_ptr,mpfr_srcptr,mpfr_rnd_t);
@@ -13236,9 +22779,11 @@ typedef enum {
  int mpfr_tanh (mpfr_ptr,mpfr_srcptr, mpfr_rnd_t);
  int mpfr_sinh_cosh (mpfr_ptr, mpfr_ptr, mpfr_srcptr, mpfr_rnd_t)
                                                                         ;
+
  int mpfr_sech (mpfr_ptr, mpfr_srcptr,mpfr_rnd_t);
  int mpfr_csch (mpfr_ptr, mpfr_srcptr,mpfr_rnd_t);
  int mpfr_coth (mpfr_ptr, mpfr_srcptr,mpfr_rnd_t);
+
  int mpfr_acos (mpfr_ptr,mpfr_srcptr,mpfr_rnd_t);
  int mpfr_asin (mpfr_ptr,mpfr_srcptr,mpfr_rnd_t);
  int mpfr_atan (mpfr_ptr,mpfr_srcptr,mpfr_rnd_t);
@@ -13252,6 +22797,7 @@ typedef enum {
  int mpfr_sec (mpfr_ptr, mpfr_srcptr,mpfr_rnd_t);
  int mpfr_csc (mpfr_ptr, mpfr_srcptr,mpfr_rnd_t);
  int mpfr_cot (mpfr_ptr, mpfr_srcptr,mpfr_rnd_t);
+
  int mpfr_hypot (mpfr_ptr, mpfr_srcptr, mpfr_srcptr, mpfr_rnd_t)
                                                                       ;
  int mpfr_erf (mpfr_ptr, mpfr_srcptr,mpfr_rnd_t);
@@ -13273,12 +22819,14 @@ typedef enum {
  int mpfr_y1 (mpfr_ptr, mpfr_srcptr, mpfr_rnd_t);
  int mpfr_yn (mpfr_ptr, long, mpfr_srcptr, mpfr_rnd_t)
                                                       ;
+
  int mpfr_min (mpfr_ptr, mpfr_srcptr, mpfr_srcptr, mpfr_rnd_t)
                                                        ;
  int mpfr_max (mpfr_ptr, mpfr_srcptr, mpfr_srcptr, mpfr_rnd_t)
                                                        ;
  int mpfr_dim (mpfr_ptr, mpfr_srcptr, mpfr_srcptr, mpfr_rnd_t)
                                                        ;
+
  int mpfr_mul_z (mpfr_ptr, mpfr_srcptr, mpz_srcptr, mpfr_rnd_t)
                                                                      ;
  int mpfr_div_z (mpfr_ptr, mpfr_srcptr, mpz_srcptr, mpfr_rnd_t)
@@ -13288,6 +22836,7 @@ typedef enum {
  int mpfr_sub_z (mpfr_ptr, mpfr_srcptr, mpz_srcptr, mpfr_rnd_t)
                                                                      ;
  int mpfr_cmp_z (mpfr_srcptr, mpz_srcptr);
+
  int mpfr_mul_q (mpfr_ptr, mpfr_srcptr, mpq_srcptr, mpfr_rnd_t)
                                                                      ;
  int mpfr_div_q (mpfr_ptr, mpfr_srcptr, mpq_srcptr, mpfr_rnd_t)
@@ -13297,18 +22846,24 @@ typedef enum {
  int mpfr_sub_q (mpfr_ptr, mpfr_srcptr, mpq_srcptr, mpfr_rnd_t)
                                                                      ;
  int mpfr_cmp_q (mpfr_srcptr, mpq_srcptr);
+
  int mpfr_cmp_f (mpfr_srcptr, mpf_srcptr);
+
  int mpfr_fma (mpfr_ptr, mpfr_srcptr, mpfr_srcptr, mpfr_srcptr, mpfr_rnd_t)
                                                                     ;
  int mpfr_fms (mpfr_ptr, mpfr_srcptr, mpfr_srcptr, mpfr_srcptr, mpfr_rnd_t)
                                                                     ;
  int mpfr_sum (mpfr_ptr, mpfr_ptr *const, unsigned long, mpfr_rnd_t)
                                                                       ;
+
  void mpfr_free_cache (void);
+
  int mpfr_subnormalize (mpfr_ptr, int, mpfr_rnd_t)
                                                                ;
+
  int mpfr_strtofr (mpfr_ptr, const char *, char **, int, mpfr_rnd_t)
                                                                           ;
+
  size_t mpfr_custom_get_size (mpfr_prec_t);
  void mpfr_custom_init (void *, mpfr_prec_t);
  void * mpfr_custom_get_mantissa (mpfr_srcptr);
@@ -13332,6 +22887,7 @@ typedef struct {
   mpfr_t im;
 }
 __mpc_struct;
+
 typedef __mpc_struct mpc_t[1];
 typedef __mpc_struct *mpc_ptr;
 typedef const __mpc_struct *mpc_srcptr;
@@ -13387,11 +22943,16 @@ typedef const __mpc_struct *mpc_srcptr;
  int mpc_set_z (mpc_ptr, mpz_srcptr, mpc_rnd_t);
  int mpc_set_z_z (mpc_ptr, mpz_srcptr, mpz_srcptr, mpc_rnd_t);
  void mpc_swap (mpc_ptr, mpc_ptr);
+
+
  int mpc_set_sj (mpc_ptr, intmax_t, mpc_rnd_t);
  int mpc_set_uj (mpc_ptr, uintmax_t, mpc_rnd_t);
  int mpc_set_sj_sj (mpc_ptr, intmax_t, intmax_t, mpc_rnd_t);
  int mpc_set_uj_uj (mpc_ptr, uintmax_t, uintmax_t, mpc_rnd_t);
+
+
  void mpc_set_nan (mpc_ptr);
+
  int mpc_real (mpfr_ptr, mpc_srcptr, mpfr_rnd_t);
  int mpc_imag (mpfr_ptr, mpc_srcptr, mpfr_rnd_t);
  int mpc_arg (mpfr_ptr, mpc_srcptr, mpfr_rnd_t);
@@ -13420,21 +22981,39 @@ typedef const __mpc_struct *mpc_srcptr;
  void mpc_get_prec2 (mpfr_prec_t *pr, mpfr_prec_t *pi, mpc_srcptr x);
  void mpc_set_prec (mpc_ptr, mpfr_prec_t);
  const char * mpc_get_version (void);
+
  int mpc_strtoc (mpc_ptr, char *, char **, int, mpc_rnd_t);
  int mpc_set_str (mpc_ptr, char *, int, mpc_rnd_t);
  char * mpc_get_str (int, size_t, mpc_srcptr, mpc_rnd_t);
  void mpc_free_str (char *);
+
  int mpc_inp_str (mpc_ptr, FILE *, size_t *, int, mpc_rnd_t);
  size_t mpc_out_str (FILE *, int, size_t, mpc_srcptr, mpc_rnd_t);
 # 29 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/real.h" 2
 extern tree do_mpc_arg2 (tree, tree, tree, int, int (*)(mpc_ptr, mpc_srcptr, mpc_srcptr, mpc_rnd_t));
+
+
+
+
+
+
 enum real_value_class {
   rvc_zero,
   rvc_normal,
   rvc_inf,
   rvc_nan
 };
+
+
+
+
+
+
+
 struct real_value {
+
+
+
   unsigned int cl : 2;
   unsigned int decimal : 1;
   unsigned int sign : 1;
@@ -13449,19 +23028,40 @@ extern char test_real_width
 # 121 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/real.h"
 struct real_format
 {
+
   void (*encode) (const struct real_format *, long *,
     const struct real_value *);
   void (*decode) (const struct real_format *, struct real_value *,
     const long *);
+
+
   int b;
+
+
   int p;
+
+
   int pnan;
+
+
   int emin;
+
+
   int emax;
+
+
+
   int signbit_ro;
+
+
+
   int signbit_rw;
+
+
   unsigned char round_towards_zero;
   unsigned char has_sign_dependent_rounding;
+
+
   unsigned char has_nans;
   unsigned char has_inf;
   unsigned char has_denorm;
@@ -13469,47 +23069,97 @@ struct real_format
   unsigned char qnan_msb_set;
   unsigned char canonical_nan_lsbs_set;
 };
+
+
+
+
+
+
+
 extern const struct real_format *
   real_format_for_mode[MAX_MODE_FLOAT - MIN_MODE_FLOAT + 1
          + MAX_MODE_DECIMAL_FLOAT - MIN_MODE_DECIMAL_FLOAT + 1];
 # 232 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/real.h"
 extern unsigned char real_arithmetic (struct real_value *, int, const struct real_value *,
         const struct real_value *);
+
+
 extern unsigned char real_compare (int, const struct real_value *, const struct real_value *);
+
+
 extern unsigned char real_isinf (const struct real_value *);
+
+
 extern unsigned char real_isnan (const struct real_value *);
+
+
 extern unsigned char real_isfinite (const struct real_value *);
+
+
 extern unsigned char real_isneg (const struct real_value *);
+
+
 extern unsigned char real_isnegzero (const struct real_value *);
+
+
 extern unsigned char real_identical (const struct real_value *, const struct real_value *);
+
+
 extern void real_convert (struct real_value *, enum machine_mode,
      const struct real_value *);
+
+
 extern unsigned char exact_real_truncate (enum machine_mode, const struct real_value *);
+
+
 extern void real_to_decimal (char *, const struct real_value *, size_t,
         size_t, int);
+
+
+
 extern void real_to_decimal_for_mode (char *, const struct real_value *, size_t,
           size_t, int, enum machine_mode);
+
+
 extern void real_to_hexadecimal (char *, const struct real_value *,
      size_t, size_t, int);
+
+
 extern long real_to_integer (const struct real_value *);
 extern void real_to_integer2 (long *, long *,
          const struct real_value *);
+
+
+
 extern int real_from_string (struct real_value *, const char *);
+
 extern void real_from_string3 (struct real_value *, const char *, enum machine_mode);
+
+
 extern void real_from_integer (struct real_value *, enum machine_mode,
           unsigned long, long, int);
+
 extern long real_to_target_fmt (long *, const struct real_value *,
     const struct real_format *);
 extern long real_to_target (long *, const struct real_value *, enum machine_mode);
+
 extern void real_from_target_fmt (struct real_value *, const long *,
       const struct real_format *);
 extern void real_from_target (struct real_value *, const long *,
          enum machine_mode);
+
 extern void real_inf (struct real_value *);
+
 extern unsigned char real_nan (struct real_value *, const char *, int, enum machine_mode);
+
 extern void real_maxval (struct real_value *, int, enum machine_mode);
+
 extern void real_2expN (struct real_value *, int, enum machine_mode);
+
 extern unsigned int real_hash (const struct real_value *);
+
+
+
 extern const struct real_format ieee_single_format;
 extern const struct real_format mips_single_format;
 extern const struct real_format motorola_single_format;
@@ -13537,31 +23187,77 @@ extern const struct real_format arm_half_format;
 # 391 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/real.h"
 extern struct real_value real_value_truncate (enum machine_mode,
          struct real_value);
+
+
+
+
 extern struct real_value real_arithmetic2 (int, const struct real_value *,
       const struct real_value *);
+
+
+
+
+
+
+
 extern int significand_size (enum machine_mode);
+
 extern struct real_value real_from_string2 (const char *, enum machine_mode);
 # 426 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/real.h"
 extern int real_exponent (const struct real_value *);
+
+
 extern void real_ldexp (struct real_value *, const struct real_value *, int);
+
+
+
+
+
 extern struct real_value dconst0;
 extern struct real_value dconst1;
 extern struct real_value dconst2;
 extern struct real_value dconstm1;
 extern struct real_value dconsthalf;
+
+
+
+
+
+
 extern const struct real_value * dconst_e_ptr (void);
+
+
 extern const struct real_value * dconst_third_ptr (void);
+
+
 extern const struct real_value * dconst_sqrt2_ptr (void);
+
+
+
 struct real_value real_value_from_int_cst (const_tree, const_tree);
 # 465 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/real.h"
 extern rtx const_double_from_real_value (struct real_value, enum machine_mode);
+
+
 extern unsigned char exact_real_inverse (enum machine_mode, struct real_value *);
+
+
+
+
 unsigned char real_can_shorten_arithmetic (enum machine_mode, enum machine_mode);
+
+
 extern tree build_real (tree, struct real_value);
+
+
 extern unsigned char real_sqrt (struct real_value *, enum machine_mode,
          const struct real_value *);
+
+
 extern unsigned char real_powi (struct real_value *, enum machine_mode,
          const struct real_value *, long);
+
+
 extern void real_trunc (struct real_value *, enum machine_mode,
    const struct real_value *);
 extern void real_floor (struct real_value *, enum machine_mode,
@@ -13570,12 +23266,27 @@ extern void real_ceil (struct real_value *, enum machine_mode,
          const struct real_value *);
 extern void real_round (struct real_value *, enum machine_mode,
    const struct real_value *);
+
+
 extern void real_copysign (struct real_value *, const struct real_value *);
+
+
+
+
+
 extern void real_from_mpfr (struct real_value *, mpfr_srcptr, tree, mpfr_rnd_t);
 extern void mpfr_from_real (mpfr_ptr, const struct real_value *, mpfr_rnd_t);
+
+
+
 extern unsigned char real_isinteger (const struct real_value *c, enum machine_mode mode);
+
+
+
+
 extern void get_max_float (const struct real_format *, char *, size_t);
 # 29 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h" 2
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/fixed-value.h" 1
 # 27 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/fixed-value.h"
 struct fixed_value
@@ -13588,54 +23299,150 @@ extern struct fixed_value fconst0[18];
 extern struct fixed_value fconst1[8];
 # 50 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/fixed-value.h"
 extern rtx const_fixed_from_fixed_value (struct fixed_value, enum machine_mode);
+
+
 extern void fixed_from_string (struct fixed_value *, const char *,
           enum machine_mode);
+
+
 extern tree build_fixed (tree, struct fixed_value);
+
+
 extern unsigned char fixed_convert (struct fixed_value *, enum machine_mode,
       const struct fixed_value *, unsigned char);
+
+
 extern unsigned char fixed_convert_from_int (struct fixed_value *, enum machine_mode,
         double_int, unsigned char, unsigned char);
+
+
 extern unsigned char fixed_convert_from_real (struct fixed_value *, enum machine_mode,
          const struct real_value *, unsigned char);
+
+
 extern void real_convert_from_fixed (struct real_value *, enum machine_mode,
          const struct fixed_value *);
+
+
 extern unsigned char fixed_identical (const struct fixed_value *, const struct fixed_value *);
+
+
 extern unsigned int fixed_hash (const struct fixed_value *);
+
+
+
+
+
+
+
 extern void fixed_to_decimal (char *str, const struct fixed_value *, size_t);
+
+
 extern unsigned char fixed_arithmetic (struct fixed_value *, int, const struct fixed_value *,
          const struct fixed_value *, unsigned char);
+
+
 extern unsigned char fixed_compare (int, const struct fixed_value *,
       const struct fixed_value *);
+
+
 extern unsigned char fixed_isneg (const struct fixed_value *);
 # 31 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h" 2
 # 45 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h"
 enum rtx_code {
+
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.def" 1
 # 82 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.def"
 UNKNOWN ,
+
+
+
+
+
+
 VALUE ,
+
+
+
 DEBUG_EXPR ,
+
+
+
+
+
+
 EXPR_LIST ,
+
+
+
 INSN_LIST ,
+
+
+
+
+
 SEQUENCE ,
+
+
 ADDRESS ,
 # 126 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.def"
 DEBUG_INSN ,
+
+
 INSN ,
+
+
+
 JUMP_INSN ,
+
+
+
+
+
+
 CALL_INSN ,
+
+
 BARRIER ,
+
+
+
+
+
+
+
 CODE_LABEL ,
+
+
+
+
+
+
 NOTE ,
 # 171 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.def"
 COND_EXEC ,
+
+
 PARALLEL ,
+
+
+
+
+
+
+
 ASM_INPUT ,
 # 196 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.def"
 ASM_OPERANDS ,
 # 214 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.def"
 UNSPEC ,
+
+
 UNSPEC_VOLATILE ,
+
+
+
 ADDR_VEC ,
 # 246 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.def"
 ADDR_DIFF_VEC ,
@@ -13647,48 +23454,154 @@ SET ,
 USE ,
 # 287 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.def"
 CLOBBER ,
+
+
+
+
+
 CALL ,
+
+
+
 RETURN ,
+
+
+
 EH_RETURN ,
+
+
+
+
+
 TRAP_IF ,
+
+
+
+
+
+
 CONST_INT ,
+
+
 CONST_FIXED ,
+
+
+
+
 CONST_DOUBLE ,
+
+
 CONST_VECTOR ,
+
+
+
+
 CONST_STRING ,
+
+
+
+
+
 CONST ,
+
+
+
 PC ,
 # 350 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.def"
 REG ,
+
+
+
+
+
+
 SCRATCH ,
+
+
+
 SUBREG ,
 # 374 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.def"
 STRICT_LOW_PART ,
+
+
+
+
+
 CONCAT ,
+
+
+
+
+
 CONCATN ,
+
+
+
+
 MEM ,
+
+
+
 LABEL_REF ,
+
+
+
+
+
+
 SYMBOL_REF ,
+
+
+
+
+
+
 CC0 ,
 # 421 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.def"
 IF_THEN_ELSE ,
+
+
 COMPARE ,
+
+
 PLUS ,
+
+
 MINUS ,
+
+
 NEG ,
+
 MULT ,
+
+
 SS_MULT ,
+
 US_MULT ,
+
+
 DIV ,
+
 SS_DIV ,
+
 US_DIV ,
+
+
 MOD ,
+
+
 UDIV ,
 UMOD ,
+
+
 AND ,
 IOR ,
 XOR ,
 NOT ,
+
+
+
+
 ASHIFT ,
 ROTATE ,
 ASHIFTRT ,
@@ -13707,6 +23620,9 @@ POST_INC ,
 # 507 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.def"
 PRE_MODIFY ,
 POST_MODIFY ,
+
+
+
 NE ,
 EQ ,
 GE ,
@@ -13717,90 +23633,242 @@ GEU ,
 GTU ,
 LEU ,
 LTU ,
+
+
 UNORDERED ,
 ORDERED ,
+
+
 UNEQ ,
 UNGE ,
 UNGT ,
 UNLE ,
 UNLT ,
+
+
 LTGT ,
+
+
+
+
 SIGN_EXTEND ,
+
+
 ZERO_EXTEND ,
+
+
 TRUNCATE ,
+
+
 FLOAT_EXTEND ,
 FLOAT_TRUNCATE ,
+
+
 FLOAT ,
+
+
+
+
+
+
+
 FIX ,
+
+
 UNSIGNED_FLOAT ,
+
+
+
+
 UNSIGNED_FIX ,
 # 579 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.def"
 FRACT_CONVERT ,
+
+
+
+
+
+
 UNSIGNED_FRACT_CONVERT ,
+
+
+
+
+
+
+
 SAT_FRACT ,
+
+
+
+
+
 UNSIGNED_SAT_FRACT ,
+
+
 ABS ,
+
+
 SQRT ,
+
+
 BSWAP ,
+
+
+
+
 FFS ,
+
+
 CLZ ,
+
+
 CTZ ,
+
+
 POPCOUNT ,
+
+
 PARITY ,
 # 638 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.def"
 SIGN_EXTRACT ,
+
+
+
 ZERO_EXTRACT ,
+
+
+
+
 HIGH ,
+
+
+
 LO_SUM ,
+
+
+
+
+
+
 VEC_MERGE ,
+
+
+
+
+
 VEC_SELECT ,
+
+
+
+
 VEC_CONCAT ,
+
+
+
+
+
 VEC_DUPLICATE ,
+
+
 SS_PLUS ,
+
+
 US_PLUS ,
+
+
 SS_MINUS ,
+
+
 SS_NEG ,
+
 US_NEG ,
+
+
 SS_ABS ,
+
+
 SS_ASHIFT ,
+
+
 US_ASHIFT ,
+
+
 US_MINUS ,
+
+
 SS_TRUNCATE ,
+
+
 US_TRUNCATE ,
+
+
+
+
 VAR_LOCATION ,
 # 49 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h" 2
+
+
   LAST_AND_UNUSED_RTX_CODE};
 # 60 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h"
 enum rtx_class {
+
+
+
+
   RTX_COMPARE,
   RTX_COMM_COMPARE,
   RTX_BIN_ARITH,
   RTX_COMM_ARITH,
+
+
   RTX_UNARY,
+
   RTX_EXTRA,
   RTX_MATCH,
   RTX_INSN,
+
+
   RTX_OBJ,
   RTX_CONST_OBJ,
+
   RTX_TERNARY,
   RTX_BITFIELD_OPS,
   RTX_AUTOINC
 };
 # 98 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h"
 extern const unsigned char rtx_length[((int) LAST_AND_UNUSED_RTX_CODE)];
+
+
 extern const char * const rtx_name[((int) LAST_AND_UNUSED_RTX_CODE)];
+
+
 extern const char * const rtx_format[((int) LAST_AND_UNUSED_RTX_CODE)];
+
+
 extern const enum rtx_class rtx_class[((int) LAST_AND_UNUSED_RTX_CODE)];
+
+
 extern const unsigned char rtx_code_size[((int) LAST_AND_UNUSED_RTX_CODE)];
 extern const unsigned char rtx_next[((int) LAST_AND_UNUSED_RTX_CODE)];
+
+
+
 typedef struct
 {
+
   unsigned min_align: 8;
+
   unsigned base_after_vec: 1;
   unsigned min_after_vec: 1;
+
   unsigned max_after_vec: 1;
+
   unsigned min_after_base: 1;
+
   unsigned max_after_base: 1;
+
+
   unsigned offset_unsigned: 1;
   unsigned : 2;
   unsigned scale : 8;
@@ -13820,6 +23888,9 @@ typedef struct reg_attrs {
   tree decl;
   long offset;
 } reg_attrs;
+
+
+
 union rtunion_def
 {
   int rt_int;
@@ -13838,37 +23909,99 @@ union rtunion_def
   struct constant_descriptor_rtx *rt_constant;
 };
 typedef union rtunion_def rtunion;
+
+
+
+
 struct block_symbol {
+
   rtunion fld[3];
+
+
   struct object_block *block;
+
+
+
   long offset;
 };
+
 static __inline__ void VEC_rtx_must_be_pointer_type (void) { (void)((rtx)1 == (void *)1); } typedef struct VEC_rtx_base { unsigned num; unsigned alloc; rtx vec[1]; } VEC_rtx_base; typedef struct VEC_rtx_none { VEC_rtx_base base; } VEC_rtx_none; static __inline__ unsigned VEC_rtx_base_length (const VEC_rtx_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ rtx VEC_rtx_base_last (const VEC_rtx_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ rtx VEC_rtx_base_index (const VEC_rtx_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_rtx_base_iterate (const VEC_rtx_base *vec_, unsigned ix_, rtx *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (rtx) 0; return 0; } } static __inline__ size_t VEC_rtx_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_rtx_base, vec) + alloc_ * sizeof(rtx); } static __inline__ void VEC_rtx_base_embedded_init (VEC_rtx_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_rtx_base_space (VEC_rtx_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ rtx *VEC_rtx_base_quick_push (VEC_rtx_base *vec_, rtx obj_ ) { rtx *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ rtx VEC_rtx_base_pop (VEC_rtx_base *vec_ ) { rtx obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_rtx_base_truncate (VEC_rtx_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ rtx VEC_rtx_base_replace (VEC_rtx_base *vec_, unsigned ix_, rtx obj_ ) { rtx old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ rtx *VEC_rtx_base_quick_insert (VEC_rtx_base *vec_, unsigned ix_, rtx obj_ ) { rtx *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (rtx)); *slot_ = obj_; return slot_; } static __inline__ rtx VEC_rtx_base_ordered_remove (VEC_rtx_base *vec_, unsigned ix_ ) { rtx *slot_; rtx obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (rtx)); return obj_; } static __inline__ rtx VEC_rtx_base_unordered_remove (VEC_rtx_base *vec_, unsigned ix_ ) { rtx *slot_; rtx obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_rtx_base_block_remove (VEC_rtx_base *vec_, unsigned ix_, unsigned len_ ) { rtx *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (rtx)); } static __inline__ rtx *VEC_rtx_base_address (VEC_rtx_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_rtx_base_lower_bound (VEC_rtx_base *vec_, const rtx obj_, unsigned char (*lessthan_)(const rtx, const rtx) ) { unsigned int len_ = VEC_rtx_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { rtx middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_rtx_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
 typedef struct VEC_rtx_heap { VEC_rtx_base base; } VEC_rtx_heap; static __inline__ VEC_rtx_heap *VEC_rtx_heap_alloc (int alloc_ ) { return (VEC_rtx_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_rtx_heap_free (VEC_rtx_heap **vec_) { if (*vec_) free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_rtx_heap *VEC_rtx_heap_copy (VEC_rtx_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_rtx_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_rtx_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (rtx) * len_); } return new_vec_; } static __inline__ int VEC_rtx_heap_reserve (VEC_rtx_heap **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_rtx_heap_reserve_exact (VEC_rtx_heap **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_rtx_heap_safe_grow (VEC_rtx_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_rtx_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_rtx_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_rtx_heap_safe_grow_cleared (VEC_rtx_heap **vec_, int size_ ) { int oldsize = VEC_rtx_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_rtx_heap_safe_grow (vec_, size_ ); memset (&(VEC_rtx_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (rtx) * (size_ - oldsize)); } static __inline__ rtx *VEC_rtx_heap_safe_push (VEC_rtx_heap **vec_, rtx obj_ ) { VEC_rtx_heap_reserve (vec_, 1 ); return VEC_rtx_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ rtx *VEC_rtx_heap_safe_insert (VEC_rtx_heap **vec_, unsigned ix_, rtx obj_ ) { VEC_rtx_heap_reserve (vec_, 1 ); return VEC_rtx_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 typedef struct VEC_rtx_gc { VEC_rtx_base base; } VEC_rtx_gc; static __inline__ VEC_rtx_gc *VEC_rtx_gc_alloc (int alloc_ ) { return (VEC_rtx_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_rtx_gc_free (VEC_rtx_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_rtx_gc *VEC_rtx_gc_copy (VEC_rtx_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_rtx_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_rtx_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (rtx) * len_); } return new_vec_; } static __inline__ int VEC_rtx_gc_reserve (VEC_rtx_gc **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_rtx_gc_reserve_exact (VEC_rtx_gc **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_rtx_gc_safe_grow (VEC_rtx_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_rtx_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_rtx_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_rtx_gc_safe_grow_cleared (VEC_rtx_gc **vec_, int size_ ) { int oldsize = VEC_rtx_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_rtx_gc_safe_grow (vec_, size_ ); memset (&(VEC_rtx_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (rtx) * (size_ - oldsize)); } static __inline__ rtx *VEC_rtx_gc_safe_push (VEC_rtx_gc **vec_, rtx obj_ ) { VEC_rtx_gc_reserve (vec_, 1 ); return VEC_rtx_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ rtx *VEC_rtx_gc_safe_insert (VEC_rtx_gc **vec_, unsigned ix_, rtx obj_ ) { VEC_rtx_gc_reserve (vec_, 1 ); return VEC_rtx_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+
+
 struct object_block {
+
   section *sect;
+
+
   unsigned int alignment;
+
+
   long size;
 # 224 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h"
   VEC_rtx_gc *objects;
 # 234 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h"
   VEC_rtx_gc *anchors;
 };
+
+
+
 struct
                                       rtx_def {
+
   __extension__ enum rtx_code code: 16;
+
+
   __extension__ enum machine_mode mode : 8;
+
+
+
+
+
+
   unsigned int jump : 1;
+
+
+
+
   unsigned int call : 1;
+
+
+
+
+
+
+
   unsigned int unchanging : 1;
 # 277 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h"
   unsigned int volatil : 1;
 # 291 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h"
   unsigned int in_struct : 1;
+
+
+
+
+
+
   unsigned int used : 1;
+
+
+
+
+
+
   unsigned frame_related : 1;
+
+
+
+
   unsigned return_val : 1;
+
+
+
+
   union u {
     rtunion fld[1];
     long hwint[1];
@@ -13885,43 +24018,145 @@ struct rtvec_def {
 # 836 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h"
 enum reg_note
 {
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/reg-notes.def" 1
 # 33 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/reg-notes.def"
 REG_DEP_TRUE,
+
+
+
+
 REG_DEAD,
+
+
 REG_INC,
 # 52 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/reg-notes.def"
 REG_EQUIV,
+
+
+
+
 REG_EQUAL,
+
+
+
+
+
+
 REG_NONNEG,
+
+
 REG_UNUSED,
 # 76 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/reg-notes.def"
 REG_CC_SETTER,
 REG_CC_USER,
+
+
+
+
 REG_LABEL_TARGET,
+
+
+
+
+
 REG_LABEL_OPERAND,
+
+
+
+
 REG_DEP_OUTPUT,
 REG_DEP_ANTI,
+
+
+
+
+
 REG_BR_PROB,
+
+
+
+
 REG_VALUE_PROFILE,
+
+
+
 REG_NOALIAS,
+
+
+
+
+
 REG_BR_PRED,
+
+
+
+
 REG_FRAME_RELATED_EXPR,
 # 130 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/reg-notes.def"
 REG_CFA_DEF_CFA,
+
+
+
+
+
+
+
 REG_CFA_ADJUST_CFA,
+
+
+
+
+
 REG_CFA_OFFSET,
+
+
+
+
 REG_CFA_REGISTER,
+
+
+
+
+
 REG_CFA_RESTORE,
+
+
+
+
 REG_CFA_SET_VDRAP,
+
+
+
+
 REG_EH_CONTEXT,
+
+
+
+
+
 REG_EH_REGION,
+
+
 REG_SAVE_NOTE,
+
+
 REG_NORETURN,
+
+
+
 REG_NON_LOCAL_GOTO,
+
+
+
+
 REG_CROSSING_JUMP,
+
+
+
 REG_SETJMP,
 # 840 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h" 2
+
   REG_NOTE_MAX
 };
 # 851 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h"
@@ -13936,24 +24171,58 @@ enum var_init_status
 # 956 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h"
 enum insn_note
 {
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/insn-notes.def" 1
 # 35 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/insn-notes.def"
 NOTE_INSN_DELETED,
+
+
 NOTE_INSN_DELETED_LABEL,
+
+
+
 NOTE_INSN_BLOCK_BEG,
 NOTE_INSN_BLOCK_END,
+
+
+
+
 NOTE_INSN_FUNCTION_BEG,
+
+
 NOTE_INSN_PROLOGUE_END,
+
+
 NOTE_INSN_EPILOGUE_BEG,
+
+
+
 NOTE_INSN_EH_REGION_BEG,
 NOTE_INSN_EH_REGION_END,
+
+
 NOTE_INSN_VAR_LOCATION,
+
+
+
+
 NOTE_INSN_BASIC_BLOCK,
+
+
+
 NOTE_INSN_SWITCH_TEXT_SECTIONS,
+
+
+
 NOTE_INSN_CFA_RESTORE_STATE,
 # 960 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h" 2
+
+
   NOTE_INSN_MAX
 };
+
+
+
 extern const char * const note_insn_name[NOTE_INSN_MAX];
 # 982 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h"
 enum label_kind
@@ -13992,11 +24261,21 @@ extern unsigned char truncated_to_mode (enum machine_mode, const_rtx);
 extern int low_bitmask_len (enum machine_mode, unsigned long);
 # 1543 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h"
 extern int generating_concat_p;
+
+
 extern int currently_expanding_to_rtl;
+
+
+
+
 extern int ceil_log2 (unsigned long);
+
+
 extern void set_stack_check_libfunc (rtx);
 extern long trunc_int_for_mode (long, enum machine_mode);
 extern rtx plus_constant (rtx, long);
+
+
 extern rtx gen_blockage (void);
 extern rtvec gen_rtvec (int, ...);
 extern rtx copy_insn_1 (rtx);
@@ -14008,16 +24287,27 @@ extern void set_reg_attrs_for_parm (rtx, rtx);
 extern void set_reg_attrs_for_decl_rtl (tree t, rtx x);
 extern void adjust_reg_mode (rtx, enum machine_mode);
 extern int mem_expr_equal_p (const_tree, const_tree);
+
+
 extern rtx rtx_alloc_stat (enum rtx_code );
+
+
 extern rtvec rtvec_alloc (int);
 extern rtvec shallow_copy_rtvec (rtvec);
 extern unsigned char shared_const_p (const_rtx);
 extern rtx copy_rtx (rtx);
 extern void dump_rtx_statistics (void);
+
+
 extern rtx copy_rtx_if_shared (rtx);
+
+
 extern unsigned int rtx_size (const_rtx);
 extern rtx shallow_copy_rtx_stat (const_rtx );
+
 extern int rtx_equal_p (const_rtx, const_rtx);
+
+
 extern rtvec gen_rtvec_v (int, rtx *);
 extern rtx gen_reg_rtx (enum machine_mode);
 extern rtx gen_rtx_REG_offset (rtx, enum machine_mode, unsigned int, int);
@@ -14025,10 +24315,16 @@ extern rtx gen_reg_rtx_offset (rtx, enum machine_mode, int);
 extern rtx gen_reg_rtx_and_attrs (rtx);
 extern rtx gen_label_rtx (void);
 extern rtx gen_lowpart_common (enum machine_mode, rtx);
+
+
 extern rtx gen_lowpart_if_possible (enum machine_mode, rtx);
+
+
 extern rtx gen_highpart (enum machine_mode, rtx);
 extern rtx gen_highpart_mode (enum machine_mode, enum machine_mode, rtx);
 extern rtx operand_subword (rtx, unsigned int, int, enum machine_mode);
+
+
 extern rtx operand_subword_force (rtx, unsigned int, enum machine_mode);
 extern int subreg_lowpart_p (const_rtx);
 extern unsigned int subreg_lowpart_offset (enum machine_mode,
@@ -14039,6 +24335,8 @@ extern int byte_lowpart_offset (enum machine_mode, enum machine_mode);
 extern rtx make_safe_from (rtx, rtx);
 extern rtx convert_memory_address_addr_space (enum machine_mode, rtx,
            addr_space_t);
+
+
 extern rtx get_insns (void);
 extern const char *get_insn_name (int);
 extern rtx get_last_insn (void);
@@ -14051,19 +24349,31 @@ extern void push_to_sequence2 (rtx, rtx);
 extern void end_sequence (void);
 extern rtx immed_double_const (long, long,
           enum machine_mode);
+
+
+
 extern rtx lowpart_subreg (enum machine_mode, rtx, enum machine_mode);
+
+
 extern rtx force_const_mem (enum machine_mode, rtx);
+
+
+
 struct function;
 extern rtx get_pool_constant (rtx);
 extern rtx get_pool_constant_mark (rtx, unsigned char *);
 extern enum machine_mode get_pool_mode (const_rtx);
 extern rtx simplify_subtraction (rtx);
+
+
 extern rtx assign_stack_local (enum machine_mode, long, int);
 extern rtx assign_stack_local_1 (enum machine_mode, long, int, unsigned char);
 extern rtx assign_stack_temp (enum machine_mode, long, int);
 extern rtx assign_stack_temp_for_type (enum machine_mode,
            long, int, tree);
 extern rtx assign_temp (tree, int, int, int);
+
+
 extern rtx emit_insn_before (rtx, rtx);
 extern rtx emit_insn_before_noloc (rtx, rtx, struct basic_block_def *);
 extern rtx emit_insn_before_setloc (rtx, rtx, int);
@@ -14131,6 +24441,8 @@ extern rtx next_label (rtx);
 extern rtx skip_consecutive_labels (rtx);
 extern rtx next_cc0_user (rtx);
 extern rtx prev_cc0_setter (rtx);
+
+
 extern int insn_line (const_rtx);
 extern const char * insn_file (const_rtx);
 extern location_t locator_location (int);
@@ -14138,6 +24450,8 @@ extern int locator_line (int);
 extern const char * locator_file (int);
 extern unsigned char locator_eq (int, int);
 extern int prologue_locator, epilogue_locator;
+
+
 extern enum rtx_code reverse_condition (enum rtx_code);
 extern enum rtx_code reverse_condition_maybe_unordered (enum rtx_code);
 extern enum rtx_code swap_condition (enum rtx_code);
@@ -14145,11 +24459,21 @@ extern enum rtx_code unsigned_condition (enum rtx_code);
 extern enum rtx_code signed_condition (enum rtx_code);
 extern void mark_jump_label (rtx, rtx, int);
 extern unsigned int cleanup_barriers (void);
+
+
 extern rtx delete_related_insns (rtx);
+
+
 extern rtx *find_constant_term_loc (rtx *);
+
+
 extern rtx try_split (rtx, rtx, int);
 extern int split_branch_probability;
+
+
 extern rtx split_insns (rtx, rtx);
+
+
 extern rtx simplify_const_unary_operation (enum rtx_code, enum machine_mode,
         rtx, enum machine_mode);
 extern rtx simplify_unary_operation (enum rtx_code, enum machine_mode, rtx,
@@ -14182,8 +24506,12 @@ extern rtx simplify_rtx (const_rtx);
 extern rtx avoid_constant_pool_reference (rtx);
 extern rtx delegitimize_mem_from_attrs (rtx);
 extern unsigned char mode_signbit_p (enum machine_mode, const_rtx);
+
+
 extern enum machine_mode choose_hard_reg_mode (unsigned int, unsigned int,
             unsigned char);
+
+
 extern rtx set_unique_reg_note (rtx, enum reg_note, rtx);
 extern void set_insn_deleted (rtx);
 # 1808 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h"
@@ -14193,6 +24521,7 @@ typedef struct replace_label_data
   rtx r2;
   unsigned char update_label_nuses;
 } replace_label_data;
+
 extern int rtx_addr_can_trap_p (const_rtx);
 extern unsigned char nonzero_address_p (const_rtx);
 extern int rtx_unstable_p (const_rtx);
@@ -14255,16 +24584,20 @@ extern int replace_label (rtx *, void *);
 extern int rtx_referenced_p (rtx, rtx);
 extern unsigned char tablejump_p (const_rtx, rtx *, rtx *);
 extern int computed_jump_p (const_rtx);
+
 typedef int (*rtx_function) (rtx *, void *);
 extern int for_each_rtx (rtx *, rtx_function, void *);
+
 typedef int (*rtx_equal_p_callback_function) (const_rtx *, const_rtx *,
                                               rtx *, rtx *);
 extern int rtx_equal_p_cb (const_rtx, const_rtx,
                            rtx_equal_p_callback_function);
+
 typedef int (*hash_rtx_callback_function) (const_rtx, enum machine_mode, rtx *,
                                            enum machine_mode *);
 extern unsigned hash_rtx_cb (const_rtx, enum machine_mode, int *, int *,
                              unsigned char, hash_rtx_callback_function);
+
 extern rtx regno_use_in (unsigned int, rtx);
 extern int auto_inc_p (const_rtx);
 extern int in_expr_list_p (const_rtx, const_rtx);
@@ -14274,17 +24607,33 @@ extern rtx find_first_parameter_load (rtx, rtx);
 extern unsigned char keep_with_call_p (const_rtx);
 extern unsigned char label_is_jump_target_p (const_rtx, const_rtx);
 extern int insn_rtx_cost (rtx, unsigned char);
+
+
+
 extern rtx canonicalize_condition (rtx, rtx, int, rtx *, rtx, int, int);
+
+
+
 extern rtx get_condition (rtx, rtx *, int, int);
+
+
 struct subreg_info
 {
+
   int offset;
+
   int nregs;
+
+
   unsigned char representable_p;
 };
+
 extern void subreg_get_info (unsigned int, enum machine_mode,
         unsigned int, enum machine_mode,
         struct subreg_info *);
+
+
+
 extern void free_EXPR_LIST_list (rtx *);
 extern void free_INSN_LIST_list (rtx *);
 extern void free_EXPR_LIST_node (rtx);
@@ -14295,24 +24644,43 @@ extern void remove_free_INSN_LIST_elem (rtx, rtx *);
 extern rtx remove_list_elem (rtx, rtx *);
 extern rtx remove_free_INSN_LIST_node (rtx *);
 extern rtx remove_free_EXPR_LIST_node (rtx *);
+
+
+
+
+
 extern void init_move_cost (enum machine_mode);
+
 extern unsigned char resize_reg_info (void);
+
 extern void free_reg_info (void);
 extern void init_subregs_of_mode (void);
 extern void finish_subregs_of_mode (void);
+
+
 extern rtx extract_asm_operands (rtx);
 extern int asm_noperands (const_rtx);
 extern const char *decode_asm_operands (rtx, rtx *, rtx **, const char **,
      enum machine_mode *, location_t *);
+
 extern enum reg_class reg_preferred_class (int);
 extern enum reg_class reg_alternate_class (int);
 extern enum reg_class reg_cover_class (int);
 extern void setup_reg_classes (int, enum reg_class, enum reg_class,
           enum reg_class);
+
 extern void split_all_insns (void);
 extern unsigned int split_all_insns_noflow (void);
+
+
 extern rtx const_int_rtx[64 * 2 + 1];
+
+
+
+
+
 extern rtx const_true_rtx;
+
 extern rtx const_tiny_rtx[3][(int) MAX_MACHINE_MODE];
 # 1997 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h"
 enum global_rtl_index
@@ -14323,122 +24691,263 @@ enum global_rtl_index
   GR_FRAME_POINTER,
 # 2012 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h"
   GR_HARD_FRAME_POINTER,
+
+
+
+
+
   GR_ARG_POINTER,
+
+
   GR_VIRTUAL_INCOMING_ARGS,
   GR_VIRTUAL_STACK_ARGS,
   GR_VIRTUAL_STACK_DYNAMIC,
   GR_VIRTUAL_OUTGOING_ARGS,
   GR_VIRTUAL_CFA,
+
   GR_MAX
 };
+
+
 extern rtx global_rtl[GR_MAX];
 # 2045 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h"
 extern rtx pic_offset_table_rtx;
 extern rtx return_address_pointer_rtx;
+
+
+
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/genrtl.h" 1
+
+
+
+
+
+
+
 extern rtx gen_rtx_fmt_0_stat (enum rtx_code, enum machine_mode mode );
+
+
+
 extern rtx gen_rtx_fmt_ee_stat (enum rtx_code, enum machine_mode mode,
            rtx arg0, rtx arg1 );
+
+
+
 extern rtx gen_rtx_fmt_ue_stat (enum rtx_code, enum machine_mode mode,
            rtx arg0, rtx arg1 );
+
+
+
 extern rtx gen_rtx_fmt_E_stat (enum rtx_code, enum machine_mode mode,
            rtvec arg0 );
+
+
+
 extern rtx gen_rtx_fmt_e_stat (enum rtx_code, enum machine_mode mode,
            rtx arg0 );
+
+
+
 extern rtx gen_rtx_fmt_iuuBieie_stat (enum rtx_code, enum machine_mode mode,
            int arg0, rtx arg1, rtx arg2,
            struct basic_block_def *arg3,
            int arg4, rtx arg5, int arg6,
            rtx arg7 );
+
+
+
 extern rtx gen_rtx_fmt_iuuBieie0_stat (enum rtx_code, enum machine_mode mode,
            int arg0, rtx arg1, rtx arg2,
            struct basic_block_def *arg3,
            int arg4, rtx arg5, int arg6,
            rtx arg7 );
+
+
+
 extern rtx gen_rtx_fmt_iuuBieiee_stat (enum rtx_code, enum machine_mode mode,
            int arg0, rtx arg1, rtx arg2,
            struct basic_block_def *arg3,
            int arg4, rtx arg5, int arg6,
            rtx arg7, rtx arg8 );
+
+
+
 extern rtx gen_rtx_fmt_iuu00000_stat (enum rtx_code, enum machine_mode mode,
            int arg0, rtx arg1, rtx arg2 );
+
+
+
 extern rtx gen_rtx_fmt_iuuB00is_stat (enum rtx_code, enum machine_mode mode,
            int arg0, rtx arg1, rtx arg2,
            struct basic_block_def *arg3,
            int arg4, const char *arg5 );
+
+
+
 extern rtx gen_rtx_fmt_si_stat (enum rtx_code, enum machine_mode mode,
            const char *arg0, int arg1 );
+
+
+
 extern rtx gen_rtx_fmt_ssiEEEi_stat (enum rtx_code, enum machine_mode mode,
            const char *arg0, const char *arg1,
            int arg2, rtvec arg3, rtvec arg4,
            rtvec arg5, int arg6 );
+
+
+
 extern rtx gen_rtx_fmt_Ei_stat (enum rtx_code, enum machine_mode mode,
            rtvec arg0, int arg1 );
+
+
+
 extern rtx gen_rtx_fmt_eEee0_stat (enum rtx_code, enum machine_mode mode,
            rtx arg0, rtvec arg1, rtx arg2,
            rtx arg3 );
+
+
+
 extern rtx gen_rtx_fmt_eee_stat (enum rtx_code, enum machine_mode mode,
            rtx arg0, rtx arg1, rtx arg2 );
+
+
+
 extern rtx gen_rtx_fmt__stat (enum rtx_code, enum machine_mode mode );
+
+
+
 extern rtx gen_rtx_fmt_w_stat (enum rtx_code, enum machine_mode mode,
            long arg0 );
+
+
+
 extern rtx gen_rtx_fmt_www_stat (enum rtx_code, enum machine_mode mode,
            long arg0,
            long arg1,
            long arg2 );
+
+
+
 extern rtx gen_rtx_fmt_s_stat (enum rtx_code, enum machine_mode mode,
            const char *arg0 );
+
+
+
 extern rtx gen_rtx_fmt_i00_stat (enum rtx_code, enum machine_mode mode,
            int arg0 );
+
+
+
 extern rtx gen_rtx_fmt_ei_stat (enum rtx_code, enum machine_mode mode,
            rtx arg0, int arg1 );
+
+
+
 extern rtx gen_rtx_fmt_e0_stat (enum rtx_code, enum machine_mode mode,
            rtx arg0 );
+
+
+
 extern rtx gen_rtx_fmt_u_stat (enum rtx_code, enum machine_mode mode,
            rtx arg0 );
+
+
+
 extern rtx gen_rtx_fmt_s00_stat (enum rtx_code, enum machine_mode mode,
            const char *arg0 );
+
+
+
 extern rtx gen_rtx_fmt_tei_stat (enum rtx_code, enum machine_mode mode,
            union tree_node *arg0, rtx arg1,
            int arg2 );
+
+
+
 extern rtx gen_rtx_fmt_iss_stat (enum rtx_code, enum machine_mode mode,
            int arg0, const char *arg1,
            const char *arg2 );
+
+
+
 extern rtx gen_rtx_fmt_is_stat (enum rtx_code, enum machine_mode mode,
            int arg0, const char *arg1 );
+
+
+
 extern rtx gen_rtx_fmt_isE_stat (enum rtx_code, enum machine_mode mode,
            int arg0, const char *arg1,
            rtvec arg2 );
+
+
+
 extern rtx gen_rtx_fmt_i_stat (enum rtx_code, enum machine_mode mode,
            int arg0 );
+
+
+
 extern rtx gen_rtx_fmt_iE_stat (enum rtx_code, enum machine_mode mode,
            int arg0, rtvec arg1 );
+
+
+
 extern rtx gen_rtx_fmt_ss_stat (enum rtx_code, enum machine_mode mode,
            const char *arg0, const char *arg1 );
+
+
+
 extern rtx gen_rtx_fmt_sEss_stat (enum rtx_code, enum machine_mode mode,
            const char *arg0, rtvec arg1,
            const char *arg2, const char *arg3 );
+
+
+
 extern rtx gen_rtx_fmt_eE_stat (enum rtx_code, enum machine_mode mode,
            rtx arg0, rtvec arg1 );
+
+
+
 extern rtx gen_rtx_fmt_Ess_stat (enum rtx_code, enum machine_mode mode,
            rtvec arg0, const char *arg1,
            const char *arg2 );
+
+
+
 extern rtx gen_rtx_fmt_ses_stat (enum rtx_code, enum machine_mode mode,
            const char *arg0, rtx arg1,
            const char *arg2 );
+
+
+
 extern rtx gen_rtx_fmt_sss_stat (enum rtx_code, enum machine_mode mode,
            const char *arg0, const char *arg1,
            const char *arg2 );
+
+
+
 extern rtx gen_rtx_fmt_sse_stat (enum rtx_code, enum machine_mode mode,
            const char *arg0, const char *arg1,
            rtx arg2 );
+
+
+
 extern rtx gen_rtx_fmt_sies_stat (enum rtx_code, enum machine_mode mode,
            const char *arg0, int arg1,
            rtx arg2, const char *arg3 );
+
+
+
 extern rtx gen_rtx_fmt_sE_stat (enum rtx_code, enum machine_mode mode,
            const char *arg0, rtvec arg1 );
+
+
+
 extern rtx gen_rtx_fmt_ii_stat (enum rtx_code, enum machine_mode mode,
            int arg0, int arg1 );
+
+
+
 extern rtx gen_rtx_fmt_Ee_stat (enum rtx_code, enum machine_mode mode,
            rtvec arg0, rtx arg1 );
 # 2052 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h" 2
@@ -14452,18 +24961,37 @@ extern rtx gen_rtx_MEM (enum machine_mode, rtx);
 # 2136 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h"
 extern rtx output_constant_def (tree, int);
 extern rtx lookup_constant_def (tree);
+
+
+
+
 extern int reload_completed;
+
+
 extern int epilogue_completed;
+
+
+
+
 extern int reload_in_progress;
 # 2160 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h"
 extern int regstack_completed;
 # 2169 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/rtl.h"
 extern int cse_not_expected;
+
+
+
+
+
 extern int rtx_to_tree_code (enum rtx_code);
+
+
 extern int delete_trivially_dead_insns (rtx, int);
 extern int cse_main (rtx, int);
 extern int exp_equiv_p (const_rtx, const_rtx, int, unsigned char);
 extern unsigned hash_rtx (const_rtx x, enum machine_mode, int *, int *, unsigned char);
+
+
 extern int comparison_dominates_p (enum rtx_code, enum rtx_code);
 extern int condjump_p (const_rtx);
 extern int any_condjump_p (const_rtx);
@@ -14491,6 +25019,8 @@ extern enum rtx_code reversed_comparison_code_parts (enum rtx_code, const_rtx,
            const_rtx, const_rtx);
 extern void delete_for_peephole (rtx, rtx);
 extern int condjump_in_parallel_p (const_rtx);
+
+
 extern int max_reg_num (void);
 extern int max_label_num (void);
 extern int get_first_label_num (void);
@@ -14536,21 +25066,37 @@ extern rtx gen_frame_mem (enum machine_mode, rtx);
 extern rtx gen_tmp_stack_mem (enum machine_mode, rtx);
 extern unsigned char validate_subreg (enum machine_mode, enum machine_mode,
         const_rtx, unsigned int);
+
+
 extern unsigned int extended_count (const_rtx, enum machine_mode, int);
 extern rtx remove_death (unsigned int, rtx);
 extern void dump_combine_stats (FILE *);
 extern void dump_combine_total_stats (FILE *);
+
+
 extern void delete_dead_jumptables (void);
+
+
 extern void debug_bb_n_slim (int);
 extern void debug_bb_slim (struct basic_block_def *);
 extern void print_rtl_slim (FILE *, rtx, rtx, int, int);
 extern void print_rtl_slim_with_bb (FILE *, rtx, int);
 extern void dump_insn_slim (FILE *f, rtx x);
 extern void debug_insn_slim (rtx x);
+
+
 extern void schedule_insns (void);
+
+
 extern void schedule_ebbs (void);
+
+
 extern void fix_sched_param (const char *, const char *);
+
+
 extern void sel_sched_fix_param (const char *param, const char *val);
+
+
 extern const char *print_rtx_head;
 extern void debug_rtx (const_rtx);
 extern void debug_rtx_list (const_rtx, int);
@@ -14561,27 +25107,48 @@ extern void print_rtl (FILE *, const_rtx);
 extern void print_simple_rtl (FILE *, const_rtx);
 extern int print_rtl_single (FILE *, const_rtx);
 extern void print_inline_rtx (FILE *, const_rtx, int);
+
+
 extern void reposition_prologue_and_epilogue_notes (void);
 extern int prologue_epilogue_contains (const_rtx);
 extern int sibcall_epilogue_contains (const_rtx);
 extern void mark_temp_addr_taken (rtx);
 extern void update_temp_slot_address (rtx, rtx);
 extern void maybe_copy_epilogue_insn (rtx, rtx);
+
+
 extern void expand_null_return (void);
 extern void expand_naked_return (void);
 extern void emit_jump (rtx);
+
+
 extern rtx move_by_pieces (rtx, rtx, unsigned long,
       unsigned int, int);
+
+
 extern void print_rtl_with_bb (FILE *, const_rtx);
+
+
 extern void dump_reg_info (FILE *);
 extern void dump_flow_info (FILE *, int);
+
+
 extern void init_expmed (void);
 extern void expand_inc (rtx, rtx);
 extern void expand_dec (rtx, rtx);
+
+
 extern unsigned char can_copy_p (enum machine_mode);
 extern unsigned char can_assign_to_reg_without_clobbers_p (rtx);
 extern rtx fis_get_condition (rtx);
+
+
+
+
+
 extern void mark_elimination (int, int);
+
+
 extern int reg_classes_intersect_p (enum reg_class, enum reg_class);
 extern int reg_class_subset_p (enum reg_class, enum reg_class);
 extern void globalize_reg (int);
@@ -14596,8 +25163,14 @@ extern void reg_scan (rtx, unsigned int);
 extern void fix_register (const char *, int, int);
 extern unsigned char invalid_mode_change_p (unsigned int, enum reg_class,
        enum machine_mode);
+
+
 extern void dbr_schedule (rtx);
+
+
 extern int function_invariant_p (const_rtx);
+
+
 enum libcall_type
 {
   LCT_NORMAL = 0,
@@ -14607,14 +25180,21 @@ enum libcall_type
   LCT_THROW = 4,
   LCT_RETURNS_TWICE = 5
 };
+
 extern void emit_library_call (rtx, enum libcall_type, enum machine_mode, int,
           ...);
 extern rtx emit_library_call_value (rtx, rtx, enum libcall_type,
         enum machine_mode, int, ...);
+
+
 extern void init_varasm_once (void);
 extern enum tls_model decl_default_tls_model (const_tree);
+
+
 extern void traverse_md_constants (int (*) (void **, void *), void *);
 struct md_constant { char *name, *value; };
+
+
 extern int read_skip_spaces (FILE *);
 extern unsigned char read_rtx (FILE *, rtx *, int *);
 extern void copy_rtx_ptr_loc (const void *, const void *);
@@ -14623,6 +25203,8 @@ extern const char *join_c_conditions (const char *, const char *);
 extern void print_c_condition (const char *);
 extern const char *read_rtx_filename;
 extern int read_rtx_lineno;
+
+
 extern rtx canon_rtx (rtx);
 extern int true_dependence (const_rtx, enum machine_mode, const_rtx, unsigned char (*)(const_rtx, unsigned char));
 extern rtx get_addr (rtx);
@@ -14639,19 +25221,37 @@ extern rtx find_base_term (rtx);
 extern rtx gen_hard_reg_clobber (enum machine_mode, unsigned int);
 extern rtx get_reg_known_value (unsigned int);
 extern unsigned char get_reg_known_equiv_p (unsigned int);
+
+
 extern int stack_regs_mentioned (const_rtx insn);
+
+
+
 extern rtx stack_limit_rtx;
+
+
 extern void invert_br_probabilities (rtx);
 extern unsigned char expensive_function_p (int);
+
+
 extern unsigned int variable_tracking_main (void);
+
+
 extern void get_mode_bounds (enum machine_mode, int, enum machine_mode,
         rtx *, rtx *);
+
+
 extern rtx reversed_condition (rtx);
 extern rtx compare_and_jump_seq (rtx, rtx, enum rtx_code, rtx, int, rtx);
+
+
 extern rtx canon_condition (rtx);
 extern void simplify_using_condition (rtx, rtx *, struct bitmap_head_def *);
+
+
 extern unsigned int compute_alignments (void);
 extern int asm_str_count (const char *templ);
+
 struct rtl_hooks
 {
   rtx (*gen_lowpart) (enum machine_mode, rtx);
@@ -14661,9 +25261,19 @@ struct rtl_hooks
   rtx (*reg_num_sign_bit_copies) (const_rtx, enum machine_mode, const_rtx, enum machine_mode,
       unsigned int, unsigned int *);
   unsigned char (*reg_truncated_to_mode) (enum machine_mode, const_rtx);
+
+
 };
+
+
 extern struct rtl_hooks rtl_hooks;
+
+
 extern const struct rtl_hooks general_rtl_hooks;
+
+
+
+
 extern void insn_locators_alloc (void);
 extern void insn_locators_free (void);
 extern void insn_locators_finalize (void);
@@ -14678,21 +25288,48 @@ extern unsigned char optimize_insn_for_speed_p (void);
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/emit-rtl.h" 1
 # 24 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/emit-rtl.h"
 extern void set_mem_alias_set (rtx, alias_set_type);
+
+
 extern void set_mem_align (rtx, unsigned int);
+
+
 extern void set_mem_addr_space (rtx, addr_space_t);
+
+
 extern void set_mem_expr (rtx, tree);
+
+
 extern void set_mem_offset (rtx, rtx);
+
+
 extern void set_mem_size (rtx, rtx);
+
+
 extern void set_mem_attrs_for_spill (rtx);
 extern tree get_spill_slot_decl (unsigned char);
+
+
+
+
+
 extern rtx replace_equiv_address (rtx, rtx);
+
+
 extern rtx replace_equiv_address_nv (rtx, rtx);
 # 44 "../../../src/plugin-utils.h" 2
 # 208 "../../../src/plugin-utils.h"
 int is_gcc();
+
+
 int is_gpp();
+
+
 int is_lto();
+
+
 void cpp_include(const char *file);
+
+
 unsigned char is_targetable_decl(tree decl);
 # 325 "../../../src/plugin-utils.h"
 unsigned char comparison_set_rtx_1(rtx match_input,rtx *cc_op,rtx *op1,rtx *op2);
@@ -14703,19 +25340,38 @@ unsigned char comparison_set_rtx_1(rtx match_input,rtx *cc_op,rtx *op1,rtx *op2)
 # 53 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/timevar.h"
 struct timevar_time_def
 {
+
   double user;
+
+
+
   double sys;
+
+
   double wall;
+
+
   unsigned ggc_mem;
 };
+
+
+
+
+
+
 typedef enum
 {
   TV_NONE,
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/timevar.def" 1
 # 34 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/timevar.def"
 TV_TOTAL,
+
+
 TV_GC,
+
+
 TV_DUMP,
+
 TV_CGRAPH,
 TV_CGRAPHOPT,
 TV_IPA_CONSTANT_PROP,
@@ -14734,12 +25390,17 @@ TV_IPA_TYPE_ESCAPE,
 TV_IPA_PTA,
 TV_IPA_SRA,
 TV_IPA_FREE_LANG_DATA,
+
 TV_CFG,
+
 TV_CLEANUP_CFG,
 TV_CFG_VERIFY,
 TV_DELETE_TRIVIALLY_DEAD,
+
 TV_LIFE,
 TV_LIFE_UPDATE,
+
+
 TV_DF_SCAN,
 TV_DF_MD,
 TV_DF_RD,
@@ -14750,10 +25411,12 @@ TV_DF_CHAIN,
 TV_DF_BYTE_LR,
 TV_DF_NOTE,
 TV_REG_STATS,
+
 TV_ALIAS_ANALYSIS,
 TV_ALIAS_STMT_WALK,
 TV_REG_SCAN,
 TV_REBUILD_JUMP,
+
 TV_CPP,
 TV_LEX,
 TV_PARSE,
@@ -14883,21 +25546,37 @@ TV_VAR_TRACKING,
 TV_TREE_IFCOMBINE,
 TV_PLUGIN_INIT,
 TV_PLUGIN_RUN,
+
+
 TV_REST_OF_COMPILATION,
 # 78 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/timevar.h" 2
   TIMEVAR_LAST
 }
 timevar_id_t;
+
+
+
+
+
+
+
 extern void timevar_init (void);
 extern void timevar_push_1 (timevar_id_t);
 extern void timevar_pop_1 (timevar_id_t);
 extern void timevar_start (timevar_id_t);
 extern void timevar_stop (timevar_id_t);
 extern void timevar_print (FILE *);
+
+
 extern void print_time (const char *, long);
+
 extern unsigned char timevar_enable;
+
 extern size_t timevar_ggc_mem_total;
 # 27 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree-pass.h" 2
+
+
+
 enum tree_dump_index
 {
   TDI_none,
@@ -14908,9 +25587,11 @@ enum tree_dump_index
   TDI_generic,
   TDI_nested,
   TDI_vcg,
+
   TDI_tree_all,
   TDI_rtl_all,
   TDI_ipa_all,
+
   TDI_end
 };
 # 86 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree-pass.h"
@@ -14922,10 +25603,16 @@ extern void dump_end (int, FILE *);
 extern void dump_node (const_tree, int, FILE *);
 extern int dump_switch_p (const char *);
 extern const char *dump_flag_name (int);
+
+
 extern FILE *dump_file;
 extern int dump_flags;
 extern const char *dump_file_name;
+
+
 extern struct dump_file_info *get_dump_file_info (int);
+
+
 enum opt_pass_type
 {
   GIMPLE_PASS,
@@ -14933,49 +25620,103 @@ enum opt_pass_type
   SIMPLE_IPA_PASS,
   IPA_PASS
 };
+
+
+
 struct opt_pass
 {
+
   enum opt_pass_type type;
+
+
+
   const char *name;
+
+
+
   unsigned char (*gate) (void);
+
+
+
+
   unsigned int (*execute) (void);
+
+
   struct opt_pass *sub;
+
+
   struct opt_pass *next;
+
+
   int static_pass_number;
+
+
+
   timevar_id_t tv_id;
+
+
   unsigned int properties_required;
   unsigned int properties_provided;
   unsigned int properties_destroyed;
+
+
   unsigned int todo_flags_start;
   unsigned int todo_flags_finish;
 };
+
+
 struct gimple_opt_pass
 {
   struct opt_pass pass;
 };
+
+
 struct rtl_opt_pass
 {
   struct opt_pass pass;
 };
+
 struct varpool_node;
 struct cgraph_node;
 struct cgraph_node_set_def;
+
+
+
 struct ipa_opt_pass_d
 {
   struct opt_pass pass;
+
+
+
   void (*generate_summary) (void);
+
+
   void (*write_summary) (struct cgraph_node_set_def *);
+
+
+
+
   void (*read_summary) (void);
   void (*function_read_summary) (struct cgraph_node *);
+
+
   void (*stmt_fixup) (struct cgraph_node *, gimple *);
+
+
+
   unsigned int function_transform_todo_flags_start;
   unsigned int (*function_transform) (struct cgraph_node *);
   void (*variable_transform) (struct varpool_node *);
 };
+
+
+
 struct simple_ipa_opt_pass
 {
   struct opt_pass pass;
 };
+
+
 struct dump_file_info
 {
   const char *suffix;
@@ -14992,14 +25733,20 @@ enum pass_positioning_ops
   PASS_POS_INSERT_BEFORE,
   PASS_POS_REPLACE
 };
+
 struct register_pass_info
 {
   struct opt_pass *pass;
   const char *reference_pass_name;
+
   int ref_pass_instance_number;
+
+
   enum pass_positioning_ops pos_op;
 };
+
 extern void tree_lowering_passes (tree decl);
+
 extern struct gimple_opt_pass pass_mudflap_1;
 extern struct gimple_opt_pass pass_mudflap_2;
 extern struct gimple_opt_pass pass_lower_cf;
@@ -15097,9 +25844,13 @@ extern struct gimple_opt_pass pass_build_cgraph_edges;
 extern struct gimple_opt_pass pass_local_pure_const;
 extern struct gimple_opt_pass pass_tracer;
 extern struct gimple_opt_pass pass_warn_unused_result;
+
+
 extern struct simple_ipa_opt_pass pass_ipa_function_and_variable_visibility;
 extern struct simple_ipa_opt_pass pass_ipa_early_inline;
+
 extern struct simple_ipa_opt_pass pass_early_local_passes;
+
 extern struct ipa_opt_pass_d pass_ipa_whole_program_visibility;
 extern struct ipa_opt_pass_d pass_ipa_lto_gimple_out;
 extern struct simple_ipa_opt_pass pass_ipa_increase_alignment;
@@ -15114,10 +25865,12 @@ extern struct simple_ipa_opt_pass pass_ipa_pta;
 extern struct simple_ipa_opt_pass pass_ipa_struct_reorg;
 extern struct ipa_opt_pass_d pass_ipa_lto_wpa_fixup;
 extern struct ipa_opt_pass_d pass_ipa_lto_finish_out;
+
 extern struct gimple_opt_pass pass_all_optimizations;
 extern struct gimple_opt_pass pass_cleanup_cfg_post_optimizing;
 extern struct gimple_opt_pass pass_init_datastructures;
 extern struct gimple_opt_pass pass_fixup_cfg;
+
 extern struct rtl_opt_pass pass_expand;
 extern struct rtl_opt_pass pass_init_function;
 extern struct rtl_opt_pass pass_jump;
@@ -15142,8 +25895,10 @@ extern struct rtl_opt_pass pass_rtl_hoist;
 extern struct rtl_opt_pass pass_rtl_store_motion;
 extern struct rtl_opt_pass pass_cse_after_global_opts;
 extern struct rtl_opt_pass pass_rtl_ifcvt;
+
 extern struct rtl_opt_pass pass_into_cfg_layout_mode;
 extern struct rtl_opt_pass pass_outof_cfg_layout_mode;
+
 extern struct rtl_opt_pass pass_loop2;
 extern struct rtl_opt_pass pass_rtl_loop_init;
 extern struct rtl_opt_pass pass_rtl_move_loop_invariants;
@@ -15151,6 +25906,7 @@ extern struct rtl_opt_pass pass_rtl_unswitch;
 extern struct rtl_opt_pass pass_rtl_unroll_and_peel_loops;
 extern struct rtl_opt_pass pass_rtl_doloop;
 extern struct rtl_opt_pass pass_rtl_loop_done;
+
 extern struct rtl_opt_pass pass_web;
 extern struct rtl_opt_pass pass_cse2;
 extern struct rtl_opt_pass pass_df_initialize_opt;
@@ -15213,6 +25969,8 @@ extern struct gimple_opt_pass pass_inline_parameters;
 extern struct gimple_opt_pass pass_all_early_optimizations;
 extern struct gimple_opt_pass pass_update_address_taken;
 extern struct gimple_opt_pass pass_convert_switch;
+
+
 extern struct opt_pass *all_passes, *all_small_ipa_passes, *all_lowering_passes,
                        *all_regular_ipa_passes, *all_lto_gen_passes;
 # 576 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree-pass.h"
@@ -15221,8 +25979,15 @@ enum
   PASS_LIST_NO_all_lowering_passes, PASS_LIST_NO_all_small_ipa_passes, PASS_LIST_NO_all_regular_ipa_passes, PASS_LIST_NO_all_lto_gen_passes, PASS_LIST_NO_all_passes,
   PASS_LIST_NUM
 };
+
+
+
+
 extern struct opt_pass **gcc_pass_lists[];
+
+
 extern struct opt_pass *current_pass;
+
 extern struct opt_pass * get_pass_for_id (int);
 extern unsigned char execute_one_pass (struct opt_pass *);
 extern void execute_pass_list (struct opt_pass *);
@@ -15232,6 +25997,7 @@ extern void execute_all_ipa_transforms (void);
 extern void execute_all_ipa_stmt_fixups (struct cgraph_node *, gimple *);
 extern unsigned char pass_init_dump_file (struct opt_pass *);
 extern void pass_fini_dump_file (struct opt_pass *);
+
 extern const char *get_current_pass_name (void);
 extern void print_current_pass (FILE *);
 extern void debug_pass (void);
@@ -15244,8 +26010,11 @@ extern unsigned char function_called_by_processed_nodes_p (void);
 extern void register_pass (struct register_pass_info *);
 # 618 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/tree-pass.h"
 extern unsigned char first_pass_instance;
+
+
 extern void do_per_function_toporder (void (*) (void *), void *);
 # 28 "../../../src/acf_plugin.c" 2
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/diagnostic.h" 1
 # 25 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/diagnostic.h"
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/pretty-print.h" 1
@@ -15258,35 +26027,84 @@ typedef struct
   location_t *locus;
   tree *abstract_origin;
 } text_info;
+
+
+
+
+
+
 typedef enum
 {
   DIAGNOSTICS_SHOW_PREFIX_ONCE = 0x0,
   DIAGNOSTICS_SHOW_PREFIX_NEVER = 0x1,
   DIAGNOSTICS_SHOW_PREFIX_EVERY_LINE = 0x2
 } diagnostic_prefixing_rule_t;
+
+
+
+
+
+
 struct chunk_info
 {
+
   struct chunk_info *prev;
+
+
+
+
+
+
+
   const char *args[30 * 2];
 };
+
+
+
 typedef struct
 {
+
   struct obstack formatted_obstack;
+
+
+
   struct obstack chunk_obstack;
+
+
+
   struct obstack *obstack;
+
+
   struct chunk_info *cur_chunk_array;
+
+
   FILE *stream;
+
+
   int line_length;
+
+
+
   char digit_buffer[128];
 } output_buffer;
+
+
 typedef unsigned int pp_flags;
+
 typedef enum
 {
   pp_none, pp_before, pp_after
 } pp_padding;
+
+
+
 typedef struct
 {
+
   diagnostic_prefixing_rule_t rule;
+
+
+
   int line_cutoff;
 } pp_wrapping_mode_t;
 # 134 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/pretty-print.h"
@@ -15296,16 +26114,35 @@ typedef unsigned char (*printer_fn) (pretty_printer *, text_info *, const char *
 # 158 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/pretty-print.h"
 struct pretty_print_info
 {
+
   output_buffer *buffer;
+
+
   const char *prefix;
+
+
   pp_padding padding;
+
+
+
   int maximum_length;
+
+
   int indent_skip;
+
+
   pp_wrapping_mode_t wrapping;
 # 187 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/pretty-print.h"
   printer_fn format_decoder;
+
+
   unsigned char emitted_prefix;
+
+
   unsigned char need_newline;
+
+
+
   unsigned char translate_identifiers;
 };
 # 300 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/pretty-print.h"
@@ -15322,12 +26159,14 @@ extern void pp_base_append_text (pretty_printer *, const char *, const char *);
 # 318 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/pretty-print.h"
 extern void pp_printf (pretty_printer *, const char *, ...)
      __attribute__ ((__format__ (__gcc_diag__, 2 ,3))) __attribute__ ((__nonnull__ (2)));
+
 extern void pp_verbatim (pretty_printer *, const char *, ...)
      __attribute__ ((__format__ (__gcc_diag__, 2 ,3))) __attribute__ ((__nonnull__ (2)));
 extern void pp_base_flush (pretty_printer *);
 extern void pp_base_format (pretty_printer *, text_info *);
 extern void pp_base_output_formatted_text (pretty_printer *);
 extern void pp_base_format_verbatim (pretty_printer *, text_info *);
+
 extern void pp_base_indent (pretty_printer *);
 extern void pp_base_newline (pretty_printer *);
 extern void pp_base_character (pretty_printer *, int);
@@ -15335,6 +26174,8 @@ extern void pp_base_string (pretty_printer *, const char *);
 extern void pp_write_text_to_stream (pretty_printer *pp);
 extern void pp_base_maybe_space (pretty_printer *);
 extern void pp_base_tree_identifier (pretty_printer *, tree);
+
+
 static __inline__ pp_wrapping_mode_t
 pp_set_verbatim_wrapping_ (pretty_printer *pp)
 {
@@ -15343,14 +26184,26 @@ pp_set_verbatim_wrapping_ (pretty_printer *pp)
   (pp)->wrapping.rule = DIAGNOSTICS_SHOW_PREFIX_NEVER;
   return oldmode;
 }
+
+
 extern const char *identifier_to_locale (const char *);
 # 26 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/diagnostic.h" 2
+
+
+
 typedef enum
 {
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/diagnostic.def" 1
 # 25 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/diagnostic.def"
 DK_UNSPECIFIED,
+
+
+
+
 DK_IGNORED,
+
+
 DK_FATAL,
 DK_ICE,
 DK_ERROR,
@@ -15359,42 +26212,91 @@ DK_WARNING,
 DK_ANACHRONISM,
 DK_NOTE,
 DK_DEBUG,
+
+
 DK_PEDWARN,
 DK_PERMERROR,
 # 33 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/diagnostic.h" 2
+
   DK_LAST_DIAGNOSTIC_KIND
 } diagnostic_t;
+
+
+
+
 typedef struct diagnostic_info
 {
   text_info message;
   location_t location;
   unsigned int override_column;
+
+
   tree abstract_origin;
+
   diagnostic_t kind;
+
   int option_index;
 } diagnostic_info;
+
+
 typedef struct diagnostic_context diagnostic_context;
 typedef void (*diagnostic_starter_fn) (diagnostic_context *,
            diagnostic_info *);
 typedef diagnostic_starter_fn diagnostic_finalizer_fn;
+
+
+
 struct diagnostic_context
 {
+
   pretty_printer *printer;
+
+
   int diagnostic_count[DK_LAST_DIAGNOSTIC_KIND];
+
+
+
   unsigned char issue_warnings_are_errors_message;
+
+
   unsigned char warning_as_error_requested;
+
+
+
+
+
+
   diagnostic_t classify_diagnostic[N_OPTS];
+
+
+
   unsigned char show_option_requested;
+
+
   unsigned char abort_on_error;
 # 98 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/diagnostic.h"
   diagnostic_starter_fn begin_diagnostic;
+
+
   diagnostic_finalizer_fn end_diagnostic;
+
+
   void (*internal_error) (const char *, va_list *);
+
+
+
+
   tree last_function;
+
+
+
   const struct line_map *last_module;
+
   int lock;
+
   unsigned char inhibit_notes_p;
 };
+
 static __inline__ void
 diagnostic_inhibit_notes (diagnostic_context * context)
 {
@@ -15407,6 +26309,8 @@ extern void diagnostic_initialize (diagnostic_context *);
 extern void diagnostic_report_current_module (diagnostic_context *);
 extern void diagnostic_report_current_function (diagnostic_context *,
       diagnostic_info *);
+
+
 extern diagnostic_t diagnostic_classify_diagnostic (diagnostic_context *,
           int ,
           diagnostic_t );
@@ -15416,7 +26320,11 @@ extern unsigned char diagnostic_report_diagnostic (diagnostic_context *,
 extern char *diagnostic_build_prefix (diagnostic_info *);
 void default_diagnostic_starter (diagnostic_context *, diagnostic_info *);
 void default_diagnostic_finalizer (diagnostic_context *, diagnostic_info *);
+
+
 extern char *file_name_as_prefix (const char *);
+
+
 extern void print_declaration (pretty_printer *, tree, int, int);
 extern int dump_generic_node (pretty_printer *, tree, int, int, unsigned char);
 extern void print_generic_stmt (FILE *, tree, int);
@@ -15426,6 +26334,8 @@ extern void print_generic_decl (FILE *, tree, int);
 extern void debug_c_tree (tree);
 extern void dump_omp_clauses (pretty_printer *, tree, int, int);
 extern void print_call_name (pretty_printer *, tree, int);
+
+
 extern void debug_generic_expr (tree);
 extern void debug_generic_stmt (tree);
 extern void debug_tree_chain (tree);
@@ -15435,9 +26345,655 @@ extern void print_gimple_seq (FILE *, gimple_seq, int, int);
 extern void print_gimple_stmt (FILE *, gimple, int, int);
 extern void print_gimple_expr (FILE *, gimple, int, int);
 extern void dump_gimple_stmt (pretty_printer *, gimple, int, int);
+
+
 extern unsigned char default_tree_printer (pretty_printer *, text_info *, const char *,
       int, unsigned char, unsigned char, unsigned char);
 # 30 "../../../src/acf_plugin.c" 2
+
+# 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.h" 1
+# 42 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.h"
+typedef struct param_info
+{
+
+
+  const char *const option;
+
+  int value;
+
+
+  unsigned char set;
+
+
+  int min_value;
+
+
+  int max_value;
+
+
+  const char *const help;
+} param_info;
+
+
+
+
+extern param_info *compiler_params;
+
+
+extern size_t get_num_compiler_params (void);
+
+
+
+extern void add_params (const param_info params[], size_t n);
+
+
+
+extern void set_param_value (const char *name, int value);
+
+
+
+
+typedef enum compiler_param
+{
+
+
+# 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.def" 1
+# 46 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.def"
+PARAM_STRUCT_REORG_COLD_STRUCT_RATIO,
+
+
+
+
+
+
+PARAM_PREDICTABLE_BRANCH_OUTCOME,
+# 70 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.def"
+PARAM_MAX_INLINE_INSNS_SINGLE,
+# 82 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.def"
+PARAM_MAX_INLINE_INSNS_AUTO,
+
+
+
+
+PARAM_MAX_INLINE_INSNS_RECURSIVE,
+
+
+
+
+PARAM_MAX_INLINE_INSNS_RECURSIVE_AUTO,
+
+
+
+
+PARAM_MAX_INLINE_RECURSIVE_DEPTH,
+
+
+
+
+PARAM_MAX_INLINE_RECURSIVE_DEPTH_AUTO,
+
+
+
+
+PARAM_MIN_INLINE_RECURSIVE_PROBABILITY,
+
+
+
+
+
+
+
+PARAM_EARLY_INLINER_MAX_ITERATIONS,
+
+
+
+
+
+
+PARAM_MAX_VARIABLE_EXPANSIONS,
+
+
+
+
+
+PARAM_MIN_VECT_LOOP_BOUND,
+# 139 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.def"
+PARAM_MAX_DELAY_SLOT_INSN_SEARCH,
+# 150 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.def"
+PARAM_MAX_DELAY_SLOT_LIVE_SEARCH,
+# 160 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.def"
+PARAM_MAX_PENDING_LIST_LENGTH,
+
+
+
+
+PARAM_LARGE_FUNCTION_INSNS,
+
+
+
+PARAM_LARGE_FUNCTION_GROWTH,
+
+
+
+PARAM_LARGE_UNIT_INSNS,
+
+
+
+PARAM_INLINE_UNIT_GROWTH,
+
+
+
+PARAM_IPCP_UNIT_GROWTH,
+
+
+
+PARAM_EARLY_INLINING_INSNS,
+
+
+
+PARAM_LARGE_STACK_FRAME,
+
+
+
+PARAM_STACK_FRAME_GROWTH,
+
+
+
+
+
+
+PARAM_MAX_GCSE_MEMORY,
+# 211 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.def"
+PARAM_GCSE_AFTER_RELOAD_PARTIAL_FRACTION,
+
+
+
+
+
+
+PARAM_GCSE_AFTER_RELOAD_CRITICAL_FRACTION,
+# 229 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.def"
+PARAM_MAX_UNROLLED_INSNS,
+
+
+
+
+
+PARAM_MAX_AVERAGE_UNROLLED_INSNS,
+
+
+
+
+PARAM_MAX_UNROLL_TIMES,
+
+
+
+
+PARAM_MAX_PEELED_INSNS,
+
+
+
+
+PARAM_MAX_PEEL_TIMES,
+
+
+
+
+PARAM_MAX_COMPLETELY_PEELED_INSNS,
+
+
+
+
+PARAM_MAX_COMPLETELY_PEEL_TIMES,
+
+
+
+
+PARAM_MAX_ONCE_PEELED_INSNS,
+
+
+
+
+PARAM_MAX_UNROLL_ITERATIONS,
+
+
+
+
+
+PARAM_MAX_UNSWITCH_INSNS,
+
+
+
+
+PARAM_MAX_UNSWITCH_LEVEL,
+
+
+
+
+
+
+PARAM_MAX_ITERATIONS_TO_TRACK,
+
+
+
+
+
+PARAM_MAX_ITERATIONS_COMPUTATION_COST,
+
+
+
+
+
+PARAM_SMS_MAX_II_FACTOR,
+
+
+
+PARAM_SMS_DFA_HISTORY,
+
+
+
+PARAM_SMS_LOOP_AVERAGE_COUNT_THRESHOLD,
+
+
+
+
+HOT_BB_COUNT_FRACTION,
+
+
+
+HOT_BB_FREQUENCY_FRACTION,
+
+
+
+
+PARAM_ALIGN_THRESHOLD,
+
+
+
+
+PARAM_ALIGN_LOOP_ITERATIONS,
+# 343 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.def"
+PARAM_MAX_PREDICTED_ITERATIONS,
+
+
+
+TRACER_DYNAMIC_COVERAGE_FEEDBACK,
+
+
+
+TRACER_DYNAMIC_COVERAGE,
+
+
+
+TRACER_MAX_CODE_GROWTH,
+
+
+
+TRACER_MIN_BRANCH_RATIO,
+
+
+
+TRACER_MIN_BRANCH_PROBABILITY_FEEDBACK,
+
+
+
+TRACER_MIN_BRANCH_PROBABILITY,
+
+
+
+
+
+PARAM_MAX_CROSSJUMP_EDGES,
+
+
+
+
+
+PARAM_MIN_CROSSJUMP_INSNS,
+
+
+
+
+
+PARAM_MAX_GROW_COPY_BB_INSNS,
+
+
+
+
+
+PARAM_MAX_GOTO_DUPLICATION_INSNS,
+
+
+
+
+
+PARAM_MAX_CSE_PATH_LENGTH,
+
+
+
+PARAM_MAX_CSE_INSNS,
+
+
+
+
+
+
+PARAM_LIM_EXPENSIVE,
+# 417 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.def"
+PARAM_IV_CONSIDER_ALL_CANDIDATES_BOUND,
+
+
+
+
+
+
+
+PARAM_IV_MAX_CONSIDERED_USES,
+
+
+
+
+
+
+
+PARAM_IV_ALWAYS_PRUNE_CAND_SET_BOUND,
+
+
+
+
+PARAM_SCEV_MAX_EXPR_SIZE,
+
+
+
+
+PARAM_OMEGA_MAX_VARS,
+
+
+
+
+PARAM_OMEGA_MAX_GEQS,
+
+
+
+
+PARAM_OMEGA_MAX_EQS,
+
+
+
+
+PARAM_OMEGA_MAX_WILD_CARDS,
+
+
+
+
+PARAM_OMEGA_HASH_TABLE_SIZE,
+
+
+
+
+PARAM_OMEGA_MAX_KEYS,
+
+
+
+
+PARAM_OMEGA_ELIMINATE_REDUNDANT_CONSTRAINTS,
+
+
+
+
+PARAM_VECT_MAX_VERSION_FOR_ALIGNMENT_CHECKS,
+
+
+
+
+PARAM_VECT_MAX_VERSION_FOR_ALIAS_CHECKS,
+
+
+
+
+PARAM_MAX_CSELIB_MEMORY_LOCATIONS,
+# 501 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.def"
+GGC_MIN_EXPAND,
+
+
+
+
+GGC_MIN_HEAPSIZE,
+
+
+
+
+
+
+
+PARAM_MAX_RELOAD_SEARCH_INSNS,
+
+
+
+
+PARAM_MAX_SCHED_REGION_BLOCKS,
+
+
+
+
+PARAM_MAX_SCHED_REGION_INSNS,
+
+
+
+
+PARAM_MAX_PIPELINE_REGION_BLOCKS,
+
+
+
+
+PARAM_MAX_PIPELINE_REGION_INSNS,
+
+
+
+
+PARAM_MIN_SPEC_PROB,
+
+
+
+
+PARAM_MAX_SCHED_EXTEND_REGIONS_ITERS,
+
+
+
+
+PARAM_MAX_SCHED_INSN_CONFLICT_DELAY,
+
+
+
+
+PARAM_SCHED_SPEC_PROB_CUTOFF,
+
+
+
+
+PARAM_SELSCHED_MAX_LOOKAHEAD,
+
+
+
+
+PARAM_SELSCHED_MAX_SCHED_TIMES,
+
+
+
+
+PARAM_SELSCHED_INSNS_TO_RENAME,
+
+
+
+
+PARAM_SCHED_MEM_TRUE_DEP_COST,
+
+
+
+
+PARAM_MAX_LAST_VALUE_RTL,
+
+
+
+
+
+
+
+PARAM_INTEGER_SHARE_LIMIT,
+# 606 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.def"
+PARAM_MIN_VIRTUAL_MAPPINGS,
+
+
+
+
+PARAM_VIRTUAL_MAPPINGS_TO_SYMS_RATIO,
+
+
+
+
+PARAM_SSP_BUFFER_SIZE,
+# 634 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.def"
+PARAM_MAX_JUMP_THREAD_DUPLICATION_STMTS,
+# 643 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.def"
+PARAM_MAX_FIELDS_FOR_FIELD_SENSITIVE,
+
+
+
+
+PARAM_MAX_SCHED_READY_INSNS,
+# 658 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.def"
+PARAM_PREFETCH_LATENCY,
+
+
+
+
+
+
+PARAM_SIMULTANEOUS_PREFETCHES,
+
+
+
+
+
+
+PARAM_L1_CACHE_SIZE,
+
+
+
+
+
+
+PARAM_L1_CACHE_LINE_SIZE,
+
+
+
+
+
+
+PARAM_L2_CACHE_SIZE,
+# 697 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.def"
+PARAM_USE_CANONICAL_TYPES,
+
+
+
+
+PARAM_MAX_PARTIAL_ANTIC_LENGTH,
+# 712 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.def"
+PARAM_SCCVN_MAX_SCC_SIZE,
+
+
+
+
+PARAM_IRA_MAX_LOOPS_NUM,
+
+
+
+
+PARAM_IRA_MAX_CONFLICT_TABLE_SIZE,
+
+
+
+
+PARAM_IRA_LOOP_RESERVED_REGS,
+
+
+
+
+
+
+
+PARAM_SWITCH_CONVERSION_BRANCH_RATIO,
+
+
+
+
+
+
+
+PARAM_LOOP_BLOCK_TILE_SIZE,
+
+
+
+
+
+
+PARAM_GRAPHITE_MAX_NB_SCOP_PARAMS,
+
+
+
+
+
+
+PARAM_GRAPHITE_MAX_BBS_PER_FUNCTION,
+
+
+
+
+
+
+PARAM_LOOP_INVARIANT_MAX_BBS_IN_LOOP,
+
+
+
+
+
+PARAM_SLP_MAX_INSNS_IN_BB,
+
+
+
+
+PARAM_MIN_INSN_TO_PREFETCH_RATIO,
+
+
+
+
+
+PARAM_PREFETCH_MIN_INSN_TO_MEM_RATIO,
+
+
+
+
+
+
+PARAM_MAX_VARTRACK_SIZE,
+
+
+
+
+
+
+PARAM_MIN_NONDEBUG_INSN_UID,
+
+
+
+
+PARAM_IPA_SRA_PTR_GROWTH_FACTOR,
+# 87 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/params.h" 2
+
+  LAST_PARAM
+} compiler_param;
+# 32 "../../../src/acf_plugin.c" 2
+
 # 1 "../../../src/acf_plugin.h" 1
 # 27 "../../../src/acf_plugin.h"
 typedef struct acf_ftable_entry {
@@ -15446,25 +27002,31 @@ typedef struct acf_ftable_entry {
     char *opt_arg;
     char *opt_file;
 } acf_ftable_entry_t;
-# 42 "../../../src/acf_plugin.h"
+# 45 "../../../src/acf_plugin.h"
 int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p, int verbose);
-# 33 "../../../src/acf_plugin.c" 2
+# 34 "../../../src/acf_plugin.c" 2
+
 acf_ftable_entry_t *acf_ftable;
 const char *acf_csv_file_key="csv_file";
 char *acf_csv_file;
+
 const char *verbose_key="verbose";
 unsigned char verbose = 0;
+
 int plugin_is_GPL_compatible;
 static const char *plugin_name;
-# 79 "../../../src/acf_plugin.c"
+# 80 "../../../src/acf_plugin.c"
 static void event_callback(void *gcc_data,void *data){
     (void)gcc_data;
     fprintf(stderr,"%s called\n",plugin_event_name[*(int*)data]);
 }
+
 extern void cplus_decl_attributes(tree *, tree, int) __attribute__((weak));
+
 typedef void (*decl_attributes_func_type)
     (tree *decl,tree attributes,int flags);
 static decl_attributes_func_type decl_attributes_func;
+
 void attribute_injector_start_unit_callback(void *gcc_data __attribute__ ((__unused__)),
          void *data __attribute__ ((__unused__))){
     if(is_gcc()){
@@ -15473,7 +27035,13 @@ void attribute_injector_start_unit_callback(void *gcc_data __attribute__ ((__unu
  decl_attributes_func=&cplus_decl_attributes;
     }
 }
+
 extern tree maybe_constant_value (tree) __attribute__((weak));
+
+
+
+
+
 static void
 my_cp_check_const_attributes (tree attributes)
 {
@@ -15489,28 +27057,49 @@ my_cp_check_const_attributes (tree attributes)
  }
     }
 }
+
 static int parse_ftable_csv_file(acf_ftable_entry_t **acf_ftable_p,
      char *csv_file, unsigned char verbose)
 {
   int nb = 0;
+
   nb = acf_parse_csv(csv_file, acf_ftable_p, verbose);
+
   return nb;
 }
+
+
+
 static unsigned char source_file_match(char *opt_file, char *input_file)
 {
     unsigned char ret;
+
     if (opt_file == ((void *)0) || input_file == ((void *)0)) {
+
+
+
+
+
  return 1;
     }
+
+
+
     if (strcmp(basename(opt_file), opt_file) == 0) {
  ret = !strcmp(opt_file, basename(input_file));
     } else {
  ret = !strcmp(opt_file, input_file);
     }
+
+
+
+
     return ret;
 }
+
 int func_number = 0;
 unsigned char csv_parsed = 0;
+
 static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
     tree decl=(tree)gcc_data;
     const char *decl_fullname;
@@ -15522,14 +27111,17 @@ static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
     volatile tree opts;
     const char *cur_func_name = ((void *)0);
     int i;
-# 192 "../../../src/acf_plugin.c"
+# 193 "../../../src/acf_plugin.c"
     cur_func_name = ((const char *) (decl_assembler_name ((cfun + 0)->decl))->identifier.id.str);
+
     if (!csv_parsed) {
  func_number = parse_ftable_csv_file(&acf_ftable,
          acf_csv_file, verbose);
  csv_parsed = 1;
     }
+
     if (func_number < 0){
+
  return;
     }
     for (i = 0; i < func_number; i++){
@@ -15537,6 +27129,10 @@ static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
  char *opt_attr = acf_ftable[i].opt_attr;
  char *opt_arg = acf_ftable[i].opt_arg;
  char *opt_file = acf_ftable[i].opt_file;
+
+ if ((!strncmp("PARAM_", opt_attr, strlen("PARAM_"))))
+   continue;
+
  attribute_identifier = (__builtin_constant_p (opt_attr) ? get_identifier_with_length ((opt_attr), strlen (opt_attr)) : get_identifier (opt_attr));
  if ((strcmp (func_name, cur_func_name) == 0) &&
      source_file_match(opt_file, (char *) main_input_filename)) {
@@ -15555,28 +27151,156 @@ static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
      } else {
   argument_list = (tree) ((void *)0);
      }
+
      attribute_list = tree_cons_stat (attribute_identifier,argument_list,attribute_list )
                           ;
+
      my_cp_check_const_attributes (attribute_list);
      if(attribute_list != (tree) ((void *)0)){
   decl_attributes_func(&decl,attribute_list,
          ATTR_FLAG_TYPE_IN_PLACE);
      }
  } else {
+
  }
     }
 }
+
+static char **csv_param_name = ((void *)0);
+static int *csv_param_value = ((void *)0);
+static size_t csv_param_index = 0;
+static int *csv_param_set = ((void *)0);
+# 259 "../../../src/acf_plugin.c"
+static unsigned char get_param_idx(char *opt_param, size_t *idx) {
+    size_t i, num_compiler_params = get_num_compiler_params();
+
+    for (i = 0; i < num_compiler_params; ++i) {
+ if (strcmp (compiler_params[i].option, opt_param) == 0) {
+     *idx = i;
+     return 1;
+ }
+    }
+    return 0;
+}
+
+static void save_and_set_param(char *opt_param, int value) {
+    size_t param_idx;
+
+    if (!get_param_idx(opt_param, &param_idx))
+ return;
+
+
+    csv_param_name[csv_param_index] = opt_param;
+    csv_param_value[csv_param_index] = (compiler_params[(int) param_idx].value);
+    csv_param_index ++;
+
+
+
+
+
+    set_param_value(opt_param, value);
+
+}
+
+static void restore_param_values() {
+    size_t i;
+
+    for ( i = 0; i < csv_param_index; i++) {
+
+
+
+ set_param_value(csv_param_name[i], csv_param_value[i]);
+
+    }
+}
+
+static void fill_csv_params() {
+    const char *cur_func_name = ((void *)0);
+    int i;
+
+    cur_func_name = ((const char *) (decl_assembler_name ((cfun + 0)->decl))->identifier.id.str);
+
+    if (!csv_parsed) {
+ func_number = parse_ftable_csv_file(&acf_ftable,
+         acf_csv_file, verbose);
+ csv_parsed = 1;
+    }
+
+    if (func_number < 0){
+
+ return;
+    }
+
+    for (i = 0; i < func_number; i++){
+ char *func_name = acf_ftable[i].func_name;
+ char *opt_attr = acf_ftable[i].opt_attr;
+ char *opt_arg = acf_ftable[i].opt_arg;
+ char *opt_file = acf_ftable[i].opt_file;
+ char *opt_param;
+
+ if (!(!strncmp("PARAM_", opt_attr, strlen("PARAM_"))))
+     continue;
+
+ opt_param = opt_attr + strlen("PARAM_");
+
+ if ((strcmp (func_name, cur_func_name) == 0) &&
+     source_file_match(opt_file, (char *) main_input_filename)) {
+     if (opt_arg != ((void *)0)) {
+
+  save_and_set_param(opt_param, atoi(acf_ftable[i].opt_arg));
+
+  if (verbose) {
+      fprintf(stdout, "acf_plugin: Attaching param to "
+       "function %s: %s=%d\n",
+       ((const char *) (decl_assembler_name ((cfun + 0)->decl))->identifier.id.str), opt_param, atoi(acf_ftable[i].opt_arg));
+  }
+     }
+ }
+    }
+
+    return;
+}
+
+static void param_injector_start_passes_callback(void *gcc_data,void *data) {
+
+    if (csv_param_name == ((void *)0)) {
+ csv_param_name = (char **)xmalloc(sizeof(char *)*get_num_compiler_params());
+ csv_param_value = (int *)xmalloc(sizeof(int) *get_num_compiler_params());
+    }
+
+
+
+
+
+
+    csv_param_index = 0;
+    fill_csv_params();
+}
+
+static void param_injector_end_passes_callback(void *gcc_data,void *data) {
+
+    restore_param_values();
+}
+
 static int pre_genericize=PLUGIN_PRE_GENERICIZE;
 static int start_unit=PLUGIN_START_UNIT;
 static int finish_unit=PLUGIN_START_UNIT;
+
 int plugin_init(struct plugin_name_args *plugin_na,
   struct plugin_gcc_version *version){
+
     plugin_name=plugin_na->base_name;
     FILE *fcsv;
     int csv_arg_pos = -1;
     unsigned char bad = 0;
     int i;
-# 277 "../../../src/acf_plugin.c"
+# 407 "../../../src/acf_plugin.c"
+    if (!((version->basever[0] < '4') ||
+   ((version->basever[0] == '4') && (version->basever[2] < '6')))) {
+ error("%s: build gcc and load gcc versions are incompatible.", plugin_name);
+ return 1;
+    }
+# 421 "../../../src/acf_plugin.c"
     switch (plugin_na->argc) {
     case 0:
  bad = 1;
@@ -15608,6 +27332,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
  bad = 1;
  break;
     }
+
     if (bad) {
  fprintf(stderr,
   "Usage for %s: -fplugin=<path>/%s.so -fplugin-arg-%s-%s="
@@ -15617,6 +27342,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
   plugin_name, verbose_key);
  return 1;
     }
+
     if (strcmp(plugin_na->argv[csv_arg_pos].key, acf_csv_file_key) == 0) {
  acf_csv_file = plugin_na->argv[csv_arg_pos].value;
  if ((fcsv = fopen_unlocked(acf_csv_file,"r")) == ((void *)0)) {
@@ -15631,6 +27357,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
   plugin_na->argv[csv_arg_pos].key);
  return 1;
     }
+
     register_callback(plugin_na->base_name,
         PLUGIN_START_UNIT,
         &attribute_injector_start_unit_callback,((void *)0));
@@ -15638,6 +27365,13 @@ int plugin_init(struct plugin_name_args *plugin_na,
         PLUGIN_PRE_GENERICIZE,
         &attribute_injector_finish_decl_callback,
         &pre_genericize);
-# 355 "../../../src/acf_plugin.c"
+
+    register_callback(plugin_na->base_name,
+        PLUGIN_ALL_PASSES_START,
+        &param_injector_start_passes_callback, ((void *)0));
+    register_callback(plugin_na->base_name,
+        PLUGIN_ALL_PASSES_END,
+        &param_injector_end_passes_callback, ((void *)0));
+# 506 "../../../src/acf_plugin.c"
     return 0;
 }

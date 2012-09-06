@@ -182,6 +182,10 @@ void readCSV(FILE *file, struct csv_list *clist) {
 
 	add_row(clist);
 
+	/* Ignore lines whose first character is % */
+	if (line1[0] == '%')
+	    continue;
+
 	/* start going character by character thro the line */
 	while (*stptr != '\0')
 	    { lcount++;
@@ -230,7 +234,7 @@ void readCSV(FILE *file, struct csv_list *clist) {
 		    }
 		if (*stptr != '\0' && *stptr == ',')
 		    stptr++;
-		strcpy(line2,stptr);
+		memmove(line2, stptr, strlen(stptr)+1);
 		stptr = line2;
 	    }
     }

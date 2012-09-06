@@ -15,7 +15,7 @@ _Z5func2Pi,cold,,
 _Z5func2Pi,cold,
 _Z5func2Pi,cold
 
-Should match file
+% Should match file
 _Z5func2Pi,optimize,unroll-loops,hello-cpp.cpp
 _Z6squarei,optimize,2,hello-cpp.cpp
 square,optimize,Os,hello.c
@@ -24,7 +24,7 @@ _Z5func2Pi,optimize,s,hello-cpp.cpp
 func2,noinline,,hello.c
 _Z5func2Pi,optimize,O0,hello-cpp.cpp
 
-Should not match file
+% Should not match file
 _Z5func2Pi,enum-int-equiv,,/
 _Z5func2Pi,enum-int-equiv,,/usr/XXXX/YYYYY/blocksort.c
 _Z5func2Pi,enum-int-equiv,,/path/file,
@@ -36,7 +36,7 @@ main,optimize,s,/xxx/yyy/zzz/hello.c
 _Z5func2Pi,noinline,,/xxx/yyy/zzz/hello.c
 _Z5func2Pi,optimize,O0,/xxx/yyy/zzz/hello-cpp.cpp
 
-Bad lines 
+% Bad lines 
 ,,
 ,,,,
 XXX,  , 
@@ -51,3 +51,9 @@ XXX,YY,ZZ,TT,II,,
 _Z5func2Pi,cold,,,,
 _Z5func2Pi,optimize,O2,/path/file,,
 
+% For --params test
+func1,optimize,O1
+func1,PARAM_max-unroll-times,4
+_Z5func1Pi,optimize,unroll-loops
+_Z5func1Pi,optimize,O1
+_Z5func1Pi,PARAM_max-unroll-times,4

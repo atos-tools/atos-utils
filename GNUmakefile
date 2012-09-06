@@ -126,13 +126,13 @@ examples-sha1-c examples-sha1 examples-bzip2: examples-%: examples-%-play
 	[ "$(NOGRAPH)" = 1 ] || (cd $(srcdir)examples/$* && $(abspath bin/atos-graph) &)
 
 examples-sha1-c-play:
-	cd $(srcdir)examples/sha1-c && $(abspath bin/atos-explore) -f -e ./sha1-c -b "gcc -O2 -o sha1-c sha.c sha1.c" -r ./run.sh -c
+	cd $(srcdir)examples/sha1-c && $(abspath bin/atos-explore) -f -e ./sha1-c -b "gcc -O2 -o sha1-c sha.c sha1.c" -r ./run.sh -c && $(abspath bin/atos-play) -p
 
 examples-sha1-play:
-	cd $(srcdir)examples/sha1 && $(abspath bin/atos-explore) -b "make clean sha" -r ./run.sh -c
+	cd $(srcdir)examples/sha1 && $(abspath bin/atos-explore) -b "make clean sha" -r ./run.sh -c && $(abspath bin/atos-play) -p
 
 examples-bzip2-play:
-	cd $(srcdir)examples/bzip2 && $(abspath bin/atos-explore) -b "make clean all" -r ./run.sh -c
+	cd $(srcdir)examples/bzip2 && $(abspath bin/atos-explore) -b "make clean all" -r ./run.sh -c && $(abspath bin/atos-play) -p
 
 #
 # Installation of doc and examples

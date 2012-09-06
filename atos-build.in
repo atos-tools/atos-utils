@@ -147,9 +147,10 @@ proot_atos() {
 PROOT=`proot_atos`
 
 ATOS_DRIVER=${ATOS_DRIVER:-$bindir/atos-driver}
-
 [ "$ATOS_DRIVER" = "0" ] || \
     PROOT_ADDON_CC_OPTS_DRIVER="PROOT_ADDON_CC_OPTS_DRIVER=$ATOS_DRIVER"
+
+[ "$TIMEOUT" != "" ] || TIMEOUT="$bindir/atos-timeout 3600"
 
 variant_hash() {
     echo "$1" | md5sum | cut -f 1 -d ' '
@@ -229,21 +230,21 @@ if [ "$1" = "" -a "$opt_rebuild" != 1 -a -f "$configuration_path/build.mk" ]; th
     # If the configuration path contains a build.mk execute it
     [ `echo $options | grep -c -e "-flto"` -ne 0 ] && lto_option="LTO=1" || lto_option=""
     if [ "$dryrun" = 1 ]; then
-	make -n -f $configuration_path/build.mk ATOS_DRIVER=$ATOS_DRIVER ACFLAGS="$APFLAGS $options" $lto_option $profdir_option
+	${TIMEOUT} make -n -f $configuration_path/build.mk ATOS_DRIVER=$ATOS_DRIVER ACFLAGS="$APFLAGS $options" $lto_option $profdir_option
     else
-	make ${dryrun:+-n} -j $jobs -f $configuration_path/build.mk ATOS_DRIVER=$ATOS_DRIVER ACFLAGS="$APFLAGS $options" $lto_option $profdir_option >>"$logfile" 2>&1 || failure=true
+	${TIMEOUT} make ${dryrun:+-n} -j $jobs -f $configuration_path/build.mk ATOS_DRIVER=$ATOS_DRIVER ACFLAGS="$APFLAGS $options" $lto_option $profdir_option >>"$logfile" 2>&1 || failure=true
     fi
 elif [ "$1" = "" -a "$opt_rebuild" = 1 -a -f "$configuration_path/build.sh" ]; then
     if [ "$dryrun" = 1 ]; then
 	echo "Executing: $configuration_path/build.sh"
     else
-	env PROOT_IGNORE_ELF_INTERPRETER=1 PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$APFLAGS $options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT_ADDON_CC_OPTS_DRIVER $PROOT -w $PWD / "$configuration_path/build.sh"  >>"$logfile"  2>&1 || failure=true
+	${TIMEOUT} env PROOT_IGNORE_ELF_INTERPRETER=1 PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$APFLAGS $options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT_ADDON_CC_OPTS_DRIVER $PROOT -w $PWD / "$configuration_path/build.sh"  >>"$logfile"  2>&1 || failure=true
     fi
 else
     if [ "$dryrun" = 1 ]; then
 	echo "Executing: " ${1+"$@"}
     else
-	env PROOT_IGNORE_ELF_INTERPRETER=1 PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$APFLAGS $options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT_ADDON_CC_OPTS_DRIVER $PROOT -w $PWD / ${1+"$@"}  >>"$logfile"  2>&1 || failure=true
+	${TIMEOUT} env PROOT_IGNORE_ELF_INTERPRETER=1 PROOT_ADDON_CC_OPTS=1 PROOT_ADDON_CC_OPTS_ARGS="$APFLAGS $options" PROOT_ADDON_CC_OPTS_CCRE="$ccregexp" $PROOT_ADDON_CC_OPTS_DRIVER $PROOT -w $PWD / ${1+"$@"}  >>"$logfile"  2>&1 || failure=true
     fi
 fi
 

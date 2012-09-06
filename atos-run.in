@@ -144,6 +144,8 @@ done
 
 shift $((OPTIND - 1))
 
+[ "$TIMEOUT" != "" ] || TIMEOUT="$dir/atos-timeout 3600"
+
 variant_hash() {
     echo "$1" | md5sum | cut -f 1 -d ' '
 }
@@ -248,7 +250,7 @@ get_time() {
 	export REMOTE_PROFILE_DIR=$remote_profile_path
 	export LOCAL_PROFILE_DIR=`profile_path`
     fi
-    /usr/bin/time -p ${1+"$@"} 2>&1 | tee $tmpfile | sed -e '/^real /d' -e '/^user /d' -e '/^sys /d'
+    ${TIMEOUT} /usr/bin/time -p ${1+"$@"} 2>&1 | tee $tmpfile | sed -e '/^real /d' -e '/^user /d' -e '/^sys /d'
     [ ${PIPESTATUS[0]} = 0 ] || failure=true
     exe_time=`tail -3 $tmpfile | awk '{if ($1 == "user") { print int($2 * 1000); }}'`
     # prefer time info from log

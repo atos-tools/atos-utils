@@ -315,7 +315,7 @@ class DependencyGraphBuilder:
             targets = list(referenced_outputs)
         else:
             targets = self.targets
-        unmatched_targets = targets
+        unmatched_targets = targets[:] # keep targets untouched
         available_inputs = set()
         last_target_node = None
         referenced_outputs = set()

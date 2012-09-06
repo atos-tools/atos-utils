@@ -1,6 +1,3 @@
-acf_plugin warning: discard icomplete line 18
-acf_plugin warning: discard icomplete line 27
-acf_plugin warning: discard icomplete line 39
 acf_plugin warning: discarded line 40: function name unspecified
 acf_plugin warning: discarded line 40: attribute unspecified
 acf_plugin warning: discarded line 41: function name unspecified
@@ -19,7 +16,9 @@ acf_plugin: Attaching attribute to function square: hot (null)
 acf_plugin: Attaching attribute to function square: optimize Os (file: hello.c)
 acf_plugin: Attaching attribute to function tab_print: optimize 3
 acf_plugin: Attaching attribute to function func1: optimize unroll-loops
+acf_plugin: Attaching attribute to function func1: optimize O1
 acf_plugin: Attaching attribute to function func2: noinline (null) (file: hello.c)
 acf_plugin: Attaching attribute to function main: optimize Os
 acf_plugin: Attaching attribute to function main: cold (null)
 acf_plugin: Attaching attribute to function main: optimize s (file: hello.c)
+acf_plugin: Attaching param to function func1: max-unroll-times=4

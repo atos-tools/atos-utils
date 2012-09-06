@@ -34,11 +34,8 @@ all: acf_plugin.so
 generate-prep-sources:
 	mkdir -p $(prepdir)
 	gcc -m32 -E $(INCLUDES) $(srcdir)/plugin-utils.c -o $(prepdir)/plugin-utils_prep.c
-	sed -i -e '/^$$/d' $(prepdir)/plugin-utils_prep.c
 	gcc -m32 -E $(INCLUDES) $(srcdir)/acf_plugin.c -o $(prepdir)/acf_plugin_prep.c
-	sed -i -e '/^$$/d' $(prepdir)/acf_plugin_prep.c
 	gcc -m32 -E $(INCLUDES) $(srcdir)/acf_csv_reader.c -o $(prepdir)/acf_csv_reader_prep.c
-	sed -i -e '/^$$/d' $(prepdir)/acf_csv_reader_prep.c
 
 acf_plugin.so: $(SRC)
 	gcc $(CFLAGS) -fPIC $(INCLUDES) -c  $(prepdir)/acf_plugin_prep.c -o acf_plugin.o

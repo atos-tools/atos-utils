@@ -28,6 +28,7 @@
 #include "function.h"
 #include "diagnostic.h"
 #include "langhooks.h"
+#include "params.h"
 
 #include "acf_plugin.h"
 
@@ -207,6 +208,9 @@ static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
 	char *opt_arg = acf_ftable[i].opt_arg;
 	char *opt_file = acf_ftable[i].opt_file;
 
+	if (IS_CSV_PARAM(opt_attr))
+	  continue;
+
 	attribute_identifier =  get_identifier(opt_attr);
 	if ((strcmp (func_name, cur_func_name) == 0) &&
 	    source_file_match(opt_file, (char *) main_input_filename)) {
@@ -240,12 +244,136 @@ static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
     }
 }
 
+static char **csv_param_name  = NULL;
+static int   *csv_param_value = NULL;
+static size_t csv_param_index = 0;
+static int   *csv_param_set   = NULL;
+
+#ifdef param_values
+#define USE_GLOBAL_PARAMS
+#else
+#undef USE_GLOBAL_PARAMS
+#endif
+
+// Get the index for a PARAM name
+static bool get_param_idx(char *opt_param, size_t *idx) {
+    size_t i, num_compiler_params = get_num_compiler_params();
+
+    for (i = 0; i < num_compiler_params; ++i) {
+	if (strcmp (compiler_params[i].option, opt_param) == 0) {
+	    *idx = i;
+	    return true;
+	}
+    }
+    return false;
+}
+
+static void save_and_set_param(char *opt_param, int value) {
+    size_t param_idx;
+
+    if (!get_param_idx(opt_param, &param_idx))
+	return;
+
+    // Save current param value
+    csv_param_name[csv_param_index] = opt_param;
+    csv_param_value[csv_param_index] = PARAM_VALUE(param_idx);
+    csv_param_index ++;
+
+    // Set new param value
+#ifdef USE_GLOBAL_PARAMS
+    set_param_value(opt_param, value, param_values, csv_param_set);
+#else
+    set_param_value(opt_param, value);
+#endif
+}
+
+static void restore_param_values() {
+    size_t i;
+
+    for ( i = 0; i < csv_param_index; i++) {
+#ifdef USE_GLOBAL_PARAMS
+	set_param_value(csv_param_name[i], csv_param_value[i], param_values, csv_param_set);
+#else
+	set_param_value(csv_param_name[i], csv_param_value[i]);
+#endif
+    }
+}
+
+static void fill_csv_params() {
+    const char *cur_func_name = NULL;
+    int i;
+
+    cur_func_name = IDENTIFIER_POINTER (DECL_ASSEMBLER_NAME (cfun->decl));
+
+    if (!csv_parsed) {
+	func_number = parse_ftable_csv_file(&acf_ftable,
+					    acf_csv_file, verbose);
+	csv_parsed = true;
+    }
+
+    if (func_number < 0){
+	/* Error already reported */
+	return;
+    }
+
+    for (i = 0; i < func_number; i++){
+	char *func_name = acf_ftable[i].func_name;
+	char *opt_attr = acf_ftable[i].opt_attr;
+	char *opt_arg = acf_ftable[i].opt_arg;
+	char *opt_file = acf_ftable[i].opt_file;
+	char *opt_param;
+
+	if (!IS_CSV_PARAM(opt_attr))
+	    continue;
+
+	opt_param = opt_attr + strlen(CSV_PARAM);
+
+	if ((strcmp (func_name, cur_func_name) == 0) &&
+	    source_file_match(opt_file, (char *) main_input_filename)) {
+	    if (opt_arg != NULL) {
+
+		save_and_set_param(opt_param, atoi(acf_ftable[i].opt_arg));
+
+		if (verbose) {
+		    fprintf(stdout, "acf_plugin: Attaching param to "
+			    "function %s: %s=%d\n",
+			    IDENTIFIER_POINTER (DECL_ASSEMBLER_NAME (cfun->decl)), opt_param, atoi(acf_ftable[i].opt_arg));
+		}
+	    }
+	}
+    }
+
+    return;
+}
+
+static void param_injector_start_passes_callback(void *gcc_data,void *data) {
+
+    if (csv_param_name == NULL) {
+	csv_param_name  = (char **)xmalloc(sizeof(char *)*get_num_compiler_params());
+	csv_param_value = (int *)xmalloc(sizeof(int) *get_num_compiler_params());
+    }
+
+#ifdef USE_GLOBAL_PARAMS
+    if (csv_param_set == NULL)
+	csv_param_set = (int *)xmalloc(sizeof(int)*get_num_compiler_params());
+#endif
+
+    csv_param_index = 0;
+    fill_csv_params();
+}
+
+static void param_injector_end_passes_callback(void *gcc_data,void *data) {
+
+    restore_param_values();
+}
+
 static int pre_genericize=PLUGIN_PRE_GENERICIZE;
 static int start_unit=PLUGIN_START_UNIT;
 static int finish_unit=PLUGIN_START_UNIT;
 
 int plugin_init(struct plugin_name_args *plugin_na,
 		struct plugin_gcc_version *version){
+
     plugin_name=plugin_na->base_name;
     FILE *fcsv;
     int csv_arg_pos = -1;
@@ -271,6 +399,22 @@ int plugin_init(struct plugin_name_args *plugin_na,
 		plugin_na->argv[i].key, plugin_na->argv[i].value);
     }
     fprintf(stderr, "---------------------\n");
+#endif
+
+    // Check the plugin is used with appropriate compiler version
+    // regarding access to PARAM values
+#ifndef USE_GLOBAL_PARAMS
+    if (!((version->basever[0] < '4') ||
+	  ((version->basever[0] == '4') && (version->basever[2] < '6')))) {
+	error("%s: build gcc and load gcc versions are incompatible.", plugin_name);
+	return 1;
+    }
+#else
+    if ((version->basever[0] < '4') ||
+	((version->basever[0] == '4') && (version->basever[2] < '6'))) {
+	error("%s: build gcc and load gcc versions are incompatible.", plugin_name);
+	return 1;
+    }
 #endif
 
     /* Check options */
@@ -338,6 +482,13 @@ int plugin_init(struct plugin_name_args *plugin_na,
 		      PLUGIN_PRE_GENERICIZE,
 		      &attribute_injector_finish_decl_callback,
 		      &pre_genericize);
+
+    register_callback(plugin_na->base_name,
+		      PLUGIN_ALL_PASSES_START,
+		      &param_injector_start_passes_callback, NULL);
+    register_callback(plugin_na->base_name,
+		      PLUGIN_ALL_PASSES_END,
+		      &param_injector_end_passes_callback, NULL);
 
 #ifdef PRINT_PASS_LIST
     printf("\n####### ALL PASSES LIST #######\n");

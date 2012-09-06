@@ -1,6 +1,3 @@
-acf_plugin warning: discard icomplete line 18
-acf_plugin warning: discard icomplete line 27
-acf_plugin warning: discard icomplete line 39
 acf_plugin warning: discarded line 40: function name unspecified
 acf_plugin warning: discarded line 40: attribute unspecified
 acf_plugin warning: discarded line 41: function name unspecified
@@ -20,6 +17,8 @@ acf_plugin: Attaching attribute to function _Z6squarei: optimize 2 (file: hello-
 acf_plugin: Attaching attribute to function _Z9tab_printPi: noinline (null)
 acf_plugin: Attaching attribute to function _Z9tab_printPi: optimize Os
 acf_plugin: Attaching attribute to function _Z5func1Pi: optimize O2
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize unroll-loops
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize O1
 acf_plugin: Attaching attribute to function _Z5func2Pi: optimize O3
 acf_plugin: Attaching attribute to function _Z5func2Pi: optimize O1
 acf_plugin: Attaching attribute to function _Z5func2Pi: cold (null)
@@ -30,3 +29,4 @@ acf_plugin: Attaching attribute to function _Z5func2Pi: optimize s (file: hello-
 acf_plugin: Attaching attribute to function _Z5func2Pi: optimize O0 (file: hello-cpp.cpp)
 acf_plugin: Attaching attribute to function main: optimize Os
 acf_plugin: Attaching attribute to function main: cold (null)
+acf_plugin: Attaching param to function _Z5func1Pi: max-unroll-times=4

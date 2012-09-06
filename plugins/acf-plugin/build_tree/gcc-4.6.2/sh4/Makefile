@@ -38,11 +38,8 @@ all: acf_plugin.so
 generate-prep-sources:
 	mkdir -p $(prepdir)
 	gcc -m32 -E $(INCLUDES) $(srcdir)/plugin-utils.c -o $(prepdir)/plugin-utils_prep.c
-	sed -i -e '/^$$/d' $(prepdir)/plugin-utils_prep.c
 	gcc -m32 -E $(INCLUDES) $(srcdir)/acf_plugin.c -o $(prepdir)/acf_plugin_prep.c
-	sed -i -e '/^$$/d' $(prepdir)/acf_plugin_prep.c
 	gcc -m32 -E $(INCLUDES) $(srcdir)/acf_csv_reader.c -o $(prepdir)/acf_csv_reader_prep.c
-	sed -i -e '/^$$/d' $(prepdir)/acf_csv_reader_prep.c
 
 test: acf-test-c acf-test-cpp
 
@@ -55,11 +52,13 @@ acf_plugin.so: $(SRC)
 ACF_PLUGIN_OPT=-fplugin=./acf_plugin.so -fplugin-arg-acf_plugin-verbose -fplugin-arg-acf_plugin-csv_file=$(testdir)/test.csv
 
 acf-test-c: $(TESTC) ./acf_plugin.so $(testdir)/test.csv
-	-$(gcc_st40) $(ACF_PLUGIN_OPT) $< -o $@  > acf-test-c.log 2>&1
+	-$(gcc_st40) $(ACF_PLUGIN_OPT) $< -o $@  | tee acf-test-c.log 2>&1
+	@echo "Checking diff with reference output:"
 	diff acf-test-c.log $(testdir)/acf-test-c.log.ref
 
 acf-test-cpp: $(TESTCPP) ./acf_plugin.so $(testdir)/test.csv
-	-$(g++_st40) $(ACF_PLUGIN_OPT) $< -o $@ > acf-test-cpp.log 2>&1
+	-$(g++_st40) $(ACF_PLUGIN_OPT) $< -o $@ | tee acf-test-cpp.log 2>&1
+	@echo "Checking diff with reference output:"
 	diff acf-test-cpp.log $(testdir)/acf-test-cpp.log.ref
 
 clean:

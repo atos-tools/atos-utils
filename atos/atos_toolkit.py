@@ -381,7 +381,8 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
                '--acf-hot-th', str(hot_th), '--acf-cold-th', str(cold_th)]
         if cold_opts: cmd += ['--acf-cold-opts', '"%s"' % cold_opts]
         if hot_opts: cmd += ['--acf-hot-opts', '"%s"' % hot_opts]
-        status, output = atos_lib.system(' '.join(cmd)) # check status ?
+        status, output = atos_lib.system(
+            ' '.join(cmd), get_output=True, check_status=True)
         return output
 
     def write_csv_file(options, funcname, *args):
@@ -437,12 +438,7 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
             os.remove(os.path.join(csv_dir, file))
 
     # generate oprof.out in current dir
-    (p_status, p_output) = atos_lib.system(oprof_script)
-    debug('*** profile run status: %s' % str(p_status))
-
-    if p_status != 0:
-        debug('*** profile run failed: script failed or not found: %s' % oprof_script)
-        return
+    atos_lib.system(oprof_script, check_status=True)
 
     if not os.path.exists(oprof_out):
         # Profile run failed: profile file not found
@@ -478,7 +474,7 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
         # Avoid profile generation for first iteration, already generated for cold functions
         if not first_iteration:
             # generate oprof.out in current dir
-            (p_status, p_output) = atos_lib.system(oprof_script)
+            atos_lib.system(oprof_script, check_status=True)
         first_iteration = False
 
         # Parse oprof.out for hot functions
@@ -711,7 +707,7 @@ def atos_opt_run(flags, variant, profdir, config, nbrun, baseopts, no_replay):
     status, output = atos_lib.system(
         '%s/atos-opt -C %s %s %s %s -r -a "%s %s" %s' % (
             globals.BINDIR, config, nbrun_option, replay_option, profdir_option,
-            flags, variant_flags, variant_options), print_out=True)
+            flags, variant_flags, variant_options), print_output=True, get_output=True)
     if not (status == 0 and output):
         info('FAILURE [%s] [%s]' % (variant, flags))
         return None

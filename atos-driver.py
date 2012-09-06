@@ -31,7 +31,8 @@ from logging import debug, info, warning, error
 
 def get_object_function_list(objfile):
     status, output = atos_lib.system(
-        'readelf --wide --symbols ' + objfile, check_status=True)
+        'readelf --wide --symbols ' + objfile,
+        check_status=True, get_output=True)
     funclist = []
     for line in output.split('\n'):
         reobj = re.match('\s+[0-9]+:' + 7 * '\s+(\S+)', line)

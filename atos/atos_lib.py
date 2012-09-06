@@ -22,6 +22,7 @@
 
 import sys, os, re, math, itertools, time, fcntl, json, hashlib, subprocess, shlex
 import cPickle as pickle
+import signal, cStringIO, select
 
 import logging
 from logging import debug, info, warning, error
@@ -622,20 +623,69 @@ def fatal(msg):
     print >> sys.stderr, msg
     sys.exit(1)
 
-def subcall(cmd, outf=None):
+def subcall(cmd, get_output=False, print_output=False, output_stderr=False):
+    """
+    Executes given command.
+    Returns exit_code and output.
+
+    Returned output will be None unless get_output argument is set.
+    Stderr will be included in returned output if output_stderr is set.
+    Outputs will not be printed on stdout/stderr unless print_output is set.
+    """
+    def process_output(process, resf):
+        # handle outputs in stdout/stderr until process end
+        def setfl(fil, flg=None, msk=None):
+            # set given flags/mask and return initial flag list
+            flags = flg or fcntl.fcntl(fil, fcntl.F_GETFL)
+            new_flags = msk and (flags | msk) or flags
+            if not fil.closed:
+                fcntl.fcntl(fil, fcntl.F_SETFL, new_flags)
+            return flags
+        # set flags to get non-blocking read of stdio/stderr
+        errflags = setfl(process.stderr, msk=os.O_NONBLOCK)
+        outflags = setfl(process.stdout, msk=os.O_NONBLOCK)
+        try:
+            while True:
+                # wait for new data avalaible or process end
+                ready = select.select(
+                    [process.stderr, process.stdout], [], [])[0]
+                if process.stderr in ready:
+                    data = process.stderr.read()
+                    if data and output_stderr: resf.write(data)
+                    if data and print_output: sys.stderr.write(data)
+                if process.stdout in ready:
+                    data = process.stdout.read()
+                    if data: resf.write(data)
+                    if data and print_output: sys.stdout.write(data)
+                if process.poll() is not None:
+                    break
+        finally:
+            # reset initial flags
+            setfl(process.stdout, flg=outflags)
+            setfl(process.stderr, flg=errflags)
     if type(cmd) == type(""):
         cmd = cmdline2list(cmd)
-    process = subprocess.Popen(cmd,
-                               stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    output = ''
+    outputf = get_output and cStringIO.StringIO()
+    popen_kwargs = {}
+    if get_output or not print_output:
+        popen_kwargs = {'stdout' : subprocess.PIPE, 'stderr' : subprocess.PIPE}
+    process = subprocess.Popen(cmd, **popen_kwargs)
     while True:
-        terminated = process.poll() is not None
-        outline = process.stdout.readline()
-        outf and outf.write(outline)
-        output += outline
-        if terminated and not outline: break
+        try:
+            if get_output:
+                process_output(process, outputf)
+            else:
+                process.wait()
+            break
+        except KeyboardInterrupt:
+            process.send_signal(signal.SIGINT)
+        except: raise
     status = process.poll()
-    return status, output
+    if get_output:
+        output = outputf.getvalue()
+        outputf.close()
+    else: output = None
+    return (status, output)
 
 def execpath(file):
     """
@@ -760,7 +810,7 @@ def list2cmdline(args):
             return "''"
     return ' '.join([ quote(a) for a in args ])
 
-def system(cmd, check_status=False, print_out=False):
+def system(cmd, check_status=False, get_output=False, print_output=False):
     printable_cmd = cmd
     if type(cmd) == type([]):
         printable_cmd = list2cmdline(cmd)
@@ -768,16 +818,18 @@ def system(cmd, check_status=False, print_out=False):
     if getarg('dryrun'):
         print printable_cmd
         return 0, None
-    outf = (print_out and not (getarg('quiet') or getarg('debug'))) and (
-        sys.stdout) or None
-    status, output = subcall(cmd, outf)
-    debug('\n  | ' + '\n  | '.join(output.split('\n')))
-    debug('command [%s] -> %s' % (printable_cmd, str(status)))
+    print_output = print_output and not (getarg('quiet') or getarg('debug'))
+    get_output = get_output or getarg('debug')
+    status, output = subcall(
+        cmd, print_output=print_output, get_output=get_output)
+    if get_output:
+        debug('\n  | ' + '\n  | '.join(output.split('\n')))
+        debug('command [%s] -> %s' % (printable_cmd, str(status)))
     if check_status and status: sys.exit(1)
-    return status, output
+    return get_output and (status, output) or status
 
 def proot_atos():
-    status, uname = subcall('/bin/uname -m')
+    status, uname = subcall('/bin/uname -m', get_output=True)
     arch = uname.rstrip('\n')
     if arch in ['i386', 'i486', 'i586', 'i686']: arch = 'i386'
     proot_exec = os.path.join(globals.LIBDIR, arch, 'bin', 'proot')

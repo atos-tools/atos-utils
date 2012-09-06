@@ -115,7 +115,7 @@ def run_atos_audit(args):
                args.output_file + "' PROOT_ADDON_CC_DEPS_CCRE='" + args.ccregexp + "' " +
                atos_lib.proot_atos() +" -w " + os.getcwd() + " / ")
     command += atos_lib.list2cmdline(args.command)
-    status, output = atos_lib.system(command, print_out=True)
+    status = atos_lib.system(command, print_output=True)
     return status
 
 def run_atos_deps(args):
@@ -243,30 +243,29 @@ def run_atos_explore(args):
     else:
         opt_rebuild = ""
 
-    status = 0
     command = os.path.join(globals.BINDIR,"atos-init") + " -C " + args.configuration_path \
               + opt_build + opt_run \
               + opt_results + opt_remote_profile_path + executables + opt_nbruns \
               + opt_rebuild + opt_q + opt_c
-    status,output = atos_lib.system(command, print_out=True, check_status=True)
+    atos_lib.system(command, print_output=True, check_status=True)
 
     for gopt in ['-O2', '-Os', '-O3']:
         for opts in ['', ' -flto', ' -funroll-loops', ' -flto -funroll-loops']:
             command_build = os.path.join(globals.BINDIR,"atos-build") + " -C " + args.configuration_path + opt_q + " -a'" + gopt + opts + "'"
-            status, output = atos_lib.system(command_build, print_out=True)
+            status = atos_lib.system(command_build, print_output=True)
             if status == 0:
                 command_run = os.path.join(globals.BINDIR,"atos-run") + " -C " + args.configuration_path + opt_q + " -r -a'" + gopt + opts + "'"
-                status, output = atos_lib.system(command_run, print_out=True)
+                atos_lib.system(command_run, print_output=True)
 
         command_prof = os.path.join(globals.BINDIR,"atos-profile") +  " -C " + args.configuration_path + opt_q + " -g'" + gopt + "'"
-        status, output = atos_lib.system(command_prof, print_out=True)
+        status = atos_lib.system(command_prof, print_output=True)
         if status != 0: continue
         for opts in ['', ' -flto', ' -funroll-loops', ' -flto -funroll-loops']:
             command_build = os.path.join(globals.BINDIR, "atos-build") + " -C " + args.configuration_path + opt_q + " -u'" + gopt + "' -a'" + gopt + opts + "'"
-            status,output = atos_lib.system(command_build, print_out=True)
+            status = atos_lib.system(command_build, print_output=True)
             if status == 0:
                 command_run = os.path.join(globals.BINDIR, "atos-run") + " -C " + args.configuration_path + opt_q + " -r -u'" + gopt + "' -a'" + gopt + opts + "'"
-                status,output = atos_lib.system(command_run, print_out=True)
+                atos_lib.system(command_run, print_output=True)
 
     if not args.quiet:
         print "Completed."
@@ -303,7 +302,7 @@ def run_atos_profile(args):
     command_build = os.path.join(globals.BINDIR, "atos-build") + " -C " + args.configuration_path + opt_q + opt_profile_path + g_opt + a_opt + opt_remote_profile_path
     command_run = os.path.join(globals.BINDIR, "atos-run") + " -C " + args.configuration_path + opt_q + " -s" + g_opt + a_opt + opt_remote_profile_path
 
-    status, output = atos_lib.system(command_build, print_out=True)
+    status = atos_lib.system(command_build, print_output=True)
     if status == 0:
-        status, output = atos_lib.system(command_run, print_out=True)
+        status = atos_lib.system(command_run, print_output=True)
     return status

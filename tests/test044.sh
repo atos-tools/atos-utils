@@ -65,4 +65,10 @@ cat > flags_list.txt <<EOF
 -O2 -ffast-math
 EOF
 $ROOT/bin/atos-explore-acf -f -F ./flags_list.txt
-[ `ls atos-configurations/acf_csv_dir | wc -l` -eq 4 ]
+#   (1 ref + 2 flags * 1 file)
+[ `ls atos-configurations/acf_csv_dir | wc -l` -eq 5 ]
+
+# same test with 2 hot files
+$ROOT/bin/atos-explore-acf -f -x 100 -F ./flags_list.txt
+#   (1 ref + 2 flags * 2 files)
+[ `ls atos-configurations/acf_csv_dir | wc -l` -eq 10 ]

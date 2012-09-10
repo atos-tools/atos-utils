@@ -563,12 +563,19 @@ def gen_file_by_file(cold_th, cold_opts, file_list, flags_file=None):
         obj_list.append((obj, int(count), float(part)))
     obj_list.sort(key=lambda x: x[1])
 
-    # build cold objects list
+    # build cold/hot objects list
     cold_list, curr_part = [], 0.0
-    for (obj, count, part)  in obj_list:
+    for (obj, count, part) in obj_list:
         if curr_part + part > float(cold_th): break
         curr_part += part
         cold_list.append(obj)
+    hot_list = filter(
+        lambda y: y not in cold_list, map(lambda x: x[0], obj_list))
+    debug('fbf cold object list: ' + str(cold_list))
+    debug('fbf hot object list: ' + str(hot_list))
+
+    csv_dir = os.path.join('.', 'atos-configurations', 'acf_csv_dir')
+    if not os.path.isdir(csv_dir): os.mkdir(csv_dir)
 
     # default options for all hot files
     base_flags = atos_base_flags(
@@ -578,24 +585,42 @@ def gen_file_by_file(cold_th, cold_opts, file_list, flags_file=None):
     opt_flag_list = (
         flags_file and map(string.strip, open(flags_file).readlines())
         or [])
-    if len(opt_flag_list) == 0: opt_flag_list = ['']
+    if base_flags: opt_flag_list = map(
+        lambda x: '%s %s' % (base_flags, x), opt_flag_list)
 
-    csv_dir = os.path.join('.', 'atos-configurations', 'acf_csv_dir')
-    if not os.path.isdir(csv_dir): os.mkdir(csv_dir)
-
-    for hot_flags in opt_flag_list:
-        if base_flags:
-            hot_flags = ('%s %s' % (base_flags, hot_flags)).strip()
-        # build option file containing flags for each objs
-        sum_flags = atos_lib.md5sum('%s\n%s' % (cold_opts, hot_flags))
-        csv_name = os.path.join(csv_dir, 'fbf-%s-%s.csv' % (cold_th, sum_flags))
+    def csv_part_opt(obj_flags):
+        # build option file containing flags for each object
+        sum_flags = atos_lib.md5sum(str(obj_flags.items()))
+        csv_name = os.path.join(csv_dir, 'fbf-%s.csv' % (sum_flags))
+        debug('fbf run [%s] -> %s' % (str(obj_flags), csv_name))
         with open(csv_name, 'w') as opt_file:
-            for obj in cold_list:
-                opt_file.write('%s,%s\n' % (obj, cold_opts))
-            if hot_flags: opt_file.write('*,%s\n' % (hot_flags))
+            for (obj, flags) in obj_flags.items():
+                if flags: opt_file.write('%s,%s\n' % (obj, flags))
+        return '--atos-optfile %s' % csv_name
 
-        # build and run using that option list
-        yield '--atos-optfile %s' % csv_name, 'basemin'
+    # reference run: simple partitioning with base flags
+    cold_obj_flags = dict(map(lambda x: (x, cold_opts), cold_list))
+    obj_flags = dict(cold_obj_flags.items() + [('*', base_flags)])
+    ref_result = yield csv_part_opt(obj_flags), 'basemin'
+    debug('fbf res [%s] -> %s' % (str(obj_flags), str(ref_result[1])))
+
+    # if empty opt_flag_list: only partitioning mode
+    if not opt_flag_list: return
+
+    # else, run exploration on hot files
+    best_obj_flags = dict(cold_obj_flags)
+    best_time = ref_result[1]
+    for hot_obj in hot_list:
+        best_flags = base_flags
+        for hot_flags in opt_flag_list:
+            obj_flags = dict(best_obj_flags.items() + [(hot_obj, hot_flags)])
+            res_size, res_time = yield csv_part_opt(obj_flags), 'basemin'
+            debug('fbf res [%s] -> %s' % (str(obj_flags), str(res_time)))
+            if res_time < best_time:
+                best_time = res_time
+                best_flags = hot_flags
+        best_obj_flags.update({hot_obj : best_flags})
+    debug('fbf best config %s' % (str(best_obj_flags)))
 
 
 # ####################################################################

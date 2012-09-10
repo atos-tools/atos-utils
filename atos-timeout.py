@@ -24,10 +24,33 @@ import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(
             os.path.dirname(__file__), '..', 'lib', 'atos', 'python')))
 from atos import globals
-import subprocess, signal, argparse
+import subprocess, signal, errno, argparse
 
-parser = argparse.ArgumentParser(prog="atos-timeout",
-                                 description="ATOS timeout utility, stops the given COMMAND after DURATION seconds.")
+class ExitCodes:
+    """ Exit codes used to feedback the parent process.
+    This codes are aligned with the coreutils timeout implementation.
+    Note that, as for coreutils, in case of termination with signal 9
+    the TIMEOUT code can't be returned, the exit code will be (128+9).
+    """
+    TIMEDOUT		= 124	# job timed out
+    CANCELED		= 125	# internal error
+    CANNOT_INVOKE	= 126	# error executing job
+    ENOENT		= 127	# couldn't find job to exec
+
+class LocalArgumentParser(argparse.ArgumentParser):
+    """ Overrides ArgumentParser for exiting with the correct code on error. """
+    def __init__(self, prog=None, description=None):
+        super(LocalArgumentParser, self).__init__(prog=prog, description=description)
+
+    def exit(self, status=0, message=None):
+        """ Always exit with status CANCELED on error. """
+        if status != 0:
+            status = ExitCodes.CANCELED
+        super(LocalArgumentParser, self).exit(status, message)
+
+
+parser = LocalArgumentParser(prog="atos-timeout",
+                             description="ATOS timeout utility, stops the given COMMAND after DURATION seconds.")
 
 parser.add_argument("-v", "--version",
                     help="output version string",
@@ -54,55 +77,106 @@ parser.add_argument("arguments",
                     nargs=argparse.REMAINDER,
                     help="command arguments")
 
+class Monitor():
+    """ Monitor class for interrupting a process after a given timeout. """
+    def __init__(self, args):
+        """ Constructor, arguments are stored into the args object. """
+        self.args = args
+        self.pgroup = None
+        self.old_pgroup = None
+        self.proc = None
+        
+    class TimeoutException(Exception):
+        """ Timeout exception used by the alarm to notify the monitor. """
+        pass
+
+    @staticmethod
+    def timeout_handler(signum, frame):
+        """ Handler for the alarm. """
+        raise Monitor.TimeoutException()
+
+    def send_signal(self, sig):
+        """ Terminates the monitor process with the given signal.
+        The signal is first sent to the monitored process in the case
+        where its process group have been changed.
+        Then the signal is sent to the whole process group initiated
+        by the monitor.
+        When possible the monitor ignores the signal such that it can
+        exit with a predifined return code and message.
+        The monitor resets its original pgroup also, in the case where
+        it is not the group leader, it allows graceful termination even
+        when signal 9 is sent.
+        """
+        if sig != 9:
+            signal.signal(sig, signal.SIG_IGN)
+        if self.pgroup != None:
+            os.setpgid(0, self.old_pgroup)
+        try:
+            self.proc.send_signal(sig)
+            if self.pgroup != None:
+                os.killpg(self.pgroup, sig)
+        except OSError, e:
+            # Process or process group already killed
+            pass
+
+    def run(self):
+        """ Runs the monitor and monitored process.
+        This method returns the exit code to be passed
+        to sys.exit.
+        """
+        # Force process group or ignore if not possible
+        try:
+            self.old_pgroup = os.getpgrp()
+            os.setpgid(0,0)
+            self.pgroup = os.getpgrp()
+            print >>sys.stderr, "pid %d, old grp %d, grp %d" % (os.getpid(), self.old_pgroup, self.pgroup)
+        except OSError, e:
+            if self.args.debug:
+                print >>sys.stderr, "atos-timeout: warning: can't set process group id: " + e.strerror
+
+        # Launch monitored process
+        try:
+            self.proc = subprocess.Popen(self.args.command + self.args.arguments)
+        except OSError, e:
+            print >>sys.stderr, "atos-timeout: error: failed to run command: " + self.args.command[0] + ": " + e.strerror
+            if e.errno == errno.ENOENT:
+                return ExitCodes.ENOENT
+            else:
+                return ExitCodes.CANNOT_INVOKE
+
+        # Install timer through alarm
+        signal.signal(signal.SIGALRM, self.timeout_handler)
+        signal.alarm(self.args.duration[0])
+
+        # Monitoring loop
+        completed = False
+        terminated = False
+        killed = False
+        while not completed:
+            try:
+                code = self.proc.wait()
+                completed = True
+            except self.TimeoutException:
+                if self.args.debug and not terminated: print >>sys.stderr, "atos-timeout: command timeout: " + self.args.command[0]
+                if self.args.signal == 9 or terminated:
+                    if self.args.debug: print >>sys.stderr, "atos-timeout: sending SIGKILL"
+                    self.send_signal(9)
+                    killed = True
+                else:
+                    if self.args.debug: print >>sys.stderr, "atos-timeout: sending signal " + str(self.args.signal)
+                    signal.alarm(self.args.kill_after)
+                    self.send_signal(self.args.signal)
+                    terminated = True
+            except KeyboardInterrupt:
+                if self.args.debug: print >>sys.stderr, "atos-timeout: command interrupted: " + self.args.command[0]
+        if killed:
+            print >>sys.stderr, "Killed after timeout: " + self.args.command[0]
+            return ExitCodes.TIMEDOUT
+        elif terminated:
+            print >>sys.stderr, "Terminated after timeout: " + self.args.command[0]
+            return ExitCodes.TIMEDOUT
+        return code
+
+
 args = parser.parse_args()
-
-if args.signal != 15 and args.signal != 9:
-    print >>sys.stderr, "atos-timeout: warning: only signal 15 and 9 are supported, fallback to signal 15"
-    args.signal = 15
-
-class TimeoutException(Exception):
-    pass
-
-def timeout_handler(signum, frame):
-    raise TimeoutException()
-
-def send_signal(proc, sig):
-    if sig == 9:
-        proc.kill()
-    else:
-        proc.terminate()
-
-try:
-    proc = subprocess.Popen(args.command + args.arguments)
-except OSError:
-    print >>sys.stderr, "atos-timeout: error: cannot execute command: " + args.command[0]
-    sys.exit(1)
-
-signal.signal(signal.SIGALRM, timeout_handler)
-signal.alarm(args.duration[0])
-
-completed = False
-terminated = False
-killed = False
-while not completed:
-    try:
-        code = proc.wait()
-        completed = True
-    except TimeoutException:
-        if args.debug and not terminated: print >>sys.stderr, "atos-timeout: command timeout: " + args.command[0]
-        if args.signal == 9 or terminated:
-            if args.debug: print >>sys.stderr, "atos-timeout: sending SIGKILL"
-            proc.kill()
-            killed = True
-        else:
-            if args.debug: print >>sys.stderr, "atos-timeout: sending SIGTERM"
-            signal.alarm(args.kill_after)
-            proc.terminate()
-            terminated = True
-    except KeyboardInterrupt:
-        if args.debug: print >>sys.stderr, "atos-timeout: command interrupted: " + args.command[0]
-if killed:
-    print >>sys.stderr, "Killed after timeout: " + args.command[0]
-elif terminated:
-    print >>sys.stderr, "Terminated after timeout: " + args.command[0]
-sys.exit(code)
+sys.exit(Monitor(args).run())

@@ -241,6 +241,25 @@ class DependencyGraph:
                 compilers.add(value['command']['arg0'])
         return list(compilers)
 
+    def is_shared_link(self, value):
+        """ Returns true if linking a shared lib. """
+        return (value['kind'] == "CCLD" and SimpleCCInterpreter.is_shared_lib_link(value['command']['args']))
+
+    def recipe_args(self, dependency):
+        """ Fixup some options that may not support mixed .c and .o files. """
+        # TODO: we may build a response file when detecting large lines
+        args = dependency['command']['args']
+        i = 0
+        new_args = []
+        while i < len(args):
+            m = re.search("^--hash-style", args[i])
+            if m != None:
+                new_args.append("-Wl," + args[i])
+            else:
+                new_args.append(args[i])
+            i = i + 1
+        return new_args
+
     def output_makefile(self,makefile):
         """ Get a parallelizable makefile for rebuilding the target. """
         mkfile = open(makefile,"w")
@@ -258,6 +277,12 @@ class DependencyGraph:
         mkfile.write("define profdir\n")
         mkfile.write("$(if $(PROFILE_DIR),-fprofile-dir=$(PROFILE_DIR)/$(1),)\n")
         mkfile.write("endef\n")
+        mkfile.write("ROOT: F_ACFLAGS=$(ACFLAGS)\n")
+        mkfile.write("ROOT: F_ALDFLAGS=$(ALDFLAGS)\n")
+        # TODO: may include per target/file flags, a better solution should be implemented
+        #mkfile.write("MAKEDIR:=$(dir $(MAKEFILE_LIST))\n")
+        #mkfile.write("-include $(MAKEDIR)/build-target-flags.mk\n")
+        #mkfile.write("-include $(MAKEDIR)/build-file-flags.mk\n")
         mkfile.write("\n")
         for node in self.dg.nodes():
             target = node
@@ -268,11 +293,15 @@ class DependencyGraph:
                 if attr == "dependency":
                     append=""
                     if value['kind'] == "CC":
-                        append=" $(ACFLAGS) $(call profdir," + self.get_profdir_suffix(value) + ")"
+                        append=" $(F_ACFLAGS) $(call profdir," + self.get_profdir_suffix(value) + ")"
                     if value['kind'] == "CCLD":
-                        append=" $(LTOFLAGS) $(ACFLAGS) $(ALDFLAGS) $(call profdir," + self.get_profdir_suffix(value) + ")"
+                        append=" $(LTOFLAGS) $(F_ACFLAGS) $(F_ALDFLAGS) $(call profdir," + self.get_profdir_suffix(value) + ")"
+                        if self.is_shared_link(value):
+                            append = append + " $(ALDSOFLAGS)"
+                        else:
+                            append = append + " $(ALDMAINFLAGS)"
                     # TODO: handle quotes in command
-                    recipe = "$(QUIET)cd " + value['command']['cwd'] + " && $(ATOS_DRIVER) " + " ".join(value['command']['args']) + append
+                    recipe = "$(QUIET)cd " + value['command']['cwd'] + " && $(ATOS_DRIVER) " + " ".join(self.recipe_args(value)) + append
                     recipe = re.sub(r'(["\'])', r'\\\1', recipe)
             deps = []
             for dep in self.dg.neighbors(node):
@@ -414,15 +443,15 @@ class SimpleCmdInterpreter:
 
     def get_kind(self, command):
         """ Get command kind from command line args. """
-        return self.select_interpreter(command).get_kind(command)
+        return self.select_interpreter(command).get_kind()
 
     def get_input_files(self, command):
         """ Get input files from command line args. """
-        return self.select_interpreter(command).get_input_files(command)
+        return self.select_interpreter(command).get_input_files()
 
     def get_output_files(self, command):
         """ Get output files from command line args. """
-        return self.select_interpreter(command).get_output_files(command)
+        return self.select_interpreter(command).get_output_files()
 
 class SimpleCCInterpreter:
     """ Returns information on a command line for a CC compiler driver.
@@ -436,27 +465,49 @@ class SimpleCCInterpreter:
         self.kind = None
         self.input_files = None
         self.output_files = None
+        self.expanded_args = None
 
-    def get_kind(self, command):
+    @staticmethod
+    def is_shared_lib_link(args):
+        """ Returns true if building a shared lib. """
+        # TODO, make this non static
+        args = atos_lib.expand_response_file(args)
+        i = 0
+        while i + 1 < len(args):
+            i = i + 1
+            m = re.search("^-shared$", args[i])
+            if m != None:
+                return True
+        return False
+
+    def get_expanded_args(self):
+        """ Returns the exanded args list, after response file expansion. """
+        if self.expanded_args == None:
+            self.expanded_args = atos_lib.expand_response_file(self.command['args'])
+        return self.expanded_args
+
+    def get_kind(self):
         """ Returns the command kind. """
         if self.kind != None:
             return self.kind
-        args = command['args']
+        args = self.get_expanded_args()
         kind = "CCLD"
         for i in range(len(args[1:])):
             m = re.search("^(-c)$", args[i+1])
             if m != None:
                 kind = "CC"
+        self.kind = kind
         return kind
 
-    def get_input_files(self, command):
+    def get_input_files(self):
         """ Get input files from a CC command line args (C/C++ sources or object files). """
         if self.input_files != None:
             return self.input_files
-        kind = self.get_kind(command)
+        kind = self.get_kind()
+        args = self.get_expanded_args()
+        cwd = self.command['cwd']
         static_link = False
         inputs = []
-        args = command['args']
         lpath = []
         i = 0
         while i + 1 < len(args):
@@ -468,7 +519,7 @@ class SimpleCCInterpreter:
                 continue
             m = re.search("\\.(c|cc|cxx|cpp|c\+\+|C|i|ii|o|os|a)$", args[i])
             if m != None:
-                inputs.append(os.path.normpath(os.path.join(command['cwd'], args[i])))
+                inputs.append(os.path.normpath(os.path.join(cwd, args[i])))
                 continue
             if kind == "CCLD" and args[i] == "-static":
                 static_link = True
@@ -480,7 +531,7 @@ class SimpleCCInterpreter:
                     if i+1 < len(args):
                         path = args[i+1]
                 if path != "":
-                    lpath.append(os.path.normpath(os.path.join(command['cwd'], path)))
+                    lpath.append(os.path.normpath(os.path.join(cwd, path)))
                 continue
             m = re.search("^-l(.*)$", args[i])
             if kind == "CCLD" and m != None:
@@ -502,57 +553,73 @@ class SimpleCCInterpreter:
                             inputs.append(file_base + ".a")
                             break
                 continue
-
+        self.input_files = inputs
         return inputs
 
-    def get_output_files(self, command):
+    def get_output_files(self):
         """ Get output files from CC command line args. """
         if self.output_files != None:
             return self.output_files
-        args = command['args']
-
-        output = atos_lib.get_output_option_value(command['args'])
-        outputs = [os.path.normpath(os.path.join(command['cwd'], output))] if output else []
-
-        if len(outputs) == 0 and len(self.get_input_files(command)) > 0:
-            if self.get_kind(command) == "CC":
+        args = self.get_expanded_args()
+        cwd = self.command['cwd']
+        output = atos_lib.get_output_option_value(args)
+        outputs = [os.path.normpath(os.path.join(cwd, output))] if output else []
+        if len(outputs) == 0 and len(self.get_input_files()) > 0:
+            if self.get_kind() == "CC":
                 outputs = []
-                for inp in self.get_input_files(command):
-                    outputs.append(os.path.normpath(os.path.join(command['cwd'], re.sub("\\.[^.]+$", ".o", os.path.basename(inp)))))
-            elif self.get_kind(command) == "CCLD":
-                outputs = [ os.path.normpath(os.path.join(command['cwd'], "a.out")) ]
+                for inp in self.get_input_files():
+                    outputs.append(os.path.normpath(os.path.join(cwd, re.sub("\\.[^.]+$", ".o", os.path.basename(inp)))))
+            elif self.get_kind() == "CCLD":
+                outputs = [ os.path.normpath(os.path.join(cwd, "a.out")) ]
             else:
-                raise Exception("Can't determine output from input files in command: " + str(command))
+                raise Exception("Can't determine output from input files in command: " + str(self.command))
+        self.output_files = outputs
         return outputs
 
 
 class SimpleARInterpreter:
     """ Returns information on a command line for a AR archiver. 
-    There qre q number of limitations:
+    There are a number of limitations:
     - only .o files are searched for input
     - only 'ar ...r... input_files...' form is recognized 
     """
     def __init__(self, command):
         """ Constructor. """
         self.command = command
+        self.input_files = None
+        self.output_files = None
+        self.expanded_args = None
 
-    def get_kind(self, command):
+    def get_expanded_args(self):
+        """ Returns the exanded args list, after response file expansion. """
+        if self.expanded_args == None:
+            self.expanded_args = atos_lib.expand_response_file(self.command['args'])
+        return self.expanded_args
+
+    def get_kind(self):
         """ Returns the command kind. """
         return "AR"
 
-    def get_input_files(self, command):
+    def get_input_files(self):
         """ Get input files from AR command line (object files only). """
+        if self.input_files != None:
+            return self.input_files
+        args = self.get_expanded_args()
+        cwd = self.command['cwd']
         inputs = []
-        args = command['args']
         for i in range(len(args[1:])):
             m = re.search("\\.(o)$", args[i+1])
             if m != None and m.group(1) != None and i >= 2:
-                    inputs.append(os.path.normpath(os.path.join(command['cwd'], args[i+1])))
+                    inputs.append(os.path.normpath(os.path.join(cwd, args[i+1])))
+        self.input_files = inputs
         return inputs
 
-    def get_output_files(self, command):
+    def get_output_files(self):
         """ Get output file from AR command line args. """
-        args = command['args']
+        if self.output_files != None:
+            return self.output_files
+        args = self.get_expanded_args()
+        cwd = self.command['cwd']
         outputs = []
         update = False
         for i in range(len(args[1:])):
@@ -561,9 +628,10 @@ class SimpleARInterpreter:
                 if m != None:
                     update = True
             elif i == 1 and update:
-                outputs = [ os.path.normpath(os.path.join(command['cwd'], args[i+1])) ]
+                outputs = [ os.path.normpath(os.path.join(cwd, args[i+1])) ]
             else:
                 break
+        self.outputs = outputs
         return outputs
 
 class CommandDependencyListFactory:

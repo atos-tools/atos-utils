@@ -851,8 +851,24 @@ def setup_logging(level = 30, logfile = None):
         filelog.setFormatter(logging.Formatter(fmtlog, fmtdate))
         logging.getLogger().addHandler(filelog)
 
+def expand_response_file(args):
+    """ Return the actual args list, after response expansion. """
+    # TODO: should use the SimpleCmdInterpreter interface
+    def expand_arg(arg):
+        m = re.search("^@(.+)$", arg)
+        if m:
+            f = open(m.group(1))
+            args = sum([i.strip().split() for i in f.readlines()],[])
+            f.close()
+        else:
+            args = [ arg ]
+        return args
+    return sum([expand_arg(arg) for arg in args], [])
+
 def get_output_option_value(args):
     """ Get value of -o option from CC command line args. """
+    # TODO: should use the SimpleCmdInterpreter interface
+    args = expand_response_file(args)
     output = None
     i = 0
     while i + 1 < len(args):
@@ -869,6 +885,8 @@ def get_output_option_value(args):
 
 def get_input_source_files(args):
     """ Get input source file of CC command. """
+    # TODO: should use the SimpleCmdInterpreter interface
+    args = expand_response_file(args)
     inputs = []
     i = 0
     while i + 1 < len(args):

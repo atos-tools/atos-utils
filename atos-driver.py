@@ -25,12 +25,13 @@ import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(
             os.path.dirname(__file__), '..', 'lib', 'atos', 'python')))
 from atos import atos_lib
+from atos import process
+from atos import logger
 
 import re, shlex, argparse
-from logging import debug, info, warning, error
 
 def get_object_function_list(objfile):
-    status, output = atos_lib.system(
+    status, output = process.system(
         'readelf --wide --symbols ' + objfile,
         check_status=True, get_output=True)
     funclist = []
@@ -77,12 +78,8 @@ def get_cc_command_additional_flags(optfile, args):
     return shlex.split(obj_opts.get(outputs[0], def_opts))
 
 def invoque_compile_command(args, optfile=None):
-    command = ' '.join(args + get_cc_command_additional_flags(optfile, args))
-    debug('driver_command [%s] [cwd=%s]' % (command, os.getcwd()))
-    status, output = atos_lib.subcall(command, sys.stdout)
-    if status:
-        debug('driver_command_status: %s [%s] [cwd=%s]' % (
-                str(status), command, os.getcwd()))
+    status = process.system(
+        args + get_cc_command_additional_flags(optfile, args))
     return status
 
 
@@ -114,7 +111,9 @@ if __name__ == "__main__":
 
     if opts.help: parser.print_help(); parser.exit()
 
-    atos_lib.setup_logging(opts.debug and 10 or 30)
+    process.setup(vars(opts))
+
+    logger.setup(vars(opts))
 
     status = 0
 

@@ -20,15 +20,12 @@
 #
 
 
-import sys, os, re, math, itertools, time, fcntl, json, hashlib, subprocess, shlex
+import sys, os, re, math, itertools, time, fcntl, json, hashlib
 import cPickle as pickle
-import signal, cStringIO, select
-
-import logging
-from logging import debug, info, warning, error
 
 import globals
 import jsonlib
+import process
 
 # ####################################################################
 
@@ -623,77 +620,12 @@ def fatal(msg):
     print >> sys.stderr, msg
     sys.exit(1)
 
-def subcall(cmd, get_output=False, print_output=False, output_stderr=False):
-    """
-    Executes given command.
-    Returns exit_code and output.
-
-    Returned output will be None unless get_output argument is set.
-    Stderr will be included in returned output if output_stderr is set.
-    Outputs will not be printed on stdout/stderr unless print_output is set.
-    """
-    def process_output(process, resf):
-        # handle outputs in stdout/stderr until process end
-        def setfl(fil, flg=None, msk=None):
-            # set given flags/mask and return initial flag list
-            flags = flg or fcntl.fcntl(fil, fcntl.F_GETFL)
-            new_flags = msk and (flags | msk) or flags
-            if not fil.closed:
-                fcntl.fcntl(fil, fcntl.F_SETFL, new_flags)
-            return flags
-        # set flags to get non-blocking read of stdio/stderr
-        errflags = setfl(process.stderr, msk=os.O_NONBLOCK)
-        outflags = setfl(process.stdout, msk=os.O_NONBLOCK)
-        try:
-            while True:
-                # wait for new data avalaible or process end
-                ready = select.select(
-                    [process.stderr, process.stdout], [], [])[0]
-                if process.stderr in ready:
-                    data = process.stderr.read()
-                    if data and output_stderr: resf.write(data)
-                    if data and print_output: sys.stderr.write(data)
-                if process.stdout in ready:
-                    data = process.stdout.read()
-                    if data: resf.write(data)
-                    if data and print_output: sys.stdout.write(data)
-                if process.poll() is not None:
-                    break
-        finally:
-            # reset initial flags
-            setfl(process.stdout, flg=outflags)
-            setfl(process.stderr, flg=errflags)
-    if type(cmd) == type(""):
-        cmd = cmdline2list(cmd)
-    outputf = get_output and cStringIO.StringIO()
-    popen_kwargs = {}
-    if get_output or not print_output:
-        popen_kwargs = {'stdout' : subprocess.PIPE, 'stderr' : subprocess.PIPE}
-    process = subprocess.Popen(cmd, **popen_kwargs)
-    while True:
-        try:
-            if get_output:
-                process_output(process, outputf)
-            else:
-                process.wait()
-            break
-        except KeyboardInterrupt:
-            process.send_signal(signal.SIGINT)
-        except: raise
-    status = process.poll()
-    if get_output:
-        output = outputf.getvalue()
-        outputf.close()
-    else: output = None
-    return (status, output)
-
 def execpath(file):
     """
     Gets the full executable path for the given file.
     Returns None if the command is not found or not executable.
     """
-    proc = subprocess.Popen(["which", file], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    output = proc.communicate()[0]
+    status, output = process.system(["which", file], get_output=True)
     if output == "": return None
     return output.rstrip("\n")
 
@@ -708,7 +640,7 @@ def pager_cmd():
     if pager == "":
         return None
     if pager != None:
-        return cmdline2list(pager)
+        return process.cmdline2list(pager)
     pager = "less"
     if execpath(pager) != None:
         return [pager]
@@ -783,54 +715,8 @@ def getarg(key, default=None):
         return eval('lastframe.f_globals["%s"].%s' % (argstruct, key))
     except: return default
 
-def cmdline2list(cmd):
-    """
-    Returns a list of args from the given shell command string.
-    """
-    return shlex.split(cmd)
-
-def list2cmdline(args):
-    """
-    Returns a quoted string suitable for execution from a shell.
-    Ref to http://stackoverflow.com/questions/967443/python-module-to-shellquote-unshellquote.
-    """
-    _quote_pos = re.compile('(?=[^-0-9a-zA-Z_./\n])')
-
-    def quote(arg):
-        r"""
-        >>> quote('\t')
-        '\\\t'
-        >>> quote('foo bar')
-        'foo\\ bar'
-        """
-        # This is the logic emacs uses
-        if arg:
-            return _quote_pos.sub('\\\\', arg).replace('\n',"'\n'")
-        else:
-            return "''"
-    return ' '.join([ quote(a) for a in args ])
-
-def system(cmd, check_status=False, get_output=False, print_output=False, output_stderr=False):
-    printable_cmd = cmd
-    if type(cmd) == type([]):
-        printable_cmd = list2cmdline(cmd)
-    debug('command [%s]' % printable_cmd)
-    if getarg('dryrun'):
-        print printable_cmd
-        return 0, None
-    print_output = print_output and not (getarg('quiet') or getarg('debug'))
-    get_output = get_output or getarg('debug')
-    status, output = subcall(
-        cmd, print_output=print_output, get_output=get_output,
-        output_stderr=output_stderr)
-    if get_output:
-        debug('\n  | ' + '\n  | '.join(output.split('\n')))
-        debug('command [%s] -> %s' % (printable_cmd, str(status)))
-    if check_status and status: sys.exit(1)
-    return get_output and (status, output) or status
-
 def proot_atos():
-    status, uname = subcall('/bin/uname -m', get_output=True)
+    status, uname = process.system('/bin/uname -m', get_output=True)
     arch = uname.rstrip('\n')
     if arch in ['i386', 'i486', 'i586', 'i686']: arch = 'i386'
     proot_exec = os.path.join(globals.LIBDIR, arch, 'bin', 'proot')
@@ -838,19 +724,6 @@ def proot_atos():
         return proot_exec
     else:
         return "proot"
-
-def setup_logging(level = 30, logfile = None):
-    fmtlog = '# %(asctime)-15s %(levelname)s: %(message)s'
-    fmtdate='[%d-%m %H:%M:%S]'
-    logging.getLogger().setLevel(0)
-    conslog = logging.StreamHandler()
-    conslog.setLevel(level)
-    conslog.setFormatter(logging.Formatter(fmtlog, fmtdate))
-    logging.getLogger().addHandler(conslog)
-    if logfile:
-        filelog = logging.FileHandler(logfile, mode='a')
-        filelog.setFormatter(logging.Formatter(fmtlog, fmtdate))
-        logging.getLogger().addHandler(filelog)
 
 def expand_response_file(args):
     """ Return the actual args list, after response expansion. """
@@ -1372,7 +1245,7 @@ if __name__ == '__main__':
                     command += ['-g', result['gconf']]
                 if opts.dryrun:
                     command += ['-n']
-                rcode = max(subprocess.call([atos_build] + command + args), rcode)
+                rcode = max(process.system([atos_build] + command + args), rcode)
             sys.exit(rcode)
 
 

@@ -59,6 +59,8 @@ INSTALLED_DATAS=$(addprefix $(PREFIX)/,$(ALL_DATAS))
 ALL_DOCS=$(SHARED_MANS) $(SHARED_HTMLS)
 INSTALLED_DOCS=$(addprefix $(PREFIX)/,$(ALL_DOCS))
 
+COVERAGE_DIR=$(abspath .)/coverage
+
 .PHONY: all clean distclean install check tests check-python-dependencies examples examples-nograph install-shared
 
 all: all-local all-plugins
@@ -107,6 +109,11 @@ check-local: check-python-dependencies
 
 check-tests: all check-python-dependencies
 	install -d tests && $(MAKE) -C tests -f $(abspath $(srcdir)tests/GNUmakefile)
+
+coverage: check-local check-plugin check-coverage
+
+check-coverage: all check-python-dependencies
+	install -d tests && $(MAKE) COVERAGE_DIR=$(COVERAGE_DIR) -C tests -f $(abspath $(srcdir)tests/GNUmakefile) coverage
 
 check-plugin:
 	$(MAKE) -C $(srcdir)plugins/acf-plugin check

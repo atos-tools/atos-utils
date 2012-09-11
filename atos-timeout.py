@@ -129,7 +129,6 @@ class Monitor():
             self.old_pgroup = os.getpgrp()
             os.setpgid(0,0)
             self.pgroup = os.getpgrp()
-            print >>sys.stderr, "pid %d, old grp %d, grp %d" % (os.getpid(), self.old_pgroup, self.pgroup)
         except OSError, e:
             if self.args.debug:
                 print >>sys.stderr, "atos-timeout: warning: can't set process group id: " + e.strerror

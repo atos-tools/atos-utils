@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 set -e
+
+cleanup() {
+    [ ! -f "$tmpfile" ] || rm -rf $tmpfile
+}
+trap cleanup INT QUIT TERM EXIT
 tmpfile=`mktemp /tmp/run.XXXXXX`
 arch=arm
 case arch in

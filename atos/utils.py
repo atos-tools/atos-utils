@@ -33,6 +33,7 @@ def invoque(tool, args):
         "atos-build": run_atos_build,
         "atos-deps": run_atos_deps,
         "atos-explore": run_atos_explore,
+        "atos-init": run_atos_init,
         "atos-profile": run_atos_profile
         }
     if hasattr(args, "coverage") and args.coverage:
@@ -456,6 +457,141 @@ def run_atos_explore(args):
     if not args.quiet:
         print "Completed."
     return 0
+
+def run_atos_init(args):
+    """ ATOS init tool implementation. """
+
+    if args.exe:
+        executables = " " + args.exe
+    elif args.executables:
+        executables = " ".join(atos_lib.list2cmdline(args.command))
+    else:
+        executables = ""
+
+    if args.force and not args.results_script and args.executables == "":
+        print "atos-init: error: when using forced mode (-f) with no custom results" \
+              "script (-t) the list of executables must be specified (-e option)"
+        sys.exit(1)
+
+    if args.results_script:
+        opt_get_results_script = " -t " + args.results_script
+    else:
+        opt_get_results_script = ""
+    if args.remote_path:
+        opt_remote_profile_path = args.remote_path
+    else:
+        opt_remote_profile_path = ""
+    opt_nbruns = " -n " + str(args.nbruns)
+    if args.quiet:
+        opt_q = " -q"
+    else:
+        opt_q = " "
+    if args.clean:
+        opt_c = " -c"
+    else:
+        opt_c = ""
+    if args.force:
+        opt_rebuild = " -f"
+    else:
+        opt_rebuild = " "
+
+    if executables == "":
+        executables=" -a"
+
+    if not os.path.isdir(args.configuration_path):
+        os.makedirs(args.configuration_path)
+
+    if args.clean:
+        if args.build_script:
+            if args.dryrun:
+                print "Cleaning build audit..."
+            else:
+                if not args.quiet:
+                    print "Cleaning build audit..."
+                rmcommand = "rm -f " + args.configuration_path + "/build.*"
+                atos_lib.system(rmcommand, print_output=True)
+        if args.run_script:
+            if args.dryrun:
+                print "Cleaning run audit..."
+            else:
+                if not args.quiet:
+                    print "Cleaning run audit..."
+                rmcommand = "rm -f " + args.configuration_path + "/run.*"
+                atos_lib.system(rmcommand, print_output=True)
+        if args.dryrun:
+            print "Cleaning all profiles..."
+        else:
+            if not args.quiet:
+                print "Cleaning all profiles..."
+            rmcommand = "rm -rf " + args.configuration_path + "/profiles"
+            atos_lib.system(rmcommand, print_output=True)
+        if args.dryrun:
+            print "Cleaning all results..."
+        else:
+            if not args.quiet:
+                print "Cleaning all results..."
+            rmcommand = "rm -rf " + args.configuration_path + "/results.db"
+            atos_lib.system(rmcommand, print_output=True)
+
+    if args.build_script:
+        command_audit = os.path.join(globals.BINDIR, "atos-audit") + " -C " + args.configuration_path + opt_q + opt_rebuild +  " " + args.build_script
+        if args.dryrun:
+            print command_audit
+        else:
+            atos_lib.subcall(command_audit)
+        command_deps = os.path.join(globals.BINDIR, "atos-deps") + " -C " + args.configuration_path + opt_q + opt_rebuild + executables
+        if args.dryrun:
+            print command_deps
+        else:
+            atos_lib.subcall(command_deps)
+        command_config = os.path.join(globals.BINDIR, "atos-config") + " -C " + args.configuration_path
+        if args.dryrun:
+            print command_config
+        else:
+            atos_lib.subcall(command_config)
+    elif not os.path.isfile(args.configuration_path + "/build.audit"):
+        print "atos-init:error: missing build audit, use -b option for specifying " \
+              "build script or use atos-audit tool"
+        sys.exit(1)
+
+    command = os.path.join(globals.PYTHONDIR, "atos", "atos_lib.py") + " config -C " + args.configuration_path + \
+              " --add \"default_values.remote_profile_path:" + opt_remote_profile_path + "\""
+    if args.dryrun:
+        print command
+    else:
+        atos_lib.subcall(command)
+    command = os.path.join(globals.PYTHONDIR, "atos", "atos_lib.py") + " config -C " + args.configuration_path +\
+                     " --add \"default_values.nb_runs:" + str(args.nbruns) + "\""
+    if args.dryrun:
+        print command
+    else:
+        atos_lib.subcall(command)
+
+    if args.run_script:
+        command_raudit = os.path.join(globals.BINDIR, "atos-raudit") + " -C " + args.configuration_path + opt_q + opt_get_results_script + args.run_script
+        if args.dryrun:
+            print command_raudit
+        else:
+            atos_lib.subcall(command_raudit)
+        # reference run
+        command_run = os.path.join(globals.BINDIR, "atos-run") + " -C " + args.configuration_path + opt_q + " -r"
+        if args.dryrun:
+            print command_run
+        else:
+            atos_lib.subcall(command_run)
+    elif not os.path.isfile(args.configuration_path + "/run.audit"):
+        print "atos-init: error: missing run audit, use -r option for specifying " \
+              "run script or use atos-raudit tool"
+        sys.exit(1)
+
+    if args.prof_script:
+        prof_sh = os.path.join(args.configuration_path, "profile.sh")
+        proff = open(prof_sh, 'w')
+        proff.write("#!/bin/sh\n")
+        proff.write("cd $PWD && " + args.prof_script)
+        proff.write("\n")
+        proff.close()
+        atos_lib.system("chmod 755 " + prof_sh)
 
 def run_atos_profile(args):
     """ ATOS profile tool implementation. """

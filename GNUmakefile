@@ -26,12 +26,12 @@ VERSION:=$(shell $(srcdir)config/update_version.sh $(VSTAMP))
 RST2MAN=$(srcdir)config/docutils rst2man --report=3 # Filter warning with images
 RST2HTML=$(srcdir)config/docutils rst2html
 
-CONFIG_SCRIPTS_EXE_IN=atos-raudit.in atos-run.in atos-play.in atos-graph.in atos-explore-inline.in atos-explore-loop.in atos-explore-optim.in atos-opt.in atos-init.in atos-replay.in atos-config.in atos-explore-acf.in atos-explore-staged.in
+CONFIG_SCRIPTS_EXE_IN=atos-raudit.in atos-run.in atos-play.in atos-graph.in atos-explore-inline.in atos-explore-loop.in atos-explore-optim.in atos-opt.in atos-replay.in atos-config.in atos-explore-acf.in atos-explore-staged.in
 CONFIG_SCRIPTS_LIB_IN=atos-acf-oprofile.py.in
 CONFIG_SCRIPTS_CFG_IN=flags.inline.cfg.in flags.loop.cfg.in flags.optim.cfg.in
 PYTHON_LIB_SCRIPTS_IN=$(addprefix atos/, __init__.py globals.py utils.py arguments.py atos_deps.py)
 PYTHON_LIB_EXE_SCRIPTS_IN=$(addprefix atos/, atos_lib.py atos_toolkit.py)
-PYTHON_SCRIPTS_IN=atos.py atos-help.py atos-audit.py atos-build.py atos-deps.py atos-explore.py atos-profile.py atos-driver.py atos-timeout.py
+PYTHON_SCRIPTS_IN=atos.py atos-help.py atos-audit.py atos-build.py atos-deps.py atos-explore.py atos-init.py atos-profile.py atos-driver.py atos-timeout.py
 SHARED_RSTS_IN=$(addprefix doc/, intro.rst tutorial.rst)
 SHARED_MANS_IN=$(SHARED_RSTS_IN)
 SHARED_HTMLS_IN=$(SHARED_RSTS_IN)

@@ -810,7 +810,7 @@ def list2cmdline(args):
             return "''"
     return ' '.join([ quote(a) for a in args ])
 
-def system(cmd, check_status=False, get_output=False, print_output=False):
+def system(cmd, check_status=False, get_output=False, print_output=False, output_stderr=False):
     printable_cmd = cmd
     if type(cmd) == type([]):
         printable_cmd = list2cmdline(cmd)
@@ -821,7 +821,8 @@ def system(cmd, check_status=False, get_output=False, print_output=False):
     print_output = print_output and not (getarg('quiet') or getarg('debug'))
     get_output = get_output or getarg('debug')
     status, output = subcall(
-        cmd, print_output=print_output, get_output=get_output)
+        cmd, print_output=print_output, get_output=get_output,
+        output_stderr=output_stderr)
     if get_output:
         debug('\n  | ' + '\n  | '.join(output.split('\n')))
         debug('command [%s] -> %s' % (printable_cmd, str(status)))

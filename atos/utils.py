@@ -21,6 +21,8 @@ import globals
 import atos
 import atos_lib
 import logging
+import string
+import fnmatch
 
 def invoque(tool, args):
     """ Dispatcher that invoques the given tool and returns. """
@@ -28,6 +30,7 @@ def invoque(tool, args):
         "atos": run_atos,
         "atos-help": run_atos_help,
         "atos-audit": run_atos_audit,
+        "atos-build": run_atos_build,
         "atos-deps": run_atos_deps,
         "atos-explore": run_atos_explore,
         "atos-profile": run_atos_profile
@@ -117,6 +120,180 @@ def run_atos_audit(args):
     command += atos_lib.list2cmdline(args.command)
     status = atos_lib.system(command, print_output=True)
     return status
+
+def run_atos_build(args):
+    """ ATOS build tool implementation. """
+
+    atos_lib.setup_logging(args.debug and logging.DEBUG or logging.WARNING)
+
+    APFLAGS=""
+    profdir_option=""
+    variant = args.variant
+    opt_rebuild = args.force
+    pvariant = "REF"
+    profile_path = ""
+    remote_profile_path = ""
+    options = args.options
+    if not options:
+        options = ""
+    atos_driver = os.getenv("ATOS_DRIVER")
+    if atos_driver == None:
+        atos_driver = os.path.join(globals.BINDIR,"atos-driver")
+    if atos_driver != '0':
+        PROOT_ADDON_CC_OPTS_DRIVER="PROOT_ADDON_CC_OPTS_DRIVER=" + atos_driver
+    timeout = os.getenv("TIMEOUT")
+    if timeout != None:
+        timeout = os.path.join(globals.BINDIR,"atos-timeout") + " 3600"
+    else:
+        timeout = ""
+
+    if args.ccname:
+        args.ccregexp = '^' + args.ccname + '$'
+
+    if args.gopts != None:
+        if args.gopts:
+            pvariant = string.join(string.split(args.gopts), '')
+        if not args.path:
+            profile_path = os.path.join(args.configuration_path, "profiles", atos_lib.hashid(pvariant))
+        else:
+            profile_path = args.path
+        if not os.path.isdir(profile_path):
+            os.makedirs(profile_path)
+        variantfile = os.path.join(profile_path, "variant.txt")
+        variantf = open(variantfile, 'w')
+        variantf.write(pvariant)
+        variantf.close()
+        for file in os.listdir(profile_path):
+            if fnmatch.fnmatch(file, '*.gcda'):
+                rmcommand = "rm -f " + file
+                atos_lib.system(rmcommand)
+
+        APFLAGS = "-fprofile-generate"
+        if not args.remote_path:
+            config_file = os.path.join(args.configuration_path, 'config.json')
+            if os.path.isfile(config_file):
+                client = atos_lib.json_config(config_file)
+                remote_profile_path = client.get_value("default_values.remote_profile_path")
+            else:
+                remote_profile_path = None
+        else:
+            remote_profile_path = args.remote_path
+        if remote_profile_path:
+            profdir_option="PROFILE_DIR=" + str(os.path.abspath(remote_profile_path))
+        else:
+            profdir_option="PROFILE_DIR=" + os.path.abspath(profile_path)
+
+    if args.uopts != None:
+        pvariant = "REF"
+        if args.uopts:
+            pvariant = string.join(string.split(args.uopts), '')
+        if not profile_path:
+            profile_path = os.path.join(args.configuration_path, "profiles", atos_lib.hashid(pvariant))
+        if not os.path.isdir(profile_path):
+            os.makedirs(profile_path)
+        APFLAGS = "-fprofile-use -fprofile-correction -Wno-error=coverage-mismatch"
+        profdir_option = "PROFILE_DIR=" + os.path.abspath(profile_path)
+
+    if variant == "REF":
+        if options != "" or pvariant != "":
+            if args.gopts != None:
+                variant = "OPT-fprofile-generate" + string.join(string.split(args.gopts), '') + string.join(string.split(options), '')
+            elif args.uopts != None:
+                variant = "OPT-fprofile-use" + string.join(string.split(args.uopts), '') + string.join(string.split(options), '')
+            else:
+                variant = "OPT" + string.join(string.split(options), '')
+
+    failure = 0
+    logs = os.path.join(args.configuration_path, "logs")
+    if args.dryrun:
+        print "mkdir -p " + logs
+    else:
+        if not os.path.isdir(logs):
+            os.makedirs(logs)
+
+    if not args.dryrun:
+        hash_var = atos_lib.hashid(variant)
+        logfile = os.path.join(logs,"build-" + hash_var + ".log")
+        logf = open(logfile, 'w')
+
+    if not args.quiet:
+        print "Building variant " + variant + "..."
+    if not args.dryrun:
+        logf.write("Building variant ")
+        logf.write(variant)
+        logf.write('\n')
+
+    build_force = os.path.join(args.configuration_path, "build.force")
+    if not opt_rebuild and os.path.isfile(build_force):
+        command = "cat " + build_force
+        status,opt_rebuild = atos_lib.subcall(command)
+
+    build_mk = os.path.join(args.configuration_path, "build.mk")
+    build_sh = os.path.join(args.configuration_path, "build.sh")
+    pwd = os.getcwd()
+    if not args.command and opt_rebuild != 1 and os.path.isfile(build_mk):
+        # If the configuration path contains a build.mk execute it
+        if string.count(options, "-flto") != 0:
+            lto_option = "LTO=1"
+        else:
+            lto_option = ""
+        command = timeout + " make -f " + build_mk + " ATOS_DRIVER=" + atos_driver + " ACFLAGS=\"" + APFLAGS + " " + options + "\" " + lto_option + " " + profdir_option
+        if args.dryrun:
+            command = command + " -n"
+            atos_lib.system(command)
+        else:
+            command = command + " -j" + str(args.jobs)
+            (status, output) = atos_lib.system(command, get_output=True, output_stderr=True)
+            logf.write(output)
+            logf.write('\n')
+            if status:
+                failure = 1
+
+    elif not args.command and opt_rebuild == 1 and os.path.isfile(build_sh):
+        if args.dryrun:
+            print "Executing: " + build_sh
+        else:
+            command = (timeout + " env PROOT_IGNORE_ELF_INTERPRETER=1 PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_OPTS_ARGS='" +
+                        APFLAGS + " " + options + "' PROOT_ADDON_CC_DEPS_CCRE='" + args.ccregexp +
+                       PROOT_ADDON_CC_OPTS_DRIVER + "' " +
+                       atos_lib.proot_atos() +" -w " + os.getcwd() + " / \"" + build_sh + "\"")
+            (status, output) = atos_lib.system(command, print_output=True, get_output=True, output_stderr=True)
+            logf.write(output)
+            logf.write('\n')
+            if status:
+                failure = 1
+
+    else:
+        command = (timeout + " env PROOT_IGNORE_ELF_INTERPRETER=1 PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_OPTS_ARGS='" +
+                   APFLAGS + " " + options + "' PROOT_ADDON_CC_DEPS_CCRE='" + args.ccregexp +
+                   PROOT_ADDON_CC_OPTS_DRIVER + "' " +
+                   atos_lib.proot_atos() +" -w " + os.getcwd() + " / ")
+        command += atos_lib.list2cmdline(args.command)
+        (status, output) = atos_lib.system(command, print_output=True, get_output=True, output_stderr=True)
+        if not args.dryrun:
+            print "Executing: "
+            command = command + " -j" + str(args.j)
+            (status, output) = atos_lib.system(command, get_output=True, output_stderr=True)
+            logf.write(output)
+            logf.write('\n')
+            if status:
+                failure = 1
+
+    if failure == 1:
+        if not args.quiet:
+            print "FAILURE while building variant " + variant + "..."
+        if not args.dryrun:
+            logf.write("FAILURE while building variant ")
+            logf.write(variant)
+            logf.write('\n')
+            logf.close()
+            sys.exit(2)
+        else:
+            if not args.dryrun:
+                logf.write("SUCCESS building variant ")
+                logf.write(variant)
+                logf.write('\n')
+                logf.close()
 
 def run_atos_deps(args):
     """ ATOS deps tool implementation. """

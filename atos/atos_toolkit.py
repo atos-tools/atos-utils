@@ -18,13 +18,13 @@
 #
 
 import sys, os, itertools, math, re, string
-
 from random import randint, choice, sample, seed
 
-from logging import debug, info, warning, error
-
 import globals
+import process
 import atos_lib
+import logger
+from logger import debug, warning
 
 # ####################################################################
 
@@ -233,7 +233,7 @@ def gen_base():
 @generator
 def gen_stdev(nbrun='10'):
     '''compute standard deviation of results'''
-    info('start stdev')
+    debug('start stdev')
     flags, variant = '-O2', 'base'
     results = []
     for n in range(int(nbrun)):
@@ -242,7 +242,7 @@ def gen_stdev(nbrun='10'):
     debug('*** results: %s' % str(results))
     debug('*** average: %s' % str(atos_lib.average(results)))
     debug('*** stddev : %s' % str(atos_lib.standard_deviation(results)))
-    info('end stdev -> [%.1f%%]' % (atos_lib.variation_coefficient(
+    debug('end stdev -> [%.1f%%]' % (atos_lib.variation_coefficient(
                 results) * 100))
 
 
@@ -306,7 +306,7 @@ def gen_one_off_rnd(variantid, epsilon='0.001'):
             flag += ' ' + baseflags[i + 1]; i += 1
         flags += [flag]; i += 1
     # extract variant
-    info('gen_one_off [%s]' % variantid)
+    debug('gen_one_off [%s]' % variantid)
     fdo = (variantid.find('-fprofile-use') != -1)
     lto = (variantid.find('-flto') != -1)
     variant = (fdo and lto) and 'fdo+lto' or (
@@ -340,26 +340,26 @@ def gen_one_off_rnd(variantid, epsilon='0.001'):
                 flag, useless and 'useless' or 'useful', speedup, sizered))
     debug('*** resulting list: [%s]' % ' '.join(curflags))
     debug('*** removed flags: [%s]' % ' '.join(removed))
-    info('gen_one_off [%s] -> useful=[%s] useless=[%s]' % (
+    debug('gen_one_off [%s] -> useful=[%s] useless=[%s]' % (
             variantid, ' '.join(curflags), ' '.join(removed)))
 
 
 @generator
 def gen_simplf():
     '''get useful flag list from frontier points'''
-    info('gen_simplf')
+    debug('gen_simplf')
     old_front_points = []
     while True:
         old_front_points_ids = [p.variant for p in old_front_points]
         cur_front_points = atos_get_result('frontier')
         new_front_points = [p for p in cur_front_points
                             if p.variant not in old_front_points_ids]
-        info('gen_simplf - new points: [%s]' % (
+        debug('gen_simplf - new points: [%s]' % (
                 ','.join([p.variant for p in new_front_points])))
         if new_front_points == []: break
         old_front_points.extend(cur_front_points)
         for p in new_front_points:
-            info('gen_simplf - point: [%s]' % (p.variant))
+            debug('gen_simplf - point: [%s]' % (p.variant))
             generator = gen_one_off_rnd(p.variant)
             result = None
             while True:
@@ -381,7 +381,7 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
                '--acf-hot-th', str(hot_th), '--acf-cold-th', str(cold_th)]
         if cold_opts: cmd += ['--acf-cold-opts', '"%s"' % cold_opts]
         if hot_opts: cmd += ['--acf-hot-opts', '"%s"' % hot_opts]
-        status, output = atos_lib.system(
+        status, output = process.system(
             ' '.join(cmd), get_output=True, check_status=True)
         return output
 
@@ -405,7 +405,7 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
             lambda f: all(map(lambda i: not re.match(i, f), filter_out)), flag_list)
         return ' '.join(flag_list)
 
-    info('gen_acf')
+    debug('gen_acf')
 
     if generator.baseopts and generator.atos_config:
         lto_set = (generator.baseopts.find('-flto') != -1)
@@ -438,7 +438,7 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
             os.remove(os.path.join(csv_dir, file))
 
     # generate oprof.out in current dir
-    atos_lib.system(oprof_script, check_status=True)
+    process.system(oprof_script, check_status=True)
 
     if not os.path.exists(oprof_out):
         # Profile run failed: profile file not found
@@ -474,7 +474,7 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
         # Avoid profile generation for first iteration, already generated for cold functions
         if not first_iteration:
             # generate oprof.out in current dir
-            atos_lib.system(oprof_script, check_status=True)
+            process.system(oprof_script, check_status=True)
         first_iteration = False
 
         # Parse oprof.out for hot functions
@@ -554,7 +554,7 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
 def gen_file_by_file(cold_th, cold_opts, file_list, flags_file=None):
     '''perform per file exploration'''
 
-    info('gen_file_by_file')
+    debug('gen_file_by_file')
 
     # get object/sample_count list
     obj_list = []
@@ -724,17 +724,17 @@ def atos_opt_run(flags, variant, profdir, config, nbrun, baseopts, no_replay):
         'fdo+lto' : ('-f -l', ''),
         'lipo' : ('-f', '-fripa')}
     flags, variant = atos_base_flags(flags, variant, baseopts)
-    info('RUN [%s] [%s]' % (variant, flags))
+    debug('RUN [%s] [%s]' % (variant, flags))
     profdir_option = profdir and ('-b %s' % profdir) or ''
     replay_option = no_replay and '-k' or ''
     nbrun_option = nbrun and ('-n %d' % nbrun) or ''
     variant_options, variant_flags = variant_options_flags[variant]
-    status, output = atos_lib.system(
+    status, output = process.system(
         '%s/atos-opt -C %s %s %s %s -r -a "%s %s" %s' % (
             globals.BINDIR, config, nbrun_option, replay_option, profdir_option,
             flags, variant_flags, variant_options), print_output=True, get_output=True)
     if not (status == 0 and output):
-        info('FAILURE [%s] [%s]' % (variant, flags))
+        debug('FAILURE [%s] [%s]' % (variant, flags))
         return None
     variant_id = None
     for line in output.split('\n'):
@@ -763,7 +763,7 @@ def atos_run_wrapper(profdir, config, nbrun, baseopts, no_replay):
 
 if __name__ == '__main__':
 
-    import optparse, logging
+    import optparse
     parser = optparse.OptionParser(
         description='Optimization space exploration loop',
         usage='%prog action [options] [variants]',
@@ -844,7 +844,8 @@ if __name__ == '__main__':
 
     (opts, args) = parser.parse_args()
 
-    atos_lib.setup_logging(opts.debug and 10 or 30, opts.logfile)
+    logger.setup(vars(opts))
+    process.setup(vars(opts))
 
     # generators setup
     generator.optlist = (

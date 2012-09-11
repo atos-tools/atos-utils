@@ -32,6 +32,7 @@ def parser(tool):
         "atos-build": parsers.atos_build,
         "atos-deps": parsers.atos_deps,
         "atos-explore": parsers.atos_explore,
+        "atos-init": parsers.atos_init,
         "atos-profile": parsers.atos_profile
         }
     return factories[tool]()
@@ -102,6 +103,9 @@ class parsers:
         sub = subs.add_parser("explore", help="do the exploration of options")
         parsers.atos_explore(sub)
 
+        sub = subs.add_parser("init", help="initialize atos environment")
+        parsers.atos_init(sub)
+
         sub = subs.add_parser("profile", help="generate the profile build")
         parsers.atos_profile(sub)
         return parser
@@ -150,7 +154,7 @@ class parsers:
         args.configuration_path(parser)
         args.ccregexp(parser)
         args.ccname(parser)
-        args.atos_build.path(parser)
+        args.path(parser)
         args.atos_build.options(parser)
         args.atos_build.variant(parser)
         args.remote_path(parser, ("-b", "--remote_path"))
@@ -194,16 +198,39 @@ class parsers:
             parser = ATOSArgumentParser(prog="atos-explore",
                                         description="ATOS explore tool")
         args.executables(parser)
-        args.atos_explore.exe(parser)
+        args.exe(parser)
         args.configuration_path(parser)
         args.build_script(parser)
         args.force(parser)
         args.run_script(parser)
         args.nbruns(parser)
         args.remote_path(parser)
-        args.resultsscript(parser)
+        args.results_script(parser)
         args.clean(parser)
         args.debug(parser)
+        args.quiet(parser)
+        args.dryrun(parser, ("--dryrun",))
+        args.version(parser)
+        return parser
+
+    @staticmethod
+    def atos_init(parser=None):
+        """ atos init arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-init",
+                                        description="ATOS explore tool")
+        args.executables(parser)
+        args.configuration_path(parser)
+        args.clean(parser)
+        args.exe(parser)
+        args.build_script(parser)
+        args.run_script(parser)
+        args.results_script(parser)
+        args.atos_init.prof_script(parser)
+        args.nbruns(parser)
+        args.remote_path(parser)
+        args.debug(parser)
+        args.force(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
         args.coverage(parser)
@@ -218,7 +245,7 @@ class parsers:
             parser = ATOSArgumentParser(prog="atos-profile",
                                         description="ATOS profile generation tool")
         args.configuration_path(parser)
-        args.atos_profile.path(parser)
+        args.path(parser)
         args.remote_path(parser, ("-b", "--remote_path"))
         args.atos_profile.options(parser)
         args.force(parser)
@@ -309,6 +336,12 @@ class args:
                              help="specify the exact compiler driver basename")
 
     @staticmethod
+    def path(parser, args=("-p", "--path")):
+        parser.add_argument(*args,
+                             dest="path",
+                             help="path to profile files")
+
+    @staticmethod
     def remote_path(parser, args=("-B", "--remote-path")):
         parser.add_argument(*args,
                              dest="remote_path",
@@ -330,7 +363,7 @@ class args:
                              default=1)
 
     @staticmethod
-    def resultsscript(parser, args=("-t", "--results-script")):
+    def results_script(parser, args=("-t", "--results-script")):
         parser.add_argument(*args,
                              dest="results_script",
                              help="results_script for specific instrumentation")
@@ -348,6 +381,12 @@ class args:
                              dest="debug",
                              help="debug mode",
                              action="store_true")
+
+    @staticmethod
+    def exe(parser, args=("-e", "--exe")):
+        parser.add_argument(*args,
+                             dest="exe",
+                             help="executables to be instrumented, defaults to args of command or all generated executables")
 
     @staticmethod
     def executables(parser):
@@ -395,12 +434,6 @@ class args:
             parser.add_argument(*args,
                                  dest="options",
                                  help="append given options to the compilation commands")
-
-        @staticmethod
-        def path(parser, args=("-p", "--path")):
-            parser.add_argument(*args,
-                                 dest="path",
-                                 help="path to profile files")
 
         @staticmethod
         def variant(parser, args=("-w", "--variant")):
@@ -458,23 +491,17 @@ class args:
                                  help="use all build targets as the default targets, use it when all built executables need to be optimized",
                                  action="store_true")
 
-    class atos_explore:
-        """ Namespace for non common atos-explore arguments. """
+    class atos_init:
+        """ Namespace for non common atos-init arguments. """
 
         @staticmethod
-        def exe(parser, args=("-e", "--exe")):
+        def prof_script(parser, args=("-p", "--profile-script")):
             parser.add_argument(*args,
-                                 dest="exe",
-                                 help="executables to be instrumented, defaults to args of command or all generated executables")
+                                 dest="prof_script",
+                                 help="script to get profile information")
 
     class atos_profile:
         """ Namespace for non common atos-profile arguments. """
-
-        @staticmethod
-        def path(parser, args=("-p", "--path")):
-            parser.add_argument(*args,
-                                 dest="path",
-                                 help="path to profile files")
 
         @staticmethod
         def options(parser, args=("-g", "--options")):

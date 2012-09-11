@@ -16,7 +16,7 @@
 # v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
 #
 
-import re
+import re, os
 import globals
 import argparse
 
@@ -78,6 +78,8 @@ class parsers:
                                     "see available commands below or run 'atos help' for the full manual.")
         args.quiet(parser)
         args.dryrun(parser)
+        args.coverage(parser)
+        args.coverage_file(parser)
         args.version(parser)
         subs = parser.add_subparsers(title="atos commands",
                                      dest="subcmd",
@@ -115,6 +117,8 @@ class parsers:
                             help="help topics. Execute 'atos help' for available topics.")
         args.atos_help.text(parser)
         args.atos_help.man(parser)
+        args.coverage(parser)
+        args.coverage_file(parser)
         args.version(parser)
         return parser
 
@@ -158,6 +162,8 @@ class parsers:
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser)
+        args.coverage(parser)
+        args.coverage_file(parser)
         args.version(parser)
         return parser
 
@@ -176,6 +182,8 @@ class parsers:
         args.force(parser)
         args.quiet(parser)
         args.dryrun(parser)
+        args.coverage(parser)
+        args.coverage_file(parser)
         args.version(parser)
         return parser
 
@@ -198,6 +206,8 @@ class parsers:
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
+        args.coverage(parser)
+        args.coverage_file(parser)
         args.version(parser)
         return parser
 
@@ -261,6 +271,23 @@ class args:
         parser.add_argument(*args,
                              action="store_true",
                              help="use atos tools in force rebuild mode, the full build command will be re-executed")
+
+    @staticmethod
+    def coverage(parser, args=("--coverage",)):
+        default_coverage = bool(os.getenv("ATOS_COVERAGE_FILE")) or bool(os.getenv("ATOS_COVERAGE"))
+        parser.add_argument(*args,
+                             action="store_true",
+                             default=default_coverage,
+                             help="enable coverage generation")
+
+    @staticmethod
+    def coverage_file(parser, args=("--coverage-file",)):
+        coverage_file = os.getenv("ATOS_COVERAGE_FILE")
+        if coverage_file == None: coverage_file = ".coverage"
+        parser.add_argument(*args,
+                             dest="coverage_file",
+                             default=coverage_file,
+                             help="data file to use for coverage generation")
 
     @staticmethod
     def build_script(parser, args=("-b", "--build-script")):

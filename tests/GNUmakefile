@@ -25,6 +25,10 @@ ERRS=$(TESTS:.sh=.err)
 ifeq ($(V),)
 V_RUN=@
 endif
+COVERAGE_DIR=$(abspath .)/coverage
+ifneq ($(COVERAGE),)
+COVERAGE_OPTS=ATOS_COVERAGE_FILE=$(COVERAGE_DIR)/.coverage.$$$$
+endif
 FORCE=.FORCE
 
 .PHONY: all tests clean distclean $(DEPS) .FORCE
@@ -33,8 +37,19 @@ all: tests
 
 tests: tests_report
 
-clean:
+coverage:
+	mkdir -p $(COVERAGE_DIR)
+	cd $(COVERAGE_DIR) && rm -rf .coverage* coverage
+	$(MAKE) COVERAGE=1 -f $(firstword $(MAKEFILE_LIST)) tests
+	cd $(COVERAGE_DIR) && coverage combine
+	cd $(COVERAGE_DIR) && coverage html -d html
+	cd $(COVERAGE_DIR) && coverage report | tail -1 | awk '{print "COVERAGE", $$4 , ":", $$2-$$3, "/", $$2}'
+
+clean: clean-coverage
 	rm -f *.out *.err tests_report.txt
+
+clean-coverage:
+	if [ -d $(COVERAGE_DIR) ]; then cd $(COVERAGE_DIR) && rm -rf .coverage* coverage; fi
 
 distclean: clean
 
@@ -47,4 +62,4 @@ $(DEPS): %: %.err
 # Force MAKEFLAGS= as we may run make in tests
 # and we do not want to inherit -jxx option
 $(ERRS): %.err: $(srcdir)%.sh $(FORCE)
-	$(V_RUN)env MAKEFLAGS= ROOT=$${ROOT:-$(abspath ..)} SRCDIR=$${SRCDIR:-$(abspath $(srcdir)..)} $(srcdir)$*.sh 2>&1 >$*.out | tee $*.err
+	$(V_RUN)env MAKEFLAGS= ROOT=$${ROOT:-$(abspath ..)} SRCDIR=$${SRCDIR:-$(abspath $(srcdir)..)} $(COVERAGE_OPTS) $(srcdir)$*.sh 2>&1 >$*.out | tee $*.err

@@ -35,6 +35,15 @@ def invoque(tool, args):
         "atos-explore": run_atos_explore,
         "atos-profile": run_atos_profile
         }
+    if hasattr(args, "coverage") and args.coverage:
+        import coverage
+        cov = coverage.coverage(data_file=args.coverage_file)
+        cov.start()
+        try:
+            return functions[tool](args)
+        finally:
+            cov.stop()
+            cov.save()
     return functions[tool](args)
 
 def execute(tool, args):

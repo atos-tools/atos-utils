@@ -172,12 +172,15 @@ $(CONFIG_SCRIPTS_CFG): lib/atos/config/%: $(srcdir)%.in
 	$(QUIET_IN)install -D $< $@
 
 $(PYTHON_SCRIPTS): bin/%: $(srcdir)%.py
+	$(QUIET_CHECK)$(srcdir)config/python_checker $<
 	$(QUIET_IN)install -d $(dir $@) && sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
 
 $(PYTHON_LIB_SCRIPTS): lib/atos/python/%.py: $(srcdir)%.py
+	$(QUIET_CHECK)$(srcdir)config/python_checker $<
 	$(QUIET_IN)install -d $(dir $@) && sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && mv $@.tmp $@
 
 $(PYTHON_LIB_EXE_SCRIPTS): lib/atos/python/%.py: $(srcdir)%.py
+	$(QUIET_CHECK)$(srcdir)config/python_checker $<
 	$(QUIET_IN)install -d $(dir $@) && sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
 
 $(SHARED_RSTS): share/atos/%: $(srcdir)%
@@ -214,6 +217,7 @@ $(INSTALLED_DOCS): $(PREFIX)/%: %
 # Manage verbose output
 #
 ifeq ($(V),1)
+QUIET_CHECK=
 QUIET_IN=
 QUIET_CP=
 QUIET_RST2MAN=
@@ -225,6 +229,7 @@ QUIET_INSTALL_DATA=
 QUIET_INSTALL_DOC=
 QUIET_CHECK=
 else
+QUIET_CHECK=@echo "CHECK $@" &&
 QUIET_IN=@echo "CONFIGURE $@" &&
 QUIET_CP=@echo "CP $@" &&
 QUIET_RST2MAN=@echo "RST2MAN $@" &&

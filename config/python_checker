@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+#
+# Check python scripts for ATOS
+#
+# Usage: python_checker <pyfile>
+#
+# Returns exit status 0 if no problem found.
+# Returns exit status 1 otherwise.
+#
+
+set -e
+
+[ "$PYCHECK" != "0" ] || exit 0
+
+configdir=`dirname $0`
+
+#
+# PEP8 syntax checker
+#
+
+$configdir/pep8.py \
+    --ignore=E121,E122,E123,E126,E127,E128,E302,E401,W601,E701,E711 $*
+
+# disabled rules:
+#
+#  E121 continuation line indentation is not a multiple of four
+#  E122 continuation line missing indentation or outdented
+#  E123 closing bracket does not match indentation of opening bracket's line
+#  E126 continuation line over-indented for hanging indent
+#  E127 continuation line over-indented for visual indent
+#  E128 continuation line under-indented for visual indent
+#  E302 expected 2 blank lines, found more
+#  E401 multiple imports on one line"
+#  W601 .has_key() is deprecated, use 'in'
+#  E701 multiple statements on one line (colon)
+#  E711 comparison to None should be 'is/is not None'

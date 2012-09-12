@@ -36,7 +36,8 @@ def cmdline2list(cmd):
 def list2cmdline(args):
     """
     Returns a quoted string suitable for execution from a shell.
-    Ref to http://stackoverflow.com/questions/967443/python-module-to-shellquote-unshellquote.
+    Ref to http://stackoverflow.com/questions/967443/
+      python-module-to-shellquote-unshellquote.
     """
     _quote_pos = re.compile('(?=[^-0-9a-zA-Z_./\n])')
 
@@ -49,10 +50,10 @@ def list2cmdline(args):
         """
         # This is the logic emacs uses
         if arg:
-            return _quote_pos.sub('\\\\', arg).replace('\n',"'\n'")
+            return _quote_pos.sub('\\\\', arg).replace('\n', "'\n'")
         else:
             return "''"
-    return ' '.join([ quote(a) for a in args ])
+    return ' '.join([quote(a) for a in args])
 
 def _process_output(process, output_file, print_output, output_stderr):
     """
@@ -97,12 +98,12 @@ def _subcall(cmd, get_output=False, print_output=False, output_stderr=False):
     Stderr will be included in returned output if output_stderr is set.
     Outputs will not be printed on stdout/stderr unless print_output is set.
     """
-    if type(cmd) == type(""):
+    if isinstance(cmd, str):
         cmd = cmdline2list(cmd)
     outputf = get_output and cStringIO.StringIO()
     popen_kwargs = {}
     if get_output or not print_output:
-        popen_kwargs = {'stdout' : subprocess.PIPE, 'stderr' : subprocess.PIPE}
+        popen_kwargs = {'stdout': subprocess.PIPE, 'stderr': subprocess.PIPE}
     process = subprocess.Popen(cmd, **popen_kwargs)
     while True:
         try:
@@ -141,7 +142,7 @@ def system(cmd, check_status=False, get_output=False, print_output=False,
     Given command can be a string or a list or arguments.
     """
     printable_cmd = cmd
-    if type(cmd) == type([]):
+    if isinstance(cmd, list):
         printable_cmd = list2cmdline(cmd)
     if _dryrun:
         logging.info(printable_cmd)

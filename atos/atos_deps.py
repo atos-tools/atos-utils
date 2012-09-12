@@ -23,7 +23,7 @@ import sys, os, re
 import globals
 import atos_lib
 
-VERBOSE=0
+VERBOSE = 0
 
 class DGraph:
     """ A class implementing a directed graph.  """
@@ -33,7 +33,8 @@ class DGraph:
         self.node_attrs_ = {}
         return
 
-    def add_node(self, node, attrs = []):
+    def add_node(self, node, attrs=None):
+        if attrs == None: attrs = []
         self.nodes_[node] = node
         self.node_attrs_[node] = attrs
 
@@ -44,7 +45,7 @@ class DGraph:
         for (edge, val) in self.edges_.items():
             (src, dst) = edge
             if src == node or dst == node:
-                self.edges_.pop((src,dst))
+                self.edges_.pop((src, dst))
         self.nodes_.pop(node)
         self.node_attrs_.pop(node)
 
@@ -65,7 +66,7 @@ class DGraph:
 
     def neighbors(self, node):
         neighbors = []
-        for (src,dst) in self.edges_:
+        for (src, dst) in self.edges_:
             if src == node:
                 neighbors.append(dst)
         return neighbors
@@ -83,29 +84,35 @@ class DGraphTest:
             print "test graph:"
             for node in self.dg.nodes():
                 print "node: " + node + " : ",
-                print " ".join([str(x) for x in self.dg.node_attrs()[node]]) + " : ",
+                print " ".join(
+                    [str(x) for x in self.dg.node_attrs()[node]]) + " : ",
                 print " ".join(self.dg.neighbors(node))
             print "edges: " + " ".join([str(x) for x in self.dg.edges()])
         print_graph()
         self.dg.add_node('ROOT')
-        self.dg.add_node('./file1.o', [('target', 'file1.o'), ('srcs', ['file1.c', 'file3.h'])])
-        self.dg.add_node('./file2.o', [('target', 'file2.o'), ('srcs', ['file2.c', 'file3.h'])])
+        self.dg.add_node('./file1.o', [
+                ('target', 'file1.o'), ('srcs', ['file1.c', 'file3.h'])])
+        self.dg.add_node('./file2.o', [
+                ('target', 'file2.o'), ('srcs', ['file2.c', 'file3.h'])])
         self.dg.add_edge(('./main.exe', './file1.o'))
         self.dg.add_edge(('./main.exe', './file2.o'))
         self.dg.add_edge(('./file2.o', './file3.h'))
         self.dg.add_edge(('./file1.o', './file3.h'))
-        self.dg.add_node('./file3.h', [('target', 'file3.h'), ('srcs', ['file3.h.in'])])
-        self.dg.add_node('./main.exe', [('target', 'main.exe'), ('srcs', ['file1.o', 'file2.o'])])
+        self.dg.add_node('./file3.h', [
+                ('target', 'file3.h'), ('srcs', ['file3.h.in'])])
+        self.dg.add_node('./main.exe', [
+                ('target', 'main.exe'), ('srcs', ['file1.o', 'file2.o'])])
         self.dg.add_edge(('ROOT', './main.exe'))
         print_graph()
         if self.dg.has_node('./file1.o'): self.dg.del_node('./file1.o')
-        if self.dg.has_edge(('ROOT', './main.exe')): self.dg.del_edge(('ROOT', './main.exe'))
+        if self.dg.has_edge(('ROOT', './main.exe')):
+            self.dg.del_edge(('ROOT', './main.exe'))
         print_graph()
 
 
 class DependencyGraph:
     """ A class implementing a dependency graph. """
-    def __init__(self, dg = None):
+    def __init__(self, dg=None):
         """ Constructor. Optionally pass a Dgraph as argument.  """
         global VERBOSE
         self.dg = dg
@@ -113,16 +120,15 @@ class DependencyGraph:
             self.dg = DGraph()
         self.verbose = VERBOSE
 
-    def add_node(self, node, attrs = []):
+    def add_node(self, node, attrs=None):
         """ Add a node. """
         if self.verbose:
             print "ADD_NODE: " + node
-        self.dg.add_node(node, attrs = attrs)
+        self.dg.add_node(node, attrs=attrs)
 
     def del_node(self, node):
         """ Delete a node and related edges. """
         self.dg.del_node(node)
-
 
     def has_node(self, node):
         """ Returns whether the graph contains the node. """
@@ -152,7 +158,7 @@ class DependencyGraph:
 
     def graph(self):
         """ Get the graph as a nodes, edges map. """
-        return { 'nodes': self.nodes(), 'edges': self.edges() }
+        return {'nodes': self.nodes(), 'edges': self.edges()}
 
     def node_attributes(self):
         """ Get the node attributes. """
@@ -169,7 +175,7 @@ class DependencyGraph:
         """ Get the list of targets. """
         targets = []
         for node in self.dg.neighbors("ROOT"):
-            for attr,value in self.node_attributes()[node]:
+            for attr, value in self.node_attributes()[node]:
                 if attr == "target":
                     targets.append(value)
         return targets
@@ -180,7 +186,7 @@ class DependencyGraph:
         for node in self.dg.nodes():
             target = None
             dep = None
-            for attr,value in self.node_attributes()[node]:
+            for attr, value in self.node_attributes()[node]:
                 if attr == "target":
                     target = value
                 if attr == "dependency":
@@ -190,27 +196,33 @@ class DependencyGraph:
         return objects
 
     def get_lto_opts(self):
-        """ Get the list of options that should be passed to linker in case of LTO build. """
-        def is_lto_opt(arg): return (arg.startswith('-m') or arg.startswith('-f'))
+        """ Get the list of options that should be passed to linker
+        in case of LTO build. """
+        def is_lto_opt(arg):
+            return (arg.startswith('-m') or arg.startswith('-f'))
         optflags = []
         for node in self.dg.nodes():
             for attr, value in self.node_attributes()[node]:
                 if attr != 'dependency' or value['kind'] != 'CC': continue
-                optflags += [x for x in value['command']['args'] if is_lto_opt(x) and x not in optflags]
+                optflags += [x for x in value['command']['args']
+                             if is_lto_opt(x) and x not in optflags]
         return optflags
 
     def common_relative_profdir_prefix(self):
-        """ Get the common path prefix of all targets of cc commands designated with a relative path. """
+        """ Get the common path prefix of all targets of cc commands designated
+        with a relative path. """
         outputs = []
         for node in self.dg.nodes():
             for attr, value in self.node_attributes()[node]:
                 if attr != 'dependency': continue
                 if value['kind'] == 'CCLD':
                     # consider that gcda files can be generated in cwd
-                    # (CCLD commands could be ignored here if no source files in input)
+                    # (CCLD commands could be ignored here if no source
+                    #  files in input)
                     outputs.append(value['command']['cwd'])
                 elif value['kind'] == 'CC':
-                    output_value = atos_lib.get_output_option_value(value['command']['args'])
+                    output_value = atos_lib.get_output_option_value(
+                        value['command']['args'])
                     # ignore output if designated with an absolute path
                     # (profdir will be prof_dir/full_path)
                     if output_value and os.path.isabs(output_value): continue
@@ -223,9 +235,11 @@ class DependencyGraph:
     def get_profdir_suffix(self, value):
         """ Get the profile dir suffix for a CC/CCLD dependency """
         if not hasattr(self, 'common_profdir_prefix_len'):
-            self.common_profdir_prefix_len = len(self.common_relative_profdir_prefix())
+            self.common_profdir_prefix_len = len(
+                self.common_relative_profdir_prefix())
         if value['kind'] == "CC":
-            output_value = atos_lib.get_output_option_value(value['command']['args'])
+            output_value = atos_lib.get_output_option_value(
+                value['command']['args'])
             if output_value and os.path.isabs(output_value): return ''
         if value['kind'] == "CC" or value['kind'] == "CCLD":
             return value['command']['cwd'][self.common_profdir_prefix_len:]
@@ -243,7 +257,9 @@ class DependencyGraph:
 
     def is_shared_link(self, value):
         """ Returns true if linking a shared lib. """
-        return (value['kind'] == "CCLD" and SimpleCCInterpreter.is_shared_lib_link(value['command']['args']))
+        return (
+            value['kind'] == "CCLD" and
+            SimpleCCInterpreter.is_shared_lib_link(value['command']['args']))
 
     def recipe_args(self, dependency):
         """ Fixup some options that may not support mixed .c and .o files. """
@@ -260,9 +276,9 @@ class DependencyGraph:
             i = i + 1
         return new_args
 
-    def output_makefile(self,makefile):
+    def output_makefile(self, makefile):
         """ Get a parallelizable makefile for rebuilding the target. """
-        mkfile = open(makefile,"w")
+        mkfile = open(makefile, "w")
         mkfile.write("#!/usr/bin/make -f\n")
         mkfile.write("SHELL=/bin/sh\n")
         mkfile.write("FORCE=FORCE\n")
@@ -275,11 +291,13 @@ class DependencyGraph:
         mkfile.write("LTOFLAGS=%s\n" % (' '.join(self.get_lto_opts())))
         mkfile.write("endif\n")
         mkfile.write("define profdir\n")
-        mkfile.write("$(if $(PROFILE_DIR),-fprofile-dir=$(PROFILE_DIR)/$(1),)\n")
+        mkfile.write(
+            "$(if $(PROFILE_DIR),-fprofile-dir=$(PROFILE_DIR)/$(1),)\n")
         mkfile.write("endef\n")
         mkfile.write("ROOT: F_ACFLAGS=$(ACFLAGS)\n")
         mkfile.write("ROOT: F_ALDFLAGS=$(ALDFLAGS)\n")
-        # TODO: may include per target/file flags, a better solution should be implemented
+        # TODO: may include per target/file flags,
+        #       a better solution should be implemented
         #mkfile.write("MAKEDIR:=$(dir $(MAKEFILE_LIST))\n")
         #mkfile.write("-include $(MAKEDIR)/build-target-flags.mk\n")
         #mkfile.write("-include $(MAKEDIR)/build-file-flags.mk\n")
@@ -287,25 +305,31 @@ class DependencyGraph:
         for node in self.dg.nodes():
             target = node
             recipe = None
-            for attr,value in self.node_attributes()[node]:
+            for attr, value in self.node_attributes()[node]:
                 if attr == "target":
                     target = value
                 if attr == "dependency":
-                    append=""
+                    append = ""
                     if value['kind'] == "CC":
-                        append=" $(F_ACFLAGS) $(call profdir," + self.get_profdir_suffix(value) + ")"
+                        append = (" $(F_ACFLAGS) $(call profdir," +
+                                  self.get_profdir_suffix(value) + ")")
                     if value['kind'] == "CCLD":
-                        append=" $(LTOFLAGS) $(F_ACFLAGS) $(F_ALDFLAGS) $(call profdir," + self.get_profdir_suffix(value) + ")"
+                        append = (" $(LTOFLAGS) $(F_ACFLAGS) $(F_ALDFLAGS) " +
+                                  "$(call profdir," +
+                                  self.get_profdir_suffix(value) + ")")
                         if self.is_shared_link(value):
                             append = append + " $(ALDSOFLAGS)"
                         else:
                             append = append + " $(ALDMAINFLAGS)"
                     # TODO: handle quotes in command
-                    recipe = "$(QUIET)cd " + value['command']['cwd'] + " && $(ATOS_DRIVER) " + " ".join(self.recipe_args(value)) + append
+                    recipe = (
+                        "$(QUIET)cd " + value['command']['cwd'] +
+                        " && $(ATOS_DRIVER) " +
+                        " ".join(self.recipe_args(value)) + append)
                     recipe = re.sub(r'(["\'])', r'\\\1', recipe)
             deps = []
             for dep in self.dg.neighbors(node):
-                for attr,value in self.node_attributes()[dep]:
+                for attr, value in self.node_attributes()[dep]:
                     if attr == "target":
                         deps.append(value)
             mkfile.write(target + ": $(FORCE) " + " ".join(deps) + "\n")
@@ -313,44 +337,48 @@ class DependencyGraph:
                 mkfile.write("\n")
             else:
                 mkfile.write("\t" + recipe + "\n")
-        mkfile.close
+        mkfile.close()
 
 class DependencyGraphBuilder:
     """ Class for building dependency list. """
     def __init__(self, deplist, targets):
-        """ Constructor. Takes a DependencyList as argument and a list of output_file targets. """
+        """ Constructor. Takes a DependencyList as argument
+        and a list of output_file targets. """
         self.graph = DependencyGraph()
         self.deplist = deplist
         self.targets = targets
 
     def target_match(self, target, output):
-        """ Check if output matches a target. Assume that target is a suffix of output. """
+        """ Check if output matches a target.
+        Assume that target is a suffix of output. """
         m = re.search(os.path.normpath(target) + "$", output)
         return m != None
 
     def build_graph(self):
-        """ Builds Add a dependency consisting of a node and input/output lists. """
+        """ Builds Add a dependency consisting of a node
+        and input/output lists. """
         self.graph.add_node("ROOT")
         referenced_outputs = set()
         if self.targets == "all" or self.targets == "last":
             for i in range(len(self.deplist)):
-                dependency = self.deplist[len(self.deplist)-i-1]
+                dependency = self.deplist[len(self.deplist) - i - 1]
                 if len(dependency['outputs']) != 1:
                     continue
-                if dependency['kind'] == "CCLD" and len(dependency['outputs']) == 1:
+                if dependency['kind'] == "CCLD" and len(dependency[
+                        'outputs']) == 1:
                     referenced_outputs.add(dependency['outputs'][0])
                     if self.targets == "last":
                         break
             targets = list(referenced_outputs)
         else:
             targets = self.targets
-        unmatched_targets = targets[:] # keep targets untouched
+        unmatched_targets = targets[:]  # keep targets untouched
         available_inputs = set()
         last_target_node = None
         referenced_outputs = set()
 
         for i in range(len(self.deplist)):
-            dependency = self.deplist[len(self.deplist)-i-1]
+            dependency = self.deplist[len(self.deplist) - i - 1]
             if len(dependency['outputs']) != 1:
                 continue
             output = dependency['outputs'][0]
@@ -358,48 +386,56 @@ class DependencyGraphBuilder:
             for target in unmatched_targets:
                 if self.target_match(target, output):
                     if output in referenced_outputs:
-                        raise Exception("Output file referenced several times: " + output)
+                        raise Exception(
+                            "Output file referenced several times: " + output)
                     unmatched_targets.remove(target)
                     found = True
                     referenced_outputs.add(output)
-                    self.graph.add_node(output, attrs = [('target', output), ('dependency', dependency)])
+                    self.graph.add_node(output, attrs=[
+                            ('target', output), ('dependency', dependency)])
                     self.graph.add_edge("ROOT", output)
-                    # Ensure that targets are serialized, this ensure that shared libraries are
-                    # compiled before executables as for now we do not track shared lib dependencies
+                    # Ensure that targets are serialized, this ensure that
+                    # shared libraries are compiled before executables as for
+                    # now we do not track shared lib dependencies
                     if last_target_node:
                         self.graph.add_edge(last_target_node, output)
                     last_target_node = output
                     for inp in dependency['inputs']:
                         available_inputs.add(inp)
                         if not self.graph.has_node(inp):
-                            self.graph.add_node(inp, attrs = [('target', inp)])
+                            self.graph.add_node(inp, attrs=[('target', inp)])
                         if not self.graph.has_edge(output, inp):
                             self.graph.add_edge(output, inp)
             if not found:
                 if output in available_inputs:
                     if output in referenced_outputs:
-                        raise Exception("Output file referenced several times: " + output)
+                        raise Exception(
+                            "Output file referenced several times: " + output)
                     referenced_outputs.add(output)
                     available_inputs.remove(output)
                     if not self.graph.has_node(output):
-                        raise Exception("Expected to have seen output in dependencies: " + output)
-                    self.graph.node_attributes()[output] = [('target', output), ('dependency', dependency)]
+                        raise Exception(
+                            "Expected to have seen output in dependencies: " +
+                            output)
+                    self.graph.node_attributes()[output] = [
+                        ('target', output), ('dependency', dependency)]
                     for inp in dependency['inputs']:
                         available_inputs.add(inp)
                         if not self.graph.has_node(inp):
-                            self.graph.add_node(inp, attrs = [('target', inp)])
+                            self.graph.add_node(inp, attrs=[('target', inp)])
                         if not self.graph.has_edge(output, inp):
                             self.graph.add_edge(output, inp)
         # Check for unmatched targets
         if len(unmatched_targets) > 0:
             for target in unmatched_targets:
-                print >> sys.stderr, "warning: unmatched target executable, will not be optimized: " + target
+                print >> sys.stderr, "warning: unmatched target executable, " \
+                    "will not be optimized: " + target
         # Prune nodes with no recipe (remove speculated inputs)
         for node in self.graph.nodes():
             if node == "ROOT":
                 continue
             real = False
-            for attr,value in self.graph.node_attributes()[node]:
+            for attr, value in self.graph.node_attributes()[node]:
                 if attr == "dependency":
                     real = True
             if not real:
@@ -417,7 +453,8 @@ class DependencyListBuilder:
 
     def add_dependency(self, command, kind, inputs, outputs):
         """ Add a dependency consisting of a node and input/output lists. """
-        dependency = { 'command': command, 'kind': kind, 'inputs': inputs, 'outputs': outputs }
+        dependency = {'command': command, 'kind': kind,
+                      'inputs': inputs, 'outputs': outputs}
         self.deps.append(dependency)
 
     def get_dependencies(self):
@@ -483,7 +520,8 @@ class SimpleCCInterpreter:
     def get_expanded_args(self):
         """ Returns the exanded args list, after response file expansion. """
         if self.expanded_args == None:
-            self.expanded_args = atos_lib.expand_response_file(self.command['args'])
+            self.expanded_args = atos_lib.expand_response_file(
+                self.command['args'])
         return self.expanded_args
 
     def get_kind(self):
@@ -493,14 +531,15 @@ class SimpleCCInterpreter:
         args = self.get_expanded_args()
         kind = "CCLD"
         for i in range(len(args[1:])):
-            m = re.search("^(-c)$", args[i+1])
+            m = re.search("^(-c)$", args[i + 1])
             if m != None:
                 kind = "CC"
         self.kind = kind
         return kind
 
     def get_input_files(self):
-        """ Get input files from a CC command line args (C/C++ sources or object files). """
+        """ Get input files from a CC command line args
+        (C/C++ sources or object files). """
         if self.input_files != None:
             return self.input_files
         kind = self.get_kind()
@@ -528,8 +567,8 @@ class SimpleCCInterpreter:
             if kind == "CCLD" and m != None:
                 path = m.group(1)
                 if path == "":
-                    if i+1 < len(args):
-                        path = args[i+1]
+                    if i + 1 < len(args):
+                        path = args[i + 1]
                 if path != "":
                     lpath.append(os.path.normpath(os.path.join(cwd, path)))
                 continue
@@ -537,16 +576,17 @@ class SimpleCCInterpreter:
             if kind == "CCLD" and m != None:
                 lib = m.group(1)
                 if lib == "":
-                    if i+1 < len(args):
-                        lib = args[i+1]
+                    if i + 1 < len(args):
+                        lib = args[i + 1]
                     i = i + 1
                 if lib != "":
                     for path in lpath:
                         # TODO: this way of finding archives is approximate, we
-                        # should use an enhanced PRoot plugin for detecting actual
-                        # dependencies at build audit time.
+                        # should use an enhanced PRoot plugin for detecting
+                        # actual dependencies at build audit time.
                         file_base = os.path.join(path, "lib" + lib)
-                        if not static_link and os.access(file_base + ".so", os.R_OK):
+                        if not static_link and os.access(
+                                file_base + ".so", os.R_OK):
                             # Skip shared objects for now
                             break
                         if os.access(file_base + ".a", os.R_OK):
@@ -563,25 +603,30 @@ class SimpleCCInterpreter:
         args = self.get_expanded_args()
         cwd = self.command['cwd']
         output = atos_lib.get_output_option_value(args)
-        outputs = [os.path.normpath(os.path.join(cwd, output))] if output else []
+        outputs = [
+            os.path.normpath(os.path.join(cwd, output))] if output else []
         if len(outputs) == 0 and len(self.get_input_files()) > 0:
             if self.get_kind() == "CC":
                 outputs = []
                 for inp in self.get_input_files():
-                    outputs.append(os.path.normpath(os.path.join(cwd, re.sub("\\.[^.]+$", ".o", os.path.basename(inp)))))
+                    outputs.append(os.path.normpath(os.path.join(cwd, re.sub(
+                                    "\\.[^.]+$", ".o",
+                                    os.path.basename(inp)))))
             elif self.get_kind() == "CCLD":
-                outputs = [ os.path.normpath(os.path.join(cwd, "a.out")) ]
+                outputs = [os.path.normpath(os.path.join(cwd, "a.out"))]
             else:
-                raise Exception("Can't determine output from input files in command: " + str(self.command))
+                raise Exception(
+                    "Can't determine output from input files in command: " +
+                    str(self.command))
         self.output_files = outputs
         return outputs
 
 
 class SimpleARInterpreter:
-    """ Returns information on a command line for a AR archiver. 
+    """ Returns information on a command line for a AR archiver.
     There are a number of limitations:
     - only .o files are searched for input
-    - only 'ar ...r... input_files...' form is recognized 
+    - only 'ar ...r... input_files...' form is recognized
     """
     def __init__(self, command):
         """ Constructor. """
@@ -593,7 +638,8 @@ class SimpleARInterpreter:
     def get_expanded_args(self):
         """ Returns the exanded args list, after response file expansion. """
         if self.expanded_args == None:
-            self.expanded_args = atos_lib.expand_response_file(self.command['args'])
+            self.expanded_args = atos_lib.expand_response_file(
+                self.command['args'])
         return self.expanded_args
 
     def get_kind(self):
@@ -608,9 +654,10 @@ class SimpleARInterpreter:
         cwd = self.command['cwd']
         inputs = []
         for i in range(len(args[1:])):
-            m = re.search("\\.(o)$", args[i+1])
+            m = re.search("\\.(o)$", args[i + 1])
             if m != None and m.group(1) != None and i >= 2:
-                    inputs.append(os.path.normpath(os.path.join(cwd, args[i+1])))
+                    inputs.append(
+                        os.path.normpath(os.path.join(cwd, args[i + 1])))
         self.input_files = inputs
         return inputs
 
@@ -624,18 +671,19 @@ class SimpleARInterpreter:
         update = False
         for i in range(len(args[1:])):
             if i == 0:
-                m = re.search("r", args[i+1])
+                m = re.search("r", args[i + 1])
                 if m != None:
                     update = True
             elif i == 1 and update:
-                outputs = [ os.path.normpath(os.path.join(cwd, args[i+1])) ]
+                outputs = [os.path.normpath(os.path.join(cwd, args[i + 1]))]
             else:
                 break
         self.outputs = outputs
         return outputs
 
 class CommandDependencyListFactory:
-    """ Creates a build dependency from a command parser and a command interpreter. """
+    """ Creates a build dependency from a command parser and a
+    command interpreter. """
     def __init__(self, parser, interpreter):
         """ Constructor. """
         self.deps = DependencyListBuilder()
@@ -671,7 +719,8 @@ class CCDEPSParser:
     def parse_line(self, line):
         """ Parses a single input_file. """
         try:
-            m = re.search("^CC_DEPS: \"([^\"]*)\": (.*): : \"([^\"]*)\"$", line)
+            m = re.search(
+                "^CC_DEPS: \"([^\"]*)\": (.*): : \"([^\"]*)\"$", line)
             arg0 = m.group(1)
             args = m.group(2)
             cwd = m.group(3)

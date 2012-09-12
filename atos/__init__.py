@@ -22,7 +22,8 @@ def check_python_version_():
     try:
         assert sys.hexversion >= 0x02060000
     except:
-        print >>sys.stderr, 'error: python version >= 2.6 is required by ATOS tools'
+        print >>sys.stderr, \
+            'error: python version >= 2.6 is required by ATOS tools'
         sys.exit(1)
 
 check_python_version_()

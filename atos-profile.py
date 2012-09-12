@@ -28,4 +28,3 @@ from atos import utils
 
 args = arguments.parser("atos-profile").parse_args()
 utils.execute("atos-profile", args)
-

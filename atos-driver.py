@@ -19,7 +19,7 @@
 # Usage: get usage with atos-driver --atos-help
 #
 
-VERSION="@VERSION@"
+VERSION = "@VERSION@"
 
 import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(
@@ -102,14 +102,16 @@ if __name__ == "__main__":
 
     parser.add_argument('--atos-fctmap', dest='fctmap',
                       action='store', default=None,
-                      help='write function map in <fctmap> file (default: False)')
+                      help='write function map in <fctmap> file')
     parser.add_argument('--atos-optfile', dest='optfile',
                       action='store', default=None,
-                      help='set option file (default: False)')
+                      help='set option file')
 
     (opts, args) = parser.parse_known_args()
 
-    if opts.help: parser.print_help(); parser.exit()
+    if opts.help:
+        parser.print_help()
+        parser.exit()
 
     process.setup(vars(opts))
 

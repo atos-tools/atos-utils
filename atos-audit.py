@@ -28,4 +28,3 @@ from atos import utils
 
 args = arguments.parser("atos-audit").parse_args()
 utils.execute("atos-audit", args)
-

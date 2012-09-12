@@ -52,10 +52,9 @@ class ATOSArgumentParser(argparse.ArgumentParser):
                  formatter_class=argparse.ArgumentDefaultsHelpFormatter):
         assert(prog != None)
 
-        super(ATOSArgumentParser, self).__init__(prog=prog,
-                                                 usage=usage,
-                                                 description=description,
-                                                 formatter_class=formatter_class)
+        super(ATOSArgumentParser, self).__init__(
+            prog=prog, usage=usage, description=description,
+            formatter_class=formatter_class)
         # Trick to allow strings starting with '-' for non option arguments
         self._negative_number_matcher = re.compile(r'^-.+$')
 
@@ -74,30 +73,36 @@ class parsers:
     @staticmethod
     def atos():
         """ atos tool arguments parser factory. """
-        parser = ATOSArgumentParser(prog="atos",
-                                    description="ATOS auto tuning optimization system tool, " +
-                                    "see available commands below or run 'atos help' for the full manual.")
+        parser = ATOSArgumentParser(
+            prog="atos",
+            description="ATOS auto tuning optimization system tool, "
+            "see available commands below "
+            "or run 'atos help' for the full manual.")
         args.quiet(parser)
         args.dryrun(parser)
         args.coverage(parser)
         args.coverage_file(parser)
         args.version(parser)
-        subs = parser.add_subparsers(title="atos commands",
-                                     dest="subcmd",
-                                     description="see short description of commands below and " +
-                                     "run 'atos COMMAND -h' for each command options",
-                                     help="available atos commands")
+        subs = parser.add_subparsers(
+            title="atos commands",
+            dest="subcmd",
+            description="see short description of commands below and " +
+            "run 'atos COMMAND -h' for each command options",
+            help="available atos commands")
 
         sub = subs.add_parser("help", help="get full ATOS tools manual")
         parsers.atos_help(sub)
 
-        sub = subs.add_parser("audit", help="audit and generate a build template to be used by atos-build")
+        sub = subs.add_parser("audit",
+                help="audit and generate a build template "
+                "to be used by atos-build")
         parsers.atos_audit(sub)
 
         sub = subs.add_parser("build", help="build system")
         parsers.atos_build(sub)
 
-        sub = subs.add_parser("dep", help="generate the build system from a previous build audit")
+        sub = subs.add_parser("dep",
+                help="generate the build system from a previous build audit")
         parsers.atos_deps(sub)
 
         sub = subs.add_parser("explore", help="do the exploration of options")
@@ -116,9 +121,10 @@ class parsers:
         if parser == None:
             parser = ATOSArgumentParser(prog="atos-help",
                                              description="ATOS help tool")
-        parser.add_argument("topics",
-                            nargs=argparse.REMAINDER,
-                            help="help topics. Execute 'atos help' for available topics.")
+        parser.add_argument(
+            "topics",
+            nargs=argparse.REMAINDER,
+            help="help topics. Execute 'atos help' for available topics.")
         args.atos_help.text(parser)
         args.atos_help.man(parser)
         args.coverage(parser)
@@ -175,8 +181,9 @@ class parsers:
     def atos_deps(parser=None):
         """ atos dep arguments parser factory. """
         if parser == None:
-            parser = ATOSArgumentParser(prog="atos-deps",
-                                        description="ATOS dependency and build system generation tool")
+            parser = ATOSArgumentParser(
+                prog="atos-deps",
+                description="ATOS dependency and build system generation tool")
         args.executables(parser)
         args.configuration_path(parser)
         args.atos_deps.input(parser)
@@ -242,8 +249,9 @@ class parsers:
     def atos_profile(parser=None):
         """ atos profile arguments parser factory. """
         if parser == None:
-            parser = ATOSArgumentParser(prog="atos-profile",
-                                        description="ATOS profile generation tool")
+            parser = ATOSArgumentParser(
+                prog="atos-profile",
+                description="ATOS profile generation tool")
         args.configuration_path(parser)
         args.path(parser)
         args.remote_path(parser, ("-b", "--remote_path"))
@@ -269,39 +277,46 @@ class args:
 
     @staticmethod
     def version(parser, args=("-v", "--version")):
-        parser.add_argument(*args,
-                            help="output version string",
-                            action="version",
-                            version="atos version " + globals.VERSION)
+        parser.add_argument(
+            *args,
+             help="output version string",
+             action="version",
+             version="atos version " + globals.VERSION)
 
     @staticmethod
     def quiet(parser, args=("-q", "--quiet")):
-        parser.add_argument(*args,
-                            help="quiet output",
-                            action="store_true")
+        parser.add_argument(
+            *args,
+             help="quiet output",
+             action="store_true")
 
     @staticmethod
     def dryrun(parser, args=("-n", "--dryrun")):
-        parser.add_argument(*args,
-                            help="dry run, output commands only",
-                            action="store_true")
+        parser.add_argument(
+            *args,
+             help="dry run, output commands only",
+             action="store_true")
 
     @staticmethod
     def configuration_path(parser, args=("-C", "--configuration")):
-        parser.add_argument(*args,
-                             dest="configuration_path",
-                             help="atos configuration working directory",
-                             default=globals.DEFAULT_CONFIGURATION_PATH)
+        parser.add_argument(
+            *args,
+             dest="configuration_path",
+             help="atos configuration working directory",
+             default=globals.DEFAULT_CONFIGURATION_PATH)
 
     @staticmethod
     def force(parser, args=("-f", "--force")):
-        parser.add_argument(*args,
-                             action="store_true",
-                             help="use atos tools in force rebuild mode, the full build command will be re-executed")
+        parser.add_argument(
+            *args,
+             action="store_true",
+             help="use atos tools in force rebuild mode, "
+             "the full build command will be re-executed")
 
     @staticmethod
     def coverage(parser, args=("--coverage",)):
-        default_coverage = bool(os.getenv("ATOS_COVERAGE_FILE")) or bool(os.getenv("ATOS_COVERAGE"))
+        default_coverage = bool(os.getenv("ATOS_COVERAGE_FILE")) or bool(
+            os.getenv("ATOS_COVERAGE"))
         parser.add_argument(*args,
                              action="store_true",
                              default=default_coverage,
@@ -318,22 +333,25 @@ class args:
 
     @staticmethod
     def build_script(parser, args=("-b", "--build-script")):
-        parser.add_argument(*args,
-                             dest="build_script",
-                             help="build_script to be audited and optimized")
+        parser.add_argument(
+            *args,
+             dest="build_script",
+             help="build_script to be audited and optimized")
 
     @staticmethod
     def ccregexp(parser, args=("-r", "--ccregexp")):
-        parser.add_argument(*args,
-                             dest="ccregexp",
-                             help="specify the compiler tools as a regexp for the basename",
-                             default=globals.DEFAULT_TOOLS_CREGEXP)
+        parser.add_argument(
+            *args,
+             dest="ccregexp",
+             help="specify the compiler tools as a regexp for the basename",
+             default=globals.DEFAULT_TOOLS_CREGEXP)
 
     @staticmethod
     def ccname(parser, args=("-c", "--ccname")):
-        parser.add_argument(*args,
-                             dest="ccname",
-                             help="specify the exact compiler driver basename")
+        parser.add_argument(
+            *args,
+             dest="ccname",
+             help="specify the exact compiler driver basename")
 
     @staticmethod
     def path(parser, args=("-p", "--path")):
@@ -343,153 +361,179 @@ class args:
 
     @staticmethod
     def remote_path(parser, args=("-B", "--remote-path")):
-        parser.add_argument(*args,
-                             dest="remote_path",
-                             help="remote path to profile files for cross execution")
-
+        parser.add_argument(
+            *args,
+             dest="remote_path",
+             help="remote path to profile files for cross execution")
 
     @staticmethod
     def run_script(parser, args=("-r", "--run-script")):
-        parser.add_argument(*args,
-                             dest="run_script",
-                             help="run_script to be audited and optimized")
+        parser.add_argument(
+            *args,
+             dest="run_script",
+             help="run_script to be audited and optimized")
 
     @staticmethod
     def nbruns(parser, args=("-n", "--nbruns")):
-        parser.add_argument(*args,
-                             dest="nbruns",
-                             type=int,
-                             help="number of executions of <run_script>",
-                             default=1)
+        parser.add_argument(
+            *args,
+             dest="nbruns",
+             type=int,
+             help="number of executions of <run_script>",
+             default=1)
 
     @staticmethod
     def results_script(parser, args=("-t", "--results-script")):
-        parser.add_argument(*args,
-                             dest="results_script",
-                             help="results_script for specific instrumentation")
+        parser.add_argument(
+            *args,
+             dest="results_script",
+             help="results_script for specific instrumentation")
 
     @staticmethod
     def clean(parser, args=("-c", "--clean")):
-        parser.add_argument(*args,
-                             dest="clean",
-                             help="clean results and profiles before exploration",
-                             action="store_true")
+        parser.add_argument(
+            *args,
+             dest="clean",
+             help="clean results and profiles before exploration",
+             action="store_true")
 
     @staticmethod
     def debug(parser, args=("-d", "--debug")):
-        parser.add_argument(*args,
-                             dest="debug",
-                             help="debug mode",
-                             action="store_true")
+        parser.add_argument(
+            *args,
+             dest="debug",
+             help="debug mode",
+             action="store_true")
 
     @staticmethod
     def exe(parser, args=("-e", "--exe")):
-        parser.add_argument(*args,
-                             dest="exe",
-                             help="executables to be instrumented, defaults to args of command or all generated executables")
+        parser.add_argument(
+            *args,
+             dest="exe",
+             help="executables to be instrumented, "
+             "defaults to args of command or all generated executables")
 
     @staticmethod
     def executables(parser):
-        parser.add_argument("executables",
-                            nargs=argparse.REMAINDER,
-                            help="default executables list to optimize")
+        parser.add_argument(
+            "executables",
+            nargs=argparse.REMAINDER,
+            help="default executables list to optimize")
 
     @staticmethod
     def command(parser):
-        parser.add_argument("command",
-                            nargs=argparse.REMAINDER,
-                            help="command to be executed")
+        parser.add_argument(
+            "command",
+            nargs=argparse.REMAINDER,
+            help="command to be executed")
 
     class atos_help:
         """ Namespace for non common atos help options. """
 
         @staticmethod
         def man(parser, args=("-m", "--man")):
-            parser.add_argument(*args,
-                                 dest="man",
-                                 action="store_true",
-                                 help="display manpage for TOPICS (default if available)")
+            parser.add_argument(
+                *args,
+                 dest="man",
+                 action="store_true",
+                 help="display manpage for TOPICS (default if available)")
 
         @staticmethod
         def text(parser, args=("-t", "--text")):
-            parser.add_argument(*args,
-                                 dest="text",
-                                 action="store_true",
-                                 help="display textual manual for TOPICS")
+            parser.add_argument(
+                *args,
+                 dest="text",
+                 action="store_true",
+                 help="display textual manual for TOPICS")
 
     class atos_audit:
         """ Namespace for non common atos-audit arguments. """
 
         @staticmethod
         def output(parser, args=("-o", "--output")):
-            parser.add_argument(*args,
-                                 dest="output_file",
-                                 help="audit description file, defaults to CONFIGURATION/build.audit")
+            parser.add_argument(
+                *args,
+                 dest="output_file",
+                 help="audit description file, "
+                 "defaults to CONFIGURATION/build.audit")
 
     class atos_build:
         """ Namespace for non common atos-build arguments. """
 
         @staticmethod
         def options(parser, args=("-a", "--options")):
-            parser.add_argument(*args,
-                                 dest="options",
-                                 help="append given options to the compilation commands")
+            parser.add_argument(
+                *args,
+                 dest="options",
+                 help="append given options to the compilation commands")
 
         @staticmethod
         def variant(parser, args=("-w", "--variant")):
-            parser.add_argument(*args,
-                                 dest="variant",
-                                 help="identifier of variant",
-                                 default="REF")
+            parser.add_argument(
+                *args,
+                 dest="variant",
+                 help="identifier of variant",
+                 default="REF")
 
         @staticmethod
         def jobs(parser, args=("-j", "--jobs")):
-            parser.add_argument(*args,
-                                 dest="jobs",
-                                 type=int,
-                                 help="use JOBS parallel thread when possible for building",
-                                 default=4)
+            parser.add_argument(
+                *args,
+                 dest="jobs",
+                 type=int,
+                 help="use JOBS parallel thread when possible for building",
+                 default=4)
 
         @staticmethod
         def useprofile(parser, group, args=("-u", "--useprof")):
-            group.add_argument(*args,
-                                 dest="uopts",
-                                 help="use profile variant deduced by UOPTS")
+            group.add_argument(
+                *args,
+                 dest="uopts",
+                 help="use profile variant deduced by UOPTS")
 
         @staticmethod
         def genprofile(parser, group, args=("-g", "--genprof")):
-            group.add_argument(*args,
-                                 dest="gopts",
-                                 help="use profile variant deduced by GOPTS")
+            group.add_argument(
+                *args,
+                 dest="gopts",
+                 help="use profile variant deduced by GOPTS")
 
     class atos_deps:
         """ Namespace for non common atos-deps arguments. """
 
         @staticmethod
         def input(parser, args=("-i", "--input")):
-            parser.add_argument(*args,
-                                 dest="input_file",
-                                 help="input build audit as generated by atos-audit, defaults to CONFIGURATION/build.audit")
+            parser.add_argument(
+                *args,
+                 dest="input_file",
+                 help="input build audit as generated by atos-audit, "
+                 "defaults to CONFIGURATION/build.audit")
 
         @staticmethod
         def output(parser, args=("-o", "--output")):
-            parser.add_argument(*args,
-                                 dest="output_file",
-                                 help="output build description suitable for atos-build, defaults to CONFIGURATION/build.mk")
+            parser.add_argument(
+                *args,
+                 dest="output_file",
+                 help="output build description suitable for atos-build, "
+                 "defaults to CONFIGURATION/build.mk")
 
         @staticmethod
         def last(parser, args=("-l", "--last")):
-            parser.add_argument(*args,
-                                 dest="last",
-                                 help="use last build target in the build audit as the default target",
-                                 action="store_true")
+            parser.add_argument(
+                *args,
+                 dest="last",
+                 help="use last build target in the build audit "
+                 "as the default target",
+                 action="store_true")
 
         @staticmethod
         def all(parser, args=("-a", "--all")):
-            parser.add_argument(*args,
-                                 dest="all",
-                                 help="use all build targets as the default targets, use it when all built executables need to be optimized",
-                                 action="store_true")
+            parser.add_argument(
+                *args,
+                 dest="all",
+                 help="use all build targets as the default targets, "
+                 "use it when all built executables need to be optimized",
+                 action="store_true")
 
     class atos_init:
         """ Namespace for non common atos-init arguments. """
@@ -505,7 +549,7 @@ class args:
 
         @staticmethod
         def options(parser, args=("-g", "--options")):
-            parser.add_argument(*args,
-                                 dest="options",
-                                 help="append given options to the compilation commands")
-
+            parser.add_argument(
+                *args,
+                 dest="options",
+                 help="append given options to the compilation commands")

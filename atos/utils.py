@@ -21,7 +21,6 @@ import sys, os, stat
 import globals
 import atos
 import atos_lib
-import string
 import fnmatch
 import logger
 import process
@@ -72,8 +71,10 @@ def run_atos_help(args):
         print "  atos help intro    : displays ATOS short introduction."
         print "  atos help tutorial : displays ATOS tutorial."
         print
-        print "  atos help COMMAND  : display manual for the given atos COMMAND."
-        print "                      Execute ``atos -h`` for available COMMANDs."
+        print \
+            "  atos help COMMAND  : display manual for the given atos COMMAND."
+        print \
+            "                      Execute ``atos -h`` for available COMMANDs."
         print
         return 0
     for topic in args.topics:
@@ -86,7 +87,8 @@ def run_atos_help(args):
             if status != 0:
                 status = atos_lib.help_text(topic)
         if status != 0:
-            print >>sys.stderr, "atos-help: " + "manual not found for topic: " + topic + "."
+            print >>sys.stderr, "atos-help: " + \
+                "manual not found for topic: " + topic + "."
             print >>sys.stderr, "Execute 'atos help' for available topics."
             return 1
     return 0
@@ -115,7 +117,8 @@ def run_atos_audit(args):
         f.write(process.list2cmdline(args.command))
         f.write("\n")
         f.close()
-        os.chmod(build_sh,stat.S_IRWXU|stat.S_IRGRP|stat.S_IXGRP|stat.S_IROTH|stat.S_IXOTH)
+        os.chmod(build_sh, stat.S_IRWXU | stat.S_IRGRP |
+                 stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
         force_sh = os.path.join(args.configuration_path, "build.force")
         f = open(force_sh, 'w')
         f.write(str(int(args.force)))
@@ -126,9 +129,11 @@ def run_atos_audit(args):
         print "fill " + args.configuration_path + "/build.sh"
         print "fill " + args.configuration_path + "/build.force"
 
-    command = ("env PROOT_IGNORE_ELF_INTERPRETER=1 PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_DEPS_OUTPUT='" +
-               args.output_file + "' PROOT_ADDON_CC_DEPS_CCRE='" + args.ccregexp + "' " +
-               atos_lib.proot_atos() +" -w " + os.getcwd() + " / ")
+    command = ("env PROOT_IGNORE_ELF_INTERPRETER=1" +
+               " PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_DEPS_OUTPUT='" +
+               args.output_file + "' PROOT_ADDON_CC_DEPS_CCRE='"
+               + args.ccregexp + "' " + atos_lib.proot_atos() +
+               " -w " + os.getcwd() + " / ")
     command += process.list2cmdline(args.command)
     status = process.system(command, print_output=True)
     return status
@@ -136,8 +141,8 @@ def run_atos_audit(args):
 def run_atos_build(args):
     """ ATOS build tool implementation. """
 
-    APFLAGS=""
-    profdir_option=""
+    APFLAGS = ""
+    profdir_option = ""
     variant = args.variant
     opt_rebuild = args.force
     pvariant = "REF"
@@ -148,12 +153,13 @@ def run_atos_build(args):
         options = ""
     atos_driver = os.getenv("ATOS_DRIVER")
     if atos_driver == None:
-        atos_driver = os.path.join(globals.BINDIR,"atos-driver")
+        atos_driver = os.path.join(globals.BINDIR, "atos-driver")
     if atos_driver != '0':
-        PROOT_ADDON_CC_OPTS_DRIVER="PROOT_ADDON_CC_OPTS_DRIVER=" + atos_driver
+        PROOT_ADDON_CC_OPTS_DRIVER = (
+            "PROOT_ADDON_CC_OPTS_DRIVER=" + atos_driver)
     timeout = os.getenv("TIMEOUT")
     if timeout != None:
-        timeout = os.path.join(globals.BINDIR,"atos-timeout") + " 3600"
+        timeout = os.path.join(globals.BINDIR, "atos-timeout") + " 3600"
     else:
         timeout = ""
 
@@ -162,9 +168,10 @@ def run_atos_build(args):
 
     if args.gopts != None:
         if args.gopts:
-            pvariant = string.join(string.split(args.gopts), '')
+            pvariant = ''.join(args.gopts.split())
         if not args.path:
-            profile_path = os.path.join(args.configuration_path, "profiles", atos_lib.hashid(pvariant))
+            profile_path = os.path.join(
+                args.configuration_path, "profiles", atos_lib.hashid(pvariant))
         else:
             profile_path = args.path
         if not os.path.isdir(profile_path):
@@ -183,35 +190,43 @@ def run_atos_build(args):
             config_file = os.path.join(args.configuration_path, 'config.json')
             if os.path.isfile(config_file):
                 client = atos_lib.json_config(config_file)
-                remote_profile_path = client.get_value("default_values.remote_profile_path")
+                remote_profile_path = client.get_value(
+                    "default_values.remote_profile_path")
             else:
                 remote_profile_path = None
         else:
             remote_profile_path = args.remote_path
         if remote_profile_path:
-            profdir_option="PROFILE_DIR=" + str(os.path.abspath(remote_profile_path))
+            profdir_option = "PROFILE_DIR=" + str(
+                os.path.abspath(remote_profile_path))
         else:
-            profdir_option="PROFILE_DIR=" + os.path.abspath(profile_path)
+            profdir_option = "PROFILE_DIR=" + os.path.abspath(profile_path)
 
     if args.uopts != None:
         pvariant = "REF"
         if args.uopts:
-            pvariant = string.join(string.split(args.uopts), '')
+            pvariant = ''.join(args.uopts.split())
         if not profile_path:
-            profile_path = os.path.join(args.configuration_path, "profiles", atos_lib.hashid(pvariant))
+            profile_path = os.path.join(
+                args.configuration_path, "profiles", atos_lib.hashid(pvariant))
         if not os.path.isdir(profile_path):
             os.makedirs(profile_path)
-        APFLAGS = "-fprofile-use -fprofile-correction -Wno-error=coverage-mismatch"
+        APFLAGS = ("-fprofile-use -fprofile-correction" +
+                   " -Wno-error=coverage-mismatch")
         profdir_option = "PROFILE_DIR=" + os.path.abspath(profile_path)
 
     if variant == "REF":
         if options != "" or pvariant != "":
             if args.gopts != None:
-                variant = "OPT-fprofile-generate" + string.join(string.split(args.gopts), '') + string.join(string.split(options), '')
+                variant = ("OPT-fprofile-generate" +
+                           ''.join(args.gopts.split()) +
+                           ''.join(options.split()))
             elif args.uopts != None:
-                variant = "OPT-fprofile-use" + string.join(string.split(args.uopts), '') + string.join(string.split(options), '')
+                variant = ("OPT-fprofile-use" +
+                           ''.join(args.uopts.split()) +
+                           ''.join(options.split()))
             else:
-                variant = "OPT" + string.join(string.split(options), '')
+                variant = "OPT" + ''.join(options.split())
 
     failure = 0
     logs = os.path.join(args.configuration_path, "logs")
@@ -223,7 +238,7 @@ def run_atos_build(args):
 
     if not args.dryrun:
         hash_var = atos_lib.hashid(variant)
-        logfile = os.path.join(logs,"build-" + hash_var + ".log")
+        logfile = os.path.join(logs, "build-" + hash_var + ".log")
         logf = open(logfile, 'w')
 
     if not args.quiet:
@@ -242,17 +257,20 @@ def run_atos_build(args):
     pwd = os.getcwd()
     if not args.command and opt_rebuild != 1 and os.path.isfile(build_mk):
         # If the configuration path contains a build.mk execute it
-        if string.count(options, "-flto") != 0:
+        if options.find("-flto") != -1:
             lto_option = "LTO=1"
         else:
             lto_option = ""
-        command = timeout + " make -f " + build_mk + " ATOS_DRIVER=" + atos_driver + " ACFLAGS=\"" + APFLAGS + " " + options + "\" " + lto_option + " " + profdir_option
+        command = (timeout + " make -f " + build_mk + " ATOS_DRIVER=" +
+                   atos_driver + " ACFLAGS=\"" + APFLAGS + " " + options +
+                   "\" " + lto_option + " " + profdir_option)
         if args.dryrun:
             command = command + " -n"
             process.system(command)
         else:
             command = command + " -j" + str(args.jobs)
-            (status, output) = process.system(command, get_output=True, output_stderr=True)
+            (status, output) = process.system(
+                command, get_output=True, output_stderr=True)
             logf.write(output)
             logf.write('\n')
             if status:
@@ -262,27 +280,36 @@ def run_atos_build(args):
         if args.dryrun:
             print "Executing: " + build_sh
         else:
-            command = (timeout + " env PROOT_IGNORE_ELF_INTERPRETER=1 PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_OPTS_ARGS='" +
-                        APFLAGS + " " + options + "' PROOT_ADDON_CC_DEPS_CCRE='" + args.ccregexp +
+            command = (timeout + " env PROOT_IGNORE_ELF_INTERPRETER=1" +
+                       " PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_OPTS_ARGS='" +
+                       APFLAGS + " " + options +
+                       "' PROOT_ADDON_CC_DEPS_CCRE='" + args.ccregexp +
                        PROOT_ADDON_CC_OPTS_DRIVER + "' " +
-                       atos_lib.proot_atos() +" -w " + os.getcwd() + " / \"" + build_sh + "\"")
-            (status, output) = process.system(command, print_output=True, get_output=True, output_stderr=True)
+                       atos_lib.proot_atos() + " -w " + os.getcwd()
+                       + " / \"" + build_sh + "\"")
+            (status, output) = process.system(
+                command, print_output=True, get_output=True,
+                output_stderr=True)
             logf.write(output)
             logf.write('\n')
             if status:
                 failure = 1
 
     else:
-        command = (timeout + " env PROOT_IGNORE_ELF_INTERPRETER=1 PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_OPTS_ARGS='" +
-                   APFLAGS + " " + options + "' PROOT_ADDON_CC_DEPS_CCRE='" + args.ccregexp +
+        command = (timeout + " env PROOT_IGNORE_ELF_INTERPRETER=1 " +
+                   "PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_OPTS_ARGS='" +
+                   APFLAGS + " " + options +
+                   "' PROOT_ADDON_CC_DEPS_CCRE='" + args.ccregexp +
                    PROOT_ADDON_CC_OPTS_DRIVER + "' " +
-                   atos_lib.proot_atos() +" -w " + os.getcwd() + " / ")
-        command += process.list2cmdline(args.command)
-        (status, output) = process.system(command, print_output=True, get_output=True, output_stderr=True)
+                   atos_lib.proot_atos() + " -w " + os.getcwd() + " / ")
+        command += atos_lib.list2cmdline(args.command)
+        (status, output) = process.system(
+            command, print_output=True, get_output=True, output_stderr=True)
         if not args.dryrun:
             print "Executing: "
             command = command + " -j" + str(args.j)
-            (status, output) = process.system(command, get_output=True, output_stderr=True)
+            (status, output) = process.system(
+                command, get_output=True, output_stderr=True)
             logf.write(output)
             logf.write('\n')
             if status:
@@ -311,7 +338,6 @@ def run_atos_deps(args):
     from atos_deps import CommandDependencyListFactory
     from atos_deps import CCDEPSParser
     from atos_deps import SimpleCmdInterpreter
-    from atos_deps import SimpleCmdInterpreter
     from atos_deps import DependencyGraphBuilder
 
     if args.input_file == None:
@@ -334,7 +360,8 @@ def run_atos_deps(args):
         print "Computing build dependencies..."
 
     if not args.dryrun:
-        factory = CommandDependencyListFactory(CCDEPSParser(open(args.input_file)), SimpleCmdInterpreter())
+        factory = CommandDependencyListFactory(
+            CCDEPSParser(open(args.input_file)), SimpleCmdInterpreter())
         factory.build_dependencies()
         dependencies = factory.get_dependencies()
         builder = DependencyGraphBuilder(dependencies, targets)
@@ -351,7 +378,8 @@ def run_atos_deps(args):
         except:
             pass
         else:
-            f.write("\n".join(args.executables if args.force else graph.get_targets()) + "\n")
+            f.write("\n".join(args.executables
+                              if args.force else graph.get_targets()) + "\n")
             f.close()
     else:
         print "fill " + args.configuration_path + "/targets"
@@ -427,28 +455,43 @@ def run_atos_explore(args):
     else:
         opt_rebuild = ""
 
-    command = os.path.join(globals.BINDIR,"atos-init") + " -C " + args.configuration_path \
-              + opt_build + opt_run \
-              + opt_results + opt_remote_profile_path + executables + opt_nbruns \
-              + opt_rebuild + opt_q + opt_c
+    command = (
+        os.path.join(globals.BINDIR, "atos-init")
+        + " -C " + args.configuration_path + opt_build + opt_run
+        + opt_results + opt_remote_profile_path + executables
+        + opt_nbruns + opt_rebuild + opt_q + opt_c)
     process.system(command, print_output=True, check_status=True)
 
     for gopt in ['-O2', '-Os', '-O3']:
         for opts in ['', ' -flto', ' -funroll-loops', ' -flto -funroll-loops']:
-            command_build = os.path.join(globals.BINDIR,"atos-build") + " -C " + args.configuration_path + opt_q + " -a'" + gopt + opts + "'"
+            command_build = (
+                os.path.join(globals.BINDIR, "atos-build")
+                + " -C " + args.configuration_path + opt_q + " -a'"
+                + gopt + opts + "'")
             status = process.system(command_build, print_output=True)
             if status == 0:
-                command_run = os.path.join(globals.BINDIR,"atos-run") + " -C " + args.configuration_path + opt_q + " -r -a'" + gopt + opts + "'"
+                command_run = (
+                    os.path.join(globals.BINDIR, "atos-run")
+                    + " -C " + args.configuration_path + opt_q + " -r -a'"
+                    + gopt + opts + "'")
                 process.system(command_run, print_output=True)
 
-        command_prof = os.path.join(globals.BINDIR,"atos-profile") +  " -C " + args.configuration_path + opt_q + " -g'" + gopt + "'"
+        command_prof = (
+            os.path.join(globals.BINDIR, "atos-profile")
+            + " -C " + args.configuration_path + opt_q + " -g'" + gopt + "'")
         status = process.system(command_prof, print_output=True)
         if status != 0: continue
         for opts in ['', ' -flto', ' -funroll-loops', ' -flto -funroll-loops']:
-            command_build = os.path.join(globals.BINDIR, "atos-build") + " -C " + args.configuration_path + opt_q + " -u'" + gopt + "' -a'" + gopt + opts + "'"
+            command_build = (
+                os.path.join(globals.BINDIR, "atos-build")
+                + " -C " + args.configuration_path + opt_q + " -u'"
+                + gopt + "' -a'" + gopt + opts + "'")
             status = process.system(command_build, print_output=True)
             if status == 0:
-                command_run = os.path.join(globals.BINDIR, "atos-run") + " -C " + args.configuration_path + opt_q + " -r -u'" + gopt + "' -a'" + gopt + opts + "'"
+                command_run = (
+                    os.path.join(globals.BINDIR, "atos-run")
+                    + " -C " + args.configuration_path + opt_q + " -r -u'"
+                    + gopt + "' -a'" + gopt + opts + "'")
                 process.system(command_run, print_output=True)
 
     if not args.quiet:
@@ -466,8 +509,9 @@ def run_atos_init(args):
         executables = ""
 
     if args.force and not args.results_script and args.executables == "":
-        print "atos-init: error: when using forced mode (-f) with no custom results" \
-              "script (-t) the list of executables must be specified (-e option)"
+        print "atos-init: error: when using forced mode (-f) with no custom " \
+        "results script (-t) the list of executables must be specified " \
+        "(-e option)"
         sys.exit(1)
 
     if args.results_script:
@@ -493,7 +537,7 @@ def run_atos_init(args):
         opt_rebuild = " "
 
     if executables == "":
-        executables=" -a"
+        executables = " -a"
 
     if not os.path.isdir(args.configuration_path):
         os.makedirs(args.configuration_path)
@@ -531,33 +575,50 @@ def run_atos_init(args):
             process.system(rmcommand, print_output=True)
 
     if args.build_script:
-        command_audit = os.path.join(globals.BINDIR, "atos-audit") + " -C " + args.configuration_path + opt_q + opt_rebuild +  " " + args.build_script
+        command_audit = (
+            os.path.join(globals.BINDIR, "atos-audit")
+            + " -C " + args.configuration_path + opt_q
+            + opt_rebuild + " " + args.build_script)
         process.system(command_audit)
-        command_deps = os.path.join(globals.BINDIR, "atos-deps") + " -C " + args.configuration_path + opt_q + opt_rebuild + executables
+        command_deps = (
+            os.path.join(globals.BINDIR, "atos-deps")
+            + " -C " + args.configuration_path + opt_q
+            + opt_rebuild + executables)
         process.system(command_deps)
-        command_config = os.path.join(globals.BINDIR, "atos-config") + " -C " + args.configuration_path
+        command_config = (
+            os.path.join(globals.BINDIR, "atos-config")
+            + " -C " + args.configuration_path)
         process.system(command_config)
     elif not os.path.isfile(args.configuration_path + "/build.audit"):
-        print "atos-init:error: missing build audit, use -b option for specifying " \
-              "build script or use atos-audit tool"
+        print "atos-init:error: missing build audit, " \
+            "use -b option for specifying build script or use atos-audit tool"
         sys.exit(1)
 
-    command = os.path.join(globals.PYTHONDIR, "atos", "atos_lib.py") + " config -C " + args.configuration_path + \
-              " --add \"default_values.remote_profile_path:" + opt_remote_profile_path + "\""
+    command = (os.path.join(globals.PYTHONDIR, "atos", "atos_lib.py")
+               + " config -C " + args.configuration_path
+               + " --add \"default_values.remote_profile_path:"
+               + opt_remote_profile_path + "\"")
     process.system(command)
-    command = os.path.join(globals.PYTHONDIR, "atos", "atos_lib.py") + " config -C " + args.configuration_path +\
-                     " --add \"default_values.nb_runs:" + str(args.nbruns) + "\""
+    command = (
+        os.path.join(globals.PYTHONDIR, "atos", "atos_lib.py") +
+        " config -C " + args.configuration_path +
+        " --add \"default_values.nb_runs:" + str(args.nbruns) + "\"")
     process.system(command)
 
     if args.run_script:
-        command_raudit = os.path.join(globals.BINDIR, "atos-raudit") + " -C " + args.configuration_path + opt_q + opt_get_results_script + args.run_script
+        command_raudit = (
+            os.path.join(globals.BINDIR, "atos-raudit")
+            + " -C " + args.configuration_path + opt_q +
+            opt_get_results_script + args.run_script)
         process.system(command_raudit)
         # reference run
-        command_run = os.path.join(globals.BINDIR, "atos-run") + " -C " + args.configuration_path + opt_q + " -r"
+        command_run = (
+            os.path.join(globals.BINDIR, "atos-run")
+            + " -C " + args.configuration_path + opt_q + " -r")
         process.system(command_run)
     elif not os.path.isfile(args.configuration_path + "/run.audit"):
-        print "atos-init: error: missing run audit, use -r option for specifying " \
-              "run script or use atos-raudit tool"
+        print "atos-init: error: missing run audit, " \
+            "use -r option for specifying run script or use atos-raudit tool"
         sys.exit(1)
 
     if args.prof_script:
@@ -597,8 +658,14 @@ def run_atos_profile(args):
     if not args.quiet:
         print "Profiling..."
 
-    command_build = os.path.join(globals.BINDIR, "atos-build") + " -C " + args.configuration_path + opt_q + opt_profile_path + g_opt + a_opt + opt_remote_profile_path
-    command_run = os.path.join(globals.BINDIR, "atos-run") + " -C " + args.configuration_path + opt_q + " -s" + g_opt + a_opt + opt_remote_profile_path
+    command_build = (
+        os.path.join(globals.BINDIR, "atos-build")
+        + " -C " + args.configuration_path + opt_q + opt_profile_path
+        + g_opt + a_opt + opt_remote_profile_path)
+    command_run = (
+        os.path.join(globals.BINDIR, "atos-run")
+        + " -C " + args.configuration_path + opt_q + " -s"
+        + g_opt + a_opt + opt_remote_profile_path)
 
     status = process.system(command_build, print_output=True)
     if status == 0:

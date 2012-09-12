@@ -72,7 +72,7 @@ def setup(kwargs):
     log_fmt = (
         '# [%(asctime)-15s] [%(filename)s:%(lineno)s,%(funcName)s]'
         ' %(levelname)s: %(message)s')
-    log_datefmt='%d-%m-%y %H:%M:%S'
+    log_datefmt = '%d-%m-%y %H:%M:%S'
 
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.DEBUG)
@@ -94,7 +94,7 @@ def setup(kwargs):
     if log_file:
         file_log_logger = logging.FileHandler(log_file, mode='a')
         file_log_logger.setFormatter(
-            logging.Formatter(log_msg_format, log_date_format))
+            logging.Formatter(log_fmt, log_datefmt))
         root_logger.getLogger().addHandler(file_log_logger)
 
 def debug(msg, *args, **kwargs):
@@ -114,4 +114,3 @@ def error(msg, *args, **kwargs):
     logging.error(msg, *args, **kwargs)
     exit_status = int(kwargs.get('fatal', 0))
     if exit_status: sys.exit(exit_status)
-

@@ -19,7 +19,6 @@
 # Usage: get usage with atos-lib -h
 #
 
-
 import sys, os, re, math, itertools, time, fcntl, json, hashlib
 import cPickle as pickle
 
@@ -46,10 +45,10 @@ class atos_db():
     def add_results(self, entries): raise NotImplementedError
 
     # return list of records
-    #   [ {'target': 'x', 'variant': 'REF', 'time' : ...}, {...}, ...]
+    #   [{'target': 'x', 'variant': 'REF', 'time': ...}, {...}, ...]
     #   query can be a dict or a jsonlib search string
-    #   ex: get({}) : all records
-    #   ex: get({'target' : 'x', 'variant' : 'REF'})
+    #   ex: get({}): all records
+    #   ex: get({'target': 'x', 'variant': 'REF'})
     #   ex: get('$[?(@.target="x" && @.variant="REF")]'
     def get_results(self, query=None): raise NotImplementedError
 
@@ -118,9 +117,11 @@ class atos_db_file(atos_db):
         entry_str = ''
         entry_keys = list(entry.keys())
         # no need for target and variant lines
-        entry_keys.remove('target'); entry_keys.remove('variant')
+        entry_keys.remove('target')
+        entry_keys.remove('variant')
         # last line must be one of the required field (time or size)
-        entry_keys.remove('time'); entry_keys += ['time']
+        entry_keys.remove('time')
+        entry_keys += ['time']
         for key in entry_keys:
             entry_str += 'ATOS: %s: %s: %s: %s\n' % (
                 entry['target'], entry['variant'], key, entry[key])
@@ -144,7 +145,8 @@ class atos_db_json(atos_db):
     def add_results(self, entries):
         with open_locked(self.db_file, 'r+') as db_file:
             self.results = json.load(db_file)
-            db_file.seek(0); db_file.truncate()
+            db_file.seek(0)
+            db_file.truncate()
             self.results.extend(entries)
             json.dump(self.results, db_file, sort_keys=True, indent=4)
 
@@ -173,7 +175,8 @@ class atos_db_pickle(atos_db):
     def add_results(self, entries):
         with open_locked(self.db_file, 'r+') as db_file:
             self.results = pickle.load(db_file)
-            db_file.seek(0); db_file.truncate()
+            db_file.seek(0)
+            db_file.truncate()
             self.results.extend(entries)
             pickle.dump(self.results, db_file, -1)
 
@@ -233,14 +236,16 @@ class atos_client_results():
             newobj._results = results
             return newobj
 
-    def __init__(self, atos_db, group_targets, query={}, group_name=None):
+    def __init__(self, atos_db, group_targets, query=None, group_name=None):
+        query = query or {}
         self.db = atos_db
         if not group_targets:
             group_targets = list(set(self.db.get_results('$[*].target') or []))
         group_name = group_name or '+'.join(group_targets)
         self.values = (group_targets, query, group_name)
-        # results: { variant : [ result_obj ] }
-        self.results = self._get_group_results(group_targets, group_name, query)
+        # results: {variant: [result_obj]}
+        self.results = self._get_group_results(
+            group_targets, group_name, query)
 
     def compute_frontier(self):
         if not self.results: return []
@@ -303,13 +308,13 @@ class atos_client_results():
             lambda x: atos_client_results.result(x.dict()), frontier_orig)
         # fake reference
         ref = atos_client_results.result(
-            {'time' : frontier_copy[0].time, 'size' : frontier_copy[-1].size})
+            {'time': frontier_copy[0].time, 'size': frontier_copy[-1].size})
         # compute speedups/sizereds
         map(lambda x: x.compute_speedup(ref), frontier_copy)
         # find best tradeoff (ratio * sizered + speedup)
         tradeoffs = sorted(map(lambda x: (
-                    (perf_size_ratio * x.speedup) + x.sizered
-                    , x), frontier_copy))
+                    (perf_size_ratio * x.speedup) + x.sizered, x),
+                               frontier_copy))
         tradeoffs = map(lambda x: x[1], tradeoffs[-nb_points:])
         # return corresponding points
         tradeoffs_points = map(
@@ -337,11 +342,11 @@ class atos_client_results():
     def _get_target_results(self, target, query):
         full_query = dict.fromkeys(atos_db.keys, '.*')
         full_query.update(query)
-        full_query.update({'target' : target})
+        full_query.update({'target': target})
         # query results for given target
         reslist = self.db.get_results(full_query)
         # create results dict
-        results = {} # { variant : [ result_obj ] }
+        results = {}  # {variant: [result_obj]}
         for res in reslist:
             if 'FAILURE' in [res['size'], res['time']]: continue
             results.setdefault(res['variant'], []).append(
@@ -361,7 +366,7 @@ class atos_client_db():
     def __init__(self, atos_db):
         self.db = atos_db
 
-    def query(self, query={}, replacement={}):
+    def query(self, query=None, replacement=None):
         return atos_client_db.db_query(self.db, query, replacement)
 
     def add_result(self, entry):
@@ -384,7 +389,7 @@ class atos_client_db():
         return True, len(results)
 
     @staticmethod
-    def db_query(db, query={}, replacement={}):
+    def db_query(db, query=None, replacement=None):
         results = db.get_results(query)
         if replacement:
             for result in results:
@@ -395,9 +400,10 @@ class atos_client_db():
     def db_transfer(db, results, force):
         required_keys, missing_keys = set(atos_db.required_keys), set()
         if not force:
+            result_keys = set(result.keys())
             for result in results:
-                if not set(result.keys()).issuperset(required_keys):
-                    missing_keys |= required_keys.difference(set(result.keys()))
+                if not result_keys.issuperset(required_keys):
+                    missing_keys |= required_keys.difference(result_keys)
         if missing_keys:
             return False, 'missing keys: %s' % str(missing_keys)
         db.add_results(results)
@@ -430,7 +436,7 @@ class json_config():
         feature_sets = []
         for compiler in self.config.setdefault('compilers', []):
             feature_sets += [
-                set([ k for (k,v) in compiler.items() if k.endswith('_enabled')
+                set([k for (k, v) in compiler.items() if k.endswith('_enabled')
                       and v == '1'])]
         if not feature_sets: return []
         enabled = feature_sets[0]
@@ -480,13 +486,13 @@ class json_config():
         versions = sorted([c['version'] for c in compilers])
         if versions:
             # min version
-            flags += ['-D%s_VERSION=%d' % (
+            flags.extend(['-D%s_VERSION=%d' % (
                     compiler_name,
-                    json_config.compiler_version_number(versions[0]))]
+                    json_config.compiler_version_number(versions[0]))])
             # max version
-            flags += ['-D%s_MAX_VERSION=%d' % (
+            flags.extend(['-D%s_MAX_VERSION=%d' % (
                     compiler_name,
-                    json_config.compiler_version_number(versions[-1]))]
+                    json_config.compiler_version_number(versions[-1]))])
         # compiler features
         flags.extend(['-D%s' % (f.upper()) for f in self._compiler_features()])
         return ' '.join(flags)
@@ -553,7 +559,7 @@ def results_filter(results, query):
     if isinstance(query, str):
         return jsonlib.search(results, query)
     return (filter(lambda x: all(
-                map(lambda (k,v): re.match('^%s$' % v, x.get(k, '')),
+                map(lambda (k, v): re.match('^%s$' % v, x.get(k, '')),
                     query.items())), results))
 
 def result_entry(d):
@@ -576,7 +582,9 @@ def open_locked(filename, mode='r'):
 
 def pprint_list(list, out=None, text=False):
     out = out or sys.stdout
-    if not list: print >>out, None; return
+    if not list:
+        print >>out, None
+        return
     if text:
         for x in list: print x
         return
@@ -584,7 +592,7 @@ def pprint_list(list, out=None, text=False):
     nb_elems = len(list)
     for i in range(nb_elems):
         print >>out, '%s%s%s' % (
-            i>0 and '  ' or '',
+            i > 0 and '  ' or '',
             json.dumps(list[i]), ((i + 1) < nb_elems) and ',\n' or ''),
     print >>out, ']'
 
@@ -602,11 +610,13 @@ def pprint_table(results, out=None, reverse=False):
         for x in range(xmax)]
     for y in range(ymax):
         print >>out, ' ',
-        if not results[y]: print ''; continue
+        if not results[y]:
+            print ''
+            continue
         for x in range(xmax):
-            fmt = ('%%%s%ds' % ((x==0)and'-'or'', colwidth[x]))
+            fmt = ('%%%s%ds' % ((x == 0) and '-' or '', colwidth[x]))
             print >>out, fmt % ('%s' % (results[y][x])),
-            if x < xmax-1: print >>out, '|',
+            if x < xmax - 1: print >>out, '|',
         print >>out, ''
 
 def info(msg):
@@ -732,10 +742,10 @@ def expand_response_file(args):
         m = re.search("^@(.+)$", arg)
         if m:
             f = open(m.group(1))
-            args = sum([i.strip().split() for i in f.readlines()],[])
+            args = sum([i.strip().split() for i in f.readlines()], [])
             f.close()
         else:
-            args = [ arg ]
+            args = [arg]
         return args
     return sum([expand_arg(arg) for arg in args], [])
 
@@ -752,7 +762,7 @@ def get_output_option_value(args):
             output = m.group(1)
             if output == "":
                 if i + 1 < len(args):
-                    output = args[i+1]
+                    output = args[i + 1]
                     i = i + 1
                 continue
     return output
@@ -777,10 +787,7 @@ def get_input_source_files(args):
 # ####################################################################
 
 
-
-
 if __name__ == '__main__':
-
 
     # ################################################################
 
@@ -800,20 +807,20 @@ if __name__ == '__main__':
             os.path.basename(sys.argv[0])), '']
 
     parser = optparse.OptionParser(
-        usage='%prog action [options]', version="%prog version " + globals.VERSION)
+        usage='%prog action [options]',
+        version="%prog version " + globals.VERSION)
     parser.format_epilog = lambda x: '\n'.join(help_lines)
 
     if len(sys.argv) < 2: parser.error('action expected')
 
     (opts, args) = parser.parse_args([sys.argv[1]])
 
-
     # ################################################################
 
     if args[0] == 'create_db':
 
         subparser = optparse.OptionParser(
-            description = 'Create a new empty database',
+            description='Create a new empty database',
             usage='%%prog %s [options]' % args[0])
         subparser.add_option('-C', dest='configuration_path',
                 action='store', type='string', default='./atos-configurations',
@@ -845,13 +852,12 @@ if __name__ == '__main__':
         if opts.shared: os.chmod(db_file, 0660)
         info('created new database in "%s"' % db_file)
 
-
     # ################################################################
 
     elif args[0] == 'query':
 
         subparser = optparse.OptionParser(
-            description = 'Query database results',
+            description='Query database results',
             usage='%%prog %s [options]' % args[0])
         subparser.add_option('-C', dest='configuration_path',
                 action='store', type='string', default='./atos-configurations',
@@ -879,13 +885,12 @@ if __name__ == '__main__':
 
         pprint_list(results, text=opts.text)
 
-
     # ################################################################
 
     elif args[0] == 'add_result':
 
         subparser = optparse.OptionParser(
-            description = 'Add result to database',
+            description='Add result to database',
             usage='%%prog %s [options] [dbfile]' % args[0])
         subparser.add_option('-C', dest='configuration_path',
                 action='store', type='string', default='./atos-configurations',
@@ -907,13 +912,12 @@ if __name__ == '__main__':
             status, output = atos_client_db(db).add_result(result)
             if not status: fatal(output)
 
-
     # ################################################################
 
     elif args[0] == 'push':
 
         subparser = optparse.OptionParser(
-            description = 'Export results to another database',
+            description='Export results to another database',
             usage='%%prog %s [options]' % args[0])
         subparser.add_option('-C', '--C1', dest='configuration_path',
                 action='store', type='string', default='./atos-configurations',
@@ -953,13 +957,12 @@ if __name__ == '__main__':
         else:
             fatal(output)
 
-
     # ################################################################
 
     elif args[0] == 'pull':
 
         subparser = optparse.OptionParser(
-            description = 'Import results from another database',
+            description='Import results from another database',
             usage='%%prog %s [options]' % args[0])
         subparser.add_option('-C', '--C1', dest='configuration_path',
                 action='store', type='string', default='./atos-configurations',
@@ -999,13 +1002,12 @@ if __name__ == '__main__':
         else:
             fatal(output)
 
-
     # ################################################################
 
     elif args[0] == 'speedups':
 
         subparser = optparse.OptionParser(
-            description = 'Get results',
+            description='Get results',
             usage='%%prog %s [options]' % args[0])
         subparser.add_option('-C', dest='configuration_path',
                 action='store', type='string', default='./atos-configurations',
@@ -1045,13 +1047,12 @@ if __name__ == '__main__':
         else:
             pprint_list(client.get_results(opts.frontier))
 
-
     # ################################################################
 
     elif args[0] == 'report':
 
         subparser = optparse.OptionParser(
-            description = 'Print results',
+            description='Print results',
             usage='%%prog %s [options]' % args[0])
         subparser.add_option('-C', dest='configuration_path',
                 action='store', type='string', default='./atos-configurations',
@@ -1094,17 +1095,20 @@ if __name__ == '__main__':
                     group_names += ['+'.join(group_targets[-1])]
         else:
             results = db.get_results(strtoquery(opts.query))
-            group_targets = sorted([list(set(results_filter(results, '$[*].target')))])
-            group_names = map(lambda g: '+'.join(g), group_targets)
+            group_targets = sorted(
+                [list(set(results_filter(results, '$[*].target')))])
+            group_names = map('+'.join, group_targets)
 
         # groups not supported in stdev mode
-        assert (opts.mode != 'stdev') or all(map(lambda g: len(g) == 1, group_targets))
+        assert (opts.mode != 'stdev') or all(
+            map(lambda g: len(g) == 1, group_targets))
 
         # results
         all_results = {}
         for num in range(len(group_targets)):
             targets, name = group_targets[num], group_names[num]
-            client = atos_client_results(db, targets, strtoquery(opts.query), name)
+            client = atos_client_results(
+                db, targets, strtoquery(opts.query), name)
             if opts.ref: client.compute_speedups(opts.ref)
             all_results[group_names[num]] = client.results
 
@@ -1142,16 +1146,15 @@ if __name__ == '__main__':
                         average(results), min(results), max(results))
                     max_avg_diff = max(avg_res - min_res, max_res - avg_res)
                     table[-1] += ['%.2f' % avg_res]
-                    table[-1] += ['%.2f%%' % ((max_avg_diff/avg_res) * 100)]
+                    table[-1] += ['%.2f%%' % ((max_avg_diff / avg_res) * 100)]
                     table[-1] += ['%.2f%%' % (
-                            (standard_deviation(results)/avg_res) * 100)]
+                            (standard_deviation(results) / avg_res) * 100)]
 
                 else: assert 0
 
             if opts.mode == 'stdev': table += [None]
 
         pprint_table(table, reverse=opts.reverse)
-
 
     # ################################################################
 
@@ -1197,13 +1200,14 @@ if __name__ == '__main__':
 
         if opts.variant:
             results = atos_client_db(atos_db).query(
-                { 'variant' : opts.variant, 'target' : opts.identifier })
+                {'variant': opts.variant, 'target': opts.identifier})
 
         elif opts.hash_id:
             results = atos_client_db(atos_db).query(
-                { 'target' : opts.identifier }) or []
+                {'target': opts.identifier}) or []
             results = filter(
-                lambda x: hashid(x['variant']).startswith(opts.hash_id), results)
+                lambda x: hashid(x['variant']).startswith(opts.hash_id),
+                results)
             if len(results) > 1:
                 subparser.error('ambiguous local_id: %s' % opts.hash_id)
 
@@ -1245,9 +1249,9 @@ if __name__ == '__main__':
                     command += ['-g', result['gconf']]
                 if opts.dryrun:
                     command += ['-n']
-                rcode = max(process.system([atos_build] + command + args), rcode)
+                rcode = max(
+                    process.system([atos_build] + command + args), rcode)
             sys.exit(rcode)
-
 
     # ################################################################
 
@@ -1309,8 +1313,6 @@ if __name__ == '__main__':
                 print client.flags_for_flagfiles()
 
         else: pass
-
-
 
     # ################################################################
 

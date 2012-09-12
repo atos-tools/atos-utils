@@ -28,4 +28,3 @@ from atos import utils
 
 args = arguments.parser("atos-build").parse_args()
 utils.execute("atos-build", args)
-

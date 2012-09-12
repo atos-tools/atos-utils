@@ -17,7 +17,7 @@
 # v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
 #
 
-import sys, os, itertools, math, re, string
+import sys, os, itertools, math, re
 from random import randint, choice, sample, seed
 
 import globals
@@ -80,7 +80,7 @@ class opt_flag():
     def soptname(s):
         eqidx = s.find('=')
         if eqidx != -1:
-            s = s[:eqidx+1]
+            s = s[:eqidx + 1]
         return s
 
     @staticmethod
@@ -117,8 +117,10 @@ class opt_flag_list():
         while idx < cmdlen:
             flag = cmd[idx]
             if flag in ['--param', '-mllvm'] and idx + 1 < cmdlen:
-                flag += ' ' + cmd[idx+1]; idx += 1
-            result += [flag]; idx += 1
+                flag += ' ' + cmd[idx + 1]
+                idx += 1
+            result += [flag]
+            idx += 1
         return result
 
     def expand_command_line(self, cmdline):
@@ -208,11 +210,10 @@ class generator():
     def descr(self):
         option_name = '--' + self.func.func_name.replace('_', '-')
         option_narg = self.func.func_code.co_argcount
-        option_help = self.func.func_doc
+        option_help = self.func.func_doc.strip()
         option_args = option_narg and ','.join(
             self.func.func_code.co_varnames[:option_narg]).upper()
         return option_name, option_narg and 1 or 0, option_help, option_args
-
 
 
 # ####################################################################
@@ -238,7 +239,7 @@ def gen_stdev(nbrun='10'):
     results = []
     for n in range(int(nbrun)):
         result = yield flags, variant
-        results += [ result[1] ]
+        results += [result[1]]
     debug('*** results: %s' % str(results))
     debug('*** average: %s' % str(atos_lib.average(results)))
     debug('*** stddev : %s' % str(atos_lib.standard_deviation(results)))
@@ -250,14 +251,16 @@ def gen_stdev(nbrun='10'):
 def gen_rnd_uniform():
     '''generate random combinations of compiler flags'''
     while True:
-        flags = [ generator.optlevel.rand() ]
-        flags += [ f.rand() for f in generator.optlist.flag_list if randint(0, 1) ]
+        flags = [generator.optlevel.rand()]
+        flags += [f.rand() for f in generator.optlist.flag_list
+                  if randint(0, 1)]
         yield ' '.join(flags)
 
 
 @generator
 def gen_rnd_uniform_deps():
-    '''generate random meaningful combination of compiler flags using dependencies'''
+    '''generate random meaningful combination ''' \
+        '''of compiler flags using dependencies'''
     if not generator.optlist.flag_list: return
     while True:
         handled_flags = set()
@@ -271,7 +274,8 @@ def gen_rnd_uniform_deps():
                 flags += ' ' + f.rand()
             handled_flags |= available_flags
             available_flags = (
-                generator.optlist.available_flags(baseflags + ' ' + flags) - handled_flags)
+                generator.optlist.available_flags(baseflags + ' ' + flags)
+                - handled_flags)
             if not available_flags: break
         yield flags
 
@@ -280,8 +284,9 @@ def gen_rnd_uniform_deps():
 def gen_rnd_fixed(seqlen='5'):
     '''generate random combinations of fixed length'''
     while True:
-        flags = [ generator.optlevel.rand() ]
-        flags += [ f.rand() for f in sample(generator.optlist.flag_list, int(seqlen)) ]
+        flags = [generator.optlevel.rand()]
+        flags += [f.rand() for f in sample(
+                generator.optlist.flag_list, int(seqlen))]
         yield ' '.join(flags)
 
 
@@ -290,7 +295,7 @@ def gen_one_by_one(optlevel):
     '''try all flags one by one'''
     for flag in generator.optlist.flag_list:
         for flagval in flag.values():
-            yield ' '.join([ optlevel, flagval ])
+            yield ' '.join([optlevel, flagval])
 
 
 @generator
@@ -302,9 +307,11 @@ def gen_one_off_rnd(variantid, epsilon='0.001'):
     i, n = 0, len(baseflags)
     while i < n:
         flag = baseflags[i]
-        if flag in ['--param','-mllvm']:
-            flag += ' ' + baseflags[i + 1]; i += 1
-        flags += [flag]; i += 1
+        if flag in ['--param', '-mllvm']:
+            flag += ' ' + baseflags[i + 1]
+            i += 1
+        flags += [flag]
+        i += 1
     # extract variant
     debug('gen_one_off [%s]' % variantid)
     fdo = (variantid.find('-fprofile-use') != -1)
@@ -370,8 +377,8 @@ def gen_simplf():
 
 @generator
 def gen_acf(imgpath, oprof_script, acf_plugin,
-            acf_hot_th='70', acf_cold_th='30', acf_cold_opts='-Os noinline cold',
-            acf_flags_file=None):
+            acf_hot_th='70', acf_cold_th='30',
+            acf_cold_opts='-Os noinline cold', acf_flags_file=None):
     '''perform per function exploration'''
 
     def call_acf_oprofile(hot_th=acf_hot_th, cold_th=acf_cold_th,
@@ -402,7 +409,8 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
             lambda f: any(map(lambda i: re.match(i, f), filter_in)), flag_list)
         filter_out = ['^-fprofile', '^-flto', '^--param']
         flag_list = filter(
-            lambda f: all(map(lambda i: not re.match(i, f), filter_out)), flag_list)
+            lambda f: all(
+                map(lambda i: not re.match(i, f), filter_out)), flag_list)
         return ' '.join(flag_list)
 
     debug('gen_acf')
@@ -433,10 +441,6 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
     if not os.path.isdir(csv_dir):
         os.mkdir(csv_dir)
 
-    if False: # do not clean-up csv dir by default
-        for file in os.listdir(csv_dir):
-            os.remove(os.path.join(csv_dir, file))
-
     # generate oprof.out in current dir
     process.system(oprof_script, check_status=True)
 
@@ -454,7 +458,8 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
     csv_path = write_csv_file(def_opts, 'cold_run', acf_csv_cold)
 
     acf_po = (' -fplugin=' + acf_plugin +
-              ' -fplugin-arg-acf_plugin-verbose -fplugin-arg-acf_plugin-csv_file=')
+              ' -fplugin-arg-acf_plugin-verbose' +
+              ' -fplugin-arg-acf_plugin-csv_file=')
 
     # Build-Run for reference results with cold functions
     result_ref = yield def_opts + acf_po + csv_path, 'base'
@@ -462,16 +467,18 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
     final_hot_csv = ''
     previous_hot_csv = ''
 
-    acf_opt_flag_list = ( # explore on given flags if any
+    acf_opt_flag_list = (  # explore on given flags if any
         acf_flags_file and map(
-            filteropt, map(string.strip, open(acf_flags_file).readlines()))
+            filteropt, map(lambda x: x.strip(),
+                           open(acf_flags_file).readlines()))
         or [])
 
     hot_functions_processed = []
     first_iteration = True
 
     while True:
-        # Avoid profile generation for first iteration, already generated for cold functions
+        # Avoid profile generation for first iteration,
+        # already generated for cold functions
         if not first_iteration:
             # generate oprof.out in current dir
             process.system(oprof_script, check_status=True)
@@ -484,14 +491,16 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
         hot_functions = []
         # Filter hot functions names
         for csv_line in acf_csv_hot.split('\n'):
-            if not csv_line: continue # handle empty lines
+            if not csv_line: continue  # handle empty lines
             word = csv_line.split(',')
             hot_functions += [word[0]]
         debug('*** Hot functions names= %s' % hot_functions)
 
         # Discard already processed hot functions
-        hot_functions_unprocessed = [ f for f in hot_functions if not f in hot_functions_processed]
-        debug('*** Hot functions not yet processed= %s' % hot_functions_unprocessed)
+        hot_functions_unprocessed = [
+            f for f in hot_functions if not f in hot_functions_processed]
+        debug('*** Hot functions not yet processed= %s' % (
+                hot_functions_unprocessed))
 
         if not hot_functions_unprocessed:
             debug('*** All hot functions processed')
@@ -500,15 +509,17 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
             function = hot_functions_unprocessed[0]
             hot_functions_processed += [function]
 
-        debug ('*** Current function: %s' % function)
+        debug('*** Current function: %s' % function)
 
         best_function_csv = ''
         best_function_result = 0
         first_result = True
         for flg in acf_opt_flag_list:
-            # Generate CSV file for the current hot function plus the cold functions
+            # Generate CSV file for the current hot function
+            # plus the cold functions
             acf_csv_all_hot = call_acf_oprofile(cold_th=0, hot_opts=flg)
-            debug('*** Current CSV for all hot functions:\n%s' % acf_csv_all_hot)
+            debug('*** Current CSV for all hot functions:\n%s' % (
+                    acf_csv_all_hot))
 
             acf_csv = ''
             # Filter current function only
@@ -516,13 +527,15 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
                 if function in csv_line:
                     acf_csv += csv_line + '\n'
             debug('*** Current CSV for function %s:\n%s' % (function, acf_csv))
-            csv_path = write_csv_file(flg, function, acf_csv, previous_hot_csv, acf_csv_cold)
+            csv_path = write_csv_file(
+                flg, function, acf_csv, previous_hot_csv, acf_csv_cold)
 
             # Build-Run for results with current hot function
             current_cmd = flg + acf_po + csv_path
             result = yield current_cmd, 'base'
             if result == None:
-                debug('*** Error during execution of command: %s' % current_cmd)
+                debug('*** Error during execution of command: %s' % (
+                        current_cmd))
                 continue
 
             debug('*** Best result=%s, new result=%s' % (
@@ -532,7 +545,8 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
                 best_function_csv = acf_csv
                 best_function_result = result
                 debug('*** Best CSV for function %s (perf= %s):\n%s' % (
-                        function, str(best_function_result[1]), best_function_csv))
+                        function, str(best_function_result[1]),
+                        best_function_csv))
             first_result = False
 
         # Record the best for this function
@@ -540,10 +554,11 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
         final_hot_csv += best_function_csv
 
     # Run the best csv for all hot functions together
-    csv_path = write_csv_file(def_opts, 'best_hot_results', final_hot_csv, acf_csv_cold)
+    csv_path = write_csv_file(
+        def_opts, 'best_hot_results', final_hot_csv, acf_csv_cold)
 
     # Build-Run for results with best hot functions options
-    final_cmd =  def_opts + acf_po + csv_path
+    final_cmd = def_opts + acf_po + csv_path
     result = yield final_cmd, 'base'
     debug('*** Final result= %s' % str(result))
 
@@ -583,7 +598,7 @@ def gen_file_by_file(cold_th, cold_opts, file_list, flags_file=None):
 
     # flag list from flags file if any
     opt_flag_list = (
-        flags_file and map(string.strip, open(flags_file).readlines())
+        flags_file and map(lambda x: x.strip(), open(flags_file).readlines())
         or [])
     if base_flags: opt_flag_list = map(
         lambda x: '%s %s' % (base_flags, x), opt_flag_list)
@@ -619,7 +634,7 @@ def gen_file_by_file(cold_th, cold_opts, file_list, flags_file=None):
             if res_time < best_time:
                 best_time = res_time
                 best_flags = hot_flags
-        best_obj_flags.update({hot_obj : best_flags})
+        best_obj_flags.update({hot_obj: best_flags})
     debug('fbf best config %s' % (str(best_obj_flags)))
 
 
@@ -639,7 +654,8 @@ def exploration_loop(generators, step=None, maxiter=None):
                 flags, variant = fv
                 result = step(flags, variant)
             else:
-                flags = fv; result = {}
+                flags = fv
+                result = {}
                 for variant in generator.variants:
                     result[variant] = step(flags, variant)
 
@@ -660,20 +676,20 @@ def atos_opt_get_result(variant, config, targets):
 def atos_opt_get_variant_conf(variant, config, base_opts):
     db = atos_lib.atos_db.db(config)
     client = atos_lib.atos_client_db(db)
-    results = client.query({'variant' : variant})
+    results = client.query({'variant': variant})
     if not results: return None
     conf_opts = results[0].get('conf', ''), results[0].get('uconf', '')
     base_opts = base_opts or ['', '']
-    conf_opts = map(lambda (x,y): '%s%s%s' % (x, x and ' ' or '', y),
+    conf_opts = map(lambda (x, y): '%s%s%s' % (x, x and ' ' or '', y),
                     zip(base_opts, conf_opts))
     return conf_opts
 
 
-def atos_opt_get_frontier(config, targets, query={}):
+def atos_opt_get_frontier(config, targets, query=None):
     db = atos_lib.atos_db.db(config)
     client = atos_lib.atos_client_results(
         db, targets and atos_lib.strtolist(targets), query)
-    results = client.get_results(only_frontier = True)
+    results = client.get_results(only_frontier=True)
     return map(lambda x: x.get('variant', ''), results)
 
 
@@ -682,11 +698,11 @@ def atos_base_flags(flags, variant, baseopts):
     variant = variant.replace('basemin', 'base')
     if not baseopts: return flags, variant
     variantd = {
-        (0, 0, 0) : variant,
-        (0, 0, 1) : 'lipo',
-        (1, 0, 0) : 'fdo',
-        (0, 1, 0) : 'lto',
-        (1, 1, 0) : 'fdo+lto' }
+        (0, 0, 0): variant,
+        (0, 0, 1): 'lipo',
+        (1, 0, 0): 'fdo',
+        (0, 1, 0): 'lto',
+        (1, 1, 0): 'fdo+lto'}
     base_flags, base_uflags = baseopts or ('', '')
     base_flags = base_flags + ' ' + flags
     fdo_set = base_uflags != ''
@@ -706,11 +722,11 @@ def atos_base_flags(flags, variant, baseopts):
 
 def atos_exp_base_flags(baseopts):
     new_opts = {
-        'base' : '',
-        'fdo'  : '-fprofile-use',
-        'lto'  : '-flto',
-        'fdo+lto' : '-fprofile-use -flto',
-        'lipo'  : '-fprofile-use -fripa',
+        'base': '',
+        'fdo': '-fprofile-use',
+        'lto': '-flto',
+        'fdo+lto': '-fprofile-use -flto',
+        'lipo': '-fprofile-use -fripa',
         }
     flags, variant = atos_base_flags('', 'base', baseopts)
     return flags + ' ' + new_opts[variant]
@@ -718,11 +734,11 @@ def atos_exp_base_flags(baseopts):
 
 def atos_opt_run(flags, variant, profdir, config, nbrun, baseopts, no_replay):
     variant_options_flags = {
-        'base' : ('', ''),
-        'fdo' : ('-f', ''),
-        'lto' : ('-l', ''),
-        'fdo+lto' : ('-f -l', ''),
-        'lipo' : ('-f', '-fripa')}
+        'base': ('', ''),
+        'fdo': ('-f', ''),
+        'lto': ('-l', ''),
+        'fdo+lto': ('-f -l', ''),
+        'lipo': ('-f', '-fripa')}
     flags, variant = atos_base_flags(flags, variant, baseopts)
     debug('RUN [%s] [%s]' % (variant, flags))
     profdir_option = profdir and ('-b %s' % profdir) or ''
@@ -731,8 +747,9 @@ def atos_opt_run(flags, variant, profdir, config, nbrun, baseopts, no_replay):
     variant_options, variant_flags = variant_options_flags[variant]
     status, output = process.system(
         '%s/atos-opt -C %s %s %s %s -r -a "%s %s" %s' % (
-            globals.BINDIR, config, nbrun_option, replay_option, profdir_option,
-            flags, variant_flags, variant_options), print_output=True, get_output=True)
+            globals.BINDIR, config, nbrun_option, replay_option,
+            profdir_option, flags, variant_flags, variant_options),
+        print_output=True, get_output=True)
     if not (status == 0 and output):
         debug('FAILURE [%s] [%s]' % (variant, flags))
         return None
@@ -755,7 +772,6 @@ def atos_get_result_wrapper(config, targets):
 def atos_run_wrapper(profdir, config, nbrun, baseopts, no_replay):
     return lambda f, v: atos_opt_run(
         f, v, profdir, config, nbrun, baseopts, no_replay)
-
 
 
 # ####################################################################
@@ -800,13 +816,16 @@ if __name__ == '__main__':
                      help='number of executions of run script (default: 1)')
     group.add_option('-k', dest='no_replay',
                      action='store_true', default=False,
-                     help='do not replay existing configurations (default: False)')
+                     help='do not replay existing configurations'
+                     ' (default: False)')
     group.add_option('--targets', dest='targets',
                      action='store', type='string', default=None,
                      help='target list for results (default: None)')
     group.add_option('-C', dest='atos_configurations',
-                     action='store', type='string', default='./atos-configurations',
-                     help='configuration path (default: ./atos-configurations)')
+                     action='store', type='string',
+                     default='./atos-configurations',
+                     help='configuration path'
+                     ' (default: ./atos-configurations)')
     parser.add_option_group(group)
 
     # generator options
@@ -831,9 +850,11 @@ if __name__ == '__main__':
     group = optparse.OptionGroup(
         parser, 'Generators', 'List of available generators')
     parser.set_defaults(generators=[])
+
     def optcallback(option, opt, value, parser, args):
         genargs = value and value.split(',') or []
-        parser.values.generators += [(args,genargs)]
+        parser.values.generators += [(args, genargs)]
+
     for gen in generator.generators:
         name, nargs, help, meta = gen.descr()
         group.add_option(name, nargs=nargs, help=help,

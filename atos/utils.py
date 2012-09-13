@@ -35,6 +35,7 @@ def invoque(tool, args):
         "atos-deps": run_atos_deps,
         "atos-explore": run_atos_explore,
         "atos-init": run_atos_init,
+        "atos-opt": run_atos_opt,
         "atos-profile": run_atos_profile
         }
     if hasattr(args, "coverage") and args.coverage:
@@ -302,7 +303,7 @@ def run_atos_build(args):
                    "' PROOT_ADDON_CC_DEPS_CCRE='" + args.ccregexp +
                    PROOT_ADDON_CC_OPTS_DRIVER + "' " +
                    atos_lib.proot_atos() + " -w " + os.getcwd() + " / ")
-        command += atos_lib.list2cmdline(args.command)
+        command += process.list2cmdline(args.command)
         (status, output) = process.system(
             command, print_output=True, get_output=True, output_stderr=True)
         if not args.dryrun:
@@ -504,7 +505,7 @@ def run_atos_init(args):
     if args.exe:
         executables = " " + args.exe
     elif args.executables:
-        executables = process.list2cmdline(args.command)
+        executables = " ".join(process.list2cmdline(args.executables))
     else:
         executables = ""
 
@@ -629,6 +630,73 @@ def run_atos_init(args):
         proff.write("\n")
         proff.close()
         process.system("chmod 755 " + prof_sh)
+
+def run_atos_opt(args):
+    """ ATOS opt tool implementation. """
+
+    if args.fdo and args.uopts == None:
+        args.uopts = args.options
+    if args.lto:
+        args.options.join(" -flto")
+    if args.quiet:
+        opt_q = " -q"
+    else:
+        opt_q = ""
+    if args.record:
+        opt_r = " -r"
+    else:
+        opt_r = ""
+    opt_nbruns = " -n" + str(args.nbruns)
+    if args.remote_path:
+        opt_remote_profile_path = "-b " + args.remote_path
+    else:
+        opt_remote_profile_path = ""
+    if args.options == None:
+        args.options = ""
+
+    if args.keep:
+        if args.uopts:
+            variant = "OPT-fprofile-use" + \
+                      "".join(args.uopts.split(' ')) + \
+                      "".join(args.options.split(' '))
+        elif args.options != "":
+            variant = "OPT" + "".join(args.options.split(' '))
+        else:
+            variant = "REF"
+        command = os.path.join(globals.PYTHONDIR, "atos", "atos_lib.py") + \
+                  " query -q \"variant:" + variant + "\""
+        status, results = process.system(command, get_output=True)
+        if results.strip() != "None":
+            print "Skipping variant " + variant + "..."
+            sys.exit(0)
+
+    if args.uopts != None:
+        command = os.path.join(globals.BINDIR, "atos-profile") + \
+                  " -C " + args.configuration_path + opt_q + \
+                  opt_remote_profile_path + " -g '" + args.uopts + "'"
+        status = process.system(command, print_output=True)
+        if status == 0:
+            command = os.path.join(globals.BINDIR, "atos-build") + \
+                      " -C " + args.configuration_path + opt_q + \
+                      " -u '" + args.uopts + "' -a '" + args.options + "'"
+            status = process.system(command, print_output=True)
+            if status == 0:
+                command = os.path.join(globals.BINDIR, "atos-run") \
+                          + " -C " + args.configuration_path + opt_q + \
+                          opt_r + opt_nbruns + " -u '" + args.uopts + \
+                          "' -a'" + args.options + "'"
+                status = process.system(command, print_output=True)
+    else:
+        command = os.path.join(globals.BINDIR, "atos-build") + \
+                  " -C " + args.configuration_path + opt_q + \
+                  " -a '" + args.options + "'"
+        status = process.system(command, print_output=True)
+        if status == 0:
+            command = os.path.join(globals.BINDIR, "atos-run") + \
+                      " -C " + args.configuration_path + opt_q + \
+                      opt_r + opt_nbruns + " -a '" + args.options + "'"
+            status = process.system(command, print_output=True)
+    return status
 
 def run_atos_profile(args):
     """ ATOS profile tool implementation. """

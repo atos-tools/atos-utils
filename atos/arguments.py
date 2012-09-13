@@ -33,6 +33,7 @@ def parser(tool):
         "atos-deps": parsers.atos_deps,
         "atos-explore": parsers.atos_explore,
         "atos-init": parsers.atos_init,
+        "atos-opt": parsers.atos_opt,
         "atos-profile": parsers.atos_profile
         }
     return factories[tool]()
@@ -111,6 +112,9 @@ class parsers:
         sub = subs.add_parser("init", help="initialize atos environment")
         parsers.atos_init(sub)
 
+        sub = subs.add_parser("opt", help="opt system")
+        parsers.atos_opt(sub)
+
         sub = subs.add_parser("profile", help="generate the profile build")
         parsers.atos_profile(sub)
         return parser
@@ -161,12 +165,12 @@ class parsers:
         args.ccregexp(parser)
         args.ccname(parser)
         args.path(parser)
-        args.atos_build.options(parser)
+        args.options(parser)
         args.atos_build.variant(parser)
         args.remote_path(parser, ("-b", "--remote_path"))
         args.atos_build.jobs(parser)
         group = parser.add_mutually_exclusive_group()
-        args.atos_build.useprofile(parser, group)
+        args.useprofile(parser, group)
         args.atos_build.genprofile(parser, group)
         args.force(parser)
         args.debug(parser)
@@ -192,6 +196,7 @@ class parsers:
         args.atos_deps.all(parser)
         args.force(parser)
         args.quiet(parser)
+        args.debug(parser)
         args.dryrun(parser)
         args.coverage(parser)
         args.coverage_file(parser)
@@ -225,7 +230,7 @@ class parsers:
         """ atos init arguments parser factory. """
         if parser == None:
             parser = ATOSArgumentParser(prog="atos-init",
-                                        description="ATOS explore tool")
+                                        description="ATOS init tool")
         args.executables(parser)
         args.configuration_path(parser)
         args.clean(parser)
@@ -246,6 +251,29 @@ class parsers:
         return parser
 
     @staticmethod
+    def atos_opt(parser=None):
+        """ atos opt arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-opt",
+                                        description="ATOS opt tool")
+        args.executables(parser)
+        args.configuration_path(parser)
+        args.atos_opt.lto(parser)
+        args.atos_opt.fdo(parser)
+        args.atos_opt.keep(parser)
+        args.atos_opt.record(parser)
+        args.remote_path(parser, ("-b", "--remote_path"))
+        args.useprofile(parser, parser)
+        args.nbruns(parser)
+        args.options(parser)
+        args.debug(parser)
+        args.force(parser, ("--force",))
+        args.quiet(parser)
+        args.dryrun(parser, ("--dryrun",))
+        args.version(parser)
+        return parser
+
+    @staticmethod
     def atos_profile(parser=None):
         """ atos profile arguments parser factory. """
         if parser == None:
@@ -255,7 +283,8 @@ class parsers:
         args.configuration_path(parser)
         args.path(parser)
         args.remote_path(parser, ("-b", "--remote_path"))
-        args.atos_profile.options(parser)
+        args.options(parser, ("-g", "--options"))
+        args.debug(parser)
         args.force(parser)
         args.quiet(parser)
         args.dryrun(parser)
@@ -414,6 +443,19 @@ class args:
              "defaults to args of command or all generated executables")
 
     @staticmethod
+    def options(parser, args=("-a", "--options")):
+        parser.add_argument(
+            *args,
+            dest="options",
+            help="append given options to the compilation commands")
+
+    @staticmethod
+    def useprofile(parser, group, args=("-u", "--useprof")):
+        group.add_argument(*args,
+                            dest="uopts",
+                            help="use profile variant deduced by UOPTS")
+
+    @staticmethod
     def executables(parser):
         parser.add_argument(
             "executables",
@@ -461,13 +503,6 @@ class args:
         """ Namespace for non common atos-build arguments. """
 
         @staticmethod
-        def options(parser, args=("-a", "--options")):
-            parser.add_argument(
-                *args,
-                 dest="options",
-                 help="append given options to the compilation commands")
-
-        @staticmethod
         def variant(parser, args=("-w", "--variant")):
             parser.add_argument(
                 *args,
@@ -483,13 +518,6 @@ class args:
                  type=int,
                  help="use JOBS parallel thread when possible for building",
                  default=4)
-
-        @staticmethod
-        def useprofile(parser, group, args=("-u", "--useprof")):
-            group.add_argument(
-                *args,
-                 dest="uopts",
-                 help="use profile variant deduced by UOPTS")
 
         @staticmethod
         def genprofile(parser, group, args=("-g", "--genprof")):
@@ -543,6 +571,37 @@ class args:
             parser.add_argument(*args,
                                  dest="prof_script",
                                  help="script to get profile information")
+
+    class atos_opt:
+        """ Namespace for non common atos-opt arguments. """
+
+        @staticmethod
+        def lto(parser, args=("-l", "--lto")):
+            parser.add_argument(*args,
+                                 dest="lto",
+                                 action='store_true',
+                                 help="use use link time optimizations")
+
+        @staticmethod
+        def fdo(parser, args=("-f", "--fdo")):
+            parser.add_argument(*args,
+                                 dest="fdo",
+                                 action='store_true',
+                                 help="use feedback directed optimizations")
+
+        @staticmethod
+        def keep(parser, args=("-k", "--keep")):
+            parser.add_argument(*args,
+                                 dest="keep",
+                                 action='store_true',
+                                 help="keep existing results if any")
+
+        @staticmethod
+        def record(parser, args=("-r", "--record")):
+            parser.add_argument(*args,
+                                 dest="record",
+                                 action='store_true',
+                                 help="record results")
 
     class atos_profile:
         """ Namespace for non common atos-profile arguments. """

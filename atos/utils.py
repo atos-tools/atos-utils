@@ -581,16 +581,16 @@ def run_atos_init(args):
             os.path.join(globals.BINDIR, "atos-audit")
             + " -C " + args.configuration_path + opt_q
             + opt_rebuild + " " + args.build_script)
-        process.system(command_audit)
+        process.system(command_audit, print_output=True)
         command_deps = (
             os.path.join(globals.BINDIR, "atos-deps")
             + " -C " + args.configuration_path + opt_q
             + opt_rebuild + executables)
-        process.system(command_deps)
+        process.system(command_deps, print_output=True)
         command_config = (
             os.path.join(globals.BINDIR, "atos-config")
             + " -C " + args.configuration_path)
-        process.system(command_config)
+        process.system(command_config, print_output=True)
     elif not os.path.isfile(args.configuration_path + "/build.audit"):
         print "atos-init:error: missing build audit, " \
             "use -b option for specifying build script or use atos-audit tool"
@@ -612,12 +612,12 @@ def run_atos_init(args):
             os.path.join(globals.BINDIR, "atos-raudit")
             + " -C " + args.configuration_path + opt_q +
             opt_get_results_script + args.run_script)
-        process.system(command_raudit)
+        process.system(command_raudit, print_output=True)
         # reference run
         command_run = (
             os.path.join(globals.BINDIR, "atos-run")
             + " -C " + args.configuration_path + opt_q + " -r")
-        process.system(command_run)
+        process.system(command_run, print_output=True)
     elif not os.path.isfile(args.configuration_path + "/run.audit"):
         print "atos-init: error: missing run audit, " \
             "use -r option for specifying run script or use atos-raudit tool"

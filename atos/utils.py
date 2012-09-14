@@ -36,7 +36,8 @@ def invoque(tool, args):
         "atos-explore": run_atos_explore,
         "atos-init": run_atos_init,
         "atos-opt": run_atos_opt,
-        "atos-profile": run_atos_profile
+        "atos-profile": run_atos_profile,
+        "atos-raudit": run_atos_raudit
         }
     if hasattr(args, "coverage") and args.coverage:
         import coverage
@@ -738,4 +739,46 @@ def run_atos_profile(args):
     status = process.system(command_build, print_output=True)
     if status == 0:
         status = process.system(command_run, print_output=True)
+    return status
+
+
+def run_atos_raudit(args):
+    """ ATOS raudit tool implementation. """
+
+    if args.command == None:
+        print "error: atos-raudit: missing run command"
+        sys.exit(1)
+
+    if not args.quiet:
+        print "Auditing run..."
+
+    if args.output_file == None:
+        if not os.path.isdir(args.configuration_path):
+            os.mkdir(args.configuration_path)
+        args.output_file = os.path.join(args.configuration_path, "run.audit")
+        process.system("touch " + args.output_file)
+        run_sh = os.path.join(args.configuration_path, "run.sh")
+        f = open(run_sh, 'w')
+        f.write("#!/bin/sh\n")
+        f.write("cd ")
+        f.write(os.getcwd())
+        f.write(" && $ARUN ")
+        f.write(process.list2cmdline(args.command))
+        f.write("\n")
+        f.close()
+        os.chmod(run_sh, stat.S_IRWXU | stat.S_IRGRP |
+                 stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+        if args.results_script != None:
+            get_res_sh = os.path.join(args.configuration_path, "get_res.sh")
+            f = open(get_res_sh, 'w')
+            f.write("#!/bin/sh\n")
+            f.write("cd ")
+            f.write(os.getcwd())
+            f.write(" &&  " + args.results_script)
+            f.write("\n")
+            f.close()
+            os.chmod(get_res_sh, stat.S_IRWXU | stat.S_IRGRP |
+                     stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+
+    status = process.system(args.command)
     return status

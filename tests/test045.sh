@@ -18,4 +18,4 @@ for bin in $ROOT/bin/atos*; do
     [ "`basename $bin`" == "atos-graph" ] \
 	&& $bin --version && continue
     $bin -v
-done
+done 2>&1

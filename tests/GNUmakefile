@@ -19,9 +19,9 @@
 #
 
 srcdir:=$(dir $(firstword $(MAKEFILE_LIST)))
-TESTS:=$(notdir $(wildcard $(srcdir)test*.sh))
-DEPS=$(TESTS:.sh=)
-ERRS=$(TESTS:.sh=.err)
+TESTS:=$(sort $(notdir $(wildcard $(srcdir)test*.sh $(srcdir)test*.py)))
+DEPS=$(basename $(TESTS))
+ERRS=$(addsuffix .err,$(TESTS))
 ifeq ($(V),)
 V_RUN=@
 endif
@@ -46,7 +46,7 @@ coverage:
 	cd $(COVERAGE_DIR) && coverage report | tail -1 | awk '{print "COVERAGE", $$4 , ":", $$2-$$3, "/", $$2}'
 
 clean: clean-coverage
-	rm -f *.out *.err tests_report.txt
+	rm -f *.out *.err *.pyc tests_report.txt
 
 clean-coverage:
 	if [ -d $(COVERAGE_DIR) ]; then cd $(COVERAGE_DIR) && rm -rf .coverage* coverage; fi
@@ -61,5 +61,5 @@ $(DEPS): %: %.err
 
 # Force MAKEFLAGS= as we may run make in tests
 # and we do not want to inherit -jxx option
-$(ERRS): %.err: $(srcdir)%.sh $(FORCE)
-	$(V_RUN)env MAKEFLAGS= ROOT=$${ROOT:-$(abspath ..)} SRCDIR=$${SRCDIR:-$(abspath $(srcdir)..)} $(COVERAGE_OPTS) $(srcdir)$*.sh 2>&1 >$*.out | tee $*.err
+$(ERRS): %.err: $(srcdir)% $(FORCE)
+	$(V_RUN)env MAKEFLAGS= ROOT=$${ROOT:-$(abspath ..)} SRCDIR=$${SRCDIR:-$(abspath $(srcdir)..)} $(COVERAGE_OPTS) $(srcdir)$* 2>&1 >$*.out | tee $*.err

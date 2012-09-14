@@ -79,7 +79,8 @@ def get_cc_command_additional_flags(optfile, args):
 
 def invoque_compile_command(args, optfile=None):
     status = process.system(
-        args + get_cc_command_additional_flags(optfile, args))
+        args + get_cc_command_additional_flags(optfile, args),
+        print_output=True)
     return status
 
 

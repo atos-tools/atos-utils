@@ -587,13 +587,3 @@ class args:
                                  dest="record",
                                  action='store_true',
                                  help="record results")
-
-    class atos_profile:
-        """ Namespace for non common atos-profile arguments. """
-
-        @staticmethod
-        def options(parser, args=("-g", "--options")):
-            parser.add_argument(
-                *args,
-                 dest="options",
-                 help="append given options to the compilation commands")

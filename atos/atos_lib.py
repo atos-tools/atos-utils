@@ -635,7 +635,10 @@ def execpath(file):
     Gets the full executable path for the given file.
     Returns None if the command is not found or not executable.
     """
-    status, output = process.system(["which", file], get_output=True)
+    try:
+        status, output = process.system(["which", file], get_output=True)
+    except OSError:
+        output = ""
     if output == "": return None
     return output.rstrip("\n")
 
@@ -659,19 +662,22 @@ def pager_cmd():
         return [pager]
     return None
 
-def pagercall(cmd):
+def pagercall(txtfile):
     """
-    Executes a command and page the output.
-    Returns the exit status of the command.
+    Executes a pager call for displaying the given text file.
     """
     pager_args = pager_cmd()
     if pager_args != None:
-        cmd = '%s | %s' % (cmd, ' '.join(pager_args))
-    try:
-        status = os.system(cmd)
-    except Exception:
-        print >>sys.stderr, "error during pager command: " + cmd
-        sys.exit(1)
+        cmd = process.list2cmdline(pager_args + [txtfile])
+        try:
+            status = os.system(cmd)
+        except Exception:
+            print >>sys.stderr, "error during pager command: " + cmd
+            status = 1
+    else:
+        for line in open(txtfile).readlines():
+            print line,
+        status = 0
     return status
 
 def mancall(page):
@@ -711,8 +717,7 @@ def help_text(topic):
     """
     rst_file = os.path.join(globals.DOCDIR, topic + ".rst")
     if os.path.exists(rst_file):
-        pagercall("cat " + rst_file)
-        return 0
+        return pagercall(rst_file)
     return 1
 
 

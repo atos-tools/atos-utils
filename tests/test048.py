@@ -8,6 +8,10 @@ TEST_CASE = "ATOS process module"
 
 from atos import process
 
+args = process.cmdline2list("command '' a\\\ file")
+cmd = process.list2cmdline(args)
+assert cmd == "command '' a\\\ file"
+
 status = process.system("false", print_output=False)
 assert status == 1
 

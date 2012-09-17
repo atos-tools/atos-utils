@@ -39,3 +39,25 @@ help=`$ROOT/bin/atos help intro | grep "ATOS Introduction"`
 
 help=`env PAGER= $ROOT/bin/atos help tutorial | grep "ATOS Tutorial"`
 [ "$help" != "" ]
+
+help=`PAGER=less $ROOT/bin/atos help -t intro | grep "ATOS Introduction"`
+[ "$help" != "" ]
+
+help=`PAGER= $ROOT/bin/atos help -t intro | grep "ATOS Introduction"`
+[ "$help" != "" ]
+
+help=`unset PAGER && $ROOT/bin/atos help -t intro | grep "ATOS Introduction"`
+[ "$help" != "" ]
+
+python=`which python`
+help=`PATH= PAGER= $python $ROOT/bin/atos help intro | grep "ATOS Introduction"`
+[ "$help" != "" ]
+
+help=`$ROOT/bin/atos help not_found_section 2>&1 | grep "manual not found"`
+[ "$help" != "" ]
+
+# Either we get an output if manpage is available or an error.
+# We are not strict there as the tools may have been installed
+# without 'make doc'.
+help=`$ROOT/bin/atos help -m intro 2>&1 | grep -e "ATOS Introduction" -e  "manual not found for"`
+[ "$help" != "" ]

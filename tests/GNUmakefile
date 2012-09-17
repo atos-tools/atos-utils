@@ -27,7 +27,8 @@ V_RUN=@
 endif
 COVERAGE_DIR=$(abspath .)/coverage
 ifneq ($(COVERAGE),)
-COVERAGE_OPTS=ATOS_COVERAGE_DIR=$(COVERAGE_DIR)
+COVERAGE_OPTS=PYTHONPATH=$(PYTHONPATH):$(srcdir)
+COVERAGE_OPTS+=ATOS_COVERAGE_DIR=$(COVERAGE_DIR)
 endif
 FORCE=.FORCE
 
@@ -42,8 +43,8 @@ coverage:
 	cd $(COVERAGE_DIR) && rm -rf .coverage* coverage
 	$(MAKE) COVERAGE=1 -f $(firstword $(MAKEFILE_LIST)) tests
 	cd $(COVERAGE_DIR) && coverage combine
-	cd $(COVERAGE_DIR) && coverage html -d html --include='/*/bin/*,/*/lib/atos/python/atos/*'
-	cd $(COVERAGE_DIR) && coverage report --include='/*/bin/*,/*/lib/atos/python/atos/*' | tail -1 | awk '{print "COVERAGE", $$4 , ":", $$2-$$3, "/", $$2}'
+	cd $(COVERAGE_DIR) && coverage html -d html --include='/*/bin/*,/*/lib/atos/python/atos/*,/*/lib/atos/atos-*'
+	cd $(COVERAGE_DIR) && coverage report --include='/*/bin/*,/*/lib/atos/python/atos/*,/*/lib/atos/atos-*' | tail -1 | awk '{print "COVERAGE", $$4 , ":", $$2-$$3, "/", $$2}'
 
 clean: clean-coverage
 	rm -f *.out *.err *.pyc tests_report.txt

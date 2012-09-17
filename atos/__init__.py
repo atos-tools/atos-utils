@@ -26,26 +26,4 @@ def check_python_version_():
             'error: python version >= 2.6 is required by ATOS tools'
         sys.exit(1)
 
-def enable_coverage():
-    coverage_enabled = (
-        bool(os.getenv("ATOS_COVERAGE_DIR")) or
-        bool(os.getenv("ATOS_COVERAGE")))
-
-    if coverage_enabled:
-        import coverage, atexit
-
-        def coverage_stop():
-            cov.stop()
-            cov.save()
-        coverage_file = ".coverage"
-        if os.getenv("ATOS_COVERAGE_DIR"):
-            coverage_dir = os.getenv("ATOS_COVERAGE_DIR")
-            coverage_file = os.path.join(
-                coverage_dir, ".coverage.%d" % (os.getpid()))
-        cov = coverage.coverage(data_file=coverage_file)
-        cov.start()
-        atexit.register(coverage_stop)
-
 check_python_version_()
-
-enable_coverage()

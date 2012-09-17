@@ -790,7 +790,7 @@ def get_input_source_files(args):
 if __name__ == '__main__':
 
     # ################################################################
-
+    import __init__
     import optparse
 
     help_lines = [

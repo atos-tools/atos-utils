@@ -778,8 +778,9 @@ def atos_run_wrapper(profdir, config, nbrun, baseopts, no_replay):
 
 
 if __name__ == '__main__':
-
+    import __init__
     import optparse
+
     parser = optparse.OptionParser(
         description='Optimization space exploration loop',
         usage='%prog action [options] [variants]',

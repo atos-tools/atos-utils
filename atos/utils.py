@@ -39,15 +39,6 @@ def invoque(tool, args):
         "atos-profile": run_atos_profile,
         "atos-raudit": run_atos_raudit
         }
-    if hasattr(args, "coverage") and args.coverage:
-        import coverage
-        cov = coverage.coverage(data_file=args.coverage_file)
-        cov.start()
-        try:
-            return functions[tool](args)
-        finally:
-            cov.stop()
-            cov.save()
     logger.setup(vars(args))
     process.setup(vars(args))
     return functions[tool](args)

@@ -72,8 +72,10 @@ doc: $(ALL_DOCS)
 all-plugins:
 	$(MAKE) -C $(srcdir)plugins/acf-plugin install PREFIX=$(abspath .)
 
-clean: clean-local clean-plugin clean-test
+clean: clean-local clean-doc clean-plugin clean-test
 
+clean-doc:
+	$(QUIET_CLEAN)rm -f $(ALL_DOCS)
 clean-local:
 	$(QUIET_CLEAN)rm -f *.tmp
 

@@ -42,8 +42,8 @@ coverage:
 	cd $(COVERAGE_DIR) && rm -rf .coverage* coverage
 	$(MAKE) COVERAGE=1 -f $(firstword $(MAKEFILE_LIST)) tests
 	cd $(COVERAGE_DIR) && coverage combine
-	cd $(COVERAGE_DIR) && coverage html -d html
-	cd $(COVERAGE_DIR) && coverage report | tail -1 | awk '{print "COVERAGE", $$4 , ":", $$2-$$3, "/", $$2}'
+	cd $(COVERAGE_DIR) && coverage html -d html --include='/*/bin/*,/*/lib/atos/python/atos/*'
+	cd $(COVERAGE_DIR) && coverage report --include='/*/bin/*,/*/lib/atos/python/atos/*' | tail -1 | awk '{print "COVERAGE", $$4 , ":", $$2-$$3, "/", $$2}'
 
 clean: clean-coverage
 	rm -f *.out *.err *.pyc tests_report.txt

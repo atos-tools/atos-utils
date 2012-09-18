@@ -21,6 +21,12 @@ assert status == 0
 status, output = process.system("echo 1", get_output=True)
 assert status == 0 and output.strip() == '1'
 
+status, output = process.system(u"echo 2", get_output=True)
+assert status == 0 and output.strip() == '2'
+
+status, output = process.system([u"echo", u"3"], get_output=True)
+assert status == 0 and output.strip() == '3'
+
 status, output = process.system(
     "ls unknownfile", get_output=True)
 assert status > 0 and output == ''

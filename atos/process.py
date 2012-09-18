@@ -31,7 +31,7 @@ def cmdline2list(cmd):
     """
     Returns a list of args from the given shell command string.
     """
-    return shlex.split(cmd)
+    return shlex.split(str(cmd))
 
 def list2cmdline(args):
     """
@@ -98,7 +98,7 @@ def _subcall(cmd, get_output=False, print_output=False, output_stderr=False):
     Stderr will be included in returned output if output_stderr is set.
     Outputs will not be printed on stdout/stderr unless print_output is set.
     """
-    if isinstance(cmd, str):
+    if isinstance(cmd, (str, unicode)):
         cmd = cmdline2list(cmd)
     outputf = get_output and cStringIO.StringIO()
     popen_kwargs = {}

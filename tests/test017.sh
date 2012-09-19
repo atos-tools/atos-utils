@@ -28,6 +28,8 @@ if [ `gcc -v --help 2>&1 | grep "\-flto" | wc -l` -ne 0 ]; then
 
     [ `$ROOT/lib/atos/python/atos/atos_lib.py query -C atos-config | grep target | wc -l` -eq 6 ]
 
+    [ `$ROOT/lib/atos/python/atos/atos_lib.py query -C atos-config | grep flto | wc -l` -eq 2 ]
+
 fi
 
 [ `find atos-config/logs -name *.log -exec grep "gcda not found" {} ";" | wc -l` -eq 0 ]

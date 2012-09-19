@@ -626,10 +626,12 @@ def run_atos_init(args):
 def run_atos_opt(args):
     """ ATOS opt tool implementation. """
 
+    if args.options == None:
+        args.options = ""
     if args.fdo and args.uopts == None:
         args.uopts = args.options
     if args.lto:
-        args.options.join(" -flto")
+        args.options += " -flto"
     if args.quiet:
         opt_q = " -q"
     else:
@@ -643,8 +645,6 @@ def run_atos_opt(args):
         opt_remote_profile_path = "-b " + args.remote_path
     else:
         opt_remote_profile_path = ""
-    if args.options == None:
-        args.options = ""
 
     if args.keep:
         if args.uopts:

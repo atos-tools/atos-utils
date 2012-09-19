@@ -27,36 +27,11 @@ SRC= $(wildcard $(prepdir)/*.c)
 TESTC=$(wildcard $(testdir)/*.c)
 TESTCPP=$(wildcard $(testdir)/*.cpp)
 
-INCLUDES=-I$(shell gcc -print-file-name=plugin)/include -I$(builddir)include
+COMPILER=gcc
+TESTGCC=gcc
+TESTGPP=g++
+TESTCFLAGS=-O2
+
 CFLAGS=-O2
 
-all: acf_plugin.so
-
-generate-prep-sources:
-	mkdir -p $(prepdir)
-	gcc -E $(INCLUDES) $(srcdir)/plugin-utils.c -o $(prepdir)/plugin-utils_prep.c
-	gcc -E $(INCLUDES) $(srcdir)/acf_plugin.c -o $(prepdir)/acf_plugin_prep.c
-	gcc -E $(INCLUDES) $(srcdir)/acf_csv_reader.c -o $(prepdir)/acf_csv_reader_prep.c
-
-test: acf-test-c acf-test-cpp
-
-acf_plugin.so: $(SRC)
-	gcc $(CFLAGS) -fPIC $(INCLUDES) -c  $(prepdir)/acf_plugin_prep.c -o acf_plugin.o
-	gcc $(CFLAGS) -fPIC $(INCLUDES) -c  $(prepdir)/plugin-utils_prep.c -o plugin-utils.o
-	gcc $(CFLAGS) -fPIC $(INCLUDES) -c  $(prepdir)/acf_csv_reader_prep.c -o acf_csv_reader.o
-	gcc $(CFLAGS) -shared  acf_plugin.o plugin-utils.o acf_csv_reader.o -o $@
-
-ACF_PLUGIN_OPT=-fplugin=./acf_plugin.so -fplugin-arg-acf_plugin-verbose -fplugin-arg-acf_plugin-csv_file=$(testdir)/test.csv
-
-acf-test-c: $(TESTC) ./acf_plugin.so $(testdir)/test.csv
-	-gcc $(ACF_PLUGIN_OPT) $< -o $@  | tee acf-test-c.log 2>&1
-	@echo "Checking diff with reference output:"
-	diff acf-test-c.log $(testdir)/acf-test-c.log.ref
-
-acf-test-cpp: $(TESTCPP) ./acf_plugin.so $(testdir)/test.csv
-	-g++ $(ACF_PLUGIN_OPT) $< -o $@ | tee acf-test-cpp.log 2>&1
-	@echo "Checking diff with reference output:"
-	diff acf-test-cpp.log $(testdir)/acf-test-cpp.log.ref
-
-clean:
-	\rm -f *.o acf_plugin.so acf-test-c acf-test-cpp acf-test-c.log acf-test-cpp.log
+include ../../common/common.mk

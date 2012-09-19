@@ -415,7 +415,9 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
 
     debug('gen_acf')
 
-    if generator.baseopts and generator.atos_config:
+    # TODO: remove this test
+    # test disabled as acf should now work with all gcc versions
+    if False and generator.baseopts and generator.atos_config:
         lto_set = (generator.baseopts.find('-flto') != -1)
         compiler_versions = atos_lib.json_config(generator.atos_config).query(
             atos_lib.strtoquery('$.compilers[*].version'))
@@ -457,10 +459,13 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
     debug('*** Cold functions:\n%s' % acf_csv_cold)
     csv_path = write_csv_file(def_opts, 'cold_run', acf_csv_cold)
 
+    # Get HOST_WIDE_INT size obtained during atos-config
+    hwi_size = atos_lib.json_config(generator.atos_config).query(
+        atos_lib.strtoquery('$.compilers[*].host_wide_int'))
     acf_po = (' -fplugin=' + acf_plugin +
+              ' -fplugin-arg-acf_plugin-host_wide_int=' + hwi_size[0] +
               ' -fplugin-arg-acf_plugin-verbose' +
               ' -fplugin-arg-acf_plugin-csv_file=')
-
     # Build-Run for reference results with cold functions
     result_ref = yield def_opts + acf_po + csv_path, 'base'
 
@@ -874,6 +879,7 @@ if __name__ == '__main__':
         opts.flags != None and opt_flag_list(opts.flags))
     generator.optlevel = opt_flag.optlevel(opts.optlvl.split(','))
     generator.variants = opts.variants.split(',')
+    generator.atos_config = opts.atos_configurations
 
     if opts.base_opts:
         opts.base_opts = opts.base_opts.split(',')

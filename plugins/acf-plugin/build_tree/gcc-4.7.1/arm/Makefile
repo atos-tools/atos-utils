@@ -24,24 +24,14 @@ prepdir=$(builddir)src
 
 SRC= $(wildcard $(prepdir)/*.c)
 
-ARMGCC=arm-linux-androideabi-gcc
+TESTC=$(wildcard $(testdir)/*.c)
+TESTCPP=$(wildcard $(testdir)/*.cpp)
 
-INCLUDES=-I$(shell $(ARMGCC) -print-file-name=plugin)/include -I$(builddir)include
+COMPILER=gcc
+TESTGCC=arm-linux-androideabi-gcc
+TESTGPP=arm-linux-androideabi-g++
+TESTCFLAGS=-O2
+
 CFLAGS=-O2 -m32
 
-all: acf_plugin.so
-
-generate-prep-sources:
-	mkdir -p $(prepdir)
-	gcc -m32 -E $(INCLUDES) $(srcdir)/plugin-utils.c -o $(prepdir)/plugin-utils_prep.c
-	gcc -m32 -E $(INCLUDES) $(srcdir)/acf_plugin.c -o $(prepdir)/acf_plugin_prep.c
-	gcc -m32 -E $(INCLUDES) $(srcdir)/acf_csv_reader.c -o $(prepdir)/acf_csv_reader_prep.c
-
-acf_plugin.so: $(SRC)
-	gcc $(CFLAGS) -fPIC $(INCLUDES) -c  $(prepdir)/acf_plugin_prep.c -o acf_plugin.o
-	gcc $(CFLAGS) -fPIC $(INCLUDES) -c  $(prepdir)/plugin-utils_prep.c -o plugin-utils.o
-	gcc $(CFLAGS) -fPIC $(INCLUDES) -c  $(prepdir)/acf_csv_reader_prep.c -o acf_csv_reader.o
-	gcc $(CFLAGS) -shared acf_plugin.o plugin-utils.o acf_csv_reader.o -o $@
-
-clean:
-	\rm -f *.o acf_plugin.so acf-test-c acf-test-cpp acf-test-c.log acf-test-cpp.log
+include ../../common/common.mk

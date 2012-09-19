@@ -170,10 +170,16 @@ if [ "$file_by_file_mode" = "0" ]; then
 	echo "`basename $0`: warning: switching to file-by-file exploration" >&2
 	file_by_file_mode=1
 
+    elif [ "`config_query '$.compilers[*].host_wide_int'`" == "0" ]; then
+	echo "`basename $0`: warning: compiler not supported by acf plugin (unknown hwi_size)" >&2
+	echo "`basename $0`: warning: switching to file-by-file exploration" >&2
+	file_by_file_mode=1
+
     elif [ "`config_query '$.compilers[*].plugins_enabled'`" != "1" ]; then
 	echo "`basename $0`: warning: compiler does not support plugins" >&2
 	echo "`basename $0`: warning: switching to file-by-file exploration" >&2
 	file_by_file_mode=1
+
     else
 	$pythondir/atos/atos_toolkit.py --log=./acf.log -C $configuration_path \
 	    $opt_debug $opt_profdir $opt_nbruns \

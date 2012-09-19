@@ -953,6 +953,111 @@ extern int ftrylockfile (FILE *__stream) __attribute__ ((__nothrow__)) ;
 
 
 extern void funlockfile (FILE *__stream) __attribute__ ((__nothrow__));
+# 907 "/usr/include/stdio.h" 3 4
+# 1 "/usr/include/bits/stdio.h" 1 3 4
+# 36 "/usr/include/bits/stdio.h" 3 4
+extern __inline int
+vprintf (__const char *__restrict __fmt, __gnuc_va_list __arg)
+{
+  return vfprintf (stdout, __fmt, __arg);
+}
+
+
+
+extern __inline int
+getchar (void)
+{
+  return _IO_getc (stdin);
+}
+
+
+
+
+extern __inline int
+fgetc_unlocked (FILE *__fp)
+{
+  return (__builtin_expect (((__fp)->_IO_read_ptr >= (__fp)->_IO_read_end), 0) ? __uflow (__fp) : *(unsigned char *) (__fp)->_IO_read_ptr++);
+}
+
+
+
+
+
+extern __inline int
+getc_unlocked (FILE *__fp)
+{
+  return (__builtin_expect (((__fp)->_IO_read_ptr >= (__fp)->_IO_read_end), 0) ? __uflow (__fp) : *(unsigned char *) (__fp)->_IO_read_ptr++);
+}
+
+
+extern __inline int
+getchar_unlocked (void)
+{
+  return (__builtin_expect (((stdin)->_IO_read_ptr >= (stdin)->_IO_read_end), 0) ? __uflow (stdin) : *(unsigned char *) (stdin)->_IO_read_ptr++);
+}
+
+
+
+
+extern __inline int
+putchar (int __c)
+{
+  return _IO_putc (__c, stdout);
+}
+
+
+
+
+extern __inline int
+fputc_unlocked (int __c, FILE *__stream)
+{
+  return (__builtin_expect (((__stream)->_IO_write_ptr >= (__stream)->_IO_write_end), 0) ? __overflow (__stream, (unsigned char) (__c)) : (unsigned char) (*(__stream)->_IO_write_ptr++ = (__c)));
+}
+
+
+
+
+
+extern __inline int
+putc_unlocked (int __c, FILE *__stream)
+{
+  return (__builtin_expect (((__stream)->_IO_write_ptr >= (__stream)->_IO_write_end), 0) ? __overflow (__stream, (unsigned char) (__c)) : (unsigned char) (*(__stream)->_IO_write_ptr++ = (__c)));
+}
+
+
+extern __inline int
+putchar_unlocked (int __c)
+{
+  return (__builtin_expect (((stdout)->_IO_write_ptr >= (stdout)->_IO_write_end), 0) ? __overflow (stdout, (unsigned char) (__c)) : (unsigned char) (*(stdout)->_IO_write_ptr++ = (__c)));
+}
+
+
+
+
+
+extern __inline __ssize_t
+getline (char **__lineptr, size_t *__n, FILE *__stream)
+{
+  return __getdelim (__lineptr, __n, '\n', __stream);
+}
+
+
+
+
+
+extern __inline int
+__attribute__ ((__nothrow__)) feof_unlocked (FILE *__stream)
+{
+  return (((__stream)->_flags & 0x10) != 0);
+}
+
+
+extern __inline int
+__attribute__ ((__nothrow__)) ferror_unlocked (FILE *__stream)
+{
+  return (((__stream)->_flags & 0x20) != 0);
+}
+# 908 "/usr/include/stdio.h" 2 3 4
 # 916 "/usr/include/stdio.h" 3 4
 
 # 43 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
@@ -1092,6 +1197,18 @@ extern int toascii (int __c) __attribute__ ((__nothrow__));
 
 extern int _toupper (int) __attribute__ ((__nothrow__));
 extern int _tolower (int) __attribute__ ((__nothrow__));
+# 190 "/usr/include/ctype.h" 3 4
+extern __inline int
+__attribute__ ((__nothrow__)) tolower (int __c)
+{
+  return __c >= -128 && __c < 256 ? (*__ctype_tolower_loc ())[__c] : __c;
+}
+
+extern __inline int
+__attribute__ ((__nothrow__)) toupper (int __c)
+{
+  return __c >= -128 && __c < 256 ? (*__ctype_toupper_loc ())[__c] : __c;
+}
 # 233 "/usr/include/ctype.h" 3 4
 # 1 "/usr/include/xlocale.h" 1 3 4
 # 28 "/usr/include/xlocale.h" 3 4
@@ -1393,6 +1510,27 @@ __extension__
 extern unsigned long long int gnu_dev_makedev (unsigned int __major,
             unsigned int __minor)
      __attribute__ ((__nothrow__));
+
+
+__extension__ extern __inline unsigned int
+__attribute__ ((__nothrow__)) gnu_dev_major (unsigned long long int __dev)
+{
+  return ((__dev >> 8) & 0xfff) | ((unsigned int) (__dev >> 32) & ~0xfff);
+}
+
+__extension__ extern __inline unsigned int
+__attribute__ ((__nothrow__)) gnu_dev_minor (unsigned long long int __dev)
+{
+  return (__dev & 0xff) | ((unsigned int) (__dev >> 12) & ~0xff);
+}
+
+__extension__ extern __inline unsigned long long int
+__attribute__ ((__nothrow__)) gnu_dev_makedev (unsigned int __major, unsigned int __minor)
+{
+  return ((__minor & 0xff) | ((__major & 0xfff) << 8)
+   | (((unsigned long long int) (__minor & ~0xff)) << 12)
+   | (((unsigned long long int) (__major & ~0xfff)) << 32));
+}
 # 224 "/usr/include/sys/types.h" 2 3 4
 
 
@@ -1923,6 +2061,13 @@ extern char *strfry (char *__string) __attribute__ ((__nothrow__)) __attribute__
 extern void *memfrob (void *__s, size_t __n) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
 # 604 "/usr/include/string.h" 3 4
 extern char *basename (__const char *__filename) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+# 632 "/usr/include/string.h" 3 4
+# 1 "/usr/include/bits/string.h" 1 3 4
+# 633 "/usr/include/string.h" 2 3 4
+
+
+# 1 "/usr/include/bits/string2.h" 1 3 4
+# 636 "/usr/include/string.h" 2 3 4
 # 644 "/usr/include/string.h" 3 4
 
 # 199 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
@@ -2128,6 +2273,36 @@ extern long double strtold_l (__const char *__restrict __nptr,
          char **__restrict __endptr,
          __locale_t __loc)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 3))) ;
+
+
+
+
+
+extern __inline double
+__attribute__ ((__nothrow__)) atof (__const char *__nptr)
+{
+  return strtod (__nptr, (char **) ((void *)0));
+}
+extern __inline int
+__attribute__ ((__nothrow__)) atoi (__const char *__nptr)
+{
+  return (int) strtol (__nptr, (char **) ((void *)0), 10);
+}
+extern __inline long int
+__attribute__ ((__nothrow__)) atol (__const char *__nptr)
+{
+  return strtol (__nptr, (char **) ((void *)0), 10);
+}
+
+
+
+
+__extension__ extern __inline long long int
+__attribute__ ((__nothrow__)) atoll (__const char *__nptr)
+{
+  return strtoll (__nptr, (char **) ((void *)0), 10);
+}
+
 # 311 "/usr/include/stdlib.h" 3 4
 extern char *l64a (long int __n) __attribute__ ((__nothrow__)) ;
 
@@ -4750,7 +4925,92 @@ extern int __xmknod (int __ver, __const char *__path, __mode_t __mode,
 extern int __xmknodat (int __ver, int __fd, __const char *__path,
          __mode_t __mode, __dev_t *__dev)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 5)));
-# 534 "/usr/include/sys/stat.h" 3 4
+
+
+
+
+extern __inline int
+__attribute__ ((__nothrow__)) stat (__const char *__path, struct stat *__statbuf)
+{
+  return __xstat (3, __path, __statbuf);
+}
+
+
+extern __inline int
+__attribute__ ((__nothrow__)) lstat (__const char *__path, struct stat *__statbuf)
+{
+  return __lxstat (3, __path, __statbuf);
+}
+
+
+extern __inline int
+__attribute__ ((__nothrow__)) fstat (int __fd, struct stat *__statbuf)
+{
+  return __fxstat (3, __fd, __statbuf);
+}
+
+
+extern __inline int
+__attribute__ ((__nothrow__)) fstatat (int __fd, __const char *__filename, struct stat *__statbuf, int __flag)
+
+{
+  return __fxstatat (3, __fd, __filename, __statbuf, __flag);
+}
+
+
+
+extern __inline int
+__attribute__ ((__nothrow__)) mknod (__const char *__path, __mode_t __mode, __dev_t __dev)
+{
+  return __xmknod (1, __path, __mode, &__dev);
+}
+
+
+
+extern __inline int
+__attribute__ ((__nothrow__)) mknodat (int __fd, __const char *__path, __mode_t __mode, __dev_t __dev)
+
+{
+  return __xmknodat (1, __fd, __path, __mode, &__dev);
+}
+
+
+
+
+
+extern __inline int
+__attribute__ ((__nothrow__)) stat64 (__const char *__path, struct stat64 *__statbuf)
+{
+  return __xstat64 (3, __path, __statbuf);
+}
+
+
+extern __inline int
+__attribute__ ((__nothrow__)) lstat64 (__const char *__path, struct stat64 *__statbuf)
+{
+  return __lxstat64 (3, __path, __statbuf);
+}
+
+
+extern __inline int
+__attribute__ ((__nothrow__)) fstat64 (int __fd, struct stat64 *__statbuf)
+{
+  return __fxstat64 (3, __fd, __statbuf);
+}
+
+
+extern __inline int
+__attribute__ ((__nothrow__)) fstatat64 (int __fd, __const char *__filename, struct stat64 *__statbuf, int __flag)
+
+{
+  return __fxstatat64 (3, __fd, __filename, __statbuf, __flag);
+}
+
+
+
+
+
+
 
 # 39 "/usr/include/fcntl.h" 2 3 4
 # 64 "/usr/include/fcntl.h" 3 4
@@ -4796,6 +5056,10 @@ extern int posix_fallocate64 (int __fd, __off64_t __offset, __off64_t __len);
 extern int __sigismember (__const __sigset_t *, int);
 extern int __sigaddset (__sigset_t *, int);
 extern int __sigdelset (__sigset_t *, int);
+# 118 "/usr/include/bits/sigset.h" 3 4
+extern __inline int __sigismember (__const __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return (__set->__val[__word] & __mask) ? 1 : 0; }
+extern __inline int __sigaddset ( __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return ((__set->__val[__word] |= __mask), 0); }
+extern __inline int __sigdelset ( __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return ((__set->__val[__word] &= ~__mask), 0); }
 # 34 "/usr/include/signal.h" 2 3 4
 
 
@@ -6092,7 +6356,70 @@ extern intmax_t wcstoimax (__const __gwchar_t *__restrict __nptr,
 extern uintmax_t wcstoumax (__const __gwchar_t *__restrict __nptr,
        __gwchar_t ** __restrict __endptr, int __base)
      __attribute__ ((__nothrow__));
-# 442 "/usr/include/inttypes.h" 3 4
+# 379 "/usr/include/inttypes.h" 3 4
+__extension__
+extern long long int __strtoll_internal (__const char *__restrict __nptr,
+      char **__restrict __endptr,
+      int __base, int __group)
+  __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+extern __inline intmax_t
+__attribute__ ((__nothrow__)) strtoimax (__const char *__restrict nptr, char **__restrict endptr, int base)
+
+{
+  return __strtoll_internal (nptr, endptr, base, 0);
+}
+
+__extension__
+extern unsigned long long int __strtoull_internal (__const char *
+         __restrict __nptr,
+         char **
+         __restrict __endptr,
+         int __base,
+         int __group)
+  __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+extern __inline uintmax_t
+__attribute__ ((__nothrow__)) strtoumax (__const char *__restrict nptr, char **__restrict endptr, int base)
+
+{
+  return __strtoull_internal (nptr, endptr, base, 0);
+}
+
+__extension__
+extern long long int __wcstoll_internal (__const __gwchar_t *
+      __restrict __nptr,
+      __gwchar_t **__restrict __endptr,
+      int __base, int __group)
+  __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+extern __inline intmax_t
+__attribute__ ((__nothrow__)) wcstoimax (__const __gwchar_t *__restrict nptr, __gwchar_t **__restrict endptr, int base)
+
+{
+  return __wcstoll_internal (nptr, endptr, base, 0);
+}
+
+
+__extension__
+extern unsigned long long int __wcstoull_internal (__const __gwchar_t *
+         __restrict __nptr,
+         __gwchar_t **
+         __restrict __endptr,
+         int __base,
+         int __group)
+  __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+extern __inline uintmax_t
+__attribute__ ((__nothrow__)) wcstoumax (__const __gwchar_t *__restrict nptr, __gwchar_t **__restrict endptr, int base)
+
+{
+  return __wcstoull_internal (nptr, endptr, base, 0);
+}
+
+
+
+
 
 # 423 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h" 2
 # 540 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/plugin/include/system.h"
@@ -27047,9 +27374,13 @@ char *acf_csv_file;
 const char *verbose_key="verbose";
 unsigned char verbose = 0;
 
+const char *hwi_size="host_wide_int";
+int gcc_runtime_hwi = 0;
+int hwi_shift = 0;
+
 int plugin_is_GPL_compatible;
 static const char *plugin_name;
-# 80 "../../../src/acf_plugin.c"
+# 84 "../../../src/acf_plugin.c"
 static void event_callback(void *gcc_data,void *data){
     (void)gcc_data;
     fprintf(stderr,"%s called\n",plugin_event_name[*(int*)data]);
@@ -27145,7 +27476,7 @@ static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
     volatile tree opts;
     const char *cur_func_name = ((void *)0);
     int i;
-# 193 "../../../src/acf_plugin.c"
+# 197 "../../../src/acf_plugin.c"
     cur_func_name = ((const char *) (decl_assembler_name ((cfun + 0)->decl))->identifier.id.str);
 
     if (!csv_parsed) {
@@ -27204,7 +27535,7 @@ static char **csv_param_name = ((void *)0);
 static int *csv_param_value = ((void *)0);
 static size_t csv_param_index = 0;
 static int *csv_param_set = ((void *)0);
-# 259 "../../../src/acf_plugin.c"
+# 270 "../../../src/acf_plugin.c"
 static unsigned char get_param_idx(char *opt_param, size_t *idx) {
     size_t i, num_compiler_params = get_num_compiler_params();
 
@@ -27227,11 +27558,7 @@ static void save_and_set_param(char *opt_param, int value) {
     csv_param_name[csv_param_index] = opt_param;
     csv_param_value[csv_param_index] = (compiler_params[(int) param_idx].value);
     csv_param_index ++;
-
-
-
-
-
+# 304 "../../../src/acf_plugin.c"
     set_param_value(opt_param, value);
 
 }
@@ -27280,7 +27607,6 @@ static void fill_csv_params() {
  if ((strcmp (func_name, cur_func_name) == 0) &&
      source_file_match(opt_file, (char *) main_input_filename)) {
      if (opt_arg != ((void *)0)) {
-
   save_and_set_param(opt_param, atoi(acf_ftable[i].opt_arg));
 
   if (verbose) {
@@ -27326,15 +27652,19 @@ int plugin_init(struct plugin_name_args *plugin_na,
     plugin_name=plugin_na->base_name;
     FILE *fcsv;
     int csv_arg_pos = -1;
+    int hwi_arg_pos = -1;
+    long hwi_size_var;
+    unsigned char hwi_ok;
+    int plugin_buildtime_hwi = 0;
     unsigned char bad = 0;
     int i;
-# 407 "../../../src/acf_plugin.c"
+# 428 "../../../src/acf_plugin.c"
     if (!((version->basever[0] < '4') ||
    ((version->basever[0] == '4') && (version->basever[2] < '6')))) {
  error("%s: build gcc and load gcc versions are incompatible.", plugin_name);
  return 1;
     }
-# 421 "../../../src/acf_plugin.c"
+# 442 "../../../src/acf_plugin.c"
     switch (plugin_na->argc) {
     case 0:
  bad = 1;
@@ -27350,9 +27680,13 @@ int plugin_init(struct plugin_name_args *plugin_na,
  }
  break;
     case 2:
+    case 3:
  for (i = 0; i < plugin_na->argc; i++) {
      if (strcmp(plugin_na->argv[i].key, verbose_key) == 0) {
   verbose = 1;
+     }
+     if (strcmp(plugin_na->argv[i].key, hwi_size) == 0) {
+  hwi_arg_pos = i;
      }
      if (strcmp(plugin_na->argv[i].key, acf_csv_file_key) == 0) {
   csv_arg_pos = i;
@@ -27369,10 +27703,13 @@ int plugin_init(struct plugin_name_args *plugin_na,
 
     if (bad) {
  fprintf(stderr,
-  "Usage for %s: -fplugin=<path>/%s.so -fplugin-arg-%s-%s="
-  "<path-to-csv-file> [-fplugin-arg-%s-%s]\n",
+  "Usage for %s: -fplugin=<path>/%s.so "
+  "-fplugin-arg-%s-%s= <path-to-csv-file> "
+  "[-fplugin-arg-%s-%s= <size_in_bytes>] "
+  "[-fplugin-arg-%s-%s]\n",
   plugin_name, plugin_name,
   plugin_name, acf_csv_file_key,
+  plugin_name, hwi_size,
   plugin_name, verbose_key);
  return 1;
     }
@@ -27392,6 +27729,41 @@ int plugin_init(struct plugin_name_args *plugin_na,
  return 1;
     }
 
+    hwi_ok = 0;
+    if (hwi_arg_pos != -1 && strcmp(plugin_na->argv[hwi_arg_pos].key, hwi_size) == 0) {
+ if (plugin_na->argv[hwi_arg_pos].value &&
+     strcmp(plugin_na->argv[hwi_arg_pos].value, "") != 0) {
+     (*__errno_location ()) = 0;
+     gcc_runtime_hwi = strtol(plugin_na->argv[hwi_arg_pos].value, ((void *)0), 0);
+     if (!(*__errno_location ())) {
+
+
+
+  hwi_ok = 1;
+
+
+  plugin_buildtime_hwi = sizeof(hwi_size_var);
+
+
+
+
+  if (gcc_runtime_hwi != plugin_buildtime_hwi) {
+
+
+      hwi_shift = (2 * (gcc_runtime_hwi - plugin_buildtime_hwi));
+  }
+
+
+
+
+     }
+ }
+    }
+
+
+
+
+
     register_callback(plugin_na->base_name,
         PLUGIN_START_UNIT,
         &attribute_injector_start_unit_callback,((void *)0));
@@ -27406,6 +27778,6 @@ int plugin_init(struct plugin_name_args *plugin_na,
     register_callback(plugin_na->base_name,
         PLUGIN_ALL_PASSES_END,
         &param_injector_end_passes_callback, ((void *)0));
-# 506 "../../../src/acf_plugin.c"
+# 569 "../../../src/acf_plugin.c"
     return 0;
 }

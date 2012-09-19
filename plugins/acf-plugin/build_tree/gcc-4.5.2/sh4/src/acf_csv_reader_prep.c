@@ -833,6 +833,97 @@ extern int ftrylockfile (FILE *__stream) __attribute__ ((__nothrow__)) ;
 
 
 extern void funlockfile (FILE *__stream) __attribute__ ((__nothrow__));
+# 907 "/usr/include/stdio.h" 3 4
+# 1 "/usr/include/bits/stdio.h" 1 3 4
+# 36 "/usr/include/bits/stdio.h" 3 4
+extern __inline int
+vprintf (__const char *__restrict __fmt, __gnuc_va_list __arg)
+{
+  return vfprintf (stdout, __fmt, __arg);
+}
+
+
+
+extern __inline int
+getchar (void)
+{
+  return _IO_getc (stdin);
+}
+
+
+
+
+extern __inline int
+fgetc_unlocked (FILE *__fp)
+{
+  return (__builtin_expect (((__fp)->_IO_read_ptr >= (__fp)->_IO_read_end), 0) ? __uflow (__fp) : *(unsigned char *) (__fp)->_IO_read_ptr++);
+}
+
+
+
+
+
+extern __inline int
+getc_unlocked (FILE *__fp)
+{
+  return (__builtin_expect (((__fp)->_IO_read_ptr >= (__fp)->_IO_read_end), 0) ? __uflow (__fp) : *(unsigned char *) (__fp)->_IO_read_ptr++);
+}
+
+
+extern __inline int
+getchar_unlocked (void)
+{
+  return (__builtin_expect (((stdin)->_IO_read_ptr >= (stdin)->_IO_read_end), 0) ? __uflow (stdin) : *(unsigned char *) (stdin)->_IO_read_ptr++);
+}
+
+
+
+
+extern __inline int
+putchar (int __c)
+{
+  return _IO_putc (__c, stdout);
+}
+
+
+
+
+extern __inline int
+fputc_unlocked (int __c, FILE *__stream)
+{
+  return (__builtin_expect (((__stream)->_IO_write_ptr >= (__stream)->_IO_write_end), 0) ? __overflow (__stream, (unsigned char) (__c)) : (unsigned char) (*(__stream)->_IO_write_ptr++ = (__c)));
+}
+
+
+
+
+
+extern __inline int
+putc_unlocked (int __c, FILE *__stream)
+{
+  return (__builtin_expect (((__stream)->_IO_write_ptr >= (__stream)->_IO_write_end), 0) ? __overflow (__stream, (unsigned char) (__c)) : (unsigned char) (*(__stream)->_IO_write_ptr++ = (__c)));
+}
+
+
+extern __inline int
+putchar_unlocked (int __c)
+{
+  return (__builtin_expect (((stdout)->_IO_write_ptr >= (stdout)->_IO_write_end), 0) ? __overflow (stdout, (unsigned char) (__c)) : (unsigned char) (*(stdout)->_IO_write_ptr++ = (__c)));
+}
+# 125 "/usr/include/bits/stdio.h" 3 4
+extern __inline int
+__attribute__ ((__nothrow__)) feof_unlocked (FILE *__stream)
+{
+  return (((__stream)->_flags & 0x10) != 0);
+}
+
+
+extern __inline int
+__attribute__ ((__nothrow__)) ferror_unlocked (FILE *__stream)
+{
+  return (((__stream)->_flags & 0x20) != 0);
+}
+# 908 "/usr/include/stdio.h" 2 3 4
 # 916 "/usr/include/stdio.h" 3 4
 
 # 21 "../../../src/acf_csv_reader.c" 2
@@ -1091,6 +1182,239 @@ extern char *__stpncpy (char *__restrict __dest,
 extern char *stpncpy (char *__restrict __dest,
         __const char *__restrict __src, size_t __n)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+# 632 "/usr/include/string.h" 3 4
+# 1 "/usr/include/bits/string.h" 1 3 4
+# 633 "/usr/include/string.h" 2 3 4
+
+
+# 1 "/usr/include/bits/string2.h" 1 3 4
+# 52 "/usr/include/bits/string2.h" 3 4
+# 1 "/usr/include/endian.h" 1 3 4
+# 37 "/usr/include/endian.h" 3 4
+# 1 "/usr/include/bits/endian.h" 1 3 4
+# 38 "/usr/include/endian.h" 2 3 4
+# 61 "/usr/include/endian.h" 3 4
+# 1 "/usr/include/bits/byteswap.h" 1 3 4
+# 28 "/usr/include/bits/byteswap.h" 3 4
+# 1 "/usr/include/bits/wordsize.h" 1 3 4
+# 29 "/usr/include/bits/byteswap.h" 2 3 4
+# 62 "/usr/include/endian.h" 2 3 4
+# 53 "/usr/include/bits/string2.h" 2 3 4
+# 394 "/usr/include/bits/string2.h" 3 4
+extern void *__rawmemchr (const void *__s, int __c);
+# 969 "/usr/include/bits/string2.h" 3 4
+extern __inline size_t __strcspn_c1 (__const char *__s, int __reject);
+extern __inline size_t
+__strcspn_c1 (__const char *__s, int __reject)
+{
+  register size_t __result = 0;
+  while (__s[__result] != '\0' && __s[__result] != __reject)
+    ++__result;
+  return __result;
+}
+
+extern __inline size_t __strcspn_c2 (__const char *__s, int __reject1,
+         int __reject2);
+extern __inline size_t
+__strcspn_c2 (__const char *__s, int __reject1, int __reject2)
+{
+  register size_t __result = 0;
+  while (__s[__result] != '\0' && __s[__result] != __reject1
+  && __s[__result] != __reject2)
+    ++__result;
+  return __result;
+}
+
+extern __inline size_t __strcspn_c3 (__const char *__s, int __reject1,
+         int __reject2, int __reject3);
+extern __inline size_t
+__strcspn_c3 (__const char *__s, int __reject1, int __reject2,
+       int __reject3)
+{
+  register size_t __result = 0;
+  while (__s[__result] != '\0' && __s[__result] != __reject1
+  && __s[__result] != __reject2 && __s[__result] != __reject3)
+    ++__result;
+  return __result;
+}
+# 1045 "/usr/include/bits/string2.h" 3 4
+extern __inline size_t __strspn_c1 (__const char *__s, int __accept);
+extern __inline size_t
+__strspn_c1 (__const char *__s, int __accept)
+{
+  register size_t __result = 0;
+
+  while (__s[__result] == __accept)
+    ++__result;
+  return __result;
+}
+
+extern __inline size_t __strspn_c2 (__const char *__s, int __accept1,
+        int __accept2);
+extern __inline size_t
+__strspn_c2 (__const char *__s, int __accept1, int __accept2)
+{
+  register size_t __result = 0;
+
+  while (__s[__result] == __accept1 || __s[__result] == __accept2)
+    ++__result;
+  return __result;
+}
+
+extern __inline size_t __strspn_c3 (__const char *__s, int __accept1,
+        int __accept2, int __accept3);
+extern __inline size_t
+__strspn_c3 (__const char *__s, int __accept1, int __accept2, int __accept3)
+{
+  register size_t __result = 0;
+
+  while (__s[__result] == __accept1 || __s[__result] == __accept2
+  || __s[__result] == __accept3)
+    ++__result;
+  return __result;
+}
+# 1121 "/usr/include/bits/string2.h" 3 4
+extern __inline char *__strpbrk_c2 (__const char *__s, int __accept1,
+         int __accept2);
+extern __inline char *
+__strpbrk_c2 (__const char *__s, int __accept1, int __accept2)
+{
+
+  while (*__s != '\0' && *__s != __accept1 && *__s != __accept2)
+    ++__s;
+  return *__s == '\0' ? ((void *)0) : (char *) (size_t) __s;
+}
+
+extern __inline char *__strpbrk_c3 (__const char *__s, int __accept1,
+         int __accept2, int __accept3);
+extern __inline char *
+__strpbrk_c3 (__const char *__s, int __accept1, int __accept2,
+       int __accept3)
+{
+
+  while (*__s != '\0' && *__s != __accept1 && *__s != __accept2
+  && *__s != __accept3)
+    ++__s;
+  return *__s == '\0' ? ((void *)0) : (char *) (size_t) __s;
+}
+# 1172 "/usr/include/bits/string2.h" 3 4
+extern __inline char *__strtok_r_1c (char *__s, char __sep, char **__nextp);
+extern __inline char *
+__strtok_r_1c (char *__s, char __sep, char **__nextp)
+{
+  char *__result;
+  if (__s == ((void *)0))
+    __s = *__nextp;
+  while (*__s == __sep)
+    ++__s;
+  __result = ((void *)0);
+  if (*__s != '\0')
+    {
+      __result = __s++;
+      while (*__s != '\0')
+ if (*__s++ == __sep)
+   {
+     __s[-1] = '\0';
+     break;
+   }
+    }
+  *__nextp = __s;
+  return __result;
+}
+# 1204 "/usr/include/bits/string2.h" 3 4
+extern char *__strsep_g (char **__stringp, __const char *__delim);
+# 1222 "/usr/include/bits/string2.h" 3 4
+extern __inline char *__strsep_1c (char **__s, char __reject);
+extern __inline char *
+__strsep_1c (char **__s, char __reject)
+{
+  register char *__retval = *__s;
+  if (__retval != ((void *)0) && (*__s = (__extension__ (__builtin_constant_p (__reject) && !__builtin_constant_p (__retval) && (__reject) == '\0' ? (char *) __rawmemchr (__retval, __reject) : __builtin_strchr (__retval, __reject)))) != ((void *)0))
+    *(*__s)++ = '\0';
+  return __retval;
+}
+
+extern __inline char *__strsep_2c (char **__s, char __reject1, char __reject2);
+extern __inline char *
+__strsep_2c (char **__s, char __reject1, char __reject2)
+{
+  register char *__retval = *__s;
+  if (__retval != ((void *)0))
+    {
+      register char *__cp = __retval;
+      while (1)
+ {
+   if (*__cp == '\0')
+     {
+       __cp = ((void *)0);
+   break;
+     }
+   if (*__cp == __reject1 || *__cp == __reject2)
+     {
+       *__cp++ = '\0';
+       break;
+     }
+   ++__cp;
+ }
+      *__s = __cp;
+    }
+  return __retval;
+}
+
+extern __inline char *__strsep_3c (char **__s, char __reject1, char __reject2,
+       char __reject3);
+extern __inline char *
+__strsep_3c (char **__s, char __reject1, char __reject2, char __reject3)
+{
+  register char *__retval = *__s;
+  if (__retval != ((void *)0))
+    {
+      register char *__cp = __retval;
+      while (1)
+ {
+   if (*__cp == '\0')
+     {
+       __cp = ((void *)0);
+   break;
+     }
+   if (*__cp == __reject1 || *__cp == __reject2 || *__cp == __reject3)
+     {
+       *__cp++ = '\0';
+       break;
+     }
+   ++__cp;
+ }
+      *__s = __cp;
+    }
+  return __retval;
+}
+# 1298 "/usr/include/bits/string2.h" 3 4
+# 1 "/usr/include/stdlib.h" 1 3 4
+# 33 "/usr/include/stdlib.h" 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.5.2/install/lib/gcc/x86_64-unknown-linux-gnu/4.5.2/include/stddef.h" 1 3 4
+# 34 "/usr/include/stdlib.h" 2 3 4
+
+
+# 469 "/usr/include/stdlib.h" 3 4
+
+
+extern void *malloc (size_t __size) __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) ;
+
+extern void *calloc (size_t __nmemb, size_t __size)
+     __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) ;
+
+# 958 "/usr/include/stdlib.h" 3 4
+
+# 1299 "/usr/include/bits/string2.h" 2 3 4
+
+
+
+
+extern char *__strdup (__const char *__string) __attribute__ ((__nothrow__)) __attribute__ ((__malloc__));
+# 1322 "/usr/include/bits/string2.h" 3 4
+extern char *__strndup (__const char *__string, size_t __n)
+     __attribute__ ((__nothrow__)) __attribute__ ((__malloc__));
+# 636 "/usr/include/string.h" 2 3 4
 # 644 "/usr/include/string.h" 3 4
 
 # 22 "../../../src/acf_csv_reader.c" 2
@@ -1211,6 +1535,33 @@ __extension__
 extern unsigned long long int strtoull (__const char *__restrict __nptr,
      char **__restrict __endptr, int __base)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+# 277 "/usr/include/stdlib.h" 3 4
+
+extern __inline double
+__attribute__ ((__nothrow__)) atof (__const char *__nptr)
+{
+  return strtod (__nptr, (char **) ((void *)0));
+}
+extern __inline int
+__attribute__ ((__nothrow__)) atoi (__const char *__nptr)
+{
+  return (int) strtol (__nptr, (char **) ((void *)0), 10);
+}
+extern __inline long int
+__attribute__ ((__nothrow__)) atol (__const char *__nptr)
+{
+  return strtol (__nptr, (char **) ((void *)0), 10);
+}
+
+
+
+
+__extension__ extern __inline long long int
+__attribute__ ((__nothrow__)) atoll (__const char *__nptr)
+{
+  return strtoll (__nptr, (char **) ((void *)0), 10);
+}
 
 # 311 "/usr/include/stdlib.h" 3 4
 extern char *l64a (long int __n) __attribute__ ((__nothrow__)) ;
@@ -1335,20 +1686,7 @@ typedef unsigned int u_int32_t __attribute__ ((__mode__ (__SI__)));
 typedef unsigned int u_int64_t __attribute__ ((__mode__ (__DI__)));
 
 typedef int register_t __attribute__ ((__mode__ (__word__)));
-# 217 "/usr/include/sys/types.h" 3 4
-# 1 "/usr/include/endian.h" 1 3 4
-# 37 "/usr/include/endian.h" 3 4
-# 1 "/usr/include/bits/endian.h" 1 3 4
-# 38 "/usr/include/endian.h" 2 3 4
-# 61 "/usr/include/endian.h" 3 4
-# 1 "/usr/include/bits/byteswap.h" 1 3 4
-# 28 "/usr/include/bits/byteswap.h" 3 4
-# 1 "/usr/include/bits/wordsize.h" 1 3 4
-# 29 "/usr/include/bits/byteswap.h" 2 3 4
-# 62 "/usr/include/endian.h" 2 3 4
-# 218 "/usr/include/sys/types.h" 2 3 4
-
-
+# 220 "/usr/include/sys/types.h" 3 4
 # 1 "/usr/include/sys/select.h" 1 3 4
 # 31 "/usr/include/sys/select.h" 3 4
 # 1 "/usr/include/bits/select.h" 1 3 4
@@ -1456,6 +1794,27 @@ __extension__
 extern unsigned long long int gnu_dev_makedev (unsigned int __major,
             unsigned int __minor)
      __attribute__ ((__nothrow__));
+
+
+__extension__ extern __inline unsigned int
+__attribute__ ((__nothrow__)) gnu_dev_major (unsigned long long int __dev)
+{
+  return ((__dev >> 8) & 0xfff) | ((unsigned int) (__dev >> 32) & ~0xfff);
+}
+
+__extension__ extern __inline unsigned int
+__attribute__ ((__nothrow__)) gnu_dev_minor (unsigned long long int __dev)
+{
+  return (__dev & 0xff) | ((unsigned int) (__dev >> 12) & ~0xff);
+}
+
+__extension__ extern __inline unsigned long long int
+__attribute__ ((__nothrow__)) gnu_dev_makedev (unsigned int __major, unsigned int __minor)
+{
+  return ((__minor & 0xff) | ((__major & 0xfff) << 8)
+   | (((unsigned long long int) (__minor & ~0xff)) << 12)
+   | (((unsigned long long int) (__major & ~0xfff)) << 32));
+}
 # 224 "/usr/include/sys/types.h" 2 3 4
 # 235 "/usr/include/sys/types.h" 3 4
 typedef __blkcnt_t blkcnt_t;
@@ -1761,23 +2120,7 @@ extern int seed48_r (unsigned short int __seed16v[3],
 extern int lcong48_r (unsigned short int __param[7],
         struct drand48_data *__buffer)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
-
-
-
-
-
-
-
-
-
-extern void *malloc (size_t __size) __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) ;
-
-extern void *calloc (size_t __nmemb, size_t __size)
-     __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) ;
-
-
-
-
+# 479 "/usr/include/stdlib.h" 3 4
 
 
 
@@ -2312,7 +2655,7 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
      for(;ccol != ((void *)0); ccol = ccol->next_column) {
   switch (table_c) {
   case 0:
-      if (strcmp ((char *) ccol->csv_entry, "") == 0) {
+      if (__extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p ((char *) ccol->csv_entry) && __builtin_constant_p ("") && (__s1_len = strlen ((char *) ccol->csv_entry), __s2_len = strlen (""), (!((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) || __s1_len >= 4) && (!((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) || __s2_len >= 4)) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) && (__s1_len = strlen ((char *) ccol->csv_entry), __s1_len < 4) ? (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s2 = (__const unsigned char *) (__const char *) (""); register int __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) && (__s2_len = strlen (""), __s2_len < 4) ? (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s1 = (__const unsigned char *) (__const char *) ((char *) ccol->csv_entry); register int __result = __s1[0] - ((__const unsigned char *) (__const char *) (""))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((__const unsigned char *) (__const char *) (""))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((__const unsigned char *) (__const char *) (""))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((__const unsigned char *) (__const char *) (""))[3]); } } __result; }))) : __builtin_strcmp ((char *) ccol->csv_entry, "")))); }) == 0) {
    if (verbose)
        printf("acf_plugin warning: discarded line %d: "
        "function name unspecified\n",
@@ -2321,7 +2664,7 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
       }
       break;
   case 1:
-      if (strcmp((char *) ccol->csv_entry, "") == 0) {
+      if (__extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p ((char *) ccol->csv_entry) && __builtin_constant_p ("") && (__s1_len = strlen ((char *) ccol->csv_entry), __s2_len = strlen (""), (!((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) || __s1_len >= 4) && (!((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) || __s2_len >= 4)) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) && (__s1_len = strlen ((char *) ccol->csv_entry), __s1_len < 4) ? (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s2 = (__const unsigned char *) (__const char *) (""); register int __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) && (__s2_len = strlen (""), __s2_len < 4) ? (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s1 = (__const unsigned char *) (__const char *) ((char *) ccol->csv_entry); register int __result = __s1[0] - ((__const unsigned char *) (__const char *) (""))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((__const unsigned char *) (__const char *) (""))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((__const unsigned char *) (__const char *) (""))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((__const unsigned char *) (__const char *) (""))[3]); } } __result; }))) : __builtin_strcmp ((char *) ccol->csv_entry, "")))); }) == 0) {
    if (verbose)
        printf("acf_plugin warning: discarded line %d: "
        "attribute unspecified\n",
@@ -2330,12 +2673,12 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
       }
       break;
   case 2:
-      if (strcmp((char *) ccol->csv_entry, "") == 0) {
+      if (__extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p ((char *) ccol->csv_entry) && __builtin_constant_p ("") && (__s1_len = strlen ((char *) ccol->csv_entry), __s2_len = strlen (""), (!((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) || __s1_len >= 4) && (!((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) || __s2_len >= 4)) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) && (__s1_len = strlen ((char *) ccol->csv_entry), __s1_len < 4) ? (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s2 = (__const unsigned char *) (__const char *) (""); register int __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) && (__s2_len = strlen (""), __s2_len < 4) ? (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s1 = (__const unsigned char *) (__const char *) ((char *) ccol->csv_entry); register int __result = __s1[0] - ((__const unsigned char *) (__const char *) (""))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((__const unsigned char *) (__const char *) (""))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((__const unsigned char *) (__const char *) (""))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((__const unsigned char *) (__const char *) (""))[3]); } } __result; }))) : __builtin_strcmp ((char *) ccol->csv_entry, "")))); }) == 0) {
    argument_null = 1;
       }
       break;
   case 3:
-      if (strcmp((char *) ccol->csv_entry, "") == 0) {
+      if (__extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p ((char *) ccol->csv_entry) && __builtin_constant_p ("") && (__s1_len = strlen ((char *) ccol->csv_entry), __s2_len = strlen (""), (!((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) || __s1_len >= 4) && (!((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) || __s2_len >= 4)) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) && (__s1_len = strlen ((char *) ccol->csv_entry), __s1_len < 4) ? (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s2 = (__const unsigned char *) (__const char *) (""); register int __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) && (__s2_len = strlen (""), __s2_len < 4) ? (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s1 = (__const unsigned char *) (__const char *) ((char *) ccol->csv_entry); register int __result = __s1[0] - ((__const unsigned char *) (__const char *) (""))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((__const unsigned char *) (__const char *) (""))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((__const unsigned char *) (__const char *) (""))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((__const unsigned char *) (__const char *) (""))[3]); } } __result; }))) : __builtin_strcmp ((char *) ccol->csv_entry, "")))); }) == 0) {
    file_null = 1;
       }
       break;

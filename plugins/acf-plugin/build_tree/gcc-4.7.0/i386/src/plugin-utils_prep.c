@@ -261,6 +261,36 @@ extern long double strtold_l (__const char *__restrict __nptr,
          char **__restrict __endptr,
          __locale_t __loc)
      throw () __attribute__ ((__nonnull__ (1, 3))) ;
+
+
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) double
+atof (__const char *__nptr) throw ()
+{
+  return strtod (__nptr, (char **) __null);
+}
+extern __inline __attribute__ ((__gnu_inline__)) int
+atoi (__const char *__nptr) throw ()
+{
+  return (int) strtol (__nptr, (char **) __null, 10);
+}
+extern __inline __attribute__ ((__gnu_inline__)) long int
+atol (__const char *__nptr) throw ()
+{
+  return strtol (__nptr, (char **) __null, 10);
+}
+
+
+
+
+__extension__ extern __inline __attribute__ ((__gnu_inline__)) long long int
+atoll (__const char *__nptr) throw ()
+{
+  return strtoll (__nptr, (char **) __null, 10);
+}
+
 # 311 "/usr/include/stdlib.h" 3 4
 extern char *l64a (long int __n) throw () ;
 
@@ -621,6 +651,27 @@ __extension__
 extern unsigned long long int gnu_dev_makedev (unsigned int __major,
             unsigned int __minor)
      throw ();
+
+
+__extension__ extern __inline __attribute__ ((__gnu_inline__)) unsigned int
+gnu_dev_major (unsigned long long int __dev) throw ()
+{
+  return ((__dev >> 8) & 0xfff) | ((unsigned int) (__dev >> 32) & ~0xfff);
+}
+
+__extension__ extern __inline __attribute__ ((__gnu_inline__)) unsigned int
+gnu_dev_minor (unsigned long long int __dev) throw ()
+{
+  return (__dev & 0xff) | ((unsigned int) (__dev >> 12) & ~0xff);
+}
+
+__extension__ extern __inline __attribute__ ((__gnu_inline__)) unsigned long long int
+gnu_dev_makedev (unsigned int __major, unsigned int __minor) throw ()
+{
+  return ((__minor & 0xff) | ((__major & 0xfff) << 8)
+   | (((unsigned long long int) (__minor & ~0xff)) << 12)
+   | (((unsigned long long int) (__major & ~0xfff)) << 32));
+}
 # 224 "/usr/include/sys/types.h" 2 3 4
 
 
@@ -2169,6 +2220,111 @@ extern int ftrylockfile (FILE *__stream) throw () ;
 
 
 extern void funlockfile (FILE *__stream) throw ();
+# 907 "/usr/include/stdio.h" 3 4
+# 1 "/usr/include/bits/stdio.h" 1 3 4
+# 36 "/usr/include/bits/stdio.h" 3 4
+extern __inline __attribute__ ((__gnu_inline__)) int
+vprintf (__const char *__restrict __fmt, __gnuc_va_list __arg)
+{
+  return vfprintf (stdout, __fmt, __arg);
+}
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+getchar (void)
+{
+  return _IO_getc (stdin);
+}
+
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+fgetc_unlocked (FILE *__fp)
+{
+  return (__builtin_expect (((__fp)->_IO_read_ptr >= (__fp)->_IO_read_end), 0) ? __uflow (__fp) : *(unsigned char *) (__fp)->_IO_read_ptr++);
+}
+
+
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+getc_unlocked (FILE *__fp)
+{
+  return (__builtin_expect (((__fp)->_IO_read_ptr >= (__fp)->_IO_read_end), 0) ? __uflow (__fp) : *(unsigned char *) (__fp)->_IO_read_ptr++);
+}
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+getchar_unlocked (void)
+{
+  return (__builtin_expect (((stdin)->_IO_read_ptr >= (stdin)->_IO_read_end), 0) ? __uflow (stdin) : *(unsigned char *) (stdin)->_IO_read_ptr++);
+}
+
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+putchar (int __c)
+{
+  return _IO_putc (__c, stdout);
+}
+
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+fputc_unlocked (int __c, FILE *__stream)
+{
+  return (__builtin_expect (((__stream)->_IO_write_ptr >= (__stream)->_IO_write_end), 0) ? __overflow (__stream, (unsigned char) (__c)) : (unsigned char) (*(__stream)->_IO_write_ptr++ = (__c)));
+}
+
+
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+putc_unlocked (int __c, FILE *__stream)
+{
+  return (__builtin_expect (((__stream)->_IO_write_ptr >= (__stream)->_IO_write_end), 0) ? __overflow (__stream, (unsigned char) (__c)) : (unsigned char) (*(__stream)->_IO_write_ptr++ = (__c)));
+}
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+putchar_unlocked (int __c)
+{
+  return (__builtin_expect (((stdout)->_IO_write_ptr >= (stdout)->_IO_write_end), 0) ? __overflow (stdout, (unsigned char) (__c)) : (unsigned char) (*(stdout)->_IO_write_ptr++ = (__c)));
+}
+
+
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) __ssize_t
+getline (char **__lineptr, size_t *__n, FILE *__stream)
+{
+  return __getdelim (__lineptr, __n, '\n', __stream);
+}
+
+
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+feof_unlocked (FILE *__stream) throw ()
+{
+  return (((__stream)->_flags & 0x10) != 0);
+}
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+ferror_unlocked (FILE *__stream) throw ()
+{
+  return (((__stream)->_flags & 0x20) != 0);
+}
+# 908 "/usr/include/stdio.h" 2 3 4
 # 916 "/usr/include/stdio.h" 3 4
 }
 # 43 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
@@ -2442,7 +2598,20 @@ extern void *memchr (void *__s, int __c, size_t __n)
       throw () __asm ("memchr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 extern __const void *memchr (__const void *__s, int __c, size_t __n)
       throw () __asm ("memchr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
-# 92 "/usr/include/string.h" 3 4
+
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) void *
+memchr (void *__s, int __c, size_t __n) throw ()
+{
+  return __builtin_memchr (__s, __c, __n);
+}
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) __const void *
+memchr (__const void *__s, int __c, size_t __n) throw ()
+{
+  return __builtin_memchr (__s, __c, __n);
+}
+
 }
 
 
@@ -2537,7 +2706,20 @@ extern char *strchr (char *__s, int __c)
      throw () __asm ("strchr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 extern __const char *strchr (__const char *__s, int __c)
      throw () __asm ("strchr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
-# 231 "/usr/include/string.h" 3 4
+
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) char *
+strchr (char *__s, int __c) throw ()
+{
+  return __builtin_strchr (__s, __c);
+}
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) __const char *
+strchr (__const char *__s, int __c) throw ()
+{
+  return __builtin_strchr (__s, __c);
+}
+
 }
 
 
@@ -2551,7 +2733,20 @@ extern char *strrchr (char *__s, int __c)
      throw () __asm ("strrchr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 extern __const char *strrchr (__const char *__s, int __c)
      throw () __asm ("strrchr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
-# 258 "/usr/include/string.h" 3 4
+
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) char *
+strrchr (char *__s, int __c) throw ()
+{
+  return __builtin_strrchr (__s, __c);
+}
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) __const char *
+strrchr (__const char *__s, int __c) throw ()
+{
+  return __builtin_strrchr (__s, __c);
+}
+
 }
 
 
@@ -2590,7 +2785,20 @@ extern char *strpbrk (char *__s, __const char *__accept)
      throw () __asm ("strpbrk") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 extern __const char *strpbrk (__const char *__s, __const char *__accept)
      throw () __asm ("strpbrk") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
-# 310 "/usr/include/string.h" 3 4
+
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) char *
+strpbrk (char *__s, __const char *__accept) throw ()
+{
+  return __builtin_strpbrk (__s, __accept);
+}
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) __const char *
+strpbrk (__const char *__s, __const char *__accept) throw ()
+{
+  return __builtin_strpbrk (__s, __accept);
+}
+
 }
 
 
@@ -2605,7 +2813,20 @@ extern char *strstr (char *__haystack, __const char *__needle)
 extern __const char *strstr (__const char *__haystack,
         __const char *__needle)
      throw () __asm ("strstr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
-# 338 "/usr/include/string.h" 3 4
+
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) char *
+strstr (char *__haystack, __const char *__needle) throw ()
+{
+  return __builtin_strstr (__haystack, __needle);
+}
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) __const char *
+strstr (__const char *__haystack, __const char *__needle) throw ()
+{
+  return __builtin_strstr (__haystack, __needle);
+}
+
 }
 
 
@@ -2708,7 +2929,20 @@ extern char *index (char *__s, int __c)
      throw () __asm ("index") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 extern __const char *index (__const char *__s, int __c)
      throw () __asm ("index") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
-# 485 "/usr/include/string.h" 3 4
+
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) char *
+index (char *__s, int __c) throw ()
+{
+  return __builtin_index (__s, __c);
+}
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) __const char *
+index (__const char *__s, int __c) throw ()
+{
+  return __builtin_index (__s, __c);
+}
+
 }
 
 
@@ -2723,7 +2957,20 @@ extern char *rindex (char *__s, int __c)
      throw () __asm ("rindex") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 extern __const char *rindex (__const char *__s, int __c)
      throw () __asm ("rindex") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
-# 513 "/usr/include/string.h" 3 4
+
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) char *
+rindex (char *__s, int __c) throw ()
+{
+  return __builtin_rindex (__s, __c);
+}
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) __const char *
+rindex (__const char *__s, int __c) throw ()
+{
+  return __builtin_rindex (__s, __c);
+}
+
 }
 
 
@@ -5014,7 +5261,92 @@ extern int __xmknod (int __ver, __const char *__path, __mode_t __mode,
 extern int __xmknodat (int __ver, int __fd, __const char *__path,
          __mode_t __mode, __dev_t *__dev)
      throw () __attribute__ ((__nonnull__ (3, 5)));
-# 534 "/usr/include/sys/stat.h" 3 4
+
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+stat (__const char *__path, struct stat *__statbuf) throw ()
+{
+  return __xstat (3, __path, __statbuf);
+}
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+lstat (__const char *__path, struct stat *__statbuf) throw ()
+{
+  return __lxstat (3, __path, __statbuf);
+}
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+fstat (int __fd, struct stat *__statbuf) throw ()
+{
+  return __fxstat (3, __fd, __statbuf);
+}
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+fstatat (int __fd, __const char *__filename, struct stat *__statbuf, int __flag) throw ()
+
+{
+  return __fxstatat (3, __fd, __filename, __statbuf, __flag);
+}
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+mknod (__const char *__path, __mode_t __mode, __dev_t __dev) throw ()
+{
+  return __xmknod (1, __path, __mode, &__dev);
+}
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+mknodat (int __fd, __const char *__path, __mode_t __mode, __dev_t __dev) throw ()
+
+{
+  return __xmknodat (1, __fd, __path, __mode, &__dev);
+}
+
+
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+stat64 (__const char *__path, struct stat64 *__statbuf) throw ()
+{
+  return __xstat64 (3, __path, __statbuf);
+}
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+lstat64 (__const char *__path, struct stat64 *__statbuf) throw ()
+{
+  return __lxstat64 (3, __path, __statbuf);
+}
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+fstat64 (int __fd, struct stat64 *__statbuf) throw ()
+{
+  return __fxstat64 (3, __fd, __statbuf);
+}
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+fstatat64 (int __fd, __const char *__filename, struct stat64 *__statbuf, int __flag) throw ()
+
+{
+  return __fxstatat64 (3, __fd, __filename, __statbuf, __flag);
+}
+
+
+
+
+
+
 }
 # 39 "/usr/include/fcntl.h" 2 3 4
 # 64 "/usr/include/fcntl.h" 3 4
@@ -5060,6 +5392,10 @@ extern "C" {
 extern int __sigismember (__const __sigset_t *, int);
 extern int __sigaddset (__sigset_t *, int);
 extern int __sigdelset (__sigset_t *, int);
+# 118 "/usr/include/bits/sigset.h" 3 4
+extern __inline __attribute__ ((__gnu_inline__)) int __sigismember (__const __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return (__set->__val[__word] & __mask) ? 1 : 0; }
+extern __inline __attribute__ ((__gnu_inline__)) int __sigaddset ( __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return ((__set->__val[__word] |= __mask), 0); }
+extern __inline __attribute__ ((__gnu_inline__)) int __sigdelset ( __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return ((__set->__val[__word] &= ~__mask), 0); }
 # 34 "/usr/include/signal.h" 2 3 4
 
 
@@ -6482,7 +6818,70 @@ extern intmax_t wcstoimax (__const wchar_t *__restrict __nptr,
 extern uintmax_t wcstoumax (__const wchar_t *__restrict __nptr,
        wchar_t ** __restrict __endptr, int __base)
      throw ();
-# 442 "/usr/include/inttypes.h" 3 4
+# 379 "/usr/include/inttypes.h" 3 4
+__extension__
+extern long long int __strtoll_internal (__const char *__restrict __nptr,
+      char **__restrict __endptr,
+      int __base, int __group)
+  throw () __attribute__ ((__nonnull__ (1))) ;
+
+extern __inline __attribute__ ((__gnu_inline__)) intmax_t
+strtoimax (__const char *__restrict nptr, char **__restrict endptr, int base) throw ()
+
+{
+  return __strtoll_internal (nptr, endptr, base, 0);
+}
+
+__extension__
+extern unsigned long long int __strtoull_internal (__const char *
+         __restrict __nptr,
+         char **
+         __restrict __endptr,
+         int __base,
+         int __group)
+  throw () __attribute__ ((__nonnull__ (1))) ;
+
+extern __inline __attribute__ ((__gnu_inline__)) uintmax_t
+strtoumax (__const char *__restrict nptr, char **__restrict endptr, int base) throw ()
+
+{
+  return __strtoull_internal (nptr, endptr, base, 0);
+}
+
+__extension__
+extern long long int __wcstoll_internal (__const wchar_t *
+      __restrict __nptr,
+      wchar_t **__restrict __endptr,
+      int __base, int __group)
+  throw () __attribute__ ((__nonnull__ (1))) ;
+
+extern __inline __attribute__ ((__gnu_inline__)) intmax_t
+wcstoimax (__const wchar_t *__restrict nptr, wchar_t **__restrict endptr, int base) throw ()
+
+{
+  return __wcstoll_internal (nptr, endptr, base, 0);
+}
+
+
+__extension__
+extern unsigned long long int __wcstoull_internal (__const wchar_t *
+         __restrict __nptr,
+         wchar_t **
+         __restrict __endptr,
+         int __base,
+         int __group)
+  throw () __attribute__ ((__nonnull__ (1))) ;
+
+extern __inline __attribute__ ((__gnu_inline__)) uintmax_t
+wcstoumax (__const wchar_t *__restrict nptr, wchar_t **__restrict endptr, int base) throw ()
+
+{
+  return __wcstoull_internal (nptr, endptr, base, 0);
+}
+
+
+
+
 }
 # 488 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
 
@@ -8445,7 +8844,32 @@ extern size_t __mbrlen (__const char *__restrict __s, size_t __n,
 extern size_t mbrlen (__const char *__restrict __s, size_t __n,
         mbstate_t *__restrict __ps) throw ();
 
-# 403 "/usr/include/wchar.h" 3 4
+
+
+
+
+
+
+
+extern wint_t __btowc_alias (int __c) __asm ("btowc");
+extern __inline __attribute__ ((__gnu_inline__)) wint_t
+btowc (int __c) throw ()
+{ return (__builtin_constant_p (__c) && __c >= '\0' && __c <= '\x7f'
+   ? (wint_t) __c : __btowc_alias (__c)); }
+
+extern int __wctob_alias (wint_t __c) __asm ("wctob");
+extern __inline __attribute__ ((__gnu_inline__)) int
+wctob (wint_t __wc) throw ()
+{ return (__builtin_constant_p (__wc) && __wc >= L'\0' && __wc <= L'\x7f'
+   ? (int) __wc : __wctob_alias (__wc)); }
+
+extern __inline __attribute__ ((__gnu_inline__)) size_t
+mbrlen (__const char *__restrict __s, size_t __n, mbstate_t *__restrict __ps) throw ()
+
+{ return (__ps != __null
+   ? mbrtowc (__null, __s, __n, __ps) : __mbrlen (__s, __n, __null)); }
+
+
 
 
 

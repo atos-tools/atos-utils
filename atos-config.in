@@ -168,7 +168,7 @@ EOF
 	[ "$machine_dir" != "sh" ] || machine_dir="sh4"
 	acfpath=${libdir}/plugins/gcc-${version}/${machine_dir}/${acf_plugin}
 	if [ ! -f "$acfpath" ]; then
-        # use only major/minor version numbers
+            # use only major/minor version numbers
 	    vers=`echo $version | sed 's/\([0-9]*\.[0-9]*\).*/\1/'`
 	    acfpath=`\ls -d1 ${libdir}/plugins/gcc-${vers}*/${machine_dir}/${acf_plugin} | sort -r | head -1`
 	fi 2>/dev/null
@@ -182,6 +182,18 @@ EOF
 	else
 	    echo "plugins_enabled 0"
 	fi
+
+        # host_wide_int size for plugins
+	HWI=0
+	# Locate cc1 from gcc path
+	cc1_path=`$compiler --print-prog-name=cc1`
+	if [ -f "$cc1_path" ]; then
+	    # Record HOST_WIDE_INT of cc1 compiler that loads the plugin
+	    HWI=`objdump -t $cc1_path | grep target_newline | awk '{print $5 - 0}'`
+	    [ "$HWI" != "" ] || HWI=0
+	fi
+	echo "host_wide_int $HWI"
+
     fi
 }
 

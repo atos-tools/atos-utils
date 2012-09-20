@@ -39,6 +39,7 @@ def invoque(tool, args):
         "atos-explore": run_atos_explore,
         "atos-init": run_atos_init,
         "atos-opt": run_atos_opt,
+        "atos-play": run_atos_play,
         "atos-profile": run_atos_profile,
         "atos-raudit": run_atos_raudit,
         "atos-run": run_atos_run,
@@ -707,6 +708,65 @@ def run_atos_opt(args):
                       " -C " + args.configuration_path + opt_q + \
                       opt_r + opt_nbruns + " -a '" + args.options + "'"
             status = process.system(command, print_output=True)
+    return status
+
+def run_atos_play(args):
+    """ ATOS play tool implementation. """
+
+    if not os.path.isdir(args.configuration_path):
+        print "error: atos-play: onfiguration missing: " + \
+              args.configuration_path
+        sys.exit(1)
+
+    if args.id == None:
+        if args.exe == None:
+            args.exe = []
+            try:
+                targetf = open(os.path.join(args.configuration_path,
+                                            "targets"),
+                               "r")
+            except:
+                print "error: atos-play: no target " \
+                      "executable and no identifier specified"
+                sys.exit(1)
+            else:
+                for line in targetf:
+                    args.exe.append(line.strip())
+                targetf.close()
+        else:
+            args.exe = [args.exe]
+
+        args.id = ""
+        sep = ""
+        for exe in args.exe:
+            args.id = sep + args.id + os.path.basename(exe)
+            sep = "-"
+
+    if args.ref:
+        select_opt = " --variant=REF"
+    elif args.localid != None:
+        select_opt = " --hash=" + args.localid
+    elif args.tradeoff != None:
+        select_opt = ""
+        for tradeoff in args.tradeoff:
+            select_opt = select_opt + " --tradeoff=" + str(tradeoff)
+    elif args.obj == "size":
+        select_opt = " --tradeoff=0.2"
+    else:
+        select_opt = " --tradeoff=5.0"
+
+    if args.printconfig:
+        print_action = " -p"
+    elif args.printvariant:
+        print_action = " -P"
+    else:
+        print_action = ""
+
+    command = os.path.join(globals.PYTHONDIR, "atos", "atos_lib.py") + \
+              " play -C " + args.configuration_path + \
+              " -i " + args.id + select_opt + " -N " + str(args.nbpoints) + \
+              print_action + " \"" + process.list2cmdline(args.command) + "\""
+    status = process.system(command, print_output=True)
     return status
 
 def run_atos_profile(args):

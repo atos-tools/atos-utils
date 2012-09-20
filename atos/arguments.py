@@ -34,6 +34,7 @@ def parser(tool):
         "atos-explore": parsers.atos_explore,
         "atos-init": parsers.atos_init,
         "atos-opt": parsers.atos_opt,
+        "atos-play": parsers.atos_play,
         "atos-profile": parsers.atos_profile,
         "atos-raudit": parsers.atos_raudit,
         "atos-run": parsers.atos_run,
@@ -115,6 +116,9 @@ class parsers:
 
         sub = subs.add_parser("opt", help="opt system")
         parsers.atos_opt(sub)
+
+        sub = subs.add_parser("play", help="play tool")
+        parsers.atos_play(sub)
 
         sub = subs.add_parser("profile", help="generate the profile build")
         parsers.atos_profile(sub)
@@ -280,6 +284,31 @@ class parsers:
         return parser
 
     @staticmethod
+    def atos_play(parser=None):
+        """ atos play arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-play",
+                                        description="ATOS play tool")
+        args.command(parser)
+        args.configuration_path(parser)
+        args.exe(parser)
+        group = parser.add_mutually_exclusive_group()
+        args.atos_play.objective(group)
+        args.atos_play.tradeoff(group)
+        args.atos_play.nbpoints(parser)
+        args.atos_play.ref(parser)
+        args.atos_play.localid(parser)
+        args.atos_play.printconfig(parser)
+        args.atos_play.printvariant(parser)
+        args.id(parser)
+        args.debug(parser)
+        args.force(parser, ("--force",))
+        args.quiet(parser)
+        args.dryrun(parser)
+        args.version(parser)
+        return parser
+
+    @staticmethod
     def atos_profile(parser=None):
         """ atos profile arguments parser factory. """
         if parser == None:
@@ -336,7 +365,7 @@ class parsers:
         output_group = parser.add_mutually_exclusive_group()
         args.output(output_group)
         args.atos_run.fd(output_group)
-        args.atos_run.id(parser)
+        args.id(parser)
         args.atos_run.silent(parser)
         args.force(parser, ("--force",))
         args.debug(parser)
@@ -498,6 +527,13 @@ class args:
              "defaults to args of command or all generated executables")
 
     @staticmethod
+    def id(parser, args=("-i", "--identifier")):
+        parser.add_argument(
+            *args,
+            dest="id",
+            help="identifier of run [default: executables basename]")
+
+    @staticmethod
     def options(parser, args=("-a", "--options")):
         parser.add_argument(
             *args,
@@ -647,15 +683,62 @@ class args:
                                  action='store_true',
                                  help="keep existing results if any")
 
-    class atos_run:
-        """ Namespace for non common atos-run arguments. """
+    class atos_play:
+        """ Namespace for non common atos-play arguments. """
 
         @staticmethod
-        def id(parser, args=("-i", "--identifier")):
+        def objective(parser, args=("-f", "--objective")):
+            parser.add_argument(*args,
+                                 dest="obj",
+                                 help="defined the objective function",
+                                 choices=["time", "size"],
+                                 default="time")
+
+        @staticmethod
+        def tradeoff(parser, args=("-s", "--tradeoff")):
+            parser.add_argument(*args,
+                                 dest="tradeoff",
+                                 action='append',
+                                 help="get best tradeoff results")
+
+        @staticmethod
+        def nbpoints(parser, args=("-N", "--nbpoints")):
             parser.add_argument(
                 *args,
-                 dest="id",
-                 help="identifier of run [default: executables basename]")
+                 dest="nbpoints",
+                 type=int,
+                 help="get nb best points given objective or tradeoff",
+                 default=1)
+
+        @staticmethod
+        def ref(parser, args=("-r", "--ref")):
+            parser.add_argument(*args,
+                                 dest="ref",
+                                 action='store_true',
+                                 help="get reference results")
+
+        @staticmethod
+        def localid(parser, args=("-l", "--localid")):
+            parser.add_argument(*args,
+                                 dest="localid",
+                                 help="get result identified by local_id")
+
+        @staticmethod
+        def printconfig(parser, args=("-p", "--printconfig")):
+            parser.add_argument(*args,
+                                 dest="printconfig",
+                                 action='store_true',
+                                 help="print configuration only")
+
+        @staticmethod
+        def printvariant(parser, args=("-P", "--printvariant")):
+            parser.add_argument(*args,
+                                 dest="printvariant",
+                                 action='store_true',
+                                 help="print configuration variant id only")
+
+    class atos_run:
+        """ Namespace for non common atos-run arguments. """
 
         @staticmethod
         def silent(parser, args=("-s", "--silent")):

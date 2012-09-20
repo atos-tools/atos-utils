@@ -37,7 +37,8 @@ def invoque(tool, args):
         "atos-init": run_atos_init,
         "atos-opt": run_atos_opt,
         "atos-profile": run_atos_profile,
-        "atos-raudit": run_atos_raudit
+        "atos-raudit": run_atos_raudit,
+        "atos-run": run_atos_run
         }
     logger.setup(vars(args))
     process.setup(vars(args))
@@ -300,7 +301,7 @@ def run_atos_build(args):
             command, print_output=True, get_output=True, output_stderr=True)
         if not args.dryrun:
             print "Executing: "
-            command = command + " -j" + str(args.j)
+            command = command + " -j" + str(args.jobs)
             (status, output) = process.system(
                 command, get_output=True, output_stderr=True)
             logf.write(output)
@@ -773,3 +774,269 @@ def run_atos_raudit(args):
 
     status = process.system(args.command)
     return status
+
+def run_atos_run(args):
+    """ ATOS run tool implementation. """
+
+    timeout = os.getenv("TIMEOUT")
+    if timeout == None:
+        timeout = os.path.join(globals.BINDIR, "atos-timeout") + " 3600"
+
+    if args.results_script == None \
+       and os.path.isfile(os.path.join(args.configuration_path,
+                                       "get_res.sh")):
+        args.results_script = os.path.join(args.configuration_path,
+                                           "get_res.sh")
+    else:
+        args.results_script = ""
+
+    if args.results_script == "":
+        if args.exe == None or args.exe == "":
+            args.exe = []
+            try:
+                targetf = open(os.path.join(args.configuration_path,
+                                            "targets"),
+                               "r")
+            except:
+                print "error: atos_run: no target executable specified"
+                sys.exit(1)
+            else:
+                for line in targetf:
+                    args.exe.append(line.strip())
+                targetf.close()
+        else:
+            args.exe = [args.exe]
+
+        if args.id == None:
+            args.id = ""
+            sep = ""
+            for exe in args.exe:
+                args.id = sep + args.id + os.path.basename(exe)
+                sep = "-"
+    else:
+        args.exe = ()
+
+    if args.variant == "REF":
+        if args.options != None:
+            if args.gopts != None:
+                args.variant = ("OPT-fprofile-generate" +
+                                ''.join(args.gopts.split()) +
+                                ''.join(args.options.split()))
+            elif args.uopts != None:
+                args.variant = ("OPT-fprofile-use" +
+                                ''.join(args.uopts.split()) +
+                                ''.join(args.options.split()))
+            else:
+                args.variant = "OPT" + ''.join(args.options.split())
+
+    if args.record or args.output_file != None:
+        args.fd = None
+
+    def get_size(executables):
+        exe_size = 0
+        for exe in executables:
+            if not os.path.isabs(exe):
+                status, exe = process.system("which " + exe,
+                                             get_output=True)
+            if exe == "":
+                return -1
+            if not args.dryrun:
+                exe.strip('\n')
+                command = "/usr/bin/size " + exe
+                status, output = process.system(command,
+                                            get_output=True)
+                exe_size = exe_size + int(output.splitlines()[1].split()[3])
+        return exe_size
+
+    def profile_path():
+        lpvariant = "REF"
+        if args.gopts != None:
+            lpvariant = "OPT" + "".join(process.cmdline2list(args.gopts))
+        return os.path.join(
+            os.path.abspath(args.configuration_path),
+            "profiles",
+            atos_lib.hashid(lpvariant))
+
+    def get_time(executables, script):
+        exe_time = 0
+        real_output = ""
+        if args.remote_path != None:
+            os.putenv("REMOTE_PROFILE_DIR", args.remote_path)
+            os.putenv("LOCAL_PROFILE_DIR", profile_path())
+
+        if script:
+            command = timeout + " /usr/bin/time -p " + \
+                      executables
+        else:
+            command = timeout + " /usr/bin/time -p " + \
+                      "".join(process.list2cmdline(executables))
+        status, output = process.system(command, get_output=True,
+                                        output_stderr=True)
+        if status != 0:
+            return -1, None
+
+        if not args.dryrun:
+            count = 0
+            last_time = 0
+            for line in output.splitlines():
+                if line.startswith("user"):
+                    last_time = float(line.split()[1]) * 1000
+                    exe_time = exe_time + last_time
+                    count = count + 1
+                if not line.startswith(("user", "real", "sys")):
+                    real_output = real_output + line + "\n"
+            if count > 1:
+                exe_time = exe_time - last_time
+
+        os.unsetenv("REMOTE_PROFILE_DIR")
+        os.unsetenv("LOCAL_PROFILE_DIR")
+
+        return exe_time, real_output
+
+    def output_run_results():
+        entry = "target:" + args.id
+        entry = entry + ",variant:" + args.variant
+        entry = entry + ",version:" + globals.VERSION
+        entry = entry + ",conf:"
+        if args.options != None:
+            entry = entry + \
+                    "".join(process.cmdline2list(args.options))
+        if args.uopts != None:
+            entry = entry + ",uconf:" + \
+                    "".join(process.cmdline2list(args.uopts))
+        if args.gopts != None:
+            entry = entry + ",gconf:" + \
+                    "".join(process.cmdline2list(args.gopts))
+        entry = entry + ",size:" + str(exe_size)
+        entry = entry + ",time:" + str(exe_time)
+        if args.output_file != None:
+            command = os.path.join(globals.PYTHONDIR, "atos",
+                                   "atos_lib.py") +  \
+                                   " add_result -r \"" + entry + "\" " + \
+                                   args.output_file
+            status = process.system(command)
+        elif args.fd != None:
+            command = os.path.join(globals.PYTHONDIR, "atos",
+                                   "atos_lib.py") + \
+                                   " add_result -r \"" + entry + \
+                                   "\" -C-"
+            status, output = process.system(command, get_output=True,
+                                            print_output=False)
+            if output != None:
+                fo.write(output)
+        else:
+            command = os.path.join(globals.PYTHONDIR, "atos",
+                                   "atos_lib.py") + \
+                                   " add_result -r \"" + entry + "\" -C " + \
+                                   args.configuration_path
+            status = process.system(command)
+
+    if not args.quiet:
+        print "Running variant " + args.variant + "..."
+    failure = False
+    logs = os.path.join(args.configuration_path, "logs")
+    if args.dryrun:
+        print "mkdir -p " + logs
+    else:
+        if not os.path.isdir(logs):
+            os.makedirs(logs)
+    hash_var = atos_lib.hashid(args.variant)
+    logfile = os.path.join(logs, "run-" + hash_var + ".log")
+    if not args.dryrun:
+        logf = open(logfile, 'w')
+
+    exe_time = ""
+    exe_size = ""
+
+    if args.exe != "":
+        exe_size = get_size(args.exe)
+        if exe_size == -1:
+            failure = True
+
+    if args.gopts == None and args.nbruns == None:
+        command = (os.path.join(globals.PYTHONDIR, "atos", "atos_lib.py")
+                   + " config -C " + args.configuration_path
+                   + " --get \"default_values.nb_runs\"")
+        status, args.nbruns = process.system(command, get_output=True)
+    if args.nbruns == "" or args.nbruns == None:
+        args.nbruns = 1
+    else:
+        args.nbruns = int(args.nbruns)
+
+    if args.fd != None:
+        fo = os.fdopen(args.fd, "w")
+
+    n = 1
+    while n <= args.nbruns:
+        if not args.dryrun:
+            logf.write("Running variant " + args.variant +
+                       " " + str(n) + "/" + str(args.nbruns) + "\n")
+        tmp_logfile = logfile + "." + str(n)
+        process.system("rm -f " + tmp_logfile)
+        run_sh = os.path.join(args.configuration_path,
+                              "run.sh")
+        if os.path.isfile(run_sh):
+            exe_time, output_time = get_time(run_sh, True)
+        else:
+            exe_time, output_time = get_time(args.executables, False)
+        if not args.dryrun:
+            tmp_logf = open(tmp_logfile, 'a')
+            tmp_logf.write(output_time)
+            tmp_logf.close()
+        if exe_time == -1:
+            failure = True
+
+        if failure:
+            exe_size = "FAILURE"
+            exe_time = "FAILURE"
+
+        if not args.silent:
+            if failure:
+                if args.results_script == "":
+                    args.id == "FAILURE"
+                output_run_results()
+            else:
+                output_res = ""
+                if args.results_script != "":
+                    command = args.results_script + " < " + \
+                              tmp_logfile
+                    status, output_res = process.system(command,
+                                                        get_output=True,
+                                                        output_stderr=True)
+                    if status != 0:
+                        failure = True
+                output = output_time + output_res
+                for line in output.splitlines():
+                    identifiers = []
+                    if line.startswith("ATOS:"):
+                        identifier = line.split(': ')[1]
+                        if not identifier in identifiers:
+                            identifiers.append(identifier)
+                            if "time:" in line:
+                                exe_time = line.split(': ')[3]
+                            elif "size:" in line:
+                                exe_size = line.split(': ')[3]
+
+                if exe_time == 0 or exe_size == 0:
+                    exe_time = "FAILURE"
+                    exe_size = "FAILURE"
+                output_run_results()
+        process.system("cat " + tmp_logfile + " > " + logfile)
+        process.system("rm " + tmp_logfile)
+        if failure:
+            if not args.quiet:
+                print "FAILURE while running variant " + args.variant + "..."
+            if not args.dryrun:
+                logf.write("FAILURE while running variant " + args.variant)
+                logf.write("\n")
+                logf.close
+            sys.exit(2)
+        else:
+            if not args.dryrun:
+                logf.write("SUCCESS running variant " + args.variant)
+                logf.write("\n")
+                logf.close
+        n = n + 1
+
+    if args.fd != None:
+        fo.close()

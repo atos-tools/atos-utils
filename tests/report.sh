@@ -13,13 +13,13 @@ while read line; do
     if [[ "$line" == *SUCCESS:* ]]; then
 	success=$((success+1))
 	nb=$((nb+1))
-    elif [[ "$line" == *INTERRUPTED* ]]; then
+    elif [[ "$line" == *INTERRUPTED:* ]]; then
 	interrupted=$((interrupted+1))
 	nb=$((nb+1))
-    elif [[ "$line" == *FAIL* ]]; then
+    elif [[ "$line" == *FAIL:* ]]; then
 	fail=$((fail+1))
 	nb=$((nb+1))
-    elif [[ "$line" == *SKIP* ]]; then
+    elif [[ "$line" == *SKIP:* ]]; then
 	skip=$((skip+1))
 	nb=$((nb+1))
     fi

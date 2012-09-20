@@ -72,3 +72,6 @@ $ROOT/bin/atos-explore-acf -f -F ./flags_list.txt
 $ROOT/bin/atos-explore-acf -f -x 100 -F ./flags_list.txt
 #   (1 ref + 2 flags * 2 files)
 [ `ls atos-configurations/acf_csv_dir | wc -l` -eq 10 ]
+
+# file-by-file staged exploration
+$ROOT/bin/atos-explore-acf -d -Y "" -x 100 -f -N 1 -V "base,fdo" -O "-Os,-O2,-O3"

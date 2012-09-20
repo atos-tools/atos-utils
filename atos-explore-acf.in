@@ -41,6 +41,9 @@ acf_cold_th=""
 acf_cold_opts="-Os"
 acf_cold_attrs="noinline cold"
 file_by_file_mode=0
+file_by_file_iter=0
+file_by_file_variants="base"
+file_by_file_opt_levels="-Os,-O2,-O3"
 
 #######################
 
@@ -67,6 +70,10 @@ Exploration Options:
       -Y "<cold_opts>" : Cold functions options [default: "$acf_cold_opts"]
       -Z "<cold_attrs>" : Cold functions attributes [default: "$acf_cold_attrs"]
       -f : Use file-by-file mode [default: false]
+      -N : Number of iterations in file-by-file staged exploration mode [default: 0]
+      -V <variants> : list of optimization variants for file-by-file staged exploration
+                      [ex: base,fdo,lto,fdo+lto] [default: $file_by_file_variants]
+      -O <optim_levels> : optimization levels [default: $file_by_file_opt_levels]
 
 Misc Options
       -q : quiet output
@@ -85,7 +92,7 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts C:e:p:x:y:Y:Z:n:b:F:fO:qdvh opt; do
+while getopts C:e:p:x:y:Y:Z:n:b:F:fN:V:O:qdvh opt; do
     case $opt in
 	C) configuration_path="$OPTARG"
 	    ;;
@@ -108,6 +115,12 @@ while getopts C:e:p:x:y:Y:Z:n:b:F:fO:qdvh opt; do
 	F) flags_file="$OPTARG"
             ;;
 	f) file_by_file_mode=1
+	    ;;
+	N) file_by_file_iter="$OPTARG"
+	    ;;
+	V) file_by_file_variants="$OPTARG"
+	    ;;
+	O) file_by_file_opt_levels="$OPTARG"
 	    ;;
 	q) opt_debug="-q"
 	    ;;
@@ -201,6 +214,7 @@ if [ "$file_by_file_mode" = "1" ]; then
 
     $pythondir/atos/atos_toolkit.py \
 	-C $configuration_path $opt_debug $opt_profdir $opt_nbruns \
-	--gen-file-by-file=$acf_cold_th,"$acf_cold_opts",$tmpfile,$flags_file "$@"
+	--variants=$file_by_file_variants --optlvl=$file_by_file_opt_levels \
+	--gen-file-by-file=$acf_cold_th,"$acf_cold_opts",$tmpfile,$flags_file,$file_by_file_iter "$@"
 fi
 

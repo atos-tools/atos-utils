@@ -35,7 +35,8 @@ def parser(tool):
         "atos-init": parsers.atos_init,
         "atos-opt": parsers.atos_opt,
         "atos-profile": parsers.atos_profile,
-        "atos-raudit": parsers.atos_raudit
+        "atos-raudit": parsers.atos_raudit,
+        "atos-run": parsers.atos_run
         }
     return factories[tool]()
 
@@ -121,6 +122,10 @@ class parsers:
                  help="audit and generate a run template "
                  "to be used by atos-build")
         parsers.atos_raudit(sub)
+
+        sub = subs.add_parser("run",
+                 help="run system")
+        parsers.atos_run(sub)
         return parser
 
     @staticmethod
@@ -148,7 +153,7 @@ class parsers:
         args.configuration_path(parser)
         args.ccregexp(parser)
         args.ccname(parser)
-        args.output(parser, "build.audit")
+        args.output(parser, "build.audit", parser)
         args.force(parser)
         args.debug(parser)
         args.quiet(parser)
@@ -168,12 +173,12 @@ class parsers:
         args.ccname(parser)
         args.path(parser)
         args.options(parser)
-        args.atos_build.variant(parser)
+        args.variant(parser)
         args.remote_path(parser, ("-b", "--remote_path"))
         args.atos_build.jobs(parser)
         group = parser.add_mutually_exclusive_group()
         args.useprofile(parser, group)
-        args.atos_build.genprofile(parser, group)
+        args.genprofile(parser, group)
         args.force(parser)
         args.debug(parser)
         args.quiet(parser)
@@ -191,7 +196,7 @@ class parsers:
         args.executables(parser)
         args.configuration_path(parser)
         args.atos_deps.input(parser)
-        args.output(parser, "build.mk")
+        args.output(parser, "build.mk", parser)
         args.atos_deps.last(parser)
         args.atos_deps.all(parser)
         args.force(parser)
@@ -213,7 +218,7 @@ class parsers:
         args.build_script(parser)
         args.force(parser)
         args.run_script(parser)
-        args.nbruns(parser)
+        args.nbruns(parser, 1)
         args.remote_path(parser)
         args.results_script(parser)
         args.clean(parser)
@@ -237,7 +242,7 @@ class parsers:
         args.run_script(parser)
         args.results_script(parser)
         args.atos_init.prof_script(parser)
-        args.nbruns(parser)
+        args.nbruns(parser, 1)
         args.remote_path(parser)
         args.debug(parser)
         args.force(parser)
@@ -257,10 +262,10 @@ class parsers:
         args.atos_opt.lto(parser)
         args.atos_opt.fdo(parser)
         args.atos_opt.keep(parser)
-        args.atos_opt.record(parser)
+        args.record(parser)
         args.remote_path(parser, ("-b", "--remote_path"))
         args.useprofile(parser, parser)
-        args.nbruns(parser)
+        args.nbruns(parser, 1)
         args.options(parser)
         args.debug(parser)
         args.force(parser, ("--force",))
@@ -296,12 +301,42 @@ class parsers:
                 description="ATOS raudit tool")
         args.command(parser)
         args.configuration_path(parser)
-        args.output(parser, "run.audit")
+        args.output(parser, "run.audit", parser)
         args.results_script(parser)
         args.force(parser)
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser)
+        args.version(parser)
+        return parser
+
+    @staticmethod
+    def atos_run(parser=None):
+        """ atos run arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-run",
+                                        description="ATOS run tool")
+        args.executables(parser)
+        args.exe(parser)
+        args.configuration_path(parser)
+        args.nbruns(parser, None)
+        args.remote_path(parser, ("-b", "--remote_path"))
+        args.results_script(parser)
+        prof_group = parser.add_mutually_exclusive_group()
+        args.useprofile(parser, prof_group)
+        args.genprofile(parser, prof_group)
+        args.record(parser)
+        args.variant(parser)
+        args.options(parser)
+        output_group = parser.add_mutually_exclusive_group()
+        args.output(parser, "None", output_group)
+        args.atos_run.fd(parser, output_group)
+        args.atos_run.id(parser)
+        args.atos_run.silent(parser)
+        args.force(parser, ("--force",))
+        args.debug(parser)
+        args.quiet(parser)
+        args.dryrun(parser, ("--dryrun",))
         args.version(parser)
         return parser
 
@@ -399,13 +434,13 @@ class args:
              help="run_script to be audited and optimized")
 
     @staticmethod
-    def nbruns(parser, args=("-n", "--nbruns")):
+    def nbruns(parser, default_val, args=("-n", "--nbruns")):
         parser.add_argument(
             *args,
              dest="nbruns",
              type=int,
              help="number of executions of <run_script>",
-             default=1)
+             default=default_val)
 
     @staticmethod
     def results_script(parser, args=("-t", "--results-script")):
@@ -446,8 +481,8 @@ class args:
             help="append given options to the compilation commands")
 
     @staticmethod
-    def output(parser, filename, args=("-o", "--output")):
-        parser.add_argument(
+    def output(parser, filename, group, args=("-o", "--output")):
+        group.add_argument(
             *args,
              dest="output_file",
             help="output description file, defaults to CONFIGURATION_PATH/"
@@ -458,6 +493,28 @@ class args:
         group.add_argument(*args,
                             dest="uopts",
                             help="use profile variant deduced by UOPTS")
+
+    @staticmethod
+    def genprofile(parser, group, args=("-g", "--genprof")):
+        group.add_argument(
+            *args,
+             dest="gopts",
+             help="generate profile variant deduced by GOPTS")
+
+    @staticmethod
+    def record(parser, args=("-r", "--record")):
+        parser.add_argument(*args,
+                             dest="record",
+                             action='store_true',
+                             help="record results")
+
+    @staticmethod
+    def variant(parser, args=("-w", "--variant")):
+        parser.add_argument(
+            *args,
+             dest="variant",
+             help="identifier of variant",
+             default="REF")
 
     @staticmethod
     def executables(parser):
@@ -496,14 +553,6 @@ class args:
         """ Namespace for non common atos-build arguments. """
 
         @staticmethod
-        def variant(parser, args=("-w", "--variant")):
-            parser.add_argument(
-                *args,
-                 dest="variant",
-                 help="identifier of variant",
-                 default="REF")
-
-        @staticmethod
         def jobs(parser, args=("-j", "--jobs")):
             parser.add_argument(
                 *args,
@@ -511,13 +560,6 @@ class args:
                  type=int,
                  help="use JOBS parallel thread when possible for building",
                  default=4)
-
-        @staticmethod
-        def genprofile(parser, group, args=("-g", "--genprof")):
-            group.add_argument(
-                *args,
-                 dest="gopts",
-                 help="use profile variant deduced by GOPTS")
 
     class atos_deps:
         """ Namespace for non common atos-deps arguments. """
@@ -581,9 +623,29 @@ class args:
                                  action='store_true',
                                  help="keep existing results if any")
 
+    class atos_run:
+        """ Namespace for non common atos-run arguments. """
+
         @staticmethod
-        def record(parser, args=("-r", "--record")):
-            parser.add_argument(*args,
-                                 dest="record",
-                                 action='store_true',
-                                 help="record results")
+        def id(parser, args=("-i", "--identifier")):
+            parser.add_argument(
+                *args,
+                 dest="id",
+                 help="identifier of run [default: executables basename]")
+
+        @staticmethod
+        def silent(parser, args=("-s", "--silent")):
+            parser.add_argument(
+                *args,
+                 dest="silent",
+                 action='store_true',
+                 help="silent mode, do not emit perf/size results")
+
+        @staticmethod
+        def fd(parser, group, args=("-f", "--fd")):
+            group.add_argument(
+                *args,
+                 dest="fd",
+                 type=int,
+                 help="fd reference for appending results",
+                 default=2)

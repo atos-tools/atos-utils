@@ -18,7 +18,7 @@ $ROOT/bin/atos-play -p -e sha1-c
 
 $ROOT/bin/atos-play -p -i sha1-c
 
-$ROOT/bin/atos-play -n -f size
+$ROOT/bin/atos-play -n -f size 2>&1
 
 [ `$ROOT/bin/atos-play -p -r | grep "ATOS: sha1-c: REF" | wc -l` -ne 0 ]
 

@@ -18,6 +18,7 @@
 #
 
 import sys, os, itertools, math, re
+from functools import partial
 from random import randint, choice, sample, seed
 
 import globals
@@ -196,7 +197,7 @@ class opt_flag_list():
 class generator():
 
     optlist, optlevel, variants, baseopts = None, None, None, None
-    atos_config = None
+    atos_config, seed = None, None
 
     generators = []
 
@@ -571,7 +572,67 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
 
 
 @generator
-def gen_file_by_file(cold_th, cold_opts, file_list, flags_file=None):
+def gen_staged(max_iter):
+    '''perform staged exploration'''
+
+    tradeoff_coeffs = [5, 1, 0.2]
+
+    def get_tradeoffs(results):
+        fselect = atos_lib.atos_client_results.select_tradeoff
+        return map(
+            lambda x: fselect(results, perf_size_ratio=x), tradeoff_coeffs)
+
+    def res_obj(result, flags, variant):
+        return atos_lib.atos_client_results.result(
+            {'size': result[0], 'time': result[1], 'target': '*',
+             'flags': flags, 'variant': variant})
+
+    def flags_files(dirname):
+        def is_flags_file(f):
+            return os.path.isfile(f) and re.match(
+                '^flags.\w*.cfg$', os.path.basename(f))
+        dirfiles = map(
+            partial(os.path.join, dirname), os.listdir(dirname))
+        return sorted(filter(is_flags_file, dirfiles))
+
+    debug('gen_staged')
+
+    flags_lists = flags_files(generator.atos_config)
+    seed(generator.seed)
+
+    results = []
+    debug('** explore basic configurations')
+    for optlevel in generator.optlevel.values():
+        for variant in generator.variants:
+            result = yield optlevel, variant
+            if result: results.append(res_obj(result, optlevel, variant))
+
+    for fl in flags_lists:
+        debug('** explore on flag_list: ' + fl)
+        tradeoffs = list(set(get_tradeoffs(results)))
+        debug('** compute tradeoff list: ' + str(tradeoffs))
+        for tradeoff in tradeoffs:
+            debug('**** base tradeoff: ' + str(tradeoff))
+            generator.optlist = opt_flag_list(fl)
+            generator.baseopts = atos_exp_base_flags(
+                '', tradeoff.flags, tradeoff.variant)
+            gen = gen_rnd_uniform_deps()
+            result = None
+            for ic in itertools.count():
+                if max_iter and ic >= int(max_iter): break
+                try: flags = gen.send(result)
+                except StopIteration: break
+                flags = ' '.join([tradeoff.flags, flags])
+                result = yield flags, tradeoff.variant
+                if result: results.append(
+                    res_obj(result, flags, tradeoff.variant))
+    # return best tradeoffs
+    raise StopIteration(dict(zip(tradeoff_coeffs, get_tradeoffs(results))))
+
+
+@generator
+def gen_file_by_file(cold_th, cold_opts, file_list,
+                     flags_file=None, staged=None):
     '''perform per file exploration'''
 
     debug('gen_file_by_file')
@@ -601,13 +662,6 @@ def gen_file_by_file(cold_th, cold_opts, file_list, flags_file=None):
     base_flags = atos_base_flags(
         '', 'base', (generator.baseopts or '', ''))[0].strip()
 
-    # flag list from flags file if any
-    opt_flag_list = (
-        flags_file and map(lambda x: x.strip(), open(flags_file).readlines())
-        or [])
-    if base_flags: opt_flag_list = map(
-        lambda x: '%s %s' % (base_flags, x), opt_flag_list)
-
     def csv_part_opt(obj_flags):
         # build option file containing flags for each object
         sum_flags = atos_lib.md5sum(str(obj_flags.items()))
@@ -619,28 +673,70 @@ def gen_file_by_file(cold_th, cold_opts, file_list, flags_file=None):
         return '--atos-optfile %s' % csv_name
 
     # reference run: simple partitioning with base flags
+    debug('fbf reference run - hot/cold partition, cold options')
     cold_obj_flags = dict(map(lambda x: (x, cold_opts), cold_list))
     obj_flags = dict(cold_obj_flags.items() + [('*', base_flags)])
     ref_result = yield csv_part_opt(obj_flags), 'basemin'
     debug('fbf res [%s] -> %s' % (str(obj_flags), str(ref_result[1])))
 
-    # if empty opt_flag_list: only partitioning mode
-    if not opt_flag_list: return
+    variant_modes = generator.baseopts and ['basemin'] or generator.variants
 
-    # else, run exploration on hot files
-    best_obj_flags = dict(cold_obj_flags)
-    best_time = ref_result[1]
-    for hot_obj in hot_list:
-        best_flags = base_flags
-        for hot_flags in opt_flag_list:
-            obj_flags = dict(best_obj_flags.items() + [(hot_obj, hot_flags)])
-            res_size, res_time = yield csv_part_opt(obj_flags), 'basemin'
-            debug('fbf res [%s] -> %s' % (str(obj_flags), str(res_time)))
-            if res_time < best_time:
-                best_time = res_time
-                best_flags = hot_flags
-        best_obj_flags.update({hot_obj: best_flags})
-    debug('fbf best config %s' % (str(best_obj_flags)))
+    # file-by-file staged exploration
+    if staged and int(staged):
+        for variant in variant_modes:
+            debug('fbf staged exploration')
+            hot_results = {}
+            init_obj_flags = dict(cold_obj_flags)
+            for hot_obj in hot_list:
+                debug('fbf staged exploration: ' + hot_obj)
+                generator.variants = ['base']  # do not loop on variants
+                gen, result = gen_staged(int(staged)), None
+                while True:
+                    try:
+                        flags, _ = gen.send(result)
+                    except StopIteration:
+                        tradeoffs_res = sys.exc_info()[1].args[0]
+                        for coeff in tradeoffs_res.keys():
+                            hot_results.setdefault(
+                                coeff, {})[hot_obj] = tradeoffs_res[coeff]
+                        break
+                    if base_flags: flags = '%s %s' % (base_flags, flags)
+                    obj_flags = dict(
+                        init_obj_flags.items() + [(hot_obj, flags)])
+                    result = yield csv_part_opt(obj_flags), variant
+            debug('fbf staged exploration results: ' + str(hot_results))
+            debug('compose best tradeoffs variants')
+            for coeff in hot_results.keys():
+                debug('compose best tradeoffs variants - coeff: ' + str(coeff))
+                obj_flags = dict(init_obj_flags.items())
+                for hot_obj in hot_results[coeff].keys():
+                    flags = hot_results[coeff][hot_obj].flags
+                    if base_flags: flags = '%s %s' % (base_flags, flags)
+                    obj_flags[hot_obj] = flags
+                yield csv_part_opt(obj_flags), variant
+
+    # run exploration on hot files based on flag list
+    if flags_file:
+        debug('fbf file exploration')
+        opt_flag_list = (flags_file and map(
+                lambda x: x.strip(), open(flags_file).readlines()) or [])
+        if base_flags: opt_flag_list = map(
+            lambda x: '%s %s' % (base_flags, x), opt_flag_list)
+        best_obj_flags = dict(cold_obj_flags)
+        best_time = ref_result[1]
+        for hot_obj in hot_list:
+            best_flags = (base_flags, 'base')
+            for hot_flags in opt_flag_list:
+                obj_flags = dict(
+                    best_obj_flags.items() + [(hot_obj, hot_flags)])
+                for variant in variant_modes:
+                    result = yield csv_part_opt(obj_flags), variant
+                    if not result: continue
+                    res_size, res_time = result
+                    if res_time < best_time:
+                        best_time, best_flags = res_time, (hot_flags, variant)
+            best_obj_flags.update({hot_obj: best_flags})
+        debug('fbf best config %s' % (str(best_obj_flags)))
 
 
 # ####################################################################
@@ -725,7 +821,7 @@ def atos_base_flags(flags, variant, baseopts):
     return base_flags, variantd[(fdo_set, lto_set, lipo_set)]
 
 
-def atos_exp_base_flags(baseopts):
+def atos_exp_base_flags(baseopts, nflags='', nvar='base'):
     new_opts = {
         'base': '',
         'fdo': '-fprofile-use',
@@ -733,7 +829,7 @@ def atos_exp_base_flags(baseopts):
         'fdo+lto': '-fprofile-use -flto',
         'lipo': '-fprofile-use -fripa',
         }
-    flags, variant = atos_base_flags('', 'base', baseopts)
+    flags, variant = atos_base_flags(nflags, nvar, baseopts)
     return flags + ' ' + new_opts[variant]
 
 
@@ -808,8 +904,8 @@ if __name__ == '__main__':
                      action='store', type='int', default=None,
                      help='maximum number of iterations (default: None)')
     parser.add_option('--seed', dest='seed',
-                     action='store', type='int', default=None,
-                     help='set the seed for random generator (default: None)')
+                     action='store', type='int', default=0,
+                     help='set the seed for random generator (default: 0)')
 
     # atos loop option
     group = optparse.OptionGroup(
@@ -880,6 +976,7 @@ if __name__ == '__main__':
     generator.optlevel = opt_flag.optlevel(opts.optlvl.split(','))
     generator.variants = opts.variants.split(',')
     generator.atos_config = opts.atos_configurations
+    generator.seed = opts.seed
 
     if opts.base_opts:
         opts.base_opts = opts.base_opts.split(',')

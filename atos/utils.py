@@ -20,10 +20,13 @@ import sys, os, stat
 
 import globals
 import atos
+import arguments
 import atos_lib
 import fnmatch
 import logger
 import process
+import shutil
+import copy
 
 def invoque(tool, args):
     """ Dispatcher that invoques the given tool and returns. """
@@ -38,7 +41,8 @@ def invoque(tool, args):
         "atos-opt": run_atos_opt,
         "atos-profile": run_atos_profile,
         "atos-raudit": run_atos_raudit,
-        "atos-run": run_atos_run
+        "atos-run": run_atos_run,
+        "atos-replay": run_atos_replay,
         }
     logger.setup(vars(args))
     process.setup(vars(args))
@@ -47,6 +51,18 @@ def invoque(tool, args):
 def execute(tool, args):
     """ Executes the invoque dispatcher and exits. """
     sys.exit(invoque(tool, args))
+
+def call(tool, args, **kwargs):
+    """ Call the given ATOS tool with args and returns.
+    Handles default arguments values if needed.
+    """
+    tool_args = arguments.argparse.Namespace()
+    for action in arguments.parser(tool)._actions:
+        if action.dest is None: continue
+        tool_args.__dict__[action.dest] = action.default
+    tool_args.__dict__.update(vars(args))
+    tool_args.__dict__.update(kwargs)
+    return invoque(tool, tool_args)
 
 def run_atos(args):
     """ Top level atos utility implementation. """
@@ -317,13 +333,14 @@ def run_atos_build(args):
             logf.write(variant)
             logf.write('\n')
             logf.close()
-            sys.exit(2)
+            return 2
         else:
             if not args.dryrun:
                 logf.write("SUCCESS building variant ")
                 logf.write(variant)
                 logf.write('\n')
                 logf.close()
+    return 0
 
 def run_atos_deps(args):
     """ ATOS deps tool implementation. """
@@ -506,7 +523,7 @@ def run_atos_init(args):
         print "atos-init: error: when using forced mode (-f) with no custom " \
         "results script (-t) the list of executables must be specified " \
         "(-e option)"
-        sys.exit(1)
+        return 1
 
     if args.results_script:
         opt_get_results_script = " -t " + args.results_script
@@ -586,7 +603,7 @@ def run_atos_init(args):
     elif not os.path.isfile(args.configuration_path + "/build.audit"):
         print "atos-init:error: missing build audit, " \
             "use -b option for specifying build script or use atos-audit tool"
-        sys.exit(1)
+        return 1
 
     command = (os.path.join(globals.PYTHONDIR, "atos", "atos_lib.py")
                + " config -C " + args.configuration_path
@@ -613,7 +630,7 @@ def run_atos_init(args):
     elif not os.path.isfile(args.configuration_path + "/run.audit"):
         print "atos-init: error: missing run audit, " \
             "use -r option for specifying run script or use atos-raudit tool"
-        sys.exit(1)
+        return 1
 
     if args.prof_script:
         prof_sh = os.path.join(args.configuration_path, "profile.sh")
@@ -623,6 +640,7 @@ def run_atos_init(args):
         proff.write("\n")
         proff.close()
         process.system("chmod 755 " + prof_sh)
+    return 0
 
 def run_atos_opt(args):
     """ ATOS opt tool implementation. """
@@ -661,7 +679,7 @@ def run_atos_opt(args):
         status, results = process.system(command, get_output=True)
         if results.strip() != "None":
             print "Skipping variant " + variant + "..."
-            sys.exit(0)
+            return 0
 
     if args.uopts != None:
         command = os.path.join(globals.BINDIR, "atos-profile") + \
@@ -733,13 +751,12 @@ def run_atos_profile(args):
         status = process.system(command_run, print_output=True)
     return status
 
-
 def run_atos_raudit(args):
     """ ATOS raudit tool implementation. """
 
     if args.command == None:
         print "error: atos-raudit: missing run command"
-        sys.exit(1)
+        return 1
 
     if not args.quiet:
         print "Auditing run..."
@@ -799,7 +816,7 @@ def run_atos_run(args):
                                "r")
             except:
                 print "error: atos_run: no target executable specified"
-                sys.exit(1)
+                return 1
             else:
                 for line in targetf:
                     args.exe.append(line.strip())
@@ -857,19 +874,14 @@ def run_atos_run(args):
             "profiles",
             atos_lib.hashid(lpvariant))
 
-    def get_time(executables, script):
+    def get_time(run_script):
         exe_time = 0
         real_output = ""
         if args.remote_path != None:
             os.putenv("REMOTE_PROFILE_DIR", args.remote_path)
             os.putenv("LOCAL_PROFILE_DIR", profile_path())
 
-        if script:
-            command = timeout + " /usr/bin/time -p " + \
-                      executables
-        else:
-            command = timeout + " /usr/bin/time -p " + \
-                      "".join(process.list2cmdline(executables))
+        command = timeout + " /usr/bin/time -p " + run_script
         status, output = process.system(command, get_output=True,
                                         output_stderr=True)
         if status != 0:
@@ -976,9 +988,11 @@ def run_atos_run(args):
         run_sh = os.path.join(args.configuration_path,
                               "run.sh")
         if os.path.isfile(run_sh):
-            exe_time, output_time = get_time(run_sh, True)
+            exe_time, output_time = get_time(run_sh)
         else:
-            exe_time, output_time = get_time(args.executables, False)
+            exe_time, output_time = get_time(
+                process.list2cmdline(args.command))
+
         if not args.dryrun:
             tmp_logf = open(tmp_logfile, 'a')
             tmp_logf.write(output_time)
@@ -993,7 +1007,7 @@ def run_atos_run(args):
         if not args.silent:
             if failure:
                 if args.results_script == "":
-                    args.id == "FAILURE"
+                    args.id = "FAILURE"
                 output_run_results()
             else:
                 output_res = ""
@@ -1029,14 +1043,60 @@ def run_atos_run(args):
             if not args.dryrun:
                 logf.write("FAILURE while running variant " + args.variant)
                 logf.write("\n")
-                logf.close
-            sys.exit(2)
+            logf.close()
+            return 2
         else:
             if not args.dryrun:
                 logf.write("SUCCESS running variant " + args.variant)
                 logf.write("\n")
-                logf.close
         n = n + 1
 
+    logf.close()
     if args.fd != None:
         fo.close()
+    return 0
+
+def run_atos_replay(args):
+    """ ATOS opt tool implementation. """
+
+    if not os.path.exists(args.results_path):
+        os.makedirs(args.results_path)
+
+    results_db_file = os.path.join(args.results_path, "results.db")
+    if not os.path.isfile(results_db_file):
+        db = atos_lib.atos_db_file(results_db_file)
+
+    config_target_file = os.path.join(args.configuration_path, 'targets')
+    result_target_file = os.path.join(args.results_path, 'targets')
+    if (not args.exe and os.path.exists(config_target_file)
+        and not os.path.exists(result_target_file)):
+        shutil.copyfile(config_target_file, result_target_file)
+
+    # reference build
+    status = call("atos-build", args)
+    if status != 0: return status
+
+    # reference run
+    status = call("atos-run", args,
+                  configuration_path=args.results_path, record=True,
+                  command=[args.run_script])
+    if status != 0: return status
+
+    # get frontier results
+    results_db = atos_lib.atos_db.db(args.configuration_path)
+    results_client = atos_lib.atos_client_results(results_db)
+    results = results_client.get_results(only_frontier=True, objects=True)
+
+    for result in results:
+        result_conf = getattr(result, 'conf', None)
+        result_uconf = getattr(result, 'uconf', None)
+
+        status = call(
+            "atos-build", args, options=result_conf, uopts=result_uconf)
+        if status != 0: continue
+
+        call("atos-run", args, configuration_path=args.results_path,
+             record=True, options=result_conf, uopts=result_uconf,
+             command=[args.run_script])
+
+    return 0

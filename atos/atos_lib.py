@@ -236,7 +236,8 @@ class atos_client_results():
             newobj._results = results
             return newobj
 
-    def __init__(self, atos_db, group_targets, query=None, group_name=None):
+    def __init__(self, atos_db,
+                 group_targets=None, query=None, group_name=None):
         query = query or {}
         self.db = atos_db
         if not group_targets:

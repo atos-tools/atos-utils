@@ -36,7 +36,8 @@ def parser(tool):
         "atos-opt": parsers.atos_opt,
         "atos-profile": parsers.atos_profile,
         "atos-raudit": parsers.atos_raudit,
-        "atos-run": parsers.atos_run
+        "atos-run": parsers.atos_run,
+        "atos-replay": parsers.atos_replay,
         }
     return factories[tool]()
 
@@ -126,6 +127,10 @@ class parsers:
         sub = subs.add_parser("run",
                  help="run system")
         parsers.atos_run(sub)
+
+        sub = subs.add_parser("replay", help="replay system")
+        parsers.atos_replay(sub)
+
         return parser
 
     @staticmethod
@@ -153,7 +158,7 @@ class parsers:
         args.configuration_path(parser)
         args.ccregexp(parser)
         args.ccname(parser)
-        args.output(parser, "build.audit", parser)
+        args.output(parser, default="build.audit")
         args.force(parser)
         args.debug(parser)
         args.quiet(parser)
@@ -177,8 +182,8 @@ class parsers:
         args.remote_path(parser, ("-b", "--remote_path"))
         args.atos_build.jobs(parser)
         group = parser.add_mutually_exclusive_group()
-        args.useprofile(parser, group)
-        args.genprofile(parser, group)
+        args.useprofile(group)
+        args.genprofile(group)
         args.force(parser)
         args.debug(parser)
         args.quiet(parser)
@@ -196,7 +201,7 @@ class parsers:
         args.executables(parser)
         args.configuration_path(parser)
         args.atos_deps.input(parser)
-        args.output(parser, "build.mk", parser)
+        args.output(parser, default="build.mk")
         args.atos_deps.last(parser)
         args.atos_deps.all(parser)
         args.force(parser)
@@ -218,7 +223,7 @@ class parsers:
         args.build_script(parser)
         args.force(parser)
         args.run_script(parser)
-        args.nbruns(parser, 1)
+        args.nbruns(parser, default=1)
         args.remote_path(parser)
         args.results_script(parser)
         args.clean(parser)
@@ -242,7 +247,7 @@ class parsers:
         args.run_script(parser)
         args.results_script(parser)
         args.atos_init.prof_script(parser)
-        args.nbruns(parser, 1)
+        args.nbruns(parser, default=1)
         args.remote_path(parser)
         args.debug(parser)
         args.force(parser)
@@ -264,8 +269,8 @@ class parsers:
         args.atos_opt.keep(parser)
         args.record(parser)
         args.remote_path(parser, ("-b", "--remote_path"))
-        args.useprofile(parser, parser)
-        args.nbruns(parser, 1)
+        args.useprofile(parser)
+        args.nbruns(parser, default=1)
         args.options(parser)
         args.debug(parser)
         args.force(parser, ("--force",))
@@ -301,7 +306,7 @@ class parsers:
                 description="ATOS raudit tool")
         args.command(parser)
         args.configuration_path(parser)
-        args.output(parser, "run.audit", parser)
+        args.output(parser, default="run.audit")
         args.results_script(parser)
         args.force(parser)
         args.debug(parser)
@@ -316,24 +321,43 @@ class parsers:
         if parser == None:
             parser = ATOSArgumentParser(prog="atos-run",
                                         description="ATOS run tool")
-        args.executables(parser)
+        args.command(parser)
         args.exe(parser)
         args.configuration_path(parser)
-        args.nbruns(parser, None)
+        args.nbruns(parser)
         args.remote_path(parser, ("-b", "--remote_path"))
         args.results_script(parser)
         prof_group = parser.add_mutually_exclusive_group()
-        args.useprofile(parser, prof_group)
-        args.genprofile(parser, prof_group)
+        args.useprofile(prof_group)
+        args.genprofile(prof_group)
         args.record(parser)
         args.variant(parser)
         args.options(parser)
         output_group = parser.add_mutually_exclusive_group()
-        args.output(parser, "None", output_group)
-        args.atos_run.fd(parser, output_group)
+        args.output(output_group)
+        args.atos_run.fd(output_group)
         args.atos_run.id(parser)
         args.atos_run.silent(parser)
         args.force(parser, ("--force",))
+        args.debug(parser)
+        args.quiet(parser)
+        args.dryrun(parser, ("--dryrun",))
+        args.version(parser)
+        return parser
+
+    @staticmethod
+    def atos_replay(parser=None):
+        """ atos replay arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-replay",
+                                        description="ATOS replay tool")
+        args.configuration_path(parser)
+        args.atos_replay.results_path(parser)
+        args.run_script(parser)
+        args.results_script(parser)
+        args.nbruns(parser)
+        args.exe(parser)
+
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
@@ -434,13 +458,13 @@ class args:
              help="run_script to be audited and optimized")
 
     @staticmethod
-    def nbruns(parser, default_val, args=("-n", "--nbruns")):
+    def nbruns(parser, default=None, args=("-n", "--nbruns")):
         parser.add_argument(
             *args,
              dest="nbruns",
              type=int,
              help="number of executions of <run_script>",
-             default=default_val)
+             default=default)
 
     @staticmethod
     def results_script(parser, args=("-t", "--results-script")):
@@ -481,22 +505,22 @@ class args:
             help="append given options to the compilation commands")
 
     @staticmethod
-    def output(parser, filename, group, args=("-o", "--output")):
-        group.add_argument(
+    def output(parser, default="None", args=("-o", "--output")):
+        parser.add_argument(
             *args,
              dest="output_file",
-            help="output description file, defaults to CONFIGURATION_PATH/"
-            + filename)
+             help="output description file, defaults to CONFIGURATION_PATH/"
+             + default)
 
     @staticmethod
-    def useprofile(parser, group, args=("-u", "--useprof")):
-        group.add_argument(*args,
+    def useprofile(parser, args=("-u", "--useprof")):
+        parser.add_argument(*args,
                             dest="uopts",
                             help="use profile variant deduced by UOPTS")
 
     @staticmethod
-    def genprofile(parser, group, args=("-g", "--genprof")):
-        group.add_argument(
+    def genprofile(parser, args=("-g", "--genprof")):
+        parser.add_argument(
             *args,
              dest="gopts",
              help="generate profile variant deduced by GOPTS")
@@ -642,10 +666,21 @@ class args:
                  help="silent mode, do not emit perf/size results")
 
         @staticmethod
-        def fd(parser, group, args=("-f", "--fd")):
-            group.add_argument(
+        def fd(parser, args=("-f", "--fd")):
+            parser.add_argument(
                 *args,
                  dest="fd",
                  type=int,
                  help="fd reference for appending results",
                  default=2)
+
+    class atos_replay:
+        """ Namespace for non common atos-replay arguments. """
+
+        @staticmethod
+        def results_path(parser, args=("-R", "--replay-dir")):
+            parser.add_argument(
+                *args,
+                 dest="results_path",
+                 help="directory for qualified results",
+                 default="atos-qualif")

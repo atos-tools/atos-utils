@@ -64,10 +64,10 @@ def setup(kwargs):
     """
     Configure the root logger for atos.
     """
-    debug = kwargs.get('debug', False)
+    debug = kwargs.get('debug', False) or os.getenv("ATOS_DEBUG")
     quiet = kwargs.get('quiet', False)
-    dryrun = kwargs.get('dryrun', False)
-    log_file = kwargs.get('log', None)
+    dryrun = kwargs.get('dryrun', False) or os.getenv("ATOS_DRYRUN")
+    log_file = kwargs.get('log', None) or os.getenv("ATOS_DEBUG_FILE")
 
     log_fmt = (
         '# [%(asctime)-15s] [%(filename)s:%(lineno)s,%(funcName)s]'

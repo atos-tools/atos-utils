@@ -11,7 +11,9 @@ mkdir $profdir
 
 cat > run.sh <<EOF
 #!/bin/sh
+echo "HELLO" 1>&2
 $SRCDIR/examples/sha1-c/run.sh
+echo "\$REMOTE_PROFILE_DIR -> \$LOCAL_PROFILE_DIR" 1>&2
 [ "\$REMOTE_PROFILE_DIR" = "" ] || mv \$REMOTE_PROFILE_DIR \$LOCAL_PROFILE_DIR
 EOF
 
@@ -25,3 +27,5 @@ $ROOT/bin/atos-init \
 $ROOT/bin/atos-opt -r -a -O2
 
 $ROOT/bin/atos-opt -r -f -a -O2
+
+[ `find atos-configurations/profiles -name "*.gcda" | wc -l` -eq 2 ]

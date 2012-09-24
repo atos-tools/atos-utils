@@ -81,7 +81,7 @@ def setup(kwargs):
     if debug: console_log_level = logging.DEBUG
     if quiet: console_log_level = logging.ERROR
 
-    console_log_handler = logging.StreamHandler()
+    console_log_handler = logging.StreamHandler(sys.stdout)
     if dryrun:
         console_log_handler.setFormatter(logging.Formatter())
         console_log_handler.addFilter(_ModuleLogFilter('process'))

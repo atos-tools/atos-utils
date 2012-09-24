@@ -179,7 +179,7 @@ def run_atos_build(args):
 
     if args.gopts != None:
         if args.gopts:
-            pvariant = ''.join(args.gopts.split())
+            pvariant = "OPT" + ''.join(args.gopts.split())
         if not args.path:
             profile_path = os.path.join(
                 args.configuration_path, "profiles", atos_lib.hashid(pvariant))
@@ -216,7 +216,7 @@ def run_atos_build(args):
     if args.uopts != None:
         pvariant = "REF"
         if args.uopts:
-            pvariant = ''.join(args.uopts.split())
+            pvariant = "OPT" + ''.join(args.uopts.split())
         if not profile_path:
             profile_path = os.path.join(
                 args.configuration_path, "profiles", atos_lib.hashid(pvariant))
@@ -335,12 +335,12 @@ def run_atos_build(args):
             logf.write('\n')
             logf.close()
             return 2
-        else:
-            if not args.dryrun:
-                logf.write("SUCCESS building variant ")
-                logf.write(variant)
-                logf.write('\n')
-                logf.close()
+    else:
+        if not args.dryrun:
+            logf.write("SUCCESS building variant ")
+            logf.write(variant)
+            logf.write('\n')
+            logf.close()
     return 0
 
 def run_atos_deps(args):
@@ -867,6 +867,13 @@ def run_atos_run(args):
     else:
         args.results_script = ""
 
+    if args.gopts and not args.remote_path:
+        config_file = os.path.join(args.configuration_path, 'config.json')
+        if os.path.isfile(config_file):
+            client = atos_lib.json_config(config_file)
+            args.remote_path = client.get_value(
+                "default_values.remote_profile_path")
+
     if args.results_script == "":
         if args.exe == None or args.exe == "":
             args.exe = []
@@ -937,10 +944,9 @@ def run_atos_run(args):
     def get_time(run_script):
         exe_time = 0
         real_output = ""
-        if args.remote_path != None:
+        if args.remote_path and args.gopts:
             os.putenv("REMOTE_PROFILE_DIR", args.remote_path)
             os.putenv("LOCAL_PROFILE_DIR", profile_path())
-
         command = timeout + " /usr/bin/time -p " + run_script
         status, output = process.system(command, get_output=True,
                                         output_stderr=True)
@@ -1053,10 +1059,11 @@ def run_atos_run(args):
             exe_time, output_time = get_time(
                 process.list2cmdline(args.command))
 
-        if not args.dryrun:
+        if not args.dryrun and output_time:
             tmp_logf = open(tmp_logfile, 'a')
             tmp_logf.write(output_time)
             tmp_logf.close()
+            logf.write(output_time)
         if exe_time == -1:
             failure = True
 
@@ -1095,7 +1102,6 @@ def run_atos_run(args):
                     exe_time = "FAILURE"
                     exe_size = "FAILURE"
                 output_run_results()
-        process.system("cat " + tmp_logfile + " > " + logfile)
         process.system("rm " + tmp_logfile)
         if failure:
             if not args.quiet:
@@ -1103,7 +1109,7 @@ def run_atos_run(args):
             if not args.dryrun:
                 logf.write("FAILURE while running variant " + args.variant)
                 logf.write("\n")
-            logf.close()
+                logf.close()
             return 2
         else:
             if not args.dryrun:
@@ -1111,7 +1117,8 @@ def run_atos_run(args):
                 logf.write("\n")
         n = n + 1
 
-    logf.close()
+    if not args.dryrun:
+        logf.close()
     if args.fd != None:
         fo.close()
     return 0

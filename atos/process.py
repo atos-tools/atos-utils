@@ -26,6 +26,7 @@ import select
 import fcntl
 import signal
 import cStringIO
+import __builtin__
 
 def cmdline2list(cmd):
     """
@@ -132,8 +133,11 @@ def setup(kwargs):
     """
     dryrun = kwargs.get('dryrun', False)
 
-    global _dryrun
+    global _dryrun, _real_open
     _dryrun = dryrun
+    if dryrun:
+        _real_open = __builtin__.open
+        __builtin__.open = _open
 
 def system(cmd, check_status=False, get_output=False, print_output=False,
            output_stderr=False):
@@ -161,3 +165,38 @@ def system(cmd, check_status=False, get_output=False, print_output=False,
         logging.debug('command [%s] -> %s' % (printable_cmd, str(status)))
     if check_status and status: sys.exit(status)
     return get_output and (status, output) or status
+
+def _open(name, *args):
+    if not _dryrun:
+        return _real_open(name, *args)
+    modes = set(args[0]) if args else None
+    if not modes:
+        return _real_open(name, *args)
+    if not (modes & set(["w", "a", "+"])):
+        return _real_open(name, *args)
+    logging.debug('# open-write ' + name)
+    return cStringIO.StringIO()
+
+class commands():
+
+    @staticmethod
+    def mkdir(dirname):
+        if os.path.isdir(dirname): return
+        logging.debug('# mkdir -p ' + dirname)
+        if _dryrun: return
+        os.makedirs(dirname)
+
+    @staticmethod
+    def touch(filename):
+        # http://stackoverflow.com/questions/1158076/
+        #   implement-touch-using-python
+        logging.debug('# touch ' + filename)
+        if _dryrun: return
+        with file(filename, 'a'):
+            os.utime(filename, None)
+
+    @staticmethod
+    def chmod(path, mode):
+        logging.debug('# chmod %s %s' % (str(mode), path))
+        if _dryrun: return
+        os.chmod(path, mode)

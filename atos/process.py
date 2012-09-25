@@ -177,6 +177,10 @@ def _open(name, *args):
     logging.debug('# open-write ' + name)
     return cStringIO.StringIO()
 
+def debug(msg, *args, **kwargs):
+    """ Log a process debug message on the ATOS logger. """
+    logging.debug(msg, *args, **kwargs)
+
 class commands():
 
     @staticmethod

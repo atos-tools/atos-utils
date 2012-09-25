@@ -27,7 +27,10 @@ import logger
 import process
 import shutil
 import copy
-from logging import info, debug
+import glob
+from logging import info, debug, error
+
+_initialized = False
 
 def invoque(tool, args):
     """ Dispatcher that invoques the given tool and returns. """
@@ -46,8 +49,11 @@ def invoque(tool, args):
         "atos-run": run_atos_run,
         "atos-replay": run_atos_replay,
         }
-    logger.setup(vars(args))
-    process.setup(vars(args))
+    global _initialized
+    if not _initialized:
+        logger.setup(vars(args))
+        process.setup(vars(args))
+        _initialized = True
     return functions[tool](args)
 
 def execute(tool, args):
@@ -58,6 +64,10 @@ def call(tool, args, **kwargs):
     """ Call the given ATOS tool with args and returns.
     Handles default arguments values if needed.
     """
+    if args.dryrun:
+        # TODO: rebuild command line for dryrun message
+        process.debug("# call: %s %s" % (tool, kwargs))
+        return 0
     tool_args = arguments.argparse.Namespace()
     for action in arguments.parser(tool)._actions:
         if action.dest is None: continue
@@ -371,87 +381,24 @@ def run_atos_deps(args):
 def run_atos_explore(args):
     """ ATOS explore tool implementation. """
 
-    if args.build_script:
-        opt_build = " -b '" + args.build_script + "'"
-    else:
-        opt_build = ""
+    call("atos-init", args)
 
-    if args.run_script:
-        opt_run = " -r '" + args.run_script + "'"
-    else:
-        opt_run = ""
-
-    if args.results_script:
-        opt_results = " -t '" + args.results_script + "'"
-    else:
-        opt_results = ""
-
-    if args.exe:
-        executables = " -e '" + args.exe + "'"
-    elif args.executables:
-        executables = " -e '" + " ".join(args.executables) + "'"
-    else:
-        executables = ""
-
-    if args.remote_path:
-        opt_remote_profile_path = " -B '" + args.remote_path + "'"
-    else:
-        opt_remote_profile_path = ""
-
-    opt_nbruns = " -n " + str(args.nbruns)
-    if args.quiet:
-        opt_q = " -q"
-    else:
-        opt_q = ""
-
-    if args.clean:
-        opt_c = " -c"
-    else:
-        opt_c = ""
-
-    if args.force:
-        opt_rebuild = " -f"
-    else:
-        opt_rebuild = ""
-
-    command = (
-        os.path.join(globals.BINDIR, "atos-init")
-        + " -C " + args.configuration_path + opt_build + opt_run
-        + opt_results + opt_remote_profile_path + executables
-        + opt_nbruns + opt_rebuild + opt_q + opt_c)
-    process.system(command, print_output=True, check_status=True)
-
-    for gopt in ['-O2', '-Os', '-O3']:
-        for opts in ['', ' -flto', ' -funroll-loops', ' -flto -funroll-loops']:
-            command_build = (
-                os.path.join(globals.BINDIR, "atos-build")
-                + " -C " + args.configuration_path + opt_q + " -a'"
-                + gopt + opts + "'")
-            status = process.system(command_build, print_output=True)
+    for opt_level in ['-O2', '-Os', '-O3']:
+        for opts in ['', '-flto', '-funroll-loops', '-flto -funroll-loops']:
+            options = ' '.join([opt_level, opts])
+            status = call("atos-build", args, options=options)
             if status == 0:
-                command_run = (
-                    os.path.join(globals.BINDIR, "atos-run")
-                    + " -C " + args.configuration_path + opt_q + " -r -a'"
-                    + gopt + opts + "'")
-                process.system(command_run, print_output=True)
+                call("atos-run", args, record=True, options=options)
 
-        command_prof = (
-            os.path.join(globals.BINDIR, "atos-profile")
-            + " -C " + args.configuration_path + opt_q + " -g'" + gopt + "'")
-        status = process.system(command_prof, print_output=True)
-        if status != 0: continue
-        for opts in ['', ' -flto', ' -funroll-loops', ' -flto -funroll-loops']:
-            command_build = (
-                os.path.join(globals.BINDIR, "atos-build")
-                + " -C " + args.configuration_path + opt_q + " -u'"
-                + gopt + "' -a'" + gopt + opts + "'")
-            status = process.system(command_build, print_output=True)
+        status = call("atos-profile", args, options=opt_level)
+        if status != 0: continue  # skip profile variants
+
+        for opts in ['', '-flto', '-funroll-loops', '-flto -funroll-loops']:
+            options = ' '.join([opt_level, opts])
+            status = call("atos-build", args, uopts=opt_level, options=options)
             if status == 0:
-                command_run = (
-                    os.path.join(globals.BINDIR, "atos-run")
-                    + " -C " + args.configuration_path + opt_q + " -r -u'"
-                    + gopt + "' -a'" + gopt + opts + "'")
-                process.system(command_run, print_output=True)
+                status = call("atos-run", args, record=True,
+                              uopts=opt_level, options=options)
 
     info("Completed.")
     return 0
@@ -459,117 +406,73 @@ def run_atos_explore(args):
 def run_atos_init(args):
     """ ATOS init tool implementation. """
 
-    if args.exe:
-        executables = " " + args.exe
-    elif args.executables:
-        executables = " ".join(process.list2cmdline(args.executables))
-    else:
-        executables = ""
-
-    if args.force and not args.results_script and args.executables == "":
-        print "atos-init: error: when using forced mode (-f) with no custom " \
-        "results script (-t) the list of executables must be specified " \
-        "(-e option)"
+    executables = args.exe and [args.exe] or args.executables
+    if args.force and not args.results_script and not executables:
+        error("when using forced mode (-f) with no custom results script (-t)"
+              " the list of executables must be specified (-e option)")
         return 1
-
-    if args.results_script:
-        opt_get_results_script = " -t " + args.results_script
-    else:
-        opt_get_results_script = ""
-    if args.remote_path:
-        opt_remote_profile_path = args.remote_path
-    else:
-        opt_remote_profile_path = ""
-    opt_nbruns = " -n " + str(args.nbruns)
-    if args.quiet:
-        opt_q = " -q"
-    else:
-        opt_q = " "
-    if args.clean:
-        opt_c = " -c"
-    else:
-        opt_c = ""
-    if args.force:
-        opt_rebuild = " -f"
-    else:
-        opt_rebuild = " "
-
-    if executables == "":
-        executables = " -a"
 
     process.commands.mkdir(args.configuration_path)
 
     if args.clean:
         if args.build_script:
             info("Cleaning build audit...")
-            rmcommand = "rm -f " + args.configuration_path + "/build.*"
-            process.system(rmcommand, print_output=True)
+            files = ' '.join(glob.glob('%s/build.*' % args.configuration_path))
+            process.system("rm -f %s" % (files), print_output=True)
         if args.run_script:
             info("Cleaning run audit...")
-            rmcommand = "rm -f " + args.configuration_path + "/run.*"
-            process.system(rmcommand, print_output=True)
+            files = ' '.join(glob.glob('%s/run.*' % args.configuration_path))
+            process.system("rm -f %s" % (files), print_output=True)
         info("Cleaning all profiles...")
-        rmcommand = "rm -rf " + args.configuration_path + "/profiles"
+        rmcommand = "rm -rf %s/profiles" % (args.configuration_path)
         process.system(rmcommand, print_output=True)
         info("Cleaning all results...")
-        rmcommand = "rm -rf " + args.configuration_path + "/results.db"
+        rmcommand = "rm -f %s/results.db" % (args.configuration_path)
         process.system(rmcommand, print_output=True)
 
     if args.build_script:
-        command_audit = (
-            os.path.join(globals.BINDIR, "atos-audit")
-            + " -C " + args.configuration_path + opt_q
-            + opt_rebuild + " " + args.build_script)
-        process.system(command_audit, print_output=True)
-        command_deps = (
-            os.path.join(globals.BINDIR, "atos-deps")
-            + " -C " + args.configuration_path + opt_q
-            + opt_rebuild + executables)
-        process.system(command_deps, print_output=True)
-        command_config = (
-            os.path.join(globals.BINDIR, "atos-config")
-            + " -C " + args.configuration_path)
+        call("atos-audit", args, command=process.cmdline2list(
+                args.build_script))
+        call("atos-deps", args, executables=executables, all=(not executables))
+        # TODO: to be replaced by call(atos-config)
+        command_config = [
+            os.path.join(globals.BINDIR, "atos-config"),
+            "-C", args.configuration_path]
         process.system(command_config, print_output=True)
-    elif not os.path.isfile(args.configuration_path + "/build.audit"):
-        print "atos-init:error: missing build audit, " \
-            "use -b option for specifying build script or use atos-audit tool"
+
+    elif not os.path.isfile(
+        os.path.join(args.configuration_path, "build.audit")):
+        error("missing build audit, use -b option for specifying build script"
+              " or use atos-audit tool")
         return 1
 
-    command = (os.path.join(globals.PYTHONDIR, "atos", "atos_lib.py")
-               + " config -C " + args.configuration_path
-               + " --add \"default_values.remote_profile_path:"
-               + opt_remote_profile_path + "\"")
-    process.system(command)
-    command = (
-        os.path.join(globals.PYTHONDIR, "atos", "atos_lib.py") +
-        " config -C " + args.configuration_path +
-        " --add \"default_values.nb_runs:" + str(args.nbruns) + "\"")
-    process.system(command)
+    config_file = os.path.join(args.configuration_path, 'config.json')
+
+    if args.remote_path:
+        atos_lib.json_config(config_file).add_value(
+            "default_values.remote_profile_path", args.remote_path)
+
+    if args.nbruns and args.nbruns != 1:
+        atos_lib.json_config(config_file).add_value(
+            "default_values.nb_runs", str(args.nbruns))
 
     if args.run_script:
-        command_raudit = (
-            os.path.join(globals.BINDIR, "atos-raudit")
-            + " -C " + args.configuration_path + opt_q +
-            opt_get_results_script + args.run_script)
-        process.system(command_raudit, print_output=True)
-        # reference run
-        command_run = (
-            os.path.join(globals.BINDIR, "atos-run")
-            + " -C " + args.configuration_path + opt_q + " -r")
-        process.system(command_run, print_output=True)
-    elif not os.path.isfile(args.configuration_path + "/run.audit"):
-        print "atos-init: error: missing run audit, " \
-            "use -r option for specifying run script or use atos-raudit tool"
+        call("atos-raudit", args, command=process.cmdline2list(
+                args.run_script))
+        call("atos-run", args, record=True)  # reference run
+
+    elif not os.path.isfile(
+        os.path.join(args.configuration_path, "run.audit")):
+        error("missing run audit, use -r option for specifying run script"
+              " or use atos-raudit tool")
         return 1
 
     if args.prof_script:
         prof_sh = os.path.join(args.configuration_path, "profile.sh")
-        proff = open(prof_sh, 'w')
-        proff.write("#!/bin/sh\n")
-        proff.write("cd $PWD && " + args.prof_script)
-        proff.write("\n")
-        proff.close()
-        process.system("chmod 755 " + prof_sh)
+        with open(prof_sh, 'w') as proff:
+            proff.write("#!/bin/sh\n")
+            proff.write("cd $PWD && %s\n" % args.prof_script)
+        process.commands.chmod(prof_sh, 0755)
     return 0
 
 def run_atos_opt(args):
@@ -808,7 +711,7 @@ def run_atos_run(args):
                                             "targets"),
                                "r")
             except:
-                print "error: atos_run: no target executable specified"
+                error("no target executable specified")
                 return 1
             else:
                 for line in targetf:
@@ -958,6 +861,7 @@ def run_atos_run(args):
                    + " config -C " + args.configuration_path
                    + " --get \"default_values.nb_runs\"")
         status, args.nbruns = process.system(command, get_output=True)
+        args.nbruns = args.nbruns and args.nbruns.strip()
     if args.nbruns == "" or args.nbruns == None:
         args.nbruns = 1
     else:
@@ -1000,6 +904,7 @@ def run_atos_run(args):
             else:
                 output_res = ""
                 if args.results_script != "":
+                    # TODO: fixme - redir does not work
                     command = args.results_script + " < " + \
                               tmp_logfile
                     status, output_res = process.system(command,

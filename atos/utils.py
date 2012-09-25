@@ -459,7 +459,8 @@ def run_atos_init(args):
     if args.run_script:
         call("atos-raudit", args, command=process.cmdline2list(
                 args.run_script))
-        call("atos-run", args, record=True)  # reference run
+        if not args.no_run:
+            call("atos-run", args, record=True)  # reference run
 
     elif not os.path.isfile(
         os.path.join(args.configuration_path, "run.audit")):

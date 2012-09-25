@@ -27,6 +27,7 @@ import fcntl
 import signal
 import cStringIO
 import __builtin__
+import tempfile
 
 def cmdline2list(cmd):
     """
@@ -90,7 +91,8 @@ def _process_output(process, output_file, print_output, output_stderr):
         setfl(process.stdout, flg=outflags)
         setfl(process.stderr, flg=errflags)
 
-def _subcall(cmd, get_output=False, print_output=False, output_stderr=False):
+def _subcall(cmd, get_output=False, print_output=False, output_stderr=False,
+             shell=False, stdin_str=False):
     """
     Executes given command.
     Returns exit_code and output.
@@ -101,11 +103,19 @@ def _subcall(cmd, get_output=False, print_output=False, output_stderr=False):
     """
     if isinstance(cmd, (str, unicode)):
         cmd = cmdline2list(cmd)
+    if shell and isinstance(cmd, list):
+        cmd = ' '.join(cmd)  # list2cmd quotes redirection chars < >
     outputf = get_output and cStringIO.StringIO()
     popen_kwargs = {}
     if get_output or not print_output:
-        popen_kwargs = {'stdout': subprocess.PIPE, 'stderr': subprocess.PIPE}
-    process = subprocess.Popen(cmd, **popen_kwargs)
+        popen_kwargs.update(
+            {'stdout': subprocess.PIPE, 'stderr': subprocess.PIPE})
+    if stdin_str:
+        stdin_tmp = tempfile.TemporaryFile()
+        stdin_tmp.write(stdin_str)
+        stdin_tmp.seek(0)
+        popen_kwargs.update({'stdin': stdin_tmp})
+    process = subprocess.Popen(cmd, shell=shell, **popen_kwargs)
     while True:
         try:
             if get_output:
@@ -123,6 +133,7 @@ def _subcall(cmd, get_output=False, print_output=False, output_stderr=False):
         output = outputf.getvalue()
         outputf.close()
     else: output = None
+    if stdin_str: stdin_tmp.close()  # trigger tmpfile deletion
     return (status, output)
 
 _dryrun = False
@@ -134,13 +145,13 @@ def setup(kwargs):
     dryrun = kwargs.get('dryrun', False)
 
     global _dryrun, _real_open
-    _dryrun = dryrun
+    _dryrun = dryrun or os.getenv("ATOS_DRYRUN")
     if dryrun:
         _real_open = __builtin__.open
         __builtin__.open = _open
 
 def system(cmd, check_status=False, get_output=False, print_output=False,
-           output_stderr=False):
+           output_stderr=False, shell=False, stdin_str=False):
     """
     Executes given command.
     Given command can be a string or a list or arguments.
@@ -159,7 +170,8 @@ def system(cmd, check_status=False, get_output=False, print_output=False,
     get_output_ = get_output or debug_mode
     status, output = _subcall(
         cmd, print_output=print_output,
-        get_output=get_output_, output_stderr=output_stderr)
+        get_output=get_output_, output_stderr=output_stderr,
+        shell=shell, stdin_str=stdin_str)
     if get_output:
         logging.debug('\n  | ' + '\n  | '.join(output.split('\n')))
         logging.debug('command [%s] -> %s' % (printable_cmd, str(status)))

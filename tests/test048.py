@@ -35,6 +35,19 @@ status, output = process.system(
     "ls unknownfile", get_output=True, output_stderr=True)
 assert status > 0 and output != ''
 
+status, output = process.system(
+    "echo 12", stdin_str='aaa' * 100000, get_output=True)
+assert status == 0 and output == '12\n'
+
+status, output = process.system(
+    "cat -", stdin_str='z' * 100000, get_output=True)
+assert status == 0 and output == 'z' * 100000
+
+status = process.system(
+    "echo 12", stdin_str='aaa' * 100000)
+assert status == 0
+
 process.setup({'dryrun': True})
 status = process.system("false")
 assert status == 0
+

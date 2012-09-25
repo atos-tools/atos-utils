@@ -10,19 +10,19 @@ $ROOT/bin/atos-init \
     -r "$SRCDIR/examples/sha1-c/run.sh" \
     -b "gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c"
 
+(
+    cp -fr atos-configurations atos-configurations-init
 
-cp -fr atos-configurations atos-configurations-init
+    $ROOT/bin/atos-build --dryrun -a "-O2"
 
-$ROOT/bin/atos-build --dryrun -a "-O2"
+    $ROOT/bin/atos-run --dryrun -r -a "-O2"
 
-$ROOT/bin/atos-run --dryrun -r -a "-O2"
+    $ROOT/bin/atos-opt --dryrun -r -a "-O2"
 
-$ROOT/bin/atos-opt --dryrun -r -a "-O2"
-
-diff -rq atos-configurations-init atos-configurations
+    diff -rq atos-configurations-init atos-configurations
 
 
-$ROOT/bin/atos-explore --dryrun
+    $ROOT/bin/atos-explore --dryrun
 
-diff -rq atos-configurations-init atos-configurations
-
+    diff -rq atos-configurations-init atos-configurations
+) 2>&1

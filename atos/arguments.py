@@ -253,6 +253,7 @@ class parsers:
         args.atos_init.prof_script(parser)
         args.nbruns(parser, default=1)
         args.remote_path(parser)
+        args.atos_init.no_run(parser)
         args.debug(parser)
         args.force(parser)
         args.quiet(parser)
@@ -658,6 +659,13 @@ class args:
             parser.add_argument(*args,
                                  dest="prof_script",
                                  help="script to get profile information")
+
+        @staticmethod
+        def no_run(parser, args=("-N", "--no-run")):
+            parser.add_argument(
+                *args,
+                 dest="no_run", action='store_true', default=False,
+                 help="do not run reference configuration")
 
     class atos_opt:
         """ Namespace for non common atos-opt arguments. """

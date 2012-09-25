@@ -720,14 +720,11 @@ def run_atos_run(args):
         else:
             args.exe = [args.exe]
 
-        if args.id == None:
-            args.id = ""
-            sep = ""
-            for exe in args.exe:
-                args.id = sep + args.id + os.path.basename(exe)
-                sep = "-"
     else:
         args.exe = ()
+
+    if not args.id:
+        args.id = "-".join(map(os.path.basename, args.exe))
 
     if args.variant == "REF":
         if args.options != None:
@@ -799,7 +796,6 @@ def run_atos_run(args):
 
         os.unsetenv("REMOTE_PROFILE_DIR")
         os.unsetenv("LOCAL_PROFILE_DIR")
-
         return exe_time, real_output
 
     def output_run_results():
@@ -884,11 +880,6 @@ def run_atos_run(args):
             exe_time, output_time = get_time(
                 process.list2cmdline(args.command))
 
-        if output_time:
-            with open(tmp_logfile, 'a') as tmp_logf:
-                tmp_logf.write(output_time)
-            logf.write(output_time)
-
         if exe_time == -1:
             failure = True
 
@@ -904,12 +895,9 @@ def run_atos_run(args):
             else:
                 output_res = ""
                 if args.results_script != "":
-                    # TODO: fixme - redir does not work
-                    command = args.results_script + " < " + \
-                              tmp_logfile
-                    status, output_res = process.system(command,
-                                                        get_output=True,
-                                                        output_stderr=True)
+                    status, output_res = process.system(
+                        args.results_script, get_output=True,
+                        output_stderr=True, stdin_str=output_time)
                     if status != 0:
                         failure = True
                 output = output_time + output_res
@@ -928,7 +916,6 @@ def run_atos_run(args):
                     exe_time = "FAILURE"
                     exe_size = "FAILURE"
                 output_run_results()
-        process.system("rm " + tmp_logfile)
         if failure:
             info("FAILURE while running variant " + args.variant + "...")
             logf.write("FAILURE while running variant " + args.variant)

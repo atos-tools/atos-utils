@@ -210,7 +210,7 @@ json_config_add_compiler()
 prepare_flag_files()
 {
     preprocessor=`cat $configuration_path/compilers | egrep -i "cc|\+\+"|head -1`
-    [ -f $preprocessor ] || return
+    [ -f "$preprocessor" ] || return
 
     flagsdefs=`json_config_flags_file`
     for flags in $libdir/config/flags.*.cfg; do

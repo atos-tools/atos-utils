@@ -60,14 +60,18 @@ class _ModuleLogFilter():
             self.module and self.module != record.module)
         return not filtered_out
 
+_debug = False
+_quiet = False
+
 def setup(kwargs):
     """
     Configure the root logger for atos.
     """
-    debug = kwargs.get('debug', False) or os.getenv("ATOS_DEBUG")
-    quiet = kwargs.get('quiet', False)
+    global _quiet, _debug
+    _debug = kwargs.get('debug', False) or os.getenv("ATOS_DEBUG")
     dryrun = kwargs.get('dryrun', False) or os.getenv("ATOS_DRYRUN")
     log_file = kwargs.get('log', None) or os.getenv("ATOS_DEBUG_FILE")
+    _quiet = kwargs.get('quiet', False)
 
     log_fmt = (
         '# [%(asctime)-15s] [%(filename)s:%(lineno)s,%(funcName)s]'
@@ -78,10 +82,10 @@ def setup(kwargs):
     root_logger.setLevel(logging.DEBUG)
 
     console_log_level = logging.INFO
-    if debug: console_log_level = logging.DEBUG
-    if quiet: console_log_level = logging.ERROR
+    if _debug: console_log_level = logging.DEBUG
+    if _quiet: console_log_level = logging.ERROR
 
-    console_log_handler = logging.StreamHandler(sys.stdout)
+    console_log_handler = logging.StreamHandler()
     if dryrun:
         console_log_handler.setFormatter(logging.Formatter())
         console_log_handler.addFilter(_ModuleLogFilter('process'))
@@ -114,3 +118,8 @@ def error(msg, *args, **kwargs):
     logging.error(msg, *args, **kwargs)
     exit_status = int(kwargs.get('fatal', 0))
     if exit_status: sys.exit(exit_status)
+
+def message(msg):
+    """ Print an info message on stdout if quiet mode is not set. """
+    logging.debug(msg)
+    if not _quiet: print msg

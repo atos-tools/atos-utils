@@ -28,7 +28,7 @@ import process
 import shutil
 import copy
 import glob
-from logging import info, debug, error
+from logger import debug, error, message
 
 _initialized = False
 
@@ -118,7 +118,7 @@ def run_atos_help(args):
 def run_atos_audit(args):
     """ ATOS audit tool implementation. """
 
-    info("Auditing build...")
+    message("Auditing build...")
 
     if args.ccname:
         args.ccregexp = '^' + args.ccname + '$'
@@ -244,7 +244,7 @@ def run_atos_build(args):
     logfile = os.path.join(logs, "build-" + hash_var + ".log")
     logf = open(logfile, 'w')
 
-    info("Building variant " + variant + "...")
+    message("Building variant " + variant + "...")
     logf.write("Building variant %s\n" % variant)
 
     build_force = os.path.join(args.configuration_path, "build.force")
@@ -303,7 +303,7 @@ def run_atos_build(args):
             failure = 1
 
     if failure == 1:
-        info("FAILURE while building variant " + variant + "...")
+        message("FAILURE while building variant " + variant + "...")
         logf.write("FAILURE while building variant %s\n" % (variant))
         logf.close()
         return 2
@@ -337,7 +337,7 @@ def run_atos_deps(args):
     if targets == None:
         raise Exception("Missing target file list.")
 
-    info("Computing build dependencies...")
+    message("Computing build dependencies...")
     factory = CommandDependencyListFactory(
         CCDEPSParser(open(args.input_file)), SimpleCmdInterpreter())
     factory.build_dependencies()
@@ -400,7 +400,7 @@ def run_atos_explore(args):
                 status = call("atos-run", args, record=True,
                               uopts=opt_level, options=options)
 
-    info("Completed.")
+    message("Completed.")
     return 0
 
 def run_atos_init(args):
@@ -416,17 +416,17 @@ def run_atos_init(args):
 
     if args.clean:
         if args.build_script:
-            info("Cleaning build audit...")
+            message("Cleaning build audit...")
             files = ' '.join(glob.glob('%s/build.*' % args.configuration_path))
             process.system("rm -f %s" % (files), print_output=True)
         if args.run_script:
-            info("Cleaning run audit...")
+            message("Cleaning run audit...")
             files = ' '.join(glob.glob('%s/run.*' % args.configuration_path))
             process.system("rm -f %s" % (files), print_output=True)
-        info("Cleaning all profiles...")
+        message("Cleaning all profiles...")
         rmcommand = "rm -rf %s/profiles" % (args.configuration_path)
         process.system(rmcommand, print_output=True)
-        info("Cleaning all results...")
+        message("Cleaning all results...")
         rmcommand = "rm -f %s/results.db" % (args.configuration_path)
         process.system(rmcommand, print_output=True)
 
@@ -627,7 +627,7 @@ def run_atos_profile(args):
     else:
         opt_remote_profile_path = ""
 
-    info("Profiling...")
+    message("Profiling...")
 
     command_build = (
         os.path.join(globals.BINDIR, "atos-build")
@@ -650,7 +650,7 @@ def run_atos_raudit(args):
         print "error: atos-raudit: missing run command"
         return 1
 
-    info("Auditing run...")
+    message("Auditing run...")
 
     if args.output_file == None:
         process.commands.mkdir(args.configuration_path)
@@ -837,7 +837,7 @@ def run_atos_run(args):
                                    args.configuration_path
             status = process.system(command)
 
-    info("Running variant " + args.variant + "...")
+    message("Running variant " + args.variant + "...")
     failure = False
     logs = os.path.join(args.configuration_path, "logs")
     process.commands.mkdir(logs)
@@ -918,7 +918,7 @@ def run_atos_run(args):
                     exe_size = "FAILURE"
                 output_run_results()
         if failure:
-            info("FAILURE while running variant " + args.variant + "...")
+            message("FAILURE while running variant " + args.variant + "...")
             logf.write("FAILURE while running variant " + args.variant)
             logf.write("\n")
             logf.close()

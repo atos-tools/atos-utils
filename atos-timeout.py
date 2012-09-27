@@ -124,20 +124,52 @@ class Monitor():
             # Process or process group already killed
             pass
 
+    def set_pgroup(self):
+        """ Force process group or ignore if not possible.
+        We also have to take control of opened tty as some
+        shells such as dash do not manage correctly process
+        groups created by setpgrp().
+        If the timeout is called from dash (/bin/sh on Ubuntu)
+        and one of the sub-process of timeout requests a tty
+        read/write the full timeout process group is stopped
+        while actually it should not as the process group should
+        be scheduled to foreground by the shell.
+        This works correctly with bash but we have to handle the
+        dash case anyway.
+        """
+
+        def list_tty_filenos():
+            filenos = []
+            for f in os.listdir("/proc/self/fd"):
+                if os.isatty(int(f)): filenos.append(int(f))
+            return filenos
+
+        # Force process group or ignore if not possible
+        try:
+            self.old_pgroup = os.getpgrp()
+            os.setpgrp()
+            self.pgroup = os.getpgrp()
+
+            # Take control of opened ttys
+            signal.signal(signal.SIGTTIN, signal.SIG_IGN)
+            signal.signal(signal.SIGTTOU, signal.SIG_IGN)
+            signal.signal(signal.SIGTSTP, signal.SIG_IGN)
+            for f in list_tty_filenos():
+                os.tcsetpgrp(f, self.pgroup)
+            signal.signal(signal.SIGTTIN, signal.SIG_DFL)
+            signal.signal(signal.SIGTTOU, signal.SIG_DFL)
+            signal.signal(signal.SIGTSTP, signal.SIG_DFL)
+        except OSError, e:
+            print >>sys.stderr, "atos-timeout: warning: can't set " \
+                "process group id: " + e.strerror
+
     def run(self):
         """ Runs the monitor and monitored process.
         This method returns the exit code to be passed
         to sys.exit.
         """
-        # Force process group or ignore if not possible
-        try:
-            self.old_pgroup = os.getpgrp()
-            os.setpgid(0, 0)
-            self.pgroup = os.getpgrp()
-        except OSError, e:
-            if self.args.debug:
-                print >>sys.stderr, "atos-timeout: warning: can't set " \
-                    "process group id: " + e.strerror
+
+        self.set_pgroup()
 
         # Launch monitored process
         try:
@@ -181,11 +213,12 @@ class Monitor():
                 if self.args.debug: print >>sys.stderr, "atos-timeout: " \
                         "command interrupted: " + self.args.command[0]
         if killed:
-            print >>sys.stderr, "Killed after timeout: " + self.args.command[0]
+            print >>sys.stderr, "Killed after timeout: " + \
+                " ".join(self.args.command + self.args.arguments)
             return ExitCodes.TIMEDOUT
         elif terminated:
             print >>sys.stderr, "Terminated after timeout: " + \
-                self.args.command[0]
+                " ".join(self.args.command + self.args.arguments)
             return ExitCodes.TIMEDOUT
         return code
 

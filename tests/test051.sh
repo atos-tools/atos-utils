@@ -4,7 +4,7 @@
 
 source `dirname $0`/common.sh
 
-TEST_CASE="ATOS dryrun mode"
+TEST_CASE="ATOS run get_results"
 
 cat > getres.sh <<EOF
 #!/usr/bin/env bash

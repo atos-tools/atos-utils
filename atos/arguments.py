@@ -363,9 +363,7 @@ class parsers:
         args.record(parser)
         args.variant(parser)
         args.options(parser)
-        output_group = parser.add_mutually_exclusive_group()
-        args.output(output_group)
-        args.atos_run.fd(output_group)
+        args.output(parser)
         args.id(parser)
         args.atos_run.silent(parser)
         args.force(parser, ("--force",))
@@ -755,15 +753,6 @@ class args:
                  dest="silent",
                  action='store_true',
                  help="silent mode, do not emit perf/size results")
-
-        @staticmethod
-        def fd(parser, args=("-f", "--fd")):
-            parser.add_argument(
-                *args,
-                 dest="fd",
-                 type=int,
-                 help="fd reference for appending results",
-                 default=2)
 
     class atos_replay:
         """ Namespace for non common atos-replay arguments. """

@@ -25,7 +25,7 @@ import subprocess
 import select
 import fcntl
 import signal
-import cStringIO
+import cStringIO, StringIO
 import __builtin__
 import tempfile
 
@@ -187,11 +187,18 @@ def _open(name, *args):
     if not (modes & set(["w", "a", "+"])):
         return _real_open(name, *args)
     logging.debug('# open-write ' + name)
-    return cStringIO.StringIO()
+    return CtxStringIO()
 
 def debug(msg, *args, **kwargs):
     """ Log a process debug message on the ATOS logger. """
     logging.debug(msg, *args, **kwargs)
+
+class CtxStringIO(StringIO.StringIO):
+    """ StringIO with context manager support class """
+
+    def __exit__(self, exc_type, exc_val, exc_tb): self.close()
+
+    def __enter__(self): return self
 
 class commands():
 

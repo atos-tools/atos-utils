@@ -25,4 +25,7 @@ $ROOT/bin/atos-init \
     $ROOT/bin/atos-explore --dryrun
 
     diff -rq atos-configurations-init atos-configurations
+
+    $ROOT/bin/atos-audit --dryrun gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c
+
 ) 2>&1

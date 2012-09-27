@@ -217,11 +217,18 @@
 -fearly-inlining: --param early-inlining-insns=
 -fearly-inlining: --param max-early-inliner-iterations=
 -fpartial-inlining: --param partial-inlining-entry-probability=
--Os, -O1, -O2, -O3, -Ofast: --param max-inline-recursive-depth=
--Os, -O1, -O2, -O3, -Ofast: --param max-inline-recursive-depth-auto=
--Os, -O1, -O2, -O3, -Ofast: --param min-inline-recursive-probability=
--Os, -O1, -O2, -O3, -Ofast: --param max-inline-insns-recursive=
--Os, -O1, -O2, -O3, -Ofast: --param max-inline-insns-recursive-auto=
+-Os, -O1, -O2, -O3: --param max-inline-recursive-depth=
+-Os, -O1, -O2, -O3: --param max-inline-recursive-depth-auto=
+-Os, -O1, -O2, -O3: --param min-inline-recursive-probability=
+-Os, -O1, -O2, -O3: --param max-inline-insns-recursive=
+-Os, -O1, -O2, -O3: --param max-inline-insns-recursive-auto=
+#if GCC_VERSION >= 40600
+-Ofast: --param max-inline-recursive-depth=
+-Ofast: --param max-inline-recursive-depth-auto=
+-Ofast: --param min-inline-recursive-probability=
+-Ofast: --param max-inline-insns-recursive=
+-Ofast: --param max-inline-insns-recursive-auto=
+#endif
 -finline: --param max-inline-insns-single=
 -finline: --param max-inline-insns-auto=
 -finline: --param inline-call-cost=
@@ -231,9 +238,12 @@
 -finline: --param large-function-insns=
 -finline: --param large-stack-frame=
 -finline: --param large-unit-insns=
--fprofile-use, -fguess-branch-probability: --param hot-bb-frequency-fraction=
--fprofile-use, -fguess-branch-probability: --param hot-bb-count-fraction=
-
+-fguess-branch-probability: --param hot-bb-frequency-fraction=
+-fguess-branch-probability: --param hot-bb-count-fraction=
+#if GCC_VERSION >= 40600
+-fprofile-use: --param hot-bb-frequency-fraction=
+-fprofile-use: --param hot-bb-count-fraction=
+#endif
 // flag default values (useful for dep roots)
 
 => -O0
@@ -248,7 +258,9 @@
 -Os => -fpartial-inlining, -fno-inline-functions
 -O3 => -finline, -finline-small-functions
 -O3 => -fpartial-inlining, -finline-functions
+#if GCC_VERSION >= 40600
 -Ofast => -finline, -finline-small-functions
 -Ofast => -fpartial-inlining, -finline-functions
+#endif
 
 #endif // GCC_VERSION >= 40400

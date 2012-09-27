@@ -168,10 +168,8 @@ def run_atos_build(args):
         PROOT_ADDON_CC_OPTS_DRIVER = (
             "PROOT_ADDON_CC_OPTS_DRIVER=" + atos_driver)
     timeout = os.getenv("TIMEOUT")
-    if timeout != None:
+    if timeout == None:
         timeout = os.path.join(globals.BINDIR, "atos-timeout") + " 3600"
-    else:
-        timeout = ""
 
     if args.ccname:
         args.ccregexp = '^' + args.ccname + '$'

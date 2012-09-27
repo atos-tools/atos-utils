@@ -733,7 +733,10 @@ def getarg(key, default=None):
 
 def proot_atos():
     status, uname = process.system('/bin/uname -m', get_output=True)
-    arch = uname.rstrip('\n')
+    if uname:
+        arch = uname.rstrip('\n')
+    else:
+        arch = 'i386'
     if arch in ['i386', 'i486', 'i586', 'i686']: arch = 'i386'
     proot_exec = os.path.join(globals.LIBDIR, arch, 'bin', 'proot')
     if os.path.isfile(proot_exec):

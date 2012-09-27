@@ -65,8 +65,20 @@ def call(tool, args, **kwargs):
     Handles default arguments values if needed.
     """
     if args.dryrun:
-        # TODO: rebuild command line for dryrun message
-        process.debug("# call: %s %s" % (tool, kwargs))
+        dest_to_opt = dict(map(
+                lambda x: (x.dest, x),
+                arguments.parser(tool)._actions))
+        arg_list, remainder = [tool], []
+        for key, value in args.__dict__.items() + kwargs.items():
+            if (key == 'dryrun' or key not in dest_to_opt.keys()
+                or value == dest_to_opt[key].default):
+                continue
+            if not dest_to_opt[key].option_strings:
+                remainder.extend(value)
+            else:
+                arg_list.append(dest_to_opt[key].option_strings[-1])
+                if dest_to_opt[key].nargs != 0: arg_list.append(str(value))
+        process.debug(process.list2cmdline(arg_list + remainder))
         return 0
     tool_args = arguments.argparse.Namespace()
     for action in arguments.parser(tool)._actions:
@@ -134,11 +146,10 @@ def run_atos_audit(args):
                 os.getcwd(),
                 process.list2cmdline(args.command)))
     process.commands.chmod(build_sh, stat.S_IRWXU | stat.S_IRGRP |
-                         stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+                           stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
     force_sh = os.path.join(args.configuration_path, "build.force")
     with open(force_sh, 'w') as file_force:
         file_force.write(str(int(args.force)))
-
     command = ("env PROOT_IGNORE_ELF_INTERPRETER=1" +
                " PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_DEPS_OUTPUT='" +
                args.output_file + "' PROOT_ADDON_CC_DEPS_CCRE='"
@@ -663,8 +674,8 @@ def run_atos_raudit(args):
         f.write(process.list2cmdline(args.command))
         f.write("\n")
         f.close()
-        os.chmod(run_sh, stat.S_IRWXU | stat.S_IRGRP |
-                 stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+        process.commands.chmod(run_sh, stat.S_IRWXU | stat.S_IRGRP |
+                               stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
         if args.results_script != None:
             get_res_sh = os.path.join(args.configuration_path, "get_res.sh")
             f = open(get_res_sh, 'w')
@@ -674,8 +685,8 @@ def run_atos_raudit(args):
             f.write(" &&  " + args.results_script)
             f.write("\n")
             f.close()
-            os.chmod(get_res_sh, stat.S_IRWXU | stat.S_IRGRP |
-                     stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+            process.commands.chmod(get_res_sh, stat.S_IRWXU | stat.S_IRGRP |
+                                   stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
 
     status = process.system(args.command)
     return status
@@ -737,9 +748,6 @@ def run_atos_run(args):
                                 ''.join(args.options.split()))
             else:
                 args.variant = "OPT" + ''.join(args.options.split())
-
-    if args.record or args.output_file != None:
-        args.fd = None
 
     def get_size(executables):
         exe_size = 0
@@ -819,7 +827,7 @@ def run_atos_run(args):
                                    " add_result -r \"" + entry + "\" " + \
                                    args.output_file
             status = process.system(command)
-        elif args.fd != None:
+        elif not args.record:
             command = os.path.join(globals.PYTHONDIR, "atos",
                                    "atos_lib.py") + \
                                    " add_result -r \"" + entry + \
@@ -827,7 +835,7 @@ def run_atos_run(args):
             status, output = process.system(command, get_output=True,
                                             print_output=False)
             if output != None:
-                fo.write(output)
+                print >> sys.stderr, output.strip()
         else:
             command = os.path.join(globals.PYTHONDIR, "atos",
                                    "atos_lib.py") + \
@@ -861,9 +869,6 @@ def run_atos_run(args):
         args.nbruns = 1
     else:
         args.nbruns = int(args.nbruns)
-
-    if args.fd != None:
-        fo = os.fdopen(args.fd, "w")
 
     n = 1
     while n <= args.nbruns:
@@ -927,8 +932,6 @@ def run_atos_run(args):
         n = n + 1
 
     logf.close()
-    if args.fd != None:
-        fo.close()
     return 0
 
 def run_atos_replay(args):

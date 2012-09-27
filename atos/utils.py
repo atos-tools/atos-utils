@@ -185,6 +185,8 @@ def run_atos_build(args):
     if args.ccname:
         args.ccregexp = '^' + args.ccname + '$'
 
+    # TODO: could be more readable with something like args.is_set(gopts)
+    # (None and '' have different meanings here)
     if args.gopts != None:
         if args.gopts:
             pvariant = "OPT" + ''.join(args.gopts.split())
@@ -614,42 +616,15 @@ def run_atos_play(args):
 def run_atos_profile(args):
     """ ATOS profile tool implementation. """
 
-    if args.quiet:
-        opt_q = " -q"
-    else:
-        opt_q = ""
-
-    if args.path:
-        opt_profile_path = " -p " + args.path
-    else:
-        opt_profile_path = " -p ''"
-
-    if args.options:
-        g_opt = " -g '" + args.options + "'"
-        a_opt = " -a '" + args.options + "'"
-    else:
-        g_opt = " -g ''"
-        a_opt = " -a ''"
-
-    if args.remote_path:
-        opt_remote_profile_path = " -b " + args.remote_path
-    else:
-        opt_remote_profile_path = ""
-
     message("Profiling...")
 
-    command_build = (
-        os.path.join(globals.BINDIR, "atos-build")
-        + " -C " + args.configuration_path + opt_q + opt_profile_path
-        + g_opt + a_opt + opt_remote_profile_path)
-    command_run = (
-        os.path.join(globals.BINDIR, "atos-run")
-        + " -C " + args.configuration_path + opt_q + " -s"
-        + g_opt + a_opt + opt_remote_profile_path)
-
-    status = process.system(command_build, print_output=True)
+    options = args.options or ''
+    status = call("atos-build", args,
+                  gopts=options, options=options)
     if status == 0:
-        status = process.system(command_run, print_output=True)
+        status = call("atos-run", args,
+                      gopts=options, options=options,
+                      silent=True)
     return status
 
 def run_atos_raudit(args):

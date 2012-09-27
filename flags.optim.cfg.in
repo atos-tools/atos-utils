@@ -1334,8 +1334,12 @@
 -fgcse, -frerun-cse-after-loop: --param max-cselib-memory-locations=
 -ftracer: --param tracer-dynamic-coverage=, --param tracer-max-code-growth=
 -ftracer: --param tracer-min-branch-ratio=, --param tracer-min-branch-probability=
--ftracer, -fprofile-use: --param tracer-dynamic-coverage-feedback=
--ftracer, -fprofile-use: --param tracer-min-branch-probability-feedback=
+-ftracer: --param tracer-dynamic-coverage-feedback=
+-ftracer: --param tracer-min-branch-probability-feedback=
+#if GCC_VERSION >= 40600
+-fprofile-use: --param tracer-dynamic-coverage-feedback=
+-fprofile-use: --param tracer-min-branch-probability-feedback=
+#endif
 -fcrossjumping: --param max-crossjump-edges=, --param min-crossjump-insns=
 -fselective-scheduling: --param selsched-max-lookahead=
 -fselective-scheduling: --param selsched-max-sched-times=
@@ -1357,8 +1361,12 @@
 -fdevirtualize: --param devirt-type-list-size=
 -ftree-pre: --param max-partial-antic-length=
 -fipa-sra: --param ipa-sra-ptr-growth-factor=
--fprofile-use, -fguess-branch-probability: --param hot-bb-frequency-fraction=
--fprofile-use, -fguess-branch-probability: --param hot-bb-count-fraction=
+-fguess-branch-probability: --param hot-bb-frequency-fraction=
+-fguess-branch-probability: --param hot-bb-count-fraction=
+#if GCC_VERSION >= 40600
+-fprofile-use: --param hot-bb-frequency-fraction=
+-fprofile-use: --param hot-bb-count-fraction=
+#endif
 
 // flag default values (useful for dep roots)
 
@@ -1379,7 +1387,9 @@
 -Os => -fschedule-insns2, -fguess-branch-probability, -fthread-jumps
 -Os => -ftree-switch-conversion, -fdevirtualize, -fipa-sra
 -Os => -fno-schedule-insns, -fno-tree-pre, -fsched-interblock
+#if GCC_VERSION >= 40600
 -Ofast => -O3
+#endif
 -funroll-loops, -funroll-all-loops => -frerun-cse-after-loop
 -fprofile-use => -ftracer
 -fschedule-insns => -fsched-interblock

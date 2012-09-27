@@ -462,7 +462,9 @@
 -O2 => -fmove-loop-invariants, -fno-tree-vectorize, -fno-unswitch-loops
 -Os => -fmove-loop-invariants, -fno-tree-vectorize, -fno-unswitch-loops
 -O3 => -fmove-loop-invariants, -ftree-vectorize, -funswitch-loops
+#if GCC_VERSION >= 40600
 -Ofast => -fmove-loop-invariants, -ftree-vectorize, -funswitch-loops
+#endif
 -fprofile-use => -fpeel-loops, -funroll-loops
 -funroll-loops, -funroll-all-loops => -frerun-cse-after-loop
 

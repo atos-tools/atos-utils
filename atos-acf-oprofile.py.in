@@ -49,21 +49,37 @@ def check_format(oprof_output):
             # 0x19e 22583 0.0312813 (no location information) libxx.so libxx.so func1
             oprofile_format = 3
             break
+        elif re.match(r'# +Overhead +Samples +Command +Shared Object +Symbol *', line):
+            # Overhead  Samples  Command   Shared Object  Symbol
+            # 0.84%       1       hello.u   /tmp/hello.u   0x0000000000000670 d [.] func1
+            ### This is 'perf' profiling command output not oprofile
+            oprofile_format = 4
+            break
     return oprofile_format
 
 def parse_binary_list(oprof_output, oprofile_format, binary, bin_path):
     binary_list = []
     for line in open(oprof_output):
-        if not re.match(r'^[0-9a-fA-F]+ +\d+ +[\d\.]+ +.*', line):
-            continue
-        # we're on a symbol line:
-        words = line.split()
-        if oprofile_format == 1:
-            image_name = words[3]
-        elif oprofile_format == 2 or oprofile_format == 3:
-            # handle (no-location-information) case
-            #   0000000 156636 9.4180 (no location information) no-vmlinux
-            image_name = (words[3] == '(no') and words[6] or words[4]
+        if (oprofile_format == 4):
+            # perf profiling format
+            # Handle:  30.25%  36 hello.u /lib/libc-2.11.1.so 0x00000000000453a0 u [.] __GI_vfprintf
+            if not re.match(r'^ +[\d\.]+% +\d+ +.* +.* +[0-9a-fA-Fx]+ +[\w!\.] +\[[\.kguH]\] +\w+.*', line):
+                continue
+            # we're on a symbol line:
+            words = line.split()
+            image_name = os.path.basename(words[3])
+        else: # oprofile format
+            if not re.match(r'^[0-9a-fA-F]+ +\d+ +[\d\.]+ +.*', line):
+                continue
+            # we're on a symbol line:
+            words = line.split()
+            if oprofile_format == 1:
+                image_name = words[3]
+            elif oprofile_format == 2 or oprofile_format == 3:
+                # handle (no-location-information) case
+                #   0000000 156636 9.4180 (no location information) no-vmlinux
+                image_name = (words[3] == '(no') and words[6] or words[4]
+
         # detect if we are in an interesting region of the profile file
         if image_name != 'anon':
             if os.path.basename(image_name) == os.path.basename(binary):
@@ -80,28 +96,51 @@ def parse_profile(oprof_output, oprofile_format, binary_list):
     # read couples of (address, sample_count) from oprofile output
     samples = {}
     for line in open(oprof_output):
-        if not re.match(r'^[0-9a-fA-F]+ +\d+ +[\d\.]+ +.*', line):
-            continue
-        # we're on a symbol line:
-        words = line.split()
-        # handle (no-location-information) case
-        #   0000000 156636 9.4180 (no location information) no-vmlinux
-        if words[3] == '(no':
-            words[3] = ' '.join(words[3:6])
-            del words[4:6]
-        image_name = (oprofile_format == 1) and words[3] or words[4]
+        if (oprofile_format == 4):
+            # perf profiling format
+            # Handle:  30.25%  36 hello.u /lib/libc-2.11.1.so 0x00000000000453a0 u [.] __GI_vfprintf
+            # Discard compiler generated symbols:
+            #           0.01%   1 sha1-c  ./sha1-c            0x00000000000005c3 d [.] printf@plt
+            if not re.match(r'^ +[\d\.]+% +\d+ +.* +.* +[0-9a-fA-Fx]+ +[\w!\.] +\[[\.kguH]\] +\w+$', line):
+                continue
+            # we're on a symbol line:
+            words = line.split()
+            image_name = os.path.basename(words[3])
+        else: # oprofile format
+            if not re.match(r'^[0-9a-fA-F]+ +\d+ +[\d\.]+ +.*', line):
+                continue
+            # we're on a symbol line:
+            words = line.split()
+            # handle (no-location-information) case
+            #   0000000 156636 9.4180 (no location information) no-vmlinux
+            if words[3] == '(no':
+                words[3] = ' '.join(words[3:6])
+                del words[4:6]
+            image_name = (oprofile_format == 1) and words[3] or words[4]
+
         # detect if we are in an interesting region of the profile file
         for (bin, path) in binary_list:
             in_binary_region = (os.path.basename(image_name) == os.path.basename(bin))
             if not in_binary_region: continue
-            vma, samps, percent = words[0:3]
-            linenr, app_name = ' ', ' '
-            if oprofile_format == 3:
-                app_name = words.pop(5)
-            if oprofile_format in [2, 3]:
-                linenr = words.pop(3)
-            if oprofile_format in [1, 2, 3]:
-                sym = words[4]
+
+            if (oprofile_format == 4):
+                # Remove trailing '%'
+                percent = words[0][:-1]
+                samps= words[1]
+                vma=words[4]
+                linenr = ' '
+                app_name = words[2]
+                sym = words[7]
+            else: # oprofile format
+                vma, samps, percent = words[0:3]
+                linenr, app_name = ' ', ' '
+                if oprofile_format == 3:
+                    app_name = words.pop(5)
+                if oprofile_format in [2, 3]:
+                    linenr = words.pop(3)
+                if oprofile_format in [1, 2, 3]:
+                    sym = words[4]
+
             # merge multiple entries for same image_name/sym
             sym_found = False
             sym = sym.split('.')[0]

@@ -99,7 +99,7 @@ def setup(kwargs):
         file_log_logger = logging.FileHandler(log_file, mode='a')
         file_log_logger.setFormatter(
             logging.Formatter(log_fmt, log_datefmt))
-        root_logger.getLogger().addHandler(file_log_logger)
+        root_logger.addHandler(file_log_logger)
 
 def debug(msg, *args, **kwargs):
     """ Log a debug message on the ATOS logger. """

@@ -50,7 +50,7 @@ def update_function_map(mapfile, args):
     if len(outputs) != 1: return
     funclist = get_object_function_list(outputs[0])
     if not funclist: funclist = ['#']
-    with atos_lib.open_locked(mapfile, 'a') as f:
+    with process.open_locked(mapfile, 'a') as f:
         f.write(''.join(
                 map(lambda x: '%s %s\n' % (outputs[0], x), funclist)))
 

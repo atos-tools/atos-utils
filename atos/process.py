@@ -182,6 +182,17 @@ def system(cmd, check_status=False, get_output=False, print_output=False,
     if check_status and status: sys.exit(status)
     return get_output and (status, output) or status
 
+def open_locked(filename, mode='r'):
+    while True:
+        outf = open(filename, mode)
+        if _dryrun and not isinstance(outf, file):
+            return outf
+        try:
+            fcntl.flock(outf, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            return outf
+        except: outf.close()
+        time.sleep(1)
+
 def _open(name, *args):
     if not _dryrun:
         return _real_open(name, *args)

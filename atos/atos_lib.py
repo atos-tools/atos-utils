@@ -87,13 +87,13 @@ class atos_db_file(atos_db):
     def _write_entries(self, entries):
         entries_str = ''.join(
             atos_db_file.entry_str(entry) for entry in entries)
-        with open_locked(self.db_file, 'a') as db_file:
+        with process.open_locked(self.db_file, 'a') as db_file:
             db_file.write(entries_str)
 
     def _read_results(self):
         if not os.path.exists(self.db_file): return
         curdict, size, time = {}, None, None
-        for line in open_locked(self.db_file):
+        for line in process.open_locked(self.db_file):
             words = line.split(':', 4)
             if len(words) < 4: continue
             # ATOS: target: variant_id: key: value
@@ -143,7 +143,7 @@ class atos_db_json(atos_db):
         return results_filter(self.results, query)
 
     def add_results(self, entries):
-        with open_locked(self.db_file, 'r+') as db_file:
+        with process.open_locked(self.db_file, 'r+') as db_file:
             self.results = json.load(db_file)
             db_file.seek(0)
             db_file.truncate()
@@ -151,7 +151,7 @@ class atos_db_json(atos_db):
             json.dump(self.results, db_file, sort_keys=True, indent=4)
 
     def _read_results(self):
-        self.results = json.load(open_locked(self.db_file))
+        self.results = json.load(process.open_locked(self.db_file))
 
     def _create(self):
         if os.path.exists(self.db_file): return
@@ -173,7 +173,7 @@ class atos_db_pickle(atos_db):
         return results_filter(self.results, query)
 
     def add_results(self, entries):
-        with open_locked(self.db_file, 'r+') as db_file:
+        with process.open_locked(self.db_file, 'r+') as db_file:
             self.results = pickle.load(db_file)
             db_file.seek(0)
             db_file.truncate()
@@ -181,7 +181,7 @@ class atos_db_pickle(atos_db):
             pickle.dump(self.results, db_file, -1)
 
     def _read_results(self):
-        self.results = pickle.load(open_locked(self.db_file))
+        self.results = pickle.load(process.open_locked(self.db_file))
 
     def _create(self):
         if os.path.exists(self.db_file): return
@@ -571,15 +571,6 @@ def result_entry(d):
     except:
         d['time'] = d['size'] = 'FAILURE'
     return d
-
-def open_locked(filename, mode='r'):
-    while True:
-        outf = open(filename, mode)
-        try:
-            fcntl.flock(outf, fcntl.LOCK_EX | fcntl.LOCK_NB)
-            return outf
-        except: outf.close()
-        time.sleep(1)
 
 def pprint_list(list, out=None, text=False):
     out = out or sys.stdout

@@ -63,6 +63,7 @@ def _process_output(process, output_file, print_output, output_stderr):
     """
     def setfl(fil, flg=None, msk=None):
         # set given flags/mask and return initial flag list
+        if not fil: return
         flags = flg or fcntl.fcntl(fil, fcntl.F_GETFL)
         new_flags = msk and (flags | msk) or flags
         if not fil.closed:
@@ -71,11 +72,11 @@ def _process_output(process, output_file, print_output, output_stderr):
     # set flags to get non-blocking read of stdio/stderr
     errflags = setfl(process.stderr, msk=os.O_NONBLOCK)
     outflags = setfl(process.stdout, msk=os.O_NONBLOCK)
+    in_files = filter(bool, [process.stderr, process.stdout])
     try:
         while True:
             # wait for new data avalaible or process end
-            ready = select.select(
-                [process.stderr, process.stdout], [], [])[0]
+            ready = select.select(in_files, [], [])[0]
             if process.stderr in ready:
                 data = process.stderr.read()
                 if data and output_stderr: output_file.write(data)
@@ -107,7 +108,10 @@ def _subcall(cmd, get_output=False, print_output=False, output_stderr=False,
         cmd = ' '.join(cmd)  # list2cmd quotes redirection chars < >
     outputf = get_output and cStringIO.StringIO()
     popen_kwargs = {}
-    if get_output or not print_output:
+    if get_output and output_stderr and not print_output:
+        popen_kwargs.update(
+            {'stdout': subprocess.PIPE, 'stderr': subprocess.STDOUT})
+    elif get_output or not print_output:
         popen_kwargs.update(
             {'stdout': subprocess.PIPE, 'stderr': subprocess.PIPE})
     if stdin_str:

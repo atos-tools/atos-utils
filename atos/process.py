@@ -81,11 +81,16 @@ def _process_output(process, output_file, print_output, output_stderr):
                 data = process.stderr.read()
                 if data and output_stderr: output_file.write(data)
                 if data and print_output: sys.stderr.write(data)
+                if not data: in_files.remove(process.stderr)
             if process.stdout in ready:
                 data = process.stdout.read()
                 if data: output_file.write(data)
                 if data and print_output: sys.stdout.write(data)
+                if not data: in_files.remove(process.stdout)
             if process.poll() is not None:
+                break
+            if not in_files:  # nothing to read, wait for end
+                process.wait()
                 break
     finally:
         # reset initial flags

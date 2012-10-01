@@ -47,6 +47,15 @@ status = process.system(
     "echo 12", stdin_str='aaa' * 100000)
 assert status == 0
 
+with open("test.c", "w") as cfile:
+    cfile.write("int main() {")
+    cfile.write("  close(0); close(1); close(2); sleep(1);")
+    cfile.write("  return 0; }")
+status = process.system("gcc test.c")
+assert status == 0
+status, output = process.system("./a.out", get_output=True)
+assert status == 0
+
 process.setup({'dryrun': True})
 status = process.system("false")
 assert status == 0

@@ -32,7 +32,7 @@ from logger import debug, error, message
 
 _initialized = False
 
-def invoque(tool, args):
+def invoque(tool, args, **kwargs):
     """ Dispatcher that invoques the given tool and returns. """
     functions = {
         "atos": run_atos,
@@ -50,21 +50,15 @@ def invoque(tool, args):
         "atos-replay": run_atos_replay,
         }
     global _initialized
+
+    dryrun = args.dryrun
     if not _initialized:
         logger.setup(vars(args))
         process.setup(vars(args))
         _initialized = True
-    return functions[tool](args)
+        dryrun = False
 
-def execute(tool, args):
-    """ Executes the invoque dispatcher and exits. """
-    sys.exit(invoque(tool, args))
-
-def call(tool, args, **kwargs):
-    """ Call the given ATOS tool with args and returns.
-    Handles default arguments values if needed.
-    """
-    if args.dryrun:
+    if dryrun:
         dest_to_opt = dict(map(
                 lambda x: (x.dest, x),
                 arguments.parser(tool)._actions))
@@ -80,13 +74,18 @@ def call(tool, args, **kwargs):
                 if dest_to_opt[key].nargs != 0: arg_list.append(str(value))
         process.debug(process.list2cmdline(arg_list + remainder))
         return 0
+
     tool_args = arguments.argparse.Namespace()
     for action in arguments.parser(tool)._actions:
         if action.dest is None: continue
         tool_args.__dict__[action.dest] = action.default
     tool_args.__dict__.update(vars(args))
     tool_args.__dict__.update(kwargs)
-    return invoque(tool, tool_args)
+    return functions[tool](tool_args)
+
+def execute(tool, args):
+    """ Executes the invoque dispatcher and exits. """
+    sys.exit(invoque(tool, args))
 
 def run_atos(args):
     """ Top level atos utility implementation. """
@@ -393,24 +392,25 @@ def run_atos_deps(args):
 def run_atos_explore(args):
     """ ATOS explore tool implementation. """
 
-    call("atos-init", args)
+    invoque("atos-init", args)
 
     for opt_level in ['-O2', '-Os', '-O3']:
         for opts in ['', '-flto', '-funroll-loops', '-flto -funroll-loops']:
             options = ' '.join([opt_level, opts])
-            status = call("atos-build", args, options=options)
+            status = invoque("atos-build", args, options=options)
             if status == 0:
-                call("atos-run", args, record=True, options=options)
+                invoque("atos-run", args, record=True, options=options)
 
-        status = call("atos-profile", args, options=opt_level)
+        status = invoque("atos-profile", args, options=opt_level)
         if status != 0: continue  # skip profile variants
 
         for opts in ['', '-flto', '-funroll-loops', '-flto -funroll-loops']:
             options = ' '.join([opt_level, opts])
-            status = call("atos-build", args, uopts=opt_level, options=options)
+            status = invoque(
+                "atos-build", args, uopts=opt_level, options=options)
             if status == 0:
-                status = call("atos-run", args, record=True,
-                              uopts=opt_level, options=options)
+                status = invoque("atos-run", args, record=True,
+                                 uopts=opt_level, options=options)
 
     message("Completed.")
     return 0
@@ -443,10 +443,11 @@ def run_atos_init(args):
         process.system(rmcommand, print_output=True)
 
     if args.build_script:
-        call("atos-audit", args, command=process.cmdline2list(
+        invoque("atos-audit", args, command=process.cmdline2list(
                 args.build_script))
-        call("atos-deps", args, executables=executables, all=(not executables))
-        # TODO: to be replaced by call(atos-config)
+        invoque("atos-deps", args,
+                executables=executables, all=(not executables))
+        # TODO: to be replaced by invoque(atos-config)
         command_config = [
             os.path.join(globals.BINDIR, "atos-config"),
             "-C", args.configuration_path]
@@ -469,10 +470,10 @@ def run_atos_init(args):
             "default_values.nb_runs", str(args.nbruns))
 
     if args.run_script:
-        call("atos-raudit", args, command=process.cmdline2list(
+        invoque("atos-raudit", args, command=process.cmdline2list(
                 args.run_script))
         if not args.no_run:
-            call("atos-run", args, record=True)  # reference run
+            invoque("atos-run", args, record=True)  # reference run
 
     elif not os.path.isfile(
         os.path.join(args.configuration_path, "run.audit")):
@@ -520,19 +521,19 @@ def run_atos_opt(args):
             return 0
 
     if args.fdo:
-        status = call("atos-profile", args,
+        status = invoque("atos-profile", args,
                       options=uopts)
         if status == 0:
-            status = call("atos-build", args,
+            status = invoque("atos-build", args,
                           options=options, uopts=uopts)
             if status == 0:
-                status = call("atos-run", args,
+                status = invoque("atos-run", args,
                           options=options, uopts=uopts)
     else:
-        status = call("atos-build", args,
+        status = invoque("atos-build", args,
                       options=options)
         if status == 0:
-            status = call("atos-run", args,
+            status = invoque("atos-run", args,
                           options=options)
     return status
 
@@ -601,10 +602,10 @@ def run_atos_profile(args):
     message("Profiling...")
 
     options = args.options or ''
-    status = call("atos-build", args,
+    status = invoque("atos-build", args,
                   gopts=options, options=options)
     if status == 0:
-        status = call("atos-run", args,
+        status = invoque("atos-run", args,
                       gopts=options, options=options,
                       silent=True)
     return status
@@ -907,11 +908,11 @@ def run_atos_replay(args):
         shutil.copyfile(config_target_file, result_target_file)
 
     # reference build
-    status = call("atos-build", args)
+    status = invoque("atos-build", args)
     if status != 0: return status
 
     # reference run
-    status = call("atos-run", args,
+    status = invoque("atos-run", args,
                   configuration_path=args.results_path, record=True,
                   command=[args.run_script])
     if status != 0: return status
@@ -925,11 +926,11 @@ def run_atos_replay(args):
         result_conf = getattr(result, 'conf', None)
         result_uconf = getattr(result, 'uconf', None)
 
-        status = call(
+        status = invoque(
             "atos-build", args, options=result_conf, uopts=result_uconf)
         if status != 0: continue
 
-        call("atos-run", args, configuration_path=args.results_path,
+        invoque("atos-run", args, configuration_path=args.results_path,
              record=True, options=result_conf, uopts=result_uconf,
              command=[args.run_script])
 

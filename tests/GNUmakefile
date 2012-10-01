@@ -20,7 +20,7 @@
 
 srcdir:=$(dir $(firstword $(MAKEFILE_LIST)))
 TESTS:=$(sort $(notdir $(wildcard $(srcdir)test*.sh $(srcdir)test*.py)))
-DEPS=$(basename $(TESTS))
+CHKS=$(addsuffix .chk,$(TESTS))
 ERRS=$(addsuffix .err,$(TESTS))
 ifeq ($(V),)
 V_RUN=@
@@ -32,7 +32,7 @@ COVERAGE_OPTS+=ATOS_COVERAGE_DIR=$(COVERAGE_DIR)
 endif
 FORCE=.FORCE
 
-.PHONY: all tests clean distclean $(DEPS) .FORCE
+.PHONY: all tests clean distclean $(CHKS) .FORCE
 
 all: tests
 
@@ -58,7 +58,7 @@ tests_report: $(srcdir)report.sh $(ERRS)
 	$(V_RUN)cat $(ERRS) | $(srcdir)report.sh >tests_report.txt; \
 	res=$$?; cat tests_report.txt; exit $$res
 
-$(DEPS): %: %.err
+$(CHKS): %.chk: %.err
 
 # Force MAKEFLAGS= as we may run make in tests
 # and we do not want to inherit -jxx option

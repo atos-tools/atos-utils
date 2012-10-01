@@ -166,7 +166,7 @@ def run_atos_build(args):
     profdir_option = ""
     variant = args.variant
     opt_rebuild = args.force
-    pvariant = "REF"
+    pvariant = ""
     profile_path = ""
     remote_profile_path = ""
     options = args.options
@@ -188,6 +188,7 @@ def run_atos_build(args):
     # TODO: could be more readable with something like args.is_set(gopts)
     # (None and '' have different meanings here)
     if args.gopts != None:
+        pvariant = "REF"
         if args.gopts:
             pvariant = "OPT" + ''.join(args.gopts.split())
         if not args.path:
@@ -491,32 +492,24 @@ def run_atos_opt(args):
     """ ATOS opt tool implementation. """
 
     if args.options == None:
-        args.options = ""
-    if args.fdo and args.uopts == None:
-        args.uopts = args.options
+        options = ""
+    else:
+        options = args.options
+    if args.fdo:
+        if args.uopts == None:
+            uopts = options
+        else:
+            uopts = args.uopts
     if args.lto:
-        args.options += " -flto"
-    if args.quiet:
-        opt_q = " -q"
-    else:
-        opt_q = ""
-    if args.record:
-        opt_r = " -r"
-    else:
-        opt_r = ""
-    opt_nbruns = " -n" + str(args.nbruns)
-    if args.remote_path:
-        opt_remote_profile_path = "-b " + args.remote_path
-    else:
-        opt_remote_profile_path = ""
+        options += " -flto"
 
     if args.keep:
         if args.uopts:
             variant = "OPT-fprofile-use" + \
-                      "".join(args.uopts.split(' ')) + \
-                      "".join(args.options.split(' '))
-        elif args.options != "":
-            variant = "OPT" + "".join(args.options.split(' '))
+                      "".join(uopts.split(' ')) + \
+                      "".join(options.split(' '))
+        elif options != "":
+            variant = "OPT" + "".join(options.split(' '))
         else:
             variant = "REF"
         command = os.path.join(globals.PYTHONDIR, "atos", "atos_lib.py") + \
@@ -526,32 +519,21 @@ def run_atos_opt(args):
             print "Skipping variant " + variant + "..."
             return 0
 
-    if args.uopts != None:
-        command = os.path.join(globals.BINDIR, "atos-profile") + \
-                  " -C " + args.configuration_path + opt_q + \
-                  opt_remote_profile_path + " -g '" + args.uopts + "'"
-        status = process.system(command, print_output=True)
+    if args.fdo:
+        status = call("atos-profile", args,
+                      options=uopts)
         if status == 0:
-            command = os.path.join(globals.BINDIR, "atos-build") + \
-                      " -C " + args.configuration_path + opt_q + \
-                      " -u '" + args.uopts + "' -a '" + args.options + "'"
-            status = process.system(command, print_output=True)
+            status = call("atos-build", args,
+                          options=options, uopts=uopts)
             if status == 0:
-                command = os.path.join(globals.BINDIR, "atos-run") \
-                          + " -C " + args.configuration_path + opt_q + \
-                          opt_r + opt_nbruns + " -u '" + args.uopts + \
-                          "' -a'" + args.options + "'"
-                status = process.system(command, print_output=True)
+                status = call("atos-run", args,
+                          options=options, uopts=uopts)
     else:
-        command = os.path.join(globals.BINDIR, "atos-build") + \
-                  " -C " + args.configuration_path + opt_q + \
-                  " -a '" + args.options + "'"
-        status = process.system(command, print_output=True)
+        status = call("atos-build", args,
+                      options=options)
         if status == 0:
-            command = os.path.join(globals.BINDIR, "atos-run") + \
-                      " -C " + args.configuration_path + opt_q + \
-                      opt_r + opt_nbruns + " -a '" + args.options + "'"
-            status = process.system(command, print_output=True)
+            status = call("atos-run", args,
+                          options=options)
     return status
 
 def run_atos_play(args):

@@ -615,10 +615,10 @@ def run_atos_play(args):
         result = results[0]
         message('Playing optimized build %s:%s...' % (
                 target_id, result['variant']))
-        status = call("atos-build", args,
-                      options=result.get('conf', None),
-                      uopts=result.get('uconf', None),
-                      gopts=result.get('gconf', None))
+        status = invoque("atos-build", args,
+                         options=result.get('conf', None),
+                         uopts=result.get('uconf', None),
+                         gopts=result.get('gconf', None))
         return status
 
 def run_atos_profile(args):

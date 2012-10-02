@@ -257,10 +257,10 @@ static int   *csv_param_set   = NULL;
 #define USE_GLOBAL_PARAMS
 
 #undef param_values
-#define param_values ((int *) (((char *) &(global_options.x_param_values)) + hwi_shift))
+#define param_values (*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift))
 #undef PARAM_VALUE
 #define PARAM_VALUE(ENUM) \
-    ((int) (((int *) (((char *) &(global_options.x_param_values)) + hwi_shift))[(int) ENUM]))
+    ((int) ((*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift))[(int) ENUM]))
 
 #else
 #undef USE_GLOBAL_PARAMS

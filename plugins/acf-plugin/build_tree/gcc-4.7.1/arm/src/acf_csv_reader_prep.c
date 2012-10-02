@@ -23,10 +23,8 @@
 # 5 "/usr/include/gnu/stubs.h" 2 3 4
 
 
-
-
-# 1 "/usr/include/gnu/stubs-64.h" 1 3 4
-# 10 "/usr/include/gnu/stubs.h" 2 3 4
+# 1 "/usr/include/gnu/stubs-32.h" 1 3 4
+# 8 "/usr/include/gnu/stubs.h" 2 3 4
 # 379 "/usr/include/features.h" 2 3 4
 # 29 "/usr/include/stdio.h" 2 3 4
 
@@ -34,9 +32,9 @@
 
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
-# 213 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 3 4
-typedef long unsigned int size_t;
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
+# 213 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 3 4
+typedef unsigned int size_t;
 # 35 "/usr/include/stdio.h" 2 3 4
 
 # 1 "/usr/include/bits/types.h" 1 3 4
@@ -58,8 +56,11 @@ typedef unsigned short int __uint16_t;
 typedef signed int __int32_t;
 typedef unsigned int __uint32_t;
 
-typedef signed long int __int64_t;
-typedef unsigned long int __uint64_t;
+
+
+
+__extension__ typedef signed long long int __int64_t;
+__extension__ typedef unsigned long long int __uint64_t;
 
 
 
@@ -67,60 +68,60 @@ typedef unsigned long int __uint64_t;
 
 
 
-typedef long int __quad_t;
-typedef unsigned long int __u_quad_t;
+__extension__ typedef long long int __quad_t;
+__extension__ typedef unsigned long long int __u_quad_t;
 # 131 "/usr/include/bits/types.h" 3 4
 # 1 "/usr/include/bits/typesizes.h" 1 3 4
 # 132 "/usr/include/bits/types.h" 2 3 4
 
 
-typedef unsigned long int __dev_t;
-typedef unsigned int __uid_t;
-typedef unsigned int __gid_t;
-typedef unsigned long int __ino_t;
-typedef unsigned long int __ino64_t;
-typedef unsigned int __mode_t;
-typedef unsigned long int __nlink_t;
-typedef long int __off_t;
-typedef long int __off64_t;
-typedef int __pid_t;
-typedef struct { int __val[2]; } __fsid_t;
-typedef long int __clock_t;
-typedef unsigned long int __rlim_t;
-typedef unsigned long int __rlim64_t;
-typedef unsigned int __id_t;
-typedef long int __time_t;
-typedef unsigned int __useconds_t;
-typedef long int __suseconds_t;
+__extension__ typedef __u_quad_t __dev_t;
+__extension__ typedef unsigned int __uid_t;
+__extension__ typedef unsigned int __gid_t;
+__extension__ typedef unsigned long int __ino_t;
+__extension__ typedef __u_quad_t __ino64_t;
+__extension__ typedef unsigned int __mode_t;
+__extension__ typedef unsigned int __nlink_t;
+__extension__ typedef long int __off_t;
+__extension__ typedef __quad_t __off64_t;
+__extension__ typedef int __pid_t;
+__extension__ typedef struct { int __val[2]; } __fsid_t;
+__extension__ typedef long int __clock_t;
+__extension__ typedef unsigned long int __rlim_t;
+__extension__ typedef __u_quad_t __rlim64_t;
+__extension__ typedef unsigned int __id_t;
+__extension__ typedef long int __time_t;
+__extension__ typedef unsigned int __useconds_t;
+__extension__ typedef long int __suseconds_t;
 
-typedef int __daddr_t;
-typedef long int __swblk_t;
-typedef int __key_t;
-
-
-typedef int __clockid_t;
+__extension__ typedef int __daddr_t;
+__extension__ typedef long int __swblk_t;
+__extension__ typedef int __key_t;
 
 
-typedef void * __timer_t;
+__extension__ typedef int __clockid_t;
 
 
-typedef long int __blksize_t;
+__extension__ typedef void * __timer_t;
+
+
+__extension__ typedef long int __blksize_t;
 
 
 
 
-typedef long int __blkcnt_t;
-typedef long int __blkcnt64_t;
+__extension__ typedef long int __blkcnt_t;
+__extension__ typedef __quad_t __blkcnt64_t;
 
 
-typedef unsigned long int __fsblkcnt_t;
-typedef unsigned long int __fsblkcnt64_t;
+__extension__ typedef unsigned long int __fsblkcnt_t;
+__extension__ typedef __u_quad_t __fsblkcnt64_t;
 
 
-typedef unsigned long int __fsfilcnt_t;
-typedef unsigned long int __fsfilcnt64_t;
+__extension__ typedef unsigned long int __fsfilcnt_t;
+__extension__ typedef __u_quad_t __fsfilcnt64_t;
 
-typedef long int __ssize_t;
+__extension__ typedef int __ssize_t;
 
 
 
@@ -129,10 +130,10 @@ typedef __quad_t *__qaddr_t;
 typedef char *__caddr_t;
 
 
-typedef long int __intptr_t;
+__extension__ typedef int __intptr_t;
 
 
-typedef unsigned int __socklen_t;
+__extension__ typedef unsigned int __socklen_t;
 # 37 "/usr/include/stdio.h" 2 3 4
 # 45 "/usr/include/stdio.h" 3 4
 struct _IO_FILE;
@@ -152,7 +153,7 @@ typedef struct _IO_FILE __FILE;
 # 32 "/usr/include/libio.h" 3 4
 # 1 "/usr/include/_G_config.h" 1 3 4
 # 15 "/usr/include/_G_config.h" 3 4
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 16 "/usr/include/_G_config.h" 2 3 4
 
 
@@ -192,8 +193,8 @@ typedef unsigned int _G_uint16_t __attribute__ ((__mode__ (__HI__)));
 typedef unsigned int _G_uint32_t __attribute__ ((__mode__ (__SI__)));
 # 33 "/usr/include/libio.h" 2 3 4
 # 53 "/usr/include/libio.h" 3 4
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stdarg.h" 1 3 4
-# 40 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stdarg.h" 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stdarg.h" 1 3 4
+# 40 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stdarg.h" 3 4
 typedef __builtin_va_list __gnuc_va_list;
 # 54 "/usr/include/libio.h" 2 3 4
 # 170 "/usr/include/libio.h" 3 4
@@ -932,7 +933,7 @@ __attribute__ ((__nothrow__)) ferror_unlocked (FILE *__stream)
 
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 34 "/usr/include/string.h" 2 3 4
 
 
@@ -1389,7 +1390,7 @@ __strsep_3c (char **__s, char __reject1, char __reject2, char __reject3)
 # 1298 "/usr/include/bits/string2.h" 3 4
 # 1 "/usr/include/stdlib.h" 1 3 4
 # 33 "/usr/include/stdlib.h" 3 4
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 34 "/usr/include/stdlib.h" 2 3 4
 
 
@@ -1418,8 +1419,8 @@ extern char *__strndup (__const char *__string, size_t __n)
 # 22 "../../../src/acf_csv_reader.c" 2
 # 1 "/usr/include/stdlib.h" 1 3 4
 # 33 "/usr/include/stdlib.h" 3 4
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
-# 325 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
+# 325 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 3 4
 typedef int wchar_t;
 # 34 "/usr/include/stdlib.h" 2 3 4
 
@@ -1663,7 +1664,7 @@ typedef __clockid_t clockid_t;
 typedef __timer_t timer_t;
 # 134 "/usr/include/sys/types.h" 2 3 4
 # 147 "/usr/include/sys/types.h" 3 4
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 148 "/usr/include/sys/types.h" 2 3 4
 
 
@@ -1835,18 +1836,19 @@ typedef unsigned long int pthread_t;
 
 typedef union
 {
-  char __size[56];
+  char __size[36];
   long int __align;
 } pthread_attr_t;
-
-
-
-typedef struct __pthread_internal_list
+# 67 "/usr/include/bits/pthreadtypes.h" 3 4
+typedef struct __pthread_internal_slist
 {
-  struct __pthread_internal_list *__prev;
-  struct __pthread_internal_list *__next;
-} __pthread_list_t;
-# 76 "/usr/include/bits/pthreadtypes.h" 3 4
+  struct __pthread_internal_slist *__next;
+} __pthread_slist_t;
+
+
+
+
+
 typedef union
 {
   struct __pthread_mutex_s
@@ -1855,17 +1857,25 @@ typedef union
     unsigned int __count;
     int __owner;
 
-    unsigned int __nusers;
+
 
 
 
     int __kind;
 
-    int __spins;
-    __pthread_list_t __list;
-# 101 "/usr/include/bits/pthreadtypes.h" 3 4
+
+
+
+
+    unsigned int __nusers;
+    __extension__ union
+    {
+      int __spins;
+      __pthread_slist_t __list;
+    };
+
   } __data;
-  char __size[40];
+  char __size[24];
   long int __align;
 } pthread_mutex_t;
 
@@ -1915,7 +1925,7 @@ typedef int pthread_once_t;
 
 typedef union
 {
-
+# 170 "/usr/include/bits/pthreadtypes.h" 3 4
   struct
   {
     int __lock;
@@ -1924,16 +1934,16 @@ typedef union
     unsigned int __writer_wakeup;
     unsigned int __nr_readers_queued;
     unsigned int __nr_writers_queued;
+
+
+    unsigned char __flags;
+    unsigned char __shared;
+    unsigned char __pad1;
+    unsigned char __pad2;
     int __writer;
-    int __shared;
-    unsigned long int __pad1;
-    unsigned long int __pad2;
-
-
-    unsigned int __flags;
   } __data;
-# 187 "/usr/include/bits/pthreadtypes.h" 3 4
-  char __size[56];
+
+  char __size[32];
   long int __align;
 } pthread_rwlock_t;
 
@@ -1954,7 +1964,7 @@ typedef volatile int pthread_spinlock_t;
 
 typedef union
 {
-  char __size[32];
+  char __size[20];
   long int __align;
 } pthread_barrier_t;
 
@@ -2130,7 +2140,7 @@ extern void cfree (void *__ptr) __attribute__ ((__nothrow__));
 
 # 1 "/usr/include/alloca.h" 1 3 4
 # 25 "/usr/include/alloca.h" 3 4
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 26 "/usr/include/alloca.h" 2 3 4
 
 

@@ -23,10 +23,8 @@
 # 5 "/usr/include/gnu/stubs.h" 2 3 4
 
 
-
-
-# 1 "/usr/include/gnu/stubs-64.h" 1 3 4
-# 10 "/usr/include/gnu/stubs.h" 2 3 4
+# 1 "/usr/include/gnu/stubs-32.h" 1 3 4
+# 8 "/usr/include/gnu/stubs.h" 2 3 4
 # 379 "/usr/include/features.h" 2 3 4
 # 26 "/usr/include/stdlib.h" 2 3 4
 
@@ -36,10 +34,10 @@
 
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
-# 213 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 3 4
-typedef long unsigned int size_t;
-# 325 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
+# 213 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 3 4
+typedef unsigned int size_t;
+# 325 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 3 4
 typedef int wchar_t;
 # 34 "/usr/include/stdlib.h" 2 3 4
 
@@ -214,8 +212,11 @@ typedef unsigned short int __uint16_t;
 typedef signed int __int32_t;
 typedef unsigned int __uint32_t;
 
-typedef signed long int __int64_t;
-typedef unsigned long int __uint64_t;
+
+
+
+__extension__ typedef signed long long int __int64_t;
+__extension__ typedef unsigned long long int __uint64_t;
 
 
 
@@ -223,60 +224,60 @@ typedef unsigned long int __uint64_t;
 
 
 
-typedef long int __quad_t;
-typedef unsigned long int __u_quad_t;
+__extension__ typedef long long int __quad_t;
+__extension__ typedef unsigned long long int __u_quad_t;
 # 131 "/usr/include/bits/types.h" 3 4
 # 1 "/usr/include/bits/typesizes.h" 1 3 4
 # 132 "/usr/include/bits/types.h" 2 3 4
 
 
-typedef unsigned long int __dev_t;
-typedef unsigned int __uid_t;
-typedef unsigned int __gid_t;
-typedef unsigned long int __ino_t;
-typedef unsigned long int __ino64_t;
-typedef unsigned int __mode_t;
-typedef unsigned long int __nlink_t;
-typedef long int __off_t;
-typedef long int __off64_t;
-typedef int __pid_t;
-typedef struct { int __val[2]; } __fsid_t;
-typedef long int __clock_t;
-typedef unsigned long int __rlim_t;
-typedef unsigned long int __rlim64_t;
-typedef unsigned int __id_t;
-typedef long int __time_t;
-typedef unsigned int __useconds_t;
-typedef long int __suseconds_t;
+__extension__ typedef __u_quad_t __dev_t;
+__extension__ typedef unsigned int __uid_t;
+__extension__ typedef unsigned int __gid_t;
+__extension__ typedef unsigned long int __ino_t;
+__extension__ typedef __u_quad_t __ino64_t;
+__extension__ typedef unsigned int __mode_t;
+__extension__ typedef unsigned int __nlink_t;
+__extension__ typedef long int __off_t;
+__extension__ typedef __quad_t __off64_t;
+__extension__ typedef int __pid_t;
+__extension__ typedef struct { int __val[2]; } __fsid_t;
+__extension__ typedef long int __clock_t;
+__extension__ typedef unsigned long int __rlim_t;
+__extension__ typedef __u_quad_t __rlim64_t;
+__extension__ typedef unsigned int __id_t;
+__extension__ typedef long int __time_t;
+__extension__ typedef unsigned int __useconds_t;
+__extension__ typedef long int __suseconds_t;
 
-typedef int __daddr_t;
-typedef long int __swblk_t;
-typedef int __key_t;
-
-
-typedef int __clockid_t;
+__extension__ typedef int __daddr_t;
+__extension__ typedef long int __swblk_t;
+__extension__ typedef int __key_t;
 
 
-typedef void * __timer_t;
+__extension__ typedef int __clockid_t;
 
 
-typedef long int __blksize_t;
+__extension__ typedef void * __timer_t;
+
+
+__extension__ typedef long int __blksize_t;
 
 
 
 
-typedef long int __blkcnt_t;
-typedef long int __blkcnt64_t;
+__extension__ typedef long int __blkcnt_t;
+__extension__ typedef __quad_t __blkcnt64_t;
 
 
-typedef unsigned long int __fsblkcnt_t;
-typedef unsigned long int __fsblkcnt64_t;
+__extension__ typedef unsigned long int __fsblkcnt_t;
+__extension__ typedef __u_quad_t __fsblkcnt64_t;
 
 
-typedef unsigned long int __fsfilcnt_t;
-typedef unsigned long int __fsfilcnt64_t;
+__extension__ typedef unsigned long int __fsfilcnt_t;
+__extension__ typedef __u_quad_t __fsfilcnt64_t;
 
-typedef long int __ssize_t;
+__extension__ typedef int __ssize_t;
 
 
 
@@ -285,10 +286,10 @@ typedef __quad_t *__qaddr_t;
 typedef char *__caddr_t;
 
 
-typedef long int __intptr_t;
+__extension__ typedef int __intptr_t;
 
 
-typedef unsigned int __socklen_t;
+__extension__ typedef unsigned int __socklen_t;
 # 32 "/usr/include/sys/types.h" 2 3 4
 
 
@@ -377,7 +378,7 @@ typedef __clockid_t clockid_t;
 typedef __timer_t timer_t;
 # 134 "/usr/include/sys/types.h" 2 3 4
 # 147 "/usr/include/sys/types.h" 3 4
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 148 "/usr/include/sys/types.h" 2 3 4
 
 
@@ -562,18 +563,19 @@ typedef unsigned long int pthread_t;
 
 typedef union
 {
-  char __size[56];
+  char __size[36];
   long int __align;
 } pthread_attr_t;
-
-
-
-typedef struct __pthread_internal_list
+# 67 "/usr/include/bits/pthreadtypes.h" 3 4
+typedef struct __pthread_internal_slist
 {
-  struct __pthread_internal_list *__prev;
-  struct __pthread_internal_list *__next;
-} __pthread_list_t;
-# 76 "/usr/include/bits/pthreadtypes.h" 3 4
+  struct __pthread_internal_slist *__next;
+} __pthread_slist_t;
+
+
+
+
+
 typedef union
 {
   struct __pthread_mutex_s
@@ -582,17 +584,25 @@ typedef union
     unsigned int __count;
     int __owner;
 
-    unsigned int __nusers;
+
 
 
 
     int __kind;
 
-    int __spins;
-    __pthread_list_t __list;
-# 101 "/usr/include/bits/pthreadtypes.h" 3 4
+
+
+
+
+    unsigned int __nusers;
+    __extension__ union
+    {
+      int __spins;
+      __pthread_slist_t __list;
+    };
+
   } __data;
-  char __size[40];
+  char __size[24];
   long int __align;
 } pthread_mutex_t;
 
@@ -642,7 +652,7 @@ typedef int pthread_once_t;
 
 typedef union
 {
-
+# 170 "/usr/include/bits/pthreadtypes.h" 3 4
   struct
   {
     int __lock;
@@ -651,16 +661,16 @@ typedef union
     unsigned int __writer_wakeup;
     unsigned int __nr_readers_queued;
     unsigned int __nr_writers_queued;
+
+
+    unsigned char __flags;
+    unsigned char __shared;
+    unsigned char __pad1;
+    unsigned char __pad2;
     int __writer;
-    int __shared;
-    unsigned long int __pad1;
-    unsigned long int __pad2;
-
-
-    unsigned int __flags;
   } __data;
-# 187 "/usr/include/bits/pthreadtypes.h" 3 4
-  char __size[56];
+
+  char __size[32];
   long int __align;
 } pthread_rwlock_t;
 
@@ -681,7 +691,7 @@ typedef volatile int pthread_spinlock_t;
 
 typedef union
 {
-  char __size[32];
+  char __size[20];
   long int __align;
 } pthread_barrier_t;
 
@@ -873,7 +883,7 @@ extern void cfree (void *__ptr) __attribute__ ((__nothrow__));
 
 # 1 "/usr/include/alloca.h" 1 3 4
 # 25 "/usr/include/alloca.h" 3 4
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 26 "/usr/include/alloca.h" 2 3 4
 
 
@@ -1123,33 +1133,33 @@ extern int getloadavg (double __loadavg[], int __nelem)
 # 21 "../../../src/plugin-utils.c" 2
 # 1 "../../../src/plugin-utils.h" 1
 # 23 "../../../src/plugin-utils.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/gcc-plugin.h" 1
-# 27 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/gcc-plugin.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config.h" 1
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gcc-plugin.h" 1
+# 27 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gcc-plugin.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config.h" 1
 
 
 
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/auto-host.h" 1
-# 7 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/auto-host.h" 1
+# 7 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config.h" 2
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/ansidecl.h" 1
-# 9 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config.h" 2
-# 28 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/gcc-plugin.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 1
-# 28 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stdarg.h" 1 3 4
-# 40 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stdarg.h" 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ansidecl.h" 1
+# 9 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config.h" 2
+# 28 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gcc-plugin.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 1
+# 28 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stdarg.h" 1 3 4
+# 40 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stdarg.h" 3 4
 typedef __builtin_va_list __gnuc_va_list;
-# 102 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stdarg.h" 3 4
+# 102 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stdarg.h" 3 4
 typedef __gnuc_va_list va_list;
-# 29 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
-# 39 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
-# 150 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 3 4
-typedef long int ptrdiff_t;
-# 40 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
+# 29 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
+# 39 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
+# 150 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 3 4
+typedef int ptrdiff_t;
+# 40 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 
 
 # 1 "/usr/include/stdio.h" 1 3 4
@@ -1158,7 +1168,7 @@ typedef long int ptrdiff_t;
 
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 35 "/usr/include/stdio.h" 2 3 4
 # 45 "/usr/include/stdio.h" 3 4
 struct _IO_FILE;
@@ -1178,7 +1188,7 @@ typedef struct _IO_FILE __FILE;
 # 32 "/usr/include/libio.h" 3 4
 # 1 "/usr/include/_G_config.h" 1 3 4
 # 15 "/usr/include/_G_config.h" 3 4
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 16 "/usr/include/_G_config.h" 2 3 4
 
 
@@ -1975,10 +1985,10 @@ __attribute__ ((__nothrow__)) ferror_unlocked (FILE *__stream)
 # 908 "/usr/include/stdio.h" 2 3 4
 # 916 "/usr/include/stdio.h" 3 4
 
-# 43 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
-# 196 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/safe-ctype.h" 1
-# 57 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/safe-ctype.h"
+# 43 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
+# 196 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/safe-ctype.h" 1
+# 57 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/safe-ctype.h"
 enum {
 
   _sch_isblank = 0x0001,
@@ -2008,10 +2018,10 @@ enum {
 
 
 extern const unsigned short _sch_istable[256];
-# 110 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/safe-ctype.h"
+# 110 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/safe-ctype.h"
 extern const unsigned char _sch_toupper[256];
 extern const unsigned char _sch_tolower[256];
-# 122 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/safe-ctype.h"
+# 122 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/safe-ctype.h"
 # 1 "/usr/include/ctype.h" 1 3 4
 # 30 "/usr/include/ctype.h" 3 4
 
@@ -2142,8 +2152,8 @@ extern int __toupper_l (int __c, __locale_t __l) __attribute__ ((__nothrow__));
 extern int toupper_l (int __c, __locale_t __l) __attribute__ ((__nothrow__));
 # 323 "/usr/include/ctype.h" 3 4
 
-# 123 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/safe-ctype.h" 2
-# 197 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
+# 123 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/safe-ctype.h" 2
+# 197 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 
 
 
@@ -2174,8 +2184,8 @@ extern int *__errno_location (void) __attribute__ ((__nothrow__)) __attribute__ 
 # 37 "/usr/include/errno.h" 2 3 4
 # 59 "/usr/include/errno.h" 3 4
 
-# 201 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
-# 215 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
+# 201 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
+# 215 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 # 1 "/usr/include/string.h" 1 3 4
 # 28 "/usr/include/string.h" 3 4
 
@@ -2183,7 +2193,7 @@ extern int *__errno_location (void) __attribute__ ((__nothrow__)) __attribute__ 
 
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 34 "/usr/include/string.h" 2 3 4
 
 
@@ -2415,10 +2425,10 @@ extern char *stpncpy (char *__restrict __dest,
 # 636 "/usr/include/string.h" 2 3 4
 # 644 "/usr/include/string.h" 3 4
 
-# 216 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
+# 216 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 # 1 "/usr/include/strings.h" 1 3 4
-# 217 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
-# 253 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
+# 217 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
+# 253 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 # 1 "/usr/include/unistd.h" 1 3 4
 # 28 "/usr/include/unistd.h" 3 4
 
@@ -2426,7 +2436,7 @@ extern char *stpncpy (char *__restrict __dest,
 # 1 "/usr/include/bits/posix_opt.h" 1 3 4
 # 204 "/usr/include/unistd.h" 2 3 4
 # 227 "/usr/include/unistd.h" 3 4
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 228 "/usr/include/unistd.h" 2 3 4
 # 256 "/usr/include/unistd.h" 3 4
 typedef __useconds_t useconds_t;
@@ -3570,23 +3580,23 @@ extern int lockf (int __fd, int __cmd, __off_t __len) ;
 extern int fdatasync (int __fildes);
 # 1153 "/usr/include/unistd.h" 3 4
 
-# 254 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
+# 254 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 
 
 
 # 1 "/usr/include/sys/param.h" 1 3 4
 # 26 "/usr/include/sys/param.h" 3 4
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include-fixed/limits.h" 1 3 4
-# 34 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include-fixed/limits.h" 3 4
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include-fixed/syslimits.h" 1 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include-fixed/limits.h" 1 3 4
+# 34 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include-fixed/limits.h" 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include-fixed/syslimits.h" 1 3 4
 
 
 
 
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include-fixed/limits.h" 1 3 4
-# 169 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include-fixed/limits.h" 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include-fixed/limits.h" 1 3 4
+# 169 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include-fixed/limits.h" 3 4
 # 1 "/usr/include/limits.h" 1 3 4
 # 145 "/usr/include/limits.h" 3 4
 # 1 "/usr/include/bits/posix1_lim.h" 1 3 4
@@ -3602,9 +3612,9 @@ extern int fdatasync (int __fildes);
 
 # 1 "/usr/include/bits/posix2_lim.h" 1 3 4
 # 150 "/usr/include/limits.h" 2 3 4
-# 170 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include-fixed/limits.h" 2 3 4
-# 8 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include-fixed/syslimits.h" 2 3 4
-# 35 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include-fixed/limits.h" 2 3 4
+# 170 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include-fixed/limits.h" 2 3 4
+# 8 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include-fixed/syslimits.h" 2 3 4
+# 35 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include-fixed/limits.h" 2 3 4
 # 27 "/usr/include/sys/param.h" 2 3 4
 
 # 1 "/usr/include/linux/param.h" 1 3 4
@@ -3616,19 +3626,19 @@ extern int fdatasync (int __fildes);
 # 1 "/usr/include/asm/param.h" 2 3 4
 # 5 "/usr/include/linux/param.h" 2 3 4
 # 29 "/usr/include/sys/param.h" 2 3 4
-# 258 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
+# 258 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 
 
 
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include-fixed/limits.h" 1 3 4
-# 264 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include-fixed/limits.h" 1 3 4
+# 264 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/hwint.h" 1
-# 180 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/hwint.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hwint.h" 1
+# 180 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hwint.h"
 static __inline__ int
 clz_hwi (unsigned long x)
 {
@@ -3693,8 +3703,8 @@ extern long gcd (long, long);
 extern long pos_mul_hwi (long, long);
 extern long mul_hwi (long, long);
 extern long least_common_multiple (long, long);
-# 268 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
-# 297 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
+# 268 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
+# 297 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 # 1 "/usr/include/sys/time.h" 1 3 4
 # 27 "/usr/include/sys/time.h" 3 4
 # 1 "/usr/include/time.h" 1 3 4
@@ -3792,7 +3802,7 @@ extern int lutimes (__const char *__file, __const struct timeval __tvp[2])
 extern int futimes (int __fd, __const struct timeval __tvp[2]) __attribute__ ((__nothrow__));
 # 191 "/usr/include/sys/time.h" 3 4
 
-# 298 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
+# 298 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 # 1 "/usr/include/time.h" 1 3 4
 # 30 "/usr/include/time.h" 3 4
 
@@ -3803,7 +3813,7 @@ extern int futimes (int __fd, __const struct timeval __tvp[2]) __attribute__ ((_
 
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 39 "/usr/include/time.h" 2 3 4
 
 
@@ -4013,8 +4023,8 @@ extern int timer_gettime (timer_t __timerid, struct itimerspec *__value)
 extern int timer_getoverrun (timer_t __timerid) __attribute__ ((__nothrow__));
 # 417 "/usr/include/time.h" 3 4
 
-# 299 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
-# 310 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
+# 299 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
+# 310 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 # 1 "/usr/include/fcntl.h" 1 3 4
 # 30 "/usr/include/fcntl.h" 3 4
 
@@ -4063,8 +4073,8 @@ extern int posix_fadvise (int __fd, __off_t __offset, __off_t __len,
 extern int posix_fallocate (int __fd, __off_t __offset, __off_t __len);
 # 208 "/usr/include/fcntl.h" 3 4
 
-# 311 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
-# 351 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
+# 311 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
+# 351 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 # 1 "/usr/include/sys/wait.h" 1 3 4
 # 29 "/usr/include/sys/wait.h" 3 4
 
@@ -4122,7 +4132,7 @@ typedef struct siginfo
 
     union
       {
- int _pad[((128 / sizeof (int)) - 4)];
+ int _pad[((128 / sizeof (int)) - 3)];
 
 
  struct
@@ -4308,7 +4318,7 @@ typedef struct sigevent
 
     union
       {
- int _pad[((64 / sizeof (int)) - 4)];
+ int _pad[((64 / sizeof (int)) - 3)];
 
 
 
@@ -4541,53 +4551,58 @@ struct _xmmreg
 {
   __uint32_t element[4];
 };
-# 109 "/usr/include/bits/sigcontext.h" 3 4
+
+
+
+
+
 struct _fpstate
 {
 
-  __uint16_t cwd;
-  __uint16_t swd;
-  __uint16_t ftw;
-  __uint16_t fop;
-  __uint64_t rip;
-  __uint64_t rdp;
-  __uint32_t mxcsr;
-  __uint32_t mxcr_mask;
-  struct _fpxreg _st[8];
-  struct _xmmreg _xmm[16];
-  __uint32_t padding[24];
-};
+  __uint32_t cw;
+  __uint32_t sw;
+  __uint32_t tag;
+  __uint32_t ipoff;
+  __uint32_t cssel;
+  __uint32_t dataoff;
+  __uint32_t datasel;
+  struct _fpreg _st[8];
+  unsigned short status;
+  unsigned short magic;
 
+
+  __uint32_t _fxsr_env[6];
+  __uint32_t mxcsr;
+  __uint32_t reserved;
+  struct _fpxreg _fxsr_st[8];
+  struct _xmmreg _xmm[8];
+  __uint32_t padding[56];
+};
+# 81 "/usr/include/bits/sigcontext.h" 3 4
 struct sigcontext
 {
-  unsigned long r8;
-  unsigned long r9;
-  unsigned long r10;
-  unsigned long r11;
-  unsigned long r12;
-  unsigned long r13;
-  unsigned long r14;
-  unsigned long r15;
-  unsigned long rdi;
-  unsigned long rsi;
-  unsigned long rbp;
-  unsigned long rbx;
-  unsigned long rdx;
-  unsigned long rax;
-  unsigned long rcx;
-  unsigned long rsp;
-  unsigned long rip;
-  unsigned long eflags;
-  unsigned short cs;
-  unsigned short gs;
-  unsigned short fs;
-  unsigned short __pad0;
-  unsigned long err;
+  unsigned short gs, __gsh;
+  unsigned short fs, __fsh;
+  unsigned short es, __esh;
+  unsigned short ds, __dsh;
+  unsigned long edi;
+  unsigned long esi;
+  unsigned long ebp;
+  unsigned long esp;
+  unsigned long ebx;
+  unsigned long edx;
+  unsigned long ecx;
+  unsigned long eax;
   unsigned long trapno;
+  unsigned long err;
+  unsigned long eip;
+  unsigned short cs, __csh;
+  unsigned long eflags;
+  unsigned long esp_at_signal;
+  unsigned short ss, __ssh;
+  struct _fpstate * fpstate;
   unsigned long oldmask;
   unsigned long cr2;
-  struct _fpstate * fpstate;
-  unsigned long __reserved1 [8];
 };
 # 340 "/usr/include/signal.h" 2 3 4
 
@@ -4599,7 +4614,7 @@ extern int sigreturn (struct sigcontext *__scp) __attribute__ ((__nothrow__));
 
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 350 "/usr/include/signal.h" 2 3 4
 
 
@@ -4966,11 +4981,11 @@ extern __pid_t wait4 (__pid_t __pid, __WAIT_STATUS __stat_loc, int __options,
 
 
 
-# 352 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
-# 382 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
+# 352 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
+# 382 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 # 1 "/usr/include/sys/mman.h" 1 3 4
 # 26 "/usr/include/sys/mman.h" 3 4
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 27 "/usr/include/sys/mman.h" 2 3 4
 # 42 "/usr/include/sys/mman.h" 3 4
 # 1 "/usr/include/bits/mman.h" 1 3 4
@@ -5040,8 +5055,8 @@ extern int shm_open (__const char *__name, int __oflag, mode_t __mode);
 extern int shm_unlink (__const char *__name);
 
 
-# 383 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
-# 398 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
+# 383 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
+# 398 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 # 1 "/usr/include/sys/times.h" 1 3 4
 # 32 "/usr/include/sys/times.h" 3 4
 
@@ -5064,13 +5079,13 @@ struct tms
 extern clock_t times (struct tms *__buffer) __attribute__ ((__nothrow__));
 
 
-# 399 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
-# 431 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
+# 399 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
+# 431 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 extern int getopt (int, char * const *, const char *);
-# 459 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
+# 459 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 # 1 "/usr/include/malloc.h" 1 3 4
 # 25 "/usr/include/malloc.h" 3 4
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 26 "/usr/include/malloc.h" 2 3 4
 # 48 "/usr/include/malloc.h" 3 4
 
@@ -5179,9 +5194,9 @@ extern void __malloc_check_init (void) __attribute__ ((__nothrow__));
 
 
 
-# 460 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
-# 483 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stdint.h" 1 3 4
+# 460 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
+# 483 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stdint.h" 1 3 4
 
 
 # 1 "/usr/include/stdint.h" 1 3 4
@@ -5198,16 +5213,24 @@ typedef unsigned int uint32_t;
 
 
 
-typedef unsigned long int uint64_t;
-# 66 "/usr/include/stdint.h" 3 4
+
+
+__extension__
+typedef unsigned long long int uint64_t;
+
+
+
+
+
+
 typedef signed char int_least8_t;
 typedef short int int_least16_t;
 typedef int int_least32_t;
 
-typedef long int int_least64_t;
 
 
-
+__extension__
+typedef long long int int_least64_t;
 
 
 
@@ -5215,26 +5238,48 @@ typedef unsigned char uint_least8_t;
 typedef unsigned short int uint_least16_t;
 typedef unsigned int uint_least32_t;
 
-typedef unsigned long int uint_least64_t;
-# 91 "/usr/include/stdint.h" 3 4
+
+
+__extension__
+typedef unsigned long long int uint_least64_t;
+
+
+
+
+
+
 typedef signed char int_fast8_t;
 
-typedef long int int_fast16_t;
-typedef long int int_fast32_t;
-typedef long int int_fast64_t;
-# 104 "/usr/include/stdint.h" 3 4
+
+
+
+
+typedef int int_fast16_t;
+typedef int int_fast32_t;
+__extension__
+typedef long long int int_fast64_t;
+
+
+
 typedef unsigned char uint_fast8_t;
 
-typedef unsigned long int uint_fast16_t;
-typedef unsigned long int uint_fast32_t;
-typedef unsigned long int uint_fast64_t;
-# 123 "/usr/include/stdint.h" 3 4
-typedef unsigned long int uintptr_t;
-# 135 "/usr/include/stdint.h" 3 4
-typedef long int intmax_t;
-typedef unsigned long int uintmax_t;
-# 4 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stdint.h" 2 3 4
-# 484 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
+
+
+
+
+typedef unsigned int uint_fast16_t;
+typedef unsigned int uint_fast32_t;
+__extension__
+typedef unsigned long long int uint_fast64_t;
+# 129 "/usr/include/stdint.h" 3 4
+typedef unsigned int uintptr_t;
+# 138 "/usr/include/stdint.h" 3 4
+__extension__
+typedef long long int intmax_t;
+__extension__
+typedef unsigned long long int uintmax_t;
+# 4 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stdint.h" 2 3 4
+# 484 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 
 
 
@@ -5243,16 +5288,17 @@ typedef unsigned long int uintmax_t;
 typedef int __gwchar_t;
 # 274 "/usr/include/inttypes.h" 3 4
 
-
-
-
-
+# 288 "/usr/include/inttypes.h" 3 4
 typedef struct
   {
-    long int quot;
-    long int rem;
+    long long int quot;
+    long long int rem;
   } imaxdiv_t;
-# 298 "/usr/include/inttypes.h" 3 4
+
+
+
+
+
 extern intmax_t imaxabs (intmax_t __n) __attribute__ ((__nothrow__)) __attribute__ ((__const__));
 
 
@@ -5276,65 +5322,73 @@ extern intmax_t wcstoimax (__const __gwchar_t *__restrict __nptr,
 extern uintmax_t wcstoumax (__const __gwchar_t *__restrict __nptr,
        __gwchar_t ** __restrict __endptr, int __base)
      __attribute__ ((__nothrow__));
-
-
-
-
-
-extern long int __strtol_internal (__const char *__restrict __nptr,
-       char **__restrict __endptr,
-       int __base, int __group)
+# 379 "/usr/include/inttypes.h" 3 4
+__extension__
+extern long long int __strtoll_internal (__const char *__restrict __nptr,
+      char **__restrict __endptr,
+      int __base, int __group)
   __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
 
 extern __inline intmax_t
 __attribute__ ((__nothrow__)) strtoimax (__const char *__restrict nptr, char **__restrict endptr, int base)
 
 {
-  return __strtol_internal (nptr, endptr, base, 0);
+  return __strtoll_internal (nptr, endptr, base, 0);
 }
 
-extern unsigned long int __strtoul_internal (__const char *
-          __restrict __nptr,
-          char ** __restrict __endptr,
-          int __base, int __group)
+__extension__
+extern unsigned long long int __strtoull_internal (__const char *
+         __restrict __nptr,
+         char **
+         __restrict __endptr,
+         int __base,
+         int __group)
   __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
 
 extern __inline uintmax_t
 __attribute__ ((__nothrow__)) strtoumax (__const char *__restrict nptr, char **__restrict endptr, int base)
 
 {
-  return __strtoul_internal (nptr, endptr, base, 0);
+  return __strtoull_internal (nptr, endptr, base, 0);
 }
 
-extern long int __wcstol_internal (__const __gwchar_t * __restrict __nptr,
-       __gwchar_t **__restrict __endptr,
-       int __base, int __group)
+__extension__
+extern long long int __wcstoll_internal (__const __gwchar_t *
+      __restrict __nptr,
+      __gwchar_t **__restrict __endptr,
+      int __base, int __group)
   __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
 
 extern __inline intmax_t
 __attribute__ ((__nothrow__)) wcstoimax (__const __gwchar_t *__restrict nptr, __gwchar_t **__restrict endptr, int base)
 
 {
-  return __wcstol_internal (nptr, endptr, base, 0);
+  return __wcstoll_internal (nptr, endptr, base, 0);
 }
 
-extern unsigned long int __wcstoul_internal (__const __gwchar_t *
-          __restrict __nptr,
-          __gwchar_t **
-          __restrict __endptr,
-          int __base, int __group)
+
+__extension__
+extern unsigned long long int __wcstoull_internal (__const __gwchar_t *
+         __restrict __nptr,
+         __gwchar_t **
+         __restrict __endptr,
+         int __base,
+         int __group)
   __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
 
 extern __inline uintmax_t
 __attribute__ ((__nothrow__)) wcstoumax (__const __gwchar_t *__restrict nptr, __gwchar_t **__restrict endptr, int base)
 
 {
-  return __wcstoul_internal (nptr, endptr, base, 0);
+  return __wcstoull_internal (nptr, endptr, base, 0);
 }
-# 442 "/usr/include/inttypes.h" 3 4
 
-# 488 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
-# 551 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
+
+
+
+
+# 488 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
+# 551 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 # 1 "/usr/include/sys/stat.h" 1 3 4
 # 105 "/usr/include/sys/stat.h" 3 4
 
@@ -5345,7 +5399,7 @@ struct stat
   {
     __dev_t st_dev;
 
-
+    unsigned short int __pad1;
 
 
     __ino_t st_ino;
@@ -5353,20 +5407,20 @@ struct stat
 
 
 
-
-
-
-    __nlink_t st_nlink;
     __mode_t st_mode;
+    __nlink_t st_nlink;
+
+
+
 
     __uid_t st_uid;
     __gid_t st_gid;
 
-    int __pad0;
+
 
     __dev_t st_rdev;
 
-
+    unsigned short int __pad2;
 
 
     __off_t st_size;
@@ -5380,9 +5434,13 @@ struct stat
     struct timespec st_atim;
     struct timespec st_mtim;
     struct timespec st_ctim;
-# 103 "/usr/include/bits/stat.h" 3 4
-    long int __unused[3];
-# 112 "/usr/include/bits/stat.h" 3 4
+# 106 "/usr/include/bits/stat.h" 3 4
+    unsigned long int __unused4;
+    unsigned long int __unused5;
+
+
+
+
   };
 # 108 "/usr/include/sys/stat.h" 2 3 4
 # 209 "/usr/include/sys/stat.h" 3 4
@@ -5506,21 +5564,21 @@ extern int __xmknodat (int __ver, int __fd, __const char *__path,
 extern __inline int
 __attribute__ ((__nothrow__)) stat (__const char *__path, struct stat *__statbuf)
 {
-  return __xstat (1, __path, __statbuf);
+  return __xstat (3, __path, __statbuf);
 }
 
 
 extern __inline int
 __attribute__ ((__nothrow__)) lstat (__const char *__path, struct stat *__statbuf)
 {
-  return __lxstat (1, __path, __statbuf);
+  return __lxstat (3, __path, __statbuf);
 }
 
 
 extern __inline int
 __attribute__ ((__nothrow__)) fstat (int __fd, struct stat *__statbuf)
 {
-  return __fxstat (1, __fd, __statbuf);
+  return __fxstat (3, __fd, __statbuf);
 }
 
 
@@ -5528,7 +5586,7 @@ extern __inline int
 __attribute__ ((__nothrow__)) fstatat (int __fd, __const char *__filename, struct stat *__statbuf, int __flag)
 
 {
-  return __fxstatat (1, __fd, __filename, __statbuf, __flag);
+  return __fxstatat (3, __fd, __filename, __statbuf, __flag);
 }
 
 
@@ -5536,7 +5594,7 @@ __attribute__ ((__nothrow__)) fstatat (int __fd, __const char *__filename, struc
 extern __inline int
 __attribute__ ((__nothrow__)) mknod (__const char *__path, __mode_t __mode, __dev_t __dev)
 {
-  return __xmknod (0, __path, __mode, &__dev);
+  return __xmknod (1, __path, __mode, &__dev);
 }
 
 
@@ -5545,24 +5603,24 @@ extern __inline int
 __attribute__ ((__nothrow__)) mknodat (int __fd, __const char *__path, __mode_t __mode, __dev_t __dev)
 
 {
-  return __xmknodat (0, __fd, __path, __mode, &__dev);
+  return __xmknodat (1, __fd, __path, __mode, &__dev);
 }
 # 534 "/usr/include/sys/stat.h" 3 4
 
-# 552 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
-# 623 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/filenames.h" 1
-# 81 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/filenames.h"
+# 552 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
+# 623 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/filenames.h" 1
+# 81 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/filenames.h"
 extern int filename_cmp (const char *s1, const char *s2);
 
 
 extern int filename_ncmp (const char *s1, const char *s2,
      size_t n);
-# 624 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
-# 635 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
+# 624 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
+# 635 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 # 1 "/usr/include/dlfcn.h" 1 3 4
 # 25 "/usr/include/dlfcn.h" 3 4
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 26 "/usr/include/dlfcn.h" 2 3 4
 
 
@@ -5587,15 +5645,15 @@ extern void *dlsym (void *__restrict __handle,
 extern char *dlerror (void) __attribute__ ((__nothrow__));
 # 189 "/usr/include/dlfcn.h" 3 4
 
-# 636 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
+# 636 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/libiberty.h" 1
-# 46 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/libiberty.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
-# 47 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/libiberty.h" 2
-# 56 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/libiberty.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h" 1
+# 46 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
+# 47 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h" 2
+# 56 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
 extern void unlock_stream (FILE *);
 
 
@@ -5637,7 +5695,7 @@ extern int writeargv (char **, FILE *);
 
 
 extern int countargv (char**);
-# 121 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/libiberty.h"
+# 121 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
 extern const char *lbasename (const char *);
 
 
@@ -5660,7 +5718,7 @@ extern char *lrealpath (const char *);
 
 
 extern char *concat (const char *, ...) __attribute__ ((__malloc__)) __attribute__ ((__sentinel__));
-# 151 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/libiberty.h"
+# 151 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
 extern char *reconcat (char *, const char *, ...) __attribute__ ((__malloc__)) __attribute__ ((__sentinel__));
 
 
@@ -5686,11 +5744,11 @@ extern char *concat_copy2 (const char *, ...) __attribute__ ((__sentinel__));
 
 
 extern char *libiberty_concat_ptr;
-# 187 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/libiberty.h"
+# 187 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
 extern int fdmatch (int fd1, int fd2);
-# 199 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/libiberty.h"
+# 199 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
 extern char * getpwd (void);
-# 212 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/libiberty.h"
+# 212 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
 extern long get_run_time (void);
 
 
@@ -5744,7 +5802,7 @@ extern char *xstrerror (int);
 
 
 extern int signo_max (void);
-# 276 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/libiberty.h"
+# 276 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
 extern const char *strsigno (int);
 
 
@@ -5801,18 +5859,18 @@ extern double physmem_available (void);
 
 
 extern unsigned int xcrc32 (const unsigned char *, int, unsigned int);
-# 375 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/libiberty.h"
+# 375 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
 extern const unsigned char _hex_value[256];
 extern void hex_init (void);
-# 401 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/libiberty.h"
+# 401 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
 extern struct pex_obj *pex_init (int flags, const char *pname,
      const char *tempbase);
-# 496 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/libiberty.h"
+# 496 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
 extern const char *pex_run (struct pex_obj *obj, int flags,
        const char *executable, char * const *argv,
        const char *outname, const char *errname,
        int *err);
-# 511 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/libiberty.h"
+# 511 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
 extern const char *pex_run_in_environment (struct pex_obj *obj, int flags,
                       const char *executable,
                                            char * const *argv,
@@ -5876,29 +5934,29 @@ extern int pex_get_times (struct pex_obj *, int count,
 
 
 extern void pex_free (struct pex_obj *);
-# 586 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/libiberty.h"
+# 586 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
 extern const char *pex_one (int flags, const char *executable,
        char * const *argv, const char *pname,
        const char *outname, const char *errname,
        int *status, int *err);
-# 605 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/libiberty.h"
+# 605 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
 extern int pexecute (const char *, char * const *, const char *,
                      const char *, char **, char **, int);
 
 
 
 extern int pwait (int, int *, int);
-# 642 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/libiberty.h"
+# 642 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
 extern void setproctitle (const char *name, ...);
 
 
 extern void stack_limit_increase (unsigned long);
-# 655 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/libiberty.h"
+# 655 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
 extern void *C_alloca (size_t) __attribute__ ((__malloc__));
-# 640 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h" 2
-# 668 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
+# 640 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
+# 668 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 extern void fancy_abort (const char *, int, const char *) __attribute__ ((__noreturn__));
-# 758 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
+# 758 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
         
 
 
@@ -5915,7 +5973,7 @@ extern void fancy_abort (const char *, int, const char *) __attribute__ ((__nore
 
 
         
-# 814 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
+# 814 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
         
 
 
@@ -5924,24 +5982,24 @@ extern void fancy_abort (const char *, int, const char *) __attribute__ ((__nore
 
 
         
-# 884 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
+# 884 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
         
-# 896 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
-        
-
-
+# 896 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
         
 
 
+        
+
+
 
         
-# 914 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
+# 914 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
         
-# 930 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/system.h"
+# 930 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
         
-# 29 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/gcc-plugin.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/coretypes.h" 1
-# 47 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/coretypes.h"
+# 29 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gcc-plugin.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/coretypes.h" 1
+# 47 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/coretypes.h"
 struct bitmap_head_def;
 typedef struct bitmap_head_def *bitmap;
 typedef const struct bitmap_head_def *const_bitmap;
@@ -6051,9 +6109,9 @@ typedef const struct edge_def *const_edge;
 struct basic_block_def;
 typedef struct basic_block_def *basic_block;
 typedef const struct basic_block_def *const_basic_block;
-# 168 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/coretypes.h"
+# 168 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/coretypes.h"
 typedef int reg_class_t;
-# 186 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/coretypes.h"
+# 186 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/coretypes.h"
 enum memmodel
 {
   MEMMODEL_RELAXED = 0,
@@ -6064,11 +6122,11 @@ enum memmodel
   MEMMODEL_SEQ_CST = 5,
   MEMMODEL_LAST = 6
 };
-# 30 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/gcc-plugin.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/highlev-plugin-common.h" 1
-# 31 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/gcc-plugin.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/hashtab.h" 1
-# 47 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/hashtab.h"
+# 30 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gcc-plugin.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/highlev-plugin-common.h" 1
+# 31 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gcc-plugin.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hashtab.h" 1
+# 47 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hashtab.h"
 typedef unsigned int hashval_t;
 
 
@@ -6106,7 +6164,7 @@ typedef void (*htab_free) (void *);
 
 typedef void *(*htab_alloc_with_arg) (void *, size_t, size_t);
 typedef void (*htab_free_with_arg) (void *, void *);
-# 100 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/hashtab.h"
+# 100 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hashtab.h"
 struct htab {
 
   htab_hash hash_f;
@@ -6209,14 +6267,14 @@ extern hashval_t htab_hash_string (const void *);
 
 
 extern hashval_t iterative_hash (const void *, size_t, hashval_t);
-# 32 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/gcc-plugin.h" 2
+# 32 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gcc-plugin.h" 2
 
 
 enum plugin_event
 {
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/plugin.def" 1
-# 22 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/plugin.def"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/plugin.def" 1
+# 22 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/plugin.def"
 PLUGIN_PASS_MANAGER_SETUP,
 
 
@@ -6289,7 +6347,7 @@ PLUGIN_EARLY_GIMPLE_PASSES_END,
 
 
 PLUGIN_NEW_PASS,
-# 38 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/gcc-plugin.h" 2
+# 38 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gcc-plugin.h" 2
 
   PLUGIN_EVENT_FIRST_DYNAMIC
 };
@@ -6345,7 +6403,7 @@ struct plugin_name_args
 
 extern unsigned char plugin_default_version_check (struct plugin_gcc_version *,
        struct plugin_gcc_version *);
-# 103 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/gcc-plugin.h"
+# 103 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gcc-plugin.h"
 typedef int (*plugin_init_func) (struct plugin_name_args *plugin_info,
                                  struct plugin_gcc_version *version);
 
@@ -6360,7 +6418,7 @@ extern int plugin_init (struct plugin_name_args *plugin_info,
 
 
 typedef void (*plugin_callback_func) (void *gcc_data, void *user_data);
-# 129 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/gcc-plugin.h"
+# 129 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gcc-plugin.h"
 extern int get_event_last (void);
 
 int get_named_event_id (const char *name, enum insert_option insert);
@@ -6382,14 +6440,14 @@ extern int unregister_callback (const char *plugin_name, int event);
 
 
 extern const char* default_plugin_dir_name (void);
-# 161 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/gcc-plugin.h"
+# 161 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gcc-plugin.h"
 extern int plugin_is_GPL_compatible;
 # 24 "../../../src/plugin-utils.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h" 1
-# 26 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/machmode.h" 1
-# 25 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/machmode.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/insn-modes.h" 1
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 1
+# 26 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/machmode.h" 1
+# 25 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/machmode.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/insn-modes.h" 1
 
 
 
@@ -6543,7 +6601,7 @@ enum machine_mode
 
   NUM_MACHINE_MODES = MAX_MACHINE_MODE
 };
-# 26 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/machmode.h" 2
+# 26 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/machmode.h" 2
 
 
 
@@ -6552,8 +6610,8 @@ extern const char * const mode_name[NUM_MACHINE_MODES];
 
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/mode-classes.def" 1
-# 35 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/machmode.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/mode-classes.def" 1
+# 35 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/machmode.h" 2
 
 enum mode_class { MODE_RANDOM, MODE_CC, MODE_INT, MODE_PARTIAL_INT, MODE_FRACT, MODE_UFRACT, MODE_ACCUM, MODE_UACCUM, MODE_FLOAT, MODE_DECIMAL_FLOAT, MODE_COMPLEX_INT, MODE_COMPLEX_FLOAT, MODE_VECTOR_INT, MODE_VECTOR_FRACT, MODE_VECTOR_UFRACT, MODE_VECTOR_ACCUM, MODE_VECTOR_UACCUM, MODE_VECTOR_FLOAT, MAX_MODE_CLASS };
 
@@ -6563,7 +6621,7 @@ enum mode_class { MODE_RANDOM, MODE_CC, MODE_INT, MODE_PARTIAL_INT, MODE_FRACT, 
 
 
 extern const unsigned char mode_class[NUM_MACHINE_MODES];
-# 179 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/machmode.h"
+# 179 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/machmode.h"
 extern unsigned char mode_size[NUM_MACHINE_MODES];
 
 
@@ -6590,7 +6648,7 @@ extern const unsigned long mode_mask_array[NUM_MACHINE_MODES];
 
 
 extern const unsigned char mode_inner[NUM_MACHINE_MODES];
-# 216 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/machmode.h"
+# 216 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/machmode.h"
 extern const unsigned char mode_nunits[NUM_MACHINE_MODES];
 
 
@@ -6657,11 +6715,11 @@ extern enum machine_mode ptr_mode;
 
 
 extern void init_adjust_machine_modes (void);
-# 27 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/input.h" 1
-# 25 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/input.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/line-map.h" 1
-# 37 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/line-map.h"
+# 27 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/input.h" 1
+# 25 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/input.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/line-map.h" 1
+# 37 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/line-map.h"
 enum lc_reason
 {
   LC_ENTER = 0,
@@ -6684,7 +6742,7 @@ typedef void *(*line_map_realloc) (void *, size_t);
 
 
 typedef size_t (*line_map_round_alloc_size_func) (size_t);
-# 71 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/line-map.h"
+# 71 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/line-map.h"
 struct line_map_ordinary {
   const char *to_file;
   linenum_type to_line;
@@ -6709,7 +6767,7 @@ struct line_map_ordinary {
 
 
 struct cpp_hashnode;
-# 105 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/line-map.h"
+# 105 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/line-map.h"
 struct line_map_macro {
 
   struct cpp_hashnode *
@@ -6719,7 +6777,7 @@ struct line_map_macro {
 
 
   unsigned int n_tokens;
-# 168 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/line-map.h"
+# 168 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/line-map.h"
   source_location * macro_locations;
 
 
@@ -6729,7 +6787,7 @@ struct line_map_macro {
 
   source_location expansion;
 };
-# 204 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/line-map.h"
+# 204 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/line-map.h"
 struct line_map {
   source_location start_location;
 
@@ -6741,7 +6799,7 @@ struct line_map {
     struct line_map_macro macro;
   } d;
 };
-# 244 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/line-map.h"
+# 244 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/line-map.h"
 struct maps_info {
 
 
@@ -6791,7 +6849,7 @@ struct line_maps {
 
   line_map_round_alloc_size_func round_alloc_size;
 };
-# 412 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/line-map.h"
+# 412 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/line-map.h"
 extern void linemap_init (struct line_maps *);
 
 
@@ -6806,7 +6864,7 @@ extern void linemap_check_files_exited (struct line_maps *);
 
 extern source_location linemap_line_start
 (struct line_maps *set, linenum_type to_line, unsigned int max_column_hint);
-# 440 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/line-map.h"
+# 440 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/line-map.h"
 extern const struct line_map *linemap_add
   (struct line_maps *, enum lc_reason, unsigned int sysp,
    const char *to_file, linenum_type to_line);
@@ -6830,7 +6888,7 @@ unsigned char linemap_macro_expansion_map_p (const struct line_map *);
 
 
 const char* linemap_map_get_macro_name (const struct line_map*);
-# 473 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/line-map.h"
+# 473 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/line-map.h"
 int linemap_location_in_system_header_p (struct line_maps *,
       source_location);
 
@@ -6839,7 +6897,7 @@ int linemap_location_in_system_header_p (struct line_maps *,
 
 unsigned char linemap_location_from_macro_expansion_p (struct line_maps *,
            source_location);
-# 550 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/line-map.h"
+# 550 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/line-map.h"
 extern source_location
 linemap_position_for_column (struct line_maps *, unsigned int);
 
@@ -6848,7 +6906,7 @@ linemap_position_for_column (struct line_maps *, unsigned int);
 source_location linemap_position_for_line_and_column (struct line_map *,
             linenum_type,
             unsigned int);
-# 577 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/line-map.h"
+# 577 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/line-map.h"
 int linemap_compare_locations (struct line_maps *set,
           source_location pre,
           source_location post);
@@ -6882,12 +6940,12 @@ enum location_resolution_kind
   LRK_SPELLING_LOCATION,
   LRK_MACRO_DEFINITION_LOCATION
 };
-# 659 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/line-map.h"
+# 659 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/line-map.h"
 source_location linemap_resolve_location (struct line_maps *,
        source_location loc,
        enum location_resolution_kind lrk,
        const struct line_map **loc_map);
-# 671 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/line-map.h"
+# 671 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/line-map.h"
 source_location linemap_unwind_toward_expansion (struct line_maps *,
        source_location loc,
        const struct line_map **loc_map);
@@ -6934,10 +6992,10 @@ void linemap_dump (FILE *, struct line_maps *, unsigned, unsigned char);
 
 
 void line_table_dump (FILE *, struct line_maps *, unsigned int, unsigned int);
-# 26 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/input.h" 2
+# 26 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/input.h" 2
 
 extern struct line_maps *line_table;
-# 37 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/input.h"
+# 37 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/input.h"
 extern char builtins_location_check[(((source_location) 1)
          < 2) ? 1 : -1];
 
@@ -6948,11 +7006,11 @@ extern expanded_location expand_location (source_location);
 typedef source_location location_t;
 
 extern location_t input_location;
-# 58 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/input.h"
+# 58 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/input.h"
 void dump_line_table_statistics (void);
-# 28 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/statistics.h" 1
-# 41 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/statistics.h"
+# 28 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/statistics.h" 1
+# 41 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/statistics.h"
 struct function;
 
 
@@ -6962,9 +7020,9 @@ extern void statistics_fini (void);
 extern void statistics_fini_pass (void);
 extern void statistics_counter_event (struct function *, const char *, int);
 extern void statistics_histogram_event (struct function *, const char *, int);
-# 29 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/vec.h" 1
-# 472 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/vec.h"
+# 29 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/vec.h" 1
+# 472 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/vec.h"
 extern void *vec_gc_p_reserve (void *, int );
 extern void *vec_gc_p_reserve_exact (void *, int );
 extern void *vec_gc_o_reserve (void *, int, size_t, size_t );
@@ -6978,13 +7036,13 @@ extern void *vec_heap_o_reserve (void *, int, size_t, size_t );
 extern void *vec_heap_o_reserve_exact (void *, int, size_t, size_t
            );
 extern void dump_vec_loc_statistics (void);
-# 514 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/vec.h"
+# 514 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/vec.h"
 typedef struct vec_prefix
 {
   unsigned num;
   unsigned alloc;
 } vec_prefix;
-# 1351 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/vec.h"
+# 1351 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/vec.h"
 extern void *vec_stack_p_reserve (void *, int );
 extern void *vec_stack_p_reserve_exact (void *, int );
 extern void *vec_stack_p_reserve_exact_1 (int, void *);
@@ -6992,9 +7050,9 @@ extern void *vec_stack_o_reserve (void *, int, size_t, size_t );
 extern void *vec_stack_o_reserve_exact (void *, int, size_t, size_t
       );
 extern void vec_stack_free (void *);
-# 30 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/vecir.h" 1
-# 28 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/vecir.h"
+# 30 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/vecir.h" 1
+# 28 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/vecir.h"
 static __inline__ void VEC_tree_must_be_pointer_type (void) { (void)((tree)1 == (void *)1); } typedef struct VEC_tree_base { struct vec_prefix prefix; tree vec[1]; } VEC_tree_base; typedef struct VEC_tree_none { VEC_tree_base base; } VEC_tree_none; static __inline__ unsigned VEC_tree_base_length (const VEC_tree_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ tree VEC_tree_base_last (const VEC_tree_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ tree VEC_tree_base_index (const VEC_tree_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_tree_base_iterate (const VEC_tree_base *vec_, unsigned ix_, tree *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (tree) 0; return 0; } } static __inline__ size_t VEC_tree_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_tree_base, vec) + alloc_ * sizeof(tree); } static __inline__ void VEC_tree_base_embedded_init (VEC_tree_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_tree_base_space (VEC_tree_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_tree_base_splice (VEC_tree_base *dst_, VEC_tree_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (tree)); dst_->prefix.num += len_; } } static __inline__ tree *VEC_tree_base_quick_push (VEC_tree_base *vec_, tree obj_ ) { tree *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ tree VEC_tree_base_pop (VEC_tree_base *vec_ ) { tree obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_tree_base_truncate (VEC_tree_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ tree VEC_tree_base_replace (VEC_tree_base *vec_, unsigned ix_, tree obj_ ) { tree old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ tree *VEC_tree_base_quick_insert (VEC_tree_base *vec_, unsigned ix_, tree obj_ ) { tree *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (tree)); *slot_ = obj_; return slot_; } static __inline__ tree VEC_tree_base_ordered_remove (VEC_tree_base *vec_, unsigned ix_ ) { tree *slot_; tree obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (tree)); return obj_; } static __inline__ tree VEC_tree_base_unordered_remove (VEC_tree_base *vec_, unsigned ix_ ) { tree *slot_; tree obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_tree_base_block_remove (VEC_tree_base *vec_, unsigned ix_, unsigned len_ ) { tree *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (tree)); } static __inline__ tree *VEC_tree_base_address (VEC_tree_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_tree_base_lower_bound (VEC_tree_base *vec_, const tree obj_, unsigned char (*lessthan_)(const tree, const tree) ) { unsigned int len_ = VEC_tree_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { tree middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_tree_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
 typedef struct VEC_tree_gc { VEC_tree_base base; } VEC_tree_gc; static __inline__ VEC_tree_gc *VEC_tree_gc_alloc (int alloc_ ) { return (VEC_tree_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_tree_gc_free (VEC_tree_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_tree_gc *VEC_tree_gc_copy (VEC_tree_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_tree_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_tree_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (tree) * len_); } return new_vec_; } static __inline__ int VEC_tree_gc_reserve (VEC_tree_gc **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_tree_gc_reserve_exact (VEC_tree_gc **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_tree_gc_safe_grow (VEC_tree_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_tree_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_tree_gc_safe_grow_cleared (VEC_tree_gc **vec_, int size_ ) { int oldsize = VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_tree_gc_safe_grow (vec_, size_ ); memset (&(VEC_tree_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (tree) * (size_ - oldsize)); } static __inline__ void VEC_tree_gc_safe_splice (VEC_tree_gc **dst_, VEC_tree_base *src_ ) { if (src_) { VEC_tree_gc_reserve_exact (dst_, src_->prefix.num ); VEC_tree_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ tree *VEC_tree_gc_safe_push (VEC_tree_gc **vec_, tree obj_ ) { VEC_tree_gc_reserve (vec_, 1 ); return VEC_tree_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ tree *VEC_tree_gc_safe_insert (VEC_tree_gc **vec_, unsigned ix_, tree obj_ ) { VEC_tree_gc_reserve (vec_, 1 ); return VEC_tree_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 typedef struct VEC_tree_heap { VEC_tree_base base; } VEC_tree_heap; static __inline__ VEC_tree_heap *VEC_tree_heap_alloc (int alloc_ ) { return (VEC_tree_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_tree_heap_free (VEC_tree_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_tree_heap *VEC_tree_heap_copy (VEC_tree_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_tree_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_tree_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (tree) * len_); } return new_vec_; } static __inline__ int VEC_tree_heap_reserve (VEC_tree_heap **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_tree_heap_reserve_exact (VEC_tree_heap **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_tree_heap_safe_grow (VEC_tree_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_tree_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_tree_heap_safe_grow_cleared (VEC_tree_heap **vec_, int size_ ) { int oldsize = VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_tree_heap_safe_grow (vec_, size_ ); memset (&(VEC_tree_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (tree) * (size_ - oldsize)); } static __inline__ void VEC_tree_heap_safe_splice (VEC_tree_heap **dst_, VEC_tree_base *src_ ) { if (src_) { VEC_tree_heap_reserve_exact (dst_, src_->prefix.num ); VEC_tree_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ tree *VEC_tree_heap_safe_push (VEC_tree_heap **vec_, tree obj_ ) { VEC_tree_heap_reserve (vec_, 1 ); return VEC_tree_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ tree *VEC_tree_heap_safe_insert (VEC_tree_heap **vec_, unsigned ix_, tree obj_ ) { VEC_tree_heap_reserve (vec_, 1 ); return VEC_tree_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
@@ -7018,16 +7076,16 @@ typedef struct VEC_gimple_seq_heap { VEC_gimple_seq_base base; } VEC_gimple_seq_
 static __inline__ void VEC_rtx_must_be_pointer_type (void) { (void)((rtx)1 == (void *)1); } typedef struct VEC_rtx_base { struct vec_prefix prefix; rtx vec[1]; } VEC_rtx_base; typedef struct VEC_rtx_none { VEC_rtx_base base; } VEC_rtx_none; static __inline__ unsigned VEC_rtx_base_length (const VEC_rtx_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ rtx VEC_rtx_base_last (const VEC_rtx_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ rtx VEC_rtx_base_index (const VEC_rtx_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_rtx_base_iterate (const VEC_rtx_base *vec_, unsigned ix_, rtx *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (rtx) 0; return 0; } } static __inline__ size_t VEC_rtx_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_rtx_base, vec) + alloc_ * sizeof(rtx); } static __inline__ void VEC_rtx_base_embedded_init (VEC_rtx_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_rtx_base_space (VEC_rtx_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_rtx_base_splice (VEC_rtx_base *dst_, VEC_rtx_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (rtx)); dst_->prefix.num += len_; } } static __inline__ rtx *VEC_rtx_base_quick_push (VEC_rtx_base *vec_, rtx obj_ ) { rtx *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ rtx VEC_rtx_base_pop (VEC_rtx_base *vec_ ) { rtx obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_rtx_base_truncate (VEC_rtx_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ rtx VEC_rtx_base_replace (VEC_rtx_base *vec_, unsigned ix_, rtx obj_ ) { rtx old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ rtx *VEC_rtx_base_quick_insert (VEC_rtx_base *vec_, unsigned ix_, rtx obj_ ) { rtx *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (rtx)); *slot_ = obj_; return slot_; } static __inline__ rtx VEC_rtx_base_ordered_remove (VEC_rtx_base *vec_, unsigned ix_ ) { rtx *slot_; rtx obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (rtx)); return obj_; } static __inline__ rtx VEC_rtx_base_unordered_remove (VEC_rtx_base *vec_, unsigned ix_ ) { rtx *slot_; rtx obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_rtx_base_block_remove (VEC_rtx_base *vec_, unsigned ix_, unsigned len_ ) { rtx *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (rtx)); } static __inline__ rtx *VEC_rtx_base_address (VEC_rtx_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_rtx_base_lower_bound (VEC_rtx_base *vec_, const rtx obj_, unsigned char (*lessthan_)(const rtx, const rtx) ) { unsigned int len_ = VEC_rtx_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { rtx middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_rtx_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
 typedef struct VEC_rtx_heap { VEC_rtx_base base; } VEC_rtx_heap; static __inline__ VEC_rtx_heap *VEC_rtx_heap_alloc (int alloc_ ) { return (VEC_rtx_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_rtx_heap_free (VEC_rtx_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_rtx_heap *VEC_rtx_heap_copy (VEC_rtx_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_rtx_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_rtx_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (rtx) * len_); } return new_vec_; } static __inline__ int VEC_rtx_heap_reserve (VEC_rtx_heap **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_rtx_heap_reserve_exact (VEC_rtx_heap **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_rtx_heap_safe_grow (VEC_rtx_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_rtx_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_rtx_heap_safe_grow_cleared (VEC_rtx_heap **vec_, int size_ ) { int oldsize = VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_rtx_heap_safe_grow (vec_, size_ ); memset (&(VEC_rtx_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (rtx) * (size_ - oldsize)); } static __inline__ void VEC_rtx_heap_safe_splice (VEC_rtx_heap **dst_, VEC_rtx_base *src_ ) { if (src_) { VEC_rtx_heap_reserve_exact (dst_, src_->prefix.num ); VEC_rtx_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ rtx *VEC_rtx_heap_safe_push (VEC_rtx_heap **vec_, rtx obj_ ) { VEC_rtx_heap_reserve (vec_, 1 ); return VEC_rtx_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ rtx *VEC_rtx_heap_safe_insert (VEC_rtx_heap **vec_, unsigned ix_, rtx obj_ ) { VEC_rtx_heap_reserve (vec_, 1 ); return VEC_rtx_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 typedef struct VEC_rtx_gc { VEC_rtx_base base; } VEC_rtx_gc; static __inline__ VEC_rtx_gc *VEC_rtx_gc_alloc (int alloc_ ) { return (VEC_rtx_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_rtx_gc_free (VEC_rtx_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_rtx_gc *VEC_rtx_gc_copy (VEC_rtx_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_rtx_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_rtx_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (rtx) * len_); } return new_vec_; } static __inline__ int VEC_rtx_gc_reserve (VEC_rtx_gc **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_rtx_gc_reserve_exact (VEC_rtx_gc **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_rtx_gc_safe_grow (VEC_rtx_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_rtx_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_rtx_gc_safe_grow_cleared (VEC_rtx_gc **vec_, int size_ ) { int oldsize = VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_rtx_gc_safe_grow (vec_, size_ ); memset (&(VEC_rtx_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (rtx) * (size_ - oldsize)); } static __inline__ void VEC_rtx_gc_safe_splice (VEC_rtx_gc **dst_, VEC_rtx_base *src_ ) { if (src_) { VEC_rtx_gc_reserve_exact (dst_, src_->prefix.num ); VEC_rtx_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ rtx *VEC_rtx_gc_safe_push (VEC_rtx_gc **vec_, rtx obj_ ) { VEC_rtx_gc_reserve (vec_, 1 ); return VEC_rtx_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ rtx *VEC_rtx_gc_safe_insert (VEC_rtx_gc **vec_, unsigned ix_, rtx obj_ ) { VEC_rtx_gc_reserve (vec_, 1 ); return VEC_rtx_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-# 31 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/double-int.h" 1
-# 24 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/double-int.h"
+# 31 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/double-int.h" 1
+# 24 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/double-int.h"
 # 1 "/usr/include/gmp.h" 1 3 4
-# 59 "/usr/include/gmp.h" 3 4
-# 1 "/usr/include/gmp-x86_64.h" 1 3 4
-# 53 "/usr/include/gmp-x86_64.h" 3 4
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/include/stddef.h" 1 3 4
-# 54 "/usr/include/gmp-x86_64.h" 2 3 4
-# 194 "/usr/include/gmp-x86_64.h" 3 4
+# 43 "/usr/include/gmp.h" 3 4
+# 1 "./include/gmp-i386.h" 1 3 4
+# 53 "./include/gmp-i386.h" 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
+# 54 "./include/gmp-i386.h" 2 3 4
+# 194 "./include/gmp-i386.h" 3 4
 typedef unsigned long int mp_limb_t;
 typedef long int mp_limb_signed_t;
 
@@ -7116,7 +7174,7 @@ typedef const __mpf_struct *mpf_srcptr;
 typedef __mpf_struct *mpf_ptr;
 typedef const __mpq_struct *mpq_srcptr;
 typedef __mpq_struct *mpq_ptr;
-# 542 "/usr/include/gmp-x86_64.h" 3 4
+# 542 "./include/gmp-i386.h" 3 4
  void __gmp_set_memory_functions (void *(*) (size_t), void *(*) (void *, size_t, size_t), void (*) (void *, size_t))
 
                                                    ;
@@ -7183,7 +7241,7 @@ typedef __mpq_struct *mpq_ptr;
 
 
  int __gmp_fprintf (FILE *, const char *, ...);
-# 621 "/usr/include/gmp-x86_64.h" 3 4
+# 621 "./include/gmp-i386.h" 3 4
  int __gmp_printf (const char *, ...);
 
 
@@ -8035,7 +8093,7 @@ typedef __mpq_struct *mpq_ptr;
 
 
  void __gmpf_urandomb (mpf_t, gmp_randstate_t, unsigned long int);
-# 1480 "/usr/include/gmp-x86_64.h" 3 4
+# 1480 "./include/gmp-i386.h" 3 4
  mp_limb_t __gmpn_add (mp_ptr, mp_srcptr, mp_size_t, mp_srcptr,mp_size_t);
 
 
@@ -8169,7 +8227,7 @@ typedef __mpq_struct *mpq_ptr;
 
 
  void __gmpn_tdiv_qr (mp_ptr, mp_ptr, mp_size_t, mp_srcptr, mp_size_t, mp_srcptr, mp_size_t);
-# 1632 "/usr/include/gmp-x86_64.h" 3 4
+# 1632 "./include/gmp-i386.h" 3 4
 extern __inline__ void
 __gmpz_abs (mpz_ptr __gmp_w, mpz_srcptr __gmp_u)
 {
@@ -8177,7 +8235,7 @@ __gmpz_abs (mpz_ptr __gmp_w, mpz_srcptr __gmp_u)
     __gmpz_set (__gmp_w, __gmp_u);
   __gmp_w->_mp_size = ((__gmp_w->_mp_size) >= 0 ? (__gmp_w->_mp_size) : -(__gmp_w->_mp_size));
 }
-# 1656 "/usr/include/gmp-x86_64.h" 3 4
+# 1656 "./include/gmp-i386.h" 3 4
 extern __inline__
 
 int
@@ -8226,7 +8284,7 @@ __gmpz_get_ui (mpz_srcptr __gmp_z)
 
 
   return (__gmp_n != 0 ? __gmp_l : 0);
-# 1712 "/usr/include/gmp-x86_64.h" 3 4
+# 1712 "./include/gmp-i386.h" 3 4
 }
 
 
@@ -8333,7 +8391,7 @@ __gmpq_neg (mpq_ptr __gmp_w, mpq_srcptr __gmp_u)
     __gmpq_set (__gmp_w, __gmp_u);
   __gmp_w->_mp_num._mp_size = - __gmp_w->_mp_num._mp_size;
 }
-# 2054 "/usr/include/gmp-x86_64.h" 3 4
+# 2054 "./include/gmp-i386.h" 3 4
 extern __inline__
 
 mp_limb_t
@@ -8413,7 +8471,7 @@ __gmpn_neg_n (mp_ptr __gmp_rp, mp_srcptr __gmp_up, mp_size_t __gmp_n)
   } while (--__gmp_n != 0);
   return __gmp_cy;
 }
-# 2211 "/usr/include/gmp-x86_64.h" 3 4
+# 2211 "./include/gmp-i386.h" 3 4
 enum
 {
   GMP_ERROR_NONE = 0,
@@ -8422,15 +8480,15 @@ enum
   GMP_ERROR_SQRT_OF_NEGATIVE = 4,
   GMP_ERROR_INVALID_ARGUMENT = 8
 };
-# 60 "/usr/include/gmp.h" 2 3 4
-# 25 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/double-int.h" 2
-# 54 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/double-int.h"
+# 44 "/usr/include/gmp.h" 2 3 4
+# 25 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/double-int.h" 2
+# 54 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/double-int.h"
 typedef struct
 {
   unsigned long low;
   long high;
 } double_int;
-# 67 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/double-int.h"
+# 67 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/double-int.h"
 static __inline__ double_int
 shwi_to_double_int (long cst)
 {
@@ -8441,7 +8499,7 @@ shwi_to_double_int (long cst)
 
   return r;
 }
-# 89 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/double-int.h"
+# 89 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/double-int.h"
 static __inline__ double_int
 uhwi_to_double_int (unsigned long cst)
 {
@@ -8597,7 +8655,7 @@ double_int double_int_ext (double_int, unsigned, unsigned char);
 double_int double_int_sext (double_int, unsigned);
 double_int double_int_zext (double_int, unsigned);
 double_int double_int_mask (unsigned);
-# 253 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/double-int.h"
+# 253 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/double-int.h"
 static __inline__ unsigned char
 double_int_zero_p (double_int cst)
 {
@@ -8663,9 +8721,9 @@ extern int div_and_round_double (unsigned, int, unsigned long,
 
 void mpz_set_double_int (mpz_t, double_int, unsigned char);
 double_int mpz_get_double_int (const_tree, mpz_t, unsigned char);
-# 32 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/real.h" 1
-# 30 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/real.h"
+# 32 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/real.h" 1
+# 30 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/real.h"
 enum real_value_class {
   rvc_zero,
   rvc_normal,
@@ -8691,10 +8749,10 @@ struct real_value {
   unsigned int uexp : (32 - 6);
   unsigned long sig[((128 + (8 * 8)) / (8 * 8))];
 };
-# 77 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/real.h"
+# 77 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/real.h"
 extern char test_real_width
   [sizeof(struct real_value) <= (((128 + (8 * 8)) + 32)/(8 * 8) + (((128 + (8 * 8)) + 32)%(8 * 8) ? 1 : 0))*sizeof(long) ? 1 : -1];
-# 115 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/real.h"
+# 115 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/real.h"
 struct real_format
 {
 
@@ -8748,7 +8806,7 @@ struct real_format
 extern const struct real_format *
   real_format_for_mode[MAX_MODE_FLOAT - MIN_MODE_FLOAT + 1
          + MAX_MODE_DECIMAL_FLOAT - MIN_MODE_DECIMAL_FLOAT + 1];
-# 226 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/real.h"
+# 226 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/real.h"
 extern unsigned char real_arithmetic (struct real_value *, int, const struct real_value *,
         const struct real_value *);
 
@@ -8853,7 +8911,7 @@ extern const struct real_format decimal_double_format;
 extern const struct real_format decimal_quad_format;
 extern const struct real_format ieee_half_format;
 extern const struct real_format arm_half_format;
-# 385 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/real.h"
+# 385 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/real.h"
 extern struct real_value real_value_truncate (enum machine_mode,
          struct real_value);
 
@@ -8866,7 +8924,7 @@ extern struct real_value real_value_abs (const struct real_value *);
 extern int significand_size (enum machine_mode);
 
 extern struct real_value real_from_string2 (const char *, enum machine_mode);
-# 414 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/real.h"
+# 414 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/real.h"
 extern int real_exponent (const struct real_value *);
 
 
@@ -8898,7 +8956,7 @@ extern const struct real_value * dconst_sqrt2_ptr (void);
 
 
 struct real_value real_value_from_int_cst (const_tree, const_tree);
-# 453 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/real.h"
+# 453 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/real.h"
 extern rtx const_double_from_real_value (struct real_value, enum machine_mode);
 
 
@@ -8940,18 +8998,18 @@ extern unsigned char real_isinteger (const struct real_value *c, enum machine_mo
 
 
 extern void get_max_float (const struct real_format *, char *, size_t);
-# 33 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/fixed-value.h" 1
-# 27 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/fixed-value.h"
+# 33 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/fixed-value.h" 1
+# 27 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/fixed-value.h"
 struct fixed_value
 {
   double_int data;
   enum machine_mode mode;
 };
-# 40 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/fixed-value.h"
+# 40 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/fixed-value.h"
 extern struct fixed_value fconst0[18];
 extern struct fixed_value fconst1[8];
-# 50 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/fixed-value.h"
+# 50 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/fixed-value.h"
 extern rtx const_fixed_from_fixed_value (struct fixed_value, enum machine_mode);
 
 
@@ -9001,9 +9059,9 @@ extern unsigned char fixed_compare (int, const struct fixed_value *,
 
 
 extern unsigned char fixed_isneg (const struct fixed_value *);
-# 34 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/alias.h" 1
-# 31 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/alias.h"
+# 34 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/alias.h" 1
+# 31 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/alias.h"
 typedef int alias_set_type;
 
 extern alias_set_type new_alias_set (void);
@@ -9019,11 +9077,11 @@ extern int alias_sets_conflict_p (alias_set_type, alias_set_type);
 extern int alias_sets_must_conflict_p (alias_set_type, alias_set_type);
 extern int objects_must_conflict_p (tree, tree);
 extern int nonoverlapping_memrefs_p (const_rtx, const_rtx, unsigned char);
-# 35 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/flags.h" 1
-# 26 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/flags.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/flag-types.h" 1
-# 25 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/flag-types.h"
+# 35 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/flags.h" 1
+# 26 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/flags.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/flag-types.h" 1
+# 25 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/flag-types.h"
 enum debug_info_type
 {
   NO_DEBUG,
@@ -9043,7 +9101,7 @@ enum debug_info_levels
   DINFO_LEVEL_NORMAL,
   DINFO_LEVEL_VERBOSE
 };
-# 53 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/flag-types.h"
+# 53 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/flag-types.h"
 enum debug_info_usage
 {
   DINFO_USAGE_DFN,
@@ -9051,7 +9109,7 @@ enum debug_info_usage
   DINFO_USAGE_IND_USE,
   DINFO_USAGE_NUM_ENUMS
 };
-# 86 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/flag-types.h"
+# 86 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/flag-types.h"
 enum debug_struct_file
 {
   DINFO_STRUCT_FILE_NONE,
@@ -9176,8 +9234,8 @@ enum vect_verbosity_levels {
 
   MAX_VERBOSITY_LEVEL
 };
-# 27 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/flags.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/options.h" 1
+# 27 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/flags.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/options.h" 1
 
 
 
@@ -9185,8 +9243,8 @@ enum vect_verbosity_levels {
 
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386-opts.h" 1
-# 31 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386-opts.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386-opts.h" 1
+# 31 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386-opts.h"
 enum stringop_alg
 {
    no_stringop,
@@ -9240,7 +9298,7 @@ enum ix86_veclibabi {
   ix86_veclibabi_type_svml,
   ix86_veclibabi_type_acml
 };
-# 9 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/options.h" 2
+# 9 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/options.h" 2
 
 
 
@@ -10911,6 +10969,18 @@ struct gcc_options
 
 
   int x_flag_gnu89_inline;
+
+
+
+
+
+  int x_go_check_divide_overflow;
+
+
+
+
+
+  int x_go_check_divide_zero;
 
 
 
@@ -12745,8 +12815,6 @@ struct cl_optimization
   signed char x_flag_loop_interchange;
   signed char x_flag_loop_parallelize_all;
   signed char x_flag_loop_strip_mine;
-  signed char x_flag_lto_report;
-  signed char x_flag_ltrans;
   signed char x_flag_errno_math;
   signed char x_flag_merge_constants;
   signed char x_flag_modulo_sched;
@@ -12858,7 +12926,6 @@ struct cl_optimization
   signed char x_flag_value_profile_transformations;
   signed char x_flag_web;
   signed char x_flag_whole_program;
-  signed char x_flag_wpa;
   signed char x_flag_wrapv;
 };
 
@@ -12898,21 +12965,21 @@ extern void cl_target_option_restore (struct gcc_options *, struct cl_target_opt
 
 
 extern void cl_target_option_print (FILE *, int, struct cl_target_option *);
-# 3810 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/options.h"
+# 3819 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/options.h"
 enum opt_code
 {
   OPT____ = 0,
-# 3844 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/options.h"
+# 3853 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/options.h"
   OPT__help = 32,
   OPT__help_ = 33,
-# 3877 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/options.h"
+# 3886 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/options.h"
   OPT__output_pch_ = 65,
 
   OPT__param = 67,
-# 3911 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/options.h"
+# 3920 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/options.h"
   OPT__sysroot_ = 99,
   OPT__target_help = 100,
-# 3922 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/options.h"
+# 3931 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/options.h"
   OPT__version = 110,
 
 
@@ -13395,600 +13462,603 @@ enum opt_code
   OPT_fgnu_runtime = 589,
   OPT_fgnu_tm = 590,
   OPT_fgnu89_inline = 591,
-  OPT_fgo_dump_ = 592,
-  OPT_fgo_optimize_ = 593,
-  OPT_fgo_prefix_ = 594,
-  OPT_fgraphite = 595,
-  OPT_fgraphite_identity = 596,
-  OPT_fguess_branch_probability = 597,
+  OPT_fgo_check_divide_overflow = 592,
+  OPT_fgo_check_divide_zero = 593,
+  OPT_fgo_dump_ = 594,
+  OPT_fgo_optimize_ = 595,
+  OPT_fgo_pkgpath_ = 596,
+  OPT_fgo_prefix_ = 597,
+  OPT_fgraphite = 598,
+  OPT_fgraphite_identity = 599,
+  OPT_fguess_branch_probability = 600,
 
 
-  OPT_fhash_synchronization = 600,
-
-
-
-  OPT_fhosted = 604,
-
-  OPT_fident = 606,
-  OPT_fif_conversion = 607,
-  OPT_fif_conversion2 = 608,
-  OPT_fimplement_inlines = 609,
-  OPT_fimplicit_inline_templates = 610,
-  OPT_fimplicit_none = 611,
-  OPT_fimplicit_templates = 612,
-  OPT_findirect_classes = 613,
-  OPT_findirect_dispatch = 614,
-  OPT_findirect_inlining = 615,
-  OPT_finhibit_size_directive = 616,
-  OPT_finit_character_ = 617,
-  OPT_finit_integer_ = 618,
-  OPT_finit_local_zero = 619,
-  OPT_finit_logical_ = 620,
-  OPT_finit_real_ = 621,
-  OPT_finline = 622,
-  OPT_finline_atomics = 623,
-  OPT_finline_functions = 624,
-  OPT_finline_functions_called_once = 625,
-
-  OPT_finline_limit_ = 627,
-  OPT_finline_small_functions = 628,
-  OPT_finput_charset_ = 629,
-  OPT_finstrument_functions = 630,
-  OPT_finstrument_functions_exclude_file_list_ = 631,
-  OPT_finstrument_functions_exclude_function_list_ = 632,
-  OPT_finteger_4_integer_8 = 633,
-  OPT_fintrinsic_modules_path = 634,
-  OPT_fipa_cp = 635,
-  OPT_fipa_cp_clone = 636,
-  OPT_fipa_matrix_reorg = 637,
-  OPT_fipa_profile = 638,
-  OPT_fipa_pta = 639,
-  OPT_fipa_pure_const = 640,
-  OPT_fipa_reference = 641,
-  OPT_fipa_sra = 642,
-
-  OPT_fira_algorithm_ = 644,
-  OPT_fira_loop_pressure = 645,
-  OPT_fira_region_ = 646,
-  OPT_fira_share_save_slots = 647,
-  OPT_fira_share_spill_slots = 648,
-  OPT_fira_verbose_ = 649,
-  OPT_fivopts = 650,
-  OPT_fjni = 651,
-  OPT_fjump_tables = 652,
-  OPT_fkeep_inline_dllexport = 653,
-  OPT_fkeep_inline_functions = 654,
-  OPT_fkeep_static_consts = 655,
-
-  OPT_flax_vector_conversions = 657,
-  OPT_fleading_underscore = 658,
-  OPT_floop_block = 659,
-  OPT_floop_flatten = 660,
-  OPT_floop_interchange = 661,
-
-  OPT_floop_parallelize_all = 663,
-  OPT_floop_strip_mine = 664,
-  OPT_flto = 665,
-  OPT_flto_compression_level_ = 666,
-  OPT_flto_partition_1to1 = 667,
-  OPT_flto_partition_balanced = 668,
-  OPT_flto_partition_none = 669,
-  OPT_flto_report = 670,
-  OPT_flto_ = 671,
-  OPT_fltrans = 672,
-  OPT_fltrans_output_list_ = 673,
-  OPT_fmain_ = 674,
-  OPT_fmath_errno = 675,
-  OPT_fmax_array_constructor_ = 676,
-  OPT_fmax_errors_ = 677,
-  OPT_fmax_identifier_length_ = 678,
-  OPT_fmax_stack_var_size_ = 679,
-  OPT_fmax_subrecord_length_ = 680,
-  OPT_fmem_report = 681,
-  OPT_fmerge_all_constants = 682,
-  OPT_fmerge_constants = 683,
-  OPT_fmerge_debug_strings = 684,
-  OPT_fmessage_length_ = 685,
-  OPT_fmodule_private = 686,
-  OPT_fmodulo_sched = 687,
-  OPT_fmodulo_sched_allow_regmoves = 688,
-  OPT_fmove_loop_invariants = 689,
-  OPT_fms_extensions = 690,
-  OPT_fmudflap = 691,
-  OPT_fmudflapir = 692,
-  OPT_fmudflapth = 693,
-
-
-  OPT_fnext_runtime = 696,
-  OPT_fnil_receivers = 697,
-  OPT_fnon_call_exceptions = 698,
-  OPT_fnonansi_builtins = 699,
-
-  OPT_fnothrow_opt = 701,
-  OPT_fobjc_abi_version_ = 702,
-  OPT_fobjc_call_cxx_cdtors = 703,
-  OPT_fobjc_direct_dispatch = 704,
-  OPT_fobjc_exceptions = 705,
-  OPT_fobjc_gc = 706,
-  OPT_fobjc_nilcheck = 707,
-  OPT_fobjc_sjlj_exceptions = 708,
-  OPT_fobjc_std_objc1 = 709,
-  OPT_fomit_frame_pointer = 710,
-  OPT_fopenmp = 711,
-  OPT_foperator_names = 712,
-  OPT_foptimize_register_move = 713,
-  OPT_foptimize_sibling_calls = 714,
-  OPT_foptimize_static_class_initialization = 715,
-  OPT_foptimize_strlen = 716,
-
-  OPT_foutput_class_dir_ = 718,
-  OPT_fpack_derived = 719,
-  OPT_fpack_struct = 720,
-  OPT_fpack_struct_ = 721,
-  OPT_fpartial_inlining = 722,
-  OPT_fpcc_struct_return = 723,
-  OPT_fpch_deps = 724,
-  OPT_fpch_preprocess = 725,
-  OPT_fpeel_loops = 726,
-  OPT_fpeephole = 727,
-  OPT_fpeephole2 = 728,
-  OPT_fpermissive = 729,
-  OPT_fpic = 730,
-  OPT_fpie = 731,
-  OPT_fplan9_extensions = 732,
-  OPT_fplugin_arg_ = 733,
-  OPT_fplugin_ = 734,
-  OPT_fpost_ipa_mem_report = 735,
-  OPT_fpre_ipa_mem_report = 736,
-  OPT_fpredictive_commoning = 737,
-  OPT_fprefetch_loop_arrays = 738,
-  OPT_fpreprocessed = 739,
-  OPT_fpretty_templates = 740,
-  OPT_fprofile = 741,
-  OPT_fprofile_arcs = 742,
-  OPT_fprofile_correction = 743,
-  OPT_fprofile_dir_ = 744,
-  OPT_fprofile_generate = 745,
-  OPT_fprofile_generate_ = 746,
-  OPT_fprofile_use = 747,
-  OPT_fprofile_use_ = 748,
-  OPT_fprofile_values = 749,
-  OPT_fprotect_parens = 750,
-  OPT_frandom_seed = 751,
-  OPT_frandom_seed_ = 752,
-  OPT_frange_check = 753,
-  OPT_freal_4_real_10 = 754,
-  OPT_freal_4_real_16 = 755,
-  OPT_freal_4_real_8 = 756,
-  OPT_freal_8_real_10 = 757,
-  OPT_freal_8_real_16 = 758,
-  OPT_freal_8_real_4 = 759,
-  OPT_frealloc_lhs = 760,
-  OPT_freciprocal_math = 761,
-  OPT_frecord_gcc_switches = 762,
-  OPT_frecord_marker_4 = 763,
-  OPT_frecord_marker_8 = 764,
-  OPT_frecursive = 765,
-  OPT_freduced_reflection = 766,
-  OPT_free = 767,
-  OPT_freg_struct_return = 768,
-  OPT_fregmove = 769,
-  OPT_frename_registers = 770,
-  OPT_freorder_blocks = 771,
-  OPT_freorder_blocks_and_partition = 772,
-  OPT_freorder_functions = 773,
-  OPT_frepack_arrays = 774,
-  OPT_freplace_objc_classes = 775,
-  OPT_frepo = 776,
-  OPT_frequire_return_statement = 777,
-  OPT_frerun_cse_after_loop = 778,
-
-  OPT_freschedule_modulo_scheduled_loops = 780,
-  OPT_fresolution_ = 781,
-  OPT_frounding_math = 782,
-  OPT_frtti = 783,
-  OPT_fsaw_java_file = 784,
-  OPT_fsched_critical_path_heuristic = 785,
-  OPT_fsched_dep_count_heuristic = 786,
-  OPT_fsched_group_heuristic = 787,
-  OPT_fsched_interblock = 788,
-  OPT_fsched_last_insn_heuristic = 789,
-  OPT_fsched_pressure = 790,
-  OPT_fsched_rank_heuristic = 791,
-  OPT_fsched_spec = 792,
-  OPT_fsched_spec_insn_heuristic = 793,
-  OPT_fsched_spec_load = 794,
-  OPT_fsched_spec_load_dangerous = 795,
-  OPT_fsched_stalled_insns = 796,
-  OPT_fsched_stalled_insns_dep = 797,
-  OPT_fsched_stalled_insns_dep_ = 798,
-  OPT_fsched_stalled_insns_ = 799,
-  OPT_fsched_verbose_ = 800,
-  OPT_fsched2_use_superblocks = 801,
-
-  OPT_fschedule_insns = 803,
-  OPT_fschedule_insns2 = 804,
-  OPT_fsecond_underscore = 805,
-  OPT_fsection_anchors = 806,
-
-  OPT_fsel_sched_pipelining = 808,
-  OPT_fsel_sched_pipelining_outer_loops = 809,
-  OPT_fsel_sched_reschedule_pipelined = 810,
-  OPT_fselective_scheduling = 811,
-  OPT_fselective_scheduling2 = 812,
-  OPT_fshort_double = 813,
-  OPT_fshort_enums = 814,
-  OPT_fshort_wchar = 815,
-  OPT_fshow_column = 816,
-  OPT_fshrink_wrap = 817,
-  OPT_fsign_zero = 818,
-  OPT_fsignaling_nans = 819,
-  OPT_fsigned_bitfields = 820,
-  OPT_fsigned_char = 821,
-  OPT_fsigned_zeros = 822,
-  OPT_fsingle_precision_constant = 823,
-  OPT_fsource_filename_ = 824,
-  OPT_fsource_ = 825,
-  OPT_fsplit_ivs_in_unroller = 826,
-  OPT_fsplit_stack = 827,
-  OPT_fsplit_wide_types = 828,
-
-  OPT_fstack_arrays = 830,
-
-  OPT_fstack_check_ = 832,
-  OPT_fstack_limit = 833,
-  OPT_fstack_limit_register_ = 834,
-  OPT_fstack_limit_symbol_ = 835,
-  OPT_fstack_protector = 836,
-  OPT_fstack_protector_all = 837,
-  OPT_fstack_usage = 838,
-  OPT_fstats = 839,
-  OPT_fstore_check = 840,
-
-  OPT_fstrict_aliasing = 842,
-  OPT_fstrict_enums = 843,
-  OPT_fstrict_overflow = 844,
-
-  OPT_fstrict_volatile_bitfields = 846,
-  OPT_fsyntax_only = 847,
-  OPT_ftabstop_ = 848,
-
-  OPT_ftarget_ = 850,
-
-  OPT_ftemplate_depth_ = 852,
-  OPT_ftest_coverage = 853,
-
-  OPT_fthread_jumps = 855,
-  OPT_fthreadsafe_statics = 856,
-  OPT_ftime_report = 857,
-  OPT_ftls_model_ = 858,
-  OPT_ftoplevel_reorder = 859,
-  OPT_ftracer = 860,
-  OPT_ftrack_macro_expansion = 861,
-  OPT_ftrack_macro_expansion_ = 862,
-  OPT_ftrapping_math = 863,
-  OPT_ftrapv = 864,
-  OPT_ftree_bit_ccp = 865,
-  OPT_ftree_builtin_call_dce = 866,
-  OPT_ftree_ccp = 867,
-  OPT_ftree_ch = 868,
-  OPT_ftree_copy_prop = 869,
-  OPT_ftree_copyrename = 870,
-  OPT_ftree_cselim = 871,
-  OPT_ftree_dce = 872,
-  OPT_ftree_dominator_opts = 873,
-  OPT_ftree_dse = 874,
-  OPT_ftree_forwprop = 875,
-  OPT_ftree_fre = 876,
-  OPT_ftree_loop_distribute_patterns = 877,
-  OPT_ftree_loop_distribution = 878,
-  OPT_ftree_loop_if_convert = 879,
-  OPT_ftree_loop_if_convert_stores = 880,
-  OPT_ftree_loop_im = 881,
-  OPT_ftree_loop_ivcanon = 882,
-
-  OPT_ftree_loop_optimize = 884,
-  OPT_ftree_lrs = 885,
-  OPT_ftree_parallelize_loops_ = 886,
-  OPT_ftree_phiprop = 887,
-  OPT_ftree_pre = 888,
-  OPT_ftree_pta = 889,
-  OPT_ftree_reassoc = 890,
-
-  OPT_ftree_scev_cprop = 892,
-  OPT_ftree_sink = 893,
-  OPT_ftree_slp_vectorize = 894,
-  OPT_ftree_sra = 895,
-
-
-  OPT_ftree_switch_conversion = 898,
-  OPT_ftree_tail_merge = 899,
-  OPT_ftree_ter = 900,
-  OPT_ftree_vect_loop_version = 901,
-  OPT_ftree_vectorize = 902,
-  OPT_ftree_vectorizer_verbose_ = 903,
-  OPT_ftree_vrp = 904,
-  OPT_funderscoring = 905,
-  OPT_funit_at_a_time = 906,
-  OPT_funroll_all_loops = 907,
-  OPT_funroll_loops = 908,
-  OPT_funsafe_loop_optimizations = 909,
-  OPT_funsafe_math_optimizations = 910,
-  OPT_funsigned_bitfields = 911,
-  OPT_funsigned_char = 912,
-  OPT_funswitch_loops = 913,
-  OPT_funwind_tables = 914,
-  OPT_fuse_atomic_builtins = 915,
-  OPT_fuse_boehm_gc = 916,
-  OPT_fuse_cxa_atexit = 917,
-  OPT_fuse_cxa_get_exception_ptr = 918,
-  OPT_fuse_divide_subroutine = 919,
-  OPT_fuse_linker_plugin = 920,
-  OPT_fvar_tracking = 921,
-  OPT_fvar_tracking_assignments = 922,
-  OPT_fvar_tracking_assignments_toggle = 923,
-  OPT_fvar_tracking_uninit = 924,
-  OPT_fvariable_expansion_in_unroller = 925,
-  OPT_fvect_cost_model = 926,
-  OPT_fverbose_asm = 927,
-
-  OPT_fvisibility_inlines_hidden = 929,
-  OPT_fvisibility_ms_compat = 930,
-  OPT_fvisibility_ = 931,
-  OPT_fvpt = 932,
-
-
-  OPT_fweak = 935,
-  OPT_fweb = 936,
-  OPT_fwhole_file = 937,
-  OPT_fwhole_program = 938,
-  OPT_fwide_exec_charset_ = 939,
-  OPT_fworking_directory = 940,
-  OPT_fwpa = 941,
-  OPT_fwrapv = 942,
-
-
-  OPT_fzero_initialized_in_bss = 945,
-  OPT_fzero_link = 946,
-  OPT_g = 947,
-  OPT_gant = 948,
-  OPT_gcoff = 949,
-  OPT_gdwarf_ = 950,
-  OPT_gen_decls = 951,
-  OPT_ggdb = 952,
-  OPT_gnat = 953,
-  OPT_gnatO = 954,
-  OPT_gno_record_gcc_switches = 955,
-  OPT_gno_strict_dwarf = 956,
-  OPT_grecord_gcc_switches = 957,
-  OPT_gstabs = 958,
-  OPT_gstabs_ = 959,
-  OPT_gstrict_dwarf = 960,
-  OPT_gtoggle = 961,
-  OPT_gvms = 962,
-  OPT_gxcoff = 963,
-  OPT_gxcoff_ = 964,
-  OPT_h = 965,
-  OPT_idirafter = 966,
-  OPT_imacros = 967,
-  OPT_imultilib = 968,
-  OPT_include = 969,
-  OPT_iplugindir_ = 970,
-  OPT_iprefix = 971,
-  OPT_iquote = 972,
-  OPT_isysroot = 973,
-  OPT_isystem = 974,
-  OPT_iwithprefix = 975,
-  OPT_iwithprefixbefore = 976,
-  OPT_k8 = 977,
-  OPT_l = 978,
-  OPT_lang_asm = 979,
-  OPT_m128bit_long_double = 980,
-  OPT_m32 = 981,
-  OPT_m3dnow = 982,
-  OPT_m3dnowa = 983,
-  OPT_m64 = 984,
-  OPT_m80387 = 985,
-  OPT_m8bit_idiv = 986,
-  OPT_m96bit_long_double = 987,
-  OPT_mabi_ = 988,
-  OPT_mabm = 989,
-  OPT_maccumulate_outgoing_args = 990,
-  OPT_maes = 991,
-  OPT_malign_double = 992,
-  OPT_malign_functions_ = 993,
-  OPT_malign_jumps_ = 994,
-  OPT_malign_loops_ = 995,
-  OPT_malign_stringops = 996,
-  OPT_mandroid = 997,
-  OPT_march_ = 998,
-  OPT_masm_ = 999,
-  OPT_mavx = 1000,
-  OPT_mavx2 = 1001,
-  OPT_mavx256_split_unaligned_load = 1002,
-  OPT_mavx256_split_unaligned_store = 1003,
-  OPT_mbionic = 1004,
-  OPT_mbmi = 1005,
-  OPT_mbmi2 = 1006,
-  OPT_mbranch_cost_ = 1007,
-  OPT_mcld = 1008,
-  OPT_mcmodel_ = 1009,
-
-  OPT_mcrc32 = 1011,
-  OPT_mcx16 = 1012,
-  OPT_mdispatch_scheduler = 1013,
-  OPT_mf16c = 1014,
-  OPT_mfancy_math_387 = 1015,
-  OPT_mfentry = 1016,
-  OPT_mfma = 1017,
-  OPT_mfma4 = 1018,
-  OPT_mforce_drap = 1019,
-  OPT_mfp_ret_in_387 = 1020,
-  OPT_mfpmath_ = 1021,
-  OPT_mfsgsbase = 1022,
-
-  OPT_mglibc = 1024,
-  OPT_mhard_float = 1025,
-  OPT_mieee_fp = 1026,
-  OPT_mincoming_stack_boundary_ = 1027,
-  OPT_minline_all_stringops = 1028,
-  OPT_minline_stringops_dynamically = 1029,
-
-  OPT_mlarge_data_threshold_ = 1031,
-  OPT_mlwp = 1032,
-  OPT_mlzcnt = 1033,
-  OPT_mmmx = 1034,
-  OPT_mmovbe = 1035,
-  OPT_mms_bitfields = 1036,
-  OPT_mno_align_stringops = 1037,
-  OPT_mno_fancy_math_387 = 1038,
-  OPT_mno_push_args = 1039,
-  OPT_mno_red_zone = 1040,
-  OPT_mno_sse4 = 1041,
-  OPT_momit_leaf_frame_pointer = 1042,
-  OPT_mpc32 = 1043,
-  OPT_mpc64 = 1044,
-  OPT_mpc80 = 1045,
-  OPT_mpclmul = 1046,
-  OPT_mpopcnt = 1047,
-  OPT_mprefer_avx128 = 1048,
-  OPT_mpreferred_stack_boundary_ = 1049,
-  OPT_mpush_args = 1050,
-  OPT_mrdrnd = 1051,
-  OPT_mrecip = 1052,
-  OPT_mrecip_ = 1053,
-  OPT_mred_zone = 1054,
-  OPT_mregparm_ = 1055,
-  OPT_mrtd = 1056,
-  OPT_msahf = 1057,
-  OPT_msoft_float = 1058,
-  OPT_msse = 1059,
-  OPT_msse2 = 1060,
-  OPT_msse2avx = 1061,
-  OPT_msse3 = 1062,
-  OPT_msse4 = 1063,
-  OPT_msse4_1 = 1064,
-  OPT_msse4_2 = 1065,
-  OPT_msse4a = 1066,
-
-  OPT_msseregparm = 1068,
-  OPT_mssse3 = 1069,
-  OPT_mstack_arg_probe = 1070,
-  OPT_mstackrealign = 1071,
-  OPT_mstringop_strategy_ = 1072,
-  OPT_mtbm = 1073,
-  OPT_mtls_dialect_ = 1074,
-  OPT_mtls_direct_seg_refs = 1075,
-  OPT_mtune_ = 1076,
-  OPT_muclibc = 1077,
-  OPT_mveclibabi_ = 1078,
-  OPT_mvect8_ret_in_mem = 1079,
-  OPT_mvzeroupper = 1080,
-  OPT_mx32 = 1081,
-  OPT_mxop = 1082,
-  OPT_n = 1083,
-  OPT_no_canonical_prefixes = 1084,
-  OPT_no_integrated_cpp = 1085,
-  OPT_nocpp = 1086,
-  OPT_nodefaultlibs = 1087,
-  OPT_nostartfiles = 1088,
-  OPT_nostdinc = 1089,
-  OPT_nostdinc__ = 1090,
-  OPT_nostdlib = 1091,
-  OPT_o = 1092,
-  OPT_p = 1093,
-  OPT_pass_exit_codes = 1094,
-  OPT_pedantic = 1095,
-  OPT_pedantic_errors = 1096,
-  OPT_pg = 1097,
-  OPT_pie = 1098,
-  OPT_pipe = 1099,
-  OPT_posix = 1100,
-  OPT_print_file_name_ = 1101,
-  OPT_print_libgcc_file_name = 1102,
-  OPT_print_multi_directory = 1103,
-  OPT_print_multi_lib = 1104,
-  OPT_print_multi_os_directory = 1105,
-  OPT_print_objc_runtime_info = 1106,
-  OPT_print_prog_name_ = 1107,
-  OPT_print_search_dirs = 1108,
-  OPT_print_sysroot = 1109,
-  OPT_print_sysroot_headers_suffix = 1110,
-  OPT_profile = 1111,
-  OPT_pthread = 1112,
-  OPT_quiet = 1113,
-  OPT_r = 1114,
-  OPT_rdynamic = 1115,
-  OPT_remap = 1116,
-  OPT_s = 1117,
-  OPT_s_bc_abi = 1118,
-  OPT_save_temps = 1119,
-  OPT_save_temps_ = 1120,
-  OPT_shared = 1121,
-  OPT_shared_libgcc = 1122,
-
-  OPT_specs_ = 1124,
-  OPT_static = 1125,
-  OPT_static_libgcc = 1126,
-  OPT_static_libgcj = 1127,
-  OPT_static_libgfortran = 1128,
-  OPT_static_libgo = 1129,
-  OPT_static_libstdc__ = 1130,
-
-
-  OPT_std_c__11 = 1133,
-  OPT_std_c__98 = 1134,
-  OPT_std_c11 = 1135,
-
-
-  OPT_std_c90 = 1138,
-  OPT_std_c99 = 1139,
-
-  OPT_std_f2003 = 1141,
-  OPT_std_f2008 = 1142,
-  OPT_std_f2008ts = 1143,
-  OPT_std_f95 = 1144,
-  OPT_std_gnu = 1145,
-
-
-  OPT_std_gnu__11 = 1148,
-  OPT_std_gnu__98 = 1149,
-  OPT_std_gnu11 = 1150,
-
-
-  OPT_std_gnu90 = 1153,
-  OPT_std_gnu99 = 1154,
-
-
-  OPT_std_iso9899_199409 = 1157,
+  OPT_fhash_synchronization = 603,
 
 
 
-  OPT_std_legacy = 1161,
-  OPT_symbolic = 1162,
-  OPT_t = 1163,
-  OPT_time = 1164,
-  OPT_time_ = 1165,
-  OPT_tno_android_cc = 1166,
-  OPT_tno_android_ld = 1167,
-  OPT_traditional = 1168,
-  OPT_traditional_cpp = 1169,
-  OPT_trigraphs = 1170,
-  OPT_u = 1171,
-  OPT_undef = 1172,
-  OPT_v = 1173,
-  OPT_version = 1174,
-  OPT_w = 1175,
-  OPT_wrapper = 1176,
-  OPT_x = 1177,
-  OPT_z = 1178,
+  OPT_fhosted = 607,
+
+  OPT_fident = 609,
+  OPT_fif_conversion = 610,
+  OPT_fif_conversion2 = 611,
+  OPT_fimplement_inlines = 612,
+  OPT_fimplicit_inline_templates = 613,
+  OPT_fimplicit_none = 614,
+  OPT_fimplicit_templates = 615,
+  OPT_findirect_classes = 616,
+  OPT_findirect_dispatch = 617,
+  OPT_findirect_inlining = 618,
+  OPT_finhibit_size_directive = 619,
+  OPT_finit_character_ = 620,
+  OPT_finit_integer_ = 621,
+  OPT_finit_local_zero = 622,
+  OPT_finit_logical_ = 623,
+  OPT_finit_real_ = 624,
+  OPT_finline = 625,
+  OPT_finline_atomics = 626,
+  OPT_finline_functions = 627,
+  OPT_finline_functions_called_once = 628,
+
+  OPT_finline_limit_ = 630,
+  OPT_finline_small_functions = 631,
+  OPT_finput_charset_ = 632,
+  OPT_finstrument_functions = 633,
+  OPT_finstrument_functions_exclude_file_list_ = 634,
+  OPT_finstrument_functions_exclude_function_list_ = 635,
+  OPT_finteger_4_integer_8 = 636,
+  OPT_fintrinsic_modules_path = 637,
+  OPT_fipa_cp = 638,
+  OPT_fipa_cp_clone = 639,
+  OPT_fipa_matrix_reorg = 640,
+  OPT_fipa_profile = 641,
+  OPT_fipa_pta = 642,
+  OPT_fipa_pure_const = 643,
+  OPT_fipa_reference = 644,
+  OPT_fipa_sra = 645,
+
+  OPT_fira_algorithm_ = 647,
+  OPT_fira_loop_pressure = 648,
+  OPT_fira_region_ = 649,
+  OPT_fira_share_save_slots = 650,
+  OPT_fira_share_spill_slots = 651,
+  OPT_fira_verbose_ = 652,
+  OPT_fivopts = 653,
+  OPT_fjni = 654,
+  OPT_fjump_tables = 655,
+  OPT_fkeep_inline_dllexport = 656,
+  OPT_fkeep_inline_functions = 657,
+  OPT_fkeep_static_consts = 658,
+
+  OPT_flax_vector_conversions = 660,
+  OPT_fleading_underscore = 661,
+  OPT_floop_block = 662,
+  OPT_floop_flatten = 663,
+  OPT_floop_interchange = 664,
+
+  OPT_floop_parallelize_all = 666,
+  OPT_floop_strip_mine = 667,
+  OPT_flto = 668,
+  OPT_flto_compression_level_ = 669,
+  OPT_flto_partition_1to1 = 670,
+  OPT_flto_partition_balanced = 671,
+  OPT_flto_partition_none = 672,
+  OPT_flto_report = 673,
+  OPT_flto_ = 674,
+  OPT_fltrans = 675,
+  OPT_fltrans_output_list_ = 676,
+  OPT_fmain_ = 677,
+  OPT_fmath_errno = 678,
+  OPT_fmax_array_constructor_ = 679,
+  OPT_fmax_errors_ = 680,
+  OPT_fmax_identifier_length_ = 681,
+  OPT_fmax_stack_var_size_ = 682,
+  OPT_fmax_subrecord_length_ = 683,
+  OPT_fmem_report = 684,
+  OPT_fmerge_all_constants = 685,
+  OPT_fmerge_constants = 686,
+  OPT_fmerge_debug_strings = 687,
+  OPT_fmessage_length_ = 688,
+  OPT_fmodule_private = 689,
+  OPT_fmodulo_sched = 690,
+  OPT_fmodulo_sched_allow_regmoves = 691,
+  OPT_fmove_loop_invariants = 692,
+  OPT_fms_extensions = 693,
+  OPT_fmudflap = 694,
+  OPT_fmudflapir = 695,
+  OPT_fmudflapth = 696,
+
+
+  OPT_fnext_runtime = 699,
+  OPT_fnil_receivers = 700,
+  OPT_fnon_call_exceptions = 701,
+  OPT_fnonansi_builtins = 702,
+
+  OPT_fnothrow_opt = 704,
+  OPT_fobjc_abi_version_ = 705,
+  OPT_fobjc_call_cxx_cdtors = 706,
+  OPT_fobjc_direct_dispatch = 707,
+  OPT_fobjc_exceptions = 708,
+  OPT_fobjc_gc = 709,
+  OPT_fobjc_nilcheck = 710,
+  OPT_fobjc_sjlj_exceptions = 711,
+  OPT_fobjc_std_objc1 = 712,
+  OPT_fomit_frame_pointer = 713,
+  OPT_fopenmp = 714,
+  OPT_foperator_names = 715,
+  OPT_foptimize_register_move = 716,
+  OPT_foptimize_sibling_calls = 717,
+  OPT_foptimize_static_class_initialization = 718,
+  OPT_foptimize_strlen = 719,
+
+  OPT_foutput_class_dir_ = 721,
+  OPT_fpack_derived = 722,
+  OPT_fpack_struct = 723,
+  OPT_fpack_struct_ = 724,
+  OPT_fpartial_inlining = 725,
+  OPT_fpcc_struct_return = 726,
+  OPT_fpch_deps = 727,
+  OPT_fpch_preprocess = 728,
+  OPT_fpeel_loops = 729,
+  OPT_fpeephole = 730,
+  OPT_fpeephole2 = 731,
+  OPT_fpermissive = 732,
+  OPT_fpic = 733,
+  OPT_fpie = 734,
+  OPT_fplan9_extensions = 735,
+  OPT_fplugin_arg_ = 736,
+  OPT_fplugin_ = 737,
+  OPT_fpost_ipa_mem_report = 738,
+  OPT_fpre_ipa_mem_report = 739,
+  OPT_fpredictive_commoning = 740,
+  OPT_fprefetch_loop_arrays = 741,
+  OPT_fpreprocessed = 742,
+  OPT_fpretty_templates = 743,
+  OPT_fprofile = 744,
+  OPT_fprofile_arcs = 745,
+  OPT_fprofile_correction = 746,
+  OPT_fprofile_dir_ = 747,
+  OPT_fprofile_generate = 748,
+  OPT_fprofile_generate_ = 749,
+  OPT_fprofile_use = 750,
+  OPT_fprofile_use_ = 751,
+  OPT_fprofile_values = 752,
+  OPT_fprotect_parens = 753,
+  OPT_frandom_seed = 754,
+  OPT_frandom_seed_ = 755,
+  OPT_frange_check = 756,
+  OPT_freal_4_real_10 = 757,
+  OPT_freal_4_real_16 = 758,
+  OPT_freal_4_real_8 = 759,
+  OPT_freal_8_real_10 = 760,
+  OPT_freal_8_real_16 = 761,
+  OPT_freal_8_real_4 = 762,
+  OPT_frealloc_lhs = 763,
+  OPT_freciprocal_math = 764,
+  OPT_frecord_gcc_switches = 765,
+  OPT_frecord_marker_4 = 766,
+  OPT_frecord_marker_8 = 767,
+  OPT_frecursive = 768,
+  OPT_freduced_reflection = 769,
+  OPT_free = 770,
+  OPT_freg_struct_return = 771,
+  OPT_fregmove = 772,
+  OPT_frename_registers = 773,
+  OPT_freorder_blocks = 774,
+  OPT_freorder_blocks_and_partition = 775,
+  OPT_freorder_functions = 776,
+  OPT_frepack_arrays = 777,
+  OPT_freplace_objc_classes = 778,
+  OPT_frepo = 779,
+  OPT_frequire_return_statement = 780,
+  OPT_frerun_cse_after_loop = 781,
+
+  OPT_freschedule_modulo_scheduled_loops = 783,
+  OPT_fresolution_ = 784,
+  OPT_frounding_math = 785,
+  OPT_frtti = 786,
+  OPT_fsaw_java_file = 787,
+  OPT_fsched_critical_path_heuristic = 788,
+  OPT_fsched_dep_count_heuristic = 789,
+  OPT_fsched_group_heuristic = 790,
+  OPT_fsched_interblock = 791,
+  OPT_fsched_last_insn_heuristic = 792,
+  OPT_fsched_pressure = 793,
+  OPT_fsched_rank_heuristic = 794,
+  OPT_fsched_spec = 795,
+  OPT_fsched_spec_insn_heuristic = 796,
+  OPT_fsched_spec_load = 797,
+  OPT_fsched_spec_load_dangerous = 798,
+  OPT_fsched_stalled_insns = 799,
+  OPT_fsched_stalled_insns_dep = 800,
+  OPT_fsched_stalled_insns_dep_ = 801,
+  OPT_fsched_stalled_insns_ = 802,
+  OPT_fsched_verbose_ = 803,
+  OPT_fsched2_use_superblocks = 804,
+
+  OPT_fschedule_insns = 806,
+  OPT_fschedule_insns2 = 807,
+  OPT_fsecond_underscore = 808,
+  OPT_fsection_anchors = 809,
+
+  OPT_fsel_sched_pipelining = 811,
+  OPT_fsel_sched_pipelining_outer_loops = 812,
+  OPT_fsel_sched_reschedule_pipelined = 813,
+  OPT_fselective_scheduling = 814,
+  OPT_fselective_scheduling2 = 815,
+  OPT_fshort_double = 816,
+  OPT_fshort_enums = 817,
+  OPT_fshort_wchar = 818,
+  OPT_fshow_column = 819,
+  OPT_fshrink_wrap = 820,
+  OPT_fsign_zero = 821,
+  OPT_fsignaling_nans = 822,
+  OPT_fsigned_bitfields = 823,
+  OPT_fsigned_char = 824,
+  OPT_fsigned_zeros = 825,
+  OPT_fsingle_precision_constant = 826,
+  OPT_fsource_filename_ = 827,
+  OPT_fsource_ = 828,
+  OPT_fsplit_ivs_in_unroller = 829,
+  OPT_fsplit_stack = 830,
+  OPT_fsplit_wide_types = 831,
+
+  OPT_fstack_arrays = 833,
+
+  OPT_fstack_check_ = 835,
+  OPT_fstack_limit = 836,
+  OPT_fstack_limit_register_ = 837,
+  OPT_fstack_limit_symbol_ = 838,
+  OPT_fstack_protector = 839,
+  OPT_fstack_protector_all = 840,
+  OPT_fstack_usage = 841,
+  OPT_fstats = 842,
+  OPT_fstore_check = 843,
+
+  OPT_fstrict_aliasing = 845,
+  OPT_fstrict_enums = 846,
+  OPT_fstrict_overflow = 847,
+
+  OPT_fstrict_volatile_bitfields = 849,
+  OPT_fsyntax_only = 850,
+  OPT_ftabstop_ = 851,
+
+  OPT_ftarget_ = 853,
+
+  OPT_ftemplate_depth_ = 855,
+  OPT_ftest_coverage = 856,
+
+  OPT_fthread_jumps = 858,
+  OPT_fthreadsafe_statics = 859,
+  OPT_ftime_report = 860,
+  OPT_ftls_model_ = 861,
+  OPT_ftoplevel_reorder = 862,
+  OPT_ftracer = 863,
+  OPT_ftrack_macro_expansion = 864,
+  OPT_ftrack_macro_expansion_ = 865,
+  OPT_ftrapping_math = 866,
+  OPT_ftrapv = 867,
+  OPT_ftree_bit_ccp = 868,
+  OPT_ftree_builtin_call_dce = 869,
+  OPT_ftree_ccp = 870,
+  OPT_ftree_ch = 871,
+  OPT_ftree_copy_prop = 872,
+  OPT_ftree_copyrename = 873,
+  OPT_ftree_cselim = 874,
+  OPT_ftree_dce = 875,
+  OPT_ftree_dominator_opts = 876,
+  OPT_ftree_dse = 877,
+  OPT_ftree_forwprop = 878,
+  OPT_ftree_fre = 879,
+  OPT_ftree_loop_distribute_patterns = 880,
+  OPT_ftree_loop_distribution = 881,
+  OPT_ftree_loop_if_convert = 882,
+  OPT_ftree_loop_if_convert_stores = 883,
+  OPT_ftree_loop_im = 884,
+  OPT_ftree_loop_ivcanon = 885,
+
+  OPT_ftree_loop_optimize = 887,
+  OPT_ftree_lrs = 888,
+  OPT_ftree_parallelize_loops_ = 889,
+  OPT_ftree_phiprop = 890,
+  OPT_ftree_pre = 891,
+  OPT_ftree_pta = 892,
+  OPT_ftree_reassoc = 893,
+
+  OPT_ftree_scev_cprop = 895,
+  OPT_ftree_sink = 896,
+  OPT_ftree_slp_vectorize = 897,
+  OPT_ftree_sra = 898,
+
+
+  OPT_ftree_switch_conversion = 901,
+  OPT_ftree_tail_merge = 902,
+  OPT_ftree_ter = 903,
+  OPT_ftree_vect_loop_version = 904,
+  OPT_ftree_vectorize = 905,
+  OPT_ftree_vectorizer_verbose_ = 906,
+  OPT_ftree_vrp = 907,
+  OPT_funderscoring = 908,
+  OPT_funit_at_a_time = 909,
+  OPT_funroll_all_loops = 910,
+  OPT_funroll_loops = 911,
+  OPT_funsafe_loop_optimizations = 912,
+  OPT_funsafe_math_optimizations = 913,
+  OPT_funsigned_bitfields = 914,
+  OPT_funsigned_char = 915,
+  OPT_funswitch_loops = 916,
+  OPT_funwind_tables = 917,
+  OPT_fuse_atomic_builtins = 918,
+  OPT_fuse_boehm_gc = 919,
+  OPT_fuse_cxa_atexit = 920,
+  OPT_fuse_cxa_get_exception_ptr = 921,
+  OPT_fuse_divide_subroutine = 922,
+  OPT_fuse_linker_plugin = 923,
+  OPT_fvar_tracking = 924,
+  OPT_fvar_tracking_assignments = 925,
+  OPT_fvar_tracking_assignments_toggle = 926,
+  OPT_fvar_tracking_uninit = 927,
+  OPT_fvariable_expansion_in_unroller = 928,
+  OPT_fvect_cost_model = 929,
+  OPT_fverbose_asm = 930,
+
+  OPT_fvisibility_inlines_hidden = 932,
+  OPT_fvisibility_ms_compat = 933,
+  OPT_fvisibility_ = 934,
+  OPT_fvpt = 935,
+
+
+  OPT_fweak = 938,
+  OPT_fweb = 939,
+  OPT_fwhole_file = 940,
+  OPT_fwhole_program = 941,
+  OPT_fwide_exec_charset_ = 942,
+  OPT_fworking_directory = 943,
+  OPT_fwpa = 944,
+  OPT_fwrapv = 945,
+
+
+  OPT_fzero_initialized_in_bss = 948,
+  OPT_fzero_link = 949,
+  OPT_g = 950,
+  OPT_gant = 951,
+  OPT_gcoff = 952,
+  OPT_gdwarf_ = 953,
+  OPT_gen_decls = 954,
+  OPT_ggdb = 955,
+  OPT_gnat = 956,
+  OPT_gnatO = 957,
+  OPT_gno_record_gcc_switches = 958,
+  OPT_gno_strict_dwarf = 959,
+  OPT_grecord_gcc_switches = 960,
+  OPT_gstabs = 961,
+  OPT_gstabs_ = 962,
+  OPT_gstrict_dwarf = 963,
+  OPT_gtoggle = 964,
+  OPT_gvms = 965,
+  OPT_gxcoff = 966,
+  OPT_gxcoff_ = 967,
+  OPT_h = 968,
+  OPT_idirafter = 969,
+  OPT_imacros = 970,
+  OPT_imultilib = 971,
+  OPT_include = 972,
+  OPT_iplugindir_ = 973,
+  OPT_iprefix = 974,
+  OPT_iquote = 975,
+  OPT_isysroot = 976,
+  OPT_isystem = 977,
+  OPT_iwithprefix = 978,
+  OPT_iwithprefixbefore = 979,
+  OPT_k8 = 980,
+  OPT_l = 981,
+  OPT_lang_asm = 982,
+  OPT_m128bit_long_double = 983,
+  OPT_m32 = 984,
+  OPT_m3dnow = 985,
+  OPT_m3dnowa = 986,
+  OPT_m64 = 987,
+  OPT_m80387 = 988,
+  OPT_m8bit_idiv = 989,
+  OPT_m96bit_long_double = 990,
+  OPT_mabi_ = 991,
+  OPT_mabm = 992,
+  OPT_maccumulate_outgoing_args = 993,
+  OPT_maes = 994,
+  OPT_malign_double = 995,
+  OPT_malign_functions_ = 996,
+  OPT_malign_jumps_ = 997,
+  OPT_malign_loops_ = 998,
+  OPT_malign_stringops = 999,
+  OPT_mandroid = 1000,
+  OPT_march_ = 1001,
+  OPT_masm_ = 1002,
+  OPT_mavx = 1003,
+  OPT_mavx2 = 1004,
+  OPT_mavx256_split_unaligned_load = 1005,
+  OPT_mavx256_split_unaligned_store = 1006,
+  OPT_mbionic = 1007,
+  OPT_mbmi = 1008,
+  OPT_mbmi2 = 1009,
+  OPT_mbranch_cost_ = 1010,
+  OPT_mcld = 1011,
+  OPT_mcmodel_ = 1012,
+
+  OPT_mcrc32 = 1014,
+  OPT_mcx16 = 1015,
+  OPT_mdispatch_scheduler = 1016,
+  OPT_mf16c = 1017,
+  OPT_mfancy_math_387 = 1018,
+  OPT_mfentry = 1019,
+  OPT_mfma = 1020,
+  OPT_mfma4 = 1021,
+  OPT_mforce_drap = 1022,
+  OPT_mfp_ret_in_387 = 1023,
+  OPT_mfpmath_ = 1024,
+  OPT_mfsgsbase = 1025,
+
+  OPT_mglibc = 1027,
+  OPT_mhard_float = 1028,
+  OPT_mieee_fp = 1029,
+  OPT_mincoming_stack_boundary_ = 1030,
+  OPT_minline_all_stringops = 1031,
+  OPT_minline_stringops_dynamically = 1032,
+
+  OPT_mlarge_data_threshold_ = 1034,
+  OPT_mlwp = 1035,
+  OPT_mlzcnt = 1036,
+  OPT_mmmx = 1037,
+  OPT_mmovbe = 1038,
+  OPT_mms_bitfields = 1039,
+  OPT_mno_align_stringops = 1040,
+  OPT_mno_fancy_math_387 = 1041,
+  OPT_mno_push_args = 1042,
+  OPT_mno_red_zone = 1043,
+  OPT_mno_sse4 = 1044,
+  OPT_momit_leaf_frame_pointer = 1045,
+  OPT_mpc32 = 1046,
+  OPT_mpc64 = 1047,
+  OPT_mpc80 = 1048,
+  OPT_mpclmul = 1049,
+  OPT_mpopcnt = 1050,
+  OPT_mprefer_avx128 = 1051,
+  OPT_mpreferred_stack_boundary_ = 1052,
+  OPT_mpush_args = 1053,
+  OPT_mrdrnd = 1054,
+  OPT_mrecip = 1055,
+  OPT_mrecip_ = 1056,
+  OPT_mred_zone = 1057,
+  OPT_mregparm_ = 1058,
+  OPT_mrtd = 1059,
+  OPT_msahf = 1060,
+  OPT_msoft_float = 1061,
+  OPT_msse = 1062,
+  OPT_msse2 = 1063,
+  OPT_msse2avx = 1064,
+  OPT_msse3 = 1065,
+  OPT_msse4 = 1066,
+  OPT_msse4_1 = 1067,
+  OPT_msse4_2 = 1068,
+  OPT_msse4a = 1069,
+
+  OPT_msseregparm = 1071,
+  OPT_mssse3 = 1072,
+  OPT_mstack_arg_probe = 1073,
+  OPT_mstackrealign = 1074,
+  OPT_mstringop_strategy_ = 1075,
+  OPT_mtbm = 1076,
+  OPT_mtls_dialect_ = 1077,
+  OPT_mtls_direct_seg_refs = 1078,
+  OPT_mtune_ = 1079,
+  OPT_muclibc = 1080,
+  OPT_mveclibabi_ = 1081,
+  OPT_mvect8_ret_in_mem = 1082,
+  OPT_mvzeroupper = 1083,
+  OPT_mx32 = 1084,
+  OPT_mxop = 1085,
+  OPT_n = 1086,
+  OPT_no_canonical_prefixes = 1087,
+  OPT_no_integrated_cpp = 1088,
+  OPT_nocpp = 1089,
+  OPT_nodefaultlibs = 1090,
+  OPT_nostartfiles = 1091,
+  OPT_nostdinc = 1092,
+  OPT_nostdinc__ = 1093,
+  OPT_nostdlib = 1094,
+  OPT_o = 1095,
+  OPT_p = 1096,
+  OPT_pass_exit_codes = 1097,
+  OPT_pedantic = 1098,
+  OPT_pedantic_errors = 1099,
+  OPT_pg = 1100,
+  OPT_pie = 1101,
+  OPT_pipe = 1102,
+  OPT_posix = 1103,
+  OPT_print_file_name_ = 1104,
+  OPT_print_libgcc_file_name = 1105,
+  OPT_print_multi_directory = 1106,
+  OPT_print_multi_lib = 1107,
+  OPT_print_multi_os_directory = 1108,
+  OPT_print_objc_runtime_info = 1109,
+  OPT_print_prog_name_ = 1110,
+  OPT_print_search_dirs = 1111,
+  OPT_print_sysroot = 1112,
+  OPT_print_sysroot_headers_suffix = 1113,
+  OPT_profile = 1114,
+  OPT_pthread = 1115,
+  OPT_quiet = 1116,
+  OPT_r = 1117,
+  OPT_rdynamic = 1118,
+  OPT_remap = 1119,
+  OPT_s = 1120,
+  OPT_s_bc_abi = 1121,
+  OPT_save_temps = 1122,
+  OPT_save_temps_ = 1123,
+  OPT_shared = 1124,
+  OPT_shared_libgcc = 1125,
+
+  OPT_specs_ = 1127,
+  OPT_static = 1128,
+  OPT_static_libgcc = 1129,
+  OPT_static_libgcj = 1130,
+  OPT_static_libgfortran = 1131,
+  OPT_static_libgo = 1132,
+  OPT_static_libstdc__ = 1133,
+
+
+  OPT_std_c__11 = 1136,
+  OPT_std_c__98 = 1137,
+  OPT_std_c11 = 1138,
+
+
+  OPT_std_c90 = 1141,
+  OPT_std_c99 = 1142,
+
+  OPT_std_f2003 = 1144,
+  OPT_std_f2008 = 1145,
+  OPT_std_f2008ts = 1146,
+  OPT_std_f95 = 1147,
+  OPT_std_gnu = 1148,
+
+
+  OPT_std_gnu__11 = 1151,
+  OPT_std_gnu__98 = 1152,
+  OPT_std_gnu11 = 1153,
+
+
+  OPT_std_gnu90 = 1156,
+  OPT_std_gnu99 = 1157,
+
+
+  OPT_std_iso9899_199409 = 1160,
+
+
+
+  OPT_std_legacy = 1164,
+  OPT_symbolic = 1165,
+  OPT_t = 1166,
+  OPT_time = 1167,
+  OPT_time_ = 1168,
+  OPT_tno_android_cc = 1169,
+  OPT_tno_android_ld = 1170,
+  OPT_traditional = 1171,
+  OPT_traditional_cpp = 1172,
+  OPT_trigraphs = 1173,
+  OPT_u = 1174,
+  OPT_undef = 1175,
+  OPT_v = 1176,
+  OPT_version = 1177,
+  OPT_w = 1178,
+  OPT_wrapper = 1179,
+  OPT_x = 1180,
+  OPT_z = 1181,
   N_OPTS,
   OPT_SPECIAL_unknown,
   OPT_SPECIAL_ignore,
   OPT_SPECIAL_program_name,
   OPT_SPECIAL_input_file
 };
-# 28 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/flags.h" 2
+# 28 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/flags.h" 2
 
 
 
@@ -14001,7 +14071,7 @@ extern int base_of_path (const char *path, const char **base_out);
 
 extern unsigned char fast_math_flags_set_p (const struct gcc_options *);
 extern unsigned char fast_math_flags_struct_set_p (struct cl_optimization *);
-# 48 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/flags.h"
+# 48 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/flags.h"
 extern void set_Wstrict_aliasing (struct gcc_options *opts, int onoff);
 
 
@@ -14035,9 +14105,9 @@ struct target_flag_state {
 };
 
 extern struct target_flag_state default_target_flag_state;
-# 105 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/flags.h"
+# 105 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/flags.h"
 extern int dump_for_graph;
-# 36 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h" 2
+# 36 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
 
 
 
@@ -14045,9 +14115,9 @@ extern int dump_for_graph;
 
 
 enum tree_code {
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/all-tree.def" 1
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def" 1
-# 42 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/all-tree.def" 1
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def" 1
+# 42 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 ERROR_MARK,
 
 
@@ -14065,23 +14135,23 @@ TREE_LIST,
 
 
 TREE_VEC,
-# 79 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 79 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 BLOCK,
-# 123 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 123 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 OFFSET_TYPE,
-# 136 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 136 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 ENUMERAL_TYPE,
 
 
 
 BOOLEAN_TYPE,
-# 150 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 150 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 INTEGER_TYPE,
 
 
 
 REAL_TYPE,
-# 163 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 163 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 POINTER_TYPE,
 
 
@@ -14095,16 +14165,16 @@ NULLPTR_TYPE,
 
 
 FIXED_POINT_TYPE,
-# 184 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 184 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 COMPLEX_TYPE,
 
 
 
 
 VECTOR_TYPE,
-# 205 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 205 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 ARRAY_TYPE,
-# 215 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 215 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 RECORD_TYPE,
 
 
@@ -14146,7 +14216,7 @@ METHOD_TYPE,
 
 
 LANG_TYPE,
-# 268 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 268 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 INTEGER_CST,
 
 
@@ -14164,7 +14234,7 @@ VECTOR_CST,
 
 
 STRING_CST,
-# 344 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 344 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 FUNCTION_DECL,
 LABEL_DECL,
 
@@ -14185,15 +14255,15 @@ DEBUG_EXPR_DECL,
 
 
 NAMESPACE_DECL,
-# 374 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 374 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 IMPORTED_DECL,
 
 
 
 TRANSLATION_UNIT_DECL,
-# 391 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 391 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 COMPONENT_REF,
-# 401 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 401 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 BIT_FIELD_REF,
 
 
@@ -14215,11 +14285,11 @@ ARRAY_RANGE_REF,
 
 
 INDIRECT_REF,
-# 430 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 430 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 OBJ_TYPE_REF,
-# 446 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 446 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 CONSTRUCTOR,
-# 456 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 456 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 COMPOUND_EXPR,
 
 
@@ -14237,13 +14307,13 @@ INIT_EXPR,
 
 
 TARGET_EXPR,
-# 486 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 486 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 COND_EXPR,
-# 498 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 498 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 VEC_COND_EXPR,
-# 512 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 512 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 VEC_PERM_EXPR,
-# 535 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 535 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 BIND_EXPR,
 
 
@@ -14260,9 +14330,9 @@ CALL_EXPR,
 
 
 WITH_CLEANUP_EXPR,
-# 567 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 567 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 CLEANUP_POINT_EXPR,
-# 619 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 619 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 PLACEHOLDER_EXPR,
 
 
@@ -14319,7 +14389,7 @@ MAX_EXPR,
 
 
 ABS_EXPR,
-# 689 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 689 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 LSHIFT_EXPR,
 RSHIFT_EXPR,
 LROTATE_EXPR,
@@ -14330,14 +14400,14 @@ BIT_IOR_EXPR,
 BIT_XOR_EXPR,
 BIT_AND_EXPR,
 BIT_NOT_EXPR,
-# 709 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 709 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 TRUTH_ANDIF_EXPR,
 TRUTH_ORIF_EXPR,
 TRUTH_AND_EXPR,
 TRUTH_OR_EXPR,
 TRUTH_XOR_EXPR,
 TRUTH_NOT_EXPR,
-# 725 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 725 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 LT_EXPR,
 LE_EXPR,
 GT_EXPR,
@@ -14384,7 +14454,7 @@ NOP_EXPR,
 
 
 NON_LVALUE_EXPR,
-# 782 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 782 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 VIEW_CONVERT_EXPR,
 
 
@@ -14467,7 +14537,7 @@ EXIT_EXPR,
 
 
 LOOP_EXPR,
-# 877 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 877 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 SWITCH_EXPR,
 
 
@@ -14512,7 +14582,7 @@ POLYNOMIAL_CHREC,
 
 
 STATEMENT_LIST,
-# 939 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 939 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 ASSERT_EXPR,
 
 
@@ -14525,11 +14595,11 @@ TREE_BINFO,
 
 
 WITH_SIZE_EXPR,
-# 961 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 961 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 REALIGN_LOAD_EXPR,
-# 977 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 977 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 TARGET_MEM_REF,
-# 987 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 987 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 MEM_REF,
 
 
@@ -14545,7 +14615,7 @@ OMP_PARALLEL,
 
 
 OMP_TASK,
-# 1022 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 1022 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 OMP_FOR,
 
 
@@ -14587,7 +14657,7 @@ OMP_ATOMIC,
 
 
 OMP_ATOMIC_READ,
-# 1072 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 1072 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 OMP_ATOMIC_CAPTURE_OLD,
 OMP_ATOMIC_CAPTURE_NEW,
 
@@ -14607,9 +14677,9 @@ TRANSACTION_EXPR,
 REDUC_MAX_EXPR,
 REDUC_MIN_EXPR,
 REDUC_PLUS_EXPR,
-# 1101 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 1101 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 DOT_PROD_EXPR,
-# 1110 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 1110 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 WIDEN_SUM_EXPR,
 
 
@@ -14618,12 +14688,12 @@ WIDEN_SUM_EXPR,
 
 
 WIDEN_MULT_EXPR,
-# 1126 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 1126 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 WIDEN_MULT_PLUS_EXPR,
 
 
 WIDEN_MULT_MINUS_EXPR,
-# 1142 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 1142 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 WIDEN_LSHIFT_EXPR,
 
 
@@ -14672,7 +14742,7 @@ VEC_PACK_SAT_EXPR,
 
 
 VEC_PACK_FIX_TRUNC_EXPR,
-# 1198 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.def"
+# 1198 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.def"
 VEC_WIDEN_LSHIFT_HI_EXPR,
 VEC_WIDEN_LSHIFT_LO_EXPR,
 
@@ -14688,10 +14758,10 @@ OPTIMIZATION_NODE,
 
 
 TARGET_OPTION_NODE,
-# 2 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/all-tree.def" 2
+# 2 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/all-tree.def" 2
 LAST_AND_UNUSED_TREE_CODE,
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.def" 1
-# 41 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.def"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.def" 1
+# 41 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.def"
 C_MAYBE_CONST_EXPR,
 
 
@@ -14706,9 +14776,9 @@ EXCESS_PRECISION_EXPR,
 
 
 USERDEF_LITERAL,
-# 4 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/all-tree.def" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/ada/gcc-interface/ada-tree.def" 1
-# 29 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/ada/gcc-interface/ada-tree.def"
+# 4 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/all-tree.def" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ada/gcc-interface/ada-tree.def" 1
+# 29 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ada/gcc-interface/ada-tree.def"
 UNCONSTRAINED_ARRAY_TYPE,
 
 
@@ -14734,7 +14804,7 @@ MINUS_NOMOD_EXPR,
 
 
 ATTR_ADDR_EXPR,
-# 62 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/ada/gcc-interface/ada-tree.def"
+# 62 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ada/gcc-interface/ada-tree.def"
 STMT_STMT,
 
 
@@ -14748,9 +14818,9 @@ LOOP_STMT,
 
 
 EXIT_STMT,
-# 5 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/all-tree.def" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.def" 1
-# 43 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.def"
+# 5 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/all-tree.def" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.def" 1
+# 43 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.def"
 OFFSET_REF,
 
 
@@ -14804,15 +14874,15 @@ THROW_EXPR,
 
 
 EMPTY_CLASS_EXPR,
-# 109 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.def"
+# 109 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.def"
 BASELINK,
-# 126 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.def"
+# 126 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.def"
 TEMPLATE_DECL,
-# 161 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.def"
+# 161 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.def"
 TEMPLATE_PARM_INDEX,
-# 170 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.def"
+# 170 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.def"
 TEMPLATE_TEMPLATE_PARM,
-# 179 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.def"
+# 179 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.def"
 TEMPLATE_TYPE_PARM,
 
 
@@ -14866,7 +14936,7 @@ TEMPLATE_ID_EXPR,
 
 
 OVERLOAD,
-# 243 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.def"
+# 243 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.def"
 PSEUDO_DTOR_EXPR,
 
 
@@ -14881,7 +14951,7 @@ IMPLICIT_CONV_EXPR,
 DOTSTAR_EXPR,
 TYPEID_EXPR,
 NOEXCEPT_EXPR,
-# 267 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.def"
+# 267 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.def"
 NON_DEPENDENT_EXPR,
 
 
@@ -14981,11 +15051,11 @@ UNARY_PLUS_EXPR,
 
 
 STATIC_ASSERT,
-# 384 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.def"
+# 384 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.def"
 TYPE_ARGUMENT_PACK,
-# 393 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.def"
+# 393 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.def"
 NONTYPE_ARGUMENT_PACK,
-# 416 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.def"
+# 416 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.def"
 TYPE_PACK_EXPANSION,
 
 
@@ -14994,16 +15064,16 @@ TYPE_PACK_EXPANSION,
 
 
 EXPR_PACK_EXPANSION,
-# 435 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.def"
+# 435 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.def"
 ARGUMENT_PACK_SELECT,
 
 
 
 
 TRAIT_EXPR,
-# 451 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.def"
+# 451 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.def"
 LAMBDA_EXPR,
-# 460 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.def"
+# 460 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.def"
 DECLTYPE_TYPE,
 
 
@@ -15013,11 +15083,11 @@ UNDERLYING_TYPE,
 
 
 BASES,
-# 478 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.def"
+# 478 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.def"
 TEMPLATE_INFO,
-# 6 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/all-tree.def" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/java/java-tree.def" 1
-# 23 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/java/java-tree.def"
+# 6 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/all-tree.def" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/java/java-tree.def" 1
+# 23 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/java/java-tree.def"
 URSHIFT_EXPR,
 
 
@@ -15028,9 +15098,9 @@ COMPARE_EXPR,
 COMPARE_L_EXPR,
 
 COMPARE_G_EXPR,
-# 7 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/all-tree.def" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/objc/objc-tree.def" 1
-# 25 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/objc/objc-tree.def"
+# 7 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/all-tree.def" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/objc/objc-tree.def" 1
+# 25 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/objc/objc-tree.def"
 CLASS_INTERFACE_TYPE,
 CLASS_IMPLEMENTATION_TYPE,
 
@@ -15048,10 +15118,10 @@ PROPERTY_DECL,
 
 MESSAGE_SEND_EXPR,
 CLASS_REFERENCE_EXPR,
-# 71 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/objc/objc-tree.def"
+# 71 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/objc/objc-tree.def"
 PROPERTY_REF,
-# 7 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/all-tree.def" 2
-# 44 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h" 2
+# 7 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/all-tree.def" 2
+# 44 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
 MAX_TREE_CODES
 };
 
@@ -15059,7 +15129,7 @@ MAX_TREE_CODES
 
 
 extern unsigned char tree_contains_struct[MAX_TREE_CODES][64];
-# 121 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 121 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 enum tree_code_class {
   tcc_exceptional,
   tcc_constant,
@@ -15088,14 +15158,14 @@ extern const char *const tree_code_class_strings[];
 
 
 extern const enum tree_code_class tree_code_type[];
-# 235 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 235 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern const unsigned char tree_code_length[];
 
 
 
 
 extern const char *const tree_code_name[];
-# 250 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 250 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 typedef enum {
   ALIAS_DIAG_NONE = 0x0,
   ALIAS_DIAG_TO_UNDEF = 0x1,
@@ -15139,8 +15209,8 @@ extern const char *const built_in_class_names[4];
 
 enum built_in_function
 {
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/builtins.def" 1
-# 184 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/builtins.def"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/builtins.def" 1
+# 184 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/builtins.def"
 BUILT_IN_NONE,
 
 
@@ -15761,8 +15831,8 @@ BUILT_IN_EH_FILTER,
 BUILT_IN_EH_COPY_VALUES,
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/sync-builtins.def" 1
-# 31 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/sync-builtins.def"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/sync-builtins.def" 1
+# 31 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/sync-builtins.def"
 BUILT_IN_SYNC_FETCH_AND_ADD_N,
 
 BUILT_IN_SYNC_FETCH_AND_ADD_1,
@@ -16332,11 +16402,11 @@ BUILT_IN_ATOMIC_THREAD_FENCE,
 
 
 BUILT_IN_ATOMIC_SIGNAL_FENCE,
-# 805 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/builtins.def" 2
+# 805 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/builtins.def" 2
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/omp-builtins.def" 1
-# 27 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/omp-builtins.def"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/omp-builtins.def" 1
+# 27 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/omp-builtins.def"
 BUILT_IN_OMP_GET_THREAD_NUM,
 
 BUILT_IN_OMP_GET_NUM_THREADS,
@@ -16520,10 +16590,10 @@ BUILT_IN_GOMP_SINGLE_START,
 BUILT_IN_GOMP_SINGLE_COPY_START,
 
 BUILT_IN_GOMP_SINGLE_COPY_END,
-# 808 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/builtins.def" 2
+# 808 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/builtins.def" 2
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/gtm-builtins.def" 1
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gtm-builtins.def" 1
 BUILT_IN_TM_START,
 
 
@@ -16578,7 +16648,7 @@ BUILT_IN_TM_LOG,
 BUILT_IN_TM_LOG_M64,
 BUILT_IN_TM_LOG_M128,
 BUILT_IN_TM_LOG_M256,
-# 63 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/gtm-builtins.def"
+# 63 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gtm-builtins.def"
 BUILT_IN_TM_STORE_1,
 
 BUILT_IN_TM_STORE_WAR_1,
@@ -16637,7 +16707,7 @@ BUILT_IN_TM_STORE_LDOUBLE,
 BUILT_IN_TM_STORE_WAR_LDOUBLE,
 
 BUILT_IN_TM_STORE_WAW_LDOUBLE,
-# 129 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/gtm-builtins.def"
+# 129 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gtm-builtins.def"
 BUILT_IN_TM_LOAD_1,
 
 BUILT_IN_TM_LOAD_RAR_1,
@@ -16713,8 +16783,8 @@ BUILT_IN_TM_LOAD_RAR_LDOUBLE,
 BUILT_IN_TM_LOAD_RAW_LDOUBLE,
 
 BUILT_IN_TM_LOAD_RFW_LDOUBLE,
-# 810 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/builtins.def" 2
-# 294 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h" 2
+# 810 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/builtins.def" 2
+# 294 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
 
 
 
@@ -16737,7 +16807,7 @@ BUILT_IN_TM_LOAD_RFW_LDOUBLE,
 
 
 extern const char * built_in_names[(int) END_BUILTINS];
-# 342 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 342 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern unsigned const char omp_clause_num_ops[];
 extern const char * const omp_clause_code_name[];
 
@@ -16760,7 +16830,7 @@ enum omp_clause_code
 
 
   OMP_CLAUSE_LASTPRIVATE,
-# 372 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 372 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
   OMP_CLAUSE_REDUCTION,
 
 
@@ -16799,7 +16869,7 @@ enum omp_clause_code
 
   OMP_CLAUSE_MERGEABLE
 };
-# 433 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 433 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_base {
   __extension__ enum tree_code code : 16;
 
@@ -16852,10 +16922,10 @@ struct tree_common {
   struct tree_typed typed;
   tree chain;
 };
-# 712 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 712 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 enum tree_node_structure_enum {
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/treestruct.def" 1
-# 33 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/treestruct.def"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/treestruct.def" 1
+# 33 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/treestruct.def"
 TS_BASE,
 TS_TYPED,
 TS_COMMON,
@@ -16894,13 +16964,13 @@ TS_CONSTRUCTOR,
 TS_OMP_CLAUSE,
 TS_OPTIMIZATION,
 TS_TARGET_OPTION,
-# 714 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h" 2
+# 714 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
   LAST_TS_ENUM
 };
-# 1012 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree-check.h" 1
-# 1013 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h" 2
-# 1484 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 1012 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree-check.h" 1
+# 1013 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
+# 1484 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_int_cst {
   struct tree_typed typed;
   double_int int_cst;
@@ -16961,10 +17031,10 @@ struct tree_vector {
   tree elements;
 };
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/symtab.h" 1
-# 22 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/symtab.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/obstack.h" 1
-# 157 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/obstack.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/symtab.h" 1
+# 22 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/symtab.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/obstack.h" 1
+# 157 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/obstack.h"
 struct _obstack_chunk
 {
   char *limit;
@@ -16979,7 +17049,7 @@ struct obstack
   char *object_base;
   char *next_free;
   char *chunk_limit;
-  long int temp;
+  int temp;
   int alignment_mask;
 
 
@@ -17053,7 +17123,7 @@ extern void (*obstack_alloc_failed_handler) (void);
 
 
 extern int obstack_exit_failure;
-# 23 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/symtab.h" 2
+# 23 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/symtab.h" 2
 
 
 
@@ -17134,8 +17204,8 @@ extern void ht_load (hash_table *ht, hashnode *entries,
 
 
 extern void ht_dump_statistics (hash_table *);
-# 1545 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h" 2
-# 1562 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 1545 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
+# 1562 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_identifier {
   struct tree_common common;
   struct ht_identifier id;
@@ -17150,13 +17220,13 @@ struct tree_list {
   tree purpose;
   tree value;
 };
-# 1584 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 1584 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_vec {
   struct tree_common common;
   int length;
   tree a[1];
 };
-# 1643 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 1643 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 typedef struct constructor_elt_d {
   tree index;
   tree value;
@@ -17169,9 +17239,9 @@ struct tree_constructor {
   struct tree_typed typed;
   VEC_constructor_elt_gc *elts;
 };
-# 1696 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 1696 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern void protected_set_expr_location (tree, location_t);
-# 1928 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 1928 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 enum omp_clause_schedule_kind
 {
   OMP_CLAUSE_SCHEDULE_STATIC,
@@ -17204,7 +17274,7 @@ struct tree_exp {
 
     operands[1];
 };
-# 1999 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 1999 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct ptr_info_def;
 
 
@@ -17250,7 +17320,7 @@ struct phi_arg_d {
   tree def;
   location_t locus;
 };
-# 2058 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 2058 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_omp_clause {
   struct tree_common common;
   location_t locus;
@@ -17268,7 +17338,7 @@ struct tree_omp_clause {
 
   tree ops[1];
 };
-# 2127 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 2127 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_block {
   struct tree_base base;
   tree chain;
@@ -17287,9 +17357,9 @@ struct tree_block {
   tree fragment_origin;
   tree fragment_chain;
 };
-# 2169 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 2169 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern enum machine_mode vector_type_mode (const_tree);
-# 2279 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 2279 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 enum cv_qualifier
   {
     TYPE_UNQUALIFIED = 0x0,
@@ -17297,7 +17367,7 @@ enum cv_qualifier
     TYPE_QUAL_VOLATILE = 0x2,
     TYPE_QUAL_RESTRICT = 0x4
   };
-# 2402 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 2402 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct die_struct;
 
 struct tree_type_common {
@@ -17349,7 +17419,7 @@ struct tree_type_with_lang_specific {
 
   struct lang_type *lang_specific;
 };
-# 2496 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 2496 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_type_non_common {
   struct tree_type_with_lang_specific with_lang_specific;
   tree values;
@@ -17357,7 +17427,7 @@ struct tree_type_non_common {
   tree maxval;
   tree binfo;
 };
-# 2607 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 2607 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_binfo {
   struct tree_common common;
 
@@ -17373,9 +17443,9 @@ struct tree_binfo {
 
   VEC_tree_none base_binfos;
 };
-# 2651 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 2651 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct function;
-# 2706 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 2706 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_decl_minimal {
   struct tree_common common;
   location_t locus;
@@ -17383,7 +17453,7 @@ struct tree_decl_minimal {
   tree name;
   tree context;
 };
-# 2874 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 2874 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_decl_common {
   struct tree_decl_minimal common;
   tree size;
@@ -17457,12 +17527,12 @@ struct tree_decl_common {
 
 extern tree decl_value_expr_lookup (tree);
 extern void decl_value_expr_insert (tree, tree);
-# 3001 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 3001 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_decl_with_rtl {
   struct tree_decl_common common;
   rtx rtl;
 };
-# 3069 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 3074 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_field_decl {
   struct tree_decl_common common;
 
@@ -17472,7 +17542,7 @@ struct tree_field_decl {
   tree bit_offset;
   tree fcontext;
 };
-# 3095 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 3100 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_label_decl {
   struct tree_decl_with_rtl common;
   int label_decl_uid;
@@ -17488,13 +17558,13 @@ struct tree_result_decl {
 struct tree_const_decl {
   struct tree_decl_common common;
 };
-# 3120 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 3125 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_parm_decl {
   struct tree_decl_with_rtl common;
   rtx incoming_rtl;
   struct var_ann_d *ann;
 };
-# 3259 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 3264 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_decl_with_vis {
  struct tree_decl_with_rtl common;
  tree assembler_name;
@@ -17530,19 +17600,19 @@ struct tree_decl_with_vis {
 
 extern tree decl_debug_expr_lookup (tree);
 extern void decl_debug_expr_insert (tree, tree);
-# 3304 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 3309 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 typedef unsigned short priority_type;
 
 extern priority_type decl_init_priority_lookup (tree);
 extern priority_type decl_fini_priority_lookup (tree);
 extern void decl_init_priority_insert (tree, priority_type);
 extern void decl_fini_priority_insert (tree, priority_type);
-# 3343 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 3348 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_var_decl {
   struct tree_decl_with_vis common;
   struct var_ann_d *ann;
 };
-# 3365 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 3370 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct
  tree_decl_non_common {
   struct tree_decl_with_vis common;
@@ -17555,10 +17625,10 @@ struct
 
   tree vindex;
 };
-# 3495 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 3500 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern VEC_tree_gc **decl_debug_args_lookup (tree);
 extern VEC_tree_gc **decl_debug_args_insert (tree);
-# 3537 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 3542 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_function_decl {
   struct tree_decl_non_common common;
 
@@ -17618,12 +17688,12 @@ struct tree_translation_unit_decl {
 
 
 extern VEC_tree_gc *all_translation_units;
-# 3612 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 3617 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_type_decl {
   struct tree_decl_non_common common;
 
 };
-# 3628 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 3633 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_statement_list_node
  {
   struct tree_statement_list_node *prev;
@@ -17876,7 +17946,7 @@ enum tree_index
 };
 
 extern tree global_trees[TI_MAX];
-# 4063 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 4068 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 enum integer_type_kind
 {
   itk_char,
@@ -17900,13 +17970,13 @@ typedef enum integer_type_kind integer_type_kind;
 
 
 extern tree integer_types[itk_none];
-# 4122 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 4127 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 enum ptrmemfunc_vbit_where_t
 {
   ptrmemfunc_vbit_in_pfn,
   ptrmemfunc_vbit_in_delta
 };
-# 4136 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 4141 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern tree decl_assembler_name (tree);
 extern unsigned char decl_assembler_name_equal (tree decl, const_tree asmname);
 extern hashval_t decl_assembler_name_hash (const_tree asmname);
@@ -17957,7 +18027,7 @@ extern tree make_tree_vec_stat (int );
 
 
 extern tree get_identifier (const char *);
-# 4198 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 4203 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern tree get_identifier_with_length (const char *, size_t);
 
 
@@ -18186,7 +18256,7 @@ extern long tree_low_cst (const_tree, int);
 extern __inline__ __attribute__ ((__gnu_inline__)) long
 tree_low_cst (const_tree t, int pos)
 {
-  ((void)(!(host_integerp (t, pos)) ? fancy_abort ("/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h", 4426, __FUNCTION__), 0 : 0));
+  ((void)(!(host_integerp (t, pos)) ? fancy_abort ("/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h", 4431, __FUNCTION__), 0 : 0));
   return (((t)->int_cst.int_cst).low);
 }
 
@@ -18204,7 +18274,7 @@ extern tree excess_precision_type (tree);
 
 extern tree make_fract_type (int, int, int);
 extern tree make_accum_type (int, int, int);
-# 4475 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 4480 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern tree make_tree (tree, rtx);
 
 
@@ -18249,7 +18319,7 @@ struct attribute_spec
 
 
   const unsigned char function_type_required;
-# 4533 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 4538 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
   tree (*const handler) (tree *node, tree name, tree args,
      int flags, unsigned char *no_add_attrs);
 
@@ -18289,7 +18359,7 @@ extern tree merge_type_attributes (tree, tree);
 
 
 extern tree private_lookup_attribute (const char *, size_t, tree);
-# 4581 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 4586 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 static __inline__ tree
 lookup_attribute (const char *attr_name, tree list)
 {
@@ -18332,7 +18402,7 @@ extern tree remove_attribute (const char *, tree);
 
 
 extern tree merge_attributes (tree, tree);
-# 4636 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 4641 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern unsigned char check_qualified_type (const_tree, const_tree, int);
 
 
@@ -18349,7 +18419,7 @@ extern tree build_qualified_type (tree, int);
 
 
 extern tree build_aligned_type (tree, unsigned int);
-# 4665 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 4670 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern tree build_distinct_type_copy (tree);
 extern tree build_variant_type_copy (tree);
 
@@ -18364,7 +18434,7 @@ extern void finish_builtin_struct (tree, const char *,
 
 
 extern void layout_type (tree);
-# 4687 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 4692 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 typedef struct record_layout_info_s
 {
 
@@ -18411,7 +18481,7 @@ extern void finish_record_layout (record_layout_info, int);
 
 
 extern tree type_hash_canon (unsigned int, tree);
-# 4742 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 4747 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern void layout_decl (tree, unsigned);
 
 
@@ -18480,7 +18550,7 @@ extern tree round_up_loc (location_t, tree, int);
 
 extern tree round_down_loc (location_t, tree, int);
 extern void finalize_size_functions (void);
-# 4819 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 4824 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern unsigned int maximum_field_alignment;
 
 
@@ -18584,15 +18654,15 @@ enum tree_node_structure_enum tree_node_structure (const_tree);
 
 
 extern unsigned char contains_placeholder_p (const_tree);
-# 4933 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 4938 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern unsigned char type_contains_placeholder_p (tree);
-# 4942 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 4947 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern void find_placeholder_in_expr (tree, VEC_tree_heap **);
-# 4960 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 4965 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern tree substitute_in_expr (tree, tree, tree);
-# 4971 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 4976 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern tree substitute_placeholder_in_expr (tree, tree);
-# 4986 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 4991 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern tree variable_size (tree);
 
 
@@ -18741,7 +18811,7 @@ function_args_iter_cond (function_args_iterator *i)
 static __inline__ void
 function_args_iter_next (function_args_iterator *i)
 {
-  ((void)(!(i->next != (tree) ((void *)0)) ? fancy_abort ("/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h", 5134, __FUNCTION__), 0 : 0));
+  ((void)(!(i->next != (tree) ((void *)0)) ? fancy_abort ("/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h", 5139, __FUNCTION__), 0 : 0));
   i->next = ((i->next)->common.chain);
 }
 
@@ -18752,7 +18822,7 @@ inlined_function_outer_scope_p (const_tree block)
 {
  return ((block)->block.locus) != ((source_location) 0);
 }
-# 5165 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 5170 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern unsigned crc32_string (unsigned, const char *);
 extern unsigned crc32_byte (unsigned, char);
 extern void clean_symbol_name (char *);
@@ -19157,10 +19227,10 @@ extern unsigned char debug_find_tree (tree, tree);
 
 extern tree unsave_expr_now (tree);
 extern tree build_duplicate_type (tree);
-# 5607 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 5612 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern int flags_from_decl_or_type (const_tree);
 extern int call_expr_flags (const_tree);
-# 5634 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 5639 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern int setjmp_call_p (const_tree);
 extern unsigned char gimple_alloca_call_p (const_gimple);
 extern unsigned char alloca_call_p (const_tree);
@@ -19172,7 +19242,7 @@ extern unsigned char must_pass_in_stack_var_size_or_pad (enum machine_mode, cons
 extern const struct attribute_spec *lookup_attribute_spec (const_tree);
 
 extern void init_attributes (void);
-# 5654 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 5659 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern tree decl_attributes (tree *, tree, int);
 
 extern void apply_tm_attr (tree, tree);
@@ -19229,7 +19299,7 @@ extern unsigned char expand_switch_using_bit_tests_p (tree, tree, unsigned int,
           unsigned int);
 extern void expand_case (gimple);
 extern void expand_decl (tree);
-# 5720 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 5725 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct pointer_set_t;
 
 
@@ -19245,7 +19315,7 @@ extern tree walk_tree_1 (tree*, walk_tree_fn, void*, struct pointer_set_t*,
     walk_tree_lh);
 extern tree walk_tree_without_duplicates_1 (tree*, walk_tree_fn, void*,
          walk_tree_lh);
-# 5743 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 5748 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern void set_decl_rtl (tree, rtx);
 extern void set_decl_incoming_rtl (tree, rtx, unsigned char);
 
@@ -19494,7 +19564,7 @@ more_const_call_expr_args_p (const const_call_expr_arg_iterator *iter)
 {
   return (iter->i < iter->n);
 }
-# 6003 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 6008 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 static __inline__ unsigned char
 is_lang_specific (tree t)
 {
@@ -19503,7 +19573,7 @@ is_lang_specific (tree t)
 
 
 extern unsigned char block_may_fallthru (const_tree);
-# 6019 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h"
+# 6024 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 typedef struct builtin_info_type_d {
   tree decl[(int)END_BUILTINS];
   unsigned char implicit_p[(int)END_BUILTINS];
@@ -19587,10 +19657,10 @@ builtin_decl_implicit_p (enum built_in_function fncode)
    && builtin_info.implicit_p[uns_fncode]);
 }
 # 25 "../../../src/plugin-utils.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 1
-# 20 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/insn-constants.h" 1
-# 78 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/insn-constants.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 1
+# 20 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/insn-constants.h" 1
+# 78 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/insn-constants.h"
 enum unspec {
   UNSPEC_GOT = 0,
   UNSPEC_GOTOFF = 1,
@@ -19674,67 +19744,66 @@ enum unspec {
   UNSPEC_SP_TLS_TEST = 79,
   UNSPEC_ROUND = 80,
   UNSPEC_CRC32 = 81,
-  UNSPEC_RDRAND = 82,
-  UNSPEC_BEXTR = 83,
-  UNSPEC_PDEP = 84,
-  UNSPEC_PEXT = 85,
-  UNSPEC_MOVNTQ = 86,
-  UNSPEC_PFRCP = 87,
-  UNSPEC_PFRCPIT1 = 88,
-  UNSPEC_PFRCPIT2 = 89,
-  UNSPEC_PFRSQRT = 90,
-  UNSPEC_PFRSQIT1 = 91,
-  UNSPEC_MOVNT = 92,
-  UNSPEC_MOVU = 93,
-  UNSPEC_LDDQU = 94,
-  UNSPEC_PSHUFB = 95,
-  UNSPEC_PSIGN = 96,
-  UNSPEC_PALIGNR = 97,
-  UNSPEC_EXTRQI = 98,
-  UNSPEC_EXTRQ = 99,
-  UNSPEC_INSERTQI = 100,
-  UNSPEC_INSERTQ = 101,
-  UNSPEC_BLENDV = 102,
-  UNSPEC_INSERTPS = 103,
-  UNSPEC_DP = 104,
-  UNSPEC_MOVNTDQA = 105,
-  UNSPEC_MPSADBW = 106,
-  UNSPEC_PHMINPOSUW = 107,
-  UNSPEC_PTEST = 108,
-  UNSPEC_PCMPESTR = 109,
-  UNSPEC_PCMPISTR = 110,
-  UNSPEC_FMADDSUB = 111,
-  UNSPEC_XOP_UNSIGNED_CMP = 112,
-  UNSPEC_XOP_TRUEFALSE = 113,
-  UNSPEC_XOP_PERMUTE = 114,
-  UNSPEC_FRCZ = 115,
-  UNSPEC_AESENC = 116,
-  UNSPEC_AESENCLAST = 117,
-  UNSPEC_AESDEC = 118,
-  UNSPEC_AESDECLAST = 119,
-  UNSPEC_AESIMC = 120,
-  UNSPEC_AESKEYGENASSIST = 121,
-  UNSPEC_PCLMUL = 122,
-  UNSPEC_PCMP = 123,
-  UNSPEC_VPERMIL = 124,
-  UNSPEC_VPERMIL2 = 125,
-  UNSPEC_VPERMIL2F128 = 126,
-  UNSPEC_CAST = 127,
-  UNSPEC_VTESTP = 128,
-  UNSPEC_VCVTPH2PS = 129,
-  UNSPEC_VCVTPS2PH = 130,
-  UNSPEC_VPERMSI = 131,
-  UNSPEC_VPERMDF = 132,
-  UNSPEC_VPERMSF = 133,
-  UNSPEC_VPERMTI = 134,
-  UNSPEC_GATHER = 135,
-  UNSPEC_VSIBADDR = 136,
-  UNSPEC_LFENCE = 137,
-  UNSPEC_SFENCE = 138,
-  UNSPEC_MFENCE = 139,
-  UNSPEC_MOVA = 140,
-  UNSPEC_LDA = 141,
-  UNSPEC_STA = 142
+  UNSPEC_BEXTR = 82,
+  UNSPEC_PDEP = 83,
+  UNSPEC_PEXT = 84,
+  UNSPEC_MOVNTQ = 85,
+  UNSPEC_PFRCP = 86,
+  UNSPEC_PFRCPIT1 = 87,
+  UNSPEC_PFRCPIT2 = 88,
+  UNSPEC_PFRSQRT = 89,
+  UNSPEC_PFRSQIT1 = 90,
+  UNSPEC_MOVNT = 91,
+  UNSPEC_MOVU = 92,
+  UNSPEC_LDDQU = 93,
+  UNSPEC_PSHUFB = 94,
+  UNSPEC_PSIGN = 95,
+  UNSPEC_PALIGNR = 96,
+  UNSPEC_EXTRQI = 97,
+  UNSPEC_EXTRQ = 98,
+  UNSPEC_INSERTQI = 99,
+  UNSPEC_INSERTQ = 100,
+  UNSPEC_BLENDV = 101,
+  UNSPEC_INSERTPS = 102,
+  UNSPEC_DP = 103,
+  UNSPEC_MOVNTDQA = 104,
+  UNSPEC_MPSADBW = 105,
+  UNSPEC_PHMINPOSUW = 106,
+  UNSPEC_PTEST = 107,
+  UNSPEC_PCMPESTR = 108,
+  UNSPEC_PCMPISTR = 109,
+  UNSPEC_FMADDSUB = 110,
+  UNSPEC_XOP_UNSIGNED_CMP = 111,
+  UNSPEC_XOP_TRUEFALSE = 112,
+  UNSPEC_XOP_PERMUTE = 113,
+  UNSPEC_FRCZ = 114,
+  UNSPEC_AESENC = 115,
+  UNSPEC_AESENCLAST = 116,
+  UNSPEC_AESDEC = 117,
+  UNSPEC_AESDECLAST = 118,
+  UNSPEC_AESIMC = 119,
+  UNSPEC_AESKEYGENASSIST = 120,
+  UNSPEC_PCLMUL = 121,
+  UNSPEC_PCMP = 122,
+  UNSPEC_VPERMIL = 123,
+  UNSPEC_VPERMIL2 = 124,
+  UNSPEC_VPERMIL2F128 = 125,
+  UNSPEC_CAST = 126,
+  UNSPEC_VTESTP = 127,
+  UNSPEC_VCVTPH2PS = 128,
+  UNSPEC_VCVTPS2PH = 129,
+  UNSPEC_VPERMSI = 130,
+  UNSPEC_VPERMDF = 131,
+  UNSPEC_VPERMSF = 132,
+  UNSPEC_VPERMTI = 133,
+  UNSPEC_GATHER = 134,
+  UNSPEC_VSIBADDR = 135,
+  UNSPEC_LFENCE = 136,
+  UNSPEC_SFENCE = 137,
+  UNSPEC_MFENCE = 138,
+  UNSPEC_MOVA = 139,
+  UNSPEC_LDA = 140,
+  UNSPEC_STA = 141
 };
 
 extern const char *const unspec_strings[];
@@ -19759,37 +19828,38 @@ enum unspecv {
   UNSPECV_RDGSBASE = 16,
   UNSPECV_WRFSBASE = 17,
   UNSPECV_WRGSBASE = 18,
-  UNSPECV_EMMS = 19,
-  UNSPECV_FEMMS = 20,
-  UNSPECV_LDMXCSR = 21,
-  UNSPECV_STMXCSR = 22,
-  UNSPECV_CLFLUSH = 23,
-  UNSPECV_MONITOR = 24,
-  UNSPECV_MWAIT = 25,
-  UNSPECV_VZEROALL = 26,
-  UNSPECV_VZEROUPPER = 27,
-  UNSPECV_CMPXCHG_1 = 28,
-  UNSPECV_CMPXCHG_2 = 29,
-  UNSPECV_CMPXCHG_3 = 30,
-  UNSPECV_CMPXCHG_4 = 31,
-  UNSPECV_XCHG = 32,
-  UNSPECV_LOCK = 33
+  UNSPECV_RDRAND = 19,
+  UNSPECV_EMMS = 20,
+  UNSPECV_FEMMS = 21,
+  UNSPECV_LDMXCSR = 22,
+  UNSPECV_STMXCSR = 23,
+  UNSPECV_CLFLUSH = 24,
+  UNSPECV_MONITOR = 25,
+  UNSPECV_MWAIT = 26,
+  UNSPECV_VZEROALL = 27,
+  UNSPECV_VZEROUPPER = 28,
+  UNSPECV_CMPXCHG_1 = 29,
+  UNSPECV_CMPXCHG_2 = 30,
+  UNSPECV_CMPXCHG_3 = 31,
+  UNSPECV_CMPXCHG_4 = 32,
+  UNSPECV_XCHG = 33,
+  UNSPECV_LOCK = 34
 };
 
 extern const char *const unspecv_strings[];
-# 21 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/vxworks-dummy.h" 1
-# 22 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/biarch64.h" 1
-# 23 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386.h" 1
-# 85 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/vxworks-dummy.h" 1
-# 86 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386.h" 2
+# 21 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/vxworks-dummy.h" 1
+# 22 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/biarch64.h" 1
+# 23 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386.h" 1
+# 85 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/vxworks-dummy.h" 1
+# 86 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386.h" 2
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386-opts.h" 1
-# 88 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386.h" 2
-# 100 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386-opts.h" 1
+# 88 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386.h" 2
+# 100 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386.h"
 struct stringop_algs
 {
   const enum stringop_alg unknown_size;
@@ -19874,7 +19944,7 @@ struct processor_costs {
 
 extern const struct processor_costs *ix86_cost;
 extern const struct processor_costs ix86_size_cost;
-# 253 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386.h"
+# 253 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386.h"
 enum ix86_tune_indices {
   X86_TUNE_USE_LEAVE,
   X86_TUNE_PUSH_MEMORY,
@@ -19950,9 +20020,9 @@ enum ix86_tune_indices {
 };
 
 extern unsigned char ix86_tune_features[X86_TUNE_LAST];
-# 427 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386.h"
+# 427 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386.h"
 enum ix86_arch_indices {
-  X86_ARCH_CMOVE,
+  X86_ARCH_CMOV,
   X86_ARCH_CMPXCHG,
   X86_ARCH_CMPXCHG8B,
   X86_ARCH_XADD,
@@ -19962,13 +20032,13 @@ enum ix86_arch_indices {
 };
 
 extern unsigned char ix86_arch_features[X86_ARCH_LAST];
-# 447 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386.h"
+# 452 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386.h"
 extern int x86_prefetch_sse;
-# 471 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386.h"
+# 476 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386.h"
 extern tree x86_mfence;
-# 522 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386.h"
+# 527 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386.h"
 extern const char *host_detect_local_cpu (int argc, const char **argv);
-# 571 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386.h"
+# 576 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386.h"
 enum target_cpu_default
 {
   TARGET_CPU_DEFAULT_generic = 0,
@@ -20002,7 +20072,7 @@ enum target_cpu_default
 
   TARGET_CPU_DEFAULT_max
 };
-# 1174 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386.h"
+# 1179 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386.h"
 enum reg_class
 {
   NO_REGS,
@@ -20028,7 +20098,7 @@ enum reg_class
   FLOAT_INT_SSE_REGS,
   ALL_REGS, LIM_REG_CLASSES
 };
-# 1464 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386.h"
+# 1469 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386.h"
 typedef struct ix86_args {
   int words;
   int nregs;
@@ -20052,11 +20122,11 @@ typedef struct ix86_args {
   enum calling_abi call_abi;
 
 } CUMULATIVE_ARGS;
-# 1883 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386.h"
+# 1899 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386.h"
 extern int const dbx_register_map[53];
 extern int const dbx64_register_map[53];
 extern int const svr4_dbx_register_map[53];
-# 2014 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386.h"
+# 2030 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386.h"
 enum processor_type
 {
   PROCESSOR_I386 = 0,
@@ -20102,7 +20172,7 @@ enum ix86_fpcmp_strategy {
   IX86_FPCMP_COMI,
   IX86_FPCMP_ARITH
 };
-# 2075 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386.h"
+# 2091 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386.h"
 enum ix86_entity
 {
   I387_TRUNC = 0,
@@ -20123,7 +20193,7 @@ enum ix86_stack_slot
   SLOT_CW_MASK_PM,
   MAX_386_STACK_LOCALS
 };
-# 2151 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386.h"
+# 2167 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386.h"
 struct machine_frame_state
 {
 
@@ -20193,7 +20263,7 @@ struct machine_function {
 
 
   unsigned int use_fast_prologue_epilogue : 1;
-# 2230 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386.h"
+# 2246 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386.h"
   unsigned int tls_descriptor_call_expanded_p : 1;
 
 
@@ -20222,38 +20292,38 @@ struct machine_function {
 
   struct seh_frame_state * seh;
 };
-# 2295 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/i386.h"
+# 2311 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/i386.h"
 extern void debug_ready_dispatch (void);
 extern void debug_dispatch_window (int);
-# 24 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/linux-android.h" 1
-# 25 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/unix.h" 1
-# 26 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/att.h" 1
-# 27 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/dbxelf.h" 1
-# 28 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/elfos.h" 1
-# 29 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/gnu-user.h" 1
-# 30 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/glibc-stdint.h" 1
-# 31 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/x86-64.h" 1
-# 32 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/gnu-user64.h" 1
-# 33 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/linux.h" 1
-# 34 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/i386/linux64.h" 1
-# 35 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/config/initfini-array.h" 1
-# 36 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 2
+# 24 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/linux-android.h" 1
+# 25 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/unix.h" 1
+# 26 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/att.h" 1
+# 27 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/dbxelf.h" 1
+# 28 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/elfos.h" 1
+# 29 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/gnu-user.h" 1
+# 30 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/glibc-stdint.h" 1
+# 31 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/x86-64.h" 1
+# 32 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/gnu-user64.h" 1
+# 33 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/linux.h" 1
+# 34 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/i386/linux64.h" 1
+# 35 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config/initfini-array.h" 1
+# 36 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 2
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/insn-flags.h" 1
-# 2780 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/insn-flags.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/insn-flags.h" 1
+# 2780 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/insn-flags.h"
 extern rtx gen_x86_fnstsw_1 (rtx);
 extern rtx gen_x86_sahf_1 (rtx);
 extern rtx gen_swapxf (rtx, rtx);
@@ -20517,6 +20587,12 @@ extern rtx gen_mmx_psadbw (rtx, rtx, rtx);
 extern rtx gen_mmx_pmovmskb (rtx, rtx);
 extern rtx gen_sse2_movq128 (rtx, rtx);
 extern rtx gen_movdi_to_sse (rtx, rtx);
+extern rtx gen_avx_movups256 (rtx, rtx);
+extern rtx gen_sse_movups (rtx, rtx);
+extern rtx gen_avx_movupd256 (rtx, rtx);
+extern rtx gen_sse2_movupd (rtx, rtx);
+extern rtx gen_avx_movdqu256 (rtx, rtx);
+extern rtx gen_sse2_movdqu (rtx, rtx);
 extern rtx gen_avx_lddqu256 (rtx, rtx);
 extern rtx gen_sse3_lddqu (rtx, rtx);
 extern rtx gen_sse2_movntisi (rtx, rtx);
@@ -21085,16 +21161,16 @@ extern rtx gen_atomic_subhi (rtx, rtx, rtx);
 extern rtx gen_atomic_subsi (rtx, rtx, rtx);
 extern rtx gen_atomic_subdi (rtx, rtx, rtx);
 extern rtx gen_atomic_andqi (rtx, rtx, rtx);
-extern rtx gen_atomic_iorqi (rtx, rtx, rtx);
+extern rtx gen_atomic_orqi (rtx, rtx, rtx);
 extern rtx gen_atomic_xorqi (rtx, rtx, rtx);
 extern rtx gen_atomic_andhi (rtx, rtx, rtx);
-extern rtx gen_atomic_iorhi (rtx, rtx, rtx);
+extern rtx gen_atomic_orhi (rtx, rtx, rtx);
 extern rtx gen_atomic_xorhi (rtx, rtx, rtx);
 extern rtx gen_atomic_andsi (rtx, rtx, rtx);
-extern rtx gen_atomic_iorsi (rtx, rtx, rtx);
+extern rtx gen_atomic_orsi (rtx, rtx, rtx);
 extern rtx gen_atomic_xorsi (rtx, rtx, rtx);
 extern rtx gen_atomic_anddi (rtx, rtx, rtx);
-extern rtx gen_atomic_iordi (rtx, rtx, rtx);
+extern rtx gen_atomic_ordi (rtx, rtx, rtx);
 extern rtx gen_atomic_xordi (rtx, rtx, rtx);
 extern rtx gen_cbranchqi4 (rtx, rtx, rtx, rtx);
 extern rtx gen_cbranchhi4 (rtx, rtx, rtx, rtx);
@@ -21620,12 +21696,6 @@ extern rtx gen_movmisalignv8sf (rtx, rtx);
 extern rtx gen_movmisalignv4sf (rtx, rtx);
 extern rtx gen_movmisalignv4df (rtx, rtx);
 extern rtx gen_movmisalignv2df (rtx, rtx);
-extern rtx gen_avx_movups256 (rtx, rtx);
-extern rtx gen_sse_movups (rtx, rtx);
-extern rtx gen_avx_movupd256 (rtx, rtx);
-extern rtx gen_sse2_movupd (rtx, rtx);
-extern rtx gen_avx_movdqu256 (rtx, rtx);
-extern rtx gen_sse2_movdqu (rtx, rtx);
 extern rtx gen_storentdi (rtx, rtx);
 extern rtx gen_storentsi (rtx, rtx);
 extern rtx gen_storentsf (rtx, rtx);
@@ -22312,15 +22382,15 @@ extern rtx gen_atomic_compare_and_swaphi (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx
 extern rtx gen_atomic_compare_and_swapsi (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
 extern rtx gen_atomic_compare_and_swapdi (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
 extern rtx gen_atomic_compare_and_swapti (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
-# 39 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 2
+# 39 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 2
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/defaults.h" 1
-# 1007 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/defaults.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/defaults.h" 1
+# 1007 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/defaults.h"
        
-# 41 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 2
+# 41 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 2
 # 26 "../../../src/plugin-utils.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/langhooks.h" 1
-# 26 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/langhooks.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/langhooks.h" 1
+# 26 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/langhooks.h"
 struct diagnostic_info;
 
 struct gimplify_omp_ctx;
@@ -22393,7 +22463,7 @@ struct lang_hooks_for_types
 
 
   tree (*type_promotes_to) (tree);
-# 106 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/langhooks.h"
+# 106 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/langhooks.h"
   void (*register_builtin_type) (tree, const char *);
 
 
@@ -22581,11 +22651,11 @@ struct lang_hooks
 
 
   unsigned char (*complain_wrong_lang_p) (const struct cl_option *option);
-# 304 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/langhooks.h"
+# 304 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/langhooks.h"
   unsigned char (*handle_option) (size_t code, const char *arg, int value, int kind,
     location_t loc,
     const struct cl_option_handlers *handlers);
-# 316 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/langhooks.h"
+# 316 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/langhooks.h"
   unsigned char (*post_options) (const char **);
 
 
@@ -22634,7 +22704,7 @@ struct lang_hooks
   lang_print_tree_hook print_decl;
   lang_print_tree_hook print_type;
   lang_print_tree_hook print_identifier;
-# 374 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/langhooks.h"
+# 374 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/langhooks.h"
   const char *(*decl_printable_name) (tree decl, int verbosity);
 
 
@@ -22650,7 +22720,7 @@ struct lang_hooks
 
   void (*print_error_function) (diagnostic_context *, const char *,
     struct diagnostic_info *);
-# 397 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/langhooks.h"
+# 397 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/langhooks.h"
   long (*to_target_charset) (long);
 
 
@@ -22751,10 +22821,10 @@ extern tree add_builtin_function_ext_scope (const char *name, tree type,
 
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h" 1
-# 26 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/ggc.h" 1
-# 30 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/ggc.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h" 1
+# 26 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ggc.h" 1
+# 30 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ggc.h"
 extern const char empty_string[];
 
 
@@ -22763,8 +22833,8 @@ extern const char empty_string[];
 
 typedef void (*gt_pointer_operator) (void *, void *);
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/gtype-desc.h" 1
-# 23 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/gtype-desc.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gtype-desc.h" 1
+# 23 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gtype-desc.h"
 enum gt_types_enum {
  gt_ggc_e_24lazy_hex_fp_value_struct,
  gt_ggc_e_15c_inline_static,
@@ -23442,7 +23512,7 @@ enum gt_types_enum {
  gt_e_P13libfunc_entry4htab,
  gt_types_enum_last
 };
-# 6588 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/gtype-desc.h"
+# 6588 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gtype-desc.h"
 extern void gt_ggc_mx_c_inline_static (void *);
 
 
@@ -24287,7 +24357,7 @@ extern void gt_ggc_m_P9loop_exit4htab (void *);
 extern void gt_ggc_m_P24types_used_by_vars_entry4htab (void *);
 extern void gt_ggc_m_P9tree_node4htab (void *);
 extern void gt_ggc_m_P13libfunc_entry4htab (void *);
-# 7440 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/gtype-desc.h"
+# 7440 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gtype-desc.h"
 extern void gt_pch_nx_c_inline_static (void *);
 
 
@@ -25678,7 +25748,7 @@ extern void * ggc_alloc_splay_tree_loop_exit_htab (int, void *);
 extern void * ggc_alloc_splay_tree_types_used_by_vars_entry_htab (int, void *);
 extern void * ggc_alloc_splay_tree_tree_node_htab (int, void *);
 extern void * ggc_alloc_splay_tree_libfunc_entry_htab (int, void *);
-# 39 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/ggc.h" 2
+# 39 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ggc.h" 2
 
 
 
@@ -25734,7 +25804,7 @@ struct ggc_cache_tab {
 
 
 extern const struct ggc_cache_tab * const gt_ggc_cache_rtab[];
-# 112 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/ggc.h"
+# 112 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ggc.h"
 extern int ggc_set_mark (const void *);
 
 
@@ -25794,7 +25864,7 @@ extern void ggc_free_overhead (void *);
 extern void ggc_prune_overhead_list (void);
 
 extern void dump_ggc_loc_statistics (unsigned char);
-# 179 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/ggc.h"
+# 179 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ggc.h"
 static __inline__ void *
 ggc_internal_vec_alloc_stat (size_t s, size_t c )
 {
@@ -25824,7 +25894,7 @@ ggc_alloc_atomic_stat (size_t s )
 extern void * ggc_cleared_alloc_htab_ignore_args (size_t, size_t);
 
 extern void * ggc_cleared_alloc_ptr_array_two_args (size_t, size_t);
-# 219 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/ggc.h"
+# 219 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ggc.h"
 extern void *ggc_splay_alloc (enum gt_types_enum, int, void *);
 
 extern void ggc_splay_dont_free (void *, void *);
@@ -25834,7 +25904,7 @@ extern void ggc_splay_dont_free (void *, void *);
 
 extern const char *ggc_alloc_string_stat (const char *contents, int length
                                           );
-# 236 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/ggc.h"
+# 236 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ggc.h"
 extern void ggc_collect (void);
 
 
@@ -25868,7 +25938,7 @@ extern struct alloc_zone tree_zone;
 
 
 extern struct alloc_zone tree_id_zone;
-# 307 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/ggc.h"
+# 307 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ggc.h"
 static __inline__ void *
 ggc_internal_zone_alloc_stat (struct alloc_zone * z __attribute__ ((__unused__)),
                               size_t s )
@@ -25920,14 +25990,14 @@ ggc_alloc_cleared_gimple_statement_d_stat (size_t s )
   return (union gimple_statement_d *)
     ggc_internal_cleared_alloc_stat (s );
 }
-# 27 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/function.h" 1
-# 25 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/function.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tree.h" 1
-# 26 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/function.h" 2
+# 27 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/function.h" 1
+# 25 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/function.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 1
+# 26 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/function.h" 2
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/vecprim.h" 1
-# 23 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/vecprim.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/vecprim.h" 1
+# 23 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/vecprim.h"
 static __inline__ void VEC_char_must_be_integral_type (void) { (void)~(char)0; } typedef struct VEC_char_base { struct vec_prefix prefix; char vec[1]; } VEC_char_base; typedef struct VEC_char_none { VEC_char_base base; } VEC_char_none; static __inline__ unsigned VEC_char_base_length (const VEC_char_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ char VEC_char_base_last (const VEC_char_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ char VEC_char_base_index (const VEC_char_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_char_base_iterate (const VEC_char_base *vec_, unsigned ix_, char *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (char) 0; return 0; } } static __inline__ size_t VEC_char_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_char_base, vec) + alloc_ * sizeof(char); } static __inline__ void VEC_char_base_embedded_init (VEC_char_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_char_base_space (VEC_char_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_char_base_splice (VEC_char_base *dst_, VEC_char_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (char)); dst_->prefix.num += len_; } } static __inline__ char *VEC_char_base_quick_push (VEC_char_base *vec_, char obj_ ) { char *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ char VEC_char_base_pop (VEC_char_base *vec_ ) { char obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_char_base_truncate (VEC_char_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ char VEC_char_base_replace (VEC_char_base *vec_, unsigned ix_, char obj_ ) { char old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ char *VEC_char_base_quick_insert (VEC_char_base *vec_, unsigned ix_, char obj_ ) { char *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (char)); *slot_ = obj_; return slot_; } static __inline__ char VEC_char_base_ordered_remove (VEC_char_base *vec_, unsigned ix_ ) { char *slot_; char obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (char)); return obj_; } static __inline__ char VEC_char_base_unordered_remove (VEC_char_base *vec_, unsigned ix_ ) { char *slot_; char obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_char_base_block_remove (VEC_char_base *vec_, unsigned ix_, unsigned len_ ) { char *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (char)); } static __inline__ char *VEC_char_base_address (VEC_char_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_char_base_lower_bound (VEC_char_base *vec_, const char obj_, unsigned char (*lessthan_)(const char, const char) ) { unsigned int len_ = VEC_char_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { char middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_char_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
 typedef struct VEC_char_heap { VEC_char_base base; } VEC_char_heap; static __inline__ VEC_char_heap *VEC_char_heap_alloc (int alloc_ ) { return (VEC_char_heap *) vec_heap_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) ); } static __inline__ VEC_char_heap *VEC_char_heap_copy (VEC_char_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_char_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_char_heap *)(vec_heap_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (char) * len_); } return new_vec_; } static __inline__ void VEC_char_heap_free (VEC_char_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_char_heap_reserve (VEC_char_heap **vec_, int alloc_ ) { int extend = !VEC_char_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_char_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) ); return extend; } static __inline__ int VEC_char_heap_reserve_exact (VEC_char_heap **vec_, int alloc_ ) { int extend = !VEC_char_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_char_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) ); return extend; } static __inline__ void VEC_char_heap_safe_grow (VEC_char_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_char_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_char_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_char_heap_safe_grow_cleared (VEC_char_heap **vec_, int size_ ) { int oldsize = VEC_char_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_char_heap_safe_grow (vec_, size_ ); memset (&(VEC_char_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (char) * (size_ - oldsize)); } static __inline__ void VEC_char_heap_safe_splice (VEC_char_heap **dst_, VEC_char_base *src_ ) { if (src_) { VEC_char_heap_reserve_exact (dst_, src_->prefix.num ); VEC_char_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ char *VEC_char_heap_safe_push (VEC_char_heap **vec_, const char obj_ ) { VEC_char_heap_reserve (vec_, 1 ); return VEC_char_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ char *VEC_char_heap_safe_insert (VEC_char_heap **vec_, unsigned ix_, const char obj_ ) { VEC_char_heap_reserve (vec_, 1 ); return VEC_char_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 
@@ -25941,18 +26011,18 @@ typedef struct VEC_int_heap { VEC_int_base base; } VEC_int_heap; static __inline
 
 static __inline__ void VEC_unsigned_must_be_integral_type (void) { (void)~(unsigned)0; } typedef struct VEC_unsigned_base { struct vec_prefix prefix; unsigned vec[1]; } VEC_unsigned_base; typedef struct VEC_unsigned_none { VEC_unsigned_base base; } VEC_unsigned_none; static __inline__ unsigned VEC_unsigned_base_length (const VEC_unsigned_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ unsigned VEC_unsigned_base_last (const VEC_unsigned_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ unsigned VEC_unsigned_base_index (const VEC_unsigned_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_unsigned_base_iterate (const VEC_unsigned_base *vec_, unsigned ix_, unsigned *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (unsigned) 0; return 0; } } static __inline__ size_t VEC_unsigned_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_unsigned_base, vec) + alloc_ * sizeof(unsigned); } static __inline__ void VEC_unsigned_base_embedded_init (VEC_unsigned_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_unsigned_base_space (VEC_unsigned_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_unsigned_base_splice (VEC_unsigned_base *dst_, VEC_unsigned_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (unsigned)); dst_->prefix.num += len_; } } static __inline__ unsigned *VEC_unsigned_base_quick_push (VEC_unsigned_base *vec_, unsigned obj_ ) { unsigned *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ unsigned VEC_unsigned_base_pop (VEC_unsigned_base *vec_ ) { unsigned obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_unsigned_base_truncate (VEC_unsigned_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ unsigned VEC_unsigned_base_replace (VEC_unsigned_base *vec_, unsigned ix_, unsigned obj_ ) { unsigned old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ unsigned *VEC_unsigned_base_quick_insert (VEC_unsigned_base *vec_, unsigned ix_, unsigned obj_ ) { unsigned *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (unsigned)); *slot_ = obj_; return slot_; } static __inline__ unsigned VEC_unsigned_base_ordered_remove (VEC_unsigned_base *vec_, unsigned ix_ ) { unsigned *slot_; unsigned obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (unsigned)); return obj_; } static __inline__ unsigned VEC_unsigned_base_unordered_remove (VEC_unsigned_base *vec_, unsigned ix_ ) { unsigned *slot_; unsigned obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_unsigned_base_block_remove (VEC_unsigned_base *vec_, unsigned ix_, unsigned len_ ) { unsigned *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (unsigned)); } static __inline__ unsigned *VEC_unsigned_base_address (VEC_unsigned_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_unsigned_base_lower_bound (VEC_unsigned_base *vec_, const unsigned obj_, unsigned char (*lessthan_)(const unsigned, const unsigned) ) { unsigned int len_ = VEC_unsigned_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { unsigned middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_unsigned_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
 typedef struct VEC_unsigned_heap { VEC_unsigned_base base; } VEC_unsigned_heap; static __inline__ VEC_unsigned_heap *VEC_unsigned_heap_alloc (int alloc_ ) { return (VEC_unsigned_heap *) vec_heap_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); } static __inline__ VEC_unsigned_heap *VEC_unsigned_heap_copy (VEC_unsigned_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_unsigned_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_unsigned_heap *)(vec_heap_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (unsigned) * len_); } return new_vec_; } static __inline__ void VEC_unsigned_heap_free (VEC_unsigned_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_unsigned_heap_reserve (VEC_unsigned_heap **vec_, int alloc_ ) { int extend = !VEC_unsigned_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_unsigned_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); return extend; } static __inline__ int VEC_unsigned_heap_reserve_exact (VEC_unsigned_heap **vec_, int alloc_ ) { int extend = !VEC_unsigned_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_unsigned_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); return extend; } static __inline__ void VEC_unsigned_heap_safe_grow (VEC_unsigned_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_unsigned_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_unsigned_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_unsigned_heap_safe_grow_cleared (VEC_unsigned_heap **vec_, int size_ ) { int oldsize = VEC_unsigned_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_unsigned_heap_safe_grow (vec_, size_ ); memset (&(VEC_unsigned_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (unsigned) * (size_ - oldsize)); } static __inline__ void VEC_unsigned_heap_safe_splice (VEC_unsigned_heap **dst_, VEC_unsigned_base *src_ ) { if (src_) { VEC_unsigned_heap_reserve_exact (dst_, src_->prefix.num ); VEC_unsigned_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ unsigned *VEC_unsigned_heap_safe_push (VEC_unsigned_heap **vec_, const unsigned obj_ ) { VEC_unsigned_heap_reserve (vec_, 1 ); return VEC_unsigned_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ unsigned *VEC_unsigned_heap_safe_insert (VEC_unsigned_heap **vec_, unsigned ix_, const unsigned obj_ ) { VEC_unsigned_heap_reserve (vec_, 1 ); return VEC_unsigned_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-# 28 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/function.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/tm.h" 1
-# 29 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/function.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/hard-reg-set.h" 1
-# 42 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/hard-reg-set.h"
+# 28 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/function.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 1
+# 29 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/function.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hard-reg-set.h" 1
+# 42 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hard-reg-set.h"
 typedef unsigned long HARD_REG_ELT_TYPE;
-# 60 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/hard-reg-set.h"
+# 60 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hard-reg-set.h"
 struct hard_reg_set_container
 {
   HARD_REG_ELT_TYPE set;
 };
-# 122 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/hard-reg-set.h"
+# 122 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hard-reg-set.h"
 static __inline__ unsigned char
 hard_reg_set_subset_p (const HARD_REG_ELT_TYPE x, const HARD_REG_ELT_TYPE y)
 {
@@ -25976,7 +26046,7 @@ hard_reg_set_empty_p (const HARD_REG_ELT_TYPE x)
 {
   return x == ((HARD_REG_ELT_TYPE) (0));
 }
-# 492 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/hard-reg-set.h"
+# 492 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hard-reg-set.h"
 typedef struct
 {
 
@@ -26062,7 +26132,7 @@ hard_reg_set_iter_next (hard_reg_set_iterator *iter, unsigned *regno)
   iter->bits >>= 1;
   *regno += 1;
 }
-# 591 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/hard-reg-set.h"
+# 591 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hard-reg-set.h"
 extern char global_regs[53];
 
 struct target_hard_regs {
@@ -26143,9 +26213,9 @@ struct target_hard_regs {
 };
 
 extern struct target_hard_regs default_target_hard_regs;
-# 718 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/hard-reg-set.h"
+# 718 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hard-reg-set.h"
 extern const char * reg_class_names[];
-# 30 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/function.h" 2
+# 30 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/function.h" 2
 
 
 
@@ -26204,7 +26274,7 @@ struct emit_status {
 
   unsigned char * regno_pointer_align;
 };
-# 98 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/function.h"
+# 98 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/function.h"
 extern rtx * regno_reg_rtx;
 
 
@@ -26217,7 +26287,7 @@ struct expr_status {
 
 
   int x_pending_stack_adjust;
-# 126 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/function.h"
+# 126 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/function.h"
   int x_inhibit_defer_pop;
 
 
@@ -26255,7 +26325,7 @@ struct rtl_eh {
 
   VEC_call_site_record_gc *call_site_record[2];
 };
-# 171 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/function.h"
+# 171 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/function.h"
 struct gimple_df;
 struct temp_slot;
 typedef struct temp_slot *temp_slot_p;
@@ -26423,7 +26493,7 @@ struct rtl_data {
 
 
   unsigned int max_used_stack_slot_alignment;
-# 346 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/function.h"
+# 346 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/function.h"
   unsigned int stack_alignment_estimated;
 
 
@@ -26528,7 +26598,7 @@ struct rtl_data {
 
   HARD_REG_ELT_TYPE asm_clobbers;
 };
-# 466 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/function.h"
+# 466 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/function.h"
 extern struct rtl_data x_rtl;
 
 
@@ -26553,7 +26623,7 @@ struct stack_usage
 
   unsigned int has_unbounded_dynamic_stack_size : 1;
 };
-# 503 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/function.h"
+# 503 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/function.h"
 struct function {
   struct eh_status *eh;
 
@@ -26698,7 +26768,7 @@ add_local_decl (struct function *fun, tree d)
 {
   (VEC_tree_gc_safe_push(&(fun->local_decls),d ));
 }
-# 657 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/function.h"
+# 657 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/function.h"
 extern struct function *cfun;
 
 
@@ -26739,7 +26809,7 @@ extern void set_cfun (struct function *new_cfun);
 extern void push_cfun (struct function *new_cfun);
 extern void pop_cfun (void);
 extern void instantiate_decl_rtl (rtx x);
-# 708 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/function.h"
+# 708 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/function.h"
 extern void reorder_blocks (void);
 
 
@@ -26798,19 +26868,19 @@ extern unsigned char requires_stack_frame_p (rtx, HARD_REG_ELT_TYPE, HARD_REG_EL
 
 extern unsigned char optimize_function_for_size_p (struct function *);
 extern unsigned char optimize_function_for_speed_p (struct function *);
-# 28 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/hashtab.h" 1
-# 29 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/vec.h" 1
-# 30 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h" 2
-# 43 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h" 1
-# 25 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/splay-tree.h" 1
-# 41 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/splay-tree.h"
+# 28 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hashtab.h" 1
+# 29 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/vec.h" 1
+# 30 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h" 2
+# 43 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h" 1
+# 25 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/splay-tree.h" 1
+# 41 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/splay-tree.h"
   typedef unsigned long int libi_uhostptr_t;
   typedef long int libi_shostptr_t;
-# 62 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/splay-tree.h"
+# 62 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/splay-tree.h"
 typedef libi_uhostptr_t splay_tree_key;
 typedef libi_uhostptr_t splay_tree_value;
 
@@ -26912,9 +26982,9 @@ extern splay_tree_node splay_tree_min (splay_tree);
 extern int splay_tree_foreach (splay_tree, splay_tree_foreach_fn, void*);
 extern int splay_tree_compare_ints (splay_tree_key, splay_tree_key);
 extern int splay_tree_compare_pointers (splay_tree_key, splay_tree_key);
-# 26 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cpplib.h" 1
-# 31 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cpplib.h"
+# 26 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cpplib.h" 1
+# 31 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cpplib.h"
 typedef struct cpp_reader cpp_reader;
 typedef struct cpp_buffer cpp_buffer;
 typedef struct cpp_options cpp_options;
@@ -26927,7 +26997,7 @@ typedef struct cpp_dir cpp_dir;
 
 struct answer;
 struct _cpp_file;
-# 153 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cpplib.h"
+# 153 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cpplib.h"
 enum cpp_ttype
 {
   CPP_EQ, CPP_NOT, CPP_GREATER, CPP_LESS, CPP_PLUS, CPP_MINUS, CPP_MULT, CPP_DIV, CPP_MOD, CPP_AND, CPP_OR, CPP_XOR, CPP_RSHIFT, CPP_LSHIFT, CPP_COMPL, CPP_AND_AND, CPP_OR_OR, CPP_QUERY, CPP_COLON, CPP_COMMA, CPP_OPEN_PAREN, CPP_CLOSE_PAREN, CPP_EOF, CPP_EQ_EQ, CPP_NOT_EQ, CPP_GREATER_EQ, CPP_LESS_EQ, CPP_PLUS_EQ, CPP_MINUS_EQ, CPP_MULT_EQ, CPP_DIV_EQ, CPP_MOD_EQ, CPP_AND_EQ, CPP_OR_EQ, CPP_XOR_EQ, CPP_RSHIFT_EQ, CPP_LSHIFT_EQ, CPP_HASH, CPP_PASTE, CPP_OPEN_SQUARE, CPP_CLOSE_SQUARE, CPP_OPEN_BRACE, CPP_CLOSE_BRACE, CPP_SEMICOLON, CPP_ELLIPSIS, CPP_PLUS_PLUS, CPP_MINUS_MINUS, CPP_DEREF, CPP_DOT, CPP_SCOPE, CPP_DEREF_STAR, CPP_DOT_STAR, CPP_ATSIGN, CPP_NAME, CPP_AT_NAME, CPP_NUMBER, CPP_CHAR, CPP_WCHAR, CPP_CHAR16, CPP_CHAR32, CPP_OTHER, CPP_STRING, CPP_WSTRING, CPP_STRING16, CPP_STRING32, CPP_UTF8STRING, CPP_OBJC_STRING, CPP_HEADER_NAME, CPP_CHAR_USERDEF, CPP_WCHAR_USERDEF, CPP_CHAR16_USERDEF, CPP_CHAR32_USERDEF, CPP_STRING_USERDEF, CPP_WSTRING_USERDEF, CPP_STRING16_USERDEF, CPP_STRING32_USERDEF, CPP_UTF8STRING_USERDEF, CPP_COMMENT, CPP_MACRO_ARG, CPP_PRAGMA, CPP_PRAGMA_EOL, CPP_PADDING,
@@ -26952,7 +27022,7 @@ struct cpp_string {
   unsigned int len;
   const unsigned char *text;
 };
-# 195 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cpplib.h"
+# 195 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cpplib.h"
 enum cpp_token_fld_kind {
   CPP_TOKEN_FLD_NODE,
   CPP_TOKEN_FLD_SOURCE,
@@ -27011,7 +27081,7 @@ struct cpp_token {
 
 
 extern enum cpp_token_fld_kind cpp_token_val_index (cpp_token *tok);
-# 269 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cpplib.h"
+# 269 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cpplib.h"
 typedef unsigned int cppchar_t;
 typedef int cppchar_signed_t;
 
@@ -27288,7 +27358,7 @@ struct cpp_callbacks
 
   unsigned char (*user_builtin_macro) (cpp_reader *, cpp_hashnode *);
 };
-# 553 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cpplib.h"
+# 553 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cpplib.h"
 struct cpp_dir
 {
 
@@ -27324,7 +27394,7 @@ struct cpp_dir
   ino_t ino;
   dev_t dev;
 };
-# 614 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cpplib.h"
+# 614 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cpplib.h"
 enum node_type
 {
   NT_VOID = 0,
@@ -27349,7 +27419,7 @@ enum cpp_builtin_type
   BT_FIRST_USER,
   BT_LAST_USER = BT_FIRST_USER + 31
 };
-# 646 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cpplib.h"
+# 646 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cpplib.h"
 enum {
   NTV_MACRO,
   NTV_ANSWER,
@@ -27357,7 +27427,7 @@ enum {
   NTV_ARGUMENT,
   NTV_NONE
 };
-# 665 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cpplib.h"
+# 665 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cpplib.h"
 union _cpp_hashnode_value {
 
   cpp_macro * macro;
@@ -27501,7 +27571,7 @@ struct cpp_num
   unsigned char unsignedp;
   unsigned char overflow;
 };
-# 849 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cpplib.h"
+# 849 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cpplib.h"
 extern unsigned cpp_classify_number (cpp_reader *, const cpp_token *,
          const char **);
 
@@ -27698,19 +27768,19 @@ extern unsigned char cpp_userdef_char_p
   (enum cpp_ttype type);
 extern const char * cpp_get_userdef_suffix
   (const cpp_token *);
-# 27 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h" 2
-# 43 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/diagnostic-core.h" 1
-# 28 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/diagnostic-core.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/bversion.h" 1
-# 29 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/diagnostic-core.h" 2
+# 27 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h" 2
+# 43 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/diagnostic-core.h" 1
+# 28 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/diagnostic-core.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/bversion.h" 1
+# 29 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/diagnostic-core.h" 2
 
 
 typedef enum
 {
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/diagnostic.def" 1
-# 25 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/diagnostic.def"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/diagnostic.def" 1
+# 25 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/diagnostic.def"
 DK_UNSPECIFIED,
 
 
@@ -27731,7 +27801,7 @@ DK_DEBUG,
 
 DK_PEDWARN,
 DK_PERMERROR,
-# 35 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/diagnostic-core.h" 2
+# 35 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/diagnostic-core.h" 2
 
   DK_LAST_DIAGNOSTIC_KIND,
 
@@ -27742,7 +27812,7 @@ DK_PERMERROR,
 extern const char *progname;
 
 extern const char *trim_filename (const char *);
-# 59 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/diagnostic-core.h"
+# 59 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/diagnostic-core.h"
 extern void internal_error (const char *, ...) __attribute__ ((__format__ (__gcc_cxxdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)))
      __attribute__ ((__noreturn__));
 
@@ -27773,8 +27843,8 @@ extern unsigned char seen_error (void);
 
 extern void fnotice (FILE *, const char *, ...)
      __attribute__ ((__format__ (__printf__, 2, 3))) __attribute__ ((__nonnull__ (2)));
-# 44 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h" 2
-# 63 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h"
+# 44 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h" 2
+# 63 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h"
 enum rid
 {
 
@@ -27916,7 +27986,7 @@ enum rid
   RID_FIRST_PATTR = RID_GETTER,
   RID_LAST_PATTR = RID_NONATOMIC
 };
-# 231 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h"
+# 231 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h"
 extern tree *ridpointers;
 
 
@@ -27992,7 +28062,7 @@ enum c_tree_index
 
     CTI_MAX
 };
-# 316 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h"
+# 316 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h"
 struct c_common_identifier {
   struct tree_common common;
   struct cpp_hashnode node;
@@ -28006,12 +28076,12 @@ struct c_common_resword
   __extension__ enum rid const rid : 16;
   const unsigned int disable : 16;
 };
-# 370 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h"
+# 370 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h"
 extern const struct c_common_resword c_common_reswords[];
 
 
 extern const unsigned int num_c_common_reswords;
-# 440 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h"
+# 440 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h"
 extern tree c_global_trees[CTI_MAX];
 
 
@@ -28060,7 +28130,7 @@ typedef enum ref_operator {
 struct stmt_tree_s {
 
   VEC_tree_gc *x_cur_stmt_list;
-# 498 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h"
+# 498 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h"
   int stmts_are_full_exprs_p;
 };
 
@@ -28078,7 +28148,7 @@ struct c_language_function {
 
   VEC_tree_gc *local_typedefs;
 };
-# 532 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h"
+# 532 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h"
 extern void (*lang_post_pch_load) (void);
 
 extern void push_file_scope (void);
@@ -28143,7 +28213,7 @@ extern int warn_unknown_pragmas;
 
 
 extern int warn_format;
-# 604 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h"
+# 604 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h"
 extern int flag_cond_mismatch;
 
 
@@ -28161,13 +28231,13 @@ extern int flag_isoc11;
 
 
 extern int flag_hosted;
-# 629 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h"
+# 629 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h"
 extern int print_struct_values;
 
 
 
 extern const char *constant_string_class_name;
-# 642 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h"
+# 642 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h"
 extern int flag_use_repository;
 
 
@@ -28202,7 +28272,7 @@ extern int c_inhibit_evaluation_warnings;
 
 
 extern unsigned char done_lexing;
-# 693 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h"
+# 693 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h"
 struct visibility_flags
 {
   unsigned inpragma : 1;
@@ -28347,7 +28417,7 @@ extern long c_common_to_target_charset (long);
 extern void c_parse_file (void);
 
 extern void warn_for_omitted_condop (location_t, tree);
-# 872 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h"
+# 872 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h"
 extern tree do_case (location_t, tree, tree);
 extern tree build_stmt (location_t, enum tree_code, ...);
 extern tree build_real_imag_expr (location_t, enum tree_code, tree);
@@ -28556,7 +28626,7 @@ c_tree_chain_next (tree t)
 
 
 extern int parse_tm_stmt_attr (tree, int);
-# 1092 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h"
+# 1092 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h"
 extern int tm_attr_to_mask (tree);
 extern tree tm_mask_to_attr (int);
 extern tree find_tm_attribute (tree);
@@ -28569,13 +28639,13 @@ struct tree_userdef_literal {
   tree value;
   tree num_string;
 };
-# 1117 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-common.h"
+# 1117 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h"
 extern tree build_userdef_literal (tree suffix_id, tree value, tree num_string);
-# 44 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/diagnostic.h" 1
-# 25 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/diagnostic.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/pretty-print.h" 1
-# 33 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/pretty-print.h"
+# 44 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/diagnostic.h" 1
+# 25 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/diagnostic.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/pretty-print.h" 1
+# 33 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/pretty-print.h"
 typedef struct
 {
   const char *format_spec;
@@ -28664,11 +28734,11 @@ typedef struct
 
   int line_cutoff;
 } pp_wrapping_mode_t;
-# 135 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/pretty-print.h"
+# 135 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/pretty-print.h"
 typedef struct pretty_print_info pretty_printer;
 typedef unsigned char (*printer_fn) (pretty_printer *, text_info *, const char *,
        int, unsigned char, unsigned char, unsigned char);
-# 159 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/pretty-print.h"
+# 159 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/pretty-print.h"
 struct pretty_print_info
 {
 
@@ -28689,7 +28759,7 @@ struct pretty_print_info
 
 
   pp_wrapping_mode_t wrapping;
-# 188 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/pretty-print.h"
+# 188 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/pretty-print.h"
   printer_fn format_decoder;
 
 
@@ -28702,7 +28772,7 @@ struct pretty_print_info
 
   unsigned char translate_identifiers;
 };
-# 297 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/pretty-print.h"
+# 297 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/pretty-print.h"
 extern void pp_construct (pretty_printer *, const char *, int);
 extern void pp_base_set_line_maximum_length (pretty_printer *, int);
 extern void pp_base_set_prefix (pretty_printer *, const char *);
@@ -28713,7 +28783,7 @@ extern const char *pp_base_formatted_text (pretty_printer *);
 extern const char *pp_base_last_position_in_text (const pretty_printer *);
 extern void pp_base_emit_prefix (pretty_printer *);
 extern void pp_base_append_text (pretty_printer *, const char *, const char *);
-# 323 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/pretty-print.h"
+# 323 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/pretty-print.h"
 extern void pp_printf (pretty_printer *, const char *, ...)
      __attribute__ ((__format__ (__gcc_cxxdiag__, 2 ,3))) __attribute__ ((__nonnull__ (2)));
 
@@ -28745,9 +28815,9 @@ pp_set_verbatim_wrapping_ (pretty_printer *pp)
 extern const char *identifier_to_locale (const char *);
 extern void *(*identifier_to_locale_alloc) (size_t);
 extern void (*identifier_to_locale_free) (void *);
-# 26 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/diagnostic.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/diagnostic-core.h" 1
-# 27 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/diagnostic.h" 2
+# 26 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/diagnostic.h" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/diagnostic-core.h" 1
+# 27 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/diagnostic.h" 2
 
 
 
@@ -28854,7 +28924,7 @@ struct diagnostic_context
 
 
   unsigned int max_errors;
-# 141 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/diagnostic.h"
+# 141 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/diagnostic.h"
   diagnostic_starter_fn begin_diagnostic;
 
 
@@ -28896,9 +28966,9 @@ diagnostic_inhibit_notes (diagnostic_context * context)
 {
   context->inhibit_notes_p = 1;
 }
-# 224 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/diagnostic.h"
+# 224 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/diagnostic.h"
 extern diagnostic_context *global_dc;
-# 254 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/diagnostic.h"
+# 254 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/diagnostic.h"
 extern void diagnostic_initialize (diagnostic_context *, int);
 extern void diagnostic_finish (diagnostic_context *);
 extern void diagnostic_report_current_module (diagnostic_context *, location_t);
@@ -28926,10 +28996,10 @@ void default_diagnostic_finalizer (diagnostic_context *, diagnostic_info *);
 
 
 extern char *file_name_as_prefix (const char *);
-# 45 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h" 2
+# 45 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h" 2
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/name-lookup.h" 1
-# 29 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/name-lookup.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/name-lookup.h" 1
+# 29 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/name-lookup.h"
 typedef struct binding_table_s *binding_table;
 typedef struct binding_entry_s *binding_entry;
 
@@ -28941,7 +29011,7 @@ struct binding_entry_s {
   tree name;
   tree type;
 };
-# 48 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/name-lookup.h"
+# 48 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/name-lookup.h"
 extern void binding_table_foreach (binding_table, bt_foreach_proc, void *);
 extern binding_entry binding_table_find (binding_table, tree);
 
@@ -28951,7 +29021,7 @@ typedef struct cxx_binding cxx_binding;
 
 
 typedef struct cp_binding_level cp_binding_level;
-# 66 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/name-lookup.h"
+# 66 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/name-lookup.h"
 struct cxx_binding {
 
   cxx_binding *previous;
@@ -29048,7 +29118,7 @@ typedef struct cp_label_binding {
 
 typedef struct VEC_cp_label_binding_base { struct vec_prefix prefix; cp_label_binding vec[1]; } VEC_cp_label_binding_base; typedef struct VEC_cp_label_binding_none { VEC_cp_label_binding_base base; } VEC_cp_label_binding_none; static __inline__ unsigned VEC_cp_label_binding_base_length (const VEC_cp_label_binding_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ cp_label_binding *VEC_cp_label_binding_base_last (VEC_cp_label_binding_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return &vec_->vec[vec_->prefix.num - 1]; } static __inline__ cp_label_binding *VEC_cp_label_binding_base_index (VEC_cp_label_binding_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return &vec_->vec[ix_]; } static __inline__ int VEC_cp_label_binding_base_iterate (VEC_cp_label_binding_base *vec_, unsigned ix_, cp_label_binding **ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static __inline__ size_t VEC_cp_label_binding_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_cp_label_binding_base, vec) + alloc_ * sizeof(cp_label_binding); } static __inline__ void VEC_cp_label_binding_base_embedded_init (VEC_cp_label_binding_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_cp_label_binding_base_space (VEC_cp_label_binding_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_cp_label_binding_base_splice (VEC_cp_label_binding_base *dst_, VEC_cp_label_binding_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (cp_label_binding)); dst_->prefix.num += len_; } } static __inline__ cp_label_binding *VEC_cp_label_binding_base_quick_push (VEC_cp_label_binding_base *vec_, const cp_label_binding *obj_ ) { cp_label_binding *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_cp_label_binding_base_pop (VEC_cp_label_binding_base *vec_ ) { (void)(vec_->prefix.num); --vec_->prefix.num; } static __inline__ void VEC_cp_label_binding_base_truncate (VEC_cp_label_binding_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ cp_label_binding *VEC_cp_label_binding_base_replace (VEC_cp_label_binding_base *vec_, unsigned ix_, const cp_label_binding *obj_ ) { cp_label_binding *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ cp_label_binding *VEC_cp_label_binding_base_quick_insert (VEC_cp_label_binding_base *vec_, unsigned ix_, const cp_label_binding *obj_ ) { cp_label_binding *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (cp_label_binding)); if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_cp_label_binding_base_ordered_remove (VEC_cp_label_binding_base *vec_, unsigned ix_ ) { cp_label_binding *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (cp_label_binding)); } static __inline__ void VEC_cp_label_binding_base_unordered_remove (VEC_cp_label_binding_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->prefix.num); vec_->vec[ix_] = vec_->vec[--vec_->prefix.num]; } static __inline__ void VEC_cp_label_binding_base_block_remove (VEC_cp_label_binding_base *vec_, unsigned ix_, unsigned len_ ) { cp_label_binding *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (cp_label_binding)); } static __inline__ cp_label_binding *VEC_cp_label_binding_base_address (VEC_cp_label_binding_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_cp_label_binding_base_lower_bound (VEC_cp_label_binding_base *vec_, const cp_label_binding *obj_, unsigned char (*lessthan_)(const cp_label_binding *, const cp_label_binding *) ) { unsigned int len_ = VEC_cp_label_binding_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { cp_label_binding *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_cp_label_binding_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
 typedef struct VEC_cp_label_binding_gc { VEC_cp_label_binding_base base; } VEC_cp_label_binding_gc; static __inline__ VEC_cp_label_binding_gc *VEC_cp_label_binding_gc_alloc (int alloc_ ) { return (VEC_cp_label_binding_gc *) vec_gc_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_cp_label_binding_gc, base.vec), sizeof (cp_label_binding) ); } static __inline__ VEC_cp_label_binding_gc *VEC_cp_label_binding_gc_copy (VEC_cp_label_binding_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_cp_label_binding_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_cp_label_binding_gc *)(vec_gc_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_cp_label_binding_gc, base.vec), sizeof (cp_label_binding) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (cp_label_binding) * len_); } return new_vec_; } static __inline__ void VEC_cp_label_binding_gc_free (VEC_cp_label_binding_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_cp_label_binding_gc_reserve (VEC_cp_label_binding_gc **vec_, int alloc_ ) { int extend = !VEC_cp_label_binding_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cp_label_binding_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_cp_label_binding_gc, base.vec), sizeof (cp_label_binding) ); return extend; } static __inline__ int VEC_cp_label_binding_gc_reserve_exact (VEC_cp_label_binding_gc **vec_, int alloc_ ) { int extend = !VEC_cp_label_binding_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cp_label_binding_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_cp_label_binding_gc, base.vec), sizeof (cp_label_binding) ); return extend; } static __inline__ void VEC_cp_label_binding_gc_safe_grow (VEC_cp_label_binding_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_cp_label_binding_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_cp_label_binding_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_cp_label_binding_gc_safe_grow_cleared (VEC_cp_label_binding_gc **vec_, int size_ ) { int oldsize = VEC_cp_label_binding_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_cp_label_binding_gc_safe_grow (vec_, size_ ); memset (&(VEC_cp_label_binding_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (cp_label_binding) * (size_ - oldsize)); } static __inline__ void VEC_cp_label_binding_gc_safe_splice (VEC_cp_label_binding_gc **dst_, VEC_cp_label_binding_base *src_ ) { if (src_) { VEC_cp_label_binding_gc_reserve_exact (dst_, src_->prefix.num ); VEC_cp_label_binding_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ cp_label_binding *VEC_cp_label_binding_gc_safe_push (VEC_cp_label_binding_gc **vec_, const cp_label_binding *obj_ ) { VEC_cp_label_binding_gc_reserve (vec_, 1 ); return VEC_cp_label_binding_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ cp_label_binding *VEC_cp_label_binding_gc_safe_insert (VEC_cp_label_binding_gc **vec_, unsigned ix_, const cp_label_binding *obj_ ) { VEC_cp_label_binding_gc_reserve (vec_, 1 ); return VEC_cp_label_binding_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-# 187 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/name-lookup.h"
+# 187 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/name-lookup.h"
 struct cp_binding_level {
 
 
@@ -29127,7 +29197,7 @@ struct cp_binding_level {
 
 
 };
-# 278 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/name-lookup.h"
+# 278 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/name-lookup.h"
 extern tree global_namespace;
 extern tree global_scope_name;
 
@@ -29224,8 +29294,8 @@ is_typename_at_global_scope (tree id)
 
   return global_value && ((enum tree_code) (global_value)->base.code) == TYPE_DECL;
 }
-# 47 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h" 2
-# 229 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 47 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h" 2
+# 229 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 struct lang_identifier {
   struct c_common_identifier c_common;
   cxx_binding *namespace_bindings;
@@ -29233,7 +29303,7 @@ struct lang_identifier {
   tree class_template_info;
   tree label_value;
 };
-# 246 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 246 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 struct template_parm_index_s {
   struct tree_common common;
   int index;
@@ -29249,12 +29319,12 @@ struct ptrmem_cst {
   tree member;
 };
 typedef struct ptrmem_cst * ptrmem_cst_t;
-# 331 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 331 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 struct tree_overload {
   struct tree_common common;
   tree function;
 };
-# 362 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 362 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 struct tree_baselink {
   struct tree_common common;
   tree binfo;
@@ -29348,19 +29418,19 @@ typedef enum impl_conv_void {
   ICV_STATEMENT,
   ICV_THIRD_IN_FOR
 } impl_conv_void;
-# 522 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 522 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 struct tree_default_arg {
   struct tree_common common;
   struct cp_token_cache *tokens;
   VEC_tree_gc *instantiations;
 };
-# 538 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 538 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 struct tree_deferred_noexcept {
   struct tree_base base;
   tree pattern;
   tree args;
 };
-# 560 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 560 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 struct tree_static_assert {
   struct tree_common common;
   tree condition;
@@ -29403,20 +29473,20 @@ typedef enum cp_trait_kind
   CPTK_IS_UNION,
   CPTK_UNDERLYING_TYPE
 } cp_trait_kind;
-# 614 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 614 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 struct tree_trait_expr {
   struct tree_common common;
   tree type1;
   tree type2;
   enum cp_trait_kind kind;
 };
-# 630 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 630 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 enum cp_lambda_default_capture_mode_type {
   CPLD_NONE,
   CPLD_COPY,
   CPLD_REFERENCE
 };
-# 696 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 696 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 struct tree_lambda_expr
 {
   struct tree_typed typed;
@@ -29430,7 +29500,7 @@ struct tree_lambda_expr
   enum cp_lambda_default_capture_mode_type default_capture_mode;
   int discriminator;
 };
-# 724 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 724 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 struct qualified_typedef_usage_s {
   tree typedef_decl;
   tree context;
@@ -29564,7 +29634,7 @@ enum cp_tree_index
 };
 
 extern tree cp_global_trees[CPTI_MAX];
-# 974 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 974 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 struct saved_scope {
   VEC_cxx_saved_binding_gc *old_bindings;
   tree old_namespace;
@@ -29598,7 +29668,7 @@ struct saved_scope {
 
   struct saved_scope *prev;
 };
-# 1056 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 1056 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 extern struct saved_scope *scope_chain;
 
 struct cxx_int_tree_map {
@@ -29636,13 +29706,13 @@ struct language_function {
   VEC_tree_gc *x_local_names;
   htab_t extern_decl_map;
 };
-# 1174 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 1174 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 extern unsigned char statement_code_p[MAX_TREE_CODES];
 
 
 
 enum languages { lang_c, lang_cplusplus, lang_java };
-# 1289 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 1289 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 typedef struct tree_pair_s {
   tree purpose;
   tree value;
@@ -29666,7 +29736,7 @@ struct lang_type_header {
 
   unsigned int spare : 1;
 };
-# 1326 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 1326 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 struct lang_type_class {
   struct lang_type_header h;
 
@@ -29721,7 +29791,7 @@ struct lang_type_class {
   unsigned has_complex_move_assign : 1;
   unsigned has_constexpr_ctor : 1;
   unsigned is_final : 1;
-# 1388 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 1388 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
   unsigned dummy : 2;
 
   tree primary_base;
@@ -29763,7 +29833,7 @@ struct lang_type {
     struct lang_type_ptrmem ptrmem;
   } u;
 };
-# 1866 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 1866 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 struct lang_decl_base {
   unsigned selector : 16;
   __extension__ enum languages language : 4;
@@ -29779,7 +29849,7 @@ struct lang_decl_base {
   unsigned u2sel : 1;
 
 };
-# 1894 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 1894 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 struct lang_decl_min {
   struct lang_decl_base base;
 
@@ -29889,10 +29959,10 @@ struct lang_decl {
     struct lang_decl_parm parm;
   } u;
 };
-# 2517 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 2517 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 extern tree decl_shadowed_for_var_lookup (tree);
 extern void decl_shadowed_for_var_insert (tree, tree);
-# 2962 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 2962 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 typedef struct aggr_init_expr_arg_iterator_d {
   tree t;
   int n;
@@ -29941,7 +30011,7 @@ more_aggr_init_expr_args_p (const aggr_init_expr_arg_iterator *iter)
 {
   return (iter->i < iter->n);
 }
-# 4026 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 4026 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 enum tag_types {
   none_type = 0,
   record_type,
@@ -30013,7 +30083,7 @@ typedef enum special_function_kind {
 
   sfk_conversion
 } special_function_kind;
-# 4115 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 4115 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 typedef enum linkage_kind {
   lk_none,
   lk_internal,
@@ -30129,7 +30199,7 @@ extern int current_class_depth;
 
 
 extern VEC_tree_gc *local_classes;
-# 4340 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 4340 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 extern int at_eof;
 
 
@@ -30139,7 +30209,7 @@ extern int at_eof;
 extern tree static_aggregates;
 
 enum overload_flags { NO_SPECIAL = 0, DTOR_FLAG, TYPENAME_FLAG };
-# 4583 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h"
+# 4583 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 extern void init_reswords (void);
 
 typedef struct operator_name_info_t {
@@ -30380,7 +30450,7 @@ static __inline__ tree
 type_of_this_parm (const_tree fntype)
 {
   function_args_iterator iter;
-  ((void)(!(((enum tree_code) (fntype)->base.code) == METHOD_TYPE) ? fancy_abort ("/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/cp/cp-tree.h", 4823, __FUNCTION__), 0 : 0));
+  ((void)(!(((enum tree_code) (fntype)->base.code) == METHOD_TYPE) ? fancy_abort ("/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h", 4823, __FUNCTION__), 0 : 0));
   function_args_iter_init (&iter, fntype);
   return function_args_iter_cond (&iter);
 }
@@ -31114,7 +31184,7 @@ extern tree finish_fname (tree);
 extern void finish_translation_unit (void);
 extern tree finish_template_type_parm (tree, tree);
 extern tree finish_template_template_parm (tree, tree);
-extern tree begin_class_definition (tree, tree);
+extern tree begin_class_definition (tree);
 extern void finish_template_decl (tree);
 extern tree finish_template_type (tree, tree, int);
 extern tree finish_base_specifier (tree, tree, unsigned char);
@@ -31490,8 +31560,8 @@ extern unsigned char cxx_omp_privatize_by_reference (const_tree);
 extern void suggest_alternatives_for (location_t, tree);
 extern tree strip_using_decl (tree);
 # 32 "../../../src/plugin-utils.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-pragma.h" 1
-# 28 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-pragma.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-pragma.h" 1
+# 28 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-pragma.h"
 typedef enum pragma_kind {
   PRAGMA_NONE = 0,
 
@@ -31596,7 +31666,7 @@ extern tree maybe_apply_renaming_pragma (tree, tree);
 extern void add_to_renaming_pragma_list (tree, tree);
 
 extern enum cpp_ttype pragma_lex (tree *);
-# 144 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/c-family/c-pragma.h"
+# 144 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-pragma.h"
 extern enum cpp_ttype c_lex_with_flags (tree *, location_t *, unsigned char *,
      int);
 
@@ -31605,13 +31675,13 @@ extern void c_pp_lookup_pragma (unsigned int, const char **, const char **);
 extern tree pragma_extern_prefix;
 # 33 "../../../src/plugin-utils.h" 2
 # 42 "../../../src/plugin-utils.h"
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h" 1
-# 47 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h" 1
+# 47 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 enum rtx_code {
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.def" 1
-# 82 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.def"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.def" 1
+# 82 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.def"
 UNKNOWN ,
 
 
@@ -31644,7 +31714,7 @@ SEQUENCE ,
 
 
 ADDRESS ,
-# 126 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.def"
+# 126 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.def"
 DEBUG_INSN ,
 
 
@@ -31678,7 +31748,7 @@ CODE_LABEL ,
 
 
 NOTE ,
-# 171 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.def"
+# 171 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.def"
 COND_EXEC ,
 
 
@@ -31691,9 +31761,9 @@ PARALLEL ,
 
 
 ASM_INPUT ,
-# 196 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.def"
+# 196 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.def"
 ASM_OPERANDS ,
-# 214 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.def"
+# 214 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.def"
 UNSPEC ,
 
 
@@ -31702,15 +31772,15 @@ UNSPEC_VOLATILE ,
 
 
 ADDR_VEC ,
-# 246 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.def"
+# 246 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.def"
 ADDR_DIFF_VEC ,
-# 257 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.def"
+# 257 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.def"
 PREFETCH ,
-# 269 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.def"
+# 269 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.def"
 SET ,
-# 278 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.def"
+# 278 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.def"
 USE ,
-# 287 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.def"
+# 287 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.def"
 CLOBBER ,
 
 
@@ -31771,7 +31841,7 @@ CONST ,
 
 
 PC ,
-# 356 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.def"
+# 356 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.def"
 REG ,
 
 
@@ -31784,7 +31854,7 @@ SCRATCH ,
 
 
 SUBREG ,
-# 380 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.def"
+# 380 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.def"
 STRICT_LOW_PART ,
 
 
@@ -31821,7 +31891,7 @@ SYMBOL_REF ,
 
 
 CC0 ,
-# 427 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.def"
+# 427 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.def"
 IF_THEN_ELSE ,
 
 
@@ -31871,17 +31941,17 @@ ROTATE ,
 ASHIFTRT ,
 LSHIFTRT ,
 ROTATERT ,
-# 484 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.def"
+# 484 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.def"
 SMIN ,
 SMAX ,
 UMIN ,
 UMAX ,
-# 496 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.def"
+# 496 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.def"
 PRE_DEC ,
 PRE_INC ,
 POST_DEC ,
 POST_INC ,
-# 513 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.def"
+# 513 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.def"
 PRE_MODIFY ,
 POST_MODIFY ,
 
@@ -31945,7 +32015,7 @@ UNSIGNED_FLOAT ,
 
 
 UNSIGNED_FIX ,
-# 585 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.def"
+# 585 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.def"
 FRACT_CONVERT ,
 
 
@@ -31998,7 +32068,7 @@ POPCOUNT ,
 
 
 PARITY ,
-# 648 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.def"
+# 648 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.def"
 SIGN_EXTRACT ,
 
 
@@ -32090,11 +32160,11 @@ ENTRY_VALUE ,
 
 
 DEBUG_PARAMETER_REF ,
-# 51 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h" 2
+# 51 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h" 2
 
 
   LAST_AND_UNUSED_RTX_CODE};
-# 62 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 62 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 enum rtx_class {
 
 
@@ -32120,7 +32190,7 @@ enum rtx_class {
   RTX_BITFIELD_OPS,
   RTX_AUTOINC
 };
-# 100 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 100 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 extern const unsigned char rtx_length[((int) LAST_AND_UNUSED_RTX_CODE)];
 
 
@@ -32193,7 +32263,7 @@ typedef struct mem_attrs
 
   unsigned char size_known_p;
 } mem_attrs;
-# 180 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 180 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 typedef struct reg_attrs {
   tree decl;
   long offset;
@@ -32246,9 +32316,9 @@ struct object_block {
 
 
   long size;
-# 241 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 241 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
   VEC_rtx_gc *objects;
-# 251 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 251 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
   VEC_rtx_gc *anchors;
 };
 
@@ -32274,13 +32344,13 @@ struct
 
 
   unsigned int call : 1;
-# 285 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 285 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
   unsigned int unchanging : 1;
-# 298 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 298 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
   unsigned int volatil : 1;
-# 312 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 312 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
   unsigned int in_struct : 1;
-# 321 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 321 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
   unsigned int used : 1;
 
 
@@ -32308,17 +32378,17 @@ struct
     struct fixed_value fv;
   } u;
 };
-# 384 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 384 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 struct rtvec_def {
   int num_elem;
   rtx elem[1];
 };
-# 874 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 874 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 enum reg_note
 {
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/reg-notes.def" 1
-# 33 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/reg-notes.def"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/reg-notes.def" 1
+# 33 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/reg-notes.def"
 REG_DEP_TRUE,
 
 
@@ -32328,7 +32398,7 @@ REG_DEAD,
 
 
 REG_INC,
-# 52 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/reg-notes.def"
+# 52 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/reg-notes.def"
 REG_EQUIV,
 
 
@@ -32345,7 +32415,7 @@ REG_NONNEG,
 
 
 REG_UNUSED,
-# 76 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/reg-notes.def"
+# 76 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/reg-notes.def"
 REG_CC_SETTER,
 REG_CC_USER,
 
@@ -32387,7 +32457,7 @@ REG_BR_PRED,
 
 
 REG_FRAME_RELATED_EXPR,
-# 126 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/reg-notes.def"
+# 126 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/reg-notes.def"
 REG_CFA_DEF_CFA,
 
 
@@ -32477,18 +32547,18 @@ REG_TM,
 
 
 REG_ARGS_SIZE,
-# 878 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h" 2
+# 878 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h" 2
 
   REG_NOTE_MAX
 };
-# 889 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 889 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 extern const char * const reg_note_name[];
-# 992 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 992 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 enum insn_note
 {
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/insn-notes.def" 1
-# 35 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/insn-notes.def"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/insn-notes.def" 1
+# 35 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/insn-notes.def"
 NOTE_INSN_DELETED,
 
 
@@ -32541,7 +32611,7 @@ NOTE_INSN_CFI,
 
 
 NOTE_INSN_CFI_LABEL,
-# 996 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h" 2
+# 996 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h" 2
 
 
   NOTE_INSN_MAX
@@ -32550,7 +32620,7 @@ NOTE_INSN_CFI_LABEL,
 
 
 extern const char * const note_insn_name[NOTE_INSN_MAX];
-# 1018 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 1018 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 enum label_kind
 {
   LABEL_NORMAL = 0,
@@ -32558,13 +32628,13 @@ enum label_kind
   LABEL_GLOBAL_ENTRY,
   LABEL_WEAK_ENTRY
 };
-# 1087 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 1087 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 static __inline__ unsigned int
 rhs_regno (const_rtx x)
 {
   return (((x)->u.fld[0]).rt_uint);
 }
-# 1162 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 1162 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 struct full_rtx_costs
 {
   int speed;
@@ -32668,7 +32738,7 @@ get_full_set_src_cost (rtx x, struct full_rtx_costs *c)
 {
   get_full_rtx_cost (x, SET, 1, c);
 }
-# 1634 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 1634 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 extern int generating_concat_p;
 
 
@@ -32919,7 +32989,7 @@ extern enum machine_mode choose_hard_reg_mode (unsigned int, unsigned int,
 extern rtx set_unique_reg_note (rtx, enum reg_note, rtx);
 extern rtx set_dst_reg_note (rtx, enum reg_note, rtx, rtx);
 extern void set_insn_deleted (rtx);
-# 1895 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 1895 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 typedef struct replace_label_data
 {
   rtx r1;
@@ -32997,7 +33067,7 @@ extern int computed_jump_p (const_rtx);
 
 typedef int (*rtx_function) (rtx *, void *);
 extern int for_each_rtx (rtx *, rtx_function, void *);
-# 1980 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 1980 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 typedef int (*for_each_inc_dec_fn) (rtx mem, rtx op, rtx dest, rtx src,
         rtx srcoff, void *arg);
 extern int for_each_inc_dec (rtx *, for_each_inc_dec_fn, void *arg);
@@ -33098,7 +33168,7 @@ extern rtx const_int_rtx[64 * 2 + 1];
 extern rtx const_true_rtx;
 
 extern rtx const_tiny_rtx[4][(int) MAX_MACHINE_MODE];
-# 2113 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 2113 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 enum global_rtl_index
 {
   GR_PC,
@@ -33107,7 +33177,7 @@ enum global_rtl_index
   GR_SIMPLE_RETURN,
   GR_STACK_POINTER,
   GR_FRAME_POINTER,
-# 2130 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 2130 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
   GR_HARD_FRAME_POINTER,
 
 
@@ -33129,7 +33199,7 @@ enum global_rtl_index
 
 
 struct target_rtl {
-# 2166 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 2166 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
   rtx x_global_rtl[GR_MAX];
 
 
@@ -33158,7 +33228,7 @@ struct target_rtl {
 };
 
 extern struct target_rtl default_target_rtl;
-# 2227 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 2227 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 static __inline__ struct mem_attrs *
 get_mem_attrs (const_rtx x)
 {
@@ -33174,7 +33244,7 @@ get_mem_attrs (const_rtx x)
 
 
 
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/genrtl.h" 1
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/genrtl.h" 1
 
 
 
@@ -34009,15 +34079,15 @@ gen_rtx_fmt_Ee_stat (enum rtx_code code, enum machine_mode mode,
 
   return rt;
 }
-# 2243 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h" 2
-# 2254 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 2243 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h" 2
+# 2254 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 extern rtx gen_rtx_CONST_INT (enum machine_mode, long);
 extern rtx gen_rtx_CONST_VECTOR (enum machine_mode, rtvec);
 extern rtx gen_raw_REG (enum machine_mode, int);
 extern rtx gen_rtx_REG (enum machine_mode, unsigned);
 extern rtx gen_rtx_SUBREG (enum machine_mode, rtx, int);
 extern rtx gen_rtx_MEM (enum machine_mode, rtx);
-# 2338 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 2338 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 extern rtx output_constant_def (tree, int);
 extern rtx lookup_constant_def (tree);
 
@@ -34033,9 +34103,9 @@ extern int epilogue_completed;
 
 
 extern int reload_in_progress;
-# 2362 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 2362 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 extern int regstack_completed;
-# 2371 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/rtl.h"
+# 2371 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 extern int cse_not_expected;
 
 
@@ -34344,8 +34414,8 @@ extern void _fatal_insn_not_found (const_rtx, const char *, int, const char *)
 extern void _fatal_insn (const char *, const_rtx, const char *, int, const char *)
      __attribute__ ((__noreturn__));
 # 43 "../../../src/plugin-utils.h" 2
-# 1 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/emit-rtl.h" 1
-# 24 "/work1/ferranti/build-gcc/gcc-4.7.0/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.0/plugin/include/emit-rtl.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/emit-rtl.h" 1
+# 24 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/emit-rtl.h"
 extern void set_mem_alias_set (rtx, alias_set_type);
 
 
@@ -34494,11 +34564,11 @@ int is_lto(){
 
 unsigned char is_targetable_decl(tree decl){
 
+  return ((decl)->decl_minimal.name)!=(tree) ((void *)0)&&!((decl)->base.nameless_flag)&&((! (((decl)->decl_minimal.context)) || ((enum tree_code) (((decl)->decl_minimal.context))->base.code) == TRANSLATION_UNIT_DECL)||(is_gpp()&&((!(((decl)->decl_common.lang_flag_0) && (((enum tree_code) (decl)->base.code) == CONST_DECL || ((enum tree_code) (decl)->base.code) == PARM_DECL || ((enum tree_code) (decl)->base.code) == TYPE_DECL || ((enum tree_code) (decl)->base.code) == TEMPLATE_DECL)) && ((enum tree_code) ((!(! (((decl)->decl_minimal.context)) || ((enum tree_code) (((decl)->decl_minimal.context))->base.code) == TRANSLATION_UNIT_DECL) ? ((decl)->decl_minimal.context) : global_namespace))->base.code) == NAMESPACE_DECL)||((((decl)->decl_minimal.context) && (tree_code_type[(int) (((enum tree_code) (((decl)->decl_minimal.context))->base.code))] == tcc_type))&&((((enum tree_code) (decl)->base.code)==FUNCTION_DECL&&((((enum tree_code) (((decl)->typed.type))->base.code) == METHOD_TYPE) || ((&(((((enum tree_code) (decl)->base.code) == TEMPLATE_DECL ? ((decl)->decl_non_common.result) : decl))->decl_common.lang_specific)->u.fn)->static_function)))||(((decl))->decl_common.lang_flag_6))))));
 
 
 
 
-  return ((decl)->decl_minimal.name)!=(tree) ((void *)0)&&!((decl)->base.nameless_flag)&&((! (((decl)->decl_minimal.context)) || ((enum tree_code) (((decl)->decl_minimal.context))->base.code) == TRANSLATION_UNIT_DECL)||is_gpp());
 
 }
 

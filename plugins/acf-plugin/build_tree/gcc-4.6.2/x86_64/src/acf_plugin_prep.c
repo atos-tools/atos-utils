@@ -32636,10 +32636,10 @@ static void save_and_set_param(char *opt_param, int value) {
 
 
     csv_param_name[csv_param_index] = opt_param;
-    csv_param_value[csv_param_index] = ((int) (((int *) (((char *) &(global_options.x_param_values)) + hwi_shift))[(int) param_idx]));
+    csv_param_value[csv_param_index] = ((int) ((*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift))[(int) param_idx]));
     csv_param_index ++;
 # 302 "../../../src/acf_plugin.c"
-    set_param_value(opt_param, value, ((int *) (((char *) &(global_options.x_param_values)) + hwi_shift)), csv_param_set);
+    set_param_value(opt_param, value, (*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift)), csv_param_set);
 
 
 
@@ -32650,7 +32650,7 @@ static void restore_param_values() {
 
     for ( i = 0; i < csv_param_index; i++) {
 
- set_param_value(csv_param_name[i], csv_param_value[i], ((int *) (((char *) &(global_options.x_param_values)) + hwi_shift)), csv_param_set);
+ set_param_value(csv_param_name[i], csv_param_value[i], (*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift)), csv_param_set);
 
 
 

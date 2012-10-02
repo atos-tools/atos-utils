@@ -55,7 +55,7 @@ clean-coverage:
 distclean: clean
 
 tests_report: $(srcdir)report.sh $(ERRS)
-	$(V_RUN)cat $(ERRS) | $(srcdir)report.sh >tests_report.txt; \
+	$(V_RUN)$(srcdir)report.sh $(ERRS) >tests_report.txt; \
 	res=$$?; cat tests_report.txt; exit $$res
 
 $(CHKS): %.chk: %.err

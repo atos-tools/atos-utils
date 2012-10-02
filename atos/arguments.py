@@ -295,7 +295,7 @@ class parsers:
         args.exe(parser)
         group = parser.add_mutually_exclusive_group()
         args.atos_play.objective(group)
-        args.atos_play.tradeoff(group)
+        args.atos_play.tradeoffs(group)
         args.atos_play.nbpoints(parser)
         args.atos_play.ref(parser)
         args.atos_play.localid(parser)
@@ -701,10 +701,11 @@ class args:
                                  default="time")
 
         @staticmethod
-        def tradeoff(parser, args=("-s", "--tradeoff")):
+        def tradeoffs(parser, args=("-s", "--tradeoffs")):
             parser.add_argument(*args,
-                                 dest="tradeoff",
+                                 dest="tradeoffs",
                                  action='append',
+                                 type=float,
                                  help="get best tradeoff results")
 
         @staticmethod

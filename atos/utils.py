@@ -520,11 +520,11 @@ def run_atos_opt(args):
             variant = "OPT" + "".join(options.split(' '))
         else:
             variant = "REF"
-        command = os.path.join(globals.PYTHONDIR, "atos", "atos_lib.py") + \
-                  " query -q \"variant:" + variant + "\""
-        status, results = process.system(command, get_output=True)
-        if results.strip() != "None":
-            print "Skipping variant " + variant + "..."
+        db = atos_lib.atos_db.db(args.configuration_path)
+        client = atos_lib.atos_client_db(db)
+        results = client.query(atos_lib.strtoquery("variant:" + variant))
+        if results != []:
+            message("Skipping variant " + variant + "...")
             return 0
 
     if args.fdo:
@@ -548,60 +548,78 @@ def run_atos_play(args):
     """ ATOS play tool implementation. """
 
     if not os.path.isdir(args.configuration_path):
-        print "error: atos-play: onfiguration missing: " + \
-              args.configuration_path
-        sys.exit(1)
+        error('Configuration missing: ' + args.configuration_path)
+        return 1
 
-    if args.id == None:
-        if args.exe == None:
-            args.exe = []
+    target_id = args.id
+    if not target_id:
+        executables = args.exe and [args.exe]
+        if not executables:
             try:
-                targetf = open(os.path.join(args.configuration_path,
-                                            "targets"),
-                               "r")
+                with open(os.path.join(
+                        args.configuration_path, "targets")) as targetf:
+                    executables = map(lambda x: os.path.basename(
+                            x.strip()), targetf.readlines())
             except:
-                print "error: atos-play: no target " \
-                      "executable and no identifier specified"
-                sys.exit(1)
-            else:
-                for line in targetf:
-                    args.exe.append(line.strip())
-                targetf.close()
-        else:
-            args.exe = [args.exe]
+                error('no target executable and no identifier specified')
+                return 1
+        target_id = "-".join(executables)
 
-        args.id = ""
-        sep = ""
-        for exe in args.exe:
-            args.id = sep + args.id + os.path.basename(exe)
-            sep = "-"
+    atos_db = atos_lib.atos_db.db(args.configuration_path)
 
+    results = []
     if args.ref:
-        select_opt = " --variant=REF"
+        results = atos_lib.atos_client_db(atos_db).query(
+            {'variant': "REF", 'target': target_id})
     elif args.localid != None:
-        select_opt = " --hash=" + args.localid
-    elif args.tradeoff != None:
-        select_opt = ""
-        for tradeoff in args.tradeoff:
-            select_opt = select_opt + " --tradeoff=" + str(tradeoff)
-    elif args.obj == "size":
-        select_opt = " --tradeoff=0.2"
+        results = atos_lib.atos_client_db(atos_db).query(
+            {'target': target_id}) or []
+        results = filter(
+            lambda x: atos_lib.hashid(x['variant']).startswith(args.localid),
+            results)
+        if len(results) > 1:
+            error('ambiguous local_id: %s' % args.localid)
+            return 1
     else:
-        select_opt = " --tradeoff=5.0"
+        tradeoffs = args.tradeoffs
+        if not tradeoffs:
+            if args.obj == "size":
+                tradeoffs = [0.2]
+            else:  # objective == "time"
+                tradeoffs = [5.0]
+        all_points = list(atos_lib.atos_client_results(
+            atos_db, [target_id]).results.values())
+        nbtr = max(1, args.nbpoints / len(tradeoffs))
+        for tradeoff in tradeoffs:
+            selected = atos_lib.atos_client_results.select_tradeoffs(
+                all_points, tradeoff, nbtr) or []
+            results.extend(selected)
+            map(all_points.remove, selected)
+        results = map(lambda x: x.dict(), results)
 
-    if args.printconfig:
-        print_action = " -p"
+    if not results:
+        error('no results found')
+        return 1
     elif args.printvariant:
-        print_action = " -P"
+        for result in results:
+            print result['variant']
+        return 0
+    elif args.printconfig:
+        for result in results:
+            print atos_lib.atos_db_file.entry_str(result),
+        return 0
+    elif len(results) > 1:
+        error('more than one build requested')
+        return 1
     else:
-        print_action = ""
-
-    command = os.path.join(globals.PYTHONDIR, "atos", "atos_lib.py") + \
-              " play -C " + args.configuration_path + \
-              " -i " + args.id + select_opt + " -N " + str(args.nbpoints) + \
-              print_action + " \"" + process.list2cmdline(args.command) + "\""
-    status = process.system(command, print_output=True)
-    return status
+        result = results[0]
+        message('Playing optimized build %s:%s...' % (
+                target_id, result['variant']))
+        status = call("atos-build", args,
+                      options=result.get('conf', None),
+                      uopts=result.get('uconf', None),
+                      gopts=result.get('gconf', None))
+        return status
 
 def run_atos_profile(args):
     """ ATOS profile tool implementation. """
@@ -621,7 +639,7 @@ def run_atos_raudit(args):
     """ ATOS raudit tool implementation. """
 
     if args.command == None:
-        print "error: atos-raudit: missing run command"
+        error('atos-raudit: missing run command')
         return 1
 
     message("Auditing run...")
@@ -787,26 +805,20 @@ def run_atos_run(args):
         entry = entry + ",size:" + str(exe_size)
         entry = entry + ",time:" + str(exe_time)
         if args.output_file != None:
-            command = os.path.join(globals.PYTHONDIR, "atos",
-                                   "atos_lib.py") +  \
-                                   " add_result -r \"" + entry + "\" " + \
-                                   args.output_file
-            status = process.system(command)
+            db = atos_lib.atos_db_file(args.output_file)
+            status, output = atos_lib.atos_client_db(db).\
+                             add_result(atos_lib.strtodict(entry))
         elif not args.record:
-            command = os.path.join(globals.PYTHONDIR, "atos",
-                                   "atos_lib.py") + \
-                                   " add_result -r \"" + entry + \
-                                   "\" -C-"
-            status, output = process.system(command, get_output=True,
-                                            print_output=False)
+            output = atos_lib.atos_db_file.entry_str(
+                atos_lib.strtodict(entry))
+            status = 0
+
             if output != None:
                 print >> sys.stderr, output.strip()
         else:
-            command = os.path.join(globals.PYTHONDIR, "atos",
-                                   "atos_lib.py") + \
-                                   " add_result -r \"" + entry + "\" -C " + \
-                                   args.configuration_path
-            status = process.system(command)
+            db = atos_lib.atos_db.db(args.configuration_path)
+            status, output = atos_lib.atos_client_db(db).\
+                             add_result(atos_lib.strtodict(entry))
 
     message("Running variant " + args.variant + "...")
     failure = False
@@ -825,11 +837,11 @@ def run_atos_run(args):
             failure = True
 
     if args.gopts == None and args.nbruns == None:
-        command = (os.path.join(globals.PYTHONDIR, "atos", "atos_lib.py")
-                   + " config -C " + args.configuration_path
-                   + " --get \"default_values.nb_runs\"")
-        status, args.nbruns = process.system(command, get_output=True)
-        args.nbruns = args.nbruns and args.nbruns.strip()
+        config_file = os.path.join(args.configuration_path, 'config.json')
+        if os.path.isfile(config_file):
+            client = atos_lib.json_config(config_file)
+            args.nbruns = client.get_value("default_values.nb_runs") or ''
+
     if args.nbruns == "" or args.nbruns == None:
         args.nbruns = 1
     else:

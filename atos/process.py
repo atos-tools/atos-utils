@@ -159,6 +159,10 @@ def setup(kwargs):
         _real_open = __builtin__.open
         __builtin__.open = _open
 
+def finalize():
+    if _dryrun:
+        __builtin__.open = _real_open
+
 def system(cmd, check_status=False, get_output=False, print_output=False,
            output_stderr=False, shell=False, stdin_str=False):
     """

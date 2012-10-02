@@ -51,6 +51,7 @@ def invoque(tool, args, **kwargs):
         }
     global _initialized
 
+    toplevel = not _initialized
     dryrun = args.dryrun
     if not _initialized:
         logger.setup(vars(args))
@@ -81,7 +82,13 @@ def invoque(tool, args, **kwargs):
         tool_args.__dict__[action.dest] = action.default
     tool_args.__dict__.update(vars(args))
     tool_args.__dict__.update(kwargs)
-    return functions[tool](tool_args)
+
+    status = functions[tool](tool_args)
+
+    if toplevel:
+        process.finalize()
+
+    return status
 
 def execute(tool, args):
     """ Executes the invoque dispatcher and exits. """

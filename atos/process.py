@@ -28,6 +28,7 @@ import signal
 import cStringIO, StringIO
 import __builtin__
 import tempfile
+import atexit
 
 def cmdline2list(cmd):
     """
@@ -145,23 +146,31 @@ def _subcall(cmd, get_output=False, print_output=False, output_stderr=False,
     if stdin_str: stdin_tmp.close()  # trigger tmpfile deletion
     return (status, output)
 
+_initialized = False
 _dryrun = False
+_real_open = None
 
 def setup(kwargs):
     """
     Configure the process launcher module.
+    Must be called before any thread creation.
     """
-    dryrun = kwargs.get('dryrun', False)
+    global _initialized, _dryrun, _real_open
+    if _initialized: return
+    _initialized = True
 
-    global _dryrun, _real_open
-    _dryrun = dryrun or os.getenv("ATOS_DRYRUN")
-    if dryrun:
-        _real_open = __builtin__.open
-        __builtin__.open = _open
+    def replace_open(fake_open):
+        def restore_open(real_open):
+            __builtin__.open = real_open
 
-def finalize():
+        atexit.register(restore_open, __builtin__.open)
+        real_open = __builtin__.open
+        __builtin__.open = fake_open
+        return real_open
+
+    _dryrun = kwargs.get('dryrun', False)
     if _dryrun:
-        __builtin__.open = _real_open
+        _real_open = replace_open(_open)
 
 def system(cmd, check_status=False, get_output=False, print_output=False,
            output_stderr=False, shell=False, stdin_str=False):

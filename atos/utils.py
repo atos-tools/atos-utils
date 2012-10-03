@@ -30,10 +30,14 @@ import copy
 import glob
 from logger import debug, error, message
 
-_initialized = False
+_at_toplevel = None
 
 def invoque(tool, args, **kwargs):
-    """ Dispatcher that invoques the given tool and returns. """
+    """
+    Dispatcher that invoques the given tool and returns.
+    This function can't be called directly from top level
+    tools, use execute() in that case.
+    """
     functions = {
         "atos": run_atos,
         "atos-help": run_atos_help,
@@ -49,17 +53,9 @@ def invoque(tool, args, **kwargs):
         "atos-run": run_atos_run,
         "atos-replay": run_atos_replay,
         }
-    global _initialized
 
-    toplevel = not _initialized
-    dryrun = args.dryrun
-    if not _initialized:
-        logger.setup(vars(args))
-        process.setup(vars(args))
-        _initialized = True
-        dryrun = False
-
-    if dryrun:
+    def dryrun_tool(tool, args, **kwargs):
+        """ Does not run the tool, outputs the tool command line. """
         dest_to_opt = dict(map(
                 lambda x: (x.dest, x),
                 arguments.parser(tool)._actions))
@@ -76,26 +72,49 @@ def invoque(tool, args, **kwargs):
         process.debug(process.list2cmdline(arg_list + remainder))
         return 0
 
-    tool_args = arguments.argparse.Namespace()
-    for action in arguments.parser(tool)._actions:
-        if action.dest is None: continue
-        tool_args.__dict__[action.dest] = action.default
-    tool_args.__dict__.update(vars(args))
-    tool_args.__dict__.update(kwargs)
+    def run_tool(tool, args, **kwargs):
+        """ Runs the tool, given the top level args and kwargs modifier. """
+        tool_args = arguments.argparse.Namespace()
+        for action in arguments.parser(tool)._actions:
+            if action.dest is None: continue
+            tool_args.__dict__[action.dest] = action.default
+        tool_args.__dict__.update(vars(args))
+        tool_args.__dict__.update(kwargs)
+        return functions[tool](tool_args)
 
-    status = functions[tool](tool_args)
+    global _at_toplevel
+    assert(_at_toplevel != None)
+    # local dryrun setting is not supported as the process module
+    # depends upon the global setting
+    assert(kwargs.get('dryrun') == None)
 
-    if toplevel:
-        process.finalize()
-
+    dryrun = args.dryrun and not _at_toplevel
+    _at_toplevel = False
+    if dryrun:
+        status = dryrun_tool(tool, args, **kwargs)
+    else:
+        status = run_tool(tool, args, **kwargs)
     return status
 
 def execute(tool, args):
-    """ Executes the invoque dispatcher and exits. """
+    """
+    Executes the invoque dispatcher and exits.
+    This function cannot be called from within invoque.
+    """
+    global _at_toplevel
+    assert(_at_toplevel == None)
+    _at_toplevel = True
     sys.exit(invoque(tool, args))
 
 def run_atos(args):
-    """ Top level atos utility implementation. """
+    """
+    Top level atos utility implementation.
+    This function is only used as a wrapper for subcommand
+    invoque(), thus we reset the _at_toplevel marker.
+    """
+    global _at_toplevel
+    assert(_at_toplevel == False)
+    _at_toplevel = True
     return invoque("atos-" + args.subcmd, args)
 
 def run_atos_help(args):

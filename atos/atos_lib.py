@@ -735,18 +735,19 @@ def getarg(key, default=None):
         return eval('lastframe.f_globals["%s"].%s' % (argstruct, key))
     except: return default
 
-def proot_atos():
+def proot_command(**kwargs):
     status, uname = process.system('/bin/uname -m', get_output=True)
-    if uname:
-        arch = uname.rstrip('\n')
-    else:
-        arch = 'i386'
+    arch = uname.rstrip('\n') if uname else 'i386'
     if arch in ['i386', 'i486', 'i586', 'i686']: arch = 'i386'
     proot_exec = os.path.join(globals.LIBDIR, arch, 'bin', 'proot')
-    if os.path.isfile(proot_exec):
-        return proot_exec
-    else:
-        return "proot"
+    proot_bin = proot_exec if os.path.isfile(proot_exec) else "proot"
+    command = ["env"]
+    for key, value in kwargs.items():
+        if value is None: continue
+        command.append("%s=%s" % (str(key), str(value)))
+    command.append(proot_bin)
+    command.extend(["-w", os.getcwd(), "/"])
+    return command
 
 def expand_response_file(args):
     """ Return the actual args list, after response expansion. """

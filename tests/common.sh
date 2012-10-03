@@ -40,6 +40,7 @@ skip() {
 
 [ "$DEBUG" = "" ] || set -x
 
-TMPTEST=`mktemp -d $TMPDIR/atos-test.XXXXXX`
+[ "$KEEPTEST" != 0 ] || TMPTEST=`mktemp -d $TMPDIR/atos-test.XXXXXX`
+[ "$KEEPTEST" = 0 ] || TMPTEST=`rm -rf $TEST.dir && mkdir -p $TEST.dir && echo $TEST.dir`
 [ "$KEEPTEST" = 0 ] || echo "Keeping test directory in: $TMPTEST"
 cd $TMPTEST

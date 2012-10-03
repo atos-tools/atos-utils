@@ -29,6 +29,7 @@ import cStringIO, StringIO
 import __builtin__
 import tempfile
 import atexit
+import time
 
 def cmdline2list(cmd):
     """

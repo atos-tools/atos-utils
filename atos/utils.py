@@ -170,8 +170,7 @@ def run_atos_audit(args):
         file_build.write("cd %s && $ARUN %s\n" % (
                 os.getcwd(),
                 process.list2cmdline(args.command)))
-    process.commands.chmod(build_sh, stat.S_IRWXU | stat.S_IRGRP |
-                           stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+    process.commands.chmod(build_sh, 0755)
     force_sh = os.path.join(args.configuration_path, "build.force")
     with open(force_sh, 'w') as file_force:
         file_force.write(str(int(args.force)))
@@ -189,14 +188,13 @@ def run_atos_build(args):
 
     APFLAGS = ""
     profdir_option = ""
-    variant = args.variant
+    variant = args.variant or atos_lib.variant_id(
+        args.options, args.gopts, args.uopts)
+    options = args.options or ""
     opt_rebuild = args.force
     pvariant = ""
     profile_path = ""
     remote_profile_path = ""
-    options = args.options
-    if not options:
-        options = ""
     atos_driver = os.getenv("ATOS_DRIVER")
     if atos_driver == None:
         atos_driver = os.path.join(globals.BINDIR, "atos-driver")
@@ -213,9 +211,7 @@ def run_atos_build(args):
     # TODO: could be more readable with something like args.is_set(gopts)
     # (None and '' have different meanings here)
     if args.gopts != None:
-        pvariant = "REF"
-        if args.gopts:
-            pvariant = "OPT" + ''.join(args.gopts.split())
+        pvariant = atos_lib.variant_id(args.gopts)
         if not args.path:
             profile_path = os.path.join(
                 args.configuration_path, "profiles", atos_lib.hashid(pvariant))
@@ -249,9 +245,7 @@ def run_atos_build(args):
             profdir_option = "PROFILE_DIR=" + os.path.abspath(profile_path)
 
     if args.uopts != None:
-        pvariant = "REF"
-        if args.uopts:
-            pvariant = "OPT" + ''.join(args.uopts.split())
+        pvariant = atos_lib.variant_id(args.uopts)
         if not profile_path:
             profile_path = os.path.join(
                 args.configuration_path, "profiles", atos_lib.hashid(pvariant))
@@ -259,19 +253,6 @@ def run_atos_build(args):
         APFLAGS = ("-fprofile-use -fprofile-correction" +
                    " -Wno-error=coverage-mismatch")
         profdir_option = "PROFILE_DIR=" + os.path.abspath(profile_path)
-
-    if variant == "REF":
-        if options != "" or pvariant != "":
-            if args.gopts != None:
-                variant = ("OPT-fprofile-generate" +
-                           ''.join(args.gopts.split()) +
-                           ''.join(options.split()))
-            elif args.uopts != None:
-                variant = ("OPT-fprofile-use" +
-                           ''.join(args.uopts.split()) +
-                           ''.join(options.split()))
-            else:
-                variant = "OPT" + ''.join(options.split())
 
     failure = 0
     logs = os.path.join(args.configuration_path, "logs")
@@ -531,18 +512,12 @@ def run_atos_opt(args):
         options += " -flto"
 
     if args.keep:
-        if args.uopts:
-            variant = "OPT-fprofile-use" + \
-                      "".join(uopts.split(' ')) + \
-                      "".join(options.split(' '))
-        elif options != "":
-            variant = "OPT" + "".join(options.split(' '))
-        else:
-            variant = "REF"
+        variant = atos_lib.variant_id(
+            args.options, None, args.uopts)
         db = atos_lib.atos_db.db(args.configuration_path)
         client = atos_lib.atos_client_db(db)
         results = client.query(atos_lib.strtoquery("variant:" + variant))
-        if results != []:
+        if results:
             message("Skipping variant " + variant + "...")
             return 0
 
@@ -676,8 +651,7 @@ def run_atos_raudit(args):
         f.write(process.list2cmdline(args.command))
         f.write("\n")
         f.close()
-        process.commands.chmod(run_sh, stat.S_IRWXU | stat.S_IRGRP |
-                               stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+        process.commands.chmod(run_sh, 0755)
         if args.results_script != None:
             get_res_sh = os.path.join(args.configuration_path, "get_res.sh")
             f = open(get_res_sh, 'w')
@@ -687,8 +661,7 @@ def run_atos_raudit(args):
             f.write(" &&  " + args.results_script)
             f.write("\n")
             f.close()
-            process.commands.chmod(get_res_sh, stat.S_IRWXU | stat.S_IRGRP |
-                                   stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+            process.commands.chmod(get_res_sh, 0755)
 
     status = process.system(args.command)
     return status
@@ -696,6 +669,8 @@ def run_atos_raudit(args):
 def run_atos_run(args):
     """ ATOS run tool implementation. """
 
+    variant = args.variant or atos_lib.variant_id(
+        args.options, args.gopts, args.uopts)
     timeout = os.getenv("TIMEOUT")
     if timeout == None:
         timeout = os.path.join(globals.BINDIR, "atos-timeout") + " 3600"
@@ -738,19 +713,6 @@ def run_atos_run(args):
     if not args.id:
         args.id = "-".join(map(os.path.basename, args.exe))
 
-    if args.variant == "REF":
-        if args.options != None:
-            if args.gopts != None:
-                args.variant = ("OPT-fprofile-generate" +
-                                ''.join(args.gopts.split()) +
-                                ''.join(args.options.split()))
-            elif args.uopts != None:
-                args.variant = ("OPT-fprofile-use" +
-                                ''.join(args.uopts.split()) +
-                                ''.join(args.options.split()))
-            else:
-                args.variant = "OPT" + ''.join(args.options.split())
-
     def get_size(executables):
         exe_size = 0
         for exe in executables:
@@ -769,9 +731,7 @@ def run_atos_run(args):
         return exe_size
 
     def profile_path():
-        lpvariant = "REF"
-        if args.gopts != None:
-            lpvariant = "OPT" + "".join(process.cmdline2list(args.gopts))
+        lpvariant = atos_lib.variant_id(args.gopts)
         return os.path.join(
             os.path.abspath(args.configuration_path),
             "profiles",
@@ -809,7 +769,7 @@ def run_atos_run(args):
 
     def output_run_results():
         entry = "target:" + args.id
-        entry = entry + ",variant:" + args.variant
+        entry = entry + ",variant:" + variant
         entry = entry + ",version:" + globals.VERSION
         entry = entry + ",conf:"
         if args.options != None:
@@ -839,11 +799,11 @@ def run_atos_run(args):
             status, output = atos_lib.atos_client_db(db).\
                              add_result(atos_lib.strtodict(entry))
 
-    message("Running variant " + args.variant + "...")
+    message("Running variant " + variant + "...")
     failure = False
     logs = os.path.join(args.configuration_path, "logs")
     process.commands.mkdir(logs)
-    hash_var = atos_lib.hashid(args.variant)
+    hash_var = atos_lib.hashid(variant)
     logfile = os.path.join(logs, "run-" + hash_var + ".log")
     logf = open(logfile, 'w')
 
@@ -868,7 +828,7 @@ def run_atos_run(args):
 
     n = 1
     while n <= args.nbruns:
-        logf.write("Running variant " + args.variant +
+        logf.write("Running variant " + variant +
                    " " + str(n) + "/" + str(args.nbruns) + "\n")
         tmp_logfile = logfile + "." + str(n)
         process.system("rm -f " + tmp_logfile)
@@ -917,13 +877,13 @@ def run_atos_run(args):
                     exe_size = "FAILURE"
                 output_run_results()
         if failure:
-            message("FAILURE while running variant " + args.variant + "...")
-            logf.write("FAILURE while running variant " + args.variant)
+            message("FAILURE while running variant " + variant + "...")
+            logf.write("FAILURE while running variant " + variant)
             logf.write("\n")
             logf.close()
             return 2
         else:
-            logf.write("SUCCESS running variant " + args.variant)
+            logf.write("SUCCESS running variant " + variant)
             logf.write("\n")
         n = n + 1
 

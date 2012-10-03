@@ -532,6 +532,19 @@ def hashid(s):
     # return same results as 'echo s | md5sum'
     return md5sum(s + '\n')
 
+def variant_id(options=None, gopts=None, uopts=None):
+    if not (options or gopts or uopts):
+        return "REF"
+    res_variant = "OPT"
+    if gopts:
+        res_variant += "-fprofile-generate" + "".join(gopts.split())
+    elif uopts:
+        res_variant += "-fprofile-use" + "".join(uopts.split())
+    else: pass
+    if options:
+        res_variant += "".join(options.split())
+    return res_variant
+
 def strtodict(s):
     # 'aa:xx,bb:yy' -> {'aa':'xx','bb':'yy'}
     d = {}

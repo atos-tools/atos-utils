@@ -583,8 +583,7 @@ class args:
         parser.add_argument(
             *args,
              dest="variant",
-             help="identifier of variant",
-             default="REF")
+             help="identifier of variant")
 
     @staticmethod
     def executables(parser):

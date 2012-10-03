@@ -106,7 +106,7 @@ while getopts C:b:B:fe:r:p:t:n:M:S:qdvh opt; do
 	    ;;
 	M) nb_iter="$OPTARG"
 	    ;;
-	S) opt_seed="--seed=$OPTARG"
+	S) opt_seed="-S $OPTARG"
 	    ;;
 	q) opt_quiet="-q"
 	    ;;

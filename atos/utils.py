@@ -174,12 +174,11 @@ def run_atos_audit(args):
     force_sh = os.path.join(args.configuration_path, "build.force")
     with open(force_sh, 'w') as file_force:
         file_force.write(str(int(args.force)))
-    command = ("env PROOT_IGNORE_ELF_INTERPRETER=1" +
-               " PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_DEPS_OUTPUT='" +
-               args.output_file + "' PROOT_ADDON_CC_DEPS_CCRE='"
-               + args.ccregexp + "' " + atos_lib.proot_atos() +
-               " -w " + os.getcwd() + " / ")
-    command += process.list2cmdline(args.command)
+    command = atos_lib.proot_command(
+        PROOT_IGNORE_ELF_INTERPRETER=1,
+        PROOT_ADDON_CC_DEPS=1,
+        PROOT_ADDON_CC_DEPS_OUTPUT=args.output_file,
+        PROOT_ADDON_CC_DEPS_CCRE=args.ccregexp) + args.command
     status = process.system(command, print_output=True)
     return status
 
@@ -198,9 +197,7 @@ def run_atos_build(args):
     atos_driver = os.getenv("ATOS_DRIVER")
     if atos_driver == None:
         atos_driver = os.path.join(globals.BINDIR, "atos-driver")
-    if atos_driver != '0':
-        PROOT_ADDON_CC_OPTS_DRIVER = (
-            "PROOT_ADDON_CC_OPTS_DRIVER=" + atos_driver)
+    if atos_driver == '0': atos_driver = None
     timeout = os.getenv("TIMEOUT")
     if timeout == None:
         timeout = os.path.join(globals.BINDIR, "atos-timeout") + " 3600"
@@ -282,52 +279,33 @@ def run_atos_build(args):
                    atos_driver + " ACFLAGS=\"" + APFLAGS + " " + options +
                    "\" " + lto_option + " " + profdir_option)
         command = command + " -j" + str(args.jobs)
-        (status, output) = process.system(
+        status, output = process.system(
             command, get_output=True, output_stderr=True)
         logf.write('%s\n' % output)
-        if status:
-            failure = 1
-
-    elif not args.command and opt_rebuild == 1 and os.path.isfile(build_sh):
-        command = (timeout + " env PROOT_IGNORE_ELF_INTERPRETER=1" +
-                   " PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_OPTS_ARGS='" +
-                   APFLAGS + " " + options +
-                   "' PROOT_ADDON_CC_DEPS_CCRE='" + args.ccregexp +
-                   PROOT_ADDON_CC_OPTS_DRIVER + "' " +
-                   atos_lib.proot_atos() + " -w " + os.getcwd()
-                   + " / \"" + build_sh + "\"")
-        (status, output) = process.system(
-            command, print_output=True, get_output=True,
-            output_stderr=True)
-        logf.write('%s\n' % output)
-        if status:
-            failure = 1
 
     else:
-        command = (timeout + " env PROOT_IGNORE_ELF_INTERPRETER=1 " +
-                   "PROOT_ADDON_CC_DEPS=1 PROOT_ADDON_CC_OPTS_ARGS='" +
-                   APFLAGS + " " + options +
-                   "' PROOT_ADDON_CC_DEPS_CCRE='" + args.ccregexp +
-                   PROOT_ADDON_CC_OPTS_DRIVER + "' " +
-                   atos_lib.proot_atos() + " -w " + os.getcwd() + " / ")
-        command += process.list2cmdline(args.command)
-        (status, output) = process.system(
+        command = timeout.split() + atos_lib.proot_command(
+            PROOT_IGNORE_ELF_INTERPRETER=1,
+            PROOT_ADDON_CC_OPTS=1,
+            PROOT_ADDON_CC_OPTS_ARGS="%s %s" % (APFLAGS, options),
+            PROOT_ADDON_CC_OPTS_CCRE=args.ccregexp,
+            PROOT_ADDON_CC_OPTS_DRIVER=atos_driver)
+        if not args.command and opt_rebuild == 1 and os.path.isfile(build_sh):
+            command.append(build_sh)
+        else:
+            command.extend(args.command)
+        status, output = process.system(
             command, print_output=True, get_output=True, output_stderr=True)
-        command = command + " -j" + str(args.jobs)
-        (status, output) = process.system(
-            command, get_output=True, output_stderr=True)
         logf.write('%s\n' % output)
-        if status:
-            failure = 1
 
-    if failure == 1:
+    if status:
         message("FAILURE while building variant " + variant + "...")
         logf.write("FAILURE while building variant %s\n" % (variant))
         logf.close()
         return 2
-    else:
-        logf.write("SUCCESS building variant %s\n" % (variant))
-        logf.close()
+
+    logf.write("SUCCESS building variant %s\n" % (variant))
+    logf.close()
     return 0
 
 def run_atos_deps(args):

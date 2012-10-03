@@ -9,40 +9,33 @@ DIRNAME = os.path.dirname(__file__)
 SRCDIR = os.getenv('SRCDIR', os.path.abspath(os.path.join(DIRNAME, '..')))
 ROOT = os.getenv('ROOT', SRCDIR)
 PYTHONDIR = os.path.join(ROOT, 'lib', 'atos', 'python')
+TEST = os.path.splitext(os.path.basename(sys.argv[0]))[0]
 
 sys.path.insert(0, PYTHONDIR)
 
 
 def success():
-    test_name = os.path.splitext(
-        os.path.basename(sys.argv[0]))[0]
     test_case = getattr(__main__, 'TEST_CASE', '?')
     print >>sys.stderr, "SUCCESS: %s: %s" % (
-        test_name, test_case)
+        TEST, test_case)
     os._exit(0)
 
 def failure(msg='', code=1):
-    test_name = os.path.splitext(
-        os.path.basename(sys.argv[0]))[0]
     test_case = getattr(__main__, 'TEST_CASE', '?')
     print >>sys.stderr, "***FAIL: %s: %s%s" % (
-        test_name, test_case, msg and ': ' + msg or '')
+        TEST, test_case, msg and ': ' + msg or '')
     os._exit(code)
 
 def interrupted(code=1):
-    test_name = os.path.splitext(
-        os.path.basename(sys.argv[0]))[0]
     test_case = getattr(__main__, 'TEST_CASE', '?')
     print >>sys.stderr, "***INTERRUPTED: %s: %s" % (
-        test_name, test_case)
+        TEST, test_case)
     os._exit(code)
 
 def skip(msg=''):
-    test_name = os.path.splitext(
-        os.path.basename(sys.argv[0]))[0]
     test_case = getattr(__main__, 'TEST_CASE', '?')
     print >>sys.stderr, "---SKIP: %s: %s%s" % (
-        test_name, test_case, msg and ': ' + msg or '')
+        TEST, test_case, msg and ': ' + msg or '')
     os._exit(0)
 
 
@@ -78,7 +71,12 @@ signal.signal(signal.SIGTERM, cleanup)
 
 # create and go to new tmp directory
 tmpdir = os.getenv('TMPDIR', '/tmp')
-tstdir = tempfile.mkdtemp(prefix='atos-test.', dir=tmpdir)
 keeptest = os.getenv('KEEPTEST', False)
-if keeptest: print "Keeping test directory in:", tstdir
+if keeptest:
+    tstdir = TEST + '.dir'
+    shutil.rmtree(tstdir, ignore_errors=True)
+    os.makedirs(tstdir)
+    print "Keeping test directory in:", tstdir
+else:
+    tstdir = tempfile.mkdtemp(prefix='atos-test.', dir=tmpdir)
 os.chdir(tstdir)

@@ -1192,7 +1192,7 @@ if __name__ == '__main__':
 
         if opts.query:
             client = json_config(config_file)
-            results = client.query(strtoquery(opts.query))
+            results = client.query(strtoquery(opts.query)) or []
             if opts.uniq: results = list(set(results))
             pprint_list(results, text=opts.text)
 

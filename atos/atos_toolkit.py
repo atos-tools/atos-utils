@@ -579,8 +579,10 @@ def gen_staged(max_iter):
 
     def get_tradeoffs(results):
         fselect = atos_lib.atos_client_results.select_tradeoff
-        return map(
+        results = map(
             lambda x: fselect(results, perf_size_ratio=x), tradeoff_coeffs)
+        # result objects can be none in case of failure
+        return filter(lambda x: x is not None, results)
 
     def res_obj(result, flags, variant):
         return atos_lib.atos_client_results.result(
@@ -675,7 +677,8 @@ def gen_file_by_file(cold_th, cold_opts, file_list,
     # reference run: simple partitioning with base flags
     debug('fbf reference run - hot/cold partition, cold options')
     cold_obj_flags = dict(map(lambda x: (x, cold_opts), cold_list))
-    obj_flags = dict(cold_obj_flags.items() + [('*', base_flags)])
+    cold_obj_flags.update({'*': base_flags})
+    obj_flags = dict(cold_obj_flags.items())
     ref_result = yield csv_part_opt(obj_flags), 'basemin'
     debug('fbf res [%s] -> %s' % (str(obj_flags), str(ref_result[1])))
 
@@ -696,9 +699,17 @@ def gen_file_by_file(cold_th, cold_opts, file_list,
                         flags, _ = gen.send(result)
                     except StopIteration:
                         tradeoffs_res = sys.exc_info()[1].args[0]
+                        if not tradeoffs_res.keys(): break
                         for coeff in tradeoffs_res.keys():
                             hot_results.setdefault(
                                 coeff, {})[hot_obj] = tradeoffs_res[coeff]
+                        # explore other files with best_flags for current file
+                        perf_coeff = sorted(tradeoffs_res.keys())[-1]
+                        best_flags = tradeoffs_res[perf_coeff].flags
+                        if base_flags: best_flags = '%s %s' % (
+                            base_flags, best_flags)
+                        init_obj_flags = dict(
+                            init_obj_flags.items() + [(hot_obj, best_flags)])
                         break
                     if base_flags: flags = '%s %s' % (base_flags, flags)
                     obj_flags = dict(

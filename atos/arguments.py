@@ -19,6 +19,8 @@
 import re, os
 import globals
 import argparse
+import logger
+import process
 
 def parser(tool):
     """
@@ -63,6 +65,15 @@ class ATOSArgumentParser(argparse.ArgumentParser):
         # Trick to allow strings starting with '-' for non option arguments
         self._negative_number_matcher = re.compile(r'^-.+$')
 
+    def parse_args(self):
+        """
+        Calls the superclass parse_args and initialize modules with
+        common arguments.
+        """
+        args = super(ATOSArgumentParser, self).parse_args()
+        logger.setup(vars(args))
+        process.setup(vars(args))
+        return args
 
 class parsers:
     """

@@ -19,7 +19,7 @@ configdir=`dirname $0`
 #
 
 $configdir/pep8.py \
-    --ignore=E121,E122,E123,E125,E126,E127,E128,E302,E401,W601,E701,E711 $*
+    --ignore=E121,E122,E123,E125,E126,E127,E128,E302,E401,W601,E701,E711,E712 $*
 
 # disabled rules:
 #
@@ -35,3 +35,4 @@ $configdir/pep8.py \
 #  W601 .has_key() is deprecated, use 'in'
 #  E701 multiple statements on one line (colon)
 #  E711 comparison to None should be 'is/is not None'
+#  E712 comparison to False should be 'if cond is False:' or 'if not cond:'

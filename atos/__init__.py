@@ -16,7 +16,7 @@
 # v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
 #
 
-import sys, os
+import sys, os, signal
 
 def check_python_version_():
     try:
@@ -26,4 +26,12 @@ def check_python_version_():
             'error: python version >= 2.6 is required by ATOS tools'
         sys.exit(1)
 
+def handle_signal_(sig, sigframe):
+    print >>sys.stderr, "Interrupted by signal %d" % sig
+    sys.exit(128 + sig)
+
+# Fail early if python version is not supported
 check_python_version_()
+
+# Avoid KeyboardInterrupt backtrace in case of ^C
+signal.signal(signal.SIGINT, handle_signal_)

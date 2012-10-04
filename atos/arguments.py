@@ -35,6 +35,7 @@ def parser(tool):
         "atos-deps": parsers.atos_deps,
         "atos-explore": parsers.atos_explore,
         "atos-init": parsers.atos_init,
+        "atos-lib": parsers.atos_lib,
         "atos-opt": parsers.atos_opt,
         "atos-play": parsers.atos_play,
         "atos-profile": parsers.atos_profile,
@@ -124,6 +125,9 @@ class parsers:
 
         sub = subs.add_parser("init", help="initialize atos environment")
         parsers.atos_init(sub)
+
+        sub = subs.add_parser("lib", help=argparse.SUPPRESS)
+        parsers.atos_lib(sub)
 
         sub = subs.add_parser("opt", help="opt system")
         parsers.atos_opt(sub)
@@ -273,6 +277,166 @@ class parsers:
         return parser
 
     @staticmethod
+    def atos_lib(parser=None):
+        """ atos lib arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-lib",
+                                        description="ATOS lib tool")
+
+        subs = parser.add_subparsers(
+            title="atos lib commands",
+            dest="subcmd_lib",
+            description="see short description of commands below and " +
+            "run 'atos lib COMMAND -h' for each command options",
+            help="available atos lib commands")
+
+        sub = subs.add_parser("create_db", help="Create a new empty database")
+        parsers.atos_lib_createdb(sub)
+
+        sub = subs.add_parser("query",
+                help="Query database results")
+        parsers.atos_lib_query(sub)
+
+        sub = subs.add_parser("speedups", help="Get results")
+        parsers.atos_lib_speedups(sub)
+
+        sub = subs.add_parser("push",
+                              help="Export results to another database")
+        parsers.atos_lib_push(sub)
+
+        sub = subs.add_parser("pull",
+                              help="Import results from another database")
+        parsers.atos_lib_pull(sub)
+
+        sub = subs.add_parser("report",
+                              help="Print results")
+        parsers.atos_lib_report(sub)
+
+        sub = subs.add_parser("add_result",
+                              help="Add result to database")
+        parsers.atos_lib_addresult(sub)
+
+        sub = subs.add_parser("config",
+                              help=argparse.SUPPRESS)
+        parsers.atos_lib_config(sub)
+
+        return parser
+
+    @staticmethod
+    def atos_lib_createdb(parser=None):
+        """ atos lib createdb arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(
+                prog="atos-lib-createdb",
+                description="=Create a new empty database")
+
+        args.configuration_path(parser)
+        args.atos_lib.type(parser)
+        args.atos_lib.shared(parser)
+        return parser
+
+    @staticmethod
+    def atos_lib_query(parser=None):
+        """ atos lib query arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(
+                prog="atos-lib-query",
+                description="Query database results")
+
+        args.configuration_path(parser)
+        args.atos_lib.query(parser)
+        args.atos_lib.text(parser)
+        return parser
+
+    @staticmethod
+    def atos_lib_speedups(parser=None):
+        """ atos lib speedups arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-lib-speedups",
+                                        description="ATOS lib tool")
+
+        args.configuration_path(parser)
+        args.tradeoffs(parser)
+        args.atos_lib.query(parser)
+        args.atos_lib.targets(parser)
+        args.atos_lib.groupname(parser)
+        args.atos_lib.refid(parser)
+        args.atos_lib.frontier(parser)
+        return parser
+
+    @staticmethod
+    def atos_lib_push(parser=None):
+        """ atos lib push arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-lib-push",
+                                        description="ATOS lib tool")
+
+        args.configuration_path(parser, ("-C", "--C1"))
+        args.atos_lib.remote_configuration_path(parser)
+        args.atos_lib.query(parser)
+        args.atos_lib.replacement(parser)
+        args.force(parser)
+        return parser
+
+    @staticmethod
+    def atos_lib_pull(parser=None):
+        """ atos lib pull arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-lib-pull",
+                                        description="ATOS lib tool")
+
+        args.configuration_path(parser, ("-C", "--C1"))
+        args.atos_lib.remote_configuration_path(parser)
+        args.atos_lib.query(parser)
+        args.atos_lib.replacement(parser)
+        args.force(parser)
+        return parser
+
+    @staticmethod
+    def atos_lib_report(parser=None):
+        """ atos lib report arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-lib-report",
+                                        description="ATOS lib tool")
+
+        args.configuration_path(parser)
+        args.atos_lib.targets(parser)
+        args.atos_lib.query(parser)
+        args.atos_lib.refid(parser)
+        args.atos_lib.reverse(parser)
+        args.atos_lib.mode(parser)
+        args.atos_lib.variants(parser)
+        return parser
+
+    @staticmethod
+    def atos_lib_addresult(parser=None):
+        """ atos lib add_result arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-lib-add_result",
+                                        description="ATOS lib tool")
+
+        args.configuration_path(parser)
+        args.atos_lib.result(parser)
+        return parser
+
+    @staticmethod
+    def atos_lib_config(parser=None):
+        """ atos lib config arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-lib-config",
+                                        description="ATOS lib tool")
+
+        args.configuration_path(parser)
+        args.atos_lib.query(parser)
+        args.atos_lib.text(parser)
+        args.atos_lib.uniq(parser)
+        args.atos_lib.additem(parser)
+        args.atos_lib.getitem(parser)
+        args.atos_lib.addcpl(parser)
+        args.atos_lib.cplflags(parser)
+        return parser
+
+    @staticmethod
     def atos_opt(parser=None):
         """ atos opt arguments parser factory. """
         if parser == None:
@@ -306,7 +470,7 @@ class parsers:
         args.exe(parser)
         group = parser.add_mutually_exclusive_group()
         args.atos_play.objective(group)
-        args.atos_play.tradeoffs(group)
+        args.tradeoffs(group)
         args.atos_play.nbpoints(parser)
         args.atos_play.ref(parser)
         args.atos_play.localid(parser)
@@ -579,6 +743,14 @@ class args:
                              help="record results")
 
     @staticmethod
+    def tradeoffs(parser, args=("-s", "--tradeoffs")):
+        parser.add_argument(*args,
+                             dest="tradeoffs",
+                             action='append',
+                             type=float,
+                             help="selected tradeoff given size/perf ratio")
+
+    @staticmethod
     def variant(parser, args=("-w", "--variant")):
         parser.add_argument(
             *args,
@@ -675,6 +847,156 @@ class args:
                  dest="no_run", action='store_true', default=False,
                  help="do not run reference configuration")
 
+    class atos_lib:
+        """ Namespace for non common atos lib arguments. """
+
+        @staticmethod
+        def query(parser, args=("-q", "--query")):
+            parser.add_argument(*args,
+                                 dest="query",
+                                 help="results query values")
+
+        @staticmethod
+        def type(parser, args=("-t", "--type")):
+            parser.add_argument(
+                *args,
+                 dest="type",
+                 choices=['results_db', 'json', 'pickle'],
+                 help="database type",
+                 default='results_db')
+
+        @staticmethod
+        def shared(parser, args=("--shared",)):
+            parser.add_argument(
+                *args,
+                 dest="shared",
+                 help="create a shared database "
+                 "(group has write permission)",
+                 action="store_true")
+
+        @staticmethod
+        def text(parser, args=("-t", "--text")):
+            parser.add_argument(
+                *args,
+                 dest="text",
+                 help="text output format (default: json)",
+                 action="store_true")
+
+        @staticmethod
+        def targets(parser, args=("-t", "--targets")):
+            parser.add_argument(
+                *args,
+                 dest="targets",
+                 help="target list")
+
+        @staticmethod
+        def groupname(parser, args=("-g", "--group_name")):
+            parser.add_argument(
+                *args,
+                 dest="group_name",
+                 help="target group name")
+
+        @staticmethod
+        def refid(parser, args=("-r", "--refid")):
+            parser.add_argument(
+                *args,
+                 dest="ref",
+                 help="reference variant id",
+                 default="REF")
+
+        @staticmethod
+        def frontier(parser, args=("-f", "--frontier")):
+            parser.add_argument(
+                *args,
+                 dest="frontier",
+                 help="only print frontier points",
+                 action="store_true")
+
+        @staticmethod
+        def remote_configuration_path(parser, args=("-R", "--C2")):
+            parser.add_argument(
+                *args,
+                 dest="remote_configuration_path",
+                 help="remote configuration path",
+                 required=True)
+
+        @staticmethod
+        def replacement(parser, args=("-r", "--repl")):
+            parser.add_argument(
+                *args,
+                 dest="replacement",
+                 help="values replacement",
+                 default="")
+
+        @staticmethod
+        def reverse(parser, args=("-X", "--reverse")):
+            parser.add_argument(
+                *args,
+                 dest="reverse",
+                 help="swap line/columns",
+                 action="store_true")
+
+        @staticmethod
+        def mode(parser, args=("-m", "--mode")):
+            parser.add_argument(
+                *args,
+                 dest="mode",
+                 choices=['speedup', 'sizered', 'stdev'],
+                 help="report type [speedup|sizered|stdev]",
+                 default="speedup")
+
+        @staticmethod
+        def variants(parser, args=("-v", "--variants")):
+            parser.add_argument(
+                *args,
+                 dest="variants",
+                 help="target list")
+
+        @staticmethod
+        def result(parser, args=("-r", "--result")):
+            parser.add_argument(
+                *args,
+                 dest="result",
+                 help="results values",
+                 default="")
+
+        @staticmethod
+        def uniq(parser, args=("-u", "--uniq")):
+            parser.add_argument(
+                *args,
+                 dest="uniq",
+                 help="omit repeated results",
+                 action="store_true")
+
+        @staticmethod
+        def additem(parser, args=("-a", "--add")):
+            parser.add_argument(
+                *args,
+                 dest="add_item",
+                 help="add config item (key:value)")
+
+        @staticmethod
+        def getitem(parser, args=("-g", "--get")):
+            parser.add_argument(
+                *args,
+                 dest="get_item",
+                 help="get config item")
+
+        @staticmethod
+        def addcpl(parser, args=("--add-cpl",)):
+            parser.add_argument(
+                *args,
+                 dest="add_cpl",
+                 help="add compiler description")
+
+        @staticmethod
+        def cplflags(parser, args=("--cpl-flags",)):
+            parser.add_argument(
+                *args,
+                 dest="cpl_flags",
+                 help="print flags for flags file",
+                 action="store_true")
+
     class atos_opt:
         """ Namespace for non common atos-opt arguments. """
 
@@ -709,14 +1031,6 @@ class args:
                                  help="defined the objective function",
                                  choices=["time", "size"],
                                  default="time")
-
-        @staticmethod
-        def tradeoffs(parser, args=("-s", "--tradeoffs")):
-            parser.add_argument(*args,
-                                 dest="tradeoffs",
-                                 action='append',
-                                 type=float,
-                                 help="get best tradeoff results")
 
         @staticmethod
         def nbpoints(parser, args=("-N", "--nbpoints")):

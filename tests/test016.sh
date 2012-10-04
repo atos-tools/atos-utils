@@ -15,15 +15,15 @@ $ROOT/bin/atos-build -a -O3
 $ROOT/bin/atos-run -r -a -O3
 
 (
-$ROOT/lib/atos/python/atos/atos_lib.py create_db -C DBDEF
-$ROOT/lib/atos/python/atos/atos_lib.py push -R DBDEF --force
-[ `$ROOT/lib/atos/python/atos/atos_lib.py query -C DBDEF | grep target | wc -l` -eq 2 ]
+$ROOT/bin/atos lib create_db -C DBDEF
+$ROOT/bin/atos lib push -R DBDEF --force
+[ `$ROOT/bin/atos lib query -C DBDEF | grep target | wc -l` -eq 2 ]
 
-$ROOT/lib/atos/python/atos/atos_lib.py create_db -C DBJSON --type=json
-$ROOT/lib/atos/python/atos/atos_lib.py push -R DBJSON --force
-[ `$ROOT/lib/atos/python/atos/atos_lib.py query -C DBJSON | grep target | wc -l` -eq 2 ]
+$ROOT/bin/atos lib create_db -C DBJSON --type=json
+$ROOT/bin/atos lib push -R DBJSON --force
+[ `$ROOT/bin/atos lib query -C DBJSON | grep target | wc -l` -eq 2 ]
 
-$ROOT/lib/atos/python/atos/atos_lib.py create_db -C DBPICKLE --type=pickle
-$ROOT/lib/atos/python/atos/atos_lib.py push -C DBJSON -R DBPICKLE --force
-[ `$ROOT/lib/atos/python/atos/atos_lib.py query -C DBPICKLE | grep target | wc -l` -eq 2 ]
+$ROOT/bin/atos lib create_db -C DBPICKLE --type=pickle
+$ROOT/bin/atos lib push -C DBJSON -R DBPICKLE --force
+[ `$ROOT/bin/atos lib query -C DBPICKLE | grep target | wc -l` -eq 2 ]
 ) 2>&1

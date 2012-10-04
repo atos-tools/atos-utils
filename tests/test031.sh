@@ -11,7 +11,7 @@ acf_plugin="acf_plugin.so"
 acf_plugin_path=""
 
 config_query() {
-    $ROOT/lib/atos/python/atos/atos_lib.py config -u -t -q $*
+    $ROOT/bin/atos lib config -u -t -q $*
 }
 
 $ROOT/bin/atos-init \
@@ -35,7 +35,7 @@ $ROOT/bin/atos-opt -r -a "-O2"
 
 $ROOT/bin/atos-opt -r -a "-O3"
 
-nb_frontier=`$ROOT/lib/atos/python/atos/atos_lib.py speedups -C atos-configurations -f | wc -l`
+nb_frontier=`$ROOT/bin/atos lib speedups -C atos-configurations -f | wc -l`
 
 oprof_out_script=oprofile.sh
 echo "#!/usr/bin/env bash" > $oprof_out_script
@@ -54,7 +54,7 @@ $ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 -Y "-Os noinline cold"
 [ -d atos-configurations ]
 
 # REF + Os + O2 + O3 
-nb_played=`$ROOT/lib/atos/python/atos/atos_lib.py query | wc -l`
+nb_played=`$ROOT/bin/atos lib query | wc -l`
 
 # 2 hot functions for default treshold hot=70, cold=30
 # -> only 3 new runs without list of flags to explore (base, ref, best)
@@ -65,7 +65,7 @@ echo "-O3 -funroll-loops"     >> flags.txt
 
 $ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 -Y "-Os noinline cold" -F flags.txt
 
-nb_played=`$ROOT/lib/atos/python/atos/atos_lib.py query | wc -l`
+nb_played=`$ROOT/bin/atos lib query | wc -l`
 # 7 +  (base, ref, best) + (2 flag_list * 2 hot_functions)
 [ "`expr $nb_played`" == "14" ]
 

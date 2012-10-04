@@ -16,7 +16,7 @@ $ROOT/bin/atos-opt -C atos-config -r -a "-O2"
 
 $ROOT/bin/atos-opt -C atos-config -r -a "-O2" -f
 
-[ `$ROOT/lib/atos/python/atos/atos_lib.py query -C atos-config | grep target | wc -l` -eq 3 ]
+[ `$ROOT/bin/atos lib query -C atos-config | grep target | wc -l` -eq 3 ]
 
 if [ `gcc -v --help 2>&1 | grep "\-flto" | wc -l` -ne 0 ]; then
 
@@ -26,9 +26,9 @@ if [ `gcc -v --help 2>&1 | grep "\-flto" | wc -l` -ne 0 ]; then
 
     $ROOT/bin/atos-opt -C atos-config -r -a "-O2" -f -u "-O2"
 
-    [ `$ROOT/lib/atos/python/atos/atos_lib.py query -C atos-config | grep target | wc -l` -eq 6 ]
+    [ `$ROOT/bin/atos lib query -C atos-config | grep target | wc -l` -eq 6 ]
 
-    [ `$ROOT/lib/atos/python/atos/atos_lib.py query -C atos-config | grep flto | wc -l` -eq 2 ]
+    [ `$ROOT/bin/atos lib query -C atos-config | grep flto | wc -l` -eq 2 ]
 
 fi
 

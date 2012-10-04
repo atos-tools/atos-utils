@@ -76,8 +76,8 @@ def _process_output(process, output_file, print_output, output_stderr):
     outflags = setfl(process.stdout, msk=os.O_NONBLOCK)
     in_files = filter(bool, [process.stderr, process.stdout])
     try:
-        while True:
-            # wait for new data avalaible or process end
+        # wait for new data availability
+        while in_files:
             ready = select.select(in_files, [], [])[0]
             if process.stderr in ready:
                 data = process.stderr.read()
@@ -89,11 +89,7 @@ def _process_output(process, output_file, print_output, output_stderr):
                 if data: output_file.write(data)
                 if data and print_output: sys.stdout.write(data)
                 if not data: in_files.remove(process.stdout)
-            if process.poll() is not None:
-                break
-            if not in_files:  # nothing to read, wait for end
-                process.wait()
-                break
+        # nothing left to read, return
     finally:
         # reset initial flags
         setfl(process.stdout, flg=outflags)
@@ -127,19 +123,11 @@ def _subcall(cmd, get_output=False, print_output=False, output_stderr=False,
         stdin_tmp.seek(0)
         popen_kwargs.update({'stdin': stdin_tmp})
     process = subprocess.Popen(cmd, shell=shell, **popen_kwargs)
-    while True:
-        try:
-            if get_output:
-                _process_output(
-                    process, output_file=outputf, print_output=print_output,
-                    output_stderr=output_stderr)
-            else:
-                process.wait()
-            break
-        except KeyboardInterrupt:
-            process.send_signal(signal.SIGINT)
-        except: raise
-    status = process.poll()
+    if get_output:
+        _process_output(
+            process, output_file=outputf, print_output=print_output,
+            output_stderr=output_stderr)
+    status = process.wait()
     if get_output:
         output = outputf.getvalue()
         outputf.close()

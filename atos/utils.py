@@ -17,9 +17,7 @@
 #
 
 import sys, os, stat
-
 import globals
-import atos
 import arguments
 import atos_lib
 import fnmatch

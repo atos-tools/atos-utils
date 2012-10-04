@@ -37,11 +37,64 @@
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 213 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 3 4
 typedef unsigned int size_t;
-# 325 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 3 4
-typedef int wchar_t;
 # 34 "/usr/include/stdlib.h" 2 3 4
 
+extern "C" {
 
+
+
+
+
+
+# 1 "/usr/include/bits/waitflags.h" 1 3 4
+# 43 "/usr/include/stdlib.h" 2 3 4
+# 1 "/usr/include/bits/waitstatus.h" 1 3 4
+# 65 "/usr/include/bits/waitstatus.h" 3 4
+# 1 "/usr/include/endian.h" 1 3 4
+# 37 "/usr/include/endian.h" 3 4
+# 1 "/usr/include/bits/endian.h" 1 3 4
+# 38 "/usr/include/endian.h" 2 3 4
+# 61 "/usr/include/endian.h" 3 4
+# 1 "/usr/include/bits/byteswap.h" 1 3 4
+# 28 "/usr/include/bits/byteswap.h" 3 4
+# 1 "/usr/include/bits/wordsize.h" 1 3 4
+# 29 "/usr/include/bits/byteswap.h" 2 3 4
+# 62 "/usr/include/endian.h" 2 3 4
+# 66 "/usr/include/bits/waitstatus.h" 2 3 4
+
+union wait
+  {
+    int w_status;
+    struct
+      {
+
+ unsigned int __w_termsig:7;
+ unsigned int __w_coredump:1;
+ unsigned int __w_retcode:8;
+ unsigned int:16;
+
+
+
+
+
+
+
+      } __wait_terminated;
+    struct
+      {
+
+ unsigned int __w_stopval:8;
+ unsigned int __w_stopsig:8;
+ unsigned int:16;
+
+
+
+
+
+
+      } __wait_stopped;
+  };
+# 44 "/usr/include/stdlib.h" 2 3 4
 # 96 "/usr/include/stdlib.h" 3 4
 
 
@@ -73,26 +126,26 @@ __extension__ typedef struct
 
 
 # 140 "/usr/include/stdlib.h" 3 4
-extern size_t __ctype_get_mb_cur_max (void) __attribute__ ((__nothrow__)) ;
+extern size_t __ctype_get_mb_cur_max (void) throw () ;
 
 
 
 
 extern double atof (__const char *__nptr)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
 
 extern int atoi (__const char *__nptr)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
 
 extern long int atol (__const char *__nptr)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
 
 
 
 
 
 __extension__ extern long long int atoll (__const char *__nptr)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
 
 
 
@@ -100,18 +153,18 @@ __extension__ extern long long int atoll (__const char *__nptr)
 
 extern double strtod (__const char *__restrict __nptr,
         char **__restrict __endptr)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__nonnull__ (1))) ;
 
 
 
 
 
 extern float strtof (__const char *__restrict __nptr,
-       char **__restrict __endptr) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+       char **__restrict __endptr) throw () __attribute__ ((__nonnull__ (1))) ;
 
 extern long double strtold (__const char *__restrict __nptr,
        char **__restrict __endptr)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__nonnull__ (1))) ;
 
 
 
@@ -119,11 +172,11 @@ extern long double strtold (__const char *__restrict __nptr,
 
 extern long int strtol (__const char *__restrict __nptr,
    char **__restrict __endptr, int __base)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__nonnull__ (1))) ;
 
 extern unsigned long int strtoul (__const char *__restrict __nptr,
       char **__restrict __endptr, int __base)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__nonnull__ (1))) ;
 
 
 
@@ -131,12 +184,12 @@ extern unsigned long int strtoul (__const char *__restrict __nptr,
 __extension__
 extern long long int strtoq (__const char *__restrict __nptr,
         char **__restrict __endptr, int __base)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__nonnull__ (1))) ;
 
 __extension__
 extern unsigned long long int strtouq (__const char *__restrict __nptr,
            char **__restrict __endptr, int __base)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__nonnull__ (1))) ;
 
 
 
@@ -145,53 +198,112 @@ extern unsigned long long int strtouq (__const char *__restrict __nptr,
 __extension__
 extern long long int strtoll (__const char *__restrict __nptr,
          char **__restrict __endptr, int __base)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__nonnull__ (1))) ;
 
 __extension__
 extern unsigned long long int strtoull (__const char *__restrict __nptr,
      char **__restrict __endptr, int __base)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__nonnull__ (1))) ;
 
-# 277 "/usr/include/stdlib.h" 3 4
-
-extern __inline double
-__attribute__ ((__nothrow__)) atof (__const char *__nptr)
+# 236 "/usr/include/stdlib.h" 3 4
+# 1 "/usr/include/xlocale.h" 1 3 4
+# 28 "/usr/include/xlocale.h" 3 4
+typedef struct __locale_struct
 {
-  return strtod (__nptr, (char **) ((void *)0));
+
+  struct locale_data *__locales[13];
+
+
+  const unsigned short int *__ctype_b;
+  const int *__ctype_tolower;
+  const int *__ctype_toupper;
+
+
+  const char *__names[13];
+} *__locale_t;
+
+
+typedef __locale_t locale_t;
+# 237 "/usr/include/stdlib.h" 2 3 4
+
+
+
+extern long int strtol_l (__const char *__restrict __nptr,
+     char **__restrict __endptr, int __base,
+     __locale_t __loc) throw () __attribute__ ((__nonnull__ (1, 4))) ;
+
+extern unsigned long int strtoul_l (__const char *__restrict __nptr,
+        char **__restrict __endptr,
+        int __base, __locale_t __loc)
+     throw () __attribute__ ((__nonnull__ (1, 4))) ;
+
+__extension__
+extern long long int strtoll_l (__const char *__restrict __nptr,
+    char **__restrict __endptr, int __base,
+    __locale_t __loc)
+     throw () __attribute__ ((__nonnull__ (1, 4))) ;
+
+__extension__
+extern unsigned long long int strtoull_l (__const char *__restrict __nptr,
+       char **__restrict __endptr,
+       int __base, __locale_t __loc)
+     throw () __attribute__ ((__nonnull__ (1, 4))) ;
+
+extern double strtod_l (__const char *__restrict __nptr,
+   char **__restrict __endptr, __locale_t __loc)
+     throw () __attribute__ ((__nonnull__ (1, 3))) ;
+
+extern float strtof_l (__const char *__restrict __nptr,
+         char **__restrict __endptr, __locale_t __loc)
+     throw () __attribute__ ((__nonnull__ (1, 3))) ;
+
+extern long double strtold_l (__const char *__restrict __nptr,
+         char **__restrict __endptr,
+         __locale_t __loc)
+     throw () __attribute__ ((__nonnull__ (1, 3))) ;
+
+
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) double
+atof (__const char *__nptr) throw ()
+{
+  return strtod (__nptr, (char **) __null);
 }
-extern __inline int
-__attribute__ ((__nothrow__)) atoi (__const char *__nptr)
+extern __inline __attribute__ ((__gnu_inline__)) int
+atoi (__const char *__nptr) throw ()
 {
-  return (int) strtol (__nptr, (char **) ((void *)0), 10);
+  return (int) strtol (__nptr, (char **) __null, 10);
 }
-extern __inline long int
-__attribute__ ((__nothrow__)) atol (__const char *__nptr)
+extern __inline __attribute__ ((__gnu_inline__)) long int
+atol (__const char *__nptr) throw ()
 {
-  return strtol (__nptr, (char **) ((void *)0), 10);
+  return strtol (__nptr, (char **) __null, 10);
 }
 
 
 
 
-__extension__ extern __inline long long int
-__attribute__ ((__nothrow__)) atoll (__const char *__nptr)
+__extension__ extern __inline __attribute__ ((__gnu_inline__)) long long int
+atoll (__const char *__nptr) throw ()
 {
-  return strtoll (__nptr, (char **) ((void *)0), 10);
+  return strtoll (__nptr, (char **) __null, 10);
 }
 
 # 311 "/usr/include/stdlib.h" 3 4
-extern char *l64a (long int __n) __attribute__ ((__nothrow__)) ;
+extern char *l64a (long int __n) throw () ;
 
 
 extern long int a64l (__const char *__s)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
 
 
 
 
 # 1 "/usr/include/sys/types.h" 1 3 4
 # 29 "/usr/include/sys/types.h" 3 4
-
+extern "C" {
 
 # 1 "/usr/include/bits/types.h" 1 3 4
 # 28 "/usr/include/bits/types.h" 3 4
@@ -310,7 +422,17 @@ typedef __loff_t loff_t;
 
 
 typedef __ino_t ino_t;
-# 62 "/usr/include/sys/types.h" 3 4
+
+
+
+
+
+
+typedef __ino64_t ino64_t;
+
+
+
+
 typedef __dev_t dev_t;
 
 
@@ -338,7 +460,17 @@ typedef __uid_t uid_t;
 
 
 typedef __off_t off_t;
-# 100 "/usr/include/sys/types.h" 3 4
+
+
+
+
+
+
+typedef __off64_t off64_t;
+
+
+
+
 typedef __pid_t pid_t;
 
 
@@ -365,6 +497,13 @@ typedef __caddr_t caddr_t;
 typedef __key_t key_t;
 # 133 "/usr/include/sys/types.h" 3 4
 # 1 "/usr/include/time.h" 1 3 4
+# 58 "/usr/include/time.h" 3 4
+
+
+typedef __clock_t clock_t;
+
+
+
 # 74 "/usr/include/time.h" 3 4
 
 
@@ -377,7 +516,19 @@ typedef __clockid_t clockid_t;
 # 104 "/usr/include/time.h" 3 4
 typedef __timer_t timer_t;
 # 134 "/usr/include/sys/types.h" 2 3 4
-# 147 "/usr/include/sys/types.h" 3 4
+
+
+
+typedef __useconds_t useconds_t;
+
+
+
+typedef __suseconds_t suseconds_t;
+
+
+
+
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 148 "/usr/include/sys/types.h" 2 3 4
 
@@ -399,20 +550,7 @@ typedef unsigned int u_int32_t __attribute__ ((__mode__ (__SI__)));
 typedef unsigned int u_int64_t __attribute__ ((__mode__ (__DI__)));
 
 typedef int register_t __attribute__ ((__mode__ (__word__)));
-# 217 "/usr/include/sys/types.h" 3 4
-# 1 "/usr/include/endian.h" 1 3 4
-# 37 "/usr/include/endian.h" 3 4
-# 1 "/usr/include/bits/endian.h" 1 3 4
-# 38 "/usr/include/endian.h" 2 3 4
-# 61 "/usr/include/endian.h" 3 4
-# 1 "/usr/include/bits/byteswap.h" 1 3 4
-# 28 "/usr/include/bits/byteswap.h" 3 4
-# 1 "/usr/include/bits/wordsize.h" 1 3 4
-# 29 "/usr/include/bits/byteswap.h" 2 3 4
-# 62 "/usr/include/endian.h" 2 3 4
-# 218 "/usr/include/sys/types.h" 2 3 4
-
-
+# 220 "/usr/include/sys/types.h" 3 4
 # 1 "/usr/include/sys/select.h" 1 3 4
 # 31 "/usr/include/sys/select.h" 3 4
 # 1 "/usr/include/bits/select.h" 1 3 4
@@ -460,14 +598,7 @@ struct timeval
     __suseconds_t tv_usec;
   };
 # 47 "/usr/include/sys/select.h" 2 3 4
-
-
-typedef __suseconds_t suseconds_t;
-
-
-
-
-
+# 55 "/usr/include/sys/select.h" 3 4
 typedef long int __fd_mask;
 # 67 "/usr/include/sys/select.h" 3 4
 typedef struct
@@ -475,10 +606,10 @@ typedef struct
 
 
 
+    __fd_mask fds_bits[1024 / (8 * (int) sizeof (__fd_mask))];
 
 
 
-    __fd_mask __fds_bits[1024 / (8 * (int) sizeof (__fd_mask))];
 
 
   } fd_set;
@@ -490,7 +621,7 @@ typedef struct
 
 typedef __fd_mask fd_mask;
 # 99 "/usr/include/sys/select.h" 3 4
-
+extern "C" {
 # 109 "/usr/include/sys/select.h" 3 4
 extern int select (int __nfds, fd_set *__restrict __readfds,
      fd_set *__restrict __writefds,
@@ -504,7 +635,7 @@ extern int pselect (int __nfds, fd_set *__restrict __readfds,
       const __sigset_t *__restrict __sigmask);
 
 
-
+}
 # 221 "/usr/include/sys/types.h" 2 3 4
 
 
@@ -512,37 +643,47 @@ extern int pselect (int __nfds, fd_set *__restrict __readfds,
 # 30 "/usr/include/sys/sysmacros.h" 3 4
 __extension__
 extern unsigned int gnu_dev_major (unsigned long long int __dev)
-     __attribute__ ((__nothrow__));
+     throw ();
 __extension__
 extern unsigned int gnu_dev_minor (unsigned long long int __dev)
-     __attribute__ ((__nothrow__));
+     throw ();
 __extension__
 extern unsigned long long int gnu_dev_makedev (unsigned int __major,
             unsigned int __minor)
-     __attribute__ ((__nothrow__));
+     throw ();
 
 
-__extension__ extern __inline unsigned int
-__attribute__ ((__nothrow__)) gnu_dev_major (unsigned long long int __dev)
+__extension__ extern __inline __attribute__ ((__gnu_inline__)) unsigned int
+gnu_dev_major (unsigned long long int __dev) throw ()
 {
   return ((__dev >> 8) & 0xfff) | ((unsigned int) (__dev >> 32) & ~0xfff);
 }
 
-__extension__ extern __inline unsigned int
-__attribute__ ((__nothrow__)) gnu_dev_minor (unsigned long long int __dev)
+__extension__ extern __inline __attribute__ ((__gnu_inline__)) unsigned int
+gnu_dev_minor (unsigned long long int __dev) throw ()
 {
   return (__dev & 0xff) | ((unsigned int) (__dev >> 12) & ~0xff);
 }
 
-__extension__ extern __inline unsigned long long int
-__attribute__ ((__nothrow__)) gnu_dev_makedev (unsigned int __major, unsigned int __minor)
+__extension__ extern __inline __attribute__ ((__gnu_inline__)) unsigned long long int
+gnu_dev_makedev (unsigned int __major, unsigned int __minor) throw ()
 {
   return ((__minor & 0xff) | ((__major & 0xfff) << 8)
    | (((unsigned long long int) (__minor & ~0xff)) << 12)
    | (((unsigned long long int) (__major & ~0xfff)) << 32));
 }
 # 224 "/usr/include/sys/types.h" 2 3 4
-# 235 "/usr/include/sys/types.h" 3 4
+
+
+
+
+typedef __blksize_t blksize_t;
+
+
+
+
+
+
 typedef __blkcnt_t blkcnt_t;
 
 
@@ -552,7 +693,15 @@ typedef __fsblkcnt_t fsblkcnt_t;
 
 
 typedef __fsfilcnt_t fsfilcnt_t;
-# 270 "/usr/include/sys/types.h" 3 4
+# 262 "/usr/include/sys/types.h" 3 4
+typedef __blkcnt64_t blkcnt64_t;
+typedef __fsblkcnt64_t fsblkcnt64_t;
+typedef __fsfilcnt64_t fsfilcnt64_t;
+
+
+
+
+
 # 1 "/usr/include/bits/pthreadtypes.h" 1 3 4
 # 23 "/usr/include/bits/pthreadtypes.h" 3 4
 # 1 "/usr/include/bits/wordsize.h" 1 3 4
@@ -703,7 +852,7 @@ typedef union
 # 271 "/usr/include/sys/types.h" 2 3 4
 
 
-
+}
 # 321 "/usr/include/stdlib.h" 2 3 4
 
 
@@ -711,21 +860,21 @@ typedef union
 
 
 
-extern long int random (void) __attribute__ ((__nothrow__));
+extern long int random (void) throw ();
 
 
-extern void srandom (unsigned int __seed) __attribute__ ((__nothrow__));
+extern void srandom (unsigned int __seed) throw ();
 
 
 
 
 
 extern char *initstate (unsigned int __seed, char *__statebuf,
-   size_t __statelen) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+   size_t __statelen) throw () __attribute__ ((__nonnull__ (2)));
 
 
 
-extern char *setstate (char *__statebuf) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+extern char *setstate (char *__statebuf) throw () __attribute__ ((__nonnull__ (1)));
 
 
 
@@ -745,58 +894,58 @@ struct random_data
   };
 
 extern int random_r (struct random_data *__restrict __buf,
-       int32_t *__restrict __result) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+       int32_t *__restrict __result) throw () __attribute__ ((__nonnull__ (1, 2)));
 
 extern int srandom_r (unsigned int __seed, struct random_data *__buf)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+     throw () __attribute__ ((__nonnull__ (2)));
 
 extern int initstate_r (unsigned int __seed, char *__restrict __statebuf,
    size_t __statelen,
    struct random_data *__restrict __buf)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 4)));
+     throw () __attribute__ ((__nonnull__ (2, 4)));
 
 extern int setstate_r (char *__restrict __statebuf,
          struct random_data *__restrict __buf)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__nonnull__ (1, 2)));
 
 
 
 
 
 
-extern int rand (void) __attribute__ ((__nothrow__));
+extern int rand (void) throw ();
 
-extern void srand (unsigned int __seed) __attribute__ ((__nothrow__));
-
-
+extern void srand (unsigned int __seed) throw ();
 
 
-extern int rand_r (unsigned int *__seed) __attribute__ ((__nothrow__));
 
 
+extern int rand_r (unsigned int *__seed) throw ();
 
 
 
 
 
-extern double drand48 (void) __attribute__ ((__nothrow__));
-extern double erand48 (unsigned short int __xsubi[3]) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
 
 
-extern long int lrand48 (void) __attribute__ ((__nothrow__));
+extern double drand48 (void) throw ();
+extern double erand48 (unsigned short int __xsubi[3]) throw () __attribute__ ((__nonnull__ (1)));
+
+
+extern long int lrand48 (void) throw ();
 extern long int nrand48 (unsigned short int __xsubi[3])
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+     throw () __attribute__ ((__nonnull__ (1)));
 
 
-extern long int mrand48 (void) __attribute__ ((__nothrow__));
+extern long int mrand48 (void) throw ();
 extern long int jrand48 (unsigned short int __xsubi[3])
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+     throw () __attribute__ ((__nonnull__ (1)));
 
 
-extern void srand48 (long int __seedval) __attribute__ ((__nothrow__));
+extern void srand48 (long int __seedval) throw ();
 extern unsigned short int *seed48 (unsigned short int __seed16v[3])
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
-extern void lcong48 (unsigned short int __param[7]) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+     throw () __attribute__ ((__nonnull__ (1)));
+extern void lcong48 (unsigned short int __param[7]) throw () __attribute__ ((__nonnull__ (1)));
 
 
 
@@ -813,39 +962,39 @@ struct drand48_data
 
 
 extern int drand48_r (struct drand48_data *__restrict __buffer,
-        double *__restrict __result) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+        double *__restrict __result) throw () __attribute__ ((__nonnull__ (1, 2)));
 extern int erand48_r (unsigned short int __xsubi[3],
         struct drand48_data *__restrict __buffer,
-        double *__restrict __result) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+        double *__restrict __result) throw () __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern int lrand48_r (struct drand48_data *__restrict __buffer,
         long int *__restrict __result)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__nonnull__ (1, 2)));
 extern int nrand48_r (unsigned short int __xsubi[3],
         struct drand48_data *__restrict __buffer,
         long int *__restrict __result)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern int mrand48_r (struct drand48_data *__restrict __buffer,
         long int *__restrict __result)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__nonnull__ (1, 2)));
 extern int jrand48_r (unsigned short int __xsubi[3],
         struct drand48_data *__restrict __buffer,
         long int *__restrict __result)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern int srand48_r (long int __seedval, struct drand48_data *__buffer)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+     throw () __attribute__ ((__nonnull__ (2)));
 
 extern int seed48_r (unsigned short int __seed16v[3],
-       struct drand48_data *__buffer) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+       struct drand48_data *__buffer) throw () __attribute__ ((__nonnull__ (1, 2)));
 
 extern int lcong48_r (unsigned short int __param[7],
         struct drand48_data *__buffer)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__nonnull__ (1, 2)));
 
 
 
@@ -855,10 +1004,10 @@ extern int lcong48_r (unsigned short int __param[7],
 
 
 
-extern void *malloc (size_t __size) __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) ;
+extern void *malloc (size_t __size) throw () __attribute__ ((__malloc__)) ;
 
 extern void *calloc (size_t __nmemb, size_t __size)
-     __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) ;
+     throw () __attribute__ ((__malloc__)) ;
 
 
 
@@ -870,14 +1019,14 @@ extern void *calloc (size_t __nmemb, size_t __size)
 
 
 extern void *realloc (void *__ptr, size_t __size)
-     __attribute__ ((__nothrow__)) __attribute__ ((__warn_unused_result__));
+     throw () __attribute__ ((__warn_unused_result__));
 
-extern void free (void *__ptr) __attribute__ ((__nothrow__));
-
-
+extern void free (void *__ptr) throw ();
 
 
-extern void cfree (void *__ptr) __attribute__ ((__nothrow__));
+
+
+extern void cfree (void *__ptr) throw ();
 
 
 
@@ -886,108 +1035,145 @@ extern void cfree (void *__ptr) __attribute__ ((__nothrow__));
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 26 "/usr/include/alloca.h" 2 3 4
 
+extern "C" {
 
 
 
 
 
-
-extern void *alloca (size_t __size) __attribute__ ((__nothrow__));
-
+extern void *alloca (size_t __size) throw ();
 
 
 
 
 
+}
 # 498 "/usr/include/stdlib.h" 2 3 4
 
 
 
 
-extern void *valloc (size_t __size) __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) ;
+extern void *valloc (size_t __size) throw () __attribute__ ((__malloc__)) ;
 
 
 
 
 extern int posix_memalign (void **__memptr, size_t __alignment, size_t __size)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__nonnull__ (1))) ;
 
 
 
 
-extern void abort (void) __attribute__ ((__nothrow__)) __attribute__ ((__noreturn__));
+extern void abort (void) throw () __attribute__ ((__noreturn__));
 
 
 
-extern int atexit (void (*__func) (void)) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
-# 530 "/usr/include/stdlib.h" 3 4
+extern int atexit (void (*__func) (void)) throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
+extern "C++" int at_quick_exit (void (*__func) (void))
+     throw () __asm ("at_quick_exit") __attribute__ ((__nonnull__ (1)));
+
+
+
+
 
 
 
 
 
 extern int on_exit (void (*__func) (int __status, void *__arg), void *__arg)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+     throw () __attribute__ ((__nonnull__ (1)));
 
 
 
 
 
 
-extern void exit (int __status) __attribute__ ((__nothrow__)) __attribute__ ((__noreturn__));
-# 553 "/usr/include/stdlib.h" 3 4
+extern void exit (int __status) throw () __attribute__ ((__noreturn__));
 
 
 
 
 
 
-extern void _Exit (int __status) __attribute__ ((__nothrow__)) __attribute__ ((__noreturn__));
+
+extern void quick_exit (int __status) throw () __attribute__ ((__noreturn__));
 
 
 
 
 
 
-extern char *getenv (__const char *__name) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+extern void _Exit (int __status) throw () __attribute__ ((__noreturn__));
+
+
+
+
+
+
+extern char *getenv (__const char *__name) throw () __attribute__ ((__nonnull__ (1))) ;
 
 
 
 
 extern char *__secure_getenv (__const char *__name)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__nonnull__ (1))) ;
 
 
 
 
 
-extern int putenv (char *__string) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+extern int putenv (char *__string) throw () __attribute__ ((__nonnull__ (1)));
 
 
 
 
 
 extern int setenv (__const char *__name, __const char *__value, int __replace)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+     throw () __attribute__ ((__nonnull__ (2)));
 
 
-extern int unsetenv (__const char *__name) __attribute__ ((__nothrow__));
-
-
-
+extern int unsetenv (__const char *__name) throw ();
 
 
 
-extern int clearenv (void) __attribute__ ((__nothrow__));
+
+
+
+extern int clearenv (void) throw ();
 # 604 "/usr/include/stdlib.h" 3 4
-extern char *mktemp (char *__template) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+extern char *mktemp (char *__template) throw () __attribute__ ((__nonnull__ (1))) ;
 # 615 "/usr/include/stdlib.h" 3 4
 extern int mkstemp (char *__template) __attribute__ ((__nonnull__ (1))) ;
+# 625 "/usr/include/stdlib.h" 3 4
+extern int mkstemp64 (char *__template) __attribute__ ((__nonnull__ (1))) ;
 # 637 "/usr/include/stdlib.h" 3 4
 extern int mkstemps (char *__template, int __suffixlen) __attribute__ ((__nonnull__ (1))) ;
+# 647 "/usr/include/stdlib.h" 3 4
+extern int mkstemps64 (char *__template, int __suffixlen)
+     __attribute__ ((__nonnull__ (1))) ;
 # 658 "/usr/include/stdlib.h" 3 4
-extern char *mkdtemp (char *__template) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
-# 707 "/usr/include/stdlib.h" 3 4
+extern char *mkdtemp (char *__template) throw () __attribute__ ((__nonnull__ (1))) ;
+# 669 "/usr/include/stdlib.h" 3 4
+extern int mkostemp (char *__template, int __flags) __attribute__ ((__nonnull__ (1))) ;
+# 679 "/usr/include/stdlib.h" 3 4
+extern int mkostemp64 (char *__template, int __flags) __attribute__ ((__nonnull__ (1))) ;
+# 689 "/usr/include/stdlib.h" 3 4
+extern int mkostemps (char *__template, int __suffixlen, int __flags)
+     __attribute__ ((__nonnull__ (1))) ;
+# 701 "/usr/include/stdlib.h" 3 4
+extern int mkostemps64 (char *__template, int __suffixlen, int __flags)
+     __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
 
 
 
@@ -995,9 +1181,16 @@ extern char *mkdtemp (char *__template) __attribute__ ((__nothrow__)) __attribut
 
 extern int system (__const char *__command) ;
 
+
+
+
+
+
+extern char *canonicalize_file_name (__const char *__name)
+     throw () __attribute__ ((__nonnull__ (1))) ;
 # 729 "/usr/include/stdlib.h" 3 4
 extern char *realpath (__const char *__restrict __name,
-         char *__restrict __resolved) __attribute__ ((__nothrow__)) ;
+         char *__restrict __resolved) throw () ;
 
 
 
@@ -1005,7 +1198,15 @@ extern char *realpath (__const char *__restrict __name,
 
 
 typedef int (*__compar_fn_t) (__const void *, __const void *);
-# 747 "/usr/include/stdlib.h" 3 4
+
+
+typedef __compar_fn_t comparison_fn_t;
+
+
+
+typedef int (*__compar_d_fn_t) (__const void *, __const void *, void *);
+
+
 
 
 
@@ -1017,14 +1218,21 @@ extern void *bsearch (__const void *__key, __const void *__base,
 
 extern void qsort (void *__base, size_t __nmemb, size_t __size,
      __compar_fn_t __compar) __attribute__ ((__nonnull__ (1, 4)));
-# 766 "/usr/include/stdlib.h" 3 4
-extern int abs (int __x) __attribute__ ((__nothrow__)) __attribute__ ((__const__)) ;
-extern long int labs (long int __x) __attribute__ ((__nothrow__)) __attribute__ ((__const__)) ;
+
+extern void qsort_r (void *__base, size_t __nmemb, size_t __size,
+       __compar_d_fn_t __compar, void *__arg)
+  __attribute__ ((__nonnull__ (1, 4)));
+
+
+
+
+extern int abs (int __x) throw () __attribute__ ((__const__)) ;
+extern long int labs (long int __x) throw () __attribute__ ((__const__)) ;
 
 
 
 __extension__ extern long long int llabs (long long int __x)
-     __attribute__ ((__nothrow__)) __attribute__ ((__const__)) ;
+     throw () __attribute__ ((__const__)) ;
 
 
 
@@ -1033,63 +1241,63 @@ __extension__ extern long long int llabs (long long int __x)
 
 
 extern div_t div (int __numer, int __denom)
-     __attribute__ ((__nothrow__)) __attribute__ ((__const__)) ;
+     throw () __attribute__ ((__const__)) ;
 extern ldiv_t ldiv (long int __numer, long int __denom)
-     __attribute__ ((__nothrow__)) __attribute__ ((__const__)) ;
+     throw () __attribute__ ((__const__)) ;
 
 
 
 
 __extension__ extern lldiv_t lldiv (long long int __numer,
         long long int __denom)
-     __attribute__ ((__nothrow__)) __attribute__ ((__const__)) ;
+     throw () __attribute__ ((__const__)) ;
 
 # 802 "/usr/include/stdlib.h" 3 4
 extern char *ecvt (double __value, int __ndigit, int *__restrict __decpt,
-     int *__restrict __sign) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 4))) ;
+     int *__restrict __sign) throw () __attribute__ ((__nonnull__ (3, 4))) ;
 
 
 
 
 extern char *fcvt (double __value, int __ndigit, int *__restrict __decpt,
-     int *__restrict __sign) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 4))) ;
+     int *__restrict __sign) throw () __attribute__ ((__nonnull__ (3, 4))) ;
 
 
 
 
 extern char *gcvt (double __value, int __ndigit, char *__buf)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3))) ;
+     throw () __attribute__ ((__nonnull__ (3))) ;
 
 
 
 
 extern char *qecvt (long double __value, int __ndigit,
       int *__restrict __decpt, int *__restrict __sign)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 4))) ;
+     throw () __attribute__ ((__nonnull__ (3, 4))) ;
 extern char *qfcvt (long double __value, int __ndigit,
       int *__restrict __decpt, int *__restrict __sign)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 4))) ;
+     throw () __attribute__ ((__nonnull__ (3, 4))) ;
 extern char *qgcvt (long double __value, int __ndigit, char *__buf)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3))) ;
+     throw () __attribute__ ((__nonnull__ (3))) ;
 
 
 
 
 extern int ecvt_r (double __value, int __ndigit, int *__restrict __decpt,
      int *__restrict __sign, char *__restrict __buf,
-     size_t __len) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 4, 5)));
+     size_t __len) throw () __attribute__ ((__nonnull__ (3, 4, 5)));
 extern int fcvt_r (double __value, int __ndigit, int *__restrict __decpt,
      int *__restrict __sign, char *__restrict __buf,
-     size_t __len) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 4, 5)));
+     size_t __len) throw () __attribute__ ((__nonnull__ (3, 4, 5)));
 
 extern int qecvt_r (long double __value, int __ndigit,
       int *__restrict __decpt, int *__restrict __sign,
       char *__restrict __buf, size_t __len)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 4, 5)));
+     throw () __attribute__ ((__nonnull__ (3, 4, 5)));
 extern int qfcvt_r (long double __value, int __ndigit,
       int *__restrict __decpt, int *__restrict __sign,
       char *__restrict __buf, size_t __len)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 4, 5)));
+     throw () __attribute__ ((__nonnull__ (3, 4, 5)));
 
 
 
@@ -1097,23 +1305,23 @@ extern int qfcvt_r (long double __value, int __ndigit,
 
 
 
-extern int mblen (__const char *__s, size_t __n) __attribute__ ((__nothrow__)) ;
+extern int mblen (__const char *__s, size_t __n) throw () ;
 
 
 extern int mbtowc (wchar_t *__restrict __pwc,
-     __const char *__restrict __s, size_t __n) __attribute__ ((__nothrow__)) ;
+     __const char *__restrict __s, size_t __n) throw () ;
 
 
-extern int wctomb (char *__s, wchar_t __wchar) __attribute__ ((__nothrow__)) ;
+extern int wctomb (char *__s, wchar_t __wchar) throw () ;
 
 
 
 extern size_t mbstowcs (wchar_t *__restrict __pwcs,
-   __const char *__restrict __s, size_t __n) __attribute__ ((__nothrow__));
+   __const char *__restrict __s, size_t __n) throw ();
 
 extern size_t wcstombs (char *__restrict __s,
    __const wchar_t *__restrict __pwcs, size_t __n)
-     __attribute__ ((__nothrow__));
+     throw ();
 
 
 
@@ -1122,14 +1330,64 @@ extern size_t wcstombs (char *__restrict __s,
 
 
 
-extern int rpmatch (__const char *__response) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
-# 907 "/usr/include/stdlib.h" 3 4
+extern int rpmatch (__const char *__response) throw () __attribute__ ((__nonnull__ (1))) ;
+# 890 "/usr/include/stdlib.h" 3 4
+extern int getsubopt (char **__restrict __optionp,
+        char *__const *__restrict __tokens,
+        char **__restrict __valuep)
+     throw () __attribute__ ((__nonnull__ (1, 2, 3))) ;
+
+
+
+
+
+extern void setkey (__const char *__key) throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
+
 extern int posix_openpt (int __oflag) ;
-# 942 "/usr/include/stdlib.h" 3 4
-extern int getloadavg (double __loadavg[], int __nelem)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
-# 958 "/usr/include/stdlib.h" 3 4
 
+
+
+
+
+
+
+extern int grantpt (int __fd) throw ();
+
+
+
+extern int unlockpt (int __fd) throw ();
+
+
+
+
+extern char *ptsname (int __fd) throw () ;
+
+
+
+
+
+
+extern int ptsname_r (int __fd, char *__buf, size_t __buflen)
+     throw () __attribute__ ((__nonnull__ (2)));
+
+
+extern int getpt (void);
+
+
+
+
+
+
+extern int getloadavg (double __loadavg[], int __nelem)
+     throw () __attribute__ ((__nonnull__ (1)));
+# 958 "/usr/include/stdlib.h" 3 4
+}
 # 21 "../../../src/plugin-utils.c" 2
 # 1 "../../../src/plugin-utils.h" 1
 # 23 "../../../src/plugin-utils.h"
@@ -1145,6 +1403,10 @@ extern int getloadavg (double __loadavg[], int __nelem)
 # 7 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config.h" 2
 
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ansidecl.h" 1
+# 119 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ansidecl.h"
+extern "C" {
+# 431 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ansidecl.h"
+}
 # 9 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/config.h" 2
 # 28 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gcc-plugin.h" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 1
@@ -1164,7 +1426,7 @@ typedef int ptrdiff_t;
 
 # 1 "/usr/include/stdio.h" 1 3 4
 # 30 "/usr/include/stdio.h" 3 4
-
+extern "C" {
 
 
 
@@ -1311,7 +1573,7 @@ struct _IO_FILE {
 };
 
 
-typedef struct _IO_FILE _IO_FILE;
+
 
 
 struct _IO_FILE_plus;
@@ -1369,7 +1631,7 @@ extern void _IO_cookie_init (struct _IO_cookie_file *__cfile, int __read_write,
 
 
 
-
+extern "C" {
 
 
 extern int __underflow (_IO_FILE *);
@@ -1378,8 +1640,8 @@ extern int __overflow (_IO_FILE *, int);
 # 460 "/usr/include/libio.h" 3 4
 extern int _IO_getc (_IO_FILE *__fp);
 extern int _IO_putc (int __c, _IO_FILE *__fp);
-extern int _IO_feof (_IO_FILE *__fp) __attribute__ ((__nothrow__));
-extern int _IO_ferror (_IO_FILE *__fp) __attribute__ ((__nothrow__));
+extern int _IO_feof (_IO_FILE *__fp) throw ();
+extern int _IO_ferror (_IO_FILE *__fp) throw ();
 
 extern int _IO_peekc_locked (_IO_FILE *__fp);
 
@@ -1387,9 +1649,9 @@ extern int _IO_peekc_locked (_IO_FILE *__fp);
 
 
 
-extern void _IO_flockfile (_IO_FILE *) __attribute__ ((__nothrow__));
-extern void _IO_funlockfile (_IO_FILE *) __attribute__ ((__nothrow__));
-extern int _IO_ftrylockfile (_IO_FILE *) __attribute__ ((__nothrow__));
+extern void _IO_flockfile (_IO_FILE *) throw ();
+extern void _IO_funlockfile (_IO_FILE *) throw ();
+extern int _IO_ftrylockfile (_IO_FILE *) throw ();
 # 490 "/usr/include/libio.h" 3 4
 extern int _IO_vfscanf (_IO_FILE * __restrict, const char * __restrict,
    __gnuc_va_list, int *__restrict);
@@ -1401,7 +1663,9 @@ extern size_t _IO_sgetn (_IO_FILE *, void *, size_t);
 extern __off64_t _IO_seekoff (_IO_FILE *, __off64_t, int, int);
 extern __off64_t _IO_seekpos (_IO_FILE *, __off64_t, int);
 
-extern void _IO_free_backup_area (_IO_FILE *) __attribute__ ((__nothrow__));
+extern void _IO_free_backup_area (_IO_FILE *) throw ();
+# 552 "/usr/include/libio.h" 3 4
+}
 # 76 "/usr/include/stdio.h" 2 3 4
 # 89 "/usr/include/stdio.h" 3 4
 
@@ -1411,6 +1675,8 @@ typedef _G_fpos_t fpos_t;
 
 
 
+
+typedef _G_fpos64_t fpos64_t;
 # 141 "/usr/include/stdio.h" 3 4
 # 1 "/usr/include/bits/stdio_lim.h" 1 3 4
 # 142 "/usr/include/stdio.h" 2 3 4
@@ -1427,15 +1693,15 @@ extern struct _IO_FILE *stderr;
 
 
 
-extern int remove (__const char *__filename) __attribute__ ((__nothrow__));
+extern int remove (__const char *__filename) throw ();
 
-extern int rename (__const char *__old, __const char *__new) __attribute__ ((__nothrow__));
+extern int rename (__const char *__old, __const char *__new) throw ();
 
 
 
 
 extern int renameat (int __oldfd, __const char *__old, int __newfd,
-       __const char *__new) __attribute__ ((__nothrow__));
+       __const char *__new) throw ();
 
 
 
@@ -1445,17 +1711,21 @@ extern int renameat (int __oldfd, __const char *__old, int __newfd,
 
 
 extern FILE *tmpfile (void) ;
-# 186 "/usr/include/stdio.h" 3 4
-extern char *tmpnam (char *__s) __attribute__ ((__nothrow__)) ;
+# 182 "/usr/include/stdio.h" 3 4
+extern FILE *tmpfile64 (void) ;
+
+
+
+extern char *tmpnam (char *__s) throw () ;
 
 
 
 
 
-extern char *tmpnam_r (char *__s) __attribute__ ((__nothrow__)) ;
+extern char *tmpnam_r (char *__s) throw () ;
 # 204 "/usr/include/stdio.h" 3 4
 extern char *tempnam (__const char *__dir, __const char *__pfx)
-     __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) ;
+     throw () __attribute__ ((__malloc__)) ;
 
 
 
@@ -1473,7 +1743,11 @@ extern int fflush (FILE *__stream);
 
 # 229 "/usr/include/stdio.h" 3 4
 extern int fflush_unlocked (FILE *__stream);
-# 243 "/usr/include/stdio.h" 3 4
+# 239 "/usr/include/stdio.h" 3 4
+extern int fcloseall (void);
+
+
+
 
 
 
@@ -1491,38 +1765,58 @@ extern FILE *freopen (__const char *__restrict __filename,
         FILE *__restrict __stream) ;
 # 272 "/usr/include/stdio.h" 3 4
 
-# 283 "/usr/include/stdio.h" 3 4
-extern FILE *fdopen (int __fd, __const char *__modes) __attribute__ ((__nothrow__)) ;
-# 296 "/usr/include/stdio.h" 3 4
+
+extern FILE *fopen64 (__const char *__restrict __filename,
+        __const char *__restrict __modes) ;
+extern FILE *freopen64 (__const char *__restrict __filename,
+   __const char *__restrict __modes,
+   FILE *__restrict __stream) ;
+
+
+
+
+extern FILE *fdopen (int __fd, __const char *__modes) throw () ;
+
+
+
+
+
+extern FILE *fopencookie (void *__restrict __magic_cookie,
+     __const char *__restrict __modes,
+     _IO_cookie_io_functions_t __io_funcs) throw () ;
+
+
+
+
 extern FILE *fmemopen (void *__s, size_t __len, __const char *__modes)
-  __attribute__ ((__nothrow__)) ;
+  throw () ;
 
 
 
 
-extern FILE *open_memstream (char **__bufloc, size_t *__sizeloc) __attribute__ ((__nothrow__)) ;
+extern FILE *open_memstream (char **__bufloc, size_t *__sizeloc) throw () ;
 
 
 
 
 
 
-extern void setbuf (FILE *__restrict __stream, char *__restrict __buf) __attribute__ ((__nothrow__));
+extern void setbuf (FILE *__restrict __stream, char *__restrict __buf) throw ();
 
 
 
 extern int setvbuf (FILE *__restrict __stream, char *__restrict __buf,
-      int __modes, size_t __n) __attribute__ ((__nothrow__));
+      int __modes, size_t __n) throw ();
 
 
 
 
 
 extern void setbuffer (FILE *__restrict __stream, char *__restrict __buf,
-         size_t __size) __attribute__ ((__nothrow__));
+         size_t __size) throw ();
 
 
-extern void setlinebuf (FILE *__stream) __attribute__ ((__nothrow__));
+extern void setlinebuf (FILE *__stream) throw ();
 
 
 
@@ -1540,7 +1834,7 @@ extern int fprintf (FILE *__restrict __stream,
 extern int printf (__const char *__restrict __format, ...);
 
 extern int sprintf (char *__restrict __s,
-      __const char *__restrict __format, ...) __attribute__ ((__nothrow__));
+      __const char *__restrict __format, ...) throw ();
 
 
 
@@ -1555,7 +1849,7 @@ extern int vfprintf (FILE *__restrict __s, __const char *__restrict __format,
 extern int vprintf (__const char *__restrict __format, __gnuc_va_list __arg);
 
 extern int vsprintf (char *__restrict __s, __const char *__restrict __format,
-       __gnuc_va_list __arg) __attribute__ ((__nothrow__));
+       __gnuc_va_list __arg) throw ();
 
 
 
@@ -1563,12 +1857,26 @@ extern int vsprintf (char *__restrict __s, __const char *__restrict __format,
 
 extern int snprintf (char *__restrict __s, size_t __maxlen,
        __const char *__restrict __format, ...)
-     __attribute__ ((__nothrow__)) __attribute__ ((__format__ (__printf__, 3, 4)));
+     throw () __attribute__ ((__format__ (__printf__, 3, 4)));
 
 extern int vsnprintf (char *__restrict __s, size_t __maxlen,
         __const char *__restrict __format, __gnuc_va_list __arg)
-     __attribute__ ((__nothrow__)) __attribute__ ((__format__ (__printf__, 3, 0)));
+     throw () __attribute__ ((__format__ (__printf__, 3, 0)));
 
+
+
+
+
+
+extern int vasprintf (char **__restrict __ptr, __const char *__restrict __f,
+        __gnuc_va_list __arg)
+     throw () __attribute__ ((__format__ (__printf__, 2, 0))) ;
+extern int __asprintf (char **__restrict __ptr,
+         __const char *__restrict __fmt, ...)
+     throw () __attribute__ ((__format__ (__printf__, 2, 3))) ;
+extern int asprintf (char **__restrict __ptr,
+       __const char *__restrict __fmt, ...)
+     throw () __attribute__ ((__format__ (__printf__, 2, 3))) ;
 # 394 "/usr/include/stdio.h" 3 4
 extern int vdprintf (int __fd, __const char *__restrict __fmt,
        __gnuc_va_list __arg)
@@ -1592,16 +1900,7 @@ extern int fscanf (FILE *__restrict __stream,
 extern int scanf (__const char *__restrict __format, ...) ;
 
 extern int sscanf (__const char *__restrict __s,
-     __const char *__restrict __format, ...) __attribute__ ((__nothrow__));
-# 425 "/usr/include/stdio.h" 3 4
-extern int fscanf (FILE *__restrict __stream, __const char *__restrict __format, ...) __asm__ ("" "__isoc99_fscanf")
-
-                               ;
-extern int scanf (__const char *__restrict __format, ...) __asm__ ("" "__isoc99_scanf")
-                              ;
-extern int sscanf (__const char *__restrict __s, __const char *__restrict __format, ...) __asm__ ("" "__isoc99_sscanf")
-
-                          __attribute__ ((__nothrow__));
+     __const char *__restrict __format, ...) throw ();
 # 445 "/usr/include/stdio.h" 3 4
 
 
@@ -1625,21 +1924,7 @@ extern int vscanf (__const char *__restrict __format, __gnuc_va_list __arg)
 
 extern int vsscanf (__const char *__restrict __s,
       __const char *__restrict __format, __gnuc_va_list __arg)
-     __attribute__ ((__nothrow__)) __attribute__ ((__format__ (__scanf__, 2, 0)));
-# 476 "/usr/include/stdio.h" 3 4
-extern int vfscanf (FILE *__restrict __s, __const char *__restrict __format, __gnuc_va_list __arg) __asm__ ("" "__isoc99_vfscanf")
-
-
-
-     __attribute__ ((__format__ (__scanf__, 2, 0))) ;
-extern int vscanf (__const char *__restrict __format, __gnuc_va_list __arg) __asm__ ("" "__isoc99_vscanf")
-
-     __attribute__ ((__format__ (__scanf__, 1, 0))) ;
-extern int vsscanf (__const char *__restrict __s, __const char *__restrict __format, __gnuc_va_list __arg) __asm__ ("" "__isoc99_vsscanf")
-
-
-
-     __attribute__ ((__nothrow__)) __attribute__ ((__format__ (__scanf__, 2, 0)));
+     throw () __attribute__ ((__format__ (__scanf__, 2, 0)));
 # 504 "/usr/include/stdio.h" 3 4
 
 
@@ -1723,6 +2008,9 @@ extern char *fgets (char *__restrict __s, int __n, FILE *__restrict __stream)
 
 extern char *gets (char *__s) ;
 
+# 622 "/usr/include/stdio.h" 3 4
+extern char *fgets_unlocked (char *__restrict __s, int __n,
+        FILE *__restrict __stream) ;
 # 638 "/usr/include/stdio.h" 3 4
 extern __ssize_t __getdelim (char **__restrict __lineptr,
           size_t *__restrict __n, int __delimiter,
@@ -1777,6 +2065,9 @@ extern size_t fread (void *__restrict __ptr, size_t __size,
 extern size_t fwrite (__const void *__restrict __ptr, size_t __size,
         size_t __n, FILE *__restrict __s);
 
+# 699 "/usr/include/stdio.h" 3 4
+extern int fputs_unlocked (__const char *__restrict __s,
+      FILE *__restrict __stream);
 # 710 "/usr/include/stdio.h" 3 4
 extern size_t fread_unlocked (void *__restrict __ptr, size_t __size,
          size_t __n, FILE *__restrict __stream) ;
@@ -1824,21 +2115,28 @@ extern int fgetpos (FILE *__restrict __stream, fpos_t *__restrict __pos);
 extern int fsetpos (FILE *__stream, __const fpos_t *__pos);
 # 788 "/usr/include/stdio.h" 3 4
 
-# 797 "/usr/include/stdio.h" 3 4
 
 
-extern void clearerr (FILE *__stream) __attribute__ ((__nothrow__));
-
-extern int feof (FILE *__stream) __attribute__ ((__nothrow__)) ;
-
-extern int ferror (FILE *__stream) __attribute__ ((__nothrow__)) ;
+extern int fseeko64 (FILE *__stream, __off64_t __off, int __whence);
+extern __off64_t ftello64 (FILE *__stream) ;
+extern int fgetpos64 (FILE *__restrict __stream, fpos64_t *__restrict __pos);
+extern int fsetpos64 (FILE *__stream, __const fpos64_t *__pos);
 
 
 
 
-extern void clearerr_unlocked (FILE *__stream) __attribute__ ((__nothrow__));
-extern int feof_unlocked (FILE *__stream) __attribute__ ((__nothrow__)) ;
-extern int ferror_unlocked (FILE *__stream) __attribute__ ((__nothrow__)) ;
+extern void clearerr (FILE *__stream) throw ();
+
+extern int feof (FILE *__stream) throw () ;
+
+extern int ferror (FILE *__stream) throw () ;
+
+
+
+
+extern void clearerr_unlocked (FILE *__stream) throw ();
+extern int feof_unlocked (FILE *__stream) throw () ;
+extern int ferror_unlocked (FILE *__stream) throw () ;
 
 
 
@@ -1858,17 +2156,21 @@ extern void perror (__const char *__s);
 # 27 "/usr/include/bits/sys_errlist.h" 3 4
 extern int sys_nerr;
 extern __const char *__const sys_errlist[];
+
+
+extern int _sys_nerr;
+extern __const char *__const _sys_errlist[];
 # 827 "/usr/include/stdio.h" 2 3 4
 
 
 
 
-extern int fileno (FILE *__stream) __attribute__ ((__nothrow__)) ;
+extern int fileno (FILE *__stream) throw () ;
 
 
 
 
-extern int fileno_unlocked (FILE *__stream) __attribute__ ((__nothrow__)) ;
+extern int fileno_unlocked (FILE *__stream) throw () ;
 # 846 "/usr/include/stdio.h" 3 4
 extern FILE *popen (__const char *__command, __const char *__modes) ;
 
@@ -1882,20 +2184,46 @@ extern int pclose (FILE *__stream);
 
 
 
-extern char *ctermid (char *__s) __attribute__ ((__nothrow__));
-# 886 "/usr/include/stdio.h" 3 4
-extern void flockfile (FILE *__stream) __attribute__ ((__nothrow__));
+extern char *ctermid (char *__s) throw ();
 
 
 
-extern int ftrylockfile (FILE *__stream) __attribute__ ((__nothrow__)) ;
 
 
-extern void funlockfile (FILE *__stream) __attribute__ ((__nothrow__));
+extern char *cuserid (char *__s);
+
+
+
+
+struct obstack;
+
+
+extern int obstack_printf (struct obstack *__restrict __obstack,
+      __const char *__restrict __format, ...)
+     throw () __attribute__ ((__format__ (__printf__, 2, 3)));
+extern int obstack_vprintf (struct obstack *__restrict __obstack,
+       __const char *__restrict __format,
+       __gnuc_va_list __args)
+     throw () __attribute__ ((__format__ (__printf__, 2, 0)));
+
+
+
+
+
+
+
+extern void flockfile (FILE *__stream) throw ();
+
+
+
+extern int ftrylockfile (FILE *__stream) throw () ;
+
+
+extern void funlockfile (FILE *__stream) throw ();
 # 907 "/usr/include/stdio.h" 3 4
 # 1 "/usr/include/bits/stdio.h" 1 3 4
 # 36 "/usr/include/bits/stdio.h" 3 4
-extern __inline int
+extern __inline __attribute__ ((__gnu_inline__)) int
 vprintf (__const char *__restrict __fmt, __gnuc_va_list __arg)
 {
   return vfprintf (stdout, __fmt, __arg);
@@ -1903,7 +2231,7 @@ vprintf (__const char *__restrict __fmt, __gnuc_va_list __arg)
 
 
 
-extern __inline int
+extern __inline __attribute__ ((__gnu_inline__)) int
 getchar (void)
 {
   return _IO_getc (stdin);
@@ -1912,7 +2240,7 @@ getchar (void)
 
 
 
-extern __inline int
+extern __inline __attribute__ ((__gnu_inline__)) int
 fgetc_unlocked (FILE *__fp)
 {
   return (__builtin_expect (((__fp)->_IO_read_ptr >= (__fp)->_IO_read_end), 0) ? __uflow (__fp) : *(unsigned char *) (__fp)->_IO_read_ptr++);
@@ -1922,14 +2250,14 @@ fgetc_unlocked (FILE *__fp)
 
 
 
-extern __inline int
+extern __inline __attribute__ ((__gnu_inline__)) int
 getc_unlocked (FILE *__fp)
 {
   return (__builtin_expect (((__fp)->_IO_read_ptr >= (__fp)->_IO_read_end), 0) ? __uflow (__fp) : *(unsigned char *) (__fp)->_IO_read_ptr++);
 }
 
 
-extern __inline int
+extern __inline __attribute__ ((__gnu_inline__)) int
 getchar_unlocked (void)
 {
   return (__builtin_expect (((stdin)->_IO_read_ptr >= (stdin)->_IO_read_end), 0) ? __uflow (stdin) : *(unsigned char *) (stdin)->_IO_read_ptr++);
@@ -1938,7 +2266,7 @@ getchar_unlocked (void)
 
 
 
-extern __inline int
+extern __inline __attribute__ ((__gnu_inline__)) int
 putchar (int __c)
 {
   return _IO_putc (__c, stdout);
@@ -1947,7 +2275,7 @@ putchar (int __c)
 
 
 
-extern __inline int
+extern __inline __attribute__ ((__gnu_inline__)) int
 fputc_unlocked (int __c, FILE *__stream)
 {
   return (__builtin_expect (((__stream)->_IO_write_ptr >= (__stream)->_IO_write_end), 0) ? __overflow (__stream, (unsigned char) (__c)) : (unsigned char) (*(__stream)->_IO_write_ptr++ = (__c)));
@@ -1957,35 +2285,53 @@ fputc_unlocked (int __c, FILE *__stream)
 
 
 
-extern __inline int
+extern __inline __attribute__ ((__gnu_inline__)) int
 putc_unlocked (int __c, FILE *__stream)
 {
   return (__builtin_expect (((__stream)->_IO_write_ptr >= (__stream)->_IO_write_end), 0) ? __overflow (__stream, (unsigned char) (__c)) : (unsigned char) (*(__stream)->_IO_write_ptr++ = (__c)));
 }
 
 
-extern __inline int
+extern __inline __attribute__ ((__gnu_inline__)) int
 putchar_unlocked (int __c)
 {
   return (__builtin_expect (((stdout)->_IO_write_ptr >= (stdout)->_IO_write_end), 0) ? __overflow (stdout, (unsigned char) (__c)) : (unsigned char) (*(stdout)->_IO_write_ptr++ = (__c)));
 }
-# 125 "/usr/include/bits/stdio.h" 3 4
-extern __inline int
-__attribute__ ((__nothrow__)) feof_unlocked (FILE *__stream)
+
+
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) __ssize_t
+getline (char **__lineptr, size_t *__n, FILE *__stream)
+{
+  return __getdelim (__lineptr, __n, '\n', __stream);
+}
+
+
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+feof_unlocked (FILE *__stream) throw ()
 {
   return (((__stream)->_flags & 0x10) != 0);
 }
 
 
-extern __inline int
-__attribute__ ((__nothrow__)) ferror_unlocked (FILE *__stream)
+extern __inline __attribute__ ((__gnu_inline__)) int
+ferror_unlocked (FILE *__stream) throw ()
 {
   return (((__stream)->_flags & 0x20) != 0);
 }
 # 908 "/usr/include/stdio.h" 2 3 4
 # 916 "/usr/include/stdio.h" 3 4
-
+}
 # 43 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
+# 99 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
+extern "C" {
+# 183 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
+}
 # 196 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/safe-ctype.h" 1
 # 57 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/safe-ctype.h"
@@ -2024,7 +2370,7 @@ extern const unsigned char _sch_tolower[256];
 # 122 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/safe-ctype.h"
 # 1 "/usr/include/ctype.h" 1 3 4
 # 30 "/usr/include/ctype.h" 3 4
-
+extern "C" {
 # 48 "/usr/include/ctype.h" 3 4
 enum
 {
@@ -2043,11 +2389,11 @@ enum
 };
 # 81 "/usr/include/ctype.h" 3 4
 extern __const unsigned short int **__ctype_b_loc (void)
-     __attribute__ ((__nothrow__)) __attribute__ ((__const));
+     throw () __attribute__ ((__const));
 extern __const __int32_t **__ctype_tolower_loc (void)
-     __attribute__ ((__nothrow__)) __attribute__ ((__const));
+     throw () __attribute__ ((__const));
 extern __const __int32_t **__ctype_toupper_loc (void)
-     __attribute__ ((__nothrow__)) __attribute__ ((__const));
+     throw () __attribute__ ((__const));
 # 96 "/usr/include/ctype.h" 3 4
 
 
@@ -2055,103 +2401,81 @@ extern __const __int32_t **__ctype_toupper_loc (void)
 
 
 
-extern int isalnum (int) __attribute__ ((__nothrow__));
-extern int isalpha (int) __attribute__ ((__nothrow__));
-extern int iscntrl (int) __attribute__ ((__nothrow__));
-extern int isdigit (int) __attribute__ ((__nothrow__));
-extern int islower (int) __attribute__ ((__nothrow__));
-extern int isgraph (int) __attribute__ ((__nothrow__));
-extern int isprint (int) __attribute__ ((__nothrow__));
-extern int ispunct (int) __attribute__ ((__nothrow__));
-extern int isspace (int) __attribute__ ((__nothrow__));
-extern int isupper (int) __attribute__ ((__nothrow__));
-extern int isxdigit (int) __attribute__ ((__nothrow__));
+extern int isalnum (int) throw ();
+extern int isalpha (int) throw ();
+extern int iscntrl (int) throw ();
+extern int isdigit (int) throw ();
+extern int islower (int) throw ();
+extern int isgraph (int) throw ();
+extern int isprint (int) throw ();
+extern int ispunct (int) throw ();
+extern int isspace (int) throw ();
+extern int isupper (int) throw ();
+extern int isxdigit (int) throw ();
 
 
 
-extern int tolower (int __c) __attribute__ ((__nothrow__));
+extern int tolower (int __c) throw ();
 
 
-extern int toupper (int __c) __attribute__ ((__nothrow__));
-
-
-
-
+extern int toupper (int __c) throw ();
 
 
 
 
-extern int isblank (int) __attribute__ ((__nothrow__));
-
-
-# 142 "/usr/include/ctype.h" 3 4
-extern int isascii (int __c) __attribute__ ((__nothrow__));
 
 
 
-extern int toascii (int __c) __attribute__ ((__nothrow__));
+
+extern int isblank (int) throw ();
 
 
 
-extern int _toupper (int) __attribute__ ((__nothrow__));
-extern int _tolower (int) __attribute__ ((__nothrow__));
-# 190 "/usr/include/ctype.h" 3 4
-extern __inline int
-__attribute__ ((__nothrow__)) tolower (int __c)
-{
-  return __c >= -128 && __c < 256 ? (*__ctype_tolower_loc ())[__c] : __c;
-}
-
-extern __inline int
-__attribute__ ((__nothrow__)) toupper (int __c)
-{
-  return __c >= -128 && __c < 256 ? (*__ctype_toupper_loc ())[__c] : __c;
-}
-# 233 "/usr/include/ctype.h" 3 4
-# 1 "/usr/include/xlocale.h" 1 3 4
-# 28 "/usr/include/xlocale.h" 3 4
-typedef struct __locale_struct
-{
-
-  struct locale_data *__locales[13];
 
 
-  const unsigned short int *__ctype_b;
-  const int *__ctype_tolower;
-  const int *__ctype_toupper;
+
+extern int isctype (int __c, int __mask) throw ();
 
 
-  const char *__names[13];
-} *__locale_t;
 
 
-typedef __locale_t locale_t;
-# 234 "/usr/include/ctype.h" 2 3 4
+
+
+extern int isascii (int __c) throw ();
+
+
+
+extern int toascii (int __c) throw ();
+
+
+
+extern int _toupper (int) throw ();
+extern int _tolower (int) throw ();
 # 247 "/usr/include/ctype.h" 3 4
-extern int isalnum_l (int, __locale_t) __attribute__ ((__nothrow__));
-extern int isalpha_l (int, __locale_t) __attribute__ ((__nothrow__));
-extern int iscntrl_l (int, __locale_t) __attribute__ ((__nothrow__));
-extern int isdigit_l (int, __locale_t) __attribute__ ((__nothrow__));
-extern int islower_l (int, __locale_t) __attribute__ ((__nothrow__));
-extern int isgraph_l (int, __locale_t) __attribute__ ((__nothrow__));
-extern int isprint_l (int, __locale_t) __attribute__ ((__nothrow__));
-extern int ispunct_l (int, __locale_t) __attribute__ ((__nothrow__));
-extern int isspace_l (int, __locale_t) __attribute__ ((__nothrow__));
-extern int isupper_l (int, __locale_t) __attribute__ ((__nothrow__));
-extern int isxdigit_l (int, __locale_t) __attribute__ ((__nothrow__));
+extern int isalnum_l (int, __locale_t) throw ();
+extern int isalpha_l (int, __locale_t) throw ();
+extern int iscntrl_l (int, __locale_t) throw ();
+extern int isdigit_l (int, __locale_t) throw ();
+extern int islower_l (int, __locale_t) throw ();
+extern int isgraph_l (int, __locale_t) throw ();
+extern int isprint_l (int, __locale_t) throw ();
+extern int ispunct_l (int, __locale_t) throw ();
+extern int isspace_l (int, __locale_t) throw ();
+extern int isupper_l (int, __locale_t) throw ();
+extern int isxdigit_l (int, __locale_t) throw ();
 
-extern int isblank_l (int, __locale_t) __attribute__ ((__nothrow__));
-
-
-
-extern int __tolower_l (int __c, __locale_t __l) __attribute__ ((__nothrow__));
-extern int tolower_l (int __c, __locale_t __l) __attribute__ ((__nothrow__));
+extern int isblank_l (int, __locale_t) throw ();
 
 
-extern int __toupper_l (int __c, __locale_t __l) __attribute__ ((__nothrow__));
-extern int toupper_l (int __c, __locale_t __l) __attribute__ ((__nothrow__));
+
+extern int __tolower_l (int __c, __locale_t __l) throw ();
+extern int tolower_l (int __c, __locale_t __l) throw ();
+
+
+extern int __toupper_l (int __c, __locale_t __l) throw ();
+extern int toupper_l (int __c, __locale_t __l) throw ();
 # 323 "/usr/include/ctype.h" 3 4
-
+}
 # 123 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/safe-ctype.h" 2
 # 197 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 
@@ -2159,7 +2483,7 @@ extern int toupper_l (int __c, __locale_t __l) __attribute__ ((__nothrow__));
 
 # 1 "/usr/include/errno.h" 1 3 4
 # 32 "/usr/include/errno.h" 3 4
-
+extern "C" {
 
 
 
@@ -2180,15 +2504,50 @@ extern int toupper_l (int __c, __locale_t __l) __attribute__ ((__nothrow__));
 # 5 "/usr/include/linux/errno.h" 2 3 4
 # 26 "/usr/include/bits/errno.h" 2 3 4
 # 43 "/usr/include/bits/errno.h" 3 4
-extern int *__errno_location (void) __attribute__ ((__nothrow__)) __attribute__ ((__const__));
+extern int *__errno_location (void) throw () __attribute__ ((__const__));
 # 37 "/usr/include/errno.h" 2 3 4
-# 59 "/usr/include/errno.h" 3 4
+# 55 "/usr/include/errno.h" 3 4
+extern char *program_invocation_name, *program_invocation_short_name;
 
+
+
+}
+# 69 "/usr/include/errno.h" 3 4
+typedef int error_t;
 # 201 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
-# 215 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
+
+
+
+
+
+
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cstring" 1 3
+# 41 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cstring" 3
+       
+# 42 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cstring" 3
+
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/x86_64-unknown-linux-gnu/32/bits/c++config.h" 1 3
+# 171 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/x86_64-unknown-linux-gnu/32/bits/c++config.h" 3
+namespace std
+{
+  typedef unsigned int size_t;
+  typedef int ptrdiff_t;
+
+
+
+
+}
+# 414 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/x86_64-unknown-linux-gnu/32/bits/c++config.h" 3
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/x86_64-unknown-linux-gnu/32/bits/os_defines.h" 1 3
+# 415 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/x86_64-unknown-linux-gnu/32/bits/c++config.h" 2 3
+
+
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/x86_64-unknown-linux-gnu/32/bits/cpu_defines.h" 1 3
+# 418 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/x86_64-unknown-linux-gnu/32/bits/c++config.h" 2 3
+# 44 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cstring" 2 3
 # 1 "/usr/include/string.h" 1 3 4
 # 28 "/usr/include/string.h" 3 4
-
+extern "C" {
 
 
 
@@ -2206,11 +2565,11 @@ extern int *__errno_location (void) __attribute__ ((__nothrow__)) __attribute__ 
 
 extern void *memcpy (void *__restrict __dest,
        __const void *__restrict __src, size_t __n)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern void *memmove (void *__dest, __const void *__src, size_t __n)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__nonnull__ (1, 2)));
 
 
 
@@ -2219,66 +2578,116 @@ extern void *memmove (void *__dest, __const void *__src, size_t __n)
 
 extern void *memccpy (void *__restrict __dest, __const void *__restrict __src,
         int __c, size_t __n)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__nonnull__ (1, 2)));
 
 
 
 
 
-extern void *memset (void *__s, int __c, size_t __n) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+extern void *memset (void *__s, int __c, size_t __n) throw () __attribute__ ((__nonnull__ (1)));
 
 
 extern int memcmp (__const void *__s1, __const void *__s2, size_t __n)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
-# 94 "/usr/include/string.h" 3 4
-extern void *memchr (__const void *__s, int __c, size_t __n)
-      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
-# 125 "/usr/include/string.h" 3 4
+
+extern "C++"
+{
+extern void *memchr (void *__s, int __c, size_t __n)
+      throw () __asm ("memchr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+extern __const void *memchr (__const void *__s, int __c, size_t __n)
+      throw () __asm ("memchr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) void *
+memchr (void *__s, int __c, size_t __n) throw ()
+{
+  return __builtin_memchr (__s, __c, __n);
+}
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) __const void *
+memchr (__const void *__s, int __c, size_t __n) throw ()
+{
+  return __builtin_memchr (__s, __c, __n);
+}
+
+}
+
+
+
+
+
+
+
+
+
+
+extern "C++" void *rawmemchr (void *__s, int __c)
+     throw () __asm ("rawmemchr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+extern "C++" __const void *rawmemchr (__const void *__s, int __c)
+     throw () __asm ("rawmemchr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
+
+extern "C++" void *memrchr (void *__s, int __c, size_t __n)
+      throw () __asm ("memrchr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+extern "C++" __const void *memrchr (__const void *__s, int __c, size_t __n)
+      throw () __asm ("memrchr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
+
 
 
 extern char *strcpy (char *__restrict __dest, __const char *__restrict __src)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__nonnull__ (1, 2)));
 
 extern char *strncpy (char *__restrict __dest,
         __const char *__restrict __src, size_t __n)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern char *strcat (char *__restrict __dest, __const char *__restrict __src)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__nonnull__ (1, 2)));
 
 extern char *strncat (char *__restrict __dest, __const char *__restrict __src,
-        size_t __n) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+        size_t __n) throw () __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern int strcmp (__const char *__s1, __const char *__s2)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 extern int strncmp (__const char *__s1, __const char *__s2, size_t __n)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern int strcoll (__const char *__s1, __const char *__s2)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 extern size_t strxfrm (char *__restrict __dest,
          __const char *__restrict __src, size_t __n)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+     throw () __attribute__ ((__nonnull__ (2)));
 
 # 164 "/usr/include/string.h" 3 4
 extern int strcoll_l (__const char *__s1, __const char *__s2, __locale_t __l)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2, 3)));
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2, 3)));
 
 extern size_t strxfrm_l (char *__dest, __const char *__src, size_t __n,
-    __locale_t __l) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 4)));
+    __locale_t __l) throw () __attribute__ ((__nonnull__ (2, 4)));
 
 
 
 
 extern char *strdup (__const char *__s)
-     __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) __attribute__ ((__nonnull__ (1)));
+     throw () __attribute__ ((__malloc__)) __attribute__ ((__nonnull__ (1)));
 
 
 
@@ -2286,39 +2695,148 @@ extern char *strdup (__const char *__s)
 
 
 extern char *strndup (__const char *__string, size_t __n)
-     __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) __attribute__ ((__nonnull__ (1)));
+     throw () __attribute__ ((__malloc__)) __attribute__ ((__nonnull__ (1)));
 # 208 "/usr/include/string.h" 3 4
 
-# 233 "/usr/include/string.h" 3 4
-extern char *strchr (__const char *__s, int __c)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
-# 260 "/usr/include/string.h" 3 4
-extern char *strrchr (__const char *__s, int __c)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 
 
-# 279 "/usr/include/string.h" 3 4
+extern "C++"
+{
+extern char *strchr (char *__s, int __c)
+     throw () __asm ("strchr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+extern __const char *strchr (__const char *__s, int __c)
+     throw () __asm ("strchr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) char *
+strchr (char *__s, int __c) throw ()
+{
+  return __builtin_strchr (__s, __c);
+}
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) __const char *
+strchr (__const char *__s, int __c) throw ()
+{
+  return __builtin_strchr (__s, __c);
+}
+
+}
+
+
+
+
+
+
+extern "C++"
+{
+extern char *strrchr (char *__s, int __c)
+     throw () __asm ("strrchr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+extern __const char *strrchr (__const char *__s, int __c)
+     throw () __asm ("strrchr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) char *
+strrchr (char *__s, int __c) throw ()
+{
+  return __builtin_strrchr (__s, __c);
+}
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) __const char *
+strrchr (__const char *__s, int __c) throw ()
+{
+  return __builtin_strrchr (__s, __c);
+}
+
+}
+
+
+
+
+
+
+
+
+
+
+extern "C++" char *strchrnul (char *__s, int __c)
+     throw () __asm ("strchrnul") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+extern "C++" __const char *strchrnul (__const char *__s, int __c)
+     throw () __asm ("strchrnul") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
 
 
 
 extern size_t strcspn (__const char *__s, __const char *__reject)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern size_t strspn (__const char *__s, __const char *__accept)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
-# 312 "/usr/include/string.h" 3 4
-extern char *strpbrk (__const char *__s, __const char *__accept)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
-# 340 "/usr/include/string.h" 3 4
-extern char *strstr (__const char *__haystack, __const char *__needle)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+extern "C++"
+{
+extern char *strpbrk (char *__s, __const char *__accept)
+     throw () __asm ("strpbrk") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+extern __const char *strpbrk (__const char *__s, __const char *__accept)
+     throw () __asm ("strpbrk") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) char *
+strpbrk (char *__s, __const char *__accept) throw ()
+{
+  return __builtin_strpbrk (__s, __accept);
+}
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) __const char *
+strpbrk (__const char *__s, __const char *__accept) throw ()
+{
+  return __builtin_strpbrk (__s, __accept);
+}
+
+}
+
+
+
+
+
+
+extern "C++"
+{
+extern char *strstr (char *__haystack, __const char *__needle)
+     throw () __asm ("strstr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+extern __const char *strstr (__const char *__haystack,
+        __const char *__needle)
+     throw () __asm ("strstr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) char *
+strstr (char *__haystack, __const char *__needle) throw ()
+{
+  return __builtin_strstr (__haystack, __needle);
+}
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) __const char *
+strstr (__const char *__haystack, __const char *__needle) throw ()
+{
+  return __builtin_strstr (__haystack, __needle);
+}
+
+}
+
+
+
 
 
 
 
 extern char *strtok (char *__restrict __s, __const char *__restrict __delim)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+     throw () __attribute__ ((__nonnull__ (2)));
 
 
 
@@ -2326,120 +2844,278 @@ extern char *strtok (char *__restrict __s, __const char *__restrict __delim)
 extern char *__strtok_r (char *__restrict __s,
     __const char *__restrict __delim,
     char **__restrict __save_ptr)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 3)));
+     throw () __attribute__ ((__nonnull__ (2, 3)));
 
 extern char *strtok_r (char *__restrict __s, __const char *__restrict __delim,
          char **__restrict __save_ptr)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 3)));
-# 395 "/usr/include/string.h" 3 4
+     throw () __attribute__ ((__nonnull__ (2, 3)));
+
+
+
+
+
+extern "C++" char *strcasestr (char *__haystack, __const char *__needle)
+     throw () __asm ("strcasestr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+extern "C++" __const char *strcasestr (__const char *__haystack,
+           __const char *__needle)
+     throw () __asm ("strcasestr") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+# 380 "/usr/include/string.h" 3 4
+extern void *memmem (__const void *__haystack, size_t __haystacklen,
+       __const void *__needle, size_t __needlelen)
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 3)));
+
+
+
+extern void *__mempcpy (void *__restrict __dest,
+   __const void *__restrict __src, size_t __n)
+     throw () __attribute__ ((__nonnull__ (1, 2)));
+extern void *mempcpy (void *__restrict __dest,
+        __const void *__restrict __src, size_t __n)
+     throw () __attribute__ ((__nonnull__ (1, 2)));
+
+
+
 
 
 extern size_t strlen (__const char *__s)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 
 
 
 
 
 extern size_t strnlen (__const char *__string, size_t __maxlen)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 
 
 
 
 
-extern char *strerror (int __errnum) __attribute__ ((__nothrow__));
+extern char *strerror (int __errnum) throw ();
 
-# 425 "/usr/include/string.h" 3 4
-extern int strerror_r (int __errnum, char *__buf, size_t __buflen) __asm__ ("" "__xpg_strerror_r") __attribute__ ((__nothrow__))
-
-                        __attribute__ ((__nonnull__ (2)));
-# 443 "/usr/include/string.h" 3 4
-extern char *strerror_l (int __errnum, __locale_t __l) __attribute__ ((__nothrow__));
+# 436 "/usr/include/string.h" 3 4
+extern char *strerror_r (int __errnum, char *__buf, size_t __buflen)
+     throw () __attribute__ ((__nonnull__ (2)));
 
 
 
 
 
-extern void __bzero (void *__s, size_t __n) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+extern char *strerror_l (int __errnum, __locale_t __l) throw ();
+
+
+
+
+
+extern void __bzero (void *__s, size_t __n) throw () __attribute__ ((__nonnull__ (1)));
 
 
 
 extern void bcopy (__const void *__src, void *__dest, size_t __n)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__nonnull__ (1, 2)));
 
 
-extern void bzero (void *__s, size_t __n) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+extern void bzero (void *__s, size_t __n) throw () __attribute__ ((__nonnull__ (1)));
 
 
 extern int bcmp (__const void *__s1, __const void *__s2, size_t __n)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
-# 487 "/usr/include/string.h" 3 4
-extern char *index (__const char *__s, int __c)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
-# 515 "/usr/include/string.h" 3 4
-extern char *rindex (__const char *__s, int __c)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+extern "C++"
+{
+extern char *index (char *__s, int __c)
+     throw () __asm ("index") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+extern __const char *index (__const char *__s, int __c)
+     throw () __asm ("index") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) char *
+index (char *__s, int __c) throw ()
+{
+  return __builtin_index (__s, __c);
+}
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) __const char *
+index (__const char *__s, int __c) throw ()
+{
+  return __builtin_index (__s, __c);
+}
+
+}
 
 
 
 
-extern int ffs (int __i) __attribute__ ((__nothrow__)) __attribute__ ((__const__));
-# 534 "/usr/include/string.h" 3 4
+
+
+
+extern "C++"
+{
+extern char *rindex (char *__s, int __c)
+     throw () __asm ("rindex") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+extern __const char *rindex (__const char *__s, int __c)
+     throw () __asm ("rindex") __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) char *
+rindex (char *__s, int __c) throw ()
+{
+  return __builtin_rindex (__s, __c);
+}
+
+extern __inline __attribute__ ((__always_inline__)) __attribute__ ((__gnu_inline__, __artificial__)) __const char *
+rindex (__const char *__s, int __c) throw ()
+{
+  return __builtin_rindex (__s, __c);
+}
+
+}
+
+
+
+
+
+
+
+extern int ffs (int __i) throw () __attribute__ ((__const__));
+
+
+
+
+extern int ffsl (long int __l) throw () __attribute__ ((__const__));
+
+__extension__ extern int ffsll (long long int __ll)
+     throw () __attribute__ ((__const__));
+
+
+
+
 extern int strcasecmp (__const char *__s1, __const char *__s2)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern int strncasecmp (__const char *__s1, __const char *__s2, size_t __n)
-     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
-# 557 "/usr/include/string.h" 3 4
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
+
+extern int strcasecmp_l (__const char *__s1, __const char *__s2,
+    __locale_t __loc)
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2, 3)));
+
+extern int strncasecmp_l (__const char *__s1, __const char *__s2,
+     size_t __n, __locale_t __loc)
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2, 4)));
+
+
+
+
+
 extern char *strsep (char **__restrict __stringp,
        __const char *__restrict __delim)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__nonnull__ (1, 2)));
 
 
 
 
-extern char *strsignal (int __sig) __attribute__ ((__nothrow__));
+extern char *strsignal (int __sig) throw ();
 
 
 extern char *__stpcpy (char *__restrict __dest, __const char *__restrict __src)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__nonnull__ (1, 2)));
 extern char *stpcpy (char *__restrict __dest, __const char *__restrict __src)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__nonnull__ (1, 2)));
 
 
 
 extern char *__stpncpy (char *__restrict __dest,
    __const char *__restrict __src, size_t __n)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+     throw () __attribute__ ((__nonnull__ (1, 2)));
 extern char *stpncpy (char *__restrict __dest,
         __const char *__restrict __src, size_t __n)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
-# 632 "/usr/include/string.h" 3 4
-# 1 "/usr/include/bits/string.h" 1 3 4
-# 633 "/usr/include/string.h" 2 3 4
+     throw () __attribute__ ((__nonnull__ (1, 2)));
 
 
-# 1 "/usr/include/bits/string2.h" 1 3 4
-# 636 "/usr/include/string.h" 2 3 4
+
+
+extern int strverscmp (__const char *__s1, __const char *__s2)
+     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+
+
+extern char *strfry (char *__string) throw () __attribute__ ((__nonnull__ (1)));
+
+
+extern void *memfrob (void *__s, size_t __n) throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
+
+extern "C++" char *basename (char *__filename)
+     throw () __asm ("basename") __attribute__ ((__nonnull__ (1)));
+extern "C++" __const char *basename (__const char *__filename)
+     throw () __asm ("basename") __attribute__ ((__nonnull__ (1)));
 # 644 "/usr/include/string.h" 3 4
+}
+# 45 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cstring" 2 3
+# 73 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cstring" 3
+namespace std __attribute__ ((__visibility__ ("default")))
+{
 
-# 216 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
+
+  using ::memchr;
+  using ::memcmp;
+  using ::memcpy;
+  using ::memmove;
+  using ::memset;
+  using ::strcat;
+  using ::strcmp;
+  using ::strcoll;
+  using ::strcpy;
+  using ::strcspn;
+  using ::strerror;
+  using ::strlen;
+  using ::strncat;
+  using ::strncmp;
+  using ::strncpy;
+  using ::strspn;
+  using ::strtok;
+  using ::strxfrm;
+  using ::strchr;
+  using ::strpbrk;
+  using ::strrchr;
+  using ::strstr;
+# 122 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cstring" 3
+
+}
+# 208 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
+# 216 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 # 1 "/usr/include/strings.h" 1 3 4
 # 217 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 # 253 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 # 1 "/usr/include/unistd.h" 1 3 4
 # 28 "/usr/include/unistd.h" 3 4
-
+extern "C" {
 # 203 "/usr/include/unistd.h" 3 4
 # 1 "/usr/include/bits/posix_opt.h" 1 3 4
 # 204 "/usr/include/unistd.h" 2 3 4
+
+
+
+# 1 "/usr/include/bits/environments.h" 1 3 4
+# 23 "/usr/include/bits/environments.h" 3 4
+# 1 "/usr/include/bits/wordsize.h" 1 3 4
+# 24 "/usr/include/bits/environments.h" 2 3 4
+# 208 "/usr/include/unistd.h" 2 3 4
 # 227 "/usr/include/unistd.h" 3 4
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 228 "/usr/include/unistd.h" 2 3 4
-# 256 "/usr/include/unistd.h" 3 4
-typedef __useconds_t useconds_t;
 # 268 "/usr/include/unistd.h" 3 4
 typedef __intptr_t intptr_t;
 
@@ -2450,13 +3126,36 @@ typedef __intptr_t intptr_t;
 
 typedef __socklen_t socklen_t;
 # 288 "/usr/include/unistd.h" 3 4
-extern int access (__const char *__name, int __type) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
-# 305 "/usr/include/unistd.h" 3 4
+extern int access (__const char *__name, int __type) throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+extern int euidaccess (__const char *__name, int __type)
+     throw () __attribute__ ((__nonnull__ (1)));
+
+
+extern int eaccess (__const char *__name, int __type)
+     throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
 extern int faccessat (int __fd, __const char *__file, int __type, int __flag)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2))) ;
+     throw () __attribute__ ((__nonnull__ (2))) ;
 # 331 "/usr/include/unistd.h" 3 4
-extern __off_t lseek (int __fd, __off_t __offset, int __whence) __attribute__ ((__nothrow__));
-# 350 "/usr/include/unistd.h" 3 4
+extern __off_t lseek (int __fd, __off_t __offset, int __whence) throw ();
+# 342 "/usr/include/unistd.h" 3 4
+extern __off64_t lseek64 (int __fd, __off64_t __offset, int __whence)
+     throw ();
+
+
+
+
+
+
 extern int close (int __fd);
 
 
@@ -2471,10 +3170,39 @@ extern ssize_t read (int __fd, void *__buf, size_t __nbytes) ;
 
 
 extern ssize_t write (int __fd, __const void *__buf, size_t __n) ;
-# 414 "/usr/include/unistd.h" 3 4
-extern int pipe (int __pipedes[2]) __attribute__ ((__nothrow__)) ;
+# 373 "/usr/include/unistd.h" 3 4
+extern ssize_t pread (int __fd, void *__buf, size_t __nbytes,
+        __off_t __offset) ;
+
+
+
+
+
+
+extern ssize_t pwrite (int __fd, __const void *__buf, size_t __n,
+         __off_t __offset) ;
+# 401 "/usr/include/unistd.h" 3 4
+extern ssize_t pread64 (int __fd, void *__buf, size_t __nbytes,
+   __off64_t __offset) ;
+
+
+extern ssize_t pwrite64 (int __fd, __const void *__buf, size_t __n,
+    __off64_t __offset) ;
+
+
+
+
+
+
+
+extern int pipe (int __pipedes[2]) throw () ;
+
+
+
+
+extern int pipe2 (int __pipedes[2], int __flags) throw () ;
 # 429 "/usr/include/unistd.h" 3 4
-extern unsigned int alarm (unsigned int __seconds) __attribute__ ((__nothrow__));
+extern unsigned int alarm (unsigned int __seconds) throw ();
 # 441 "/usr/include/unistd.h" 3 4
 extern unsigned int sleep (unsigned int __seconds);
 
@@ -2484,7 +3212,7 @@ extern unsigned int sleep (unsigned int __seconds);
 
 
 extern __useconds_t ualarm (__useconds_t __value, __useconds_t __interval)
-     __attribute__ ((__nothrow__));
+     throw ();
 
 
 
@@ -2498,17 +3226,17 @@ extern int pause (void);
 
 
 extern int chown (__const char *__file, __uid_t __owner, __gid_t __group)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__nonnull__ (1))) ;
 
 
 
-extern int fchown (int __fd, __uid_t __owner, __gid_t __group) __attribute__ ((__nothrow__)) ;
+extern int fchown (int __fd, __uid_t __owner, __gid_t __group) throw () ;
 
 
 
 
 extern int lchown (__const char *__file, __uid_t __owner, __gid_t __group)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__nonnull__ (1))) ;
 
 
 
@@ -2517,74 +3245,103 @@ extern int lchown (__const char *__file, __uid_t __owner, __gid_t __group)
 
 extern int fchownat (int __fd, __const char *__file, __uid_t __owner,
        __gid_t __group, int __flag)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2))) ;
+     throw () __attribute__ ((__nonnull__ (2))) ;
 
 
 
-extern int chdir (__const char *__path) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+extern int chdir (__const char *__path) throw () __attribute__ ((__nonnull__ (1))) ;
 
 
 
-extern int fchdir (int __fd) __attribute__ ((__nothrow__)) ;
+extern int fchdir (int __fd) throw () ;
 # 507 "/usr/include/unistd.h" 3 4
-extern char *getcwd (char *__buf, size_t __size) __attribute__ ((__nothrow__)) ;
-# 520 "/usr/include/unistd.h" 3 4
+extern char *getcwd (char *__buf, size_t __size) throw () ;
+
+
+
+
+
+extern char *get_current_dir_name (void) throw ();
+
+
+
+
+
+
 extern char *getwd (char *__buf)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) __attribute__ ((__deprecated__)) ;
+     throw () __attribute__ ((__nonnull__ (1))) __attribute__ ((__deprecated__)) ;
 
 
 
 
-extern int dup (int __fd) __attribute__ ((__nothrow__)) ;
+extern int dup (int __fd) throw () ;
 
 
-extern int dup2 (int __fd, int __fd2) __attribute__ ((__nothrow__));
-# 538 "/usr/include/unistd.h" 3 4
+extern int dup2 (int __fd, int __fd2) throw ();
+
+
+
+
+extern int dup3 (int __fd, int __fd2, int __flags) throw ();
+
+
+
 extern char **__environ;
 
-
+extern char **environ;
 
 
 
 
 
 extern int execve (__const char *__path, char *__const __argv[],
-     char *__const __envp[]) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+     char *__const __envp[]) throw () __attribute__ ((__nonnull__ (1)));
 
 
 
 
 extern int fexecve (int __fd, char *__const __argv[], char *__const __envp[])
-     __attribute__ ((__nothrow__));
+     throw ();
 
 
 
 
 extern int execv (__const char *__path, char *__const __argv[])
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+     throw () __attribute__ ((__nonnull__ (1)));
 
 
 
 extern int execle (__const char *__path, __const char *__arg, ...)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+     throw () __attribute__ ((__nonnull__ (1)));
 
 
 
 extern int execl (__const char *__path, __const char *__arg, ...)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+     throw () __attribute__ ((__nonnull__ (1)));
 
 
 
 extern int execvp (__const char *__file, char *__const __argv[])
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+     throw () __attribute__ ((__nonnull__ (1)));
 
 
 
 
 extern int execlp (__const char *__file, __const char *__arg, ...)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
-# 593 "/usr/include/unistd.h" 3 4
-extern int nice (int __inc) __attribute__ ((__nothrow__)) ;
+     throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+extern int execvpe (__const char *__file, char *__const __argv[],
+      char *__const __envp[])
+     throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+extern int nice (int __inc) throw () ;
 
 
 
@@ -3248,176 +4005,219 @@ enum
 
 
 extern long int pathconf (__const char *__path, int __name)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+     throw () __attribute__ ((__nonnull__ (1)));
 
 
-extern long int fpathconf (int __fd, int __name) __attribute__ ((__nothrow__));
+extern long int fpathconf (int __fd, int __name) throw ();
 
 
-extern long int sysconf (int __name) __attribute__ ((__nothrow__));
-
-
-
-extern size_t confstr (int __name, char *__buf, size_t __len) __attribute__ ((__nothrow__));
+extern long int sysconf (int __name) throw ();
 
 
 
-
-extern __pid_t getpid (void) __attribute__ ((__nothrow__));
-
-
-extern __pid_t getppid (void) __attribute__ ((__nothrow__));
+extern size_t confstr (int __name, char *__buf, size_t __len) throw ();
 
 
 
 
-extern __pid_t getpgrp (void) __attribute__ ((__nothrow__));
+extern __pid_t getpid (void) throw ();
+
+
+extern __pid_t getppid (void) throw ();
+
+
+
+
+extern __pid_t getpgrp (void) throw ();
 # 641 "/usr/include/unistd.h" 3 4
-extern __pid_t __getpgid (__pid_t __pid) __attribute__ ((__nothrow__));
-# 650 "/usr/include/unistd.h" 3 4
-extern int setpgid (__pid_t __pid, __pid_t __pgid) __attribute__ ((__nothrow__));
+extern __pid_t __getpgid (__pid_t __pid) throw ();
+
+extern __pid_t getpgid (__pid_t __pid) throw ();
+
+
+
+
+
+
+extern int setpgid (__pid_t __pid, __pid_t __pgid) throw ();
 # 667 "/usr/include/unistd.h" 3 4
-extern int setpgrp (void) __attribute__ ((__nothrow__));
+extern int setpgrp (void) throw ();
 # 684 "/usr/include/unistd.h" 3 4
-extern __pid_t setsid (void) __attribute__ ((__nothrow__));
+extern __pid_t setsid (void) throw ();
+
+
+
+extern __pid_t getsid (__pid_t __pid) throw ();
+
+
+
+extern __uid_t getuid (void) throw ();
+
+
+extern __uid_t geteuid (void) throw ();
+
+
+extern __gid_t getgid (void) throw ();
+
+
+extern __gid_t getegid (void) throw ();
+
+
+
+
+extern int getgroups (int __size, __gid_t __list[]) throw () ;
+
+
+
+extern int group_member (__gid_t __gid) throw ();
 
 
 
 
 
 
-
-extern __uid_t getuid (void) __attribute__ ((__nothrow__));
-
-
-extern __uid_t geteuid (void) __attribute__ ((__nothrow__));
-
-
-extern __gid_t getgid (void) __attribute__ ((__nothrow__));
-
-
-extern __gid_t getegid (void) __attribute__ ((__nothrow__));
+extern int setuid (__uid_t __uid) throw ();
 
 
 
 
-extern int getgroups (int __size, __gid_t __list[]) __attribute__ ((__nothrow__)) ;
-# 717 "/usr/include/unistd.h" 3 4
-extern int setuid (__uid_t __uid) __attribute__ ((__nothrow__));
+extern int setreuid (__uid_t __ruid, __uid_t __euid) throw ();
 
 
 
 
-extern int setreuid (__uid_t __ruid, __uid_t __euid) __attribute__ ((__nothrow__));
-
-
-
-
-extern int seteuid (__uid_t __uid) __attribute__ ((__nothrow__));
+extern int seteuid (__uid_t __uid) throw ();
 
 
 
 
 
 
-extern int setgid (__gid_t __gid) __attribute__ ((__nothrow__));
+extern int setgid (__gid_t __gid) throw ();
 
 
 
 
-extern int setregid (__gid_t __rgid, __gid_t __egid) __attribute__ ((__nothrow__));
+extern int setregid (__gid_t __rgid, __gid_t __egid) throw ();
 
 
 
 
-extern int setegid (__gid_t __gid) __attribute__ ((__nothrow__));
-# 773 "/usr/include/unistd.h" 3 4
-extern __pid_t fork (void) __attribute__ ((__nothrow__));
-
-
-
-
-
-
-extern __pid_t vfork (void) __attribute__ ((__nothrow__));
+extern int setegid (__gid_t __gid) throw ();
 
 
 
 
 
-extern char *ttyname (int __fd) __attribute__ ((__nothrow__));
+extern int getresuid (__uid_t *__ruid, __uid_t *__euid, __uid_t *__suid)
+     throw ();
+
+
+
+extern int getresgid (__gid_t *__rgid, __gid_t *__egid, __gid_t *__sgid)
+     throw ();
+
+
+
+extern int setresuid (__uid_t __ruid, __uid_t __euid, __uid_t __suid)
+     throw ();
+
+
+
+extern int setresgid (__gid_t __rgid, __gid_t __egid, __gid_t __sgid)
+     throw ();
+
+
+
+
+
+
+extern __pid_t fork (void) throw ();
+
+
+
+
+
+
+extern __pid_t vfork (void) throw ();
+
+
+
+
+
+extern char *ttyname (int __fd) throw ();
 
 
 
 extern int ttyname_r (int __fd, char *__buf, size_t __buflen)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2))) ;
+     throw () __attribute__ ((__nonnull__ (2))) ;
 
 
 
-extern int isatty (int __fd) __attribute__ ((__nothrow__));
+extern int isatty (int __fd) throw ();
 
 
 
 
 
-extern int ttyslot (void) __attribute__ ((__nothrow__));
+extern int ttyslot (void) throw ();
 
 
 
 
 extern int link (__const char *__from, __const char *__to)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2))) ;
+     throw () __attribute__ ((__nonnull__ (1, 2))) ;
 
 
 
 
 extern int linkat (int __fromfd, __const char *__from, int __tofd,
      __const char *__to, int __flags)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 4))) ;
+     throw () __attribute__ ((__nonnull__ (2, 4))) ;
 
 
 
 
 extern int symlink (__const char *__from, __const char *__to)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2))) ;
+     throw () __attribute__ ((__nonnull__ (1, 2))) ;
 
 
 
 
 extern ssize_t readlink (__const char *__restrict __path,
     char *__restrict __buf, size_t __len)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2))) ;
+     throw () __attribute__ ((__nonnull__ (1, 2))) ;
 
 
 
 
 extern int symlinkat (__const char *__from, int __tofd,
-        __const char *__to) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 3))) ;
+        __const char *__to) throw () __attribute__ ((__nonnull__ (1, 3))) ;
 
 
 extern ssize_t readlinkat (int __fd, __const char *__restrict __path,
       char *__restrict __buf, size_t __len)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 3))) ;
+     throw () __attribute__ ((__nonnull__ (2, 3))) ;
 
 
 
-extern int unlink (__const char *__name) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+extern int unlink (__const char *__name) throw () __attribute__ ((__nonnull__ (1)));
 
 
 
 extern int unlinkat (int __fd, __const char *__name, int __flag)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
+     throw () __attribute__ ((__nonnull__ (2)));
 
 
 
-extern int rmdir (__const char *__path) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+extern int rmdir (__const char *__path) throw () __attribute__ ((__nonnull__ (1)));
 
 
 
-extern __pid_t tcgetpgrp (int __fd) __attribute__ ((__nothrow__));
+extern __pid_t tcgetpgrp (int __fd) throw ();
 
 
-extern int tcsetpgrp (int __fd, __pid_t __pgrp_id) __attribute__ ((__nothrow__));
+extern int tcsetpgrp (int __fd, __pid_t __pgrp_id) throw ();
 
 
 
@@ -3437,9 +4237,11 @@ extern int getlogin_r (char *__name, size_t __name_len) __attribute__ ((__nonnul
 
 
 
-extern int setlogin (__const char *__name) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+extern int setlogin (__const char *__name) throw () __attribute__ ((__nonnull__ (1)));
 # 887 "/usr/include/unistd.h" 3 4
 # 1 "/usr/include/getopt.h" 1 3 4
+# 50 "/usr/include/getopt.h" 3 4
+extern "C" {
 # 59 "/usr/include/getopt.h" 3 4
 extern char *optarg;
 # 73 "/usr/include/getopt.h" 3 4
@@ -3455,7 +4257,9 @@ extern int opterr;
 extern int optopt;
 # 152 "/usr/include/getopt.h" 3 4
 extern int getopt (int ___argc, char *const *___argv, const char *__shortopts)
-       __attribute__ ((__nothrow__));
+       throw ();
+# 187 "/usr/include/getopt.h" 3 4
+}
 # 888 "/usr/include/unistd.h" 2 3 4
 
 
@@ -3464,7 +4268,7 @@ extern int getopt (int ___argc, char *const *___argv, const char *__shortopts)
 
 
 
-extern int gethostname (char *__name, size_t __len) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+extern int gethostname (char *__name, size_t __len) throw () __attribute__ ((__nonnull__ (1)));
 
 
 
@@ -3472,29 +4276,29 @@ extern int gethostname (char *__name, size_t __len) __attribute__ ((__nothrow__)
 
 
 extern int sethostname (__const char *__name, size_t __len)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__nonnull__ (1))) ;
 
 
 
-extern int sethostid (long int __id) __attribute__ ((__nothrow__)) ;
+extern int sethostid (long int __id) throw () ;
 
 
 
 
 
 extern int getdomainname (char *__name, size_t __len)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__nonnull__ (1))) ;
 extern int setdomainname (__const char *__name, size_t __len)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__nonnull__ (1))) ;
 
 
 
 
 
-extern int vhangup (void) __attribute__ ((__nothrow__));
+extern int vhangup (void) throw ();
 
 
-extern int revoke (__const char *__file) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+extern int revoke (__const char *__file) throw () __attribute__ ((__nonnull__ (1))) ;
 
 
 
@@ -3504,32 +4308,32 @@ extern int revoke (__const char *__file) __attribute__ ((__nothrow__)) __attribu
 
 extern int profil (unsigned short int *__sample_buffer, size_t __size,
      size_t __offset, unsigned int __scale)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+     throw () __attribute__ ((__nonnull__ (1)));
 
 
 
 
 
-extern int acct (__const char *__name) __attribute__ ((__nothrow__));
+extern int acct (__const char *__name) throw ();
 
 
 
-extern char *getusershell (void) __attribute__ ((__nothrow__));
-extern void endusershell (void) __attribute__ ((__nothrow__));
-extern void setusershell (void) __attribute__ ((__nothrow__));
-
-
-
-
-
-extern int daemon (int __nochdir, int __noclose) __attribute__ ((__nothrow__)) ;
+extern char *getusershell (void) throw ();
+extern void endusershell (void) throw ();
+extern void setusershell (void) throw ();
 
 
 
 
 
+extern int daemon (int __nochdir, int __noclose) throw () ;
 
-extern int chroot (__const char *__path) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
+extern int chroot (__const char *__path) throw () __attribute__ ((__nonnull__ (1))) ;
 
 
 
@@ -3545,41 +4349,77 @@ extern int fsync (int __fd);
 extern long int gethostid (void);
 
 
-extern void sync (void) __attribute__ ((__nothrow__));
+extern void sync (void) throw ();
 
 
 
 
-extern int getpagesize (void) __attribute__ ((__nothrow__)) __attribute__ ((__const__));
+extern int getpagesize (void) throw () __attribute__ ((__const__));
 
 
 
 
-extern int getdtablesize (void) __attribute__ ((__nothrow__));
+extern int getdtablesize (void) throw ();
 
 
 
 
 extern int truncate (__const char *__file, __off_t __length)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+     throw () __attribute__ ((__nonnull__ (1))) ;
+# 1010 "/usr/include/unistd.h" 3 4
+extern int truncate64 (__const char *__file, __off64_t __length)
+     throw () __attribute__ ((__nonnull__ (1))) ;
 # 1020 "/usr/include/unistd.h" 3 4
-extern int ftruncate (int __fd, __off_t __length) __attribute__ ((__nothrow__)) ;
+extern int ftruncate (int __fd, __off_t __length) throw () ;
+# 1030 "/usr/include/unistd.h" 3 4
+extern int ftruncate64 (int __fd, __off64_t __length) throw () ;
 # 1040 "/usr/include/unistd.h" 3 4
-extern int brk (void *__addr) __attribute__ ((__nothrow__)) ;
+extern int brk (void *__addr) throw () ;
 
 
 
 
 
-extern void *sbrk (intptr_t __delta) __attribute__ ((__nothrow__));
+extern void *sbrk (intptr_t __delta) throw ();
 # 1061 "/usr/include/unistd.h" 3 4
-extern long int syscall (long int __sysno, ...) __attribute__ ((__nothrow__));
+extern long int syscall (long int __sysno, ...) throw ();
 # 1084 "/usr/include/unistd.h" 3 4
 extern int lockf (int __fd, int __cmd, __off_t __len) ;
+# 1094 "/usr/include/unistd.h" 3 4
+extern int lockf64 (int __fd, int __cmd, __off64_t __len) ;
 # 1115 "/usr/include/unistd.h" 3 4
 extern int fdatasync (int __fildes);
-# 1153 "/usr/include/unistd.h" 3 4
 
+
+
+
+
+
+
+extern char *crypt (__const char *__key, __const char *__salt)
+     throw () __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+extern void encrypt (char *__block, int __edflag) throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+
+extern void swab (__const void *__restrict __from, void *__restrict __to,
+    ssize_t __n) throw () __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
+
+
+
+extern char *ctermid (char *__s) throw ();
+# 1153 "/usr/include/unistd.h" 3 4
+}
 # 254 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 
 
@@ -3612,6 +4452,14 @@ extern int fdatasync (int __fildes);
 
 # 1 "/usr/include/bits/posix2_lim.h" 1 3 4
 # 150 "/usr/include/limits.h" 2 3 4
+
+
+
+# 1 "/usr/include/bits/xopen_lim.h" 1 3 4
+# 34 "/usr/include/bits/xopen_lim.h" 3 4
+# 1 "/usr/include/bits/stdio_lim.h" 1 3 4
+# 35 "/usr/include/bits/xopen_lim.h" 2 3 4
+# 154 "/usr/include/limits.h" 2 3 4
 # 170 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include-fixed/limits.h" 2 3 4
 # 8 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include-fixed/syslimits.h" 2 3 4
 # 35 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include-fixed/limits.h" 2 3 4
@@ -3639,7 +4487,7 @@ extern int fdatasync (int __fildes);
 
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hwint.h" 1
 # 180 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hwint.h"
-static __inline__ int
+static inline int
 clz_hwi (unsigned long x)
 {
   if (x == 0)
@@ -3653,7 +4501,7 @@ clz_hwi (unsigned long x)
 
 }
 
-static __inline__ int
+static inline int
 ctz_hwi (unsigned long x)
 {
   if (x == 0)
@@ -3667,7 +4515,7 @@ ctz_hwi (unsigned long x)
 
 }
 
-static __inline__ int
+static inline int
 ffs_hwi (unsigned long x)
 {
 
@@ -3679,13 +4527,13 @@ ffs_hwi (unsigned long x)
 
 }
 
-static __inline__ int
+static inline int
 floor_log2 (unsigned long x)
 {
   return (8 * 8) - 1 - clz_hwi (x);
 }
 
-static __inline__ int
+static inline int
 exact_log2 (unsigned long x)
 {
   return x == (x & -x) && x ? ctz_hwi (x) : -1;
@@ -3713,7 +4561,7 @@ extern long least_common_multiple (long, long);
 # 1 "/usr/include/bits/time.h" 1 3 4
 # 30 "/usr/include/sys/time.h" 2 3 4
 # 39 "/usr/include/sys/time.h" 3 4
-
+extern "C" {
 # 57 "/usr/include/sys/time.h" 3 4
 struct timezone
   {
@@ -3724,21 +4572,21 @@ struct timezone
 typedef struct timezone *__restrict __timezone_ptr_t;
 # 73 "/usr/include/sys/time.h" 3 4
 extern int gettimeofday (struct timeval *__restrict __tv,
-    __timezone_ptr_t __tz) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+    __timezone_ptr_t __tz) throw () __attribute__ ((__nonnull__ (1)));
 
 
 
 
 extern int settimeofday (__const struct timeval *__tv,
     __const struct timezone *__tz)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+     throw () __attribute__ ((__nonnull__ (1)));
 
 
 
 
 
 extern int adjtime (__const struct timeval *__delta,
-      struct timeval *__olddelta) __attribute__ ((__nothrow__));
+      struct timeval *__olddelta) throw ();
 
 
 
@@ -3778,34 +4626,42 @@ typedef int __itimer_which_t;
 
 
 extern int getitimer (__itimer_which_t __which,
-        struct itimerval *__value) __attribute__ ((__nothrow__));
+        struct itimerval *__value) throw ();
 
 
 
 
 extern int setitimer (__itimer_which_t __which,
         __const struct itimerval *__restrict __new,
-        struct itimerval *__restrict __old) __attribute__ ((__nothrow__));
+        struct itimerval *__restrict __old) throw ();
 
 
 
 
 extern int utimes (__const char *__file, __const struct timeval __tvp[2])
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+     throw () __attribute__ ((__nonnull__ (1)));
 
 
 
 extern int lutimes (__const char *__file, __const struct timeval __tvp[2])
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+     throw () __attribute__ ((__nonnull__ (1)));
 
 
-extern int futimes (int __fd, __const struct timeval __tvp[2]) __attribute__ ((__nothrow__));
+extern int futimes (int __fd, __const struct timeval __tvp[2]) throw ();
+
+
+
+
+
+
+extern int futimesat (int __fd, __const char *__file,
+        __const struct timeval __tvp[2]) throw ();
 # 191 "/usr/include/sys/time.h" 3 4
-
+}
 # 298 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 # 1 "/usr/include/time.h" 1 3 4
 # 30 "/usr/include/time.h" 3 4
-
+extern "C" {
 
 
 
@@ -3820,13 +4676,6 @@ extern int futimes (int __fd, __const struct timeval __tvp[2]) __attribute__ ((_
 
 # 1 "/usr/include/bits/time.h" 1 3 4
 # 43 "/usr/include/time.h" 2 3 4
-# 58 "/usr/include/time.h" 3 4
-
-
-typedef __clock_t clock_t;
-
-
-
 # 131 "/usr/include/time.h" 3 4
 
 
@@ -3870,17 +4719,17 @@ struct sigevent;
 
 
 
-extern clock_t clock (void) __attribute__ ((__nothrow__));
+extern clock_t clock (void) throw ();
 
 
-extern time_t time (time_t *__timer) __attribute__ ((__nothrow__));
+extern time_t time (time_t *__timer) throw ();
 
 
 extern double difftime (time_t __time1, time_t __time0)
-     __attribute__ ((__nothrow__)) __attribute__ ((__const__));
+     throw () __attribute__ ((__const__));
 
 
-extern time_t mktime (struct tm *__tp) __attribute__ ((__nothrow__));
+extern time_t mktime (struct tm *__tp) throw ();
 
 
 
@@ -3888,43 +4737,64 @@ extern time_t mktime (struct tm *__tp) __attribute__ ((__nothrow__));
 
 extern size_t strftime (char *__restrict __s, size_t __maxsize,
    __const char *__restrict __format,
-   __const struct tm *__restrict __tp) __attribute__ ((__nothrow__));
+   __const struct tm *__restrict __tp) throw ();
 
-# 217 "/usr/include/time.h" 3 4
+
+
+
+
+extern char *strptime (__const char *__restrict __s,
+         __const char *__restrict __fmt, struct tm *__tp)
+     throw ();
+
+
+
+
+
+
+
 extern size_t strftime_l (char *__restrict __s, size_t __maxsize,
      __const char *__restrict __format,
      __const struct tm *__restrict __tp,
-     __locale_t __loc) __attribute__ ((__nothrow__));
-# 230 "/usr/include/time.h" 3 4
+     __locale_t __loc) throw ();
 
 
 
-extern struct tm *gmtime (__const time_t *__timer) __attribute__ ((__nothrow__));
+extern char *strptime_l (__const char *__restrict __s,
+    __const char *__restrict __fmt, struct tm *__tp,
+    __locale_t __loc) throw ();
 
 
 
-extern struct tm *localtime (__const time_t *__timer) __attribute__ ((__nothrow__));
+
+
+
+extern struct tm *gmtime (__const time_t *__timer) throw ();
+
+
+
+extern struct tm *localtime (__const time_t *__timer) throw ();
 
 
 
 
 
 extern struct tm *gmtime_r (__const time_t *__restrict __timer,
-       struct tm *__restrict __tp) __attribute__ ((__nothrow__));
+       struct tm *__restrict __tp) throw ();
 
 
 
 extern struct tm *localtime_r (__const time_t *__restrict __timer,
-          struct tm *__restrict __tp) __attribute__ ((__nothrow__));
+          struct tm *__restrict __tp) throw ();
 
 
 
 
 
-extern char *asctime (__const struct tm *__tp) __attribute__ ((__nothrow__));
+extern char *asctime (__const struct tm *__tp) throw ();
 
 
-extern char *ctime (__const time_t *__timer) __attribute__ ((__nothrow__));
+extern char *ctime (__const time_t *__timer) throw ();
 
 
 
@@ -3933,11 +4803,11 @@ extern char *ctime (__const time_t *__timer) __attribute__ ((__nothrow__));
 
 
 extern char *asctime_r (__const struct tm *__restrict __tp,
-   char *__restrict __buf) __attribute__ ((__nothrow__));
+   char *__restrict __buf) throw ();
 
 
 extern char *ctime_r (__const time_t *__restrict __timer,
-        char *__restrict __buf) __attribute__ ((__nothrow__));
+        char *__restrict __buf) throw ();
 
 
 
@@ -3953,7 +4823,7 @@ extern char *tzname[2];
 
 
 
-extern void tzset (void) __attribute__ ((__nothrow__));
+extern void tzset (void) throw ();
 
 
 
@@ -3964,29 +4834,29 @@ extern long int timezone;
 
 
 
-extern int stime (__const time_t *__when) __attribute__ ((__nothrow__));
+extern int stime (__const time_t *__when) throw ();
 # 313 "/usr/include/time.h" 3 4
-extern time_t timegm (struct tm *__tp) __attribute__ ((__nothrow__));
+extern time_t timegm (struct tm *__tp) throw ();
 
 
-extern time_t timelocal (struct tm *__tp) __attribute__ ((__nothrow__));
+extern time_t timelocal (struct tm *__tp) throw ();
 
 
-extern int dysize (int __year) __attribute__ ((__nothrow__)) __attribute__ ((__const__));
+extern int dysize (int __year) throw () __attribute__ ((__const__));
 # 328 "/usr/include/time.h" 3 4
 extern int nanosleep (__const struct timespec *__requested_time,
         struct timespec *__remaining);
 
 
 
-extern int clock_getres (clockid_t __clock_id, struct timespec *__res) __attribute__ ((__nothrow__));
+extern int clock_getres (clockid_t __clock_id, struct timespec *__res) throw ();
 
 
-extern int clock_gettime (clockid_t __clock_id, struct timespec *__tp) __attribute__ ((__nothrow__));
+extern int clock_gettime (clockid_t __clock_id, struct timespec *__tp) throw ();
 
 
 extern int clock_settime (clockid_t __clock_id, __const struct timespec *__tp)
-     __attribute__ ((__nothrow__));
+     throw ();
 
 
 
@@ -3998,36 +4868,44 @@ extern int clock_nanosleep (clockid_t __clock_id, int __flags,
        struct timespec *__rem);
 
 
-extern int clock_getcpuclockid (pid_t __pid, clockid_t *__clock_id) __attribute__ ((__nothrow__));
+extern int clock_getcpuclockid (pid_t __pid, clockid_t *__clock_id) throw ();
 
 
 
 
 extern int timer_create (clockid_t __clock_id,
     struct sigevent *__restrict __evp,
-    timer_t *__restrict __timerid) __attribute__ ((__nothrow__));
+    timer_t *__restrict __timerid) throw ();
 
 
-extern int timer_delete (timer_t __timerid) __attribute__ ((__nothrow__));
+extern int timer_delete (timer_t __timerid) throw ();
 
 
 extern int timer_settime (timer_t __timerid, int __flags,
      __const struct itimerspec *__restrict __value,
-     struct itimerspec *__restrict __ovalue) __attribute__ ((__nothrow__));
+     struct itimerspec *__restrict __ovalue) throw ();
 
 
 extern int timer_gettime (timer_t __timerid, struct itimerspec *__value)
-     __attribute__ ((__nothrow__));
+     throw ();
 
 
-extern int timer_getoverrun (timer_t __timerid) __attribute__ ((__nothrow__));
-# 417 "/usr/include/time.h" 3 4
+extern int timer_getoverrun (timer_t __timerid) throw ();
+# 390 "/usr/include/time.h" 3 4
+extern int getdate_err;
+# 399 "/usr/include/time.h" 3 4
+extern struct tm *getdate (__const char *__string);
+# 413 "/usr/include/time.h" 3 4
+extern int getdate_r (__const char *__restrict __string,
+        struct tm *__restrict __resbufp);
 
+
+}
 # 299 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 # 310 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 # 1 "/usr/include/fcntl.h" 1 3 4
 # 30 "/usr/include/fcntl.h" 3 4
-
+extern "C" {
 
 
 
@@ -4035,6 +4913,15 @@ extern int timer_getoverrun (timer_t __timerid) __attribute__ ((__nothrow__));
 # 25 "/usr/include/bits/fcntl.h" 3 4
 # 1 "/usr/include/bits/wordsize.h" 1 3 4
 # 26 "/usr/include/bits/fcntl.h" 2 3 4
+
+# 1 "/usr/include/bits/uio.h" 1 3 4
+# 44 "/usr/include/bits/uio.h" 3 4
+struct iovec
+  {
+    void *iov_base;
+    size_t iov_len;
+  };
+# 28 "/usr/include/bits/fcntl.h" 2 3 4
 # 160 "/usr/include/bits/fcntl.h" 3 4
 struct flock
   {
@@ -4049,15 +4936,425 @@ struct flock
 
     __pid_t l_pid;
   };
+
+
+struct flock64
+  {
+    short int l_type;
+    short int l_whence;
+    __off64_t l_start;
+    __off64_t l_len;
+    __pid_t l_pid;
+  };
+
+
+
+
+enum __pid_type
+  {
+    F_OWNER_TID = 0,
+    F_OWNER_PID,
+    F_OWNER_GID
+  };
+
+
+struct f_owner_ex
+  {
+    enum __pid_type type;
+    __pid_t pid;
+  };
 # 257 "/usr/include/bits/fcntl.h" 3 4
+extern "C" {
 
-# 302 "/usr/include/bits/fcntl.h" 3 4
 
+
+
+extern ssize_t readahead (int __fd, __off64_t __offset, size_t __count)
+    throw ();
+
+
+
+extern int sync_file_range (int __fd, __off64_t __from, __off64_t __to,
+       unsigned int __flags);
+
+
+
+extern ssize_t vmsplice (int __fdout, const struct iovec *__iov,
+    size_t __count, unsigned int __flags);
+
+
+extern ssize_t splice (int __fdin, __off64_t *__offin, int __fdout,
+         __off64_t *__offout, size_t __len,
+         unsigned int __flags);
+
+
+extern ssize_t tee (int __fdin, int __fdout, size_t __len,
+      unsigned int __flags);
+
+
+
+extern int fallocate (int __fd, int __mode, __off_t __offset, __off_t __len);
+# 297 "/usr/include/bits/fcntl.h" 3 4
+extern int fallocate64 (int __fd, int __mode, __off64_t __offset,
+   __off64_t __len);
+
+
+
+}
 # 35 "/usr/include/fcntl.h" 2 3 4
+
+
+
+# 1 "/usr/include/sys/stat.h" 1 3 4
+# 105 "/usr/include/sys/stat.h" 3 4
+extern "C" {
+
+# 1 "/usr/include/bits/stat.h" 1 3 4
+# 43 "/usr/include/bits/stat.h" 3 4
+struct stat
+  {
+    __dev_t st_dev;
+
+    unsigned short int __pad1;
+
+
+    __ino_t st_ino;
+
+
+
+
+    __mode_t st_mode;
+    __nlink_t st_nlink;
+
+
+
+
+    __uid_t st_uid;
+    __gid_t st_gid;
+
+
+
+    __dev_t st_rdev;
+
+    unsigned short int __pad2;
+
+
+    __off_t st_size;
+
+
+
+    __blksize_t st_blksize;
+
+    __blkcnt_t st_blocks;
+# 88 "/usr/include/bits/stat.h" 3 4
+    struct timespec st_atim;
+    struct timespec st_mtim;
+    struct timespec st_ctim;
+# 106 "/usr/include/bits/stat.h" 3 4
+    unsigned long int __unused4;
+    unsigned long int __unused5;
+
+
+
+
+  };
+
+
+
+struct stat64
+  {
+    __dev_t st_dev;
+
+
+
+
+
+    unsigned int __pad1;
+    __ino_t __st_ino;
+    __mode_t st_mode;
+    __nlink_t st_nlink;
+
+    __uid_t st_uid;
+    __gid_t st_gid;
+
+
+
+
+
+    __dev_t st_rdev;
+    unsigned int __pad2;
+    __off64_t st_size;
+
+    __blksize_t st_blksize;
+    __blkcnt64_t st_blocks;
+
+
+
+
+
+
+
+    struct timespec st_atim;
+    struct timespec st_mtim;
+    struct timespec st_ctim;
+# 166 "/usr/include/bits/stat.h" 3 4
+    __ino64_t st_ino;
+
+  };
+# 108 "/usr/include/sys/stat.h" 2 3 4
+# 209 "/usr/include/sys/stat.h" 3 4
+extern int stat (__const char *__restrict __file,
+   struct stat *__restrict __buf) throw () __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+extern int fstat (int __fd, struct stat *__buf) throw () __attribute__ ((__nonnull__ (2)));
+# 228 "/usr/include/sys/stat.h" 3 4
+extern int stat64 (__const char *__restrict __file,
+     struct stat64 *__restrict __buf) throw () __attribute__ ((__nonnull__ (1, 2)));
+extern int fstat64 (int __fd, struct stat64 *__buf) throw () __attribute__ ((__nonnull__ (2)));
+
+
+
+
+
+
+
+extern int fstatat (int __fd, __const char *__restrict __file,
+      struct stat *__restrict __buf, int __flag)
+     throw () __attribute__ ((__nonnull__ (2, 3)));
+# 253 "/usr/include/sys/stat.h" 3 4
+extern int fstatat64 (int __fd, __const char *__restrict __file,
+        struct stat64 *__restrict __buf, int __flag)
+     throw () __attribute__ ((__nonnull__ (2, 3)));
+
+
+
+
+
+
+
+extern int lstat (__const char *__restrict __file,
+    struct stat *__restrict __buf) throw () __attribute__ ((__nonnull__ (1, 2)));
+# 276 "/usr/include/sys/stat.h" 3 4
+extern int lstat64 (__const char *__restrict __file,
+      struct stat64 *__restrict __buf)
+     throw () __attribute__ ((__nonnull__ (1, 2)));
+
+
+
+
+
+extern int chmod (__const char *__file, __mode_t __mode)
+     throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+extern int lchmod (__const char *__file, __mode_t __mode)
+     throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+extern int fchmod (int __fd, __mode_t __mode) throw ();
+
+
+
+
+
+extern int fchmodat (int __fd, __const char *__file, __mode_t __mode,
+       int __flag)
+     throw () __attribute__ ((__nonnull__ (2))) ;
+
+
+
+
+
+
+extern __mode_t umask (__mode_t __mask) throw ();
+
+
+
+
+extern __mode_t getumask (void) throw ();
+
+
+
+extern int mkdir (__const char *__path, __mode_t __mode)
+     throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+extern int mkdirat (int __fd, __const char *__path, __mode_t __mode)
+     throw () __attribute__ ((__nonnull__ (2)));
+
+
+
+
+
+
+extern int mknod (__const char *__path, __mode_t __mode, __dev_t __dev)
+     throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+extern int mknodat (int __fd, __const char *__path, __mode_t __mode,
+      __dev_t __dev) throw () __attribute__ ((__nonnull__ (2)));
+
+
+
+
+
+extern int mkfifo (__const char *__path, __mode_t __mode)
+     throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+
+
+extern int mkfifoat (int __fd, __const char *__path, __mode_t __mode)
+     throw () __attribute__ ((__nonnull__ (2)));
+
+
+
+
+
+extern int utimensat (int __fd, __const char *__path,
+        __const struct timespec __times[2],
+        int __flags)
+     throw () __attribute__ ((__nonnull__ (2)));
+
+
+
+
+extern int futimens (int __fd, __const struct timespec __times[2]) throw ();
+# 399 "/usr/include/sys/stat.h" 3 4
+extern int __fxstat (int __ver, int __fildes, struct stat *__stat_buf)
+     throw () __attribute__ ((__nonnull__ (3)));
+extern int __xstat (int __ver, __const char *__filename,
+      struct stat *__stat_buf) throw () __attribute__ ((__nonnull__ (2, 3)));
+extern int __lxstat (int __ver, __const char *__filename,
+       struct stat *__stat_buf) throw () __attribute__ ((__nonnull__ (2, 3)));
+extern int __fxstatat (int __ver, int __fildes, __const char *__filename,
+         struct stat *__stat_buf, int __flag)
+     throw () __attribute__ ((__nonnull__ (3, 4)));
+# 432 "/usr/include/sys/stat.h" 3 4
+extern int __fxstat64 (int __ver, int __fildes, struct stat64 *__stat_buf)
+     throw () __attribute__ ((__nonnull__ (3)));
+extern int __xstat64 (int __ver, __const char *__filename,
+        struct stat64 *__stat_buf) throw () __attribute__ ((__nonnull__ (2, 3)));
+extern int __lxstat64 (int __ver, __const char *__filename,
+         struct stat64 *__stat_buf) throw () __attribute__ ((__nonnull__ (2, 3)));
+extern int __fxstatat64 (int __ver, int __fildes, __const char *__filename,
+    struct stat64 *__stat_buf, int __flag)
+     throw () __attribute__ ((__nonnull__ (3, 4)));
+
+extern int __xmknod (int __ver, __const char *__path, __mode_t __mode,
+       __dev_t *__dev) throw () __attribute__ ((__nonnull__ (2, 4)));
+
+extern int __xmknodat (int __ver, int __fd, __const char *__path,
+         __mode_t __mode, __dev_t *__dev)
+     throw () __attribute__ ((__nonnull__ (3, 5)));
+
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+stat (__const char *__path, struct stat *__statbuf) throw ()
+{
+  return __xstat (3, __path, __statbuf);
+}
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+lstat (__const char *__path, struct stat *__statbuf) throw ()
+{
+  return __lxstat (3, __path, __statbuf);
+}
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+fstat (int __fd, struct stat *__statbuf) throw ()
+{
+  return __fxstat (3, __fd, __statbuf);
+}
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+fstatat (int __fd, __const char *__filename, struct stat *__statbuf, int __flag) throw ()
+
+{
+  return __fxstatat (3, __fd, __filename, __statbuf, __flag);
+}
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+mknod (__const char *__path, __mode_t __mode, __dev_t __dev) throw ()
+{
+  return __xmknod (1, __path, __mode, &__dev);
+}
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+mknodat (int __fd, __const char *__path, __mode_t __mode, __dev_t __dev) throw ()
+
+{
+  return __xmknodat (1, __fd, __path, __mode, &__dev);
+}
+
+
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+stat64 (__const char *__path, struct stat64 *__statbuf) throw ()
+{
+  return __xstat64 (3, __path, __statbuf);
+}
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+lstat64 (__const char *__path, struct stat64 *__statbuf) throw ()
+{
+  return __lxstat64 (3, __path, __statbuf);
+}
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+fstat64 (int __fd, struct stat64 *__statbuf) throw ()
+{
+  return __fxstat64 (3, __fd, __statbuf);
+}
+
+
+extern __inline __attribute__ ((__gnu_inline__)) int
+fstatat64 (int __fd, __const char *__filename, struct stat64 *__statbuf, int __flag) throw ()
+
+{
+  return __fxstatat64 (3, __fd, __filename, __statbuf, __flag);
+}
+
+
+
+
+
+
+}
+# 39 "/usr/include/fcntl.h" 2 3 4
 # 64 "/usr/include/fcntl.h" 3 4
 extern int fcntl (int __fd, int __cmd, ...);
 # 73 "/usr/include/fcntl.h" 3 4
 extern int open (__const char *__file, int __oflag, ...) __attribute__ ((__nonnull__ (1)));
+# 83 "/usr/include/fcntl.h" 3 4
+extern int open64 (__const char *__file, int __oflag, ...) __attribute__ ((__nonnull__ (1)));
 # 97 "/usr/include/fcntl.h" 3 4
 extern int openat (int __fd, __const char *__file, int __oflag, ...)
      __attribute__ ((__nonnull__ (2)));
@@ -4066,22 +5363,29 @@ extern int openat64 (int __fd, __const char *__file, int __oflag, ...)
      __attribute__ ((__nonnull__ (2)));
 # 118 "/usr/include/fcntl.h" 3 4
 extern int creat (__const char *__file, __mode_t __mode) __attribute__ ((__nonnull__ (1)));
+# 128 "/usr/include/fcntl.h" 3 4
+extern int creat64 (__const char *__file, __mode_t __mode) __attribute__ ((__nonnull__ (1)));
 # 164 "/usr/include/fcntl.h" 3 4
 extern int posix_fadvise (int __fd, __off_t __offset, __off_t __len,
-     int __advise) __attribute__ ((__nothrow__));
+     int __advise) throw ();
+# 176 "/usr/include/fcntl.h" 3 4
+extern int posix_fadvise64 (int __fd, __off64_t __offset, __off64_t __len,
+       int __advise) throw ();
 # 186 "/usr/include/fcntl.h" 3 4
 extern int posix_fallocate (int __fd, __off_t __offset, __off_t __len);
+# 197 "/usr/include/fcntl.h" 3 4
+extern int posix_fallocate64 (int __fd, __off64_t __offset, __off64_t __len);
 # 208 "/usr/include/fcntl.h" 3 4
-
+}
 # 311 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 # 351 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 # 1 "/usr/include/sys/wait.h" 1 3 4
 # 29 "/usr/include/sys/wait.h" 3 4
-
+extern "C" {
 
 # 1 "/usr/include/signal.h" 1 3 4
 # 31 "/usr/include/signal.h" 3 4
-
+extern "C" {
 
 # 1 "/usr/include/bits/sigset.h" 1 3 4
 # 104 "/usr/include/bits/sigset.h" 3 4
@@ -4089,9 +5393,9 @@ extern int __sigismember (__const __sigset_t *, int);
 extern int __sigaddset (__sigset_t *, int);
 extern int __sigdelset (__sigset_t *, int);
 # 118 "/usr/include/bits/sigset.h" 3 4
-extern __inline int __sigismember (__const __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return (__set->__val[__word] & __mask) ? 1 : 0; }
-extern __inline int __sigaddset ( __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return ((__set->__val[__word] |= __mask), 0); }
-extern __inline int __sigdelset ( __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return ((__set->__val[__word] &= ~__mask), 0); }
+extern __inline __attribute__ ((__gnu_inline__)) int __sigismember (__const __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return (__set->__val[__word] & __mask) ? 1 : 0; }
+extern __inline __attribute__ ((__gnu_inline__)) int __sigaddset ( __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return ((__set->__val[__word] |= __mask), 0); }
+extern __inline __attribute__ ((__gnu_inline__)) int __sigdelset ( __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return ((__set->__val[__word] &= ~__mask), 0); }
 # 34 "/usr/include/signal.h" 2 3 4
 
 
@@ -4360,35 +5664,53 @@ typedef void (*__sighandler_t) (int);
 
 
 extern __sighandler_t __sysv_signal (int __sig, __sighandler_t __handler)
-     __attribute__ ((__nothrow__));
-# 99 "/usr/include/signal.h" 3 4
+     throw ();
+
+extern __sighandler_t sysv_signal (int __sig, __sighandler_t __handler)
+     throw ();
+
+
+
+
+
 
 
 extern __sighandler_t signal (int __sig, __sighandler_t __handler)
-     __attribute__ ((__nothrow__));
+     throw ();
 # 113 "/usr/include/signal.h" 3 4
 
-# 126 "/usr/include/signal.h" 3 4
-extern int kill (__pid_t __pid, int __sig) __attribute__ ((__nothrow__));
+
+
+
+
+extern __sighandler_t bsd_signal (int __sig, __sighandler_t __handler)
+     throw ();
 
 
 
 
 
 
-extern int killpg (__pid_t __pgrp, int __sig) __attribute__ ((__nothrow__));
+extern int kill (__pid_t __pid, int __sig) throw ();
 
 
 
 
-extern int raise (int __sig) __attribute__ ((__nothrow__));
+
+
+extern int killpg (__pid_t __pgrp, int __sig) throw ();
+
+
+
+
+extern int raise (int __sig) throw ();
 
 
 
 
 extern __sighandler_t ssignal (int __sig, __sighandler_t __handler)
-     __attribute__ ((__nothrow__));
-extern int gsignal (int __sig) __attribute__ ((__nothrow__));
+     throw ();
+extern int gsignal (int __sig) throw ();
 
 
 
@@ -4401,36 +5723,58 @@ extern void psignal (int __sig, __const char *__s);
 extern void psiginfo (__const siginfo_t *__pinfo, __const char *__s);
 # 168 "/usr/include/signal.h" 3 4
 extern int __sigpause (int __sig_or_mask, int __is_sig);
+# 177 "/usr/include/signal.h" 3 4
+extern int sigpause (int __sig) __asm__ ("__xpg_sigpause");
 # 196 "/usr/include/signal.h" 3 4
-extern int sigblock (int __mask) __attribute__ ((__nothrow__)) __attribute__ ((__deprecated__));
+extern int sigblock (int __mask) throw () __attribute__ ((__deprecated__));
 
 
-extern int sigsetmask (int __mask) __attribute__ ((__nothrow__)) __attribute__ ((__deprecated__));
+extern int sigsetmask (int __mask) throw () __attribute__ ((__deprecated__));
 
 
-extern int siggetmask (void) __attribute__ ((__nothrow__)) __attribute__ ((__deprecated__));
-# 216 "/usr/include/signal.h" 3 4
+extern int siggetmask (void) throw () __attribute__ ((__deprecated__));
+# 211 "/usr/include/signal.h" 3 4
+typedef __sighandler_t sighandler_t;
+
+
+
+
 typedef __sighandler_t sig_t;
 
 
 
 
 
-extern int sigemptyset (sigset_t *__set) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+extern int sigemptyset (sigset_t *__set) throw () __attribute__ ((__nonnull__ (1)));
 
 
-extern int sigfillset (sigset_t *__set) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+extern int sigfillset (sigset_t *__set) throw () __attribute__ ((__nonnull__ (1)));
 
 
-extern int sigaddset (sigset_t *__set, int __signo) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+extern int sigaddset (sigset_t *__set, int __signo) throw () __attribute__ ((__nonnull__ (1)));
 
 
-extern int sigdelset (sigset_t *__set, int __signo) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+extern int sigdelset (sigset_t *__set, int __signo) throw () __attribute__ ((__nonnull__ (1)));
 
 
 extern int sigismember (__const sigset_t *__set, int __signo)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
-# 252 "/usr/include/signal.h" 3 4
+     throw () __attribute__ ((__nonnull__ (1)));
+
+
+
+extern int sigisemptyset (__const sigset_t *__set) throw () __attribute__ ((__nonnull__ (1)));
+
+
+extern int sigandset (sigset_t *__set, __const sigset_t *__left,
+        __const sigset_t *__right) throw () __attribute__ ((__nonnull__ (1, 2, 3)));
+
+
+extern int sigorset (sigset_t *__set, __const sigset_t *__left,
+       __const sigset_t *__right) throw () __attribute__ ((__nonnull__ (1, 2, 3)));
+
+
+
+
 # 1 "/usr/include/bits/sigaction.h" 1 3 4
 # 25 "/usr/include/bits/sigaction.h" 3 4
 struct sigaction
@@ -4464,7 +5808,7 @@ struct sigaction
 
 
 extern int sigprocmask (int __how, __const sigset_t *__restrict __set,
-   sigset_t *__restrict __oset) __attribute__ ((__nothrow__));
+   sigset_t *__restrict __oset) throw ();
 
 
 
@@ -4475,10 +5819,10 @@ extern int sigsuspend (__const sigset_t *__set) __attribute__ ((__nonnull__ (1))
 
 
 extern int sigaction (int __sig, __const struct sigaction *__restrict __act,
-        struct sigaction *__restrict __oact) __attribute__ ((__nothrow__));
+        struct sigaction *__restrict __oact) throw ();
 
 
-extern int sigpending (sigset_t *__set) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+extern int sigpending (sigset_t *__set) throw () __attribute__ ((__nonnull__ (1)));
 
 
 
@@ -4509,7 +5853,7 @@ extern int sigtimedwait (__const sigset_t *__restrict __set,
 
 
 extern int sigqueue (__pid_t __pid, int __sig, __const union sigval __val)
-     __attribute__ ((__nothrow__));
+     throw ();
 # 310 "/usr/include/signal.h" 3 4
 extern __const char *__const _sys_siglist[65];
 extern __const char *__const sys_siglist[65];
@@ -4525,7 +5869,7 @@ struct sigvec
   };
 # 334 "/usr/include/signal.h" 3 4
 extern int sigvec (int __sig, __const struct sigvec *__vec,
-     struct sigvec *__ovec) __attribute__ ((__nothrow__));
+     struct sigvec *__ovec) throw ();
 
 
 
@@ -4607,7 +5951,7 @@ struct sigcontext
 # 340 "/usr/include/signal.h" 2 3 4
 
 
-extern int sigreturn (struct sigcontext *__scp) __attribute__ ((__nothrow__));
+extern int sigreturn (struct sigcontext *__scp) throw ();
 
 
 
@@ -4620,7 +5964,7 @@ extern int sigreturn (struct sigcontext *__scp) __attribute__ ((__nothrow__));
 
 
 
-extern int siginterrupt (int __sig, int __interrupt) __attribute__ ((__nothrow__));
+extern int siginterrupt (int __sig, int __interrupt) throw ();
 
 # 1 "/usr/include/bits/sigstack.h" 1 3 4
 # 26 "/usr/include/bits/sigstack.h" 3 4
@@ -4647,23 +5991,161 @@ typedef struct sigaltstack
     size_t ss_size;
   } stack_t;
 # 357 "/usr/include/signal.h" 2 3 4
-# 365 "/usr/include/signal.h" 3 4
+
+
+# 1 "/usr/include/sys/ucontext.h" 1 3 4
+# 23 "/usr/include/sys/ucontext.h" 3 4
+# 1 "/usr/include/signal.h" 1 3 4
+# 24 "/usr/include/sys/ucontext.h" 2 3 4
+# 1 "/usr/include/bits/wordsize.h" 1 3 4
+# 25 "/usr/include/sys/ucontext.h" 2 3 4
+# 148 "/usr/include/sys/ucontext.h" 3 4
+typedef int greg_t;
+
+
+
+
+
+typedef greg_t gregset_t[19];
+
+
+
+enum
+{
+  REG_GS = 0,
+
+  REG_FS,
+
+  REG_ES,
+
+  REG_DS,
+
+  REG_EDI,
+
+  REG_ESI,
+
+  REG_EBP,
+
+  REG_ESP,
+
+  REG_EBX,
+
+  REG_EDX,
+
+  REG_ECX,
+
+  REG_EAX,
+
+  REG_TRAPNO,
+
+  REG_ERR,
+
+  REG_EIP,
+
+  REG_CS,
+
+  REG_EFL,
+
+  REG_UESP,
+
+  REG_SS
+
+};
+
+
+
+struct _libc_fpreg
+{
+  unsigned short int significand[4];
+  unsigned short int exponent;
+};
+
+struct _libc_fpstate
+{
+  unsigned long int cw;
+  unsigned long int sw;
+  unsigned long int tag;
+  unsigned long int ipoff;
+  unsigned long int cssel;
+  unsigned long int dataoff;
+  unsigned long int datasel;
+  struct _libc_fpreg _st[8];
+  unsigned long int status;
+};
+
+
+typedef struct _libc_fpstate *fpregset_t;
+
+
+typedef struct
+  {
+    gregset_t gregs;
+
+
+    fpregset_t fpregs;
+    unsigned long int oldmask;
+    unsigned long int cr2;
+  } mcontext_t;
+
+
+typedef struct ucontext
+  {
+    unsigned long int uc_flags;
+    struct ucontext *uc_link;
+    stack_t uc_stack;
+    mcontext_t uc_mcontext;
+    __sigset_t uc_sigmask;
+    struct _libc_fpstate __fpregs_mem;
+  } ucontext_t;
+# 360 "/usr/include/signal.h" 2 3 4
+
+
+
+
+
 extern int sigstack (struct sigstack *__ss, struct sigstack *__oss)
-     __attribute__ ((__nothrow__)) __attribute__ ((__deprecated__));
+     throw () __attribute__ ((__deprecated__));
 
 
 
 extern int sigaltstack (__const struct sigaltstack *__restrict __ss,
-   struct sigaltstack *__restrict __oss) __attribute__ ((__nothrow__));
-# 395 "/usr/include/signal.h" 3 4
+   struct sigaltstack *__restrict __oss) throw ();
+
+
+
+
+
+
+
+extern int sighold (int __sig) throw ();
+
+
+extern int sigrelse (int __sig) throw ();
+
+
+extern int sigignore (int __sig) throw ();
+
+
+extern __sighandler_t sigset (int __sig, __sighandler_t __disp) throw ();
+
+
+
+
+
+
 # 1 "/usr/include/bits/sigthread.h" 1 3 4
 # 31 "/usr/include/bits/sigthread.h" 3 4
 extern int pthread_sigmask (int __how,
        __const __sigset_t *__restrict __newmask,
-       __sigset_t *__restrict __oldmask)__attribute__ ((__nothrow__));
+       __sigset_t *__restrict __oldmask)throw ();
 
 
-extern int pthread_kill (pthread_t __threadid, int __signo) __attribute__ ((__nothrow__));
+extern int pthread_kill (pthread_t __threadid, int __signo) throw ();
+
+
+
+extern int pthread_sigqueue (pthread_t __threadid, int __signo,
+        const union sigval __value) throw ();
 # 396 "/usr/include/signal.h" 2 3 4
 
 
@@ -4671,13 +6153,13 @@ extern int pthread_kill (pthread_t __threadid, int __signo) __attribute__ ((__no
 
 
 
-extern int __libc_current_sigrtmin (void) __attribute__ ((__nothrow__));
+extern int __libc_current_sigrtmin (void) throw ();
 
-extern int __libc_current_sigrtmax (void) __attribute__ ((__nothrow__));
-
-
+extern int __libc_current_sigrtmax (void) throw ();
 
 
+
+}
 # 32 "/usr/include/sys/wait.h" 2 3 4
 # 1 "/usr/include/sys/resource.h" 1 3 4
 # 25 "/usr/include/sys/resource.h" 3 4
@@ -4764,7 +6246,7 @@ typedef __rlim_t rlim_t;
 
 
 
-
+typedef __rlim64_t rlim64_t;
 
 
 struct rlimit
@@ -4774,7 +6256,18 @@ struct rlimit
 
     rlim_t rlim_max;
   };
-# 154 "/usr/include/bits/resource.h" 3 4
+
+
+struct rlimit64
+  {
+
+    rlim64_t rlim_cur;
+
+    rlim64_t rlim_max;
+ };
+
+
+
 enum __rusage_who
 {
 
@@ -4783,7 +6276,16 @@ enum __rusage_who
 
 
   RUSAGE_CHILDREN = -1
-# 172 "/usr/include/bits/resource.h" 3 4
+
+
+
+  ,
+
+  RUSAGE_THREAD = 1
+
+
+
+
 };
 
 
@@ -4855,7 +6357,7 @@ enum __priority_which
 
 
 
-
+extern "C" {
 # 43 "/usr/include/sys/resource.h" 3 4
 typedef int __rlimit_resource_t;
 typedef int __rusage_who_t;
@@ -4866,75 +6368,40 @@ typedef int __priority_which_t;
 
 
 extern int getrlimit (__rlimit_resource_t __resource,
-        struct rlimit *__rlimits) __attribute__ ((__nothrow__));
-# 70 "/usr/include/sys/resource.h" 3 4
+        struct rlimit *__rlimits) throw ();
+# 62 "/usr/include/sys/resource.h" 3 4
+extern int getrlimit64 (__rlimit_resource_t __resource,
+   struct rlimit64 *__rlimits) throw ();
+
+
+
+
+
+
 extern int setrlimit (__rlimit_resource_t __resource,
-        __const struct rlimit *__rlimits) __attribute__ ((__nothrow__));
-# 88 "/usr/include/sys/resource.h" 3 4
-extern int getrusage (__rusage_who_t __who, struct rusage *__usage) __attribute__ ((__nothrow__));
+        __const struct rlimit *__rlimits) throw ();
+# 82 "/usr/include/sys/resource.h" 3 4
+extern int setrlimit64 (__rlimit_resource_t __resource,
+   __const struct rlimit64 *__rlimits) throw ();
+
+
+
+
+extern int getrusage (__rusage_who_t __who, struct rusage *__usage) throw ();
 
 
 
 
 
-extern int getpriority (__priority_which_t __which, id_t __who) __attribute__ ((__nothrow__));
+extern int getpriority (__priority_which_t __which, id_t __who) throw ();
 
 
 
 extern int setpriority (__priority_which_t __which, id_t __who, int __prio)
-     __attribute__ ((__nothrow__));
+     throw ();
 
-
+}
 # 33 "/usr/include/sys/wait.h" 2 3 4
-
-
-
-
-
-# 1 "/usr/include/bits/waitflags.h" 1 3 4
-# 39 "/usr/include/sys/wait.h" 2 3 4
-# 63 "/usr/include/sys/wait.h" 3 4
-typedef union
-  {
-    union wait *__uptr;
-    int *__iptr;
-  } __WAIT_STATUS __attribute__ ((__transparent_union__));
-# 80 "/usr/include/sys/wait.h" 3 4
-# 1 "/usr/include/bits/waitstatus.h" 1 3 4
-# 67 "/usr/include/bits/waitstatus.h" 3 4
-union wait
-  {
-    int w_status;
-    struct
-      {
-
- unsigned int __w_termsig:7;
- unsigned int __w_coredump:1;
- unsigned int __w_retcode:8;
- unsigned int:16;
-
-
-
-
-
-
-
-      } __wait_terminated;
-    struct
-      {
-
- unsigned int __w_stopval:8;
- unsigned int __w_stopsig:8;
- unsigned int:16;
-
-
-
-
-
-
-      } __wait_stopped;
-  };
-# 81 "/usr/include/sys/wait.h" 2 3 4
 # 102 "/usr/include/sys/wait.h" 3 4
 typedef enum
 {
@@ -4943,7 +6410,7 @@ typedef enum
   P_PGID
 } idtype_t;
 # 116 "/usr/include/sys/wait.h" 3 4
-extern __pid_t wait (__WAIT_STATUS __stat_loc);
+extern __pid_t wait (void * __stat_loc);
 # 139 "/usr/include/sys/wait.h" 3 4
 extern __pid_t waitpid (__pid_t __pid, int *__stat_loc, int __options);
 
@@ -4969,18 +6436,18 @@ struct rusage;
 
 
 
-extern __pid_t wait3 (__WAIT_STATUS __stat_loc, int __options,
-        struct rusage * __usage) __attribute__ ((__nothrow__));
+extern __pid_t wait3 (void * __stat_loc, int __options,
+        struct rusage * __usage) throw ();
 
 
 
 
-extern __pid_t wait4 (__pid_t __pid, __WAIT_STATUS __stat_loc, int __options,
-        struct rusage *__usage) __attribute__ ((__nothrow__));
+extern __pid_t wait4 (__pid_t __pid, void * __stat_loc, int __options,
+        struct rusage *__usage) throw ();
 
 
 
-
+}
 # 352 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 # 382 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 # 1 "/usr/include/sys/mman.h" 1 3 4
@@ -4994,17 +6461,23 @@ extern __pid_t wait4 (__pid_t __pid, __WAIT_STATUS __stat_loc, int __options,
 
 
 
-
+extern "C" {
 # 58 "/usr/include/sys/mman.h" 3 4
 extern void *mmap (void *__addr, size_t __len, int __prot,
-     int __flags, int __fd, __off_t __offset) __attribute__ ((__nothrow__));
-# 77 "/usr/include/sys/mman.h" 3 4
-extern int munmap (void *__addr, size_t __len) __attribute__ ((__nothrow__));
+     int __flags, int __fd, __off_t __offset) throw ();
+# 71 "/usr/include/sys/mman.h" 3 4
+extern void *mmap64 (void *__addr, size_t __len, int __prot,
+       int __flags, int __fd, __off64_t __offset) throw ();
 
 
 
 
-extern int mprotect (void *__addr, size_t __len, int __prot) __attribute__ ((__nothrow__));
+extern int munmap (void *__addr, size_t __len) throw ();
+
+
+
+
+extern int mprotect (void *__addr, size_t __len, int __prot) throw ();
 
 
 
@@ -5017,28 +6490,28 @@ extern int msync (void *__addr, size_t __len, int __flags);
 
 
 
-extern int madvise (void *__addr, size_t __len, int __advice) __attribute__ ((__nothrow__));
+extern int madvise (void *__addr, size_t __len, int __advice) throw ();
 
 
 
-extern int posix_madvise (void *__addr, size_t __len, int __advice) __attribute__ ((__nothrow__));
-
-
-
-
-extern int mlock (__const void *__addr, size_t __len) __attribute__ ((__nothrow__));
-
-
-extern int munlock (__const void *__addr, size_t __len) __attribute__ ((__nothrow__));
+extern int posix_madvise (void *__addr, size_t __len, int __advice) throw ();
 
 
 
 
-extern int mlockall (int __flags) __attribute__ ((__nothrow__));
+extern int mlock (__const void *__addr, size_t __len) throw ();
+
+
+extern int munlock (__const void *__addr, size_t __len) throw ();
 
 
 
-extern int munlockall (void) __attribute__ ((__nothrow__));
+
+extern int mlockall (int __flags) throw ();
+
+
+
+extern int munlockall (void) throw ();
 
 
 
@@ -5047,19 +6520,30 @@ extern int munlockall (void) __attribute__ ((__nothrow__));
 
 
 extern int mincore (void *__start, size_t __len, unsigned char *__vec)
-     __attribute__ ((__nothrow__));
-# 145 "/usr/include/sys/mman.h" 3 4
+     throw ();
+# 134 "/usr/include/sys/mman.h" 3 4
+extern void *mremap (void *__addr, size_t __old_len, size_t __new_len,
+       int __flags, ...) throw ();
+
+
+
+extern int remap_file_pages (void *__start, size_t __size, int __prot,
+        size_t __pgoff, int __flags) throw ();
+
+
+
+
 extern int shm_open (__const char *__name, int __oflag, mode_t __mode);
 
 
 extern int shm_unlink (__const char *__name);
 
-
+}
 # 383 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 # 398 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 # 1 "/usr/include/sys/times.h" 1 3 4
 # 32 "/usr/include/sys/times.h" 3 4
-
+extern "C" {
 
 
 struct tms
@@ -5076,25 +6560,31 @@ struct tms
 
 
 
-extern clock_t times (struct tms *__buffer) __attribute__ ((__nothrow__));
+extern clock_t times (struct tms *__buffer) throw ();
 
-
+}
 # 399 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
+# 407 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
+extern "C" {
 # 431 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 extern int getopt (int, char * const *, const char *);
-# 459 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
+# 455 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
+}
+
+
+
 # 1 "/usr/include/malloc.h" 1 3 4
 # 25 "/usr/include/malloc.h" 3 4
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 26 "/usr/include/malloc.h" 2 3 4
 # 48 "/usr/include/malloc.h" 3 4
+extern "C" {
 
 
+extern void *malloc (size_t __size) throw () __attribute__ ((__malloc__)) ;
 
-extern void *malloc (size_t __size) __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) ;
 
-
-extern void *calloc (size_t __nmemb, size_t __size) __attribute__ ((__nothrow__))
+extern void *calloc (size_t __nmemb, size_t __size) throw ()
        __attribute__ ((__malloc__)) ;
 
 
@@ -5102,26 +6592,26 @@ extern void *calloc (size_t __nmemb, size_t __size) __attribute__ ((__nothrow__)
 
 
 
-extern void *realloc (void *__ptr, size_t __size) __attribute__ ((__nothrow__))
+extern void *realloc (void *__ptr, size_t __size) throw ()
        __attribute__ ((__warn_unused_result__));
 
 
-extern void free (void *__ptr) __attribute__ ((__nothrow__));
+extern void free (void *__ptr) throw ();
 
 
-extern void cfree (void *__ptr) __attribute__ ((__nothrow__));
+extern void cfree (void *__ptr) throw ();
 
 
-extern void *memalign (size_t __alignment, size_t __size) __attribute__ ((__nothrow__))
+extern void *memalign (size_t __alignment, size_t __size) throw ()
        __attribute__ ((__malloc__)) ;
 
 
-extern void *valloc (size_t __size) __attribute__ ((__nothrow__))
+extern void *valloc (size_t __size) throw ()
        __attribute__ ((__malloc__)) ;
 
 
 
-extern void * pvalloc (size_t __size) __attribute__ ((__nothrow__))
+extern void * pvalloc (size_t __size) throw ()
        __attribute__ ((__malloc__)) ;
 
 
@@ -5129,7 +6619,7 @@ extern void * pvalloc (size_t __size) __attribute__ ((__nothrow__))
 extern void *(*__morecore) (ptrdiff_t __size);
 
 
-extern void *__default_morecore (ptrdiff_t __size) __attribute__ ((__nothrow__))
+extern void *__default_morecore (ptrdiff_t __size) throw ()
        __attribute__ ((__malloc__));
 
 
@@ -5148,30 +6638,30 @@ struct mallinfo {
 };
 
 
-extern struct mallinfo mallinfo (void) __attribute__ ((__nothrow__));
+extern struct mallinfo mallinfo (void) throw ();
 # 135 "/usr/include/malloc.h" 3 4
-extern int mallopt (int __param, int __val) __attribute__ ((__nothrow__));
+extern int mallopt (int __param, int __val) throw ();
 
 
 
-extern int malloc_trim (size_t __pad) __attribute__ ((__nothrow__));
+extern int malloc_trim (size_t __pad) throw ();
 
 
 
-extern size_t malloc_usable_size (void *__ptr) __attribute__ ((__nothrow__));
+extern size_t malloc_usable_size (void *__ptr) throw ();
 
 
-extern void malloc_stats (void) __attribute__ ((__nothrow__));
+extern void malloc_stats (void) throw ();
 
 
 extern int malloc_info (int __options, FILE *__fp);
 
 
-extern void *malloc_get_state (void) __attribute__ ((__nothrow__));
+extern void *malloc_get_state (void) throw ();
 
 
 
-extern int malloc_set_state (void *__ptr) __attribute__ ((__nothrow__));
+extern int malloc_set_state (void *__ptr) throw ();
 
 
 
@@ -5190,12 +6680,20 @@ extern void *(*__memalign_hook) (size_t __alignment, size_t __size, __const void
 extern void (*__after_morecore_hook) (void);
 
 
-extern void __malloc_check_init (void) __attribute__ ((__nothrow__));
+extern void __malloc_check_init (void) throw ();
 
 
-
+}
 # 460 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
-# 483 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
+
+
+
+extern "C" {
+# 479 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
+}
+
+
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stdint.h" 1 3 4
 
 
@@ -5284,10 +6782,8 @@ typedef unsigned long long int uintmax_t;
 
 
 # 1 "/usr/include/inttypes.h" 1 3 4
-# 35 "/usr/include/inttypes.h" 3 4
-typedef int __gwchar_t;
 # 274 "/usr/include/inttypes.h" 3 4
-
+extern "C" {
 # 288 "/usr/include/inttypes.h" 3 4
 typedef struct
   {
@@ -5299,38 +6795,38 @@ typedef struct
 
 
 
-extern intmax_t imaxabs (intmax_t __n) __attribute__ ((__nothrow__)) __attribute__ ((__const__));
+extern intmax_t imaxabs (intmax_t __n) throw () __attribute__ ((__const__));
 
 
 extern imaxdiv_t imaxdiv (intmax_t __numer, intmax_t __denom)
-      __attribute__ ((__nothrow__)) __attribute__ ((__const__));
+      throw () __attribute__ ((__const__));
 
 
 extern intmax_t strtoimax (__const char *__restrict __nptr,
-      char **__restrict __endptr, int __base) __attribute__ ((__nothrow__));
+      char **__restrict __endptr, int __base) throw ();
 
 
 extern uintmax_t strtoumax (__const char *__restrict __nptr,
-       char ** __restrict __endptr, int __base) __attribute__ ((__nothrow__));
+       char ** __restrict __endptr, int __base) throw ();
 
 
-extern intmax_t wcstoimax (__const __gwchar_t *__restrict __nptr,
-      __gwchar_t **__restrict __endptr, int __base)
-     __attribute__ ((__nothrow__));
+extern intmax_t wcstoimax (__const wchar_t *__restrict __nptr,
+      wchar_t **__restrict __endptr, int __base)
+     throw ();
 
 
-extern uintmax_t wcstoumax (__const __gwchar_t *__restrict __nptr,
-       __gwchar_t ** __restrict __endptr, int __base)
-     __attribute__ ((__nothrow__));
+extern uintmax_t wcstoumax (__const wchar_t *__restrict __nptr,
+       wchar_t ** __restrict __endptr, int __base)
+     throw ();
 # 379 "/usr/include/inttypes.h" 3 4
 __extension__
 extern long long int __strtoll_internal (__const char *__restrict __nptr,
       char **__restrict __endptr,
       int __base, int __group)
-  __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+  throw () __attribute__ ((__nonnull__ (1))) ;
 
-extern __inline intmax_t
-__attribute__ ((__nothrow__)) strtoimax (__const char *__restrict nptr, char **__restrict endptr, int base)
+extern __inline __attribute__ ((__gnu_inline__)) intmax_t
+strtoimax (__const char *__restrict nptr, char **__restrict endptr, int base) throw ()
 
 {
   return __strtoll_internal (nptr, endptr, base, 0);
@@ -5343,24 +6839,24 @@ extern unsigned long long int __strtoull_internal (__const char *
          __restrict __endptr,
          int __base,
          int __group)
-  __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+  throw () __attribute__ ((__nonnull__ (1))) ;
 
-extern __inline uintmax_t
-__attribute__ ((__nothrow__)) strtoumax (__const char *__restrict nptr, char **__restrict endptr, int base)
+extern __inline __attribute__ ((__gnu_inline__)) uintmax_t
+strtoumax (__const char *__restrict nptr, char **__restrict endptr, int base) throw ()
 
 {
   return __strtoull_internal (nptr, endptr, base, 0);
 }
 
 __extension__
-extern long long int __wcstoll_internal (__const __gwchar_t *
+extern long long int __wcstoll_internal (__const wchar_t *
       __restrict __nptr,
-      __gwchar_t **__restrict __endptr,
+      wchar_t **__restrict __endptr,
       int __base, int __group)
-  __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+  throw () __attribute__ ((__nonnull__ (1))) ;
 
-extern __inline intmax_t
-__attribute__ ((__nothrow__)) wcstoimax (__const __gwchar_t *__restrict nptr, __gwchar_t **__restrict endptr, int base)
+extern __inline __attribute__ ((__gnu_inline__)) intmax_t
+wcstoimax (__const wchar_t *__restrict nptr, wchar_t **__restrict endptr, int base) throw ()
 
 {
   return __wcstoll_internal (nptr, endptr, base, 0);
@@ -5368,16 +6864,16 @@ __attribute__ ((__nothrow__)) wcstoimax (__const __gwchar_t *__restrict nptr, __
 
 
 __extension__
-extern unsigned long long int __wcstoull_internal (__const __gwchar_t *
+extern unsigned long long int __wcstoull_internal (__const wchar_t *
          __restrict __nptr,
-         __gwchar_t **
+         wchar_t **
          __restrict __endptr,
          int __base,
          int __group)
-  __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+  throw () __attribute__ ((__nonnull__ (1))) ;
 
-extern __inline uintmax_t
-__attribute__ ((__nothrow__)) wcstoumax (__const __gwchar_t *__restrict nptr, __gwchar_t **__restrict endptr, int base)
+extern __inline __attribute__ ((__gnu_inline__)) uintmax_t
+wcstoumax (__const wchar_t *__restrict nptr, wchar_t **__restrict endptr, int base) throw ()
 
 {
   return __wcstoull_internal (nptr, endptr, base, 0);
@@ -5386,236 +6882,27 @@ __attribute__ ((__nothrow__)) wcstoumax (__const __gwchar_t *__restrict nptr, __
 
 
 
-
+}
 # 488 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
-# 551 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
-# 1 "/usr/include/sys/stat.h" 1 3 4
-# 105 "/usr/include/sys/stat.h" 3 4
 
 
-# 1 "/usr/include/bits/stat.h" 1 3 4
-# 43 "/usr/include/bits/stat.h" 3 4
-struct stat
-  {
-    __dev_t st_dev;
 
-    unsigned short int __pad1;
-
-
-    __ino_t st_ino;
-
-
-
-
-    __mode_t st_mode;
-    __nlink_t st_nlink;
-
-
-
-
-    __uid_t st_uid;
-    __gid_t st_gid;
-
-
-
-    __dev_t st_rdev;
-
-    unsigned short int __pad2;
-
-
-    __off_t st_size;
-
-
-
-    __blksize_t st_blksize;
-
-    __blkcnt_t st_blocks;
-# 88 "/usr/include/bits/stat.h" 3 4
-    struct timespec st_atim;
-    struct timespec st_mtim;
-    struct timespec st_ctim;
-# 106 "/usr/include/bits/stat.h" 3 4
-    unsigned long int __unused4;
-    unsigned long int __unused5;
-
-
-
-
-  };
-# 108 "/usr/include/sys/stat.h" 2 3 4
-# 209 "/usr/include/sys/stat.h" 3 4
-extern int stat (__const char *__restrict __file,
-   struct stat *__restrict __buf) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
-
-
-
-extern int fstat (int __fd, struct stat *__buf) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
-# 238 "/usr/include/sys/stat.h" 3 4
-extern int fstatat (int __fd, __const char *__restrict __file,
-      struct stat *__restrict __buf, int __flag)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 3)));
-# 263 "/usr/include/sys/stat.h" 3 4
-extern int lstat (__const char *__restrict __file,
-    struct stat *__restrict __buf) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
-# 284 "/usr/include/sys/stat.h" 3 4
-extern int chmod (__const char *__file, __mode_t __mode)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
-
-
-
-
-
-extern int lchmod (__const char *__file, __mode_t __mode)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
-
-
-
-
-extern int fchmod (int __fd, __mode_t __mode) __attribute__ ((__nothrow__));
-
-
-
-
-
-extern int fchmodat (int __fd, __const char *__file, __mode_t __mode,
-       int __flag)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2))) ;
-
-
-
-
-
-
-extern __mode_t umask (__mode_t __mask) __attribute__ ((__nothrow__));
-# 321 "/usr/include/sys/stat.h" 3 4
-extern int mkdir (__const char *__path, __mode_t __mode)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
-
-
-
-
-
-extern int mkdirat (int __fd, __const char *__path, __mode_t __mode)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
-
-
-
-
-
-
-extern int mknod (__const char *__path, __mode_t __mode, __dev_t __dev)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
-
-
-
-
-
-extern int mknodat (int __fd, __const char *__path, __mode_t __mode,
-      __dev_t __dev) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
-
-
-
-
-
-extern int mkfifo (__const char *__path, __mode_t __mode)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
-
-
-
-
-
-extern int mkfifoat (int __fd, __const char *__path, __mode_t __mode)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
-
-
-
-
-
-extern int utimensat (int __fd, __const char *__path,
-        __const struct timespec __times[2],
-        int __flags)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
-
-
-
-
-extern int futimens (int __fd, __const struct timespec __times[2]) __attribute__ ((__nothrow__));
-# 399 "/usr/include/sys/stat.h" 3 4
-extern int __fxstat (int __ver, int __fildes, struct stat *__stat_buf)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3)));
-extern int __xstat (int __ver, __const char *__filename,
-      struct stat *__stat_buf) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 3)));
-extern int __lxstat (int __ver, __const char *__filename,
-       struct stat *__stat_buf) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 3)));
-extern int __fxstatat (int __ver, int __fildes, __const char *__filename,
-         struct stat *__stat_buf, int __flag)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 4)));
-# 442 "/usr/include/sys/stat.h" 3 4
-extern int __xmknod (int __ver, __const char *__path, __mode_t __mode,
-       __dev_t *__dev) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 4)));
-
-extern int __xmknodat (int __ver, int __fd, __const char *__path,
-         __mode_t __mode, __dev_t *__dev)
-     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (3, 5)));
-
-
-
-
-extern __inline int
-__attribute__ ((__nothrow__)) stat (__const char *__path, struct stat *__statbuf)
-{
-  return __xstat (3, __path, __statbuf);
+extern "C" {
+# 534 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 }
-
-
-extern __inline int
-__attribute__ ((__nothrow__)) lstat (__const char *__path, struct stat *__statbuf)
-{
-  return __lxstat (3, __path, __statbuf);
-}
-
-
-extern __inline int
-__attribute__ ((__nothrow__)) fstat (int __fd, struct stat *__statbuf)
-{
-  return __fxstat (3, __fd, __statbuf);
-}
-
-
-extern __inline int
-__attribute__ ((__nothrow__)) fstatat (int __fd, __const char *__filename, struct stat *__statbuf, int __flag)
-
-{
-  return __fxstatat (3, __fd, __filename, __statbuf, __flag);
-}
-
-
-
-extern __inline int
-__attribute__ ((__nothrow__)) mknod (__const char *__path, __mode_t __mode, __dev_t __dev)
-{
-  return __xmknod (1, __path, __mode, &__dev);
-}
-
-
-
-extern __inline int
-__attribute__ ((__nothrow__)) mknodat (int __fd, __const char *__path, __mode_t __mode, __dev_t __dev)
-
-{
-  return __xmknodat (1, __fd, __path, __mode, &__dev);
-}
-# 534 "/usr/include/sys/stat.h" 3 4
-
-# 552 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 # 623 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/filenames.h" 1
+# 30 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/filenames.h"
+extern "C" {
 # 81 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/filenames.h"
 extern int filename_cmp (const char *s1, const char *s2);
 
 
 extern int filename_ncmp (const char *s1, const char *s2,
      size_t n);
+
+
+}
 # 624 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 # 635 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 # 1 "/usr/include/dlfcn.h" 1 3 4
@@ -5625,32 +6912,172 @@ extern int filename_ncmp (const char *s1, const char *s2,
 
 
 # 1 "/usr/include/bits/dlfcn.h" 1 3 4
+# 58 "/usr/include/bits/dlfcn.h" 3 4
+extern "C" {
+
+
+extern void _dl_mcount_wrapper_check (void *__selfpc) throw ();
+
+}
 # 29 "/usr/include/dlfcn.h" 2 3 4
-# 53 "/usr/include/dlfcn.h" 3 4
+# 45 "/usr/include/dlfcn.h" 3 4
+typedef long int Lmid_t;
 
 
 
 
-extern void *dlopen (__const char *__file, int __mode) __attribute__ ((__nothrow__));
 
 
 
-extern int dlclose (void *__handle) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+extern "C" {
+
+
+
+extern void *dlopen (__const char *__file, int __mode) throw ();
+
+
+
+extern int dlclose (void *__handle) throw () __attribute__ ((__nonnull__ (1)));
 
 
 
 extern void *dlsym (void *__restrict __handle,
-      __const char *__restrict __name) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
-# 83 "/usr/include/dlfcn.h" 3 4
-extern char *dlerror (void) __attribute__ ((__nothrow__));
-# 189 "/usr/include/dlfcn.h" 3 4
+      __const char *__restrict __name) throw () __attribute__ ((__nonnull__ (2)));
 
+
+
+extern void *dlmopen (Lmid_t __nsid, __const char *__file, int __mode) throw ();
+
+
+
+extern void *dlvsym (void *__restrict __handle,
+       __const char *__restrict __name,
+       __const char *__restrict __version)
+     throw () __attribute__ ((__nonnull__ (2, 3)));
+
+
+
+
+
+extern char *dlerror (void) throw ();
+
+
+
+
+
+typedef struct
+{
+  __const char *dli_fname;
+  void *dli_fbase;
+  __const char *dli_sname;
+  void *dli_saddr;
+} Dl_info;
+
+
+
+extern int dladdr (__const void *__address, Dl_info *__info)
+     throw () __attribute__ ((__nonnull__ (2)));
+
+
+extern int dladdr1 (__const void *__address, Dl_info *__info,
+      void **__extra_info, int __flags) throw () __attribute__ ((__nonnull__ (2)));
+
+
+
+
+enum
+  {
+
+    RTLD_DL_SYMENT = 1,
+
+
+    RTLD_DL_LINKMAP = 2
+  };
+
+
+
+
+
+
+
+extern int dlinfo (void *__restrict __handle,
+     int __request, void *__restrict __arg)
+     throw () __attribute__ ((__nonnull__ (1, 3)));
+
+
+enum
+  {
+
+    RTLD_DI_LMID = 1,
+
+
+
+    RTLD_DI_LINKMAP = 2,
+
+    RTLD_DI_CONFIGADDR = 3,
+
+
+
+
+
+
+    RTLD_DI_SERINFO = 4,
+    RTLD_DI_SERINFOSIZE = 5,
+
+
+
+    RTLD_DI_ORIGIN = 6,
+
+    RTLD_DI_PROFILENAME = 7,
+    RTLD_DI_PROFILEOUT = 8,
+
+
+
+
+    RTLD_DI_TLS_MODID = 9,
+
+
+
+
+
+    RTLD_DI_TLS_DATA = 10,
+
+    RTLD_DI_MAX = 10
+  };
+
+
+
+
+typedef struct
+{
+  char *dls_name;
+  unsigned int dls_flags;
+} Dl_serpath;
+
+
+
+typedef struct
+{
+  size_t dls_size;
+  unsigned int dls_cnt;
+  Dl_serpath dls_serpath[1];
+} Dl_serinfo;
+
+
+
+}
 # 636 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 
 
 
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h" 1
-# 46 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
+# 40 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
+extern "C" {
+
+
+
+
+
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
 # 47 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h" 2
 # 56 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
@@ -5953,6 +7380,8 @@ extern void setproctitle (const char *name, ...);
 extern void stack_limit_increase (unsigned long);
 # 655 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
 extern void *C_alloca (size_t) __attribute__ ((__malloc__));
+# 682 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/libiberty.h"
+}
 # 640 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h" 2
 # 668 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/system.h"
 extern void fancy_abort (const char *, int, const char *) __attribute__ ((__noreturn__));
@@ -6126,6 +7555,8 @@ enum memmodel
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/highlev-plugin-common.h" 1
 # 31 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gcc-plugin.h" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hashtab.h" 1
+# 37 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hashtab.h"
+extern "C" {
 # 47 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hashtab.h"
 typedef unsigned int hashval_t;
 
@@ -6267,6 +7698,11 @@ extern hashval_t htab_hash_string (const void *);
 
 
 extern hashval_t iterative_hash (const void *, size_t, hashval_t);
+
+
+
+
+}
 # 32 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gcc-plugin.h" 2
 
 
@@ -6355,7 +7791,7 @@ PLUGIN_NEW_PASS,
 
 
 
-
+extern "C" {
 
 
 extern const char **plugin_event_name;
@@ -6401,7 +7837,7 @@ struct plugin_name_args
 
 
 
-extern unsigned char plugin_default_version_check (struct plugin_gcc_version *,
+extern bool plugin_default_version_check (struct plugin_gcc_version *,
        struct plugin_gcc_version *);
 # 103 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gcc-plugin.h"
 typedef int (*plugin_init_func) (struct plugin_name_args *plugin_info,
@@ -6440,8 +7876,20 @@ extern int unregister_callback (const char *plugin_name, int event);
 
 
 extern const char* default_plugin_dir_name (void);
-# 161 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/gcc-plugin.h"
+
+
+}
+
+
+
+
+
+
+extern "C" {
+
 extern int plugin_is_GPL_compatible;
+
+}
 # 24 "../../../src/plugin-utils.h" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 1
 # 26 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
@@ -6792,7 +8240,7 @@ struct line_map {
   source_location start_location;
 
 
-  __extension__ enum lc_reason reason : 8;
+  enum lc_reason reason : 8;
 
   union map_u {
     struct line_map_ordinary ordinary;
@@ -6829,7 +8277,7 @@ struct line_maps {
   unsigned int depth;
 
 
-  unsigned char trace_includes;
+  bool trace_includes;
 
 
   source_location highest_location;
@@ -6880,11 +8328,11 @@ extern const struct line_map *linemap_lookup
 
 
 
-unsigned char linemap_tracks_macro_expansion_locs_p (struct line_maps *);
+bool linemap_tracks_macro_expansion_locs_p (struct line_maps *);
 
 
 
-unsigned char linemap_macro_expansion_map_p (const struct line_map *);
+bool linemap_macro_expansion_map_p (const struct line_map *);
 
 
 const char* linemap_map_get_macro_name (const struct line_map*);
@@ -6895,7 +8343,7 @@ int linemap_location_in_system_header_p (struct line_maps *,
 
 
 
-unsigned char linemap_location_from_macro_expansion_p (struct line_maps *,
+bool linemap_location_from_macro_expansion_p (struct line_maps *,
            source_location);
 # 550 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/line-map.h"
 extern source_location
@@ -6928,7 +8376,7 @@ typedef struct
   int column;
 
 
-  unsigned char sysp;
+  bool sysp;
 } expanded_location;
 
 
@@ -6986,7 +8434,7 @@ void linemap_dump_location (struct line_maps *, source_location, FILE *);
 
 
 
-void linemap_dump (FILE *, struct line_maps *, unsigned, unsigned char);
+void linemap_dump (FILE *, struct line_maps *, unsigned, bool);
 
 
 
@@ -7053,38 +8501,1199 @@ extern void vec_stack_free (void *);
 # 30 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/vecir.h" 1
 # 28 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/vecir.h"
-static __inline__ void VEC_tree_must_be_pointer_type (void) { (void)((tree)1 == (void *)1); } typedef struct VEC_tree_base { struct vec_prefix prefix; tree vec[1]; } VEC_tree_base; typedef struct VEC_tree_none { VEC_tree_base base; } VEC_tree_none; static __inline__ unsigned VEC_tree_base_length (const VEC_tree_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ tree VEC_tree_base_last (const VEC_tree_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ tree VEC_tree_base_index (const VEC_tree_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_tree_base_iterate (const VEC_tree_base *vec_, unsigned ix_, tree *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (tree) 0; return 0; } } static __inline__ size_t VEC_tree_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_tree_base, vec) + alloc_ * sizeof(tree); } static __inline__ void VEC_tree_base_embedded_init (VEC_tree_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_tree_base_space (VEC_tree_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_tree_base_splice (VEC_tree_base *dst_, VEC_tree_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (tree)); dst_->prefix.num += len_; } } static __inline__ tree *VEC_tree_base_quick_push (VEC_tree_base *vec_, tree obj_ ) { tree *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ tree VEC_tree_base_pop (VEC_tree_base *vec_ ) { tree obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_tree_base_truncate (VEC_tree_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ tree VEC_tree_base_replace (VEC_tree_base *vec_, unsigned ix_, tree obj_ ) { tree old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ tree *VEC_tree_base_quick_insert (VEC_tree_base *vec_, unsigned ix_, tree obj_ ) { tree *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (tree)); *slot_ = obj_; return slot_; } static __inline__ tree VEC_tree_base_ordered_remove (VEC_tree_base *vec_, unsigned ix_ ) { tree *slot_; tree obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (tree)); return obj_; } static __inline__ tree VEC_tree_base_unordered_remove (VEC_tree_base *vec_, unsigned ix_ ) { tree *slot_; tree obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_tree_base_block_remove (VEC_tree_base *vec_, unsigned ix_, unsigned len_ ) { tree *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (tree)); } static __inline__ tree *VEC_tree_base_address (VEC_tree_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_tree_base_lower_bound (VEC_tree_base *vec_, const tree obj_, unsigned char (*lessthan_)(const tree, const tree) ) { unsigned int len_ = VEC_tree_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { tree middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_tree_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_tree_gc { VEC_tree_base base; } VEC_tree_gc; static __inline__ VEC_tree_gc *VEC_tree_gc_alloc (int alloc_ ) { return (VEC_tree_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_tree_gc_free (VEC_tree_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_tree_gc *VEC_tree_gc_copy (VEC_tree_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_tree_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_tree_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (tree) * len_); } return new_vec_; } static __inline__ int VEC_tree_gc_reserve (VEC_tree_gc **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_tree_gc_reserve_exact (VEC_tree_gc **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_tree_gc_safe_grow (VEC_tree_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_tree_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_tree_gc_safe_grow_cleared (VEC_tree_gc **vec_, int size_ ) { int oldsize = VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_tree_gc_safe_grow (vec_, size_ ); memset (&(VEC_tree_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (tree) * (size_ - oldsize)); } static __inline__ void VEC_tree_gc_safe_splice (VEC_tree_gc **dst_, VEC_tree_base *src_ ) { if (src_) { VEC_tree_gc_reserve_exact (dst_, src_->prefix.num ); VEC_tree_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ tree *VEC_tree_gc_safe_push (VEC_tree_gc **vec_, tree obj_ ) { VEC_tree_gc_reserve (vec_, 1 ); return VEC_tree_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ tree *VEC_tree_gc_safe_insert (VEC_tree_gc **vec_, unsigned ix_, tree obj_ ) { VEC_tree_gc_reserve (vec_, 1 ); return VEC_tree_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-typedef struct VEC_tree_heap { VEC_tree_base base; } VEC_tree_heap; static __inline__ VEC_tree_heap *VEC_tree_heap_alloc (int alloc_ ) { return (VEC_tree_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_tree_heap_free (VEC_tree_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_tree_heap *VEC_tree_heap_copy (VEC_tree_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_tree_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_tree_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (tree) * len_); } return new_vec_; } static __inline__ int VEC_tree_heap_reserve (VEC_tree_heap **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_tree_heap_reserve_exact (VEC_tree_heap **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_tree_heap_safe_grow (VEC_tree_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_tree_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_tree_heap_safe_grow_cleared (VEC_tree_heap **vec_, int size_ ) { int oldsize = VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_tree_heap_safe_grow (vec_, size_ ); memset (&(VEC_tree_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (tree) * (size_ - oldsize)); } static __inline__ void VEC_tree_heap_safe_splice (VEC_tree_heap **dst_, VEC_tree_base *src_ ) { if (src_) { VEC_tree_heap_reserve_exact (dst_, src_->prefix.num ); VEC_tree_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ tree *VEC_tree_heap_safe_push (VEC_tree_heap **vec_, tree obj_ ) { VEC_tree_heap_reserve (vec_, 1 ); return VEC_tree_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ tree *VEC_tree_heap_safe_insert (VEC_tree_heap **vec_, unsigned ix_, tree obj_ ) { VEC_tree_heap_reserve (vec_, 1 ); return VEC_tree_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+static inline void VEC_tree_must_be_pointer_type (void) { (void)((tree)1 == (void *)1); } typedef struct VEC_tree_base { struct vec_prefix prefix; tree vec[1]; } VEC_tree_base; typedef struct VEC_tree_none { VEC_tree_base base; } VEC_tree_none; static inline unsigned VEC_tree_base_length (const VEC_tree_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline tree VEC_tree_base_last (const VEC_tree_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline tree VEC_tree_base_index (const VEC_tree_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_tree_base_iterate (const VEC_tree_base *vec_, unsigned ix_, tree *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (tree) 0; return 0; } } static inline size_t VEC_tree_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_tree_base, vec) + alloc_ * sizeof(tree); } static inline void VEC_tree_base_embedded_init (VEC_tree_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_tree_base_space (VEC_tree_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_tree_base_splice (VEC_tree_base *dst_, VEC_tree_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (tree)); dst_->prefix.num += len_; } } static inline tree *VEC_tree_base_quick_push (VEC_tree_base *vec_, tree obj_ ) { tree *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline tree VEC_tree_base_pop (VEC_tree_base *vec_ ) { tree obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_tree_base_truncate (VEC_tree_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline tree VEC_tree_base_replace (VEC_tree_base *vec_, unsigned ix_, tree obj_ ) { tree old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline tree *VEC_tree_base_quick_insert (VEC_tree_base *vec_, unsigned ix_, tree obj_ ) { tree *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (tree)); *slot_ = obj_; return slot_; } static inline tree VEC_tree_base_ordered_remove (VEC_tree_base *vec_, unsigned ix_ ) { tree *slot_; tree obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (tree)); return obj_; } static inline tree VEC_tree_base_unordered_remove (VEC_tree_base *vec_, unsigned ix_ ) { tree *slot_; tree obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_tree_base_block_remove (VEC_tree_base *vec_, unsigned ix_, unsigned len_ ) { tree *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (tree)); } static inline tree *VEC_tree_base_address (VEC_tree_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_tree_base_lower_bound (VEC_tree_base *vec_, const tree obj_, bool (*lessthan_)(const tree, const tree) ) { unsigned int len_ = VEC_tree_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { tree middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_tree_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_tree_gc { VEC_tree_base base; } VEC_tree_gc; static inline VEC_tree_gc *VEC_tree_gc_alloc (int alloc_ ) { return (VEC_tree_gc *) vec_gc_p_reserve_exact (__null, alloc_ ); } static inline void VEC_tree_gc_free (VEC_tree_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline VEC_tree_gc *VEC_tree_gc_copy (VEC_tree_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_tree_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_tree_gc *)(vec_gc_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (tree) * len_); } return new_vec_; } static inline int VEC_tree_gc_reserve (VEC_tree_gc **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_tree_gc_reserve_exact (VEC_tree_gc **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_tree_gc_safe_grow (VEC_tree_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_tree_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_tree_gc_safe_grow_cleared (VEC_tree_gc **vec_, int size_ ) { int oldsize = VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_tree_gc_safe_grow (vec_, size_ ); memset (&(VEC_tree_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (tree) * (size_ - oldsize)); } static inline void VEC_tree_gc_safe_splice (VEC_tree_gc **dst_, VEC_tree_base *src_ ) { if (src_) { VEC_tree_gc_reserve_exact (dst_, src_->prefix.num ); VEC_tree_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline tree *VEC_tree_gc_safe_push (VEC_tree_gc **vec_, tree obj_ ) { VEC_tree_gc_reserve (vec_, 1 ); return VEC_tree_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline tree *VEC_tree_gc_safe_insert (VEC_tree_gc **vec_, unsigned ix_, tree obj_ ) { VEC_tree_gc_reserve (vec_, 1 ); return VEC_tree_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_tree_heap { VEC_tree_base base; } VEC_tree_heap; static inline VEC_tree_heap *VEC_tree_heap_alloc (int alloc_ ) { return (VEC_tree_heap *) vec_heap_p_reserve_exact (__null, alloc_ ); } static inline void VEC_tree_heap_free (VEC_tree_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = __null; } static inline VEC_tree_heap *VEC_tree_heap_copy (VEC_tree_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_tree_heap *new_vec_ = __null; if (len_) { new_vec_ = (VEC_tree_heap *)(vec_heap_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (tree) * len_); } return new_vec_; } static inline int VEC_tree_heap_reserve (VEC_tree_heap **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_tree_heap_reserve_exact (VEC_tree_heap **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_tree_heap_safe_grow (VEC_tree_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_tree_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_tree_heap_safe_grow_cleared (VEC_tree_heap **vec_, int size_ ) { int oldsize = VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_tree_heap_safe_grow (vec_, size_ ); memset (&(VEC_tree_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (tree) * (size_ - oldsize)); } static inline void VEC_tree_heap_safe_splice (VEC_tree_heap **dst_, VEC_tree_base *src_ ) { if (src_) { VEC_tree_heap_reserve_exact (dst_, src_->prefix.num ); VEC_tree_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline tree *VEC_tree_heap_safe_push (VEC_tree_heap **vec_, tree obj_ ) { VEC_tree_heap_reserve (vec_, 1 ); return VEC_tree_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline tree *VEC_tree_heap_safe_insert (VEC_tree_heap **vec_, unsigned ix_, tree obj_ ) { VEC_tree_heap_reserve (vec_, 1 ); return VEC_tree_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 
 
-static __inline__ void VEC_gimple_must_be_pointer_type (void) { (void)((gimple)1 == (void *)1); } typedef struct VEC_gimple_base { struct vec_prefix prefix; gimple vec[1]; } VEC_gimple_base; typedef struct VEC_gimple_none { VEC_gimple_base base; } VEC_gimple_none; static __inline__ unsigned VEC_gimple_base_length (const VEC_gimple_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ gimple VEC_gimple_base_last (const VEC_gimple_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ gimple VEC_gimple_base_index (const VEC_gimple_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_gimple_base_iterate (const VEC_gimple_base *vec_, unsigned ix_, gimple *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (gimple) 0; return 0; } } static __inline__ size_t VEC_gimple_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_gimple_base, vec) + alloc_ * sizeof(gimple); } static __inline__ void VEC_gimple_base_embedded_init (VEC_gimple_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_gimple_base_space (VEC_gimple_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_gimple_base_splice (VEC_gimple_base *dst_, VEC_gimple_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (gimple)); dst_->prefix.num += len_; } } static __inline__ gimple *VEC_gimple_base_quick_push (VEC_gimple_base *vec_, gimple obj_ ) { gimple *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ gimple VEC_gimple_base_pop (VEC_gimple_base *vec_ ) { gimple obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_gimple_base_truncate (VEC_gimple_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ gimple VEC_gimple_base_replace (VEC_gimple_base *vec_, unsigned ix_, gimple obj_ ) { gimple old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ gimple *VEC_gimple_base_quick_insert (VEC_gimple_base *vec_, unsigned ix_, gimple obj_ ) { gimple *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (gimple)); *slot_ = obj_; return slot_; } static __inline__ gimple VEC_gimple_base_ordered_remove (VEC_gimple_base *vec_, unsigned ix_ ) { gimple *slot_; gimple obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (gimple)); return obj_; } static __inline__ gimple VEC_gimple_base_unordered_remove (VEC_gimple_base *vec_, unsigned ix_ ) { gimple *slot_; gimple obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_gimple_base_block_remove (VEC_gimple_base *vec_, unsigned ix_, unsigned len_ ) { gimple *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (gimple)); } static __inline__ gimple *VEC_gimple_base_address (VEC_gimple_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_gimple_base_lower_bound (VEC_gimple_base *vec_, const gimple obj_, unsigned char (*lessthan_)(const gimple, const gimple) ) { unsigned int len_ = VEC_gimple_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { gimple middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_gimple_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_gimple_heap { VEC_gimple_base base; } VEC_gimple_heap; static __inline__ VEC_gimple_heap *VEC_gimple_heap_alloc (int alloc_ ) { return (VEC_gimple_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_heap_free (VEC_gimple_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_heap *VEC_gimple_heap_copy (VEC_gimple_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple) * len_); } return new_vec_; } static __inline__ int VEC_gimple_heap_reserve (VEC_gimple_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_heap_reserve_exact (VEC_gimple_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_heap_safe_grow (VEC_gimple_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_gimple_heap_safe_grow_cleared (VEC_gimple_heap **vec_, int size_ ) { int oldsize = VEC_gimple_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_heap_safe_grow (vec_, size_ ); memset (&(VEC_gimple_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple) * (size_ - oldsize)); } static __inline__ void VEC_gimple_heap_safe_splice (VEC_gimple_heap **dst_, VEC_gimple_base *src_ ) { if (src_) { VEC_gimple_heap_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple *VEC_gimple_heap_safe_push (VEC_gimple_heap **vec_, gimple obj_ ) { VEC_gimple_heap_reserve (vec_, 1 ); return VEC_gimple_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple *VEC_gimple_heap_safe_insert (VEC_gimple_heap **vec_, unsigned ix_, gimple obj_ ) { VEC_gimple_heap_reserve (vec_, 1 ); return VEC_gimple_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-typedef struct VEC_gimple_gc { VEC_gimple_base base; } VEC_gimple_gc; static __inline__ VEC_gimple_gc *VEC_gimple_gc_alloc (int alloc_ ) { return (VEC_gimple_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_gc_free (VEC_gimple_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_gc *VEC_gimple_gc_copy (VEC_gimple_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple) * len_); } return new_vec_; } static __inline__ int VEC_gimple_gc_reserve (VEC_gimple_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_gc_reserve_exact (VEC_gimple_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_gc_safe_grow (VEC_gimple_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_gimple_gc_safe_grow_cleared (VEC_gimple_gc **vec_, int size_ ) { int oldsize = VEC_gimple_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_gc_safe_grow (vec_, size_ ); memset (&(VEC_gimple_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple) * (size_ - oldsize)); } static __inline__ void VEC_gimple_gc_safe_splice (VEC_gimple_gc **dst_, VEC_gimple_base *src_ ) { if (src_) { VEC_gimple_gc_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple *VEC_gimple_gc_safe_push (VEC_gimple_gc **vec_, gimple obj_ ) { VEC_gimple_gc_reserve (vec_, 1 ); return VEC_gimple_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple *VEC_gimple_gc_safe_insert (VEC_gimple_gc **vec_, unsigned ix_, gimple obj_ ) { VEC_gimple_gc_reserve (vec_, 1 ); return VEC_gimple_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+static inline void VEC_gimple_must_be_pointer_type (void) { (void)((gimple)1 == (void *)1); } typedef struct VEC_gimple_base { struct vec_prefix prefix; gimple vec[1]; } VEC_gimple_base; typedef struct VEC_gimple_none { VEC_gimple_base base; } VEC_gimple_none; static inline unsigned VEC_gimple_base_length (const VEC_gimple_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline gimple VEC_gimple_base_last (const VEC_gimple_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline gimple VEC_gimple_base_index (const VEC_gimple_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_gimple_base_iterate (const VEC_gimple_base *vec_, unsigned ix_, gimple *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (gimple) 0; return 0; } } static inline size_t VEC_gimple_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_gimple_base, vec) + alloc_ * sizeof(gimple); } static inline void VEC_gimple_base_embedded_init (VEC_gimple_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_gimple_base_space (VEC_gimple_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_gimple_base_splice (VEC_gimple_base *dst_, VEC_gimple_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (gimple)); dst_->prefix.num += len_; } } static inline gimple *VEC_gimple_base_quick_push (VEC_gimple_base *vec_, gimple obj_ ) { gimple *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline gimple VEC_gimple_base_pop (VEC_gimple_base *vec_ ) { gimple obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_gimple_base_truncate (VEC_gimple_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline gimple VEC_gimple_base_replace (VEC_gimple_base *vec_, unsigned ix_, gimple obj_ ) { gimple old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline gimple *VEC_gimple_base_quick_insert (VEC_gimple_base *vec_, unsigned ix_, gimple obj_ ) { gimple *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (gimple)); *slot_ = obj_; return slot_; } static inline gimple VEC_gimple_base_ordered_remove (VEC_gimple_base *vec_, unsigned ix_ ) { gimple *slot_; gimple obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (gimple)); return obj_; } static inline gimple VEC_gimple_base_unordered_remove (VEC_gimple_base *vec_, unsigned ix_ ) { gimple *slot_; gimple obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_gimple_base_block_remove (VEC_gimple_base *vec_, unsigned ix_, unsigned len_ ) { gimple *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (gimple)); } static inline gimple *VEC_gimple_base_address (VEC_gimple_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_gimple_base_lower_bound (VEC_gimple_base *vec_, const gimple obj_, bool (*lessthan_)(const gimple, const gimple) ) { unsigned int len_ = VEC_gimple_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { gimple middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_gimple_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_gimple_heap { VEC_gimple_base base; } VEC_gimple_heap; static inline VEC_gimple_heap *VEC_gimple_heap_alloc (int alloc_ ) { return (VEC_gimple_heap *) vec_heap_p_reserve_exact (__null, alloc_ ); } static inline void VEC_gimple_heap_free (VEC_gimple_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = __null; } static inline VEC_gimple_heap *VEC_gimple_heap_copy (VEC_gimple_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_heap *new_vec_ = __null; if (len_) { new_vec_ = (VEC_gimple_heap *)(vec_heap_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple) * len_); } return new_vec_; } static inline int VEC_gimple_heap_reserve (VEC_gimple_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_gimple_heap_reserve_exact (VEC_gimple_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_gimple_heap_safe_grow (VEC_gimple_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_gimple_heap_safe_grow_cleared (VEC_gimple_heap **vec_, int size_ ) { int oldsize = VEC_gimple_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_heap_safe_grow (vec_, size_ ); memset (&(VEC_gimple_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple) * (size_ - oldsize)); } static inline void VEC_gimple_heap_safe_splice (VEC_gimple_heap **dst_, VEC_gimple_base *src_ ) { if (src_) { VEC_gimple_heap_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline gimple *VEC_gimple_heap_safe_push (VEC_gimple_heap **vec_, gimple obj_ ) { VEC_gimple_heap_reserve (vec_, 1 ); return VEC_gimple_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline gimple *VEC_gimple_heap_safe_insert (VEC_gimple_heap **vec_, unsigned ix_, gimple obj_ ) { VEC_gimple_heap_reserve (vec_, 1 ); return VEC_gimple_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_gimple_gc { VEC_gimple_base base; } VEC_gimple_gc; static inline VEC_gimple_gc *VEC_gimple_gc_alloc (int alloc_ ) { return (VEC_gimple_gc *) vec_gc_p_reserve_exact (__null, alloc_ ); } static inline void VEC_gimple_gc_free (VEC_gimple_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline VEC_gimple_gc *VEC_gimple_gc_copy (VEC_gimple_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_gimple_gc *)(vec_gc_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple) * len_); } return new_vec_; } static inline int VEC_gimple_gc_reserve (VEC_gimple_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_gimple_gc_reserve_exact (VEC_gimple_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_gimple_gc_safe_grow (VEC_gimple_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_gimple_gc_safe_grow_cleared (VEC_gimple_gc **vec_, int size_ ) { int oldsize = VEC_gimple_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_gc_safe_grow (vec_, size_ ); memset (&(VEC_gimple_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple) * (size_ - oldsize)); } static inline void VEC_gimple_gc_safe_splice (VEC_gimple_gc **dst_, VEC_gimple_base *src_ ) { if (src_) { VEC_gimple_gc_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline gimple *VEC_gimple_gc_safe_push (VEC_gimple_gc **vec_, gimple obj_ ) { VEC_gimple_gc_reserve (vec_, 1 ); return VEC_gimple_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline gimple *VEC_gimple_gc_safe_insert (VEC_gimple_gc **vec_, unsigned ix_, gimple obj_ ) { VEC_gimple_gc_reserve (vec_, 1 ); return VEC_gimple_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 
 
 typedef gimple *gimple_p;
-static __inline__ void VEC_gimple_p_must_be_pointer_type (void) { (void)((gimple_p)1 == (void *)1); } typedef struct VEC_gimple_p_base { struct vec_prefix prefix; gimple_p vec[1]; } VEC_gimple_p_base; typedef struct VEC_gimple_p_none { VEC_gimple_p_base base; } VEC_gimple_p_none; static __inline__ unsigned VEC_gimple_p_base_length (const VEC_gimple_p_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ gimple_p VEC_gimple_p_base_last (const VEC_gimple_p_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ gimple_p VEC_gimple_p_base_index (const VEC_gimple_p_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_gimple_p_base_iterate (const VEC_gimple_p_base *vec_, unsigned ix_, gimple_p *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (gimple_p) 0; return 0; } } static __inline__ size_t VEC_gimple_p_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_gimple_p_base, vec) + alloc_ * sizeof(gimple_p); } static __inline__ void VEC_gimple_p_base_embedded_init (VEC_gimple_p_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_gimple_p_base_space (VEC_gimple_p_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_gimple_p_base_splice (VEC_gimple_p_base *dst_, VEC_gimple_p_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (gimple_p)); dst_->prefix.num += len_; } } static __inline__ gimple_p *VEC_gimple_p_base_quick_push (VEC_gimple_p_base *vec_, gimple_p obj_ ) { gimple_p *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ gimple_p VEC_gimple_p_base_pop (VEC_gimple_p_base *vec_ ) { gimple_p obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_gimple_p_base_truncate (VEC_gimple_p_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ gimple_p VEC_gimple_p_base_replace (VEC_gimple_p_base *vec_, unsigned ix_, gimple_p obj_ ) { gimple_p old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ gimple_p *VEC_gimple_p_base_quick_insert (VEC_gimple_p_base *vec_, unsigned ix_, gimple_p obj_ ) { gimple_p *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (gimple_p)); *slot_ = obj_; return slot_; } static __inline__ gimple_p VEC_gimple_p_base_ordered_remove (VEC_gimple_p_base *vec_, unsigned ix_ ) { gimple_p *slot_; gimple_p obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (gimple_p)); return obj_; } static __inline__ gimple_p VEC_gimple_p_base_unordered_remove (VEC_gimple_p_base *vec_, unsigned ix_ ) { gimple_p *slot_; gimple_p obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_gimple_p_base_block_remove (VEC_gimple_p_base *vec_, unsigned ix_, unsigned len_ ) { gimple_p *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (gimple_p)); } static __inline__ gimple_p *VEC_gimple_p_base_address (VEC_gimple_p_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_gimple_p_base_lower_bound (VEC_gimple_p_base *vec_, const gimple_p obj_, unsigned char (*lessthan_)(const gimple_p, const gimple_p) ) { unsigned int len_ = VEC_gimple_p_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { gimple_p middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_gimple_p_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_gimple_p_heap { VEC_gimple_p_base base; } VEC_gimple_p_heap; static __inline__ VEC_gimple_p_heap *VEC_gimple_p_heap_alloc (int alloc_ ) { return (VEC_gimple_p_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_p_heap_free (VEC_gimple_p_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_p_heap *VEC_gimple_p_heap_copy (VEC_gimple_p_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_p_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_p_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple_p) * len_); } return new_vec_; } static __inline__ int VEC_gimple_p_heap_reserve (VEC_gimple_p_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_p_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_p_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_p_heap_reserve_exact (VEC_gimple_p_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_p_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_p_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_p_heap_safe_grow (VEC_gimple_p_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_p_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_p_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_gimple_p_heap_safe_grow_cleared (VEC_gimple_p_heap **vec_, int size_ ) { int oldsize = VEC_gimple_p_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_p_heap_safe_grow (vec_, size_ ); memset (&(VEC_gimple_p_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple_p) * (size_ - oldsize)); } static __inline__ void VEC_gimple_p_heap_safe_splice (VEC_gimple_p_heap **dst_, VEC_gimple_p_base *src_ ) { if (src_) { VEC_gimple_p_heap_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_p_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple_p *VEC_gimple_p_heap_safe_push (VEC_gimple_p_heap **vec_, gimple_p obj_ ) { VEC_gimple_p_heap_reserve (vec_, 1 ); return VEC_gimple_p_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple_p *VEC_gimple_p_heap_safe_insert (VEC_gimple_p_heap **vec_, unsigned ix_, gimple_p obj_ ) { VEC_gimple_p_heap_reserve (vec_, 1 ); return VEC_gimple_p_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+static inline void VEC_gimple_p_must_be_pointer_type (void) { (void)((gimple_p)1 == (void *)1); } typedef struct VEC_gimple_p_base { struct vec_prefix prefix; gimple_p vec[1]; } VEC_gimple_p_base; typedef struct VEC_gimple_p_none { VEC_gimple_p_base base; } VEC_gimple_p_none; static inline unsigned VEC_gimple_p_base_length (const VEC_gimple_p_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline gimple_p VEC_gimple_p_base_last (const VEC_gimple_p_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline gimple_p VEC_gimple_p_base_index (const VEC_gimple_p_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_gimple_p_base_iterate (const VEC_gimple_p_base *vec_, unsigned ix_, gimple_p *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (gimple_p) 0; return 0; } } static inline size_t VEC_gimple_p_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_gimple_p_base, vec) + alloc_ * sizeof(gimple_p); } static inline void VEC_gimple_p_base_embedded_init (VEC_gimple_p_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_gimple_p_base_space (VEC_gimple_p_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_gimple_p_base_splice (VEC_gimple_p_base *dst_, VEC_gimple_p_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (gimple_p)); dst_->prefix.num += len_; } } static inline gimple_p *VEC_gimple_p_base_quick_push (VEC_gimple_p_base *vec_, gimple_p obj_ ) { gimple_p *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline gimple_p VEC_gimple_p_base_pop (VEC_gimple_p_base *vec_ ) { gimple_p obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_gimple_p_base_truncate (VEC_gimple_p_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline gimple_p VEC_gimple_p_base_replace (VEC_gimple_p_base *vec_, unsigned ix_, gimple_p obj_ ) { gimple_p old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline gimple_p *VEC_gimple_p_base_quick_insert (VEC_gimple_p_base *vec_, unsigned ix_, gimple_p obj_ ) { gimple_p *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (gimple_p)); *slot_ = obj_; return slot_; } static inline gimple_p VEC_gimple_p_base_ordered_remove (VEC_gimple_p_base *vec_, unsigned ix_ ) { gimple_p *slot_; gimple_p obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (gimple_p)); return obj_; } static inline gimple_p VEC_gimple_p_base_unordered_remove (VEC_gimple_p_base *vec_, unsigned ix_ ) { gimple_p *slot_; gimple_p obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_gimple_p_base_block_remove (VEC_gimple_p_base *vec_, unsigned ix_, unsigned len_ ) { gimple_p *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (gimple_p)); } static inline gimple_p *VEC_gimple_p_base_address (VEC_gimple_p_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_gimple_p_base_lower_bound (VEC_gimple_p_base *vec_, const gimple_p obj_, bool (*lessthan_)(const gimple_p, const gimple_p) ) { unsigned int len_ = VEC_gimple_p_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { gimple_p middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_gimple_p_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_gimple_p_heap { VEC_gimple_p_base base; } VEC_gimple_p_heap; static inline VEC_gimple_p_heap *VEC_gimple_p_heap_alloc (int alloc_ ) { return (VEC_gimple_p_heap *) vec_heap_p_reserve_exact (__null, alloc_ ); } static inline void VEC_gimple_p_heap_free (VEC_gimple_p_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = __null; } static inline VEC_gimple_p_heap *VEC_gimple_p_heap_copy (VEC_gimple_p_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_p_heap *new_vec_ = __null; if (len_) { new_vec_ = (VEC_gimple_p_heap *)(vec_heap_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple_p) * len_); } return new_vec_; } static inline int VEC_gimple_p_heap_reserve (VEC_gimple_p_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_p_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_p_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_gimple_p_heap_reserve_exact (VEC_gimple_p_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_p_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_p_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_gimple_p_heap_safe_grow (VEC_gimple_p_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_p_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_p_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_gimple_p_heap_safe_grow_cleared (VEC_gimple_p_heap **vec_, int size_ ) { int oldsize = VEC_gimple_p_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_p_heap_safe_grow (vec_, size_ ); memset (&(VEC_gimple_p_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple_p) * (size_ - oldsize)); } static inline void VEC_gimple_p_heap_safe_splice (VEC_gimple_p_heap **dst_, VEC_gimple_p_base *src_ ) { if (src_) { VEC_gimple_p_heap_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_p_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline gimple_p *VEC_gimple_p_heap_safe_push (VEC_gimple_p_heap **vec_, gimple_p obj_ ) { VEC_gimple_p_heap_reserve (vec_, 1 ); return VEC_gimple_p_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline gimple_p *VEC_gimple_p_heap_safe_insert (VEC_gimple_p_heap **vec_, unsigned ix_, gimple_p obj_ ) { VEC_gimple_p_heap_reserve (vec_, 1 ); return VEC_gimple_p_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 
 
-static __inline__ void VEC_gimple_seq_must_be_pointer_type (void) { (void)((gimple_seq)1 == (void *)1); } typedef struct VEC_gimple_seq_base { struct vec_prefix prefix; gimple_seq vec[1]; } VEC_gimple_seq_base; typedef struct VEC_gimple_seq_none { VEC_gimple_seq_base base; } VEC_gimple_seq_none; static __inline__ unsigned VEC_gimple_seq_base_length (const VEC_gimple_seq_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ gimple_seq VEC_gimple_seq_base_last (const VEC_gimple_seq_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ gimple_seq VEC_gimple_seq_base_index (const VEC_gimple_seq_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_gimple_seq_base_iterate (const VEC_gimple_seq_base *vec_, unsigned ix_, gimple_seq *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (gimple_seq) 0; return 0; } } static __inline__ size_t VEC_gimple_seq_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_gimple_seq_base, vec) + alloc_ * sizeof(gimple_seq); } static __inline__ void VEC_gimple_seq_base_embedded_init (VEC_gimple_seq_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_gimple_seq_base_space (VEC_gimple_seq_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_gimple_seq_base_splice (VEC_gimple_seq_base *dst_, VEC_gimple_seq_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (gimple_seq)); dst_->prefix.num += len_; } } static __inline__ gimple_seq *VEC_gimple_seq_base_quick_push (VEC_gimple_seq_base *vec_, gimple_seq obj_ ) { gimple_seq *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ gimple_seq VEC_gimple_seq_base_pop (VEC_gimple_seq_base *vec_ ) { gimple_seq obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_gimple_seq_base_truncate (VEC_gimple_seq_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ gimple_seq VEC_gimple_seq_base_replace (VEC_gimple_seq_base *vec_, unsigned ix_, gimple_seq obj_ ) { gimple_seq old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ gimple_seq *VEC_gimple_seq_base_quick_insert (VEC_gimple_seq_base *vec_, unsigned ix_, gimple_seq obj_ ) { gimple_seq *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (gimple_seq)); *slot_ = obj_; return slot_; } static __inline__ gimple_seq VEC_gimple_seq_base_ordered_remove (VEC_gimple_seq_base *vec_, unsigned ix_ ) { gimple_seq *slot_; gimple_seq obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (gimple_seq)); return obj_; } static __inline__ gimple_seq VEC_gimple_seq_base_unordered_remove (VEC_gimple_seq_base *vec_, unsigned ix_ ) { gimple_seq *slot_; gimple_seq obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_gimple_seq_base_block_remove (VEC_gimple_seq_base *vec_, unsigned ix_, unsigned len_ ) { gimple_seq *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (gimple_seq)); } static __inline__ gimple_seq *VEC_gimple_seq_base_address (VEC_gimple_seq_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_gimple_seq_base_lower_bound (VEC_gimple_seq_base *vec_, const gimple_seq obj_, unsigned char (*lessthan_)(const gimple_seq, const gimple_seq) ) { unsigned int len_ = VEC_gimple_seq_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { gimple_seq middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_gimple_seq_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_gimple_seq_gc { VEC_gimple_seq_base base; } VEC_gimple_seq_gc; static __inline__ VEC_gimple_seq_gc *VEC_gimple_seq_gc_alloc (int alloc_ ) { return (VEC_gimple_seq_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_seq_gc_free (VEC_gimple_seq_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_seq_gc *VEC_gimple_seq_gc_copy (VEC_gimple_seq_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_seq_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_seq_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple_seq) * len_); } return new_vec_; } static __inline__ int VEC_gimple_seq_gc_reserve (VEC_gimple_seq_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_seq_gc_reserve_exact (VEC_gimple_seq_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_seq_gc_safe_grow (VEC_gimple_seq_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_seq_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_seq_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_gimple_seq_gc_safe_grow_cleared (VEC_gimple_seq_gc **vec_, int size_ ) { int oldsize = VEC_gimple_seq_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_seq_gc_safe_grow (vec_, size_ ); memset (&(VEC_gimple_seq_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple_seq) * (size_ - oldsize)); } static __inline__ void VEC_gimple_seq_gc_safe_splice (VEC_gimple_seq_gc **dst_, VEC_gimple_seq_base *src_ ) { if (src_) { VEC_gimple_seq_gc_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_seq_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple_seq *VEC_gimple_seq_gc_safe_push (VEC_gimple_seq_gc **vec_, gimple_seq obj_ ) { VEC_gimple_seq_gc_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple_seq *VEC_gimple_seq_gc_safe_insert (VEC_gimple_seq_gc **vec_, unsigned ix_, gimple_seq obj_ ) { VEC_gimple_seq_gc_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-typedef struct VEC_gimple_seq_heap { VEC_gimple_seq_base base; } VEC_gimple_seq_heap; static __inline__ VEC_gimple_seq_heap *VEC_gimple_seq_heap_alloc (int alloc_ ) { return (VEC_gimple_seq_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_seq_heap_free (VEC_gimple_seq_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_seq_heap *VEC_gimple_seq_heap_copy (VEC_gimple_seq_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_seq_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_seq_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple_seq) * len_); } return new_vec_; } static __inline__ int VEC_gimple_seq_heap_reserve (VEC_gimple_seq_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_seq_heap_reserve_exact (VEC_gimple_seq_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_seq_heap_safe_grow (VEC_gimple_seq_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_seq_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_seq_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_gimple_seq_heap_safe_grow_cleared (VEC_gimple_seq_heap **vec_, int size_ ) { int oldsize = VEC_gimple_seq_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_seq_heap_safe_grow (vec_, size_ ); memset (&(VEC_gimple_seq_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple_seq) * (size_ - oldsize)); } static __inline__ void VEC_gimple_seq_heap_safe_splice (VEC_gimple_seq_heap **dst_, VEC_gimple_seq_base *src_ ) { if (src_) { VEC_gimple_seq_heap_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_seq_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple_seq *VEC_gimple_seq_heap_safe_push (VEC_gimple_seq_heap **vec_, gimple_seq obj_ ) { VEC_gimple_seq_heap_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple_seq *VEC_gimple_seq_heap_safe_insert (VEC_gimple_seq_heap **vec_, unsigned ix_, gimple_seq obj_ ) { VEC_gimple_seq_heap_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+static inline void VEC_gimple_seq_must_be_pointer_type (void) { (void)((gimple_seq)1 == (void *)1); } typedef struct VEC_gimple_seq_base { struct vec_prefix prefix; gimple_seq vec[1]; } VEC_gimple_seq_base; typedef struct VEC_gimple_seq_none { VEC_gimple_seq_base base; } VEC_gimple_seq_none; static inline unsigned VEC_gimple_seq_base_length (const VEC_gimple_seq_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline gimple_seq VEC_gimple_seq_base_last (const VEC_gimple_seq_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline gimple_seq VEC_gimple_seq_base_index (const VEC_gimple_seq_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_gimple_seq_base_iterate (const VEC_gimple_seq_base *vec_, unsigned ix_, gimple_seq *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (gimple_seq) 0; return 0; } } static inline size_t VEC_gimple_seq_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_gimple_seq_base, vec) + alloc_ * sizeof(gimple_seq); } static inline void VEC_gimple_seq_base_embedded_init (VEC_gimple_seq_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_gimple_seq_base_space (VEC_gimple_seq_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_gimple_seq_base_splice (VEC_gimple_seq_base *dst_, VEC_gimple_seq_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (gimple_seq)); dst_->prefix.num += len_; } } static inline gimple_seq *VEC_gimple_seq_base_quick_push (VEC_gimple_seq_base *vec_, gimple_seq obj_ ) { gimple_seq *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline gimple_seq VEC_gimple_seq_base_pop (VEC_gimple_seq_base *vec_ ) { gimple_seq obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_gimple_seq_base_truncate (VEC_gimple_seq_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline gimple_seq VEC_gimple_seq_base_replace (VEC_gimple_seq_base *vec_, unsigned ix_, gimple_seq obj_ ) { gimple_seq old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline gimple_seq *VEC_gimple_seq_base_quick_insert (VEC_gimple_seq_base *vec_, unsigned ix_, gimple_seq obj_ ) { gimple_seq *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (gimple_seq)); *slot_ = obj_; return slot_; } static inline gimple_seq VEC_gimple_seq_base_ordered_remove (VEC_gimple_seq_base *vec_, unsigned ix_ ) { gimple_seq *slot_; gimple_seq obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (gimple_seq)); return obj_; } static inline gimple_seq VEC_gimple_seq_base_unordered_remove (VEC_gimple_seq_base *vec_, unsigned ix_ ) { gimple_seq *slot_; gimple_seq obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_gimple_seq_base_block_remove (VEC_gimple_seq_base *vec_, unsigned ix_, unsigned len_ ) { gimple_seq *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (gimple_seq)); } static inline gimple_seq *VEC_gimple_seq_base_address (VEC_gimple_seq_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_gimple_seq_base_lower_bound (VEC_gimple_seq_base *vec_, const gimple_seq obj_, bool (*lessthan_)(const gimple_seq, const gimple_seq) ) { unsigned int len_ = VEC_gimple_seq_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { gimple_seq middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_gimple_seq_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_gimple_seq_gc { VEC_gimple_seq_base base; } VEC_gimple_seq_gc; static inline VEC_gimple_seq_gc *VEC_gimple_seq_gc_alloc (int alloc_ ) { return (VEC_gimple_seq_gc *) vec_gc_p_reserve_exact (__null, alloc_ ); } static inline void VEC_gimple_seq_gc_free (VEC_gimple_seq_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline VEC_gimple_seq_gc *VEC_gimple_seq_gc_copy (VEC_gimple_seq_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_seq_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_gimple_seq_gc *)(vec_gc_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple_seq) * len_); } return new_vec_; } static inline int VEC_gimple_seq_gc_reserve (VEC_gimple_seq_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_gimple_seq_gc_reserve_exact (VEC_gimple_seq_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_gimple_seq_gc_safe_grow (VEC_gimple_seq_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_seq_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_seq_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_gimple_seq_gc_safe_grow_cleared (VEC_gimple_seq_gc **vec_, int size_ ) { int oldsize = VEC_gimple_seq_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_seq_gc_safe_grow (vec_, size_ ); memset (&(VEC_gimple_seq_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple_seq) * (size_ - oldsize)); } static inline void VEC_gimple_seq_gc_safe_splice (VEC_gimple_seq_gc **dst_, VEC_gimple_seq_base *src_ ) { if (src_) { VEC_gimple_seq_gc_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_seq_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline gimple_seq *VEC_gimple_seq_gc_safe_push (VEC_gimple_seq_gc **vec_, gimple_seq obj_ ) { VEC_gimple_seq_gc_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline gimple_seq *VEC_gimple_seq_gc_safe_insert (VEC_gimple_seq_gc **vec_, unsigned ix_, gimple_seq obj_ ) { VEC_gimple_seq_gc_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_gimple_seq_heap { VEC_gimple_seq_base base; } VEC_gimple_seq_heap; static inline VEC_gimple_seq_heap *VEC_gimple_seq_heap_alloc (int alloc_ ) { return (VEC_gimple_seq_heap *) vec_heap_p_reserve_exact (__null, alloc_ ); } static inline void VEC_gimple_seq_heap_free (VEC_gimple_seq_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = __null; } static inline VEC_gimple_seq_heap *VEC_gimple_seq_heap_copy (VEC_gimple_seq_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_seq_heap *new_vec_ = __null; if (len_) { new_vec_ = (VEC_gimple_seq_heap *)(vec_heap_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple_seq) * len_); } return new_vec_; } static inline int VEC_gimple_seq_heap_reserve (VEC_gimple_seq_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_gimple_seq_heap_reserve_exact (VEC_gimple_seq_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_gimple_seq_heap_safe_grow (VEC_gimple_seq_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_seq_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_seq_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_gimple_seq_heap_safe_grow_cleared (VEC_gimple_seq_heap **vec_, int size_ ) { int oldsize = VEC_gimple_seq_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_seq_heap_safe_grow (vec_, size_ ); memset (&(VEC_gimple_seq_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple_seq) * (size_ - oldsize)); } static inline void VEC_gimple_seq_heap_safe_splice (VEC_gimple_seq_heap **dst_, VEC_gimple_seq_base *src_ ) { if (src_) { VEC_gimple_seq_heap_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_seq_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline gimple_seq *VEC_gimple_seq_heap_safe_push (VEC_gimple_seq_heap **vec_, gimple_seq obj_ ) { VEC_gimple_seq_heap_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline gimple_seq *VEC_gimple_seq_heap_safe_insert (VEC_gimple_seq_heap **vec_, unsigned ix_, gimple_seq obj_ ) { VEC_gimple_seq_heap_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 
 
-static __inline__ void VEC_rtx_must_be_pointer_type (void) { (void)((rtx)1 == (void *)1); } typedef struct VEC_rtx_base { struct vec_prefix prefix; rtx vec[1]; } VEC_rtx_base; typedef struct VEC_rtx_none { VEC_rtx_base base; } VEC_rtx_none; static __inline__ unsigned VEC_rtx_base_length (const VEC_rtx_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ rtx VEC_rtx_base_last (const VEC_rtx_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ rtx VEC_rtx_base_index (const VEC_rtx_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_rtx_base_iterate (const VEC_rtx_base *vec_, unsigned ix_, rtx *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (rtx) 0; return 0; } } static __inline__ size_t VEC_rtx_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_rtx_base, vec) + alloc_ * sizeof(rtx); } static __inline__ void VEC_rtx_base_embedded_init (VEC_rtx_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_rtx_base_space (VEC_rtx_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_rtx_base_splice (VEC_rtx_base *dst_, VEC_rtx_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (rtx)); dst_->prefix.num += len_; } } static __inline__ rtx *VEC_rtx_base_quick_push (VEC_rtx_base *vec_, rtx obj_ ) { rtx *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ rtx VEC_rtx_base_pop (VEC_rtx_base *vec_ ) { rtx obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_rtx_base_truncate (VEC_rtx_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ rtx VEC_rtx_base_replace (VEC_rtx_base *vec_, unsigned ix_, rtx obj_ ) { rtx old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ rtx *VEC_rtx_base_quick_insert (VEC_rtx_base *vec_, unsigned ix_, rtx obj_ ) { rtx *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (rtx)); *slot_ = obj_; return slot_; } static __inline__ rtx VEC_rtx_base_ordered_remove (VEC_rtx_base *vec_, unsigned ix_ ) { rtx *slot_; rtx obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (rtx)); return obj_; } static __inline__ rtx VEC_rtx_base_unordered_remove (VEC_rtx_base *vec_, unsigned ix_ ) { rtx *slot_; rtx obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_rtx_base_block_remove (VEC_rtx_base *vec_, unsigned ix_, unsigned len_ ) { rtx *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (rtx)); } static __inline__ rtx *VEC_rtx_base_address (VEC_rtx_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_rtx_base_lower_bound (VEC_rtx_base *vec_, const rtx obj_, unsigned char (*lessthan_)(const rtx, const rtx) ) { unsigned int len_ = VEC_rtx_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { rtx middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_rtx_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_rtx_heap { VEC_rtx_base base; } VEC_rtx_heap; static __inline__ VEC_rtx_heap *VEC_rtx_heap_alloc (int alloc_ ) { return (VEC_rtx_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_rtx_heap_free (VEC_rtx_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_rtx_heap *VEC_rtx_heap_copy (VEC_rtx_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_rtx_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_rtx_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (rtx) * len_); } return new_vec_; } static __inline__ int VEC_rtx_heap_reserve (VEC_rtx_heap **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_rtx_heap_reserve_exact (VEC_rtx_heap **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_rtx_heap_safe_grow (VEC_rtx_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_rtx_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_rtx_heap_safe_grow_cleared (VEC_rtx_heap **vec_, int size_ ) { int oldsize = VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_rtx_heap_safe_grow (vec_, size_ ); memset (&(VEC_rtx_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (rtx) * (size_ - oldsize)); } static __inline__ void VEC_rtx_heap_safe_splice (VEC_rtx_heap **dst_, VEC_rtx_base *src_ ) { if (src_) { VEC_rtx_heap_reserve_exact (dst_, src_->prefix.num ); VEC_rtx_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ rtx *VEC_rtx_heap_safe_push (VEC_rtx_heap **vec_, rtx obj_ ) { VEC_rtx_heap_reserve (vec_, 1 ); return VEC_rtx_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ rtx *VEC_rtx_heap_safe_insert (VEC_rtx_heap **vec_, unsigned ix_, rtx obj_ ) { VEC_rtx_heap_reserve (vec_, 1 ); return VEC_rtx_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-typedef struct VEC_rtx_gc { VEC_rtx_base base; } VEC_rtx_gc; static __inline__ VEC_rtx_gc *VEC_rtx_gc_alloc (int alloc_ ) { return (VEC_rtx_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_rtx_gc_free (VEC_rtx_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_rtx_gc *VEC_rtx_gc_copy (VEC_rtx_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_rtx_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_rtx_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (rtx) * len_); } return new_vec_; } static __inline__ int VEC_rtx_gc_reserve (VEC_rtx_gc **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_rtx_gc_reserve_exact (VEC_rtx_gc **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_rtx_gc_safe_grow (VEC_rtx_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_rtx_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_rtx_gc_safe_grow_cleared (VEC_rtx_gc **vec_, int size_ ) { int oldsize = VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_rtx_gc_safe_grow (vec_, size_ ); memset (&(VEC_rtx_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (rtx) * (size_ - oldsize)); } static __inline__ void VEC_rtx_gc_safe_splice (VEC_rtx_gc **dst_, VEC_rtx_base *src_ ) { if (src_) { VEC_rtx_gc_reserve_exact (dst_, src_->prefix.num ); VEC_rtx_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ rtx *VEC_rtx_gc_safe_push (VEC_rtx_gc **vec_, rtx obj_ ) { VEC_rtx_gc_reserve (vec_, 1 ); return VEC_rtx_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ rtx *VEC_rtx_gc_safe_insert (VEC_rtx_gc **vec_, unsigned ix_, rtx obj_ ) { VEC_rtx_gc_reserve (vec_, 1 ); return VEC_rtx_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+static inline void VEC_rtx_must_be_pointer_type (void) { (void)((rtx)1 == (void *)1); } typedef struct VEC_rtx_base { struct vec_prefix prefix; rtx vec[1]; } VEC_rtx_base; typedef struct VEC_rtx_none { VEC_rtx_base base; } VEC_rtx_none; static inline unsigned VEC_rtx_base_length (const VEC_rtx_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline rtx VEC_rtx_base_last (const VEC_rtx_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline rtx VEC_rtx_base_index (const VEC_rtx_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_rtx_base_iterate (const VEC_rtx_base *vec_, unsigned ix_, rtx *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (rtx) 0; return 0; } } static inline size_t VEC_rtx_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_rtx_base, vec) + alloc_ * sizeof(rtx); } static inline void VEC_rtx_base_embedded_init (VEC_rtx_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_rtx_base_space (VEC_rtx_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_rtx_base_splice (VEC_rtx_base *dst_, VEC_rtx_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (rtx)); dst_->prefix.num += len_; } } static inline rtx *VEC_rtx_base_quick_push (VEC_rtx_base *vec_, rtx obj_ ) { rtx *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline rtx VEC_rtx_base_pop (VEC_rtx_base *vec_ ) { rtx obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_rtx_base_truncate (VEC_rtx_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline rtx VEC_rtx_base_replace (VEC_rtx_base *vec_, unsigned ix_, rtx obj_ ) { rtx old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline rtx *VEC_rtx_base_quick_insert (VEC_rtx_base *vec_, unsigned ix_, rtx obj_ ) { rtx *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (rtx)); *slot_ = obj_; return slot_; } static inline rtx VEC_rtx_base_ordered_remove (VEC_rtx_base *vec_, unsigned ix_ ) { rtx *slot_; rtx obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (rtx)); return obj_; } static inline rtx VEC_rtx_base_unordered_remove (VEC_rtx_base *vec_, unsigned ix_ ) { rtx *slot_; rtx obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_rtx_base_block_remove (VEC_rtx_base *vec_, unsigned ix_, unsigned len_ ) { rtx *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (rtx)); } static inline rtx *VEC_rtx_base_address (VEC_rtx_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_rtx_base_lower_bound (VEC_rtx_base *vec_, const rtx obj_, bool (*lessthan_)(const rtx, const rtx) ) { unsigned int len_ = VEC_rtx_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { rtx middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_rtx_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_rtx_heap { VEC_rtx_base base; } VEC_rtx_heap; static inline VEC_rtx_heap *VEC_rtx_heap_alloc (int alloc_ ) { return (VEC_rtx_heap *) vec_heap_p_reserve_exact (__null, alloc_ ); } static inline void VEC_rtx_heap_free (VEC_rtx_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = __null; } static inline VEC_rtx_heap *VEC_rtx_heap_copy (VEC_rtx_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_rtx_heap *new_vec_ = __null; if (len_) { new_vec_ = (VEC_rtx_heap *)(vec_heap_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (rtx) * len_); } return new_vec_; } static inline int VEC_rtx_heap_reserve (VEC_rtx_heap **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_rtx_heap_reserve_exact (VEC_rtx_heap **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_rtx_heap_safe_grow (VEC_rtx_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_rtx_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_rtx_heap_safe_grow_cleared (VEC_rtx_heap **vec_, int size_ ) { int oldsize = VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_rtx_heap_safe_grow (vec_, size_ ); memset (&(VEC_rtx_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (rtx) * (size_ - oldsize)); } static inline void VEC_rtx_heap_safe_splice (VEC_rtx_heap **dst_, VEC_rtx_base *src_ ) { if (src_) { VEC_rtx_heap_reserve_exact (dst_, src_->prefix.num ); VEC_rtx_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline rtx *VEC_rtx_heap_safe_push (VEC_rtx_heap **vec_, rtx obj_ ) { VEC_rtx_heap_reserve (vec_, 1 ); return VEC_rtx_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline rtx *VEC_rtx_heap_safe_insert (VEC_rtx_heap **vec_, unsigned ix_, rtx obj_ ) { VEC_rtx_heap_reserve (vec_, 1 ); return VEC_rtx_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_rtx_gc { VEC_rtx_base base; } VEC_rtx_gc; static inline VEC_rtx_gc *VEC_rtx_gc_alloc (int alloc_ ) { return (VEC_rtx_gc *) vec_gc_p_reserve_exact (__null, alloc_ ); } static inline void VEC_rtx_gc_free (VEC_rtx_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline VEC_rtx_gc *VEC_rtx_gc_copy (VEC_rtx_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_rtx_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_rtx_gc *)(vec_gc_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (rtx) * len_); } return new_vec_; } static inline int VEC_rtx_gc_reserve (VEC_rtx_gc **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_rtx_gc_reserve_exact (VEC_rtx_gc **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_rtx_gc_safe_grow (VEC_rtx_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_rtx_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_rtx_gc_safe_grow_cleared (VEC_rtx_gc **vec_, int size_ ) { int oldsize = VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_rtx_gc_safe_grow (vec_, size_ ); memset (&(VEC_rtx_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (rtx) * (size_ - oldsize)); } static inline void VEC_rtx_gc_safe_splice (VEC_rtx_gc **dst_, VEC_rtx_base *src_ ) { if (src_) { VEC_rtx_gc_reserve_exact (dst_, src_->prefix.num ); VEC_rtx_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline rtx *VEC_rtx_gc_safe_push (VEC_rtx_gc **vec_, rtx obj_ ) { VEC_rtx_gc_reserve (vec_, 1 ); return VEC_rtx_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline rtx *VEC_rtx_gc_safe_insert (VEC_rtx_gc **vec_, unsigned ix_, rtx obj_ ) { VEC_rtx_gc_reserve (vec_, 1 ); return VEC_rtx_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 # 31 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/double-int.h" 1
 # 24 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/double-int.h"
 # 1 "/usr/include/gmp.h" 1 3 4
 # 43 "/usr/include/gmp.h" 3 4
 # 1 "./include/gmp-i386.h" 1 3 4
-# 53 "./include/gmp-i386.h" 3 4
+# 24 "./include/gmp-i386.h" 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/iosfwd" 1 3 4
+# 38 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/iosfwd" 3 4
+       
+# 39 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/iosfwd" 3
+
+
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/bits/stringfwd.h" 1 3
+# 39 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/bits/stringfwd.h" 3
+       
+# 40 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/bits/stringfwd.h" 3
+
+
+
+namespace std __attribute__ ((__visibility__ ("default")))
+{
+
+
+  template<typename _Alloc>
+    class allocator;
+
+
+
+
+
+
+
+  template<class _CharT>
+    struct char_traits;
+
+  template<typename _CharT, typename _Traits = char_traits<_CharT>,
+           typename _Alloc = allocator<_CharT> >
+    class basic_string;
+
+  template<> struct char_traits<char>;
+
+  typedef basic_string<char> string;
+
+
+  template<> struct char_traits<wchar_t>;
+
+  typedef basic_string<wchar_t> wstring;
+# 85 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/bits/stringfwd.h" 3
+
+}
+# 42 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/iosfwd" 2 3
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/bits/postypes.h" 1 3
+# 40 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/bits/postypes.h" 3
+       
+# 41 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/bits/postypes.h" 3
+
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cwchar" 1 3
+# 41 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cwchar" 3
+       
+# 42 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cwchar" 3
+
+
+
+
+# 1 "/usr/include/wchar.h" 1 3 4
+# 52 "/usr/include/wchar.h" 3 4
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
-# 54 "./include/gmp-i386.h" 2 3 4
+# 354 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 3 4
+typedef unsigned int wint_t;
+# 53 "/usr/include/wchar.h" 2 3 4
+# 104 "/usr/include/wchar.h" 3 4
+
+
+typedef __mbstate_t mbstate_t;
+
+
+
+# 129 "/usr/include/wchar.h" 3 4
+extern "C" {
+
+
+
+
+struct tm;
+
+
+
+
+
+
+
+
+
+extern wchar_t *wcscpy (wchar_t *__restrict __dest,
+   __const wchar_t *__restrict __src) throw ();
+
+extern wchar_t *wcsncpy (wchar_t *__restrict __dest,
+    __const wchar_t *__restrict __src, size_t __n)
+     throw ();
+
+
+extern wchar_t *wcscat (wchar_t *__restrict __dest,
+   __const wchar_t *__restrict __src) throw ();
+
+extern wchar_t *wcsncat (wchar_t *__restrict __dest,
+    __const wchar_t *__restrict __src, size_t __n)
+     throw ();
+
+
+extern int wcscmp (__const wchar_t *__s1, __const wchar_t *__s2)
+     throw () __attribute__ ((__pure__));
+
+extern int wcsncmp (__const wchar_t *__s1, __const wchar_t *__s2, size_t __n)
+     throw () __attribute__ ((__pure__));
+
+
+
+
+extern int wcscasecmp (__const wchar_t *__s1, __const wchar_t *__s2) throw ();
+
+
+extern int wcsncasecmp (__const wchar_t *__s1, __const wchar_t *__s2,
+   size_t __n) throw ();
+
+
+
+
+
+extern int wcscasecmp_l (__const wchar_t *__s1, __const wchar_t *__s2,
+    __locale_t __loc) throw ();
+
+extern int wcsncasecmp_l (__const wchar_t *__s1, __const wchar_t *__s2,
+     size_t __n, __locale_t __loc) throw ();
+
+
+
+
+
+extern int wcscoll (__const wchar_t *__s1, __const wchar_t *__s2) throw ();
+
+
+
+extern size_t wcsxfrm (wchar_t *__restrict __s1,
+         __const wchar_t *__restrict __s2, size_t __n) throw ();
+
+
+
+
+
+
+
+
+extern int wcscoll_l (__const wchar_t *__s1, __const wchar_t *__s2,
+        __locale_t __loc) throw ();
+
+
+
+
+extern size_t wcsxfrm_l (wchar_t *__s1, __const wchar_t *__s2,
+    size_t __n, __locale_t __loc) throw ();
+
+
+extern wchar_t *wcsdup (__const wchar_t *__s) throw () __attribute__ ((__malloc__));
+
+
+
+
+
+extern "C++" wchar_t *wcschr (wchar_t *__wcs, wchar_t __wc)
+     throw () __asm ("wcschr") __attribute__ ((__pure__));
+extern "C++" __const wchar_t *wcschr (__const wchar_t *__wcs, wchar_t __wc)
+     throw () __asm ("wcschr") __attribute__ ((__pure__));
+
+
+
+
+
+
+extern "C++" wchar_t *wcsrchr (wchar_t *__wcs, wchar_t __wc)
+     throw () __asm ("wcsrchr") __attribute__ ((__pure__));
+extern "C++" __const wchar_t *wcsrchr (__const wchar_t *__wcs, wchar_t __wc)
+     throw () __asm ("wcsrchr") __attribute__ ((__pure__));
+
+
+
+
+
+
+
+
+
+extern wchar_t *wcschrnul (__const wchar_t *__s, wchar_t __wc)
+     throw () __attribute__ ((__pure__));
+
+
+
+
+
+extern size_t wcscspn (__const wchar_t *__wcs, __const wchar_t *__reject)
+     throw () __attribute__ ((__pure__));
+
+
+extern size_t wcsspn (__const wchar_t *__wcs, __const wchar_t *__accept)
+     throw () __attribute__ ((__pure__));
+
+
+extern "C++" wchar_t *wcspbrk (wchar_t *__wcs, __const wchar_t *__accept)
+     throw () __asm ("wcspbrk") __attribute__ ((__pure__));
+extern "C++" __const wchar_t *wcspbrk (__const wchar_t *__wcs,
+           __const wchar_t *__accept)
+     throw () __asm ("wcspbrk") __attribute__ ((__pure__));
+
+
+
+
+
+
+extern "C++" wchar_t *wcsstr (wchar_t *__haystack, __const wchar_t *__needle)
+     throw () __asm ("wcsstr") __attribute__ ((__pure__));
+extern "C++" __const wchar_t *wcsstr (__const wchar_t *__haystack,
+          __const wchar_t *__needle)
+     throw () __asm ("wcsstr") __attribute__ ((__pure__));
+
+
+
+
+
+
+extern wchar_t *wcstok (wchar_t *__restrict __s,
+   __const wchar_t *__restrict __delim,
+   wchar_t **__restrict __ptr) throw ();
+
+
+extern size_t wcslen (__const wchar_t *__s) throw () __attribute__ ((__pure__));
+
+
+
+
+
+extern "C++" wchar_t *wcswcs (wchar_t *__haystack, __const wchar_t *__needle)
+     throw () __asm ("wcswcs") __attribute__ ((__pure__));
+extern "C++" __const wchar_t *wcswcs (__const wchar_t *__haystack,
+          __const wchar_t *__needle)
+     throw () __asm ("wcswcs") __attribute__ ((__pure__));
+# 303 "/usr/include/wchar.h" 3 4
+extern size_t wcsnlen (__const wchar_t *__s, size_t __maxlen)
+     throw () __attribute__ ((__pure__));
+
+
+
+
+
+
+extern "C++" wchar_t *wmemchr (wchar_t *__s, wchar_t __c, size_t __n)
+     throw () __asm ("wmemchr") __attribute__ ((__pure__));
+extern "C++" __const wchar_t *wmemchr (__const wchar_t *__s, wchar_t __c,
+           size_t __n)
+     throw () __asm ("wmemchr") __attribute__ ((__pure__));
+
+
+
+
+
+
+extern int wmemcmp (__const wchar_t *__restrict __s1,
+      __const wchar_t *__restrict __s2, size_t __n)
+     throw () __attribute__ ((__pure__));
+
+
+extern wchar_t *wmemcpy (wchar_t *__restrict __s1,
+    __const wchar_t *__restrict __s2, size_t __n) throw ();
+
+
+
+extern wchar_t *wmemmove (wchar_t *__s1, __const wchar_t *__s2, size_t __n)
+     throw ();
+
+
+extern wchar_t *wmemset (wchar_t *__s, wchar_t __c, size_t __n) throw ();
+
+
+
+
+
+extern wchar_t *wmempcpy (wchar_t *__restrict __s1,
+     __const wchar_t *__restrict __s2, size_t __n)
+     throw ();
+
+
+
+
+
+
+extern wint_t btowc (int __c) throw ();
+
+
+
+extern int wctob (wint_t __c) throw ();
+
+
+
+extern int mbsinit (__const mbstate_t *__ps) throw () __attribute__ ((__pure__));
+
+
+
+extern size_t mbrtowc (wchar_t *__restrict __pwc,
+         __const char *__restrict __s, size_t __n,
+         mbstate_t *__p) throw ();
+
+
+extern size_t wcrtomb (char *__restrict __s, wchar_t __wc,
+         mbstate_t *__restrict __ps) throw ();
+
+
+extern size_t __mbrlen (__const char *__restrict __s, size_t __n,
+   mbstate_t *__restrict __ps) throw ();
+extern size_t mbrlen (__const char *__restrict __s, size_t __n,
+        mbstate_t *__restrict __ps) throw ();
+
+
+
+
+
+
+
+
+extern wint_t __btowc_alias (int __c) __asm ("btowc");
+extern __inline __attribute__ ((__gnu_inline__)) wint_t
+btowc (int __c) throw ()
+{ return (__builtin_constant_p (__c) && __c >= '\0' && __c <= '\x7f'
+   ? (wint_t) __c : __btowc_alias (__c)); }
+
+extern int __wctob_alias (wint_t __c) __asm ("wctob");
+extern __inline __attribute__ ((__gnu_inline__)) int
+wctob (wint_t __wc) throw ()
+{ return (__builtin_constant_p (__wc) && __wc >= L'\0' && __wc <= L'\x7f'
+   ? (int) __wc : __wctob_alias (__wc)); }
+
+extern __inline __attribute__ ((__gnu_inline__)) size_t
+mbrlen (__const char *__restrict __s, size_t __n, mbstate_t *__restrict __ps) throw ()
+
+{ return (__ps != __null
+   ? mbrtowc (__null, __s, __n, __ps) : __mbrlen (__s, __n, __null)); }
+
+
+
+
+
+extern size_t mbsrtowcs (wchar_t *__restrict __dst,
+    __const char **__restrict __src, size_t __len,
+    mbstate_t *__restrict __ps) throw ();
+
+
+
+extern size_t wcsrtombs (char *__restrict __dst,
+    __const wchar_t **__restrict __src, size_t __len,
+    mbstate_t *__restrict __ps) throw ();
+
+
+
+
+
+
+extern size_t mbsnrtowcs (wchar_t *__restrict __dst,
+     __const char **__restrict __src, size_t __nmc,
+     size_t __len, mbstate_t *__restrict __ps) throw ();
+
+
+
+extern size_t wcsnrtombs (char *__restrict __dst,
+     __const wchar_t **__restrict __src,
+     size_t __nwc, size_t __len,
+     mbstate_t *__restrict __ps) throw ();
+
+
+
+
+
+
+extern int wcwidth (wchar_t __c) throw ();
+
+
+
+extern int wcswidth (__const wchar_t *__s, size_t __n) throw ();
+
+
+
+
+
+
+extern double wcstod (__const wchar_t *__restrict __nptr,
+        wchar_t **__restrict __endptr) throw ();
+
+
+
+
+
+extern float wcstof (__const wchar_t *__restrict __nptr,
+       wchar_t **__restrict __endptr) throw ();
+extern long double wcstold (__const wchar_t *__restrict __nptr,
+       wchar_t **__restrict __endptr) throw ();
+
+
+
+
+
+
+
+extern long int wcstol (__const wchar_t *__restrict __nptr,
+   wchar_t **__restrict __endptr, int __base) throw ();
+
+
+
+extern unsigned long int wcstoul (__const wchar_t *__restrict __nptr,
+      wchar_t **__restrict __endptr, int __base)
+     throw ();
+
+
+
+
+
+
+__extension__
+extern long long int wcstoll (__const wchar_t *__restrict __nptr,
+         wchar_t **__restrict __endptr, int __base)
+     throw ();
+
+
+
+__extension__
+extern unsigned long long int wcstoull (__const wchar_t *__restrict __nptr,
+     wchar_t **__restrict __endptr,
+     int __base) throw ();
+
+
+
+
+
+
+__extension__
+extern long long int wcstoq (__const wchar_t *__restrict __nptr,
+        wchar_t **__restrict __endptr, int __base)
+     throw ();
+
+
+
+__extension__
+extern unsigned long long int wcstouq (__const wchar_t *__restrict __nptr,
+           wchar_t **__restrict __endptr,
+           int __base) throw ();
+# 528 "/usr/include/wchar.h" 3 4
+extern long int wcstol_l (__const wchar_t *__restrict __nptr,
+     wchar_t **__restrict __endptr, int __base,
+     __locale_t __loc) throw ();
+
+extern unsigned long int wcstoul_l (__const wchar_t *__restrict __nptr,
+        wchar_t **__restrict __endptr,
+        int __base, __locale_t __loc) throw ();
+
+__extension__
+extern long long int wcstoll_l (__const wchar_t *__restrict __nptr,
+    wchar_t **__restrict __endptr,
+    int __base, __locale_t __loc) throw ();
+
+__extension__
+extern unsigned long long int wcstoull_l (__const wchar_t *__restrict __nptr,
+       wchar_t **__restrict __endptr,
+       int __base, __locale_t __loc)
+     throw ();
+
+extern double wcstod_l (__const wchar_t *__restrict __nptr,
+   wchar_t **__restrict __endptr, __locale_t __loc)
+     throw ();
+
+extern float wcstof_l (__const wchar_t *__restrict __nptr,
+         wchar_t **__restrict __endptr, __locale_t __loc)
+     throw ();
+
+extern long double wcstold_l (__const wchar_t *__restrict __nptr,
+         wchar_t **__restrict __endptr,
+         __locale_t __loc) throw ();
+
+
+
+
+
+
+extern wchar_t *wcpcpy (wchar_t *__dest, __const wchar_t *__src) throw ();
+
+
+
+extern wchar_t *wcpncpy (wchar_t *__dest, __const wchar_t *__src, size_t __n)
+     throw ();
+# 578 "/usr/include/wchar.h" 3 4
+extern __FILE *open_wmemstream (wchar_t **__bufloc, size_t *__sizeloc) throw ();
+
+
+
+
+
+
+extern int fwide (__FILE *__fp, int __mode) throw ();
+
+
+
+
+
+
+extern int fwprintf (__FILE *__restrict __stream,
+       __const wchar_t *__restrict __format, ...)
+                                                           ;
+
+
+
+
+extern int wprintf (__const wchar_t *__restrict __format, ...)
+                                                           ;
+
+extern int swprintf (wchar_t *__restrict __s, size_t __n,
+       __const wchar_t *__restrict __format, ...)
+     throw () ;
+
+
+
+
+
+extern int vfwprintf (__FILE *__restrict __s,
+        __const wchar_t *__restrict __format,
+        __gnuc_va_list __arg)
+                                                           ;
+
+
+
+
+extern int vwprintf (__const wchar_t *__restrict __format,
+       __gnuc_va_list __arg)
+                                                           ;
+
+
+extern int vswprintf (wchar_t *__restrict __s, size_t __n,
+        __const wchar_t *__restrict __format,
+        __gnuc_va_list __arg)
+     throw () ;
+
+
+
+
+
+
+extern int fwscanf (__FILE *__restrict __stream,
+      __const wchar_t *__restrict __format, ...)
+                                                          ;
+
+
+
+
+extern int wscanf (__const wchar_t *__restrict __format, ...)
+                                                          ;
+
+extern int swscanf (__const wchar_t *__restrict __s,
+      __const wchar_t *__restrict __format, ...)
+     throw () ;
+# 678 "/usr/include/wchar.h" 3 4
+
+
+
+
+
+
+
+
+
+extern int vfwscanf (__FILE *__restrict __s,
+       __const wchar_t *__restrict __format,
+       __gnuc_va_list __arg)
+                                                          ;
+
+
+
+
+extern int vwscanf (__const wchar_t *__restrict __format,
+      __gnuc_va_list __arg)
+                                                          ;
+
+extern int vswscanf (__const wchar_t *__restrict __s,
+       __const wchar_t *__restrict __format,
+       __gnuc_va_list __arg)
+     throw () ;
+# 734 "/usr/include/wchar.h" 3 4
+
+
+
+
+
+
+
+
+
+extern wint_t fgetwc (__FILE *__stream);
+extern wint_t getwc (__FILE *__stream);
+
+
+
+
+
+extern wint_t getwchar (void);
+
+
+
+
+
+
+extern wint_t fputwc (wchar_t __wc, __FILE *__stream);
+extern wint_t putwc (wchar_t __wc, __FILE *__stream);
+
+
+
+
+
+extern wint_t putwchar (wchar_t __wc);
+
+
+
+
+
+
+
+extern wchar_t *fgetws (wchar_t *__restrict __ws, int __n,
+   __FILE *__restrict __stream);
+
+
+
+
+
+extern int fputws (__const wchar_t *__restrict __ws,
+     __FILE *__restrict __stream);
+
+
+
+
+
+
+extern wint_t ungetwc (wint_t __wc, __FILE *__stream);
+
+# 799 "/usr/include/wchar.h" 3 4
+extern wint_t getwc_unlocked (__FILE *__stream);
+extern wint_t getwchar_unlocked (void);
+
+
+
+
+
+
+
+extern wint_t fgetwc_unlocked (__FILE *__stream);
+
+
+
+
+
+
+
+extern wint_t fputwc_unlocked (wchar_t __wc, __FILE *__stream);
+# 825 "/usr/include/wchar.h" 3 4
+extern wint_t putwc_unlocked (wchar_t __wc, __FILE *__stream);
+extern wint_t putwchar_unlocked (wchar_t __wc);
+# 835 "/usr/include/wchar.h" 3 4
+extern wchar_t *fgetws_unlocked (wchar_t *__restrict __ws, int __n,
+     __FILE *__restrict __stream);
+
+
+
+
+
+
+
+extern int fputws_unlocked (__const wchar_t *__restrict __ws,
+       __FILE *__restrict __stream);
+
+
+
+
+
+
+
+extern size_t wcsftime (wchar_t *__restrict __s, size_t __maxsize,
+   __const wchar_t *__restrict __format,
+   __const struct tm *__restrict __tp) throw ();
+
+
+
+
+
+
+
+extern size_t wcsftime_l (wchar_t *__restrict __s, size_t __maxsize,
+     __const wchar_t *__restrict __format,
+     __const struct tm *__restrict __tp,
+     __locale_t __loc) throw ();
+# 889 "/usr/include/wchar.h" 3 4
+}
+# 47 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cwchar" 2 3
+# 64 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cwchar" 3
+namespace std
+{
+  using ::mbstate_t;
+}
+# 137 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cwchar" 3
+namespace std __attribute__ ((__visibility__ ("default")))
+{
+
+
+  using ::wint_t;
+
+  using ::btowc;
+  using ::fgetwc;
+  using ::fgetws;
+  using ::fputwc;
+  using ::fputws;
+  using ::fwide;
+  using ::fwprintf;
+  using ::fwscanf;
+  using ::getwc;
+  using ::getwchar;
+  using ::mbrlen;
+  using ::mbrtowc;
+  using ::mbsinit;
+  using ::mbsrtowcs;
+  using ::putwc;
+  using ::putwchar;
+
+  using ::swprintf;
+
+  using ::swscanf;
+  using ::ungetwc;
+  using ::vfwprintf;
+
+  using ::vfwscanf;
+
+
+  using ::vswprintf;
+
+
+  using ::vswscanf;
+
+  using ::vwprintf;
+
+  using ::vwscanf;
+
+  using ::wcrtomb;
+  using ::wcscat;
+  using ::wcscmp;
+  using ::wcscoll;
+  using ::wcscpy;
+  using ::wcscspn;
+  using ::wcsftime;
+  using ::wcslen;
+  using ::wcsncat;
+  using ::wcsncmp;
+  using ::wcsncpy;
+  using ::wcsrtombs;
+  using ::wcsspn;
+  using ::wcstod;
+
+  using ::wcstof;
+
+  using ::wcstok;
+  using ::wcstol;
+  using ::wcstoul;
+  using ::wcsxfrm;
+  using ::wctob;
+  using ::wmemcmp;
+  using ::wmemcpy;
+  using ::wmemmove;
+  using ::wmemset;
+  using ::wprintf;
+  using ::wscanf;
+  using ::wcschr;
+  using ::wcspbrk;
+  using ::wcsrchr;
+  using ::wcsstr;
+  using ::wmemchr;
+# 234 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cwchar" 3
+
+}
+
+
+
+
+
+
+
+namespace __gnu_cxx
+{
+
+
+
+
+
+  using ::wcstold;
+# 259 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cwchar" 3
+  using ::wcstoll;
+  using ::wcstoull;
+
+}
+
+namespace std
+{
+  using ::__gnu_cxx::wcstold;
+  using ::__gnu_cxx::wcstoll;
+  using ::__gnu_cxx::wcstoull;
+}
+# 43 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/bits/postypes.h" 2 3
+# 70 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/bits/postypes.h" 3
+namespace std __attribute__ ((__visibility__ ("default")))
+{
+
+# 92 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/bits/postypes.h" 3
+  typedef long long streamoff;
+
+
+
+
+
+
+
+  typedef ptrdiff_t streamsize;
+# 113 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/bits/postypes.h" 3
+  template<typename _StateT>
+    class fpos
+    {
+    private:
+      streamoff _M_off;
+      _StateT _M_state;
+
+    public:
+
+
+
+
+      fpos()
+      : _M_off(0), _M_state() { }
+# 135 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/bits/postypes.h" 3
+      fpos(streamoff __off)
+      : _M_off(__off), _M_state() { }
+
+
+      operator streamoff() const { return _M_off; }
+
+
+      void
+      state(_StateT __st)
+      { _M_state = __st; }
+
+
+      _StateT
+      state() const
+      { return _M_state; }
+
+
+
+
+
+      fpos&
+      operator+=(streamoff __off)
+      {
+ _M_off += __off;
+ return *this;
+      }
+
+
+
+
+
+      fpos&
+      operator-=(streamoff __off)
+      {
+ _M_off -= __off;
+ return *this;
+      }
+
+
+
+
+
+
+
+      fpos
+      operator+(streamoff __off) const
+      {
+ fpos __pos(*this);
+ __pos += __off;
+ return __pos;
+      }
+
+
+
+
+
+
+
+      fpos
+      operator-(streamoff __off) const
+      {
+ fpos __pos(*this);
+ __pos -= __off;
+ return __pos;
+      }
+
+
+
+
+
+
+      streamoff
+      operator-(const fpos& __other) const
+      { return _M_off - __other._M_off; }
+    };
+
+
+
+
+
+
+  template<typename _StateT>
+    inline bool
+    operator==(const fpos<_StateT>& __lhs, const fpos<_StateT>& __rhs)
+    { return streamoff(__lhs) == streamoff(__rhs); }
+
+  template<typename _StateT>
+    inline bool
+    operator!=(const fpos<_StateT>& __lhs, const fpos<_StateT>& __rhs)
+    { return streamoff(__lhs) != streamoff(__rhs); }
+
+
+
+
+
+  typedef fpos<mbstate_t> streampos;
+
+  typedef fpos<mbstate_t> wstreampos;
+# 241 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/bits/postypes.h" 3
+
+}
+# 43 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/iosfwd" 2 3
+
+namespace std __attribute__ ((__visibility__ ("default")))
+{
+
+# 76 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/iosfwd" 3
+  class ios_base;
+
+  template<typename _CharT, typename _Traits = char_traits<_CharT> >
+    class basic_ios;
+
+  template<typename _CharT, typename _Traits = char_traits<_CharT> >
+    class basic_streambuf;
+
+  template<typename _CharT, typename _Traits = char_traits<_CharT> >
+    class basic_istream;
+
+  template<typename _CharT, typename _Traits = char_traits<_CharT> >
+    class basic_ostream;
+
+  template<typename _CharT, typename _Traits = char_traits<_CharT> >
+    class basic_iostream;
+
+  template<typename _CharT, typename _Traits = char_traits<_CharT>,
+     typename _Alloc = allocator<_CharT> >
+    class basic_stringbuf;
+
+  template<typename _CharT, typename _Traits = char_traits<_CharT>,
+    typename _Alloc = allocator<_CharT> >
+    class basic_istringstream;
+
+  template<typename _CharT, typename _Traits = char_traits<_CharT>,
+    typename _Alloc = allocator<_CharT> >
+    class basic_ostringstream;
+
+  template<typename _CharT, typename _Traits = char_traits<_CharT>,
+    typename _Alloc = allocator<_CharT> >
+    class basic_stringstream;
+
+  template<typename _CharT, typename _Traits = char_traits<_CharT> >
+    class basic_filebuf;
+
+  template<typename _CharT, typename _Traits = char_traits<_CharT> >
+    class basic_ifstream;
+
+  template<typename _CharT, typename _Traits = char_traits<_CharT> >
+    class basic_ofstream;
+
+  template<typename _CharT, typename _Traits = char_traits<_CharT> >
+    class basic_fstream;
+
+  template<typename _CharT, typename _Traits = char_traits<_CharT> >
+    class istreambuf_iterator;
+
+  template<typename _CharT, typename _Traits = char_traits<_CharT> >
+    class ostreambuf_iterator;
+
+
+
+  typedef basic_ios<char> ios;
+
+
+  typedef basic_streambuf<char> streambuf;
+
+
+  typedef basic_istream<char> istream;
+
+
+  typedef basic_ostream<char> ostream;
+
+
+  typedef basic_iostream<char> iostream;
+
+
+  typedef basic_stringbuf<char> stringbuf;
+
+
+  typedef basic_istringstream<char> istringstream;
+
+
+  typedef basic_ostringstream<char> ostringstream;
+
+
+  typedef basic_stringstream<char> stringstream;
+
+
+  typedef basic_filebuf<char> filebuf;
+
+
+  typedef basic_ifstream<char> ifstream;
+
+
+  typedef basic_ofstream<char> ofstream;
+
+
+  typedef basic_fstream<char> fstream;
+
+
+
+  typedef basic_ios<wchar_t> wios;
+
+
+  typedef basic_streambuf<wchar_t> wstreambuf;
+
+
+  typedef basic_istream<wchar_t> wistream;
+
+
+  typedef basic_ostream<wchar_t> wostream;
+
+
+  typedef basic_iostream<wchar_t> wiostream;
+
+
+  typedef basic_stringbuf<wchar_t> wstringbuf;
+
+
+  typedef basic_istringstream<wchar_t> wistringstream;
+
+
+  typedef basic_ostringstream<wchar_t> wostringstream;
+
+
+  typedef basic_stringstream<wchar_t> wstringstream;
+
+
+  typedef basic_filebuf<wchar_t> wfilebuf;
+
+
+  typedef basic_ifstream<wchar_t> wifstream;
+
+
+  typedef basic_ofstream<wchar_t> wofstream;
+
+
+  typedef basic_fstream<wchar_t> wfstream;
+
+
+
+
+}
+# 25 "./include/gmp-i386.h" 2 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cstdio" 1 3 4
+# 41 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cstdio" 3 4
+       
+# 42 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cstdio" 3
+# 95 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cstdio" 3
+namespace std
+{
+  using ::FILE;
+  using ::fpos_t;
+
+  using ::clearerr;
+  using ::fclose;
+  using ::feof;
+  using ::ferror;
+  using ::fflush;
+  using ::fgetc;
+  using ::fgetpos;
+  using ::fgets;
+  using ::fopen;
+  using ::fprintf;
+  using ::fputc;
+  using ::fputs;
+  using ::fread;
+  using ::freopen;
+  using ::fscanf;
+  using ::fseek;
+  using ::fsetpos;
+  using ::ftell;
+  using ::fwrite;
+  using ::getc;
+  using ::getchar;
+  using ::gets;
+  using ::perror;
+  using ::printf;
+  using ::putc;
+  using ::putchar;
+  using ::puts;
+  using ::remove;
+  using ::rename;
+  using ::rewind;
+  using ::scanf;
+  using ::setbuf;
+  using ::setvbuf;
+  using ::sprintf;
+  using ::sscanf;
+  using ::tmpfile;
+  using ::tmpnam;
+  using ::ungetc;
+  using ::vfprintf;
+  using ::vprintf;
+  using ::vsprintf;
+}
+# 151 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cstdio" 3
+namespace __gnu_cxx
+{
+# 169 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cstdio" 3
+  using ::snprintf;
+  using ::vfscanf;
+  using ::vscanf;
+  using ::vsnprintf;
+  using ::vsscanf;
+
+}
+
+namespace std
+{
+  using ::__gnu_cxx::snprintf;
+  using ::__gnu_cxx::vfscanf;
+  using ::__gnu_cxx::vscanf;
+  using ::__gnu_cxx::vsnprintf;
+  using ::__gnu_cxx::vsscanf;
+}
+# 26 "./include/gmp-i386.h" 2 3 4
+# 51 "./include/gmp-i386.h" 3 4
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cstddef" 1 3 4
+# 41 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cstddef" 3 4
+       
+# 42 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cstddef" 3
+
+
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/include/stddef.h" 1 3 4
+# 44 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/../../../../include/c++/4.7.1/cstddef" 2 3
+# 52 "./include/gmp-i386.h" 2 3 4
 # 194 "./include/gmp-i386.h" 3 4
 typedef unsigned long int mp_limb_t;
 typedef long int mp_limb_signed_t;
@@ -7174,15 +9783,20 @@ typedef const __mpf_struct *mpf_srcptr;
 typedef __mpf_struct *mpf_ptr;
 typedef const __mpq_struct *mpq_srcptr;
 typedef __mpq_struct *mpq_ptr;
-# 542 "./include/gmp-i386.h" 3 4
+# 537 "./include/gmp-i386.h" 3 4
+extern "C" {
+using std::FILE;
+
+
+
  void __gmp_set_memory_functions (void *(*) (size_t), void *(*) (void *, size_t, size_t), void (*) (void *, size_t))
 
-                                                   ;
+                                      throw ();
 
 
  void __gmp_get_memory_functions (void *(**) (size_t), void *(**) (void *, size_t, size_t), void (**) (void *, size_t))
 
-                                                                                ;
+                                                                   throw ();
 
 
  extern const int __gmp_bits_per_limb;
@@ -7374,25 +9988,25 @@ typedef __mpq_struct *mpq_ptr;
  void __gmpz_clrbit (mpz_ptr, unsigned long int);
 
 
- int __gmpz_cmp (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+ int __gmpz_cmp (mpz_srcptr, mpz_srcptr) throw () __attribute__ ((__pure__));
 
 
  int __gmpz_cmp_d (mpz_srcptr, double) __attribute__ ((__pure__));
 
 
- int __gmpz_cmp_si (mpz_srcptr, signed long int) __attribute__ ((__pure__));
+ int __gmpz_cmp_si (mpz_srcptr, signed long int) throw () __attribute__ ((__pure__));
 
 
- int __gmpz_cmp_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+ int __gmpz_cmp_ui (mpz_srcptr, unsigned long int) throw () __attribute__ ((__pure__));
 
 
- int __gmpz_cmpabs (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+ int __gmpz_cmpabs (mpz_srcptr, mpz_srcptr) throw () __attribute__ ((__pure__));
 
 
  int __gmpz_cmpabs_d (mpz_srcptr, double) __attribute__ ((__pure__));
 
 
- int __gmpz_cmpabs_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+ int __gmpz_cmpabs_ui (mpz_srcptr, unsigned long int) throw () __attribute__ ((__pure__));
 
 
  void __gmpz_com (mpz_ptr, mpz_srcptr);
@@ -7404,7 +10018,7 @@ typedef __mpq_struct *mpq_ptr;
  int __gmpz_congruent_p (mpz_srcptr, mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
 
 
- int __gmpz_congruent_2exp_p (mpz_srcptr, mpz_srcptr, unsigned long) __attribute__ ((__pure__));
+ int __gmpz_congruent_2exp_p (mpz_srcptr, mpz_srcptr, unsigned long) throw () __attribute__ ((__pure__));
 
 
  int __gmpz_congruent_ui_p (mpz_srcptr, unsigned long, unsigned long) __attribute__ ((__pure__));
@@ -7422,7 +10036,7 @@ typedef __mpq_struct *mpq_ptr;
  int __gmpz_divisible_ui_p (mpz_srcptr, unsigned long) __attribute__ ((__pure__));
 
 
- int __gmpz_divisible_2exp_p (mpz_srcptr, unsigned long) __attribute__ ((__pure__));
+ int __gmpz_divisible_2exp_p (mpz_srcptr, unsigned long) throw () __attribute__ ((__pure__));
 
 
  void __gmpz_dump (mpz_srcptr);
@@ -7467,27 +10081,27 @@ typedef __mpq_struct *mpq_ptr;
  void __gmpz_fib2_ui (mpz_ptr, mpz_ptr, unsigned long int);
 
 
- int __gmpz_fits_sint_p (mpz_srcptr) __attribute__ ((__pure__));
+ int __gmpz_fits_sint_p (mpz_srcptr) throw () __attribute__ ((__pure__));
 
 
- int __gmpz_fits_slong_p (mpz_srcptr) __attribute__ ((__pure__));
+ int __gmpz_fits_slong_p (mpz_srcptr) throw () __attribute__ ((__pure__));
 
 
- int __gmpz_fits_sshort_p (mpz_srcptr) __attribute__ ((__pure__));
-
-
-
- int __gmpz_fits_uint_p (mpz_srcptr) __attribute__ ((__pure__));
+ int __gmpz_fits_sshort_p (mpz_srcptr) throw () __attribute__ ((__pure__));
 
 
 
-
- int __gmpz_fits_ulong_p (mpz_srcptr) __attribute__ ((__pure__));
+ int __gmpz_fits_uint_p (mpz_srcptr) throw () __attribute__ ((__pure__));
 
 
 
 
- int __gmpz_fits_ushort_p (mpz_srcptr) __attribute__ ((__pure__));
+ int __gmpz_fits_ulong_p (mpz_srcptr) throw () __attribute__ ((__pure__));
+
+
+
+
+ int __gmpz_fits_ushort_p (mpz_srcptr) throw () __attribute__ ((__pure__));
 
 
 
@@ -7506,23 +10120,23 @@ typedef __mpq_struct *mpq_ptr;
  double __gmpz_get_d_2exp (signed long int *, mpz_srcptr);
 
 
- long int __gmpz_get_si (mpz_srcptr) __attribute__ ((__pure__));
+ long int __gmpz_get_si (mpz_srcptr) throw () __attribute__ ((__pure__));
 
 
  char *__gmpz_get_str (char *, int, mpz_srcptr);
 
 
 
- unsigned long int __gmpz_get_ui (mpz_srcptr) __attribute__ ((__pure__));
+ unsigned long int __gmpz_get_ui (mpz_srcptr) throw () __attribute__ ((__pure__));
 
 
 
 
- mp_limb_t __gmpz_getlimbn (mpz_srcptr, mp_size_t) __attribute__ ((__pure__));
+ mp_limb_t __gmpz_getlimbn (mpz_srcptr, mp_size_t) throw () __attribute__ ((__pure__));
 
 
 
- unsigned long int __gmpz_hamdist (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+ unsigned long int __gmpz_hamdist (mpz_srcptr, mpz_srcptr) throw () __attribute__ ((__pure__));
 
 
  void __gmpz_import (mpz_ptr, size_t, int, size_t, int, size_t, const void *);
@@ -7643,7 +10257,7 @@ typedef __mpq_struct *mpq_ptr;
 
 
 
- unsigned long int __gmpz_popcount (mpz_srcptr) __attribute__ ((__pure__));
+ unsigned long int __gmpz_popcount (mpz_srcptr) throw () __attribute__ ((__pure__));
 
 
 
@@ -7680,10 +10294,10 @@ typedef __mpq_struct *mpq_ptr;
  void __gmpz_rrandomb (mpz_ptr, gmp_randstate_t, unsigned long int);
 
 
- unsigned long int __gmpz_scan0 (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+ unsigned long int __gmpz_scan0 (mpz_srcptr, unsigned long int) throw () __attribute__ ((__pure__));
 
 
- unsigned long int __gmpz_scan1 (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+ unsigned long int __gmpz_scan1 (mpz_srcptr, unsigned long int) throw () __attribute__ ((__pure__));
 
 
  void __gmpz_set (mpz_ptr, mpz_srcptr);
@@ -7713,11 +10327,11 @@ typedef __mpq_struct *mpq_ptr;
 
 
 
- size_t __gmpz_size (mpz_srcptr) __attribute__ ((__pure__));
+ size_t __gmpz_size (mpz_srcptr) throw () __attribute__ ((__pure__));
 
 
 
- size_t __gmpz_sizeinbase (mpz_srcptr, int) __attribute__ ((__pure__));
+ size_t __gmpz_sizeinbase (mpz_srcptr, int) throw () __attribute__ ((__pure__));
 
 
  void __gmpz_sqrt (mpz_ptr, mpz_srcptr);
@@ -7741,7 +10355,7 @@ typedef __mpq_struct *mpq_ptr;
  void __gmpz_submul_ui (mpz_ptr, mpz_srcptr, unsigned long int);
 
 
- void __gmpz_swap (mpz_ptr, mpz_ptr) ;
+ void __gmpz_swap (mpz_ptr, mpz_ptr) throw ();
 
 
  unsigned long int __gmpz_tdiv_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
@@ -7771,7 +10385,7 @@ typedef __mpq_struct *mpq_ptr;
  unsigned long int __gmpz_tdiv_r_ui (mpz_ptr, mpz_srcptr, unsigned long int);
 
 
- int __gmpz_tstbit (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+ int __gmpz_tstbit (mpz_srcptr, unsigned long int) throw () __attribute__ ((__pure__));
 
 
  void __gmpz_ui_pow_ui (mpz_ptr, unsigned long int, unsigned long int);
@@ -7819,7 +10433,7 @@ typedef __mpq_struct *mpq_ptr;
  void __gmpq_div_2exp (mpq_ptr, mpq_srcptr, unsigned long);
 
 
- int __gmpq_equal (mpq_srcptr, mpq_srcptr) __attribute__ ((__pure__));
+ int __gmpq_equal (mpq_srcptr, mpq_srcptr) throw () __attribute__ ((__pure__));
 
 
  void __gmpq_get_num (mpz_ptr, mpq_srcptr);
@@ -7891,7 +10505,7 @@ typedef __mpq_struct *mpq_ptr;
  void __gmpq_sub (mpq_ptr, mpq_srcptr, mpq_srcptr);
 
 
- void __gmpq_swap (mpq_ptr, mpq_ptr) ;
+ void __gmpq_swap (mpq_ptr, mpq_ptr) throw ();
 
 
 
@@ -7911,16 +10525,16 @@ typedef __mpq_struct *mpq_ptr;
  void __gmpf_clear (mpf_ptr);
 
 
- int __gmpf_cmp (mpf_srcptr, mpf_srcptr) __attribute__ ((__pure__));
+ int __gmpf_cmp (mpf_srcptr, mpf_srcptr) throw () __attribute__ ((__pure__));
 
 
  int __gmpf_cmp_d (mpf_srcptr, double) __attribute__ ((__pure__));
 
 
- int __gmpf_cmp_si (mpf_srcptr, signed long int) __attribute__ ((__pure__));
+ int __gmpf_cmp_si (mpf_srcptr, signed long int) throw () __attribute__ ((__pure__));
 
 
- int __gmpf_cmp_ui (mpf_srcptr, unsigned long int) __attribute__ ((__pure__));
+ int __gmpf_cmp_ui (mpf_srcptr, unsigned long int) throw () __attribute__ ((__pure__));
 
 
  void __gmpf_div (mpf_ptr, mpf_srcptr, mpf_srcptr);
@@ -7938,22 +10552,22 @@ typedef __mpq_struct *mpq_ptr;
  int __gmpf_eq (mpf_srcptr, mpf_srcptr, unsigned long int) __attribute__ ((__pure__));
 
 
- int __gmpf_fits_sint_p (mpf_srcptr) __attribute__ ((__pure__));
+ int __gmpf_fits_sint_p (mpf_srcptr) throw () __attribute__ ((__pure__));
 
 
- int __gmpf_fits_slong_p (mpf_srcptr) __attribute__ ((__pure__));
+ int __gmpf_fits_slong_p (mpf_srcptr) throw () __attribute__ ((__pure__));
 
 
- int __gmpf_fits_sshort_p (mpf_srcptr) __attribute__ ((__pure__));
+ int __gmpf_fits_sshort_p (mpf_srcptr) throw () __attribute__ ((__pure__));
 
 
- int __gmpf_fits_uint_p (mpf_srcptr) __attribute__ ((__pure__));
+ int __gmpf_fits_uint_p (mpf_srcptr) throw () __attribute__ ((__pure__));
 
 
- int __gmpf_fits_ulong_p (mpf_srcptr) __attribute__ ((__pure__));
+ int __gmpf_fits_ulong_p (mpf_srcptr) throw () __attribute__ ((__pure__));
 
 
- int __gmpf_fits_ushort_p (mpf_srcptr) __attribute__ ((__pure__));
+ int __gmpf_fits_ushort_p (mpf_srcptr) throw () __attribute__ ((__pure__));
 
 
  void __gmpf_floor (mpf_ptr, mpf_srcptr);
@@ -7965,19 +10579,19 @@ typedef __mpq_struct *mpq_ptr;
  double __gmpf_get_d_2exp (signed long int *, mpf_srcptr);
 
 
- unsigned long int __gmpf_get_default_prec (void) __attribute__ ((__pure__));
+ unsigned long int __gmpf_get_default_prec (void) throw () __attribute__ ((__pure__));
 
 
- unsigned long int __gmpf_get_prec (mpf_srcptr) __attribute__ ((__pure__));
+ unsigned long int __gmpf_get_prec (mpf_srcptr) throw () __attribute__ ((__pure__));
 
 
- long __gmpf_get_si (mpf_srcptr) __attribute__ ((__pure__));
+ long __gmpf_get_si (mpf_srcptr) throw () __attribute__ ((__pure__));
 
 
  char *__gmpf_get_str (char *, mp_exp_t *, int, size_t, mpf_srcptr);
 
 
- unsigned long __gmpf_get_ui (mpf_srcptr) __attribute__ ((__pure__));
+ unsigned long __gmpf_get_ui (mpf_srcptr) throw () __attribute__ ((__pure__));
 
 
  void __gmpf_init (mpf_ptr);
@@ -8006,7 +10620,7 @@ typedef __mpq_struct *mpq_ptr;
 
 
 
- int __gmpf_integer_p (mpf_srcptr) __attribute__ ((__pure__));
+ int __gmpf_integer_p (mpf_srcptr) throw () __attribute__ ((__pure__));
 
 
  void __gmpf_mul (mpf_ptr, mpf_srcptr, mpf_srcptr);
@@ -8041,13 +10655,13 @@ typedef __mpq_struct *mpq_ptr;
  void __gmpf_set_d (mpf_ptr, double);
 
 
- void __gmpf_set_default_prec (unsigned long int) ;
+ void __gmpf_set_default_prec (unsigned long int) throw ();
 
 
  void __gmpf_set_prec (mpf_ptr, unsigned long int);
 
 
- void __gmpf_set_prec_raw (mpf_ptr, unsigned long int) ;
+ void __gmpf_set_prec_raw (mpf_ptr, unsigned long int) throw ();
 
 
  void __gmpf_set_q (mpf_ptr, mpq_srcptr);
@@ -8065,7 +10679,7 @@ typedef __mpq_struct *mpq_ptr;
  void __gmpf_set_z (mpf_ptr, mpz_srcptr);
 
 
- size_t __gmpf_size (mpf_srcptr) __attribute__ ((__pure__));
+ size_t __gmpf_size (mpf_srcptr) throw () __attribute__ ((__pure__));
 
 
  void __gmpf_sqrt (mpf_ptr, mpf_srcptr);
@@ -8080,7 +10694,7 @@ typedef __mpq_struct *mpq_ptr;
  void __gmpf_sub_ui (mpf_ptr, mpf_srcptr, unsigned long int);
 
 
- void __gmpf_swap (mpf_ptr, mpf_ptr) ;
+ void __gmpf_swap (mpf_ptr, mpf_ptr) throw ();
 
 
  void __gmpf_trunc (mpf_ptr, mpf_srcptr);
@@ -8099,7 +10713,7 @@ typedef __mpq_struct *mpq_ptr;
 
 
 
- mp_limb_t __gmpn_add_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t) ;
+ mp_limb_t __gmpn_add_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t) throw ();
 
 
 
@@ -8113,7 +10727,7 @@ typedef __mpq_struct *mpq_ptr;
 
 
 
- int __gmpn_cmp (mp_srcptr, mp_srcptr, mp_size_t) __attribute__ ((__pure__));
+ int __gmpn_cmp (mp_srcptr, mp_srcptr, mp_size_t) throw () __attribute__ ((__pure__));
 
 
 
@@ -8150,7 +10764,7 @@ typedef __mpq_struct *mpq_ptr;
  size_t __gmpn_get_str (unsigned char *, int, mp_ptr, mp_size_t);
 
 
- unsigned long int __gmpn_hamdist (mp_srcptr, mp_srcptr, mp_size_t) __attribute__ ((__pure__));
+ unsigned long int __gmpn_hamdist (mp_srcptr, mp_srcptr, mp_size_t) throw () __attribute__ ((__pure__));
 
 
  mp_limb_t __gmpn_lshift (mp_ptr, mp_srcptr, mp_size_t, unsigned int);
@@ -8179,7 +10793,7 @@ typedef __mpq_struct *mpq_ptr;
  int __gmpn_perfect_square_p (mp_srcptr, mp_size_t) __attribute__ ((__pure__));
 
 
- unsigned long int __gmpn_popcount (mp_srcptr, mp_size_t) __attribute__ ((__pure__));
+ unsigned long int __gmpn_popcount (mp_srcptr, mp_size_t) throw () __attribute__ ((__pure__));
 
 
  mp_size_t __gmpn_pow_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t, mp_ptr);
@@ -8216,7 +10830,7 @@ typedef __mpq_struct *mpq_ptr;
 
 
 
- mp_limb_t __gmpn_sub_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t) ;
+ mp_limb_t __gmpn_sub_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t) throw ();
 
 
 
@@ -8239,7 +10853,7 @@ __gmpz_abs (mpz_ptr __gmp_w, mpz_srcptr __gmp_u)
 extern __inline__
 
 int
-__gmpz_fits_uint_p (mpz_srcptr __gmp_z)
+__gmpz_fits_uint_p (mpz_srcptr __gmp_z) throw ()
 {
   mp_size_t __gmp_n = __gmp_z->_mp_size; mp_ptr __gmp_p = __gmp_z->_mp_d; return (__gmp_n == 0 || (__gmp_n == 1 && __gmp_p[0] <= (~ (unsigned) 0)));;
 }
@@ -8250,7 +10864,7 @@ __gmpz_fits_uint_p (mpz_srcptr __gmp_z)
 extern __inline__
 
 int
-__gmpz_fits_ulong_p (mpz_srcptr __gmp_z)
+__gmpz_fits_ulong_p (mpz_srcptr __gmp_z) throw ()
 {
   mp_size_t __gmp_n = __gmp_z->_mp_size; mp_ptr __gmp_p = __gmp_z->_mp_d; return (__gmp_n == 0 || (__gmp_n == 1 && __gmp_p[0] <= (~ (unsigned long) 0)));;
 }
@@ -8261,7 +10875,7 @@ __gmpz_fits_ulong_p (mpz_srcptr __gmp_z)
 extern __inline__
 
 int
-__gmpz_fits_ushort_p (mpz_srcptr __gmp_z)
+__gmpz_fits_ushort_p (mpz_srcptr __gmp_z) throw ()
 {
   mp_size_t __gmp_n = __gmp_z->_mp_size; mp_ptr __gmp_p = __gmp_z->_mp_d; return (__gmp_n == 0 || (__gmp_n == 1 && __gmp_p[0] <= ((unsigned short) ~0)));;
 }
@@ -8272,7 +10886,7 @@ __gmpz_fits_ushort_p (mpz_srcptr __gmp_z)
 extern __inline__
 
 unsigned long
-__gmpz_get_ui (mpz_srcptr __gmp_z)
+__gmpz_get_ui (mpz_srcptr __gmp_z) throw ()
 {
   mp_ptr __gmp_p = __gmp_z->_mp_d;
   mp_size_t __gmp_n = __gmp_z->_mp_size;
@@ -8293,7 +10907,7 @@ __gmpz_get_ui (mpz_srcptr __gmp_z)
 extern __inline__
 
 mp_limb_t
-__gmpz_getlimbn (mpz_srcptr __gmp_z, mp_size_t __gmp_n)
+__gmpz_getlimbn (mpz_srcptr __gmp_z, mp_size_t __gmp_n) throw ()
 {
   mp_limb_t __gmp_result = 0;
   if (__builtin_expect ((__gmp_n >= 0 && __gmp_n < ((__gmp_z->_mp_size) >= 0 ? (__gmp_z->_mp_size) : -(__gmp_z->_mp_size))) != 0, 1))
@@ -8335,7 +10949,7 @@ __gmpz_perfect_square_p (mpz_srcptr __gmp_a)
 extern __inline__
 
 unsigned long
-__gmpz_popcount (mpz_srcptr __gmp_u)
+__gmpz_popcount (mpz_srcptr __gmp_u) throw ()
 {
   mp_size_t __gmp_usize;
   unsigned long __gmp_result;
@@ -8364,7 +10978,7 @@ __gmpz_set_q (mpz_ptr __gmp_w, mpq_srcptr __gmp_u)
 extern __inline__
 
 size_t
-__gmpz_size (mpz_srcptr __gmp_z)
+__gmpz_size (mpz_srcptr __gmp_z) throw ()
 {
   return ((__gmp_z->_mp_size) >= 0 ? (__gmp_z->_mp_size) : -(__gmp_z->_mp_size));
 }
@@ -8398,7 +11012,7 @@ mp_limb_t
 __gmpn_add (mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize)
 {
   mp_limb_t __gmp_c;
-  do { mp_size_t __gmp_i; mp_limb_t __gmp_x; __gmp_i = (__gmp_ysize); if (__gmp_i != 0) { if (__gmpn_add_n (__gmp_wp, __gmp_xp, __gmp_yp, __gmp_i)) { do { if (__gmp_i >= (__gmp_xsize)) { (__gmp_c) = 1; goto __gmp_done; } __gmp_x = (__gmp_xp)[__gmp_i]; } while ((((__gmp_wp)[__gmp_i++] = (__gmp_x + 1) & ((~ ((mp_limb_t) (0))) >> 0)) == 0)); } } if ((__gmp_wp) != (__gmp_xp)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_xsize); __gmp_j++) (__gmp_wp)[__gmp_j] = (__gmp_xp)[__gmp_j]; } while (0); (__gmp_c) = 0; __gmp_done: ; } while (0);
+  do { mp_size_t __gmp_i; mp_limb_t __gmp_x; __gmp_i = (__gmp_ysize); if (__gmp_i != 0) { if (__gmpn_add_n (__gmp_wp, __gmp_xp, __gmp_yp, __gmp_i)) { do { if (__gmp_i >= (__gmp_xsize)) { (__gmp_c) = 1; goto __gmp_done; } __gmp_x = (__gmp_xp)[__gmp_i]; } while ((((__gmp_wp)[__gmp_i++] = (__gmp_x + 1) & ((~ (static_cast<mp_limb_t> (0))) >> 0)) == 0)); } } if ((__gmp_wp) != (__gmp_xp)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_xsize); __gmp_j++) (__gmp_wp)[__gmp_j] = (__gmp_xp)[__gmp_j]; } while (0); (__gmp_c) = 0; __gmp_done: ; } while (0);
   return __gmp_c;
 }
 
@@ -8408,7 +11022,7 @@ __gmpn_add (mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcpt
 extern __inline__
 
 mp_limb_t
-__gmpn_add_1 (mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n)
+__gmpn_add_1 (mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n) throw ()
 {
   mp_limb_t __gmp_c;
   do { mp_size_t __gmp_i; mp_limb_t __gmp_x, __gmp_r; __gmp_x = (__gmp_src)[0]; __gmp_r = __gmp_x + (__gmp_n); (__gmp_dst)[0] = __gmp_r; if (((__gmp_r) < ((__gmp_n)))) { (__gmp_c) = 1; for (__gmp_i = 1; __gmp_i < (__gmp_size);) { __gmp_x = (__gmp_src)[__gmp_i]; __gmp_r = __gmp_x + 1; (__gmp_dst)[__gmp_i] = __gmp_r; ++__gmp_i; if (!((__gmp_r) < (1))) { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; break; } } } else { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (1); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; } } while (0);
@@ -8421,7 +11035,7 @@ __gmpn_add_1 (mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_li
 extern __inline__
 
 int
-__gmpn_cmp (mp_srcptr __gmp_xp, mp_srcptr __gmp_yp, mp_size_t __gmp_size)
+__gmpn_cmp (mp_srcptr __gmp_xp, mp_srcptr __gmp_yp, mp_size_t __gmp_size) throw ()
 {
   int __gmp_result;
   do { mp_size_t __gmp_i; mp_limb_t __gmp_x, __gmp_y; (__gmp_result) = 0; __gmp_i = (__gmp_size); while (--__gmp_i >= 0) { __gmp_x = (__gmp_xp)[__gmp_i]; __gmp_y = (__gmp_yp)[__gmp_i]; if (__gmp_x != __gmp_y) { (__gmp_result) = (__gmp_x > __gmp_y ? 1 : -1); break; } } } while (0);
@@ -8437,7 +11051,7 @@ mp_limb_t
 __gmpn_sub (mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize)
 {
   mp_limb_t __gmp_c;
-  do { mp_size_t __gmp_i; mp_limb_t __gmp_x; __gmp_i = (__gmp_ysize); if (__gmp_i != 0) { if (__gmpn_sub_n (__gmp_wp, __gmp_xp, __gmp_yp, __gmp_i)) { do { if (__gmp_i >= (__gmp_xsize)) { (__gmp_c) = 1; goto __gmp_done; } __gmp_x = (__gmp_xp)[__gmp_i]; } while ((((__gmp_wp)[__gmp_i++] = (__gmp_x - 1) & ((~ ((mp_limb_t) (0))) >> 0)), __gmp_x == 0)); } } if ((__gmp_wp) != (__gmp_xp)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_xsize); __gmp_j++) (__gmp_wp)[__gmp_j] = (__gmp_xp)[__gmp_j]; } while (0); (__gmp_c) = 0; __gmp_done: ; } while (0);
+  do { mp_size_t __gmp_i; mp_limb_t __gmp_x; __gmp_i = (__gmp_ysize); if (__gmp_i != 0) { if (__gmpn_sub_n (__gmp_wp, __gmp_xp, __gmp_yp, __gmp_i)) { do { if (__gmp_i >= (__gmp_xsize)) { (__gmp_c) = 1; goto __gmp_done; } __gmp_x = (__gmp_xp)[__gmp_i]; } while ((((__gmp_wp)[__gmp_i++] = (__gmp_x - 1) & ((~ (static_cast<mp_limb_t> (0))) >> 0)), __gmp_x == 0)); } } if ((__gmp_wp) != (__gmp_xp)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_xsize); __gmp_j++) (__gmp_wp)[__gmp_j] = (__gmp_xp)[__gmp_j]; } while (0); (__gmp_c) = 0; __gmp_done: ; } while (0);
   return __gmp_c;
 }
 
@@ -8447,7 +11061,7 @@ __gmpn_sub (mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcpt
 extern __inline__
 
 mp_limb_t
-__gmpn_sub_1 (mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n)
+__gmpn_sub_1 (mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n) throw ()
 {
   mp_limb_t __gmp_c;
   do { mp_size_t __gmp_i; mp_limb_t __gmp_x, __gmp_r; __gmp_x = (__gmp_src)[0]; __gmp_r = __gmp_x - (__gmp_n); (__gmp_dst)[0] = __gmp_r; if (((__gmp_x) < ((__gmp_n)))) { (__gmp_c) = 1; for (__gmp_i = 1; __gmp_i < (__gmp_size);) { __gmp_x = (__gmp_src)[__gmp_i]; __gmp_r = __gmp_x - 1; (__gmp_dst)[__gmp_i] = __gmp_r; ++__gmp_i; if (!((__gmp_x) < (1))) { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; break; } } } else { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (1); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; } } while (0);
@@ -8471,6 +11085,17 @@ __gmpn_neg_n (mp_ptr __gmp_rp, mp_srcptr __gmp_up, mp_size_t __gmp_n)
   } while (--__gmp_n != 0);
   return __gmp_cy;
 }
+
+
+
+}
+# 2180 "./include/gmp-i386.h" 3 4
+ std::ostream& operator<< (std::ostream &, mpz_srcptr);
+ std::ostream& operator<< (std::ostream &, mpq_srcptr);
+ std::ostream& operator<< (std::ostream &, mpf_srcptr);
+ std::istream& operator>> (std::istream &, mpz_ptr);
+ std::istream& operator>> (std::istream &, mpq_ptr);
+ std::istream& operator>> (std::istream &, mpf_ptr);
 # 2211 "./include/gmp-i386.h" 3 4
 enum
 {
@@ -8489,7 +11114,7 @@ typedef struct
   long high;
 } double_int;
 # 67 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/double-int.h"
-static __inline__ double_int
+static inline double_int
 shwi_to_double_int (long cst)
 {
   double_int r;
@@ -8500,7 +11125,7 @@ shwi_to_double_int (long cst)
   return r;
 }
 # 89 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/double-int.h"
-static __inline__ double_int
+static inline double_int
 uhwi_to_double_int (unsigned long cst)
 {
   double_int r;
@@ -8514,7 +11139,7 @@ uhwi_to_double_int (unsigned long cst)
 
 
 
-static __inline__ long
+static inline long
 double_int_to_shwi (double_int cst)
 {
   return (long) cst.low;
@@ -8523,18 +11148,18 @@ double_int_to_shwi (double_int cst)
 
 
 
-static __inline__ unsigned long
+static inline unsigned long
 double_int_to_uhwi (double_int cst)
 {
   return cst.low;
 }
 
-unsigned char double_int_fits_in_hwi_p (double_int, unsigned char);
-unsigned char double_int_fits_in_shwi_p (double_int);
+bool double_int_fits_in_hwi_p (double_int, bool);
+bool double_int_fits_in_shwi_p (double_int);
 
 
 
-static __inline__ unsigned char
+static inline bool
 double_int_fits_in_uhwi_p (double_int cst)
 {
   return cst.high == 0;
@@ -8546,7 +11171,7 @@ double_int_fits_in_uhwi_p (double_int cst)
 
 
 double_int double_int_mul (double_int, double_int);
-double_int double_int_mul_with_sign (double_int, double_int, unsigned char, int *);
+double_int double_int_mul_with_sign (double_int, double_int, bool, int *);
 double_int double_int_add (double_int, double_int);
 double_int double_int_sub (double_int, double_int);
 double_int double_int_neg (double_int);
@@ -8554,13 +11179,13 @@ double_int double_int_neg (double_int);
 
 
 
-double_int double_int_div (double_int, double_int, unsigned char, unsigned);
+double_int double_int_div (double_int, double_int, bool, unsigned);
 double_int double_int_sdiv (double_int, double_int, unsigned);
 double_int double_int_udiv (double_int, double_int, unsigned);
-double_int double_int_mod (double_int, double_int, unsigned char, unsigned);
+double_int double_int_mod (double_int, double_int, bool, unsigned);
 double_int double_int_smod (double_int, double_int, unsigned);
 double_int double_int_umod (double_int, double_int, unsigned);
-double_int double_int_divmod (double_int, double_int, unsigned char, unsigned, double_int *);
+double_int double_int_divmod (double_int, double_int, bool, unsigned, double_int *);
 double_int double_int_sdivmod (double_int, double_int, unsigned, double_int *);
 double_int double_int_udivmod (double_int, double_int, unsigned, double_int *);
 
@@ -8571,7 +11196,7 @@ int double_int_ctz (double_int);
 
 
 
-static __inline__ double_int
+static inline double_int
 double_int_not (double_int a)
 {
   a.low = ~a.low;
@@ -8581,7 +11206,7 @@ double_int_not (double_int a)
 
 
 
-static __inline__ double_int
+static inline double_int
 double_int_ior (double_int a, double_int b)
 {
   a.low |= b.low;
@@ -8591,7 +11216,7 @@ double_int_ior (double_int a, double_int b)
 
 
 
-static __inline__ double_int
+static inline double_int
 double_int_and (double_int a, double_int b)
 {
   a.low &= b.low;
@@ -8601,7 +11226,7 @@ double_int_and (double_int a, double_int b)
 
 
 
-static __inline__ double_int
+static inline double_int
 double_int_and_not (double_int a, double_int b)
 {
   a.low &= ~b.low;
@@ -8611,7 +11236,7 @@ double_int_and_not (double_int a, double_int b)
 
 
 
-static __inline__ double_int
+static inline double_int
 double_int_xor (double_int a, double_int b)
 {
   a.low ^= b.low;
@@ -8621,42 +11246,42 @@ double_int_xor (double_int a, double_int b)
 
 
 
-double_int double_int_lshift (double_int, long, unsigned int, unsigned char);
-double_int double_int_rshift (double_int, long, unsigned int, unsigned char);
+double_int double_int_lshift (double_int, long, unsigned int, bool);
+double_int double_int_rshift (double_int, long, unsigned int, bool);
 double_int double_int_lrotate (double_int, long, unsigned int);
 double_int double_int_rrotate (double_int, long, unsigned int);
 
 
 
 
-static __inline__ unsigned char
+static inline bool
 double_int_negative_p (double_int cst)
 {
   return cst.high < 0;
 }
 
-int double_int_cmp (double_int, double_int, unsigned char);
+int double_int_cmp (double_int, double_int, bool);
 int double_int_scmp (double_int, double_int);
 int double_int_ucmp (double_int, double_int);
 
-double_int double_int_max (double_int, double_int, unsigned char);
+double_int double_int_max (double_int, double_int, bool);
 double_int double_int_smax (double_int, double_int);
 double_int double_int_umax (double_int, double_int);
 
-double_int double_int_min (double_int, double_int, unsigned char);
+double_int double_int_min (double_int, double_int, bool);
 double_int double_int_smin (double_int, double_int);
 double_int double_int_umin (double_int, double_int);
 
-void dump_double_int (FILE *, double_int, unsigned char);
+void dump_double_int (FILE *, double_int, bool);
 
 
 
-double_int double_int_ext (double_int, unsigned, unsigned char);
+double_int double_int_ext (double_int, unsigned, bool);
 double_int double_int_sext (double_int, unsigned);
 double_int double_int_zext (double_int, unsigned);
 double_int double_int_mask (unsigned);
 # 253 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/double-int.h"
-static __inline__ unsigned char
+static inline bool
 double_int_zero_p (double_int cst)
 {
   return cst.low == 0 && cst.high == 0;
@@ -8664,7 +11289,7 @@ double_int_zero_p (double_int cst)
 
 
 
-static __inline__ unsigned char
+static inline bool
 double_int_one_p (double_int cst)
 {
   return cst.low == 1 && cst.high == 0;
@@ -8672,7 +11297,7 @@ double_int_one_p (double_int cst)
 
 
 
-static __inline__ unsigned char
+static inline bool
 double_int_minus_one_p (double_int cst)
 {
   return (cst.low == (~((unsigned long) 0)) && cst.high == -1);
@@ -8680,7 +11305,7 @@ double_int_minus_one_p (double_int cst)
 
 
 
-static __inline__ unsigned char
+static inline bool
 double_int_equal_p (double_int cst1, double_int cst2)
 {
   return cst1.low == cst2.low && cst1.high == cst2.high;
@@ -8692,7 +11317,7 @@ double_int_equal_p (double_int cst1, double_int cst2)
 extern int add_double_with_sign (unsigned long, long,
      unsigned long, long,
      unsigned long *, long *,
-     unsigned char);
+     bool);
 
 
 extern int neg_double (unsigned long, long,
@@ -8700,15 +11325,15 @@ extern int neg_double (unsigned long, long,
 extern int mul_double_with_sign (unsigned long, long,
      unsigned long, long,
      unsigned long *, long *,
-     unsigned char);
+     bool);
 
 
 extern void lshift_double (unsigned long, long,
       long, unsigned int,
-      unsigned long *, long *, unsigned char);
+      unsigned long *, long *, bool);
 extern void rshift_double (unsigned long, long,
       long, unsigned int,
-      unsigned long *, long *, unsigned char);
+      unsigned long *, long *, bool);
 extern int div_and_round_double (unsigned, int, unsigned long,
      long, unsigned long,
      long, unsigned long *,
@@ -8719,8 +11344,8 @@ extern int div_and_round_double (unsigned, int, unsigned long,
 
 
 
-void mpz_set_double_int (mpz_t, double_int, unsigned char);
-double_int mpz_get_double_int (const_tree, mpz_t, unsigned char);
+void mpz_set_double_int (mpz_t, double_int, bool);
+double_int mpz_get_double_int (const_tree, mpz_t, bool);
 # 32 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/real.h" 1
 # 30 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/real.h"
@@ -8785,16 +11410,16 @@ struct real_format
   int signbit_rw;
 
 
-  unsigned char round_towards_zero;
-  unsigned char has_sign_dependent_rounding;
+  bool round_towards_zero;
+  bool has_sign_dependent_rounding;
 
 
-  unsigned char has_nans;
-  unsigned char has_inf;
-  unsigned char has_denorm;
-  unsigned char has_signed_zero;
-  unsigned char qnan_msb_set;
-  unsigned char canonical_nan_lsbs_set;
+  bool has_nans;
+  bool has_inf;
+  bool has_denorm;
+  bool has_signed_zero;
+  bool qnan_msb_set;
+  bool canonical_nan_lsbs_set;
 };
 
 
@@ -8807,36 +11432,36 @@ extern const struct real_format *
   real_format_for_mode[MAX_MODE_FLOAT - MIN_MODE_FLOAT + 1
          + MAX_MODE_DECIMAL_FLOAT - MIN_MODE_DECIMAL_FLOAT + 1];
 # 226 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/real.h"
-extern unsigned char real_arithmetic (struct real_value *, int, const struct real_value *,
+extern bool real_arithmetic (struct real_value *, int, const struct real_value *,
         const struct real_value *);
 
 
-extern unsigned char real_compare (int, const struct real_value *, const struct real_value *);
+extern bool real_compare (int, const struct real_value *, const struct real_value *);
 
 
-extern unsigned char real_isinf (const struct real_value *);
+extern bool real_isinf (const struct real_value *);
 
 
-extern unsigned char real_isnan (const struct real_value *);
+extern bool real_isnan (const struct real_value *);
 
 
-extern unsigned char real_isfinite (const struct real_value *);
+extern bool real_isfinite (const struct real_value *);
 
 
-extern unsigned char real_isneg (const struct real_value *);
+extern bool real_isneg (const struct real_value *);
 
 
-extern unsigned char real_isnegzero (const struct real_value *);
+extern bool real_isnegzero (const struct real_value *);
 
 
-extern unsigned char real_identical (const struct real_value *, const struct real_value *);
+extern bool real_identical (const struct real_value *, const struct real_value *);
 
 
 extern void real_convert (struct real_value *, enum machine_mode,
      const struct real_value *);
 
 
-extern unsigned char exact_real_truncate (enum machine_mode, const struct real_value *);
+extern bool exact_real_truncate (enum machine_mode, const struct real_value *);
 
 
 extern void real_to_decimal (char *, const struct real_value *, size_t,
@@ -8877,7 +11502,7 @@ extern void real_from_target (struct real_value *, const long *,
 
 extern void real_inf (struct real_value *);
 
-extern unsigned char real_nan (struct real_value *, const char *, int, enum machine_mode);
+extern bool real_nan (struct real_value *, const char *, int, enum machine_mode);
 
 extern void real_maxval (struct real_value *, int, enum machine_mode);
 
@@ -8960,22 +11585,22 @@ struct real_value real_value_from_int_cst (const_tree, const_tree);
 extern rtx const_double_from_real_value (struct real_value, enum machine_mode);
 
 
-extern unsigned char exact_real_inverse (enum machine_mode, struct real_value *);
+extern bool exact_real_inverse (enum machine_mode, struct real_value *);
 
 
 
 
-unsigned char real_can_shorten_arithmetic (enum machine_mode, enum machine_mode);
+bool real_can_shorten_arithmetic (enum machine_mode, enum machine_mode);
 
 
 extern tree build_real (tree, struct real_value);
 
 
-extern unsigned char real_sqrt (struct real_value *, enum machine_mode,
+extern bool real_sqrt (struct real_value *, enum machine_mode,
          const struct real_value *);
 
 
-extern unsigned char real_powi (struct real_value *, enum machine_mode,
+extern bool real_powi (struct real_value *, enum machine_mode,
          const struct real_value *, long);
 
 
@@ -8992,7 +11617,7 @@ extern void real_round (struct real_value *, enum machine_mode,
 extern void real_copysign (struct real_value *, const struct real_value *);
 
 
-extern unsigned char real_isinteger (const struct real_value *c, enum machine_mode mode);
+extern bool real_isinteger (const struct real_value *c, enum machine_mode mode);
 
 
 
@@ -9020,23 +11645,23 @@ extern void fixed_from_string (struct fixed_value *, const char *,
 extern tree build_fixed (tree, struct fixed_value);
 
 
-extern unsigned char fixed_convert (struct fixed_value *, enum machine_mode,
-      const struct fixed_value *, unsigned char);
+extern bool fixed_convert (struct fixed_value *, enum machine_mode,
+      const struct fixed_value *, bool);
 
 
-extern unsigned char fixed_convert_from_int (struct fixed_value *, enum machine_mode,
-        double_int, unsigned char, unsigned char);
+extern bool fixed_convert_from_int (struct fixed_value *, enum machine_mode,
+        double_int, bool, bool);
 
 
-extern unsigned char fixed_convert_from_real (struct fixed_value *, enum machine_mode,
-         const struct real_value *, unsigned char);
+extern bool fixed_convert_from_real (struct fixed_value *, enum machine_mode,
+         const struct real_value *, bool);
 
 
 extern void real_convert_from_fixed (struct real_value *, enum machine_mode,
          const struct fixed_value *);
 
 
-extern unsigned char fixed_identical (const struct fixed_value *, const struct fixed_value *);
+extern bool fixed_identical (const struct fixed_value *, const struct fixed_value *);
 
 
 extern unsigned int fixed_hash (const struct fixed_value *);
@@ -9050,15 +11675,15 @@ extern unsigned int fixed_hash (const struct fixed_value *);
 extern void fixed_to_decimal (char *str, const struct fixed_value *, size_t);
 
 
-extern unsigned char fixed_arithmetic (struct fixed_value *, int, const struct fixed_value *,
-         const struct fixed_value *, unsigned char);
+extern bool fixed_arithmetic (struct fixed_value *, int, const struct fixed_value *,
+         const struct fixed_value *, bool);
 
 
-extern unsigned char fixed_compare (int, const struct fixed_value *,
+extern bool fixed_compare (int, const struct fixed_value *,
       const struct fixed_value *);
 
 
-extern unsigned char fixed_isneg (const struct fixed_value *);
+extern bool fixed_isneg (const struct fixed_value *);
 # 34 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/alias.h" 1
 # 31 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/alias.h"
@@ -9069,14 +11694,14 @@ extern alias_set_type get_alias_set (tree);
 extern alias_set_type get_deref_alias_set (tree);
 extern alias_set_type get_varargs_alias_set (void);
 extern alias_set_type get_frame_alias_set (void);
-extern unsigned char component_uses_parent_alias_set (const_tree);
-extern unsigned char alias_set_subset_of (alias_set_type, alias_set_type);
+extern bool component_uses_parent_alias_set (const_tree);
+extern bool alias_set_subset_of (alias_set_type, alias_set_type);
 extern void record_alias_subset (alias_set_type, alias_set_type);
 extern void record_component_aliases (tree);
 extern int alias_sets_conflict_p (alias_set_type, alias_set_type);
 extern int alias_sets_must_conflict_p (alias_set_type, alias_set_type);
 extern int objects_must_conflict_p (tree, tree);
-extern int nonoverlapping_memrefs_p (const_rtx, const_rtx, unsigned char);
+extern int nonoverlapping_memrefs_p (const_rtx, const_rtx, bool);
 # 35 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/flags.h" 1
 # 26 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/flags.h"
@@ -9342,55 +11967,55 @@ struct gcc_options
 
 
 
-  unsigned char x_exit_after_options;
+  bool x_exit_after_options;
 
 
 
 
 
-  unsigned char x_flag_dump_all_passed;
+  bool x_flag_dump_all_passed;
 
 
 
 
 
-  unsigned char x_flag_opts_finished;
+  bool x_flag_opts_finished;
 
 
 
 
 
-  unsigned char x_flag_stack_usage_info;
+  bool x_flag_stack_usage_info;
 
 
 
 
 
-  unsigned char x_flag_warn_unused_result;
+  bool x_flag_warn_unused_result;
 
 
 
 
 
-  unsigned char x_in_lto_p;
+  bool x_in_lto_p;
 
 
 
 
 
-  unsigned char x_use_gnu_debug_info_extensions;
+  bool x_use_gnu_debug_info_extensions;
 
 
 
 
 
-  unsigned char x_warn_frame_larger_than;
+  bool x_warn_frame_larger_than;
 
 
 
 
 
-  unsigned char x_warn_larger_than;
+  bool x_warn_larger_than;
 
 
 
@@ -12706,34 +15331,34 @@ struct gcc_options
 
 
 
-  unsigned char frontend_set_flag_associative_math;
+  bool frontend_set_flag_associative_math;
 
 
-  unsigned char frontend_set_flag_cx_limited_range;
+  bool frontend_set_flag_cx_limited_range;
 
 
-  unsigned char frontend_set_flag_finite_math_only;
+  bool frontend_set_flag_finite_math_only;
 
 
-  unsigned char frontend_set_flag_errno_math;
+  bool frontend_set_flag_errno_math;
 
 
-  unsigned char frontend_set_flag_reciprocal_math;
+  bool frontend_set_flag_reciprocal_math;
 
 
-  unsigned char frontend_set_flag_rounding_math;
+  bool frontend_set_flag_rounding_math;
 
 
-  unsigned char frontend_set_flag_signaling_nans;
+  bool frontend_set_flag_signaling_nans;
 
 
-  unsigned char frontend_set_flag_signed_zeros;
+  bool frontend_set_flag_signed_zeros;
 
 
-  unsigned char frontend_set_flag_trapping_math;
+  bool frontend_set_flag_trapping_math;
 
 
-  unsigned char frontend_set_flag_unsafe_math_optimizations;
+  bool frontend_set_flag_unsafe_math_optimizations;
 
 
 };
@@ -14069,8 +16694,8 @@ extern void strip_off_ending (char *, int);
 extern int base_of_path (const char *path, const char **base_out);
 
 
-extern unsigned char fast_math_flags_set_p (const struct gcc_options *);
-extern unsigned char fast_math_flags_struct_set_p (struct cl_optimization *);
+extern bool fast_math_flags_set_p (const struct gcc_options *);
+extern bool fast_math_flags_struct_set_p (struct cl_optimization *);
 # 48 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/flags.h"
 extern void set_Wstrict_aliasing (struct gcc_options *opts, int onoff);
 
@@ -14078,7 +16703,7 @@ extern void set_Wstrict_aliasing (struct gcc_options *opts, int onoff);
 
 
 
-extern unsigned char final_insns_dump_p;
+extern bool final_insns_dump_p;
 
 
 
@@ -15180,8 +17805,8 @@ typedef struct alias_pair
 } alias_pair;
 
 
-typedef struct VEC_alias_pair_base { struct vec_prefix prefix; alias_pair vec[1]; } VEC_alias_pair_base; typedef struct VEC_alias_pair_none { VEC_alias_pair_base base; } VEC_alias_pair_none; static __inline__ unsigned VEC_alias_pair_base_length (const VEC_alias_pair_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ alias_pair *VEC_alias_pair_base_last (VEC_alias_pair_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return &vec_->vec[vec_->prefix.num - 1]; } static __inline__ alias_pair *VEC_alias_pair_base_index (VEC_alias_pair_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return &vec_->vec[ix_]; } static __inline__ int VEC_alias_pair_base_iterate (VEC_alias_pair_base *vec_, unsigned ix_, alias_pair **ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static __inline__ size_t VEC_alias_pair_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_alias_pair_base, vec) + alloc_ * sizeof(alias_pair); } static __inline__ void VEC_alias_pair_base_embedded_init (VEC_alias_pair_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_alias_pair_base_space (VEC_alias_pair_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_alias_pair_base_splice (VEC_alias_pair_base *dst_, VEC_alias_pair_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (alias_pair)); dst_->prefix.num += len_; } } static __inline__ alias_pair *VEC_alias_pair_base_quick_push (VEC_alias_pair_base *vec_, const alias_pair *obj_ ) { alias_pair *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_alias_pair_base_pop (VEC_alias_pair_base *vec_ ) { (void)(vec_->prefix.num); --vec_->prefix.num; } static __inline__ void VEC_alias_pair_base_truncate (VEC_alias_pair_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ alias_pair *VEC_alias_pair_base_replace (VEC_alias_pair_base *vec_, unsigned ix_, const alias_pair *obj_ ) { alias_pair *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ alias_pair *VEC_alias_pair_base_quick_insert (VEC_alias_pair_base *vec_, unsigned ix_, const alias_pair *obj_ ) { alias_pair *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (alias_pair)); if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_alias_pair_base_ordered_remove (VEC_alias_pair_base *vec_, unsigned ix_ ) { alias_pair *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (alias_pair)); } static __inline__ void VEC_alias_pair_base_unordered_remove (VEC_alias_pair_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->prefix.num); vec_->vec[ix_] = vec_->vec[--vec_->prefix.num]; } static __inline__ void VEC_alias_pair_base_block_remove (VEC_alias_pair_base *vec_, unsigned ix_, unsigned len_ ) { alias_pair *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (alias_pair)); } static __inline__ alias_pair *VEC_alias_pair_base_address (VEC_alias_pair_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_alias_pair_base_lower_bound (VEC_alias_pair_base *vec_, const alias_pair *obj_, unsigned char (*lessthan_)(const alias_pair *, const alias_pair *) ) { unsigned int len_ = VEC_alias_pair_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { alias_pair *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_alias_pair_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_alias_pair_gc { VEC_alias_pair_base base; } VEC_alias_pair_gc; static __inline__ VEC_alias_pair_gc *VEC_alias_pair_gc_alloc (int alloc_ ) { return (VEC_alias_pair_gc *) vec_gc_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) ); } static __inline__ VEC_alias_pair_gc *VEC_alias_pair_gc_copy (VEC_alias_pair_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_alias_pair_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_alias_pair_gc *)(vec_gc_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (alias_pair) * len_); } return new_vec_; } static __inline__ void VEC_alias_pair_gc_free (VEC_alias_pair_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_alias_pair_gc_reserve (VEC_alias_pair_gc **vec_, int alloc_ ) { int extend = !VEC_alias_pair_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_alias_pair_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) ); return extend; } static __inline__ int VEC_alias_pair_gc_reserve_exact (VEC_alias_pair_gc **vec_, int alloc_ ) { int extend = !VEC_alias_pair_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_alias_pair_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) ); return extend; } static __inline__ void VEC_alias_pair_gc_safe_grow (VEC_alias_pair_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_alias_pair_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_alias_pair_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_alias_pair_gc_safe_grow_cleared (VEC_alias_pair_gc **vec_, int size_ ) { int oldsize = VEC_alias_pair_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_alias_pair_gc_safe_grow (vec_, size_ ); memset (&(VEC_alias_pair_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (alias_pair) * (size_ - oldsize)); } static __inline__ void VEC_alias_pair_gc_safe_splice (VEC_alias_pair_gc **dst_, VEC_alias_pair_base *src_ ) { if (src_) { VEC_alias_pair_gc_reserve_exact (dst_, src_->prefix.num ); VEC_alias_pair_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ alias_pair *VEC_alias_pair_gc_safe_push (VEC_alias_pair_gc **vec_, const alias_pair *obj_ ) { VEC_alias_pair_gc_reserve (vec_, 1 ); return VEC_alias_pair_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ alias_pair *VEC_alias_pair_gc_safe_insert (VEC_alias_pair_gc **vec_, unsigned ix_, const alias_pair *obj_ ) { VEC_alias_pair_gc_reserve (vec_, 1 ); return VEC_alias_pair_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_alias_pair_base { struct vec_prefix prefix; alias_pair vec[1]; } VEC_alias_pair_base; typedef struct VEC_alias_pair_none { VEC_alias_pair_base base; } VEC_alias_pair_none; static inline unsigned VEC_alias_pair_base_length (const VEC_alias_pair_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline alias_pair *VEC_alias_pair_base_last (VEC_alias_pair_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return &vec_->vec[vec_->prefix.num - 1]; } static inline alias_pair *VEC_alias_pair_base_index (VEC_alias_pair_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return &vec_->vec[ix_]; } static inline int VEC_alias_pair_base_iterate (VEC_alias_pair_base *vec_, unsigned ix_, alias_pair **ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static inline size_t VEC_alias_pair_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_alias_pair_base, vec) + alloc_ * sizeof(alias_pair); } static inline void VEC_alias_pair_base_embedded_init (VEC_alias_pair_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_alias_pair_base_space (VEC_alias_pair_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_alias_pair_base_splice (VEC_alias_pair_base *dst_, VEC_alias_pair_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (alias_pair)); dst_->prefix.num += len_; } } static inline alias_pair *VEC_alias_pair_base_quick_push (VEC_alias_pair_base *vec_, const alias_pair *obj_ ) { alias_pair *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_alias_pair_base_pop (VEC_alias_pair_base *vec_ ) { (void)(vec_->prefix.num); --vec_->prefix.num; } static inline void VEC_alias_pair_base_truncate (VEC_alias_pair_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline alias_pair *VEC_alias_pair_base_replace (VEC_alias_pair_base *vec_, unsigned ix_, const alias_pair *obj_ ) { alias_pair *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static inline alias_pair *VEC_alias_pair_base_quick_insert (VEC_alias_pair_base *vec_, unsigned ix_, const alias_pair *obj_ ) { alias_pair *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (alias_pair)); if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_alias_pair_base_ordered_remove (VEC_alias_pair_base *vec_, unsigned ix_ ) { alias_pair *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (alias_pair)); } static inline void VEC_alias_pair_base_unordered_remove (VEC_alias_pair_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->prefix.num); vec_->vec[ix_] = vec_->vec[--vec_->prefix.num]; } static inline void VEC_alias_pair_base_block_remove (VEC_alias_pair_base *vec_, unsigned ix_, unsigned len_ ) { alias_pair *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (alias_pair)); } static inline alias_pair *VEC_alias_pair_base_address (VEC_alias_pair_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_alias_pair_base_lower_bound (VEC_alias_pair_base *vec_, const alias_pair *obj_, bool (*lessthan_)(const alias_pair *, const alias_pair *) ) { unsigned int len_ = VEC_alias_pair_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { alias_pair *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_alias_pair_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_alias_pair_gc { VEC_alias_pair_base base; } VEC_alias_pair_gc; static inline VEC_alias_pair_gc *VEC_alias_pair_gc_alloc (int alloc_ ) { return (VEC_alias_pair_gc *) vec_gc_o_reserve_exact (__null, alloc_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) ); } static inline VEC_alias_pair_gc *VEC_alias_pair_gc_copy (VEC_alias_pair_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_alias_pair_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_alias_pair_gc *)(vec_gc_o_reserve_exact (__null, len_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (alias_pair) * len_); } return new_vec_; } static inline void VEC_alias_pair_gc_free (VEC_alias_pair_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline int VEC_alias_pair_gc_reserve (VEC_alias_pair_gc **vec_, int alloc_ ) { int extend = !VEC_alias_pair_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_alias_pair_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) ); return extend; } static inline int VEC_alias_pair_gc_reserve_exact (VEC_alias_pair_gc **vec_, int alloc_ ) { int extend = !VEC_alias_pair_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_alias_pair_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) ); return extend; } static inline void VEC_alias_pair_gc_safe_grow (VEC_alias_pair_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_alias_pair_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_alias_pair_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_alias_pair_gc_safe_grow_cleared (VEC_alias_pair_gc **vec_, int size_ ) { int oldsize = VEC_alias_pair_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_alias_pair_gc_safe_grow (vec_, size_ ); memset (&(VEC_alias_pair_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (alias_pair) * (size_ - oldsize)); } static inline void VEC_alias_pair_gc_safe_splice (VEC_alias_pair_gc **dst_, VEC_alias_pair_base *src_ ) { if (src_) { VEC_alias_pair_gc_reserve_exact (dst_, src_->prefix.num ); VEC_alias_pair_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline alias_pair *VEC_alias_pair_gc_safe_push (VEC_alias_pair_gc **vec_, const alias_pair *obj_ ) { VEC_alias_pair_gc_reserve (vec_, 1 ); return VEC_alias_pair_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline alias_pair *VEC_alias_pair_gc_safe_insert (VEC_alias_pair_gc **vec_, unsigned ix_, const alias_pair *obj_ ) { VEC_alias_pair_gc_reserve (vec_, 1 ); return VEC_alias_pair_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 
 extern VEC_alias_pair_gc * alias_pairs;
 
@@ -16871,7 +19496,7 @@ enum omp_clause_code
 };
 # 433 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 struct tree_base {
-  __extension__ enum tree_code code : 16;
+  enum tree_code code : 16;
 
   unsigned side_effects_flag : 1;
   unsigned constant_flag : 1;
@@ -17034,6 +19659,8 @@ struct tree_vector {
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/symtab.h" 1
 # 22 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/symtab.h"
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/obstack.h" 1
+# 114 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/obstack.h"
+extern "C" {
 # 157 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/obstack.h"
 struct _obstack_chunk
 {
@@ -17123,6 +19750,8 @@ extern void (*obstack_alloc_failed_handler) (void);
 
 
 extern int obstack_exit_failure;
+# 542 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/obstack.h"
+}
 # 23 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/symtab.h" 2
 
 
@@ -17171,7 +19800,7 @@ struct ht
   unsigned int collisions;
 
 
-  unsigned char entries_owned;
+  bool entries_owned;
 };
 
 
@@ -17200,7 +19829,7 @@ extern void ht_purge (hash_table *, ht_cb, const void *);
 
 
 extern void ht_load (hash_table *ht, hashnode *entries,
-       unsigned int nslots, unsigned int nelements, unsigned char own);
+       unsigned int nslots, unsigned int nelements, bool own);
 
 
 extern void ht_dump_statistics (hash_table *);
@@ -17232,8 +19861,8 @@ typedef struct constructor_elt_d {
   tree value;
 } constructor_elt;
 
-typedef struct VEC_constructor_elt_base { struct vec_prefix prefix; constructor_elt vec[1]; } VEC_constructor_elt_base; typedef struct VEC_constructor_elt_none { VEC_constructor_elt_base base; } VEC_constructor_elt_none; static __inline__ unsigned VEC_constructor_elt_base_length (const VEC_constructor_elt_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ constructor_elt *VEC_constructor_elt_base_last (VEC_constructor_elt_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return &vec_->vec[vec_->prefix.num - 1]; } static __inline__ constructor_elt *VEC_constructor_elt_base_index (VEC_constructor_elt_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return &vec_->vec[ix_]; } static __inline__ int VEC_constructor_elt_base_iterate (VEC_constructor_elt_base *vec_, unsigned ix_, constructor_elt **ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static __inline__ size_t VEC_constructor_elt_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_constructor_elt_base, vec) + alloc_ * sizeof(constructor_elt); } static __inline__ void VEC_constructor_elt_base_embedded_init (VEC_constructor_elt_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_constructor_elt_base_space (VEC_constructor_elt_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_constructor_elt_base_splice (VEC_constructor_elt_base *dst_, VEC_constructor_elt_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (constructor_elt)); dst_->prefix.num += len_; } } static __inline__ constructor_elt *VEC_constructor_elt_base_quick_push (VEC_constructor_elt_base *vec_, const constructor_elt *obj_ ) { constructor_elt *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_constructor_elt_base_pop (VEC_constructor_elt_base *vec_ ) { (void)(vec_->prefix.num); --vec_->prefix.num; } static __inline__ void VEC_constructor_elt_base_truncate (VEC_constructor_elt_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ constructor_elt *VEC_constructor_elt_base_replace (VEC_constructor_elt_base *vec_, unsigned ix_, const constructor_elt *obj_ ) { constructor_elt *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ constructor_elt *VEC_constructor_elt_base_quick_insert (VEC_constructor_elt_base *vec_, unsigned ix_, const constructor_elt *obj_ ) { constructor_elt *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (constructor_elt)); if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_constructor_elt_base_ordered_remove (VEC_constructor_elt_base *vec_, unsigned ix_ ) { constructor_elt *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (constructor_elt)); } static __inline__ void VEC_constructor_elt_base_unordered_remove (VEC_constructor_elt_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->prefix.num); vec_->vec[ix_] = vec_->vec[--vec_->prefix.num]; } static __inline__ void VEC_constructor_elt_base_block_remove (VEC_constructor_elt_base *vec_, unsigned ix_, unsigned len_ ) { constructor_elt *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (constructor_elt)); } static __inline__ constructor_elt *VEC_constructor_elt_base_address (VEC_constructor_elt_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_constructor_elt_base_lower_bound (VEC_constructor_elt_base *vec_, const constructor_elt *obj_, unsigned char (*lessthan_)(const constructor_elt *, const constructor_elt *) ) { unsigned int len_ = VEC_constructor_elt_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { constructor_elt *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_constructor_elt_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_constructor_elt_gc { VEC_constructor_elt_base base; } VEC_constructor_elt_gc; static __inline__ VEC_constructor_elt_gc *VEC_constructor_elt_gc_alloc (int alloc_ ) { return (VEC_constructor_elt_gc *) vec_gc_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) ); } static __inline__ VEC_constructor_elt_gc *VEC_constructor_elt_gc_copy (VEC_constructor_elt_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_constructor_elt_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_constructor_elt_gc *)(vec_gc_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (constructor_elt) * len_); } return new_vec_; } static __inline__ void VEC_constructor_elt_gc_free (VEC_constructor_elt_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_constructor_elt_gc_reserve (VEC_constructor_elt_gc **vec_, int alloc_ ) { int extend = !VEC_constructor_elt_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_constructor_elt_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) ); return extend; } static __inline__ int VEC_constructor_elt_gc_reserve_exact (VEC_constructor_elt_gc **vec_, int alloc_ ) { int extend = !VEC_constructor_elt_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_constructor_elt_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) ); return extend; } static __inline__ void VEC_constructor_elt_gc_safe_grow (VEC_constructor_elt_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_constructor_elt_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_constructor_elt_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_constructor_elt_gc_safe_grow_cleared (VEC_constructor_elt_gc **vec_, int size_ ) { int oldsize = VEC_constructor_elt_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_constructor_elt_gc_safe_grow (vec_, size_ ); memset (&(VEC_constructor_elt_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (constructor_elt) * (size_ - oldsize)); } static __inline__ void VEC_constructor_elt_gc_safe_splice (VEC_constructor_elt_gc **dst_, VEC_constructor_elt_base *src_ ) { if (src_) { VEC_constructor_elt_gc_reserve_exact (dst_, src_->prefix.num ); VEC_constructor_elt_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ constructor_elt *VEC_constructor_elt_gc_safe_push (VEC_constructor_elt_gc **vec_, const constructor_elt *obj_ ) { VEC_constructor_elt_gc_reserve (vec_, 1 ); return VEC_constructor_elt_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ constructor_elt *VEC_constructor_elt_gc_safe_insert (VEC_constructor_elt_gc **vec_, unsigned ix_, const constructor_elt *obj_ ) { VEC_constructor_elt_gc_reserve (vec_, 1 ); return VEC_constructor_elt_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_constructor_elt_base { struct vec_prefix prefix; constructor_elt vec[1]; } VEC_constructor_elt_base; typedef struct VEC_constructor_elt_none { VEC_constructor_elt_base base; } VEC_constructor_elt_none; static inline unsigned VEC_constructor_elt_base_length (const VEC_constructor_elt_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline constructor_elt *VEC_constructor_elt_base_last (VEC_constructor_elt_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return &vec_->vec[vec_->prefix.num - 1]; } static inline constructor_elt *VEC_constructor_elt_base_index (VEC_constructor_elt_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return &vec_->vec[ix_]; } static inline int VEC_constructor_elt_base_iterate (VEC_constructor_elt_base *vec_, unsigned ix_, constructor_elt **ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static inline size_t VEC_constructor_elt_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_constructor_elt_base, vec) + alloc_ * sizeof(constructor_elt); } static inline void VEC_constructor_elt_base_embedded_init (VEC_constructor_elt_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_constructor_elt_base_space (VEC_constructor_elt_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_constructor_elt_base_splice (VEC_constructor_elt_base *dst_, VEC_constructor_elt_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (constructor_elt)); dst_->prefix.num += len_; } } static inline constructor_elt *VEC_constructor_elt_base_quick_push (VEC_constructor_elt_base *vec_, const constructor_elt *obj_ ) { constructor_elt *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_constructor_elt_base_pop (VEC_constructor_elt_base *vec_ ) { (void)(vec_->prefix.num); --vec_->prefix.num; } static inline void VEC_constructor_elt_base_truncate (VEC_constructor_elt_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline constructor_elt *VEC_constructor_elt_base_replace (VEC_constructor_elt_base *vec_, unsigned ix_, const constructor_elt *obj_ ) { constructor_elt *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static inline constructor_elt *VEC_constructor_elt_base_quick_insert (VEC_constructor_elt_base *vec_, unsigned ix_, const constructor_elt *obj_ ) { constructor_elt *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (constructor_elt)); if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_constructor_elt_base_ordered_remove (VEC_constructor_elt_base *vec_, unsigned ix_ ) { constructor_elt *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (constructor_elt)); } static inline void VEC_constructor_elt_base_unordered_remove (VEC_constructor_elt_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->prefix.num); vec_->vec[ix_] = vec_->vec[--vec_->prefix.num]; } static inline void VEC_constructor_elt_base_block_remove (VEC_constructor_elt_base *vec_, unsigned ix_, unsigned len_ ) { constructor_elt *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (constructor_elt)); } static inline constructor_elt *VEC_constructor_elt_base_address (VEC_constructor_elt_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_constructor_elt_base_lower_bound (VEC_constructor_elt_base *vec_, const constructor_elt *obj_, bool (*lessthan_)(const constructor_elt *, const constructor_elt *) ) { unsigned int len_ = VEC_constructor_elt_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { constructor_elt *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_constructor_elt_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_constructor_elt_gc { VEC_constructor_elt_base base; } VEC_constructor_elt_gc; static inline VEC_constructor_elt_gc *VEC_constructor_elt_gc_alloc (int alloc_ ) { return (VEC_constructor_elt_gc *) vec_gc_o_reserve_exact (__null, alloc_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) ); } static inline VEC_constructor_elt_gc *VEC_constructor_elt_gc_copy (VEC_constructor_elt_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_constructor_elt_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_constructor_elt_gc *)(vec_gc_o_reserve_exact (__null, len_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (constructor_elt) * len_); } return new_vec_; } static inline void VEC_constructor_elt_gc_free (VEC_constructor_elt_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline int VEC_constructor_elt_gc_reserve (VEC_constructor_elt_gc **vec_, int alloc_ ) { int extend = !VEC_constructor_elt_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_constructor_elt_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) ); return extend; } static inline int VEC_constructor_elt_gc_reserve_exact (VEC_constructor_elt_gc **vec_, int alloc_ ) { int extend = !VEC_constructor_elt_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_constructor_elt_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) ); return extend; } static inline void VEC_constructor_elt_gc_safe_grow (VEC_constructor_elt_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_constructor_elt_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_constructor_elt_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_constructor_elt_gc_safe_grow_cleared (VEC_constructor_elt_gc **vec_, int size_ ) { int oldsize = VEC_constructor_elt_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_constructor_elt_gc_safe_grow (vec_, size_ ); memset (&(VEC_constructor_elt_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (constructor_elt) * (size_ - oldsize)); } static inline void VEC_constructor_elt_gc_safe_splice (VEC_constructor_elt_gc **dst_, VEC_constructor_elt_base *src_ ) { if (src_) { VEC_constructor_elt_gc_reserve_exact (dst_, src_->prefix.num ); VEC_constructor_elt_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline constructor_elt *VEC_constructor_elt_gc_safe_push (VEC_constructor_elt_gc **vec_, const constructor_elt *obj_ ) { VEC_constructor_elt_gc_reserve (vec_, 1 ); return VEC_constructor_elt_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline constructor_elt *VEC_constructor_elt_gc_safe_insert (VEC_constructor_elt_gc **vec_, unsigned ix_, const constructor_elt *obj_ ) { VEC_constructor_elt_gc_reserve (vec_, 1 ); return VEC_constructor_elt_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 
 struct tree_constructor {
   struct tree_typed typed;
@@ -17384,7 +20013,7 @@ struct tree_type_common {
   unsigned restrict_flag : 1;
   unsigned contains_placeholder_bits : 2;
 
-  __extension__ enum machine_mode mode : 8;
+  enum machine_mode mode : 8;
 
   unsigned string_flag : 1;
   unsigned lang_flag_0 : 1;
@@ -17458,7 +20087,7 @@ struct tree_decl_common {
   struct tree_decl_minimal common;
   tree size;
 
-  __extension__ enum machine_mode mode : 8;
+  enum machine_mode mode : 8;
 
   unsigned nonlocal_flag : 1;
   unsigned virtual_flag : 1;
@@ -17584,10 +20213,10 @@ struct tree_decl_with_vis {
 
  unsigned seen_in_bind_expr : 1;
  unsigned comdat_flag : 1;
- __extension__ enum symbol_visibility visibility : 2;
+ enum symbol_visibility visibility : 2;
  unsigned visibility_specified : 1;
 
- __extension__ enum tls_model tls_model : 3;
+ enum tls_model tls_model : 3;
 
 
  unsigned init_priority_p : 1;
@@ -17645,8 +20274,8 @@ struct tree_function_decl {
 
 
 
-  __extension__ enum built_in_function function_code : 11;
-  __extension__ enum built_in_class built_in_class : 2;
+  enum built_in_function function_code : 11;
+  enum built_in_class built_in_class : 2;
 
   unsigned static_ctor_flag : 1;
   unsigned static_dtor_flag : 1;
@@ -17978,7 +20607,7 @@ enum ptrmemfunc_vbit_where_t
 };
 # 4141 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern tree decl_assembler_name (tree);
-extern unsigned char decl_assembler_name_equal (tree decl, const_tree asmname);
+extern bool decl_assembler_name_equal (tree decl, const_tree asmname);
 extern hashval_t decl_assembler_name_hash (const_tree asmname);
 
 
@@ -18062,7 +20691,7 @@ extern tree build6_stat (enum tree_code, tree, tree, tree, tree, tree,
 
 
 
-static __inline__ tree
+static inline tree
 build1_stat_loc (location_t loc, enum tree_code code, tree type,
    tree arg1 )
 {
@@ -18073,7 +20702,7 @@ build1_stat_loc (location_t loc, enum tree_code code, tree type,
 }
 
 
-static __inline__ tree
+static inline tree
 build2_stat_loc (location_t loc, enum tree_code code, tree type, tree arg0,
    tree arg1 )
 {
@@ -18084,7 +20713,7 @@ build2_stat_loc (location_t loc, enum tree_code code, tree type, tree arg0,
 }
 
 
-static __inline__ tree
+static inline tree
 build3_stat_loc (location_t loc, enum tree_code code, tree type, tree arg0,
    tree arg1, tree arg2 )
 {
@@ -18096,7 +20725,7 @@ build3_stat_loc (location_t loc, enum tree_code code, tree type, tree arg0,
 
 
 
-static __inline__ tree
+static inline tree
 build4_stat_loc (location_t loc, enum tree_code code, tree type, tree arg0,
    tree arg1, tree arg2, tree arg3 )
 {
@@ -18108,7 +20737,7 @@ build4_stat_loc (location_t loc, enum tree_code code, tree type, tree arg0,
 
 
 
-static __inline__ tree
+static inline tree
 build5_stat_loc (location_t loc, enum tree_code code, tree type, tree arg0,
    tree arg1, tree arg2, tree arg3, tree arg4 )
 {
@@ -18121,7 +20750,7 @@ build5_stat_loc (location_t loc, enum tree_code code, tree type, tree arg0,
 
 
 
-static __inline__ tree
+static inline tree
 build6_stat_loc (location_t loc, enum tree_code code, tree type, tree arg0,
    tree arg1, tree arg2, tree arg3, tree arg4,
    tree arg5 )
@@ -18141,19 +20770,19 @@ extern tree build_var_debug_value_stat (tree, tree );
 
 
 
-static __inline__ double_int
+static inline double_int
 tree_to_double_int (const_tree cst)
 {
   return ((cst)->int_cst.int_cst);
 }
 
 extern tree double_int_to_tree (tree, double_int);
-extern unsigned char double_int_fits_to_tree_p (const_tree, double_int);
-extern tree force_fit_type_double (tree, double_int, int, unsigned char);
+extern bool double_int_fits_to_tree_p (const_tree, double_int);
+extern tree force_fit_type_double (tree, double_int, int, bool);
 
 
 
-static __inline__ tree
+static inline tree
 build_int_cstu (tree type, unsigned long cst)
 {
   return double_int_to_tree (type, uhwi_to_double_int (cst));
@@ -18205,9 +20834,9 @@ extern tree signed_type_for (tree);
 extern tree unsigned_type_for (tree);
 extern void initialize_sizetypes (void);
 extern void fixup_unsigned_type (tree);
-extern tree build_pointer_type_for_mode (tree, enum machine_mode, unsigned char);
+extern tree build_pointer_type_for_mode (tree, enum machine_mode, bool);
 extern tree build_pointer_type (tree);
-extern tree build_reference_type_for_mode (tree, enum machine_mode, unsigned char);
+extern tree build_reference_type_for_mode (tree, enum machine_mode, bool);
 extern tree build_reference_type (tree);
 extern tree build_vector_type_for_mode (tree, enum machine_mode);
 extern tree build_vector_type (tree innertype, int nunits);
@@ -18219,7 +20848,7 @@ extern tree build_nonshared_array_type (tree, tree);
 extern tree build_array_type_nelts (tree, unsigned long);
 extern tree build_function_type (tree, tree);
 extern tree build_function_type_list (tree, ...);
-extern tree build_function_decl_skip_args (tree, bitmap, unsigned char);
+extern tree build_function_decl_skip_args (tree, bitmap, bool);
 extern tree build_varargs_function_type_list (tree, ...);
 extern tree build_function_type_array (tree, int, tree *);
 extern tree build_varargs_function_type_array (tree, int, tree *);
@@ -18233,12 +20862,12 @@ extern tree build_method_type (tree, tree);
 extern tree build_offset_type (tree, tree);
 extern tree build_complex_type (tree);
 extern tree array_type_nelts (const_tree);
-extern unsigned char in_array_bounds_p (tree);
-extern unsigned char range_in_array_bounds_p (tree);
+extern bool in_array_bounds_p (tree);
+extern bool range_in_array_bounds_p (tree);
 
 extern tree value_member (tree, tree);
 extern tree purpose_member (const_tree, tree);
-extern unsigned char vec_member (const_tree, VEC_tree_gc *);
+extern bool vec_member (const_tree, VEC_tree_gc *);
 extern tree chain_index (int, tree);
 
 extern int attribute_list_equal (const_tree, const_tree);
@@ -18253,7 +20882,7 @@ extern int host_integerp (const_tree, int)
   ;
 extern long tree_low_cst (const_tree, int);
 
-extern __inline__ __attribute__ ((__gnu_inline__)) long
+extern inline __attribute__ ((__gnu_inline__)) long
 tree_low_cst (const_tree t, int pos)
 {
   ((void)(!(host_integerp (t, pos)) ? fancy_abort ("/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h", 4431, __FUNCTION__), 0 : 0));
@@ -18263,10 +20892,10 @@ tree_low_cst (const_tree t, int pos)
 extern long size_low_cst (const_tree);
 extern int tree_int_cst_sgn (const_tree);
 extern int tree_int_cst_sign_bit (const_tree);
-extern unsigned int tree_int_cst_min_precision (tree, unsigned char);
-extern unsigned char tree_expr_nonnegative_p (tree);
-extern unsigned char tree_expr_nonnegative_warnv_p (tree, unsigned char *);
-extern unsigned char may_negate_without_overflow_p (const_tree);
+extern unsigned int tree_int_cst_min_precision (tree, bool);
+extern bool tree_expr_nonnegative_p (tree);
+extern bool tree_expr_nonnegative_warnv_p (tree, bool *);
+extern bool may_negate_without_overflow_p (const_tree);
 extern tree strip_array_types (tree);
 extern tree excess_precision_type (tree);
 
@@ -18310,20 +20939,20 @@ struct attribute_spec
 
 
 
-  const unsigned char decl_required;
+  const bool decl_required;
 
 
-  const unsigned char type_required;
+  const bool type_required;
 
 
 
 
-  const unsigned char function_type_required;
+  const bool function_type_required;
 # 4538 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
   tree (*const handler) (tree *node, tree name, tree args,
-     int flags, unsigned char *no_add_attrs);
+     int flags, bool *no_add_attrs);
 
-  const unsigned char affects_type_identity;
+  const bool affects_type_identity;
 };
 
 
@@ -18360,13 +20989,13 @@ extern tree merge_type_attributes (tree, tree);
 
 extern tree private_lookup_attribute (const char *, size_t, tree);
 # 4586 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
-static __inline__ tree
+static inline tree
 lookup_attribute (const char *attr_name, tree list)
 {
   ((void)(0 && (attr_name[0] != '_')));
 
-  if (list == (tree) ((void *)0))
-    return (tree) ((void *)0);
+  if (list == (tree) __null)
+    return (tree) __null;
   else
 
 
@@ -18376,14 +21005,14 @@ lookup_attribute (const char *attr_name, tree list)
 
 
 
-extern unsigned char private_is_attribute_p (const char *, size_t, const_tree);
+extern bool private_is_attribute_p (const char *, size_t, const_tree);
 
 
 
 
 
 
-static __inline__ unsigned char
+static inline bool
 is_attribute_p (const char *attr_name, const_tree ident)
 {
   ((void)(0 && (attr_name[0] != '_')));
@@ -18403,7 +21032,7 @@ extern tree remove_attribute (const char *, tree);
 
 extern tree merge_attributes (tree, tree);
 # 4641 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
-extern unsigned char check_qualified_type (const_tree, const_tree, int);
+extern bool check_qualified_type (const_tree, const_tree, int);
 
 
 
@@ -18588,16 +21217,16 @@ extern tree first_field (const_tree);
 
 
 
-extern unsigned char initializer_zerop (const_tree);
+extern bool initializer_zerop (const_tree);
 
 
 
 extern VEC_tree_gc *ctor_to_vec (tree);
 
-extern unsigned char categorize_ctor_elements (const_tree, long *,
-          long *, unsigned char *);
+extern bool categorize_ctor_elements (const_tree, long *,
+          long *, bool *);
 
-extern unsigned char complete_ctor_at_level_p (const_tree, long, const_tree);
+extern bool complete_ctor_at_level_p (const_tree, long, const_tree);
 
 
 
@@ -18622,7 +21251,7 @@ extern int integer_pow2p (const_tree);
 
 extern int integer_nonzerop (const_tree);
 
-extern unsigned char cst_and_fits_in_hwi (const_tree);
+extern bool cst_and_fits_in_hwi (const_tree);
 extern tree num_ending_zeros (const_tree);
 
 
@@ -18653,9 +21282,9 @@ enum tree_node_structure_enum tree_node_structure (const_tree);
 
 
 
-extern unsigned char contains_placeholder_p (const_tree);
+extern bool contains_placeholder_p (const_tree);
 # 4938 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
-extern unsigned char type_contains_placeholder_p (tree);
+extern bool type_contains_placeholder_p (tree);
 # 4947 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern void find_placeholder_in_expr (tree, VEC_tree_heap **);
 # 4965 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
@@ -18693,7 +21322,7 @@ extern tree get_narrower (tree, int *);
 
 
 
-static __inline__ unsigned char
+static inline bool
 handled_component_p (const_tree t)
 {
   switch (((enum tree_code) (t)->base.code))
@@ -18705,10 +21334,10 @@ handled_component_p (const_tree t)
     case VIEW_CONVERT_EXPR:
     case REALPART_EXPR:
     case IMAGPART_EXPR:
-      return 1;
+      return true;
 
     default:
-      return 0;
+      return false;
     }
 }
 
@@ -18718,13 +21347,13 @@ handled_component_p (const_tree t)
 
 extern tree get_inner_reference (tree, long *, long *,
      tree *, enum machine_mode *, int *, int *,
-     unsigned char);
+     bool);
 
 
 
 
 
-extern unsigned char contains_packed_reference (const_tree exp);
+extern bool contains_packed_reference (const_tree exp);
 
 
 
@@ -18783,7 +21412,7 @@ typedef struct {
 
 
 
-static __inline__ void
+static inline void
 function_args_iter_init (function_args_iterator *i, const_tree fntype)
 {
   i->next = ((fntype)->type_non_common.values);
@@ -18792,32 +21421,32 @@ function_args_iter_init (function_args_iterator *i, const_tree fntype)
 
 
 
-static __inline__ tree *
+static inline tree *
 function_args_iter_cond_ptr (function_args_iterator *i)
 {
-  return (i->next) ? &((i->next)->list.value) : ((void *)0);
+  return (i->next) ? &((i->next)->list.value) : __null;
 }
 
 
 
 
-static __inline__ tree
+static inline tree
 function_args_iter_cond (function_args_iterator *i)
 {
-  return (i->next) ? ((i->next)->list.value) : (tree) ((void *)0);
+  return (i->next) ? ((i->next)->list.value) : (tree) __null;
 }
 
 
-static __inline__ void
+static inline void
 function_args_iter_next (function_args_iterator *i)
 {
-  ((void)(!(i->next != (tree) ((void *)0)) ? fancy_abort ("/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h", 5139, __FUNCTION__), 0 : 0));
+  ((void)(!(i->next != (tree) __null) ? fancy_abort ("/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h", 5139, __FUNCTION__), 0 : 0));
   i->next = ((i->next)->common.chain);
 }
 
 
 
-static __inline__ unsigned char
+static inline bool
 inlined_function_outer_scope_p (const_tree block)
 {
  return ((block)->block.locus) != ((source_location) 0);
@@ -18829,19 +21458,19 @@ extern void clean_symbol_name (char *);
 extern tree get_file_function_name (const char *);
 extern tree get_callee_fndecl (const_tree);
 extern int type_num_arguments (const_tree);
-extern unsigned char associative_tree_code (enum tree_code);
-extern unsigned char commutative_tree_code (enum tree_code);
-extern unsigned char commutative_ternary_tree_code (enum tree_code);
+extern bool associative_tree_code (enum tree_code);
+extern bool commutative_tree_code (enum tree_code);
+extern bool commutative_ternary_tree_code (enum tree_code);
 extern tree upper_bound_in_type (tree, tree);
 extern tree lower_bound_in_type (tree, tree);
 extern int operand_equal_for_phi_arg_p (const_tree, const_tree);
 extern tree create_artificial_label (location_t);
 extern const char *get_name (tree);
-extern unsigned char stdarg_p (const_tree);
-extern unsigned char prototype_p (tree);
-extern unsigned char is_typedef_decl (tree x);
-extern unsigned char typedef_variant_p (tree);
-extern unsigned char auto_var_in_fn_p (const_tree, const_tree);
+extern bool stdarg_p (const_tree);
+extern bool prototype_p (tree);
+extern bool is_typedef_decl (tree x);
+extern bool typedef_variant_p (tree);
+extern bool auto_var_in_fn_p (const_tree, const_tree);
 extern tree build_low_bits_mask (tree, unsigned);
 extern tree tree_strip_nop_conversions (tree);
 extern tree tree_strip_sign_nop_conversions (tree);
@@ -18875,7 +21504,7 @@ extern void using_eh_for_cleanups (void);
 
 
 
-static __inline__ int
+static inline int
 struct_ptr_eq (const void *a, const void *b)
 {
   const void * const * x = (const void * const *) a;
@@ -18883,7 +21512,7 @@ struct_ptr_eq (const void *a, const void *b)
   return *x == *y;
 }
 
-static __inline__ hashval_t
+static inline hashval_t
 struct_ptr_hash (const void *a)
 {
   const void * const * x = (const void * const *) a;
@@ -18946,7 +21575,7 @@ extern tree fold_build_call_array_loc (location_t, tree, tree, int, tree *);
 
 
 extern tree fold_build_call_array_initializer_loc (location_t, tree, tree, int, tree *);
-extern unsigned char fold_convertible_p (const_tree, const_tree);
+extern bool fold_convertible_p (const_tree, const_tree);
 
 
 extern tree fold_convert_loc (location_t, tree, tree);
@@ -18955,9 +21584,9 @@ extern tree fold_ignored_result (tree);
 extern tree fold_abs_const (tree, tree);
 extern tree fold_indirect_ref_1 (location_t, tree, tree);
 extern void fold_defer_overflow_warnings (void);
-extern void fold_undefer_overflow_warnings (unsigned char, const_gimple, int);
+extern void fold_undefer_overflow_warnings (bool, const_gimple, int);
 extern void fold_undefer_and_ignore_overflow_warnings (void);
-extern unsigned char fold_deferring_overflow_warnings_p (void);
+extern bool fold_deferring_overflow_warnings_p (void);
 extern tree fold_fma (location_t, tree, tree, tree, tree);
 
 enum operand_equal_flag
@@ -19003,36 +21632,36 @@ extern tree build_simple_mem_ref_loc (location_t, tree);
 extern double_int mem_ref_offset (const_tree);
 extern tree reference_alias_ptr_type (const_tree);
 extern tree build_invariant_address (tree, tree, long);
-extern tree constant_boolean_node (unsigned char, tree);
+extern tree constant_boolean_node (bool, tree);
 extern tree div_if_zero_remainder (enum tree_code, const_tree, const_tree);
 
-extern unsigned char tree_swap_operands_p (const_tree, const_tree, unsigned char);
+extern bool tree_swap_operands_p (const_tree, const_tree, bool);
 extern enum tree_code swap_tree_comparison (enum tree_code);
 
-extern unsigned char ptr_difference_const (tree, tree, long *);
-extern enum tree_code invert_tree_comparison (enum tree_code, unsigned char);
+extern bool ptr_difference_const (tree, tree, long *);
+extern enum tree_code invert_tree_comparison (enum tree_code, bool);
 
-extern unsigned char tree_expr_nonzero_p (tree);
-extern unsigned char tree_unary_nonzero_warnv_p (enum tree_code, tree, tree, unsigned char *);
-extern unsigned char tree_binary_nonzero_warnv_p (enum tree_code, tree, tree, tree op1,
-                                         unsigned char *);
-extern unsigned char tree_single_nonzero_warnv_p (tree, unsigned char *);
-extern unsigned char tree_unary_nonnegative_warnv_p (enum tree_code, tree, tree, unsigned char *);
-extern unsigned char tree_binary_nonnegative_warnv_p (enum tree_code, tree, tree, tree,
-                                             unsigned char *);
-extern unsigned char tree_single_nonnegative_warnv_p (tree t, unsigned char *strict_overflow_p);
-extern unsigned char tree_invalid_nonnegative_warnv_p (tree t, unsigned char *strict_overflow_p);
-extern unsigned char tree_call_nonnegative_warnv_p (tree, tree, tree, tree, unsigned char *);
+extern bool tree_expr_nonzero_p (tree);
+extern bool tree_unary_nonzero_warnv_p (enum tree_code, tree, tree, bool *);
+extern bool tree_binary_nonzero_warnv_p (enum tree_code, tree, tree, tree op1,
+                                         bool *);
+extern bool tree_single_nonzero_warnv_p (tree, bool *);
+extern bool tree_unary_nonnegative_warnv_p (enum tree_code, tree, tree, bool *);
+extern bool tree_binary_nonnegative_warnv_p (enum tree_code, tree, tree, tree,
+                                             bool *);
+extern bool tree_single_nonnegative_warnv_p (tree t, bool *strict_overflow_p);
+extern bool tree_invalid_nonnegative_warnv_p (tree t, bool *strict_overflow_p);
+extern bool tree_call_nonnegative_warnv_p (tree, tree, tree, tree, bool *);
 
-extern unsigned char tree_expr_nonzero_warnv_p (tree, unsigned char *);
+extern bool tree_expr_nonzero_warnv_p (tree, bool *);
 
-extern unsigned char fold_real_zero_addition_p (const_tree, const_tree, int);
+extern bool fold_real_zero_addition_p (const_tree, const_tree, int);
 extern tree combine_comparisons (location_t, enum tree_code, enum tree_code,
      enum tree_code, tree, tree, tree);
 extern void debug_fold_checksum (const_tree);
 
 
-static __inline__ unsigned char
+static inline bool
 truth_value_p (enum tree_code code)
 {
   return (tree_code_type[(int) (code)] == tcc_comparison
@@ -19043,7 +21672,7 @@ truth_value_p (enum tree_code code)
 
 
 
-static __inline__ unsigned char
+static inline bool
 ptrofftype_p (tree type)
 {
   return ((((enum tree_code) (type)->base.code) == ENUMERAL_TYPE || ((enum tree_code) (type)->base.code) == BOOLEAN_TYPE || ((enum tree_code) (type)->base.code) == INTEGER_TYPE)
@@ -19053,7 +21682,7 @@ ptrofftype_p (tree type)
 
 
 
-static __inline__ tree
+static inline tree
 convert_to_ptrofftype_loc (location_t loc, tree off)
 {
   return fold_convert_loc (loc, sizetype_tab[(int) SIZETYPE], off);
@@ -19061,7 +21690,7 @@ convert_to_ptrofftype_loc (location_t loc, tree off)
 
 
 
-static __inline__ tree
+static inline tree
 fold_build_pointer_plus_loc (location_t loc, tree ptr, tree off)
 {
   return fold_build2_stat_loc (loc, POINTER_PLUS_EXPR, ((ptr)->typed.type), ptr, fold_convert_loc (loc, sizetype_tab[(int) SIZETYPE], off) )
@@ -19071,7 +21700,7 @@ fold_build_pointer_plus_loc (location_t loc, tree ptr, tree off)
 
 
 
-static __inline__ tree
+static inline tree
 fold_build_pointer_plus_hwi_loc (location_t loc, tree ptr, long off)
 {
   return fold_build2_stat_loc (loc, POINTER_PLUS_EXPR, ((ptr)->typed.type), ptr, size_int_kind (off, SIZETYPE) )
@@ -19081,19 +21710,19 @@ fold_build_pointer_plus_hwi_loc (location_t loc, tree ptr, long off)
 
 
 
-extern unsigned char avoid_folding_inline_builtin (tree);
-extern tree fold_call_expr (location_t, tree, unsigned char);
-extern tree fold_builtin_fputs (location_t, tree, tree, unsigned char, unsigned char, tree);
+extern bool avoid_folding_inline_builtin (tree);
+extern tree fold_call_expr (location_t, tree, bool);
+extern tree fold_builtin_fputs (location_t, tree, tree, bool, bool, tree);
 extern tree fold_builtin_strcpy (location_t, tree, tree, tree, tree);
 extern tree fold_builtin_strncpy (location_t, tree, tree, tree, tree, tree);
-extern tree fold_builtin_memory_chk (location_t, tree, tree, tree, tree, tree, tree, unsigned char,
+extern tree fold_builtin_memory_chk (location_t, tree, tree, tree, tree, tree, tree, bool,
          enum built_in_function);
-extern tree fold_builtin_stxcpy_chk (location_t, tree, tree, tree, tree, tree, unsigned char,
+extern tree fold_builtin_stxcpy_chk (location_t, tree, tree, tree, tree, tree, bool,
          enum built_in_function);
-extern tree fold_builtin_stxncpy_chk (location_t, tree, tree, tree, tree, tree, unsigned char,
+extern tree fold_builtin_stxncpy_chk (location_t, tree, tree, tree, tree, tree, bool,
           enum built_in_function);
 extern tree fold_builtin_snprintf_chk (location_t, tree, tree, enum built_in_function);
-extern unsigned char fold_builtin_next_arg (tree, unsigned char);
+extern bool fold_builtin_next_arg (tree, bool);
 extern enum built_in_function builtin_mathfn_code (const_tree);
 extern tree fold_builtin_call_array (location_t, tree, tree, int, tree *);
 extern tree build_call_expr_loc_array (location_t, tree, int, tree *);
@@ -19105,38 +21734,38 @@ extern tree c_strlen (tree, int);
 extern tree std_gimplify_va_arg_expr (tree, tree, gimple_seq *, gimple_seq *);
 extern tree build_va_arg_indirect_ref (tree);
 extern tree build_string_literal (int, const char *);
-extern unsigned char validate_arglist (const_tree, ...);
+extern bool validate_arglist (const_tree, ...);
 extern rtx builtin_memset_read_str (void *, long, enum machine_mode);
-extern unsigned char is_builtin_fn (tree);
+extern bool is_builtin_fn (tree);
 extern unsigned int get_object_alignment_1 (tree, unsigned long *);
 extern unsigned int get_object_alignment (tree);
 extern unsigned int get_object_or_type_alignment (tree);
 extern unsigned int get_pointer_alignment_1 (tree, unsigned long *);
 extern unsigned int get_pointer_alignment (tree);
-extern tree fold_call_stmt (gimple, unsigned char);
+extern tree fold_call_stmt (gimple, bool);
 extern tree gimple_fold_builtin_snprintf_chk (gimple, tree, enum built_in_function);
-extern tree make_range (tree, int *, tree *, tree *, unsigned char *);
+extern tree make_range (tree, int *, tree *, tree *, bool *);
 extern tree make_range_step (location_t, enum tree_code, tree, tree, tree,
-        tree *, tree *, int *, unsigned char *);
+        tree *, tree *, int *, bool *);
 extern tree build_range_check (location_t, tree, tree, int, tree, tree);
-extern unsigned char merge_ranges (int *, tree *, tree *, int, tree, tree, int,
+extern bool merge_ranges (int *, tree *, tree *, int, tree, tree, int,
      tree, tree);
 extern void set_builtin_user_assembler_name (tree decl, const char *asmspec);
-extern unsigned char is_simple_builtin (tree);
-extern unsigned char is_inexpensive_builtin (tree);
+extern bool is_simple_builtin (tree);
+extern bool is_inexpensive_builtin (tree);
 
 
 extern tree strip_float_extensions (tree);
 
 
 extern int really_constant_p (const_tree);
-extern unsigned char decl_address_invariant_p (const_tree);
-extern unsigned char decl_address_ip_invariant_p (const_tree);
-extern unsigned char int_fits_type_p (const_tree, const_tree);
+extern bool decl_address_invariant_p (const_tree);
+extern bool decl_address_ip_invariant_p (const_tree);
+extern bool int_fits_type_p (const_tree, const_tree);
 
 extern void get_type_static_bounds (const_tree, mpz_t, mpz_t);
 
-extern unsigned char variably_modified_type_p (tree, tree);
+extern bool variably_modified_type_p (tree, tree);
 extern int tree_log2 (const_tree);
 extern int tree_floor_log2 (const_tree);
 extern int simple_cst_equal (const_tree, const_tree);
@@ -19154,19 +21783,19 @@ extern void type_hash_add (unsigned int, tree);
 extern int simple_cst_list_equal (const_tree, const_tree);
 extern void dump_tree_statistics (void);
 extern void recompute_tree_invariant_for_addr_expr (tree);
-extern unsigned char needs_to_live_in_memory (const_tree);
+extern bool needs_to_live_in_memory (const_tree);
 extern tree reconstruct_complex_type (tree, tree);
 
 extern int real_onep (const_tree);
 extern int real_twop (const_tree);
 extern int real_minus_onep (const_tree);
 extern void init_ttree (void);
-extern void build_common_tree_nodes (unsigned char, unsigned char);
+extern void build_common_tree_nodes (bool, bool);
 extern void build_common_builtin_nodes (void);
 extern tree build_nonstandard_integer_type (unsigned long, int);
 extern tree build_range_type (tree, tree, tree);
 extern tree build_nonshared_range_type (tree, tree, tree);
-extern unsigned char subrange_type_for_debug_p (const_tree, tree *, tree *);
+extern bool subrange_type_for_debug_p (const_tree, tree *, tree *);
 extern long int_cst_value (const_tree);
 extern long widest_int_cst_value (const_tree);
 
@@ -19190,10 +21819,10 @@ extern void stack_protect_epilogue (void);
 extern void init_dummy_function_start (void);
 extern void expand_dummy_function_end (void);
 extern unsigned int init_function_for_compilation (void);
-extern void allocate_struct_function (tree, unsigned char);
+extern void allocate_struct_function (tree, bool);
 extern void push_struct_function (tree fndecl);
 extern void init_function_start (tree);
-extern unsigned char use_register_for_decl (const_tree);
+extern bool use_register_for_decl (const_tree);
 extern void generate_setjmp_warnings (void);
 extern void init_temp_slots (void);
 extern void free_temp_slots (void);
@@ -19222,7 +21851,7 @@ extern void indent_to (FILE *, int);
 
 
 
-extern unsigned char debug_find_tree (tree, tree);
+extern bool debug_find_tree (tree, tree);
 
 
 extern tree unsave_expr_now (tree);
@@ -19232,10 +21861,10 @@ extern int flags_from_decl_or_type (const_tree);
 extern int call_expr_flags (const_tree);
 # 5639 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern int setjmp_call_p (const_tree);
-extern unsigned char gimple_alloca_call_p (const_gimple);
-extern unsigned char alloca_call_p (const_tree);
-extern unsigned char must_pass_in_stack_var_size (enum machine_mode, const_tree);
-extern unsigned char must_pass_in_stack_var_size_or_pad (enum machine_mode, const_tree);
+extern bool gimple_alloca_call_p (const_gimple);
+extern bool alloca_call_p (const_tree);
+extern bool must_pass_in_stack_var_size (enum machine_mode, const_tree);
+extern bool must_pass_in_stack_var_size_or_pad (enum machine_mode, const_tree);
 
 
 
@@ -19252,7 +21881,7 @@ extern void set_decl_abstract_flags (tree, int);
 extern void set_decl_origin_self (tree);
 
 
-extern void set_min_and_max_values_for_integral_type (tree, int, unsigned char);
+extern void set_min_and_max_values_for_integral_type (tree, int, bool);
 extern void fixup_signed_type (tree);
 extern void internal_reference_types (void);
 extern unsigned int update_alignment_for_field (record_layout_info, tree,
@@ -19272,8 +21901,8 @@ extern void process_pending_assemble_externals (void);
 extern void finish_aliases_1 (void);
 extern void finish_aliases_2 (void);
 extern void remove_unreachable_alias_pairs (void);
-extern unsigned char decl_replaceable_p (tree);
-extern unsigned char decl_binds_to_current_def_p (tree);
+extern bool decl_replaceable_p (tree);
+extern bool decl_binds_to_current_def_p (tree);
 
 
 
@@ -19283,19 +21912,19 @@ typedef struct pointer_set_t symbol_alias_set_t;
 
 extern void symbol_alias_set_destroy (symbol_alias_set_t *);
 extern int symbol_alias_set_contains (const symbol_alias_set_t *, tree);
-extern symbol_alias_set_t * propagate_aliases_backward (unsigned char (*)
+extern symbol_alias_set_t * propagate_aliases_backward (bool (*)
         (tree, tree, void *),
        void *);
 
 
 extern void expand_computed_goto (tree);
-extern unsigned char parse_output_constraint (const char **, int, int, int,
-         unsigned char *, unsigned char *, unsigned char *);
-extern unsigned char parse_input_constraint (const char **, int, int, int, int,
-        const char * const *, unsigned char *, unsigned char *);
+extern bool parse_output_constraint (const char **, int, int, int,
+         bool *, bool *, bool *);
+extern bool parse_input_constraint (const char **, int, int, int, int,
+        const char * const *, bool *, bool *);
 extern void expand_asm_stmt (gimple);
 extern tree resolve_asm_operand_names (tree, tree, tree, tree);
-extern unsigned char expand_switch_using_bit_tests_p (tree, tree, unsigned int,
+extern bool expand_switch_using_bit_tests_p (tree, tree, unsigned int,
           unsigned int);
 extern void expand_case (gimple);
 extern void expand_decl (tree);
@@ -19317,7 +21946,7 @@ extern tree walk_tree_without_duplicates_1 (tree*, walk_tree_fn, void*,
          walk_tree_lh);
 # 5748 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 extern void set_decl_rtl (tree, rtx);
-extern void set_decl_incoming_rtl (tree, rtx, unsigned char);
+extern void set_decl_incoming_rtl (tree, rtx, bool);
 
 
 
@@ -19348,7 +21977,7 @@ extern int tree_node_sizes[];
 
 
 
-extern unsigned char in_gimple_form;
+extern bool in_gimple_form;
 
 
 extern tree get_base_address (tree t);
@@ -19363,7 +21992,7 @@ struct tree_map_base {
 extern int tree_map_base_eq (const void *, const void *);
 extern unsigned int tree_map_base_hash (const void *);
 extern int tree_map_base_marked_p (const void *);
-extern unsigned char list_equal_p (const_tree, const_tree);
+extern bool list_equal_p (const_tree, const_tree);
 
 
 
@@ -19432,7 +22061,7 @@ extern void copy_mem_ref_info (tree, tree);
 extern void copy_ref_info (tree, tree);
 
 
-extern unsigned char ssa_name_nonnegative_p (const_tree);
+extern bool ssa_name_nonnegative_p (const_tree);
 
 
 extern void init_object_sizes (void);
@@ -19444,15 +22073,15 @@ extern unsigned long highest_pow2_factor (const_tree);
 extern tree build_personality_function (const char *);
 
 
-extern tree build_tm_abort_call (location_t, unsigned char);
-extern unsigned char is_tm_safe (const_tree);
-extern unsigned char is_tm_pure (const_tree);
-extern unsigned char is_tm_may_cancel_outer (tree);
-extern unsigned char is_tm_ending_fndecl (tree);
+extern tree build_tm_abort_call (location_t, bool);
+extern bool is_tm_safe (const_tree);
+extern bool is_tm_pure (const_tree);
+extern bool is_tm_may_cancel_outer (tree);
+extern bool is_tm_ending_fndecl (tree);
 extern void record_tm_replacement (tree, tree);
 extern void tm_malloc_replacement (tree);
 
-static __inline__ unsigned char
+static inline bool
 is_tm_safe_or_pure (const_tree x)
 {
   return is_tm_safe (x) || is_tm_pure (x);
@@ -19465,7 +22094,7 @@ void init_inline_once (void);
 
 
 
-static __inline__ int
+static inline int
 tree_operand_length (const_tree node)
 {
   if ((tree_code_type[(int) (((enum tree_code) (node)->base.code))] == tcc_vl_exp))
@@ -19493,7 +22122,7 @@ typedef struct const_call_expr_arg_iterator_d {
 
 
 
-static __inline__ void
+static inline void
 init_call_expr_arg_iterator (tree exp, call_expr_arg_iterator *iter)
 {
   iter->t = exp;
@@ -19501,7 +22130,7 @@ init_call_expr_arg_iterator (tree exp, call_expr_arg_iterator *iter)
   iter->i = 0;
 }
 
-static __inline__ void
+static inline void
 init_const_call_expr_arg_iterator (const_tree exp, const_call_expr_arg_iterator *iter)
 {
   iter->t = exp;
@@ -19511,23 +22140,23 @@ init_const_call_expr_arg_iterator (const_tree exp, const_call_expr_arg_iterator 
 
 
 
-static __inline__ tree
+static inline tree
 next_call_expr_arg (call_expr_arg_iterator *iter)
 {
   tree result;
   if (iter->i >= iter->n)
-    return (tree) ((void *)0);
+    return (tree) __null;
   result = (((iter->t))->exp.operands[(iter->i) + 3]);
   iter->i++;
   return result;
 }
 
-static __inline__ const_tree
+static inline const_tree
 next_const_call_expr_arg (const_call_expr_arg_iterator *iter)
 {
   const_tree result;
   if (iter->i >= iter->n)
-    return (tree) ((void *)0);
+    return (tree) __null;
   result = (((iter->t))->exp.operands[(iter->i) + 3]);
   iter->i++;
   return result;
@@ -19537,14 +22166,14 @@ next_const_call_expr_arg (const_call_expr_arg_iterator *iter)
 
 
 
-static __inline__ tree
+static inline tree
 first_call_expr_arg (tree exp, call_expr_arg_iterator *iter)
 {
   init_call_expr_arg_iterator (exp, iter);
   return next_call_expr_arg (iter);
 }
 
-static __inline__ const_tree
+static inline const_tree
 first_const_call_expr_arg (const_tree exp, const_call_expr_arg_iterator *iter)
 {
   init_const_call_expr_arg_iterator (exp, iter);
@@ -19553,30 +22182,30 @@ first_const_call_expr_arg (const_tree exp, const_call_expr_arg_iterator *iter)
 
 
 
-static __inline__ unsigned char
+static inline bool
 more_call_expr_args_p (const call_expr_arg_iterator *iter)
 {
   return (iter->i < iter->n);
 }
 
-static __inline__ unsigned char
+static inline bool
 more_const_call_expr_args_p (const const_call_expr_arg_iterator *iter)
 {
   return (iter->i < iter->n);
 }
 # 6008 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
-static __inline__ unsigned char
+static inline bool
 is_lang_specific (tree t)
 {
   return ((enum tree_code) (t)->base.code) == LANG_TYPE || ((enum tree_code) (t)->base.code) >= ((int) LAST_AND_UNUSED_TREE_CODE);
 }
 
 
-extern unsigned char block_may_fallthru (const_tree);
+extern bool block_may_fallthru (const_tree);
 # 6024 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tree.h"
 typedef struct builtin_info_type_d {
   tree decl[(int)END_BUILTINS];
-  unsigned char implicit_p[(int)END_BUILTINS];
+  bool implicit_p[(int)END_BUILTINS];
 } builtin_info_type;
 
 extern builtin_info_type builtin_info;
@@ -19586,7 +22215,7 @@ extern builtin_info_type builtin_info;
 
 
 
-static __inline__ tree
+static inline tree
 builtin_decl_explicit (enum built_in_function fncode)
 {
   ((void)(0 && ((((unsigned long) ((int)fncode) - (unsigned long) (((int)BUILT_IN_NONE) + 1) <= (unsigned long) (((int) END_BUILTINS) - 1) - (unsigned long) (((int)BUILT_IN_NONE) + 1))))));
@@ -19595,14 +22224,14 @@ builtin_decl_explicit (enum built_in_function fncode)
 }
 
 
-static __inline__ tree
+static inline tree
 builtin_decl_implicit (enum built_in_function fncode)
 {
   size_t uns_fncode = (size_t)fncode;
   ((void)(0 && ((((unsigned long) ((int)fncode) - (unsigned long) (((int)BUILT_IN_NONE) + 1) <= (unsigned long) (((int) END_BUILTINS) - 1) - (unsigned long) (((int)BUILT_IN_NONE) + 1))))));
 
   if (!builtin_info.implicit_p[uns_fncode])
-    return (tree) ((void *)0);
+    return (tree) __null;
 
   return builtin_info.decl[uns_fncode];
 }
@@ -19610,12 +22239,12 @@ builtin_decl_implicit (enum built_in_function fncode)
 
 
 
-static __inline__ void
-set_builtin_decl (enum built_in_function fncode, tree decl, unsigned char implicit_p)
+static inline void
+set_builtin_decl (enum built_in_function fncode, tree decl, bool implicit_p)
 {
   size_t ufncode = (size_t)fncode;
 
-  ((void)(0 && ((((unsigned long) ((int)fncode) - (unsigned long) (((int)BUILT_IN_NONE) + 1) <= (unsigned long) (((int) END_BUILTINS) - 1) - (unsigned long) (((int)BUILT_IN_NONE) + 1))) && (decl != (tree) ((void *)0) || !implicit_p))))
+  ((void)(0 && ((((unsigned long) ((int)fncode) - (unsigned long) (((int)BUILT_IN_NONE) + 1) <= (unsigned long) (((int) END_BUILTINS) - 1) - (unsigned long) (((int)BUILT_IN_NONE) + 1))) && (decl != (tree) __null || !implicit_p))))
                                                ;
 
   builtin_info.decl[ufncode] = decl;
@@ -19624,12 +22253,12 @@ set_builtin_decl (enum built_in_function fncode, tree decl, unsigned char implic
 
 
 
-static __inline__ void
-set_builtin_decl_implicit_p (enum built_in_function fncode, unsigned char implicit_p)
+static inline void
+set_builtin_decl_implicit_p (enum built_in_function fncode, bool implicit_p)
 {
   size_t uns_fncode = (size_t)fncode;
 
-  ((void)(0 && ((((unsigned long) ((int)fncode) - (unsigned long) (((int)BUILT_IN_NONE) + 1) <= (unsigned long) (((int) END_BUILTINS) - 1) - (unsigned long) (((int)BUILT_IN_NONE) + 1))) && builtin_info.decl[uns_fncode] != (tree) ((void *)0))))
+  ((void)(0 && ((((unsigned long) ((int)fncode) - (unsigned long) (((int)BUILT_IN_NONE) + 1) <= (unsigned long) (((int) END_BUILTINS) - 1) - (unsigned long) (((int)BUILT_IN_NONE) + 1))) && builtin_info.decl[uns_fncode] != (tree) __null)))
                                                        ;
 
   builtin_info.implicit_p[uns_fncode] = implicit_p;
@@ -19638,22 +22267,22 @@ set_builtin_decl_implicit_p (enum built_in_function fncode, unsigned char implic
 
 
 
-static __inline__ unsigned char
+static inline bool
 builtin_decl_explicit_p (enum built_in_function fncode)
 {
   ((void)(0 && ((((unsigned long) ((int)fncode) - (unsigned long) (((int)BUILT_IN_NONE) + 1) <= (unsigned long) (((int) END_BUILTINS) - 1) - (unsigned long) (((int)BUILT_IN_NONE) + 1))))));
-  return (builtin_info.decl[(size_t)fncode] != (tree) ((void *)0));
+  return (builtin_info.decl[(size_t)fncode] != (tree) __null);
 }
 
 
 
-static __inline__ unsigned char
+static inline bool
 builtin_decl_implicit_p (enum built_in_function fncode)
 {
   size_t uns_fncode = (size_t)fncode;
 
   ((void)(0 && ((((unsigned long) ((int)fncode) - (unsigned long) (((int)BUILT_IN_NONE) + 1) <= (unsigned long) (((int) END_BUILTINS) - 1) - (unsigned long) (((int)BUILT_IN_NONE) + 1))))));
-  return (builtin_info.decl[uns_fncode] != (tree) ((void *)0)
+  return (builtin_info.decl[uns_fncode] != (tree) __null
    && builtin_info.implicit_p[uns_fncode]);
 }
 # 25 "../../../src/plugin-utils.h" 2
@@ -20252,7 +22881,7 @@ struct machine_function {
 
 
 
-  __extension__ enum calling_abi call_abi : 8;
+  enum calling_abi call_abi : 8;
 
 
   unsigned int accesses_prev_frame : 1;
@@ -20435,8 +23064,8 @@ extern rtx gen_popcountdi2 (rtx, rtx);
 extern rtx gen_bswaphi_lowpart (rtx);
 extern rtx gen_paritydi2_cmp (rtx, rtx, rtx, rtx);
 extern rtx gen_paritysi2_cmp (rtx, rtx, rtx);
-static __inline__ rtx gen_tls_initial_exec_64_sun (rtx, rtx);
-static __inline__ rtx
+static inline rtx gen_tls_initial_exec_64_sun (rtx, rtx);
+static inline rtx
 gen_tls_initial_exec_64_sun(rtx a __attribute__ ((__unused__)), rtx b __attribute__ ((__unused__)))
 {
   return 0;
@@ -22408,7 +25037,7 @@ enum classify_record
 
 struct lang_hooks_for_tree_inlining
 {
-  unsigned char (*var_mod_type_p) (tree, tree);
+  bool (*var_mod_type_p) (tree, tree);
 };
 
 struct lang_hooks_for_callgraph
@@ -22424,7 +25053,7 @@ struct lang_hooks_for_tree_dump
 {
 
 
-  unsigned char (*dump_tree) (void *, tree);
+  bool (*dump_tree) (void *, tree);
 
 
   int (*type_quals) (const_tree);
@@ -22453,7 +25082,7 @@ struct lang_hooks_for_types
 
 
 
-  unsigned char (*generic_p) (const_tree);
+  bool (*generic_p) (const_tree);
 
 
   tree (*get_argument_pack_elems) (const_tree);
@@ -22484,11 +25113,11 @@ struct lang_hooks_for_types
 
 
 
-  unsigned char (*type_hash_eq) (const_tree, const_tree);
+  bool (*type_hash_eq) (const_tree, const_tree);
 
 
 
-  unsigned char (*get_array_descr_info) (const_tree, struct array_descr_info *);
+  bool (*get_array_descr_info) (const_tree, struct array_descr_info *);
 
 
   void (*get_subrange_bounds) (const_tree, tree *, tree *);
@@ -22512,7 +25141,7 @@ struct lang_hooks_for_decls
 
 
 
-  unsigned char (*global_bindings_p) (void);
+  bool (*global_bindings_p) (void);
 
 
 
@@ -22524,33 +25153,33 @@ struct lang_hooks_for_decls
   tree (*getdecls) (void);
 
 
-  unsigned char (*function_decl_explicit_p) (tree);
+  bool (*function_decl_explicit_p) (tree);
 
 
 
-  unsigned char (*generic_generic_parameter_decl_p) (const_tree);
+  bool (*generic_generic_parameter_decl_p) (const_tree);
 
 
 
-  unsigned char (*function_parm_expanded_from_pack_p) (tree, tree);
+  bool (*function_parm_expanded_from_pack_p) (tree, tree);
 
 
   tree (*get_generic_function_decl) (const_tree);
 
 
 
-  unsigned char (*warn_unused_global) (const_tree);
+  bool (*warn_unused_global) (const_tree);
 
 
 
   void (*final_write_globals) (void);
 
 
-  unsigned char (*ok_for_sibcall) (const_tree);
+  bool (*ok_for_sibcall) (const_tree);
 
 
 
-  unsigned char (*omp_privatize_by_reference) (const_tree);
+  bool (*omp_privatize_by_reference) (const_tree);
 
 
 
@@ -22564,15 +25193,15 @@ struct lang_hooks_for_decls
 
 
 
-  unsigned char (*omp_disregard_value_expr) (tree, unsigned char);
+  bool (*omp_disregard_value_expr) (tree, bool);
 
 
 
-  unsigned char (*omp_private_debug_clause) (tree, unsigned char);
+  bool (*omp_private_debug_clause) (tree, bool);
 
 
 
-  unsigned char (*omp_private_outer_ref) (tree);
+  bool (*omp_private_outer_ref) (tree);
 
 
 
@@ -22650,18 +25279,18 @@ struct lang_hooks
 
 
 
-  unsigned char (*complain_wrong_lang_p) (const struct cl_option *option);
+  bool (*complain_wrong_lang_p) (const struct cl_option *option);
 # 304 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/langhooks.h"
-  unsigned char (*handle_option) (size_t code, const char *arg, int value, int kind,
+  bool (*handle_option) (size_t code, const char *arg, int value, int kind,
     location_t loc,
     const struct cl_option_handlers *handlers);
 # 316 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/langhooks.h"
-  unsigned char (*post_options) (const char **);
+  bool (*post_options) (const char **);
 
 
 
 
-  unsigned char (*init) (void);
+  bool (*init) (void);
 
 
   void (*finish) (void);
@@ -22670,7 +25299,7 @@ struct lang_hooks
   void (*parse_file) (void);
 
 
-  unsigned char (*missing_noreturn_ok_p) (tree);
+  bool (*missing_noreturn_ok_p) (tree);
 
 
 
@@ -22753,7 +25382,7 @@ struct lang_hooks
   tree (*get_innermost_generic_args) (const_tree);
 
 
-  unsigned char (*function_parameter_pack_p) (const_tree);
+  bool (*function_parameter_pack_p) (const_tree);
 
 
 
@@ -22776,7 +25405,7 @@ struct lang_hooks
 
 
 
-  tree (*expr_to_decl) (tree expr, unsigned char *tc, unsigned char *se);
+  tree (*expr_to_decl) (tree expr, bool *tc, bool *se);
 
 
   tree (*eh_personality) (void);
@@ -22794,11 +25423,11 @@ struct lang_hooks
 
 
 
-  unsigned char eh_use_cxa_end_cleanup;
+  bool eh_use_cxa_end_cleanup;
 
 
 
-  unsigned char deep_unsharing;
+  bool deep_unsharing;
 
 
 
@@ -25830,7 +28459,7 @@ extern void init_ggc (void);
 
 
 
-extern unsigned char ggc_protect_identifiers;
+extern bool ggc_protect_identifiers;
 
 
 extern void gt_pch_save (FILE *f);
@@ -25863,15 +28492,15 @@ extern void ggc_record_overhead (size_t, size_t, void * );
 extern void ggc_free_overhead (void *);
 extern void ggc_prune_overhead_list (void);
 
-extern void dump_ggc_loc_statistics (unsigned char);
+extern void dump_ggc_loc_statistics (bool);
 # 179 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ggc.h"
-static __inline__ void *
+static inline void *
 ggc_internal_vec_alloc_stat (size_t s, size_t c )
 {
     return ggc_internal_alloc_stat (c * s );
 }
 
-static __inline__ void *
+static inline void *
 ggc_internal_cleared_vec_alloc_stat (size_t s, size_t c )
 {
     return ggc_internal_cleared_alloc_stat (c * s );
@@ -25880,7 +28509,7 @@ ggc_internal_cleared_vec_alloc_stat (size_t s, size_t c )
 
 
 
-static __inline__ void *
+static inline void *
 ggc_alloc_atomic_stat (size_t s )
 {
     return ggc_internal_alloc_stat (s );
@@ -25939,21 +28568,21 @@ extern struct alloc_zone tree_zone;
 
 extern struct alloc_zone tree_id_zone;
 # 307 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ggc.h"
-static __inline__ void *
+static inline void *
 ggc_internal_zone_alloc_stat (struct alloc_zone * z __attribute__ ((__unused__)),
                               size_t s )
 {
     return ggc_internal_alloc_stat (s );
 }
 
-static __inline__ void *
+static inline void *
 ggc_internal_zone_cleared_alloc_stat (struct alloc_zone * z __attribute__ ((__unused__)),
                                       size_t s )
 {
     return ggc_internal_cleared_alloc_stat (s );
 }
 
-static __inline__ void *
+static inline void *
 ggc_internal_zone_vec_alloc_stat (struct alloc_zone * z __attribute__ ((__unused__)),
                                   size_t s, size_t n )
 {
@@ -25964,19 +28593,19 @@ ggc_internal_zone_vec_alloc_stat (struct alloc_zone * z __attribute__ ((__unused
 
 
 
-static __inline__ struct rtx_def *
+static inline struct rtx_def *
 ggc_alloc_zone_rtx_def_stat (struct alloc_zone * z, size_t s )
 {
   return (struct rtx_def *) ggc_internal_zone_alloc_stat (z, s );
 }
 
-static __inline__ union tree_node *
+static inline union tree_node *
 ggc_alloc_zone_tree_node_stat (struct alloc_zone * z, size_t s )
 {
   return (union tree_node *) ggc_internal_zone_alloc_stat (z, s );
 }
 
-static __inline__ union tree_node *
+static inline union tree_node *
 ggc_alloc_zone_cleared_tree_node_stat (struct alloc_zone * z, size_t s
                                        )
 {
@@ -25984,7 +28613,7 @@ ggc_alloc_zone_cleared_tree_node_stat (struct alloc_zone * z, size_t s
     ggc_internal_zone_cleared_alloc_stat (z, s );
 }
 
-static __inline__ union gimple_statement_d *
+static inline union gimple_statement_d *
 ggc_alloc_cleared_gimple_statement_d_stat (size_t s )
 {
   return (union gimple_statement_d *)
@@ -25998,19 +28627,19 @@ ggc_alloc_cleared_gimple_statement_d_stat (size_t s )
 
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/vecprim.h" 1
 # 23 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/vecprim.h"
-static __inline__ void VEC_char_must_be_integral_type (void) { (void)~(char)0; } typedef struct VEC_char_base { struct vec_prefix prefix; char vec[1]; } VEC_char_base; typedef struct VEC_char_none { VEC_char_base base; } VEC_char_none; static __inline__ unsigned VEC_char_base_length (const VEC_char_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ char VEC_char_base_last (const VEC_char_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ char VEC_char_base_index (const VEC_char_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_char_base_iterate (const VEC_char_base *vec_, unsigned ix_, char *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (char) 0; return 0; } } static __inline__ size_t VEC_char_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_char_base, vec) + alloc_ * sizeof(char); } static __inline__ void VEC_char_base_embedded_init (VEC_char_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_char_base_space (VEC_char_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_char_base_splice (VEC_char_base *dst_, VEC_char_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (char)); dst_->prefix.num += len_; } } static __inline__ char *VEC_char_base_quick_push (VEC_char_base *vec_, char obj_ ) { char *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ char VEC_char_base_pop (VEC_char_base *vec_ ) { char obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_char_base_truncate (VEC_char_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ char VEC_char_base_replace (VEC_char_base *vec_, unsigned ix_, char obj_ ) { char old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ char *VEC_char_base_quick_insert (VEC_char_base *vec_, unsigned ix_, char obj_ ) { char *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (char)); *slot_ = obj_; return slot_; } static __inline__ char VEC_char_base_ordered_remove (VEC_char_base *vec_, unsigned ix_ ) { char *slot_; char obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (char)); return obj_; } static __inline__ char VEC_char_base_unordered_remove (VEC_char_base *vec_, unsigned ix_ ) { char *slot_; char obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_char_base_block_remove (VEC_char_base *vec_, unsigned ix_, unsigned len_ ) { char *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (char)); } static __inline__ char *VEC_char_base_address (VEC_char_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_char_base_lower_bound (VEC_char_base *vec_, const char obj_, unsigned char (*lessthan_)(const char, const char) ) { unsigned int len_ = VEC_char_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { char middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_char_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_char_heap { VEC_char_base base; } VEC_char_heap; static __inline__ VEC_char_heap *VEC_char_heap_alloc (int alloc_ ) { return (VEC_char_heap *) vec_heap_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) ); } static __inline__ VEC_char_heap *VEC_char_heap_copy (VEC_char_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_char_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_char_heap *)(vec_heap_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (char) * len_); } return new_vec_; } static __inline__ void VEC_char_heap_free (VEC_char_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_char_heap_reserve (VEC_char_heap **vec_, int alloc_ ) { int extend = !VEC_char_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_char_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) ); return extend; } static __inline__ int VEC_char_heap_reserve_exact (VEC_char_heap **vec_, int alloc_ ) { int extend = !VEC_char_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_char_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) ); return extend; } static __inline__ void VEC_char_heap_safe_grow (VEC_char_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_char_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_char_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_char_heap_safe_grow_cleared (VEC_char_heap **vec_, int size_ ) { int oldsize = VEC_char_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_char_heap_safe_grow (vec_, size_ ); memset (&(VEC_char_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (char) * (size_ - oldsize)); } static __inline__ void VEC_char_heap_safe_splice (VEC_char_heap **dst_, VEC_char_base *src_ ) { if (src_) { VEC_char_heap_reserve_exact (dst_, src_->prefix.num ); VEC_char_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ char *VEC_char_heap_safe_push (VEC_char_heap **vec_, const char obj_ ) { VEC_char_heap_reserve (vec_, 1 ); return VEC_char_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ char *VEC_char_heap_safe_insert (VEC_char_heap **vec_, unsigned ix_, const char obj_ ) { VEC_char_heap_reserve (vec_, 1 ); return VEC_char_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+static inline void VEC_char_must_be_integral_type (void) { (void)~(char)0; } typedef struct VEC_char_base { struct vec_prefix prefix; char vec[1]; } VEC_char_base; typedef struct VEC_char_none { VEC_char_base base; } VEC_char_none; static inline unsigned VEC_char_base_length (const VEC_char_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline char VEC_char_base_last (const VEC_char_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline char VEC_char_base_index (const VEC_char_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_char_base_iterate (const VEC_char_base *vec_, unsigned ix_, char *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (char) 0; return 0; } } static inline size_t VEC_char_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_char_base, vec) + alloc_ * sizeof(char); } static inline void VEC_char_base_embedded_init (VEC_char_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_char_base_space (VEC_char_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_char_base_splice (VEC_char_base *dst_, VEC_char_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (char)); dst_->prefix.num += len_; } } static inline char *VEC_char_base_quick_push (VEC_char_base *vec_, char obj_ ) { char *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline char VEC_char_base_pop (VEC_char_base *vec_ ) { char obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_char_base_truncate (VEC_char_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline char VEC_char_base_replace (VEC_char_base *vec_, unsigned ix_, char obj_ ) { char old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline char *VEC_char_base_quick_insert (VEC_char_base *vec_, unsigned ix_, char obj_ ) { char *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (char)); *slot_ = obj_; return slot_; } static inline char VEC_char_base_ordered_remove (VEC_char_base *vec_, unsigned ix_ ) { char *slot_; char obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (char)); return obj_; } static inline char VEC_char_base_unordered_remove (VEC_char_base *vec_, unsigned ix_ ) { char *slot_; char obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_char_base_block_remove (VEC_char_base *vec_, unsigned ix_, unsigned len_ ) { char *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (char)); } static inline char *VEC_char_base_address (VEC_char_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_char_base_lower_bound (VEC_char_base *vec_, const char obj_, bool (*lessthan_)(const char, const char) ) { unsigned int len_ = VEC_char_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { char middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_char_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_char_heap { VEC_char_base base; } VEC_char_heap; static inline VEC_char_heap *VEC_char_heap_alloc (int alloc_ ) { return (VEC_char_heap *) vec_heap_o_reserve_exact (__null, alloc_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) ); } static inline VEC_char_heap *VEC_char_heap_copy (VEC_char_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_char_heap *new_vec_ = __null; if (len_) { new_vec_ = (VEC_char_heap *)(vec_heap_o_reserve_exact (__null, len_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (char) * len_); } return new_vec_; } static inline void VEC_char_heap_free (VEC_char_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = __null; } static inline int VEC_char_heap_reserve (VEC_char_heap **vec_, int alloc_ ) { int extend = !VEC_char_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_char_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) ); return extend; } static inline int VEC_char_heap_reserve_exact (VEC_char_heap **vec_, int alloc_ ) { int extend = !VEC_char_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_char_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) ); return extend; } static inline void VEC_char_heap_safe_grow (VEC_char_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_char_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_char_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_char_heap_safe_grow_cleared (VEC_char_heap **vec_, int size_ ) { int oldsize = VEC_char_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_char_heap_safe_grow (vec_, size_ ); memset (&(VEC_char_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (char) * (size_ - oldsize)); } static inline void VEC_char_heap_safe_splice (VEC_char_heap **dst_, VEC_char_base *src_ ) { if (src_) { VEC_char_heap_reserve_exact (dst_, src_->prefix.num ); VEC_char_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline char *VEC_char_heap_safe_push (VEC_char_heap **vec_, const char obj_ ) { VEC_char_heap_reserve (vec_, 1 ); return VEC_char_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline char *VEC_char_heap_safe_insert (VEC_char_heap **vec_, unsigned ix_, const char obj_ ) { VEC_char_heap_reserve (vec_, 1 ); return VEC_char_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 
 typedef unsigned char uchar;
-static __inline__ void VEC_uchar_must_be_integral_type (void) { (void)~(uchar)0; } typedef struct VEC_uchar_base { struct vec_prefix prefix; uchar vec[1]; } VEC_uchar_base; typedef struct VEC_uchar_none { VEC_uchar_base base; } VEC_uchar_none; static __inline__ unsigned VEC_uchar_base_length (const VEC_uchar_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ uchar VEC_uchar_base_last (const VEC_uchar_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ uchar VEC_uchar_base_index (const VEC_uchar_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_uchar_base_iterate (const VEC_uchar_base *vec_, unsigned ix_, uchar *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (uchar) 0; return 0; } } static __inline__ size_t VEC_uchar_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_uchar_base, vec) + alloc_ * sizeof(uchar); } static __inline__ void VEC_uchar_base_embedded_init (VEC_uchar_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_uchar_base_space (VEC_uchar_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_uchar_base_splice (VEC_uchar_base *dst_, VEC_uchar_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (uchar)); dst_->prefix.num += len_; } } static __inline__ uchar *VEC_uchar_base_quick_push (VEC_uchar_base *vec_, uchar obj_ ) { uchar *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ uchar VEC_uchar_base_pop (VEC_uchar_base *vec_ ) { uchar obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_uchar_base_truncate (VEC_uchar_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ uchar VEC_uchar_base_replace (VEC_uchar_base *vec_, unsigned ix_, uchar obj_ ) { uchar old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ uchar *VEC_uchar_base_quick_insert (VEC_uchar_base *vec_, unsigned ix_, uchar obj_ ) { uchar *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (uchar)); *slot_ = obj_; return slot_; } static __inline__ uchar VEC_uchar_base_ordered_remove (VEC_uchar_base *vec_, unsigned ix_ ) { uchar *slot_; uchar obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (uchar)); return obj_; } static __inline__ uchar VEC_uchar_base_unordered_remove (VEC_uchar_base *vec_, unsigned ix_ ) { uchar *slot_; uchar obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_uchar_base_block_remove (VEC_uchar_base *vec_, unsigned ix_, unsigned len_ ) { uchar *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (uchar)); } static __inline__ uchar *VEC_uchar_base_address (VEC_uchar_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_uchar_base_lower_bound (VEC_uchar_base *vec_, const uchar obj_, unsigned char (*lessthan_)(const uchar, const uchar) ) { unsigned int len_ = VEC_uchar_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { uchar middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_uchar_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_uchar_heap { VEC_uchar_base base; } VEC_uchar_heap; static __inline__ VEC_uchar_heap *VEC_uchar_heap_alloc (int alloc_ ) { return (VEC_uchar_heap *) vec_heap_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) ); } static __inline__ VEC_uchar_heap *VEC_uchar_heap_copy (VEC_uchar_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_uchar_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_uchar_heap *)(vec_heap_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (uchar) * len_); } return new_vec_; } static __inline__ void VEC_uchar_heap_free (VEC_uchar_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_uchar_heap_reserve (VEC_uchar_heap **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) ); return extend; } static __inline__ int VEC_uchar_heap_reserve_exact (VEC_uchar_heap **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) ); return extend; } static __inline__ void VEC_uchar_heap_safe_grow (VEC_uchar_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_uchar_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_uchar_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_uchar_heap_safe_grow_cleared (VEC_uchar_heap **vec_, int size_ ) { int oldsize = VEC_uchar_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_uchar_heap_safe_grow (vec_, size_ ); memset (&(VEC_uchar_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (uchar) * (size_ - oldsize)); } static __inline__ void VEC_uchar_heap_safe_splice (VEC_uchar_heap **dst_, VEC_uchar_base *src_ ) { if (src_) { VEC_uchar_heap_reserve_exact (dst_, src_->prefix.num ); VEC_uchar_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ uchar *VEC_uchar_heap_safe_push (VEC_uchar_heap **vec_, const uchar obj_ ) { VEC_uchar_heap_reserve (vec_, 1 ); return VEC_uchar_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ uchar *VEC_uchar_heap_safe_insert (VEC_uchar_heap **vec_, unsigned ix_, const uchar obj_ ) { VEC_uchar_heap_reserve (vec_, 1 ); return VEC_uchar_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-typedef struct VEC_uchar_gc { VEC_uchar_base base; } VEC_uchar_gc; static __inline__ VEC_uchar_gc *VEC_uchar_gc_alloc (int alloc_ ) { return (VEC_uchar_gc *) vec_gc_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) ); } static __inline__ VEC_uchar_gc *VEC_uchar_gc_copy (VEC_uchar_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_uchar_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_uchar_gc *)(vec_gc_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (uchar) * len_); } return new_vec_; } static __inline__ void VEC_uchar_gc_free (VEC_uchar_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_uchar_gc_reserve (VEC_uchar_gc **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) ); return extend; } static __inline__ int VEC_uchar_gc_reserve_exact (VEC_uchar_gc **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) ); return extend; } static __inline__ void VEC_uchar_gc_safe_grow (VEC_uchar_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_uchar_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_uchar_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_uchar_gc_safe_grow_cleared (VEC_uchar_gc **vec_, int size_ ) { int oldsize = VEC_uchar_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_uchar_gc_safe_grow (vec_, size_ ); memset (&(VEC_uchar_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (uchar) * (size_ - oldsize)); } static __inline__ void VEC_uchar_gc_safe_splice (VEC_uchar_gc **dst_, VEC_uchar_base *src_ ) { if (src_) { VEC_uchar_gc_reserve_exact (dst_, src_->prefix.num ); VEC_uchar_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ uchar *VEC_uchar_gc_safe_push (VEC_uchar_gc **vec_, const uchar obj_ ) { VEC_uchar_gc_reserve (vec_, 1 ); return VEC_uchar_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ uchar *VEC_uchar_gc_safe_insert (VEC_uchar_gc **vec_, unsigned ix_, const uchar obj_ ) { VEC_uchar_gc_reserve (vec_, 1 ); return VEC_uchar_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+static inline void VEC_uchar_must_be_integral_type (void) { (void)~(uchar)0; } typedef struct VEC_uchar_base { struct vec_prefix prefix; uchar vec[1]; } VEC_uchar_base; typedef struct VEC_uchar_none { VEC_uchar_base base; } VEC_uchar_none; static inline unsigned VEC_uchar_base_length (const VEC_uchar_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline uchar VEC_uchar_base_last (const VEC_uchar_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline uchar VEC_uchar_base_index (const VEC_uchar_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_uchar_base_iterate (const VEC_uchar_base *vec_, unsigned ix_, uchar *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (uchar) 0; return 0; } } static inline size_t VEC_uchar_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_uchar_base, vec) + alloc_ * sizeof(uchar); } static inline void VEC_uchar_base_embedded_init (VEC_uchar_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_uchar_base_space (VEC_uchar_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_uchar_base_splice (VEC_uchar_base *dst_, VEC_uchar_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (uchar)); dst_->prefix.num += len_; } } static inline uchar *VEC_uchar_base_quick_push (VEC_uchar_base *vec_, uchar obj_ ) { uchar *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline uchar VEC_uchar_base_pop (VEC_uchar_base *vec_ ) { uchar obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_uchar_base_truncate (VEC_uchar_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline uchar VEC_uchar_base_replace (VEC_uchar_base *vec_, unsigned ix_, uchar obj_ ) { uchar old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline uchar *VEC_uchar_base_quick_insert (VEC_uchar_base *vec_, unsigned ix_, uchar obj_ ) { uchar *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (uchar)); *slot_ = obj_; return slot_; } static inline uchar VEC_uchar_base_ordered_remove (VEC_uchar_base *vec_, unsigned ix_ ) { uchar *slot_; uchar obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (uchar)); return obj_; } static inline uchar VEC_uchar_base_unordered_remove (VEC_uchar_base *vec_, unsigned ix_ ) { uchar *slot_; uchar obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_uchar_base_block_remove (VEC_uchar_base *vec_, unsigned ix_, unsigned len_ ) { uchar *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (uchar)); } static inline uchar *VEC_uchar_base_address (VEC_uchar_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_uchar_base_lower_bound (VEC_uchar_base *vec_, const uchar obj_, bool (*lessthan_)(const uchar, const uchar) ) { unsigned int len_ = VEC_uchar_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { uchar middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_uchar_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_uchar_heap { VEC_uchar_base base; } VEC_uchar_heap; static inline VEC_uchar_heap *VEC_uchar_heap_alloc (int alloc_ ) { return (VEC_uchar_heap *) vec_heap_o_reserve_exact (__null, alloc_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) ); } static inline VEC_uchar_heap *VEC_uchar_heap_copy (VEC_uchar_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_uchar_heap *new_vec_ = __null; if (len_) { new_vec_ = (VEC_uchar_heap *)(vec_heap_o_reserve_exact (__null, len_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (uchar) * len_); } return new_vec_; } static inline void VEC_uchar_heap_free (VEC_uchar_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = __null; } static inline int VEC_uchar_heap_reserve (VEC_uchar_heap **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) ); return extend; } static inline int VEC_uchar_heap_reserve_exact (VEC_uchar_heap **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) ); return extend; } static inline void VEC_uchar_heap_safe_grow (VEC_uchar_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_uchar_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_uchar_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_uchar_heap_safe_grow_cleared (VEC_uchar_heap **vec_, int size_ ) { int oldsize = VEC_uchar_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_uchar_heap_safe_grow (vec_, size_ ); memset (&(VEC_uchar_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (uchar) * (size_ - oldsize)); } static inline void VEC_uchar_heap_safe_splice (VEC_uchar_heap **dst_, VEC_uchar_base *src_ ) { if (src_) { VEC_uchar_heap_reserve_exact (dst_, src_->prefix.num ); VEC_uchar_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline uchar *VEC_uchar_heap_safe_push (VEC_uchar_heap **vec_, const uchar obj_ ) { VEC_uchar_heap_reserve (vec_, 1 ); return VEC_uchar_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline uchar *VEC_uchar_heap_safe_insert (VEC_uchar_heap **vec_, unsigned ix_, const uchar obj_ ) { VEC_uchar_heap_reserve (vec_, 1 ); return VEC_uchar_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_uchar_gc { VEC_uchar_base base; } VEC_uchar_gc; static inline VEC_uchar_gc *VEC_uchar_gc_alloc (int alloc_ ) { return (VEC_uchar_gc *) vec_gc_o_reserve_exact (__null, alloc_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) ); } static inline VEC_uchar_gc *VEC_uchar_gc_copy (VEC_uchar_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_uchar_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_uchar_gc *)(vec_gc_o_reserve_exact (__null, len_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (uchar) * len_); } return new_vec_; } static inline void VEC_uchar_gc_free (VEC_uchar_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline int VEC_uchar_gc_reserve (VEC_uchar_gc **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) ); return extend; } static inline int VEC_uchar_gc_reserve_exact (VEC_uchar_gc **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) ); return extend; } static inline void VEC_uchar_gc_safe_grow (VEC_uchar_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_uchar_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_uchar_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_uchar_gc_safe_grow_cleared (VEC_uchar_gc **vec_, int size_ ) { int oldsize = VEC_uchar_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_uchar_gc_safe_grow (vec_, size_ ); memset (&(VEC_uchar_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (uchar) * (size_ - oldsize)); } static inline void VEC_uchar_gc_safe_splice (VEC_uchar_gc **dst_, VEC_uchar_base *src_ ) { if (src_) { VEC_uchar_gc_reserve_exact (dst_, src_->prefix.num ); VEC_uchar_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline uchar *VEC_uchar_gc_safe_push (VEC_uchar_gc **vec_, const uchar obj_ ) { VEC_uchar_gc_reserve (vec_, 1 ); return VEC_uchar_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline uchar *VEC_uchar_gc_safe_insert (VEC_uchar_gc **vec_, unsigned ix_, const uchar obj_ ) { VEC_uchar_gc_reserve (vec_, 1 ); return VEC_uchar_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 
-static __inline__ void VEC_int_must_be_integral_type (void) { (void)~(int)0; } typedef struct VEC_int_base { struct vec_prefix prefix; int vec[1]; } VEC_int_base; typedef struct VEC_int_none { VEC_int_base base; } VEC_int_none; static __inline__ unsigned VEC_int_base_length (const VEC_int_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ int VEC_int_base_last (const VEC_int_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ int VEC_int_base_index (const VEC_int_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_int_base_iterate (const VEC_int_base *vec_, unsigned ix_, int *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (int) 0; return 0; } } static __inline__ size_t VEC_int_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_int_base, vec) + alloc_ * sizeof(int); } static __inline__ void VEC_int_base_embedded_init (VEC_int_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_int_base_space (VEC_int_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_int_base_splice (VEC_int_base *dst_, VEC_int_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (int)); dst_->prefix.num += len_; } } static __inline__ int *VEC_int_base_quick_push (VEC_int_base *vec_, int obj_ ) { int *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ int VEC_int_base_pop (VEC_int_base *vec_ ) { int obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_int_base_truncate (VEC_int_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ int VEC_int_base_replace (VEC_int_base *vec_, unsigned ix_, int obj_ ) { int old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ int *VEC_int_base_quick_insert (VEC_int_base *vec_, unsigned ix_, int obj_ ) { int *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (int)); *slot_ = obj_; return slot_; } static __inline__ int VEC_int_base_ordered_remove (VEC_int_base *vec_, unsigned ix_ ) { int *slot_; int obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (int)); return obj_; } static __inline__ int VEC_int_base_unordered_remove (VEC_int_base *vec_, unsigned ix_ ) { int *slot_; int obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_int_base_block_remove (VEC_int_base *vec_, unsigned ix_, unsigned len_ ) { int *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (int)); } static __inline__ int *VEC_int_base_address (VEC_int_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_int_base_lower_bound (VEC_int_base *vec_, const int obj_, unsigned char (*lessthan_)(const int, const int) ) { unsigned int len_ = VEC_int_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { int middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_int_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_int_heap { VEC_int_base base; } VEC_int_heap; static __inline__ VEC_int_heap *VEC_int_heap_alloc (int alloc_ ) { return (VEC_int_heap *) vec_heap_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) ); } static __inline__ VEC_int_heap *VEC_int_heap_copy (VEC_int_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_int_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_int_heap *)(vec_heap_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (int) * len_); } return new_vec_; } static __inline__ void VEC_int_heap_free (VEC_int_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_int_heap_reserve (VEC_int_heap **vec_, int alloc_ ) { int extend = !VEC_int_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_int_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) ); return extend; } static __inline__ int VEC_int_heap_reserve_exact (VEC_int_heap **vec_, int alloc_ ) { int extend = !VEC_int_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_int_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) ); return extend; } static __inline__ void VEC_int_heap_safe_grow (VEC_int_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_int_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_int_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_int_heap_safe_grow_cleared (VEC_int_heap **vec_, int size_ ) { int oldsize = VEC_int_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_int_heap_safe_grow (vec_, size_ ); memset (&(VEC_int_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (int) * (size_ - oldsize)); } static __inline__ void VEC_int_heap_safe_splice (VEC_int_heap **dst_, VEC_int_base *src_ ) { if (src_) { VEC_int_heap_reserve_exact (dst_, src_->prefix.num ); VEC_int_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ int *VEC_int_heap_safe_push (VEC_int_heap **vec_, const int obj_ ) { VEC_int_heap_reserve (vec_, 1 ); return VEC_int_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ int *VEC_int_heap_safe_insert (VEC_int_heap **vec_, unsigned ix_, const int obj_ ) { VEC_int_heap_reserve (vec_, 1 ); return VEC_int_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+static inline void VEC_int_must_be_integral_type (void) { (void)~(int)0; } typedef struct VEC_int_base { struct vec_prefix prefix; int vec[1]; } VEC_int_base; typedef struct VEC_int_none { VEC_int_base base; } VEC_int_none; static inline unsigned VEC_int_base_length (const VEC_int_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline int VEC_int_base_last (const VEC_int_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline int VEC_int_base_index (const VEC_int_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_int_base_iterate (const VEC_int_base *vec_, unsigned ix_, int *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (int) 0; return 0; } } static inline size_t VEC_int_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_int_base, vec) + alloc_ * sizeof(int); } static inline void VEC_int_base_embedded_init (VEC_int_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_int_base_space (VEC_int_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_int_base_splice (VEC_int_base *dst_, VEC_int_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (int)); dst_->prefix.num += len_; } } static inline int *VEC_int_base_quick_push (VEC_int_base *vec_, int obj_ ) { int *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline int VEC_int_base_pop (VEC_int_base *vec_ ) { int obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_int_base_truncate (VEC_int_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline int VEC_int_base_replace (VEC_int_base *vec_, unsigned ix_, int obj_ ) { int old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline int *VEC_int_base_quick_insert (VEC_int_base *vec_, unsigned ix_, int obj_ ) { int *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (int)); *slot_ = obj_; return slot_; } static inline int VEC_int_base_ordered_remove (VEC_int_base *vec_, unsigned ix_ ) { int *slot_; int obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (int)); return obj_; } static inline int VEC_int_base_unordered_remove (VEC_int_base *vec_, unsigned ix_ ) { int *slot_; int obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_int_base_block_remove (VEC_int_base *vec_, unsigned ix_, unsigned len_ ) { int *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (int)); } static inline int *VEC_int_base_address (VEC_int_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_int_base_lower_bound (VEC_int_base *vec_, const int obj_, bool (*lessthan_)(const int, const int) ) { unsigned int len_ = VEC_int_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { int middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_int_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_int_heap { VEC_int_base base; } VEC_int_heap; static inline VEC_int_heap *VEC_int_heap_alloc (int alloc_ ) { return (VEC_int_heap *) vec_heap_o_reserve_exact (__null, alloc_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) ); } static inline VEC_int_heap *VEC_int_heap_copy (VEC_int_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_int_heap *new_vec_ = __null; if (len_) { new_vec_ = (VEC_int_heap *)(vec_heap_o_reserve_exact (__null, len_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (int) * len_); } return new_vec_; } static inline void VEC_int_heap_free (VEC_int_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = __null; } static inline int VEC_int_heap_reserve (VEC_int_heap **vec_, int alloc_ ) { int extend = !VEC_int_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_int_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) ); return extend; } static inline int VEC_int_heap_reserve_exact (VEC_int_heap **vec_, int alloc_ ) { int extend = !VEC_int_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_int_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) ); return extend; } static inline void VEC_int_heap_safe_grow (VEC_int_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_int_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_int_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_int_heap_safe_grow_cleared (VEC_int_heap **vec_, int size_ ) { int oldsize = VEC_int_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_int_heap_safe_grow (vec_, size_ ); memset (&(VEC_int_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (int) * (size_ - oldsize)); } static inline void VEC_int_heap_safe_splice (VEC_int_heap **dst_, VEC_int_base *src_ ) { if (src_) { VEC_int_heap_reserve_exact (dst_, src_->prefix.num ); VEC_int_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline int *VEC_int_heap_safe_push (VEC_int_heap **vec_, const int obj_ ) { VEC_int_heap_reserve (vec_, 1 ); return VEC_int_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline int *VEC_int_heap_safe_insert (VEC_int_heap **vec_, unsigned ix_, const int obj_ ) { VEC_int_heap_reserve (vec_, 1 ); return VEC_int_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 
-static __inline__ void VEC_unsigned_must_be_integral_type (void) { (void)~(unsigned)0; } typedef struct VEC_unsigned_base { struct vec_prefix prefix; unsigned vec[1]; } VEC_unsigned_base; typedef struct VEC_unsigned_none { VEC_unsigned_base base; } VEC_unsigned_none; static __inline__ unsigned VEC_unsigned_base_length (const VEC_unsigned_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ unsigned VEC_unsigned_base_last (const VEC_unsigned_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ unsigned VEC_unsigned_base_index (const VEC_unsigned_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_unsigned_base_iterate (const VEC_unsigned_base *vec_, unsigned ix_, unsigned *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (unsigned) 0; return 0; } } static __inline__ size_t VEC_unsigned_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_unsigned_base, vec) + alloc_ * sizeof(unsigned); } static __inline__ void VEC_unsigned_base_embedded_init (VEC_unsigned_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_unsigned_base_space (VEC_unsigned_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_unsigned_base_splice (VEC_unsigned_base *dst_, VEC_unsigned_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (unsigned)); dst_->prefix.num += len_; } } static __inline__ unsigned *VEC_unsigned_base_quick_push (VEC_unsigned_base *vec_, unsigned obj_ ) { unsigned *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ unsigned VEC_unsigned_base_pop (VEC_unsigned_base *vec_ ) { unsigned obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_unsigned_base_truncate (VEC_unsigned_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ unsigned VEC_unsigned_base_replace (VEC_unsigned_base *vec_, unsigned ix_, unsigned obj_ ) { unsigned old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ unsigned *VEC_unsigned_base_quick_insert (VEC_unsigned_base *vec_, unsigned ix_, unsigned obj_ ) { unsigned *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (unsigned)); *slot_ = obj_; return slot_; } static __inline__ unsigned VEC_unsigned_base_ordered_remove (VEC_unsigned_base *vec_, unsigned ix_ ) { unsigned *slot_; unsigned obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (unsigned)); return obj_; } static __inline__ unsigned VEC_unsigned_base_unordered_remove (VEC_unsigned_base *vec_, unsigned ix_ ) { unsigned *slot_; unsigned obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_unsigned_base_block_remove (VEC_unsigned_base *vec_, unsigned ix_, unsigned len_ ) { unsigned *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (unsigned)); } static __inline__ unsigned *VEC_unsigned_base_address (VEC_unsigned_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_unsigned_base_lower_bound (VEC_unsigned_base *vec_, const unsigned obj_, unsigned char (*lessthan_)(const unsigned, const unsigned) ) { unsigned int len_ = VEC_unsigned_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { unsigned middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_unsigned_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_unsigned_heap { VEC_unsigned_base base; } VEC_unsigned_heap; static __inline__ VEC_unsigned_heap *VEC_unsigned_heap_alloc (int alloc_ ) { return (VEC_unsigned_heap *) vec_heap_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); } static __inline__ VEC_unsigned_heap *VEC_unsigned_heap_copy (VEC_unsigned_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_unsigned_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_unsigned_heap *)(vec_heap_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (unsigned) * len_); } return new_vec_; } static __inline__ void VEC_unsigned_heap_free (VEC_unsigned_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_unsigned_heap_reserve (VEC_unsigned_heap **vec_, int alloc_ ) { int extend = !VEC_unsigned_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_unsigned_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); return extend; } static __inline__ int VEC_unsigned_heap_reserve_exact (VEC_unsigned_heap **vec_, int alloc_ ) { int extend = !VEC_unsigned_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_unsigned_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); return extend; } static __inline__ void VEC_unsigned_heap_safe_grow (VEC_unsigned_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_unsigned_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_unsigned_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_unsigned_heap_safe_grow_cleared (VEC_unsigned_heap **vec_, int size_ ) { int oldsize = VEC_unsigned_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_unsigned_heap_safe_grow (vec_, size_ ); memset (&(VEC_unsigned_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (unsigned) * (size_ - oldsize)); } static __inline__ void VEC_unsigned_heap_safe_splice (VEC_unsigned_heap **dst_, VEC_unsigned_base *src_ ) { if (src_) { VEC_unsigned_heap_reserve_exact (dst_, src_->prefix.num ); VEC_unsigned_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ unsigned *VEC_unsigned_heap_safe_push (VEC_unsigned_heap **vec_, const unsigned obj_ ) { VEC_unsigned_heap_reserve (vec_, 1 ); return VEC_unsigned_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ unsigned *VEC_unsigned_heap_safe_insert (VEC_unsigned_heap **vec_, unsigned ix_, const unsigned obj_ ) { VEC_unsigned_heap_reserve (vec_, 1 ); return VEC_unsigned_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+static inline void VEC_unsigned_must_be_integral_type (void) { (void)~(unsigned)0; } typedef struct VEC_unsigned_base { struct vec_prefix prefix; unsigned vec[1]; } VEC_unsigned_base; typedef struct VEC_unsigned_none { VEC_unsigned_base base; } VEC_unsigned_none; static inline unsigned VEC_unsigned_base_length (const VEC_unsigned_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline unsigned VEC_unsigned_base_last (const VEC_unsigned_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline unsigned VEC_unsigned_base_index (const VEC_unsigned_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_unsigned_base_iterate (const VEC_unsigned_base *vec_, unsigned ix_, unsigned *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (unsigned) 0; return 0; } } static inline size_t VEC_unsigned_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_unsigned_base, vec) + alloc_ * sizeof(unsigned); } static inline void VEC_unsigned_base_embedded_init (VEC_unsigned_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_unsigned_base_space (VEC_unsigned_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_unsigned_base_splice (VEC_unsigned_base *dst_, VEC_unsigned_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (unsigned)); dst_->prefix.num += len_; } } static inline unsigned *VEC_unsigned_base_quick_push (VEC_unsigned_base *vec_, unsigned obj_ ) { unsigned *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline unsigned VEC_unsigned_base_pop (VEC_unsigned_base *vec_ ) { unsigned obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_unsigned_base_truncate (VEC_unsigned_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline unsigned VEC_unsigned_base_replace (VEC_unsigned_base *vec_, unsigned ix_, unsigned obj_ ) { unsigned old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline unsigned *VEC_unsigned_base_quick_insert (VEC_unsigned_base *vec_, unsigned ix_, unsigned obj_ ) { unsigned *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (unsigned)); *slot_ = obj_; return slot_; } static inline unsigned VEC_unsigned_base_ordered_remove (VEC_unsigned_base *vec_, unsigned ix_ ) { unsigned *slot_; unsigned obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (unsigned)); return obj_; } static inline unsigned VEC_unsigned_base_unordered_remove (VEC_unsigned_base *vec_, unsigned ix_ ) { unsigned *slot_; unsigned obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_unsigned_base_block_remove (VEC_unsigned_base *vec_, unsigned ix_, unsigned len_ ) { unsigned *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (unsigned)); } static inline unsigned *VEC_unsigned_base_address (VEC_unsigned_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_unsigned_base_lower_bound (VEC_unsigned_base *vec_, const unsigned obj_, bool (*lessthan_)(const unsigned, const unsigned) ) { unsigned int len_ = VEC_unsigned_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { unsigned middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_unsigned_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_unsigned_heap { VEC_unsigned_base base; } VEC_unsigned_heap; static inline VEC_unsigned_heap *VEC_unsigned_heap_alloc (int alloc_ ) { return (VEC_unsigned_heap *) vec_heap_o_reserve_exact (__null, alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); } static inline VEC_unsigned_heap *VEC_unsigned_heap_copy (VEC_unsigned_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_unsigned_heap *new_vec_ = __null; if (len_) { new_vec_ = (VEC_unsigned_heap *)(vec_heap_o_reserve_exact (__null, len_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (unsigned) * len_); } return new_vec_; } static inline void VEC_unsigned_heap_free (VEC_unsigned_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = __null; } static inline int VEC_unsigned_heap_reserve (VEC_unsigned_heap **vec_, int alloc_ ) { int extend = !VEC_unsigned_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_unsigned_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); return extend; } static inline int VEC_unsigned_heap_reserve_exact (VEC_unsigned_heap **vec_, int alloc_ ) { int extend = !VEC_unsigned_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_unsigned_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); return extend; } static inline void VEC_unsigned_heap_safe_grow (VEC_unsigned_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_unsigned_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_unsigned_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_unsigned_heap_safe_grow_cleared (VEC_unsigned_heap **vec_, int size_ ) { int oldsize = VEC_unsigned_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_unsigned_heap_safe_grow (vec_, size_ ); memset (&(VEC_unsigned_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (unsigned) * (size_ - oldsize)); } static inline void VEC_unsigned_heap_safe_splice (VEC_unsigned_heap **dst_, VEC_unsigned_base *src_ ) { if (src_) { VEC_unsigned_heap_reserve_exact (dst_, src_->prefix.num ); VEC_unsigned_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline unsigned *VEC_unsigned_heap_safe_push (VEC_unsigned_heap **vec_, const unsigned obj_ ) { VEC_unsigned_heap_reserve (vec_, 1 ); return VEC_unsigned_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline unsigned *VEC_unsigned_heap_safe_insert (VEC_unsigned_heap **vec_, unsigned ix_, const unsigned obj_ ) { VEC_unsigned_heap_reserve (vec_, 1 ); return VEC_unsigned_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 # 28 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/function.h" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/tm.h" 1
 # 29 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/function.h" 2
@@ -26023,25 +28652,25 @@ struct hard_reg_set_container
   HARD_REG_ELT_TYPE set;
 };
 # 122 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hard-reg-set.h"
-static __inline__ unsigned char
+static inline bool
 hard_reg_set_subset_p (const HARD_REG_ELT_TYPE x, const HARD_REG_ELT_TYPE y)
 {
   return (x & ~y) == ((HARD_REG_ELT_TYPE) (0));
 }
 
-static __inline__ unsigned char
+static inline bool
 hard_reg_set_equal_p (const HARD_REG_ELT_TYPE x, const HARD_REG_ELT_TYPE y)
 {
   return x == y;
 }
 
-static __inline__ unsigned char
+static inline bool
 hard_reg_set_intersect_p (const HARD_REG_ELT_TYPE x, const HARD_REG_ELT_TYPE y)
 {
   return (x & y) != ((HARD_REG_ELT_TYPE) (0));
 }
 
-static __inline__ unsigned char
+static inline bool
 hard_reg_set_empty_p (const HARD_REG_ELT_TYPE x)
 {
   return x == ((HARD_REG_ELT_TYPE) (0));
@@ -26068,7 +28697,7 @@ typedef struct
 
 
 
-static __inline__ void
+static inline void
 hard_reg_set_iter_init (hard_reg_set_iterator *iter, HARD_REG_ELT_TYPE set,
                         unsigned min, unsigned *regno)
 {
@@ -26091,14 +28720,14 @@ hard_reg_set_iter_init (hard_reg_set_iterator *iter, HARD_REG_ELT_TYPE set,
   *regno = min;
 }
 
-static __inline__ unsigned char
+static inline bool
 hard_reg_set_iter_set (hard_reg_set_iterator *iter, unsigned *regno)
 {
   while (1)
     {
 
       if (iter->word_no >= iter->length)
-        return 0;
+        return false;
 
       if (iter->bits)
         {
@@ -26126,7 +28755,7 @@ hard_reg_set_iter_set (hard_reg_set_iterator *iter, unsigned *regno)
     }
 }
 
-static __inline__ void
+static inline void
 hard_reg_set_iter_next (hard_reg_set_iterator *iter, unsigned *regno)
 {
   iter->bits >>= 1;
@@ -26192,7 +28821,7 @@ struct target_hard_regs {
 
 
 
-  unsigned char x_class_only_fixed_regs[((int) LIM_REG_CLASSES)];
+  bool x_class_only_fixed_regs[((int) LIM_REG_CLASSES)];
 
 
   unsigned int x_reg_class_size[((int) LIM_REG_CLASSES)];
@@ -26309,8 +28938,8 @@ struct expr_status {
 };
 
 typedef struct call_site_record_d *call_site_record;
-static __inline__ void VEC_call_site_record_must_be_pointer_type (void) { (void)((call_site_record)1 == (void *)1); } typedef struct VEC_call_site_record_base { struct vec_prefix prefix; call_site_record vec[1]; } VEC_call_site_record_base; typedef struct VEC_call_site_record_none { VEC_call_site_record_base base; } VEC_call_site_record_none; static __inline__ unsigned VEC_call_site_record_base_length (const VEC_call_site_record_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ call_site_record VEC_call_site_record_base_last (const VEC_call_site_record_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ call_site_record VEC_call_site_record_base_index (const VEC_call_site_record_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_call_site_record_base_iterate (const VEC_call_site_record_base *vec_, unsigned ix_, call_site_record *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (call_site_record) 0; return 0; } } static __inline__ size_t VEC_call_site_record_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_call_site_record_base, vec) + alloc_ * sizeof(call_site_record); } static __inline__ void VEC_call_site_record_base_embedded_init (VEC_call_site_record_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_call_site_record_base_space (VEC_call_site_record_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_call_site_record_base_splice (VEC_call_site_record_base *dst_, VEC_call_site_record_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (call_site_record)); dst_->prefix.num += len_; } } static __inline__ call_site_record *VEC_call_site_record_base_quick_push (VEC_call_site_record_base *vec_, call_site_record obj_ ) { call_site_record *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ call_site_record VEC_call_site_record_base_pop (VEC_call_site_record_base *vec_ ) { call_site_record obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_call_site_record_base_truncate (VEC_call_site_record_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ call_site_record VEC_call_site_record_base_replace (VEC_call_site_record_base *vec_, unsigned ix_, call_site_record obj_ ) { call_site_record old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ call_site_record *VEC_call_site_record_base_quick_insert (VEC_call_site_record_base *vec_, unsigned ix_, call_site_record obj_ ) { call_site_record *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (call_site_record)); *slot_ = obj_; return slot_; } static __inline__ call_site_record VEC_call_site_record_base_ordered_remove (VEC_call_site_record_base *vec_, unsigned ix_ ) { call_site_record *slot_; call_site_record obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (call_site_record)); return obj_; } static __inline__ call_site_record VEC_call_site_record_base_unordered_remove (VEC_call_site_record_base *vec_, unsigned ix_ ) { call_site_record *slot_; call_site_record obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_call_site_record_base_block_remove (VEC_call_site_record_base *vec_, unsigned ix_, unsigned len_ ) { call_site_record *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (call_site_record)); } static __inline__ call_site_record *VEC_call_site_record_base_address (VEC_call_site_record_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_call_site_record_base_lower_bound (VEC_call_site_record_base *vec_, const call_site_record obj_, unsigned char (*lessthan_)(const call_site_record, const call_site_record) ) { unsigned int len_ = VEC_call_site_record_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { call_site_record middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_call_site_record_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_call_site_record_gc { VEC_call_site_record_base base; } VEC_call_site_record_gc; static __inline__ VEC_call_site_record_gc *VEC_call_site_record_gc_alloc (int alloc_ ) { return (VEC_call_site_record_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_call_site_record_gc_free (VEC_call_site_record_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_call_site_record_gc *VEC_call_site_record_gc_copy (VEC_call_site_record_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_call_site_record_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_call_site_record_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (call_site_record) * len_); } return new_vec_; } static __inline__ int VEC_call_site_record_gc_reserve (VEC_call_site_record_gc **vec_, int alloc_ ) { int extend = !VEC_call_site_record_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_call_site_record_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_call_site_record_gc_reserve_exact (VEC_call_site_record_gc **vec_, int alloc_ ) { int extend = !VEC_call_site_record_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_call_site_record_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_call_site_record_gc_safe_grow (VEC_call_site_record_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_call_site_record_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_call_site_record_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_call_site_record_gc_safe_grow_cleared (VEC_call_site_record_gc **vec_, int size_ ) { int oldsize = VEC_call_site_record_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_call_site_record_gc_safe_grow (vec_, size_ ); memset (&(VEC_call_site_record_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (call_site_record) * (size_ - oldsize)); } static __inline__ void VEC_call_site_record_gc_safe_splice (VEC_call_site_record_gc **dst_, VEC_call_site_record_base *src_ ) { if (src_) { VEC_call_site_record_gc_reserve_exact (dst_, src_->prefix.num ); VEC_call_site_record_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ call_site_record *VEC_call_site_record_gc_safe_push (VEC_call_site_record_gc **vec_, call_site_record obj_ ) { VEC_call_site_record_gc_reserve (vec_, 1 ); return VEC_call_site_record_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ call_site_record *VEC_call_site_record_gc_safe_insert (VEC_call_site_record_gc **vec_, unsigned ix_, call_site_record obj_ ) { VEC_call_site_record_gc_reserve (vec_, 1 ); return VEC_call_site_record_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+static inline void VEC_call_site_record_must_be_pointer_type (void) { (void)((call_site_record)1 == (void *)1); } typedef struct VEC_call_site_record_base { struct vec_prefix prefix; call_site_record vec[1]; } VEC_call_site_record_base; typedef struct VEC_call_site_record_none { VEC_call_site_record_base base; } VEC_call_site_record_none; static inline unsigned VEC_call_site_record_base_length (const VEC_call_site_record_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline call_site_record VEC_call_site_record_base_last (const VEC_call_site_record_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline call_site_record VEC_call_site_record_base_index (const VEC_call_site_record_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_call_site_record_base_iterate (const VEC_call_site_record_base *vec_, unsigned ix_, call_site_record *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (call_site_record) 0; return 0; } } static inline size_t VEC_call_site_record_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_call_site_record_base, vec) + alloc_ * sizeof(call_site_record); } static inline void VEC_call_site_record_base_embedded_init (VEC_call_site_record_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_call_site_record_base_space (VEC_call_site_record_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_call_site_record_base_splice (VEC_call_site_record_base *dst_, VEC_call_site_record_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (call_site_record)); dst_->prefix.num += len_; } } static inline call_site_record *VEC_call_site_record_base_quick_push (VEC_call_site_record_base *vec_, call_site_record obj_ ) { call_site_record *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline call_site_record VEC_call_site_record_base_pop (VEC_call_site_record_base *vec_ ) { call_site_record obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_call_site_record_base_truncate (VEC_call_site_record_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline call_site_record VEC_call_site_record_base_replace (VEC_call_site_record_base *vec_, unsigned ix_, call_site_record obj_ ) { call_site_record old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline call_site_record *VEC_call_site_record_base_quick_insert (VEC_call_site_record_base *vec_, unsigned ix_, call_site_record obj_ ) { call_site_record *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (call_site_record)); *slot_ = obj_; return slot_; } static inline call_site_record VEC_call_site_record_base_ordered_remove (VEC_call_site_record_base *vec_, unsigned ix_ ) { call_site_record *slot_; call_site_record obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (call_site_record)); return obj_; } static inline call_site_record VEC_call_site_record_base_unordered_remove (VEC_call_site_record_base *vec_, unsigned ix_ ) { call_site_record *slot_; call_site_record obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_call_site_record_base_block_remove (VEC_call_site_record_base *vec_, unsigned ix_, unsigned len_ ) { call_site_record *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (call_site_record)); } static inline call_site_record *VEC_call_site_record_base_address (VEC_call_site_record_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_call_site_record_base_lower_bound (VEC_call_site_record_base *vec_, const call_site_record obj_, bool (*lessthan_)(const call_site_record, const call_site_record) ) { unsigned int len_ = VEC_call_site_record_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { call_site_record middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_call_site_record_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_call_site_record_gc { VEC_call_site_record_base base; } VEC_call_site_record_gc; static inline VEC_call_site_record_gc *VEC_call_site_record_gc_alloc (int alloc_ ) { return (VEC_call_site_record_gc *) vec_gc_p_reserve_exact (__null, alloc_ ); } static inline void VEC_call_site_record_gc_free (VEC_call_site_record_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline VEC_call_site_record_gc *VEC_call_site_record_gc_copy (VEC_call_site_record_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_call_site_record_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_call_site_record_gc *)(vec_gc_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (call_site_record) * len_); } return new_vec_; } static inline int VEC_call_site_record_gc_reserve (VEC_call_site_record_gc **vec_, int alloc_ ) { int extend = !VEC_call_site_record_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_call_site_record_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_call_site_record_gc_reserve_exact (VEC_call_site_record_gc **vec_, int alloc_ ) { int extend = !VEC_call_site_record_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_call_site_record_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_call_site_record_gc_safe_grow (VEC_call_site_record_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_call_site_record_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_call_site_record_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_call_site_record_gc_safe_grow_cleared (VEC_call_site_record_gc **vec_, int size_ ) { int oldsize = VEC_call_site_record_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_call_site_record_gc_safe_grow (vec_, size_ ); memset (&(VEC_call_site_record_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (call_site_record) * (size_ - oldsize)); } static inline void VEC_call_site_record_gc_safe_splice (VEC_call_site_record_gc **dst_, VEC_call_site_record_base *src_ ) { if (src_) { VEC_call_site_record_gc_reserve_exact (dst_, src_->prefix.num ); VEC_call_site_record_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline call_site_record *VEC_call_site_record_gc_safe_push (VEC_call_site_record_gc **vec_, call_site_record obj_ ) { VEC_call_site_record_gc_reserve (vec_, 1 ); return VEC_call_site_record_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline call_site_record *VEC_call_site_record_gc_safe_insert (VEC_call_site_record_gc **vec_, unsigned ix_, call_site_record obj_ ) { VEC_call_site_record_gc_reserve (vec_, 1 ); return VEC_call_site_record_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 
 
 struct rtl_eh {
@@ -26332,13 +28961,13 @@ typedef struct temp_slot *temp_slot_p;
 struct call_site_record_d;
 struct dw_fde_struct;
 
-static __inline__ void VEC_temp_slot_p_must_be_pointer_type (void) { (void)((temp_slot_p)1 == (void *)1); } typedef struct VEC_temp_slot_p_base { struct vec_prefix prefix; temp_slot_p vec[1]; } VEC_temp_slot_p_base; typedef struct VEC_temp_slot_p_none { VEC_temp_slot_p_base base; } VEC_temp_slot_p_none; static __inline__ unsigned VEC_temp_slot_p_base_length (const VEC_temp_slot_p_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ temp_slot_p VEC_temp_slot_p_base_last (const VEC_temp_slot_p_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ temp_slot_p VEC_temp_slot_p_base_index (const VEC_temp_slot_p_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_temp_slot_p_base_iterate (const VEC_temp_slot_p_base *vec_, unsigned ix_, temp_slot_p *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (temp_slot_p) 0; return 0; } } static __inline__ size_t VEC_temp_slot_p_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_temp_slot_p_base, vec) + alloc_ * sizeof(temp_slot_p); } static __inline__ void VEC_temp_slot_p_base_embedded_init (VEC_temp_slot_p_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_temp_slot_p_base_space (VEC_temp_slot_p_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_temp_slot_p_base_splice (VEC_temp_slot_p_base *dst_, VEC_temp_slot_p_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (temp_slot_p)); dst_->prefix.num += len_; } } static __inline__ temp_slot_p *VEC_temp_slot_p_base_quick_push (VEC_temp_slot_p_base *vec_, temp_slot_p obj_ ) { temp_slot_p *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ temp_slot_p VEC_temp_slot_p_base_pop (VEC_temp_slot_p_base *vec_ ) { temp_slot_p obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_temp_slot_p_base_truncate (VEC_temp_slot_p_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ temp_slot_p VEC_temp_slot_p_base_replace (VEC_temp_slot_p_base *vec_, unsigned ix_, temp_slot_p obj_ ) { temp_slot_p old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ temp_slot_p *VEC_temp_slot_p_base_quick_insert (VEC_temp_slot_p_base *vec_, unsigned ix_, temp_slot_p obj_ ) { temp_slot_p *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (temp_slot_p)); *slot_ = obj_; return slot_; } static __inline__ temp_slot_p VEC_temp_slot_p_base_ordered_remove (VEC_temp_slot_p_base *vec_, unsigned ix_ ) { temp_slot_p *slot_; temp_slot_p obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (temp_slot_p)); return obj_; } static __inline__ temp_slot_p VEC_temp_slot_p_base_unordered_remove (VEC_temp_slot_p_base *vec_, unsigned ix_ ) { temp_slot_p *slot_; temp_slot_p obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_temp_slot_p_base_block_remove (VEC_temp_slot_p_base *vec_, unsigned ix_, unsigned len_ ) { temp_slot_p *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (temp_slot_p)); } static __inline__ temp_slot_p *VEC_temp_slot_p_base_address (VEC_temp_slot_p_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_temp_slot_p_base_lower_bound (VEC_temp_slot_p_base *vec_, const temp_slot_p obj_, unsigned char (*lessthan_)(const temp_slot_p, const temp_slot_p) ) { unsigned int len_ = VEC_temp_slot_p_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { temp_slot_p middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_temp_slot_p_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_temp_slot_p_gc { VEC_temp_slot_p_base base; } VEC_temp_slot_p_gc; static __inline__ VEC_temp_slot_p_gc *VEC_temp_slot_p_gc_alloc (int alloc_ ) { return (VEC_temp_slot_p_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_temp_slot_p_gc_free (VEC_temp_slot_p_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_temp_slot_p_gc *VEC_temp_slot_p_gc_copy (VEC_temp_slot_p_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_temp_slot_p_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_temp_slot_p_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (temp_slot_p) * len_); } return new_vec_; } static __inline__ int VEC_temp_slot_p_gc_reserve (VEC_temp_slot_p_gc **vec_, int alloc_ ) { int extend = !VEC_temp_slot_p_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_temp_slot_p_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_temp_slot_p_gc_reserve_exact (VEC_temp_slot_p_gc **vec_, int alloc_ ) { int extend = !VEC_temp_slot_p_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_temp_slot_p_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_temp_slot_p_gc_safe_grow (VEC_temp_slot_p_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_temp_slot_p_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_temp_slot_p_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_temp_slot_p_gc_safe_grow_cleared (VEC_temp_slot_p_gc **vec_, int size_ ) { int oldsize = VEC_temp_slot_p_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_temp_slot_p_gc_safe_grow (vec_, size_ ); memset (&(VEC_temp_slot_p_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (temp_slot_p) * (size_ - oldsize)); } static __inline__ void VEC_temp_slot_p_gc_safe_splice (VEC_temp_slot_p_gc **dst_, VEC_temp_slot_p_base *src_ ) { if (src_) { VEC_temp_slot_p_gc_reserve_exact (dst_, src_->prefix.num ); VEC_temp_slot_p_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ temp_slot_p *VEC_temp_slot_p_gc_safe_push (VEC_temp_slot_p_gc **vec_, temp_slot_p obj_ ) { VEC_temp_slot_p_gc_reserve (vec_, 1 ); return VEC_temp_slot_p_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ temp_slot_p *VEC_temp_slot_p_gc_safe_insert (VEC_temp_slot_p_gc **vec_, unsigned ix_, temp_slot_p obj_ ) { VEC_temp_slot_p_gc_reserve (vec_, 1 ); return VEC_temp_slot_p_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+static inline void VEC_temp_slot_p_must_be_pointer_type (void) { (void)((temp_slot_p)1 == (void *)1); } typedef struct VEC_temp_slot_p_base { struct vec_prefix prefix; temp_slot_p vec[1]; } VEC_temp_slot_p_base; typedef struct VEC_temp_slot_p_none { VEC_temp_slot_p_base base; } VEC_temp_slot_p_none; static inline unsigned VEC_temp_slot_p_base_length (const VEC_temp_slot_p_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline temp_slot_p VEC_temp_slot_p_base_last (const VEC_temp_slot_p_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline temp_slot_p VEC_temp_slot_p_base_index (const VEC_temp_slot_p_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_temp_slot_p_base_iterate (const VEC_temp_slot_p_base *vec_, unsigned ix_, temp_slot_p *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (temp_slot_p) 0; return 0; } } static inline size_t VEC_temp_slot_p_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_temp_slot_p_base, vec) + alloc_ * sizeof(temp_slot_p); } static inline void VEC_temp_slot_p_base_embedded_init (VEC_temp_slot_p_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_temp_slot_p_base_space (VEC_temp_slot_p_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_temp_slot_p_base_splice (VEC_temp_slot_p_base *dst_, VEC_temp_slot_p_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (temp_slot_p)); dst_->prefix.num += len_; } } static inline temp_slot_p *VEC_temp_slot_p_base_quick_push (VEC_temp_slot_p_base *vec_, temp_slot_p obj_ ) { temp_slot_p *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline temp_slot_p VEC_temp_slot_p_base_pop (VEC_temp_slot_p_base *vec_ ) { temp_slot_p obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_temp_slot_p_base_truncate (VEC_temp_slot_p_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline temp_slot_p VEC_temp_slot_p_base_replace (VEC_temp_slot_p_base *vec_, unsigned ix_, temp_slot_p obj_ ) { temp_slot_p old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline temp_slot_p *VEC_temp_slot_p_base_quick_insert (VEC_temp_slot_p_base *vec_, unsigned ix_, temp_slot_p obj_ ) { temp_slot_p *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (temp_slot_p)); *slot_ = obj_; return slot_; } static inline temp_slot_p VEC_temp_slot_p_base_ordered_remove (VEC_temp_slot_p_base *vec_, unsigned ix_ ) { temp_slot_p *slot_; temp_slot_p obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (temp_slot_p)); return obj_; } static inline temp_slot_p VEC_temp_slot_p_base_unordered_remove (VEC_temp_slot_p_base *vec_, unsigned ix_ ) { temp_slot_p *slot_; temp_slot_p obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_temp_slot_p_base_block_remove (VEC_temp_slot_p_base *vec_, unsigned ix_, unsigned len_ ) { temp_slot_p *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (temp_slot_p)); } static inline temp_slot_p *VEC_temp_slot_p_base_address (VEC_temp_slot_p_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_temp_slot_p_base_lower_bound (VEC_temp_slot_p_base *vec_, const temp_slot_p obj_, bool (*lessthan_)(const temp_slot_p, const temp_slot_p) ) { unsigned int len_ = VEC_temp_slot_p_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { temp_slot_p middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_temp_slot_p_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_temp_slot_p_gc { VEC_temp_slot_p_base base; } VEC_temp_slot_p_gc; static inline VEC_temp_slot_p_gc *VEC_temp_slot_p_gc_alloc (int alloc_ ) { return (VEC_temp_slot_p_gc *) vec_gc_p_reserve_exact (__null, alloc_ ); } static inline void VEC_temp_slot_p_gc_free (VEC_temp_slot_p_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline VEC_temp_slot_p_gc *VEC_temp_slot_p_gc_copy (VEC_temp_slot_p_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_temp_slot_p_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_temp_slot_p_gc *)(vec_gc_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (temp_slot_p) * len_); } return new_vec_; } static inline int VEC_temp_slot_p_gc_reserve (VEC_temp_slot_p_gc **vec_, int alloc_ ) { int extend = !VEC_temp_slot_p_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_temp_slot_p_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_temp_slot_p_gc_reserve_exact (VEC_temp_slot_p_gc **vec_, int alloc_ ) { int extend = !VEC_temp_slot_p_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_temp_slot_p_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_temp_slot_p_gc_safe_grow (VEC_temp_slot_p_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_temp_slot_p_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_temp_slot_p_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_temp_slot_p_gc_safe_grow_cleared (VEC_temp_slot_p_gc **vec_, int size_ ) { int oldsize = VEC_temp_slot_p_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_temp_slot_p_gc_safe_grow (vec_, size_ ); memset (&(VEC_temp_slot_p_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (temp_slot_p) * (size_ - oldsize)); } static inline void VEC_temp_slot_p_gc_safe_splice (VEC_temp_slot_p_gc **dst_, VEC_temp_slot_p_base *src_ ) { if (src_) { VEC_temp_slot_p_gc_reserve_exact (dst_, src_->prefix.num ); VEC_temp_slot_p_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline temp_slot_p *VEC_temp_slot_p_gc_safe_push (VEC_temp_slot_p_gc **vec_, temp_slot_p obj_ ) { VEC_temp_slot_p_gc_reserve (vec_, 1 ); return VEC_temp_slot_p_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline temp_slot_p *VEC_temp_slot_p_gc_safe_insert (VEC_temp_slot_p_gc **vec_, unsigned ix_, temp_slot_p obj_ ) { VEC_temp_slot_p_gc_reserve (vec_, 1 ); return VEC_temp_slot_p_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 struct ipa_opt_pass_d;
 typedef struct ipa_opt_pass_d *ipa_opt_pass;
 
-static __inline__ void VEC_ipa_opt_pass_must_be_pointer_type (void) { (void)((ipa_opt_pass)1 == (void *)1); } typedef struct VEC_ipa_opt_pass_base { struct vec_prefix prefix; ipa_opt_pass vec[1]; } VEC_ipa_opt_pass_base; typedef struct VEC_ipa_opt_pass_none { VEC_ipa_opt_pass_base base; } VEC_ipa_opt_pass_none; static __inline__ unsigned VEC_ipa_opt_pass_base_length (const VEC_ipa_opt_pass_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ ipa_opt_pass VEC_ipa_opt_pass_base_last (const VEC_ipa_opt_pass_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ ipa_opt_pass VEC_ipa_opt_pass_base_index (const VEC_ipa_opt_pass_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_ipa_opt_pass_base_iterate (const VEC_ipa_opt_pass_base *vec_, unsigned ix_, ipa_opt_pass *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (ipa_opt_pass) 0; return 0; } } static __inline__ size_t VEC_ipa_opt_pass_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_ipa_opt_pass_base, vec) + alloc_ * sizeof(ipa_opt_pass); } static __inline__ void VEC_ipa_opt_pass_base_embedded_init (VEC_ipa_opt_pass_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_ipa_opt_pass_base_space (VEC_ipa_opt_pass_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_ipa_opt_pass_base_splice (VEC_ipa_opt_pass_base *dst_, VEC_ipa_opt_pass_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (ipa_opt_pass)); dst_->prefix.num += len_; } } static __inline__ ipa_opt_pass *VEC_ipa_opt_pass_base_quick_push (VEC_ipa_opt_pass_base *vec_, ipa_opt_pass obj_ ) { ipa_opt_pass *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ ipa_opt_pass VEC_ipa_opt_pass_base_pop (VEC_ipa_opt_pass_base *vec_ ) { ipa_opt_pass obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_ipa_opt_pass_base_truncate (VEC_ipa_opt_pass_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ ipa_opt_pass VEC_ipa_opt_pass_base_replace (VEC_ipa_opt_pass_base *vec_, unsigned ix_, ipa_opt_pass obj_ ) { ipa_opt_pass old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ ipa_opt_pass *VEC_ipa_opt_pass_base_quick_insert (VEC_ipa_opt_pass_base *vec_, unsigned ix_, ipa_opt_pass obj_ ) { ipa_opt_pass *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (ipa_opt_pass)); *slot_ = obj_; return slot_; } static __inline__ ipa_opt_pass VEC_ipa_opt_pass_base_ordered_remove (VEC_ipa_opt_pass_base *vec_, unsigned ix_ ) { ipa_opt_pass *slot_; ipa_opt_pass obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (ipa_opt_pass)); return obj_; } static __inline__ ipa_opt_pass VEC_ipa_opt_pass_base_unordered_remove (VEC_ipa_opt_pass_base *vec_, unsigned ix_ ) { ipa_opt_pass *slot_; ipa_opt_pass obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_ipa_opt_pass_base_block_remove (VEC_ipa_opt_pass_base *vec_, unsigned ix_, unsigned len_ ) { ipa_opt_pass *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (ipa_opt_pass)); } static __inline__ ipa_opt_pass *VEC_ipa_opt_pass_base_address (VEC_ipa_opt_pass_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_ipa_opt_pass_base_lower_bound (VEC_ipa_opt_pass_base *vec_, const ipa_opt_pass obj_, unsigned char (*lessthan_)(const ipa_opt_pass, const ipa_opt_pass) ) { unsigned int len_ = VEC_ipa_opt_pass_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { ipa_opt_pass middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_ipa_opt_pass_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_ipa_opt_pass_heap { VEC_ipa_opt_pass_base base; } VEC_ipa_opt_pass_heap; static __inline__ VEC_ipa_opt_pass_heap *VEC_ipa_opt_pass_heap_alloc (int alloc_ ) { return (VEC_ipa_opt_pass_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_ipa_opt_pass_heap_free (VEC_ipa_opt_pass_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_ipa_opt_pass_heap *VEC_ipa_opt_pass_heap_copy (VEC_ipa_opt_pass_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_ipa_opt_pass_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_ipa_opt_pass_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (ipa_opt_pass) * len_); } return new_vec_; } static __inline__ int VEC_ipa_opt_pass_heap_reserve (VEC_ipa_opt_pass_heap **vec_, int alloc_ ) { int extend = !VEC_ipa_opt_pass_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_ipa_opt_pass_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_ipa_opt_pass_heap_reserve_exact (VEC_ipa_opt_pass_heap **vec_, int alloc_ ) { int extend = !VEC_ipa_opt_pass_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_ipa_opt_pass_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_ipa_opt_pass_heap_safe_grow (VEC_ipa_opt_pass_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_ipa_opt_pass_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_ipa_opt_pass_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_ipa_opt_pass_heap_safe_grow_cleared (VEC_ipa_opt_pass_heap **vec_, int size_ ) { int oldsize = VEC_ipa_opt_pass_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_ipa_opt_pass_heap_safe_grow (vec_, size_ ); memset (&(VEC_ipa_opt_pass_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (ipa_opt_pass) * (size_ - oldsize)); } static __inline__ void VEC_ipa_opt_pass_heap_safe_splice (VEC_ipa_opt_pass_heap **dst_, VEC_ipa_opt_pass_base *src_ ) { if (src_) { VEC_ipa_opt_pass_heap_reserve_exact (dst_, src_->prefix.num ); VEC_ipa_opt_pass_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ ipa_opt_pass *VEC_ipa_opt_pass_heap_safe_push (VEC_ipa_opt_pass_heap **vec_, ipa_opt_pass obj_ ) { VEC_ipa_opt_pass_heap_reserve (vec_, 1 ); return VEC_ipa_opt_pass_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ ipa_opt_pass *VEC_ipa_opt_pass_heap_safe_insert (VEC_ipa_opt_pass_heap **vec_, unsigned ix_, ipa_opt_pass obj_ ) { VEC_ipa_opt_pass_heap_reserve (vec_, 1 ); return VEC_ipa_opt_pass_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+static inline void VEC_ipa_opt_pass_must_be_pointer_type (void) { (void)((ipa_opt_pass)1 == (void *)1); } typedef struct VEC_ipa_opt_pass_base { struct vec_prefix prefix; ipa_opt_pass vec[1]; } VEC_ipa_opt_pass_base; typedef struct VEC_ipa_opt_pass_none { VEC_ipa_opt_pass_base base; } VEC_ipa_opt_pass_none; static inline unsigned VEC_ipa_opt_pass_base_length (const VEC_ipa_opt_pass_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline ipa_opt_pass VEC_ipa_opt_pass_base_last (const VEC_ipa_opt_pass_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline ipa_opt_pass VEC_ipa_opt_pass_base_index (const VEC_ipa_opt_pass_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_ipa_opt_pass_base_iterate (const VEC_ipa_opt_pass_base *vec_, unsigned ix_, ipa_opt_pass *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (ipa_opt_pass) 0; return 0; } } static inline size_t VEC_ipa_opt_pass_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_ipa_opt_pass_base, vec) + alloc_ * sizeof(ipa_opt_pass); } static inline void VEC_ipa_opt_pass_base_embedded_init (VEC_ipa_opt_pass_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_ipa_opt_pass_base_space (VEC_ipa_opt_pass_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_ipa_opt_pass_base_splice (VEC_ipa_opt_pass_base *dst_, VEC_ipa_opt_pass_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (ipa_opt_pass)); dst_->prefix.num += len_; } } static inline ipa_opt_pass *VEC_ipa_opt_pass_base_quick_push (VEC_ipa_opt_pass_base *vec_, ipa_opt_pass obj_ ) { ipa_opt_pass *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline ipa_opt_pass VEC_ipa_opt_pass_base_pop (VEC_ipa_opt_pass_base *vec_ ) { ipa_opt_pass obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_ipa_opt_pass_base_truncate (VEC_ipa_opt_pass_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline ipa_opt_pass VEC_ipa_opt_pass_base_replace (VEC_ipa_opt_pass_base *vec_, unsigned ix_, ipa_opt_pass obj_ ) { ipa_opt_pass old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline ipa_opt_pass *VEC_ipa_opt_pass_base_quick_insert (VEC_ipa_opt_pass_base *vec_, unsigned ix_, ipa_opt_pass obj_ ) { ipa_opt_pass *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (ipa_opt_pass)); *slot_ = obj_; return slot_; } static inline ipa_opt_pass VEC_ipa_opt_pass_base_ordered_remove (VEC_ipa_opt_pass_base *vec_, unsigned ix_ ) { ipa_opt_pass *slot_; ipa_opt_pass obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (ipa_opt_pass)); return obj_; } static inline ipa_opt_pass VEC_ipa_opt_pass_base_unordered_remove (VEC_ipa_opt_pass_base *vec_, unsigned ix_ ) { ipa_opt_pass *slot_; ipa_opt_pass obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_ipa_opt_pass_base_block_remove (VEC_ipa_opt_pass_base *vec_, unsigned ix_, unsigned len_ ) { ipa_opt_pass *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (ipa_opt_pass)); } static inline ipa_opt_pass *VEC_ipa_opt_pass_base_address (VEC_ipa_opt_pass_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_ipa_opt_pass_base_lower_bound (VEC_ipa_opt_pass_base *vec_, const ipa_opt_pass obj_, bool (*lessthan_)(const ipa_opt_pass, const ipa_opt_pass) ) { unsigned int len_ = VEC_ipa_opt_pass_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { ipa_opt_pass middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_ipa_opt_pass_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_ipa_opt_pass_heap { VEC_ipa_opt_pass_base base; } VEC_ipa_opt_pass_heap; static inline VEC_ipa_opt_pass_heap *VEC_ipa_opt_pass_heap_alloc (int alloc_ ) { return (VEC_ipa_opt_pass_heap *) vec_heap_p_reserve_exact (__null, alloc_ ); } static inline void VEC_ipa_opt_pass_heap_free (VEC_ipa_opt_pass_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = __null; } static inline VEC_ipa_opt_pass_heap *VEC_ipa_opt_pass_heap_copy (VEC_ipa_opt_pass_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_ipa_opt_pass_heap *new_vec_ = __null; if (len_) { new_vec_ = (VEC_ipa_opt_pass_heap *)(vec_heap_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (ipa_opt_pass) * len_); } return new_vec_; } static inline int VEC_ipa_opt_pass_heap_reserve (VEC_ipa_opt_pass_heap **vec_, int alloc_ ) { int extend = !VEC_ipa_opt_pass_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_ipa_opt_pass_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_ipa_opt_pass_heap_reserve_exact (VEC_ipa_opt_pass_heap **vec_, int alloc_ ) { int extend = !VEC_ipa_opt_pass_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_ipa_opt_pass_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_ipa_opt_pass_heap_safe_grow (VEC_ipa_opt_pass_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_ipa_opt_pass_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_ipa_opt_pass_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_ipa_opt_pass_heap_safe_grow_cleared (VEC_ipa_opt_pass_heap **vec_, int size_ ) { int oldsize = VEC_ipa_opt_pass_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_ipa_opt_pass_heap_safe_grow (vec_, size_ ); memset (&(VEC_ipa_opt_pass_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (ipa_opt_pass) * (size_ - oldsize)); } static inline void VEC_ipa_opt_pass_heap_safe_splice (VEC_ipa_opt_pass_heap **dst_, VEC_ipa_opt_pass_base *src_ ) { if (src_) { VEC_ipa_opt_pass_heap_reserve_exact (dst_, src_->prefix.num ); VEC_ipa_opt_pass_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline ipa_opt_pass *VEC_ipa_opt_pass_heap_safe_push (VEC_ipa_opt_pass_heap **vec_, ipa_opt_pass obj_ ) { VEC_ipa_opt_pass_heap_reserve (vec_, 1 ); return VEC_ipa_opt_pass_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline ipa_opt_pass *VEC_ipa_opt_pass_heap_safe_insert (VEC_ipa_opt_pass_heap **vec_, unsigned ix_, ipa_opt_pass obj_ ) { VEC_ipa_opt_pass_heap_reserve (vec_, 1 ); return VEC_ipa_opt_pass_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 
 struct varasm_status {
 
@@ -26504,93 +29133,93 @@ struct rtl_data {
 
 
 
-  unsigned char accesses_prior_frames;
+  bool accesses_prior_frames;
 
 
-  unsigned char calls_eh_return;
+  bool calls_eh_return;
 
 
 
-  unsigned char saves_all_registers;
+  bool saves_all_registers;
 
 
 
-  unsigned char has_nonlocal_goto;
+  bool has_nonlocal_goto;
 
 
-  unsigned char has_asm_statement;
+  bool has_asm_statement;
 
 
 
 
 
 
-  unsigned char all_throwers_are_sibcalls;
+  bool all_throwers_are_sibcalls;
 
 
 
-  unsigned char limit_stack;
+  bool limit_stack;
 
 
-  unsigned char profile;
+  bool profile;
 
 
-  unsigned char uses_const_pool;
+  bool uses_const_pool;
 
 
-  unsigned char uses_pic_offset_table;
+  bool uses_pic_offset_table;
 
 
-  unsigned char uses_eh_lsda;
+  bool uses_eh_lsda;
 
 
-  unsigned char tail_call_emit;
+  bool tail_call_emit;
 
 
-  unsigned char arg_pointer_save_area_init;
+  bool arg_pointer_save_area_init;
 
 
 
-  unsigned char frame_pointer_needed;
+  bool frame_pointer_needed;
 
 
-  unsigned char maybe_hot_insn_p;
+  bool maybe_hot_insn_p;
 
 
 
 
 
 
-  unsigned char stack_realign_needed;
+  bool stack_realign_needed;
 
 
 
 
-  unsigned char stack_realign_tried;
+  bool stack_realign_tried;
 
 
 
-  unsigned char need_drap;
+  bool need_drap;
 
 
 
 
-  unsigned char stack_realign_processed;
+  bool stack_realign_processed;
 
 
 
-  unsigned char stack_realign_finalized;
+  bool stack_realign_finalized;
 
 
-  unsigned char dbr_scheduled_p;
+  bool dbr_scheduled_p;
 
 
 
 
-  unsigned char nothrow;
+  bool nothrow;
 
 
-  unsigned char shrink_wrapped;
+  bool shrink_wrapped;
 
 
 
@@ -26763,7 +29392,7 @@ struct function {
 
 
 
-static __inline__ void
+static inline void
 add_local_decl (struct function *fun, tree d)
 {
   (VEC_tree_gc_safe_push(&(fun->local_decls),d ));
@@ -26827,7 +29456,7 @@ extern long get_frame_size (void);
 
 
 
-extern unsigned char frame_offset_overflow (long, tree);
+extern bool frame_offset_overflow (long, tree);
 
 
 
@@ -26851,10 +29480,10 @@ extern const char *current_function_name (void);
 
 extern void do_warn_unused_parameter (tree);
 
-extern unsigned char pass_by_reference (CUMULATIVE_ARGS *, enum machine_mode,
-          tree, unsigned char);
-extern unsigned char reference_callee_copied (CUMULATIVE_ARGS *, enum machine_mode,
-         tree, unsigned char);
+extern bool pass_by_reference (CUMULATIVE_ARGS *, enum machine_mode,
+          tree, bool);
+extern bool reference_callee_copied (CUMULATIVE_ARGS *, enum machine_mode,
+         tree, bool);
 
 extern void used_types_insert (tree);
 
@@ -26862,12 +29491,12 @@ extern int get_next_funcdef_no (void);
 extern int get_last_funcdef_no (void);
 
 
-extern unsigned char requires_stack_frame_p (rtx, HARD_REG_ELT_TYPE, HARD_REG_ELT_TYPE);
+extern bool requires_stack_frame_p (rtx, HARD_REG_ELT_TYPE, HARD_REG_ELT_TYPE);
 
 
 
-extern unsigned char optimize_function_for_size_p (struct function *);
-extern unsigned char optimize_function_for_speed_p (struct function *);
+extern bool optimize_function_for_size_p (struct function *);
+extern bool optimize_function_for_speed_p (struct function *);
 # 28 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/hashtab.h" 1
 # 29 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h" 2
@@ -26877,7 +29506,13 @@ extern unsigned char optimize_function_for_speed_p (struct function *);
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h" 1
 # 25 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h"
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/splay-tree.h" 1
-# 41 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/splay-tree.h"
+# 35 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/splay-tree.h"
+extern "C" {
+
+
+
+
+
   typedef unsigned long int libi_uhostptr_t;
   typedef long int libi_shostptr_t;
 # 62 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/splay-tree.h"
@@ -26982,6 +29617,9 @@ extern splay_tree_node splay_tree_min (splay_tree);
 extern int splay_tree_foreach (splay_tree, splay_tree_foreach_fn, void*);
 extern int splay_tree_compare_ints (splay_tree_key, splay_tree_key);
 extern int splay_tree_compare_pointers (splay_tree_key, splay_tree_key);
+
+
+}
 # 26 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h" 2
 # 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cpplib.h" 1
 # 31 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cpplib.h"
@@ -27053,7 +29691,7 @@ struct cpp_identifier {
 
 struct cpp_token {
   source_location src_loc;
-  __extension__ enum cpp_ttype type : 8;
+  enum cpp_ttype type : 8;
   unsigned short flags;
 
   union cpp_token_u
@@ -27257,10 +29895,10 @@ struct cpp_options
   enum cpp_normalize_level warn_normalize;
 
 
-  unsigned char warn_invalid_pch;
+  bool warn_invalid_pch;
 
 
-  unsigned char restore_pch_deps;
+  bool restore_pch_deps;
 
 
   struct
@@ -27269,18 +29907,18 @@ struct cpp_options
     enum cpp_deps_style style;
 
 
-    unsigned char missing_files;
+    bool missing_files;
 
 
 
-    unsigned char phony_targets;
+    bool phony_targets;
 
 
-    unsigned char ignore_main_file;
+    bool ignore_main_file;
 
 
 
-    unsigned char need_preprocessor_output;
+    bool need_preprocessor_output;
   } deps;
 
 
@@ -27290,17 +29928,17 @@ struct cpp_options
   size_t precision, char_precision, int_precision, wchar_precision;
 
 
-  unsigned char unsigned_char, unsigned_wchar;
+  bool unsigned_char, unsigned_wchar;
 
 
 
-  unsigned char bytes_big_endian;
+  bool bytes_big_endian;
 
 
   unsigned char stdc_0_in_system_headers;
 
 
-  unsigned char directives_only;
+  bool directives_only;
 };
 
 
@@ -27340,7 +29978,7 @@ struct cpp_callbacks
 
 
 
-  unsigned char (*error) (cpp_reader *, int, int, source_location, unsigned int,
+  bool (*error) (cpp_reader *, int, int, source_location, unsigned int,
    const char *, va_list *)
        __attribute__ ((__format__ (__printf__, 6, 0))) __attribute__ ((__nonnull__ (6)));
 
@@ -27356,7 +29994,7 @@ struct cpp_callbacks
   void (*used) (cpp_reader *, source_location, cpp_hashnode *);
 
 
-  unsigned char (*user_builtin_macro) (cpp_reader *, cpp_hashnode *);
+  bool (*user_builtin_macro) (cpp_reader *, cpp_hashnode *);
 };
 # 553 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cpplib.h"
 struct cpp_dir
@@ -27373,7 +30011,7 @@ struct cpp_dir
   unsigned char sysp;
 
 
-  unsigned char user_supplied_p;
+  bool user_supplied_p;
 
 
 
@@ -27446,7 +30084,7 @@ struct cpp_hashnode {
 
 
   unsigned char rid_code;
-  __extension__ enum node_type type : 6;
+  enum node_type type : 6;
   unsigned int flags : 10;
 
   union _cpp_hashnode_value value;
@@ -27515,11 +30153,11 @@ extern void cpp_destroy (cpp_reader *);
 extern unsigned int cpp_token_len (const cpp_token *);
 extern unsigned char *cpp_token_as_text (cpp_reader *, const cpp_token *);
 extern unsigned char *cpp_spell_token (cpp_reader *, const cpp_token *,
-           unsigned char *, unsigned char);
+           unsigned char *, bool);
 extern void cpp_register_pragma (cpp_reader *, const char *, const char *,
-     void (*) (cpp_reader *), unsigned char);
+     void (*) (cpp_reader *), bool);
 extern void cpp_register_deferred_pragma (cpp_reader *, const char *,
-       const char *, unsigned, unsigned char, unsigned char);
+       const char *, unsigned, bool, bool);
 extern int cpp_avoid_paste (cpp_reader *, const cpp_token *,
        const cpp_token *);
 extern const cpp_token *cpp_get_token (cpp_reader *);
@@ -27534,10 +30172,10 @@ extern const cpp_token *cpp_peek_token (cpp_reader *, int);
 extern cppchar_t cpp_interpret_charconst (cpp_reader *, const cpp_token *,
        unsigned int *, int *);
 
-extern unsigned char cpp_interpret_string (cpp_reader *,
+extern bool cpp_interpret_string (cpp_reader *,
       const cpp_string *, size_t,
       cpp_string *, enum cpp_ttype);
-extern unsigned char cpp_interpret_string_notranslate (cpp_reader *,
+extern bool cpp_interpret_string_notranslate (cpp_reader *,
            const cpp_string *, size_t,
            cpp_string *, enum cpp_ttype);
 
@@ -27568,8 +30206,8 @@ struct cpp_num
 {
   cpp_num_part high;
   cpp_num_part low;
-  unsigned char unsignedp;
-  unsigned char overflow;
+  bool unsignedp;
+  bool overflow;
 };
 # 849 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cpplib.h"
 extern unsigned cpp_classify_number (cpp_reader *, const cpp_token *,
@@ -27636,32 +30274,32 @@ enum {
 };
 
 
-extern unsigned char cpp_error (cpp_reader *, int, const char *msgid, ...)
+extern bool cpp_error (cpp_reader *, int, const char *msgid, ...)
   __attribute__ ((__format__ (__printf__, 3, 4))) __attribute__ ((__nonnull__ (3)));
-extern unsigned char cpp_warning (cpp_reader *, int, const char *msgid, ...)
+extern bool cpp_warning (cpp_reader *, int, const char *msgid, ...)
   __attribute__ ((__format__ (__printf__, 3, 4))) __attribute__ ((__nonnull__ (3)));
-extern unsigned char cpp_pedwarning (cpp_reader *, int, const char *msgid, ...)
+extern bool cpp_pedwarning (cpp_reader *, int, const char *msgid, ...)
   __attribute__ ((__format__ (__printf__, 3, 4))) __attribute__ ((__nonnull__ (3)));
-extern unsigned char cpp_warning_syshdr (cpp_reader *, int, const char *msgid, ...)
+extern bool cpp_warning_syshdr (cpp_reader *, int, const char *msgid, ...)
   __attribute__ ((__format__ (__printf__, 3, 4))) __attribute__ ((__nonnull__ (3)));
 
 
 
-extern unsigned char cpp_errno (cpp_reader *, int, const char *msgid);
+extern bool cpp_errno (cpp_reader *, int, const char *msgid);
 
 
 
 
-extern unsigned char cpp_error_with_line (cpp_reader *, int, source_location,
+extern bool cpp_error_with_line (cpp_reader *, int, source_location,
                                  unsigned, const char *msgid, ...)
   __attribute__ ((__format__ (__printf__, 5, 6))) __attribute__ ((__nonnull__ (5)));
-extern unsigned char cpp_warning_with_line (cpp_reader *, int, source_location,
+extern bool cpp_warning_with_line (cpp_reader *, int, source_location,
                                    unsigned, const char *msgid, ...)
   __attribute__ ((__format__ (__printf__, 5, 6))) __attribute__ ((__nonnull__ (5)));
-extern unsigned char cpp_pedwarning_with_line (cpp_reader *, int, source_location,
+extern bool cpp_pedwarning_with_line (cpp_reader *, int, source_location,
                                       unsigned, const char *msgid, ...)
   __attribute__ ((__format__ (__printf__, 5, 6))) __attribute__ ((__nonnull__ (5)));
-extern unsigned char cpp_warning_with_line_syshdr (cpp_reader *, int, source_location,
+extern bool cpp_warning_with_line_syshdr (cpp_reader *, int, source_location,
                                           unsigned, const char *msgid, ...)
   __attribute__ ((__format__ (__printf__, 5, 6))) __attribute__ ((__nonnull__ (5)));
 
@@ -27727,10 +30365,10 @@ extern unsigned char *cpp_quote_string (unsigned char *, const unsigned char *,
      unsigned int);
 
 
-extern unsigned char cpp_included (cpp_reader *, const char *);
-extern unsigned char cpp_included_before (cpp_reader *, const char *, source_location);
+extern bool cpp_included (cpp_reader *, const char *);
+extern bool cpp_included_before (cpp_reader *, const char *, source_location);
 extern void cpp_make_system_header (cpp_reader *, int, int);
-extern unsigned char cpp_push_include (cpp_reader *, const char *);
+extern bool cpp_push_include (cpp_reader *, const char *);
 extern void cpp_change_file (cpp_reader *, enum lc_reason, const char *);
 extern const char *cpp_get_path (struct _cpp_file *);
 extern cpp_dir *cpp_get_dir (struct _cpp_file *);
@@ -27762,9 +30400,9 @@ extern enum cpp_ttype cpp_userdef_char_remove_type
   (enum cpp_ttype type);
 extern enum cpp_ttype cpp_userdef_char_add_type
   (enum cpp_ttype type);
-extern unsigned char cpp_userdef_string_p
+extern bool cpp_userdef_string_p
   (enum cpp_ttype type);
-extern unsigned char cpp_userdef_char_p
+extern bool cpp_userdef_char_p
   (enum cpp_ttype type);
 extern const char * cpp_get_userdef_suffix
   (const cpp_token *);
@@ -27816,8 +30454,8 @@ extern const char *trim_filename (const char *);
 extern void internal_error (const char *, ...) __attribute__ ((__format__ (__gcc_cxxdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)))
      __attribute__ ((__noreturn__));
 
-extern unsigned char warning (int, const char *, ...) __attribute__ ((__format__ (__gcc_cxxdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
-extern unsigned char warning_at (location_t, int, const char *, ...)
+extern bool warning (int, const char *, ...) __attribute__ ((__format__ (__gcc_cxxdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
+extern bool warning_at (location_t, int, const char *, ...)
     __attribute__ ((__format__ (__gcc_cxxdiag__, 3, 4))) __attribute__ ((__nonnull__ (3)));
 extern void error (const char *, ...) __attribute__ ((__format__ (__gcc_cxxdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
 extern void error_n (location_t, int, const char *, const char *, ...)
@@ -27826,17 +30464,17 @@ extern void error_at (location_t, const char *, ...) __attribute__ ((__format__ 
 extern void fatal_error (const char *, ...) __attribute__ ((__format__ (__gcc_cxxdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)))
      __attribute__ ((__noreturn__));
 
-extern unsigned char pedwarn (location_t, int, const char *, ...)
+extern bool pedwarn (location_t, int, const char *, ...)
      __attribute__ ((__format__ (__gcc_cxxdiag__, 3, 4))) __attribute__ ((__nonnull__ (3)));
-extern unsigned char permerror (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_cxxdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
+extern bool permerror (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_cxxdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
 extern void sorry (const char *, ...) __attribute__ ((__format__ (__gcc_cxxdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
 extern void inform (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_cxxdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
 extern void inform_n (location_t, int, const char *, const char *, ...)
     __attribute__ ((__format__ (__gcc_cxxdiag__, 3, 5))) __attribute__ ((__nonnull__ (3))) __attribute__ ((__format__ (__gcc_cxxdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
 extern void verbatim (const char *, ...) __attribute__ ((__format__ (__gcc_cxxdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
-extern unsigned char emit_diagnostic (diagnostic_t, location_t, int,
+extern bool emit_diagnostic (diagnostic_t, location_t, int,
         const char *, ...) __attribute__ ((__format__ (__gcc_cxxdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
-extern unsigned char seen_error (void);
+extern bool seen_error (void);
 
 
 
@@ -28073,7 +30711,7 @@ struct c_common_identifier {
 struct c_common_resword
 {
   const char *const word;
-  __extension__ enum rid const rid : 16;
+  enum rid const rid : 16;
   const unsigned int disable : 16;
 };
 # 370 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h"
@@ -28157,7 +30795,7 @@ extern stmt_tree current_stmt_tree (void);
 extern tree push_stmt_list (void);
 extern tree pop_stmt_list (tree);
 extern tree add_stmt (tree);
-extern void push_cleanup (tree, tree, unsigned char);
+extern void push_cleanup (tree, tree, bool);
 extern tree pushdecl_top_level (tree);
 extern tree pushdecl (tree);
 extern tree build_modify_expr (location_t, tree, tree, enum tree_code,
@@ -28169,7 +30807,7 @@ extern int c_expand_decl (tree);
 extern int field_decl_cmp (const void *, const void *);
 extern void resort_sorted_fields (void *, void *, gt_pointer_operator,
       void *);
-extern unsigned char has_c_linkage (const_tree decl);
+extern bool has_c_linkage (const_tree decl);
 
 
 
@@ -28193,7 +30831,7 @@ extern char flag_dump_includes;
 
 
 
-extern unsigned char flag_pch_preprocess;
+extern bool flag_pch_preprocess;
 
 
 
@@ -28271,7 +30909,7 @@ extern int c_inhibit_evaluation_warnings;
 
 
 
-extern unsigned char done_lexing;
+extern bool done_lexing;
 # 693 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/c-family/c-common.h"
 struct visibility_flags
 {
@@ -28297,7 +30935,7 @@ extern tree (*make_fname_decl) (location_t, tree, int);
 extern void c_register_addr_space (const char *str, addr_space_t as);
 
 
-extern unsigned char in_late_binary_op;
+extern bool in_late_binary_op;
 extern const char *c_addr_space_name (addr_space_t as);
 extern tree identifier_global_value (tree);
 extern tree c_linkage_bindings (tree);
@@ -28308,22 +30946,22 @@ extern void finish_fname_decls (void);
 extern const char *fname_as_string (int);
 extern tree fname_decl (location_t, unsigned, tree);
 
-extern int check_user_alignment (const_tree, unsigned char);
+extern int check_user_alignment (const_tree, bool);
 extern void check_function_arguments (const_tree, int, tree *);
 extern void check_function_arguments_recurse (void (*)
            (void *, tree,
             unsigned long),
            void *, tree,
            unsigned long);
-extern unsigned char check_builtin_function_arguments (tree, int, tree *);
+extern bool check_builtin_function_arguments (tree, int, tree *);
 extern void check_function_format (tree, int, tree *);
 extern void set_Wformat (int);
-extern tree handle_format_attribute (tree *, tree, tree, int, unsigned char *);
-extern tree handle_format_arg_attribute (tree *, tree, tree, int, unsigned char *);
-extern unsigned char attribute_takes_identifier_p (const_tree);
-extern unsigned char c_common_handle_option (size_t, const char *, int, int, location_t,
+extern tree handle_format_attribute (tree *, tree, tree, int, bool *);
+extern tree handle_format_arg_attribute (tree *, tree, tree, int, bool *);
+extern bool attribute_takes_identifier_p (const_tree);
+extern bool c_common_handle_option (size_t, const char *, int, int, location_t,
         const struct cl_option_handlers *);
-extern unsigned char default_handle_c_option (size_t, const char *, int);
+extern bool default_handle_c_option (size_t, const char *, int);
 extern tree c_common_type_for_mode (enum machine_mode, int);
 extern tree c_common_type_for_size (unsigned int, int);
 extern tree c_common_fixed_point_type_for_size (unsigned int, unsigned int,
@@ -28333,15 +30971,15 @@ extern tree c_common_signed_type (tree);
 extern tree c_common_signed_or_unsigned_type (int, tree);
 extern void c_common_init_ts (void);
 extern tree c_build_bitfield_integer_type (unsigned long, int);
-extern unsigned char unsafe_conversion_p (tree, tree, unsigned char);
-extern unsigned char decl_with_nonnull_addr_p (const_tree);
-extern tree c_fully_fold (tree, unsigned char, unsigned char *);
+extern bool unsafe_conversion_p (tree, tree, bool);
+extern bool decl_with_nonnull_addr_p (const_tree);
+extern tree c_fully_fold (tree, bool, bool *);
 extern tree decl_constant_value_for_optimization (tree);
-extern tree c_wrap_maybe_const (tree, unsigned char);
+extern tree c_wrap_maybe_const (tree, bool);
 extern tree c_save_expr (tree);
 extern tree c_common_truthvalue_conversion (location_t, tree);
 extern void c_apply_type_quals_to_decl (int, tree);
-extern tree c_sizeof_or_alignof_type (location_t, tree, unsigned char, int);
+extern tree c_sizeof_or_alignof_type (location_t, tree, bool, int);
 extern tree c_alignof_expr (location_t, tree);
 
 
@@ -28349,31 +30987,31 @@ extern void binary_op_error (location_t, enum tree_code, tree, tree);
 extern tree fix_string_type (tree);
 extern void constant_expression_warning (tree);
 extern void constant_expression_error (tree);
-extern unsigned char strict_aliasing_warning (tree, tree, tree);
+extern bool strict_aliasing_warning (tree, tree, tree);
 extern void warnings_for_convert_and_check (tree, tree, tree);
 extern tree convert_and_check (tree, tree);
 extern void overflow_warning (location_t, tree);
 extern void warn_logical_operator (location_t, enum tree_code, tree,
        enum tree_code, tree, enum tree_code, tree);
 extern void check_main_parameter_types (tree decl);
-extern unsigned char c_determine_visibility (tree);
-extern unsigned char same_scalar_type_ignoring_signedness (tree, tree);
-extern void mark_valid_location_for_stdc_pragma (unsigned char);
-extern unsigned char valid_location_for_stdc_pragma_p (void);
+extern bool c_determine_visibility (tree);
+extern bool same_scalar_type_ignoring_signedness (tree, tree);
+extern void mark_valid_location_for_stdc_pragma (bool);
+extern bool valid_location_for_stdc_pragma_p (void);
 extern void set_float_const_decimal64 (void);
 extern void clear_float_const_decimal64 (void);
-extern unsigned char float_const_decimal64_p (void);
+extern bool float_const_decimal64_p (void);
 
-extern unsigned char keyword_begins_type_specifier (enum rid);
-extern unsigned char keyword_is_storage_class_specifier (enum rid);
-extern unsigned char keyword_is_type_qualifier (enum rid);
-extern unsigned char keyword_is_decl_specifier (enum rid);
-
-
+extern bool keyword_begins_type_specifier (enum rid);
+extern bool keyword_is_storage_class_specifier (enum rid);
+extern bool keyword_is_type_qualifier (enum rid);
+extern bool keyword_is_decl_specifier (enum rid);
 
 
 
-extern tree shorten_binary_op (tree result_type, tree op0, tree op1, unsigned char bitwise);
+
+
+extern tree shorten_binary_op (tree result_type, tree op0, tree op1, bool bitwise);
 
 
 
@@ -28398,16 +31036,16 @@ extern tree build_va_arg (location_t, tree, tree);
 extern const unsigned int c_family_lang_mask;
 extern unsigned int c_common_option_lang_mask (void);
 extern void c_common_initialize_diagnostics (diagnostic_context *);
-extern unsigned char c_common_complain_wrong_lang_p (const struct cl_option *);
+extern bool c_common_complain_wrong_lang_p (const struct cl_option *);
 extern void c_common_init_options_struct (struct gcc_options *);
 extern void c_common_init_options (unsigned int, struct cl_decoded_option *);
-extern unsigned char c_common_post_options (const char **);
-extern unsigned char c_common_init (void);
+extern bool c_common_post_options (const char **);
+extern bool c_common_init (void);
 extern void c_common_finish (void);
 extern void c_common_parse_file (void);
 extern alias_set_type c_common_get_alias_set (tree);
 extern void c_register_builtin_type (tree, const char*);
-extern unsigned char c_promoting_integer_type_p (const_tree);
+extern bool c_promoting_integer_type_p (const_tree);
 extern int self_promoting_args_p (const_tree);
 extern tree strip_pointer_operator (tree);
 extern tree strip_pointer_or_array_types (tree);
@@ -28463,10 +31101,10 @@ extern tree finish_label_address_expr (tree, location_t);
 
 extern tree lookup_label (tree);
 extern tree lookup_name (tree);
-extern unsigned char lvalue_p (const_tree);
+extern bool lvalue_p (const_tree);
 
-extern unsigned char vector_targets_convertible_p (const_tree t1, const_tree t2);
-extern unsigned char vector_types_convertible_p (const_tree t1, const_tree t2, unsigned char emit_lax_note);
+extern bool vector_targets_convertible_p (const_tree t1, const_tree t2);
+extern bool vector_types_convertible_p (const_tree t1, const_tree t2, bool emit_lax_note);
 
 extern rtx c_expand_expr (tree, rtx, enum machine_mode, int, rtx *);
 
@@ -28474,11 +31112,11 @@ extern void init_c_lex (void);
 
 extern void c_cpp_builtins (cpp_reader *);
 extern void c_cpp_builtins_optimize_pragma (cpp_reader *, tree, tree);
-extern unsigned char c_cpp_error (cpp_reader *, int, int, location_t, unsigned int,
+extern bool c_cpp_error (cpp_reader *, int, int, location_t, unsigned int,
     const char *, va_list *)
      __attribute__ ((__format__ (__gcc_cxxdiag__, 6, 0))) __attribute__ ((__nonnull__ (6)));
 
-extern unsigned char parse_optimize_options (tree, unsigned char);
+extern bool parse_optimize_options (tree, bool);
 
 
 
@@ -28503,7 +31141,7 @@ struct c_fileinfo
 struct c_fileinfo *get_fileinfo (const char *);
 extern void dump_time_statistics (void);
 
-extern unsigned char c_dump_tree (void *, tree);
+extern bool c_dump_tree (void *, tree);
 
 extern void verify_sequence_points (tree);
 
@@ -28525,9 +31163,9 @@ extern void readonly_error (tree, enum lvalue_use);
 extern void lvalue_error (location_t, enum lvalue_use);
 extern void invalid_indirection_error (location_t, tree, ref_operator);
 
-extern int complete_array_type (tree *, tree, unsigned char);
+extern int complete_array_type (tree *, tree, bool);
 
-extern tree builtin_type_for_size (int, unsigned char);
+extern tree builtin_type_for_size (int, bool);
 
 extern void c_common_mark_addressable_vec (tree);
 
@@ -28584,7 +31222,7 @@ extern void init_pp_output (FILE *);
 extern void preprocess_file (cpp_reader *);
 extern void pp_file_change (const struct line_map *);
 extern void pp_dir_change (cpp_reader *, const char *);
-extern unsigned char check_missing_format_attribute (tree, tree);
+extern bool check_missing_format_attribute (tree, tree);
 
 
 extern tree c_finish_omp_master (location_t, tree);
@@ -28601,12 +31239,12 @@ extern void c_split_parallel_clauses (location_t, tree, tree *, tree *);
 extern enum omp_clause_default_kind c_omp_predetermined_sharing (tree);
 
 
-extern unsigned char c_omp_sharing_predetermined (tree);
-extern tree c_omp_remap_decl (tree, unsigned char);
+extern bool c_omp_sharing_predetermined (tree);
+extern tree c_omp_remap_decl (tree, bool);
 extern void record_types_used_by_current_var_decl (tree);
 
 
-static __inline__ tree
+static inline tree
 c_tree_chain_next (tree t)
 {
 
@@ -28617,7 +31255,7 @@ c_tree_chain_next (tree t)
 
   if ((tree_contains_struct[(((enum tree_code) (t)->base.code))][(TS_COMMON)]))
     return ((t)->common.chain);
-  return ((void *)0);
+  return __null;
 }
 
 
@@ -28736,8 +31374,8 @@ typedef struct
 } pp_wrapping_mode_t;
 # 135 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/pretty-print.h"
 typedef struct pretty_print_info pretty_printer;
-typedef unsigned char (*printer_fn) (pretty_printer *, text_info *, const char *,
-       int, unsigned char, unsigned char, unsigned char);
+typedef bool (*printer_fn) (pretty_printer *, text_info *, const char *,
+       int, bool, bool, bool);
 # 159 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/pretty-print.h"
 struct pretty_print_info
 {
@@ -28763,14 +31401,14 @@ struct pretty_print_info
   printer_fn format_decoder;
 
 
-  unsigned char emitted_prefix;
+  bool emitted_prefix;
 
 
-  unsigned char need_newline;
+  bool need_newline;
 
 
 
-  unsigned char translate_identifiers;
+  bool translate_identifiers;
 };
 # 297 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/pretty-print.h"
 extern void pp_construct (pretty_printer *, const char *, int);
@@ -28802,7 +31440,7 @@ extern void pp_write_text_to_stream (pretty_printer *pp);
 extern void pp_base_maybe_space (pretty_printer *);
 
 
-static __inline__ pp_wrapping_mode_t
+static inline pp_wrapping_mode_t
 pp_set_verbatim_wrapping_ (pretty_printer *pp)
 {
   pp_wrapping_mode_t oldmode = (pp)->wrapping;
@@ -28862,10 +31500,10 @@ struct diagnostic_context
 
 
 
-  unsigned char some_warnings_are_errors;
+  bool some_warnings_are_errors;
 
 
-  unsigned char warning_as_error_requested;
+  bool warning_as_error_requested;
 
 
 
@@ -28895,32 +31533,32 @@ struct diagnostic_context
 
 
 
-  unsigned char show_option_requested;
+  bool show_option_requested;
 
 
-  unsigned char abort_on_error;
+  bool abort_on_error;
 
 
-  unsigned char show_column;
+  bool show_column;
 
 
-  unsigned char pedantic_errors;
+  bool pedantic_errors;
 
 
-  unsigned char permissive;
+  bool permissive;
 
 
 
   int opt_permissive;
 
 
-  unsigned char fatal_errors;
+  bool fatal_errors;
 
 
-  unsigned char dc_inhibit_warnings;
+  bool dc_inhibit_warnings;
 
 
-  unsigned char dc_warn_system_headers;
+  bool dc_warn_system_headers;
 
 
   unsigned int max_errors;
@@ -28958,13 +31596,13 @@ struct diagnostic_context
 
   int lock;
 
-  unsigned char inhibit_notes_p;
+  bool inhibit_notes_p;
 };
 
-static __inline__ void
+static inline void
 diagnostic_inhibit_notes (diagnostic_context * context)
 {
-  context->inhibit_notes_p = 1;
+  context->inhibit_notes_p = true;
 }
 # 224 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/diagnostic.h"
 extern diagnostic_context *global_dc;
@@ -28980,7 +31618,7 @@ extern diagnostic_t diagnostic_classify_diagnostic (diagnostic_context *,
           location_t);
 extern void diagnostic_push_diagnostics (diagnostic_context *, location_t);
 extern void diagnostic_pop_diagnostics (diagnostic_context *, location_t);
-extern unsigned char diagnostic_report_diagnostic (diagnostic_context *,
+extern bool diagnostic_report_diagnostic (diagnostic_context *,
        diagnostic_info *);
 
 extern void diagnostic_set_info (diagnostic_info *, const char *, va_list *,
@@ -29045,14 +31683,14 @@ typedef struct cxx_saved_binding {
   tree real_type_value;
 } cxx_saved_binding;
 
-typedef struct VEC_cxx_saved_binding_base { struct vec_prefix prefix; cxx_saved_binding vec[1]; } VEC_cxx_saved_binding_base; typedef struct VEC_cxx_saved_binding_none { VEC_cxx_saved_binding_base base; } VEC_cxx_saved_binding_none; static __inline__ unsigned VEC_cxx_saved_binding_base_length (const VEC_cxx_saved_binding_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ cxx_saved_binding *VEC_cxx_saved_binding_base_last (VEC_cxx_saved_binding_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return &vec_->vec[vec_->prefix.num - 1]; } static __inline__ cxx_saved_binding *VEC_cxx_saved_binding_base_index (VEC_cxx_saved_binding_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return &vec_->vec[ix_]; } static __inline__ int VEC_cxx_saved_binding_base_iterate (VEC_cxx_saved_binding_base *vec_, unsigned ix_, cxx_saved_binding **ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static __inline__ size_t VEC_cxx_saved_binding_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_cxx_saved_binding_base, vec) + alloc_ * sizeof(cxx_saved_binding); } static __inline__ void VEC_cxx_saved_binding_base_embedded_init (VEC_cxx_saved_binding_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_cxx_saved_binding_base_space (VEC_cxx_saved_binding_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_cxx_saved_binding_base_splice (VEC_cxx_saved_binding_base *dst_, VEC_cxx_saved_binding_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (cxx_saved_binding)); dst_->prefix.num += len_; } } static __inline__ cxx_saved_binding *VEC_cxx_saved_binding_base_quick_push (VEC_cxx_saved_binding_base *vec_, const cxx_saved_binding *obj_ ) { cxx_saved_binding *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_cxx_saved_binding_base_pop (VEC_cxx_saved_binding_base *vec_ ) { (void)(vec_->prefix.num); --vec_->prefix.num; } static __inline__ void VEC_cxx_saved_binding_base_truncate (VEC_cxx_saved_binding_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ cxx_saved_binding *VEC_cxx_saved_binding_base_replace (VEC_cxx_saved_binding_base *vec_, unsigned ix_, const cxx_saved_binding *obj_ ) { cxx_saved_binding *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ cxx_saved_binding *VEC_cxx_saved_binding_base_quick_insert (VEC_cxx_saved_binding_base *vec_, unsigned ix_, const cxx_saved_binding *obj_ ) { cxx_saved_binding *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (cxx_saved_binding)); if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_cxx_saved_binding_base_ordered_remove (VEC_cxx_saved_binding_base *vec_, unsigned ix_ ) { cxx_saved_binding *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (cxx_saved_binding)); } static __inline__ void VEC_cxx_saved_binding_base_unordered_remove (VEC_cxx_saved_binding_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->prefix.num); vec_->vec[ix_] = vec_->vec[--vec_->prefix.num]; } static __inline__ void VEC_cxx_saved_binding_base_block_remove (VEC_cxx_saved_binding_base *vec_, unsigned ix_, unsigned len_ ) { cxx_saved_binding *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (cxx_saved_binding)); } static __inline__ cxx_saved_binding *VEC_cxx_saved_binding_base_address (VEC_cxx_saved_binding_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_cxx_saved_binding_base_lower_bound (VEC_cxx_saved_binding_base *vec_, const cxx_saved_binding *obj_, unsigned char (*lessthan_)(const cxx_saved_binding *, const cxx_saved_binding *) ) { unsigned int len_ = VEC_cxx_saved_binding_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { cxx_saved_binding *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_cxx_saved_binding_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_cxx_saved_binding_gc { VEC_cxx_saved_binding_base base; } VEC_cxx_saved_binding_gc; static __inline__ VEC_cxx_saved_binding_gc *VEC_cxx_saved_binding_gc_alloc (int alloc_ ) { return (VEC_cxx_saved_binding_gc *) vec_gc_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_cxx_saved_binding_gc, base.vec), sizeof (cxx_saved_binding) ); } static __inline__ VEC_cxx_saved_binding_gc *VEC_cxx_saved_binding_gc_copy (VEC_cxx_saved_binding_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_cxx_saved_binding_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_cxx_saved_binding_gc *)(vec_gc_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_cxx_saved_binding_gc, base.vec), sizeof (cxx_saved_binding) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (cxx_saved_binding) * len_); } return new_vec_; } static __inline__ void VEC_cxx_saved_binding_gc_free (VEC_cxx_saved_binding_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_cxx_saved_binding_gc_reserve (VEC_cxx_saved_binding_gc **vec_, int alloc_ ) { int extend = !VEC_cxx_saved_binding_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cxx_saved_binding_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_cxx_saved_binding_gc, base.vec), sizeof (cxx_saved_binding) ); return extend; } static __inline__ int VEC_cxx_saved_binding_gc_reserve_exact (VEC_cxx_saved_binding_gc **vec_, int alloc_ ) { int extend = !VEC_cxx_saved_binding_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cxx_saved_binding_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_cxx_saved_binding_gc, base.vec), sizeof (cxx_saved_binding) ); return extend; } static __inline__ void VEC_cxx_saved_binding_gc_safe_grow (VEC_cxx_saved_binding_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_cxx_saved_binding_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_cxx_saved_binding_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_cxx_saved_binding_gc_safe_grow_cleared (VEC_cxx_saved_binding_gc **vec_, int size_ ) { int oldsize = VEC_cxx_saved_binding_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_cxx_saved_binding_gc_safe_grow (vec_, size_ ); memset (&(VEC_cxx_saved_binding_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (cxx_saved_binding) * (size_ - oldsize)); } static __inline__ void VEC_cxx_saved_binding_gc_safe_splice (VEC_cxx_saved_binding_gc **dst_, VEC_cxx_saved_binding_base *src_ ) { if (src_) { VEC_cxx_saved_binding_gc_reserve_exact (dst_, src_->prefix.num ); VEC_cxx_saved_binding_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ cxx_saved_binding *VEC_cxx_saved_binding_gc_safe_push (VEC_cxx_saved_binding_gc **vec_, const cxx_saved_binding *obj_ ) { VEC_cxx_saved_binding_gc_reserve (vec_, 1 ); return VEC_cxx_saved_binding_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ cxx_saved_binding *VEC_cxx_saved_binding_gc_safe_insert (VEC_cxx_saved_binding_gc **vec_, unsigned ix_, const cxx_saved_binding *obj_ ) { VEC_cxx_saved_binding_gc_reserve (vec_, 1 ); return VEC_cxx_saved_binding_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_cxx_saved_binding_base { struct vec_prefix prefix; cxx_saved_binding vec[1]; } VEC_cxx_saved_binding_base; typedef struct VEC_cxx_saved_binding_none { VEC_cxx_saved_binding_base base; } VEC_cxx_saved_binding_none; static inline unsigned VEC_cxx_saved_binding_base_length (const VEC_cxx_saved_binding_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline cxx_saved_binding *VEC_cxx_saved_binding_base_last (VEC_cxx_saved_binding_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return &vec_->vec[vec_->prefix.num - 1]; } static inline cxx_saved_binding *VEC_cxx_saved_binding_base_index (VEC_cxx_saved_binding_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return &vec_->vec[ix_]; } static inline int VEC_cxx_saved_binding_base_iterate (VEC_cxx_saved_binding_base *vec_, unsigned ix_, cxx_saved_binding **ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static inline size_t VEC_cxx_saved_binding_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_cxx_saved_binding_base, vec) + alloc_ * sizeof(cxx_saved_binding); } static inline void VEC_cxx_saved_binding_base_embedded_init (VEC_cxx_saved_binding_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_cxx_saved_binding_base_space (VEC_cxx_saved_binding_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_cxx_saved_binding_base_splice (VEC_cxx_saved_binding_base *dst_, VEC_cxx_saved_binding_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (cxx_saved_binding)); dst_->prefix.num += len_; } } static inline cxx_saved_binding *VEC_cxx_saved_binding_base_quick_push (VEC_cxx_saved_binding_base *vec_, const cxx_saved_binding *obj_ ) { cxx_saved_binding *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_cxx_saved_binding_base_pop (VEC_cxx_saved_binding_base *vec_ ) { (void)(vec_->prefix.num); --vec_->prefix.num; } static inline void VEC_cxx_saved_binding_base_truncate (VEC_cxx_saved_binding_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline cxx_saved_binding *VEC_cxx_saved_binding_base_replace (VEC_cxx_saved_binding_base *vec_, unsigned ix_, const cxx_saved_binding *obj_ ) { cxx_saved_binding *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static inline cxx_saved_binding *VEC_cxx_saved_binding_base_quick_insert (VEC_cxx_saved_binding_base *vec_, unsigned ix_, const cxx_saved_binding *obj_ ) { cxx_saved_binding *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (cxx_saved_binding)); if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_cxx_saved_binding_base_ordered_remove (VEC_cxx_saved_binding_base *vec_, unsigned ix_ ) { cxx_saved_binding *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (cxx_saved_binding)); } static inline void VEC_cxx_saved_binding_base_unordered_remove (VEC_cxx_saved_binding_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->prefix.num); vec_->vec[ix_] = vec_->vec[--vec_->prefix.num]; } static inline void VEC_cxx_saved_binding_base_block_remove (VEC_cxx_saved_binding_base *vec_, unsigned ix_, unsigned len_ ) { cxx_saved_binding *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (cxx_saved_binding)); } static inline cxx_saved_binding *VEC_cxx_saved_binding_base_address (VEC_cxx_saved_binding_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_cxx_saved_binding_base_lower_bound (VEC_cxx_saved_binding_base *vec_, const cxx_saved_binding *obj_, bool (*lessthan_)(const cxx_saved_binding *, const cxx_saved_binding *) ) { unsigned int len_ = VEC_cxx_saved_binding_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { cxx_saved_binding *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_cxx_saved_binding_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_cxx_saved_binding_gc { VEC_cxx_saved_binding_base base; } VEC_cxx_saved_binding_gc; static inline VEC_cxx_saved_binding_gc *VEC_cxx_saved_binding_gc_alloc (int alloc_ ) { return (VEC_cxx_saved_binding_gc *) vec_gc_o_reserve_exact (__null, alloc_, __builtin_offsetof (VEC_cxx_saved_binding_gc, base.vec), sizeof (cxx_saved_binding) ); } static inline VEC_cxx_saved_binding_gc *VEC_cxx_saved_binding_gc_copy (VEC_cxx_saved_binding_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_cxx_saved_binding_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_cxx_saved_binding_gc *)(vec_gc_o_reserve_exact (__null, len_, __builtin_offsetof (VEC_cxx_saved_binding_gc, base.vec), sizeof (cxx_saved_binding) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (cxx_saved_binding) * len_); } return new_vec_; } static inline void VEC_cxx_saved_binding_gc_free (VEC_cxx_saved_binding_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline int VEC_cxx_saved_binding_gc_reserve (VEC_cxx_saved_binding_gc **vec_, int alloc_ ) { int extend = !VEC_cxx_saved_binding_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cxx_saved_binding_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_cxx_saved_binding_gc, base.vec), sizeof (cxx_saved_binding) ); return extend; } static inline int VEC_cxx_saved_binding_gc_reserve_exact (VEC_cxx_saved_binding_gc **vec_, int alloc_ ) { int extend = !VEC_cxx_saved_binding_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cxx_saved_binding_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_cxx_saved_binding_gc, base.vec), sizeof (cxx_saved_binding) ); return extend; } static inline void VEC_cxx_saved_binding_gc_safe_grow (VEC_cxx_saved_binding_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_cxx_saved_binding_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_cxx_saved_binding_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_cxx_saved_binding_gc_safe_grow_cleared (VEC_cxx_saved_binding_gc **vec_, int size_ ) { int oldsize = VEC_cxx_saved_binding_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_cxx_saved_binding_gc_safe_grow (vec_, size_ ); memset (&(VEC_cxx_saved_binding_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (cxx_saved_binding) * (size_ - oldsize)); } static inline void VEC_cxx_saved_binding_gc_safe_splice (VEC_cxx_saved_binding_gc **dst_, VEC_cxx_saved_binding_base *src_ ) { if (src_) { VEC_cxx_saved_binding_gc_reserve_exact (dst_, src_->prefix.num ); VEC_cxx_saved_binding_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline cxx_saved_binding *VEC_cxx_saved_binding_gc_safe_push (VEC_cxx_saved_binding_gc **vec_, const cxx_saved_binding *obj_ ) { VEC_cxx_saved_binding_gc_reserve (vec_, 1 ); return VEC_cxx_saved_binding_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline cxx_saved_binding *VEC_cxx_saved_binding_gc_safe_insert (VEC_cxx_saved_binding_gc **vec_, unsigned ix_, const cxx_saved_binding *obj_ ) { VEC_cxx_saved_binding_gc_reserve (vec_, 1 ); return VEC_cxx_saved_binding_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 
 extern tree identifier_type_value (tree);
 extern void set_identifier_type_value (tree, tree);
 extern void pop_binding (tree, tree);
 extern tree constructor_name (tree);
-extern unsigned char constructor_name_p (tree, tree);
+extern bool constructor_name_p (tree, tree);
 
 
 typedef enum scope_kind {
@@ -29106,8 +31744,8 @@ typedef struct cp_class_binding {
   tree identifier;
 } cp_class_binding;
 
-typedef struct VEC_cp_class_binding_base { struct vec_prefix prefix; cp_class_binding vec[1]; } VEC_cp_class_binding_base; typedef struct VEC_cp_class_binding_none { VEC_cp_class_binding_base base; } VEC_cp_class_binding_none; static __inline__ unsigned VEC_cp_class_binding_base_length (const VEC_cp_class_binding_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ cp_class_binding *VEC_cp_class_binding_base_last (VEC_cp_class_binding_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return &vec_->vec[vec_->prefix.num - 1]; } static __inline__ cp_class_binding *VEC_cp_class_binding_base_index (VEC_cp_class_binding_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return &vec_->vec[ix_]; } static __inline__ int VEC_cp_class_binding_base_iterate (VEC_cp_class_binding_base *vec_, unsigned ix_, cp_class_binding **ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static __inline__ size_t VEC_cp_class_binding_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_cp_class_binding_base, vec) + alloc_ * sizeof(cp_class_binding); } static __inline__ void VEC_cp_class_binding_base_embedded_init (VEC_cp_class_binding_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_cp_class_binding_base_space (VEC_cp_class_binding_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_cp_class_binding_base_splice (VEC_cp_class_binding_base *dst_, VEC_cp_class_binding_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (cp_class_binding)); dst_->prefix.num += len_; } } static __inline__ cp_class_binding *VEC_cp_class_binding_base_quick_push (VEC_cp_class_binding_base *vec_, const cp_class_binding *obj_ ) { cp_class_binding *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_cp_class_binding_base_pop (VEC_cp_class_binding_base *vec_ ) { (void)(vec_->prefix.num); --vec_->prefix.num; } static __inline__ void VEC_cp_class_binding_base_truncate (VEC_cp_class_binding_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ cp_class_binding *VEC_cp_class_binding_base_replace (VEC_cp_class_binding_base *vec_, unsigned ix_, const cp_class_binding *obj_ ) { cp_class_binding *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ cp_class_binding *VEC_cp_class_binding_base_quick_insert (VEC_cp_class_binding_base *vec_, unsigned ix_, const cp_class_binding *obj_ ) { cp_class_binding *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (cp_class_binding)); if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_cp_class_binding_base_ordered_remove (VEC_cp_class_binding_base *vec_, unsigned ix_ ) { cp_class_binding *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (cp_class_binding)); } static __inline__ void VEC_cp_class_binding_base_unordered_remove (VEC_cp_class_binding_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->prefix.num); vec_->vec[ix_] = vec_->vec[--vec_->prefix.num]; } static __inline__ void VEC_cp_class_binding_base_block_remove (VEC_cp_class_binding_base *vec_, unsigned ix_, unsigned len_ ) { cp_class_binding *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (cp_class_binding)); } static __inline__ cp_class_binding *VEC_cp_class_binding_base_address (VEC_cp_class_binding_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_cp_class_binding_base_lower_bound (VEC_cp_class_binding_base *vec_, const cp_class_binding *obj_, unsigned char (*lessthan_)(const cp_class_binding *, const cp_class_binding *) ) { unsigned int len_ = VEC_cp_class_binding_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { cp_class_binding *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_cp_class_binding_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_cp_class_binding_gc { VEC_cp_class_binding_base base; } VEC_cp_class_binding_gc; static __inline__ VEC_cp_class_binding_gc *VEC_cp_class_binding_gc_alloc (int alloc_ ) { return (VEC_cp_class_binding_gc *) vec_gc_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_cp_class_binding_gc, base.vec), sizeof (cp_class_binding) ); } static __inline__ VEC_cp_class_binding_gc *VEC_cp_class_binding_gc_copy (VEC_cp_class_binding_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_cp_class_binding_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_cp_class_binding_gc *)(vec_gc_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_cp_class_binding_gc, base.vec), sizeof (cp_class_binding) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (cp_class_binding) * len_); } return new_vec_; } static __inline__ void VEC_cp_class_binding_gc_free (VEC_cp_class_binding_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_cp_class_binding_gc_reserve (VEC_cp_class_binding_gc **vec_, int alloc_ ) { int extend = !VEC_cp_class_binding_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cp_class_binding_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_cp_class_binding_gc, base.vec), sizeof (cp_class_binding) ); return extend; } static __inline__ int VEC_cp_class_binding_gc_reserve_exact (VEC_cp_class_binding_gc **vec_, int alloc_ ) { int extend = !VEC_cp_class_binding_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cp_class_binding_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_cp_class_binding_gc, base.vec), sizeof (cp_class_binding) ); return extend; } static __inline__ void VEC_cp_class_binding_gc_safe_grow (VEC_cp_class_binding_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_cp_class_binding_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_cp_class_binding_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_cp_class_binding_gc_safe_grow_cleared (VEC_cp_class_binding_gc **vec_, int size_ ) { int oldsize = VEC_cp_class_binding_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_cp_class_binding_gc_safe_grow (vec_, size_ ); memset (&(VEC_cp_class_binding_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (cp_class_binding) * (size_ - oldsize)); } static __inline__ void VEC_cp_class_binding_gc_safe_splice (VEC_cp_class_binding_gc **dst_, VEC_cp_class_binding_base *src_ ) { if (src_) { VEC_cp_class_binding_gc_reserve_exact (dst_, src_->prefix.num ); VEC_cp_class_binding_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ cp_class_binding *VEC_cp_class_binding_gc_safe_push (VEC_cp_class_binding_gc **vec_, const cp_class_binding *obj_ ) { VEC_cp_class_binding_gc_reserve (vec_, 1 ); return VEC_cp_class_binding_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ cp_class_binding *VEC_cp_class_binding_gc_safe_insert (VEC_cp_class_binding_gc **vec_, unsigned ix_, const cp_class_binding *obj_ ) { VEC_cp_class_binding_gc_reserve (vec_, 1 ); return VEC_cp_class_binding_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_cp_class_binding_base { struct vec_prefix prefix; cp_class_binding vec[1]; } VEC_cp_class_binding_base; typedef struct VEC_cp_class_binding_none { VEC_cp_class_binding_base base; } VEC_cp_class_binding_none; static inline unsigned VEC_cp_class_binding_base_length (const VEC_cp_class_binding_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline cp_class_binding *VEC_cp_class_binding_base_last (VEC_cp_class_binding_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return &vec_->vec[vec_->prefix.num - 1]; } static inline cp_class_binding *VEC_cp_class_binding_base_index (VEC_cp_class_binding_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return &vec_->vec[ix_]; } static inline int VEC_cp_class_binding_base_iterate (VEC_cp_class_binding_base *vec_, unsigned ix_, cp_class_binding **ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static inline size_t VEC_cp_class_binding_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_cp_class_binding_base, vec) + alloc_ * sizeof(cp_class_binding); } static inline void VEC_cp_class_binding_base_embedded_init (VEC_cp_class_binding_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_cp_class_binding_base_space (VEC_cp_class_binding_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_cp_class_binding_base_splice (VEC_cp_class_binding_base *dst_, VEC_cp_class_binding_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (cp_class_binding)); dst_->prefix.num += len_; } } static inline cp_class_binding *VEC_cp_class_binding_base_quick_push (VEC_cp_class_binding_base *vec_, const cp_class_binding *obj_ ) { cp_class_binding *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_cp_class_binding_base_pop (VEC_cp_class_binding_base *vec_ ) { (void)(vec_->prefix.num); --vec_->prefix.num; } static inline void VEC_cp_class_binding_base_truncate (VEC_cp_class_binding_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline cp_class_binding *VEC_cp_class_binding_base_replace (VEC_cp_class_binding_base *vec_, unsigned ix_, const cp_class_binding *obj_ ) { cp_class_binding *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static inline cp_class_binding *VEC_cp_class_binding_base_quick_insert (VEC_cp_class_binding_base *vec_, unsigned ix_, const cp_class_binding *obj_ ) { cp_class_binding *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (cp_class_binding)); if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_cp_class_binding_base_ordered_remove (VEC_cp_class_binding_base *vec_, unsigned ix_ ) { cp_class_binding *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (cp_class_binding)); } static inline void VEC_cp_class_binding_base_unordered_remove (VEC_cp_class_binding_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->prefix.num); vec_->vec[ix_] = vec_->vec[--vec_->prefix.num]; } static inline void VEC_cp_class_binding_base_block_remove (VEC_cp_class_binding_base *vec_, unsigned ix_, unsigned len_ ) { cp_class_binding *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (cp_class_binding)); } static inline cp_class_binding *VEC_cp_class_binding_base_address (VEC_cp_class_binding_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_cp_class_binding_base_lower_bound (VEC_cp_class_binding_base *vec_, const cp_class_binding *obj_, bool (*lessthan_)(const cp_class_binding *, const cp_class_binding *) ) { unsigned int len_ = VEC_cp_class_binding_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { cp_class_binding *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_cp_class_binding_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_cp_class_binding_gc { VEC_cp_class_binding_base base; } VEC_cp_class_binding_gc; static inline VEC_cp_class_binding_gc *VEC_cp_class_binding_gc_alloc (int alloc_ ) { return (VEC_cp_class_binding_gc *) vec_gc_o_reserve_exact (__null, alloc_, __builtin_offsetof (VEC_cp_class_binding_gc, base.vec), sizeof (cp_class_binding) ); } static inline VEC_cp_class_binding_gc *VEC_cp_class_binding_gc_copy (VEC_cp_class_binding_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_cp_class_binding_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_cp_class_binding_gc *)(vec_gc_o_reserve_exact (__null, len_, __builtin_offsetof (VEC_cp_class_binding_gc, base.vec), sizeof (cp_class_binding) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (cp_class_binding) * len_); } return new_vec_; } static inline void VEC_cp_class_binding_gc_free (VEC_cp_class_binding_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline int VEC_cp_class_binding_gc_reserve (VEC_cp_class_binding_gc **vec_, int alloc_ ) { int extend = !VEC_cp_class_binding_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cp_class_binding_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_cp_class_binding_gc, base.vec), sizeof (cp_class_binding) ); return extend; } static inline int VEC_cp_class_binding_gc_reserve_exact (VEC_cp_class_binding_gc **vec_, int alloc_ ) { int extend = !VEC_cp_class_binding_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cp_class_binding_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_cp_class_binding_gc, base.vec), sizeof (cp_class_binding) ); return extend; } static inline void VEC_cp_class_binding_gc_safe_grow (VEC_cp_class_binding_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_cp_class_binding_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_cp_class_binding_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_cp_class_binding_gc_safe_grow_cleared (VEC_cp_class_binding_gc **vec_, int size_ ) { int oldsize = VEC_cp_class_binding_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_cp_class_binding_gc_safe_grow (vec_, size_ ); memset (&(VEC_cp_class_binding_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (cp_class_binding) * (size_ - oldsize)); } static inline void VEC_cp_class_binding_gc_safe_splice (VEC_cp_class_binding_gc **dst_, VEC_cp_class_binding_base *src_ ) { if (src_) { VEC_cp_class_binding_gc_reserve_exact (dst_, src_->prefix.num ); VEC_cp_class_binding_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline cp_class_binding *VEC_cp_class_binding_gc_safe_push (VEC_cp_class_binding_gc **vec_, const cp_class_binding *obj_ ) { VEC_cp_class_binding_gc_reserve (vec_, 1 ); return VEC_cp_class_binding_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline cp_class_binding *VEC_cp_class_binding_gc_safe_insert (VEC_cp_class_binding_gc **vec_, unsigned ix_, const cp_class_binding *obj_ ) { VEC_cp_class_binding_gc_reserve (vec_, 1 ); return VEC_cp_class_binding_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 
 typedef struct cp_label_binding {
 
@@ -29116,8 +31754,8 @@ typedef struct cp_label_binding {
   tree prev_value;
 } cp_label_binding;
 
-typedef struct VEC_cp_label_binding_base { struct vec_prefix prefix; cp_label_binding vec[1]; } VEC_cp_label_binding_base; typedef struct VEC_cp_label_binding_none { VEC_cp_label_binding_base base; } VEC_cp_label_binding_none; static __inline__ unsigned VEC_cp_label_binding_base_length (const VEC_cp_label_binding_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ cp_label_binding *VEC_cp_label_binding_base_last (VEC_cp_label_binding_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return &vec_->vec[vec_->prefix.num - 1]; } static __inline__ cp_label_binding *VEC_cp_label_binding_base_index (VEC_cp_label_binding_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return &vec_->vec[ix_]; } static __inline__ int VEC_cp_label_binding_base_iterate (VEC_cp_label_binding_base *vec_, unsigned ix_, cp_label_binding **ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static __inline__ size_t VEC_cp_label_binding_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_cp_label_binding_base, vec) + alloc_ * sizeof(cp_label_binding); } static __inline__ void VEC_cp_label_binding_base_embedded_init (VEC_cp_label_binding_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_cp_label_binding_base_space (VEC_cp_label_binding_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_cp_label_binding_base_splice (VEC_cp_label_binding_base *dst_, VEC_cp_label_binding_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (cp_label_binding)); dst_->prefix.num += len_; } } static __inline__ cp_label_binding *VEC_cp_label_binding_base_quick_push (VEC_cp_label_binding_base *vec_, const cp_label_binding *obj_ ) { cp_label_binding *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_cp_label_binding_base_pop (VEC_cp_label_binding_base *vec_ ) { (void)(vec_->prefix.num); --vec_->prefix.num; } static __inline__ void VEC_cp_label_binding_base_truncate (VEC_cp_label_binding_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ cp_label_binding *VEC_cp_label_binding_base_replace (VEC_cp_label_binding_base *vec_, unsigned ix_, const cp_label_binding *obj_ ) { cp_label_binding *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ cp_label_binding *VEC_cp_label_binding_base_quick_insert (VEC_cp_label_binding_base *vec_, unsigned ix_, const cp_label_binding *obj_ ) { cp_label_binding *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (cp_label_binding)); if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_cp_label_binding_base_ordered_remove (VEC_cp_label_binding_base *vec_, unsigned ix_ ) { cp_label_binding *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (cp_label_binding)); } static __inline__ void VEC_cp_label_binding_base_unordered_remove (VEC_cp_label_binding_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->prefix.num); vec_->vec[ix_] = vec_->vec[--vec_->prefix.num]; } static __inline__ void VEC_cp_label_binding_base_block_remove (VEC_cp_label_binding_base *vec_, unsigned ix_, unsigned len_ ) { cp_label_binding *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (cp_label_binding)); } static __inline__ cp_label_binding *VEC_cp_label_binding_base_address (VEC_cp_label_binding_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_cp_label_binding_base_lower_bound (VEC_cp_label_binding_base *vec_, const cp_label_binding *obj_, unsigned char (*lessthan_)(const cp_label_binding *, const cp_label_binding *) ) { unsigned int len_ = VEC_cp_label_binding_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { cp_label_binding *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_cp_label_binding_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_cp_label_binding_gc { VEC_cp_label_binding_base base; } VEC_cp_label_binding_gc; static __inline__ VEC_cp_label_binding_gc *VEC_cp_label_binding_gc_alloc (int alloc_ ) { return (VEC_cp_label_binding_gc *) vec_gc_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_cp_label_binding_gc, base.vec), sizeof (cp_label_binding) ); } static __inline__ VEC_cp_label_binding_gc *VEC_cp_label_binding_gc_copy (VEC_cp_label_binding_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_cp_label_binding_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_cp_label_binding_gc *)(vec_gc_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_cp_label_binding_gc, base.vec), sizeof (cp_label_binding) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (cp_label_binding) * len_); } return new_vec_; } static __inline__ void VEC_cp_label_binding_gc_free (VEC_cp_label_binding_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_cp_label_binding_gc_reserve (VEC_cp_label_binding_gc **vec_, int alloc_ ) { int extend = !VEC_cp_label_binding_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cp_label_binding_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_cp_label_binding_gc, base.vec), sizeof (cp_label_binding) ); return extend; } static __inline__ int VEC_cp_label_binding_gc_reserve_exact (VEC_cp_label_binding_gc **vec_, int alloc_ ) { int extend = !VEC_cp_label_binding_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cp_label_binding_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_cp_label_binding_gc, base.vec), sizeof (cp_label_binding) ); return extend; } static __inline__ void VEC_cp_label_binding_gc_safe_grow (VEC_cp_label_binding_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_cp_label_binding_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_cp_label_binding_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_cp_label_binding_gc_safe_grow_cleared (VEC_cp_label_binding_gc **vec_, int size_ ) { int oldsize = VEC_cp_label_binding_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_cp_label_binding_gc_safe_grow (vec_, size_ ); memset (&(VEC_cp_label_binding_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (cp_label_binding) * (size_ - oldsize)); } static __inline__ void VEC_cp_label_binding_gc_safe_splice (VEC_cp_label_binding_gc **dst_, VEC_cp_label_binding_base *src_ ) { if (src_) { VEC_cp_label_binding_gc_reserve_exact (dst_, src_->prefix.num ); VEC_cp_label_binding_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ cp_label_binding *VEC_cp_label_binding_gc_safe_push (VEC_cp_label_binding_gc **vec_, const cp_label_binding *obj_ ) { VEC_cp_label_binding_gc_reserve (vec_, 1 ); return VEC_cp_label_binding_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ cp_label_binding *VEC_cp_label_binding_gc_safe_insert (VEC_cp_label_binding_gc **vec_, unsigned ix_, const cp_label_binding *obj_ ) { VEC_cp_label_binding_gc_reserve (vec_, 1 ); return VEC_cp_label_binding_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_cp_label_binding_base { struct vec_prefix prefix; cp_label_binding vec[1]; } VEC_cp_label_binding_base; typedef struct VEC_cp_label_binding_none { VEC_cp_label_binding_base base; } VEC_cp_label_binding_none; static inline unsigned VEC_cp_label_binding_base_length (const VEC_cp_label_binding_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline cp_label_binding *VEC_cp_label_binding_base_last (VEC_cp_label_binding_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return &vec_->vec[vec_->prefix.num - 1]; } static inline cp_label_binding *VEC_cp_label_binding_base_index (VEC_cp_label_binding_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return &vec_->vec[ix_]; } static inline int VEC_cp_label_binding_base_iterate (VEC_cp_label_binding_base *vec_, unsigned ix_, cp_label_binding **ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static inline size_t VEC_cp_label_binding_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_cp_label_binding_base, vec) + alloc_ * sizeof(cp_label_binding); } static inline void VEC_cp_label_binding_base_embedded_init (VEC_cp_label_binding_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_cp_label_binding_base_space (VEC_cp_label_binding_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_cp_label_binding_base_splice (VEC_cp_label_binding_base *dst_, VEC_cp_label_binding_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (cp_label_binding)); dst_->prefix.num += len_; } } static inline cp_label_binding *VEC_cp_label_binding_base_quick_push (VEC_cp_label_binding_base *vec_, const cp_label_binding *obj_ ) { cp_label_binding *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_cp_label_binding_base_pop (VEC_cp_label_binding_base *vec_ ) { (void)(vec_->prefix.num); --vec_->prefix.num; } static inline void VEC_cp_label_binding_base_truncate (VEC_cp_label_binding_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline cp_label_binding *VEC_cp_label_binding_base_replace (VEC_cp_label_binding_base *vec_, unsigned ix_, const cp_label_binding *obj_ ) { cp_label_binding *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static inline cp_label_binding *VEC_cp_label_binding_base_quick_insert (VEC_cp_label_binding_base *vec_, unsigned ix_, const cp_label_binding *obj_ ) { cp_label_binding *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (cp_label_binding)); if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_cp_label_binding_base_ordered_remove (VEC_cp_label_binding_base *vec_, unsigned ix_ ) { cp_label_binding *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (cp_label_binding)); } static inline void VEC_cp_label_binding_base_unordered_remove (VEC_cp_label_binding_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->prefix.num); vec_->vec[ix_] = vec_->vec[--vec_->prefix.num]; } static inline void VEC_cp_label_binding_base_block_remove (VEC_cp_label_binding_base *vec_, unsigned ix_, unsigned len_ ) { cp_label_binding *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (cp_label_binding)); } static inline cp_label_binding *VEC_cp_label_binding_base_address (VEC_cp_label_binding_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_cp_label_binding_base_lower_bound (VEC_cp_label_binding_base *vec_, const cp_label_binding *obj_, bool (*lessthan_)(const cp_label_binding *, const cp_label_binding *) ) { unsigned int len_ = VEC_cp_label_binding_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { cp_label_binding *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_cp_label_binding_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_cp_label_binding_gc { VEC_cp_label_binding_base base; } VEC_cp_label_binding_gc; static inline VEC_cp_label_binding_gc *VEC_cp_label_binding_gc_alloc (int alloc_ ) { return (VEC_cp_label_binding_gc *) vec_gc_o_reserve_exact (__null, alloc_, __builtin_offsetof (VEC_cp_label_binding_gc, base.vec), sizeof (cp_label_binding) ); } static inline VEC_cp_label_binding_gc *VEC_cp_label_binding_gc_copy (VEC_cp_label_binding_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_cp_label_binding_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_cp_label_binding_gc *)(vec_gc_o_reserve_exact (__null, len_, __builtin_offsetof (VEC_cp_label_binding_gc, base.vec), sizeof (cp_label_binding) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (cp_label_binding) * len_); } return new_vec_; } static inline void VEC_cp_label_binding_gc_free (VEC_cp_label_binding_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline int VEC_cp_label_binding_gc_reserve (VEC_cp_label_binding_gc **vec_, int alloc_ ) { int extend = !VEC_cp_label_binding_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cp_label_binding_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_cp_label_binding_gc, base.vec), sizeof (cp_label_binding) ); return extend; } static inline int VEC_cp_label_binding_gc_reserve_exact (VEC_cp_label_binding_gc **vec_, int alloc_ ) { int extend = !VEC_cp_label_binding_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cp_label_binding_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_cp_label_binding_gc, base.vec), sizeof (cp_label_binding) ); return extend; } static inline void VEC_cp_label_binding_gc_safe_grow (VEC_cp_label_binding_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_cp_label_binding_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_cp_label_binding_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_cp_label_binding_gc_safe_grow_cleared (VEC_cp_label_binding_gc **vec_, int size_ ) { int oldsize = VEC_cp_label_binding_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_cp_label_binding_gc_safe_grow (vec_, size_ ); memset (&(VEC_cp_label_binding_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (cp_label_binding) * (size_ - oldsize)); } static inline void VEC_cp_label_binding_gc_safe_splice (VEC_cp_label_binding_gc **dst_, VEC_cp_label_binding_base *src_ ) { if (src_) { VEC_cp_label_binding_gc_reserve_exact (dst_, src_->prefix.num ); VEC_cp_label_binding_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline cp_label_binding *VEC_cp_label_binding_gc_safe_push (VEC_cp_label_binding_gc **vec_, const cp_label_binding *obj_ ) { VEC_cp_label_binding_gc_reserve (vec_, 1 ); return VEC_cp_label_binding_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline cp_label_binding *VEC_cp_label_binding_gc_safe_insert (VEC_cp_label_binding_gc **vec_, unsigned ix_, const cp_label_binding *obj_ ) { VEC_cp_label_binding_gc_reserve (vec_, 1 ); return VEC_cp_label_binding_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 # 187 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/name-lookup.h"
 struct cp_binding_level {
 
@@ -29181,7 +31819,7 @@ struct cp_binding_level {
 
 
 
-  __extension__ enum scope_kind kind : 4;
+  enum scope_kind kind : 4;
 
 
 
@@ -29211,20 +31849,20 @@ extern tree global_type_node;
 
 
 extern cp_binding_level *leave_scope (void);
-extern unsigned char kept_level_p (void);
-extern unsigned char global_bindings_p (void);
-extern unsigned char toplevel_bindings_p (void);
-extern unsigned char namespace_bindings_p (void);
-extern unsigned char local_bindings_p (void);
-extern unsigned char template_parm_scope_p (void);
+extern bool kept_level_p (void);
+extern bool global_bindings_p (void);
+extern bool toplevel_bindings_p (void);
+extern bool namespace_bindings_p (void);
+extern bool local_bindings_p (void);
+extern bool template_parm_scope_p (void);
 extern scope_kind innermost_scope_kind (void);
 extern cp_binding_level *begin_scope (scope_kind, tree);
 extern void print_binding_stack (void);
 extern void push_to_top_level (void);
 extern void pop_from_top_level (void);
 extern void pop_everything (void);
-extern void keep_next_level (unsigned char);
-extern unsigned char is_ancestor (tree, tree);
+extern void keep_next_level (bool);
+extern bool is_ancestor (tree, tree);
 extern tree push_scope (tree);
 extern void pop_scope (tree);
 extern tree push_inner_scope (tree);
@@ -29235,30 +31873,30 @@ extern void push_namespace (tree);
 extern void pop_namespace (void);
 extern void push_nested_namespace (tree);
 extern void pop_nested_namespace (tree);
-extern unsigned char handle_namespace_attrs (tree, tree);
+extern bool handle_namespace_attrs (tree, tree);
 extern void pushlevel_class (void);
 extern void poplevel_class (void);
-extern tree pushdecl_with_scope (tree, cp_binding_level *, unsigned char);
+extern tree pushdecl_with_scope (tree, cp_binding_level *, bool);
 extern tree lookup_name_prefer_type (tree, int);
-extern tree lookup_name_real (tree, int, int, unsigned char, int, int);
+extern tree lookup_name_real (tree, int, int, bool, int, int);
 extern tree lookup_type_scope (tree, tag_scope);
 extern tree namespace_binding (tree, tree);
 extern void set_namespace_binding (tree, tree, tree);
-extern unsigned char hidden_name_p (tree);
+extern bool hidden_name_p (tree);
 extern tree remove_hidden_names (tree);
-extern tree lookup_qualified_name (tree, tree, unsigned char, unsigned char);
+extern tree lookup_qualified_name (tree, tree, bool, bool);
 extern tree lookup_name_nonclass (tree);
 extern tree lookup_name_innermost_nonclass_level (tree);
-extern unsigned char is_local_extern (tree);
-extern tree lookup_function_nonclass (tree, VEC_tree_gc *, unsigned char);
+extern bool is_local_extern (tree);
+extern tree lookup_function_nonclass (tree, VEC_tree_gc *, bool);
 extern void push_local_binding (tree, tree, int);
-extern unsigned char pushdecl_class_level (tree);
-extern tree pushdecl_namespace_level (tree, unsigned char);
-extern unsigned char push_class_level_binding (tree, tree);
+extern bool pushdecl_class_level (tree);
+extern tree pushdecl_namespace_level (tree, bool);
+extern bool push_class_level_binding (tree, tree);
 extern tree getdecls (void);
 extern int function_parm_depth (void);
 extern tree cp_namespace_decls (tree);
-extern void set_decl_namespace (tree, tree, unsigned char);
+extern void set_decl_namespace (tree, tree, bool);
 extern void push_decl_namespace (tree);
 extern void pop_decl_namespace (void);
 extern void do_namespace_alias (tree, tree);
@@ -29266,28 +31904,28 @@ extern void do_toplevel_using_decl (tree, tree, tree);
 extern void do_local_using_decl (tree, tree, tree);
 extern tree do_class_using_decl (tree, tree);
 extern void do_using_directive (tree);
-extern tree lookup_arg_dependent (tree, tree, VEC_tree_gc *, unsigned char);
-extern unsigned char is_associated_namespace (tree, tree);
+extern tree lookup_arg_dependent (tree, tree, VEC_tree_gc *, bool);
+extern bool is_associated_namespace (tree, tree);
 extern void parse_using_directive (tree, tree);
 extern tree innermost_non_namespace_value (tree);
-extern cxx_binding *outer_binding (tree, cxx_binding *, unsigned char);
+extern cxx_binding *outer_binding (tree, cxx_binding *, bool);
 extern void cp_emit_debug_info_for_using (tree, tree);
 
 
 
 
-static __inline__ unsigned char
+static inline bool
 get_global_value_if_present (tree id, tree *decl)
 {
   tree global_value = namespace_binding (id, global_namespace);
   if (global_value)
     *decl = global_value;
-  return global_value != ((void *)0);
+  return global_value != __null;
 }
 
 
 
-static __inline__ unsigned char
+static inline bool
 is_typename_at_global_scope (tree id)
 {
   tree global_value = namespace_binding (id, global_namespace);
@@ -29507,8 +32145,8 @@ struct qualified_typedef_usage_s {
   location_t locus;
 };
 typedef struct qualified_typedef_usage_s qualified_typedef_usage_t;
-typedef struct VEC_qualified_typedef_usage_t_base { struct vec_prefix prefix; qualified_typedef_usage_t vec[1]; } VEC_qualified_typedef_usage_t_base; typedef struct VEC_qualified_typedef_usage_t_none { VEC_qualified_typedef_usage_t_base base; } VEC_qualified_typedef_usage_t_none; static __inline__ unsigned VEC_qualified_typedef_usage_t_base_length (const VEC_qualified_typedef_usage_t_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ qualified_typedef_usage_t *VEC_qualified_typedef_usage_t_base_last (VEC_qualified_typedef_usage_t_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return &vec_->vec[vec_->prefix.num - 1]; } static __inline__ qualified_typedef_usage_t *VEC_qualified_typedef_usage_t_base_index (VEC_qualified_typedef_usage_t_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return &vec_->vec[ix_]; } static __inline__ int VEC_qualified_typedef_usage_t_base_iterate (VEC_qualified_typedef_usage_t_base *vec_, unsigned ix_, qualified_typedef_usage_t **ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static __inline__ size_t VEC_qualified_typedef_usage_t_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_qualified_typedef_usage_t_base, vec) + alloc_ * sizeof(qualified_typedef_usage_t); } static __inline__ void VEC_qualified_typedef_usage_t_base_embedded_init (VEC_qualified_typedef_usage_t_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_qualified_typedef_usage_t_base_space (VEC_qualified_typedef_usage_t_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_qualified_typedef_usage_t_base_splice (VEC_qualified_typedef_usage_t_base *dst_, VEC_qualified_typedef_usage_t_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (qualified_typedef_usage_t)); dst_->prefix.num += len_; } } static __inline__ qualified_typedef_usage_t *VEC_qualified_typedef_usage_t_base_quick_push (VEC_qualified_typedef_usage_t_base *vec_, const qualified_typedef_usage_t *obj_ ) { qualified_typedef_usage_t *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_qualified_typedef_usage_t_base_pop (VEC_qualified_typedef_usage_t_base *vec_ ) { (void)(vec_->prefix.num); --vec_->prefix.num; } static __inline__ void VEC_qualified_typedef_usage_t_base_truncate (VEC_qualified_typedef_usage_t_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ qualified_typedef_usage_t *VEC_qualified_typedef_usage_t_base_replace (VEC_qualified_typedef_usage_t_base *vec_, unsigned ix_, const qualified_typedef_usage_t *obj_ ) { qualified_typedef_usage_t *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ qualified_typedef_usage_t *VEC_qualified_typedef_usage_t_base_quick_insert (VEC_qualified_typedef_usage_t_base *vec_, unsigned ix_, const qualified_typedef_usage_t *obj_ ) { qualified_typedef_usage_t *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (qualified_typedef_usage_t)); if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_qualified_typedef_usage_t_base_ordered_remove (VEC_qualified_typedef_usage_t_base *vec_, unsigned ix_ ) { qualified_typedef_usage_t *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (qualified_typedef_usage_t)); } static __inline__ void VEC_qualified_typedef_usage_t_base_unordered_remove (VEC_qualified_typedef_usage_t_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->prefix.num); vec_->vec[ix_] = vec_->vec[--vec_->prefix.num]; } static __inline__ void VEC_qualified_typedef_usage_t_base_block_remove (VEC_qualified_typedef_usage_t_base *vec_, unsigned ix_, unsigned len_ ) { qualified_typedef_usage_t *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (qualified_typedef_usage_t)); } static __inline__ qualified_typedef_usage_t *VEC_qualified_typedef_usage_t_base_address (VEC_qualified_typedef_usage_t_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_qualified_typedef_usage_t_base_lower_bound (VEC_qualified_typedef_usage_t_base *vec_, const qualified_typedef_usage_t *obj_, unsigned char (*lessthan_)(const qualified_typedef_usage_t *, const qualified_typedef_usage_t *) ) { unsigned int len_ = VEC_qualified_typedef_usage_t_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { qualified_typedef_usage_t *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_qualified_typedef_usage_t_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_qualified_typedef_usage_t_gc { VEC_qualified_typedef_usage_t_base base; } VEC_qualified_typedef_usage_t_gc; static __inline__ VEC_qualified_typedef_usage_t_gc *VEC_qualified_typedef_usage_t_gc_alloc (int alloc_ ) { return (VEC_qualified_typedef_usage_t_gc *) vec_gc_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_qualified_typedef_usage_t_gc, base.vec), sizeof (qualified_typedef_usage_t) ); } static __inline__ VEC_qualified_typedef_usage_t_gc *VEC_qualified_typedef_usage_t_gc_copy (VEC_qualified_typedef_usage_t_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_qualified_typedef_usage_t_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_qualified_typedef_usage_t_gc *)(vec_gc_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_qualified_typedef_usage_t_gc, base.vec), sizeof (qualified_typedef_usage_t) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (qualified_typedef_usage_t) * len_); } return new_vec_; } static __inline__ void VEC_qualified_typedef_usage_t_gc_free (VEC_qualified_typedef_usage_t_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_qualified_typedef_usage_t_gc_reserve (VEC_qualified_typedef_usage_t_gc **vec_, int alloc_ ) { int extend = !VEC_qualified_typedef_usage_t_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_qualified_typedef_usage_t_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_qualified_typedef_usage_t_gc, base.vec), sizeof (qualified_typedef_usage_t) ); return extend; } static __inline__ int VEC_qualified_typedef_usage_t_gc_reserve_exact (VEC_qualified_typedef_usage_t_gc **vec_, int alloc_ ) { int extend = !VEC_qualified_typedef_usage_t_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_qualified_typedef_usage_t_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_qualified_typedef_usage_t_gc, base.vec), sizeof (qualified_typedef_usage_t) ); return extend; } static __inline__ void VEC_qualified_typedef_usage_t_gc_safe_grow (VEC_qualified_typedef_usage_t_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_qualified_typedef_usage_t_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_qualified_typedef_usage_t_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_qualified_typedef_usage_t_gc_safe_grow_cleared (VEC_qualified_typedef_usage_t_gc **vec_, int size_ ) { int oldsize = VEC_qualified_typedef_usage_t_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_qualified_typedef_usage_t_gc_safe_grow (vec_, size_ ); memset (&(VEC_qualified_typedef_usage_t_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (qualified_typedef_usage_t) * (size_ - oldsize)); } static __inline__ void VEC_qualified_typedef_usage_t_gc_safe_splice (VEC_qualified_typedef_usage_t_gc **dst_, VEC_qualified_typedef_usage_t_base *src_ ) { if (src_) { VEC_qualified_typedef_usage_t_gc_reserve_exact (dst_, src_->prefix.num ); VEC_qualified_typedef_usage_t_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ qualified_typedef_usage_t *VEC_qualified_typedef_usage_t_gc_safe_push (VEC_qualified_typedef_usage_t_gc **vec_, const qualified_typedef_usage_t *obj_ ) { VEC_qualified_typedef_usage_t_gc_reserve (vec_, 1 ); return VEC_qualified_typedef_usage_t_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ qualified_typedef_usage_t *VEC_qualified_typedef_usage_t_gc_safe_insert (VEC_qualified_typedef_usage_t_gc **vec_, unsigned ix_, const qualified_typedef_usage_t *obj_ ) { VEC_qualified_typedef_usage_t_gc_reserve (vec_, 1 ); return VEC_qualified_typedef_usage_t_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_qualified_typedef_usage_t_base { struct vec_prefix prefix; qualified_typedef_usage_t vec[1]; } VEC_qualified_typedef_usage_t_base; typedef struct VEC_qualified_typedef_usage_t_none { VEC_qualified_typedef_usage_t_base base; } VEC_qualified_typedef_usage_t_none; static inline unsigned VEC_qualified_typedef_usage_t_base_length (const VEC_qualified_typedef_usage_t_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline qualified_typedef_usage_t *VEC_qualified_typedef_usage_t_base_last (VEC_qualified_typedef_usage_t_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return &vec_->vec[vec_->prefix.num - 1]; } static inline qualified_typedef_usage_t *VEC_qualified_typedef_usage_t_base_index (VEC_qualified_typedef_usage_t_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return &vec_->vec[ix_]; } static inline int VEC_qualified_typedef_usage_t_base_iterate (VEC_qualified_typedef_usage_t_base *vec_, unsigned ix_, qualified_typedef_usage_t **ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static inline size_t VEC_qualified_typedef_usage_t_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_qualified_typedef_usage_t_base, vec) + alloc_ * sizeof(qualified_typedef_usage_t); } static inline void VEC_qualified_typedef_usage_t_base_embedded_init (VEC_qualified_typedef_usage_t_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_qualified_typedef_usage_t_base_space (VEC_qualified_typedef_usage_t_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_qualified_typedef_usage_t_base_splice (VEC_qualified_typedef_usage_t_base *dst_, VEC_qualified_typedef_usage_t_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (qualified_typedef_usage_t)); dst_->prefix.num += len_; } } static inline qualified_typedef_usage_t *VEC_qualified_typedef_usage_t_base_quick_push (VEC_qualified_typedef_usage_t_base *vec_, const qualified_typedef_usage_t *obj_ ) { qualified_typedef_usage_t *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_qualified_typedef_usage_t_base_pop (VEC_qualified_typedef_usage_t_base *vec_ ) { (void)(vec_->prefix.num); --vec_->prefix.num; } static inline void VEC_qualified_typedef_usage_t_base_truncate (VEC_qualified_typedef_usage_t_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline qualified_typedef_usage_t *VEC_qualified_typedef_usage_t_base_replace (VEC_qualified_typedef_usage_t_base *vec_, unsigned ix_, const qualified_typedef_usage_t *obj_ ) { qualified_typedef_usage_t *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static inline qualified_typedef_usage_t *VEC_qualified_typedef_usage_t_base_quick_insert (VEC_qualified_typedef_usage_t_base *vec_, unsigned ix_, const qualified_typedef_usage_t *obj_ ) { qualified_typedef_usage_t *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (qualified_typedef_usage_t)); if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_qualified_typedef_usage_t_base_ordered_remove (VEC_qualified_typedef_usage_t_base *vec_, unsigned ix_ ) { qualified_typedef_usage_t *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (qualified_typedef_usage_t)); } static inline void VEC_qualified_typedef_usage_t_base_unordered_remove (VEC_qualified_typedef_usage_t_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->prefix.num); vec_->vec[ix_] = vec_->vec[--vec_->prefix.num]; } static inline void VEC_qualified_typedef_usage_t_base_block_remove (VEC_qualified_typedef_usage_t_base *vec_, unsigned ix_, unsigned len_ ) { qualified_typedef_usage_t *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (qualified_typedef_usage_t)); } static inline qualified_typedef_usage_t *VEC_qualified_typedef_usage_t_base_address (VEC_qualified_typedef_usage_t_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_qualified_typedef_usage_t_base_lower_bound (VEC_qualified_typedef_usage_t_base *vec_, const qualified_typedef_usage_t *obj_, bool (*lessthan_)(const qualified_typedef_usage_t *, const qualified_typedef_usage_t *) ) { unsigned int len_ = VEC_qualified_typedef_usage_t_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { qualified_typedef_usage_t *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_qualified_typedef_usage_t_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_qualified_typedef_usage_t_gc { VEC_qualified_typedef_usage_t_base base; } VEC_qualified_typedef_usage_t_gc; static inline VEC_qualified_typedef_usage_t_gc *VEC_qualified_typedef_usage_t_gc_alloc (int alloc_ ) { return (VEC_qualified_typedef_usage_t_gc *) vec_gc_o_reserve_exact (__null, alloc_, __builtin_offsetof (VEC_qualified_typedef_usage_t_gc, base.vec), sizeof (qualified_typedef_usage_t) ); } static inline VEC_qualified_typedef_usage_t_gc *VEC_qualified_typedef_usage_t_gc_copy (VEC_qualified_typedef_usage_t_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_qualified_typedef_usage_t_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_qualified_typedef_usage_t_gc *)(vec_gc_o_reserve_exact (__null, len_, __builtin_offsetof (VEC_qualified_typedef_usage_t_gc, base.vec), sizeof (qualified_typedef_usage_t) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (qualified_typedef_usage_t) * len_); } return new_vec_; } static inline void VEC_qualified_typedef_usage_t_gc_free (VEC_qualified_typedef_usage_t_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline int VEC_qualified_typedef_usage_t_gc_reserve (VEC_qualified_typedef_usage_t_gc **vec_, int alloc_ ) { int extend = !VEC_qualified_typedef_usage_t_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_qualified_typedef_usage_t_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_qualified_typedef_usage_t_gc, base.vec), sizeof (qualified_typedef_usage_t) ); return extend; } static inline int VEC_qualified_typedef_usage_t_gc_reserve_exact (VEC_qualified_typedef_usage_t_gc **vec_, int alloc_ ) { int extend = !VEC_qualified_typedef_usage_t_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_qualified_typedef_usage_t_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_qualified_typedef_usage_t_gc, base.vec), sizeof (qualified_typedef_usage_t) ); return extend; } static inline void VEC_qualified_typedef_usage_t_gc_safe_grow (VEC_qualified_typedef_usage_t_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_qualified_typedef_usage_t_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_qualified_typedef_usage_t_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_qualified_typedef_usage_t_gc_safe_grow_cleared (VEC_qualified_typedef_usage_t_gc **vec_, int size_ ) { int oldsize = VEC_qualified_typedef_usage_t_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_qualified_typedef_usage_t_gc_safe_grow (vec_, size_ ); memset (&(VEC_qualified_typedef_usage_t_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (qualified_typedef_usage_t) * (size_ - oldsize)); } static inline void VEC_qualified_typedef_usage_t_gc_safe_splice (VEC_qualified_typedef_usage_t_gc **dst_, VEC_qualified_typedef_usage_t_base *src_ ) { if (src_) { VEC_qualified_typedef_usage_t_gc_reserve_exact (dst_, src_->prefix.num ); VEC_qualified_typedef_usage_t_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline qualified_typedef_usage_t *VEC_qualified_typedef_usage_t_gc_safe_push (VEC_qualified_typedef_usage_t_gc **vec_, const qualified_typedef_usage_t *obj_ ) { VEC_qualified_typedef_usage_t_gc_reserve (vec_, 1 ); return VEC_qualified_typedef_usage_t_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline qualified_typedef_usage_t *VEC_qualified_typedef_usage_t_gc_safe_insert (VEC_qualified_typedef_usage_t_gc **vec_, unsigned ix_, const qualified_typedef_usage_t *obj_ ) { VEC_qualified_typedef_usage_t_gc_reserve (vec_, 1 ); return VEC_qualified_typedef_usage_t_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 
 struct tree_template_info {
   struct tree_common common;
@@ -29707,7 +32345,7 @@ struct language_function {
   htab_t extern_decl_map;
 };
 # 1174 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
-extern unsigned char statement_code_p[MAX_TREE_CODES];
+extern bool statement_code_p[MAX_TREE_CODES];
 
 
 
@@ -29718,8 +32356,8 @@ typedef struct tree_pair_s {
   tree value;
 } tree_pair_s;
 typedef tree_pair_s *tree_pair_p;
-typedef struct VEC_tree_pair_s_base { struct vec_prefix prefix; tree_pair_s vec[1]; } VEC_tree_pair_s_base; typedef struct VEC_tree_pair_s_none { VEC_tree_pair_s_base base; } VEC_tree_pair_s_none; static __inline__ unsigned VEC_tree_pair_s_base_length (const VEC_tree_pair_s_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ tree_pair_s *VEC_tree_pair_s_base_last (VEC_tree_pair_s_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return &vec_->vec[vec_->prefix.num - 1]; } static __inline__ tree_pair_s *VEC_tree_pair_s_base_index (VEC_tree_pair_s_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return &vec_->vec[ix_]; } static __inline__ int VEC_tree_pair_s_base_iterate (VEC_tree_pair_s_base *vec_, unsigned ix_, tree_pair_s **ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static __inline__ size_t VEC_tree_pair_s_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_tree_pair_s_base, vec) + alloc_ * sizeof(tree_pair_s); } static __inline__ void VEC_tree_pair_s_base_embedded_init (VEC_tree_pair_s_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_tree_pair_s_base_space (VEC_tree_pair_s_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_tree_pair_s_base_splice (VEC_tree_pair_s_base *dst_, VEC_tree_pair_s_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (tree_pair_s)); dst_->prefix.num += len_; } } static __inline__ tree_pair_s *VEC_tree_pair_s_base_quick_push (VEC_tree_pair_s_base *vec_, const tree_pair_s *obj_ ) { tree_pair_s *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_tree_pair_s_base_pop (VEC_tree_pair_s_base *vec_ ) { (void)(vec_->prefix.num); --vec_->prefix.num; } static __inline__ void VEC_tree_pair_s_base_truncate (VEC_tree_pair_s_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ tree_pair_s *VEC_tree_pair_s_base_replace (VEC_tree_pair_s_base *vec_, unsigned ix_, const tree_pair_s *obj_ ) { tree_pair_s *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ tree_pair_s *VEC_tree_pair_s_base_quick_insert (VEC_tree_pair_s_base *vec_, unsigned ix_, const tree_pair_s *obj_ ) { tree_pair_s *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (tree_pair_s)); if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_tree_pair_s_base_ordered_remove (VEC_tree_pair_s_base *vec_, unsigned ix_ ) { tree_pair_s *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (tree_pair_s)); } static __inline__ void VEC_tree_pair_s_base_unordered_remove (VEC_tree_pair_s_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->prefix.num); vec_->vec[ix_] = vec_->vec[--vec_->prefix.num]; } static __inline__ void VEC_tree_pair_s_base_block_remove (VEC_tree_pair_s_base *vec_, unsigned ix_, unsigned len_ ) { tree_pair_s *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (tree_pair_s)); } static __inline__ tree_pair_s *VEC_tree_pair_s_base_address (VEC_tree_pair_s_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_tree_pair_s_base_lower_bound (VEC_tree_pair_s_base *vec_, const tree_pair_s *obj_, unsigned char (*lessthan_)(const tree_pair_s *, const tree_pair_s *) ) { unsigned int len_ = VEC_tree_pair_s_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { tree_pair_s *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_tree_pair_s_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_tree_pair_s_gc { VEC_tree_pair_s_base base; } VEC_tree_pair_s_gc; static __inline__ VEC_tree_pair_s_gc *VEC_tree_pair_s_gc_alloc (int alloc_ ) { return (VEC_tree_pair_s_gc *) vec_gc_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_tree_pair_s_gc, base.vec), sizeof (tree_pair_s) ); } static __inline__ VEC_tree_pair_s_gc *VEC_tree_pair_s_gc_copy (VEC_tree_pair_s_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_tree_pair_s_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_tree_pair_s_gc *)(vec_gc_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_tree_pair_s_gc, base.vec), sizeof (tree_pair_s) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (tree_pair_s) * len_); } return new_vec_; } static __inline__ void VEC_tree_pair_s_gc_free (VEC_tree_pair_s_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_tree_pair_s_gc_reserve (VEC_tree_pair_s_gc **vec_, int alloc_ ) { int extend = !VEC_tree_pair_s_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_pair_s_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_tree_pair_s_gc, base.vec), sizeof (tree_pair_s) ); return extend; } static __inline__ int VEC_tree_pair_s_gc_reserve_exact (VEC_tree_pair_s_gc **vec_, int alloc_ ) { int extend = !VEC_tree_pair_s_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_pair_s_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_tree_pair_s_gc, base.vec), sizeof (tree_pair_s) ); return extend; } static __inline__ void VEC_tree_pair_s_gc_safe_grow (VEC_tree_pair_s_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_tree_pair_s_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_tree_pair_s_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_tree_pair_s_gc_safe_grow_cleared (VEC_tree_pair_s_gc **vec_, int size_ ) { int oldsize = VEC_tree_pair_s_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_tree_pair_s_gc_safe_grow (vec_, size_ ); memset (&(VEC_tree_pair_s_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (tree_pair_s) * (size_ - oldsize)); } static __inline__ void VEC_tree_pair_s_gc_safe_splice (VEC_tree_pair_s_gc **dst_, VEC_tree_pair_s_base *src_ ) { if (src_) { VEC_tree_pair_s_gc_reserve_exact (dst_, src_->prefix.num ); VEC_tree_pair_s_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ tree_pair_s *VEC_tree_pair_s_gc_safe_push (VEC_tree_pair_s_gc **vec_, const tree_pair_s *obj_ ) { VEC_tree_pair_s_gc_reserve (vec_, 1 ); return VEC_tree_pair_s_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ tree_pair_s *VEC_tree_pair_s_gc_safe_insert (VEC_tree_pair_s_gc **vec_, unsigned ix_, const tree_pair_s *obj_ ) { VEC_tree_pair_s_gc_reserve (vec_, 1 ); return VEC_tree_pair_s_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_tree_pair_s_base { struct vec_prefix prefix; tree_pair_s vec[1]; } VEC_tree_pair_s_base; typedef struct VEC_tree_pair_s_none { VEC_tree_pair_s_base base; } VEC_tree_pair_s_none; static inline unsigned VEC_tree_pair_s_base_length (const VEC_tree_pair_s_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline tree_pair_s *VEC_tree_pair_s_base_last (VEC_tree_pair_s_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return &vec_->vec[vec_->prefix.num - 1]; } static inline tree_pair_s *VEC_tree_pair_s_base_index (VEC_tree_pair_s_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return &vec_->vec[ix_]; } static inline int VEC_tree_pair_s_base_iterate (VEC_tree_pair_s_base *vec_, unsigned ix_, tree_pair_s **ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static inline size_t VEC_tree_pair_s_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_tree_pair_s_base, vec) + alloc_ * sizeof(tree_pair_s); } static inline void VEC_tree_pair_s_base_embedded_init (VEC_tree_pair_s_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_tree_pair_s_base_space (VEC_tree_pair_s_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_tree_pair_s_base_splice (VEC_tree_pair_s_base *dst_, VEC_tree_pair_s_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (tree_pair_s)); dst_->prefix.num += len_; } } static inline tree_pair_s *VEC_tree_pair_s_base_quick_push (VEC_tree_pair_s_base *vec_, const tree_pair_s *obj_ ) { tree_pair_s *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_tree_pair_s_base_pop (VEC_tree_pair_s_base *vec_ ) { (void)(vec_->prefix.num); --vec_->prefix.num; } static inline void VEC_tree_pair_s_base_truncate (VEC_tree_pair_s_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline tree_pair_s *VEC_tree_pair_s_base_replace (VEC_tree_pair_s_base *vec_, unsigned ix_, const tree_pair_s *obj_ ) { tree_pair_s *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static inline tree_pair_s *VEC_tree_pair_s_base_quick_insert (VEC_tree_pair_s_base *vec_, unsigned ix_, const tree_pair_s *obj_ ) { tree_pair_s *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (tree_pair_s)); if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_tree_pair_s_base_ordered_remove (VEC_tree_pair_s_base *vec_, unsigned ix_ ) { tree_pair_s *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (tree_pair_s)); } static inline void VEC_tree_pair_s_base_unordered_remove (VEC_tree_pair_s_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->prefix.num); vec_->vec[ix_] = vec_->vec[--vec_->prefix.num]; } static inline void VEC_tree_pair_s_base_block_remove (VEC_tree_pair_s_base *vec_, unsigned ix_, unsigned len_ ) { tree_pair_s *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (tree_pair_s)); } static inline tree_pair_s *VEC_tree_pair_s_base_address (VEC_tree_pair_s_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_tree_pair_s_base_lower_bound (VEC_tree_pair_s_base *vec_, const tree_pair_s *obj_, bool (*lessthan_)(const tree_pair_s *, const tree_pair_s *) ) { unsigned int len_ = VEC_tree_pair_s_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { tree_pair_s *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_tree_pair_s_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_tree_pair_s_gc { VEC_tree_pair_s_base base; } VEC_tree_pair_s_gc; static inline VEC_tree_pair_s_gc *VEC_tree_pair_s_gc_alloc (int alloc_ ) { return (VEC_tree_pair_s_gc *) vec_gc_o_reserve_exact (__null, alloc_, __builtin_offsetof (VEC_tree_pair_s_gc, base.vec), sizeof (tree_pair_s) ); } static inline VEC_tree_pair_s_gc *VEC_tree_pair_s_gc_copy (VEC_tree_pair_s_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_tree_pair_s_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_tree_pair_s_gc *)(vec_gc_o_reserve_exact (__null, len_, __builtin_offsetof (VEC_tree_pair_s_gc, base.vec), sizeof (tree_pair_s) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (tree_pair_s) * len_); } return new_vec_; } static inline void VEC_tree_pair_s_gc_free (VEC_tree_pair_s_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline int VEC_tree_pair_s_gc_reserve (VEC_tree_pair_s_gc **vec_, int alloc_ ) { int extend = !VEC_tree_pair_s_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_pair_s_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_tree_pair_s_gc, base.vec), sizeof (tree_pair_s) ); return extend; } static inline int VEC_tree_pair_s_gc_reserve_exact (VEC_tree_pair_s_gc **vec_, int alloc_ ) { int extend = !VEC_tree_pair_s_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_pair_s_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_tree_pair_s_gc, base.vec), sizeof (tree_pair_s) ); return extend; } static inline void VEC_tree_pair_s_gc_safe_grow (VEC_tree_pair_s_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_tree_pair_s_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_tree_pair_s_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_tree_pair_s_gc_safe_grow_cleared (VEC_tree_pair_s_gc **vec_, int size_ ) { int oldsize = VEC_tree_pair_s_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_tree_pair_s_gc_safe_grow (vec_, size_ ); memset (&(VEC_tree_pair_s_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (tree_pair_s) * (size_ - oldsize)); } static inline void VEC_tree_pair_s_gc_safe_splice (VEC_tree_pair_s_gc **dst_, VEC_tree_pair_s_base *src_ ) { if (src_) { VEC_tree_pair_s_gc_reserve_exact (dst_, src_->prefix.num ); VEC_tree_pair_s_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline tree_pair_s *VEC_tree_pair_s_gc_safe_push (VEC_tree_pair_s_gc **vec_, const tree_pair_s *obj_ ) { VEC_tree_pair_s_gc_reserve (vec_, 1 ); return VEC_tree_pair_s_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline tree_pair_s *VEC_tree_pair_s_gc_safe_insert (VEC_tree_pair_s_gc **vec_, unsigned ix_, const tree_pair_s *obj_ ) { VEC_tree_pair_s_gc_reserve (vec_, 1 ); return VEC_tree_pair_s_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 
 
 
@@ -29836,7 +32474,7 @@ struct lang_type {
 # 1866 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cp/cp-tree.h"
 struct lang_decl_base {
   unsigned selector : 16;
-  __extension__ enum languages language : 4;
+  enum languages language : 4;
   unsigned use_template : 2;
   unsigned not_really_extern : 1;
   unsigned initialized_in_class : 1;
@@ -29878,7 +32516,7 @@ struct lang_decl_fn {
 
 
 
-  __extension__ enum tree_code operator_code : 16;
+  enum tree_code operator_code : 16;
 
   unsigned global_ctor_p : 1;
   unsigned global_dtor_p : 1;
@@ -29971,7 +32609,7 @@ typedef struct aggr_init_expr_arg_iterator_d {
 
 
 
-static __inline__ void
+static inline void
 init_aggr_init_expr_arg_iterator (tree exp,
            aggr_init_expr_arg_iterator *iter)
 {
@@ -29982,12 +32620,12 @@ init_aggr_init_expr_arg_iterator (tree exp,
 
 
 
-static __inline__ tree
+static inline tree
 next_aggr_init_expr_arg (aggr_init_expr_arg_iterator *iter)
 {
   tree result;
   if (iter->i >= iter->n)
-    return (tree) ((void *)0);
+    return (tree) __null;
   result = (((iter->t))->exp.operands[(iter->i) + 3]);
   iter->i++;
   return result;
@@ -29997,7 +32635,7 @@ next_aggr_init_expr_arg (aggr_init_expr_arg_iterator *iter)
 
 
 
-static __inline__ tree
+static inline tree
 first_aggr_init_expr_arg (tree exp, aggr_init_expr_arg_iterator *iter)
 {
   init_aggr_init_expr_arg_iterator (exp, iter);
@@ -30006,7 +32644,7 @@ first_aggr_init_expr_arg (tree exp, aggr_init_expr_arg_iterator *iter)
 
 
 
-static __inline__ unsigned char
+static inline bool
 more_aggr_init_expr_args_p (const aggr_init_expr_arg_iterator *iter)
 {
   return (iter->i < iter->n);
@@ -30359,13 +32997,13 @@ struct cp_parameter_declarator {
   tree default_argument;
 
 
-  unsigned char ellipsis_p;
+  bool ellipsis_p;
 };
 
 
 struct cp_declarator {
 
-  __extension__ enum cp_declarator_kind kind : 4;
+  enum cp_declarator_kind kind : 4;
 
 
   unsigned int parameter_pack_p : 1;
@@ -30419,7 +33057,7 @@ struct cp_declarator {
 
       cp_cv_quals qualifiers;
 
-      unsigned char rvalue_ref;
+      bool rvalue_ref;
     } reference;
   } u;
 };
@@ -30441,12 +33079,12 @@ struct tinst_level {
   int errors;
 
 
-  unsigned char in_system_header_p;
+  bool in_system_header_p;
 };
 
 
 
-static __inline__ tree
+static inline tree
 type_of_this_parm (const_tree fntype)
 {
   function_args_iterator iter;
@@ -30457,7 +33095,7 @@ type_of_this_parm (const_tree fntype)
 
 
 
-static __inline__ tree
+static inline tree
 class_of_this_parm (const_tree fntype)
 {
   return ((type_of_this_parm (fntype))->typed.type);
@@ -30468,10 +33106,10 @@ class_of_this_parm (const_tree fntype)
 extern cp_parameter_declarator *no_parameters;
 
 
-extern unsigned char pragma_java_exceptions;
+extern bool pragma_java_exceptions;
 
 
-extern unsigned char check_dtor_name (tree, tree);
+extern bool check_dtor_name (tree, tree);
 
 extern tree build_conditional_expr (tree, tree, tree,
                                                  tsubst_flags_t);
@@ -30479,12 +33117,12 @@ extern tree build_addr_func (tree);
 extern void set_flags_from_callee (tree);
 extern tree build_call_a (tree, int, tree*);
 extern tree build_call_n (tree, int, ...);
-extern unsigned char null_ptr_cst_p (tree);
-extern unsigned char null_member_pointer_value_p (tree);
-extern unsigned char sufficient_parms_p (const_tree);
+extern bool null_ptr_cst_p (tree);
+extern bool null_member_pointer_value_p (tree);
+extern bool sufficient_parms_p (const_tree);
 extern tree type_decays_to (tree);
 extern tree build_user_type_conversion (tree, tree, int);
-extern tree build_new_function_call (tree, VEC_tree_gc **, unsigned char,
+extern tree build_new_function_call (tree, VEC_tree_gc **, bool,
        tsubst_flags_t);
 extern tree build_operator_new_call (tree, VEC_tree_gc **, tree *,
        tree *, tree *);
@@ -30498,11 +33136,11 @@ extern tree build_new_op (enum tree_code, int, tree,
        tsubst_flags_t);
 extern tree build_op_call (tree, VEC_tree_gc **,
        tsubst_flags_t);
-extern tree build_op_delete_call (enum tree_code, tree, tree, unsigned char, tree, tree);
-extern unsigned char can_convert (tree, tree);
-extern unsigned char can_convert_arg (tree, tree, tree, int);
-extern unsigned char can_convert_arg_bad (tree, tree, tree, int);
-extern unsigned char enforce_access (tree, tree, tree);
+extern tree build_op_delete_call (enum tree_code, tree, tree, bool, tree, tree);
+extern bool can_convert (tree, tree);
+extern bool can_convert_arg (tree, tree, tree, int);
+extern bool can_convert_arg_bad (tree, tree, tree, int);
+extern bool enforce_access (tree, tree, tree);
 extern void push_defarg_context (tree);
 extern void pop_defarg_context (void);
 extern tree convert_default_arg (tree, tree, tree, int);
@@ -30511,22 +33149,22 @@ extern tree build_x_va_arg (tree, tree);
 extern tree cxx_type_promotes_to (tree);
 extern tree type_passed_as (tree);
 extern tree convert_for_arg_passing (tree, tree);
-extern unsigned char is_properly_derived_from (tree, tree);
+extern bool is_properly_derived_from (tree, tree);
 extern tree initialize_reference (tree, tree, int,
        tsubst_flags_t);
 extern tree extend_ref_init_temps (tree, tree, VEC_tree_gc**);
 extern tree make_temporary_var_for_ref_to_temp (tree, tree);
 extern tree strip_top_quals (tree);
-extern unsigned char reference_related_p (tree, tree);
+extern bool reference_related_p (tree, tree);
 extern tree perform_implicit_conversion (tree, tree, tsubst_flags_t);
 extern tree perform_implicit_conversion_flags (tree, tree, tsubst_flags_t, int);
 extern tree build_integral_nontype_arg_conv (tree, tree, tsubst_flags_t);
-extern tree perform_direct_initialization_if_possible (tree, tree, unsigned char,
+extern tree perform_direct_initialization_if_possible (tree, tree, bool,
                                                        tsubst_flags_t);
 extern tree in_charge_arg_for_name (tree);
 extern tree build_cxx_call (tree, int, tree *);
-extern unsigned char is_std_init_list (tree);
-extern unsigned char is_list_ctor (tree);
+extern bool is_std_init_list (tree);
+extern bool is_list_ctor (tree);
 
 
 
@@ -30535,7 +33173,7 @@ extern unsigned char is_list_ctor (tree);
 extern tree build_vfield_ref (tree, tree);
 extern tree build_base_path (enum tree_code, tree,
        tree, int, tsubst_flags_t);
-extern tree convert_to_base (tree, tree, unsigned char, unsigned char,
+extern tree convert_to_base (tree, tree, bool, bool,
        tsubst_flags_t);
 extern tree convert_to_base_statically (tree, tree);
 extern tree build_vtbl_ref (tree, tree);
@@ -30543,8 +33181,8 @@ extern tree build_vfn_ref (tree, tree);
 extern tree get_vtable_decl (tree, int);
 extern void resort_type_method_vec (void *, void *,
        gt_pointer_operator, void *);
-extern unsigned char add_method (tree, tree, tree);
-extern unsigned char currently_open_class (tree);
+extern bool add_method (tree, tree, tree);
+extern bool currently_open_class (tree);
 extern tree currently_open_derived_class (tree);
 extern tree current_nonlambda_class_type (void);
 extern tree finish_struct (tree, tree);
@@ -30552,7 +33190,7 @@ extern void finish_struct_1 (tree);
 extern int resolves_to_fixed_type_p (tree, int *);
 extern void init_class_processing (void);
 extern int is_empty_class (tree);
-extern unsigned char is_really_empty_class (tree);
+extern bool is_really_empty_class (tree);
 extern void pushclass (tree);
 extern void popclass (void);
 extern void push_nested_class (tree);
@@ -30577,26 +33215,26 @@ extern void determine_key_method (tree);
 extern void check_for_override (tree, tree);
 extern void push_class_stack (void);
 extern void pop_class_stack (void);
-extern unsigned char type_has_user_nondefault_constructor (tree);
+extern bool type_has_user_nondefault_constructor (tree);
 extern tree in_class_defaulted_default_constructor (tree);
-extern unsigned char user_provided_p (tree);
-extern unsigned char type_has_user_provided_constructor (tree);
-extern unsigned char type_has_user_provided_default_constructor (tree);
+extern bool user_provided_p (tree);
+extern bool type_has_user_provided_constructor (tree);
+extern bool type_has_user_provided_default_constructor (tree);
 extern tree default_init_uninitialized_part (tree);
-extern unsigned char trivial_default_constructor_is_constexpr (tree);
-extern unsigned char type_has_constexpr_default_constructor (tree);
-extern unsigned char type_has_virtual_destructor (tree);
-extern unsigned char type_has_move_constructor (tree);
-extern unsigned char type_has_move_assign (tree);
-extern unsigned char type_has_user_declared_move_constructor (tree);
-extern unsigned char type_has_user_declared_move_assign(tree);
-extern unsigned char type_build_ctor_call (tree);
+extern bool trivial_default_constructor_is_constexpr (tree);
+extern bool type_has_constexpr_default_constructor (tree);
+extern bool type_has_virtual_destructor (tree);
+extern bool type_has_move_constructor (tree);
+extern bool type_has_move_assign (tree);
+extern bool type_has_user_declared_move_constructor (tree);
+extern bool type_has_user_declared_move_assign(tree);
+extern bool type_build_ctor_call (tree);
 extern void explain_non_literal_class (tree);
 extern void defaulted_late_check (tree);
-extern unsigned char defaultable_fn_check (tree);
+extern bool defaultable_fn_check (tree);
 extern void fixup_type_variants (tree);
 extern void fixup_attribute_variants (tree);
-extern tree* decl_cloned_function_p (const_tree, unsigned char);
+extern tree* decl_cloned_function_p (const_tree, bool);
 extern void clone_function_decl (tree, int);
 extern void adjust_clone_args (tree);
 
@@ -30611,17 +33249,17 @@ extern tree cp_fold_convert (tree, tree);
 extern tree convert_to_void (tree, impl_conv_void,
                                     tsubst_flags_t);
 extern tree convert_force (tree, tree, int);
-extern tree build_expr_type_conversion (int, tree, unsigned char);
+extern tree build_expr_type_conversion (int, tree, bool);
 extern tree type_promotes_to (tree);
 extern tree perform_qualification_conversions (tree, tree);
 
 
 extern tree pushdecl (tree);
-extern tree pushdecl_maybe_friend (tree, unsigned char);
+extern tree pushdecl_maybe_friend (tree, bool);
 extern void maybe_push_cleanup_level (tree);
 extern tree pushtag (tree, tree, tag_scope);
 extern tree make_anon_name (void);
-extern tree pushdecl_top_level_maybe_friend (tree, unsigned char);
+extern tree pushdecl_top_level_maybe_friend (tree, bool);
 extern tree pushdecl_top_level_and_finish (tree, tree);
 extern tree check_for_out_of_scope_variable (tree);
 extern void print_other_binding_stack (cp_binding_level *);
@@ -30638,11 +33276,11 @@ extern void push_switch (tree);
 extern void pop_switch (void);
 extern tree make_lambda_name (void);
 extern int decls_match (tree, tree);
-extern tree duplicate_decls (tree, tree, unsigned char);
+extern tree duplicate_decls (tree, tree, bool);
 extern tree declare_local_label (tree);
 extern tree define_label (location_t, tree);
 extern void check_goto (tree);
-extern unsigned char check_omp_return (void);
+extern bool check_omp_return (void);
 extern tree make_typename_type (tree, tree, enum tag_types, tsubst_flags_t);
 extern tree make_unbound_class_template (tree, tree, tree, tsubst_flags_t);
 extern tree build_library_fn_ptr (const char *, tree);
@@ -30652,27 +33290,27 @@ extern tree push_void_library_fn (tree, tree);
 extern tree push_throw_library_fn (tree, tree);
 extern tree check_tag_decl (cp_decl_specifier_seq *);
 extern tree shadow_tag (cp_decl_specifier_seq *);
-extern tree groktypename (cp_decl_specifier_seq *, const cp_declarator *, unsigned char);
+extern tree groktypename (cp_decl_specifier_seq *, const cp_declarator *, bool);
 extern tree start_decl (const cp_declarator *, cp_decl_specifier_seq *, int, tree, tree, tree *);
-extern void start_decl_1 (tree, unsigned char);
-extern unsigned char check_array_initializer (tree, tree, tree);
-extern void cp_finish_decl (tree, tree, unsigned char, tree, int);
-extern int cp_complete_array_type (tree *, tree, unsigned char);
-extern int cp_complete_array_type_or_error (tree *, tree, unsigned char, tsubst_flags_t);
+extern void start_decl_1 (tree, bool);
+extern bool check_array_initializer (tree, tree, tree);
+extern void cp_finish_decl (tree, tree, bool, tree, int);
+extern int cp_complete_array_type (tree *, tree, bool);
+extern int cp_complete_array_type_or_error (tree *, tree, bool, tsubst_flags_t);
 extern tree build_ptrmemfunc_type (tree);
 extern tree build_ptrmem_type (tree, tree);
 
 extern tree build_this_parm (tree, cp_cv_quals);
 extern int copy_fn_p (const_tree);
-extern unsigned char move_fn_p (const_tree);
+extern bool move_fn_p (const_tree);
 extern tree get_scope_of_declarator (const cp_declarator *);
 extern void grok_special_member_properties (tree);
 extern int grok_ctor_properties (const_tree, const_tree);
-extern unsigned char grok_op_properties (tree, unsigned char);
-extern tree xref_tag (enum tag_types, tree, tag_scope, unsigned char);
+extern bool grok_op_properties (tree, bool);
+extern tree xref_tag (enum tag_types, tree, tag_scope, bool);
 extern tree xref_tag_from_type (tree, tree, tag_scope);
-extern unsigned char xref_basetypes (tree, tree);
-extern tree start_enum (tree, tree, tree, unsigned char, unsigned char *);
+extern bool xref_basetypes (tree, tree);
+extern tree start_enum (tree, tree, tree, bool, bool *);
 extern void finish_enum_value_list (tree);
 extern void finish_enum (tree);
 extern void build_enumerator (tree, tree, tree, location_t);
@@ -30704,35 +33342,35 @@ extern tmpl_spec_kind current_tmpl_spec_kind (int);
 extern tree cp_fname_init (const char *, tree *);
 extern tree cxx_builtin_function (tree decl);
 extern tree cxx_builtin_function_ext_scope (tree decl);
-extern tree check_elaborated_type_specifier (enum tag_types, tree, unsigned char);
+extern tree check_elaborated_type_specifier (enum tag_types, tree, bool);
 extern void warn_extern_redeclared_static (tree, tree);
 extern tree cxx_comdat_group (tree);
-extern unsigned char cp_missing_noreturn_ok_p (tree);
+extern bool cp_missing_noreturn_ok_p (tree);
 extern void initialize_artificial_var (tree, VEC_constructor_elt_gc *);
 extern tree check_var_type (tree, tree);
 extern tree reshape_init (tree, tree, tsubst_flags_t);
 extern tree next_initializable_field (tree);
 
-extern unsigned char defer_mark_used_calls;
+extern bool defer_mark_used_calls;
 extern VEC_tree_gc *deferred_mark_used_calls;
 extern tree finish_case_label (location_t, tree, tree);
 extern tree cxx_maybe_build_cleanup (tree, tsubst_flags_t);
 
 
-extern unsigned char check_java_method (tree);
+extern bool check_java_method (tree);
 extern tree build_memfn_type (tree, tree, cp_cv_quals);
 extern tree change_return_type (tree, tree);
 extern void maybe_retrofit_in_chrg (tree);
 extern void maybe_make_one_only (tree);
-extern unsigned char vague_linkage_p (tree);
+extern bool vague_linkage_p (tree);
 extern void grokclassfn (tree, tree,
        enum overload_flags);
 extern tree grok_array_decl (tree, tree);
-extern tree delete_sanity (tree, tree, unsigned char, int, tsubst_flags_t);
+extern tree delete_sanity (tree, tree, bool, int, tsubst_flags_t);
 extern tree check_classfn (tree, tree, tree);
 extern void check_member_template (tree);
 extern tree grokfield (const cp_declarator *, cp_decl_specifier_seq *,
-         tree, unsigned char, tree, tree);
+         tree, bool, tree, tree);
 extern tree grokbitfield (const cp_declarator *, cp_decl_specifier_seq *,
      tree, tree);
 extern tree cp_reconstruct_complex_type (tree, tree);
@@ -30747,21 +33385,21 @@ extern void constrain_class_visibility (tree);
 extern void import_export_decl (tree);
 extern tree build_cleanup (tree);
 extern tree build_offset_ref_call_from_tree (tree, VEC_tree_gc **);
-extern unsigned char decl_constant_var_p (tree);
-extern unsigned char decl_maybe_constant_var_p (tree);
+extern bool decl_constant_var_p (tree);
+extern bool decl_maybe_constant_var_p (tree);
 extern void check_default_args (tree);
-extern unsigned char mark_used (tree);
-extern void finish_static_data_member_decl (tree, tree, unsigned char, tree, int);
+extern bool mark_used (tree);
+extern void finish_static_data_member_decl (tree, tree, bool, tree, int);
 extern tree cp_build_parm_decl (tree, tree);
 extern tree get_guard (tree);
 extern tree get_guard_cond (tree);
 extern tree set_guard (tree);
 extern tree cxx_callgraph_analyze_expr (tree *, int *);
 extern void mark_needed (tree);
-extern unsigned char decl_needed_p (tree);
+extern bool decl_needed_p (tree);
 extern void note_vague_linkage_fn (tree);
 extern tree build_artificial_parm (tree, tree);
-extern unsigned char possibly_inlined_p (tree);
+extern bool possibly_inlined_p (tree);
 extern int parm_index (tree);
 
 
@@ -30771,13 +33409,13 @@ extern const char *type_as_string_translate (tree, int);
 extern const char *decl_as_string (tree, int);
 extern const char *decl_as_string_translate (tree, int);
 extern const char *expr_as_string (tree, int);
-extern const char *lang_decl_name (tree, int, unsigned char);
+extern const char *lang_decl_name (tree, int, bool);
 extern const char *language_to_string (enum languages);
 extern const char *class_key_or_enum_as_string (tree);
 extern void print_instantiation_context (void);
 extern void maybe_warn_variadic_templates (void);
 extern void maybe_warn_cpp0x (cpp0x_warn_str str);
-extern unsigned char pedwarn_cxx98 (location_t, int, const char *, ...) __attribute__ ((__format__ (__gcc_cxxdiag__, 3, 4))) __attribute__ ((__nonnull__ (3)));
+extern bool pedwarn_cxx98 (location_t, int, const char *, ...) __attribute__ ((__format__ (__gcc_cxxdiag__, 3, 4))) __attribute__ ((__nonnull__ (3)));
 extern location_t location_of (tree);
 extern void qualified_name_lookup_error (tree, tree, tree,
        location_t);
@@ -30791,11 +33429,11 @@ extern tree build_throw (tree);
 extern int nothrow_libfn_p (const_tree);
 extern void check_handlers (tree);
 extern tree finish_noexcept_expr (tree, tsubst_flags_t);
-extern unsigned char expr_noexcept_p (tree, tsubst_flags_t);
+extern bool expr_noexcept_p (tree, tsubst_flags_t);
 extern void perform_deferred_noexcept_checks (void);
-extern unsigned char nothrow_spec_p (const_tree);
-extern unsigned char type_noexcept_p (const_tree);
-extern unsigned char type_throw_all_p (const_tree);
+extern bool nothrow_spec_p (const_tree);
+extern bool type_noexcept_p (const_tree);
+extern bool type_throw_all_p (const_tree);
 extern tree build_noexcept_spec (tree, int);
 extern void choose_personality_routine (enum languages);
 extern tree build_must_not_throw_expr (tree,tree);
@@ -30814,9 +33452,9 @@ extern void mark_exp_read (tree);
 
 
 extern int is_friend (tree, tree);
-extern void make_friend_class (tree, tree, unsigned char);
-extern void add_friend (tree, tree, unsigned char);
-extern tree do_friend (tree, tree, tree, tree, enum overload_flags, unsigned char);
+extern void make_friend_class (tree, tree, bool);
+extern void add_friend (tree, tree, bool);
+extern tree do_friend (tree, tree, tree, tree, enum overload_flags, bool);
 
 
 extern tree expand_member_init (tree);
@@ -30825,15 +33463,15 @@ extern tree build_aggr_init (tree, tree, int,
                                                  tsubst_flags_t);
 extern int is_class_type (tree, int);
 extern tree get_type_value (tree);
-extern tree build_zero_init (tree, tree, unsigned char);
+extern tree build_zero_init (tree, tree, bool);
 extern tree build_value_init (tree, tsubst_flags_t);
 extern tree build_value_init_noctor (tree, tsubst_flags_t);
-extern tree build_offset_ref (tree, tree, unsigned char);
+extern tree build_offset_ref (tree, tree, bool);
 extern tree build_new (VEC_tree_gc **, tree, tree,
        VEC_tree_gc **, int,
                                                  tsubst_flags_t);
 extern tree get_temp_regvar (tree, tree);
-extern tree build_vec_init (tree, tree, tree, unsigned char, int,
+extern tree build_vec_init (tree, tree, tree, bool, int,
                                                  tsubst_flags_t);
 extern tree build_delete (tree, tree,
        special_function_kind,
@@ -30847,7 +33485,7 @@ extern void initialize_vtbl_ptrs (tree);
 extern tree build_java_class_ref (tree);
 extern tree integral_constant_value (tree);
 extern tree decl_constant_value_safe (tree);
-extern int diagnose_uninitialized_cst_or_ref_member (tree, unsigned char, unsigned char);
+extern int diagnose_uninitialized_cst_or_ref_member (tree, bool, bool);
 
 
 extern void cxx_dup_lang_specific_decl (tree);
@@ -30862,17 +33500,17 @@ extern tree copy_decl (tree);
 extern tree copy_type (tree);
 extern tree cxx_make_type (enum tree_code);
 extern tree make_class_type (enum tree_code);
-extern unsigned char cxx_init (void);
+extern bool cxx_init (void);
 extern void cxx_finish (void);
-extern unsigned char in_main_input_context (void);
+extern bool in_main_input_context (void);
 
 
 extern void init_method (void);
-extern tree make_thunk (tree, unsigned char, tree, tree);
+extern tree make_thunk (tree, bool, tree, tree);
 extern void finish_thunk (tree);
-extern void use_thunk (tree, unsigned char);
-extern unsigned char trivial_fn_p (tree);
-extern unsigned char maybe_explain_implicit_delete (tree);
+extern void use_thunk (tree, bool);
+extern bool trivial_fn_p (tree);
+extern bool maybe_explain_implicit_delete (tree);
 extern void explain_implicit_non_constexpr (tree);
 extern void synthesize_method (tree);
 extern tree lazily_declare_fn (special_function_kind,
@@ -30887,16 +33525,16 @@ extern tree get_dtor (tree, tsubst_flags_t);
 extern tree locate_ctor (tree);
 
 
-extern unsigned char maybe_clone_body (tree);
+extern bool maybe_clone_body (tree);
 
 
-extern unsigned char check_template_shadow (tree);
+extern bool check_template_shadow (tree);
 extern tree get_innermost_template_args (tree, int);
 extern void maybe_begin_member_template_processing (tree);
 extern void maybe_end_member_template_processing (void);
 extern tree finish_member_template_decl (tree);
 extern void begin_template_parm_list (void);
-extern unsigned char begin_specialization (void);
+extern bool begin_specialization (void);
 extern void reset_specialization (void);
 extern void end_specialization (void);
 extern void begin_explicit_instantiation (void);
@@ -30908,17 +33546,17 @@ extern tree type_uses_auto (tree);
 extern void append_type_to_template_for_access_check (tree, tree, tree,
             location_t);
 extern tree splice_late_return_type (tree, tree);
-extern unsigned char is_auto (const_tree);
+extern bool is_auto (const_tree);
 extern tree process_template_parm (tree, location_t, tree,
-       unsigned char, unsigned char, unsigned);
+       bool, bool, unsigned);
 extern tree end_template_parm_list (tree);
 void fixup_template_parms (void);
 extern void end_template_decl (void);
 extern tree maybe_update_decl_type (tree, tree);
-extern unsigned char check_default_tmpl_args (tree, tree, int, int, int);
+extern bool check_default_tmpl_args (tree, tree, int, int, int);
 extern tree push_template_decl (tree);
-extern tree push_template_decl_real (tree, unsigned char);
-extern unsigned char redeclare_class_template (tree, tree);
+extern tree push_template_decl_real (tree, bool);
+extern bool redeclare_class_template (tree, tree);
 extern tree lookup_template_class (tree, tree, tree, tree,
        int, tsubst_flags_t);
 extern tree lookup_template_function (tree, tree);
@@ -30929,27 +33567,27 @@ extern tree instantiate_template (tree, tree, tsubst_flags_t);
 extern int fn_type_unification (tree, tree, tree,
        const tree *, unsigned int,
        tree, unification_kind_t, int,
-       unsigned char);
+       bool);
 extern void mark_decl_instantiated (tree, int);
 extern int more_specialized_fn (tree, tree, int);
 extern void do_decl_instantiation (tree, tree);
 extern void do_type_instantiation (tree, tree, tsubst_flags_t);
-extern unsigned char always_instantiate_p (tree);
+extern bool always_instantiate_p (tree);
 extern void maybe_instantiate_noexcept (tree);
-extern tree instantiate_decl (tree, int, unsigned char);
+extern tree instantiate_decl (tree, int, bool);
 extern int comp_template_parms (const_tree, const_tree);
-extern unsigned char uses_parameter_packs (tree);
-extern unsigned char template_parameter_pack_p (const_tree);
-extern unsigned char function_parameter_pack_p (const_tree);
-extern unsigned char function_parameter_expanded_from_pack_p (tree, tree);
+extern bool uses_parameter_packs (tree);
+extern bool template_parameter_pack_p (const_tree);
+extern bool function_parameter_pack_p (const_tree);
+extern bool function_parameter_expanded_from_pack_p (tree, tree);
 extern tree make_pack_expansion (tree);
-extern unsigned char check_for_bare_parameter_packs (tree);
+extern bool check_for_bare_parameter_packs (tree);
 extern tree build_template_info (tree, tree);
 extern tree get_template_info (const_tree);
 extern VEC_qualified_typedef_usage_t_gc* get_types_needing_access_check (tree);
 extern int template_class_depth (tree);
 extern int is_specialization_of (tree, tree);
-extern unsigned char is_specialization_of_friend (tree, tree);
+extern bool is_specialization_of_friend (tree, tree);
 extern tree get_pattern_parm (tree, tree);
 extern int comp_template_args (tree, tree);
 extern tree maybe_process_partial_specialization (tree);
@@ -30959,7 +33597,7 @@ extern void instantiate_pending_templates (int);
 extern tree tsubst_default_argument (tree, tree, tree);
 extern tree tsubst (tree, tree, tsubst_flags_t, tree);
 extern tree tsubst_copy_and_build (tree, tree, tsubst_flags_t,
-       tree, unsigned char, unsigned char);
+       tree, bool, bool);
 extern tree most_general_template (tree);
 extern tree get_mostly_instantiated_function_type (tree);
 extern int problematic_instantiation_changed (void);
@@ -30967,35 +33605,35 @@ extern void record_last_problematic_instantiation (void);
 extern struct tinst_level *current_instantiation(void);
 extern tree maybe_get_template_decl_from_type_decl (tree);
 extern int processing_template_parmlist;
-extern unsigned char dependent_type_p (tree);
-extern unsigned char dependent_scope_p (tree);
-extern unsigned char any_dependent_template_arguments_p (const_tree);
-extern unsigned char dependent_template_p (tree);
-extern unsigned char dependent_template_id_p (tree, tree);
-extern unsigned char type_dependent_expression_p (tree);
-extern unsigned char any_type_dependent_arguments_p (const VEC_tree_gc *);
-extern unsigned char any_type_dependent_elements_p (const_tree);
-extern unsigned char type_dependent_expression_p_push (tree);
-extern unsigned char value_dependent_expression_p (tree);
-extern unsigned char any_value_dependent_elements_p (const_tree);
-extern unsigned char dependent_omp_for_p (tree, tree, tree, tree);
-extern tree resolve_typename_type (tree, unsigned char);
+extern bool dependent_type_p (tree);
+extern bool dependent_scope_p (tree);
+extern bool any_dependent_template_arguments_p (const_tree);
+extern bool dependent_template_p (tree);
+extern bool dependent_template_id_p (tree, tree);
+extern bool type_dependent_expression_p (tree);
+extern bool any_type_dependent_arguments_p (const VEC_tree_gc *);
+extern bool any_type_dependent_elements_p (const_tree);
+extern bool type_dependent_expression_p_push (tree);
+extern bool value_dependent_expression_p (tree);
+extern bool any_value_dependent_elements_p (const_tree);
+extern bool dependent_omp_for_p (tree, tree, tree, tree);
+extern tree resolve_typename_type (tree, bool);
 extern tree template_for_substitution (tree);
 extern tree build_non_dependent_expr (tree);
 extern void make_args_non_dependent (VEC_tree_gc *);
-extern unsigned char reregister_specialization (tree, tree, tree);
+extern bool reregister_specialization (tree, tree, tree);
 extern tree fold_non_dependent_expr (tree);
-extern unsigned char alias_type_or_template_p (tree);
-extern unsigned char alias_template_specialization_p (tree);
-extern unsigned char explicit_class_specialization_p (tree);
+extern bool alias_type_or_template_p (tree);
+extern bool alias_template_specialization_p (tree);
+extern bool explicit_class_specialization_p (tree);
 extern int push_tinst_level (tree);
 extern void pop_tinst_level (void);
 extern struct tinst_level *outermost_tinst_level(void);
-extern unsigned char parameter_of_template_p (tree, tree);
+extern bool parameter_of_template_p (tree, tree);
 extern void init_template_processing (void);
 extern void print_template_statistics (void);
-unsigned char template_template_parameter_p (const_tree);
-extern unsigned char primary_template_instantiation_p (const_tree);
+bool template_template_parameter_p (const_tree);
+extern bool primary_template_instantiation_p (const_tree);
 extern tree get_primary_template_innermost_parameters (const_tree);
 extern tree get_template_parms_at_level (tree, int);
 extern tree get_template_innermost_arguments (const_tree);
@@ -31007,7 +33645,7 @@ extern hashval_t iterative_hash_template_arg (tree arg, hashval_t val);
 
 extern void init_repo (void);
 extern int repo_emit_p (tree);
-extern unsigned char repo_export_class_p (const_tree);
+extern bool repo_export_class_p (const_tree);
 extern void finish_repo (void);
 
 
@@ -31021,22 +33659,22 @@ extern tree get_typeid (tree);
 extern tree build_headof (tree);
 extern tree build_dynamic_cast (tree, tree, tsubst_flags_t);
 extern void emit_support_tinfos (void);
-extern unsigned char emit_tinfo_decl (tree);
+extern bool emit_tinfo_decl (tree);
 
 
-extern unsigned char accessible_base_p (tree, tree, unsigned char);
+extern bool accessible_base_p (tree, tree, bool);
 extern tree lookup_base (tree, tree, base_access,
        base_kind *);
 extern tree dcast_base_hint (tree, tree);
-extern int accessible_p (tree, tree, unsigned char);
-extern tree lookup_field_1 (tree, tree, unsigned char);
-extern tree lookup_field (tree, tree, int, unsigned char);
+extern int accessible_p (tree, tree, bool);
+extern tree lookup_field_1 (tree, tree, bool);
+extern tree lookup_field (tree, tree, int, bool);
 extern int lookup_fnfields_1 (tree, tree);
 extern tree lookup_fnfields_slot (tree, tree);
 extern tree lookup_fnfields_slot_nolazy (tree, tree);
 extern int class_method_index_for_fn (tree, tree);
 extern tree lookup_fnfields (tree, tree, int);
-extern tree lookup_member (tree, tree, int, unsigned char,
+extern tree lookup_member (tree, tree, int, bool,
        tsubst_flags_t);
 extern int look_for_overrides (tree, tree);
 extern void get_pure_virtuals (tree);
@@ -31046,8 +33684,8 @@ extern void print_search_statistics (void);
 extern void reinit_search_statistics (void);
 extern tree current_scope (void);
 extern int at_function_scope_p (void);
-extern unsigned char at_class_scope_p (void);
-extern unsigned char at_namespace_scope_p (void);
+extern bool at_class_scope_p (void);
+extern bool at_namespace_scope_p (void);
 extern tree context_for_name_lookup (tree);
 extern tree lookup_conversions (tree);
 extern tree binfo_from_vbase (tree);
@@ -31077,8 +33715,8 @@ typedef struct deferred_access_check {
 
   tree diag_decl;
 } deferred_access_check;
-typedef struct VEC_deferred_access_check_base { struct vec_prefix prefix; deferred_access_check vec[1]; } VEC_deferred_access_check_base; typedef struct VEC_deferred_access_check_none { VEC_deferred_access_check_base base; } VEC_deferred_access_check_none; static __inline__ unsigned VEC_deferred_access_check_base_length (const VEC_deferred_access_check_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ deferred_access_check *VEC_deferred_access_check_base_last (VEC_deferred_access_check_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return &vec_->vec[vec_->prefix.num - 1]; } static __inline__ deferred_access_check *VEC_deferred_access_check_base_index (VEC_deferred_access_check_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return &vec_->vec[ix_]; } static __inline__ int VEC_deferred_access_check_base_iterate (VEC_deferred_access_check_base *vec_, unsigned ix_, deferred_access_check **ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static __inline__ size_t VEC_deferred_access_check_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_deferred_access_check_base, vec) + alloc_ * sizeof(deferred_access_check); } static __inline__ void VEC_deferred_access_check_base_embedded_init (VEC_deferred_access_check_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_deferred_access_check_base_space (VEC_deferred_access_check_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_deferred_access_check_base_splice (VEC_deferred_access_check_base *dst_, VEC_deferred_access_check_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (deferred_access_check)); dst_->prefix.num += len_; } } static __inline__ deferred_access_check *VEC_deferred_access_check_base_quick_push (VEC_deferred_access_check_base *vec_, const deferred_access_check *obj_ ) { deferred_access_check *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_deferred_access_check_base_pop (VEC_deferred_access_check_base *vec_ ) { (void)(vec_->prefix.num); --vec_->prefix.num; } static __inline__ void VEC_deferred_access_check_base_truncate (VEC_deferred_access_check_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ deferred_access_check *VEC_deferred_access_check_base_replace (VEC_deferred_access_check_base *vec_, unsigned ix_, const deferred_access_check *obj_ ) { deferred_access_check *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ deferred_access_check *VEC_deferred_access_check_base_quick_insert (VEC_deferred_access_check_base *vec_, unsigned ix_, const deferred_access_check *obj_ ) { deferred_access_check *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (deferred_access_check)); if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_deferred_access_check_base_ordered_remove (VEC_deferred_access_check_base *vec_, unsigned ix_ ) { deferred_access_check *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (deferred_access_check)); } static __inline__ void VEC_deferred_access_check_base_unordered_remove (VEC_deferred_access_check_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->prefix.num); vec_->vec[ix_] = vec_->vec[--vec_->prefix.num]; } static __inline__ void VEC_deferred_access_check_base_block_remove (VEC_deferred_access_check_base *vec_, unsigned ix_, unsigned len_ ) { deferred_access_check *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (deferred_access_check)); } static __inline__ deferred_access_check *VEC_deferred_access_check_base_address (VEC_deferred_access_check_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_deferred_access_check_base_lower_bound (VEC_deferred_access_check_base *vec_, const deferred_access_check *obj_, unsigned char (*lessthan_)(const deferred_access_check *, const deferred_access_check *) ) { unsigned int len_ = VEC_deferred_access_check_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { deferred_access_check *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_deferred_access_check_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_deferred_access_check_gc { VEC_deferred_access_check_base base; } VEC_deferred_access_check_gc; static __inline__ VEC_deferred_access_check_gc *VEC_deferred_access_check_gc_alloc (int alloc_ ) { return (VEC_deferred_access_check_gc *) vec_gc_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_deferred_access_check_gc, base.vec), sizeof (deferred_access_check) ); } static __inline__ VEC_deferred_access_check_gc *VEC_deferred_access_check_gc_copy (VEC_deferred_access_check_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_deferred_access_check_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_deferred_access_check_gc *)(vec_gc_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_deferred_access_check_gc, base.vec), sizeof (deferred_access_check) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (deferred_access_check) * len_); } return new_vec_; } static __inline__ void VEC_deferred_access_check_gc_free (VEC_deferred_access_check_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_deferred_access_check_gc_reserve (VEC_deferred_access_check_gc **vec_, int alloc_ ) { int extend = !VEC_deferred_access_check_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_deferred_access_check_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_deferred_access_check_gc, base.vec), sizeof (deferred_access_check) ); return extend; } static __inline__ int VEC_deferred_access_check_gc_reserve_exact (VEC_deferred_access_check_gc **vec_, int alloc_ ) { int extend = !VEC_deferred_access_check_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_deferred_access_check_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_deferred_access_check_gc, base.vec), sizeof (deferred_access_check) ); return extend; } static __inline__ void VEC_deferred_access_check_gc_safe_grow (VEC_deferred_access_check_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_deferred_access_check_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_deferred_access_check_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_deferred_access_check_gc_safe_grow_cleared (VEC_deferred_access_check_gc **vec_, int size_ ) { int oldsize = VEC_deferred_access_check_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_deferred_access_check_gc_safe_grow (vec_, size_ ); memset (&(VEC_deferred_access_check_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (deferred_access_check) * (size_ - oldsize)); } static __inline__ void VEC_deferred_access_check_gc_safe_splice (VEC_deferred_access_check_gc **dst_, VEC_deferred_access_check_base *src_ ) { if (src_) { VEC_deferred_access_check_gc_reserve_exact (dst_, src_->prefix.num ); VEC_deferred_access_check_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ deferred_access_check *VEC_deferred_access_check_gc_safe_push (VEC_deferred_access_check_gc **vec_, const deferred_access_check *obj_ ) { VEC_deferred_access_check_gc_reserve (vec_, 1 ); return VEC_deferred_access_check_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ deferred_access_check *VEC_deferred_access_check_gc_safe_insert (VEC_deferred_access_check_gc **vec_, unsigned ix_, const deferred_access_check *obj_ ) { VEC_deferred_access_check_gc_reserve (vec_, 1 ); return VEC_deferred_access_check_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_deferred_access_check_base { struct vec_prefix prefix; deferred_access_check vec[1]; } VEC_deferred_access_check_base; typedef struct VEC_deferred_access_check_none { VEC_deferred_access_check_base base; } VEC_deferred_access_check_none; static inline unsigned VEC_deferred_access_check_base_length (const VEC_deferred_access_check_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline deferred_access_check *VEC_deferred_access_check_base_last (VEC_deferred_access_check_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return &vec_->vec[vec_->prefix.num - 1]; } static inline deferred_access_check *VEC_deferred_access_check_base_index (VEC_deferred_access_check_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return &vec_->vec[ix_]; } static inline int VEC_deferred_access_check_base_iterate (VEC_deferred_access_check_base *vec_, unsigned ix_, deferred_access_check **ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static inline size_t VEC_deferred_access_check_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_deferred_access_check_base, vec) + alloc_ * sizeof(deferred_access_check); } static inline void VEC_deferred_access_check_base_embedded_init (VEC_deferred_access_check_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_deferred_access_check_base_space (VEC_deferred_access_check_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_deferred_access_check_base_splice (VEC_deferred_access_check_base *dst_, VEC_deferred_access_check_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (deferred_access_check)); dst_->prefix.num += len_; } } static inline deferred_access_check *VEC_deferred_access_check_base_quick_push (VEC_deferred_access_check_base *vec_, const deferred_access_check *obj_ ) { deferred_access_check *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_deferred_access_check_base_pop (VEC_deferred_access_check_base *vec_ ) { (void)(vec_->prefix.num); --vec_->prefix.num; } static inline void VEC_deferred_access_check_base_truncate (VEC_deferred_access_check_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline deferred_access_check *VEC_deferred_access_check_base_replace (VEC_deferred_access_check_base *vec_, unsigned ix_, const deferred_access_check *obj_ ) { deferred_access_check *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static inline deferred_access_check *VEC_deferred_access_check_base_quick_insert (VEC_deferred_access_check_base *vec_, unsigned ix_, const deferred_access_check *obj_ ) { deferred_access_check *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (deferred_access_check)); if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_deferred_access_check_base_ordered_remove (VEC_deferred_access_check_base *vec_, unsigned ix_ ) { deferred_access_check *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (deferred_access_check)); } static inline void VEC_deferred_access_check_base_unordered_remove (VEC_deferred_access_check_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->prefix.num); vec_->vec[ix_] = vec_->vec[--vec_->prefix.num]; } static inline void VEC_deferred_access_check_base_block_remove (VEC_deferred_access_check_base *vec_, unsigned ix_, unsigned len_ ) { deferred_access_check *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (deferred_access_check)); } static inline deferred_access_check *VEC_deferred_access_check_base_address (VEC_deferred_access_check_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_deferred_access_check_base_lower_bound (VEC_deferred_access_check_base *vec_, const deferred_access_check *obj_, bool (*lessthan_)(const deferred_access_check *, const deferred_access_check *) ) { unsigned int len_ = VEC_deferred_access_check_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { deferred_access_check *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_deferred_access_check_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_deferred_access_check_gc { VEC_deferred_access_check_base base; } VEC_deferred_access_check_gc; static inline VEC_deferred_access_check_gc *VEC_deferred_access_check_gc_alloc (int alloc_ ) { return (VEC_deferred_access_check_gc *) vec_gc_o_reserve_exact (__null, alloc_, __builtin_offsetof (VEC_deferred_access_check_gc, base.vec), sizeof (deferred_access_check) ); } static inline VEC_deferred_access_check_gc *VEC_deferred_access_check_gc_copy (VEC_deferred_access_check_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_deferred_access_check_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_deferred_access_check_gc *)(vec_gc_o_reserve_exact (__null, len_, __builtin_offsetof (VEC_deferred_access_check_gc, base.vec), sizeof (deferred_access_check) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (deferred_access_check) * len_); } return new_vec_; } static inline void VEC_deferred_access_check_gc_free (VEC_deferred_access_check_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline int VEC_deferred_access_check_gc_reserve (VEC_deferred_access_check_gc **vec_, int alloc_ ) { int extend = !VEC_deferred_access_check_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_deferred_access_check_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_deferred_access_check_gc, base.vec), sizeof (deferred_access_check) ); return extend; } static inline int VEC_deferred_access_check_gc_reserve_exact (VEC_deferred_access_check_gc **vec_, int alloc_ ) { int extend = !VEC_deferred_access_check_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_deferred_access_check_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_deferred_access_check_gc, base.vec), sizeof (deferred_access_check) ); return extend; } static inline void VEC_deferred_access_check_gc_safe_grow (VEC_deferred_access_check_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_deferred_access_check_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_deferred_access_check_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_deferred_access_check_gc_safe_grow_cleared (VEC_deferred_access_check_gc **vec_, int size_ ) { int oldsize = VEC_deferred_access_check_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_deferred_access_check_gc_safe_grow (vec_, size_ ); memset (&(VEC_deferred_access_check_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (deferred_access_check) * (size_ - oldsize)); } static inline void VEC_deferred_access_check_gc_safe_splice (VEC_deferred_access_check_gc **dst_, VEC_deferred_access_check_base *src_ ) { if (src_) { VEC_deferred_access_check_gc_reserve_exact (dst_, src_->prefix.num ); VEC_deferred_access_check_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline deferred_access_check *VEC_deferred_access_check_gc_safe_push (VEC_deferred_access_check_gc **vec_, const deferred_access_check *obj_ ) { VEC_deferred_access_check_gc_reserve (vec_, 1 ); return VEC_deferred_access_check_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline deferred_access_check *VEC_deferred_access_check_gc_safe_insert (VEC_deferred_access_check_gc **vec_, unsigned ix_, const deferred_access_check *obj_ ) { VEC_deferred_access_check_gc_reserve (vec_, 1 ); return VEC_deferred_access_check_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 
 
 extern void push_deferring_access_checks (deferring_kind);
@@ -31090,7 +33728,7 @@ extern void pop_to_parent_deferring_access_checks (void);
 extern void perform_access_checks (VEC_deferred_access_check_gc*);
 extern void perform_deferred_access_checks (void);
 extern void perform_or_defer_access_check (tree, tree, tree);
-extern unsigned char speculative_access_check (tree, tree, tree, unsigned char);
+extern bool speculative_access_check (tree, tree, tree, bool);
 extern int stmts_are_full_exprs_p (void);
 extern void init_cp_semantics (void);
 extern tree do_poplevel (tree);
@@ -31136,19 +33774,19 @@ extern tree begin_handler (void);
 extern void finish_handler_parms (tree, tree);
 extern void finish_handler (tree);
 extern void finish_cleanup (tree, tree);
-extern unsigned char literal_type_p (tree);
+extern bool literal_type_p (tree);
 extern tree register_constexpr_fundef (tree, tree);
-extern unsigned char check_constexpr_ctor_body (tree, tree);
+extern bool check_constexpr_ctor_body (tree, tree);
 extern tree ensure_literal_type_for_constexpr_object (tree);
-extern unsigned char potential_constant_expression (tree);
-extern unsigned char potential_rvalue_constant_expression (tree);
-extern unsigned char require_potential_constant_expression (tree);
-extern unsigned char require_potential_rvalue_constant_expression (tree);
+extern bool potential_constant_expression (tree);
+extern bool potential_rvalue_constant_expression (tree);
+extern bool require_potential_constant_expression (tree);
+extern bool require_potential_rvalue_constant_expression (tree);
 extern tree cxx_constant_value (tree);
 extern tree maybe_constant_value (tree);
 extern tree maybe_constant_init (tree);
-extern unsigned char is_sub_constant_expr (tree);
-extern unsigned char reduced_constant_expression_p (tree);
+extern bool is_sub_constant_expr (tree);
+extern bool reduced_constant_expression_p (tree);
 extern void explain_invalid_constexpr_fn (tree);
 extern VEC_tree_heap* cx_error_context (void);
 
@@ -31168,13 +33806,13 @@ extern tree finish_parenthesized_expr (tree);
 extern tree finish_non_static_data_member (tree, tree, tree);
 extern tree begin_stmt_expr (void);
 extern tree finish_stmt_expr_expr (tree, tree);
-extern tree finish_stmt_expr (tree, unsigned char);
+extern tree finish_stmt_expr (tree, bool);
 extern tree stmt_expr_value_expr (tree);
-unsigned char empty_expr_stmt_p (tree);
-extern tree perform_koenig_lookup (tree, VEC_tree_gc *, unsigned char,
+bool empty_expr_stmt_p (tree);
+extern tree perform_koenig_lookup (tree, VEC_tree_gc *, bool,
        tsubst_flags_t);
-extern tree finish_call_expr (tree, VEC_tree_gc **, unsigned char,
-       unsigned char, tsubst_flags_t);
+extern tree finish_call_expr (tree, VEC_tree_gc **, bool,
+       bool, tsubst_flags_t);
 extern tree finish_increment_expr (tree, enum tree_code);
 extern tree finish_this_expr (void);
 extern tree finish_pseudo_destructor_expr (tree, tree, tree);
@@ -31187,18 +33825,18 @@ extern tree finish_template_template_parm (tree, tree);
 extern tree begin_class_definition (tree);
 extern void finish_template_decl (tree);
 extern tree finish_template_type (tree, tree, int);
-extern tree finish_base_specifier (tree, tree, unsigned char);
+extern tree finish_base_specifier (tree, tree, bool);
 extern void finish_member_declaration (tree);
 extern tree finish_id_expression (tree, tree, tree,
        cp_id_kind *,
-       unsigned char, unsigned char, unsigned char *,
-       unsigned char, unsigned char, unsigned char, unsigned char,
+       bool, bool, bool *,
+       bool, bool, bool, bool,
        const char **,
                                                  location_t);
 extern tree finish_typeof (tree);
 extern tree finish_underlying_type (tree);
 extern tree calculate_bases (tree);
-extern tree finish_bases (tree, unsigned char);
+extern tree finish_bases (tree, bool);
 extern tree calculate_direct_bases (tree);
 extern tree finish_offsetof (tree);
 extern void finish_decl_cleanup (tree, tree);
@@ -31206,13 +33844,13 @@ extern void finish_eh_cleanup (tree);
 extern void emit_associated_thunks (tree);
 extern void finish_mem_initializers (tree);
 extern tree check_template_template_default_arg (tree);
-extern unsigned char expand_or_defer_fn_1 (tree);
+extern bool expand_or_defer_fn_1 (tree);
 extern void expand_or_defer_fn (tree);
 extern void add_typedef_to_current_template_for_access_check (tree, tree,
              location_t);
 extern void check_accessibility_of_qualified_id (tree, tree, tree);
-extern tree finish_qualified_id_expr (tree, tree, unsigned char, unsigned char,
-       unsigned char, unsigned char);
+extern tree finish_qualified_id_expr (tree, tree, bool, bool,
+       bool, bool);
 extern void simplify_aggr_init_expr (tree *);
 extern void finalize_nrv (tree *, tree, tree);
 extern void note_decl_for_pch (tree);
@@ -31235,11 +33873,11 @@ extern tree begin_transaction_stmt (location_t, tree *, int);
 extern void finish_transaction_stmt (tree, tree, int, tree);
 extern tree build_transaction_expr (location_t, tree, int, tree);
 extern void finish_omp_taskyield (void);
-extern unsigned char cxx_omp_create_clause_info (tree, tree, unsigned char, unsigned char, unsigned char);
+extern bool cxx_omp_create_clause_info (tree, tree, bool, bool, bool);
 extern tree baselink_for_fns (tree);
 extern void finish_static_assert (tree, tree, location_t,
-                                                 unsigned char);
-extern tree finish_decltype_type (tree, unsigned char, tsubst_flags_t);
+                                                 bool);
+extern tree finish_decltype_type (tree, bool, tsubst_flags_t);
 extern tree finish_trait_expr (enum cp_trait_kind, tree, tree);
 extern tree build_lambda_expr (void);
 extern tree build_lambda_object (tree);
@@ -31249,18 +33887,18 @@ extern tree lambda_return_type (tree);
 extern tree lambda_proxy_type (tree);
 extern tree lambda_function (tree);
 extern void apply_lambda_return_type (tree, tree);
-extern tree add_capture (tree, tree, tree, unsigned char, unsigned char);
+extern tree add_capture (tree, tree, tree, bool, bool);
 extern tree add_default_capture (tree, tree, tree);
 extern tree build_capture_proxy (tree);
 extern void insert_capture_proxy (tree);
 extern void insert_pending_capture_proxies (void);
-extern unsigned char is_capture_proxy (tree);
-extern unsigned char is_normal_capture_proxy (tree);
+extern bool is_capture_proxy (tree);
+extern bool is_normal_capture_proxy (tree);
 extern void register_capture_members (tree);
 extern tree lambda_expr_this_capture (tree);
 extern tree nonlambda_method_basetype (void);
 extern void maybe_add_lambda_conv_op (tree);
-extern unsigned char is_lambda_ignored_entity (tree);
+extern bool is_lambda_ignored_entity (tree);
 
 
 extern int cp_tree_operand_length (const_tree);
@@ -31272,17 +33910,17 @@ extern void lang_check_failed (const char *, int,
 extern tree stabilize_expr (tree, tree *);
 extern void stabilize_call (tree, tree *);
 extern void stabilize_aggr_init (tree, tree *);
-extern unsigned char stabilize_init (tree, tree *);
+extern bool stabilize_init (tree, tree *);
 extern tree add_stmt_to_compound (tree, tree);
 extern void init_tree (void);
-extern unsigned char pod_type_p (const_tree);
-extern unsigned char layout_pod_type_p (const_tree);
-extern unsigned char std_layout_type_p (const_tree);
-extern unsigned char trivial_type_p (const_tree);
-extern unsigned char trivially_copyable_p (const_tree);
-extern unsigned char type_has_nontrivial_default_init (const_tree);
-extern unsigned char type_has_nontrivial_copy_init (const_tree);
-extern unsigned char class_tmpl_impl_spec_p (const_tree);
+extern bool pod_type_p (const_tree);
+extern bool layout_pod_type_p (const_tree);
+extern bool std_layout_type_p (const_tree);
+extern bool trivial_type_p (const_tree);
+extern bool trivially_copyable_p (const_tree);
+extern bool type_has_nontrivial_default_init (const_tree);
+extern bool type_has_nontrivial_copy_init (const_tree);
+extern bool class_tmpl_impl_spec_p (const_tree);
 extern int zero_init_p (const_tree);
 extern tree strip_typedefs (tree);
 extern tree copy_binfo (tree, tree, tree,
@@ -31290,8 +33928,8 @@ extern tree copy_binfo (tree, tree, tree,
 extern int member_p (const_tree);
 extern cp_lvalue_kind real_lvalue_p (const_tree);
 extern cp_lvalue_kind lvalue_kind (const_tree);
-extern unsigned char lvalue_or_rvalue_with_address_p (const_tree);
-extern unsigned char builtin_valid_in_constant_expr_p (const_tree);
+extern bool lvalue_or_rvalue_with_address_p (const_tree);
+extern bool builtin_valid_in_constant_expr_p (const_tree);
 extern tree build_min (enum tree_code, tree, ...);
 extern tree build_min_nt (enum tree_code, ...);
 extern tree build_min_non_dep (enum tree_code, tree, ...);
@@ -31307,7 +33945,7 @@ extern tree build_vec_init_expr (tree, tree, tsubst_flags_t);
 extern void diagnose_non_constexpr_vec_init (tree);
 extern tree hash_tree_cons (tree, tree, tree);
 extern tree hash_tree_chain (tree, tree);
-extern tree build_qualified_name (tree, tree, tree, unsigned char);
+extern tree build_qualified_name (tree, tree, tree, bool);
 extern int is_overloaded_fn (tree);
 extern tree dependent_name (tree);
 extern tree get_fns (tree);
@@ -31315,7 +33953,7 @@ extern tree get_first_fn (tree);
 extern tree ovl_cons (tree, tree);
 extern tree build_overload (tree, tree);
 extern tree ovl_scope (tree);
-extern unsigned char non_static_member_function_p (tree);
+extern bool non_static_member_function_p (tree);
 extern const char *cxx_printable_name (tree, int);
 extern const char *cxx_printable_name_translate (tree, int);
 extern tree build_exception_variant (tree, tree);
@@ -31325,13 +33963,13 @@ extern tree array_type_nelts_top (tree);
 extern tree break_out_target_exprs (tree);
 extern tree get_type_decl (tree);
 extern tree decl_namespace_context (tree);
-extern unsigned char decl_anon_ns_mem_p (const_tree);
+extern bool decl_anon_ns_mem_p (const_tree);
 extern tree lvalue_type (tree);
 extern tree error_type (tree);
 extern int varargs_function_p (const_tree);
-extern unsigned char really_overloaded_fn (tree);
-extern unsigned char cp_tree_equal (tree, tree);
-extern tree no_linkage_check (tree, unsigned char);
+extern bool really_overloaded_fn (tree);
+extern bool cp_tree_equal (tree, tree);
+extern tree no_linkage_check (tree, bool);
 extern void debug_binfo (tree);
 extern tree build_dummy_object (tree);
 extern tree maybe_dummy_object (tree, tree *);
@@ -31339,12 +33977,12 @@ extern int is_dummy_object (const_tree);
 extern const struct attribute_spec cxx_attribute_table[];
 extern tree make_ptrmem_cst (tree, tree);
 extern tree cp_build_type_attribute_variant (tree, tree);
-extern tree cp_build_reference_type (tree, unsigned char);
+extern tree cp_build_reference_type (tree, bool);
 extern tree move (tree);
 extern tree cp_build_qualified_type_real (tree, int, tsubst_flags_t);
 
 
-extern unsigned char cv_qualified_p (const_tree);
+extern bool cv_qualified_p (const_tree);
 extern tree cv_unqualified (tree);
 extern special_function_kind special_function_p (const_tree);
 extern int count_trees (tree);
@@ -31362,8 +34000,8 @@ extern tree fold_if_not_in_template (tree);
 extern tree rvalue (tree);
 extern tree convert_bitfield_to_declared_type (tree);
 extern tree cp_save_expr (tree);
-extern unsigned char cast_valid_in_integral_constant_expression_p (tree);
-extern unsigned char cxx_type_hash_eq (const_tree, const_tree);
+extern bool cast_valid_in_integral_constant_expression_p (tree);
+extern bool cxx_type_hash_eq (const_tree, const_tree);
 
 extern void cxx_print_statistics (void);
 
@@ -31377,7 +34015,7 @@ extern void cxx_print_error_function (diagnostic_context *,
        struct diagnostic_info *);
 
 
-extern unsigned char cxx_mark_addressable (tree);
+extern bool cxx_mark_addressable (tree);
 extern int string_conv_p (const_tree, const_tree, int);
 extern tree cp_truthvalue_conversion (tree);
 extern tree condition_conversion (tree);
@@ -31388,21 +34026,21 @@ extern tree complete_type_or_else (tree, tree);
 extern tree complete_type_or_maybe_complain (tree, tree, tsubst_flags_t);
 extern int type_unknown_p (const_tree);
 enum { ce_derived, ce_normal, ce_exact };
-extern unsigned char comp_except_specs (const_tree, const_tree, int);
-extern unsigned char comptypes (tree, tree, int);
-extern unsigned char same_type_ignoring_top_level_qualifiers_p (tree, tree);
-extern unsigned char compparms (const_tree, const_tree);
+extern bool comp_except_specs (const_tree, const_tree, int);
+extern bool comptypes (tree, tree, int);
+extern bool same_type_ignoring_top_level_qualifiers_p (tree, tree);
+extern bool compparms (const_tree, const_tree);
 extern int comp_cv_qualification (const_tree, const_tree);
 extern int comp_cv_qual_signature (tree, tree);
-extern tree cxx_sizeof_or_alignof_expr (tree, enum tree_code, unsigned char);
-extern tree cxx_sizeof_or_alignof_type (tree, enum tree_code, unsigned char);
+extern tree cxx_sizeof_or_alignof_expr (tree, enum tree_code, bool);
+extern tree cxx_sizeof_or_alignof_type (tree, enum tree_code, bool);
 extern tree cxx_sizeof_nowarn (tree);
 extern tree is_bitfield_expr_with_lowered_type (const_tree);
 extern tree unlowered_expr_type (const_tree);
 extern tree decay_conversion (tree);
-extern tree build_class_member_access_expr (tree, tree, tree, unsigned char,
+extern tree build_class_member_access_expr (tree, tree, tree, bool,
        tsubst_flags_t);
-extern tree finish_class_member_access_expr (tree, tree, unsigned char,
+extern tree finish_class_member_access_expr (tree, tree, bool,
        tsubst_flags_t);
 extern tree build_x_indirect_ref (tree, ref_operator,
                                                  tsubst_flags_t);
@@ -31450,16 +34088,16 @@ extern tree convert_for_initialization (tree, tree, tree, int,
        impl_conv_rhs, tree, int,
                                                  tsubst_flags_t);
 extern int comp_ptr_ttypes (tree, tree);
-extern unsigned char comp_ptr_ttypes_const (tree, tree);
-extern unsigned char error_type_p (const_tree);
+extern bool comp_ptr_ttypes_const (tree, tree);
+extern bool error_type_p (const_tree);
 extern int ptr_reasonably_similar (const_tree, const_tree);
-extern tree build_ptrmemfunc (tree, tree, int, unsigned char,
+extern tree build_ptrmemfunc (tree, tree, int, bool,
        tsubst_flags_t);
 extern int cp_type_quals (const_tree);
 extern int type_memfn_quals (const_tree);
 extern tree apply_memfn_quals (tree, cp_cv_quals);
-extern unsigned char cp_has_mutable_p (const_tree);
-extern unsigned char at_least_as_qualified_p (const_tree, const_tree);
+extern bool cp_has_mutable_p (const_tree);
+extern bool at_least_as_qualified_p (const_tree, const_tree);
 extern void cp_apply_type_quals_to_decl (int, tree);
 extern tree build_ptrmemfunc1 (tree, tree, tree);
 extern void expand_ptrmemfunc_cst (tree, tree *, tree *);
@@ -31470,7 +34108,7 @@ extern tree composite_pointer_type (tree, tree, tree, tree,
        tsubst_flags_t);
 extern tree merge_types (tree, tree);
 extern tree strip_array_domain (tree);
-extern tree check_return_expr (tree, unsigned char *);
+extern tree check_return_expr (tree, bool *);
 extern tree cp_build_binary_op (location_t,
        enum tree_code, tree, tree,
        tsubst_flags_t);
@@ -31481,15 +34119,15 @@ extern tree build_typed_address (tree, tree);
 extern tree build_nop (tree, tree);
 extern tree non_reference (tree);
 extern tree lookup_anon_field (tree, tree);
-extern unsigned char invalid_nonstatic_memfn_p (const_tree, tsubst_flags_t);
+extern bool invalid_nonstatic_memfn_p (const_tree, tsubst_flags_t);
 extern tree convert_member_func_to_ptr (tree, tree);
-extern tree convert_ptrmem (tree, tree, unsigned char, unsigned char,
+extern tree convert_ptrmem (tree, tree, bool, bool,
        tsubst_flags_t);
 extern int lvalue_or_else (tree, enum lvalue_use,
                                                  tsubst_flags_t);
 extern void check_template_keyword (tree);
-extern unsigned char check_raw_literal_operator (const_tree decl);
-extern unsigned char check_literal_operator_args (const_tree, unsigned char *, unsigned char *);
+extern bool check_raw_literal_operator (const_tree decl);
+extern bool check_literal_operator_args (const_tree, bool *, bool *);
 
 
 extern void require_complete_eh_spec_types (tree, tree);
@@ -31531,14 +34169,14 @@ extern tree mangle_guard_variable (tree);
 extern tree mangle_ref_init_variable (tree);
 
 
-extern unsigned char cp_dump_tree (void *, tree);
+extern bool cp_dump_tree (void *, tree);
 
 
 
 extern alias_set_type cxx_get_alias_set (tree);
-extern unsigned char cxx_warn_unused_global_decl (const_tree);
+extern bool cxx_warn_unused_global_decl (const_tree);
 extern size_t cp_tree_size (enum tree_code);
-extern unsigned char cp_var_mod_type_p (tree, tree);
+extern bool cp_var_mod_type_p (tree, tree);
 extern void cxx_initialize_diagnostics (diagnostic_context *);
 extern int cxx_types_compatible_p (tree, tree);
 extern void init_shadowed_var_for_decl (void);
@@ -31547,14 +34185,14 @@ extern void init_shadowed_var_for_decl (void);
 extern int cp_gimplify_expr (tree *, gimple_seq *,
        gimple_seq *);
 extern void cp_genericize (tree);
-extern unsigned char cxx_omp_const_qual_no_mutable (tree);
+extern bool cxx_omp_const_qual_no_mutable (tree);
 extern enum omp_clause_default_kind cxx_omp_predetermined_sharing (tree);
 extern tree cxx_omp_clause_default_ctor (tree, tree, tree);
 extern tree cxx_omp_clause_copy_ctor (tree, tree, tree);
 extern tree cxx_omp_clause_assign_op (tree, tree, tree);
 extern tree cxx_omp_clause_dtor (tree, tree);
 extern void cxx_omp_finish_clause (tree);
-extern unsigned char cxx_omp_privatize_by_reference (const_tree);
+extern bool cxx_omp_privatize_by_reference (const_tree);
 
 
 extern void suggest_alternatives_for (location_t, tree);
@@ -31619,7 +34257,7 @@ extern struct cpp_reader* parse_in;
 
 
 extern void push_visibility (const char *, int);
-extern unsigned char pop_visibility (int);
+extern bool pop_visibility (int);
 
 extern void init_pragma (void);
 
@@ -31639,7 +34277,7 @@ struct internal_pragma_handler_d {
   union gen_pragma_handler handler;
 
 
-  unsigned char extra_data;
+  bool extra_data;
 
   void * data;
 };
@@ -32258,10 +34896,10 @@ typedef struct mem_attrs
   unsigned char addrspace;
 
 
-  unsigned char offset_known_p;
+  bool offset_known_p;
 
 
-  unsigned char size_known_p;
+  bool size_known_p;
 } mem_attrs;
 # 180 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
 typedef struct reg_attrs {
@@ -32327,10 +34965,10 @@ struct object_block {
 struct
                                                     rtx_def {
 
-  __extension__ enum rtx_code code: 16;
+  enum rtx_code code: 16;
 
 
-  __extension__ enum machine_mode mode : 8;
+  enum machine_mode mode : 8;
 
 
 
@@ -32629,7 +35267,7 @@ enum label_kind
   LABEL_WEAK_ENTRY
 };
 # 1087 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
-static __inline__ unsigned int
+static inline unsigned int
 rhs_regno (const_rtx x)
 {
   return (((x)->u.fld[0]).rt_uint);
@@ -32642,7 +35280,7 @@ struct full_rtx_costs
 };
 
 
-static __inline__ void
+static inline void
 init_costs_to_max (struct full_rtx_costs *c)
 {
   c->speed = 2147483647;
@@ -32650,7 +35288,7 @@ init_costs_to_max (struct full_rtx_costs *c)
 }
 
 
-static __inline__ void
+static inline void
 init_costs_to_zero (struct full_rtx_costs *c)
 {
   c->speed = 0;
@@ -32659,9 +35297,9 @@ init_costs_to_zero (struct full_rtx_costs *c)
 
 
 
-static __inline__ unsigned char
+static inline bool
 costs_lt_p (struct full_rtx_costs *a, struct full_rtx_costs *b,
-     unsigned char speed)
+     bool speed)
 {
   if (speed)
     return (a->speed < b->speed
@@ -32673,7 +35311,7 @@ costs_lt_p (struct full_rtx_costs *a, struct full_rtx_costs *b,
 
 
 
-static __inline__ void
+static inline void
 costs_add_n_insns (struct full_rtx_costs *c, int n)
 {
   c->speed += ((n) * 4);
@@ -32681,8 +35319,8 @@ costs_add_n_insns (struct full_rtx_costs *c, int n)
 }
 
 extern void init_rtlanal (void);
-extern int rtx_cost (rtx, enum rtx_code, int, unsigned char);
-extern int address_cost (rtx, enum machine_mode, addr_space_t, unsigned char);
+extern int rtx_cost (rtx, enum rtx_code, int, bool);
+extern int address_cost (rtx, enum machine_mode, addr_space_t, bool);
 extern void get_full_rtx_cost (rtx, enum rtx_code, int,
           struct full_rtx_costs *);
 extern unsigned int subreg_lsb (const_rtx);
@@ -32690,7 +35328,7 @@ extern unsigned int subreg_lsb_1 (enum machine_mode, enum machine_mode,
       unsigned int);
 extern unsigned int subreg_regno_offset (unsigned int, enum machine_mode,
       unsigned int, enum machine_mode);
-extern unsigned char subreg_offset_representable_p (unsigned int, enum machine_mode,
+extern bool subreg_offset_representable_p (unsigned int, enum machine_mode,
         unsigned int, enum machine_mode);
 extern unsigned int subreg_regno (const_rtx);
 extern int simplify_subreg_regno (unsigned int, enum machine_mode,
@@ -32699,23 +35337,23 @@ extern unsigned int subreg_nregs (const_rtx);
 extern unsigned int subreg_nregs_with_regno (unsigned int, const_rtx);
 extern unsigned long nonzero_bits (const_rtx, enum machine_mode);
 extern unsigned int num_sign_bit_copies (const_rtx, enum machine_mode);
-extern unsigned char constant_pool_constant_p (rtx);
-extern unsigned char truncated_to_mode (enum machine_mode, const_rtx);
+extern bool constant_pool_constant_p (rtx);
+extern bool truncated_to_mode (enum machine_mode, const_rtx);
 extern int low_bitmask_len (enum machine_mode, unsigned long);
 
 
 
 
 
-static __inline__ int
-set_rtx_cost (rtx x, unsigned char speed_p)
+static inline int
+set_rtx_cost (rtx x, bool speed_p)
 {
   return rtx_cost (x, INSN, 4, speed_p);
 }
 
 
 
-static __inline__ void
+static inline void
 get_full_set_rtx_cost (rtx x, struct full_rtx_costs *c)
 {
   get_full_rtx_cost (x, INSN, 4, c);
@@ -32725,15 +35363,15 @@ get_full_set_rtx_cost (rtx x, struct full_rtx_costs *c)
 
 
 
-static __inline__ int
-set_src_cost (rtx x, unsigned char speed_p)
+static inline int
+set_src_cost (rtx x, bool speed_p)
 {
   return rtx_cost (x, SET, 1, speed_p);
 }
 
 
 
-static __inline__ void
+static inline void
 get_full_set_src_cost (rtx x, struct full_rtx_costs *c)
 {
   get_full_rtx_cost (x, SET, 1, c);
@@ -32759,7 +35397,7 @@ extern rtx rtx_alloc_stat (enum rtx_code );
 
 extern rtvec rtvec_alloc (int);
 extern rtvec shallow_copy_rtvec (rtvec);
-extern unsigned char shared_const_p (const_rtx);
+extern bool shared_const_p (const_rtx);
 extern rtx copy_rtx (rtx);
 extern void dump_rtx_statistics (void);
 
@@ -32792,7 +35430,7 @@ extern rtx operand_subword (rtx, unsigned int, int, enum machine_mode);
 
 
 extern rtx operand_subword_force (rtx, unsigned int, enum machine_mode);
-extern unsigned char paradoxical_subreg_p (const_rtx);
+extern bool paradoxical_subreg_p (const_rtx);
 extern int subreg_lowpart_p (const_rtx);
 extern unsigned int subreg_lowpart_offset (enum machine_mode,
         enum machine_mode);
@@ -32828,7 +35466,7 @@ extern rtx force_const_mem (enum machine_mode, rtx);
 
 struct function;
 extern rtx get_pool_constant (rtx);
-extern rtx get_pool_constant_mark (rtx, unsigned char *);
+extern rtx get_pool_constant_mark (rtx, bool *);
 extern enum machine_mode get_pool_mode (const_rtx);
 extern rtx simplify_subtraction (rtx);
 extern void decide_function_section (tree);
@@ -32917,7 +35555,7 @@ extern const char * insn_file (const_rtx);
 extern location_t locator_location (int);
 extern int locator_line (int);
 extern const char * locator_file (int);
-extern unsigned char locator_eq (int, int);
+extern bool locator_eq (int, int);
 extern int prologue_locator, epilogue_locator;
 
 
@@ -32974,16 +35612,16 @@ extern rtx simplify_replace_rtx (rtx, const_rtx, rtx);
 extern rtx simplify_rtx (const_rtx);
 extern rtx avoid_constant_pool_reference (rtx);
 extern rtx delegitimize_mem_from_attrs (rtx);
-extern unsigned char mode_signbit_p (enum machine_mode, const_rtx);
-extern unsigned char val_signbit_p (enum machine_mode, unsigned long);
-extern unsigned char val_signbit_known_set_p (enum machine_mode,
+extern bool mode_signbit_p (enum machine_mode, const_rtx);
+extern bool val_signbit_p (enum machine_mode, unsigned long);
+extern bool val_signbit_known_set_p (enum machine_mode,
          unsigned long);
-extern unsigned char val_signbit_known_clear_p (enum machine_mode,
+extern bool val_signbit_known_clear_p (enum machine_mode,
            unsigned long);
 
 
 extern enum machine_mode choose_hard_reg_mode (unsigned int, unsigned int,
-            unsigned char);
+            bool);
 
 
 extern rtx set_unique_reg_note (rtx, enum reg_note, rtx);
@@ -32994,17 +35632,17 @@ typedef struct replace_label_data
 {
   rtx r1;
   rtx r2;
-  unsigned char update_label_nuses;
+  bool update_label_nuses;
 } replace_label_data;
 
 extern int rtx_addr_can_trap_p (const_rtx);
-extern unsigned char nonzero_address_p (const_rtx);
+extern bool nonzero_address_p (const_rtx);
 extern int rtx_unstable_p (const_rtx);
-extern unsigned char rtx_varies_p (const_rtx, unsigned char);
-extern unsigned char rtx_addr_varies_p (const_rtx, unsigned char);
+extern bool rtx_varies_p (const_rtx, bool);
+extern bool rtx_addr_varies_p (const_rtx, bool);
 extern long get_integer_term (const_rtx);
 extern rtx get_related_value (const_rtx);
-extern unsigned char offset_within_block_p (const_rtx, long);
+extern bool offset_within_block_p (const_rtx, long);
 extern void split_const (rtx, rtx *, rtx *);
 extern int reg_mentioned_p (const_rtx, const_rtx);
 extern int count_occurrences (const_rtx, const_rtx, int);
@@ -33012,7 +35650,7 @@ extern int reg_referenced_p (const_rtx, const_rtx);
 extern int reg_used_between_p (const_rtx, const_rtx, const_rtx);
 extern int reg_set_between_p (const_rtx, const_rtx, const_rtx);
 extern int commutative_operand_precedence (rtx);
-extern unsigned char swap_commutative_operands_p (rtx, rtx);
+extern bool swap_commutative_operands_p (rtx, rtx);
 extern int modified_between_p (const_rtx, const_rtx, const_rtx);
 extern int no_labels_between_p (const_rtx, const_rtx);
 extern int modified_in_p (const_rtx, const_rtx);
@@ -33051,18 +35689,18 @@ extern int volatile_insn_p (const_rtx);
 extern int may_trap_p_1 (const_rtx, unsigned);
 extern int may_trap_p (const_rtx);
 extern int may_trap_or_fault_p (const_rtx);
-extern unsigned char can_throw_internal (const_rtx);
-extern unsigned char can_throw_external (const_rtx);
-extern unsigned char insn_could_throw_p (const_rtx);
-extern unsigned char insn_nothrow_p (const_rtx);
-extern unsigned char can_nonlocal_goto (const_rtx);
+extern bool can_throw_internal (const_rtx);
+extern bool can_throw_external (const_rtx);
+extern bool insn_could_throw_p (const_rtx);
+extern bool insn_nothrow_p (const_rtx);
+extern bool can_nonlocal_goto (const_rtx);
 extern void copy_reg_eh_region_note_forward (rtx, rtx, rtx);
 extern void copy_reg_eh_region_note_backward(rtx, rtx, rtx);
 extern int inequality_comparisons_p (const_rtx);
 extern rtx replace_rtx (rtx, rtx, rtx);
 extern int replace_label (rtx *, void *);
 extern int rtx_referenced_p (rtx, rtx);
-extern unsigned char tablejump_p (const_rtx, rtx *, rtx *);
+extern bool tablejump_p (const_rtx, rtx *, rtx *);
 extern int computed_jump_p (const_rtx);
 
 typedef int (*rtx_function) (rtx *, void *);
@@ -33080,7 +35718,7 @@ extern int rtx_equal_p_cb (const_rtx, const_rtx,
 typedef int (*hash_rtx_callback_function) (const_rtx, enum machine_mode, rtx *,
                                            enum machine_mode *);
 extern unsigned hash_rtx_cb (const_rtx, enum machine_mode, int *, int *,
-                             unsigned char, hash_rtx_callback_function);
+                             bool, hash_rtx_callback_function);
 
 extern rtx regno_use_in (unsigned int, rtx);
 extern int auto_inc_p (const_rtx);
@@ -33088,9 +35726,9 @@ extern int in_expr_list_p (const_rtx, const_rtx);
 extern void remove_node_from_expr_list (const_rtx, rtx *);
 extern int loc_mentioned_in_p (rtx *, const_rtx);
 extern rtx find_first_parameter_load (rtx, rtx);
-extern unsigned char keep_with_call_p (const_rtx);
-extern unsigned char label_is_jump_target_p (const_rtx, const_rtx);
-extern int insn_rtx_cost (rtx, unsigned char);
+extern bool keep_with_call_p (const_rtx);
+extern bool label_is_jump_target_p (const_rtx, const_rtx);
+extern int insn_rtx_cost (rtx, bool);
 
 
 
@@ -33109,7 +35747,7 @@ struct subreg_info
   int nregs;
 
 
-  unsigned char representable_p;
+  bool representable_p;
 };
 
 extern void subreg_get_info (unsigned int, enum machine_mode,
@@ -33137,7 +35775,7 @@ extern rtx remove_free_EXPR_LIST_node (rtx *);
 
 extern void init_move_cost (enum machine_mode);
 
-extern unsigned char resize_reg_info (void);
+extern bool resize_reg_info (void);
 
 extern void free_reg_info (void);
 extern void init_subregs_of_mode (void);
@@ -33229,7 +35867,7 @@ struct target_rtl {
 
 extern struct target_rtl default_target_rtl;
 # 2227 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/rtl.h"
-static __inline__ struct mem_attrs *
+static inline struct mem_attrs *
 get_mem_attrs (const_rtx x)
 {
   struct mem_attrs *attrs;
@@ -33252,7 +35890,7 @@ get_mem_attrs (const_rtx x)
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_0_stat (enum rtx_code code, enum machine_mode mode )
 {
   rtx rt;
@@ -33267,7 +35905,7 @@ gen_rtx_fmt_0_stat (enum rtx_code code, enum machine_mode mode )
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_ee_stat (enum rtx_code code, enum machine_mode mode,
  rtx arg0,
  rtx arg1 )
@@ -33285,7 +35923,7 @@ gen_rtx_fmt_ee_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_ue_stat (enum rtx_code code, enum machine_mode mode,
  rtx arg0,
  rtx arg1 )
@@ -33303,7 +35941,7 @@ gen_rtx_fmt_ue_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_E_stat (enum rtx_code code, enum machine_mode mode,
  rtvec arg0 )
 {
@@ -33319,7 +35957,7 @@ gen_rtx_fmt_E_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_e_stat (enum rtx_code code, enum machine_mode mode,
  rtx arg0 )
 {
@@ -33335,7 +35973,7 @@ gen_rtx_fmt_e_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_iuuBeiie_stat (enum rtx_code code, enum machine_mode mode,
  int arg0,
  rtx arg1,
@@ -33365,7 +36003,7 @@ gen_rtx_fmt_iuuBeiie_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_iuuBeiie0_stat (enum rtx_code code, enum machine_mode mode,
  int arg0,
  rtx arg1,
@@ -33396,7 +36034,7 @@ gen_rtx_fmt_iuuBeiie0_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_iuuBeiiee_stat (enum rtx_code code, enum machine_mode mode,
  int arg0,
  rtx arg1,
@@ -33428,7 +36066,7 @@ gen_rtx_fmt_iuuBeiiee_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_iuu00000_stat (enum rtx_code code, enum machine_mode mode,
  int arg0,
  rtx arg1,
@@ -33453,7 +36091,7 @@ gen_rtx_fmt_iuu00000_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_iuuB00is_stat (enum rtx_code code, enum machine_mode mode,
  int arg0,
  rtx arg1,
@@ -33481,7 +36119,7 @@ gen_rtx_fmt_iuuB00is_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_si_stat (enum rtx_code code, enum machine_mode mode,
  const char *arg0,
  int arg1 )
@@ -33499,7 +36137,7 @@ gen_rtx_fmt_si_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_ssiEEEi_stat (enum rtx_code code, enum machine_mode mode,
  const char *arg0,
  const char *arg1,
@@ -33527,7 +36165,7 @@ gen_rtx_fmt_ssiEEEi_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_Ei_stat (enum rtx_code code, enum machine_mode mode,
  rtvec arg0,
  int arg1 )
@@ -33545,7 +36183,7 @@ gen_rtx_fmt_Ei_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_eEee0_stat (enum rtx_code code, enum machine_mode mode,
  rtx arg0,
  rtvec arg1,
@@ -33568,7 +36206,7 @@ gen_rtx_fmt_eEee0_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_eee_stat (enum rtx_code code, enum machine_mode mode,
  rtx arg0,
  rtx arg1,
@@ -33588,7 +36226,7 @@ gen_rtx_fmt_eee_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt__stat (enum rtx_code code, enum machine_mode mode )
 {
   rtx rt;
@@ -33602,7 +36240,7 @@ gen_rtx_fmt__stat (enum rtx_code code, enum machine_mode mode )
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_w_stat (enum rtx_code code, enum machine_mode mode,
  long arg0 )
 {
@@ -33618,7 +36256,7 @@ gen_rtx_fmt_w_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_www_stat (enum rtx_code code, enum machine_mode mode,
  long arg0,
  long arg1,
@@ -33638,7 +36276,7 @@ gen_rtx_fmt_www_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_s_stat (enum rtx_code code, enum machine_mode mode,
  const char *arg0 )
 {
@@ -33654,7 +36292,7 @@ gen_rtx_fmt_s_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_i00_stat (enum rtx_code code, enum machine_mode mode,
  int arg0 )
 {
@@ -33672,7 +36310,7 @@ gen_rtx_fmt_i00_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_ei_stat (enum rtx_code code, enum machine_mode mode,
  rtx arg0,
  int arg1 )
@@ -33690,7 +36328,7 @@ gen_rtx_fmt_ei_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_e0_stat (enum rtx_code code, enum machine_mode mode,
  rtx arg0 )
 {
@@ -33707,7 +36345,7 @@ gen_rtx_fmt_e0_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_u_stat (enum rtx_code code, enum machine_mode mode,
  rtx arg0 )
 {
@@ -33723,7 +36361,7 @@ gen_rtx_fmt_u_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_s00_stat (enum rtx_code code, enum machine_mode mode,
  const char *arg0 )
 {
@@ -33741,7 +36379,7 @@ gen_rtx_fmt_s00_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_tei_stat (enum rtx_code code, enum machine_mode mode,
  union tree_node *arg0,
  rtx arg1,
@@ -33761,7 +36399,7 @@ gen_rtx_fmt_tei_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_t_stat (enum rtx_code code, enum machine_mode mode,
  union tree_node *arg0 )
 {
@@ -33777,7 +36415,7 @@ gen_rtx_fmt_t_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_iss_stat (enum rtx_code code, enum machine_mode mode,
  int arg0,
  const char *arg1,
@@ -33797,7 +36435,7 @@ gen_rtx_fmt_iss_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_is_stat (enum rtx_code code, enum machine_mode mode,
  int arg0,
  const char *arg1 )
@@ -33815,7 +36453,7 @@ gen_rtx_fmt_is_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_isE_stat (enum rtx_code code, enum machine_mode mode,
  int arg0,
  const char *arg1,
@@ -33835,7 +36473,7 @@ gen_rtx_fmt_isE_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_i_stat (enum rtx_code code, enum machine_mode mode,
  int arg0 )
 {
@@ -33851,7 +36489,7 @@ gen_rtx_fmt_i_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_iE_stat (enum rtx_code code, enum machine_mode mode,
  int arg0,
  rtvec arg1 )
@@ -33869,7 +36507,7 @@ gen_rtx_fmt_iE_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_ss_stat (enum rtx_code code, enum machine_mode mode,
  const char *arg0,
  const char *arg1 )
@@ -33887,7 +36525,7 @@ gen_rtx_fmt_ss_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_sEss_stat (enum rtx_code code, enum machine_mode mode,
  const char *arg0,
  rtvec arg1,
@@ -33909,7 +36547,7 @@ gen_rtx_fmt_sEss_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_eE_stat (enum rtx_code code, enum machine_mode mode,
  rtx arg0,
  rtvec arg1 )
@@ -33927,7 +36565,7 @@ gen_rtx_fmt_eE_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_Ess_stat (enum rtx_code code, enum machine_mode mode,
  rtvec arg0,
  const char *arg1,
@@ -33947,7 +36585,7 @@ gen_rtx_fmt_Ess_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_ses_stat (enum rtx_code code, enum machine_mode mode,
  const char *arg0,
  rtx arg1,
@@ -33967,7 +36605,7 @@ gen_rtx_fmt_ses_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_sss_stat (enum rtx_code code, enum machine_mode mode,
  const char *arg0,
  const char *arg1,
@@ -33987,7 +36625,7 @@ gen_rtx_fmt_sss_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_sse_stat (enum rtx_code code, enum machine_mode mode,
  const char *arg0,
  const char *arg1,
@@ -34007,7 +36645,7 @@ gen_rtx_fmt_sse_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_sies_stat (enum rtx_code code, enum machine_mode mode,
  const char *arg0,
  int arg1,
@@ -34029,7 +36667,7 @@ gen_rtx_fmt_sies_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_sE_stat (enum rtx_code code, enum machine_mode mode,
  const char *arg0,
  rtvec arg1 )
@@ -34047,7 +36685,7 @@ gen_rtx_fmt_sE_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_ii_stat (enum rtx_code code, enum machine_mode mode,
  int arg0,
  int arg1 )
@@ -34065,7 +36703,7 @@ gen_rtx_fmt_ii_stat (enum rtx_code code, enum machine_mode mode,
 
 
 
-static __inline__ rtx
+static inline rtx
 gen_rtx_fmt_Ee_stat (enum rtx_code code, enum machine_mode mode,
  rtvec arg0,
  rtx arg1 )
@@ -34117,15 +36755,15 @@ extern int rtx_to_tree_code (enum rtx_code);
 
 extern int delete_trivially_dead_insns (rtx, int);
 extern int cse_main (rtx, int);
-extern int exp_equiv_p (const_rtx, const_rtx, int, unsigned char);
-extern unsigned hash_rtx (const_rtx x, enum machine_mode, int *, int *, unsigned char);
+extern int exp_equiv_p (const_rtx, const_rtx, int, bool);
+extern unsigned hash_rtx (const_rtx x, enum machine_mode, int *, int *, bool);
 
 
-extern unsigned char check_for_inc_dec (rtx insn);
+extern bool check_for_inc_dec (rtx insn);
 
 
 extern int comparison_dominates_p (enum rtx_code, enum rtx_code);
-extern unsigned char jump_to_label_p (rtx);
+extern bool jump_to_label_p (rtx);
 extern int condjump_p (const_rtx);
 extern int any_condjump_p (const_rtx);
 extern int any_uncondjump_p (const_rtx);
@@ -34188,14 +36826,14 @@ extern rtx emit (rtx);
 extern rtx delete_insn (rtx);
 extern rtx entry_of_function (void);
 extern void emit_insn_at_entry (rtx);
-extern void delete_insn_chain (rtx, rtx, unsigned char);
+extern void delete_insn_chain (rtx, rtx, bool);
 extern rtx unlink_insn_chain (rtx, rtx);
 extern rtx delete_insn_and_edges (rtx);
 extern rtx gen_lowpart_SUBREG (enum machine_mode, rtx);
 extern rtx gen_const_mem (enum machine_mode, rtx);
 extern rtx gen_frame_mem (enum machine_mode, rtx);
 extern rtx gen_tmp_stack_mem (enum machine_mode, rtx);
-extern unsigned char validate_subreg (enum machine_mode, enum machine_mode,
+extern bool validate_subreg (enum machine_mode, enum machine_mode,
         const_rtx, unsigned int);
 
 
@@ -34269,8 +36907,8 @@ extern void expand_inc (rtx, rtx);
 extern void expand_dec (rtx, rtx);
 
 
-extern unsigned char can_copy_p (enum machine_mode);
-extern unsigned char can_assign_to_reg_without_clobbers_p (rtx);
+extern bool can_copy_p (enum machine_mode);
+extern bool can_assign_to_reg_without_clobbers_p (rtx);
 extern rtx fis_get_condition (rtx);
 
 
@@ -34292,7 +36930,7 @@ extern void init_reg_sets (void);
 extern void regclass (rtx, int);
 extern void reg_scan (rtx, unsigned int);
 extern void fix_register (const char *, int, int);
-extern unsigned char invalid_mode_change_p (unsigned int, enum reg_class);
+extern bool invalid_mode_change_p (unsigned int, enum reg_class);
 
 
 extern void dbr_schedule (rtx);
@@ -34322,7 +36960,7 @@ extern void init_varasm_once (void);
 extern rtx make_debug_expr_from_rtl (const_rtx);
 
 
-extern unsigned char read_rtx (const char *, rtx *);
+extern bool read_rtx (const char *, rtx *);
 
 
 extern rtx canon_rtx (rtx);
@@ -34338,11 +36976,11 @@ extern void init_alias_target (void);
 extern void init_alias_analysis (void);
 extern void end_alias_analysis (void);
 extern void vt_equate_reg_base_value (const_rtx, const_rtx);
-extern unsigned char memory_modified_in_insn_p (const_rtx, const_rtx);
+extern bool memory_modified_in_insn_p (const_rtx, const_rtx);
 extern rtx find_base_term (rtx);
 extern rtx gen_hard_reg_clobber (enum machine_mode, unsigned int);
 extern rtx get_reg_known_value (unsigned int);
-extern unsigned char get_reg_known_equiv_p (unsigned int);
+extern bool get_reg_known_equiv_p (unsigned int);
 extern rtx get_reg_base_value (unsigned int);
 
 
@@ -34354,7 +36992,7 @@ extern rtx stack_limit_rtx;
 
 
 extern void invert_br_probabilities (rtx);
-extern unsigned char expensive_function_p (int);
+extern bool expensive_function_p (int);
 
 
 extern unsigned int variable_tracking_main (void);
@@ -34383,7 +37021,7 @@ struct rtl_hooks
       unsigned long, unsigned long *);
   rtx (*reg_num_sign_bit_copies) (const_rtx, enum machine_mode, const_rtx, enum machine_mode,
       unsigned int, unsigned int *);
-  unsigned char (*reg_truncated_to_mode) (enum machine_mode, const_rtx);
+  bool (*reg_truncated_to_mode) (enum machine_mode, const_rtx);
 
 
 };
@@ -34405,8 +37043,8 @@ extern location_t get_curr_insn_source_location (void);
 extern void set_curr_insn_block (tree);
 extern tree get_curr_insn_block (void);
 extern int curr_insn_locator (void);
-extern unsigned char optimize_insn_for_size_p (void);
-extern unsigned char optimize_insn_for_speed_p (void);
+extern bool optimize_insn_for_size_p (void);
+extern bool optimize_insn_for_speed_p (void);
 
 
 extern void _fatal_insn_not_found (const_rtx, const char *, int, const char *)
@@ -34441,7 +37079,7 @@ extern void clear_mem_size (rtx);
 
 
 extern void set_mem_attrs_for_spill (rtx);
-extern tree get_spill_slot_decl (unsigned char);
+extern tree get_spill_slot_decl (bool);
 
 
 
@@ -34466,7 +37104,7 @@ extern int mem_expr_equal_p (const_tree, const_tree);
 
 
 
-static __inline__ rtx
+static inline rtx
 get_insns (void)
 {
   return (&x_rtl)->emit.x_first_insn;
@@ -34474,7 +37112,7 @@ get_insns (void)
 
 
 
-static __inline__ void
+static inline void
 set_first_insn (rtx insn)
 {
   ((void)(0 && (!insn || !(((insn)->u.fld[1]).rt_rtx))));
@@ -34483,7 +37121,7 @@ set_first_insn (rtx insn)
 
 
 
-static __inline__ rtx
+static inline rtx
 get_last_insn (void)
 {
   return (&x_rtl)->emit.x_last_insn;
@@ -34491,7 +37129,7 @@ get_last_insn (void)
 
 
 
-static __inline__ void
+static inline void
 set_last_insn (rtx insn)
 {
   ((void)(0 && (!insn || !(((insn)->u.fld[2]).rt_rtx))));
@@ -34500,7 +37138,7 @@ set_last_insn (rtx insn)
 
 
 
-static __inline__ int
+static inline int
 get_max_uid (void)
 {
   return (&x_rtl)->emit.x_cur_insn_uid;
@@ -34519,13 +37157,13 @@ int is_lto();
 void cpp_include(const char *file);
 
 
-unsigned char is_targetable_decl(tree decl);
+bool is_targetable_decl(tree decl);
 
 
 
-unsigned char is_targetable_type(tree type);
+bool is_targetable_type(tree type);
 # 325 "../../../src/plugin-utils.h"
-unsigned char comparison_set_rtx_1(rtx match_input,rtx *cc_op,rtx *op1,rtx *op2);
+bool comparison_set_rtx_1(rtx match_input,rtx *cc_op,rtx *op1,rtx *op2);
 # 22 "../../../src/plugin-utils.c" 2
 
 
@@ -34562,22 +37200,22 @@ int is_lto(){
 
 
 
-unsigned char is_targetable_decl(tree decl){
+bool is_targetable_decl(tree decl){
 
 
 
 
 
-  return ((decl)->decl_minimal.name)!=(tree) ((void *)0)&&!((decl)->base.nameless_flag)&&((! (((decl)->decl_minimal.context)) || ((enum tree_code) (((decl)->decl_minimal.context))->base.code) == TRANSLATION_UNIT_DECL)||is_gpp());
+  return ((decl)->decl_minimal.name)!=(tree) __null&&!((decl)->base.nameless_flag)&&((! (((decl)->decl_minimal.context)) || ((enum tree_code) (((decl)->decl_minimal.context))->base.code) == TRANSLATION_UNIT_DECL)||is_gpp());
 
 }
 
-unsigned char is_targetable_type(tree type){
- return ((type)->type_common.name)!=(tree) ((void *)0)&&!((type)->base.nameless_flag)&&(! (((type)->type_common.context)) || ((enum tree_code) (((type)->type_common.context))->base.code) == TRANSLATION_UNIT_DECL);
+bool is_targetable_type(tree type){
+ return ((type)->type_common.name)!=(tree) __null&&!((type)->base.nameless_flag)&&(! (((type)->type_common.context)) || ((enum tree_code) (((type)->type_common.context))->base.code) == TRANSLATION_UNIT_DECL);
 }
 
 
-unsigned char comparison_set_rtx_1(rtx match_input,rtx *cc_op,rtx *op1,rtx *op2){
+bool comparison_set_rtx_1(rtx match_input,rtx *cc_op,rtx *op1,rtx *op2){
  if(((enum rtx_code) (match_input)->code)==SET){
   rtx compare=(((match_input)->u.fld[1]).rt_rtx);
   *cc_op=(((match_input)->u.fld[0]).rt_rtx);
@@ -34590,9 +37228,9 @@ unsigned char comparison_set_rtx_1(rtx match_input,rtx *cc_op,rtx *op1,rtx *op2)
    *op1=(((compare)->u.fld[0]).rt_rtx);
    *op2=(((compare)->u.fld[1]).rt_rtx);
 
-   return 1;
+   return true;
   }
  }
 
- return 0;
+ return false;
 }

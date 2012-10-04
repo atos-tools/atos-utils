@@ -55,7 +55,7 @@ int is_lto(){
 
 #if __GCC_VERSION__>=40600
 bool is_targetable_decl(tree decl){
-	#if __GCC_VERSION__>40700
+	#if __GCC_VERSION__>40701
 		return DECL_NAME(decl)!=NULL_TREE&&!DECL_NAMELESS(decl)&&(DECL_FILE_SCOPE_P(decl)||(is_gpp()&&(DECL_NAMESPACE_SCOPE_P(decl)||(DECL_CLASS_SCOPE_P(decl)&&((TREE_CODE(decl)==FUNCTION_DECL&&DECL_FUNCTION_MEMBER_P(decl))||DECL_THIS_STATIC(decl))))));
 	#else
 		// Some C++ specific definition are not visible as cp/cp-tree.h can't

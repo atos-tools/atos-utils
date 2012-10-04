@@ -140,7 +140,7 @@ static bool source_file_match(char *opt_file, char *input_file)
     bool ret;
 
     if (opt_file == NULL || input_file == NULL) {
-#if ACF_DEBUG
+#ifdef ACF_DEBUG
 	fprintf(stderr, "Source file %s, %s: unspecified\n",
 		(opt_file == NULL?"(null)":opt_file),
 		(input_file == NULL?"(null)":input_file));
@@ -155,7 +155,7 @@ static bool source_file_match(char *opt_file, char *input_file)
     } else {
 	ret = !strcmp(opt_file, input_file);
     }
-#if ACF_DEBUG
+#ifdef ACF_DEBUG
     fprintf(stderr, "Source file %s, %s: %s\n", opt_file, input_file,
 	    (ret?"matching":"not matching"));
 #endif
@@ -176,7 +176,7 @@ static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
     volatile tree opts;
     const char *cur_func_name = NULL;
     int i;
-#if ACF_REMOTE_DEBUG
+#ifdef ACF_REMOTE_DEBUG
     int acf_remote_debug = 1;
 #endif
 
@@ -190,7 +190,7 @@ static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
     }
 #endif /* ACF_TRACE */
 
-#if ACF_REMOTE_DEBUG
+#ifdef ACF_REMOTE_DEBUG
     while (acf_remote_debug)
 	sleep(2);
 #endif
@@ -410,7 +410,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
     }
 #endif
 
-#if ACF_DEBUG
+#ifdef ACF_DEBUG
     fprintf(stderr, "---------------------\n");
     fprintf(stderr,"Hello World from the %s !\n", plugin_name);
     if (plugin_na->argc >= 1)
@@ -510,14 +510,14 @@ int plugin_init(struct plugin_name_args *plugin_na,
 	    errno = 0;
 	    gcc_runtime_hwi = strtol(plugin_na->argv[hwi_arg_pos].value, NULL, 0);
 	    if (!errno) {
-#if ACF_DEBUG
+#ifdef ACF_DEBUG
 		fprintf(stderr,"gcc HOST_WIDE_INT size from parameters: %d\n", gcc_runtime_hwi);
 #endif
 		hwi_ok = true;
 
 		/* Get plugin HOST_WIDE_INT size */
 		plugin_buildtime_hwi = sizeof(hwi_size_var);
-#if ACF_DEBUG
+#ifdef ACF_DEBUG
 		fprintf(stderr,"Plugin HOST_WIDE_INT size: %d\n", plugin_buildtime_hwi);
 #endif
 
@@ -526,14 +526,14 @@ int plugin_init(struct plugin_name_args *plugin_na,
 		       due to 2 fields of type HOST_WIDE_INT at its begining*/
 		    hwi_shift = (2 * (gcc_runtime_hwi - plugin_buildtime_hwi));
 		}
-#if ACF_DEBUG
+#ifdef ACF_DEBUG
 		if (hwi_shift)
 		    fprintf(stderr,"HOST_WIDE_INT shift: %d\n", hwi_shift);
 #endif
 	    }
 	}
     }
-#if ACF_DEBUG
+#ifdef ACF_DEBUG
     if (!hwi_ok)
 	fprintf(stderr,"Warning: No HOST_WIDE_TYPE size in parameters\n");
 #endif

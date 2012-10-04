@@ -128,23 +128,23 @@ shift $((OPTIND - 1))
 
 tradeoff_variants() {
     regexp="^.*[\"\']variant[\"\']: [\"\']\([^\"\']*\)[\"\'].*$"
-    $pythondir/atos/atos_lib.py speedups --tradeoff=5 --tradeoff=1 --tradeoff=0.2 \
+    $dir/atos lib speedups --tradeoff=5 --tradeoff=1 --tradeoff=0.2 \
 	| grep "$regexp" | sed "s/$regexp/\1/" | sort -u
 }
 
 config_query() {
-    $pythondir/atos/atos_lib.py config -C $configuration_path -u -t -q $*
+    $dir/atos lib config -C $configuration_path -u -t -q $*
 }
 
 perf_variant() {
     regexp="^.*[\"\']variant[\"\']: [\"\']\([^\"\']*\)[\"\'].*$"
-    $pythondir/atos/atos_lib.py speedups --tradeoff=5 \
+    $dir/atos lib speedups --tradeoff=5 \
 	| grep "$regexp" | sed "s/$regexp/\1/"
 }
 
 size_flags() {
     regexp="^.*[\"\']conf[\"\']: [\"\']\([^\"\']*\)[\"\'].*$"
-    $pythondir/atos/atos_lib.py speedups --tradeoff=0.2 \
+    $dir/atos lib speedups --tradeoff=0.2 \
 	| grep "$regexp" | sed "s/$regexp/\1/"
 }
 

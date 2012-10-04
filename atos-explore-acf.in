@@ -169,7 +169,7 @@ if [[ "$profiling_script" == "" || ! -x $profiling_script ]]; then
 fi
 
 config_query() {
-    $pythondir/atos/atos_lib.py config -C $configuration_path -u -t -q $*
+    $dir/atos lib config -C $configuration_path -u -t -q $*
 }
 
 [ "$acf_cold_th" != "" ] || acf_cold_th=`expr 100 - $acf_hot_th` || true

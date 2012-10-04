@@ -199,12 +199,12 @@ EOF
 
 json_config_flags_file()
 {
-    $pythondir/atos/atos_lib.py config -C $configuration_path --cpl-flags
+    $dir/atos lib config -C $configuration_path --cpl-flags
 }
 
 json_config_add_compiler()
 {
-    $pythondir/atos/atos_lib.py config -C $configuration_path --add-cpl $1
+    $dir/atos lib config -C $configuration_path --add-cpl $1
 }
 
 prepare_flag_files()

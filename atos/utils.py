@@ -26,7 +26,7 @@ import process
 import shutil
 import copy
 import glob
-from logger import debug, error, message
+from logger import debug, error, message, info
 
 _at_toplevel = None
 
@@ -44,6 +44,7 @@ def invoque(tool, args, **kwargs):
         "atos-deps": run_atos_deps,
         "atos-explore": run_atos_explore,
         "atos-init": run_atos_init,
+        "atos-lib": run_atos_lib,
         "atos-opt": run_atos_opt,
         "atos-play": run_atos_play,
         "atos-profile": run_atos_profile,
@@ -464,6 +465,221 @@ def run_atos_init(args):
         atos_lib.generate_script(prof_sh, args.prof_script)
 
     return 0
+
+def run_atos_lib(args):
+    """ ATOS lib tool implementation. """
+
+    if args.subcmd_lib == "create_db":
+        if not os.path.exists(args.configuration_path):
+            os.makedirs(args.configuration_path)
+        if args.type == 'results_db':
+            db_file = os.path.join(args.configuration_path, 'results.db')
+            db = atos_lib.atos_db_file(db_file)
+        elif args.type == 'json':
+            db_file = os.path.join(args.configuration_path, 'results.json')
+            db = atos_lib.atos_db_json(db_file)
+        elif args.type == 'pickle':
+            db_file = os.path.join(args.configuration_path, 'results.pkl')
+            db = atos_lib.atos_db_pickle(db_file)
+        else: assert 0
+        if args.shared: process.commands.chmod(db_file, 0660)
+        info('created new database in "%s"' % db_file)
+        return 0
+
+    elif args.subcmd_lib == "query":
+        if args.configuration_path == '-':
+            results = atos_lib.results_filter(
+                atos_lib.atos_client_db.db_load(sys.stdin),
+                atos_lib.strtoquery(args.query))
+        else:
+            client = atos_lib.atos_client_db(
+                atos_lib.atos_db.db(args.configuration_path))
+            results = client.query(atos_lib.strtoquery(args.query))
+
+        atos_lib.pprint_list(results, text=args.text)
+        return 0
+
+    elif args.subcmd_lib == "speedups":
+        client = atos_lib.atos_client_results(
+            atos_lib.atos_db.db(args.configuration_path),
+            args.targets and atos_lib.strtolist(args.targets),
+            atos_lib.strtoquery(args.query), args.group_name)
+
+        if args.ref: client.compute_speedups(args.ref)
+
+        if args.tradeoffs:
+            atos_lib.pprint_list(
+                map(lambda x: client.tradeoff(x).dict(), args.tradeoffs))
+        else:
+            atos_lib.pprint_list(client.get_results(args.frontier))
+        return 0
+
+    elif args.subcmd_lib == "push":
+        db = atos_lib.atos_db.db(args.configuration_path)
+        results = atos_lib.atos_client_db.db_query(
+            db, atos_lib.strtoquery(args.query),
+            atos_lib.strtodict(args.replacement))
+
+        if args.remote_configuration_path == '-':
+            status, output = atos_lib.atos_client_db.db_dump(
+                results, sys.stdout)
+        else:
+            other_db = atos_lib.atos_db.db(args.remote_configuration_path)
+            status, output = atos_lib.atos_client_db.db_transfer(
+                other_db, results, args.force)
+
+        if status:
+            info('exported %d results' % (output))
+            return 0
+        else:
+            error(output)
+            return 1
+
+    elif args.subcmd_lib == "pull":
+        db = atos_lib.atos_db.db(args.configuration_path)
+
+        if args.remote_configuration_path == '-':
+            results = atos_lib.atos_client_db.db_load(sys.stdin)
+        else:
+            other_db = atos_lib.atos_db.db(args.remote_configuration_path)
+            results = atos_lib.atos_client_db.db_query(
+                other_db, atos_lib.strtoquery(args.query),
+                atos_lib.strtodict(args.replacement))
+
+        status, output = atos_lib.atos_client_db.db_transfer(
+            db, results, args.force)
+
+        if status:
+            info('imported %d results' % (output))
+            return 0
+        else:
+            error(output)
+            return 1
+
+    elif args.subcmd_lib == "report":
+        db = atos_lib.atos_db.db(args.configuration_path)
+
+        # targets 'group1:targ1,targ2,targ3+group2:targ4,targ5+targ6'
+        group_targets, group_names = [], []
+        if args.targets:
+            for group in args.targets.split('+'):
+                spl = group.split(':')
+                if len(spl) > 1:
+                    group_targets += [spl[1].split(',')]
+                    group_names += [spl[0]]
+                else:
+                    group_targets += [spl[0].split(',')]
+                    group_names += ['+'.join(group_targets[-1])]
+        else:
+            results = db.get_results(atos_lib.strtoquery(args.query))
+            group_targets = sorted(
+                [list(set(atos_lib.results_filter(results, '$[*].target')))])
+            group_names = map('+'.join, group_targets)
+
+        # groups not supported in stdev mode
+        assert (args.mode != 'stdev') or all(
+            map(lambda g: len(g) == 1, group_targets))
+
+        # results
+        all_results = {}
+        for num in range(len(group_targets)):
+            targets, name = group_targets[num], group_names[num]
+            client = atos_lib.atos_client_results(
+                db, targets, atos_lib.strtoquery(args.query), name)
+            if args.ref: client.compute_speedups(args.ref)
+            all_results[group_names[num]] = client.results
+
+        # variants
+        variants = args.variants and args.variants.split(',') or sorted(list(
+            reduce(lambda acc, s: acc.intersection(s),
+                   map(lambda v: set(v.keys()), all_results.values()))))
+
+        table = (args.mode != 'stdev') and [[''] + group_names] or []
+
+        for variant in variants:
+
+            table += [[variant]]
+            if args.mode == 'stdev':
+                table[-1] += ['AVG', 'NOISE', 'STDEV']
+
+            for target in group_names:
+
+                if args.mode == 'speedup':
+                    table[-1] += ['%.0f %+6.1f%%' % (
+                            all_results[target][variant].time,
+                            all_results[target][variant].speedup * 100)]
+
+                elif args.mode == 'sizered':
+                    table[-1] += ['%.0f %+6.1f%%' % (
+                            all_results[target][variant].size,
+                            all_results[target][variant].sizered * 100)]
+
+                elif args.mode == 'stdev':
+                    table += [[target]]
+                    results = map(
+                        lambda r: r.time,
+                        all_results[target][variant]._results[0]._results)
+                    avg_res, min_res, max_res = (
+                        atos_lib.average(results), min(results), max(results))
+                    max_avg_diff = max(avg_res - min_res, max_res - avg_res)
+                    table[-1] += ['%.2f' % avg_res]
+                    table[-1] += ['%.2f%%' % ((max_avg_diff / avg_res) * 100)]
+                    table[-1] += ['%.2f%%' % (
+                            (atos_lib.standard_deviation(results) / avg_res)
+                        * 100)]
+
+                else: assert 0
+
+            if args.mode == 'stdev': table += [None]
+
+        atos_lib.pprint_table(table, reverse=args.reverse)
+        return 0
+
+    elif args.subcmd_lib == "add_result":
+        result = atos_lib.strtodict(args.result)
+
+        if args.configuration_path == '-':
+            print atos_lib.atos_db_file.entry_str(result),
+
+        else:
+            db = (args and atos_lib.atos_db_file(args[0])
+                  or atos_lib.atos_db.db(args.configuration_path))
+            status, output = atos_lib.atos_client_db(db).add_result(result)
+            if not status:
+                error(output)
+                return 1
+        return 0
+
+    elif args.subcmd_lib == "config":
+        config_file = os.path.join(args.configuration_path, 'config.json')
+
+        if args.query:
+            client = atos_lib.json_config(config_file)
+            results = client.query(atos_lib.strtoquery(args.query))
+            if args.uniq: results = list(set(results))
+            atos_lib.pprint_list(results, text=args.text)
+
+        elif args.add_item:
+            client = atos_lib.json_config(config_file)
+            key, value = args.add_item.split(':')
+            client.add_value(key, value)
+
+        elif args.get_item:
+            if os.path.isfile(config_file):
+                client = atos_lib.json_config(config_file)
+                print client.get_value(args.get_item) or ''
+
+        elif args.add_cpl:
+            client = atos_lib.json_config(config_file)
+            client.add_compiler(args.add_cpl)
+
+        elif args.cpl_flags:
+            if os.path.isfile(config_file):
+                client = atos_lib.json_config(config_file)
+                print client.flags_for_flagfiles()
+
+        else: pass
+        return 0
 
 def run_atos_opt(args):
     """ ATOS opt tool implementation. """

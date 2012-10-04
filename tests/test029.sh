@@ -14,12 +14,12 @@ echo "Running test in: $TMPTEST"
 
 tradeoff_variants() {
     regexp="^.*[\"\']variant[\"\']: [\"\']\([^\"\']*\)[\"\'].*$"
-    $ROOT/lib/atos/python/atos/atos_lib.py speedups \
+    $ROOT/bin/atos lib speedups \
 	--tradeoff=5 --tradeoff=1 --tradeoff=0.2 \
 	| grep "$regexp" | sed "s/$regexp/\1/" | sort -u
 }
 
-$ROOT/lib/atos/python/atos/atos_lib.py create_db --type=json
+$ROOT/bin/atos lib create_db --type=json
 
 $ROOT/bin/atos-init \
     -r "$SRCDIR/examples/sha1-c/run.sh" \

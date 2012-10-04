@@ -14,4 +14,4 @@ touch f.txt
 
 $ROOT/bin/atos-explore-inline -F ./f.txt -M 5
 
-[ `$ROOT/lib/atos/python/atos/atos_lib.py query | grep -v REF | wc -l` -eq 0 ]
+[ `$ROOT/bin/atos lib query | grep -v REF | wc -l` -eq 0 ]

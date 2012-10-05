@@ -672,7 +672,7 @@ def gen_file_by_file(cold_th, cold_opts, file_list,
         with open(csv_name, 'w') as opt_file:
             for (obj, flags) in obj_flags.items():
                 if flags: opt_file.write('%s,%s\n' % (obj, flags))
-        return '--atos-optfile %s' % csv_name
+        return '--atos-optfile %s' % os.path.abspath(csv_name)
 
     # reference run: simple partitioning with base flags
     debug('fbf reference run - hot/cold partition, cold options')

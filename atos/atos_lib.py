@@ -545,6 +545,12 @@ def variant_id(options=None, gopts=None, uopts=None):
         res_variant += "".join(options.split())
     return res_variant
 
+def get_config_value(configuration_path, key, default=None):
+    config_file = os.path.join(configuration_path, 'config.json')
+    if not os.path.isfile(config_file): return default
+    client = json_config(config_file)
+    return client.get_value(key) or default
+
 def strtodict(s):
     # 'aa:xx,bb:yy' -> {'aa':'xx','bb':'yy'}
     d = {}
@@ -761,6 +767,21 @@ def proot_command(**kwargs):
     command.append(proot_bin)
     command.extend(["-w", os.getcwd(), "/"])
     return command
+
+def timeout_command():
+    timeout = os.getenv("TIMEOUT")
+    if timeout == None:
+        timeout = [os.path.join(globals.BINDIR, "atos-timeout"), "3600"]
+    else:
+        timeout = timeout and process.cmdline2list(timeout) or []
+    return timeout
+
+def open_atos_log_file(configuration_path, name_prefix, variant_id):
+    logs_dir = os.path.join(configuration_path, "logs")
+    process.commands.mkdir(logs_dir)
+    log_file = os.path.join(
+        logs_dir, "%s-%s.log" % (name_prefix, hashid(variant_id)))
+    return open(log_file, "w")
 
 def expand_response_file(args):
     """ Return the actual args list, after response expansion. """

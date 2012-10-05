@@ -20,12 +20,12 @@ import sys, os, stat
 import globals
 import arguments
 import atos_lib
-import fnmatch
 import logger
 import process
 import shutil
 import copy
 import glob
+import re
 from logger import debug, error, message, info
 
 _at_toplevel = None
@@ -156,144 +156,114 @@ def run_atos_audit(args):
 
     message("Auditing build...")
 
-    if args.ccname:
-        args.ccregexp = '^' + args.ccname + '$'
-    if args.output_file == None:
-        args.output_file = os.path.join(args.configuration_path, "build.audit")
+    ccregexp = args.ccname and ('^%s$' % args.ccname) or args.ccregexp
+    output_file = args.output_file or os.path.join(
+        args.configuration_path, "build.audit")
 
     process.commands.mkdir(args.configuration_path)
-    process.commands.touch(args.output_file)
+    process.commands.touch(output_file)
+
     build_sh = os.path.join(args.configuration_path, "build.sh")
     atos_lib.generate_script(build_sh, args.command)
     force_sh = os.path.join(args.configuration_path, "build.force")
     with open(force_sh, 'w') as file_force:
         file_force.write(str(int(args.force)))
+
     command = atos_lib.proot_command(
         PROOT_IGNORE_ELF_INTERPRETER=1,
         PROOT_ADDON_CC_DEPS=1,
-        PROOT_ADDON_CC_DEPS_OUTPUT=args.output_file,
-        PROOT_ADDON_CC_DEPS_CCRE=args.ccregexp) + args.command
+        PROOT_ADDON_CC_DEPS_OUTPUT=output_file,
+        PROOT_ADDON_CC_DEPS_CCRE=ccregexp) + args.command
     status = process.system(command, print_output=True)
     return status
 
 def run_atos_build(args):
     """ ATOS build tool implementation. """
 
-    APFLAGS = ""
-    profdir_option = ""
     variant = args.variant or atos_lib.variant_id(
         args.options, args.gopts, args.uopts)
-    options = args.options or ""
-    opt_rebuild = args.force
-    pvariant = ""
-    profile_path = ""
-    remote_profile_path = ""
+    logf = atos_lib.open_atos_log_file(
+        args.configuration_path, "build", variant)
+
+    message("Building variant %s..." % variant)
+    logf.write("Building variant %s\n" % variant)
+
+    make_options = []
+    compile_options = args.options and [args.options] or []
+
     atos_driver = os.getenv("ATOS_DRIVER")
     if atos_driver == None:
         atos_driver = os.path.join(globals.BINDIR, "atos-driver")
-    if atos_driver == '0': atos_driver = None
-    timeout = os.getenv("TIMEOUT")
-    if timeout == None:
-        timeout = os.path.join(globals.BINDIR, "atos-timeout") + " 3600"
+    if atos_driver == '0':
+        atos_driver = None
 
-    if args.ccname:
-        args.ccregexp = '^' + args.ccname + '$'
-
-    # TODO: could be more readable with something like args.is_set(gopts)
-    # (None and '' have different meanings here)
-    if args.gopts != None:
-        pvariant = atos_lib.variant_id(args.gopts)
-        if not args.path:
-            profile_path = os.path.join(
-                args.configuration_path, "profiles", atos_lib.hashid(pvariant))
-        else:
-            profile_path = args.path
-        process.commands.mkdir(profile_path)
-        variantfile = os.path.join(profile_path, "variant.txt")
-        variantf = open(variantfile, 'w')
-        variantf.write(pvariant)
-        variantf.close()
-        for file in os.listdir(profile_path):
-            if fnmatch.fnmatch(file, '*.gcda'):
-                rmcommand = "rm -f " + file
-                process.system(rmcommand)
-
-        APFLAGS = "-fprofile-generate"
-        if not args.remote_path:
-            config_file = os.path.join(args.configuration_path, 'config.json')
-            if os.path.isfile(config_file):
-                client = atos_lib.json_config(config_file)
-                remote_profile_path = client.get_value(
-                    "default_values.remote_profile_path")
-            else:
-                remote_profile_path = None
-        else:
-            remote_profile_path = args.remote_path
-        if remote_profile_path:
-            profdir_option = "PROFILE_DIR=" + str(
-                os.path.abspath(remote_profile_path))
-        else:
-            profdir_option = "PROFILE_DIR=" + os.path.abspath(profile_path)
-
-    if args.uopts != None:
-        pvariant = atos_lib.variant_id(args.uopts)
-        if not profile_path:
-            profile_path = os.path.join(
-                args.configuration_path, "profiles", atos_lib.hashid(pvariant))
-        process.commands.mkdir(profile_path)
-        APFLAGS = ("-fprofile-use -fprofile-correction" +
-                   " -Wno-error=coverage-mismatch")
-        profdir_option = "PROFILE_DIR=" + os.path.abspath(profile_path)
-
-    failure = 0
-    logs = os.path.join(args.configuration_path, "logs")
-    process.commands.mkdir(logs)
-
-    hash_var = atos_lib.hashid(variant)
-    logfile = os.path.join(logs, "build-" + hash_var + ".log")
-    logf = open(logfile, 'w')
-
-    message("Building variant " + variant + "...")
-    logf.write("Building variant %s\n" % variant)
-
+    opt_rebuild = args.force
     build_force = os.path.join(args.configuration_path, "build.force")
     if not opt_rebuild and os.path.isfile(build_force):
         opt_rebuild = int(open(build_force).read().strip())
 
-    build_mk = os.path.join(args.configuration_path, "build.mk")
-    build_sh = os.path.join(args.configuration_path, "build.sh")
-    pwd = os.getcwd()
-    if not args.command and opt_rebuild != 1 and os.path.isfile(build_mk):
-        # If the configuration path contains a build.mk execute it
-        if options.find("-flto") != -1:
-            lto_option = "LTO=1"
-        else:
-            lto_option = ""
-        command = (timeout + " make -f " + build_mk + " ATOS_DRIVER=" +
-                   atos_driver + " ACFLAGS=\"" + APFLAGS + " " + options +
-                   "\" " + lto_option + " " + profdir_option)
-        command = command + " -j" + str(args.jobs)
-        status, output = process.system(
-            command, get_output=True, output_stderr=True)
-        logf.write('%s\n' % output)
+    if args.gopts != None or args.uopts != None:
+        pvariant = atos_lib.variant_id(args.gopts or args.uopts or "")
+        profile_path = args.path
+        if not profile_path:
+            profile_path = os.path.join(
+                args.configuration_path, "profiles", atos_lib.hashid(pvariant))
+        process.commands.mkdir(profile_path)
 
+    if args.gopts != None:
+        with open(os.path.join(profile_path, "variant.txt"), "w") as variantf:
+            variantf.write(pvariant)
+        process.system(["rm", "-f"] + glob.glob('%s/*.gcda' % (profile_path)))
+        compile_options += ["-fprofile-generate"]
+
+        remote_profile_path = args.remote_path
+        if not remote_profile_path:
+            remote_profile_path = atos_lib.get_config_value(
+                args.configuration_path, 'default_values.remote_profile_path')
+        if remote_profile_path:
+            profile_path = remote_profile_path
+        make_options += ["PROFILE_DIR=%s" % os.path.abspath(profile_path)]
+
+    if args.uopts != None:
+        compile_options += ["-fprofile-use", "-fprofile-correction",
+                            "-Wno-error=coverage-mismatch"]
+        make_options += ["PROFILE_DIR=" + os.path.abspath(profile_path)]
+
+    build_mk = os.path.join(args.configuration_path, "build.mk")
+    compile_options = " ".join(compile_options)
+    if not args.command and not opt_rebuild and os.path.isfile(build_mk):
+        # if the configuration path contains a build.mk execute it
+        command = ["make", "-f", build_mk, "-j", str(args.jobs)]
+        command.append("ACFLAGS=%s" % compile_options)
+        command.extend(make_options)
+        if atos_driver:
+            command.append("ATOS_DRIVER=%s" % atos_driver)
+        if compile_options.find("-flto") != -1:
+            command.append("LTO=1")
+        status, output = process.system(
+            atos_lib.timeout_command() + command,
+            get_output=True, output_stderr=True)
     else:
-        command = timeout.split() + atos_lib.proot_command(
+        # else use proot cc_opts addon (force mode)
+        build_sh = os.path.join(args.configuration_path, "build.sh")
+        ccregexp = args.ccname and ("^%s$" % args.ccname) or args.ccregexp
+        command = atos_lib.proot_command(
             PROOT_IGNORE_ELF_INTERPRETER=1,
             PROOT_ADDON_CC_OPTS=1,
-            PROOT_ADDON_CC_OPTS_ARGS="%s %s" % (APFLAGS, options),
-            PROOT_ADDON_CC_OPTS_CCRE=args.ccregexp,
+            PROOT_ADDON_CC_OPTS_ARGS="%s" % compile_options,
+            PROOT_ADDON_CC_OPTS_CCRE=ccregexp,
             PROOT_ADDON_CC_OPTS_DRIVER=atos_driver)
-        if not args.command and opt_rebuild == 1 and os.path.isfile(build_sh):
+        if not args.command and opt_rebuild and os.path.isfile(build_sh):
             command.append(build_sh)
         else:
             command.extend(args.command)
         status, output = process.system(
-            command, print_output=True, get_output=True, output_stderr=True)
-        logf.write('%s\n' % output)
+            atos_lib.timeout_command() + command,
+            get_output=True, output_stderr=True)
 
+    logf.write('%s\n' % output)
     if status:
-        message("FAILURE while building variant " + variant + "...")
+        message("FAILURE while building variant %s... " % (variant))
         logf.write("FAILURE while building variant %s\n" % (variant))
         logf.close()
         return 2
@@ -311,10 +281,10 @@ def run_atos_deps(args):
     from atos_deps import SimpleCmdInterpreter
     from atos_deps import DependencyGraphBuilder
 
-    if args.input_file == None:
-        args.input_file = os.path.join(args.configuration_path, "build.audit")
-    if args.output_file == None:
-        args.output_file = os.path.join(args.configuration_path, "build.mk")
+    input_file = args.input_file or os.path.join(
+        args.configuration_path, "build.audit")
+    output_file = args.output_file or os.path.join(
+        args.configuration_path, "build.mk")
 
     targets = None
     if args.executables:
@@ -329,7 +299,7 @@ def run_atos_deps(args):
 
     message("Computing build dependencies...")
     factory = CommandDependencyListFactory(
-        CCDEPSParser(open(args.input_file)), SimpleCmdInterpreter())
+        CCDEPSParser(open(input_file)), SimpleCmdInterpreter())
     factory.build_dependencies()
     dependencies = factory.get_dependencies()
     builder = DependencyGraphBuilder(dependencies, targets)
@@ -337,7 +307,7 @@ def run_atos_deps(args):
     graph = builder.get_graph()
 
     if not args.force:
-        graph.output_makefile(args.output_file)
+        graph.output_makefile(output_file)
 
     # For now only write targets if configuration dir is there
     try:
@@ -690,43 +660,26 @@ def run_atos_lib(args):
 def run_atos_opt(args):
     """ ATOS opt tool implementation. """
 
-    if args.options == None:
-        options = ""
-    else:
-        options = args.options
-    if args.fdo:
-        if args.uopts == None:
-            uopts = options
-        else:
-            uopts = args.uopts
-    if args.lto:
-        options += " -flto"
+    options = args.options or ""
+    uopts = args.uopts or (args.fdo and options or None)
+    if args.lto: options += " -flto"
 
-    if args.keep:
-        variant = atos_lib.variant_id(
-            args.options, None, args.uopts)
+    if args.keep:  # do nothing if existing run results
+        variant = atos_lib.variant_id(options, None, args.uopts)
         db = atos_lib.atos_db.db(args.configuration_path)
-        client = atos_lib.atos_client_db(db)
-        results = client.query(atos_lib.strtoquery("variant:" + variant))
+        results = atos_lib.atos_client_db(db).query({"variant": variant})
         if results:
-            message("Skipping variant " + variant + "...")
+            message("Skipping variant %s..." % variant)
             return 0
 
     if args.fdo:
-        status = invoque("atos-profile", args,
-                      options=uopts)
-        if status == 0:
-            status = invoque("atos-build", args,
-                          options=options, uopts=uopts)
-            if status == 0:
-                status = invoque("atos-run", args,
-                          options=options, uopts=uopts)
-    else:
-        status = invoque("atos-build", args,
-                      options=options)
-        if status == 0:
-            status = invoque("atos-run", args,
-                          options=options)
+        status = invoque("atos-profile", args, options=uopts, uopts=None)
+        if status: return status
+
+    status = invoque("atos-build", args, options=options, uopts=uopts)
+    if status: return status
+
+    status = invoque("atos-run", args, options=options, uopts=uopts)
     return status
 
 def run_atos_play(args):
@@ -810,29 +763,29 @@ def run_atos_profile(args):
     """ ATOS profile tool implementation. """
 
     message("Profiling...")
-
     options = args.options or ''
-    status = invoque("atos-build", args,
-                  gopts=options, options=options)
-    if status == 0:
-        status = invoque("atos-run", args,
-                      gopts=options, options=options,
-                      silent=True)
+
+    status = invoque(
+        "atos-build", args, gopts=options, options=options)
+    if status: return status
+
+    status = invoque(
+        "atos-run", args, gopts=options, options=options, silent=True)
     return status
 
 def run_atos_raudit(args):
     """ ATOS raudit tool implementation. """
 
-    if args.command == None:
+    if not args.command:
         error('atos-raudit: missing run command')
         return 1
 
     message("Auditing run...")
 
-    if args.output_file == None:
+    if not args.output_file:
         process.commands.mkdir(args.configuration_path)
-        args.output_file = os.path.join(args.configuration_path, "run.audit")
-        process.commands.touch(args.output_file)
+        output_file = os.path.join(args.configuration_path, "run.audit")
+        process.commands.touch(output_file)
         run_sh = os.path.join(args.configuration_path, "run.sh")
         atos_lib.generate_script(run_sh, args.command)
         if args.results_script != None:
@@ -845,223 +798,190 @@ def run_atos_raudit(args):
 def run_atos_run(args):
     """ ATOS run tool implementation. """
 
-    variant = args.variant or atos_lib.variant_id(
-        args.options, args.gopts, args.uopts)
-    timeout = os.getenv("TIMEOUT")
-    if timeout == None:
-        timeout = os.path.join(globals.BINDIR, "atos-timeout") + " 3600"
-
-    if args.results_script == None \
-       and os.path.isfile(os.path.join(args.configuration_path,
-                                       "get_res.sh")):
-        args.results_script = os.path.join(args.configuration_path,
-                                           "get_res.sh")
-    else:
-        args.results_script = ""
-
-    if args.gopts and not args.remote_path:
-        config_file = os.path.join(args.configuration_path, 'config.json')
-        if os.path.isfile(config_file):
-            client = atos_lib.json_config(config_file)
-            args.remote_path = client.get_value(
-                "default_values.remote_profile_path")
-
-    if args.results_script == "":
-        if args.exe == None or args.exe == "":
-            args.exe = []
-            try:
-                targetf = open(os.path.join(args.configuration_path,
-                                            "targets"),
-                               "r")
-            except:
-                error("no target executable specified")
-                return 1
-            else:
-                for line in targetf:
-                    args.exe.append(line.strip())
-                targetf.close()
-        else:
-            args.exe = [args.exe]
-
-    else:
-        args.exe = ()
-
-    if not args.id:
-        args.id = "-".join(map(os.path.basename, args.exe))
-
-    def get_size(executables):
-        exe_size = 0
-        for exe in executables:
-            if not os.path.isabs(exe):
-                status, exe = process.system("which " + exe,
-                                             get_output=True)
-            if exe == "":
-                return -1
-            exe.strip('\n')
-            command = "/usr/bin/size " + exe
-            status, output = process.system(
-                command, get_output=True)
-            size = int(
-                output.splitlines()[1].split()[3]) if not args.dryrun else 0
-            exe_size = exe_size + size
-        return exe_size
-
     def profile_path():
         lpvariant = atos_lib.variant_id(args.gopts)
         return os.path.join(
             os.path.abspath(args.configuration_path),
-            "profiles",
-            atos_lib.hashid(lpvariant))
+            "profiles", atos_lib.hashid(lpvariant))
 
-    def get_time(run_script):
-        exe_time = 0
-        real_output = ""
-        if args.remote_path and args.gopts:
-            os.putenv("REMOTE_PROFILE_DIR", args.remote_path)
+    def get_size(executables):
+        def one_size(exe):
+            if not os.path.isabs(exe):
+                status, exe = process.system(["which", exe], get_output=True)
+            if not exe: return None
+            status, output = process.system(
+                ["/usr/bin/size", exe.strip()], get_output=True)
+            if args.dryrun: return 0
+            if status or not output: return None
+            return int(output.splitlines()[1].split()[3])
+        executables_size = map(one_size, executables)
+        if None in executables_size:
+            return None
+        return sum(executables_size)
+
+    def get_time():
+        if remote_path and args.gopts:
+            os.putenv("REMOTE_PROFILE_DIR", remote_path)
             os.putenv("LOCAL_PROFILE_DIR", profile_path())
-        command = timeout + " /usr/bin/time -p " + run_script
-        status, output = process.system(command, get_output=True,
-                                        output_stderr=True)
-        if args.dryrun:
-            return 0, ""
-        if status != 0 or not output:
-            return -1, None
 
-        count = 0
-        last_time = 0
-        for line in output.splitlines():
-            if line.startswith("user"):
-                last_time = float(line.split()[1]) * 1000
-                exe_time = exe_time + last_time
-                count = count + 1
-            if not line.startswith(("user", "real", "sys")):
-                real_output = real_output + line + "\n"
-        if count > 1:
-            exe_time = exe_time - last_time
+        run_script = os.path.join(args.configuration_path, "run.sh")
+        run_script = os.path.isfile(run_script) and [
+            run_script] or args.command
+
+        status, output = process.system(
+            atos_lib.timeout_command() + ["/usr/bin/time", "-p"] + run_script,
+            get_output=True, output_stderr=True)
+
+        if args.dryrun:
+            return status, ""
+        if status or not output:
+            return None, None
+
+        lines_output = output.splitlines()
+
+        lines_user = filter(
+            lambda x: x.startswith("user "), lines_output)
+        # if existing 'time' lines in output,
+        #   ignore the last one (produced by our time command)
+        if len(lines_user) > 1: lines_user = lines_user[:-1]
+        exe_time = sum(
+            map(lambda x: float(x.split()[1]) * 1000, lines_user), 0.0)
+
+        lines_filtered = filter(
+            lambda x: not re.match("^(user|real|sys) ", x), lines_output)
+        real_output = '\n'.join(lines_filtered) + '\n'
 
         os.unsetenv("REMOTE_PROFILE_DIR")
         os.unsetenv("LOCAL_PROFILE_DIR")
         return exe_time, real_output
 
-    def output_run_results():
-        entry = "target:" + args.id
-        entry = entry + ",variant:" + variant
-        entry = entry + ",version:" + globals.VERSION
-        entry = entry + ",conf:"
-        if args.options != None:
-            entry = entry + \
-                    "".join(process.cmdline2list(args.options))
+    def output_run_results(target, variant, time, size):
+        if args.silent: return
+        if time is None: time = "FAILURE"
+        if size is None: size = "FAILURE"
+        entry = {}
+        entry.update({'target': target})
+        entry.update({'variant': variant})
+        entry.update({'version': globals.VERSION})
+        entry.update({'conf': "".join(
+                    process.cmdline2list(args.options or ''))})
         if args.uopts != None:
-            entry = entry + ",uconf:" + \
-                    "".join(process.cmdline2list(args.uopts))
+            entry.update({'uconf': "".join(
+                        process.cmdline2list(args.uopts))})
         if args.gopts != None:
-            entry = entry + ",gconf:" + \
-                    "".join(process.cmdline2list(args.gopts))
-        entry = entry + ",size:" + str(exe_size)
-        entry = entry + ",time:" + str(exe_time)
-        if args.output_file != None:
+            entry.update({'gconf': "".join(
+                        process.cmdline2list(args.gopts))})
+        entry.update({'time': str(time)})
+        entry.update({'size': str(size)})
+        if args.output_file:
             db = atos_lib.atos_db_file(args.output_file)
-            status, output = atos_lib.atos_client_db(db).\
-                             add_result(atos_lib.strtodict(entry))
-        elif not args.record:
-            output = atos_lib.atos_db_file.entry_str(
-                atos_lib.strtodict(entry))
-            status = 0
-
-            if output != None:
-                print >> sys.stderr, output.strip()
-        else:
+            atos_lib.atos_client_db(db).add_result(entry)
+        elif args.record:
             db = atos_lib.atos_db.db(args.configuration_path)
-            status, output = atos_lib.atos_client_db(db).\
-                             add_result(atos_lib.strtodict(entry))
+            atos_lib.atos_client_db(db).add_result(entry)
+        else:
+            print >>sys.stderr, atos_lib.atos_db_file.entry_str(entry),
 
-    message("Running variant " + variant + "...")
-    failure = False
-    logs = os.path.join(args.configuration_path, "logs")
-    process.commands.mkdir(logs)
-    hash_var = atos_lib.hashid(variant)
-    logfile = os.path.join(logs, "run-" + hash_var + ".log")
-    logf = open(logfile, 'w')
+    def check_failure(failure, fail_condition, fail_message):
+        if failure: return failure
+        if fail_condition:
+            debug("CHKFAILURE [%s]" % fail_message)
+        return fail_condition
 
-    exe_time = ""
-    exe_size = ""
+    variant = args.variant or atos_lib.variant_id(
+        args.options, args.gopts, args.uopts)
 
-    if args.exe != "":
-        exe_size = get_size(args.exe)
-        if exe_size == -1:
-            failure = True
+    results_script = args.results_script
+    if not results_script:
+        get_res_sh = os.path.join(args.configuration_path, "get_res.sh")
+        results_script = os.path.isfile(get_res_sh) and get_res_sh
 
-    if args.gopts == None and args.nbruns == None:
-        config_file = os.path.join(args.configuration_path, 'config.json')
-        if os.path.isfile(config_file):
-            client = atos_lib.json_config(config_file)
-            args.nbruns = client.get_value("default_values.nb_runs") or ''
+    remote_path = args.remote_path
+    if args.gopts and not remote_path:
+        remote_path = atos_lib.get_config_value(
+            args.configuration_path, 'default_values.remote_profile_path')
 
-    if args.nbruns == "" or args.nbruns == None:
-        args.nbruns = 1
+    nbruns = args.nbruns
+    if nbruns is None:
+        nbruns = args.gopts and 1 or atos_lib.get_config_value(
+                args.configuration_path, "default_values.nb_runs", 1)
+
+    if results_script:
+        executables, target_id = None, None
     else:
-        args.nbruns = int(args.nbruns)
+        executables = args.exe and [args.exe]
+        if not executables:
+            try:
+                with open(os.path.join(
+                        args.configuration_path, "targets")) as targetf:
+                    executables = map(lambda x: x.strip(), targetf.readlines())
+            except:
+                error("no target executable specified")
+                return 1
+        target_id = args.id or "-".join(map(os.path.basename, executables))
 
-    n = 1
-    while n <= args.nbruns:
-        logf.write("Running variant " + variant +
-                   " " + str(n) + "/" + str(args.nbruns) + "\n")
-        tmp_logfile = logfile + "." + str(n)
-        process.system("rm -f " + tmp_logfile)
-        run_sh = os.path.join(args.configuration_path,
-                              "run.sh")
-        if os.path.isfile(run_sh):
-            exe_time, output_time = get_time(run_sh)
-        else:
-            exe_time, output_time = get_time(
-                process.list2cmdline(args.command))
+    logf = atos_lib.open_atos_log_file(
+        args.configuration_path, "run", variant)
+    message("Running variant " + variant + "...")
 
-        if exe_time == -1:
-            failure = True
+    failure = False
 
+    if executables:
+        exe_size = get_size(executables)
+        failure = check_failure(
+            failure, exe_size is None, "get_size failure")
+    else:
+        exe_size = None
+
+    n = 0
+    while n < nbruns:
+        logf.write("Running variant %s %d/%d\n" % (variant, n, nbruns))
+
+        exe_time, output_time = get_time()
+
+        failure = check_failure(
+            failure, exe_time is None,
+            "get_time failure")
         if failure:
-            exe_size = "FAILURE"
-            exe_time = "FAILURE"
+            output_run_results(
+                results_script and "FAILURE" or target_id,
+                variant, "FAILURE", "FAILURE")
+            break
 
-        if not args.silent:
-            if failure:
-                if args.results_script == "":
-                    args.id = "FAILURE"
-                output_run_results()
-            else:
-                output_res = ""
-                if args.results_script != "":
-                    status, output_res = process.system(
-                        args.results_script, get_output=True,
-                        output_stderr=True, stdin_str=output_time)
-                    if status != 0:
-                        failure = True
-                output = output_time + output_res
-                for line in output.splitlines():
-                    identifiers = []
-                    if line.startswith("ATOS:"):
-                        identifier = line.split(': ')[1]
-                        if not identifier in identifiers:
-                            identifiers.append(identifier)
-                            if "time:" in line:
-                                exe_time = line.split(': ')[3]
-                            elif "size:" in line:
-                                exe_size = line.split(': ')[3]
+        if results_script:
+            status, output_res = process.system(
+                results_script, get_output=True,
+                output_stderr=True, stdin_str=output_time)
+            output_time += "\n" + output_res
+            failure = check_failure(
+                failure, status != 0, "get_res failure")
+        output_result = {}
+        for line in output_time.splitlines():
+            words = line.split(': ')
+            if words[0] != "ATOS": continue
+            target, key, value = words[1:4]
+            output_result.setdefault(target, {})[key] = value
+        if output_result:
+            for target, res in output_result.items():
+                exe_time = res.get('time', None)
+                exe_size = res.get('size', None)
+                output_run_results(target, variant, exe_time, exe_size)
+                failure = check_failure(
+                    failure, exe_time is None, "get_res time failure")
+                failure = check_failure(
+                    failure, exe_size is None, "get_res size failure")
+        else:  # no "ATOS: targ: time: ..." lines
+            output_run_results(target_id, variant, exe_time, exe_size)
 
-                if exe_time == 0 or exe_size == 0:
-                    exe_time = "FAILURE"
-                    exe_size = "FAILURE"
-                output_run_results()
-        if failure:
-            message("FAILURE while running variant " + variant + "...")
-            logf.write("FAILURE while running variant " + variant)
-            logf.write("\n")
-            logf.close()
-            return 2
-        else:
-            logf.write("SUCCESS running variant " + variant)
-            logf.write("\n")
+        if failure: break
+        logf.write("SUCCESS running variant %s\n" % variant)
         n = n + 1
+
+    if failure or n < nbruns:
+        message("FAILURE while running variant " + variant + "...")
+        logf.write("FAILURE while running variant %s\n" % variant)
+        logf.close()
+        return 2
 
     logf.close()
     return 0

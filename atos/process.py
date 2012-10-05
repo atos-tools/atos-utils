@@ -34,29 +34,55 @@ import time
 def cmdline2list(cmd):
     """
     Returns a list of args from the given shell command string.
+    This supports unicode strings, but they are first converted
+    to bare ASCII strings.
     """
+    assert(isinstance(cmd, (str, unicode)))
     return shlex.split(str(cmd))
 
-def list2cmdline(args):
+def list2cmdline(args, **kwargs):
     """
     Returns a quoted string suitable for execution from a shell.
-    Ref to http://stackoverflow.com/questions/967443/
-      python-module-to-shellquote-unshellquote.
+    Original version from:
+    http://stackoverflow.com/questions/967443/
+    python-module-to-shellquote-unshellquote.
     """
-    _quote_pos = re.compile('(?=[^-0-9a-zA-Z_./\n])')
+    assert(isinstance(args, list))
 
-    def quote(arg):
+    def emacs_quote(arg):
         r"""
+        This is the logic emacs uses.
         >>> quote('\t')
         '\\\t'
-        >>> quote('foo bar')
-        'foo\\ bar'
+        >>> print quote('foo bar')
+        foo\ bar
+        >>> print quote("foo'and'bar")
+        foo\'and\'bar
         """
-        # This is the logic emacs uses
         if arg:
             return _quote_pos.sub('\\\\', arg).replace('\n', "'\n'")
         else:
             return "''"
+
+    def sh_quote(arg):
+        r"""
+        Can be used in scripts where over quoting is not an issue.
+        In a shell, using '...' for quoting ensure no interpretation of
+        any char. Also, arguments can be created by contiguous quoted
+        parts.
+        Thus we just have to split around ' into parts that we quote
+        with '...' and join again around a "'" sequence.
+        >>> sh_quote('\t')
+        "'\t'"
+        >>> print sh_quote('foo bar')
+        'foo bar'
+        >>> print sh_quote("foo'and'bar")
+        'foo'"'"'and'"'"'bar'
+        """
+        return "\"'\"".join(["'" + x + "'" for x in arg.split("'")])
+
+    _quote_pos = re.compile('(?=[^-0-9a-zA-Z_./\n])')
+    quote = sh_quote if kwargs.get('sh_quote', False) else emacs_quote
     return ' '.join([quote(a) for a in args])
 
 def _process_output(process, output_file, print_output, output_stderr):

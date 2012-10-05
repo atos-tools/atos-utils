@@ -59,7 +59,7 @@ class opt_flag():
                 while int(val) <= max:
                     yield int(val)
                     val = val + step
-            nbvalues = 10
+            nbvalues = 3
             flag, min, max = self.range
             return ['%s%d' % (flag, v) for v in frange(
                     min, max, float(max - min) / (nbvalues - 1))]
@@ -748,6 +748,93 @@ def gen_file_by_file(cold_th, cold_opts, file_list,
                         best_time, best_flags = res_time, (hot_flags, variant)
             best_obj_flags.update({hot_obj: best_flags})
         debug('fbf best config %s' % (str(best_obj_flags)))
+
+
+# ####################################################################
+
+
+@generator
+def gen_acf_tests(dirname):
+    '''try all flags one by one'''
+
+    def open_csv_file(dirname, flagname, count):
+        csv_name = 'acf_test_'
+        if flagname.startswith('-f'):
+            csv_name += flagname[1:]
+        elif flagname.startswith('--param '):
+            csv_name += 'p' + flagname[8:]
+        else:
+            csv_name += flagname.replace('-', '_')
+        csv_name = csv_name.replace(' ', '').replace('=', '')
+        csv_name += str(count)
+        csv_file = open(dirname + '/' + csv_name + '.csv', 'w')
+        return csv_file
+
+    def write_csv_flag(csv_file, flagval, ignoreO):
+        flagval = flagval.replace('--param ', 'PARAM_')
+        for opt in flagval.split(' '):
+            if opt.startswith('-f'):
+                opt = 'optimize,' + opt[2:]
+            elif opt.startswith('-O'):
+                ## Do not write -O dependencies, they are passed as options
+                if (ignoreO):
+                    continue
+                opt = 'optimize,' + opt[1:]
+            elif opt.startswith('-'):
+                opt = opt[1:]
+            csv_file.write('func1,' + opt.replace('=', ',') + '\n')
+
+    def close_csv_file(csv_file):
+        csv_file.close()
+
+    def get_dependency(flagval, skip=0):
+        eqidx = flagval.find('=')
+        if eqidx != -1:
+            flagval = flagval[:eqidx + 1]
+        occur = 0
+        for (k, v) in generator.optlist.dependencies.items():
+            vstr = map(str, v)
+            if flagval in vstr:
+                if (occur == skip):
+                    return k
+                occur += 1
+        return None
+
+    # Generator for optimize attributes
+    # modify nbvalues to generate fewer test files
+
+    #     if not optlevel.startswith('-O'):
+    #         print 'incorrect opt level, please use -O...'
+    #         assert 0
+
+    if not os.path.isdir(dirname):
+        os.mkdir(dirname)
+
+    for flag in generator.optlist.flag_list:
+        count = 0
+        for flagval in flag.values():
+            depflag = get_dependency(flagval)
+            if not depflag:
+                csv_file = open_csv_file(dirname, flag.optname(), count)
+                #  write_csv_flag(csv_file, optlevel);
+                write_csv_flag(csv_file, flagval, 0)
+                close_csv_file(csv_file)
+                count += 1
+            else:
+                skip = 0
+                while depflag:
+                    csv_file = open_csv_file(dirname, flag.optname(), count)
+                    #  write_csv_flag(csv_file, optlevel);
+                    while depflag:
+                        write_csv_flag(csv_file, depflag, 1)
+                        depflag = get_dependency(depflag)
+                    write_csv_flag(csv_file, flagval, 0)
+                    close_csv_file(csv_file)
+                    skip += 1
+                    count += 1
+                    depflag = get_dependency(flagval, skip)
+
+    sys.exit(0)
 
 
 # ####################################################################

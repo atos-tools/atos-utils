@@ -29,8 +29,27 @@
 #include "diagnostic.h"
 #include "langhooks.h"
 #include "params.h"
+#include "cgraph.h"
+#include "opts.h"
 
 #include "acf_plugin.h"
+
+/* ============================================================ */
+/* Setting of global macros
+/* ============================================================ */
+
+#ifdef param_values
+#define USE_GLOBAL_PARAMS
+
+#undef param_values
+#define param_values (*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift))
+#undef PARAM_VALUE
+#define PARAM_VALUE(ENUM) \
+    ((int) ((*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift))[(int) ENUM]))
+
+#else
+#undef USE_GLOBAL_PARAMS
+#endif
 
 acf_ftable_entry_t *acf_ftable;
 const char *acf_csv_file_key="csv_file";
@@ -81,25 +100,9 @@ static void print_pass_list(struct opt_pass *pass,int tab_number){
 }
 #endif /* PRINT_PASS_LIST */
 
-static void event_callback(void *gcc_data,void *data){
-    (void)gcc_data;
-    fprintf(stderr,"%s called\n",plugin_event_name[*(int*)data]);
-}
-
-extern void cplus_decl_attributes(tree *, tree, int) __attribute__((weak));
-
-typedef void (*decl_attributes_func_type)
-    (tree *decl,tree attributes,int flags);
-static decl_attributes_func_type decl_attributes_func;
-
-void attribute_injector_start_unit_callback(void *gcc_data ATTRIBUTE_UNUSED,
-					    void *data ATTRIBUTE_UNUSED){
-    if(is_gcc()){
-	decl_attributes_func=(decl_attributes_func_type)(&decl_attributes);
-    }else{
-	decl_attributes_func=&cplus_decl_attributes;
-    }
-}
+/* ============================================================ */
+/* Add attributes to function during function parsing
+/* ============================================================ */
 
 extern tree maybe_constant_value (tree) __attribute__((weak));
 
@@ -123,148 +126,120 @@ my_cp_check_const_attributes (tree attributes)
     }
 }
 
-static int parse_ftable_csv_file(acf_ftable_entry_t **acf_ftable_p,
-				 char *csv_file, bool verbose)
-{
-  int nb = 0;
+typedef void (*decl_attributes_func_type)
+    (tree *decl,tree attributes,int flags);
+static decl_attributes_func_type decl_attributes_func;
 
-  nb = acf_parse_csv(csv_file, acf_ftable_p, verbose);
-
-  return nb;
-}
-
-/* Check if opt_file from csv configuration file matches
-   current compiled file */
-static bool source_file_match(char *opt_file, char *input_file)
-{
-    bool ret;
-
-    if (opt_file == NULL || input_file == NULL) {
-#ifdef ACF_DEBUG
-	fprintf(stderr, "Source file %s, %s: unspecified\n",
-		(opt_file == NULL?"(null)":opt_file),
-		(input_file == NULL?"(null)":input_file));
-#endif
-	return true;
-    }
-    /* if opt_file name without path, just compare it to basename
-       of input_file name.
-       Otherwise compare full path. */
-    if (strcmp(basename(opt_file), opt_file) == 0) {
-	ret = !strcmp(opt_file, basename(input_file));
-    } else {
-	ret = !strcmp(opt_file, input_file);
-    }
-#ifdef ACF_DEBUG
-    fprintf(stderr, "Source file %s, %s: %s\n", opt_file, input_file,
-	    (ret?"matching":"not matching"));
-#endif
-    return ret;
-}
-
-int func_number = 0;
-bool csv_parsed = false;
-
-static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
-    tree decl=(tree)gcc_data;
-    const char *decl_fullname;
-    tree attribute_identifier;
-    tree attribute_list=NULL_TREE;
+static void
+add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tree decl) {
+    tree attribute_identifier = get_identifier(acf_entry->opt_attr);;
+    tree attribute_list = NULL_TREE;
     tree argument = NULL_TREE;
-    tree argument_list=NULL_TREE;
-    volatile tree def_opts;
-    volatile tree opts;
-    const char *cur_func_name = NULL;
-    int i;
-#ifdef ACF_REMOTE_DEBUG
-    int acf_remote_debug = 1;
-#endif
+    tree argument_list = NULL_TREE;
 
-#if ACF_TRACE
-    if(DECL_P(decl)&&is_targetable_decl(decl) &&
-       MATCH(decl, match_tree_code(equal_to(FUNCTION_DECL)))) {
-	decl_fullname=lang_hooks.decl_printable_name(decl,2);
-	fprintf(stderr,"acf_plugin: Processing function %s (%s)\n",
-		decl_fullname,
-		IDENTIFIER_POINTER (DECL_ASSEMBLER_NAME (cfun->decl)));
-    }
-#endif /* ACF_TRACE */
-
-#ifdef ACF_REMOTE_DEBUG
-    while (acf_remote_debug)
-	sleep(2);
-#endif
-    cur_func_name = IDENTIFIER_POINTER (DECL_ASSEMBLER_NAME (cfun->decl));
-
-    if (!csv_parsed) {
-	func_number = parse_ftable_csv_file(&acf_ftable,
-					    acf_csv_file, verbose);
-	csv_parsed = true;
+    if (verbose) {
+	fprintf(stdout, "acf_plugin: Attaching attribute to "
+		"function %s: %s %s",
+		cur_func_name, acf_entry->opt_attr, acf_entry->opt_arg);
+	if (acf_entry->opt_file == NULL)
+	    fprintf(stdout, "\n");
+	else
+	    fprintf(stdout, " (file: %s)\n", acf_entry->opt_file);
     }
 
-    if (func_number < 0){
-	/* Error already reported */
-	return;
+    if (acf_entry->opt_arg != NULL) {
+	argument = build_string(strlen(acf_entry->opt_arg), acf_entry->opt_arg);
+	argument_list =  tree_cons(NULL_TREE, argument, argument_list);
+    } else {
+	argument_list = NULL_TREE;
     }
-    for (i = 0; i < func_number; i++){
-	char *func_name = acf_ftable[i].func_name;
-	char *opt_attr = acf_ftable[i].opt_attr;
-	char *opt_arg = acf_ftable[i].opt_arg;
-	char *opt_file = acf_ftable[i].opt_file;
 
-	if (IS_CSV_PARAM(opt_attr))
-	  continue;
+    attribute_list = tree_cons(attribute_identifier, argument_list,
+			       attribute_list);
 
-	attribute_identifier =  get_identifier(opt_attr);
-	if ((strcmp (func_name, cur_func_name) == 0) &&
-	    source_file_match(opt_file, (char *) main_input_filename)) {
-	    if (verbose) {
-		fprintf(stdout, "acf_plugin: Attaching attribute to "
-			"function %s: %s %s",
-			cur_func_name, opt_attr, opt_arg);
-		if (opt_file == NULL)
-		    fprintf(stdout, "\n");
-		else
-		    fprintf(stdout, " (file: %s)\n",opt_file);
-	    }
-	    if (opt_arg != NULL) {
-		argument = build_string(strlen(opt_arg), opt_arg);
-		argument_list =  tree_cons(NULL_TREE, argument, argument_list);
-	    } else {
-		argument_list = NULL_TREE;
-	    }
-
-	    attribute_list = tree_cons(attribute_identifier, argument_list,
-				       attribute_list);
-
-	    my_cp_check_const_attributes (attribute_list);
-	    if(attribute_list != NULL_TREE){
-		decl_attributes_func(&decl,attribute_list,
-				     ATTR_FLAG_TYPE_IN_PLACE);
-	    }
-	} else {
-	    /*	fprintf(stderr, "NOT optimizing %s\n", cur_func_name); */
-	}
+    my_cp_check_const_attributes (attribute_list);
+    if (attribute_list != NULL_TREE) {
+	decl_attributes_func(&decl,attribute_list,
+			     ATTR_FLAG_TYPE_IN_PLACE);
     }
 }
+
+/* ============================================================ */
+/* Add attributes to function in LTO pass
+/* ============================================================ */
+
+static struct cl_optimization loc_save_options, *save_options;
+
+static void
+add_lto_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
+
+    // if starts with "no-", remove it. Then add "f" -->
+    // find_opt("fmove-loop-invariants", 1<<13) = 665
+    if (!strcmp("optimize", acf_entry->opt_attr)) {
+	char opt_name[128];
+	int opt_value = 1;
+	size_t opt_index;
+
+	strcpy(opt_name, "-f");
+	if (!strncmp("no-", acf_entry->opt_arg, strlen("no-"))) {
+	    opt_value = 0;
+	    strcat(opt_name, acf_entry->opt_arg + strlen("no-"));
+	}
+	else
+	    strcat(opt_name, acf_entry->opt_arg);
+	opt_index = find_opt(opt_name+1, CL_OPTIMIZATION);
+
+#ifdef USE_GLOBAL_PARAMS
+	if ((opt_index >= cl_options_count) ||
+	    cl_options[opt_index].alias_target == OPT_SPECIAL_ignore)
+	    return;
+#endif
+
+	if (verbose) {
+	    fprintf(stdout, "acf_plugin: Attaching attribute to "
+		    "function %s: %s %s",
+		    cur_func_name, acf_entry->opt_attr, acf_entry->opt_arg);
+	    if (acf_entry->opt_file == NULL)
+		fprintf(stdout, "\n");
+	    else
+		fprintf(stdout, " (file: %s)\n", acf_entry->opt_file);
+	}
+
+	if (save_options == NULL) {
+	    save_options = &loc_save_options;
+#ifdef USE_GLOBAL_PARAMS
+	    cl_optimization_save(save_options, &global_options);
+#else
+	    cl_optimization_save(save_options);
+#endif
+	}
+
+#ifdef USE_GLOBAL_PARAMS
+	{
+	    struct cl_option_handlers handlers;
+	    set_default_handlers (&handlers);
+	    handle_generated_option(&global_options, &global_options_set, opt_index, NULL, opt_value,
+				    CL_OPTIMIZATION, DK_UNSPECIFIED, UNKNOWN_LOCATION, &handlers, NULL);
+	}
+#else
+	set_option(&cl_options[opt_index], opt_value, NULL);
+#endif
+    }
+
+    // An example for --param max-unroll-times=4
+    //    opt_index = 67;
+    //    opt_arg="max-unroll-times=4";
+    //    opt_value=4;
+}
+
+/* ============================================================ */
+/* Add params to function in backend or LTO pass
+/* ============================================================ */
 
 static char **csv_param_name  = NULL;
 static int   *csv_param_value = NULL;
 static size_t csv_param_index = 0;
 static int   *csv_param_set   = NULL;
-
-#ifdef param_values
-#define USE_GLOBAL_PARAMS
-
-#undef param_values
-#define param_values (*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift))
-#undef PARAM_VALUE
-#define PARAM_VALUE(ENUM) \
-    ((int) ((*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift))[(int) ENUM]))
-
-#else
-#undef USE_GLOBAL_PARAMS
-#endif
 
 // Get the index for a PARAM name
 static bool get_param_idx(char *opt_param, size_t *idx) {
@@ -305,6 +280,26 @@ static void save_and_set_param(char *opt_param, int value) {
 #endif
 }
 
+static void
+add_param(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
+
+    char *opt_param = acf_entry->opt_attr + strlen(CSV_PARAM);
+
+    if (acf_entry->opt_arg != NULL) {
+	if (verbose) {
+	    fprintf(stdout, "acf_plugin: Attaching param to "
+		    "function %s: %s=%s",
+		    cur_func_name, opt_param, acf_entry->opt_arg);
+	    if (acf_entry->opt_file == NULL)
+		fprintf(stdout, "\n");
+	    else
+		fprintf(stdout, " (file: %s)\n", acf_entry->opt_file);
+	}
+
+	save_and_set_param(opt_param, atoi(acf_entry->opt_arg));
+    }
+}
+
 static void restore_param_values() {
     size_t i;
 
@@ -317,50 +312,142 @@ static void restore_param_values() {
     }
 }
 
-static void fill_csv_params() {
+/* ============================================================ */
+/* Read CSV file and set attributes and params
+/* ============================================================ */
+
+static int parse_ftable_csv_file(acf_ftable_entry_t **acf_ftable_p,
+				 char *csv_file, bool verbose)
+{
+  int nb = 0;
+
+  nb = acf_parse_csv(csv_file, acf_ftable_p, verbose);
+
+  return nb;
+}
+
+/* Check if opt_file from csv configuration file matches
+   current compiled file */
+static bool source_file_match(char *opt_file, char *input_file)
+{
+    bool ret;
+
+    if (opt_file == NULL || input_file == NULL) {
+#ifdef ACF_DEBUG
+	fprintf(stderr, "Source file %s, %s: unspecified\n",
+		(opt_file == NULL?"(null)":opt_file),
+		(input_file == NULL?"(null)":input_file));
+#endif
+	return true;
+    }
+    /* if opt_file name without path, just compare it to basename
+       of input_file name.
+       Otherwise compare full path. */
+    if (strcmp(basename(opt_file), opt_file) == 0) {
+	ret = !strcmp(opt_file, basename(input_file));
+    } else {
+	ret = !strcmp(opt_file, input_file);
+    }
+#ifdef ACF_DEBUG
+    fprintf(stderr, "Source file %s, %s: %s\n", opt_file, input_file,
+	    (ret?"matching":"not matching"));
+#endif
+    return ret;
+}
+
+static void fill_csv_options(tree decl, int pass) {
     const char *cur_func_name = NULL;
     int i;
 
-    cur_func_name = IDENTIFIER_POINTER (DECL_ASSEMBLER_NAME (cfun->decl));
+    static int func_number = 0;
+    static bool csv_parsed = false;
 
     if (!csv_parsed) {
-	func_number = parse_ftable_csv_file(&acf_ftable,
-					    acf_csv_file, verbose);
+	func_number = parse_ftable_csv_file(&acf_ftable, acf_csv_file, verbose);
 	csv_parsed = true;
     }
-
     if (func_number < 0){
 	/* Error already reported */
 	return;
     }
 
-    for (i = 0; i < func_number; i++){
-	char *func_name = acf_ftable[i].func_name;
-	char *opt_attr = acf_ftable[i].opt_attr;
-	char *opt_arg = acf_ftable[i].opt_arg;
-	char *opt_file = acf_ftable[i].opt_file;
-	char *opt_param;
+    cur_func_name = IDENTIFIER_POINTER (DECL_ASSEMBLER_NAME (cfun->decl));
 
-	if (!IS_CSV_PARAM(opt_attr))
+    for (i = 0; i < func_number; i++){
+	acf_ftable_entry_t *acf_entry = &acf_ftable[i];
+
+	// TBD: Do not match input_file_name if is_lto()
+	// Add support for cloned functions (name is derived from original name)
+	if ((strcmp (acf_entry->func_name, cur_func_name) != 0) ||
+	    !source_file_match(acf_entry->opt_file, (char *) main_input_filename))
 	    continue;
 
-	opt_param = opt_attr + strlen(CSV_PARAM);
-
-	if ((strcmp (func_name, cur_func_name) == 0) &&
-	    source_file_match(opt_file, (char *) main_input_filename)) {
-	    if (opt_arg != NULL) {
-		save_and_set_param(opt_param, atoi(acf_ftable[i].opt_arg));
-
-		if (verbose) {
-		    fprintf(stdout, "acf_plugin: Attaching param to "
-			    "function %s: %s=%d\n",
-			    IDENTIFIER_POINTER (DECL_ASSEMBLER_NAME (cfun->decl)), opt_param, atoi(acf_ftable[i].opt_arg));
-		}
-	    }
+	switch (pass) {
+	case 1:
+	    // Do not handle --param when called on function parsing
+	    if (IS_CSV_OPTIMIZE(acf_entry))
+		add_decl_attribute(cur_func_name, acf_entry, decl);
+	    break;
+	case 2:
+	    // No need to handle optimize attribute in backend if not
+	    // in lto mode
+	    if (IS_CSV_PARAM(acf_entry))
+		add_param(cur_func_name, acf_entry);
+	    else if (IS_CSV_OPTIMIZE(acf_entry) && is_lto())
+		add_lto_attribute(cur_func_name, acf_entry);
+	    break;
+	default:
+	    // Unkonwn pass
+	    return;
 	}
     }
+}
 
-    return;
+/* ============================================================ */
+/* Add ACF callbacks to GCC
+/* ============================================================ */
+
+static void event_callback(void *gcc_data,void *data){
+    (void)gcc_data;
+    fprintf(stderr,"%s called\n",plugin_event_name[*(int*)data]);
+}
+
+extern void cplus_decl_attributes(tree *, tree, int) __attribute__((weak));
+
+void attribute_injector_start_unit_callback(void *gcc_data ATTRIBUTE_UNUSED,
+					    void *data ATTRIBUTE_UNUSED){
+    if(is_gcc()){
+	decl_attributes_func=(decl_attributes_func_type)(&decl_attributes);
+    }else if (is_gpp()){
+	decl_attributes_func=&cplus_decl_attributes;
+    }
+    else
+	decl_attributes_func=NULL;
+}
+
+static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
+    tree decl=(tree)gcc_data;
+    const char *decl_fullname;
+#ifdef ACF_REMOTE_DEBUG
+    int acf_remote_debug = 1;
+#endif
+
+#if ACF_TRACE
+    if(DECL_P(decl)&&is_targetable_decl(decl) &&
+       MATCH(decl, match_tree_code(equal_to(FUNCTION_DECL)))) {
+	decl_fullname=lang_hooks.decl_printable_name(decl,2);
+	fprintf(stderr,"acf_plugin: Processing function %s (%s)\n",
+		decl_fullname,
+		IDENTIFIER_POINTER (DECL_ASSEMBLER_NAME (cfun->decl)));
+    }
+#endif /* ACF_TRACE */
+
+#ifdef ACF_REMOTE_DEBUG
+    while (acf_remote_debug)
+	sleep(2);
+#endif
+
+    fill_csv_options(decl, 1);
 }
 
 static void param_injector_start_passes_callback(void *gcc_data,void *data) {
@@ -376,17 +463,77 @@ static void param_injector_start_passes_callback(void *gcc_data,void *data) {
 #endif
 
     csv_param_index = 0;
-    fill_csv_params();
+    save_options = NULL;
+    fill_csv_options(NULL, 2);
 }
 
 static void param_injector_end_passes_callback(void *gcc_data,void *data) {
 
-    restore_param_values();
+    if (csv_param_index > 0)
+	restore_param_values();
+    if (save_options != NULL)
+#ifdef USE_GLOBAL_PARAMS
+	cl_optimization_restore(&global_options, save_options);
+#else
+        cl_optimization_restore(save_options);
+#endif
+}
+
+static void lto_clean_optimize_callback(void) {
+    struct cgraph_node *node;
+
+    //    if (verbose)
+    //	printf("New pass lto_clean_optimize_callback\n");
+
+    for (node = cgraph_nodes; node; node = node->next) {
+	tree decl_node = node->decl;
+	// Remove the optimization node that cannot be emited as
+	// GIMPLE bytecode for gcc < 4.7
+	DECL_FUNCTION_SPECIFIC_OPTIMIZATION(decl_node) = NULL;
+    }
 }
 
 static int pre_genericize=PLUGIN_PRE_GENERICIZE;
 static int start_unit=PLUGIN_START_UNIT;
 static int finish_unit=PLUGIN_START_UNIT;
+
+static struct ipa_opt_pass_d lto_clean_optimize_pass = {
+    {
+	IPA_PASS,
+	"lto_clean_optimize",	        /* name */
+	NULL,				/* gate */
+	NULL,        	                /* execute */
+	NULL,				/* sub */
+	NULL,				/* next */
+	0,				/* static_pass_number */
+	TV_NONE,			/* tv_id */
+	0,	                        /* properties_required */
+	0,				/* properties_provided */
+	0,				/* properties_destroyed */
+	0,            			/* todo_flags_start */
+	0                               /* todo_flags_finish */
+    },
+    &lto_clean_optimize_callback,       /* generate_summary */
+    NULL,				/* write_summary */
+    NULL,		         	/* read_summary */
+#ifdef USE_GLOBAL_PARAMS
+    NULL,				/* write_optimization_summary */
+    NULL,				/* read_optimization_summary */
+#else
+    NULL,                               /* function_read_summary */
+#endif
+    NULL,				/* stmt_fixup */
+    0,					/* TODOs */
+    NULL,			        /* function_transform */
+    NULL				/* variable_transform */
+};
+
+static struct register_pass_info lto_clean_optimize_info = {
+    (struct opt_pass *)&lto_clean_optimize_pass,
+    "lto_decls_out",
+    0,
+    PASS_POS_INSERT_BEFORE
+};
 
 int plugin_init(struct plugin_name_args *plugin_na,
 		struct plugin_gcc_version *version){
@@ -552,6 +699,15 @@ int plugin_init(struct plugin_name_args *plugin_na,
     register_callback(plugin_na->base_name,
 		      PLUGIN_ALL_PASSES_END,
 		      &param_injector_end_passes_callback, NULL);
+
+    // For GCC versions earlier than 4.7, remove the optimization node
+    // that cannot be emitted as GIMPLE bytecode
+    if (flag_generate_lto &&
+	((version->basever[0] < '4') ||
+	 ((version->basever[0] == '4') && (version->basever[2] < '7'))))
+	    register_callback (plugin_na->base_name,
+			       PLUGIN_PASS_MANAGER_SETUP,
+			       NULL, &lto_clean_optimize_info);
 
 #ifdef PRINT_PASS_LIST
     printf("\n####### ALL PASSES LIST #######\n");

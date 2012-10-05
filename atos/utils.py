@@ -825,8 +825,7 @@ def run_atos_run(args):
             os.putenv("LOCAL_PROFILE_DIR", profile_path())
 
         run_script = os.path.join(args.configuration_path, "run.sh")
-        run_script = os.path.isfile(run_script) and [
-            run_script] or args.command
+        run_script = args.command or [run_script]
 
         status, output = process.system(
             atos_lib.timeout_command() + ["/usr/bin/time", "-p"] + run_script,
@@ -935,13 +934,14 @@ def run_atos_run(args):
 
     n = 0
     while n < nbruns:
-        logf.write("Running variant %s %d/%d\n" % (variant, n, nbruns))
+        logf.write("Running variant %s %d/%d\n" % (variant, n + 1, nbruns))
 
         exe_time, output_time = get_time()
 
+        logf.write(output_time)
+
         failure = check_failure(
-            failure, exe_time is None,
-            "get_time failure")
+            failure, exe_time is None, "get_time failure")
         if failure:
             output_run_results(
                 results_script and "FAILURE" or target_id,
@@ -978,7 +978,7 @@ def run_atos_run(args):
         n = n + 1
 
     if failure or n < nbruns:
-        message("FAILURE while running variant " + variant + "...")
+        message("FAILURE while running variant %s..." % variant)
         logf.write("FAILURE while running variant %s\n" % variant)
         logf.close()
         return 2

@@ -541,7 +541,6 @@ class parsers:
         args.output(parser)
         args.id(parser)
         args.atos_run.silent(parser)
-        args.force(parser, ("--force",))
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))

@@ -131,10 +131,10 @@ def _subcall(cmd, get_output=False, print_output=False, output_stderr=False,
     Stderr will be included in returned output if output_stderr is set.
     Outputs will not be printed on stdout/stderr unless print_output is set.
     """
-    if isinstance(cmd, (str, unicode)):
-        cmd = cmdline2list(cmd)
-    if shell and isinstance(cmd, list):
-        cmd = ' '.join(cmd)  # list2cmd quotes redirection chars < >
+    assert(isinstance(cmd, (list, str, unicode)))
+    assert(not shell or not isinstance(cmd, list))
+    cmd_list = cmdline2list(cmd) if isinstance(cmd, (str, unicode)) else cmd
+    if not shell: cmd = cmd_list
     outputf = get_output and cStringIO.StringIO()
     popen_kwargs = {}
     if get_output and output_stderr and not print_output:
@@ -148,12 +148,16 @@ def _subcall(cmd, get_output=False, print_output=False, output_stderr=False,
         stdin_tmp.write(stdin_str)
         stdin_tmp.seek(0)
         popen_kwargs.update({'stdin': stdin_tmp})
-    process = subprocess.Popen(cmd, shell=shell, **popen_kwargs)
-    if get_output:
-        _process_output(
-            process, output_file=outputf, print_output=print_output,
-            output_stderr=output_stderr)
-    status = process.wait()
+    try:
+        process = subprocess.Popen(cmd, shell=shell, **popen_kwargs)
+        if get_output:
+            _process_output(
+                process, output_file=outputf, print_output=print_output,
+                output_stderr=output_stderr)
+        status = process.wait()
+    except OSError, e:
+        print >>sys.stderr, "%s: %s" % (cmd_list[0], e.strerror)
+        status = 1
     if get_output:
         output = outputf.getvalue()
         outputf.close()

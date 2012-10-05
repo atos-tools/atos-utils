@@ -163,12 +163,7 @@ def run_atos_audit(args):
     process.commands.mkdir(args.configuration_path)
     process.commands.touch(args.output_file)
     build_sh = os.path.join(args.configuration_path, "build.sh")
-    with open(build_sh, 'w') as file_build:
-        file_build.write("#!/bin/sh\n")
-        file_build.write("cd %s && $ARUN %s\n" % (
-                os.getcwd(),
-                process.list2cmdline(args.command)))
-    process.commands.chmod(build_sh, 0755)
+    atos_lib.generate_script(build_sh, args.command)
     force_sh = os.path.join(args.configuration_path, "build.force")
     with open(force_sh, 'w') as file_force:
         file_force.write(str(int(args.force)))
@@ -466,10 +461,8 @@ def run_atos_init(args):
 
     if args.prof_script:
         prof_sh = os.path.join(args.configuration_path, "profile.sh")
-        with open(prof_sh, 'w') as proff:
-            proff.write("#!/bin/sh\n")
-            proff.write("cd $PWD && %s\n" % args.prof_script)
-        process.commands.chmod(prof_sh, 0755)
+        atos_lib.generate_script(prof_sh, args.prof_script)
+
     return 0
 
 def run_atos_opt(args):
@@ -619,25 +612,10 @@ def run_atos_raudit(args):
         args.output_file = os.path.join(args.configuration_path, "run.audit")
         process.commands.touch(args.output_file)
         run_sh = os.path.join(args.configuration_path, "run.sh")
-        f = open(run_sh, 'w')
-        f.write("#!/bin/sh\n")
-        f.write("cd ")
-        f.write(os.getcwd())
-        f.write(" && $ARUN ")
-        f.write(process.list2cmdline(args.command))
-        f.write("\n")
-        f.close()
-        process.commands.chmod(run_sh, 0755)
+        atos_lib.generate_script(run_sh, args.command)
         if args.results_script != None:
             get_res_sh = os.path.join(args.configuration_path, "get_res.sh")
-            f = open(get_res_sh, 'w')
-            f.write("#!/bin/sh\n")
-            f.write("cd ")
-            f.write(os.getcwd())
-            f.write(" &&  " + args.results_script)
-            f.write("\n")
-            f.close()
-            process.commands.chmod(get_res_sh, 0755)
+            atos_lib.generate_script(get_res_sh, args.results_script)
 
     status = process.system(args.command)
     return status

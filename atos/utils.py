@@ -792,7 +792,7 @@ def run_atos_raudit(args):
             get_res_sh = os.path.join(args.configuration_path, "get_res.sh")
             atos_lib.generate_script(get_res_sh, args.results_script)
 
-    status = process.system(args.command)
+    status = process.system(args.command, print_output=True)
     return status
 
 def run_atos_run(args):

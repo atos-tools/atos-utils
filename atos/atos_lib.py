@@ -721,23 +721,25 @@ def help_text(topic):
     return 1
 
 
-def generate_script(script_path, command):
+def generate_script(script_path, command, environ=None):
     """
     Generates a wrapper script from the given command.
     The command may be a list or a correctly quoted string.
     The command is executed within the current directory
-    and the current environment (at the time of this call).
+    and the given environment (current environment at the
+    time of this call if None).
     """
     from process import list2cmdline, commands
     assert(isinstance(command, (list, str, unicode)))
     if isinstance(command, list):
         command = list2cmdline(command, sh_quote=True)
     cwd = list2cmdline([os.getcwd()], sh_quote=True)
+    environ = os.environ if (environ is None) else environ
     with open(script_path, 'w') as f:
         f.write("#!/bin/sh\n")
         f.write("set -e\n")
         f.write("cd " + cwd + "\n")
-        for key, value in os.environ.items():
+        for key, value in environ.items():
             quoted_value = list2cmdline([value], sh_quote=True)
             f.write(key + "=" + quoted_value + " && ")
             f.write("export " + key + "\n")

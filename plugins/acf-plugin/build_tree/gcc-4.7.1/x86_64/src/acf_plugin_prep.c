@@ -38752,6 +38752,2999 @@ extern int default_param_value (compiler_param num);
 
 extern void init_param_values (int *params);
 # 32 "../../../src/acf_plugin.c" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cgraph.h" 1
+# 25 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cgraph.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/plugin-api.h" 1
+# 41 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/plugin-api.h"
+extern "C"
+{
+
+
+
+
+enum ld_plugin_status
+{
+  LDPS_OK = 0,
+  LDPS_NO_SYMS,
+  LDPS_BAD_HANDLE,
+  LDPS_ERR
+
+};
+
+
+
+enum ld_plugin_api_version
+{
+  LD_PLUGIN_API_VERSION = 1
+};
+
+
+
+enum ld_plugin_output_file_type
+{
+  LDPO_REL,
+  LDPO_EXEC,
+  LDPO_DYN
+};
+
+
+
+struct ld_plugin_input_file
+{
+  const char *name;
+  int fd;
+  off_t offset;
+  off_t filesize;
+  void *handle;
+};
+
+
+
+struct ld_plugin_symbol
+{
+  char *name;
+  char *version;
+  int def;
+  int visibility;
+  uint64_t size;
+  char *comdat_key;
+  int resolution;
+};
+
+
+
+struct ld_plugin_section
+{
+  const void* handle;
+  unsigned int shndx;
+};
+
+
+
+enum ld_plugin_symbol_kind
+{
+  LDPK_DEF,
+  LDPK_WEAKDEF,
+  LDPK_UNDEF,
+  LDPK_WEAKUNDEF,
+  LDPK_COMMON
+};
+
+
+
+enum ld_plugin_symbol_visibility
+{
+  LDPV_DEFAULT,
+  LDPV_PROTECTED,
+  LDPV_INTERNAL,
+  LDPV_HIDDEN
+};
+
+
+
+enum ld_plugin_symbol_resolution
+{
+  LDPR_UNKNOWN = 0,
+
+
+  LDPR_UNDEF,
+
+
+
+  LDPR_PREVAILING_DEF,
+
+
+
+
+  LDPR_PREVAILING_DEF_IRONLY,
+
+
+
+  LDPR_PREEMPTED_REG,
+
+
+  LDPR_PREEMPTED_IR,
+
+
+  LDPR_RESOLVED_IR,
+
+
+
+  LDPR_RESOLVED_EXEC,
+
+
+  LDPR_RESOLVED_DYN,
+
+
+
+
+
+  LDPR_PREVAILING_DEF_IRONLY_EXP
+};
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_claim_file_handler) (
+  const struct ld_plugin_input_file *file, int *claimed);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_all_symbols_read_handler) (void);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_cleanup_handler) (void);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_register_claim_file) (ld_plugin_claim_file_handler handler);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_register_all_symbols_read) (
+  ld_plugin_all_symbols_read_handler handler);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_register_cleanup) (ld_plugin_cleanup_handler handler);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_add_symbols) (void *handle, int nsyms,
+                          const struct ld_plugin_symbol *syms);
+
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_get_input_file) (const void *handle,
+                             struct ld_plugin_input_file *file);
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_get_view) (const void *handle, const void **viewp);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_release_input_file) (const void *handle);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_get_symbols) (const void *handle, int nsyms,
+                          struct ld_plugin_symbol *syms);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_add_input_file) (const char *pathname);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_add_input_library) (const char *libname);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_set_extra_library_path) (const char *path);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_message) (int level, const char *format, ...);
+
+
+
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_get_input_section_count) (const void* handle, unsigned int *count);
+
+
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_get_input_section_type) (const struct ld_plugin_section section,
+                                     unsigned int *type);
+
+
+
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_get_input_section_name) (const struct ld_plugin_section section,
+                                     char **section_name_ptr);
+
+
+
+
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_get_input_section_contents) (const struct ld_plugin_section section,
+                                         const unsigned char **section_contents,
+                                         size_t* len);
+
+
+
+
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_update_section_order) (const struct ld_plugin_section *section_list,
+       unsigned int num_sections);
+
+
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_allow_section_ordering) (void);
+
+enum ld_plugin_level
+{
+  LDPL_INFO,
+  LDPL_WARNING,
+  LDPL_ERROR,
+  LDPL_FATAL
+};
+
+
+
+enum ld_plugin_tag
+{
+  LDPT_NULL = 0,
+  LDPT_API_VERSION,
+  LDPT_GOLD_VERSION,
+  LDPT_LINKER_OUTPUT,
+  LDPT_OPTION,
+  LDPT_REGISTER_CLAIM_FILE_HOOK,
+  LDPT_REGISTER_ALL_SYMBOLS_READ_HOOK,
+  LDPT_REGISTER_CLEANUP_HOOK,
+  LDPT_ADD_SYMBOLS,
+  LDPT_GET_SYMBOLS,
+  LDPT_ADD_INPUT_FILE,
+  LDPT_MESSAGE,
+  LDPT_GET_INPUT_FILE,
+  LDPT_RELEASE_INPUT_FILE,
+  LDPT_ADD_INPUT_LIBRARY,
+  LDPT_OUTPUT_NAME,
+  LDPT_SET_EXTRA_LIBRARY_PATH,
+  LDPT_GNU_LD_VERSION,
+  LDPT_GET_VIEW,
+  LDPT_GET_INPUT_SECTION_COUNT,
+  LDPT_GET_INPUT_SECTION_TYPE,
+  LDPT_GET_INPUT_SECTION_NAME,
+  LDPT_GET_INPUT_SECTION_CONTENTS,
+  LDPT_UPDATE_SECTION_ORDER,
+  LDPT_ALLOW_SECTION_ORDERING,
+  LDPT_GET_SYMBOLS_V2
+};
+
+
+
+struct ld_plugin_tv
+{
+  enum ld_plugin_tag tv_tag;
+  union
+  {
+    int tv_val;
+    const char *tv_string;
+    ld_plugin_register_claim_file tv_register_claim_file;
+    ld_plugin_register_all_symbols_read tv_register_all_symbols_read;
+    ld_plugin_register_cleanup tv_register_cleanup;
+    ld_plugin_add_symbols tv_add_symbols;
+    ld_plugin_get_symbols tv_get_symbols;
+    ld_plugin_add_input_file tv_add_input_file;
+    ld_plugin_message tv_message;
+    ld_plugin_get_input_file tv_get_input_file;
+    ld_plugin_get_view tv_get_view;
+    ld_plugin_release_input_file tv_release_input_file;
+    ld_plugin_add_input_library tv_add_input_library;
+    ld_plugin_set_extra_library_path tv_set_extra_library_path;
+    ld_plugin_get_input_section_count tv_get_input_section_count;
+    ld_plugin_get_input_section_type tv_get_input_section_type;
+    ld_plugin_get_input_section_name tv_get_input_section_name;
+    ld_plugin_get_input_section_contents tv_get_input_section_contents;
+    ld_plugin_update_section_order tv_update_section_order;
+    ld_plugin_allow_section_ordering tv_allow_section_ordering;
+  } tv_u;
+};
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_onload) (struct ld_plugin_tv *tv);
+
+
+}
+# 26 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cgraph.h" 2
+
+
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/basic-block.h" 1
+# 24 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/basic-block.h"
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/predict.h" 1
+# 25 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/predict.h"
+enum br_predictor
+{
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/predict.def" 1
+# 38 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/predict.def"
+PRED_COMBINED,
+
+
+PRED_DS_THEORY,
+
+
+
+PRED_FIRST_MATCH,
+
+
+PRED_NO_PREDICTION,
+
+
+PRED_UNCONDITIONAL,
+
+
+
+
+
+PRED_LOOP_ITERATIONS,
+
+
+
+PRED_BUILTIN_EXPECT,
+
+
+
+PRED_LOOP_ITERATIONS_GUESSED,
+
+
+
+PRED_CONTINUE,
+
+
+PRED_NORETURN,
+
+
+
+PRED_COLD_FUNCTION,
+
+
+
+PRED_LOOP_BRANCH,
+
+
+
+PRED_LOOP_EXIT,
+
+
+
+PRED_POINTER,
+PRED_TREE_POINTER,
+
+
+PRED_OPCODE_POSITIVE,
+PRED_OPCODE_NONEQUAL,
+PRED_FPOPCODE,
+PRED_TREE_OPCODE_POSITIVE,
+PRED_TREE_OPCODE_NONEQUAL,
+PRED_TREE_FPOPCODE,
+
+
+PRED_CALL,
+
+
+PRED_TREE_EARLY_RETURN,
+
+
+PRED_GOTO,
+
+
+PRED_CONST_RETURN,
+
+
+PRED_NEGATIVE_RETURN,
+
+
+PRED_NULL_RETURN,
+
+
+PRED_MUDFLAP,
+# 28 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/predict.h" 2
+
+
+  END_PREDICTORS
+};
+
+enum prediction
+{
+   NOT_TAKEN,
+   TAKEN
+};
+
+extern void predict_insn_def (rtx, enum br_predictor, enum prediction);
+extern int counts_to_freqs (void);
+extern void estimate_bb_frequencies (void);
+extern const char *predictor_name (enum br_predictor);
+extern tree build_predict_expr (enum br_predictor, enum prediction);
+extern void tree_estimate_probability (void);
+extern void compute_function_frequency (void);
+extern void rebuild_frequencies (void);
+# 25 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/basic-block.h" 2
+
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/function.h" 1
+# 27 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/basic-block.h" 2
+
+
+
+
+
+
+typedef long gcov_type;
+
+
+struct edge_def {
+
+  struct basic_block_def *src;
+  struct basic_block_def *dest;
+
+
+  union edge_def_insns {
+    gimple_seq g;
+    rtx r;
+  } insns;
+
+
+  void * aux;
+
+
+  tree goto_block;
+  location_t goto_locus;
+
+
+
+  unsigned int dest_idx;
+
+  int flags;
+  int probability;
+  gcov_type count;
+
+};
+
+static inline void VEC_edge_must_be_pointer_type (void) { (void)((edge)1 == (void *)1); } typedef struct VEC_edge_base { struct vec_prefix prefix; edge vec[1]; } VEC_edge_base; typedef struct VEC_edge_none { VEC_edge_base base; } VEC_edge_none; static inline unsigned VEC_edge_base_length (const VEC_edge_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline edge VEC_edge_base_last (const VEC_edge_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline edge VEC_edge_base_index (const VEC_edge_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_edge_base_iterate (const VEC_edge_base *vec_, unsigned ix_, edge *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (edge) 0; return 0; } } static inline size_t VEC_edge_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_edge_base, vec) + alloc_ * sizeof(edge); } static inline void VEC_edge_base_embedded_init (VEC_edge_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_edge_base_space (VEC_edge_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_edge_base_splice (VEC_edge_base *dst_, VEC_edge_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (edge)); dst_->prefix.num += len_; } } static inline edge *VEC_edge_base_quick_push (VEC_edge_base *vec_, edge obj_ ) { edge *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline edge VEC_edge_base_pop (VEC_edge_base *vec_ ) { edge obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_edge_base_truncate (VEC_edge_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline edge VEC_edge_base_replace (VEC_edge_base *vec_, unsigned ix_, edge obj_ ) { edge old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline edge *VEC_edge_base_quick_insert (VEC_edge_base *vec_, unsigned ix_, edge obj_ ) { edge *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (edge)); *slot_ = obj_; return slot_; } static inline edge VEC_edge_base_ordered_remove (VEC_edge_base *vec_, unsigned ix_ ) { edge *slot_; edge obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (edge)); return obj_; } static inline edge VEC_edge_base_unordered_remove (VEC_edge_base *vec_, unsigned ix_ ) { edge *slot_; edge obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_edge_base_block_remove (VEC_edge_base *vec_, unsigned ix_, unsigned len_ ) { edge *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (edge)); } static inline edge *VEC_edge_base_address (VEC_edge_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_edge_base_lower_bound (VEC_edge_base *vec_, const edge obj_, bool (*lessthan_)(const edge, const edge) ) { unsigned int len_ = VEC_edge_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { edge middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_edge_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_edge_gc { VEC_edge_base base; } VEC_edge_gc; static inline VEC_edge_gc *VEC_edge_gc_alloc (int alloc_ ) { return (VEC_edge_gc *) vec_gc_p_reserve_exact (__null, alloc_ ); } static inline void VEC_edge_gc_free (VEC_edge_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline VEC_edge_gc *VEC_edge_gc_copy (VEC_edge_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_edge_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_edge_gc *)(vec_gc_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (edge) * len_); } return new_vec_; } static inline int VEC_edge_gc_reserve (VEC_edge_gc **vec_, int alloc_ ) { int extend = !VEC_edge_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_edge_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_edge_gc_reserve_exact (VEC_edge_gc **vec_, int alloc_ ) { int extend = !VEC_edge_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_edge_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_edge_gc_safe_grow (VEC_edge_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_edge_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_edge_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_edge_gc_safe_grow_cleared (VEC_edge_gc **vec_, int size_ ) { int oldsize = VEC_edge_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_edge_gc_safe_grow (vec_, size_ ); memset (&(VEC_edge_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (edge) * (size_ - oldsize)); } static inline void VEC_edge_gc_safe_splice (VEC_edge_gc **dst_, VEC_edge_base *src_ ) { if (src_) { VEC_edge_gc_reserve_exact (dst_, src_->prefix.num ); VEC_edge_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline edge *VEC_edge_gc_safe_push (VEC_edge_gc **vec_, edge obj_ ) { VEC_edge_gc_reserve (vec_, 1 ); return VEC_edge_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline edge *VEC_edge_gc_safe_insert (VEC_edge_gc **vec_, unsigned ix_, edge obj_ ) { VEC_edge_gc_reserve (vec_, 1 ); return VEC_edge_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_edge_heap { VEC_edge_base base; } VEC_edge_heap; static inline VEC_edge_heap *VEC_edge_heap_alloc (int alloc_ ) { return (VEC_edge_heap *) vec_heap_p_reserve_exact (__null, alloc_ ); } static inline void VEC_edge_heap_free (VEC_edge_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = __null; } static inline VEC_edge_heap *VEC_edge_heap_copy (VEC_edge_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_edge_heap *new_vec_ = __null; if (len_) { new_vec_ = (VEC_edge_heap *)(vec_heap_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (edge) * len_); } return new_vec_; } static inline int VEC_edge_heap_reserve (VEC_edge_heap **vec_, int alloc_ ) { int extend = !VEC_edge_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_edge_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_edge_heap_reserve_exact (VEC_edge_heap **vec_, int alloc_ ) { int extend = !VEC_edge_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_edge_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_edge_heap_safe_grow (VEC_edge_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_edge_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_edge_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_edge_heap_safe_grow_cleared (VEC_edge_heap **vec_, int size_ ) { int oldsize = VEC_edge_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_edge_heap_safe_grow (vec_, size_ ); memset (&(VEC_edge_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (edge) * (size_ - oldsize)); } static inline void VEC_edge_heap_safe_splice (VEC_edge_heap **dst_, VEC_edge_base *src_ ) { if (src_) { VEC_edge_heap_reserve_exact (dst_, src_->prefix.num ); VEC_edge_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline edge *VEC_edge_heap_safe_push (VEC_edge_heap **vec_, edge obj_ ) { VEC_edge_heap_reserve (vec_, 1 ); return VEC_edge_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline edge *VEC_edge_heap_safe_insert (VEC_edge_heap **vec_, unsigned ix_, edge obj_ ) { VEC_edge_heap_reserve (vec_, 1 ); return VEC_edge_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+# 99 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/basic-block.h"
+extern const struct gcov_ctr_summary *profile_info;
+
+
+struct loop;
+
+
+struct rtl_bb_info;
+# 133 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/basic-block.h"
+struct basic_block_def {
+
+  VEC_edge_gc *preds;
+  VEC_edge_gc *succs;
+
+
+  void * aux;
+
+
+  struct loop *loop_father;
+
+
+  struct et_node * dom[2];
+
+
+  struct basic_block_def *prev_bb;
+  struct basic_block_def *next_bb;
+
+  union basic_block_il_dependent {
+      struct gimple_bb_info * gimple;
+      struct rtl_bb_info * rtl;
+    } il;
+
+
+  gcov_type count;
+
+
+  int index;
+
+
+  int loop_depth;
+
+
+  int frequency;
+
+
+  int discriminator;
+
+
+  int flags;
+};
+
+struct rtl_bb_info {
+
+  rtx head_;
+  rtx end_;
+
+
+
+  rtx header;
+  rtx footer;
+
+
+  int visited;
+};
+
+struct gimple_bb_info {
+
+  gimple_seq seq;
+
+
+  gimple_seq phi_nodes;
+};
+
+static inline void VEC_basic_block_must_be_pointer_type (void) { (void)((basic_block)1 == (void *)1); } typedef struct VEC_basic_block_base { struct vec_prefix prefix; basic_block vec[1]; } VEC_basic_block_base; typedef struct VEC_basic_block_none { VEC_basic_block_base base; } VEC_basic_block_none; static inline unsigned VEC_basic_block_base_length (const VEC_basic_block_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline basic_block VEC_basic_block_base_last (const VEC_basic_block_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline basic_block VEC_basic_block_base_index (const VEC_basic_block_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_basic_block_base_iterate (const VEC_basic_block_base *vec_, unsigned ix_, basic_block *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (basic_block) 0; return 0; } } static inline size_t VEC_basic_block_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_basic_block_base, vec) + alloc_ * sizeof(basic_block); } static inline void VEC_basic_block_base_embedded_init (VEC_basic_block_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_basic_block_base_space (VEC_basic_block_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_basic_block_base_splice (VEC_basic_block_base *dst_, VEC_basic_block_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (basic_block)); dst_->prefix.num += len_; } } static inline basic_block *VEC_basic_block_base_quick_push (VEC_basic_block_base *vec_, basic_block obj_ ) { basic_block *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline basic_block VEC_basic_block_base_pop (VEC_basic_block_base *vec_ ) { basic_block obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_basic_block_base_truncate (VEC_basic_block_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline basic_block VEC_basic_block_base_replace (VEC_basic_block_base *vec_, unsigned ix_, basic_block obj_ ) { basic_block old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline basic_block *VEC_basic_block_base_quick_insert (VEC_basic_block_base *vec_, unsigned ix_, basic_block obj_ ) { basic_block *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (basic_block)); *slot_ = obj_; return slot_; } static inline basic_block VEC_basic_block_base_ordered_remove (VEC_basic_block_base *vec_, unsigned ix_ ) { basic_block *slot_; basic_block obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (basic_block)); return obj_; } static inline basic_block VEC_basic_block_base_unordered_remove (VEC_basic_block_base *vec_, unsigned ix_ ) { basic_block *slot_; basic_block obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_basic_block_base_block_remove (VEC_basic_block_base *vec_, unsigned ix_, unsigned len_ ) { basic_block *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (basic_block)); } static inline basic_block *VEC_basic_block_base_address (VEC_basic_block_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_basic_block_base_lower_bound (VEC_basic_block_base *vec_, const basic_block obj_, bool (*lessthan_)(const basic_block, const basic_block) ) { unsigned int len_ = VEC_basic_block_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { basic_block middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_basic_block_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_basic_block_gc { VEC_basic_block_base base; } VEC_basic_block_gc; static inline VEC_basic_block_gc *VEC_basic_block_gc_alloc (int alloc_ ) { return (VEC_basic_block_gc *) vec_gc_p_reserve_exact (__null, alloc_ ); } static inline void VEC_basic_block_gc_free (VEC_basic_block_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline VEC_basic_block_gc *VEC_basic_block_gc_copy (VEC_basic_block_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_basic_block_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_basic_block_gc *)(vec_gc_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (basic_block) * len_); } return new_vec_; } static inline int VEC_basic_block_gc_reserve (VEC_basic_block_gc **vec_, int alloc_ ) { int extend = !VEC_basic_block_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_basic_block_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_basic_block_gc_reserve_exact (VEC_basic_block_gc **vec_, int alloc_ ) { int extend = !VEC_basic_block_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_basic_block_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_basic_block_gc_safe_grow (VEC_basic_block_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_basic_block_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_basic_block_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_basic_block_gc_safe_grow_cleared (VEC_basic_block_gc **vec_, int size_ ) { int oldsize = VEC_basic_block_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_basic_block_gc_safe_grow (vec_, size_ ); memset (&(VEC_basic_block_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (basic_block) * (size_ - oldsize)); } static inline void VEC_basic_block_gc_safe_splice (VEC_basic_block_gc **dst_, VEC_basic_block_base *src_ ) { if (src_) { VEC_basic_block_gc_reserve_exact (dst_, src_->prefix.num ); VEC_basic_block_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline basic_block *VEC_basic_block_gc_safe_push (VEC_basic_block_gc **vec_, basic_block obj_ ) { VEC_basic_block_gc_reserve (vec_, 1 ); return VEC_basic_block_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline basic_block *VEC_basic_block_gc_safe_insert (VEC_basic_block_gc **vec_, unsigned ix_, basic_block obj_ ) { VEC_basic_block_gc_reserve (vec_, 1 ); return VEC_basic_block_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_basic_block_heap { VEC_basic_block_base base; } VEC_basic_block_heap; static inline VEC_basic_block_heap *VEC_basic_block_heap_alloc (int alloc_ ) { return (VEC_basic_block_heap *) vec_heap_p_reserve_exact (__null, alloc_ ); } static inline void VEC_basic_block_heap_free (VEC_basic_block_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = __null; } static inline VEC_basic_block_heap *VEC_basic_block_heap_copy (VEC_basic_block_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_basic_block_heap *new_vec_ = __null; if (len_) { new_vec_ = (VEC_basic_block_heap *)(vec_heap_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (basic_block) * len_); } return new_vec_; } static inline int VEC_basic_block_heap_reserve (VEC_basic_block_heap **vec_, int alloc_ ) { int extend = !VEC_basic_block_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_basic_block_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_basic_block_heap_reserve_exact (VEC_basic_block_heap **vec_, int alloc_ ) { int extend = !VEC_basic_block_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_basic_block_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_basic_block_heap_safe_grow (VEC_basic_block_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_basic_block_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_basic_block_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_basic_block_heap_safe_grow_cleared (VEC_basic_block_heap **vec_, int size_ ) { int oldsize = VEC_basic_block_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_basic_block_heap_safe_grow (vec_, size_ ); memset (&(VEC_basic_block_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (basic_block) * (size_ - oldsize)); } static inline void VEC_basic_block_heap_safe_splice (VEC_basic_block_heap **dst_, VEC_basic_block_base *src_ ) { if (src_) { VEC_basic_block_heap_reserve_exact (dst_, src_->prefix.num ); VEC_basic_block_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline basic_block *VEC_basic_block_heap_safe_push (VEC_basic_block_heap **vec_, basic_block obj_ ) { VEC_basic_block_heap_reserve (vec_, 1 ); return VEC_basic_block_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline basic_block *VEC_basic_block_heap_safe_insert (VEC_basic_block_heap **vec_, unsigned ix_, basic_block obj_ ) { VEC_basic_block_heap_reserve (vec_, 1 ); return VEC_basic_block_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+# 213 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/basic-block.h"
+enum bb_flags
+{
+
+  BB_NEW = 1 << 0,
+
+
+
+  BB_REACHABLE = 1 << 1,
+
+
+  BB_IRREDUCIBLE_LOOP = 1 << 2,
+
+
+  BB_SUPERBLOCK = 1 << 3,
+
+
+
+  BB_DISABLE_SCHEDULE = 1 << 4,
+
+
+  BB_HOT_PARTITION = 1 << 5,
+
+
+  BB_COLD_PARTITION = 1 << 6,
+
+
+  BB_DUPLICATED = 1 << 7,
+
+
+  BB_NON_LOCAL_GOTO_TARGET = 1 << 8,
+
+
+  BB_RTL = 1 << 9 ,
+
+
+
+  BB_FORWARDER_BLOCK = 1 << 10,
+
+
+
+  BB_NONTHREADABLE_BLOCK = 1 << 11,
+
+
+
+
+
+  BB_MODIFIED = 1 << 12
+};
+# 279 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/basic-block.h"
+enum dom_state
+{
+  DOM_NONE,
+  DOM_NO_FAST_QUERY,
+  DOM_OK
+};
+
+
+enum profile_status_d
+{
+  PROFILE_ABSENT,
+  PROFILE_GUESSED,
+  PROFILE_READ,
+  PROFILE_LAST
+};
+
+
+
+
+
+struct control_flow_graph {
+
+
+  basic_block x_entry_block_ptr;
+  basic_block x_exit_block_ptr;
+
+
+  VEC_basic_block_gc *x_basic_block_info;
+
+
+  int x_n_basic_blocks;
+
+
+  int x_n_edges;
+
+
+  int x_last_basic_block;
+
+
+  int last_label_uid;
+
+
+
+  VEC_basic_block_gc *x_label_to_block_map;
+
+  enum profile_status_d x_profile_status;
+
+
+  enum dom_state x_dom_computed[2];
+
+
+  unsigned x_n_bbs_in_dom_tree[2];
+
+
+
+  int max_jumptable_ents;
+};
+# 427 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/basic-block.h"
+extern void compute_bb_for_insn (void);
+extern unsigned int free_bb_for_insn (void);
+extern void update_bb_for_insn (basic_block);
+
+extern void insert_insn_on_edge (rtx, edge);
+basic_block split_edge_and_insert (edge, rtx);
+
+extern void commit_one_edge_insertion (edge e);
+extern void commit_edge_insertions (void);
+
+extern void remove_fake_edges (void);
+extern void remove_fake_exit_edges (void);
+extern void add_noreturn_fake_exit_edges (void);
+extern void connect_infinite_loops_to_exit (void);
+extern edge unchecked_make_edge (basic_block, basic_block, int);
+extern edge cached_make_edge (sbitmap, basic_block, basic_block, int);
+extern edge make_edge (basic_block, basic_block, int);
+extern edge make_single_succ_edge (basic_block, basic_block, int);
+extern void remove_edge_raw (edge);
+extern void redirect_edge_succ (edge, basic_block);
+extern edge redirect_edge_succ_nodup (edge, basic_block);
+extern void redirect_edge_pred (edge, basic_block);
+extern basic_block create_basic_block_structure (rtx, rtx, rtx, basic_block);
+extern void clear_bb_flags (void);
+extern int post_order_compute (int *, bool, bool);
+extern int inverted_post_order_compute (int *);
+extern int pre_and_rev_post_order_compute (int *, int *, bool);
+extern int dfs_enumerate_from (basic_block, int,
+          bool (*)(const_basic_block, const void *),
+          basic_block *, int, const void *);
+extern void compute_dominance_frontiers (struct bitmap_head_def *);
+extern bitmap compute_idf (bitmap, struct bitmap_head_def *);
+extern void dump_bb_info (basic_block, bool, bool, int, const char *, FILE *);
+extern void dump_edge_info (FILE *, edge, int);
+extern void brief_dump_cfg (FILE *);
+extern void clear_edges (void);
+extern void scale_bbs_frequencies_int (basic_block *, int, int, int);
+extern void scale_bbs_frequencies_gcov_type (basic_block *, int, gcov_type,
+          gcov_type);
+
+
+
+
+
+
+typedef struct ce_if_block
+{
+  basic_block test_bb;
+  basic_block then_bb;
+  basic_block else_bb;
+  basic_block join_bb;
+  basic_block last_test_bb;
+  int num_multiple_test_blocks;
+  int num_and_and_blocks;
+  int num_or_or_blocks;
+  int num_multiple_test_insns;
+  int and_and_p;
+  int num_then_insns;
+  int num_else_insns;
+  int pass;
+
+
+
+
+
+} ce_if_block_t;
+
+
+struct edge_list
+{
+  int num_blocks;
+  int num_edges;
+  edge *index_to_edge;
+};
+# 548 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/basic-block.h"
+static inline bool
+single_succ_p (const_basic_block bb)
+{
+  return (VEC_edge_base_length(((__builtin_offsetof (__typeof (*(bb->succs)), base) == 0 || ((bb->succs))) ? &((bb->succs))->base : 0))) == 1;
+}
+
+
+
+static inline bool
+single_pred_p (const_basic_block bb)
+{
+  return (VEC_edge_base_length(((__builtin_offsetof (__typeof (*(bb->preds)), base) == 0 || ((bb->preds))) ? &((bb->preds))->base : 0))) == 1;
+}
+
+
+
+
+static inline edge
+single_succ_edge (const_basic_block bb)
+{
+  ((void)(0 && (single_succ_p (bb))));
+  return (VEC_edge_base_index(((__builtin_offsetof (__typeof (*(bb)->succs), base) == 0 || ((bb)->succs)) ? &((bb)->succs)->base : 0),(0) ));
+}
+
+
+
+
+static inline edge
+single_pred_edge (const_basic_block bb)
+{
+  ((void)(0 && (single_pred_p (bb))));
+  return (VEC_edge_base_index(((__builtin_offsetof (__typeof (*(bb)->preds), base) == 0 || ((bb)->preds)) ? &((bb)->preds)->base : 0),(0) ));
+}
+
+
+
+
+static inline basic_block
+single_succ (const_basic_block bb)
+{
+  return single_succ_edge (bb)->dest;
+}
+
+
+
+
+static inline basic_block
+single_pred (const_basic_block bb)
+{
+  return single_pred_edge (bb)->src;
+}
+
+
+
+typedef struct {
+  unsigned index;
+  VEC_edge_gc **container;
+} edge_iterator;
+
+static inline VEC_edge_gc *
+ei_container (edge_iterator i)
+{
+  ((void)(0 && (i.container)));
+  return *i.container;
+}
+
+
+
+
+
+static inline edge_iterator
+ei_start_1 (VEC_edge_gc **ev)
+{
+  edge_iterator i;
+
+  i.index = 0;
+  i.container = ev;
+
+  return i;
+}
+
+
+
+static inline edge_iterator
+ei_last_1 (VEC_edge_gc **ev)
+{
+  edge_iterator i;
+
+  i.index = (VEC_edge_base_length(((__builtin_offsetof (__typeof (*(*ev)), base) == 0 || ((*ev))) ? &((*ev))->base : 0))) - 1;
+  i.container = ev;
+
+  return i;
+}
+
+
+static inline bool
+ei_end_p (edge_iterator i)
+{
+  return (i.index == (VEC_edge_base_length(((__builtin_offsetof (__typeof (*(ei_container (i))), base) == 0 || ((ei_container (i)))) ? &((ei_container (i)))->base : 0))));
+}
+
+
+
+static inline bool
+ei_one_before_end_p (edge_iterator i)
+{
+  return (i.index + 1 == (VEC_edge_base_length(((__builtin_offsetof (__typeof (*(ei_container (i))), base) == 0 || ((ei_container (i)))) ? &((ei_container (i)))->base : 0))));
+}
+
+
+static inline void
+ei_next (edge_iterator *i)
+{
+  ((void)(0 && (i->index < (VEC_edge_base_length(((__builtin_offsetof (__typeof (*(ei_container (*i))), base) == 0 || ((ei_container (*i)))) ? &((ei_container (*i)))->base : 0))))));
+  i->index++;
+}
+
+
+static inline void
+ei_prev (edge_iterator *i)
+{
+  ((void)(0 && (i->index > 0)));
+  i->index--;
+}
+
+
+static inline edge
+ei_edge (edge_iterator i)
+{
+  return (VEC_edge_base_index(((__builtin_offsetof (__typeof (*(ei_container (i))), base) == 0 || ((ei_container (i)))) ? &((ei_container (i)))->base : 0),(i.index) ));
+}
+
+
+
+
+static inline edge
+ei_safe_edge (edge_iterator i)
+{
+  return !ei_end_p (i) ? ei_edge (i) : __null;
+}
+
+
+
+
+
+static inline bool
+ei_cond (edge_iterator ei, edge *p)
+{
+  if (!ei_end_p (ei))
+    {
+      *p = ei_edge (ei);
+      return 1;
+    }
+  else
+    {
+      *p = __null;
+      return 0;
+    }
+}
+# 728 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/basic-block.h"
+struct edge_list * create_edge_list (void);
+void free_edge_list (struct edge_list *);
+void print_edge_list (FILE *, struct edge_list *);
+void verify_edge_list (FILE *, struct edge_list *);
+int find_edge_index (struct edge_list *, basic_block, basic_block);
+edge find_edge (basic_block, basic_block);
+# 746 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/basic-block.h"
+extern struct edge_list *pre_edge_lcm (int, sbitmap *, sbitmap *,
+           sbitmap *, sbitmap *, sbitmap **,
+           sbitmap **);
+extern struct edge_list *pre_edge_rev_lcm (int, sbitmap *,
+        sbitmap *, sbitmap *,
+        sbitmap *, sbitmap **,
+        sbitmap **);
+extern void compute_available (sbitmap *, sbitmap *, sbitmap *, sbitmap *);
+
+
+extern bool maybe_hot_bb_p (const_basic_block);
+extern bool maybe_hot_edge_p (edge);
+extern bool probably_never_executed_bb_p (const_basic_block);
+extern bool optimize_bb_for_size_p (const_basic_block);
+extern bool optimize_bb_for_speed_p (const_basic_block);
+extern bool optimize_edge_for_size_p (edge);
+extern bool optimize_edge_for_speed_p (edge);
+extern bool optimize_loop_for_size_p (struct loop *);
+extern bool optimize_loop_for_speed_p (struct loop *);
+extern bool optimize_loop_nest_for_size_p (struct loop *);
+extern bool optimize_loop_nest_for_speed_p (struct loop *);
+extern bool gimple_predicted_by_p (const_basic_block, enum br_predictor);
+extern bool rtl_predicted_by_p (const_basic_block, enum br_predictor);
+extern void gimple_predict_edge (edge, enum br_predictor, int);
+extern void rtl_predict_edge (edge, enum br_predictor, int);
+extern void predict_edge_def (edge, enum br_predictor, enum prediction);
+extern void guess_outgoing_edge_probabilities (basic_block);
+extern void remove_predictions_associated_with_edge (edge);
+extern bool edge_probability_reliable_p (const_edge);
+extern bool br_prob_note_reliable_p (const_rtx);
+extern bool predictable_edge_p (edge);
+
+
+extern void init_flow (struct function *);
+extern void debug_bb (basic_block);
+extern basic_block debug_bb_n (int);
+extern void expunge_block (basic_block);
+extern void link_block (basic_block, basic_block);
+extern void unlink_block (basic_block);
+extern void compact_blocks (void);
+extern basic_block alloc_block (void);
+extern void alloc_aux_for_blocks (int);
+extern void clear_aux_for_blocks (void);
+extern void free_aux_for_blocks (void);
+extern void alloc_aux_for_edges (int);
+extern void clear_aux_for_edges (void);
+extern void free_aux_for_edges (void);
+
+
+extern void find_unreachable_blocks (void);
+extern bool forwarder_block_p (const_basic_block);
+extern bool can_fallthru (basic_block, basic_block);
+extern bool could_fall_through (basic_block, basic_block);
+extern void flow_nodes_print (const char *, const_sbitmap, FILE *);
+extern void flow_edge_list_print (const char *, const edge *, int, FILE *);
+
+
+extern rtx block_label (basic_block);
+extern rtx bb_note (basic_block);
+extern bool purge_all_dead_edges (void);
+extern bool purge_dead_edges (basic_block);
+extern bool fixup_abnormal_edges (void);
+extern basic_block force_nonfallthru_and_redirect (edge, basic_block, rtx);
+
+
+extern void find_many_sub_basic_blocks (sbitmap);
+extern void rtl_make_eh_edge (sbitmap, basic_block, rtx);
+
+enum replace_direction { dir_none, dir_forward, dir_backward, dir_both };
+
+
+extern bool cleanup_cfg (int);
+extern int flow_find_cross_jump (basic_block, basic_block, rtx *, rtx *,
+                                 enum replace_direction*);
+extern int flow_find_head_matching_sequence (basic_block, basic_block,
+          rtx *, rtx *, int);
+
+extern bool delete_unreachable_blocks (void);
+
+extern bool mark_dfs_back_edges (void);
+extern void set_edge_can_fallthru_flag (void);
+extern void update_br_prob_note (basic_block);
+extern bool inside_basic_block_p (const_rtx);
+extern bool control_flow_insn_p (const_rtx);
+extern rtx get_last_bb_insn (basic_block);
+
+
+extern void reorder_basic_blocks (void);
+
+
+
+enum cdi_direction
+{
+  CDI_DOMINATORS = 1,
+  CDI_POST_DOMINATORS = 2
+};
+
+extern enum dom_state dom_info_state (enum cdi_direction);
+extern void set_dom_info_availability (enum cdi_direction, enum dom_state);
+extern bool dom_info_available_p (enum cdi_direction);
+extern void calculate_dominance_info (enum cdi_direction);
+extern void free_dominance_info (enum cdi_direction);
+extern basic_block nearest_common_dominator (enum cdi_direction,
+          basic_block, basic_block);
+extern basic_block nearest_common_dominator_for_set (enum cdi_direction,
+           bitmap);
+extern void set_immediate_dominator (enum cdi_direction, basic_block,
+         basic_block);
+extern basic_block get_immediate_dominator (enum cdi_direction, basic_block);
+extern bool dominated_by_p (enum cdi_direction, const_basic_block, const_basic_block);
+extern VEC_basic_block_heap *get_dominated_by (enum cdi_direction, basic_block);
+extern VEC_basic_block_heap *get_dominated_by_region (enum cdi_direction,
+        basic_block *,
+        unsigned);
+extern VEC_basic_block_heap *get_dominated_to_depth (enum cdi_direction,
+       basic_block, int);
+extern VEC_basic_block_heap *get_all_dominated_blocks (enum cdi_direction,
+         basic_block);
+extern void add_to_dominance_info (enum cdi_direction, basic_block);
+extern void delete_from_dominance_info (enum cdi_direction, basic_block);
+basic_block recompute_dominator (enum cdi_direction, basic_block);
+extern void redirect_immediate_dominators (enum cdi_direction, basic_block,
+        basic_block);
+extern void iterate_fix_dominators (enum cdi_direction,
+        VEC_basic_block_heap *, bool);
+extern void verify_dominators (enum cdi_direction);
+extern basic_block first_dom_son (enum cdi_direction, basic_block);
+extern basic_block next_dom_son (enum cdi_direction, basic_block);
+unsigned bb_dom_dfs_in (enum cdi_direction, basic_block);
+unsigned bb_dom_dfs_out (enum cdi_direction, basic_block);
+
+extern edge try_redirect_by_replacing_jump (edge, basic_block, bool);
+extern void break_superblocks (void);
+extern void relink_block_chain (bool);
+extern void check_bb_profile (basic_block, FILE *);
+extern void update_bb_profile_for_threading (basic_block, int, gcov_type, edge);
+extern void init_rtl_bb_info (basic_block);
+
+extern void initialize_original_copy_tables (void);
+extern void free_original_copy_tables (void);
+extern void set_bb_original (basic_block, basic_block);
+extern basic_block get_bb_original (basic_block);
+extern void set_bb_copy (basic_block, basic_block);
+extern basic_block get_bb_copy (basic_block);
+void set_loop_copy (struct loop *, struct loop *);
+struct loop *get_loop_copy (struct loop *);
+
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cfghooks.h" 1
+# 25 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cfghooks.h"
+struct cfg_hooks
+{
+
+  const char *name;
+
+
+  int (*verify_flow_info) (void);
+  void (*dump_bb) (basic_block, FILE *, int, int);
+
+
+
+
+  basic_block (*create_basic_block) (void *head, void *end, basic_block after);
+
+
+
+
+
+  edge (*redirect_edge_and_branch) (edge e, basic_block b);
+
+
+
+
+  basic_block (*redirect_edge_and_branch_force) (edge, basic_block);
+
+
+
+  bool (*can_remove_branch_p) (const_edge);
+
+
+  void (*delete_basic_block) (basic_block);
+
+
+
+  basic_block (*split_block) (basic_block b, void * i);
+
+
+  bool (*move_block_after) (basic_block b, basic_block a);
+
+
+  bool (*can_merge_blocks_p) (basic_block a, basic_block b);
+
+
+  void (*merge_blocks) (basic_block a, basic_block b);
+
+
+  void (*predict_edge) (edge e, enum br_predictor predictor, int probability);
+
+
+
+  bool (*predicted_by_p) (const_basic_block bb, enum br_predictor predictor);
+
+
+  bool (*can_duplicate_block_p) (const_basic_block a);
+
+
+  basic_block (*duplicate_block) (basic_block a);
+
+
+
+  basic_block (*split_edge) (edge);
+  void (*make_forwarder_block) (edge);
+
+
+  void (*tidy_fallthru_edge) (edge);
+
+
+  basic_block (*force_nonfallthru) (edge);
+
+
+
+  bool (*block_ends_with_call_p) (basic_block);
+
+
+
+  bool (*block_ends_with_condjump_p) (const_basic_block);
+# 109 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cfghooks.h"
+  int (*flow_call_edges_add) (sbitmap);
+
+
+
+  void (*execute_on_growing_pred) (edge);
+
+
+
+  void (*execute_on_shrinking_pred) (edge);
+
+
+
+  bool (*cfg_hook_duplicate_loop_to_header_edge) (struct loop *, edge,
+        unsigned, sbitmap,
+        edge, VEC_edge_heap **,
+        int);
+
+
+
+  void (*lv_add_condition_to_bb) (basic_block, basic_block, basic_block,
+      void *);
+
+  void (*lv_adjust_loop_header_phi) (basic_block, basic_block,
+         basic_block, edge);
+
+
+
+  void (*extract_cond_bb_edges) (basic_block, edge *, edge *);
+
+
+
+
+  void (*flush_pending_stmts) (edge);
+};
+
+extern void verify_flow_info (void);
+extern void dump_bb (basic_block, FILE *, int);
+extern edge redirect_edge_and_branch (edge, basic_block);
+extern basic_block redirect_edge_and_branch_force (edge, basic_block);
+extern bool can_remove_branch_p (const_edge);
+extern void remove_branch (edge);
+extern void remove_edge (edge);
+extern edge split_block (basic_block, void *);
+extern edge split_block_after_labels (basic_block);
+extern bool move_block_after (basic_block, basic_block);
+extern void delete_basic_block (basic_block);
+extern basic_block split_edge (edge);
+extern basic_block create_basic_block (void *, void *, basic_block);
+extern basic_block create_empty_bb (basic_block);
+extern bool can_merge_blocks_p (basic_block, basic_block);
+extern void merge_blocks (basic_block, basic_block);
+extern edge make_forwarder_block (basic_block, bool (*)(edge),
+      void (*) (basic_block));
+extern basic_block force_nonfallthru (edge);
+extern void tidy_fallthru_edge (edge);
+extern void tidy_fallthru_edges (void);
+extern void predict_edge (edge e, enum br_predictor predictor, int probability);
+extern bool predicted_by_p (const_basic_block bb, enum br_predictor predictor);
+extern bool can_duplicate_block_p (const_basic_block);
+extern basic_block duplicate_block (basic_block, edge, basic_block);
+extern bool block_ends_with_call_p (basic_block bb);
+extern bool block_ends_with_condjump_p (const_basic_block bb);
+extern int flow_call_edges_add (sbitmap);
+extern void execute_on_growing_pred (edge);
+extern void execute_on_shrinking_pred (edge);
+extern bool cfg_hook_duplicate_loop_to_header_edge (struct loop *loop, edge,
+          unsigned int ndupl,
+          sbitmap wont_exit,
+          edge orig,
+          VEC_edge_heap **to_remove,
+          int flags);
+
+extern void lv_flush_pending_stmts (edge);
+extern void extract_cond_bb_edges (basic_block, edge *, edge*);
+extern void lv_adjust_loop_header_phi (basic_block, basic_block, basic_block,
+           edge);
+extern void lv_add_condition_to_bb (basic_block, basic_block, basic_block,
+        void *);
+
+
+extern struct cfg_hooks gimple_cfg_hooks;
+extern struct cfg_hooks rtl_cfg_hooks;
+extern struct cfg_hooks cfg_layout_rtl_cfg_hooks;
+
+
+extern enum ir_type current_ir_type (void);
+extern void rtl_register_cfg_hooks (void);
+extern void cfg_layout_rtl_register_cfg_hooks (void);
+extern void gimple_register_cfg_hooks (void);
+extern struct cfg_hooks get_cfg_hooks (void);
+extern void set_cfg_hooks (struct cfg_hooks);
+# 894 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/basic-block.h" 2
+
+
+static inline bool
+bb_has_eh_pred (basic_block bb)
+{
+  edge e;
+  edge_iterator ei;
+
+  for ((ei) = ei_start_1 (&((bb->preds))); ei_cond ((ei), &(e)); ei_next (&(ei)))
+    {
+      if (e->flags & 0x0008)
+ return true;
+    }
+  return false;
+}
+
+
+static inline bool
+bb_has_abnormal_pred (basic_block bb)
+{
+  edge e;
+  edge_iterator ei;
+
+  for ((ei) = ei_start_1 (&((bb->preds))); ei_cond ((ei), &(e)); ei_next (&(ei)))
+    {
+      if (e->flags & 0x0002)
+ return true;
+    }
+  return false;
+}
+
+
+static inline edge
+find_fallthru_edge (VEC_edge_gc *edges)
+{
+  edge e;
+  edge_iterator ei;
+
+  for ((ei) = ei_start_1 (&((edges))); ei_cond ((ei), &(e)); ei_next (&(ei)))
+    if (e->flags & 0x0001)
+      break;
+
+  return e;
+}
+
+
+extern edge mfb_kj_edge;
+extern bool mfb_keep_just (edge);
+
+
+extern void rtl_profile_for_bb (basic_block);
+extern void rtl_profile_for_edge (edge);
+extern void default_rtl_profile (void);
+# 29 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cgraph.h" 2
+
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ipa-ref.h" 1
+# 22 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ipa-ref.h"
+struct cgraph_node;
+struct varpool_node;
+
+
+enum ipa_ref_use
+{
+  IPA_REF_LOAD,
+  IPA_REF_STORE,
+  IPA_REF_ADDR,
+  IPA_REF_ALIAS
+};
+
+
+enum ipa_ref_type
+{
+  IPA_REF_CGRAPH,
+  IPA_REF_VARPOOL
+};
+
+
+
+union ipa_ref_ptr_u
+{
+  struct cgraph_node * cgraph_node;
+  struct varpool_node * varpool_node;
+};
+
+
+struct ipa_ref
+{
+  union ipa_ref_ptr_u refering;
+  union ipa_ref_ptr_u refered;
+  gimple stmt;
+  unsigned int refered_index;
+  enum ipa_ref_type refering_type:1;
+  enum ipa_ref_type refered_type:1;
+  enum ipa_ref_use use:2;
+};
+
+typedef struct ipa_ref ipa_ref_t;
+typedef struct ipa_ref *ipa_ref_ptr;
+
+typedef struct VEC_ipa_ref_t_base { struct vec_prefix prefix; ipa_ref_t vec[1]; } VEC_ipa_ref_t_base; typedef struct VEC_ipa_ref_t_none { VEC_ipa_ref_t_base base; } VEC_ipa_ref_t_none; static inline unsigned VEC_ipa_ref_t_base_length (const VEC_ipa_ref_t_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline ipa_ref_t *VEC_ipa_ref_t_base_last (VEC_ipa_ref_t_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return &vec_->vec[vec_->prefix.num - 1]; } static inline ipa_ref_t *VEC_ipa_ref_t_base_index (VEC_ipa_ref_t_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return &vec_->vec[ix_]; } static inline int VEC_ipa_ref_t_base_iterate (VEC_ipa_ref_t_base *vec_, unsigned ix_, ipa_ref_t **ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static inline size_t VEC_ipa_ref_t_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_ipa_ref_t_base, vec) + alloc_ * sizeof(ipa_ref_t); } static inline void VEC_ipa_ref_t_base_embedded_init (VEC_ipa_ref_t_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_ipa_ref_t_base_space (VEC_ipa_ref_t_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_ipa_ref_t_base_splice (VEC_ipa_ref_t_base *dst_, VEC_ipa_ref_t_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (ipa_ref_t)); dst_->prefix.num += len_; } } static inline ipa_ref_t *VEC_ipa_ref_t_base_quick_push (VEC_ipa_ref_t_base *vec_, const ipa_ref_t *obj_ ) { ipa_ref_t *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_ipa_ref_t_base_pop (VEC_ipa_ref_t_base *vec_ ) { (void)(vec_->prefix.num); --vec_->prefix.num; } static inline void VEC_ipa_ref_t_base_truncate (VEC_ipa_ref_t_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline ipa_ref_t *VEC_ipa_ref_t_base_replace (VEC_ipa_ref_t_base *vec_, unsigned ix_, const ipa_ref_t *obj_ ) { ipa_ref_t *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static inline ipa_ref_t *VEC_ipa_ref_t_base_quick_insert (VEC_ipa_ref_t_base *vec_, unsigned ix_, const ipa_ref_t *obj_ ) { ipa_ref_t *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (ipa_ref_t)); if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_ipa_ref_t_base_ordered_remove (VEC_ipa_ref_t_base *vec_, unsigned ix_ ) { ipa_ref_t *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (ipa_ref_t)); } static inline void VEC_ipa_ref_t_base_unordered_remove (VEC_ipa_ref_t_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->prefix.num); vec_->vec[ix_] = vec_->vec[--vec_->prefix.num]; } static inline void VEC_ipa_ref_t_base_block_remove (VEC_ipa_ref_t_base *vec_, unsigned ix_, unsigned len_ ) { ipa_ref_t *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (ipa_ref_t)); } static inline ipa_ref_t *VEC_ipa_ref_t_base_address (VEC_ipa_ref_t_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_ipa_ref_t_base_lower_bound (VEC_ipa_ref_t_base *vec_, const ipa_ref_t *obj_, bool (*lessthan_)(const ipa_ref_t *, const ipa_ref_t *) ) { unsigned int len_ = VEC_ipa_ref_t_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { ipa_ref_t *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_ipa_ref_t_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_ipa_ref_t_gc { VEC_ipa_ref_t_base base; } VEC_ipa_ref_t_gc; static inline VEC_ipa_ref_t_gc *VEC_ipa_ref_t_gc_alloc (int alloc_ ) { return (VEC_ipa_ref_t_gc *) vec_gc_o_reserve_exact (__null, alloc_, __builtin_offsetof (VEC_ipa_ref_t_gc, base.vec), sizeof (ipa_ref_t) ); } static inline VEC_ipa_ref_t_gc *VEC_ipa_ref_t_gc_copy (VEC_ipa_ref_t_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_ipa_ref_t_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_ipa_ref_t_gc *)(vec_gc_o_reserve_exact (__null, len_, __builtin_offsetof (VEC_ipa_ref_t_gc, base.vec), sizeof (ipa_ref_t) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (ipa_ref_t) * len_); } return new_vec_; } static inline void VEC_ipa_ref_t_gc_free (VEC_ipa_ref_t_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline int VEC_ipa_ref_t_gc_reserve (VEC_ipa_ref_t_gc **vec_, int alloc_ ) { int extend = !VEC_ipa_ref_t_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_ipa_ref_t_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_ipa_ref_t_gc, base.vec), sizeof (ipa_ref_t) ); return extend; } static inline int VEC_ipa_ref_t_gc_reserve_exact (VEC_ipa_ref_t_gc **vec_, int alloc_ ) { int extend = !VEC_ipa_ref_t_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_ipa_ref_t_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_ipa_ref_t_gc, base.vec), sizeof (ipa_ref_t) ); return extend; } static inline void VEC_ipa_ref_t_gc_safe_grow (VEC_ipa_ref_t_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_ipa_ref_t_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_ipa_ref_t_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_ipa_ref_t_gc_safe_grow_cleared (VEC_ipa_ref_t_gc **vec_, int size_ ) { int oldsize = VEC_ipa_ref_t_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_ipa_ref_t_gc_safe_grow (vec_, size_ ); memset (&(VEC_ipa_ref_t_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (ipa_ref_t) * (size_ - oldsize)); } static inline void VEC_ipa_ref_t_gc_safe_splice (VEC_ipa_ref_t_gc **dst_, VEC_ipa_ref_t_base *src_ ) { if (src_) { VEC_ipa_ref_t_gc_reserve_exact (dst_, src_->prefix.num ); VEC_ipa_ref_t_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline ipa_ref_t *VEC_ipa_ref_t_gc_safe_push (VEC_ipa_ref_t_gc **vec_, const ipa_ref_t *obj_ ) { VEC_ipa_ref_t_gc_reserve (vec_, 1 ); return VEC_ipa_ref_t_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline ipa_ref_t *VEC_ipa_ref_t_gc_safe_insert (VEC_ipa_ref_t_gc **vec_, unsigned ix_, const ipa_ref_t *obj_ ) { VEC_ipa_ref_t_gc_reserve (vec_, 1 ); return VEC_ipa_ref_t_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+static inline void VEC_ipa_ref_ptr_must_be_pointer_type (void) { (void)((ipa_ref_ptr)1 == (void *)1); } typedef struct VEC_ipa_ref_ptr_base { struct vec_prefix prefix; ipa_ref_ptr vec[1]; } VEC_ipa_ref_ptr_base; typedef struct VEC_ipa_ref_ptr_none { VEC_ipa_ref_ptr_base base; } VEC_ipa_ref_ptr_none; static inline unsigned VEC_ipa_ref_ptr_base_length (const VEC_ipa_ref_ptr_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline ipa_ref_ptr VEC_ipa_ref_ptr_base_last (const VEC_ipa_ref_ptr_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline ipa_ref_ptr VEC_ipa_ref_ptr_base_index (const VEC_ipa_ref_ptr_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_ipa_ref_ptr_base_iterate (const VEC_ipa_ref_ptr_base *vec_, unsigned ix_, ipa_ref_ptr *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (ipa_ref_ptr) 0; return 0; } } static inline size_t VEC_ipa_ref_ptr_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_ipa_ref_ptr_base, vec) + alloc_ * sizeof(ipa_ref_ptr); } static inline void VEC_ipa_ref_ptr_base_embedded_init (VEC_ipa_ref_ptr_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_ipa_ref_ptr_base_space (VEC_ipa_ref_ptr_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_ipa_ref_ptr_base_splice (VEC_ipa_ref_ptr_base *dst_, VEC_ipa_ref_ptr_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (ipa_ref_ptr)); dst_->prefix.num += len_; } } static inline ipa_ref_ptr *VEC_ipa_ref_ptr_base_quick_push (VEC_ipa_ref_ptr_base *vec_, ipa_ref_ptr obj_ ) { ipa_ref_ptr *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline ipa_ref_ptr VEC_ipa_ref_ptr_base_pop (VEC_ipa_ref_ptr_base *vec_ ) { ipa_ref_ptr obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_ipa_ref_ptr_base_truncate (VEC_ipa_ref_ptr_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline ipa_ref_ptr VEC_ipa_ref_ptr_base_replace (VEC_ipa_ref_ptr_base *vec_, unsigned ix_, ipa_ref_ptr obj_ ) { ipa_ref_ptr old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline ipa_ref_ptr *VEC_ipa_ref_ptr_base_quick_insert (VEC_ipa_ref_ptr_base *vec_, unsigned ix_, ipa_ref_ptr obj_ ) { ipa_ref_ptr *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (ipa_ref_ptr)); *slot_ = obj_; return slot_; } static inline ipa_ref_ptr VEC_ipa_ref_ptr_base_ordered_remove (VEC_ipa_ref_ptr_base *vec_, unsigned ix_ ) { ipa_ref_ptr *slot_; ipa_ref_ptr obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (ipa_ref_ptr)); return obj_; } static inline ipa_ref_ptr VEC_ipa_ref_ptr_base_unordered_remove (VEC_ipa_ref_ptr_base *vec_, unsigned ix_ ) { ipa_ref_ptr *slot_; ipa_ref_ptr obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_ipa_ref_ptr_base_block_remove (VEC_ipa_ref_ptr_base *vec_, unsigned ix_, unsigned len_ ) { ipa_ref_ptr *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (ipa_ref_ptr)); } static inline ipa_ref_ptr *VEC_ipa_ref_ptr_base_address (VEC_ipa_ref_ptr_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_ipa_ref_ptr_base_lower_bound (VEC_ipa_ref_ptr_base *vec_, const ipa_ref_ptr obj_, bool (*lessthan_)(const ipa_ref_ptr, const ipa_ref_ptr) ) { unsigned int len_ = VEC_ipa_ref_ptr_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { ipa_ref_ptr middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_ipa_ref_ptr_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_ipa_ref_ptr_heap { VEC_ipa_ref_ptr_base base; } VEC_ipa_ref_ptr_heap; static inline VEC_ipa_ref_ptr_heap *VEC_ipa_ref_ptr_heap_alloc (int alloc_ ) { return (VEC_ipa_ref_ptr_heap *) vec_heap_p_reserve_exact (__null, alloc_ ); } static inline void VEC_ipa_ref_ptr_heap_free (VEC_ipa_ref_ptr_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = __null; } static inline VEC_ipa_ref_ptr_heap *VEC_ipa_ref_ptr_heap_copy (VEC_ipa_ref_ptr_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_ipa_ref_ptr_heap *new_vec_ = __null; if (len_) { new_vec_ = (VEC_ipa_ref_ptr_heap *)(vec_heap_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (ipa_ref_ptr) * len_); } return new_vec_; } static inline int VEC_ipa_ref_ptr_heap_reserve (VEC_ipa_ref_ptr_heap **vec_, int alloc_ ) { int extend = !VEC_ipa_ref_ptr_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_ipa_ref_ptr_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_ipa_ref_ptr_heap_reserve_exact (VEC_ipa_ref_ptr_heap **vec_, int alloc_ ) { int extend = !VEC_ipa_ref_ptr_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_ipa_ref_ptr_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_ipa_ref_ptr_heap_safe_grow (VEC_ipa_ref_ptr_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_ipa_ref_ptr_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_ipa_ref_ptr_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_ipa_ref_ptr_heap_safe_grow_cleared (VEC_ipa_ref_ptr_heap **vec_, int size_ ) { int oldsize = VEC_ipa_ref_ptr_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_ipa_ref_ptr_heap_safe_grow (vec_, size_ ); memset (&(VEC_ipa_ref_ptr_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (ipa_ref_ptr) * (size_ - oldsize)); } static inline void VEC_ipa_ref_ptr_heap_safe_splice (VEC_ipa_ref_ptr_heap **dst_, VEC_ipa_ref_ptr_base *src_ ) { if (src_) { VEC_ipa_ref_ptr_heap_reserve_exact (dst_, src_->prefix.num ); VEC_ipa_ref_ptr_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline ipa_ref_ptr *VEC_ipa_ref_ptr_heap_safe_push (VEC_ipa_ref_ptr_heap **vec_, ipa_ref_ptr obj_ ) { VEC_ipa_ref_ptr_heap_reserve (vec_, 1 ); return VEC_ipa_ref_ptr_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline ipa_ref_ptr *VEC_ipa_ref_ptr_heap_safe_insert (VEC_ipa_ref_ptr_heap **vec_, unsigned ix_, ipa_ref_ptr obj_ ) { VEC_ipa_ref_ptr_heap_reserve (vec_, 1 ); return VEC_ipa_ref_ptr_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+
+struct ipa_ref_list
+{
+
+  VEC_ipa_ref_t_gc *references;
+
+
+  VEC_ipa_ref_ptr_heap * refering;
+};
+
+struct ipa_ref * ipa_record_reference (struct cgraph_node *,
+           struct varpool_node *,
+           struct cgraph_node *,
+           struct varpool_node *,
+           enum ipa_ref_use, gimple);
+
+void ipa_remove_reference (struct ipa_ref *);
+void ipa_remove_all_references (struct ipa_ref_list *);
+void ipa_remove_all_refering (struct ipa_ref_list *);
+void ipa_dump_references (FILE *, struct ipa_ref_list *);
+void ipa_dump_refering (FILE *, struct ipa_ref_list *);
+void ipa_clone_references (struct cgraph_node *, struct varpool_node *, struct ipa_ref_list *);
+void ipa_clone_refering (struct cgraph_node *, struct varpool_node *, struct ipa_ref_list *);
+bool ipa_ref_cannot_lead_to_return (struct ipa_ref *);
+bool ipa_ref_has_aliases_p (struct ipa_ref_list *);
+# 31 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cgraph.h" 2
+
+enum availability
+{
+
+  AVAIL_UNSET,
+
+  AVAIL_NOT_AVAILABLE,
+
+
+
+
+
+  AVAIL_OVERWRITABLE,
+
+
+  AVAIL_AVAILABLE,
+
+
+
+
+  AVAIL_LOCAL
+};
+
+
+
+struct lto_file_decl_data;
+
+extern const char * const cgraph_availability_names[];
+extern const char * const ld_plugin_symbol_resolution_names[];
+
+
+
+struct cgraph_thunk_info {
+
+  long fixed_offset;
+  long virtual_value;
+  tree alias;
+  bool this_adjusting;
+  bool virtual_offset_p;
+
+  bool thunk_p;
+};
+
+
+
+
+struct cgraph_local_info {
+
+  struct lto_file_decl_data * lto_file_data;
+
+
+
+  unsigned local : 1;
+
+
+  unsigned externally_visible : 1;
+
+
+  unsigned finalized : 1;
+
+
+  unsigned versionable : 1;
+
+
+
+  unsigned can_change_signature : 1;
+
+
+
+  unsigned redefined_extern_inline : 1;
+
+
+  unsigned tm_may_enter_irr : 1;
+};
+
+
+
+
+struct cgraph_global_info {
+
+
+  struct cgraph_node *inlined_to;
+};
+
+
+
+
+struct cgraph_rtl_info {
+   unsigned int preferred_incoming_stack_boundary;
+};
+
+
+
+struct ipa_replace_map
+{
+
+  tree old_tree;
+
+  tree new_tree;
+
+  int parm_num;
+
+  bool replace_p;
+
+  bool ref_p;
+};
+typedef struct ipa_replace_map *ipa_replace_map_p;
+static inline void VEC_ipa_replace_map_p_must_be_pointer_type (void) { (void)((ipa_replace_map_p)1 == (void *)1); } typedef struct VEC_ipa_replace_map_p_base { struct vec_prefix prefix; ipa_replace_map_p vec[1]; } VEC_ipa_replace_map_p_base; typedef struct VEC_ipa_replace_map_p_none { VEC_ipa_replace_map_p_base base; } VEC_ipa_replace_map_p_none; static inline unsigned VEC_ipa_replace_map_p_base_length (const VEC_ipa_replace_map_p_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline ipa_replace_map_p VEC_ipa_replace_map_p_base_last (const VEC_ipa_replace_map_p_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline ipa_replace_map_p VEC_ipa_replace_map_p_base_index (const VEC_ipa_replace_map_p_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_ipa_replace_map_p_base_iterate (const VEC_ipa_replace_map_p_base *vec_, unsigned ix_, ipa_replace_map_p *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (ipa_replace_map_p) 0; return 0; } } static inline size_t VEC_ipa_replace_map_p_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_ipa_replace_map_p_base, vec) + alloc_ * sizeof(ipa_replace_map_p); } static inline void VEC_ipa_replace_map_p_base_embedded_init (VEC_ipa_replace_map_p_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_ipa_replace_map_p_base_space (VEC_ipa_replace_map_p_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_ipa_replace_map_p_base_splice (VEC_ipa_replace_map_p_base *dst_, VEC_ipa_replace_map_p_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (ipa_replace_map_p)); dst_->prefix.num += len_; } } static inline ipa_replace_map_p *VEC_ipa_replace_map_p_base_quick_push (VEC_ipa_replace_map_p_base *vec_, ipa_replace_map_p obj_ ) { ipa_replace_map_p *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline ipa_replace_map_p VEC_ipa_replace_map_p_base_pop (VEC_ipa_replace_map_p_base *vec_ ) { ipa_replace_map_p obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_ipa_replace_map_p_base_truncate (VEC_ipa_replace_map_p_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline ipa_replace_map_p VEC_ipa_replace_map_p_base_replace (VEC_ipa_replace_map_p_base *vec_, unsigned ix_, ipa_replace_map_p obj_ ) { ipa_replace_map_p old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline ipa_replace_map_p *VEC_ipa_replace_map_p_base_quick_insert (VEC_ipa_replace_map_p_base *vec_, unsigned ix_, ipa_replace_map_p obj_ ) { ipa_replace_map_p *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (ipa_replace_map_p)); *slot_ = obj_; return slot_; } static inline ipa_replace_map_p VEC_ipa_replace_map_p_base_ordered_remove (VEC_ipa_replace_map_p_base *vec_, unsigned ix_ ) { ipa_replace_map_p *slot_; ipa_replace_map_p obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (ipa_replace_map_p)); return obj_; } static inline ipa_replace_map_p VEC_ipa_replace_map_p_base_unordered_remove (VEC_ipa_replace_map_p_base *vec_, unsigned ix_ ) { ipa_replace_map_p *slot_; ipa_replace_map_p obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_ipa_replace_map_p_base_block_remove (VEC_ipa_replace_map_p_base *vec_, unsigned ix_, unsigned len_ ) { ipa_replace_map_p *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (ipa_replace_map_p)); } static inline ipa_replace_map_p *VEC_ipa_replace_map_p_base_address (VEC_ipa_replace_map_p_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_ipa_replace_map_p_base_lower_bound (VEC_ipa_replace_map_p_base *vec_, const ipa_replace_map_p obj_, bool (*lessthan_)(const ipa_replace_map_p, const ipa_replace_map_p) ) { unsigned int len_ = VEC_ipa_replace_map_p_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { ipa_replace_map_p middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_ipa_replace_map_p_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_ipa_replace_map_p_gc { VEC_ipa_replace_map_p_base base; } VEC_ipa_replace_map_p_gc; static inline VEC_ipa_replace_map_p_gc *VEC_ipa_replace_map_p_gc_alloc (int alloc_ ) { return (VEC_ipa_replace_map_p_gc *) vec_gc_p_reserve_exact (__null, alloc_ ); } static inline void VEC_ipa_replace_map_p_gc_free (VEC_ipa_replace_map_p_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline VEC_ipa_replace_map_p_gc *VEC_ipa_replace_map_p_gc_copy (VEC_ipa_replace_map_p_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_ipa_replace_map_p_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_ipa_replace_map_p_gc *)(vec_gc_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (ipa_replace_map_p) * len_); } return new_vec_; } static inline int VEC_ipa_replace_map_p_gc_reserve (VEC_ipa_replace_map_p_gc **vec_, int alloc_ ) { int extend = !VEC_ipa_replace_map_p_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_ipa_replace_map_p_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_ipa_replace_map_p_gc_reserve_exact (VEC_ipa_replace_map_p_gc **vec_, int alloc_ ) { int extend = !VEC_ipa_replace_map_p_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_ipa_replace_map_p_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_ipa_replace_map_p_gc_safe_grow (VEC_ipa_replace_map_p_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_ipa_replace_map_p_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_ipa_replace_map_p_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_ipa_replace_map_p_gc_safe_grow_cleared (VEC_ipa_replace_map_p_gc **vec_, int size_ ) { int oldsize = VEC_ipa_replace_map_p_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_ipa_replace_map_p_gc_safe_grow (vec_, size_ ); memset (&(VEC_ipa_replace_map_p_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (ipa_replace_map_p) * (size_ - oldsize)); } static inline void VEC_ipa_replace_map_p_gc_safe_splice (VEC_ipa_replace_map_p_gc **dst_, VEC_ipa_replace_map_p_base *src_ ) { if (src_) { VEC_ipa_replace_map_p_gc_reserve_exact (dst_, src_->prefix.num ); VEC_ipa_replace_map_p_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline ipa_replace_map_p *VEC_ipa_replace_map_p_gc_safe_push (VEC_ipa_replace_map_p_gc **vec_, ipa_replace_map_p obj_ ) { VEC_ipa_replace_map_p_gc_reserve (vec_, 1 ); return VEC_ipa_replace_map_p_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline ipa_replace_map_p *VEC_ipa_replace_map_p_gc_safe_insert (VEC_ipa_replace_map_p_gc **vec_, unsigned ix_, ipa_replace_map_p obj_ ) { VEC_ipa_replace_map_p_gc_reserve (vec_, 1 ); return VEC_ipa_replace_map_p_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+struct cgraph_clone_info
+{
+  VEC_ipa_replace_map_p_gc* tree_map;
+  bitmap args_to_skip;
+  bitmap combined_args_to_skip;
+};
+
+
+
+
+
+struct cgraph_node {
+  tree decl;
+  struct cgraph_edge *callees;
+  struct cgraph_edge *callers;
+  struct cgraph_node *next;
+  struct cgraph_node *previous;
+
+
+  struct cgraph_edge *indirect_calls;
+
+  struct cgraph_node *origin;
+
+  struct cgraph_node *nested;
+
+  struct cgraph_node *next_nested;
+
+  struct cgraph_node *next_needed;
+
+  struct cgraph_node *next_sibling_clone;
+  struct cgraph_node *prev_sibling_clone;
+  struct cgraph_node *clones;
+  struct cgraph_node *clone_of;
+
+  struct cgraph_node *same_comdat_group;
+
+
+  htab_t call_site_hash;
+
+  tree former_clone_of;
+
+  void * aux;
+
+
+
+
+  VEC_ipa_opt_pass_heap * ipa_transforms_to_apply;
+
+  struct ipa_ref_list ref_list;
+  struct cgraph_local_info local;
+  struct cgraph_global_info global;
+  struct cgraph_rtl_info rtl;
+  struct cgraph_clone_info clone;
+  struct cgraph_thunk_info thunk;
+
+
+  gcov_type count;
+
+
+  int count_materialization_scale;
+
+  int uid;
+
+  int order;
+
+  enum ld_plugin_symbol_resolution resolution;
+
+
+
+
+
+
+  unsigned needed : 1;
+
+
+  unsigned address_taken : 1;
+
+
+  unsigned abstract_and_needed : 1;
+
+
+
+
+
+
+  unsigned reachable : 1;
+
+  unsigned reachable_from_other_partition : 1;
+
+  unsigned lowered : 1;
+
+
+  unsigned analyzed : 1;
+
+
+
+  unsigned in_other_partition : 1;
+
+  unsigned process : 1;
+
+  unsigned alias : 1;
+
+  unsigned same_body_alias : 1;
+
+
+  enum node_frequency frequency : 2;
+
+  unsigned only_called_at_startup : 1;
+
+  unsigned only_called_at_exit : 1;
+
+
+
+
+  unsigned tm_clone : 1;
+};
+
+typedef struct cgraph_node *cgraph_node_ptr;
+
+static inline void VEC_cgraph_node_ptr_must_be_pointer_type (void) { (void)((cgraph_node_ptr)1 == (void *)1); } typedef struct VEC_cgraph_node_ptr_base { struct vec_prefix prefix; cgraph_node_ptr vec[1]; } VEC_cgraph_node_ptr_base; typedef struct VEC_cgraph_node_ptr_none { VEC_cgraph_node_ptr_base base; } VEC_cgraph_node_ptr_none; static inline unsigned VEC_cgraph_node_ptr_base_length (const VEC_cgraph_node_ptr_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline cgraph_node_ptr VEC_cgraph_node_ptr_base_last (const VEC_cgraph_node_ptr_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline cgraph_node_ptr VEC_cgraph_node_ptr_base_index (const VEC_cgraph_node_ptr_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_cgraph_node_ptr_base_iterate (const VEC_cgraph_node_ptr_base *vec_, unsigned ix_, cgraph_node_ptr *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (cgraph_node_ptr) 0; return 0; } } static inline size_t VEC_cgraph_node_ptr_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_cgraph_node_ptr_base, vec) + alloc_ * sizeof(cgraph_node_ptr); } static inline void VEC_cgraph_node_ptr_base_embedded_init (VEC_cgraph_node_ptr_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_cgraph_node_ptr_base_space (VEC_cgraph_node_ptr_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_cgraph_node_ptr_base_splice (VEC_cgraph_node_ptr_base *dst_, VEC_cgraph_node_ptr_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (cgraph_node_ptr)); dst_->prefix.num += len_; } } static inline cgraph_node_ptr *VEC_cgraph_node_ptr_base_quick_push (VEC_cgraph_node_ptr_base *vec_, cgraph_node_ptr obj_ ) { cgraph_node_ptr *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline cgraph_node_ptr VEC_cgraph_node_ptr_base_pop (VEC_cgraph_node_ptr_base *vec_ ) { cgraph_node_ptr obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_cgraph_node_ptr_base_truncate (VEC_cgraph_node_ptr_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline cgraph_node_ptr VEC_cgraph_node_ptr_base_replace (VEC_cgraph_node_ptr_base *vec_, unsigned ix_, cgraph_node_ptr obj_ ) { cgraph_node_ptr old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline cgraph_node_ptr *VEC_cgraph_node_ptr_base_quick_insert (VEC_cgraph_node_ptr_base *vec_, unsigned ix_, cgraph_node_ptr obj_ ) { cgraph_node_ptr *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (cgraph_node_ptr)); *slot_ = obj_; return slot_; } static inline cgraph_node_ptr VEC_cgraph_node_ptr_base_ordered_remove (VEC_cgraph_node_ptr_base *vec_, unsigned ix_ ) { cgraph_node_ptr *slot_; cgraph_node_ptr obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (cgraph_node_ptr)); return obj_; } static inline cgraph_node_ptr VEC_cgraph_node_ptr_base_unordered_remove (VEC_cgraph_node_ptr_base *vec_, unsigned ix_ ) { cgraph_node_ptr *slot_; cgraph_node_ptr obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_cgraph_node_ptr_base_block_remove (VEC_cgraph_node_ptr_base *vec_, unsigned ix_, unsigned len_ ) { cgraph_node_ptr *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (cgraph_node_ptr)); } static inline cgraph_node_ptr *VEC_cgraph_node_ptr_base_address (VEC_cgraph_node_ptr_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_cgraph_node_ptr_base_lower_bound (VEC_cgraph_node_ptr_base *vec_, const cgraph_node_ptr obj_, bool (*lessthan_)(const cgraph_node_ptr, const cgraph_node_ptr) ) { unsigned int len_ = VEC_cgraph_node_ptr_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { cgraph_node_ptr middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_cgraph_node_ptr_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_cgraph_node_ptr_heap { VEC_cgraph_node_ptr_base base; } VEC_cgraph_node_ptr_heap; static inline VEC_cgraph_node_ptr_heap *VEC_cgraph_node_ptr_heap_alloc (int alloc_ ) { return (VEC_cgraph_node_ptr_heap *) vec_heap_p_reserve_exact (__null, alloc_ ); } static inline void VEC_cgraph_node_ptr_heap_free (VEC_cgraph_node_ptr_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = __null; } static inline VEC_cgraph_node_ptr_heap *VEC_cgraph_node_ptr_heap_copy (VEC_cgraph_node_ptr_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_cgraph_node_ptr_heap *new_vec_ = __null; if (len_) { new_vec_ = (VEC_cgraph_node_ptr_heap *)(vec_heap_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (cgraph_node_ptr) * len_); } return new_vec_; } static inline int VEC_cgraph_node_ptr_heap_reserve (VEC_cgraph_node_ptr_heap **vec_, int alloc_ ) { int extend = !VEC_cgraph_node_ptr_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cgraph_node_ptr_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_cgraph_node_ptr_heap_reserve_exact (VEC_cgraph_node_ptr_heap **vec_, int alloc_ ) { int extend = !VEC_cgraph_node_ptr_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cgraph_node_ptr_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_cgraph_node_ptr_heap_safe_grow (VEC_cgraph_node_ptr_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_cgraph_node_ptr_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_cgraph_node_ptr_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_cgraph_node_ptr_heap_safe_grow_cleared (VEC_cgraph_node_ptr_heap **vec_, int size_ ) { int oldsize = VEC_cgraph_node_ptr_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_cgraph_node_ptr_heap_safe_grow (vec_, size_ ); memset (&(VEC_cgraph_node_ptr_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (cgraph_node_ptr) * (size_ - oldsize)); } static inline void VEC_cgraph_node_ptr_heap_safe_splice (VEC_cgraph_node_ptr_heap **dst_, VEC_cgraph_node_ptr_base *src_ ) { if (src_) { VEC_cgraph_node_ptr_heap_reserve_exact (dst_, src_->prefix.num ); VEC_cgraph_node_ptr_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline cgraph_node_ptr *VEC_cgraph_node_ptr_heap_safe_push (VEC_cgraph_node_ptr_heap **vec_, cgraph_node_ptr obj_ ) { VEC_cgraph_node_ptr_heap_reserve (vec_, 1 ); return VEC_cgraph_node_ptr_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline cgraph_node_ptr *VEC_cgraph_node_ptr_heap_safe_insert (VEC_cgraph_node_ptr_heap **vec_, unsigned ix_, cgraph_node_ptr obj_ ) { VEC_cgraph_node_ptr_heap_reserve (vec_, 1 ); return VEC_cgraph_node_ptr_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_cgraph_node_ptr_gc { VEC_cgraph_node_ptr_base base; } VEC_cgraph_node_ptr_gc; static inline VEC_cgraph_node_ptr_gc *VEC_cgraph_node_ptr_gc_alloc (int alloc_ ) { return (VEC_cgraph_node_ptr_gc *) vec_gc_p_reserve_exact (__null, alloc_ ); } static inline void VEC_cgraph_node_ptr_gc_free (VEC_cgraph_node_ptr_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline VEC_cgraph_node_ptr_gc *VEC_cgraph_node_ptr_gc_copy (VEC_cgraph_node_ptr_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_cgraph_node_ptr_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_cgraph_node_ptr_gc *)(vec_gc_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (cgraph_node_ptr) * len_); } return new_vec_; } static inline int VEC_cgraph_node_ptr_gc_reserve (VEC_cgraph_node_ptr_gc **vec_, int alloc_ ) { int extend = !VEC_cgraph_node_ptr_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cgraph_node_ptr_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_cgraph_node_ptr_gc_reserve_exact (VEC_cgraph_node_ptr_gc **vec_, int alloc_ ) { int extend = !VEC_cgraph_node_ptr_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cgraph_node_ptr_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_cgraph_node_ptr_gc_safe_grow (VEC_cgraph_node_ptr_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_cgraph_node_ptr_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_cgraph_node_ptr_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_cgraph_node_ptr_gc_safe_grow_cleared (VEC_cgraph_node_ptr_gc **vec_, int size_ ) { int oldsize = VEC_cgraph_node_ptr_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_cgraph_node_ptr_gc_safe_grow (vec_, size_ ); memset (&(VEC_cgraph_node_ptr_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (cgraph_node_ptr) * (size_ - oldsize)); } static inline void VEC_cgraph_node_ptr_gc_safe_splice (VEC_cgraph_node_ptr_gc **dst_, VEC_cgraph_node_ptr_base *src_ ) { if (src_) { VEC_cgraph_node_ptr_gc_reserve_exact (dst_, src_->prefix.num ); VEC_cgraph_node_ptr_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline cgraph_node_ptr *VEC_cgraph_node_ptr_gc_safe_push (VEC_cgraph_node_ptr_gc **vec_, cgraph_node_ptr obj_ ) { VEC_cgraph_node_ptr_gc_reserve (vec_, 1 ); return VEC_cgraph_node_ptr_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline cgraph_node_ptr *VEC_cgraph_node_ptr_gc_safe_insert (VEC_cgraph_node_ptr_gc **vec_, unsigned ix_, cgraph_node_ptr obj_ ) { VEC_cgraph_node_ptr_gc_reserve (vec_, 1 ); return VEC_cgraph_node_ptr_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+
+
+struct cgraph_node_set_def
+{
+  struct pointer_map_t *map;
+  VEC_cgraph_node_ptr_heap *nodes;
+};
+
+typedef struct varpool_node *varpool_node_ptr;
+
+static inline void VEC_varpool_node_ptr_must_be_pointer_type (void) { (void)((varpool_node_ptr)1 == (void *)1); } typedef struct VEC_varpool_node_ptr_base { struct vec_prefix prefix; varpool_node_ptr vec[1]; } VEC_varpool_node_ptr_base; typedef struct VEC_varpool_node_ptr_none { VEC_varpool_node_ptr_base base; } VEC_varpool_node_ptr_none; static inline unsigned VEC_varpool_node_ptr_base_length (const VEC_varpool_node_ptr_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline varpool_node_ptr VEC_varpool_node_ptr_base_last (const VEC_varpool_node_ptr_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline varpool_node_ptr VEC_varpool_node_ptr_base_index (const VEC_varpool_node_ptr_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_varpool_node_ptr_base_iterate (const VEC_varpool_node_ptr_base *vec_, unsigned ix_, varpool_node_ptr *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (varpool_node_ptr) 0; return 0; } } static inline size_t VEC_varpool_node_ptr_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_varpool_node_ptr_base, vec) + alloc_ * sizeof(varpool_node_ptr); } static inline void VEC_varpool_node_ptr_base_embedded_init (VEC_varpool_node_ptr_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_varpool_node_ptr_base_space (VEC_varpool_node_ptr_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_varpool_node_ptr_base_splice (VEC_varpool_node_ptr_base *dst_, VEC_varpool_node_ptr_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (varpool_node_ptr)); dst_->prefix.num += len_; } } static inline varpool_node_ptr *VEC_varpool_node_ptr_base_quick_push (VEC_varpool_node_ptr_base *vec_, varpool_node_ptr obj_ ) { varpool_node_ptr *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline varpool_node_ptr VEC_varpool_node_ptr_base_pop (VEC_varpool_node_ptr_base *vec_ ) { varpool_node_ptr obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_varpool_node_ptr_base_truncate (VEC_varpool_node_ptr_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline varpool_node_ptr VEC_varpool_node_ptr_base_replace (VEC_varpool_node_ptr_base *vec_, unsigned ix_, varpool_node_ptr obj_ ) { varpool_node_ptr old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline varpool_node_ptr *VEC_varpool_node_ptr_base_quick_insert (VEC_varpool_node_ptr_base *vec_, unsigned ix_, varpool_node_ptr obj_ ) { varpool_node_ptr *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (varpool_node_ptr)); *slot_ = obj_; return slot_; } static inline varpool_node_ptr VEC_varpool_node_ptr_base_ordered_remove (VEC_varpool_node_ptr_base *vec_, unsigned ix_ ) { varpool_node_ptr *slot_; varpool_node_ptr obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (varpool_node_ptr)); return obj_; } static inline varpool_node_ptr VEC_varpool_node_ptr_base_unordered_remove (VEC_varpool_node_ptr_base *vec_, unsigned ix_ ) { varpool_node_ptr *slot_; varpool_node_ptr obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_varpool_node_ptr_base_block_remove (VEC_varpool_node_ptr_base *vec_, unsigned ix_, unsigned len_ ) { varpool_node_ptr *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (varpool_node_ptr)); } static inline varpool_node_ptr *VEC_varpool_node_ptr_base_address (VEC_varpool_node_ptr_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_varpool_node_ptr_base_lower_bound (VEC_varpool_node_ptr_base *vec_, const varpool_node_ptr obj_, bool (*lessthan_)(const varpool_node_ptr, const varpool_node_ptr) ) { unsigned int len_ = VEC_varpool_node_ptr_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { varpool_node_ptr middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_varpool_node_ptr_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_varpool_node_ptr_heap { VEC_varpool_node_ptr_base base; } VEC_varpool_node_ptr_heap; static inline VEC_varpool_node_ptr_heap *VEC_varpool_node_ptr_heap_alloc (int alloc_ ) { return (VEC_varpool_node_ptr_heap *) vec_heap_p_reserve_exact (__null, alloc_ ); } static inline void VEC_varpool_node_ptr_heap_free (VEC_varpool_node_ptr_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = __null; } static inline VEC_varpool_node_ptr_heap *VEC_varpool_node_ptr_heap_copy (VEC_varpool_node_ptr_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_varpool_node_ptr_heap *new_vec_ = __null; if (len_) { new_vec_ = (VEC_varpool_node_ptr_heap *)(vec_heap_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (varpool_node_ptr) * len_); } return new_vec_; } static inline int VEC_varpool_node_ptr_heap_reserve (VEC_varpool_node_ptr_heap **vec_, int alloc_ ) { int extend = !VEC_varpool_node_ptr_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_varpool_node_ptr_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_varpool_node_ptr_heap_reserve_exact (VEC_varpool_node_ptr_heap **vec_, int alloc_ ) { int extend = !VEC_varpool_node_ptr_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_varpool_node_ptr_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_varpool_node_ptr_heap_safe_grow (VEC_varpool_node_ptr_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_varpool_node_ptr_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_varpool_node_ptr_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_varpool_node_ptr_heap_safe_grow_cleared (VEC_varpool_node_ptr_heap **vec_, int size_ ) { int oldsize = VEC_varpool_node_ptr_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_varpool_node_ptr_heap_safe_grow (vec_, size_ ); memset (&(VEC_varpool_node_ptr_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (varpool_node_ptr) * (size_ - oldsize)); } static inline void VEC_varpool_node_ptr_heap_safe_splice (VEC_varpool_node_ptr_heap **dst_, VEC_varpool_node_ptr_base *src_ ) { if (src_) { VEC_varpool_node_ptr_heap_reserve_exact (dst_, src_->prefix.num ); VEC_varpool_node_ptr_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline varpool_node_ptr *VEC_varpool_node_ptr_heap_safe_push (VEC_varpool_node_ptr_heap **vec_, varpool_node_ptr obj_ ) { VEC_varpool_node_ptr_heap_reserve (vec_, 1 ); return VEC_varpool_node_ptr_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline varpool_node_ptr *VEC_varpool_node_ptr_heap_safe_insert (VEC_varpool_node_ptr_heap **vec_, unsigned ix_, varpool_node_ptr obj_ ) { VEC_varpool_node_ptr_heap_reserve (vec_, 1 ); return VEC_varpool_node_ptr_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_varpool_node_ptr_gc { VEC_varpool_node_ptr_base base; } VEC_varpool_node_ptr_gc; static inline VEC_varpool_node_ptr_gc *VEC_varpool_node_ptr_gc_alloc (int alloc_ ) { return (VEC_varpool_node_ptr_gc *) vec_gc_p_reserve_exact (__null, alloc_ ); } static inline void VEC_varpool_node_ptr_gc_free (VEC_varpool_node_ptr_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline VEC_varpool_node_ptr_gc *VEC_varpool_node_ptr_gc_copy (VEC_varpool_node_ptr_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_varpool_node_ptr_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_varpool_node_ptr_gc *)(vec_gc_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (varpool_node_ptr) * len_); } return new_vec_; } static inline int VEC_varpool_node_ptr_gc_reserve (VEC_varpool_node_ptr_gc **vec_, int alloc_ ) { int extend = !VEC_varpool_node_ptr_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_varpool_node_ptr_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_varpool_node_ptr_gc_reserve_exact (VEC_varpool_node_ptr_gc **vec_, int alloc_ ) { int extend = !VEC_varpool_node_ptr_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_varpool_node_ptr_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_varpool_node_ptr_gc_safe_grow (VEC_varpool_node_ptr_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_varpool_node_ptr_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_varpool_node_ptr_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_varpool_node_ptr_gc_safe_grow_cleared (VEC_varpool_node_ptr_gc **vec_, int size_ ) { int oldsize = VEC_varpool_node_ptr_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_varpool_node_ptr_gc_safe_grow (vec_, size_ ); memset (&(VEC_varpool_node_ptr_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (varpool_node_ptr) * (size_ - oldsize)); } static inline void VEC_varpool_node_ptr_gc_safe_splice (VEC_varpool_node_ptr_gc **dst_, VEC_varpool_node_ptr_base *src_ ) { if (src_) { VEC_varpool_node_ptr_gc_reserve_exact (dst_, src_->prefix.num ); VEC_varpool_node_ptr_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline varpool_node_ptr *VEC_varpool_node_ptr_gc_safe_push (VEC_varpool_node_ptr_gc **vec_, varpool_node_ptr obj_ ) { VEC_varpool_node_ptr_gc_reserve (vec_, 1 ); return VEC_varpool_node_ptr_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline varpool_node_ptr *VEC_varpool_node_ptr_gc_safe_insert (VEC_varpool_node_ptr_gc **vec_, unsigned ix_, varpool_node_ptr obj_ ) { VEC_varpool_node_ptr_gc_reserve (vec_, 1 ); return VEC_varpool_node_ptr_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+
+
+struct varpool_node_set_def
+{
+  struct pointer_map_t * map;
+  VEC_varpool_node_ptr_heap *nodes;
+};
+
+typedef struct cgraph_node_set_def *cgraph_node_set;
+
+static inline void VEC_cgraph_node_set_must_be_pointer_type (void) { (void)((cgraph_node_set)1 == (void *)1); } typedef struct VEC_cgraph_node_set_base { struct vec_prefix prefix; cgraph_node_set vec[1]; } VEC_cgraph_node_set_base; typedef struct VEC_cgraph_node_set_none { VEC_cgraph_node_set_base base; } VEC_cgraph_node_set_none; static inline unsigned VEC_cgraph_node_set_base_length (const VEC_cgraph_node_set_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline cgraph_node_set VEC_cgraph_node_set_base_last (const VEC_cgraph_node_set_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline cgraph_node_set VEC_cgraph_node_set_base_index (const VEC_cgraph_node_set_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_cgraph_node_set_base_iterate (const VEC_cgraph_node_set_base *vec_, unsigned ix_, cgraph_node_set *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (cgraph_node_set) 0; return 0; } } static inline size_t VEC_cgraph_node_set_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_cgraph_node_set_base, vec) + alloc_ * sizeof(cgraph_node_set); } static inline void VEC_cgraph_node_set_base_embedded_init (VEC_cgraph_node_set_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_cgraph_node_set_base_space (VEC_cgraph_node_set_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_cgraph_node_set_base_splice (VEC_cgraph_node_set_base *dst_, VEC_cgraph_node_set_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (cgraph_node_set)); dst_->prefix.num += len_; } } static inline cgraph_node_set *VEC_cgraph_node_set_base_quick_push (VEC_cgraph_node_set_base *vec_, cgraph_node_set obj_ ) { cgraph_node_set *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline cgraph_node_set VEC_cgraph_node_set_base_pop (VEC_cgraph_node_set_base *vec_ ) { cgraph_node_set obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_cgraph_node_set_base_truncate (VEC_cgraph_node_set_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline cgraph_node_set VEC_cgraph_node_set_base_replace (VEC_cgraph_node_set_base *vec_, unsigned ix_, cgraph_node_set obj_ ) { cgraph_node_set old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline cgraph_node_set *VEC_cgraph_node_set_base_quick_insert (VEC_cgraph_node_set_base *vec_, unsigned ix_, cgraph_node_set obj_ ) { cgraph_node_set *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (cgraph_node_set)); *slot_ = obj_; return slot_; } static inline cgraph_node_set VEC_cgraph_node_set_base_ordered_remove (VEC_cgraph_node_set_base *vec_, unsigned ix_ ) { cgraph_node_set *slot_; cgraph_node_set obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (cgraph_node_set)); return obj_; } static inline cgraph_node_set VEC_cgraph_node_set_base_unordered_remove (VEC_cgraph_node_set_base *vec_, unsigned ix_ ) { cgraph_node_set *slot_; cgraph_node_set obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_cgraph_node_set_base_block_remove (VEC_cgraph_node_set_base *vec_, unsigned ix_, unsigned len_ ) { cgraph_node_set *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (cgraph_node_set)); } static inline cgraph_node_set *VEC_cgraph_node_set_base_address (VEC_cgraph_node_set_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_cgraph_node_set_base_lower_bound (VEC_cgraph_node_set_base *vec_, const cgraph_node_set obj_, bool (*lessthan_)(const cgraph_node_set, const cgraph_node_set) ) { unsigned int len_ = VEC_cgraph_node_set_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { cgraph_node_set middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_cgraph_node_set_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_cgraph_node_set_gc { VEC_cgraph_node_set_base base; } VEC_cgraph_node_set_gc; static inline VEC_cgraph_node_set_gc *VEC_cgraph_node_set_gc_alloc (int alloc_ ) { return (VEC_cgraph_node_set_gc *) vec_gc_p_reserve_exact (__null, alloc_ ); } static inline void VEC_cgraph_node_set_gc_free (VEC_cgraph_node_set_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline VEC_cgraph_node_set_gc *VEC_cgraph_node_set_gc_copy (VEC_cgraph_node_set_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_cgraph_node_set_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_cgraph_node_set_gc *)(vec_gc_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (cgraph_node_set) * len_); } return new_vec_; } static inline int VEC_cgraph_node_set_gc_reserve (VEC_cgraph_node_set_gc **vec_, int alloc_ ) { int extend = !VEC_cgraph_node_set_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cgraph_node_set_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_cgraph_node_set_gc_reserve_exact (VEC_cgraph_node_set_gc **vec_, int alloc_ ) { int extend = !VEC_cgraph_node_set_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cgraph_node_set_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_cgraph_node_set_gc_safe_grow (VEC_cgraph_node_set_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_cgraph_node_set_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_cgraph_node_set_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_cgraph_node_set_gc_safe_grow_cleared (VEC_cgraph_node_set_gc **vec_, int size_ ) { int oldsize = VEC_cgraph_node_set_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_cgraph_node_set_gc_safe_grow (vec_, size_ ); memset (&(VEC_cgraph_node_set_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (cgraph_node_set) * (size_ - oldsize)); } static inline void VEC_cgraph_node_set_gc_safe_splice (VEC_cgraph_node_set_gc **dst_, VEC_cgraph_node_set_base *src_ ) { if (src_) { VEC_cgraph_node_set_gc_reserve_exact (dst_, src_->prefix.num ); VEC_cgraph_node_set_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline cgraph_node_set *VEC_cgraph_node_set_gc_safe_push (VEC_cgraph_node_set_gc **vec_, cgraph_node_set obj_ ) { VEC_cgraph_node_set_gc_reserve (vec_, 1 ); return VEC_cgraph_node_set_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline cgraph_node_set *VEC_cgraph_node_set_gc_safe_insert (VEC_cgraph_node_set_gc **vec_, unsigned ix_, cgraph_node_set obj_ ) { VEC_cgraph_node_set_gc_reserve (vec_, 1 ); return VEC_cgraph_node_set_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_cgraph_node_set_heap { VEC_cgraph_node_set_base base; } VEC_cgraph_node_set_heap; static inline VEC_cgraph_node_set_heap *VEC_cgraph_node_set_heap_alloc (int alloc_ ) { return (VEC_cgraph_node_set_heap *) vec_heap_p_reserve_exact (__null, alloc_ ); } static inline void VEC_cgraph_node_set_heap_free (VEC_cgraph_node_set_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = __null; } static inline VEC_cgraph_node_set_heap *VEC_cgraph_node_set_heap_copy (VEC_cgraph_node_set_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_cgraph_node_set_heap *new_vec_ = __null; if (len_) { new_vec_ = (VEC_cgraph_node_set_heap *)(vec_heap_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (cgraph_node_set) * len_); } return new_vec_; } static inline int VEC_cgraph_node_set_heap_reserve (VEC_cgraph_node_set_heap **vec_, int alloc_ ) { int extend = !VEC_cgraph_node_set_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cgraph_node_set_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_cgraph_node_set_heap_reserve_exact (VEC_cgraph_node_set_heap **vec_, int alloc_ ) { int extend = !VEC_cgraph_node_set_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cgraph_node_set_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_cgraph_node_set_heap_safe_grow (VEC_cgraph_node_set_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_cgraph_node_set_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_cgraph_node_set_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_cgraph_node_set_heap_safe_grow_cleared (VEC_cgraph_node_set_heap **vec_, int size_ ) { int oldsize = VEC_cgraph_node_set_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_cgraph_node_set_heap_safe_grow (vec_, size_ ); memset (&(VEC_cgraph_node_set_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (cgraph_node_set) * (size_ - oldsize)); } static inline void VEC_cgraph_node_set_heap_safe_splice (VEC_cgraph_node_set_heap **dst_, VEC_cgraph_node_set_base *src_ ) { if (src_) { VEC_cgraph_node_set_heap_reserve_exact (dst_, src_->prefix.num ); VEC_cgraph_node_set_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline cgraph_node_set *VEC_cgraph_node_set_heap_safe_push (VEC_cgraph_node_set_heap **vec_, cgraph_node_set obj_ ) { VEC_cgraph_node_set_heap_reserve (vec_, 1 ); return VEC_cgraph_node_set_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline cgraph_node_set *VEC_cgraph_node_set_heap_safe_insert (VEC_cgraph_node_set_heap **vec_, unsigned ix_, cgraph_node_set obj_ ) { VEC_cgraph_node_set_heap_reserve (vec_, 1 ); return VEC_cgraph_node_set_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+typedef struct varpool_node_set_def *varpool_node_set;
+
+static inline void VEC_varpool_node_set_must_be_pointer_type (void) { (void)((varpool_node_set)1 == (void *)1); } typedef struct VEC_varpool_node_set_base { struct vec_prefix prefix; varpool_node_set vec[1]; } VEC_varpool_node_set_base; typedef struct VEC_varpool_node_set_none { VEC_varpool_node_set_base base; } VEC_varpool_node_set_none; static inline unsigned VEC_varpool_node_set_base_length (const VEC_varpool_node_set_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline varpool_node_set VEC_varpool_node_set_base_last (const VEC_varpool_node_set_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline varpool_node_set VEC_varpool_node_set_base_index (const VEC_varpool_node_set_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_varpool_node_set_base_iterate (const VEC_varpool_node_set_base *vec_, unsigned ix_, varpool_node_set *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (varpool_node_set) 0; return 0; } } static inline size_t VEC_varpool_node_set_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_varpool_node_set_base, vec) + alloc_ * sizeof(varpool_node_set); } static inline void VEC_varpool_node_set_base_embedded_init (VEC_varpool_node_set_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_varpool_node_set_base_space (VEC_varpool_node_set_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_varpool_node_set_base_splice (VEC_varpool_node_set_base *dst_, VEC_varpool_node_set_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (varpool_node_set)); dst_->prefix.num += len_; } } static inline varpool_node_set *VEC_varpool_node_set_base_quick_push (VEC_varpool_node_set_base *vec_, varpool_node_set obj_ ) { varpool_node_set *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline varpool_node_set VEC_varpool_node_set_base_pop (VEC_varpool_node_set_base *vec_ ) { varpool_node_set obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_varpool_node_set_base_truncate (VEC_varpool_node_set_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline varpool_node_set VEC_varpool_node_set_base_replace (VEC_varpool_node_set_base *vec_, unsigned ix_, varpool_node_set obj_ ) { varpool_node_set old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline varpool_node_set *VEC_varpool_node_set_base_quick_insert (VEC_varpool_node_set_base *vec_, unsigned ix_, varpool_node_set obj_ ) { varpool_node_set *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (varpool_node_set)); *slot_ = obj_; return slot_; } static inline varpool_node_set VEC_varpool_node_set_base_ordered_remove (VEC_varpool_node_set_base *vec_, unsigned ix_ ) { varpool_node_set *slot_; varpool_node_set obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (varpool_node_set)); return obj_; } static inline varpool_node_set VEC_varpool_node_set_base_unordered_remove (VEC_varpool_node_set_base *vec_, unsigned ix_ ) { varpool_node_set *slot_; varpool_node_set obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_varpool_node_set_base_block_remove (VEC_varpool_node_set_base *vec_, unsigned ix_, unsigned len_ ) { varpool_node_set *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (varpool_node_set)); } static inline varpool_node_set *VEC_varpool_node_set_base_address (VEC_varpool_node_set_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_varpool_node_set_base_lower_bound (VEC_varpool_node_set_base *vec_, const varpool_node_set obj_, bool (*lessthan_)(const varpool_node_set, const varpool_node_set) ) { unsigned int len_ = VEC_varpool_node_set_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { varpool_node_set middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_varpool_node_set_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_varpool_node_set_gc { VEC_varpool_node_set_base base; } VEC_varpool_node_set_gc; static inline VEC_varpool_node_set_gc *VEC_varpool_node_set_gc_alloc (int alloc_ ) { return (VEC_varpool_node_set_gc *) vec_gc_p_reserve_exact (__null, alloc_ ); } static inline void VEC_varpool_node_set_gc_free (VEC_varpool_node_set_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = __null; } static inline VEC_varpool_node_set_gc *VEC_varpool_node_set_gc_copy (VEC_varpool_node_set_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_varpool_node_set_gc *new_vec_ = __null; if (len_) { new_vec_ = (VEC_varpool_node_set_gc *)(vec_gc_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (varpool_node_set) * len_); } return new_vec_; } static inline int VEC_varpool_node_set_gc_reserve (VEC_varpool_node_set_gc **vec_, int alloc_ ) { int extend = !VEC_varpool_node_set_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_varpool_node_set_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_varpool_node_set_gc_reserve_exact (VEC_varpool_node_set_gc **vec_, int alloc_ ) { int extend = !VEC_varpool_node_set_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_varpool_node_set_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_varpool_node_set_gc_safe_grow (VEC_varpool_node_set_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_varpool_node_set_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_varpool_node_set_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_varpool_node_set_gc_safe_grow_cleared (VEC_varpool_node_set_gc **vec_, int size_ ) { int oldsize = VEC_varpool_node_set_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_varpool_node_set_gc_safe_grow (vec_, size_ ); memset (&(VEC_varpool_node_set_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (varpool_node_set) * (size_ - oldsize)); } static inline void VEC_varpool_node_set_gc_safe_splice (VEC_varpool_node_set_gc **dst_, VEC_varpool_node_set_base *src_ ) { if (src_) { VEC_varpool_node_set_gc_reserve_exact (dst_, src_->prefix.num ); VEC_varpool_node_set_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline varpool_node_set *VEC_varpool_node_set_gc_safe_push (VEC_varpool_node_set_gc **vec_, varpool_node_set obj_ ) { VEC_varpool_node_set_gc_reserve (vec_, 1 ); return VEC_varpool_node_set_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline varpool_node_set *VEC_varpool_node_set_gc_safe_insert (VEC_varpool_node_set_gc **vec_, unsigned ix_, varpool_node_set obj_ ) { VEC_varpool_node_set_gc_reserve (vec_, 1 ); return VEC_varpool_node_set_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_varpool_node_set_heap { VEC_varpool_node_set_base base; } VEC_varpool_node_set_heap; static inline VEC_varpool_node_set_heap *VEC_varpool_node_set_heap_alloc (int alloc_ ) { return (VEC_varpool_node_set_heap *) vec_heap_p_reserve_exact (__null, alloc_ ); } static inline void VEC_varpool_node_set_heap_free (VEC_varpool_node_set_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = __null; } static inline VEC_varpool_node_set_heap *VEC_varpool_node_set_heap_copy (VEC_varpool_node_set_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_varpool_node_set_heap *new_vec_ = __null; if (len_) { new_vec_ = (VEC_varpool_node_set_heap *)(vec_heap_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (varpool_node_set) * len_); } return new_vec_; } static inline int VEC_varpool_node_set_heap_reserve (VEC_varpool_node_set_heap **vec_, int alloc_ ) { int extend = !VEC_varpool_node_set_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_varpool_node_set_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_varpool_node_set_heap_reserve_exact (VEC_varpool_node_set_heap **vec_, int alloc_ ) { int extend = !VEC_varpool_node_set_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_varpool_node_set_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_varpool_node_set_heap_safe_grow (VEC_varpool_node_set_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_varpool_node_set_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_varpool_node_set_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_varpool_node_set_heap_safe_grow_cleared (VEC_varpool_node_set_heap **vec_, int size_ ) { int oldsize = VEC_varpool_node_set_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_varpool_node_set_heap_safe_grow (vec_, size_ ); memset (&(VEC_varpool_node_set_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (varpool_node_set) * (size_ - oldsize)); } static inline void VEC_varpool_node_set_heap_safe_splice (VEC_varpool_node_set_heap **dst_, VEC_varpool_node_set_base *src_ ) { if (src_) { VEC_varpool_node_set_heap_reserve_exact (dst_, src_->prefix.num ); VEC_varpool_node_set_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline varpool_node_set *VEC_varpool_node_set_heap_safe_push (VEC_varpool_node_set_heap **vec_, varpool_node_set obj_ ) { VEC_varpool_node_set_heap_reserve (vec_, 1 ); return VEC_varpool_node_set_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline varpool_node_set *VEC_varpool_node_set_heap_safe_insert (VEC_varpool_node_set_heap **vec_, unsigned ix_, varpool_node_set obj_ ) { VEC_varpool_node_set_heap_reserve (vec_, 1 ); return VEC_varpool_node_set_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+
+typedef struct
+{
+  cgraph_node_set set;
+  unsigned index;
+} cgraph_node_set_iterator;
+
+
+typedef struct
+{
+  varpool_node_set set;
+  unsigned index;
+} varpool_node_set_iterator;
+
+
+
+typedef enum cgraph_inline_failed_enum {
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cif-code.def" 1
+# 31 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cif-code.def"
+CIF_OK,
+
+
+CIF_UNSPECIFIED,
+
+
+
+CIF_FUNCTION_NOT_CONSIDERED,
+
+
+CIF_BODY_NOT_AVAILABLE,
+
+
+
+
+ CIF_REDEFINED_EXTERN_INLINE
+# 44 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cif-code.def"
+ ,
+
+
+
+
+CIF_FUNCTION_NOT_INLINABLE,
+
+
+CIF_OVERWRITABLE,
+
+
+CIF_FUNCTION_NOT_INLINE_CANDIDATE,
+
+
+
+ CIF_LARGE_FUNCTION_GROWTH_LIMIT
+# 58 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cif-code.def"
+ ,
+
+
+ CIF_LARGE_STACK_FRAME_GROWTH_LIMIT
+# 60 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cif-code.def"
+ ,
+
+
+ CIF_MAX_INLINE_INSNS_SINGLE_LIMIT
+# 62 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cif-code.def"
+ ,
+
+
+ CIF_MAX_INLINE_INSNS_AUTO_LIMIT
+# 64 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cif-code.def"
+ ,
+
+
+ CIF_INLINE_UNIT_GROWTH_LIMIT
+# 66 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cif-code.def"
+ ,
+
+
+
+CIF_RECURSIVE_INLINING,
+
+
+CIF_UNLIKELY_CALL,
+
+
+
+ CIF_NOT_DECLARED_INLINED
+# 76 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cif-code.def"
+ ,
+
+
+
+
+ CIF_OPTIMIZING_FOR_SIZE
+# 80 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cif-code.def"
+ ,
+
+
+
+CIF_MISMATCHED_ARGUMENTS,
+
+
+
+ CIF_ORIGINALLY_INDIRECT_CALL
+# 87 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cif-code.def"
+ ,
+
+
+
+
+ CIF_INDIRECT_UNKNOWN_CALL
+# 91 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cif-code.def"
+ ,
+
+
+
+CIF_EH_PERSONALITY,
+
+
+
+CIF_NON_CALL_EXCEPTIONS,
+
+
+CIF_TARGET_OPTION_MISMATCH,
+
+
+CIF_OPTIMIZATION_MISMATCH,
+# 316 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cgraph.h" 2
+  CIF_N_REASONS
+} cgraph_inline_failed_t;
+
+
+
+struct cgraph_indirect_call_info
+{
+
+
+  long anc_offset;
+
+  long otr_token;
+
+  tree otr_type;
+
+  int param_index;
+
+  int ecf_flags;
+
+
+
+  unsigned polymorphic : 1;
+};
+
+struct cgraph_edge {
+
+  gcov_type count;
+  struct cgraph_node *caller;
+  struct cgraph_node *callee;
+  struct cgraph_edge *prev_caller;
+  struct cgraph_edge *next_caller;
+  struct cgraph_edge *prev_callee;
+  struct cgraph_edge *next_callee;
+  gimple call_stmt;
+
+
+  struct cgraph_indirect_call_info *indirect_info;
+  void * aux;
+
+
+  cgraph_inline_failed_t inline_failed;
+
+
+  unsigned int lto_stmt_uid;
+
+
+
+  int frequency;
+
+  int uid;
+
+  unsigned int indirect_inlining_edge : 1;
+
+
+  unsigned int indirect_unknown_callee : 1;
+
+
+  unsigned int call_stmt_cannot_inline_p : 1;
+
+  unsigned int can_throw_external : 1;
+};
+
+
+
+
+typedef struct cgraph_edge *cgraph_edge_p;
+
+static inline void VEC_cgraph_edge_p_must_be_pointer_type (void) { (void)((cgraph_edge_p)1 == (void *)1); } typedef struct VEC_cgraph_edge_p_base { struct vec_prefix prefix; cgraph_edge_p vec[1]; } VEC_cgraph_edge_p_base; typedef struct VEC_cgraph_edge_p_none { VEC_cgraph_edge_p_base base; } VEC_cgraph_edge_p_none; static inline unsigned VEC_cgraph_edge_p_base_length (const VEC_cgraph_edge_p_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline cgraph_edge_p VEC_cgraph_edge_p_base_last (const VEC_cgraph_edge_p_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static inline cgraph_edge_p VEC_cgraph_edge_p_base_index (const VEC_cgraph_edge_p_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static inline int VEC_cgraph_edge_p_base_iterate (const VEC_cgraph_edge_p_base *vec_, unsigned ix_, cgraph_edge_p *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (cgraph_edge_p) 0; return 0; } } static inline size_t VEC_cgraph_edge_p_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_cgraph_edge_p_base, vec) + alloc_ * sizeof(cgraph_edge_p); } static inline void VEC_cgraph_edge_p_base_embedded_init (VEC_cgraph_edge_p_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_cgraph_edge_p_base_space (VEC_cgraph_edge_p_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_cgraph_edge_p_base_splice (VEC_cgraph_edge_p_base *dst_, VEC_cgraph_edge_p_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (cgraph_edge_p)); dst_->prefix.num += len_; } } static inline cgraph_edge_p *VEC_cgraph_edge_p_base_quick_push (VEC_cgraph_edge_p_base *vec_, cgraph_edge_p obj_ ) { cgraph_edge_p *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static inline cgraph_edge_p VEC_cgraph_edge_p_base_pop (VEC_cgraph_edge_p_base *vec_ ) { cgraph_edge_p obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_cgraph_edge_p_base_truncate (VEC_cgraph_edge_p_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline cgraph_edge_p VEC_cgraph_edge_p_base_replace (VEC_cgraph_edge_p_base *vec_, unsigned ix_, cgraph_edge_p obj_ ) { cgraph_edge_p old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static inline cgraph_edge_p *VEC_cgraph_edge_p_base_quick_insert (VEC_cgraph_edge_p_base *vec_, unsigned ix_, cgraph_edge_p obj_ ) { cgraph_edge_p *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (cgraph_edge_p)); *slot_ = obj_; return slot_; } static inline cgraph_edge_p VEC_cgraph_edge_p_base_ordered_remove (VEC_cgraph_edge_p_base *vec_, unsigned ix_ ) { cgraph_edge_p *slot_; cgraph_edge_p obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (cgraph_edge_p)); return obj_; } static inline cgraph_edge_p VEC_cgraph_edge_p_base_unordered_remove (VEC_cgraph_edge_p_base *vec_, unsigned ix_ ) { cgraph_edge_p *slot_; cgraph_edge_p obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static inline void VEC_cgraph_edge_p_base_block_remove (VEC_cgraph_edge_p_base *vec_, unsigned ix_, unsigned len_ ) { cgraph_edge_p *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (cgraph_edge_p)); } static inline cgraph_edge_p *VEC_cgraph_edge_p_base_address (VEC_cgraph_edge_p_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_cgraph_edge_p_base_lower_bound (VEC_cgraph_edge_p_base *vec_, const cgraph_edge_p obj_, bool (*lessthan_)(const cgraph_edge_p, const cgraph_edge_p) ) { unsigned int len_ = VEC_cgraph_edge_p_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { cgraph_edge_p middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_cgraph_edge_p_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_cgraph_edge_p_heap { VEC_cgraph_edge_p_base base; } VEC_cgraph_edge_p_heap; static inline VEC_cgraph_edge_p_heap *VEC_cgraph_edge_p_heap_alloc (int alloc_ ) { return (VEC_cgraph_edge_p_heap *) vec_heap_p_reserve_exact (__null, alloc_ ); } static inline void VEC_cgraph_edge_p_heap_free (VEC_cgraph_edge_p_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = __null; } static inline VEC_cgraph_edge_p_heap *VEC_cgraph_edge_p_heap_copy (VEC_cgraph_edge_p_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_cgraph_edge_p_heap *new_vec_ = __null; if (len_) { new_vec_ = (VEC_cgraph_edge_p_heap *)(vec_heap_p_reserve_exact (__null, len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (cgraph_edge_p) * len_); } return new_vec_; } static inline int VEC_cgraph_edge_p_heap_reserve (VEC_cgraph_edge_p_heap **vec_, int alloc_ ) { int extend = !VEC_cgraph_edge_p_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cgraph_edge_p_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static inline int VEC_cgraph_edge_p_heap_reserve_exact (VEC_cgraph_edge_p_heap **vec_, int alloc_ ) { int extend = !VEC_cgraph_edge_p_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cgraph_edge_p_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static inline void VEC_cgraph_edge_p_heap_safe_grow (VEC_cgraph_edge_p_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_cgraph_edge_p_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_cgraph_edge_p_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_cgraph_edge_p_heap_safe_grow_cleared (VEC_cgraph_edge_p_heap **vec_, int size_ ) { int oldsize = VEC_cgraph_edge_p_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_cgraph_edge_p_heap_safe_grow (vec_, size_ ); memset (&(VEC_cgraph_edge_p_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (cgraph_edge_p) * (size_ - oldsize)); } static inline void VEC_cgraph_edge_p_heap_safe_splice (VEC_cgraph_edge_p_heap **dst_, VEC_cgraph_edge_p_base *src_ ) { if (src_) { VEC_cgraph_edge_p_heap_reserve_exact (dst_, src_->prefix.num ); VEC_cgraph_edge_p_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline cgraph_edge_p *VEC_cgraph_edge_p_heap_safe_push (VEC_cgraph_edge_p_heap **vec_, cgraph_edge_p obj_ ) { VEC_cgraph_edge_p_heap_reserve (vec_, 1 ); return VEC_cgraph_edge_p_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline cgraph_edge_p *VEC_cgraph_edge_p_heap_safe_insert (VEC_cgraph_edge_p_heap **vec_, unsigned ix_, cgraph_edge_p obj_ ) { VEC_cgraph_edge_p_heap_reserve (vec_, 1 ); return VEC_cgraph_edge_p_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+
+
+
+struct varpool_node {
+  tree decl;
+
+  tree alias_of;
+
+  struct varpool_node *next, *prev;
+
+  struct varpool_node *next_needed, *prev_needed;
+
+  struct varpool_node *same_comdat_group;
+  struct ipa_ref_list ref_list;
+
+  struct lto_file_decl_data * lto_file_data;
+  void * aux;
+
+  int order;
+  enum ld_plugin_symbol_resolution resolution;
+
+
+
+  unsigned needed : 1;
+
+
+  unsigned force_output : 1;
+
+
+  unsigned analyzed : 1;
+
+  unsigned finalized : 1;
+
+  unsigned output : 1;
+
+  unsigned externally_visible : 1;
+
+
+  unsigned alias : 1;
+  unsigned extra_name_alias : 1;
+
+  unsigned used_from_other_partition : 1;
+
+
+
+  unsigned in_other_partition : 1;
+};
+
+
+
+struct cgraph_asm_node {
+
+  struct cgraph_asm_node *next;
+
+  tree asm_str;
+
+  int order;
+};
+
+extern struct cgraph_node *cgraph_nodes;
+extern int cgraph_n_nodes;
+extern int cgraph_max_uid;
+extern int cgraph_edge_max_uid;
+extern bool cgraph_global_info_ready;
+enum cgraph_state
+{
+
+  CGRAPH_STATE_CONSTRUCTION,
+
+  CGRAPH_STATE_IPA,
+
+  CGRAPH_STATE_IPA_SSA,
+
+  CGRAPH_STATE_EXPANSION,
+
+  CGRAPH_STATE_FINISHED
+};
+extern enum cgraph_state cgraph_state;
+extern bool cgraph_function_flags_ready;
+extern struct cgraph_node *cgraph_nodes_queue;
+extern struct cgraph_node *cgraph_new_nodes;
+
+extern struct cgraph_asm_node *cgraph_asm_nodes;
+extern int cgraph_order;
+extern bool same_body_aliases_done;
+
+
+void dump_cgraph (FILE *);
+void debug_cgraph (void);
+void dump_cgraph_node (FILE *, struct cgraph_node *);
+void debug_cgraph_node (struct cgraph_node *);
+void cgraph_insert_node_to_hashtable (struct cgraph_node *node);
+void cgraph_remove_edge (struct cgraph_edge *);
+void cgraph_remove_node (struct cgraph_node *);
+void cgraph_add_to_same_comdat_group (struct cgraph_node *, struct cgraph_node *);
+void cgraph_remove_node_and_inline_clones (struct cgraph_node *);
+void cgraph_release_function_body (struct cgraph_node *);
+void cgraph_node_remove_callees (struct cgraph_node *node);
+struct cgraph_edge *cgraph_create_edge (struct cgraph_node *,
+     struct cgraph_node *,
+     gimple, gcov_type, int);
+struct cgraph_edge *cgraph_create_indirect_edge (struct cgraph_node *, gimple,
+       int, gcov_type, int);
+struct cgraph_indirect_call_info *cgraph_allocate_init_indirect_info (void);
+struct cgraph_node * cgraph_get_node (const_tree);
+struct cgraph_node * cgraph_create_node (tree);
+struct cgraph_node * cgraph_get_create_node (tree);
+struct cgraph_node * cgraph_same_body_alias (struct cgraph_node *, tree, tree);
+struct cgraph_node * cgraph_add_thunk (struct cgraph_node *, tree, tree, bool, long,
+           long, tree, tree);
+struct cgraph_node *cgraph_node_for_asm (tree);
+struct cgraph_edge *cgraph_edge (struct cgraph_node *, gimple);
+void cgraph_set_call_stmt (struct cgraph_edge *, gimple);
+void cgraph_set_call_stmt_including_clones (struct cgraph_node *, gimple, gimple);
+void cgraph_create_edge_including_clones (struct cgraph_node *,
+       struct cgraph_node *,
+       gimple, gimple, gcov_type, int,
+       cgraph_inline_failed_t);
+void cgraph_update_edges_for_call_stmt (gimple, tree, gimple);
+struct cgraph_local_info *cgraph_local_info (tree);
+struct cgraph_global_info *cgraph_global_info (tree);
+struct cgraph_rtl_info *cgraph_rtl_info (tree);
+const char * cgraph_node_name (struct cgraph_node *);
+struct cgraph_edge * cgraph_clone_edge (struct cgraph_edge *,
+     struct cgraph_node *, gimple,
+     unsigned, gcov_type, int, bool);
+struct cgraph_node * cgraph_clone_node (struct cgraph_node *, tree, gcov_type,
+     int, bool, VEC_cgraph_edge_p_heap *,
+     bool);
+struct cgraph_node *cgraph_create_function_alias (tree, tree);
+void cgraph_call_node_duplication_hooks (struct cgraph_node *node1,
+      struct cgraph_node *node2);
+
+void cgraph_redirect_edge_callee (struct cgraph_edge *, struct cgraph_node *);
+void cgraph_make_edge_direct (struct cgraph_edge *, struct cgraph_node *);
+bool cgraph_only_called_directly_p (struct cgraph_node *);
+
+struct cgraph_asm_node *cgraph_add_asm_node (tree);
+
+bool cgraph_function_possibly_inlined_p (tree);
+void cgraph_unnest_node (struct cgraph_node *);
+
+enum availability cgraph_function_body_availability (struct cgraph_node *);
+void cgraph_add_new_function (tree, bool);
+const char* cgraph_inline_failed_string (cgraph_inline_failed_t);
+struct cgraph_node * cgraph_create_virtual_clone (struct cgraph_node *old_node,
+                             VEC_cgraph_edge_p_heap*,
+                             VEC_ipa_replace_map_p_gc* tree_map,
+                             bitmap args_to_skip,
+        const char *clone_name);
+
+void cgraph_set_nothrow_flag (struct cgraph_node *, bool);
+void cgraph_set_const_flag (struct cgraph_node *, bool, bool);
+void cgraph_set_pure_flag (struct cgraph_node *, bool, bool);
+tree clone_function_name (tree decl, const char *);
+bool cgraph_node_cannot_return (struct cgraph_node *);
+bool cgraph_edge_cannot_lead_to_return (struct cgraph_edge *);
+bool cgraph_will_be_removed_from_program_if_no_direct_calls
+  (struct cgraph_node *node);
+bool cgraph_can_remove_if_no_direct_calls_and_refs_p
+  (struct cgraph_node *node);
+bool cgraph_can_remove_if_no_direct_calls_p (struct cgraph_node *node);
+bool resolution_used_from_other_file_p (enum ld_plugin_symbol_resolution);
+bool cgraph_used_from_object_file_p (struct cgraph_node *);
+bool varpool_used_from_object_file_p (struct varpool_node *);
+bool cgraph_for_node_thunks_and_aliases (struct cgraph_node *,
+                    bool (*) (struct cgraph_node *, void *),
+                    void *,
+      bool);
+bool cgraph_for_node_and_aliases (struct cgraph_node *,
+                    bool (*) (struct cgraph_node *, void *),
+             void *, bool);
+VEC_cgraph_edge_p_heap * collect_callers_of_node (struct cgraph_node *node);
+
+
+
+extern FILE *cgraph_dump_file;
+void cgraph_finalize_function (tree, bool);
+void cgraph_mark_if_needed (tree);
+void cgraph_analyze_function (struct cgraph_node *);
+void cgraph_finalize_compilation_unit (void);
+void cgraph_optimize (void);
+void cgraph_mark_needed_node (struct cgraph_node *);
+void cgraph_mark_address_taken_node (struct cgraph_node *);
+void cgraph_mark_reachable_node (struct cgraph_node *);
+bool cgraph_inline_p (struct cgraph_edge *, cgraph_inline_failed_t *reason);
+bool cgraph_preserve_function_body_p (struct cgraph_node *);
+void verify_cgraph (void);
+void verify_cgraph_node (struct cgraph_node *);
+void cgraph_build_static_cdtor (char which, tree body, int priority);
+void cgraph_reset_static_var_maps (void);
+void init_cgraph (void);
+struct cgraph_node * cgraph_copy_node_for_versioning (struct cgraph_node *,
+  tree, VEC_cgraph_edge_p_heap*, bitmap);
+struct cgraph_node *cgraph_function_versioning (struct cgraph_node *,
+      VEC_cgraph_edge_p_heap*,
+      VEC_ipa_replace_map_p_gc*,
+      bitmap, bool, bitmap,
+      basic_block, const char *);
+void tree_function_versioning (tree, tree, VEC_ipa_replace_map_p_gc*,
+          bool, bitmap, bool, bitmap, basic_block);
+void record_references_in_initializer (tree, bool);
+bool cgraph_process_new_functions (void);
+void cgraph_process_same_body_aliases (void);
+
+bool cgraph_decide_is_function_needed (struct cgraph_node *, tree);
+
+typedef void (*cgraph_edge_hook)(struct cgraph_edge *, void *);
+typedef void (*cgraph_node_hook)(struct cgraph_node *, void *);
+typedef void (*cgraph_2edge_hook)(struct cgraph_edge *, struct cgraph_edge *,
+      void *);
+typedef void (*cgraph_2node_hook)(struct cgraph_node *, struct cgraph_node *,
+      void *);
+struct cgraph_edge_hook_list;
+struct cgraph_node_hook_list;
+struct cgraph_2edge_hook_list;
+struct cgraph_2node_hook_list;
+struct cgraph_edge_hook_list *cgraph_add_edge_removal_hook (cgraph_edge_hook, void *);
+void cgraph_remove_edge_removal_hook (struct cgraph_edge_hook_list *);
+struct cgraph_node_hook_list *cgraph_add_node_removal_hook (cgraph_node_hook,
+           void *);
+void cgraph_remove_node_removal_hook (struct cgraph_node_hook_list *);
+struct cgraph_node_hook_list *cgraph_add_function_insertion_hook (cgraph_node_hook,
+                 void *);
+void cgraph_remove_function_insertion_hook (struct cgraph_node_hook_list *);
+void cgraph_call_function_insertion_hooks (struct cgraph_node *node);
+struct cgraph_2edge_hook_list *cgraph_add_edge_duplication_hook (cgraph_2edge_hook, void *);
+void cgraph_remove_edge_duplication_hook (struct cgraph_2edge_hook_list *);
+struct cgraph_2node_hook_list *cgraph_add_node_duplication_hook (cgraph_2node_hook, void *);
+void cgraph_remove_node_duplication_hook (struct cgraph_2node_hook_list *);
+void cgraph_materialize_all_clones (void);
+gimple cgraph_redirect_edge_call_stmt_to_callee (struct cgraph_edge *);
+bool cgraph_propagate_frequency (struct cgraph_node *node);
+
+unsigned int rebuild_cgraph_edges (void);
+void cgraph_rebuild_references (void);
+void reset_inline_failed (struct cgraph_node *);
+int compute_call_stmt_bb_frequency (tree, basic_block bb);
+
+
+bool cgraph_remove_unreachable_nodes (bool, FILE *);
+cgraph_node_set cgraph_node_set_new (void);
+cgraph_node_set_iterator cgraph_node_set_find (cgraph_node_set,
+            struct cgraph_node *);
+void cgraph_node_set_add (cgraph_node_set, struct cgraph_node *);
+void cgraph_node_set_remove (cgraph_node_set, struct cgraph_node *);
+void dump_cgraph_node_set (FILE *, cgraph_node_set);
+void debug_cgraph_node_set (cgraph_node_set);
+void free_cgraph_node_set (cgraph_node_set);
+
+varpool_node_set varpool_node_set_new (void);
+varpool_node_set_iterator varpool_node_set_find (varpool_node_set,
+            struct varpool_node *);
+void varpool_node_set_add (varpool_node_set, struct varpool_node *);
+void varpool_node_set_remove (varpool_node_set, struct varpool_node *);
+void dump_varpool_node_set (FILE *, varpool_node_set);
+void debug_varpool_node_set (varpool_node_set);
+void free_varpool_node_set (varpool_node_set);
+void ipa_discover_readonly_nonaddressable_vars (void);
+bool cgraph_comdat_can_be_unshared_p (struct cgraph_node *);
+bool varpool_externally_visible_p (struct varpool_node *, bool);
+
+
+bool cgraph_maybe_hot_edge_p (struct cgraph_edge *e);
+bool cgraph_optimize_for_size_p (struct cgraph_node *);
+
+
+extern struct varpool_node *varpool_nodes_queue;
+extern struct varpool_node *varpool_nodes;
+
+struct varpool_node *varpool_node (tree);
+struct varpool_node *varpool_node_for_asm (tree asmname);
+void varpool_mark_needed_node (struct varpool_node *);
+void debug_varpool (void);
+void dump_varpool (FILE *);
+void dump_varpool_node (FILE *, struct varpool_node *);
+
+void varpool_finalize_decl (tree);
+bool decide_is_variable_needed (struct varpool_node *, tree);
+enum availability cgraph_variable_initializer_availability (struct varpool_node *);
+void cgraph_make_decl_local (tree);
+void cgraph_make_node_local (struct cgraph_node *);
+bool cgraph_node_can_be_local_p (struct cgraph_node *);
+
+
+struct varpool_node * varpool_get_node (const_tree decl);
+void varpool_remove_node (struct varpool_node *node);
+void varpool_finalize_named_section_flags (struct varpool_node *node);
+bool varpool_assemble_pending_decls (void);
+bool varpool_assemble_decl (struct varpool_node *node);
+bool varpool_analyze_pending_decls (void);
+void varpool_remove_unreferenced_decls (void);
+void varpool_empty_needed_queue (void);
+struct varpool_node * varpool_extra_name_alias (tree, tree);
+struct varpool_node * varpool_create_variable_alias (tree, tree);
+const char * varpool_node_name (struct varpool_node *node);
+void varpool_reset_queue (void);
+bool const_value_known_p (tree);
+bool varpool_for_node_and_aliases (struct varpool_node *,
+                     bool (*) (struct varpool_node *, void *),
+              void *, bool);
+void varpool_add_new_variable (tree);
+
+
+
+
+
+
+static inline struct varpool_node *
+varpool_first_static_initializer (void)
+{
+  struct varpool_node *node;
+  for (node = varpool_nodes_queue; node; node = node->next_needed)
+    {
+      ((void)(0 && (((enum tree_code) (node->decl)->base.code) == VAR_DECL)));
+      if (((node->decl)->decl_common.initial))
+ return node;
+    }
+  return __null;
+}
+
+
+static inline struct varpool_node *
+varpool_next_static_initializer (struct varpool_node *node)
+{
+  for (node = node->next_needed; node; node = node->next_needed)
+    {
+      ((void)(0 && (((enum tree_code) (node->decl)->base.code) == VAR_DECL)));
+      if (((node->decl)->decl_common.initial))
+ return node;
+    }
+  return __null;
+}
+
+
+
+
+
+
+
+static inline struct cgraph_node *
+cgraph_first_defined_function (void)
+{
+  struct cgraph_node *node;
+  for (node = cgraph_nodes; node; node = node->next)
+    {
+      if (node->analyzed)
+ return node;
+    }
+  return __null;
+}
+
+
+static inline struct cgraph_node *
+cgraph_next_defined_function (struct cgraph_node *node)
+{
+  for (node = node->next; node; node = node->next)
+    {
+      if (node->analyzed)
+ return node;
+    }
+  return __null;
+}
+# 762 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cgraph.h"
+static inline bool
+cgraph_function_with_gimple_body_p (struct cgraph_node *node)
+{
+  return node->analyzed && !node->thunk.thunk_p && !node->alias;
+}
+
+
+static inline struct cgraph_node *
+cgraph_first_function_with_gimple_body (void)
+{
+  struct cgraph_node *node;
+  for (node = cgraph_nodes; node; node = node->next)
+    {
+      if (cgraph_function_with_gimple_body_p (node))
+ return node;
+    }
+  return __null;
+}
+
+
+static inline struct cgraph_node *
+cgraph_next_function_with_gimple_body (struct cgraph_node *node)
+{
+  for (node = node->next; node; node = node->next)
+    {
+      if (cgraph_function_with_gimple_body_p (node))
+ return node;
+    }
+  return __null;
+}
+
+
+
+
+
+
+
+tree add_new_static_var (tree type);
+
+
+static inline bool
+csi_end_p (cgraph_node_set_iterator csi)
+{
+  return csi.index >= (VEC_cgraph_node_ptr_base_length(((__builtin_offsetof (__typeof (*csi.set->nodes), base) == 0 || (csi.set->nodes)) ? &(csi.set->nodes)->base : 0)));
+}
+
+
+static inline void
+csi_next (cgraph_node_set_iterator *csi)
+{
+  csi->index++;
+}
+
+
+static inline struct cgraph_node *
+csi_node (cgraph_node_set_iterator csi)
+{
+  return (VEC_cgraph_node_ptr_base_index(((__builtin_offsetof (__typeof (*csi.set->nodes), base) == 0 || (csi.set->nodes)) ? &(csi.set->nodes)->base : 0),csi.index ));
+}
+
+
+static inline cgraph_node_set_iterator
+csi_start (cgraph_node_set set)
+{
+  cgraph_node_set_iterator csi;
+
+  csi.set = set;
+  csi.index = 0;
+  return csi;
+}
+
+
+static inline bool
+cgraph_node_in_set_p (struct cgraph_node *node, cgraph_node_set set)
+{
+  cgraph_node_set_iterator csi;
+  csi = cgraph_node_set_find (set, node);
+  return !csi_end_p (csi);
+}
+
+
+static inline size_t
+cgraph_node_set_size (cgraph_node_set set)
+{
+  return (VEC_cgraph_node_ptr_base_length(((__builtin_offsetof (__typeof (*set->nodes), base) == 0 || (set->nodes)) ? &(set->nodes)->base : 0)));
+}
+
+
+static inline bool
+vsi_end_p (varpool_node_set_iterator vsi)
+{
+  return vsi.index >= (VEC_varpool_node_ptr_base_length(((__builtin_offsetof (__typeof (*vsi.set->nodes), base) == 0 || (vsi.set->nodes)) ? &(vsi.set->nodes)->base : 0)));
+}
+
+
+static inline void
+vsi_next (varpool_node_set_iterator *vsi)
+{
+  vsi->index++;
+}
+
+
+static inline struct varpool_node *
+vsi_node (varpool_node_set_iterator vsi)
+{
+  return (VEC_varpool_node_ptr_base_index(((__builtin_offsetof (__typeof (*vsi.set->nodes), base) == 0 || (vsi.set->nodes)) ? &(vsi.set->nodes)->base : 0),vsi.index ));
+}
+
+
+static inline varpool_node_set_iterator
+vsi_start (varpool_node_set set)
+{
+  varpool_node_set_iterator vsi;
+
+  vsi.set = set;
+  vsi.index = 0;
+  return vsi;
+}
+
+
+static inline bool
+varpool_node_in_set_p (struct varpool_node *node, varpool_node_set set)
+{
+  varpool_node_set_iterator vsi;
+  vsi = varpool_node_set_find (set, node);
+  return !vsi_end_p (vsi);
+}
+
+
+static inline size_t
+varpool_node_set_size (varpool_node_set set)
+{
+  return (VEC_varpool_node_ptr_base_length(((__builtin_offsetof (__typeof (*set->nodes), base) == 0 || (set->nodes)) ? &(set->nodes)->base : 0)));
+}
+
+
+
+
+
+struct constant_descriptor_tree {
+
+  rtx rtl;
+
+
+  tree value;
+
+
+
+
+  hashval_t hash;
+};
+
+
+static inline bool
+cgraph_node_set_nonempty_p (cgraph_node_set set)
+{
+  return !((VEC_cgraph_node_ptr_base_length(((__builtin_offsetof (__typeof (*set->nodes), base) == 0 || (set->nodes)) ? &(set->nodes)->base : 0))) == 0);
+}
+
+
+static inline bool
+varpool_node_set_nonempty_p (varpool_node_set set)
+{
+  return !((VEC_varpool_node_ptr_base_length(((__builtin_offsetof (__typeof (*set->nodes), base) == 0 || (set->nodes)) ? &(set->nodes)->base : 0))) == 0);
+}
+
+
+
+
+
+static inline bool
+cgraph_only_called_directly_or_aliased_p (struct cgraph_node *node)
+{
+  ((void)(!(!node->global.inlined_to) ? fancy_abort ("/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cgraph.h", 935, __FUNCTION__), 0 : 0));
+  return (!node->needed && !node->address_taken
+   && !node->reachable_from_other_partition
+   && !((node->decl)->function_decl.static_ctor_flag)
+   && !((node->decl)->function_decl.static_dtor_flag)
+   && !node->local.externally_visible);
+}
+
+
+
+
+static inline bool
+varpool_can_remove_if_no_refs (struct varpool_node *node)
+{
+  return (!node->force_output && !node->used_from_other_partition
+   && (global_options.x_flag_toplevel_reorder || ((node->decl)->decl_with_vis.comdat_flag)
+       || ((node->decl)->decl_common.artificial_flag))
+     && (((node->decl)->decl_with_vis.comdat_flag) || !node->externally_visible));
+}
+
+
+
+
+
+
+static inline bool
+varpool_all_refs_explicit_p (struct varpool_node *vnode)
+{
+  return (vnode->analyzed
+   && !vnode->externally_visible
+   && !vnode->used_from_other_partition
+   && !vnode->force_output);
+}
+
+
+htab_t constant_pool_htab (void);
+
+
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ipa-ref-inline.h" 1
+# 23 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ipa-ref-inline.h"
+static inline struct cgraph_node *
+ipa_ref_node (struct ipa_ref *ref)
+{
+  ((void)(!(ref->refered_type == IPA_REF_CGRAPH) ? fancy_abort ("/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ipa-ref-inline.h", 26, __FUNCTION__), 0 : 0));
+  return ref->refered.cgraph_node;
+}
+
+
+
+static inline struct varpool_node *
+ipa_ref_varpool_node (struct ipa_ref *ref)
+{
+  ((void)(!(ref->refered_type == IPA_REF_VARPOOL) ? fancy_abort ("/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ipa-ref-inline.h", 35, __FUNCTION__), 0 : 0));
+  return ref->refered.varpool_node;
+}
+
+
+
+static inline struct cgraph_node *
+ipa_ref_refering_node (struct ipa_ref *ref)
+{
+  ((void)(!(ref->refering_type == IPA_REF_CGRAPH) ? fancy_abort ("/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ipa-ref-inline.h", 44, __FUNCTION__), 0 : 0));
+  return ref->refering.cgraph_node;
+}
+
+
+
+static inline struct varpool_node *
+ipa_ref_refering_varpool_node (struct ipa_ref *ref)
+{
+  ((void)(!(ref->refering_type == IPA_REF_VARPOOL) ? fancy_abort ("/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/ipa-ref-inline.h", 53, __FUNCTION__), 0 : 0));
+  return ref->refering.varpool_node;
+}
+
+
+
+static inline struct ipa_ref_list *
+ipa_ref_refering_ref_list (struct ipa_ref *ref)
+{
+  if (ref->refering_type == IPA_REF_CGRAPH)
+    return &ipa_ref_refering_node (ref)->ref_list;
+  else
+    return &ipa_ref_refering_varpool_node (ref)->ref_list;
+}
+
+
+
+static inline struct ipa_ref_list *
+ipa_ref_refered_ref_list (struct ipa_ref *ref)
+{
+  if (ref->refered_type == IPA_REF_CGRAPH)
+    return &ipa_ref_node (ref)->ref_list;
+  else
+    return &ipa_ref_varpool_node (ref)->ref_list;
+}
+
+
+
+static inline struct ipa_ref *
+ipa_ref_list_first_reference (struct ipa_ref_list *list)
+{
+  if (!(VEC_ipa_ref_t_base_length(((__builtin_offsetof (__typeof (*list->references), base) == 0 || (list->references)) ? &(list->references)->base : 0))))
+    return __null;
+  return (VEC_ipa_ref_t_base_index(((__builtin_offsetof (__typeof (*list->references), base) == 0 || (list->references)) ? &(list->references)->base : 0),0 ));
+}
+
+
+
+static inline struct ipa_ref *
+ipa_ref_list_first_refering (struct ipa_ref_list *list)
+{
+  if (!(VEC_ipa_ref_ptr_base_length(((__builtin_offsetof (__typeof (*list->refering), base) == 0 || (list->refering)) ? &(list->refering)->base : 0))))
+    return __null;
+  return (VEC_ipa_ref_ptr_base_index(((__builtin_offsetof (__typeof (*list->refering), base) == 0 || (list->refering)) ? &(list->refering)->base : 0),0 ));
+}
+
+
+
+static inline void
+ipa_empty_ref_list (struct ipa_ref_list *list)
+{
+  list->refering = __null;
+  list->references = __null;
+}
+
+
+
+static inline unsigned int
+ipa_ref_list_nreferences (struct ipa_ref_list *list)
+{
+  return (VEC_ipa_ref_t_base_length(((__builtin_offsetof (__typeof (*list->references), base) == 0 || (list->references)) ? &(list->references)->base : 0)));
+}
+# 974 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/cgraph.h" 2
+
+
+
+static inline struct cgraph_node *
+cgraph_alias_aliased_node (struct cgraph_node *n)
+{
+  struct ipa_ref *ref;
+
+  (VEC_ipa_ref_t_base_iterate(((__builtin_offsetof (__typeof (*(&n->ref_list)->references), base) == 0 || ((&n->ref_list)->references)) ? &((&n->ref_list)->references)->base : 0),(0),&((ref))));
+  ((void)(0 && (ref->use == IPA_REF_ALIAS)));
+  if (ref->refered_type == IPA_REF_CGRAPH)
+    return ipa_ref_node (ref);
+  return __null;
+}
+
+
+
+static inline struct varpool_node *
+varpool_alias_aliased_node (struct varpool_node *n)
+{
+  struct ipa_ref *ref;
+
+  (VEC_ipa_ref_t_base_iterate(((__builtin_offsetof (__typeof (*(&n->ref_list)->references), base) == 0 || ((&n->ref_list)->references)) ? &((&n->ref_list)->references)->base : 0),(0),&((ref))));
+  ((void)(0 && (ref->use == IPA_REF_ALIAS)));
+  if (ref->refered_type == IPA_REF_VARPOOL)
+    return ipa_ref_varpool_node (ref);
+  return __null;
+}
+
+
+
+
+
+static inline struct cgraph_node *
+cgraph_function_node (struct cgraph_node *node, enum availability *availability)
+{
+  if (availability)
+    *availability = cgraph_function_body_availability (node);
+  while (node)
+    {
+      if (node->alias && node->analyzed)
+ node = cgraph_alias_aliased_node (node);
+      else if (node->thunk.thunk_p)
+ node = node->callees->callee;
+      else
+ return node;
+      if (node && availability)
+ {
+   enum availability a;
+   a = cgraph_function_body_availability (node);
+   if (a < *availability)
+     *availability = a;
+ }
+    }
+  if (availability)
+    *availability = AVAIL_NOT_AVAILABLE;
+  return __null;
+}
+
+
+
+
+
+static inline struct cgraph_node *
+cgraph_function_or_thunk_node (struct cgraph_node *node, enum availability *availability)
+{
+  if (availability)
+    *availability = cgraph_function_body_availability (node);
+  while (node)
+    {
+      if (node->alias && node->analyzed)
+ node = cgraph_alias_aliased_node (node);
+      else
+ return node;
+      if (node && availability)
+ {
+   enum availability a;
+   a = cgraph_function_body_availability (node);
+   if (a < *availability)
+     *availability = a;
+ }
+    }
+  if (availability)
+    *availability = AVAIL_NOT_AVAILABLE;
+  return __null;
+}
+
+
+
+
+
+static inline struct varpool_node *
+varpool_variable_node (struct varpool_node *node, enum availability *availability)
+{
+  if (availability)
+    *availability = cgraph_variable_initializer_availability (node);
+  while (node)
+    {
+      if (node->alias && node->analyzed)
+ node = varpool_alias_aliased_node (node);
+      else
+ return node;
+      if (node && availability)
+ {
+   enum availability a;
+   a = cgraph_variable_initializer_availability (node);
+   if (a < *availability)
+     *availability = a;
+ }
+    }
+  if (availability)
+    *availability = AVAIL_NOT_AVAILABLE;
+  return __null;
+}
+
+
+static inline bool
+cgraph_edge_recursive_p (struct cgraph_edge *e)
+{
+  struct cgraph_node *callee = cgraph_function_or_thunk_node (e->callee, __null);
+  if (e->caller->global.inlined_to)
+    return e->caller->global.inlined_to->decl == callee->decl;
+  else
+    return e->caller->decl == callee->decl;
+}
+
+
+static inline bool
+decl_is_tm_clone (const_tree fndecl)
+{
+  struct cgraph_node *n = cgraph_get_node (fndecl);
+  if (n)
+    return n->tm_clone;
+  return false;
+}
+# 33 "../../../src/acf_plugin.c" 2
+# 1 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/opts.h" 1
+# 28 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/opts.h"
+enum cl_var_type {
+
+  CLVC_BOOLEAN,
+
+
+  CLVC_EQUAL,
+
+
+  CLVC_BIT_CLEAR,
+
+
+  CLVC_BIT_SET,
+
+
+
+  CLVC_STRING,
+
+
+
+  CLVC_ENUM,
+
+
+
+  CLVC_DEFER
+};
+
+struct cl_option
+{
+
+  const char *opt_text;
+
+  const char *help;
+
+  const char *missing_argument_error;
+
+  const char *warn_message;
+
+  const char *alias_arg;
+
+  const char *neg_alias_arg;
+
+  unsigned short alias_target;
+
+
+  unsigned short back_chain;
+
+  unsigned char opt_len;
+
+  int neg_index;
+
+  unsigned int flags;
+
+  unsigned int cl_disabled : 1;
+
+
+
+  unsigned int cl_separate_nargs : 2;
+
+  unsigned int cl_separate_alias : 1;
+
+  unsigned int cl_negative_alias : 1;
+
+  unsigned int cl_no_driver_arg : 1;
+
+  unsigned int cl_reject_driver : 1;
+
+  unsigned int cl_reject_negative : 1;
+
+  unsigned int cl_missing_ok : 1;
+
+  unsigned int cl_uinteger : 1;
+
+  unsigned int cl_host_wide_int : 1;
+
+  unsigned int cl_tolower : 1;
+
+  unsigned int cl_report : 1;
+
+
+  unsigned short flag_var_offset;
+
+
+  unsigned short var_enum;
+
+  enum cl_var_type var_type;
+
+  long var_value;
+};
+
+
+
+struct cl_option_state {
+  const void *data;
+  size_t size;
+  char ch;
+};
+
+extern const struct cl_option cl_options[];
+extern const unsigned int cl_options_count;
+extern const char *const lang_names[];
+extern const unsigned int cl_lang_count;
+# 155 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/opts.h"
+struct cl_enum_arg
+{
+
+  const char *arg;
+
+
+  int value;
+
+
+  unsigned int flags;
+};
+
+
+
+struct cl_enum
+{
+
+
+  const char *help;
+
+
+
+  const char *unknown_error;
+
+
+  const struct cl_enum_arg *values;
+
+
+  size_t var_size;
+
+
+  void (*set) (void *var, int value);
+
+
+  int (*get) (const void *var);
+};
+
+extern const struct cl_enum cl_enums[];
+extern const unsigned int cl_enums_count;
+# 210 "/work1/ferranti/build-gcc/gcc-4.7.1/install/lib/gcc/x86_64-unknown-linux-gnu/4.7.1/plugin/include/opts.h"
+struct cl_decoded_option
+{
+
+
+  size_t opt_index;
+
+
+  const char *warn_message;
+
+
+
+  const char *arg;
+
+
+
+
+
+  const char *orig_option_with_args_text;
+
+
+
+
+
+  const char *canonical_option[4];
+
+
+
+  size_t canonical_option_num_elements;
+
+
+
+
+  int value;
+
+
+  int errors;
+};
+
+
+
+
+typedef struct
+{
+
+
+  size_t opt_index;
+  const char *arg;
+  int value;
+} cl_deferred_option;
+typedef struct VEC_cl_deferred_option_base { struct vec_prefix prefix; cl_deferred_option vec[1]; } VEC_cl_deferred_option_base; typedef struct VEC_cl_deferred_option_none { VEC_cl_deferred_option_base base; } VEC_cl_deferred_option_none; static inline unsigned VEC_cl_deferred_option_base_length (const VEC_cl_deferred_option_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static inline cl_deferred_option *VEC_cl_deferred_option_base_last (VEC_cl_deferred_option_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return &vec_->vec[vec_->prefix.num - 1]; } static inline cl_deferred_option *VEC_cl_deferred_option_base_index (VEC_cl_deferred_option_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return &vec_->vec[ix_]; } static inline int VEC_cl_deferred_option_base_iterate (VEC_cl_deferred_option_base *vec_, unsigned ix_, cl_deferred_option **ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static inline size_t VEC_cl_deferred_option_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_cl_deferred_option_base, vec) + alloc_ * sizeof(cl_deferred_option); } static inline void VEC_cl_deferred_option_base_embedded_init (VEC_cl_deferred_option_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static inline int VEC_cl_deferred_option_base_space (VEC_cl_deferred_option_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static inline void VEC_cl_deferred_option_base_splice (VEC_cl_deferred_option_base *dst_, VEC_cl_deferred_option_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (cl_deferred_option)); dst_->prefix.num += len_; } } static inline cl_deferred_option *VEC_cl_deferred_option_base_quick_push (VEC_cl_deferred_option_base *vec_, const cl_deferred_option *obj_ ) { cl_deferred_option *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_cl_deferred_option_base_pop (VEC_cl_deferred_option_base *vec_ ) { (void)(vec_->prefix.num); --vec_->prefix.num; } static inline void VEC_cl_deferred_option_base_truncate (VEC_cl_deferred_option_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static inline cl_deferred_option *VEC_cl_deferred_option_base_replace (VEC_cl_deferred_option_base *vec_, unsigned ix_, const cl_deferred_option *obj_ ) { cl_deferred_option *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static inline cl_deferred_option *VEC_cl_deferred_option_base_quick_insert (VEC_cl_deferred_option_base *vec_, unsigned ix_, const cl_deferred_option *obj_ ) { cl_deferred_option *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (cl_deferred_option)); if (obj_) *slot_ = *obj_; return slot_; } static inline void VEC_cl_deferred_option_base_ordered_remove (VEC_cl_deferred_option_base *vec_, unsigned ix_ ) { cl_deferred_option *slot_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (cl_deferred_option)); } static inline void VEC_cl_deferred_option_base_unordered_remove (VEC_cl_deferred_option_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->prefix.num); vec_->vec[ix_] = vec_->vec[--vec_->prefix.num]; } static inline void VEC_cl_deferred_option_base_block_remove (VEC_cl_deferred_option_base *vec_, unsigned ix_, unsigned len_ ) { cl_deferred_option *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (cl_deferred_option)); } static inline cl_deferred_option *VEC_cl_deferred_option_base_address (VEC_cl_deferred_option_base *vec_) { return vec_ ? vec_->vec : 0; } static inline unsigned VEC_cl_deferred_option_base_lower_bound (VEC_cl_deferred_option_base *vec_, const cl_deferred_option *obj_, bool (*lessthan_)(const cl_deferred_option *, const cl_deferred_option *) ) { unsigned int len_ = VEC_cl_deferred_option_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { cl_deferred_option *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_cl_deferred_option_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_cl_deferred_option_heap { VEC_cl_deferred_option_base base; } VEC_cl_deferred_option_heap; static inline VEC_cl_deferred_option_heap *VEC_cl_deferred_option_heap_alloc (int alloc_ ) { return (VEC_cl_deferred_option_heap *) vec_heap_o_reserve_exact (__null, alloc_, __builtin_offsetof (VEC_cl_deferred_option_heap, base.vec), sizeof (cl_deferred_option) ); } static inline VEC_cl_deferred_option_heap *VEC_cl_deferred_option_heap_copy (VEC_cl_deferred_option_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_cl_deferred_option_heap *new_vec_ = __null; if (len_) { new_vec_ = (VEC_cl_deferred_option_heap *)(vec_heap_o_reserve_exact (__null, len_, __builtin_offsetof (VEC_cl_deferred_option_heap, base.vec), sizeof (cl_deferred_option) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (cl_deferred_option) * len_); } return new_vec_; } static inline void VEC_cl_deferred_option_heap_free (VEC_cl_deferred_option_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = __null; } static inline int VEC_cl_deferred_option_heap_reserve (VEC_cl_deferred_option_heap **vec_, int alloc_ ) { int extend = !VEC_cl_deferred_option_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cl_deferred_option_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_cl_deferred_option_heap, base.vec), sizeof (cl_deferred_option) ); return extend; } static inline int VEC_cl_deferred_option_heap_reserve_exact (VEC_cl_deferred_option_heap **vec_, int alloc_ ) { int extend = !VEC_cl_deferred_option_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_cl_deferred_option_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_cl_deferred_option_heap, base.vec), sizeof (cl_deferred_option) ); return extend; } static inline void VEC_cl_deferred_option_heap_safe_grow (VEC_cl_deferred_option_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_cl_deferred_option_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_cl_deferred_option_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static inline void VEC_cl_deferred_option_heap_safe_grow_cleared (VEC_cl_deferred_option_heap **vec_, int size_ ) { int oldsize = VEC_cl_deferred_option_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_cl_deferred_option_heap_safe_grow (vec_, size_ ); memset (&(VEC_cl_deferred_option_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (cl_deferred_option) * (size_ - oldsize)); } static inline void VEC_cl_deferred_option_heap_safe_splice (VEC_cl_deferred_option_heap **dst_, VEC_cl_deferred_option_base *src_ ) { if (src_) { VEC_cl_deferred_option_heap_reserve_exact (dst_, src_->prefix.num ); VEC_cl_deferred_option_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static inline cl_deferred_option *VEC_cl_deferred_option_heap_safe_push (VEC_cl_deferred_option_heap **vec_, const cl_deferred_option *obj_ ) { VEC_cl_deferred_option_heap_reserve (vec_, 1 ); return VEC_cl_deferred_option_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static inline cl_deferred_option *VEC_cl_deferred_option_heap_safe_insert (VEC_cl_deferred_option_heap **vec_, unsigned ix_, const cl_deferred_option *obj_ ) { VEC_cl_deferred_option_heap_reserve (vec_, 1 ); return VEC_cl_deferred_option_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+
+
+struct cl_option_handler_func
+{
+
+  bool (*handler) (struct gcc_options *opts,
+     struct gcc_options *opts_set,
+     const struct cl_decoded_option *decoded,
+     unsigned int lang_mask, int kind, location_t loc,
+     const struct cl_option_handlers *handlers,
+     diagnostic_context *dc);
+
+
+
+  unsigned int mask;
+};
+
+
+
+struct cl_option_handlers
+{
+
+
+
+
+  bool (*unknown_option_callback) (const struct cl_decoded_option *decoded);
+
+
+
+  void (*wrong_lang_callback) (const struct cl_decoded_option *decoded,
+          unsigned int lang_mask);
+
+
+  size_t num_handlers;
+
+
+  struct cl_option_handler_func handlers[3];
+};
+
+
+
+extern const char **in_fnames;
+
+
+
+extern unsigned num_in_fnames;
+
+size_t find_opt (const char *input, unsigned int lang_mask);
+extern int integral_argument (const char *arg);
+extern bool enum_value_to_arg (const struct cl_enum_arg *enum_args,
+          const char **argp, int value,
+          unsigned int lang_mask);
+extern void decode_cmdline_options_to_array (unsigned int argc,
+          const char **argv,
+          unsigned int lang_mask,
+          struct cl_decoded_option **decoded_options,
+          unsigned int *decoded_options_count);
+extern void init_options_once (void);
+extern void init_options_struct (struct gcc_options *opts,
+     struct gcc_options *opts_set);
+extern void decode_cmdline_options_to_array_default_mask (unsigned int argc,
+         const char **argv,
+         struct cl_decoded_option **decoded_options,
+         unsigned int *decoded_options_count);
+extern void set_default_handlers (struct cl_option_handlers *handlers);
+extern void decode_options (struct gcc_options *opts,
+       struct gcc_options *opts_set,
+       struct cl_decoded_option *decoded_options,
+       unsigned int decoded_options_count,
+       location_t loc,
+       diagnostic_context *dc);
+extern int option_enabled (int opt_idx, void *opts);
+extern bool get_option_state (struct gcc_options *, int,
+         struct cl_option_state *);
+extern void set_option (struct gcc_options *opts,
+   struct gcc_options *opts_set,
+   int opt_index, int value, const char *arg, int kind,
+   location_t loc, diagnostic_context *dc);
+extern void *option_flag_var (int opt_index, struct gcc_options *opts);
+bool handle_generated_option (struct gcc_options *opts,
+         struct gcc_options *opts_set,
+         size_t opt_index, const char *arg, int value,
+         unsigned int lang_mask, int kind, location_t loc,
+         const struct cl_option_handlers *handlers,
+         diagnostic_context *dc);
+void generate_option (size_t opt_index, const char *arg, int value,
+        unsigned int lang_mask,
+        struct cl_decoded_option *decoded);
+void generate_option_input_file (const char *file,
+     struct cl_decoded_option *decoded);
+extern void read_cmdline_option (struct gcc_options *opts,
+     struct gcc_options *opts_set,
+     struct cl_decoded_option *decoded,
+     location_t loc,
+     unsigned int lang_mask,
+     const struct cl_option_handlers *handlers,
+     diagnostic_context *dc);
+extern void control_warning_option (unsigned int opt_index, int kind,
+        bool imply, location_t loc,
+        unsigned int lang_mask,
+        const struct cl_option_handlers *handlers,
+        struct gcc_options *opts,
+        struct gcc_options *opts_set,
+        diagnostic_context *dc);
+extern void print_ignored_options (void);
+extern void handle_common_deferred_options (void);
+extern bool common_handle_option (struct gcc_options *opts,
+      struct gcc_options *opts_set,
+      const struct cl_decoded_option *decoded,
+      unsigned int lang_mask, int kind,
+      location_t loc,
+      const struct cl_option_handlers *handlers,
+      diagnostic_context *dc);
+extern bool target_handle_option (struct gcc_options *opts,
+      struct gcc_options *opts_set,
+      const struct cl_decoded_option *decoded,
+      unsigned int lang_mask, int kind,
+      location_t loc,
+      const struct cl_option_handlers *handlers,
+      diagnostic_context *dc);
+extern void finish_options (struct gcc_options *opts,
+       struct gcc_options *opts_set,
+       location_t loc);
+extern void default_options_optimization (struct gcc_options *opts,
+       struct gcc_options *opts_set,
+       struct cl_decoded_option *decoded_options,
+       unsigned int decoded_options_count,
+       location_t loc,
+       unsigned int lang_mask,
+       const struct cl_option_handlers *handlers,
+       diagnostic_context *dc);
+extern void set_struct_debug_option (struct gcc_options *opts,
+         location_t loc,
+         const char *value);
+extern bool opt_enum_arg_to_value (size_t opt_index, const char *arg,
+       int *value, unsigned int lang_mask);
+# 34 "../../../src/acf_plugin.c" 2
 
 # 1 "../../../src/acf_plugin.h" 1
 # 27 "../../../src/acf_plugin.h"
@@ -38761,7 +41754,7 @@ typedef struct acf_ftable_entry {
     char *opt_arg;
     char *opt_file;
 } acf_ftable_entry_t;
-# 41 "../../../src/acf_plugin.h"
+# 42 "../../../src/acf_plugin.h"
 extern "C" {
 
 
@@ -38770,8 +41763,8 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p, int verbose
 
 
 }
-# 34 "../../../src/acf_plugin.c" 2
-
+# 36 "../../../src/acf_plugin.c" 2
+# 54 "../../../src/acf_plugin.c"
 acf_ftable_entry_t *acf_ftable;
 const char *acf_csv_file_key="csv_file";
 char *acf_csv_file;
@@ -38785,27 +41778,7 @@ int hwi_shift = 0;
 
 int plugin_is_GPL_compatible;
 static const char *plugin_name;
-# 84 "../../../src/acf_plugin.c"
-static void event_callback(void *gcc_data,void *data){
-    (void)gcc_data;
-    fprintf(stderr,"%s called\n",plugin_event_name[*(int*)data]);
-}
-
-extern void cplus_decl_attributes(tree *, tree, int) __attribute__((weak));
-
-typedef void (*decl_attributes_func_type)
-    (tree *decl,tree attributes,int flags);
-static decl_attributes_func_type decl_attributes_func;
-
-void attribute_injector_start_unit_callback(void *gcc_data __attribute__ ((__unused__)),
-         void *data __attribute__ ((__unused__))){
-    if(is_gcc()){
- decl_attributes_func=(decl_attributes_func_type)(&decl_attributes);
-    }else{
- decl_attributes_func=&cplus_decl_attributes;
-    }
-}
-
+# 107 "../../../src/acf_plugin.c"
 extern tree maybe_constant_value (tree) __attribute__((weak));
 
 
@@ -38827,6 +41800,187 @@ my_cp_check_const_attributes (tree attributes)
  }
     }
 }
+
+typedef void (*decl_attributes_func_type)
+    (tree *decl,tree attributes,int flags);
+static decl_attributes_func_type decl_attributes_func;
+
+static void
+add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tree decl) {
+    tree attribute_identifier = (__builtin_constant_p (acf_entry->opt_attr) ? get_identifier_with_length ((acf_entry->opt_attr), strlen (acf_entry->opt_attr)) : get_identifier (acf_entry->opt_attr));;
+    tree attribute_list = (tree) __null;
+    tree argument = (tree) __null;
+    tree argument_list = (tree) __null;
+
+    if (verbose) {
+ fprintf(stdout, "acf_plugin: Attaching attribute to "
+  "function %s: %s %s",
+  cur_func_name, acf_entry->opt_attr, acf_entry->opt_arg);
+ if (acf_entry->opt_file == __null)
+     fprintf(stdout, "\n");
+ else
+     fprintf(stdout, " (file: %s)\n", acf_entry->opt_file);
+    }
+
+    if (acf_entry->opt_arg != __null) {
+ argument = build_string(strlen(acf_entry->opt_arg), acf_entry->opt_arg);
+ argument_list = tree_cons_stat ((tree) __null,argument,argument_list );
+    } else {
+ argument_list = (tree) __null;
+    }
+
+    attribute_list = tree_cons_stat (attribute_identifier,argument_list,attribute_list )
+                         ;
+
+    my_cp_check_const_attributes (attribute_list);
+    if (attribute_list != (tree) __null) {
+ decl_attributes_func(&decl,attribute_list,
+        ATTR_FLAG_TYPE_IN_PLACE);
+    }
+}
+
+
+
+
+
+static struct cl_optimization loc_save_options, *save_options;
+
+static void
+add_lto_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
+
+
+
+    if (!strcmp("optimize", acf_entry->opt_attr)) {
+ char opt_name[128];
+ int opt_value = 1;
+ size_t opt_index;
+
+ strcpy(opt_name, "-f");
+ if (!strncmp("no-", acf_entry->opt_arg, strlen("no-"))) {
+     opt_value = 0;
+     strcat(opt_name, acf_entry->opt_arg + strlen("no-"));
+ }
+ else
+     strcat(opt_name, acf_entry->opt_arg);
+ opt_index = find_opt(opt_name+1, (1U << 18));
+
+
+ if ((opt_index >= cl_options_count) ||
+     cl_options[opt_index].alias_target == OPT_SPECIAL_ignore)
+     return;
+
+
+ if (verbose) {
+     fprintf(stdout, "acf_plugin: Attaching attribute to "
+      "function %s: %s %s",
+      cur_func_name, acf_entry->opt_attr, acf_entry->opt_arg);
+     if (acf_entry->opt_file == __null)
+  fprintf(stdout, "\n");
+     else
+  fprintf(stdout, " (file: %s)\n", acf_entry->opt_file);
+ }
+
+ if (save_options == __null) {
+     save_options = &loc_save_options;
+
+     cl_optimization_save(save_options, &global_options);
+
+
+
+ }
+
+
+ {
+     struct cl_option_handlers handlers;
+     set_default_handlers (&handlers);
+     handle_generated_option(&global_options, &global_options_set, opt_index, __null, opt_value,
+        (1U << 18), DK_UNSPECIFIED, ((source_location) 0), &handlers, __null);
+ }
+
+
+
+    }
+
+
+
+
+
+}
+
+
+
+
+
+static char **csv_param_name = __null;
+static int *csv_param_value = __null;
+static size_t csv_param_index = 0;
+static int *csv_param_set = __null;
+
+
+static bool get_param_idx(char *opt_param, size_t *idx) {
+    size_t i, num_compiler_params = get_num_compiler_params();
+
+    for (i = 0; i < num_compiler_params; ++i) {
+ if (strcmp (compiler_params[i].option, opt_param) == 0) {
+     *idx = i;
+     return true;
+ }
+    }
+    return false;
+}
+
+static void save_and_set_param(char *opt_param, int value) {
+    size_t param_idx;
+
+    if (!get_param_idx(opt_param, &param_idx))
+ return;
+
+
+    csv_param_name[csv_param_index] = opt_param;
+    csv_param_value[csv_param_index] = ((int) ((*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift))[(int) param_idx]));
+    csv_param_index ++;
+# 277 "../../../src/acf_plugin.c"
+    set_param_value(opt_param, value, (*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift)), csv_param_set);
+
+
+
+}
+
+static void
+add_param(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
+
+    char *opt_param = acf_entry->opt_attr + strlen("PARAM_");
+
+    if (acf_entry->opt_arg != __null) {
+ if (verbose) {
+     fprintf(stdout, "acf_plugin: Attaching param to "
+      "function %s: %s=%s",
+      cur_func_name, opt_param, acf_entry->opt_arg);
+     if (acf_entry->opt_file == __null)
+  fprintf(stdout, "\n");
+     else
+  fprintf(stdout, " (file: %s)\n", acf_entry->opt_file);
+ }
+
+ save_and_set_param(opt_param, atoi(acf_entry->opt_arg));
+    }
+}
+
+static void restore_param_values() {
+    size_t i;
+
+    for ( i = 0; i < csv_param_index; i++) {
+
+ set_param_value(csv_param_name[i], csv_param_value[i], (*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift)), csv_param_set);
+
+
+
+    }
+}
+
+
+
+
 
 static int parse_ftable_csv_file(acf_ftable_entry_t **acf_ftable_p,
      char *csv_file, bool verbose)
@@ -38867,165 +42021,81 @@ static bool source_file_match(char *opt_file, char *input_file)
     return ret;
 }
 
-int func_number = 0;
-bool csv_parsed = false;
+static void fill_csv_options(tree decl, int pass) {
+    const char *cur_func_name = __null;
+    int i;
+
+    static int func_number = 0;
+    static bool csv_parsed = false;
+
+    if (!csv_parsed) {
+ func_number = parse_ftable_csv_file(&acf_ftable, acf_csv_file, verbose);
+ csv_parsed = true;
+    }
+    if (func_number < 0){
+
+ return;
+    }
+
+    cur_func_name = ((const char *) (decl_assembler_name ((cfun + 0)->decl))->identifier.id.str);
+
+    for (i = 0; i < func_number; i++){
+ acf_ftable_entry_t *acf_entry = &acf_ftable[i];
+
+
+
+ if ((strcmp (acf_entry->func_name, cur_func_name) != 0) ||
+     !source_file_match(acf_entry->opt_file, (char *) global_options.x_main_input_filename))
+     continue;
+
+ switch (pass) {
+ case 1:
+
+     if ((strncmp("PARAM_", acf_entry->opt_attr, strlen("PARAM_"))))
+  add_decl_attribute(cur_func_name, acf_entry, decl);
+     break;
+ case 2:
+
+
+     if ((!strncmp("PARAM_", acf_entry->opt_attr, strlen("PARAM_"))))
+  add_param(cur_func_name, acf_entry);
+     else if ((strncmp("PARAM_", acf_entry->opt_attr, strlen("PARAM_"))) && is_lto())
+  add_lto_attribute(cur_func_name, acf_entry);
+     break;
+ default:
+
+     return;
+ }
+    }
+}
+
+
+
+
+
+static void event_callback(void *gcc_data,void *data){
+    (void)gcc_data;
+    fprintf(stderr,"%s called\n",plugin_event_name[*(int*)data]);
+}
+
+extern void cplus_decl_attributes(tree *, tree, int) __attribute__((weak));
+
+void attribute_injector_start_unit_callback(void *gcc_data __attribute__ ((__unused__)),
+         void *data __attribute__ ((__unused__))){
+    if(is_gcc()){
+ decl_attributes_func=(decl_attributes_func_type)(&decl_attributes);
+    }else if (is_gpp()){
+ decl_attributes_func=&cplus_decl_attributes;
+    }
+    else
+ decl_attributes_func=__null;
+}
 
 static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
     tree decl=(tree)gcc_data;
     const char *decl_fullname;
-    tree attribute_identifier;
-    tree attribute_list=(tree) __null;
-    tree argument = (tree) __null;
-    tree argument_list=(tree) __null;
-    volatile tree def_opts;
-    volatile tree opts;
-    const char *cur_func_name = __null;
-    int i;
-# 197 "../../../src/acf_plugin.c"
-    cur_func_name = ((const char *) (decl_assembler_name ((cfun + 0)->decl))->identifier.id.str);
-
-    if (!csv_parsed) {
- func_number = parse_ftable_csv_file(&acf_ftable,
-         acf_csv_file, verbose);
- csv_parsed = true;
-    }
-
-    if (func_number < 0){
-
- return;
-    }
-    for (i = 0; i < func_number; i++){
- char *func_name = acf_ftable[i].func_name;
- char *opt_attr = acf_ftable[i].opt_attr;
- char *opt_arg = acf_ftable[i].opt_arg;
- char *opt_file = acf_ftable[i].opt_file;
-
- if ((!strncmp("PARAM_", opt_attr, strlen("PARAM_"))))
-   continue;
-
- attribute_identifier = (__builtin_constant_p (opt_attr) ? get_identifier_with_length ((opt_attr), strlen (opt_attr)) : get_identifier (opt_attr));
- if ((strcmp (func_name, cur_func_name) == 0) &&
-     source_file_match(opt_file, (char *) global_options.x_main_input_filename)) {
-     if (verbose) {
-  fprintf(stdout, "acf_plugin: Attaching attribute to "
-   "function %s: %s %s",
-   cur_func_name, opt_attr, opt_arg);
-  if (opt_file == __null)
-      fprintf(stdout, "\n");
-  else
-      fprintf(stdout, " (file: %s)\n",opt_file);
-     }
-     if (opt_arg != __null) {
-  argument = build_string(strlen(opt_arg), opt_arg);
-  argument_list = tree_cons_stat ((tree) __null,argument,argument_list );
-     } else {
-  argument_list = (tree) __null;
-     }
-
-     attribute_list = tree_cons_stat (attribute_identifier,argument_list,attribute_list )
-                          ;
-
-     my_cp_check_const_attributes (attribute_list);
-     if(attribute_list != (tree) __null){
-  decl_attributes_func(&decl,attribute_list,
-         ATTR_FLAG_TYPE_IN_PLACE);
-     }
- } else {
-
- }
-    }
-}
-
-static char **csv_param_name = __null;
-static int *csv_param_value = __null;
-static size_t csv_param_index = 0;
-static int *csv_param_set = __null;
-# 270 "../../../src/acf_plugin.c"
-static bool get_param_idx(char *opt_param, size_t *idx) {
-    size_t i, num_compiler_params = get_num_compiler_params();
-
-    for (i = 0; i < num_compiler_params; ++i) {
- if (strcmp (compiler_params[i].option, opt_param) == 0) {
-     *idx = i;
-     return true;
- }
-    }
-    return false;
-}
-
-static void save_and_set_param(char *opt_param, int value) {
-    size_t param_idx;
-
-    if (!get_param_idx(opt_param, &param_idx))
- return;
-
-
-    csv_param_name[csv_param_index] = opt_param;
-    csv_param_value[csv_param_index] = ((int) ((*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift))[(int) param_idx]));
-    csv_param_index ++;
-# 302 "../../../src/acf_plugin.c"
-    set_param_value(opt_param, value, (*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift)), csv_param_set);
-
-
-
-}
-
-static void restore_param_values() {
-    size_t i;
-
-    for ( i = 0; i < csv_param_index; i++) {
-
- set_param_value(csv_param_name[i], csv_param_value[i], (*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift)), csv_param_set);
-
-
-
-    }
-}
-
-static void fill_csv_params() {
-    const char *cur_func_name = __null;
-    int i;
-
-    cur_func_name = ((const char *) (decl_assembler_name ((cfun + 0)->decl))->identifier.id.str);
-
-    if (!csv_parsed) {
- func_number = parse_ftable_csv_file(&acf_ftable,
-         acf_csv_file, verbose);
- csv_parsed = true;
-    }
-
-    if (func_number < 0){
-
- return;
-    }
-
-    for (i = 0; i < func_number; i++){
- char *func_name = acf_ftable[i].func_name;
- char *opt_attr = acf_ftable[i].opt_attr;
- char *opt_arg = acf_ftable[i].opt_arg;
- char *opt_file = acf_ftable[i].opt_file;
- char *opt_param;
-
- if (!(!strncmp("PARAM_", opt_attr, strlen("PARAM_"))))
-     continue;
-
- opt_param = opt_attr + strlen("PARAM_");
-
- if ((strcmp (func_name, cur_func_name) == 0) &&
-     source_file_match(opt_file, (char *) global_options.x_main_input_filename)) {
-     if (opt_arg != __null) {
-  save_and_set_param(opt_param, atoi(acf_ftable[i].opt_arg));
-
-  if (verbose) {
-      fprintf(stdout, "acf_plugin: Attaching param to "
-       "function %s: %s=%d\n",
-       ((const char *) (decl_assembler_name ((cfun + 0)->decl))->identifier.id.str), opt_param, atoi(acf_ftable[i].opt_arg));
-  }
-     }
- }
-    }
-
-    return;
+# 450 "../../../src/acf_plugin.c"
+    fill_csv_options(decl, 1);
 }
 
 static void param_injector_start_passes_callback(void *gcc_data,void *data) {
@@ -39041,17 +42111,77 @@ static void param_injector_start_passes_callback(void *gcc_data,void *data) {
 
 
     csv_param_index = 0;
-    fill_csv_params();
+    save_options = __null;
+    fill_csv_options(__null, 2);
 }
 
 static void param_injector_end_passes_callback(void *gcc_data,void *data) {
 
-    restore_param_values();
+    if (csv_param_index > 0)
+ restore_param_values();
+    if (save_options != __null)
+
+ cl_optimization_restore(&global_options, save_options);
+
+
+
+}
+
+static void lto_clean_optimize_callback(void) {
+    struct cgraph_node *node;
+
+
+
+
+    for (node = cgraph_nodes; node; node = node->next) {
+ tree decl_node = node->decl;
+
+
+ ((decl_node)->function_decl.function_specific_optimization) = __null;
+    }
 }
 
 static int pre_genericize=PLUGIN_PRE_GENERICIZE;
 static int start_unit=PLUGIN_START_UNIT;
 static int finish_unit=PLUGIN_START_UNIT;
+
+static struct ipa_opt_pass_d lto_clean_optimize_pass = {
+    {
+ IPA_PASS,
+ "lto_clean_optimize",
+ __null,
+ __null,
+ __null,
+ __null,
+ 0,
+ TV_NONE,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0
+    },
+    &lto_clean_optimize_callback,
+    __null,
+    __null,
+
+    __null,
+    __null,
+
+
+
+    __null,
+    0,
+    __null,
+    __null
+};
+
+static struct register_pass_info lto_clean_optimize_info = {
+    (struct opt_pass *)&lto_clean_optimize_pass,
+    "lto_decls_out",
+    0,
+    PASS_POS_INSERT_BEFORE
+};
 
 int plugin_init(struct plugin_name_args *plugin_na,
   struct plugin_gcc_version *version){
@@ -39065,7 +42195,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
     int plugin_buildtime_hwi = 0;
     bool bad = false;
     int i;
-# 434 "../../../src/acf_plugin.c"
+# 581 "../../../src/acf_plugin.c"
     if ((version->basever[0] < '4') ||
  ((version->basever[0] == '4') && (version->basever[2] < '6'))) {
  error("%s: build gcc and load gcc versions are incompatible.", plugin_name);
@@ -39187,6 +42317,15 @@ int plugin_init(struct plugin_name_args *plugin_na,
     register_callback(plugin_na->base_name,
         PLUGIN_ALL_PASSES_END,
         &param_injector_end_passes_callback, __null);
-# 569 "../../../src/acf_plugin.c"
+
+
+
+    if (global_options.x_flag_generate_lto &&
+ ((version->basever[0] < '4') ||
+  ((version->basever[0] == '4') && (version->basever[2] < '7'))))
+     register_callback (plugin_na->base_name,
+          PLUGIN_PASS_MANAGER_SETUP,
+          __null, &lto_clean_optimize_info);
+# 725 "../../../src/acf_plugin.c"
     return 0;
 }

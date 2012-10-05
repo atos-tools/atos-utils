@@ -2820,7 +2820,7 @@ typedef struct acf_ftable_entry {
     char *opt_arg;
     char *opt_file;
 } acf_ftable_entry_t;
-# 41 "../../../src/acf_plugin.h"
+# 42 "../../../src/acf_plugin.h"
 extern "C" {
 
 

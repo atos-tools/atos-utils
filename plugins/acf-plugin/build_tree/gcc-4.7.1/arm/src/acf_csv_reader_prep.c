@@ -2397,7 +2397,7 @@ typedef struct acf_ftable_entry {
     char *opt_arg;
     char *opt_file;
 } acf_ftable_entry_t;
-# 45 "../../../src/acf_plugin.h"
+# 46 "../../../src/acf_plugin.h"
 int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p, int verbose);
 # 25 "../../../src/acf_csv_reader.c" 2
 # 42 "../../../src/acf_csv_reader.c"

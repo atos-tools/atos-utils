@@ -35,7 +35,8 @@ typedef struct acf_ftable_entry {
 #define CSV_REQ_ENTRIES 2
 
 #define CSV_PARAM "PARAM_"
-#define IS_CSV_PARAM(str) (!strncmp(CSV_PARAM, str, strlen(CSV_PARAM)))
+#define IS_CSV_PARAM(acf_entry) (!strncmp(CSV_PARAM, acf_entry->opt_attr, strlen(CSV_PARAM)))
+#define IS_CSV_OPTIMIZE(acf_entry) (strncmp(CSV_PARAM, acf_entry->opt_attr, strlen(CSV_PARAM)))
 
 #ifdef __cplusplus
 extern "C" {

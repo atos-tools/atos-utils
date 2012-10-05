@@ -40,6 +40,7 @@ srcdir=`cd $dir/../.. && pwd`
 echo "Getting parameters..."
 WORKSPACE=${WORKSPACE:-$PWD}
 GITROOT=${GITROOT:-$srcdir}
+LONG_TESTS=${LONG_TESTS:-1}
 
 echo "Setting clean environment"
 export PATH=/usr/local/bin:/usr/bin:/bin
@@ -100,8 +101,8 @@ make -f $GITROOT/GNUmakefile examples-nograph
 echo "Installing atos-utils..."
 make -f $GITROOT/GNUmakefile -j 4 install install-doc PREFIX=$DEVIMAGE/usr/local
 
-echo "Checking installed version of atos-utils..."
-ROOT=$DEVIMAGE/usr/local make -f $GITROOT/GNUmakefile -j 4 check
+echo "Checking installed version of atos-utils with long tests..."
+ROOT=$DEVIMAGE/usr/local LONG_TESTS=${LONG_TESTS} make -f $GITROOT/GNUmakefile -j 4 check
 
 echo "Archiving atos-utils..."
 cd $DEVIMAGE

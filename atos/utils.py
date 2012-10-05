@@ -422,15 +422,18 @@ def run_atos_init(args):
         process.system(rmcommand, print_output=True)
 
     if args.build_script:
-        invoque("atos-audit", args, command=process.cmdline2list(
-                args.build_script))
-        invoque("atos-deps", args,
-                executables=executables, all=(not executables))
+        status = invoque("atos-audit", args,
+                         command=process.cmdline2list(args.build_script))
+        if status != 0: return status
+        status = invoque("atos-deps", args, executables=executables,
+                         all=(not executables))
+        if status != 0: return status
         # TODO: to be replaced by invoque(atos-config)
         command_config = [
             os.path.join(globals.BINDIR, "atos-config"),
             "-C", args.configuration_path]
-        process.system(command_config, print_output=True)
+        status = process.system(command_config, print_output=True)
+        if status != 0: return status
 
     elif not os.path.isfile(
         os.path.join(args.configuration_path, "build.audit")):
@@ -449,10 +452,13 @@ def run_atos_init(args):
             "default_values.nb_runs", str(args.nbruns))
 
     if args.run_script:
-        invoque("atos-raudit", args, command=process.cmdline2list(
-                args.run_script))
+        status = invoque("atos-raudit", args,
+                         command=process.cmdline2list(args.run_script))
+        if status != 0: return status
         if not args.no_run:
-            invoque("atos-run", args, record=True)  # reference run
+            # reference run
+            status = invoque("atos-run", args, record=True)
+            if status != 0: return status
 
     elif not os.path.isfile(
         os.path.join(args.configuration_path, "run.audit")):

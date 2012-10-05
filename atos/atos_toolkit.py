@@ -680,7 +680,7 @@ def gen_file_by_file(cold_th, cold_opts, file_list,
     cold_obj_flags.update({'*': base_flags})
     obj_flags = dict(cold_obj_flags.items())
     ref_result = yield csv_part_opt(obj_flags), 'basemin'
-    debug('fbf res [%s] -> %s' % (str(obj_flags), str(ref_result[1])))
+    debug('fbf res [%s] -> %s' % (str(obj_flags), str(ref_result)))
 
     variant_modes = generator.baseopts and ['basemin'] or generator.variants
 

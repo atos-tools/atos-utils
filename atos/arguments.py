@@ -442,7 +442,6 @@ class parsers:
         if parser == None:
             parser = ATOSArgumentParser(prog="atos-opt",
                                         description="ATOS opt tool")
-        args.executables(parser)
         args.configuration_path(parser)
         args.atos_opt.lto(parser)
         args.atos_opt.fdo(parser)

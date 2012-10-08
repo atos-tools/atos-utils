@@ -636,7 +636,8 @@ def execpath(file):
     Returns None if the command is not found or not executable.
     """
     try:
-        status, output = process.system(["which", file], get_output=True)
+        status, output = process.system(
+            ["/usr/bin/which", file], get_output=True)
     except OSError:
         output = ""
     if output == "": return None

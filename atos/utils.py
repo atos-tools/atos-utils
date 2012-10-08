@@ -231,7 +231,11 @@ def run_atos_build(args):
 
     build_mk = os.path.join(args.configuration_path, "build.mk")
     compile_options = " ".join(compile_options)
-    if not args.command and not opt_rebuild and os.path.isfile(build_mk):
+    if not args.command and not opt_rebuild:
+        if not os.path.isfile(build_mk):
+            error("optimized build file missing: %s" % build_mk)
+            error("atos-deps was not run or configuration path mismatch")
+            return 1
         # if the configuration path contains a build.mk execute it
         command = ["make", "-f", build_mk, "-j", str(args.jobs)]
         command.append("ACFLAGS=%s" % compile_options)
@@ -253,7 +257,11 @@ def run_atos_build(args):
             PROOT_ADDON_CC_OPTS_ARGS="%s" % compile_options,
             PROOT_ADDON_CC_OPTS_CCRE=ccregexp,
             PROOT_ADDON_CC_OPTS_DRIVER=atos_driver)
-        if not args.command and opt_rebuild and os.path.isfile(build_sh):
+        if not args.command:
+            if not os.path.isfile(build_sh):
+                error("build script missing: %s" % build_sh)
+                error("atos-build was not run or configuration path mismatch")
+                return 1
             command.append(build_sh)
         else:
             command.extend(args.command)
@@ -665,7 +673,7 @@ def run_atos_opt(args):
     if args.lto: options += " -flto"
 
     if args.keep:  # do nothing if existing run results
-        variant = atos_lib.variant_id(options, None, args.uopts)
+        variant = atos_lib.variant_id(options, None, uopts)
         db = atos_lib.atos_db.db(args.configuration_path)
         results = atos_lib.atos_client_db(db).query({"variant": variant})
         if results:

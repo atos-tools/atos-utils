@@ -807,7 +807,8 @@ def run_atos_run(args):
     def get_size(executables):
         def one_size(exe):
             if not os.path.isabs(exe):
-                status, exe = process.system(["which", exe], get_output=True)
+                status, exe = process.system(
+                    ["/usr/bin/which", exe], get_output=True)
             if not exe: return None
             status, output = process.system(
                 ["/usr/bin/size", exe.strip()], get_output=True)

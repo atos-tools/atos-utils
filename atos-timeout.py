@@ -24,7 +24,9 @@ import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(
             os.path.dirname(__file__), '..', 'lib', 'atos', 'python')))
 from atos import globals
-import subprocess, signal, errno, argparse
+import subprocess, signal, errno, argparse, time
+
+GRP_ENVVAR = "ATOS_TIMEOUT_GRP"
 
 class ExitCodes:
     """ Exit codes used to feedback the parent process.
@@ -87,89 +89,118 @@ class Monitor():
     def __init__(self, args):
         """ Constructor, arguments are stored into the args object. """
         self.args = args
-        self.pgroup = None
-        self.old_pgroup = None
         self.proc = None
+        self.group = None
 
     class TimeoutException(Exception):
         """ Timeout exception used by the alarm to notify the monitor. """
         pass
+
+    def timeout_grps(self, pid):
+        """
+        Get the timeout groups for the given process, it is available through
+        the GRP_ENVVAR (see definition above) envvar of the process.
+        Returns the list of timeout groups for the process or [].
+        """
+        try:
+            with open("/proc/%d/environ" % pid) as f:
+                env_vars = f.read()
+        except IOError:
+            # Can't read, not accessible
+            return []
+        env_list = env_vars.strip().split('\0')
+        for env in env_list:
+            index = env.find(GRP_ENVVAR + "=")
+            if index == 0:
+                return map(int, env[(len(GRP_ENVVAR) + 1):].split(':'))
+        return []
+
+    def process_list(self, sid):
+        """
+        Returns the list of processes in the given session id.
+        """
+        def filter_ps_pid(pid):
+            return pid != ps_pid
+
+        try:
+            proc = subprocess.Popen(["ps", "-s", str(sid),
+                                     "-o", "pid"],
+                                    stdout=subprocess.PIPE)
+        except OSError:
+            return []
+        output = proc.communicate()[0]
+        if proc.returncode != 0:
+            return []
+        ps_pid = proc.pid
+        return filter(filter_ps_pid,
+                      map(int, [x.strip() for x in
+                                output.strip().split("\n")[1:]]))
+
+    def sub_processes(self):
+        """
+        Construct the full list of process in the monitor hierarchy.
+        """
+        def all_grp_processes(grp, process_list):
+            """ Get all processes that match the given group. """
+            def filter_grp(pid):
+                return grp in self.timeout_grps(pid)
+            return filter(filter_grp, process_list)
+
+        processes = self.process_list(os.getsid(self.group))
+        grp_processes = all_grp_processes(self.group, processes)
+        return grp_processes
 
     @staticmethod
     def timeout_handler(signum, frame):
         """ Handler for the alarm. """
         raise Monitor.TimeoutException()
 
+    @staticmethod
+    def interrupt_handler(signum, frame):
+        """ Handler for signals that require immediate exit. """
+        print >>sys.stderr, \
+            "atos-timeout: interrupted by signal %d" % signum
+        sys.exit(128 + signum)
+
     def send_signal(self, sig):
-        """ Terminates the monitor process with the given signal.
-        The signal is first sent to the monitored process in the case
-        where its process group have been changed.
-        Then the signal is sent to the whole process group initiated
-        by the monitor.
-        When possible the monitor ignores the signal such that it can
-        exit with a predifined return code and message.
-        The monitor resets its original pgroup also, in the case where
-        it is not the group leader, it allows graceful termination even
-        when signal 9 is sent.
         """
-        if sig != 9:
-            signal.signal(sig, signal.SIG_IGN)
-        if self.pgroup != None:
-            os.setpgid(0, self.old_pgroup)
-        try:
-            self.proc.send_signal(sig)
-            if self.pgroup != None:
-                os.killpg(self.pgroup, sig)
-        except OSError, e:
-            # Process or process group already killed
-            pass
-
-    def set_pgroup(self):
-        """ Force process group or ignore if not possible.
-        We also have to take control of opened tty as some
-        shells such as dash do not manage correctly process
-        groups created by setpgrp().
-        If the timeout is called from dash (/bin/sh on Ubuntu)
-        and one of the sub-process of timeout requests a tty
-        read/write the full timeout process group is stopped
-        while actually it should not as the process group should
-        be scheduled to foreground by the shell.
-        This works correctly with bash but we have to handle the
-        dash case anyway.
+        Terminates the monitored processes with the given signal.
+        All processes in the monitor hierarchy will receive the signal.
+        In order to avoid race conditions when a process is created
+        after the list of processes in the group is constructed, we
+        iterate until no more processes in the group is found.
+        Note that in the main monitor loop an alarm is setup in the
+        case where the signal is not SIGKILL, thus in practice the
+        loop will always be exited.
         """
+        def filter_monitor(proc):
+            return proc != self.group
 
-        def list_tty_filenos():
-            filenos = []
-            for f in os.listdir("/proc/self/fd"):
-                if os.isatty(int(f)): filenos.append(int(f))
-            return filenos
-
-        # Force process group or ignore if not possible
-        try:
-            self.old_pgroup = os.getpgrp()
-            os.setpgrp()
-            self.pgroup = os.getpgrp()
-
-            # Take control of opened ttys
-            signal.signal(signal.SIGTTIN, signal.SIG_IGN)
-            signal.signal(signal.SIGTTOU, signal.SIG_IGN)
-            signal.signal(signal.SIGTSTP, signal.SIG_IGN)
-            for f in list_tty_filenos():
-                os.tcsetpgrp(f, self.pgroup)
-            signal.signal(signal.SIGTTIN, signal.SIG_DFL)
-            signal.signal(signal.SIGTTOU, signal.SIG_DFL)
-            signal.signal(signal.SIGTSTP, signal.SIG_DFL)
-        except OSError, e:
-            print >>sys.stderr, "atos-timeout: warning: can't set " \
-                "process group id: " + e.strerror
+        while True:
+            to_be_killed = filter(filter_monitor, self.sub_processes())
+            if not to_be_killed: break
+            for proc in to_be_killed:
+                try:
+                    os.kill(proc, sig)
+                    if self.args.debug:
+                        print >>sys.stderr, "atos-timeout: killed " + \
+                            str(proc)
+                except OSError, e:
+                    # Process already killed
+                    pass
+            time.sleep(1)
 
     def run(self):
-        """ Runs the monitor and monitored process.
-        This method returns the exit code to be passed
-        to sys.exit.
+        """
+        Runs the monitor and monitored process.
+        This method returns the exit code to be passed to sys.exit.
         """
 
-        self.set_pgroup()
+        # Set the timeout group to the monitor pid
+        self.group = os.getpid()
+        grps = os.environ.get(GRP_ENVVAR, None)
+        os.environ[GRP_ENVVAR] = (str(self.group) if not grps else
+                                  ':'.join((str(self.group), grps)))
 
         # Launch monitored process
         try:
@@ -187,12 +218,20 @@ class Monitor():
         signal.signal(signal.SIGALRM, self.timeout_handler)
         signal.alarm(self.args.duration[0])
 
+        # Install handler for ^C
+        signal.signal(signal.SIGINT, self.interrupt_handler)
+
         # Monitoring loop
         completed = False
         terminated = False
         killed = False
         while not completed:
             try:
+                if killed:
+                    self.send_signal(9)
+                elif terminated:
+                    signal.alarm(self.args.kill_after)
+                    self.send_signal(self.args.signal)
                 code = self.proc.wait()
                 completed = True
             except self.TimeoutException:
@@ -201,17 +240,11 @@ class Monitor():
                 if self.args.signal == 9 or terminated:
                     if self.args.debug:
                         print >>sys.stderr, "atos-timeout: sending SIGKILL"
-                    self.send_signal(9)
                     killed = True
                 else:
                     if self.args.debug: print >>sys.stderr, "atos-timeout: " \
                             "sending signal " + str(self.args.signal)
-                    signal.alarm(self.args.kill_after)
-                    self.send_signal(self.args.signal)
                     terminated = True
-            except KeyboardInterrupt:
-                if self.args.debug: print >>sys.stderr, "atos-timeout: " \
-                        "command interrupted: " + self.args.command[0]
         if killed:
             print >>sys.stderr, "Killed after timeout: " + \
                 " ".join(self.args.command + self.args.arguments)
@@ -221,7 +254,6 @@ class Monitor():
                 " ".join(self.args.command + self.args.arguments)
             return ExitCodes.TIMEDOUT
         return code
-
 
 args = parser.parse_args()
 sys.exit(Monitor(args).run())

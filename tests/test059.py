@@ -62,6 +62,13 @@ atos_lib.generate_script("get_res.sh", ";"
         "echo ATOS: aaa: size: 2000;"
         "x=`cat - | grep test | awk '{ print ($2 + 1) * 1000 }'`;"
         "echo ATOS: aaa: time: $x", {})
+atos_lib.generate_script("get_res_2.sh", ";"
+        "echo ATOS: bin1: size: 1001;"
+        "echo ATOS: bin1: time: 1000;"
+        "echo ATOS: bin2: size: 2002;"
+        "echo ATOS: bin2: time: 2000;"
+        "echo ATOS: bin3: size: 3003;"
+        "echo ATOS: bin3: time: 3000;", {})
 
 
 
@@ -210,3 +217,12 @@ assert len(results) == 1 and results[0]["time"] == (110 * 1000)
 
 
 
+status = utils.invoque("atos-run", args, options="-O4", record=True,
+                       results_script="./get_res_2.sh")
+assert status == 0
+results = get_results({"variant" : "OPT-O4", 'target': 'bin1'})
+assert len(results) == 1 and results[0]["time"] == 1000 and results[0]["size"] == 1001
+results = get_results({"variant" : "OPT-O4", 'target': 'bin2'})
+assert len(results) == 1 and results[0]["time"] == 2000 and results[0]["size"] == 2002
+results = get_results({"variant" : "OPT-O4", 'target': 'bin3'})
+assert len(results) == 1 and results[0]["time"] == 3000 and results[0]["size"] == 3003

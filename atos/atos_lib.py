@@ -582,6 +582,15 @@ def results_filter(results, query):
                 map(lambda (k, v): re.match('^%s$' % v, x.get(k, '')),
                     query.items())), results))
 
+def results_filter_cookie(results, cookie):
+    if not cookie: return results
+    return filter(
+        lambda x: cookie in x.get('cookies', '').split(','), results)
+
+def new_cookie():
+    # only based on current time for now
+    return md5sum(str(time.time()))
+
 def result_entry(d):
     try:
         d['time'] = float(d['time'])

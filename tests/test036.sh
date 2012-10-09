@@ -22,7 +22,7 @@ chmod u+x run.sh
 $ROOT/bin/atos-init \
     -r "./run.sh" \
     -b "gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c" \
-    -B $profdir
+    -B $profdir 2>&1
 
 $ROOT/bin/atos-opt -r -a -O2
 

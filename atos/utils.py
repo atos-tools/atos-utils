@@ -881,6 +881,8 @@ def run_atos_run(args):
                         process.cmdline2list(args.gopts))})
         entry.update({'time': str(time)})
         entry.update({'size': str(size)})
+        if args.cookies:
+            entry.update({'cookies': ','.join(list(set(args.cookies)))})
         if args.output_file:
             db = atos_lib.atos_db_file(args.output_file)
             atos_lib.atos_client_db(db).add_result(entry)

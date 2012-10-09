@@ -246,6 +246,7 @@ class parsers:
         args.remote_path(parser)
         args.results_script(parser)
         args.clean(parser)
+        args.cookie(parser)
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
@@ -451,6 +452,7 @@ class parsers:
         args.useprofile(parser)
         args.nbruns(parser, default=1)
         args.options(parser)
+        args.cookie(parser)
         args.debug(parser)
         args.force(parser, ("--force",))
         args.quiet(parser)
@@ -537,6 +539,7 @@ class parsers:
         args.record(parser)
         args.variant(parser)
         args.options(parser)
+        args.cookie(parser)
         args.output(parser)
         args.id(parser)
         args.atos_run.silent(parser)
@@ -558,7 +561,7 @@ class parsers:
         args.results_script(parser)
         args.nbruns(parser)
         args.exe(parser)
-
+        args.cookie(parser)
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
@@ -739,6 +742,13 @@ class args:
                              dest="record",
                              action='store_true',
                              help="record results")
+
+    @staticmethod
+    def cookie(parser, args=("--cookie",)):
+        parser.add_argument(*args,
+                             dest="cookies",
+                             action='append',
+                             help=argparse.SUPPRESS)
 
     @staticmethod
     def tradeoffs(parser, args=("-s", "--tradeoffs")):

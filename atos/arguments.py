@@ -42,6 +42,9 @@ def parser(tool):
         "atos-raudit": parsers.atos_raudit,
         "atos-run": parsers.atos_run,
         "atos-replay": parsers.atos_replay,
+        "atos-explore-inline": parsers.atos_explore_inline,
+        "atos-explore-loop": parsers.atos_explore_loop,
+        "atos-explore-optim": parsers.atos_explore_optim,
         }
     return factories[tool]()
 
@@ -247,6 +250,69 @@ class parsers:
         args.results_script(parser)
         args.clean(parser)
         args.cookie(parser)
+        args.debug(parser)
+        args.quiet(parser)
+        args.dryrun(parser, ("--dryrun",))
+        args.version(parser)
+        return parser
+
+    @staticmethod
+    def atos_explore_inline(parser=None):
+        """ atos explore inline arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-explore-inline",
+                                        description="ATOS explore inline tool")
+        args.configuration_path(parser)
+        args.nbruns(parser, default=1)
+        args.remote_path(parser)
+        args.seed(parser)
+        args.nbiters(parser)
+        args.flags(parser)
+        args.optim_levels(parser)
+        args.optim_variants(parser)
+        args.base_variants(parser)
+        args.debug(parser)
+        args.quiet(parser)
+        args.dryrun(parser, ("--dryrun",))
+        args.version(parser)
+        return parser
+
+    @staticmethod
+    def atos_explore_loop(parser=None):
+        """ atos explore loop arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-explore-loop",
+                                        description="ATOS explore loop tool")
+        args.configuration_path(parser)
+        args.nbruns(parser, default=1)
+        args.remote_path(parser)
+        args.seed(parser)
+        args.nbiters(parser)
+        args.flags(parser)
+        args.optim_levels(parser)
+        args.optim_variants(parser)
+        args.base_variants(parser)
+        args.debug(parser)
+        args.quiet(parser)
+        args.dryrun(parser, ("--dryrun",))
+        args.version(parser)
+        return parser
+
+    @staticmethod
+    def atos_explore_optim(parser=None):
+        """ atos explore optim arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-explore-optim",
+                                        description="ATOS explore optim tool")
+        args.configuration_path(parser)
+        args.nbruns(parser, default=1)
+        args.remote_path(parser)
+        args.seed(parser)
+        args.nbiters(parser)
+        args.flags(parser)
+        args.optim_levels(parser)
+        args.optim_variants(parser)
+        args.base_variants(parser)
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
@@ -764,6 +830,56 @@ class args:
             *args,
              dest="variant",
              help="identifier of variant")
+
+    @staticmethod
+    def seed(parser, args=("-S", "--seed")):
+        parser.add_argument(
+            *args,
+             dest="seed",
+             help="seed for random generator",
+             default=0)
+
+    @staticmethod
+    def nbiters(parser, args=("-M", "--nbiters")):
+        parser.add_argument(
+            *args,
+             dest="nbiters",
+             type=int,
+             help="number of exploration loop iterations",
+             default=100)
+
+    @staticmethod
+    def flags(parser, args=("-F", "--flags")):
+        parser.add_argument(
+            *args,
+             dest="flags_file",
+             help="flags list filename",
+             default=None)
+
+    @staticmethod
+    def optim_levels(parser, args=("-O", "--optim-levels")):
+        parser.add_argument(
+            *args,
+             dest="optim_levels",
+             help="list of optimization levels",
+             default="-Os,-O2,-O3")
+
+    @staticmethod
+    def optim_variants(parser, args=("-V", "--optim-variants")):
+        parser.add_argument(
+            *args,
+             dest="optim_variants",
+             help="list of optimization variants, defaults to all"
+             " available variants",
+             default=None)
+
+    @staticmethod
+    def base_variants(parser):
+        parser.add_argument(
+            "base_variants",
+            nargs=argparse.REMAINDER,
+            help="identifiers of variants"
+            " on which the exploration will be based")
 
     @staticmethod
     def executables(parser):

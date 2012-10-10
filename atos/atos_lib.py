@@ -588,8 +588,8 @@ def results_filter_cookie(results, cookie):
         lambda x: cookie in x.get('cookies', '').split(','), results)
 
 def new_cookie():
-    # only based on current time for now
-    return md5sum(str(time.time()))
+    return md5sum(":".join(map(str, (
+                    os.uname() + (os.getpid(), os.getppid(), time.time())))))
 
 def result_entry(d):
     try:

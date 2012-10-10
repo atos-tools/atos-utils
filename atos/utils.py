@@ -20,6 +20,7 @@ import sys, os, stat
 import globals
 import arguments
 import atos_lib
+import generators
 import logger
 import process
 import shutil
@@ -51,6 +52,9 @@ def invoque(tool, args, **kwargs):
         "atos-raudit": run_atos_raudit,
         "atos-run": run_atos_run,
         "atos-replay": run_atos_replay,
+        "atos-explore-inline": run_atos_explore_inline,
+        "atos-explore-loop": run_atos_explore_loop,
+        "atos-explore-optim": run_atos_explore_optim,
         }
 
     def dryrun_tool(tool, args, **kwargs):
@@ -1040,3 +1044,36 @@ def run_atos_replay(args):
              command=[args.run_script])
 
     return 0
+
+def run_atos_explore_inline(args):
+    """ ATOS explore-inline tool implementation. """
+
+    flags_file = args.flags_file or os.path.join(
+        args.configuration_path, "flags.inline.cfg")
+
+    status = generators.run_exploration_loop(
+        args, flags_file=flags_file, generator=generators.gen_rnd_uniform_deps)
+
+    return status
+
+def run_atos_explore_loop(args):
+    """ ATOS explore-loop tool implementation. """
+
+    flags_file = args.flags_file or os.path.join(
+        args.configuration_path, "flags.loop.cfg")
+
+    status = generators.run_exploration_loop(
+        args, flags_file=flags_file, generator=generators.gen_rnd_uniform_deps)
+
+    return status
+
+def run_atos_explore_optim(args):
+    """ ATOS explore-optim tool implementation. """
+
+    flags_file = args.flags_file or os.path.join(
+        args.configuration_path, "flags.optim.cfg")
+
+    status = generators.run_exploration_loop(
+        args, flags_file=flags_file, generator=generators.gen_rnd_uniform_deps)
+
+    return status

@@ -175,14 +175,6 @@ EOF
 	[ -f "$acfpath" ] || acfpath="none"
 	echo "plugin_acf $acfpath"
 
-        # plugins
-	if [ -f "$acfpath" ]; then
-	    result=`$compiler -O2 -fplugin=$acfpath -fplugin-arg-acf_plugin-test -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
-	    echo "plugins_enabled $result"
-	else
-	    echo "plugins_enabled 0"
-	fi
-
         # host_wide_int size for plugins
 	HWI=0
 	# Locate cc1 from gcc path
@@ -193,6 +185,14 @@ EOF
 	    [ "$HWI" != "" ] || HWI=0
 	fi
 	echo "host_wide_int $HWI"
+
+        # plugins
+	if [ -f "$acfpath" -a "$HWI" != 0 ]; then
+	    result=`$compiler -O2 -fplugin=$acfpath -fplugin-arg-acf_plugin-test -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
+	    echo "plugins_enabled $result"
+	else
+	    echo "plugins_enabled 0"
+	fi
 
     fi
 }

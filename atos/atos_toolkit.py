@@ -25,171 +25,8 @@ import globals
 import process
 import atos_lib
 import logger
+import generators
 from logger import debug, warning
-
-# ####################################################################
-
-
-class opt_flag():
-
-    def __init__(self, frange=None, fchoice=None):
-        assert bool(frange) ^ bool(fchoice)
-        self.range, self.choice = None, None
-        if frange:
-            flag, min, max = frange
-            self.range = (flag, int(min), int(max))
-        if fchoice:
-            self.choice = fchoice
-
-    def __repr__(self):
-        return self.optname()
-
-    def rand(self):
-        if self.range:
-            flag, min, max = self.range
-            return '%s%d' % (flag, randint(min, max))
-        elif self.choice:
-            return choice(self.choice)
-        else: assert 0
-
-    def values(self):
-        if self.range:
-            def frange(min, max, step):
-                val = float(min)
-                while int(val) <= max:
-                    yield int(val)
-                    val = val + step
-            nbvalues = 3
-            flag, min, max = self.range
-            return ['%s%d' % (flag, v) for v in frange(
-                    min, max, float(max - min) / (nbvalues - 1))]
-        elif self.choice:
-            return list(self.choice)
-        else: assert 0
-
-    def isoptlevel(self):
-        return self.optname() == '-O'
-
-    @staticmethod
-    def optlevel(opt):
-        return opt_flag(fchoice=opt)
-
-    def optname(self):
-        return opt_flag.foptname(self.rand())
-
-    @staticmethod
-    def soptname(s):
-        eqidx = s.find('=')
-        if eqidx != -1:
-            s = s[:eqidx + 1]
-        return s
-
-    @staticmethod
-    def foptname(s):
-        s = opt_flag.soptname(s)
-        if s.startswith('-fno-'):
-            s = s.replace('no-', '', 1)
-        if s.startswith('-O'):
-            s = '-O'
-        return s
-
-
-class opt_flag_list():
-
-    def __init__(self, filename):
-        self.load_from_file(filename)
-
-    def available_flags(self, cmdline=''):
-        result = []
-        # options that have no dependencies
-        result.extend(self.dependencies.get('', []))
-        # options that are enabled by command line
-        cmdflags = self.expand_command_line(cmdline)
-        for flag in cmdflags:
-            result.extend(self.dependencies.get(
-                    opt_flag.soptname(flag), []))
-        # filter options already set ?
-        return set(result)
-
-    @staticmethod
-    def parse_line(cmdline):
-        cmd = [x.strip() for x in cmdline.split(' ')]
-        result, idx, cmdlen = [], 0, len(cmd)
-        while idx < cmdlen:
-            flag = cmd[idx]
-            if flag in ['--param', '-mllvm'] and idx + 1 < cmdlen:
-                flag += ' ' + cmd[idx + 1]
-                idx += 1
-            result += [flag]
-            idx += 1
-        return result
-
-    def expand_command_line(self, cmdline):
-        def handle_flag(flag, explicit):
-            if not flag: return
-            flag_name = opt_flag.foptname(flag)
-            explicitly_set = flag_isset.get(flag_name, False)
-            if explicitly_set and not explicit: return
-            flag_isset[flag_name] = explicit
-            flag_value[flag_name] = flag
-            flag_index[flag_name] = flag_idx
-        flag_isset, flag_value, flag_index = {}, {}, {}
-        # initial options
-        flag_list, flag_idx = [''], 0
-        # command line flags
-        flag_list.extend(opt_flag_list.parse_line(cmdline))
-        # expand aliases
-        for flag in flag_list:
-            handle_flag(flag, True)
-            flag_aliases = list(self.aliases.get(flag, []))
-            flag_idx += 1
-            while flag_aliases:
-                handle_flag(flag_aliases.pop(0), False)
-                flag_idx += 1
-        # return ordered and simplified flag list
-        return sorted(flag_value.values(),
-                      key=lambda x: flag_index[opt_flag.foptname(x)])
-
-    def load_from_file(self, filename):
-        flag_list, rev_dependencies, aliases = [], {}, {}
-        # parse flags file
-        for line in open(filename):
-            line = line.split('#', 1)[0].strip()
-            line = line.split('//', 1)[0].strip()
-            if not line: continue
-            # dependency
-            reobj = re.match('^(.*):(.*)', line)
-            if reobj:
-                ldeps = [x.strip() for x in reobj.group(1).split(',')]
-                rdeps = [x.strip() for x in reobj.group(2).split(',')]
-                [rev_dependencies.setdefault(r, []).append(
-                        l) for l in ldeps for r in rdeps]
-                continue
-            # alias
-            reobj = re.match('^(.*)=>(.*)', line)
-            if reobj:
-                lalias = [x.strip() for x in reobj.group(1).split(',')]
-                ralias = [x.strip() for x in reobj.group(2).split(',')]
-                [aliases.setdefault(l, []).append(
-                        r) for l in lalias for r in ralias]
-                continue
-            # range flag
-            reobj = re.match('^(.*)\[(.*)\.\.(.*)\]', line)
-            if reobj:
-                flag_list += [opt_flag(frange=reobj.groups())]
-                continue
-            # choice flag
-            choices = [w.strip() for w in line.split('|')]
-            flag_list += [opt_flag(fchoice=choices)]
-        # dependency dict
-        dependencies = {}
-        for flag in flag_list:
-            for dep_parent in rev_dependencies.get(flag.optname(), ['']):
-                dependencies.setdefault(dep_parent, []).append(flag)
-        self.flag_list = flag_list
-        self.dependencies = dependencies
-        self.aliases = aliases
-
 
 # ####################################################################
 
@@ -404,7 +241,7 @@ def gen_acf(imgpath, oprof_script, acf_plugin,
         return csv_path
 
     def filteropt(flag_str):
-        flag_list = opt_flag_list.parse_line(flag_str)
+        flag_list = generators.optim_flag_list.parse_line(flag_str)
         filter_in = ['^-f', '^-O', '^[^-]']
         flag_list = filter(
             lambda f: any(map(lambda i: re.match(i, f), filter_in)), flag_list)
@@ -615,7 +452,7 @@ def gen_staged(max_iter):
         debug('** compute tradeoff list: ' + str(tradeoffs))
         for tradeoff in tradeoffs:
             debug('**** base tradeoff: ' + str(tradeoff))
-            generator.optlist = opt_flag_list(fl)
+            generator.optlist = generators.optim_flag_list(fl)
             generator.baseopts = atos_exp_base_flags(
                 '', tradeoff.flags, tradeoff.variant)
             gen = gen_rnd_uniform_deps()
@@ -1070,8 +907,9 @@ if __name__ == '__main__':
 
     # generators setup
     generator.optlist = (
-        opts.flags != None and opt_flag_list(opts.flags))
-    generator.optlevel = opt_flag.optlevel(opts.optlvl.split(','))
+        opts.flags != None and generators.optim_flag_list(opts.flags))
+    generator.optlevel = generators.optim_flag_list.optim_flag.optlevel(
+        opts.optlvl.split(','))
     generator.variants = opts.variants.split(',')
     generator.atos_config = opts.atos_configurations
     generator.seed = opts.seed
@@ -1082,7 +920,8 @@ if __name__ == '__main__':
         generator.baseopts = atos_exp_base_flags(opts.base_opts)
 
     if opts.base_opts or args:
-        generator.optlevel = opt_flag.optlevel([''])
+        generator.optlevel = generators.optim_flag_list.optim_flag.optlevel(
+            [''])
         generator.variants = ['base']
 
     # exploration loop

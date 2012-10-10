@@ -22,7 +22,6 @@ srcdir:=$(dir $(firstword $(MAKEFILE_LIST)))
 builddir=$(srcdir)build_tree
 PREFIX=/usr/local
 PLUGIN_PREFIX=$(PREFIX)/lib/atos/plugins
-VSTAMP=version.stamp
 
 ALL_FILES_SUB=gcc-4.5.2/i386/acf_plugin.so gcc-4.5.2/x86_64/acf_plugin.so gcc-4.5.2/sh4/acf_plugin.so gcc-4.6.2/i386/acf_plugin.so gcc-4.6.2/x86_64/acf_plugin.so gcc-4.6.2/sh4/acf_plugin.so gcc-4.6.2/arm/acf_plugin.so gcc-4.7.0/i386/acf_plugin.so gcc-4.7.0/x86_64/acf_plugin.so gcc-4.7.1/arm/acf_plugin.so gcc-4.7.1/x86_64/acf_plugin.so gcc-4.7.1/i386/acf_plugin.so
 
@@ -30,11 +29,12 @@ ALL_FILES=$(addprefix $(builddir)/,$(ALL_FILES_SUB))
 
 INSTALLED_FILES=$(addprefix $(PLUGIN_PREFIX)/,$(ALL_FILES_SUB))
 
+.FORCE:
 .PHONY: all clean distclean install check tests
 
 all: $(ALL_FILES)
 
-$(builddir)/%/acf_plugin.so:
+$(builddir)/%/acf_plugin.so: .FORCE
 	$(MAKE) -C $(builddir)/$* all
 
 clean: $(dir $(ALL_FILES))

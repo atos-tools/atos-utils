@@ -1,4 +1,7 @@
+include conf.mk
+
 LTO=0
+CPP=0
 COPT=
 FLAG=
 CSV_DIR=.
@@ -18,14 +21,27 @@ CSV_FILES=$(wildcard $(CSV_DIR)/*.csv)
 CSV_CHECK=$(CSV_FILES:.csv=.check)
 
 XOPTS=
-SRCS=acf_test_main.c
+SRCC=acf_test_main.c
 MK_FLAG=COPT=$(COPT)
 
 ifeq ($(LTO), 1)
 XOPTS=-DLTO -flto
-SRCS+=acf_test_func.c
+SRCC+=acf_test_func.c
 MK_FLAG+=LTO=1
 LTOOOPT=-flto
+endif
+
+COMPILER=gcc
+CEXT=c
+CFUNC=func1
+
+SRCS=$(SRCC)
+ifeq ($(CPP), 1)
+COMPILER=g++
+CEXT=cpp
+CFUNC=_Z5func1Pi
+SRCS=$(SRCC:.c=.cpp)
+MK_FLAG+=CPP=1
 endif
 
 ifeq ($(V),1)
@@ -40,7 +56,7 @@ all:
 none:
 
 config:
-	$(QUIET)gcc -o acf_test_config acf_test_config.c && \
+	$(QUIET)$(COMPILER) -o acf_test_config acf_test_config.$(CEXT) && \
 	rm -f acf_test_config
 
 acf_tests: $(FLAGS)
@@ -52,7 +68,7 @@ csv_generate:
 	$(QUIET)rm -rf $(CSV_DIR) && \
 	mkdir -p $(CSV_DIR) && \
 	cp $(config_dir)/$(FLAG) $(CSV_DIR)/$(FLAG) && \
-	python $(ROOT)/lib/atos/python/atos/atos_toolkit.py --flags=$(CSV_DIR)/$(FLAG) --gen-acf-tests=$(CSV_DIR)
+	python $(ROOT)/lib/atos/python/atos/atos_toolkit.py --flags=$(CSV_DIR)/$(FLAG) --gen-acf-tests=$(CSV_DIR),$(CFUNC)
 
 csv_tests: $(TESTS)
 
@@ -61,7 +77,7 @@ $(TESTS): csv_generate
 
 %.check: %.csv
 	id=$*$(COPT)$(LTOOPT); \
-	gcc $(COPT) $(XOPTS) -fplugin=$(plugindir)/acf_plugin.so -fplugin-arg-acf_plugin-verbose -fplugin-arg-acf_plugin-csv_file=$< $(SRCS) -o $$id.out > $$id.trace.log 2>$$id.error.log ; \
+	$(COMPILER) $(COPT) $(XOPTS) -fplugin=$(plugindir)/acf_plugin.so -fplugin-arg-acf_plugin-verbose -fplugin-arg-acf_plugin-csv_file=$< $(SRCS) -o $$id.out > $$id.trace.log 2>$$id.error.log ; \
 	if [ `cat $$id.error.log | wc -l` -ne 0 ]; then \
 	  echo "$(MAKE) $*.chk $(MK_FLAG) => FAILED"; \
 	  cat $$id.error.log ; \
@@ -74,7 +90,7 @@ $(TESTS): csv_generate
 	rm -f $$id.out $$id.trace.log $$id.error.log
 
 %.chk: %.csv
-	gcc $(COPT) $(XOPTS) -fplugin=$(plugindir)/acf_plugin.so -fplugin-arg-acf_plugin-verbose -fplugin-arg-acf_plugin-csv_file=$< $(SRCS) -o $*.out
+	$(COMPILER) $(COPT) $(XOPTS) -fplugin=$(plugindir)/acf_plugin.so -fplugin-arg-acf_plugin-verbose -fplugin-arg-acf_plugin-csv_file=$< $(SRCS) -o $*.out
 
 
 clean:

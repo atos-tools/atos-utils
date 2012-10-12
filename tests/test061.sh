@@ -34,17 +34,33 @@ export GCC_VERSION=`config_query '$.compilers[*].version'`
 export GCC_TARGET=`config_query '$.compilers[*].target'`
 export LTO_ENABLED=`config_query '$.compilers[*].lto_enabled'`
 
+cat > conf.mk <<EOF
+ROOT=$ROOT
+GCC_VERSION=$GCC_VERSION
+GCC_TARGET=$GCC_TARGET
+EOF
+
 GCC_MAJ_MIN=`echo $GCC_VERSION | sed -e "s:\.[0-9]*$::"`;
 
-./acf_test.sh 2>&1 | tee acf_test.log
+./acf_test.sh | tee acf_test.log
 sed -n -e "/^.*FAILED$/p" acf_test.log | sort > acf_test_FAILED.log
 cp expected_FAILED.$GCC_MAJ_MIN.txt expected_tmp.log
 diff acf_test_FAILED.log expected_tmp.log || exit 1
 
+CPP=1 ./acf_test.sh | tee acf_test_cpp.log
+sed -n -e "/^.*FAILED$/p" acf_test_cpp.log | sort > acf_test_FAILED.log
+sed -e "s/ => / CPP=1 => /" expected_FAILED.$GCC_MAJ_MIN.txt > expected_tmp.log
+diff acf_test_FAILED.log expected_tmp.log || exit 1
+
 if [ $LTO_ENABLED -eq 1 ]; then
-    LTO=1 ./acf_test.sh 2>&1 | tee acf_test_lto.log
+    LTO=1 ./acf_test.sh | tee acf_test_lto.log
     sed -n -e "/^.*FAILED$/p" acf_test_lto.log | sort > acf_test_FAILED.log
     sed -e "s/ => / LTO=1 => /" expected_FAILED.$GCC_MAJ_MIN.txt > expected_tmp.log
+    diff acf_test_FAILED.log expected_tmp.log || exit 1
+
+    LTO=1 CPP=1 ./acf_test.sh | tee acf_test_lto_cpp.log
+    sed -n -e "/^.*FAILED$/p" acf_test_lto_cpp.log | sort > acf_test_FAILED.log
+    sed -e "s/ => / LTO=1 CPP=1 => /" expected_FAILED.$GCC_MAJ_MIN.txt > expected_tmp.log
     diff acf_test_FAILED.log expected_tmp.log || exit 1
 fi
 

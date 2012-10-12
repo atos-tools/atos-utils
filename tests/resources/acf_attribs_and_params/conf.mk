@@ -1,0 +1,2 @@
+ROOT=
+GCC_VERSION=

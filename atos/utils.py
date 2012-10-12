@@ -57,13 +57,23 @@ def invoque(tool, args, **kwargs):
         "atos-explore-optim": run_atos_explore_optim,
         }
 
+    def tool_args(tool, args, **kwargs):
+        """ Returns the args arguments modified by kwargs. """
+        tool_args = arguments.argparse.Namespace()
+        for action in arguments.parser(tool)._actions:
+            if action.dest is None: continue
+            tool_args.__dict__[action.dest] = action.default
+        tool_args.__dict__.update(vars(args))
+        tool_args.__dict__.update(kwargs)
+        return tool_args
+
     def dryrun_tool(tool, args, **kwargs):
         """ Does not run the tool, outputs the tool command line. """
         dest_to_opt = dict(map(
                 lambda x: (x.dest, x),
                 arguments.parser(tool)._actions))
         arg_list, remainder = [tool], []
-        for key, value in args.__dict__.items() + kwargs.items():
+        for key, value in tool_args(tool, args, **kwargs).__dict__.items():
             if (key == 'dryrun' or key not in dest_to_opt.keys()
                 or value == dest_to_opt[key].default):
                 continue
@@ -77,13 +87,7 @@ def invoque(tool, args, **kwargs):
 
     def run_tool(tool, args, **kwargs):
         """ Runs the tool, given the top level args and kwargs modifier. """
-        tool_args = arguments.argparse.Namespace()
-        for action in arguments.parser(tool)._actions:
-            if action.dest is None: continue
-            tool_args.__dict__[action.dest] = action.default
-        tool_args.__dict__.update(vars(args))
-        tool_args.__dict__.update(kwargs)
-        return functions[tool](tool_args)
+        return functions[tool](tool_args(tool, args, **kwargs))
 
     global _at_toplevel
     assert(_at_toplevel != None)
@@ -299,8 +303,9 @@ def run_atos_deps(args):
         args.configuration_path, "build.mk")
 
     targets = None
-    if args.executables:
-        targets = args.executables
+    executables = args.exes and args.exes.split() or args.executables
+    if executables:
+        targets = executables
     if args.last:
         targets = "last"
     if args.all:
@@ -327,7 +332,7 @@ def run_atos_deps(args):
     except:
         pass
     else:
-        f.write("\n".join(args.executables
+        f.write("\n".join(executables
                           if args.force else graph.get_targets()) + "\n")
         f.close()
 
@@ -379,7 +384,7 @@ def run_atos_explore(args):
 def run_atos_init(args):
     """ ATOS init tool implementation. """
 
-    executables = args.exe and [args.exe] or args.executables
+    executables = args.exes and args.exes.split() or args.executables
     if args.force and not args.results_script and not executables:
         error("when using forced mode (-f) with no custom results script (-t)"
               " the list of executables must be specified (-e option)")
@@ -407,7 +412,7 @@ def run_atos_init(args):
         status = invoque("atos-audit", args,
                          command=process.cmdline2list(args.build_script))
         if status != 0: return status
-        status = invoque("atos-deps", args, executables=executables,
+        status = invoque("atos-deps", args,
                          all=(not executables))
         if status != 0: return status
         # TODO: to be replaced by invoque(atos-config)
@@ -701,19 +706,14 @@ def run_atos_play(args):
         error('Configuration missing: ' + args.configuration_path)
         return 1
 
-    target_id = args.id
-    if not target_id:
-        executables = args.exe and [args.exe]
-        if not executables:
-            try:
-                with open(os.path.join(
-                        args.configuration_path, "targets")) as targetf:
-                    executables = map(lambda x: os.path.basename(
-                            x.strip()), targetf.readlines())
-            except:
-                error('no target executable and no identifier specified')
-                return 1
-        target_id = "-".join(executables)
+    try:
+        with open(os.path.join(
+                args.configuration_path, "targets")) as targetf:
+            executables = map(lambda x: x.strip(), targetf.readlines())
+    except:
+        error('no target executable available in configuration')
+        return 1
+    target_id = args.id or atos_lib.target_id(executables)
 
     atos_db = atos_lib.atos_db.db(args.configuration_path)
 
@@ -923,16 +923,14 @@ def run_atos_run(args):
     if results_script:
         executables, target_id = None, None
     else:
-        executables = args.exe and [args.exe]
-        if not executables:
-            try:
-                with open(os.path.join(
-                        args.configuration_path, "targets")) as targetf:
-                    executables = map(lambda x: x.strip(), targetf.readlines())
-            except:
-                error("no target executable specified")
-                return 1
-        target_id = args.id or "-".join(map(os.path.basename, executables))
+        try:
+            with open(os.path.join(
+                    args.configuration_path, "targets")) as targetf:
+                executables = map(lambda x: x.strip(), targetf.readlines())
+        except:
+            error('no target executable available in configuration')
+            return 1
+        target_id = args.id or atos_lib.target_id(executables)
 
     logf = atos_lib.open_atos_log_file(
         args.configuration_path, "run", variant)
@@ -1012,9 +1010,7 @@ def run_atos_replay(args):
 
     config_target_file = os.path.join(args.configuration_path, 'targets')
     result_target_file = os.path.join(args.results_path, 'targets')
-    if (not args.exe and os.path.exists(config_target_file)
-        and not os.path.exists(result_target_file)):
-        shutil.copyfile(config_target_file, result_target_file)
+    shutil.copyfile(config_target_file, result_target_file)
 
     # reference build
     status = invoque("atos-build", args)

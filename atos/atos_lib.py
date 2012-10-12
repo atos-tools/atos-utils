@@ -545,6 +545,10 @@ def variant_id(options=None, gopts=None, uopts=None):
         res_variant += "".join(options.split())
     return res_variant
 
+def target_id(executables):
+    """ Returns the target id given the list of executables. """
+    return "-".join(map(os.path.basename, executables))
+
 def get_config_value(configuration_path, key, default=None):
     config_file = os.path.join(configuration_path, 'config.json')
     if not os.path.isfile(config_file): return default

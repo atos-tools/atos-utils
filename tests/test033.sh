@@ -14,7 +14,7 @@ $ROOT/bin/atos-opt -r -a "-O2"
 
 $ROOT/bin/atos-opt -r -a "-O3"
 
-$ROOT/bin/atos-play -p -e sha1-c
+$ROOT/bin/atos-play -p
 
 $ROOT/bin/atos-play -p -i sha1-c
 

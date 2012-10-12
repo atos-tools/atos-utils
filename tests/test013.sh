@@ -13,11 +13,14 @@ EOF
 
 chmod u+x run.sh
 
-$ROOT/bin/atos-run -e test -n 2 ./run.sh 2>&1 | tee run.log
+mkdir atos-configurations
+which test >atos-configurations/targets
+
+$ROOT/bin/atos-run -n 2 ./run.sh 2>&1 | tee run.log
 
 if [ "${PIPESTATUS[0]}" != "0" ]; then
     echo "atos-run exited with non-zero status" 1>&2
-    $ROOT/bin/atos-run -d -e test -n 2 ./run.sh 1>&2
+    $ROOT/bin/atos-run -d -n 2 ./run.sh 1>&2
     false
 fi
 

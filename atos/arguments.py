@@ -221,6 +221,7 @@ class parsers:
                 prog="atos-deps",
                 description="ATOS dependency and build system generation tool")
         args.executables(parser)
+        args.exes(parser)
         args.configuration_path(parser)
         args.atos_deps.input(parser)
         args.output(parser, default="build.mk")
@@ -240,7 +241,7 @@ class parsers:
             parser = ATOSArgumentParser(prog="atos-explore",
                                         description="ATOS explore tool")
         args.executables(parser)
-        args.exe(parser)
+        args.exes(parser)
         args.configuration_path(parser)
         args.build_script(parser)
         args.force(parser)
@@ -328,7 +329,7 @@ class parsers:
         args.executables(parser)
         args.configuration_path(parser)
         args.clean(parser)
-        args.exe(parser)
+        args.exes(parser)
         args.build_script(parser)
         args.run_script(parser)
         args.results_script(parser)
@@ -534,7 +535,6 @@ class parsers:
                                         description="ATOS play tool")
         args.command(parser)
         args.configuration_path(parser)
-        args.exe(parser)
         group = parser.add_mutually_exclusive_group()
         args.atos_play.objective(group)
         args.tradeoffs(group)
@@ -594,7 +594,6 @@ class parsers:
             parser = ATOSArgumentParser(prog="atos-run",
                                         description="ATOS run tool")
         args.command(parser)
-        args.exe(parser)
         args.configuration_path(parser)
         args.nbruns(parser)
         args.remote_path(parser, ("-b", "--remote_path"))
@@ -626,7 +625,6 @@ class parsers:
         args.run_script(parser)
         args.results_script(parser)
         args.nbruns(parser)
-        args.exe(parser)
         args.cookie(parser)
         args.debug(parser)
         args.quiet(parser)
@@ -760,10 +758,10 @@ class args:
              action="store_true")
 
     @staticmethod
-    def exe(parser, args=("-e", "--exe")):
+    def exes(parser, args=("-e", "--executables")):
         parser.add_argument(
             *args,
-             dest="exe",
+             dest="exes",
              help="executables to be instrumented, "
              "defaults to args of command or all generated executables")
 

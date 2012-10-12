@@ -591,7 +591,7 @@ def gen_file_by_file(cold_th, cold_opts, file_list,
 
 
 @generator
-def gen_acf_tests(dirname):
+def gen_acf_tests(dirname, funcname):
     '''try all flags one by one'''
 
     def open_csv_file(dirname, flagname, count):
@@ -607,7 +607,7 @@ def gen_acf_tests(dirname):
         csv_file = open(dirname + '/' + csv_name + '.csv', 'w')
         return csv_file
 
-    def write_csv_flag(csv_file, flagval, ignoreO):
+    def write_csv_flag(csv_file, funcname, flagval, ignoreO):
         flagval = flagval.replace('--param ', 'PARAM_')
         for opt in flagval.split(' '):
             if opt.startswith('-f'):
@@ -619,7 +619,7 @@ def gen_acf_tests(dirname):
                 opt = 'optimize,' + opt[1:]
             elif opt.startswith('-'):
                 opt = opt[1:]
-            csv_file.write('func1,' + opt.replace('=', ',') + '\n')
+            csv_file.write(funcname + ',' + opt.replace('=', ',') + '\n')
 
     def close_csv_file(csv_file):
         csv_file.close()
@@ -654,7 +654,7 @@ def gen_acf_tests(dirname):
             if not depflag:
                 csv_file = open_csv_file(dirname, flag.optname(), count)
                 #  write_csv_flag(csv_file, optlevel);
-                write_csv_flag(csv_file, flagval, 0)
+                write_csv_flag(csv_file, funcname, flagval, 0)
                 close_csv_file(csv_file)
                 count += 1
             else:
@@ -663,9 +663,9 @@ def gen_acf_tests(dirname):
                     csv_file = open_csv_file(dirname, flag.optname(), count)
                     #  write_csv_flag(csv_file, optlevel);
                     while depflag:
-                        write_csv_flag(csv_file, depflag, 1)
+                        write_csv_flag(csv_file, funcname, depflag, 1)
                         depflag = get_dependency(depflag)
-                    write_csv_flag(csv_file, flagval, 0)
+                    write_csv_flag(csv_file, funcname, flagval, 0)
                     close_csv_file(csv_file)
                     skip += 1
                     count += 1

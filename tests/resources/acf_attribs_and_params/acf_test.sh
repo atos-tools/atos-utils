@@ -4,4 +4,4 @@
 
 [ "$LTO_ENABLED" = "1" -o "$LTO" != "1" ] || exit 0
 
-$ROOT/bin/atos-init -b "make config" -r "make -j 4 acf_tests LTO=$LTO" --no-run
+$ROOT/bin/atos-init -b "make config" -r "make -j 4 acf_tests LTO=$LTO CPP=$CPP" --no-run

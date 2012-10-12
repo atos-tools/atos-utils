@@ -128,8 +128,9 @@ shift $((OPTIND - 1))
 
 tradeoff_variants() {
     regexp="^.*[\"\']variant[\"\']: [\"\']\([^\"\']*\)[\"\'].*$"
-    $dir/atos lib speedups --tradeoff=5 --tradeoff=1 --tradeoff=0.2 \
+    $dir/atos lib speedups -C $configuration_path --tradeoff=5 --tradeoff=1 --tradeoff=0.2 \
 	| grep "$regexp" | sed "s/$regexp/\1/" | sort -u
+    [ ${PIPESTATUS[0]} = 0 ] || exit 1
 }
 
 config_query() {
@@ -138,14 +139,16 @@ config_query() {
 
 perf_variant() {
     regexp="^.*[\"\']variant[\"\']: [\"\']\([^\"\']*\)[\"\'].*$"
-    $dir/atos lib speedups --tradeoff=5 \
+    $dir/atos lib speedups -C $configuration_path --tradeoff=5 \
 	| grep "$regexp" | sed "s/$regexp/\1/"
+    [ ${PIPESTATUS[0]} = 0 ] || exit 1
 }
 
 size_flags() {
     regexp="^.*[\"\']conf[\"\']: [\"\']\([^\"\']*\)[\"\'].*$"
-    $dir/atos lib speedups --tradeoff=0.2 \
+    $dir/atos lib speedups -C $configuration_path --tradeoff=0.2 \
 	| grep "$regexp" | sed "s/$regexp/\1/"
+    [ ${PIPESTATUS[0]} = 0 ] || exit 1
 }
 
 $dir/atos-init -C "$configuration_path" \

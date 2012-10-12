@@ -549,6 +549,11 @@ def target_id(executables):
     """ Returns the target id given the list of executables. """
     return "-".join(map(os.path.basename, executables))
 
+def get_profile_path(configuration_path, variant):
+    """ Returns the local profile path for the given variant. """
+    return os.path.abspath(os.path.join(configuration_path,
+                                        "profiles", hashid(variant)))
+
 def get_config_value(configuration_path, key, default=None):
     config_file = os.path.join(configuration_path, 'config.json')
     if not os.path.isfile(config_file): return default

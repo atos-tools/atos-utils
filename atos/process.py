@@ -30,6 +30,7 @@ import __builtin__
 import tempfile
 import atexit
 import time
+import shutil
 
 def cmdline2list(cmd):
     """
@@ -256,8 +257,8 @@ class commands():
 
     @staticmethod
     def mkdir(dirname):
+        logging.debug('mkdir -p ' + dirname)
         if os.path.isdir(dirname): return
-        logging.debug('# mkdir -p ' + dirname)
         if _dryrun: return
         os.makedirs(dirname)
 
@@ -265,13 +266,36 @@ class commands():
     def touch(filename):
         # http://stackoverflow.com/questions/1158076/
         #   implement-touch-using-python
-        logging.debug('# touch ' + filename)
+        logging.debug('touch ' + filename)
         if _dryrun: return
         with file(filename, 'a'):
             os.utime(filename, None)
 
     @staticmethod
     def chmod(path, mode):
-        logging.debug('# chmod %s %s' % (str(mode), path))
+        logging.debug('chmod %s %s' % (str(mode), path))
         if _dryrun: return
         os.chmod(path, mode)
+
+    @staticmethod
+    def rmtree(path):
+        logging.debug('rm -rf %s' % (path))
+        if _dryrun: return
+        if not os.path.exists(path): return
+        if os.path.isdir(path) and not os.path.islink(path):
+            shutil.rmtree(path)
+        else:
+            os.unlink(path)
+
+    @staticmethod
+    def unlink(path):
+        logging.debug('rm -f %s' % (path))
+        if _dryrun: return
+        if os.path.exists(path):
+            os.unlink(path)
+
+    @staticmethod
+    def copyfile(src, dst):
+        logging.debug('cp %s %s' % (src, dst))
+        if _dryrun: return
+        shutil.copyfile(src, dst)

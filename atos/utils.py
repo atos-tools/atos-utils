@@ -23,7 +23,6 @@ import atos_lib
 import generators
 import logger
 import process
-import shutil
 import copy
 import glob
 import re
@@ -212,16 +211,14 @@ def run_atos_build(args):
 
     if args.gopts != None or args.uopts != None:
         pvariant = atos_lib.variant_id(args.gopts or args.uopts or "")
-        profile_path = args.path
-        if not profile_path:
-            profile_path = os.path.join(
-                args.configuration_path, "profiles", atos_lib.hashid(pvariant))
-        process.commands.mkdir(profile_path)
+        profile_path = os.path.abspath(args.path) if args.path else \
+            atos_lib.get_profile_path(args.configuration_path, pvariant)
 
     if args.gopts != None:
+        process.commands.rmtree(profile_path)
+        process.commands.mkdir(profile_path)
         with open(os.path.join(profile_path, "variant.txt"), "w") as variantf:
             variantf.write(pvariant)
-        process.system(["rm", "-f"] + glob.glob('%s/*.gcda' % (profile_path)))
         compile_options += ["-fprofile-generate"]
 
         remote_profile_path = args.remote_path
@@ -230,12 +227,12 @@ def run_atos_build(args):
                 args.configuration_path, 'default_values.remote_profile_path')
         if remote_profile_path:
             profile_path = remote_profile_path
-        make_options += ["PROFILE_DIR=%s" % os.path.abspath(profile_path)]
+        make_options += ["PROFILE_DIR=%s" % profile_path]
 
     if args.uopts != None:
         compile_options += ["-fprofile-use", "-fprofile-correction",
                             "-Wno-error=coverage-mismatch"]
-        make_options += ["PROFILE_DIR=" + os.path.abspath(profile_path)]
+        make_options += ["PROFILE_DIR=%s" % profile_path]
 
     build_mk = os.path.join(args.configuration_path, "build.mk")
     compile_options = " ".join(compile_options)
@@ -395,18 +392,18 @@ def run_atos_init(args):
     if args.clean:
         if args.build_script:
             message("Cleaning build audit...")
-            files = ' '.join(glob.glob('%s/build.*' % args.configuration_path))
-            process.system("rm -f %s" % (files), print_output=True)
+            process.commands.unlink('%s/build.mk' % args.configuration_path)
+            process.commands.unlink('%s/build.sh' % args.configuration_path)
+            process.commands.unlink('%s/build.force' % args.configuration_path)
+            process.commands.unlink('%s/build.audit' % args.configuration_path)
         if args.run_script:
             message("Cleaning run audit...")
-            files = ' '.join(glob.glob('%s/run.*' % args.configuration_path))
-            process.system("rm -f %s" % (files), print_output=True)
+            process.commands.unlink('%s/run.sh' % args.configuration_path)
+            process.commands.unlink('%s/run.audit' % args.configuration_path)
         message("Cleaning all profiles...")
-        rmcommand = "rm -rf %s/profiles" % (args.configuration_path)
-        process.system(rmcommand, print_output=True)
+        process.commands.rmtree('%s/profiles' % args.configuration_path)
         message("Cleaning all results...")
-        rmcommand = "rm -f %s/results.db" % (args.configuration_path)
-        process.system(rmcommand, print_output=True)
+        process.commands.unlink('%s/results.db' % args.configuration_path)
 
     if args.build_script:
         status = invoque("atos-audit", args,
@@ -421,7 +418,6 @@ def run_atos_init(args):
             "-C", args.configuration_path]
         status = process.system(command_config, print_output=True)
         if status != 0: return status
-
     elif not os.path.isfile(
         os.path.join(args.configuration_path, "build.audit")):
         error("missing build audit, use -b option for specifying build script"
@@ -442,11 +438,6 @@ def run_atos_init(args):
         status = invoque("atos-raudit", args,
                          command=process.cmdline2list(args.run_script))
         if status != 0: return status
-        if not args.no_run:
-            # reference run
-            status = invoque("atos-run", args, record=True)
-            if status != 0: return status
-
     elif not os.path.isfile(
         os.path.join(args.configuration_path, "run.audit")):
         error("missing run audit, use -r option for specifying run script"
@@ -456,6 +447,12 @@ def run_atos_init(args):
     if args.prof_script:
         prof_sh = os.path.join(args.configuration_path, "profile.sh")
         atos_lib.generate_script(prof_sh, args.prof_script)
+
+    # Record the reference if necessary
+    if (args.clean or args.build_script or args.run_script) and \
+            not args.no_run:
+        status = invoque("atos-opt", args, record=True)
+        if status != 0: return status
 
     return 0
 
@@ -810,12 +807,6 @@ def run_atos_raudit(args):
 def run_atos_run(args):
     """ ATOS run tool implementation. """
 
-    def profile_path():
-        lpvariant = atos_lib.variant_id(args.gopts)
-        return os.path.join(
-            os.path.abspath(args.configuration_path),
-            "profiles", atos_lib.hashid(lpvariant))
-
     def get_size(executables):
         def one_size(exe):
             if not os.path.isabs(exe):
@@ -835,7 +826,9 @@ def run_atos_run(args):
     def get_time():
         if remote_path and args.gopts:
             os.putenv("REMOTE_PROFILE_DIR", remote_path)
-            os.putenv("LOCAL_PROFILE_DIR", profile_path())
+            os.putenv("LOCAL_PROFILE_DIR", atos_lib.get_profile_path(
+                    args.configuration_path,
+                    atos_lib.variant_id(args.gopts)))
 
         run_script = os.path.join(args.configuration_path, "run.sh")
         run_script = args.command or [run_script]
@@ -875,13 +868,13 @@ def run_atos_run(args):
         entry.update({'target': target})
         entry.update({'variant': variant})
         entry.update({'version': globals.VERSION})
-        entry.update({'conf': "".join(
+        entry.update({'conf': " ".join(
                     process.cmdline2list(args.options or ''))})
         if args.uopts != None:
-            entry.update({'uconf': "".join(
+            entry.update({'uconf': " ".join(
                         process.cmdline2list(args.uopts))})
         if args.gopts != None:
-            entry.update({'gconf': "".join(
+            entry.update({'gconf': " ".join(
                         process.cmdline2list(args.gopts))})
         entry.update({'time': str(time)})
         entry.update({'size': str(size)})
@@ -1002,15 +995,20 @@ def run_atos_run(args):
 def run_atos_replay(args):
     """ ATOS opt tool implementation. """
 
+    if os.path.abspath(args.results_path) == \
+            os.path.abspath(args.configuration_path):
+        error("replay result path must differ from configuration path")
+        return 1
+
     process.commands.mkdir(args.results_path)
 
     results_db_file = os.path.join(args.results_path, "results.db")
     if not os.path.isfile(results_db_file):
-        db = atos_lib.atos_db_file(results_db_file)
+        atos_lib.atos_db_file(results_db_file)
 
     config_target_file = os.path.join(args.configuration_path, 'targets')
     result_target_file = os.path.join(args.results_path, 'targets')
-    shutil.copyfile(config_target_file, result_target_file)
+    process.commands.copyfile(config_target_file, result_target_file)
 
     # reference build
     status = invoque("atos-build", args)

@@ -326,6 +326,62 @@ static int parse_ftable_csv_file(acf_ftable_entry_t **acf_ftable_p,
   return nb;
 }
 
+#define MATCH_TOKEN(match, tok, tok_len) ((strlen(match) == tok_len) && (strncmp(match, tok, tok_len) == 0))
+
+static bool func_name_match(const char *acf_func, const char *cur_func) {
+    /* GCC function cloning rename functions with a suffix that starts
+       with a '.', and that contains fields separated with '.', that
+       can be numbers or one of "clone", "isra", "constprop" or
+       "part". */
+    const char *suffix, *token, *next_token;
+    size_t token_len;
+
+    if (strncmp(cur_func, acf_func, strlen(acf_func)))
+	return false;
+
+    suffix = cur_func+strlen(acf_func);
+
+    if (*suffix == '\0') {
+#ifdef ACF_DEBUG
+	fprintf(stderr, "func_name_match is true for function %s\n", cur_func);
+#endif
+	return true;
+    }
+
+    if (*suffix != '.') {
+#ifdef ACF_DEBUG
+	fprintf(stderr, "For function %s, suffix %s does not match cloning suffix\n",
+		acf_func, suffix);
+#endif
+	return false;
+    }
+
+    next_token = suffix;
+    do {
+	token = next_token + 1;
+	next_token = strchr(token, '.');
+	token_len = (next_token == NULL) ? strlen(token) : next_token-token;
+
+	if (!((token_len == 0) ||
+	      (strspn(token, "0123456789") == token_len) ||
+	      MATCH_TOKEN("part", token, token_len) ||
+	      MATCH_TOKEN("isra", token, token_len) ||
+	      MATCH_TOKEN("clone", token, token_len) ||
+	      MATCH_TOKEN("constprop", token, token_len))) {
+#ifdef ACF_DEBUG
+	    fprintf(stderr, "For function %s, suffix %s does not match cloning suffix\n",
+		    acf_func, suffix);
+#endif
+	    return false;
+	}
+    } while (next_token != NULL);
+
+#ifdef ACF_DEBUG
+    fprintf(stderr, "func_name_match is true for function %s\n", cur_func);
+#endif
+    return true;
+}
+
 /* Check if opt_file from csv configuration file matches
    current compiled file */
 static bool source_file_match(char *opt_file, char *input_file)
@@ -377,8 +433,7 @@ static void fill_csv_options(tree decl, int pass) {
 	acf_ftable_entry_t *acf_entry = &acf_ftable[i];
 
 	// TBD: Do not match input_file_name if is_lto()
-	// Add support for cloned functions (name is derived from original name)
-	if ((strcmp (acf_entry->func_name, cur_func_name) != 0) ||
+	if (!func_name_match(acf_entry->func_name, cur_func_name) ||
 	    !source_file_match(acf_entry->opt_file, (char *) main_input_filename))
 	    continue;
 

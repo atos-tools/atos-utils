@@ -56,14 +56,32 @@ class atos_db():
     @staticmethod
     def db(atos_configuration):
         # results.pkl  loadtime:  3.50s  filesize: 229M
-        db_file = os.path.join(atos_configuration, 'results.pkl')
-        if os.path.exists(db_file): return atos_db_pickle(db_file)
+        db_pckl = os.path.join(atos_configuration, 'results.pkl')
         # results.json loadtime: 27.63s  filesize: 217M
-        db_file = os.path.join(atos_configuration, 'results.json')
-        if os.path.exists(db_file): return atos_db_json(db_file)
+        db_json = os.path.join(atos_configuration, 'results.json')
         # results.db   loadtime:  5.70s  filesize: 579M
-        db_file = os.path.join(atos_configuration, 'results.db')
-        return atos_db_file(db_file)
+        db_dflt = os.path.join(atos_configuration, 'results.db')
+
+        # select db file in atos-config directory
+        if os.path.exists(db_pckl):
+            db_func, db_file = atos_db_pickle, db_pckl
+        elif os.path.exists(db_json):
+            db_func, db_file = atos_db_json, db_json
+        else:
+            db_func, db_file = atos_db_file, db_dflt
+
+        # create db-cache if necessary
+        if not getattr(atos_db, 'db_cache', None):
+            atos_db.db_cache = {}
+
+        # use already-opened db if any
+        db_file = os.path.abspath(db_file)
+        if db_file in atos_db.db_cache.keys():
+            return atos_db.db_cache[db_file]
+        else:
+            new_db = db_func(db_file)
+            atos_db.db_cache[db_file] = new_db
+            return new_db
 
 
 # ####################################################################

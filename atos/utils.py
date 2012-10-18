@@ -860,10 +860,8 @@ def run_atos_run(args):
             atos_lib.timeout_command() + ["/usr/bin/time", "-p"] + run_script,
             get_output=True, output_stderr=True)
 
-        if args.dryrun:
-            return status, ""
-        if status or not output:
-            return None, None
+        if args.dryrun or status:
+            return status, 0.0, output
 
         lines_output = output.splitlines()
 
@@ -881,7 +879,7 @@ def run_atos_run(args):
 
         os.unsetenv("REMOTE_PROFILE_DIR")
         os.unsetenv("LOCAL_PROFILE_DIR")
-        return exe_time, real_output
+        return status, exe_time, real_output
 
     def output_run_results(target, variant, time, size):
         if args.silent: return
@@ -965,12 +963,12 @@ def run_atos_run(args):
     while n < nbruns:
         logf.write("Running variant %s %d/%d\n" % (variant, n + 1, nbruns))
 
-        exe_time, output_time = get_time()
+        status, exe_time, output_time = get_time()
 
         logf.write(output_time)
 
         failure = check_failure(
-            failure, exe_time is None, "get_time failure")
+            failure, status != 0, "get_time failure")
         if failure:
             output_run_results(
                 results_script and "FAILURE" or target_id,

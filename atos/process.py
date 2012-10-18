@@ -202,7 +202,7 @@ def system(cmd, check_status=False, get_output=False, print_output=False,
         printable_cmd = list2cmdline(cmd)
     if _dryrun:
         logging.info(printable_cmd)
-        return get_output and (0, None) or 0
+        return get_output and (0, "") or 0
     logging.debug('command [%s]' % printable_cmd)
     root_logger = logging.getLogger()
     debug_mode = root_logger.isEnabledFor(logging.DEBUG)

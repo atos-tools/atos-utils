@@ -17,11 +17,13 @@ with open("./test.c", "w") as testf:
     print >>testf, '{'
     print >>testf, '  char *remote = getenv("REMOTE_PROFILE_DIR");'
     print >>testf, '  char *local = getenv("LOCAL_PROFILE_DIR");'
+    print >>testf, '  char *error = getenv("ERROR_CODE");'
     print >>testf, '  fprintf(stdout, "hello\\n");'
     print >>testf, '  if (remote) fprintf(stdout, "remote %s\\n", remote);'
     print >>testf, '  if (local) fprintf(stdout, "local %s\\n", local);'
     print >>testf, '  fprintf(stdout, "test %s\\n", (getenv("TIME") ?: "99"));'
     print >>testf, '  fprintf(stdout, "user %s\\n", (getenv("TIME") ?: "99"));'
+    print >>testf, '  if (error) return atoi(error);'
     print >>testf, '  return 0;'
     print >>testf, '}'
 
@@ -195,3 +197,11 @@ results = common.atos_results({"variant" : "OPT-O4", 'target': 'bin2'})
 assert len(results) == 1 and results[0]["time"] == 2000 and results[0]["size"] == 2002
 results = common.atos_results({"variant" : "OPT-O4", 'target': 'bin3'})
 assert len(results) == 1 and results[0]["time"] == 3000 and results[0]["size"] == 3003
+
+
+# run failure
+
+os.putenv("TIME", "120")
+os.putenv("ERROR_CODE", "1")
+status = utils.invoque("atos-run", args, variant="X11", record=True)
+assert status != 0

@@ -157,8 +157,8 @@ EOF
 	result=`$compiler -O2 -floop-block -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
 	echo "graphite_enabled $result"
 
-        # libgomp
-	result=`$compiler -O2 -ftree-parallelize-loops=16 -lc -nostdlib -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
+        # libgomp & libpthread
+	result=`$compiler -O2 -ftree-parallelize-loops=16 -lc -lgomp -lpthread -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
 	echo "libgomp_enabled $result"
 
         # acf plugin

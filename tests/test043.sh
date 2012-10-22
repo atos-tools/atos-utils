@@ -14,7 +14,8 @@ $ROOT/bin/atos-opt -r -a "-O2"
 
 $ROOT/bin/atos-opt -r -a "-O3"
 
-$ROOT/lib/atos/python/atos/atos_toolkit.py \
-    --seed=0 --max=1 --variants=base --gen-base OPT-O2 OPT-O3
+$ROOT/bin/atos gen \
+    --seed=0 --nbiters=1 --optim-variants=base --generator=gen_base \
+    OPT-O2 OPT-O3
 
 [ `cat atos-configurations/results.db | grep " time: " | wc -l` -eq 5 ]

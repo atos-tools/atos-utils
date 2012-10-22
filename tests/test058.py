@@ -52,7 +52,7 @@ status = utils.invoque("atos-build", args, options="-O2", gopts="-O2")
 assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-generate")) == 1
 assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-dir")) == 1
 
-status = utils.invoque("atos-run", args, options="-O2", gopts="-O2")
+status = utils.invoque("atos-run", args, options="-O2", gopts="-O2", silent=True)
 assert status == 0
 
 #
@@ -72,7 +72,7 @@ os.makedirs("proftmp")
 status = utils.invoque("atos-build", args, options="-O3", gopts="-O3", path="proftmp")
 assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .*proftmp")) == 1
 
-status = utils.invoque("atos-run", args, options="-O3", gopts="-O3")
+status = utils.invoque("atos-run", args, options="-O3", gopts="-O3", silent=True)
 assert status == 0
 
 status = utils.invoque("atos-build", args, options="-O3", uopts="-O3", path="proftmp")

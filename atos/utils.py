@@ -16,17 +16,16 @@
 # v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
 #
 
-import sys, os, stat
+import sys, os
+import re
+
 import globals
 import arguments
 import atos_lib
 import generators
-import logger
 import process
-import copy
-import glob
-import re
-from logger import debug, error, message, info
+import profile
+from logger import debug, warning, error, message, info
 
 _at_toplevel = None
 
@@ -44,7 +43,6 @@ def invoque(tool, args, **kwargs):
         "atos-deps": run_atos_deps,
         "atos-explore": run_atos_explore,
         "atos-init": run_atos_init,
-        "atos-lib": run_atos_lib,
         "atos-opt": run_atos_opt,
         "atos-play": run_atos_play,
         "atos-profile": run_atos_profile,
@@ -54,6 +52,9 @@ def invoque(tool, args, **kwargs):
         "atos-explore-inline": run_atos_explore_inline,
         "atos-explore-loop": run_atos_explore_loop,
         "atos-explore-optim": run_atos_explore_optim,
+        "atos-explore-acf": run_atos_explore_acf,
+        "atos-lib": run_atos_lib,
+        "atos-gen": run_atos_gen,
         }
 
     def tool_args(tool, args, **kwargs):
@@ -671,6 +672,28 @@ def run_atos_lib(args):
         else: pass
         return 0
 
+def run_atos_gen(args):
+    """ ATOS gen tool implementation. """
+    try:
+        assert args.generator
+        generator = eval('generators.%s' % args.generator)
+    except:
+        error("unknown generator '%s'" % args.generator)
+        return 1
+
+    gen_args = arguments.argparse.Namespace()
+    gen_args.__dict__.update(vars(args))
+
+    for arg in args.args or []:
+        key, value = arg.split('=')
+        gen_args.__dict__[key] = value
+
+    status = generators.run_exploration_loop(
+        gen_args, generator=generator)
+
+    return status
+
+
 def run_atos_opt(args):
     """ ATOS opt tool implementation. """
 
@@ -1069,5 +1092,79 @@ def run_atos_explore_optim(args):
 
     status = generators.run_exploration_loop(
         args, flags_file=flags_file, generator=generators.gen_rnd_uniform_deps)
+
+    return status
+
+def run_atos_explore_acf(args):
+    """ ATOS explore-acf tool implementation. """
+
+    imgpath = profile.get_image_pathes(
+        args.exes, args.configuration_path)
+    if not imgpath:
+        error("executables must be specified (-e option)")
+        return 1
+
+    prof_script = args.prof_script or os.path.join(
+        args.configuration_path, "profile.sh")
+    if not os.path.isfile(prof_script):
+        error("profiling script not specified")
+        return 1
+
+    csv_dir = os.path.join(args.configuration_path, 'acf_csv_dir')
+    process.commands.mkdir(csv_dir)
+
+    file_by_file = args.file_by_file
+    if not file_by_file:
+
+        # ACF mode - function-by-function exploration
+
+        acf_plugin_path = atos_lib.query_config_values(
+            args.configuration_path, "$.compilers[*].plugin_acf")
+        acf_plugin_path = acf_plugin_path and list(set(acf_plugin_path))[0]
+
+        host_wide_int = atos_lib.query_config_values(
+            args.configuration_path, "$.compilers[*].host_wide_int",
+            default=[0])
+
+        plugins_enabled = atos_lib.query_config_values(
+            args.configuration_path, "$.compilers[*].plugins_enabled")
+        plugins_enabled = plugins_enabled and bool(int(
+            list(set(plugins_enabled))[0])) or False
+
+        if not acf_plugin_path:
+            warning("compiler not supported by acf plugin")
+            warning("switching to file-by-file exploration")
+            file_by_file = True
+
+        elif not all(map(int, host_wide_int)):
+            warning("compiler not supported by acf plugin (unknown hwi_size)")
+            warning("switching to file-by-file exploration")
+            file_by_file = True
+
+        elif not plugins_enabled:
+            warning("compiler does not support plugins")
+            warning("switching to file-by-file exploration")
+            file_by_file = True
+
+        else:
+            status = generators.run_exploration_loop(
+                args, imgpath=imgpath, csv_dir=csv_dir,
+                hwi_size=str(int(host_wide_int[0])),
+                prof_script=prof_script, acf_plugin_path=acf_plugin_path,
+                acf_hot_th=str(args.hot_th),
+                acf_cold_opts=("%s %s" % (args.cold_opts, args.cold_attrs)),
+                flags_file=args.flags_file,
+                generator=generators.gen_function_by_function)
+
+    if file_by_file:
+
+        # FILE mode - file-by-file exploration
+
+        status = generators.run_exploration_loop(
+            args, prof_script=prof_script,
+            imgpath=imgpath, csv_dir=csv_dir,
+            hot_th=str(args.hot_th), cold_opts=args.cold_opts,
+            flags_file=args.flags_file, nbiters_stage=args.nbiters_stage,
+            generator=generators.gen_file_by_file)
 
     return status

@@ -35,7 +35,6 @@ def parser(tool):
         "atos-deps": parsers.atos_deps,
         "atos-explore": parsers.atos_explore,
         "atos-init": parsers.atos_init,
-        "atos-lib": parsers.atos_lib,
         "atos-opt": parsers.atos_opt,
         "atos-play": parsers.atos_play,
         "atos-profile": parsers.atos_profile,
@@ -45,6 +44,9 @@ def parser(tool):
         "atos-explore-inline": parsers.atos_explore_inline,
         "atos-explore-loop": parsers.atos_explore_loop,
         "atos-explore-optim": parsers.atos_explore_optim,
+        "atos-explore-acf": parsers.atos_explore_acf,
+        "atos-lib": parsers.atos_lib,
+        "atos-gen": parsers.atos_gen,
         }
     return factories[tool]()
 
@@ -69,12 +71,12 @@ class ATOSArgumentParser(argparse.ArgumentParser):
         # Trick to allow strings starting with '-' for non option arguments
         self._negative_number_matcher = re.compile(r'^-.+$')
 
-    def parse_args(self):
+    def parse_args(self, args=None, namespace=None):
         """
         Calls the superclass parse_args and initialize modules with
         common arguments.
         """
-        args = super(ATOSArgumentParser, self).parse_args()
+        args = super(ATOSArgumentParser, self).parse_args(args, namespace)
         logger.setup(vars(args))
         process.setup(vars(args))
         return args
@@ -129,9 +131,6 @@ class parsers:
         sub = subs.add_parser("init", help="initialize atos environment")
         parsers.atos_init(sub)
 
-        sub = subs.add_parser("lib", help=argparse.SUPPRESS)
-        parsers.atos_lib(sub)
-
         sub = subs.add_parser("opt", help="opt system")
         parsers.atos_opt(sub)
 
@@ -152,6 +151,12 @@ class parsers:
 
         sub = subs.add_parser("replay", help="replay system")
         parsers.atos_replay(sub)
+
+        sub = subs.add_parser("lib", help=argparse.SUPPRESS)
+        parsers.atos_lib(sub)
+
+        sub = subs.add_parser("gen", help=argparse.SUPPRESS)
+        parsers.atos_gen(sub)
 
         return parser
 
@@ -321,6 +326,35 @@ class parsers:
         return parser
 
     @staticmethod
+    def atos_explore_acf(parser=None):
+        """ atos explore acf arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-explore-acf",
+                                        description="ATOS explore acf tool")
+
+        args.exes(parser)
+        args.configuration_path(parser)
+        args.nbruns(parser, default=1)
+        args.remote_path(parser)
+        args.prof_script(parser)
+        args.seed(parser)
+        args.nbiters(parser)
+        args.flags(parser)
+        args.optim_levels(parser)
+        args.optim_variants(parser)
+        args.base_variants(parser)
+        args.atos_explore.file_by_file(parser)
+        args.atos_explore.hot_threshold(parser)
+        args.atos_explore.cold_options(parser)
+        args.atos_explore.cold_attributes(parser)
+        args.atos_explore.nbiters_stage(parser)
+        args.debug(parser)
+        args.quiet(parser)
+        args.dryrun(parser, ("--dryrun",))
+        args.version(parser)
+        return parser
+
+    @staticmethod
     def atos_init(parser=None):
         """ atos init arguments parser factory. """
         if parser == None:
@@ -333,7 +367,7 @@ class parsers:
         args.build_script(parser)
         args.run_script(parser)
         args.results_script(parser)
-        args.atos_init.prof_script(parser)
+        args.prof_script(parser)
         args.nbruns(parser, default=1)
         args.remote_path(parser)
         args.atos_init.no_run(parser)
@@ -524,6 +558,26 @@ class parsers:
         args.force(parser, ("--force",))
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
+        args.version(parser)
+        return parser
+
+    @staticmethod
+    def atos_gen(parser=None):
+        """ atos gen arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-gen",
+                                        description="ATOS gen tool")
+        args.configuration_path(parser)
+        args.base_variants(parser)
+        args.nbiters(parser)
+        args.seed(parser)
+        args.atos_gen.arguments(parser)
+        args.atos_gen.generator(parser)
+        args.optim_levels(parser)
+        args.optim_variants(parser)
+        args.debug(parser)
+        args.quiet(parser)
+        args.dryrun(parser)
         args.version(parser)
         return parser
 
@@ -855,7 +909,7 @@ class args:
              default=None)
 
     @staticmethod
-    def optim_levels(parser, args=("-O", "--optim-levels")):
+    def optim_levels(parser, args=("--optim-levels",)):
         parser.add_argument(
             *args,
              dest="optim_levels",
@@ -892,6 +946,12 @@ class args:
             "command",
             nargs=argparse.REMAINDER,
             help="command to be executed")
+
+    @staticmethod
+    def prof_script(parser, args=("-p", "--profile-script")):
+        parser.add_argument(*args,
+                             dest="prof_script",
+                             help="script to get profile information")
 
     class atos_help:
         """ Namespace for non common atos help options. """
@@ -955,12 +1015,6 @@ class args:
 
     class atos_init:
         """ Namespace for non common atos-init arguments. """
-
-        @staticmethod
-        def prof_script(parser, args=("-p", "--profile-script")):
-            parser.add_argument(*args,
-                                 dest="prof_script",
-                                 help="script to get profile information")
 
         @staticmethod
         def no_run(parser, args=("-N", "--no-run")):
@@ -1211,3 +1265,66 @@ class args:
                  dest="results_path",
                  help="directory for qualified results",
                  default="atos-qualif")
+
+    class atos_explore:
+        """ Namespace for non common atos-explore-* arguments. """
+
+        @staticmethod
+        def file_by_file(parser, args=("-f", "--file-by-file")):
+            parser.add_argument(
+                *args,
+                 dest="file_by_file",
+                 action='store_true',
+                 help="force file-by-file exploration",
+                 default=False)
+
+        @staticmethod
+        def hot_threshold(parser, args=("-x", "--hot-th")):
+            parser.add_argument(
+                *args,
+                 dest="hot_th",
+                 type=int,
+                 help="hot functions treshold percentage",
+                 default=70)
+
+        @staticmethod
+        def cold_options(parser, args=("-Y", "--cold-opts")):
+            parser.add_argument(
+                *args,
+                 dest="cold_opts",
+                 help="cold functions options",
+                 default="-Os")
+
+        @staticmethod
+        def cold_attributes(parser, args=("-Z", "--cold-attrs")):
+            parser.add_argument(
+                *args,
+                 dest="cold_attrs",
+                 help="cold functions attributes",
+                 default="noinline cold")
+
+        @staticmethod
+        def nbiters_stage(parser, args=("-N", "--nbiters-stage")):
+            parser.add_argument(
+                *args,
+                 dest="nbiters_stage",
+                 type=int,
+                 help="number of exploration loop iterations for each stage")
+
+    class atos_gen:
+        """ Namespace for non common atos-gen arguments. """
+
+        @staticmethod
+        def arguments(parser, args=("--arg",)):
+            parser.add_argument(
+                *args,
+                 dest="args",
+                 action='append',
+                 help="argument for generator ('key=value')")
+
+        @staticmethod
+        def generator(parser, args=("--generator",)):
+            parser.add_argument(
+                *args,
+                 dest="generator",
+                 help="generator used for exploration")

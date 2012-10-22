@@ -17,10 +17,13 @@
 # v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
 #
 
-import sys, os, itertools, math, re
+import sys, os, itertools, re
 import random
+import functools
+import tempfile
 
-import logger
+import process
+import profile
 import utils
 import arguments
 import atos_lib
@@ -191,25 +194,61 @@ class optim_flag_list():
         self.dependencies = dependencies
         self.aliases = aliases
 
+class config(atos_lib.default_obj):
+    def extend_cookies(self, cookies):
+        self.cookies = self.cookies or []
+        self.cookies.extend(cookies)
+        return self
 
 # ####################################################################
 
 
+def gen_base(optim_levels=None, **kwargs):
+    """
+    generate basic configurations
+    """
+    debug('gen_base')
+
+    optim_levels = (
+        optim_levels and optim_levels.split(',') or [])
+
+    for optlevel in optim_levels:
+        yield config(flags=optlevel)
+
+
+def gen_flags_file(flags_file=None, base_flags=None, **kwargs):
+    """
+    generate configurations based on flag lists from a file
+    """
+    debug('gen_flags_file')
+
+    assert flags_file and os.path.isfile(flags_file)
+    base_flags = base_flags and (base_flags + ' ') or ''
+
+    for line in open(flags_file):
+        line = line.split('#', 1)[0].strip()
+        if not line: continue
+        yield config(flags=(base_flags + line))
+
+
 def gen_rnd_uniform_deps(
-    flags_file='', optim_levels='', base_flags='', **kwargs):
+    flags_file=None, optim_levels=None, base_flags=None, **kwargs):
     """
     generate random meaningful combination of compiler flags using dependencies
     """
-    if not flags_file: return
-    base_flags = base_flags or ''
+    debug('gen_rnd_uniform_deps [%s]' % str(flags_file))
+
+    assert flags_file and os.path.isfile(flags_file)
     flag_list = optim_flag_list(flags_file)
-    optim_levels = optim_flag_list.optim_flag.optlevel(optim_levels.split(','))
-    if not flag_list.flag_list: return
+    if not flag_list.flag_list: return  # empty list case
+    optim_levels = (optim_levels or '').split(',')
+    optim_levels = optim_flag_list.optim_flag.optlevel(optim_levels)
+    base_flags = base_flags or ''
+
     while True:
         handled_flags = set()
         available_flags = flag_list.available_flags(base_flags)
-        flags = ''
-        if not base_flags: flags += optim_levels.rand()
+        flags = base_flags or optim_levels.rand()
         while True:
             for f in sorted(list(available_flags)):
                 if random.randint(0, 1): continue
@@ -219,39 +258,457 @@ def gen_rnd_uniform_deps(
                 flag_list.available_flags(base_flags + ' ' + flags)
                 - handled_flags)
             if not available_flags: break
-        yield flags
+        yield config(flags=flags)
+
+
+def _gen_variants(generator, optim_variants=None):
+    """
+    generate variants (base, fdo, lto, ...) for generated flags
+    """
+
+    optim_variants = (
+        optim_variants and optim_variants.split(',') or [None])
+
+    while True:
+        try: cfg = generator.next()
+        except StopIteration: break
+        for variant in optim_variants:
+            yield cfg.copy().update(variant=variant)
+
+
+def gen_staged(
+    optim_levels=None, optim_variants=None, nbiters_stage=None, fine_expl=None,
+    configuration_path='atos-configurations', seed='0',
+    **kwargs):
+    """
+    perform staged exploration
+    """
+    debug('gen_staged')
+
+    flags_lists = [
+        'flags.inline.cfg', 'flags.loop.cfg', 'flags.optim.cfg']
+    flags_lists = map(
+        functools.partial(os.path.join, configuration_path), flags_lists)
+    flags_lists = filter(os.path.isfile, flags_lists)
+    tradeoff_coeffs = [5, 1, 0.2]
+    nbiters_stage = nbiters_stage and int(nbiters_stage) or 100
+    random.seed(int(seed))
+
+    # list of generators used during staged exploration
+    generators = [(gen_base, {})]
+    for flags_file in flags_lists:
+        generators += [(gen_rnd_uniform_deps, {'flags_file': flags_file})]
+
+    expl_cookie, cookie_to_cfg = atos_lib.new_cookie(), {}
+    selected_configs = [(None, optim_variants)]
+
+    for (fct, args) in generators:
+
+        # run exploration on previously selected configs
+        for (flags, variants) in selected_configs:
+            debug('gen_staged: generator %s' % str((fct, flags, variants)))
+
+            # build generator for next exploration
+            gen_args = atos_lib.default_obj(**kwargs).update(
+                base_flags=flags, optim_levels=optim_levels, **args)
+            generator = _gen_variants(
+                fct(**vars(gen_args)), optim_variants=variants)
+            # exploration loop
+            for ic in itertools.count():
+                if ic >= nbiters_stage: break
+                try: cfg = generator.next()
+                except StopIteration: break
+                run_cookie = atos_lib.new_cookie()
+                cookie_to_cfg[run_cookie] = (cfg.flags, cfg.variant)
+                yield cfg.extend_cookies([expl_cookie, run_cookie])
+
+        # select tradeoffs configs (flags, variants) for next exploration
+        selected_results = get_run_tradeoffs(
+            tradeoff_coeffs, expl_cookie, configuration_path)
+        selected_cookies = sum(map(
+            lambda x: x.cookies.split(','), selected_results), [])
+        selected_configs = filter(
+            bool, map(lambda x: cookie_to_cfg.get(x, None), selected_cookies))
+        debug('gen_staged: tradeoffs for next stages: ' + str(
+                selected_configs))
+
+    # get best tradeoffs for the whole exploration
+    tradeoffs = get_run_tradeoffs(
+        tradeoff_coeffs, expl_cookie, configuration_path)
+    debug('gen_staged: final tradeoffs: %s' % (str(tradeoffs)))
+
+
+def gen_function_by_function(
+    acf_plugin_path, hwi_size,
+    prof_script, imgpath, csv_dir, hot_th, cold_opts='-Os noinline cold',
+    flags_file=None, nbiters_stage=None,
+    base_flags=None, base_variant=None, optim_variants=None,
+    configuration_path='atos-configurations', **kwargs):
+    """
+    perform per function exploration
+    """
+
+    def compiler_opt_to_attribute(opt):
+        if opt.startswith('-O'):    # -Ox options
+            csv_opt = 'optimize,' + opt[2:]
+        elif opt.startswith('-f'):  # -fx options
+            csv_opt = 'optimize,' + opt[2:]
+        else:  # direct attributes
+            csv_opt = opt + ','
+        return csv_opt
+
+    def filter_options(flag_str):
+        flag_list = optim_flag_list.parse_line(flag_str)
+        filter_in = ['^-f', '^-O', '^[^-]']
+        flag_list = filter(
+            lambda f: any(map(lambda i: re.match(i, f), filter_in)), flag_list)
+        filter_out = ['^-fprofile', '^-flto', '^--param']
+        flag_list = filter(
+            lambda f: all(
+                map(lambda i: not re.match(i, f), filter_out)), flag_list)
+        return ' '.join(flag_list)
+
+    def acf_csv_opt(obj_flags, base_flags=''):
+        # build option file containing flags for each function
+        sum_flags = atos_lib.md5sum(str(obj_flags.items()))
+        csv_name = os.path.join(csv_dir, 'acf-%s.csv' % (sum_flags))
+        debug('gen_function_by_function: run [%s] -> %s' % (
+                str(obj_flags), csv_name))
+        with open(csv_name, 'w') as opt_file:
+            for ((fct, loc), flags) in obj_flags.items():
+                loc = (',' + loc) if loc else ''
+                flag_list = map(compiler_opt_to_attribute, flags.split())
+                for flag in flag_list:
+                    opt_file.write('%s,%s%s\n' % (fct, flag, loc))
+        return (
+            base_flags +
+            ' -fplugin=' + acf_plugin_path +
+            ' -fplugin-arg-acf_plugin-host_wide_int=' + hwi_size +
+            ' -fplugin-arg-acf_plugin-verbose' +
+            ' -fplugin-arg-acf_plugin-csv_file=' + csv_name)
+
+    debug('gen_function_by_function')
+    assert acf_plugin_path and os.path.isfile(acf_plugin_path)
+    assert hwi_size and int(hwi_size)
+
+    tradeoff_coeffs = [5, 1, 0.2]
+    nbiters_stage = nbiters_stage and int(nbiters_stage)
+    optim_variants = base_variant and [base_variant] or (
+        optim_variants or 'base').split(',')
+    base_flags = base_flags or '-O2'
+    base_variant = base_variant or 'base'
+
+    # reference run
+    debug('gen_function_by_function: reference run')
+    yield config(flags=base_flags, variant=base_variant)
+
+    # run profiling script
+    debug('gen_function_by_function: profiling run')
+    status = process.system(prof_script)
+    if status: return
+
+    # get cold functions list and initialize func_flags map
+    cold_funcs, hot_funcs = profile.partition_symbols_loc(
+        imgpath=imgpath, hot_th=hot_th)
+    cold_func_flags = dict(
+        map(lambda x: (x, filter_options(cold_opts)), cold_funcs))
+
+    # build/run with default cold options
+    debug('gen_function_by_function: cold functions')
+    yield config(flags=acf_csv_opt(
+            cold_func_flags, base_flags), variant=base_variant)
+
+    if not (flags_file or nbiters_stage): return
+
+    # function-by-function exploration
+
+    for variant in optim_variants:
+        debug('gen_function_by_function: exploration - ' + variant)
+
+        base_func_flags = dict(cold_func_flags)
+        hot_funcs_processed = []
+        func_to_cookie, cookie_to_flags = {}, {}
+
+        while True:  # loop on hot functions
+
+            # parse oprof.out for new hot functions list
+            debug('gen_function_by_function: profiling run')
+            status = process.system(prof_script)
+            if status: return
+            cold_funcs, hot_funcs = profile.partition_symbols_loc(
+                imgpath=imgpath, hot_th=hot_th)
+            debug('gen_function_by_function: hot funcs=' + str(hot_funcs))
+
+            # discard already processed hot functions and select next hot_func
+            hot_funcs_unprocessed = [
+                f for f in hot_funcs if not f in hot_funcs_processed]
+            debug('gen_function_by_function: hot_funcs_unprocessed= ' + str(
+                    hot_funcs_unprocessed))
+            if not hot_funcs_unprocessed: break
+            curr_hot_func = hot_funcs_unprocessed.pop()
+            hot_funcs_processed.append(curr_hot_func)
+            debug('gen_function_by_function: hot_func: ' + str(curr_hot_func))
+
+            # create the generator that will be used for curr_hot_func expl
+            if flags_file:  # if requested, explore on flag list
+                debug('gen_function_by_function: file: %s ' % (flags_file))
+                generator = gen_flags_file(
+                    flags_file=flags_file,
+                    configuration_path=configuration_path, **kwargs)
+            else:  # else, perform a classic staged exploration
+                debug('gen_function_by_function: staged_exploration')
+                generator = gen_staged(
+                    nbiters_stage=nbiters_stage,
+                    configuration_path=configuration_path, **kwargs)
+
+            # keep track of current hot_func results
+            func_cookie = atos_lib.new_cookie()
+            func_to_cookie[curr_hot_func] = func_cookie
+
+            # run exploration loop on newly selected hot_func
+            while True:
+                try: cfg = generator.next()
+                except StopIteration: break
+                # compose csv from cold flags and best flags for previous funcs
+                curr_hot_flags = filter_options(cfg.flags)
+                run_func_flags = dict(base_func_flags.items() + [
+                        (curr_hot_func, curr_hot_flags)])
+                # keep track of hot_func flags for current run
+                run_cookie = atos_lib.new_cookie()
+                cookie_to_flags[run_cookie] = curr_hot_flags
+                yield cfg.update(
+                    flags=acf_csv_opt(run_func_flags, base_flags),
+                    variant=variant).extend_cookies([func_cookie, run_cookie])
+
+            # explore other funcs with best perf flags for current func
+            perf_coeff = sorted(tradeoff_coeffs)[-1]
+            perf_results = get_run_tradeoffs(
+                [perf_coeff], func_cookie, configuration_path)
+            perf_cookies = sum(map(
+                    lambda x: x.cookies.split(','), perf_results), [])
+            perf_flags = filter(
+                bool, map(lambda x: cookie_to_flags.get(x, ''), perf_cookies))
+            if perf_flags: base_func_flags.update(
+                {curr_hot_func: perf_flags[0]})
+
+        # compose config from best tradeoffs
+        debug('gen_function_by_function: compose best tradeoffs variants')
+        for coeff in tradeoff_coeffs:
+            debug('gen_function_by_function: coeff: ' + str(coeff))
+            coeff_func_flags = dict(base_func_flags.items())
+            for hot_func in func_to_cookie.keys():
+                coeff_results = get_run_tradeoffs(
+                    [coeff], func_to_cookie[hot_func], configuration_path)
+                coeff_cookies = sum(map(
+                        lambda x: x.cookies.split(','), coeff_results), [])
+                coeff_flags = filter(bool, map(
+                        lambda x: cookie_to_flags.get(x, None), coeff_cookies))
+                if coeff_flags: coeff_func_flags.update(
+                    {hot_func: coeff_flags[0]})
+            yield config(flags=acf_csv_opt(
+                    coeff_func_flags, base_flags), variant=variant)
+
+def gen_file_by_file(
+    prof_script, imgpath, csv_dir, hot_th, cold_opts="-Os",
+    flags_file=None, nbiters_stage=None,
+    base_flags=None, base_variant=None, optim_variants=None,
+    configuration_path='atos-configurations', **kwargs):
+    """
+    perform per file exploration
+    """
+
+    def fbf_csv_opt(obj_flags, base_flags=''):
+        # build option file containing flags for each object file
+        sum_flags = atos_lib.md5sum(str(obj_flags.items()))
+        csv_name = os.path.join(csv_dir, 'fbf-%s.csv' % (sum_flags))
+        debug('gen_file_by_file: run [%s] -> %s' % (str(obj_flags), csv_name))
+        with open(csv_name, 'w') as opt_file:
+            for (obj, flags) in obj_flags.items():
+                if flags: opt_file.write('%s,%s\n' % (obj, flags))
+        return base_flags + ' --atos-optfile %s' % os.path.abspath(csv_name)
+
+    debug('gen_file_by_file')
+    # TODO: some code can now be factorized with gen_function_by_function
+
+    tradeoff_coeffs = [5, 1, 0.2]
+    nbiters_stage = nbiters_stage and int(nbiters_stage)
+    optim_variants = base_variant and [base_variant] or (
+        optim_variants or 'base').split(',')
+    base_flags = base_flags or '-O2'
+    base_variant = base_variant or 'base'
+
+    # run atos-fctmap and compute function-to-object-file map
+    debug('gen_file_by_file: function to object map')
+    mapfile = tempfile.NamedTemporaryFile(delete=False)
+    mapfile.close()
+    yield config(flags="-O2 -g --atos-fctmap=%s" % (mapfile.name))
+    fct_map = profile.read_function_to_file_map(mapfile.name)
+    process.commands.unlink(mapfile.name)
+
+    # run profiling script and get sample counts
+    debug('gen_file_by_file: profiling run')
+    status = process.system(prof_script)
+    if status: return
+
+    # partition function symbols, then object files
+    cold_objs, hot_objs = profile.partition_object_files(
+        imgpath=imgpath, hot_th=hot_th, fct_map=fct_map)
+    debug('gen_file_by_file: hot objects: ' + str(hot_objs))
+    debug('gen_file_by_file: cold objects: ' + str(cold_objs))
+
+    # reference run: simple partitioning with base flags
+    debug('gen_file_by_file: ref - hot/cold partition, cold options')
+    cold_obj_flags = dict(map(lambda x: (x, cold_opts), cold_objs))
+    cold_obj_flags.update({'*': base_flags})
+    yield config(
+        flags=fbf_csv_opt(cold_obj_flags), variant=base_variant)
+
+    if not (flags_file or nbiters_stage): return
+
+    # file-by-file exploration
+
+    for variant in optim_variants:
+        debug('gen_file_by_file: exploration - ' + variant)
+
+        base_obj_flags = dict(cold_obj_flags)
+        obj_to_cookie, cookie_to_flags = {}, {}
+
+        for curr_hot_obj in hot_objs:  # loop on hot object files
+            debug('gen_file_by_file: hot_obj: ' + str(curr_hot_obj))
+
+            # create the generator that will be used for curr_hot_obj expl
+            if flags_file:  # if requested, explore on flags list
+                debug('gen_file_by_file: file: %s ' % (flags_file))
+                generator = gen_flags_file(
+                    flags_file=flags_file,
+                    configuration_path=configuration_path, **kwargs)
+            else:  # else, perform a classic staged exploration
+                debug('gen_file_by_file: staged_exploration')
+                generator = gen_staged(
+                    nbiters_stage=nbiters_stage,
+                    configuration_path=configuration_path, **kwargs)
+
+            # keep track of current hot_obj results
+            obj_cookie = atos_lib.new_cookie()
+            obj_to_cookie[curr_hot_obj] = obj_cookie
+
+            # run exploration loop on newly selected hot_obj
+            while True:
+                try: cfg = generator.next()
+                except StopIteration: break
+                # compose csv from cold flags and best flags for previous objs
+                curr_hot_flags = '%s %s' % (base_flags, cfg.flags)
+                run_obj_flags = dict(base_obj_flags.items() + [
+                        (curr_hot_obj, curr_hot_flags)])
+                # keep track of hot_obj flags for current run
+                run_cookie = atos_lib.new_cookie()
+                cookie_to_flags[run_cookie] = curr_hot_flags
+                yield cfg.update(
+                    flags=fbf_csv_opt(run_obj_flags),
+                    variant=variant).extend_cookies([obj_cookie, run_cookie])
+
+            # explore other objs with best perf flags for current obj
+            perf_coeff = sorted(tradeoff_coeffs)[-1]
+            perf_results = get_run_tradeoffs(
+                [perf_coeff], obj_cookie, configuration_path)
+            perf_cookies = sum(map(
+                    lambda x: x.cookies.split(','), perf_results), [])
+            perf_flags = filter(
+                bool, map(lambda x: cookie_to_flags.get(x, ''), perf_cookies))
+            if perf_flags: base_obj_flags.update(
+                {curr_hot_obj: perf_flags[0]})
+
+        # compose config from best tradeoffs
+        debug('gen_file_by_file: compose best tradeoffs variants')
+        for coeff in tradeoff_coeffs:
+            debug('gen_file_by_file: coeff: ' + str(coeff))
+            coeff_obj_flags = dict(base_obj_flags.items())
+            for hot_obj in obj_to_cookie.keys():
+                coeff_results = get_run_tradeoffs(
+                    [coeff], obj_to_cookie[hot_obj], configuration_path)
+                coeff_cookies = sum(map(
+                        lambda x: x.cookies.split(','), coeff_results), [])
+                coeff_flags = filter(bool, map(
+                        lambda x: cookie_to_flags.get(x, None), coeff_cookies))
+                if coeff_flags: coeff_obj_flags.update(
+                    {hot_obj: coeff_flags[0]})
+            yield config(flags=fbf_csv_opt(
+                    coeff_obj_flags, base_flags), variant=variant)
 
 
 # ####################################################################
 
 
-def run_exploration_loop(args=None, **kwargs):
+def get_run_tradeoffs(
+    tradeoffs, cookie=None, configuration_path=None):
+    results = get_run_results(
+        cookie=cookie, configuration_path=configuration_path)
+    fselect = atos_lib.atos_client_results.select_tradeoff
+    results = map(
+        lambda x: fselect(results, perf_size_ratio=x), tradeoffs)
+    # result objects can be none in case of failure
+    results = list(set(filter(bool, results)))
+    return results
 
-    def get_variant_config(variant_id, configuration_path, **kwargs):
-        db = atos_lib.atos_db.db(configuration_path)
-        # search variant_id in results database
-        results = atos_lib.atos_client_db(db).query({'variant': variant_id})
-        if not results:
-            warning("variant not found: '%s'" % variant_id)
-            return None
-        conf, uconf = results[0].get('conf', ''), results[0].get('uconf', None)
-        # deduce optim_variant from conf & uconf
-        variantd = {
-            (0, 0, 0): 'base',
-            (0, 0, 1): 'lipo',
-            (1, 0, 0): 'fdo',
-            (0, 1, 0): 'lto',
-            (1, 1, 0): 'fdo+lto'}
-        fdo_set = (uconf is not None)
-        lto_set = (conf.find('-flto') != -1)
-        lipo_set = fdo_set and (conf.find('-fripa') != -1)
-        optim_variant = variantd[(fdo_set, lto_set, lipo_set)]
-        # also deduce optim_flags
-        optim_flags = conf.replace('-flto', '')
-        optim_flags = optim_flags.replace('-fprofile-use', '')
-        optim_flags = optim_flags.replace('-fripa', '')
-        optim_flags = re.sub('\ [\ ]*', ' ', optim_flags)
-        return optim_flags, optim_variant
+
+def get_run_results(cookie, configuration_path, **kwargs):
+    db = atos_lib.atos_db.db(configuration_path)
+    results = atos_lib.results_filter_cookie(
+        db.get_results(), cookie)
+    # filter out failures
+    results = filter(
+        lambda x: "FAILURE" not in x.values(), results)
+    if not results: return None
+    # transform into result objects
+    results = map(
+        atos_lib.atos_client_results.result, results)
+    # compute merged results for each variant
+    variants = list(
+        set(map(lambda x: x.variant, results)))
+    variant_results = []
+    for variant in variants:
+        filtered_results = filter(lambda x: x.variant == variant, results)
+        targets = list(set(map(lambda x: x.target, filtered_results)))
+        # merge multiple runs
+        targets_results = map(
+            atos_lib.atos_client_results.result.merge_multiple_runs,
+            map(lambda x: filter(lambda y: y.target == x, filtered_results),
+                targets))
+        # merge multiple targets
+        variant_results.append(
+            atos_lib.atos_client_results.result.merge_targets(
+                'group', targets_results))
+    return variant_results
+
+
+def get_variant_config(variant_id, configuration_path, **kwargs):
+    db = atos_lib.atos_db.db(configuration_path)
+    # search variant_id in results database
+    results = atos_lib.atos_client_db(db).query({'variant': variant_id})
+    if not results:
+        warning("variant not found: '%s'" % variant_id)
+        return None
+    conf, uconf = results[0].get('conf', ''), results[0].get('uconf', None)
+    # deduce optim_variant from conf & uconf
+    variantd = {
+        (0, 0, 0): 'base',
+        (0, 0, 1): 'lipo',
+        (1, 0, 0): 'fdo',
+        (0, 1, 0): 'lto',
+        (1, 1, 0): 'fdo+lto'}
+    fdo_set = (uconf is not None)
+    lto_set = (conf.find('-flto') != -1)
+    lipo_set = fdo_set and (conf.find('-fripa') != -1)
+    optim_variant = variantd[(fdo_set, lto_set, lipo_set)]
+    # also deduce optim_flags
+    optim_flags = conf.replace('-flto', '')
+    optim_flags = optim_flags.replace('-fprofile-use', '')
+    optim_flags = optim_flags.replace('-fripa', '')
+    optim_flags = re.sub('\ [\ ]*', ' ', optim_flags)
+    return optim_flags, optim_variant
+
+
+def run_exploration_loop(args=None, **kwargs):
 
     def get_frontier_variants(configuration_path, **kwargs):
         db = atos_lib.atos_db.db(configuration_path)
@@ -259,30 +716,7 @@ def run_exploration_loop(args=None, **kwargs):
             only_frontier=True, objects=True)
         return map(lambda x: x.variant, results)
 
-    def get_run_results(configuration_path, cookie, **kwargs):
-        db = atos_lib.atos_db.db(configuration_path)
-        results = atos_lib.results_filter_cookie(
-            db.get_results(), cookie)
-        # filter out failures
-        results = filter(
-            lambda x: "FAILURE" not in x.values(), results)
-        if not results: return None
-        # transform into result objects
-        results = map(
-            atos_lib.atos_client_results.result, results)
-        # get target list
-        targets = list(
-            set(map(lambda x: x.target, results)))
-        # merge multiple runs
-        results = map(
-            atos_lib.atos_client_results.result.merge_multiple_runs,
-            map(lambda x: filter(lambda y: y.target == x, results), targets))
-        # merge multiple targets
-        result = atos_lib.atos_client_results.result.merge_targets(
-            'group', results)
-        return result.size, result.time
-
-    def step(flags, variant):
+    def step(flags, variant, cookies=None):
         debug('step: %s, %s' % (variant, flags))
         # add flags from base_variant_configuration
         flags = (base_flags and (base_flags + ' ') or '') + flags
@@ -291,52 +725,51 @@ def run_exploration_loop(args=None, **kwargs):
         lto = variant in ['lto', 'fdo+lto']
         if variant == 'lipo': flags += ' -fripa'
         # compute atos-opt argument list and invoque it
-        run_cookie = atos_lib.new_cookie()
         opt_args = arguments.argparse.Namespace()
-        opt_args.__dict__.update(vars(args))
+        opt_args.__dict__.update(vars(args or {}))
         opt_args.__dict__.update(kwargs)
-        status = utils.invoque(
-            "atos-opt", opt_args,
-            options=flags, fdo=fdo, lto=lto, record=True,
-            cookies=(gen_args.get('cookies', []) + [run_cookie]))
-        # unpack and aggregate (merge) results
-        if status: return None
-        results = get_run_results(cookie=run_cookie, **gen_args)
-        debug('step-> %d, %s' % (status, str(results)))
-        return results
+        run_cookie = atos_lib.new_cookie()
+        run_cookies = gen_args.cookies or []
+        run_cookies.append(run_cookie)
+        if cookies: run_cookies.extend(cookies)
+        utils.invoque(
+            "atos-opt", opt_args, options=flags, fdo=fdo, lto=lto,
+            record=True, cookies=run_cookies)
+        # print debug info
+        results = get_run_results(cookie=run_cookie, **vars(gen_args))
+        debug('step-> ' + str(results))
 
     gen_args = dict(vars(args or {}).items() + kwargs.items())
-    generator = gen_args.get('generator', None)
-    max_iter = gen_args.get('nbiters', None)
-    optim_variants = gen_args.get('optim_variants', None)
-    optim_variants = (optim_variants or 'base').split(',')
-    base_variants = gen_args.get('base_variants', None) or [None]
+    gen_args = atos_lib.default_obj(**gen_args)
+    optim_variants = (gen_args.optim_variants or 'base').split(',')
+    base_variants = gen_args.base_variants or [None]
     base_variants = sum(map(
             lambda x: (  # replace 'frontier' by correspondind ids
-                (x != 'frontier') and [x] or get_frontier_variants(**gen_args)
-                ), base_variants), [])
-    seed_number = gen_args.get('seed', 0)
+                (x != 'frontier') and [x] or get_frontier_variants(
+                    **vars(gen_args))), base_variants), [])
+    assert gen_args.generator
 
     for variant_id in base_variants:
+        random.seed(gen_args.seed or 0)
         base_flags, base_variant = (
-            variant_id and get_variant_config(variant_id, **gen_args)
+            variant_id and get_variant_config(variant_id, **vars(gen_args))
             or (None, None))
-        generator_ = generator(
-            base_flags=base_flags, base_variant=base_variant, **gen_args)
-        random.seed(seed_number)
-        result = None
+        gen_args.update(base_flags=base_flags, base_variant=base_variant)
+        generator_ = gen_args.generator(**vars(gen_args))
+
         for ic in itertools.count():
-            if ic == max_iter:
+            if ic == gen_args.nbiters:
                 debug('max_iter reached - exploration stopped')
                 break
             try:
-                fv = generator_.send(result)
+                cfg = generator_.next()
             except StopIteration:
                 debug('stopiteration - exploration stopped')
                 break
-            if isinstance(fv, tuple):
-                flags, variant = fv
-                result = step(flags, variant)
+            if cfg.variant is not None:
+                step(flags=cfg.flags, variant=cfg.variant, cookies=cfg.cookies)
             else:
                 variants = base_variant and [base_variant] or optim_variants
-                result = dict(map(lambda x: (x, step(fv, x)), variants))
+                for variant in variants:
+                    step(flags=cfg.flags, variant=variant, cookies=cfg.cookies)
+    return 0

@@ -68,7 +68,7 @@ csv_generate:
 	$(QUIET)rm -rf $(CSV_DIR) && \
 	mkdir -p $(CSV_DIR) && \
 	cp $(config_dir)/$(FLAG) $(CSV_DIR)/$(FLAG) && \
-	python $(ROOT)/lib/atos/python/atos/atos_toolkit.py --flags=$(CSV_DIR)/$(FLAG) --gen-acf-tests=$(CSV_DIR),$(CFUNC)
+	python ./gen_acf_tests.py --flags=$(CSV_DIR)/$(FLAG) --csvdir=$(CSV_DIR) --cfunc=$(CFUNC)
 
 csv_tests: $(TESTS)
 

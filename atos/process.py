@@ -24,7 +24,6 @@ import logging
 import subprocess
 import select
 import fcntl
-import signal
 import cStringIO, StringIO
 import __builtin__
 import tempfile

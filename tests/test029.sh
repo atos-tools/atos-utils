@@ -41,14 +41,6 @@ echo "# atos-explore-loop..."
 tradeoff_variants
 $ROOT/bin/atos-explore-loop -M20 `tradeoff_variants`
 
-
-echo "# simplifying selected points..."
-tradeoff_variants
-for v in `tradeoff_variants`; do
-    $ROOT/lib/atos/python/atos/atos_toolkit.py -k --gen-one-off-rnd=$v,3
-done
-
-
 echo "# selected points:"
 tradeoff_variants
 

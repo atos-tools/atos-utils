@@ -57,8 +57,8 @@ $ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 -Y "-Os noinline cold"
 nb_played=`$ROOT/bin/atos lib query | wc -l`
 
 # 2 hot functions for default treshold hot=70, cold=30
-# -> only 3 new runs without list of flags to explore (base, ref, best)
-[ "`expr $nb_played`" == "7" ]
+# -> only 2 new runs without list of flags to explore (base, ref)
+[ "`expr $nb_played`" == "6" ]
 
 echo "-O2 -finline-functions" > flags.txt
 echo "-O3 -funroll-loops"     >> flags.txt
@@ -66,8 +66,8 @@ echo "-O3 -funroll-loops"     >> flags.txt
 $ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 -Y "-Os noinline cold" -F flags.txt
 
 nb_played=`$ROOT/bin/atos lib query | wc -l`
-# 7 +  (base, ref, best) + (2 flag_list * 2 hot_functions)
-[ "`expr $nb_played`" == "14" ]
+# 6 +  (base, ref) + (2 flag_list * 3 hot_functions) + tradeoffs
+[ `expr $nb_played` -ge 14 ]
 
 # try with perf ref point
 $ROOT/bin/atos-explore-acf -p ./$oprof_out_script -x 70 OPT-O2

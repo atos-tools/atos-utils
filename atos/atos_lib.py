@@ -19,7 +19,7 @@
 # Usage: get usage with atos-lib -h
 #
 
-import sys, os, re, math, itertools, time, fcntl, json, hashlib
+import sys, os, re, math, itertools, time, json, hashlib
 import cPickle as pickle
 
 import globals
@@ -401,7 +401,7 @@ class atos_client_db():
     def db_transfer(db, results, force):
         required_keys, missing_keys = set(atos_db.required_keys), set()
         if not force:
-            result_keys = set(result.keys())
+            result_keys = set(results.keys())
             for result in results:
                 if not result_keys.issuperset(required_keys):
                     missing_keys |= required_keys.difference(result_keys)
@@ -502,6 +502,27 @@ class json_config():
 # ####################################################################
 
 
+class default_obj(object):
+    """
+    Simple attributes holder.
+    """
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
+    def update(self, **kwargs):
+        self.__dict__.update(kwargs)
+        return self
+
+    def copy(self, **kwargs):
+        return type(self)(**vars(self))
+
+    def __repr__(self):
+        items = map(lambda (k, v): (str(k) + '=' + str(v)), vars(self).items())
+        return 'obj(%s)' % ', '.join(items)
+
+    def __getattr__(self, name):
+        return None
+
 def timer(func):
     def wrapper(*args, **kwargs):
         t0 = time.time()
@@ -560,6 +581,12 @@ def get_config_value(configuration_path, key, default=None):
     client = json_config(config_file)
     return client.get_value(key) or default
 
+def query_config_values(configuration_path, query, default=None):
+    config_file = os.path.join(configuration_path, 'config.json')
+    if not os.path.isfile(config_file): return default
+    client = json_config(config_file)
+    return client.query(strtoquery(query)) or default
+
 def strtodict(s):
     # 'aa:xx,bb:yy' -> {'aa':'xx','bb':'yy'}
     d = {}
@@ -597,8 +624,7 @@ def results_filter_cookie(results, cookie):
         lambda x: cookie in x.get('cookies', '').split(','), results)
 
 def new_cookie():
-    return md5sum(":".join(map(str, (
-                    os.uname() + (os.getpid(), os.getppid(), time.time())))))
+    return md5sum(str((os.uname() + (os.getpid(), os.getppid(), time.time()))))
 
 def result_entry(d):
     try:

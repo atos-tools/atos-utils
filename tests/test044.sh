@@ -64,14 +64,17 @@ cat > flags_list.txt <<EOF
 -O3 -funroll-loops
 -O2 -ffast-math
 EOF
+rm -f atos-configurations/acf_csv_dir/*
 $ROOT/bin/atos-explore-acf -f -F ./flags_list.txt
-#   (1 ref + 2 flags * 1 file)
-[ `ls atos-configurations/acf_csv_dir | wc -l` -eq 5 ]
+#  (1 ref + 2 flags * 1 file) + best tradeoffs
+ls atos-configurations/acf_csv_dir
+[ `ls atos-configurations/acf_csv_dir | wc -l` -ge 3 ]
 
 # same test with 2 hot files
+rm -f atos-configurations/acf_csv_dir/*
 $ROOT/bin/atos-explore-acf -f -x 100 -F ./flags_list.txt
-#   (1 ref + 2 flags * 2 files)
-[ `ls atos-configurations/acf_csv_dir | wc -l` -eq 10 ]
+#  (1 ref + 2 flags * 2 files) + best tradeoffs
+[ `ls atos-configurations/acf_csv_dir | wc -l` -ge 5 ]
 
 # file-by-file staged exploration
-$ROOT/bin/atos-explore-acf -Y "" -x 100 -f -N 1 -V "base,fdo" -O "-Os,-O2,-O3"
+$ROOT/bin/atos-explore-acf -Y "" -x 100 -f -N 1 --optim-variants "base,fdo" --optim-levels "-Os,-O2,-O3"

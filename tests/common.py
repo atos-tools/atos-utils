@@ -94,7 +94,7 @@ def atos_setup_args(**kwargs):
     # set environment variables
     for key, value in kwargs.items():
         if value is None: continue
-        os.putenv(str(key), str(value))
+        os.environ[str(key)] = str(value)
     # allows to call 'invoque' function from toplevel
     atos.logger.setup({})
     atos.process.setup({})

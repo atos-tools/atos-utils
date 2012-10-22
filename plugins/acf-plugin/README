@@ -1,0 +1,57 @@
+Building plugins
+================
+
+Build all plugins versions/archs from preprocessed files
+--------------------------------------------------------
+
+Build with:
+
+    make all    # generate plugins in 'build/gcc-<versions>/<hosts>/' dirs
+
+
+Full rebuild of all varsions/archs from sources
+-----------------------------------------------
+
+    .dependencies extract
+    make prep   # generate preprocessed files in 'build_tree/gcc-<versions>/<hosts>/' dirs
+    make all
+    make check
+
+Note that optionally, make prep will have modified the source tree, it should be commited then.
+
+
+Single build of plugin for the native compiler
+----------------------------------------------
+
+The native compiler must support plugins (i.e. be configured with --enable-plugin):
+
+    ./configure
+    make -f Makefile.prep	# generate preprocessed files
+    make -f Makefile.plugin     # generate acf_plugin.so
+
+Note that for gcc >= 4.7.0 compilers, the plugins should be built with g++:
+
+    ./configure CC=g++
+
+In order to use a different compiler:
+
+    ./configure CC=/my/gcc 
+
+or:
+
+    ./configure CC=/my/g++ # for >= 4.7.0 compiler
+
+Installation
+------------
+
+Install with:
+
+    make install PREFIX=/usr/local
+
+This will install plugins into $PREFIX/lib/gcc-plugins/acf-plugins/gcc-<versions>/<hosts>.
+
+Optionally, use this form to override the plugins prefix dir:
+
+    make install PLUGIN_PREFIX=/usr/local/plugins
+
+This will install plugins into $PLUGIN_PREFIX/gcc-<versions>/<hosts>.

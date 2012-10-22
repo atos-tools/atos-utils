@@ -1,0 +1,127 @@
+#!/usr/bin/env python
+#
+#
+
+import os, sys, subprocess
+import optparse
+
+parser = optparse.OptionParser()
+parser.add_option("--quiet", action="store_false",
+                  dest="verbose", default=True,
+                  help="disable verbose mode")
+parser.add_option("--debug", action="store_true",
+                  dest="debug", default=False,
+                  help="output debug messages")
+parser.add_option("--status", action="store_true",
+                  dest="status", default=False,
+                  help="configure in config.status mode")
+parser.add_option("--configure-prep", action="store_true",
+                  dest="configure_prep", default=False,
+                  help="configure for preprocessed sources only")
+parser.add_option("--configure-plugin", action="store_true",
+                  dest="configure_plugin", default=False,
+                  help="configure for plugin generation only")
+parser.add_option("--with-prep", dest="prepdir",
+                  help="set preprocessed source dir to the given path")
+(opts, args) = parser.parse_args()
+
+class ConfigVars:
+    """ Namespace for configured variables. """
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            self.__dict__[key] = value
+
+    def items(self):
+        return self.__dict__.items()
+
+    def __str__(self):
+        if len(self.__dict__.items()) == 0:
+            string = 'config_vars: []\n'
+        else:
+            string = 'config_vars:\n'
+        for key, value in self.__dict__.items():
+            string += "  %s='%s'\n" % (key, value)
+        return string
+
+class Configuration:
+    """ Configuration object. """
+    def __init__(self, config_vars, *args, **kwargs):
+        self.config_vars_ = config_vars
+        self.config_infiles_ = args
+        self.verbose_ = kwargs.get('verbose', True)
+        self.debug_ = kwargs.get('debug', False)
+
+    def parse_args(self, *args):
+        for envvar in args:
+            (key, value) = envvar.split('=', 1)
+            if key in self.config_vars_.__dict__ and \
+                    value != None:
+                self.config_vars_.__dict__[key] = value
+        
+    def configure_files(self):
+        if self.verbose_: print "Configure dir %s..." % os.getcwd()
+        if self.debug_: print "Configuration:\n%s" % str(self)
+        for infile in self.config_infiles_:
+            infile = os.path.join(os.path.dirname(__file__), infile) 
+            base = os.path.basename(infile).rsplit('.in', 1)[0]
+            try:
+                inf = open(infile, 'r')
+                outf = open(base, 'w')
+                if self.verbose_: print "Generating %s" % base
+                for line in inf.readlines():
+                    for key, value in self.config_vars_.items():
+                        line = line.replace('@%s@' % key, value)
+                    outf.write(line)
+            except Exception, e:
+                if os.path.exists(base):
+                    os.unlink(base)
+                raise e
+            inf.close()
+            outf.close()
+        if self.verbose_: print "Configure completed."
+
+    def __str__(self):
+        string = str(self.config_vars_)
+        if len(self.config_infiles_) == 0:
+            string += 'input_files: []\n'
+        else:
+            string += 'input_files:\n'
+        for infile in self.config_infiles_:
+            string += "  %s" % infile
+        return string
+
+config_vars = ConfigVars(srcdir=os.path.dirname(__file__),
+                         builddir=os.getcwd(),
+                         prepdir='$(builddir)',
+                         CC='gcc',
+                         CFLAGS='-O2',
+                         CPPFLAGS='')
+
+if opts.configure_prep:
+    files = [ 'Makefile.prep.in' ]
+elif opts.configure_plugin:
+    files = [ 'Makefile.plugin.in' ]
+else:
+    files = [ 'Makefile.prep.in', 'Makefile.plugin.in' ]
+
+if not opts.status:
+    configfd = os.open('config.status', os.O_CREAT|os.O_WRONLY)
+    os.write(configfd, "#!/usr/bin/env bash\n" \
+                 "exec %s --status %s\n" % \
+                 (__file__,
+                  " ".join(map((lambda x: "'%s'" % x), sys.argv[1:]))))
+    os.close(configfd)
+    os.chmod('config.status', 0755)
+    retcode = subprocess.call('./config.status')
+    if retcode != 0:
+        os.unlink('config.status')
+    sys.exit(retcode)
+else:
+    configuration = Configuration(config_vars,
+                                  verbose=opts.verbose,
+                                  debug=opts.debug,
+                                  *files)
+    if opts.prepdir:
+        args.append('prepdir=%s' % opts.prepdir)
+    configuration.parse_args(*args)
+    configuration.configure_files()

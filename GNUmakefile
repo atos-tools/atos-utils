@@ -23,6 +23,7 @@ PREFIX=/usr/local
 VSTAMP=version.stamp
 VERSION:=$(shell $(srcdir)config/update_version.sh $(VSTAMP))
 
+PROOT=proot
 RST2MAN=$(srcdir)config/docutils rst2man --report=3 # Filter warning with images
 RST2HTML=$(srcdir)config/docutils rst2html
 
@@ -70,7 +71,7 @@ all-local: $(ALL_EXES) $(ALL_DATAS)
 doc: $(ALL_DOCS)
 
 all-plugins:
-	$(MAKE) -C $(srcdir)plugins/acf-plugin install PREFIX=$(abspath .)
+	$(QUIET)$(MAKE) $(QUIET_S) -C $(srcdir)plugins/acf-plugin install PLUGIN_PREFIX=$(abspath lib/atos/plugins)
 
 clean: clean-local clean-doc clean-plugin clean-test
 
@@ -80,7 +81,7 @@ clean-local:
 	$(QUIET_CLEAN)rm -f *.tmp
 
 clean-plugin:
-	$(MAKE) -C $(srcdir)plugins/acf-plugin clean
+	$(QUIET)$(MAKE) $(QUIET_S) -C $(srcdir)plugins/acf-plugin clean
 
 clean-test:
 	install -d tests && $(MAKE) -C tests -f $(abspath $(srcdir)tests/GNUmakefile) clean
@@ -91,7 +92,7 @@ distclean-local:
 	$(QUIET_DISTCLEAN)rm -fr bin lib share $(VSTAMP)
 
 distclean-plugin:
-	$(MAKE) -C $(srcdir)plugins/acf-plugin distclean
+	$(QUIET)$(MAKE) $(QUIET_S) -C $(srcdir)plugins/acf-plugin distclean
 
 distclean-test:
 	install -d tests && $(MAKE) -C tests -f $(abspath $(srcdir)tests/GNUmakefile) distclean
@@ -99,26 +100,23 @@ distclean-test:
 install: $(INSTALLED_EXES) $(INSTALLED_DATAS) install-plugins
 
 install-plugins:
-	$(MAKE) -C $(srcdir)plugins/acf-plugin install PREFIX=$(abspath $(PREFIX))
+	$(QUIET)$(MAKE) $(QUIET_S) -C $(srcdir)plugins/acf-plugin install PLUGIN_PREFIX=$(abspath $(PREFIX)/lib/atos/plugins/)
 
 install-doc: $(INSTALLED_DOCS)
 
 tests: check
 
-check: check-local check-plugin check-tests
+check: check-local check-tests
 
 check-local: check-python-dependencies
 
 check-tests: all check-python-dependencies
 	install -d tests && $(MAKE) -C tests -f $(abspath $(srcdir)tests/GNUmakefile)
 
-coverage: check-local check-plugin check-coverage
+coverage: check-local check-coverage
 
 check-coverage: all check-python-dependencies
 	install -d tests && $(MAKE) COVERAGE_DIR=$(COVERAGE_DIR) -C tests -f $(abspath $(srcdir)tests/GNUmakefile) coverage
-
-check-plugin:
-	$(MAKE) -C $(srcdir)plugins/acf-plugin check
 
 examples: all check-python-dependencies
 	@echo "   Running examples."
@@ -230,6 +228,8 @@ QUIET_INSTALL_EXE=
 QUIET_INSTALL_DATA=
 QUIET_INSTALL_DOC=
 QUIET_CHECK=
+QUIET_S=
+QUIET=
 else
 QUIET_CHECK=@echo "CHECK $@" &&
 QUIET_IN=@echo "CONFIGURE $@" &&
@@ -242,6 +242,8 @@ QUIET_INSTALL_EXE=@echo "INSTALL EXE $@" &&
 QUIET_INSTALL_DATA=@echo "INSTALL DATA $@" &&
 QUIET_INSTALL_DOC=@echo "INSTALL DOC $@" &&
 QUIET_CHECK=@echo "CHECK $@" &&
+QUIET_S=-s
+QUIET=@
 endif
 
 

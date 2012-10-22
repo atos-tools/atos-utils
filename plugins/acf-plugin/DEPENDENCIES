@@ -1,0 +1,32 @@
+configurations:
+  default: [proot, rhlinux-i586-5el-rootfs, rhlinux-x86_64-5el-rootfs, gcc-prebuilt-linux-x86-gcc-4.5.2,
+    gcc-prebuilt-linux-x86-gcc-4.6.2, gcc-prebuilt-linux-x86-gcc-4.7.2, gcc-prebuilt-linux-x86-64-gcc-4.5.2,
+    gcc-prebuilt-linux-x86-64-gcc-4.6.2, gcc-prebuilt-linux-x86-64-gcc-4.7.2]
+repositories:
+  gcc-prebuilt-linux-x86-64-gcc-4.5.2: {alias: prebuilt/x86_64/gcc-4.5.2, format: git,
+    repos: 'ssh://gitolite@codex.cro.st.com/atos/gcc-prebuilt-linux-x86-64-gcc-4.5.2.git',
+    revision: 9fc3af105c90923001e0fe70b16eb0da2c7451ae}
+  gcc-prebuilt-linux-x86-64-gcc-4.6.2: {alias: prebuilt/x86_64/gcc-4.6.2, format: git,
+    repos: 'ssh://gitolite@codex.cro.st.com/atos/gcc-prebuilt-linux-x86-64-gcc-4.6.2.git',
+    revision: c3d01e3c284eb7f9595e8f92ada302a6f6c3bb4d}
+  gcc-prebuilt-linux-x86-64-gcc-4.7.2: {alias: prebuilt/x86_64/gcc-4.7.2, format: git,
+    repos: 'ssh://gitolite@codex.cro.st.com/atos/gcc-prebuilt-linux-x86-64-gcc-4.7.2.git',
+    revision: 485ba0e14f4380c72cce0a874c38ebcd018c753f}
+  gcc-prebuilt-linux-x86-gcc-4.5.2: {alias: prebuilt/i386/gcc-4.5.2, format: git,
+    repos: 'ssh://gitolite@codex.cro.st.com/atos/gcc-prebuilt-linux-x86-gcc-4.5.2.git',
+    revision: 0703ac010ee8d59ecefe88f59744253b7dcde4b9}
+  gcc-prebuilt-linux-x86-gcc-4.6.2: {alias: prebuilt/i386/gcc-4.6.2, format: git,
+    repos: 'ssh://gitolite@codex.cro.st.com/atos/gcc-prebuilt-linux-x86-gcc-4.6.2.git',
+    revision: 60aa0fcef232825d3ef45297f01cf6c1b2bc717a}
+  gcc-prebuilt-linux-x86-gcc-4.7.2: {alias: prebuilt/i386/gcc-4.7.2, format: git,
+    repos: 'ssh://gitolite@codex.cro.st.com/atos/gcc-prebuilt-linux-x86-gcc-4.7.2.git',
+    revision: fbef3b3ab0475fccdfbb581af265a95bd4a228af}
+  proot: {format: git, repos: 'ssh://gitolite@codex.cro.st.com/proot/u/christophe_guillon/proot',
+    revision: 741b3ee79d47f0c6b7eb37abdfffffdae68cbdfb}
+  rhlinux-i586-5el-rootfs: {alias: distros/rhlinux-i586-5el-rootfs, format: tar, ignore_status: true,
+    repos: 'ssh://gnx5855.gnb.st.com/home/compwork/projects/atos/opensuse.org.repo.RHEL_5.i586.tgz',
+    revision: bf9c81d647fb05a0d3eca7055e5e2be565ffd2ba}
+  rhlinux-x86_64-5el-rootfs: {alias: distros/rhlinux-x86_64-5el-rootfs, format: tar,
+    ignore_status: true, repos: 'ssh://gnx5855.gnb.st.com/home/compwork/projects/atos/opensuse.org.repo.RHEL_5.x86_64.tgz',
+    revision: d571872d60c59eeedca900b5d0e59bf16a378571}
+

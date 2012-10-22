@@ -1,0 +1,67 @@
+#!/bin/sh
+# This software is delivered under the terms of the MIT License
+#
+# Copyright (c) 2009 Christophe Guillon <christophe.guillon.perso@gmail.com>
+#
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this software and associated documentation
+# files (the "Software"), to deal in the Software without
+# restriction, including without limitation the rights to use,
+# copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following
+# conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+# OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+# WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+
+#
+# dependencies script
+# 
+# Get usage with:
+#   ./dependencies -h
+#
+# This scripts gets a specific version of deptools if not present.
+# Then is executes it deptools/deptools.py with the given arguments.
+# The actual dependency on deptools is owned by this script.
+# The other dependencies are handled by the deptools DEPENDENCIES files.
+#
+# For local usage in a project, copy this script and optionally change:
+# DEPTOOL_REPO=... and
+# DEPTOOL_REV=...
+# to the local repository for deptool and either origin/master or a fixed
+# revision of deptools to ensure strict dependency on deptools itself.
+#
+
+set -e
+dir=`dirname $0`
+
+DEPTOOL_REPO=${DEPTOOL_REPO:-gitolite@codex.cro.st.com:ci-kb/deptools.git}
+DEPTOOL_REV=${DEPTOOL_REV:-887c0bd2d9a24d9b7146659403fa278adcd76e1b}
+
+error() { echo "`basename $0`: error: $1" >&2; exit 1; }
+warning() { echo "`basename $0`: warning: $1" >&2; }
+
+# Extract deptools at the required revision
+[ -d deptools ] || git clone -b master ${DEPTOOL_REPO} deptools
+[ -d deptools/.git ] || error "trying to run dependencies from the deptools repository itself or deptools dir is corrupted."
+(cd deptools && git fetch origin) || warning "unable to update deptools from origin repository: ${DEPTOOL_REPO}. Use DEPTOOL_REPO=local_repo envvar."
+current_revision=`cd deptools && git log HEAD | head -1`
+requested_revision=`cd deptools && git log ${DEPTOOL_REV} | head -1`
+[ "$requested_revision" != "" ] || warning "unable to get requested revision of deptools ${DEPTOOL_REV}. Use DEPTOOL_REV=revision envvar."
+[ "$requested_revision" = "" -o "$requested_revision" = "$current_revision" ] || echo "deptools updated from ${current_revision} to ${requested_revision}."
+[ "$requested_revision" = "" ] || (cd deptools && git reset --quiet --hard ${DEPTOOL_REV})
+[ -e deptools/deptools/deptool.py ] || error "a problem occured while updating deptools. Fix ./deptools repository and retry."
+
+# Execute deptools
+deptools/deptools/deptool.py ${1+"$@"}

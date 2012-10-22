@@ -1,0 +1,43 @@
+#
+# Copyright (C) STMicroelectronics Ltd. 2012
+#
+# This file is part of ATOS.
+#
+# ATOS is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License v2.0
+# as published by the Free Software Foundation
+#
+# ATOS is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
+#
+# Makefile for per-function optimization plugin 
+#
+builddir=/opt/gcc-plugins/build_tree/gcc-4.5.2/sh4/i386
+srcdir=/opt/gcc-plugins
+prepdir=$(builddir)
+
+COMPILER=/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/gcc
+CFLAGS=
+CPPFLAGS=
+
+PREP_INCLUDES=-I$(shell $(COMPILER) $(CFLAGS) -print-file-name=plugin)/include
+
+SRCS=$(wildcard $(srcdir)/src/*.c)
+PREPS=$(patsubst  $(srcdir)/src/%.c, $(prepdir)/prep/%_prep.c, $(SRCS))
+
+.PHONY: all generate-prep-sources
+
+all: generate-prep-sources
+
+generate-prep-sources:  $(PREPS)
+
+$(PREPS): $(prepdir)/prep/%_prep.c: $(srcdir)/src/%.c $(builddir)/Makefile.prep
+	mkdir -p $(prepdir)/prep && $(COMPILER) $(CFLAGS) $(CPPFLAGS) $(PREP_INCLUDES) -E $(srcdir)/src/$*.c -o $(prepdir)/prep/$*_prep.c
+
+$(builddir)/Makefile.prep: $(srcdir)/Makefile.prep.in
+	cd $(builddir) && ./config.status

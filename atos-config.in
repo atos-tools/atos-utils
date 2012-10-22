@@ -166,7 +166,10 @@ EOF
 	machine_dir=`echo $target | sed 's/-.*//'`
 	[ "$machine_dir" != "i686" ] || machine_dir="i386"
 	[ "$machine_dir" != "sh" ] || machine_dir="sh4"
-	acfpath=${libdir}/plugins/gcc-${version}/${machine_dir}/${acf_plugin}
+	# Todo: need to compute compiler host, for now same as target (i.e. consider native compiler)
+	# to be merged with Denis' check
+	compiler_host=${machine_dir}
+	acfpath=${libdir}/plugins/gcc-${version}/${machine_dir}/${compiler_host}/${acf_plugin}
 	if [ ! -f "$acfpath" ]; then
             # use only major/minor version numbers
 	    vers=`echo $version | sed 's/\([0-9]*\.[0-9]*\).*/\1/'`

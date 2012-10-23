@@ -693,7 +693,6 @@ def run_atos_gen(args):
 
     return status
 
-
 def run_atos_opt(args):
     """ ATOS opt tool implementation. """
 

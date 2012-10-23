@@ -27,7 +27,7 @@ import profile
 import utils
 import arguments
 import atos_lib
-from logger import debug, warning, error, info
+from logger import debug, warning, error, info, message
 
 
 # ####################################################################
@@ -48,6 +48,9 @@ class optim_flag_list():
 
         def __repr__(self):
             return self.optname()
+
+        def __str__(self):
+            return self.range and self.range[0] or self.choice[0]
 
         def rand(self):
             if self.range:
@@ -250,7 +253,7 @@ def gen_rnd_uniform_deps(
         available_flags = flag_list.available_flags(base_flags)
         flags = base_flags or optim_levels.rand()
         while True:
-            for f in sorted(list(available_flags)):
+            for f in sorted(list(available_flags), key=str):
                 if random.randint(0, 1): continue
                 flags += ' ' + f.rand()
             handled_flags |= available_flags
@@ -278,7 +281,7 @@ def _gen_variants(generator, optim_variants=None):
 
 def gen_staged(
     optim_levels=None, optim_variants=None, nbiters_stage=None, fine_expl=None,
-    configuration_path='atos-configurations', seed='0',
+    configuration_path='atos-configurations', seed='0', expl_cookie=None,
     **kwargs):
     """
     perform staged exploration
@@ -299,10 +302,13 @@ def gen_staged(
     for flags_file in flags_lists:
         generators += [(gen_rnd_uniform_deps, {'flags_file': flags_file})]
 
-    expl_cookie, cookie_to_cfg = atos_lib.new_cookie(), {}
+    expl_cookie = expl_cookie or atos_lib.new_cookie()
+    cookie_to_cfg = {}
     selected_configs = [(None, optim_variants)]
 
     for (fct, args) in generators:
+        stage_cookie = atos_lib.compute_cookie(
+            expl_cookie, fct.func_name, args)
 
         # run exploration on previously selected configs
         for (flags, variants) in selected_configs:
@@ -318,13 +324,15 @@ def gen_staged(
                 if ic >= nbiters_stage: break
                 try: cfg = generator.next()
                 except StopIteration: break
-                run_cookie = atos_lib.new_cookie()
+                run_cookie = atos_lib.compute_cookie(
+                    stage_cookie, cfg.flags, cfg.variant)
                 cookie_to_cfg[run_cookie] = (cfg.flags, cfg.variant)
-                yield cfg.extend_cookies([expl_cookie, run_cookie])
+                yield cfg.extend_cookies(
+                    [expl_cookie, stage_cookie, run_cookie])
 
         # select tradeoffs configs (flags, variants) for next exploration
         selected_results = get_run_tradeoffs(
-            tradeoff_coeffs, expl_cookie, configuration_path)
+            tradeoff_coeffs, stage_cookie, configuration_path)
         selected_cookies = sum(map(
             lambda x: x.cookies.split(','), selected_results), [])
         selected_configs = filter(
@@ -343,7 +351,7 @@ def gen_function_by_function(
     prof_script, imgpath, csv_dir, hot_th, cold_opts='-Os noinline cold',
     flags_file=None, nbiters_stage=None,
     base_flags=None, base_variant=None, optim_variants=None,
-    configuration_path='atos-configurations', **kwargs):
+    configuration_path='atos-configurations', expl_cookie=None, **kwargs):
     """
     perform per function exploration
     """
@@ -420,6 +428,8 @@ def gen_function_by_function(
 
     if not (flags_file or nbiters_stage): return
 
+    expl_cookie = expl_cookie or atos_lib.new_cookie()
+
     # function-by-function exploration
 
     for variant in optim_variants:
@@ -449,21 +459,22 @@ def gen_function_by_function(
             hot_funcs_processed.append(curr_hot_func)
             debug('gen_function_by_function: hot_func: ' + str(curr_hot_func))
 
+            # keep track of current hot_func results
+            func_cookie = atos_lib.compute_cookie(
+                expl_cookie, variant, curr_hot_func)
+            func_to_cookie[curr_hot_func] = func_cookie
+
             # create the generator that will be used for curr_hot_func expl
             if flags_file:  # if requested, explore on flag list
                 debug('gen_function_by_function: file: %s ' % (flags_file))
                 generator = gen_flags_file(
-                    flags_file=flags_file,
+                    flags_file=flags_file, expl_cookie=func_cookie,
                     configuration_path=configuration_path, **kwargs)
             else:  # else, perform a classic staged exploration
                 debug('gen_function_by_function: staged_exploration')
                 generator = gen_staged(
-                    nbiters_stage=nbiters_stage,
+                    nbiters_stage=nbiters_stage, expl_cookie=func_cookie,
                     configuration_path=configuration_path, **kwargs)
-
-            # keep track of current hot_func results
-            func_cookie = atos_lib.new_cookie()
-            func_to_cookie[curr_hot_func] = func_cookie
 
             # run exploration loop on newly selected hot_func
             while True:
@@ -474,7 +485,7 @@ def gen_function_by_function(
                 run_func_flags = dict(base_func_flags.items() + [
                         (curr_hot_func, curr_hot_flags)])
                 # keep track of hot_func flags for current run
-                run_cookie = atos_lib.new_cookie()
+                run_cookie = atos_lib.compute_cookie(func_cookie, cfg.flags)
                 cookie_to_flags[run_cookie] = curr_hot_flags
                 yield cfg.update(
                     flags=acf_csv_opt(run_func_flags, base_flags),
@@ -512,7 +523,7 @@ def gen_file_by_file(
     prof_script, imgpath, csv_dir, hot_th, cold_opts="-Os",
     flags_file=None, nbiters_stage=None,
     base_flags=None, base_variant=None, optim_variants=None,
-    configuration_path='atos-configurations', **kwargs):
+    configuration_path='atos-configurations', expl_cookie=None, **kwargs):
     """
     perform per file exploration
     """
@@ -565,6 +576,8 @@ def gen_file_by_file(
 
     if not (flags_file or nbiters_stage): return
 
+    expl_cookie = expl_cookie or atos_lib.new_cookie()
+
     # file-by-file exploration
 
     for variant in optim_variants:
@@ -576,21 +589,22 @@ def gen_file_by_file(
         for curr_hot_obj in hot_objs:  # loop on hot object files
             debug('gen_file_by_file: hot_obj: ' + str(curr_hot_obj))
 
+            # keep track of current hot_obj results
+            obj_cookie = atos_lib.compute_cookie(
+                expl_cookie, variant, curr_hot_obj)
+            obj_to_cookie[curr_hot_obj] = obj_cookie
+
             # create the generator that will be used for curr_hot_obj expl
             if flags_file:  # if requested, explore on flags list
                 debug('gen_file_by_file: file: %s ' % (flags_file))
                 generator = gen_flags_file(
-                    flags_file=flags_file,
+                    flags_file=flags_file, expl_cookie=obj_cookie,
                     configuration_path=configuration_path, **kwargs)
             else:  # else, perform a classic staged exploration
                 debug('gen_file_by_file: staged_exploration')
                 generator = gen_staged(
-                    nbiters_stage=nbiters_stage,
+                    nbiters_stage=nbiters_stage, expl_cookie=obj_cookie,
                     configuration_path=configuration_path, **kwargs)
-
-            # keep track of current hot_obj results
-            obj_cookie = atos_lib.new_cookie()
-            obj_to_cookie[curr_hot_obj] = obj_cookie
 
             # run exploration loop on newly selected hot_obj
             while True:
@@ -601,7 +615,7 @@ def gen_file_by_file(
                 run_obj_flags = dict(base_obj_flags.items() + [
                         (curr_hot_obj, curr_hot_flags)])
                 # keep track of hot_obj flags for current run
-                run_cookie = atos_lib.new_cookie()
+                run_cookie = atos_lib.compute_cookie(obj_cookie, cfg.flags)
                 cookie_to_flags[run_cookie] = curr_hot_flags
                 yield cfg.update(
                     flags=fbf_csv_opt(run_obj_flags),
@@ -729,7 +743,7 @@ def run_exploration_loop(args=None, **kwargs):
         opt_args.__dict__.update(vars(args or {}))
         opt_args.__dict__.update(kwargs)
         run_cookie = atos_lib.new_cookie()
-        run_cookies = gen_args.cookies or []
+        run_cookies = gen_args.cookies and list(gen_args.cookies) or []
         run_cookies.append(run_cookie)
         if cookies: run_cookies.extend(cookies)
         utils.invoque(
@@ -749,12 +763,19 @@ def run_exploration_loop(args=None, **kwargs):
                     **vars(gen_args))), base_variants), [])
     assert gen_args.generator
 
+    # exploration cookie (used for keeping configs already ran)
+    expl_cookie = (
+        gen_args.cookies and gen_args.cookies[-1] or atos_lib.new_cookie())
+    message("Identifier of exploration: " + str(expl_cookie))
+
     for variant_id in base_variants:
         random.seed(gen_args.seed or 0)
         base_flags, base_variant = (
             variant_id and get_variant_config(variant_id, **vars(gen_args))
             or (None, None))
-        gen_args.update(base_flags=base_flags, base_variant=base_variant)
+        gen_args.update(
+            base_flags=base_flags, base_variant=base_variant,
+            expl_cookie=expl_cookie)
         generator_ = gen_args.generator(**vars(gen_args))
 
         for ic in itertools.count():

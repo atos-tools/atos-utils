@@ -256,8 +256,7 @@ def get_samples(imgpath=None, oprof_output="./oprof.out"):
         return None, None
     oprofile_format = check_format(oprof_output)
     if not oprofile_format:
-        error('oprofile output format not supported' % (
-                os.path.basename(sys.argv[0])))
+        error('oprofile output format not supported')
         return None, None
     binary_list = parse_binary_list(
         oprof_output, oprofile_format, binary, bin_path)

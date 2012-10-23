@@ -32,7 +32,35 @@ status = utils.invoque(
     no_run=True)
 assert status == 0
 
-from test064 import generated_configs, query_configs
+
+def query_configs(cfg, **kwargs):
+    def match(x):
+        return all(
+            map(lambda (k, v):
+                    re.match('^%s$' % v, getattr(x, k, None) or ''),
+                    kwargs.items()))
+    return filter(match, cfg)
+
+
+def generated_configs(gen, max_iter=None, cfg_to_res=None):
+    random.seed(0)
+    configs = []
+    for ic in itertools.count():
+        if ic == max_iter: break
+        try:
+            cfg = gen.send(None)
+            configs.append(cfg)
+            if not cfg_to_res: continue
+            target, time, size = cfg_to_res(cfg)
+            variant = atos_lib.variant_id(cfg.flags) + '-' + cfg.variant
+            entry = {'target': target, 'variant': variant, 'conf': cfg.flags,
+                     'cookies': ','.join(list(set(cfg.cookies or [])))}
+            entry.update({'time': time, 'size': size})
+            db = atos_lib.atos_db.db('atos-configurations')
+            atos_lib.atos_client_db(db).add_result(entry)
+        except StopIteration: break
+    return configs
+
 
 # reference results
 entry = {'target': 'sha1-c', 'variant': 'REF', 'conf': '',

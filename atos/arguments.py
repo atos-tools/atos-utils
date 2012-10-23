@@ -256,6 +256,7 @@ class parsers:
         args.results_script(parser)
         args.clean(parser)
         args.cookie(parser)
+        args.keep(parser)
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
@@ -277,6 +278,8 @@ class parsers:
         args.optim_levels(parser)
         args.optim_variants(parser)
         args.base_variants(parser)
+        args.cookie(parser)
+        args.keep(parser)
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
@@ -298,6 +301,8 @@ class parsers:
         args.optim_levels(parser)
         args.optim_variants(parser)
         args.base_variants(parser)
+        args.cookie(parser)
+        args.keep(parser)
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
@@ -319,6 +324,8 @@ class parsers:
         args.optim_levels(parser)
         args.optim_variants(parser)
         args.base_variants(parser)
+        args.cookie(parser)
+        args.keep(parser)
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
@@ -348,6 +355,8 @@ class parsers:
         args.atos_explore.cold_options(parser)
         args.atos_explore.cold_attributes(parser)
         args.atos_explore.nbiters_stage(parser)
+        args.cookie(parser)
+        args.keep(parser)
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
@@ -547,7 +556,7 @@ class parsers:
         args.configuration_path(parser)
         args.atos_opt.lto(parser)
         args.atos_opt.fdo(parser)
-        args.atos_opt.keep(parser)
+        args.keep(parser)
         args.record(parser)
         args.remote_path(parser, ("-b", "--remote_path"))
         args.useprofile(parser)
@@ -575,6 +584,8 @@ class parsers:
         args.atos_gen.generator(parser)
         args.optim_levels(parser)
         args.optim_variants(parser)
+        args.cookie(parser)
+        args.keep(parser)
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser)
@@ -953,6 +964,13 @@ class args:
                              dest="prof_script",
                              help="script to get profile information")
 
+    @staticmethod
+    def keep(parser, args=("-k", "--keep")):
+        parser.add_argument(*args,
+                             dest="keep",
+                             action='store_true',
+                             help="keep existing results if any")
+
     class atos_help:
         """ Namespace for non common atos help options. """
 
@@ -1189,13 +1207,6 @@ class args:
                                  dest="fdo",
                                  action='store_true',
                                  help="use feedback directed optimizations")
-
-        @staticmethod
-        def keep(parser, args=("-k", "--keep")):
-            parser.add_argument(*args,
-                                 dest="keep",
-                                 action='store_true',
-                                 help="keep existing results if any")
 
     class atos_play:
         """ Namespace for non common atos-play arguments. """

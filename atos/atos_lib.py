@@ -331,9 +331,12 @@ class atos_client_results():
         # compute speedups/sizereds
         map(lambda x: x.compute_speedup(ref), frontier_copy)
         # find best tradeoff (ratio * sizered + speedup)
-        tradeoffs = sorted(map(lambda x: (
-                    (perf_size_ratio * x.speedup) + x.sizered, x),
-                               frontier_copy))
+        tradeoffs = map(lambda x: (
+                (perf_size_ratio * x.speedup) + x.sizered, x),
+                        frontier_copy)
+        # also sort by variant_id (to get a deterministic behavior)
+        tradeoffs = sorted(tradeoffs, key=lambda x: (x[0], x[1].variant))
+        # take the "nb_points" best variants
         tradeoffs = map(lambda x: x[1], tradeoffs[-nb_points:])
         # return corresponding points
         tradeoffs_points = map(
@@ -643,6 +646,9 @@ def results_filter_cookie(results, cookie):
 
 def new_cookie():
     return md5sum(str((os.uname() + (os.getpid(), os.getppid(), time.time()))))
+
+def compute_cookie(*args):
+    return md5sum(str(args))
 
 def result_entry(d):
     try:

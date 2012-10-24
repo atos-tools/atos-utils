@@ -41,11 +41,13 @@
 #ifdef param_values
 #define USE_GLOBAL_PARAMS
 
+#ifdef HWI_SHIFT
 #undef param_values
 #define param_values (*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift))
 #undef PARAM_VALUE
 #define PARAM_VALUE(ENUM) \
     ((int) ((*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift))[(int) ENUM]))
+#endif
 
 #else
 #undef USE_GLOBAL_PARAMS
@@ -58,9 +60,11 @@ char *acf_csv_file;
 const char *verbose_key="verbose";
 bool verbose = false;
 
+#ifdef HWI_SHIFT
 const char *hwi_size="host_wide_int";
 int gcc_runtime_hwi = 0;
 int hwi_shift = 0;
+#endif
 
 int plugin_is_GPL_compatible;
 static const char *plugin_name;
@@ -293,7 +297,7 @@ static void save_and_set_param(char *opt_param, int value) {
     csv_param_value[csv_param_index] = PARAM_VALUE(param_idx);
     csv_param_index ++;
 
-#if defined(USE_GLOBAL_PARAMS) && defined(ACF_DEBUG)
+#if defined(USE_GLOBAL_PARAMS) && defined (HWI_SHIFT) && defined(ACF_DEBUG)
     if (hwi_shift)
 	fprintf(stderr, "Default x_param_value address= %p, \n" \
 		"Shifted x_param_value= %p\n",
@@ -639,10 +643,12 @@ int plugin_init(struct plugin_name_args *plugin_na,
     plugin_name=plugin_na->base_name;
     FILE *fcsv;
     int csv_arg_pos = -1;
+#ifdef HWI_SHIFT
     int hwi_arg_pos = -1;
     HOST_WIDE_INT hwi_size_var;
     bool hwi_ok;
     int plugin_buildtime_hwi = 0;
+#endif
     bool bad = false;
     int i;
 
@@ -704,9 +710,11 @@ int plugin_init(struct plugin_name_args *plugin_na,
 	    if (strcmp(plugin_na->argv[i].key, verbose_key) == 0) {
 		verbose = true;
 	    }
+#ifdef HWI_SHIFT
 	    if (strcmp(plugin_na->argv[i].key, hwi_size) == 0) {
 		hwi_arg_pos = i;
 	    }
+#endif
 	    if (strcmp(plugin_na->argv[i].key, acf_csv_file_key) == 0) {
 		csv_arg_pos = i;
 	    }
@@ -724,11 +732,15 @@ int plugin_init(struct plugin_name_args *plugin_na,
 	fprintf(stderr,
 		"Usage for %s: -fplugin=<path>/%s.so "
 		"-fplugin-arg-%s-%s= <path-to-csv-file> "
+#ifdef HWI_SHIFT
 		"[-fplugin-arg-%s-%s= <size_in_bytes>] "
+#endif
 		"[-fplugin-arg-%s-%s]\n",
 		plugin_name, plugin_name,
 		plugin_name, acf_csv_file_key,
+#ifdef HWI_SHIFT
 		plugin_name, hwi_size,
+#endif
 		plugin_name, verbose_key);
 	return 1;
     }
@@ -747,6 +759,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
 	return 1;
     }
 
+#ifdef HWI_SHIFT
     hwi_ok = false;
     if (hwi_arg_pos != -1 && strcmp(plugin_na->argv[hwi_arg_pos].key, hwi_size) == 0) {
 	if (plugin_na->argv[hwi_arg_pos].value &&
@@ -781,6 +794,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
     if (!hwi_ok)
 	fprintf(stderr,"Warning: No HOST_WIDE_TYPE size in parameters\n");
 #endif
+#endif /* HWI_SHIFT */
 
     register_callback(plugin_na->base_name,
 		      PLUGIN_START_UNIT,

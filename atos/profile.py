@@ -147,6 +147,8 @@ def parse_profile(oprof_output, oprofile_format, binary_list):
                 linenr, app_name = ' ', ' '
                 if oprofile_format == 3:
                     app_name = words.pop(5)
+                elif oprofile_format == 4:
+                    app_name = words.pop(4)
                 if oprofile_format in [2, 3]:
                     linenr = words.pop(3)
                 if oprofile_format in [1, 2, 3, 4]:

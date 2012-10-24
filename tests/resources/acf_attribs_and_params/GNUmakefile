@@ -14,7 +14,7 @@ ifneq ($(findstring 4.5., $(GCC_VERSION)), 4.5.)
 TESTS+=-Ofast
 endif
 
-plugindir:=$(ROOT)/plugins/acf-plugin/build_tree/gcc-$(GCC_VERSION)/x86_64
+plugindir:=$(ROOT)/plugins/acf-plugin/build/gcc-$(GCC_VERSION)/x86_64/x86_64
 
 csv_root=CSV_
 CSV_FILES=$(wildcard $(CSV_DIR)/*.csv)

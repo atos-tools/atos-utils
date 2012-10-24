@@ -124,8 +124,7 @@ cfg = generated_configs(gen)
 assert len(cfg) == 2  # default run + cold options
 assert query_configs(cfg, flags='-O2', variant='base')
 assert query_configs(
-    cfg, flags='-O2 -fplugin=plugin.so '
-    '-fplugin-arg-acf_plugin-host_wide_int=7 .*', variant='base')
+    cfg, flags='-O2 -fplugin=plugin.so .*', variant='base')
 
 gen = generators.gen_function_by_function(
     acf_plugin_path="plugin.so", hwi_size="8",

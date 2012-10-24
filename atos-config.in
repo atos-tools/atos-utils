@@ -82,6 +82,35 @@ fi
 
 #######################
 
+get_executable_host()
+{
+    local compiler=${1?}
+    local host
+    host=`file $compiler | cut -d',' -f2 | sed 's/ //g'`
+    case "$host" in
+	Intel80[3456]86) host=i386
+	    ;;
+	x86-64) host=x86_64
+	    ;;
+	*) host=unknown
+	    ;;
+    esac
+    echo "$host"
+}
+
+get_triplet_alias()
+{
+    local triplet=${1?}
+    local alias
+    alias=`echo $triplet | sed 's/-.*//'`
+    case "$alias" in
+	i[3456]86) alias=i386
+	    ;;
+	sh) alias=sh4
+	    ;;
+    esac
+    echo "$alias"
+}
 compiler_test()
 {
     compiler=$1
@@ -100,6 +129,9 @@ EOF
         # compiler id
 	name="rvct"
 	target="ARM"
+	target_alias=arm
+	host_alias=`get_executable_host $compiler`
+
 	if [[ `basename $compiler` ==  armcc ]]; then
 	    version=`$compiler | head -1 | cut -d' ' -f4`
 	else
@@ -115,6 +147,12 @@ EOF
 
         # target machine
 	echo "target $target"
+
+	# target alias
+	echo "target_alias $target_alias"
+
+	# host alias
+	echo "host_alias $host_alias"
 
         # driver version string
 	result=`$compiler | head -1`
@@ -133,6 +171,8 @@ EOF
         # compiler id
 	name=`$compiler -v 2>&1 | grep " version " | cut -d' ' -f1`
 	target=`$compiler -dumpmachine`
+	target_alias=`get_triplet_alias $target`
+	host_alias=`get_executable_host $compiler`
 	version=`$compiler -v 2>&1 | grep " version " | cut -d' ' -f3`
 	echo "id $name-$target-$version"
 
@@ -144,6 +184,12 @@ EOF
 
         # target machine
 	echo "target $target"
+
+	# target alias
+	echo "target_alias $target_alias"
+
+	# host alias
+	echo "host_alias $host_alias"
 
         # driver version string
 	result=`echo \`$compiler -v 2>&1\``
@@ -163,20 +209,22 @@ EOF
 
         # acf plugin
 	acf_plugin="acf_plugin.so"
-	machine_dir=`echo $target | sed 's/-.*//'`
-	[ "$machine_dir" != "i686" ] || machine_dir="i386"
-	[ "$machine_dir" != "sh" ] || machine_dir="sh4"
-	# Todo: need to compute compiler host, for now same as target (i.e. consider native compiler)
-	# to be merged with Denis' check
-	compiler_host=${machine_dir}
-	acfpath=${libdir}/plugins/gcc-${version}/${machine_dir}/${compiler_host}/${acf_plugin}
+	acfpath=${libdir}/plugins/gcc-${version}/${target_alias}/${host_alias}/${acf_plugin}
 	if [ ! -f "$acfpath" ]; then
             # use only major/minor version numbers
 	    vers=`echo $version | sed 's/\([0-9]*\.[0-9]*\).*/\1/'`
-	    acfpath=`\ls -d1 ${libdir}/plugins/gcc-${vers}*/${machine_dir}/${acf_plugin} | sort -r | head -1`
+	    acfpath=`\ls -d1 ${libdir}/plugins/gcc-${vers}*/${target_alias}/${host_alias}/${acf_plugin} | sort -r | head -1`
 	fi 2>/dev/null
 	[ -f "$acfpath" ] || acfpath="none"
 	echo "plugin_acf $acfpath"
+
+        # plugins
+	if [ -f "$acfpath" ]; then
+	    result=`$compiler -O2 -fplugin=$acfpath -fplugin-arg-acf_plugin-test -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
+	    echo "plugins_enabled $result"
+	else
+	    echo "plugins_enabled 0"
+	fi
 
         # host_wide_int size for plugins
 	HWI=0
@@ -185,17 +233,23 @@ EOF
 	if [ -f "$cc1_path" ]; then
 	    # Record HOST_WIDE_INT of cc1 compiler that loads the plugin
 	    HWI=`objdump -t $cc1_path | grep target_newline | awk '{print $5 - 0}'`
-	    [ "$HWI" != "" ] || HWI=0
+	    [ "$HWI" != "" ] || HWI=1
 	fi
-	echo "host_wide_int $HWI"
+	if [ "$HWI" != "1" ]; then
+	    # Check if actual hwi size matches expectations
+	    if [ "$host_alias" == "i386" -a "$target_alias" != "x86_64" ]; then
+		expected_hwi=4
+	    else
+		expected_hwi=8
+	    fi
+	    if [ "$expected_hwi" != "$HWI" ]; then
+		HWI=0
+	    else
+		HWI=1
+	    fi
+	fi
 
-        # plugins
-	if [ -f "$acfpath" -a "$HWI" != 0 ]; then
-	    result=`$compiler -O2 -fplugin=$acfpath -fplugin-arg-acf_plugin-test -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
-	    echo "plugins_enabled $result"
-	else
-	    echo "plugins_enabled 0"
-	fi
+	echo "valid_host_wide_int $HWI"
 
     fi
 }

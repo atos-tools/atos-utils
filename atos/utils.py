@@ -1120,8 +1120,8 @@ def run_atos_explore_acf(args):
         acf_plugin_path = acf_plugin_path and list(set(acf_plugin_path))[0]
 
         host_wide_int = atos_lib.query_config_values(
-            args.configuration_path, "$.compilers[*].host_wide_int",
-            default=[0])
+            args.configuration_path, "$.compilers[*].valid_host_wide_int",
+            default=None)
 
         plugins_enabled = atos_lib.query_config_values(
             args.configuration_path, "$.compilers[*].plugins_enabled")
@@ -1133,10 +1133,9 @@ def run_atos_explore_acf(args):
             warning("switching to file-by-file exploration")
             file_by_file = True
 
-        elif not all(map(int, host_wide_int)):
-            warning("compiler not supported by acf plugin (unknown hwi_size)")
-            warning("switching to file-by-file exploration")
-            file_by_file = True
+        elif host_wide_int and not all(map(int, host_wide_int)):
+            error("compiler not supported by acf plugin (wrong hwi_size)")
+            return 1
 
         elif not plugins_enabled:
             warning("compiler does not support plugins")
@@ -1146,7 +1145,6 @@ def run_atos_explore_acf(args):
         else:
             status = generators.run_exploration_loop(
                 args, imgpath=imgpath, csv_dir=csv_dir,
-                hwi_size=str(int(host_wide_int[0])),
                 prof_script=prof_script, acf_plugin_path=acf_plugin_path,
                 acf_hot_th=str(args.hot_th),
                 acf_cold_opts=("%s %s" % (args.cold_opts, args.cold_attrs)),

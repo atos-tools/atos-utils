@@ -347,7 +347,7 @@ def gen_staged(
 
 
 def gen_function_by_function(
-    acf_plugin_path, hwi_size,
+    acf_plugin_path,
     prof_script, imgpath, csv_dir, hot_th, cold_opts='-Os noinline cold',
     flags_file=None, nbiters_stage=None,
     base_flags=None, base_variant=None, optim_variants=None,
@@ -393,13 +393,11 @@ def gen_function_by_function(
         return (
             base_flags +
             ' -fplugin=' + acf_plugin_path +
-            ' -fplugin-arg-acf_plugin-host_wide_int=' + hwi_size +
             ' -fplugin-arg-acf_plugin-verbose' +
             ' -fplugin-arg-acf_plugin-csv_file=' + csv_name)
 
     debug('gen_function_by_function')
     assert acf_plugin_path and os.path.isfile(acf_plugin_path)
-    assert hwi_size and int(hwi_size)
 
     tradeoff_coeffs = [5, 1, 0.2]
     nbiters_stage = nbiters_stage and int(nbiters_stage)

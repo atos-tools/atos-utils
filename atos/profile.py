@@ -39,6 +39,9 @@ def check_format(oprof_output):
         # 0x19e 22583 0.0312813 (no location info) libxx.so libxx.so func1
         r'vma +samples +% +linenr[ _]info +image[ _]name '
         '+app[ _]name +symbol[ _]name *',
+        # vma samples  %  image name  app name   symbol name
+        # 0x19e 22583 0.0312813 libxx.so libxx.so func1
+        r'vma +samples +% +image[ _]name +app[ _]name +symbol[ _]name *',
         # Overhead Samples Command Shared Object Symbol
         # 0.84%     1      hello.u /tmp/hello.u  0x000000000670 d [.] func1
         r'# +Overhead +Samples +Command +Shared Object +Symbol *',
@@ -58,7 +61,7 @@ def parse_binary_list(oprof_output, oprofile_format, binary, bin_path):
 
     binary_list = []
     for line in open(oprof_output):
-        if (oprofile_format == 4):
+        if (oprofile_format == 5):
             # perf profiling format
             # Handle:  30.25%  36 hello.u /lib/libc-2.11.1.so \
             #          0x00000000000453a0 u [.] __GI_vfprintf
@@ -73,7 +76,7 @@ def parse_binary_list(oprof_output, oprofile_format, binary, bin_path):
                 continue
             # we're on a symbol line:
             words = line.split()
-            if oprofile_format == 1:
+            if oprofile_format == 1 or oprofile_format == 4:
                 image_name = words[3]
             elif oprofile_format == 2 or oprofile_format == 3:
                 # handle (no-location-information) case
@@ -97,7 +100,7 @@ def parse_profile(oprof_output, oprofile_format, binary_list):
     # read couples of (address, sample_count) from oprofile output
     samples = {}
     for line in open(oprof_output):
-        if (oprofile_format == 4):
+        if (oprofile_format == 5):
             # perf profiling format
             # Handle:  30.25%  36 hello.u /lib/libc-2.11.1.so \
             #          0x00000000000453a0 u [.] __GI_vfprintf
@@ -121,7 +124,9 @@ def parse_profile(oprof_output, oprofile_format, binary_list):
             if words[3] == '(no':
                 words[3] = ' '.join(words[3:6])
                 del words[4:6]
-            image_name = (oprofile_format == 1) and words[3] or words[4]
+            image_name = (
+                (oprofile_format == 1 or oprofile_format == 4)
+                and words[3] or words[4])
 
         # detect if we are in an interesting region of the profile file
         for (bin, path) in binary_list:
@@ -129,7 +134,7 @@ def parse_profile(oprof_output, oprofile_format, binary_list):
                 os.path.basename(image_name) == os.path.basename(bin))
             if not in_binary_region: continue
 
-            if (oprofile_format == 4):
+            if (oprofile_format == 5):
                 # Remove trailing '%'
                 percent = words[0][:-1]
                 samps = words[1]
@@ -144,7 +149,7 @@ def parse_profile(oprof_output, oprofile_format, binary_list):
                     app_name = words.pop(5)
                 if oprofile_format in [2, 3]:
                     linenr = words.pop(3)
-                if oprofile_format in [1, 2, 3]:
+                if oprofile_format in [1, 2, 3, 4]:
                     sym = words[4]
 
             # merge multiple entries for same image_name/sym

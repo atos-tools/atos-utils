@@ -763,9 +763,18 @@ def run_exploration_loop(args=None, **kwargs):
                     **vars(gen_args))), base_variants), [])
     assert gen_args.generator
 
+    # previous results wont be found without old exploration cookie
+    if gen_args.reuse and not gen_args.cookies:
+        error(" --reuse option must be used with --cookie option")
+        return 1
+
     # exploration cookie (used for keeping configs already ran)
-    expl_cookie = (
-        gen_args.cookies and gen_args.cookies[-1] or atos_lib.new_cookie())
+    if gen_args.cookies:
+        if len(gen_args.cookies) > 1:
+            expl_cookie = atos_lib.compute_cookie(gen_args.cookies)
+        else: expl_cookie = gen_args.cookies[0]
+    else: expl_cookie = atos_lib.new_cookie()
+
     message("Identifier of exploration: " + str(expl_cookie))
 
     for variant_id in base_variants:

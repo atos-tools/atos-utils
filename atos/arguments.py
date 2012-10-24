@@ -256,7 +256,7 @@ class parsers:
         args.results_script(parser)
         args.clean(parser)
         args.cookie(parser)
-        args.keep(parser)
+        args.reuse(parser)
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
@@ -279,7 +279,7 @@ class parsers:
         args.optim_variants(parser)
         args.base_variants(parser)
         args.cookie(parser)
-        args.keep(parser)
+        args.reuse(parser)
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
@@ -302,7 +302,7 @@ class parsers:
         args.optim_variants(parser)
         args.base_variants(parser)
         args.cookie(parser)
-        args.keep(parser)
+        args.reuse(parser)
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
@@ -325,7 +325,7 @@ class parsers:
         args.optim_variants(parser)
         args.base_variants(parser)
         args.cookie(parser)
-        args.keep(parser)
+        args.reuse(parser)
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
@@ -356,7 +356,7 @@ class parsers:
         args.atos_explore.cold_attributes(parser)
         args.atos_explore.nbiters_stage(parser)
         args.cookie(parser)
-        args.keep(parser)
+        args.reuse(parser)
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
@@ -556,7 +556,7 @@ class parsers:
         args.configuration_path(parser)
         args.atos_opt.lto(parser)
         args.atos_opt.fdo(parser)
-        args.keep(parser)
+        args.reuse(parser)
         args.record(parser)
         args.remote_path(parser, ("-b", "--remote_path"))
         args.useprofile(parser)
@@ -585,7 +585,7 @@ class parsers:
         args.optim_levels(parser)
         args.optim_variants(parser)
         args.cookie(parser)
-        args.keep(parser)
+        args.reuse(parser)
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser)
@@ -965,11 +965,11 @@ class args:
                              help="script to get profile information")
 
     @staticmethod
-    def keep(parser, args=("-k", "--keep")):
+    def reuse(parser, args=("--reuse",)):
         parser.add_argument(*args,
-                             dest="keep",
+                             dest="reuse",
                              action='store_true',
-                             help="keep existing results if any")
+                             help="reuse existing results")
 
     class atos_help:
         """ Namespace for non common atos help options. """

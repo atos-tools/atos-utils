@@ -43,7 +43,8 @@ assert len(results) == 2
 #   -k, --keep
 #
 
-status = utils.invoque("atos-opt", args, options="-O2", record=True, keep=True)
+status = utils.invoque(
+    "atos-opt", args, options="-O2", record=True, reuse=True)
 assert status == 0
 
 results = common.atos_results({"variant" : "OPT-O2"})

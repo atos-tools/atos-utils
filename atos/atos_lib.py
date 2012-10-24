@@ -570,6 +570,9 @@ def variation_coefficient(l):
 def md5sum(s):
     return hashlib.md5(s).hexdigest()
 
+def sha1sum(s):
+    return hashlib.sha1(s).hexdigest()
+
 def hashid(s):
     # return same results as 'echo s | md5sum'
     return md5sum(s + '\n')
@@ -645,10 +648,10 @@ def results_filter_cookie(results, cookie):
         lambda x: cookie in x.get('cookies', '').split(','), results)
 
 def new_cookie():
-    return md5sum(str((os.uname() + (os.getpid(), os.getppid(), time.time()))))
+    return compute_cookie(os.uname(), os.getpid(), os.getppid(), time.time())
 
 def compute_cookie(*args):
-    return md5sum(str(args))
+    return sha1sum(str(args))
 
 def result_entry(d):
     try:

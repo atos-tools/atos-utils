@@ -700,7 +700,7 @@ def run_atos_opt(args):
     uopts = args.uopts or (args.fdo and options or None)
     if args.lto: options += " -flto"
 
-    if args.keep:  # do nothing if existing run results
+    if args.reuse:  # do nothing if existing run results
         variant = atos_lib.variant_id(options, None, uopts)
         db = atos_lib.atos_db.db(args.configuration_path)
         results = atos_lib.atos_client_db(db).query({"variant": variant})

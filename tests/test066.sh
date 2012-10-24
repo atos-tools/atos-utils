@@ -36,7 +36,7 @@ $ROOT/bin/atos gen --generator=gen_staged --arg=nbiters_stage=10 \
 nb_played1=`$ROOT/bin/atos lib query | wc -l`
 
 $ROOT/bin/atos gen --generator=gen_staged --arg=nbiters_stage=10 \
-    --optim-variants=base --cookie=aaaaaaaaaaaaaaaaaaaa --keep
+    --optim-variants=base --cookie=aaaaaaaaaaaaaaaaaaaa --reuse
 
 nb_played2=`$ROOT/bin/atos lib query | wc -l`
 
@@ -55,7 +55,7 @@ nb_played1=`$ROOT/bin/atos lib query | wc -l`
 
 export ATOS_DEBUG_FILE=log2.txt
 
-$ROOT/bin/atos-explore-inline --nbiters=10 --keep --cookie=$expl_cookie1
+$ROOT/bin/atos-explore-inline --nbiters=10 --reuse --cookie=$expl_cookie1
 
 expl_cookie2=`grep "Identifier of exploration:" log2.txt | sed 's/.* //g'`
 
@@ -78,7 +78,7 @@ nb_played1=`$ROOT/bin/atos lib query | wc -l`
 export ATOS_DEBUG_FILE=log4.txt
 
 $ROOT/bin/atos-explore-acf --file-by-file --hot-th=70 --nbiters-stage=10 \
-    --keep --cookie=$expl_cookie1
+    --reuse --cookie=$expl_cookie1
 
 expl_cookie2=`grep "Identifier of exploration:" log4.txt | sed 's/.* //g'`
 

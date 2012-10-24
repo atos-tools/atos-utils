@@ -204,7 +204,10 @@ EOF
 	echo "graphite_enabled $result"
 
         # libgomp & libpthread
-	result=`$compiler -O2 -ftree-parallelize-loops=16 -lc -lgomp -lpthread -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
+	# TODO: support for -ftree-parallelize-loops need -lgomp -lpthred to be passed at link time,
+	# this is not yet supported in file-by-file and function-per-function exploration.
+	#result=`$compiler -O2 -ftree-parallelize-loops=16 -lc -lgomp -lpthread -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
+	result=0
 	echo "libgomp_enabled $result"
 
         # acf plugin

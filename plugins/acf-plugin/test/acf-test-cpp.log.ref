@@ -1,32 +1,50 @@
-acf_plugin warning: discarded line 40: function name unspecified
-acf_plugin warning: discarded line 40: attribute unspecified
-acf_plugin warning: discarded line 41: function name unspecified
-acf_plugin warning: discarded line 41: attribute unspecified
-acf_plugin warning: discarded line 44: function name unspecified
-acf_plugin warning: discarded line 45: attribute unspecified
-acf_plugin warning: discarded line 46: attribute unspecified
-acf_plugin warning: discarded line 47: function name unspecified
-acf_plugin warning: discarded line 48: more than 4 entries
-acf_plugin warning: discarded line 49: more than 4 entries
-acf_plugin warning: discarded line 50: more than 4 entries
-acf_plugin warning: discarded line 51: more than 4 entries
-acf_plugin warning: discarded line 52: more than 4 entries
-acf_plugin: Attaching attribute to function _Z8tab_initPi: optimize O0
-acf_plugin: Attaching attribute to function _Z6squarei: optimize O3
-acf_plugin: Attaching attribute to function _Z6squarei: optimize 2 (file: hello-cpp.cpp)
-acf_plugin: Attaching attribute to function _Z9tab_printPi: noinline (null)
-acf_plugin: Attaching attribute to function _Z9tab_printPi: optimize Os
-acf_plugin: Attaching attribute to function _Z5func1Pi: optimize O2
-acf_plugin: Attaching attribute to function _Z5func1Pi: optimize unroll-loops
-acf_plugin: Attaching attribute to function _Z5func1Pi: optimize O1
-acf_plugin: Attaching attribute to function _Z5func2Pi: optimize O3
-acf_plugin: Attaching attribute to function _Z5func2Pi: optimize O1
-acf_plugin: Attaching attribute to function _Z5func2Pi: cold (null)
-acf_plugin: Attaching attribute to function _Z5func2Pi: cold (null)
-acf_plugin: Attaching attribute to function _Z5func2Pi: cold (null)
-acf_plugin: Attaching attribute to function _Z5func2Pi: optimize unroll-loops (file: hello-cpp.cpp)
-acf_plugin: Attaching attribute to function _Z5func2Pi: optimize s (file: hello-cpp.cpp)
-acf_plugin: Attaching attribute to function _Z5func2Pi: optimize O0 (file: hello-cpp.cpp)
-acf_plugin: Attaching attribute to function main: optimize Os
-acf_plugin: Attaching attribute to function main: cold (null)
-acf_plugin: Attaching param to function _Z5func1Pi: max-unroll-times=4
+acf_plugin warning: discarded line 53: function name unspecified
+acf_plugin warning: discarded line 53: attribute unspecified
+acf_plugin warning: discarded line 54: function name unspecified
+acf_plugin warning: discarded line 54: attribute unspecified
+acf_plugin warning: discarded line 55: attribute unspecified
+acf_plugin warning: discarded line 56: attribute unspecified
+acf_plugin warning: discarded line 57: function name unspecified
+acf_plugin warning: discarded line 58: attribute unspecified
+acf_plugin warning: discarded line 59: attribute unspecified
+acf_plugin warning: discarded line 60: function name unspecified
+acf_plugin warning: discarded line 61: attribute unspecified
+acf_plugin warning: discarded line 62: attribute unspecified
+acf_plugin warning: discarded line 63: attribute unspecified
+acf_plugin warning: line 64: discarded entries after null argument
+acf_plugin warning: line 65: discarded entries after null argument
+acf_plugin warning: line 66: discarded entries after null argument
+acf_plugin warning: discarded line 69: more than 13 entries
+acf_plugin warning: discarded line 70: more than 13 entries
+acf_plugin warning: discarded line 71: more than 13 entries
+acf_plugin warning: discarded line 72: more than 13 entries
+acf_plugin: Attaching attribute to function _Z8tab_initPi: optimize O0,
+acf_plugin: Attaching attribute to function _Z6squarei: optimize O3,
+acf_plugin: Attaching attribute to function _Z6squarei: optimize #2, (file: hello-cpp.cpp)
+acf_plugin: Attaching attribute to function _Z9tab_printPi: noinline 
+acf_plugin: Attaching attribute to function _Z9tab_printPi: optimize Os,
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize O2,
+acf_plugin: Attaching attribute to function _Z5func1Pi: section .mysectionname,
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize tree-parallelize-loops=12,
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize ira-algorithm=priority,
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize ira-algorithm=CB,
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize ira-region=all,
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize ira-region=mixed,
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize ira-region=one,
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize sched-stalled-insns=9,
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize unroll-loops,
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize O1,
+acf_plugin: Attaching attribute to function _Z5func2Pi: optimize O3,
+acf_plugin: Attaching attribute to function _Z5func2Pi: optimize O1,
+acf_plugin: Attaching attribute to function _Z5func2Pi: cold 
+acf_plugin: Attaching attribute to function _Z5func2Pi: cold 
+acf_plugin: Attaching attribute to function _Z5func2Pi: cold 
+acf_plugin: Attaching attribute to function _Z5func2Pi: optimize unroll-loops, (file: hello-cpp.cpp)
+acf_plugin: Attaching attribute to function _Z5func2Pi: optimize s, (file: hello-cpp.cpp)
+acf_plugin: Attaching attribute to function _Z5func2Pi: optimize O0, (file: hello-cpp.cpp)
+acf_plugin: Attaching attribute to function _Z5func2Pi: cold 
+acf_plugin: Attaching attribute to function _Z5func2Pi: cold 
+acf_plugin: Attaching attribute to function main: optimize Os,
+acf_plugin: Attaching attribute to function main: cold 
+acf_plugin: Attaching param to function _Z5func1Pi: max-unroll-times=8
+acf_plugin: Attaching param to function _Z5func1Pi: max-inline-insns=400

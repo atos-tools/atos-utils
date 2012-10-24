@@ -24,18 +24,35 @@
 #include "acf_plugin.h"
 
 // Parse a .csv file of attributes per functions of the form:
-// func_name, attribute_name, attribute_arguments
-// For C++ functions, the mangled name must be used
-// Only the 3rd entry (attribute_argument) and 4th entry (source file)
-// are optional.
+// func_name, filename, attribute_name, attribute_arguments.
+// For C++ functions, the mangled name must be used.
+// Only the 1st entry (function name) and 3rd entry (attribute name)
+// are mandatory.
 // Malformed lines are discarded.
+// All entries after attribute name are considered attribute arguments.
+// There are two types of attribute arguments:
+// - strings (default without extra syntax)
+// - integers with extra '#' at begining of value (no spaces allowd before '#')
+// Attribute arguments parsing is stopped at first NULL argument. Following
+// arguments are discarded but line is not.
 // Examples:
-// square,optimize,O3
-// main,optimize,Os
-// _Z5func2Pi,noinline,file2.cpp
-// _Z5func1Pi,noinline,/path1/path2/file1.c
+// square,,optimize,O3
+// main,file1.c,optimize,Os
+// _Z5func2Pi,,noinline,file2.cpp
+// _Z5func1Pi,/path1/path2/file2.cpp,noinline,
+// _Z5func1Pi,/path1/path2/file2.cpp,nonnull,#1,#3,#7,#9
+// _Z5func1Pi,/path1/path2/file2.cpp,section,.mysectionname
+// _Z5func1Pi,,optimize,tree-parallelize-loops=12
+// _Z5func1Pi,,optimize,fp-contract=fast
+// GCC --param option support: When "param" keyword is used
+// as attribute name, the two following attribute arguments are
+// considered as a GCC parameter name and its value.
+// Example:
+// _Z5func1Pi,,param,max-unroll-times,#4
+// _Z5func1Pi,,param,max-inline-insns,#400
 
 // Usage: acf_ftable_size = acf_parse_csv(csv_file,  &acf_ftable, verbose);
+
 
 #define MAX_LINE_SIZE 5000
 
@@ -140,7 +157,7 @@ void csv_list_display(struct csv_list *clist) {
 }
 
 void acf_ftable_display(acf_ftable_entry_t *acf_ftable) {
-    int table_r;
+    int table_r, i;
 
 #if CSV_READER_DEBUG
     printf("Number of entries: %d\n", acf_ftable_size);
@@ -148,11 +165,26 @@ void acf_ftable_display(acf_ftable_entry_t *acf_ftable) {
 
   for (table_r = 0; table_r < acf_ftable_size; table_r++) {
       printf("%s,", acf_ftable[table_r].func_name);
-      printf("%s,", acf_ftable[table_r].opt_attr);
-      printf("%s,", (acf_ftable[table_r].opt_arg != NULL ?
-		     acf_ftable[table_r].opt_arg : "(null)"));
-      printf("%s\n", (acf_ftable[table_r].opt_file != NULL ?
+      printf("%s,", (acf_ftable[table_r].opt_file != NULL ?
 		      acf_ftable[table_r].opt_file : "(null)"));
+      printf("%s,", acf_ftable[table_r].opt_attr);
+      if (acf_ftable[table_r].attr_arg_number == 0) {
+	  printf("(no arguments)");
+      }
+      for (i = 0; i < acf_ftable[table_r].attr_arg_number; i++) {
+	  switch (acf_ftable[table_r].opt_args[i].arg_type) {
+	  case NO_TYPE:
+	      break;
+	  case STR_TYPE:
+	      printf("\'%s\',", (acf_ftable[table_r].opt_args[i].av.str_arg != NULL ?
+			     acf_ftable[table_r].opt_args[i].av.str_arg : "(null),"));
+	      break;
+	  case INT_TYPE:
+	      printf("(#)%d,", acf_ftable[table_r].opt_args[i].av.int_arg);
+	      break;
+	  }
+      }
+      printf("\n");
   }
 
   return;
@@ -280,18 +312,20 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
 
     crow = parsed_csv.rows;
     for(; crow != NULL; crow = crow->next_row, cur_line++) {
+	int j;
+
 	if(crow->columns_number) {
 	    ccol = crow->columns;
 	    int table_c = 0;
 	    /* Discard empty or imcomplete lines (only argument and
 	       source file are optional) */
 	    int discard = 0;
-	    int argument_null = 0;
+	    int argument_nb = 0;
 	    int file_null = 0;
 
 	    for(;ccol != NULL; ccol = ccol->next_column) {
 		switch (table_c) {
-		case 0:
+		case FUNCNAME:
 		    if (strcmp ((char *) ccol->csv_entry, "") == 0) {
 			if (verbose)
 			    printf("acf_plugin warning: discarded line %d: "
@@ -300,7 +334,12 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
 			discard = 1;
 		    }
 		    break;
-		case 1:
+		case FILENAME:
+		    if (strcmp((char *) ccol->csv_entry, "") == 0) {
+			file_null = 1;
+		    }
+		    break;
+		case ATTRIBUTE:
 		    if (strcmp((char *) ccol->csv_entry, "") == 0) {
 			if (verbose)
 			    printf("acf_plugin warning: discarded line %d: "
@@ -309,20 +348,29 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
 			discard = 1;
 		    }
 		    break;
-		case 2:
-		    if (strcmp((char *) ccol->csv_entry, "") == 0) {
-			argument_null = 1;
+		case FIRST_ARG:
+		    for (j = 0; j < MAX_ARGS && ccol != NULL; j++, ccol = ccol->next_column) {
+			if (strcmp((char *) ccol->csv_entry, "") != 0) {
+			    argument_nb++;
+			    table_c++;
+			} else {
+			    /* Stop at first null entry. */
+			    break;
+			}
 		    }
-		    break;
-		case 3:
-		    if (strcmp((char *) ccol->csv_entry, "") == 0) {
-			file_null = 1;
+		    if (ccol && ccol->next_column != NULL) {
+			if (verbose)
+			    printf("acf_plugin warning: line %d: discarded entries "
+				   "after null argument\n", cur_line);
 		    }
 		    break;
 		default:
 		    break;
 		}
 		table_c++;
+
+		if (ccol == NULL)
+		    break;
 	    }
 
 	    if (discard)
@@ -349,30 +397,13 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
 		printf("{%s} ", ccol->csv_entry);
 #endif
 		switch (table_c) {
-		case 0:
+		case FUNCNAME:
 		    acf_ftable[table_r].func_name = (char *)
 			malloc(strlen(ccol->csv_entry) + 1);
 		    strcpy (acf_ftable[table_r].func_name,
 			    (char *) ccol->csv_entry);
 		    break;
-		case 1:
-		    acf_ftable[table_r].opt_attr = (char *)
-			malloc(strlen(ccol->csv_entry) + 1);
-		    strcpy (acf_ftable[table_r].opt_attr,
-			    (char *) ccol->csv_entry);
-		    break;
-		case 2:
-		    if (argument_null) {
-			// Initialize empty argument
-			acf_ftable[table_r].opt_arg = (char *) NULL;
-		    } else {
-			acf_ftable[table_r].opt_arg = (char *)
-			    malloc(strlen(ccol->csv_entry) + 1);
-			strcpy (acf_ftable[table_r].opt_arg,
-				(char *)ccol->csv_entry);
-		    }
-		    break;
-		case 3:
+		case FILENAME:
 		    if (file_null) {
 			// Initialize empty source file information
 			acf_ftable[table_r].opt_file = (char *) NULL;
@@ -383,20 +414,47 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
 				(char *)ccol->csv_entry);
 		    }
 		    break;
-		default:
-		    if (verbose)
-			printf("acf_plugin warning: CSV entry with more "
-			       "than %d entries\n", CSV_MAX_ENTRIES);
+		case ATTRIBUTE:
+		    acf_ftable[table_r].opt_attr = (char *)
+			malloc(strlen(ccol->csv_entry) + 1);
+		    strcpy (acf_ftable[table_r].opt_attr,
+			    (char *) ccol->csv_entry);
+		    break;
+		case FIRST_ARG:
+		    if (argument_nb == 0) {
+			// Initialize empty argument
+			acf_ftable[table_r].attr_arg_number = 0;
+			acf_ftable[table_r].opt_args[0].arg_type = NO_TYPE;
+		    } else {
+			acf_ftable[table_r].attr_arg_number = argument_nb;
+			for (j = 0; j < argument_nb && ccol != NULL ; j++, ccol = ccol->next_column) {
+			    /* Check if argument is integer (starts with #) */
+			    if (ccol->csv_entry[0] == '#') { /* argument is an integer */
+				acf_ftable[table_r].opt_args[j].arg_type = INT_TYPE;
+				acf_ftable[table_r].opt_args[j].av.int_arg = (int)
+				    atoi(ccol->csv_entry + 1); /* skip # */
+
+			    } else { /* argument is a string */
+				acf_ftable[table_r].opt_args[j].arg_type = STR_TYPE;
+				acf_ftable[table_r].opt_args[j].av.str_arg = (char *)
+				    malloc(strlen(ccol->csv_entry) + 1);
+				strcpy (acf_ftable[table_r].opt_args[j].av.str_arg,
+					(char *) ccol->csv_entry);
+			    }
+			    table_c++;
+			}
+		    }
+		    break;
 		}
 		table_c++;
+
+		if (ccol == NULL)
+		    break;
 	    }
-	    // Initialize empty argument and source file
-	    if (table_c == 2) {
-		acf_ftable[table_r].opt_arg = (char *) NULL;
-		acf_ftable[table_r].opt_file = (char *) NULL;
-	    }
-	    if (table_c == 3) {
-		acf_ftable[table_r].opt_file = (char *) NULL;
+	    // Initialize empty argument
+	    if (table_c == FIRST_ARG) {
+		acf_ftable[table_r].attr_arg_number = 0;
+		acf_ftable[table_r].opt_args[0].arg_type = NO_TYPE;
 	    }
 	    table_r++;
 	}

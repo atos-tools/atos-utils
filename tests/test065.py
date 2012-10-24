@@ -175,7 +175,7 @@ assert os.path.isfile(cold_csv)
 cold_csv_lines = open(cold_csv).readlines()
 assert len(cold_csv_lines) == 5
 cold_csv_flags = set(map(
-            lambda x: ','.join(x.strip().split(',')[1:]), cold_csv_lines))
+            lambda x: ','.join(x.strip().split(',')[2:]), cold_csv_lines))
 assert 'optimize,s' in cold_csv_flags
 
 cold_csv_funcs = set(map(lambda x: x.strip().split(',')[0], cold_csv_lines))
@@ -195,7 +195,7 @@ assert os.path.isfile(cold_csv)
 cold_csv_lines = open(cold_csv).readlines()
 assert len(cold_csv_lines) == 8 # 4 cold funcs * 2 flags
 cold_csv_flags = set(map(
-            lambda x: ','.join(x.strip().split(',')[1:]), cold_csv_lines))
+            lambda x: ','.join(x.strip().split(',')[2:]), cold_csv_lines))
 assert cold_csv_flags == set(['optimize,0', 'optimize,nothing'])
 cold_csv_funcs = set(map(lambda x: x.strip().split(',')[0], cold_csv_lines))
 assert cold_csv_funcs == set(

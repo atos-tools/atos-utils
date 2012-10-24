@@ -1,59 +1,98 @@
-_Z5func2Pi,optimize,O3
-_Z8tab_initPi,optimize,O0
-_Z9tab_printPi,noinline
-_Z5func1Pi,optimize,O2
-_Z5func2Pi,optimize,O1
-main,optimize,Os
-_Z9tab_printPi,optimize,Os
-main,cold
-_Z6squarei,optimize,O3
-square,optimize,O3
-square,hot
-tab_print,optimize,3
-func1,optimize,unroll-loops
-_Z5func2Pi,cold,,
-_Z5func2Pi,cold,
-_Z5func2Pi,cold
+_Z5func2Pi,,optimize,O3
+_Z8tab_initPi,,optimize,O0
+_Z9tab_printPi,,noinline
+_Z5func1Pi,,optimize,O2
+_Z5func2Pi,,optimize,O1
+main,,optimize,Os
+_Z9tab_printPi,,optimize,Os
+main,,cold
+_Z6squarei,,optimize,O3
+square,,optimize,O3
+square,,hot
+tab_print,,optimize,3
+func1,,optimize,unroll-loops
+%func3,,nonnull,#1,#3,#7,#8
+_Z5func2Pi,,cold,,
+_Z5func2Pi,,cold,
+_Z5func2Pi,,cold
+_Z5func1Pi,,section,.mysectionname
+%_Z5func1Pi,,format,printf,#2,#3
+_Z5func1Pi,,optimize,tree-parallelize-loops=12
+%_Z5func1Pi,,optimize,fp-contract=off
+%_Z5func1Pi,,optimize,fp-contract=fast
+_Z5func1Pi,,optimize,ira-algorithm=priority
+_Z5func1Pi,,optimize,ira-algorithm=CB
+_Z5func1Pi,,optimize,ira-region=all
+_Z5func1Pi,,optimize,ira-region=mixed
+_Z5func1Pi,,optimize,ira-region=one
+_Z5func1Pi,,optimize,sched-stalled-insns=9
+
 
 % Should match file
-_Z5func2Pi,optimize,unroll-loops,hello-cpp.cpp
-_Z6squarei,optimize,2,hello-cpp.cpp
-square,optimize,Os,hello.c
-main,optimize,s,hello.c
-_Z5func2Pi,optimize,s,hello-cpp.cpp
-func2,noinline,,hello.c
-_Z5func2Pi,optimize,O0,hello-cpp.cpp
+_Z5func2Pi,hello-cpp.cpp,optimize,unroll-loops
+_Z6squarei,hello-cpp.cpp,optimize,#2
+square,hello.c,optimize,Os
+main,hello.c,optimize,s
+_Z5func2Pi,hello-cpp.cpp,optimize,s
+func2,hello.c,noinline,
+_Z5func2Pi,hello-cpp.cpp,optimize,O0
 
 % Should not match file
-_Z5func2Pi,enum-int-equiv,,/
-_Z5func2Pi,enum-int-equiv,,/usr/XXXX/YYYYY/blocksort.c
-_Z5func2Pi,enum-int-equiv,,/path/file,
-_Z6squarei,enum-int-equiv,,toto.c
-_Z5func2Pi,optimize,unroll-loops,/xxx/yyy/zzz/hello-cpp.cpp
-_Z6squarei,optimize,2,/xxx/yyy/zzz/hello-cpp.cpp
-_Z6squarei,optimize,Os,/xxx/yyy/zzz/hello.c
-main,optimize,s,/xxx/yyy/zzz/hello.c
-_Z5func2Pi,noinline,,/xxx/yyy/zzz/hello.c
-_Z5func2Pi,optimize,O0,/xxx/yyy/zzz/hello-cpp.cpp
+_Z5func2Pi,/,enum-int-equiv,
+_Z5func2Pi,/usr/XXXX/YYYYY/blocksort.c,enum-int-equiv,
+_Z5func2Pi,/path/file,enum-int-equiv,,
+_Z6squarei,toto.c,enum-int-equiv,
+_Z5func2Pi,/xxx/yyy/zzz/hello-cpp.cpp,optimize,unroll-loops
+_Z6squarei,/xxx/yyy/zzz/hello-cpp.cpp,optimize,2
+_Z6squarei,/xxx/yyy/zzz/hello.c,optimize,Os
+main,/xxx/yyy/zzz/hello.c,optimize,s
+_Z5func2Pi,/xxx/yyy/zzz/hello.c,noinline,
+_Z5func2Pi,/xxx/yyy/zzz/hello-cpp.cpp,optimize,O0
 
 % Bad lines 
-,,
+,,,
 ,,,,
-XXX,  , 
-XXX,    ,
+XXX,  ,, 
+XXX,  ,,
 ,xx,
-XXX,, 
-XXX,,zz
+XXX, ,,,
+XXX,zz,,
 ,  ,  ,   ,  ,
-XXX,YY,ZZ,TT,II
-XXX,YY,ZZ,TT,II,
-XXX,YY,ZZ,TT,II,,
-_Z5func2Pi,cold,,,,
-_Z5func2Pi,optimize,O2,/path/file,,
+XXX,YY,,TT,II
+XXX,YY,,TT,II,
+XXX,YY,,TT,II,,
+_Z5func2Pi,,cold,,,,
+_Z5func2Pi,,cold,,xx,#78,
+_Z5func2Pi,/path/file,optimize,O2,,xxx,,
+
+% Test too many arguments
+func1,,nonnull,1,2,3,4,5,6,8,9,10,11
+func1,,nonnull,1,2,3,4,5,6,8,9,10,11,12
+func1,,nonnull,#1,#2,#3,#4,#5,#6,#8,#9,#10,#11,#12
+func1,,nonnull,#1,2,#3,4,#5,6,#8,9,#10,11,#12
+
+% Test multiple arguments
+%func3,,nonnull,#1,#2,#3,#4,#5,
+%func3,,nonnull,#1,#2,#3,#4,#5,#6,#8
+
+% Test integer arguments (parser only)
+%func1,,mult_dir,#1,#2,#3,#4,#5,#6
+%func1,,mult_dir,#1,2,#3,4,#5,6
+%func1,,mult_dir,#11,#22,#33,#44,#55,#66
+%func1,,mult_dir,#111,222,#333,444,#555,666
+%func1,,mult_dir,#1111,#2222,#3333,#4444,#5555,#6666
+%func1,,mult_dir,#123,234,#345,456,#567,678,#789,890
+% Test integer arguments with trailing spaces or tabs (parser only)
+%func3,,nonnull,#1   ,  #2,	#3,     #4,		#5,#6
+
+% Test non-digit after '#'
+%func3,,nonnull,#7TT,#8 ,
+%func3,,aligned,#2FFT1,
 
 % For --params test
-func1,optimize,O1
-func1,PARAM_max-unroll-times,4
-_Z5func1Pi,optimize,unroll-loops
-_Z5func1Pi,optimize,O1
-_Z5func1Pi,PARAM_max-unroll-times,4
+func1,,optimize,O1
+func1,,param,max-unroll-times,#4
+_Z5func1Pi,,optimize,unroll-loops
+_Z5func1Pi,,optimize,O1
+_Z5func1Pi,,param,max-unroll-times,#8
+_Z5func1Pi,,param,max-inline-insns,#400

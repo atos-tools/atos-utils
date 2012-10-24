@@ -50,6 +50,13 @@ int func2 (int *tab) {
     return 2;
 }
 
+void func3 (int *i1, int *i2, int *i3, int *i4, int *i5, int *i6, int *i7, int *i8) {
+    printf("i1=%d, i2=%d, i3=%d, i4=%d, i5=%d, i6=%d, i7=%d, i8=%d\n",
+	   *i1, *i2, *i3, *i4, *i5, *i6, *i7, *i8);
+
+    return;
+}
+
 int main(int argc, char **argv) {
     int titi = 11;
     int i, res;

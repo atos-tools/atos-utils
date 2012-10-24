@@ -30,7 +30,7 @@ def open_csv_file(dirname, flagname, count):
     return csv_file
 
 def write_csv_flag(csv_file, funcname, flagval, ignoreO):
-    flagval = flagval.replace('--param ', 'PARAM_')
+    flagval = flagval.replace('--param ', '--PARAM_')
     for opt in flagval.split(' '):
         if opt.startswith('-f'):
             opt = 'optimize,' + opt[2:]
@@ -39,9 +39,12 @@ def write_csv_flag(csv_file, funcname, flagval, ignoreO):
             if (ignoreO):
                 continue
             opt = 'optimize,' + opt[1:]
+        elif opt.startswith('--PARAM_'):  # --params xx=y options
+            opt = 'param,' + opt[8:]
+            opt = opt.replace(' ', '').replace('=', ',#')
         elif opt.startswith('-'):
             opt = opt[1:]
-        csv_file.write(funcname + ',' + opt.replace('=', ',') + '\n')
+        csv_file.write(funcname + ',,' + opt + '\n')
 
 def close_csv_file(csv_file):
     csv_file.close()

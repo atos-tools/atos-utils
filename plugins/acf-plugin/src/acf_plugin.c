@@ -136,20 +136,47 @@ add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tre
     tree attribute_list = NULL_TREE;
     tree argument = NULL_TREE;
     tree argument_list = NULL_TREE;
+    int i;
 
     if (verbose) {
 	fprintf(stdout, "acf_plugin: Attaching attribute to "
-		"function %s: %s %s",
-		cur_func_name, acf_entry->opt_attr, acf_entry->opt_arg);
+		"function %s: %s ",
+		cur_func_name, acf_entry->opt_attr);
+	for (i = 0; i < acf_entry->attr_arg_number; i++) {
+	    switch (acf_entry->opt_args[i].arg_type) {
+	    case NO_TYPE:
+		break;
+	    case STR_TYPE:
+		fprintf(stdout, "%s,", (acf_entry->opt_args[i].av.str_arg != NULL ?
+				       acf_entry->opt_args[i].av.str_arg : "(null),"));
+		break;
+	    case INT_TYPE:
+		fprintf(stdout, "#%d,", acf_entry->opt_args[i].av.int_arg);
+		break;
+	    }
+	}
 	if (acf_entry->opt_file == NULL)
 	    fprintf(stdout, "\n");
 	else
 	    fprintf(stdout, " (file: %s)\n", acf_entry->opt_file);
     }
 
-    if (acf_entry->opt_arg != NULL) {
-	argument = build_string(strlen(acf_entry->opt_arg), acf_entry->opt_arg);
-	argument_list =  tree_cons(NULL_TREE, argument, argument_list);
+    if (acf_entry->attr_arg_number != 0) {
+	for (i = 0; i < acf_entry->attr_arg_number; i++) {
+	    switch (acf_entry->opt_args[i].arg_type) {
+	    case NO_TYPE:
+		break;
+	    case STR_TYPE:
+		argument = build_string(strlen(acf_entry->opt_args[i].av.str_arg),
+					acf_entry->opt_args[i].av.str_arg);
+		argument_list =  tree_cons(NULL_TREE, argument, argument_list);
+		break;
+	    case INT_TYPE:
+		argument =  build_int_cst (NULL_TREE, acf_entry->opt_args[i].av.int_arg);
+		argument_list =  tree_cons(NULL_TREE, argument, argument_list);
+		break;
+	    }
+	}
     } else {
 	argument_list = NULL_TREE;
     }
@@ -170,6 +197,7 @@ add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tre
 
 static struct cl_optimization loc_save_options, *save_options;
 
+/* TO DO: Handle options taking multiple parameters */
 static void
 add_lto_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
 
@@ -181,12 +209,12 @@ add_lto_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
 	size_t opt_index;
 
 	strcpy(opt_name, "-f");
-	if (!strncmp("no-", acf_entry->opt_arg, strlen("no-"))) {
+	if (!strncmp("no-", acf_entry->opt_args[0].av.str_arg, strlen("no-"))) {
 	    opt_value = 0;
-	    strcat(opt_name, acf_entry->opt_arg + strlen("no-"));
+	    strcat(opt_name, acf_entry->opt_args[0].av.str_arg + strlen("no-"));
 	}
 	else
-	    strcat(opt_name, acf_entry->opt_arg);
+	    strcat(opt_name, acf_entry->opt_args[0].av.str_arg);
 	opt_index = find_opt(opt_name+1, CL_OPTIMIZATION);
 
 #ifdef USE_GLOBAL_PARAMS
@@ -198,7 +226,7 @@ add_lto_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
 	if (verbose) {
 	    fprintf(stdout, "acf_plugin: Attaching attribute to "
 		    "function %s: %s %s",
-		    cur_func_name, acf_entry->opt_attr, acf_entry->opt_arg);
+		    cur_func_name, acf_entry->opt_attr, acf_entry->opt_args[0].av.str_arg);
 	    if (acf_entry->opt_file == NULL)
 		fprintf(stdout, "\n");
 	    else
@@ -282,22 +310,37 @@ static void save_and_set_param(char *opt_param, int value) {
 
 static void
 add_param(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
+    char *opt_param;
+    int opt_value;
+    bool bad = false;
 
-    char *opt_param = acf_entry->opt_attr + strlen(CSV_PARAM);
+    /* Check --param X=n syntax */
+    if (acf_entry->attr_arg_number != 2)
+	bad = true;
+    if (acf_entry->opt_args[0].arg_type != STR_TYPE)
+	bad = true;
+    if (acf_entry->opt_args[1].arg_type != INT_TYPE)
+	bad = true;
 
-    if (acf_entry->opt_arg != NULL) {
-	if (verbose) {
-	    fprintf(stdout, "acf_plugin: Attaching param to "
-		    "function %s: %s=%s",
-		    cur_func_name, opt_param, acf_entry->opt_arg);
-	    if (acf_entry->opt_file == NULL)
-		fprintf(stdout, "\n");
-	    else
-		fprintf(stdout, " (file: %s)\n", acf_entry->opt_file);
-	}
-
-	save_and_set_param(opt_param, atoi(acf_entry->opt_arg));
+    if (bad) {
+	fprintf(stderr,"%s: Warning: wrong --param setting.\n", plugin_name);
+	return;
     }
+
+    opt_param = acf_entry->opt_args[0].av.str_arg;
+    opt_value = acf_entry->opt_args[1].av.int_arg;
+
+    if (verbose) {
+	fprintf(stdout, "%s: Attaching param to "
+		"function %s: %s=%d", plugin_name,
+		cur_func_name, opt_param, opt_value);
+	if (acf_entry->opt_file == NULL)
+	    fprintf(stdout, "\n");
+	else
+	    fprintf(stdout, " (file: %s)\n", acf_entry->opt_file);
+    }
+
+    save_and_set_param(opt_param, opt_value);
 }
 
 static void restore_param_values() {
@@ -440,7 +483,7 @@ static void fill_csv_options(tree decl, int pass) {
 	switch (pass) {
 	case 1:
 	    // Do not handle --param when called on function parsing
-	    if (IS_CSV_OPTIMIZE(acf_entry))
+	    if (!IS_CSV_PARAM(acf_entry))
 		add_decl_attribute(cur_func_name, acf_entry, decl);
 	    break;
 	case 2:
@@ -448,7 +491,7 @@ static void fill_csv_options(tree decl, int pass) {
 	    // in lto mode
 	    if (IS_CSV_PARAM(acf_entry))
 		add_param(cur_func_name, acf_entry);
-	    else if (IS_CSV_OPTIMIZE(acf_entry) && is_lto())
+	    else  if (is_lto())  /* !CSV_PARAM */
 		add_lto_attribute(cur_func_name, acf_entry);
 	    break;
 	default:
@@ -693,15 +736,14 @@ int plugin_init(struct plugin_name_args *plugin_na,
     if (strcmp(plugin_na->argv[csv_arg_pos].key, acf_csv_file_key) == 0) {
 	acf_csv_file = plugin_na->argv[csv_arg_pos].value;
 	if ((fcsv = fopen(acf_csv_file, "r")) == NULL) {
-	    fprintf(stderr,"Error in %s: csv file not found: %s\n",
-		    plugin_name, acf_csv_file);
+	    error("%s: csv file not found: %s\n", plugin_name, acf_csv_file);
 	    bad = true;
 	} else {
 	    fclose(fcsv);
 	}
     } else {
-	fprintf(stderr,"Error in %s: Unknown option %s\n", plugin_name,
-		plugin_na->argv[csv_arg_pos].key);
+	error("%s: Unknown option %s\n", plugin_name,
+	      plugin_na->argv[csv_arg_pos].key);
 	return 1;
     }
 

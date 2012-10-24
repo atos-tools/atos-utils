@@ -361,6 +361,9 @@ def gen_function_by_function(
             csv_opt = 'optimize,' + opt[2:]
         elif opt.startswith('-f'):  # -fx options
             csv_opt = 'optimize,' + opt[2:]
+        elif opt.startswith('--param '):  # --params xx=y options
+            csv_opt = 'param,' + opt[8:]
+            csv_opt = csv_opt.replace(' ', '').replace('=', ',#')
         else:  # direct attributes
             csv_opt = opt + ','
         return csv_opt
@@ -370,7 +373,7 @@ def gen_function_by_function(
         filter_in = ['^-f', '^-O', '^[^-]']
         flag_list = filter(
             lambda f: any(map(lambda i: re.match(i, f), filter_in)), flag_list)
-        filter_out = ['^-fprofile', '^-flto', '^--param']
+        filter_out = ['^-fprofile', '^-flto']
         flag_list = filter(
             lambda f: all(
                 map(lambda i: not re.match(i, f), filter_out)), flag_list)
@@ -384,10 +387,9 @@ def gen_function_by_function(
                 str(obj_flags), csv_name))
         with open(csv_name, 'w') as opt_file:
             for ((fct, loc), flags) in obj_flags.items():
-                loc = (',' + loc) if loc else ''
                 flag_list = map(compiler_opt_to_attribute, flags.split())
                 for flag in flag_list:
-                    opt_file.write('%s,%s%s\n' % (fct, flag, loc))
+                    opt_file.write('%s,%s,%s\n' % (fct, loc or '', flag))
         return (
             base_flags +
             ' -fplugin=' + acf_plugin_path +

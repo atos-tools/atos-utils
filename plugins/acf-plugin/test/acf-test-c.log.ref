@@ -1,24 +1,31 @@
-acf_plugin warning: discarded line 40: function name unspecified
-acf_plugin warning: discarded line 40: attribute unspecified
-acf_plugin warning: discarded line 41: function name unspecified
-acf_plugin warning: discarded line 41: attribute unspecified
-acf_plugin warning: discarded line 44: function name unspecified
-acf_plugin warning: discarded line 45: attribute unspecified
-acf_plugin warning: discarded line 46: attribute unspecified
-acf_plugin warning: discarded line 47: function name unspecified
-acf_plugin warning: discarded line 48: more than 4 entries
-acf_plugin warning: discarded line 49: more than 4 entries
-acf_plugin warning: discarded line 50: more than 4 entries
-acf_plugin warning: discarded line 51: more than 4 entries
-acf_plugin warning: discarded line 52: more than 4 entries
-acf_plugin: Attaching attribute to function square: optimize O3
-acf_plugin: Attaching attribute to function square: hot (null)
-acf_plugin: Attaching attribute to function square: optimize Os (file: hello.c)
-acf_plugin: Attaching attribute to function tab_print: optimize 3
-acf_plugin: Attaching attribute to function func1: optimize unroll-loops
-acf_plugin: Attaching attribute to function func1: optimize O1
-acf_plugin: Attaching attribute to function func2: noinline (null) (file: hello.c)
-acf_plugin: Attaching attribute to function main: optimize Os
-acf_plugin: Attaching attribute to function main: cold (null)
-acf_plugin: Attaching attribute to function main: optimize s (file: hello.c)
+acf_plugin warning: discarded line 53: function name unspecified
+acf_plugin warning: discarded line 53: attribute unspecified
+acf_plugin warning: discarded line 54: function name unspecified
+acf_plugin warning: discarded line 54: attribute unspecified
+acf_plugin warning: discarded line 55: attribute unspecified
+acf_plugin warning: discarded line 56: attribute unspecified
+acf_plugin warning: discarded line 57: function name unspecified
+acf_plugin warning: discarded line 58: attribute unspecified
+acf_plugin warning: discarded line 59: attribute unspecified
+acf_plugin warning: discarded line 60: function name unspecified
+acf_plugin warning: discarded line 61: attribute unspecified
+acf_plugin warning: discarded line 62: attribute unspecified
+acf_plugin warning: discarded line 63: attribute unspecified
+acf_plugin warning: line 64: discarded entries after null argument
+acf_plugin warning: line 65: discarded entries after null argument
+acf_plugin warning: line 66: discarded entries after null argument
+acf_plugin warning: discarded line 69: more than 13 entries
+acf_plugin warning: discarded line 70: more than 13 entries
+acf_plugin warning: discarded line 71: more than 13 entries
+acf_plugin warning: discarded line 72: more than 13 entries
+acf_plugin: Attaching attribute to function square: optimize O3,
+acf_plugin: Attaching attribute to function square: hot 
+acf_plugin: Attaching attribute to function square: optimize Os, (file: hello.c)
+acf_plugin: Attaching attribute to function tab_print: optimize 3,
+acf_plugin: Attaching attribute to function func1: optimize unroll-loops,
+acf_plugin: Attaching attribute to function func1: optimize O1,
+acf_plugin: Attaching attribute to function func2: noinline  (file: hello.c)
+acf_plugin: Attaching attribute to function main: optimize Os,
+acf_plugin: Attaching attribute to function main: cold 
+acf_plugin: Attaching attribute to function main: optimize s, (file: hello.c)
 acf_plugin: Attaching param to function func1: max-unroll-times=4

@@ -24,19 +24,41 @@
 #include <string.h>
 #include <stdlib.h>
 
+/* Maximum number of arguments for a function attribute or gcc param */
+/* arguments may be strings/integers */
+#define MAX_ARGS 10
+
+#define CSV_MAX_ENTRIES (3 + MAX_ARGS)
+#define CSV_REQ_ENTRIES 3 /* Only funcname and attribute required but
+			     filename in 2nd position */
+
+typedef enum {FUNCNAME, FILENAME, ATTRIBUTE, FIRST_ARG} acf_columns;
+
+typedef enum {
+    NO_TYPE,
+    STR_TYPE,
+    INT_TYPE
+} attr_arg_type;
+
+typedef union {
+    char *str_arg;
+    int int_arg;
+} attr_arg_val;
+
+typedef struct {
+    attr_arg_type arg_type;
+    attr_arg_val av;
+} attr_arg;
+
 typedef struct acf_ftable_entry {
     char *func_name;
-    char *opt_attr;
-    char *opt_arg;
     char *opt_file;
+    char *opt_attr; /* gcc function attribute or "param" for parameters */
+    int attr_arg_number; /* number of args of the attribute/param */
+    attr_arg opt_args[MAX_ARGS];  /* list of args of the attribute/param */
 } acf_ftable_entry_t;
 
-#define CSV_MAX_ENTRIES 4
-#define CSV_REQ_ENTRIES 2
-
-#define CSV_PARAM "PARAM_"
-#define IS_CSV_PARAM(acf_entry) (!strncmp(CSV_PARAM, acf_entry->opt_attr, strlen(CSV_PARAM)))
-#define IS_CSV_OPTIMIZE(acf_entry) (strncmp(CSV_PARAM, acf_entry->opt_attr, strlen(CSV_PARAM)))
+#define IS_CSV_PARAM(acf_entry) (strcmp("param", acf_entry->opt_attr) == 0)
 
 #ifdef __cplusplus
 extern "C" {

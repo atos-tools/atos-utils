@@ -4,7 +4,7 @@
 
 source `dirname $0`/common.sh
 
-TEST_CASE="ATOS generators - option --keep"
+TEST_CASE="ATOS generators - option --reuse"
 
 cat > build.sh <<EOF
 gcc -c $SRCDIR/examples/sha1-c/sha.c -o sha.o
@@ -30,12 +30,12 @@ $ROOT/bin/atos-init \
 
 
 
-$ROOT/bin/atos gen --generator=gen_staged --arg=nbiters_stage=10 \
+$ROOT/bin/atos gen --generator=gen_staged --arg=nbiters=10 \
     --optim-variants=base --cookie=aaaaaaaaaaaaaaaaaaaa
 
 nb_played1=`$ROOT/bin/atos lib query | wc -l`
 
-$ROOT/bin/atos gen --generator=gen_staged --arg=nbiters_stage=10 \
+$ROOT/bin/atos gen --generator=gen_staged --arg=nbiters=10 \
     --optim-variants=base --cookie=aaaaaaaaaaaaaaaaaaaa --reuse
 
 nb_played2=`$ROOT/bin/atos lib query | wc -l`
@@ -69,7 +69,7 @@ nb_played2=`$ROOT/bin/atos lib query | wc -l`
 
 export ATOS_DEBUG_FILE=log3.txt
 
-$ROOT/bin/atos-explore-acf --file-by-file --hot-th=70 --nbiters-stage=10
+$ROOT/bin/atos-explore-acf --file-by-file --hot-th=70 --per-func-nbiters=10
 
 expl_cookie1=`grep "Identifier of exploration:" log3.txt | sed 's/.* //g'`
 
@@ -77,7 +77,7 @@ nb_played1=`$ROOT/bin/atos lib query | wc -l`
 
 export ATOS_DEBUG_FILE=log4.txt
 
-$ROOT/bin/atos-explore-acf --file-by-file --hot-th=70 --nbiters-stage=10 \
+$ROOT/bin/atos-explore-acf --file-by-file --hot-th=70 --per-func-nbiters=10 \
     --reuse --cookie=$expl_cookie1
 
 expl_cookie2=`grep "Identifier of exploration:" log4.txt | sed 's/.* //g'`

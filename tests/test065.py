@@ -110,7 +110,7 @@ process.commands.touch("plugin.so")
 #   gen_function_by_function
 #     gen_function_by_function(
 #        acf_plugin_path, hwi_size, prof_script, imgpath, csv_dir,
-#        hot_th, cold_opts='-Os noinline cold', flags_file='', nbiters_stage='',
+#        hot_th, cold_opts='-Os noinline cold', flags_file='', per_func_nbiters='',
 #        base_flags='', base_variant='', optim_variants='')
 #
 
@@ -258,7 +258,7 @@ gen = generators.gen_function_by_function(
     acf_plugin_path="plugin.so", hwi_size="8",
     prof_script="./profile.sh", imgpath=".",
     csv_dir="csv", hot_th="70", cold_opts="-Os",
-    base_flags="-O2", nbiters_stage="100", optim_levels="-O2")
+    base_flags="-O2", per_func_nbiters="100", optim_levels="-O2")
 cfg = generated_configs(gen, cfg_to_res=cfg_result)
 # ref + cold + 3 final tradeoffs
 # + (2 funcs * (1 base + inline * 100 + loop * 100 * 2 tradeoffs)

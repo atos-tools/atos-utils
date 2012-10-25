@@ -1149,6 +1149,7 @@ def run_atos_explore_acf(args):
                 acf_hot_th=str(args.hot_th),
                 acf_cold_opts=("%s %s" % (args.cold_opts, args.cold_attrs)),
                 flags_file=args.flags_file,
+                per_func_nbiters=args.per_func_nbiters,
                 generator=generators.gen_function_by_function)
 
     if file_by_file:
@@ -1159,7 +1160,8 @@ def run_atos_explore_acf(args):
             args, prof_script=prof_script,
             imgpath=imgpath, csv_dir=csv_dir,
             hot_th=str(args.hot_th), cold_opts=args.cold_opts,
-            flags_file=args.flags_file, nbiters_stage=args.nbiters_stage,
+            flags_file=args.flags_file,
+            per_file_nbiters=args.per_func_nbiters,
             generator=generators.gen_file_by_file)
 
     return status

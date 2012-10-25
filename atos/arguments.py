@@ -403,7 +403,7 @@ class parsers:
         args.remote_path(parser)
         args.prof_script(parser)
         args.seed(parser)
-        args.nbiters(parser)
+        args.per_func_nbiters(parser)
         args.flags(parser)
         args.optim_levels(parser)
         args.optim_variants(parser)
@@ -412,7 +412,6 @@ class parsers:
         args.atos_explore.hot_threshold(parser)
         args.atos_explore.cold_options(parser)
         args.atos_explore.cold_attributes(parser)
-        args.atos_explore.nbiters_stage(parser)
         args.cookie(parser)
         args.reuse(parser)
         args.debug(parser)
@@ -637,6 +636,7 @@ class parsers:
         args.configuration_path(parser)
         args.base_variants(parser)
         args.nbiters(parser)
+        args.per_func_nbiters(parser)
         args.seed(parser)
         args.atos_gen.arguments(parser)
         args.atos_gen.generator(parser)
@@ -966,8 +966,17 @@ class args:
             *args,
              dest="nbiters",
              type=int,
-             help="number of exploration loop iterations",
+             help="number of iterations for per target exploration",
              default=100)
+
+    @staticmethod
+    def per_func_nbiters(parser, args=("-N", "--per-func-nbiters")):
+        parser.add_argument(
+            *args,
+             dest="per_func_nbiters",
+             type=int,
+             help="number of exploration for per function/file exploration",
+             default=None)
 
     @staticmethod
     def flags(parser, args=("-F", "--flags")):
@@ -1371,14 +1380,6 @@ class args:
                  dest="cold_attrs",
                  help="cold functions attributes",
                  default="noinline cold")
-
-        @staticmethod
-        def nbiters_stage(parser, args=("-N", "--nbiters-stage")):
-            parser.add_argument(
-                *args,
-                 dest="nbiters_stage",
-                 type=int,
-                 help="number of exploration loop iterations for each stage")
 
     class atos_gen:
         """ Namespace for non common atos-gen arguments. """

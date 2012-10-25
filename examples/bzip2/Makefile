@@ -22,6 +22,7 @@
 
 SRCS=blocksort.c bzip2.c bzlib.c compress.c crctable.c decompress.c huffman.c randtable.c
 OBJS=$(SRCS:.c=.o)
+CC=gcc
 CFLAGS=-O2
 LDFLAGS=
 LIBS=

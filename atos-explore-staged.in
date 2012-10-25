@@ -37,9 +37,11 @@ profiling_script=""
 get_results_script=""
 opt_nbruns=""
 nb_iter=100
+nb_func_iter=0
 opt_seed=""
 opt_quiet=""
 opt_debug=""
+ratios="80"
 
 version() {
     echo "atos-explore-staged version @VERSION@"
@@ -66,8 +68,10 @@ Run Options
       -n <nb> : number of executions of <run_script> [default: $nbruns]
 
 Exploration Options
-      -M <nb> : number of exploration loop iterations [default: $nb_iter]
+      -M <nb_iter> : number of iterations for per target explorations [default: $nb_iter]
+      -N <nb_func_iter> : number of iterations for per function explorations [default: $nb_func_iter]
       -S <seed> : seed for random generator [default: none]
+      -R <ratios> : space separated list of hot/cold ratios [default: $ratios]
 
 Misc Options
       -q : quiet output
@@ -84,7 +88,7 @@ cleanup() {
 trap "cleanup; exit 3" TERM STOP
 trap "cleanup" EXIT
 
-while getopts C:b:B:fe:r:p:t:n:M:S:qdvh opt; do
+while getopts C:b:B:fe:r:p:t:n:M:N:R:S:qdvh opt; do
     case $opt in
 	C) configuration_path="$OPTARG"
 	    ;;
@@ -104,7 +108,11 @@ while getopts C:b:B:fe:r:p:t:n:M:S:qdvh opt; do
 	    ;;
 	n) opt_nbruns="-n $OPTARG"
 	    ;;
-	M) nb_iter="$OPTARG"
+	M) nb_iter="$OPTARG";
+	    ;;
+	N) nb_func_iter="$OPTARGS"
+	    ;;
+	R) ratios="$OPTARGS"
 	    ;;
 	S) opt_seed="-S $OPTARG"
 	    ;;
@@ -175,10 +183,10 @@ acf_plugin_path=`config_query '$.compilers[*].plugin_acf'`
 
 if [ "$acf_plugin_path" != "" -a "$profiling_script" != "" ]; then
     variant=`perf_variant`
-    for ratio in 20 70 80 90; do
+    for ratio in $ratios; do
 	$dir/atos-explore-acf -C "$configuration_path" $opt_seed $opt_debug $opt_quiet \
 	    -p $profiling_script \
-	    -x $ratio -Y "`size_flags`" $variant
+	    -x $ratio -Y "`size_flags`" -N $nb_func_iter $variant
     done
 
 fi

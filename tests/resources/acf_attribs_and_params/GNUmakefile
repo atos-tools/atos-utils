@@ -77,17 +77,17 @@ $(TESTS): csv_generate
 
 %.check: %.csv
 	id=$*$(COPT)$(LTOOPT); \
-	$(COMPILER) $(COPT) $(XOPTS) -fplugin=$(plugindir)/acf_plugin.so -fplugin-arg-acf_plugin-verbose -fplugin-arg-acf_plugin-csv_file=$< $(SRCS) -o $$id.out > $$id.trace.log 2>$$id.error.log ; \
-	if [ `cat $$id.error.log | wc -l` -ne 0 ]; then \
+	$(COMPILER) $(COPT) $(XOPTS) -fplugin=$(plugindir)/acf_plugin.so -fplugin-arg-acf_plugin-verbose -fplugin-arg-acf_plugin-csv_file=$< $(SRCS) -o $$id.out > $$id.trace.log 2>&1 ; \
+	lines=`cat $$id.trace.log | wc -l`; \
+	expected_lines=`cat $< | wc -l`; \
+	[ "$(LTO)" != 1 ] || expected_lines=`expr $$expected_lines + $$expected_lines`; \
+	if [ "$$lines" -ne "$$expected_lines" ]; then \
 	  echo "$(MAKE) $*.chk $(MK_FLAG) => FAILED"; \
-	  cat $$id.error.log ; \
-	elif [ `cat $$id.trace.log | wc -l` -ne `cat $< | wc -l` ]; then \
-	  echo "$(MAKE) $*.chk $(MK_FLAG) => FAILED"; \
-	  cat $$id.trace.log $$id.error.log ; \
+	  cat $$id.trace.log ; \
 	else \
 	  echo "$(MAKE) $*.chk $(MK_FLAG) => SUCCESS"; \
 	fi ; \
-	rm -f $$id.out $$id.trace.log $$id.error.log
+	#rm -f $$id.out $$id.trace.log $$id.error.log
 
 %.chk: %.csv
 	$(COMPILER) $(COPT) $(XOPTS) -fplugin=$(plugindir)/acf_plugin.so -fplugin-arg-acf_plugin-verbose -fplugin-arg-acf_plugin-csv_file=$< $(SRCS) -o $*.out

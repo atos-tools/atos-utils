@@ -92,7 +92,7 @@ $(CONFIGURE_PLUGINS): $(PLUGIN_BUILDDIR)/%/Makefile.plugin: $(SRCDIR)/Makefile.p
 	$(SRCDIR)/configure --configure-plugin --with-prep=$(PREP_BUILDDIR)/$(call plugin_subdir,$*) CC="$(call plugin_compiler,$*)" CFLAGS="$(call plugin_cflags,$*)" CPPFLAGS="$(call plugin_cppflags,$*)"
 
 $(ALL_PLUGINS): $(PLUGIN_BUILDDIR)/%/all.phony: $(PLUGIN_BUILDDIR)/%/Makefile.plugin
-	@echo "Building plugin plugin for $*"
+	@echo "Building plugin for $*"
 	$(QUIET)\
 	$(MAKE) $(QUIET_S) -C $(PLUGIN_BUILDDIR)/$(call plugin_subdir,$*) -f Makefile.plugin all
 

@@ -35065,10 +35065,10 @@ typedef struct acf_ftable_entry {
     int attr_arg_number;
     attr_arg opt_args[10];
 } acf_ftable_entry_t;
-# 68 "/opt/gcc-plugins/src/acf_plugin.h"
+# 72 "/opt/gcc-plugins/src/acf_plugin.h"
 int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p, int verbose);
 # 36 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 54 "/opt/gcc-plugins/src/acf_plugin.c"
+# 56 "/opt/gcc-plugins/src/acf_plugin.c"
 acf_ftable_entry_t *acf_ftable;
 const char *acf_csv_file_key="csv_file";
 char *acf_csv_file;
@@ -35076,13 +35076,15 @@ char *acf_csv_file;
 const char *verbose_key="verbose";
 unsigned char verbose = 0;
 
-const char *hwi_size="host_wide_int";
-int gcc_runtime_hwi = 0;
-int hwi_shift = 0;
+
+
+
+
+
 
 int plugin_is_GPL_compatible;
 static const char *plugin_name;
-# 107 "/opt/gcc-plugins/src/acf_plugin.c"
+# 111 "/opt/gcc-plugins/src/acf_plugin.c"
 extern tree maybe_constant_value (tree) __attribute__((weak));
 
 
@@ -35118,26 +35120,28 @@ add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tre
     int i;
 
     if (verbose) {
- fprintf(stdout, "acf_plugin: Attaching attribute to "
-  "function %s: %s ",
-  cur_func_name, acf_entry->opt_attr);
+        const char *sep = "";
+ fprintf(stderr, "acf_plugin: Attaching attribute to " "function %s: %s ", cur_func_name, acf_entry->opt_attr)
+
+                                     ;
  for (i = 0; i < acf_entry->attr_arg_number; i++) {
      switch (acf_entry->opt_args[i].arg_type) {
      case NO_TYPE:
   break;
      case STR_TYPE:
-  fprintf(stdout, "%s,", (acf_entry->opt_args[i].av.str_arg != ((void *)0) ?
-           acf_entry->opt_args[i].av.str_arg : "(null),"));
+         fprintf(stderr, "%s%s", sep, (acf_entry->opt_args[i].av.str_arg != ((void *)0) ? acf_entry->opt_args[i].av.str_arg : "(null),"))
+                                                          ;
   break;
      case INT_TYPE:
-  fprintf(stdout, "#%d,", acf_entry->opt_args[i].av.int_arg);
+         fprintf(stderr, "%s#%d", sep, acf_entry->opt_args[i].av.int_arg);
   break;
      }
+     sep = ",";
  }
  if (acf_entry->opt_file == ((void *)0))
-     fprintf(stdout, "\n");
+     fprintf(stderr, "\n");
  else
-     fprintf(stdout, " (file: %s)\n", acf_entry->opt_file);
+     fprintf(stderr, " (file: %s)\n", acf_entry->opt_file);
     }
 
     if (acf_entry->attr_arg_number != 0) {
@@ -35203,13 +35207,13 @@ add_lto_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
 
 
  if (verbose) {
-     fprintf(stdout, "acf_plugin: Attaching attribute to "
-      "function %s: %s %s",
-      cur_func_name, acf_entry->opt_attr, acf_entry->opt_args[0].av.str_arg);
+     fprintf(stderr, "acf_plugin: Attaching attribute to " "function %s: %s %s", cur_func_name, acf_entry->opt_attr, acf_entry->opt_args[0].av.str_arg)
+
+                                                                            ;
      if (acf_entry->opt_file == ((void *)0))
-  fprintf(stdout, "\n");
+  fprintf(stderr, "\n");
      else
-  fprintf(stdout, " (file: %s)\n", acf_entry->opt_file);
+  fprintf(stderr, " (file: %s)\n", acf_entry->opt_file);
  }
 
  if (save_options == ((void *)0)) {
@@ -35269,10 +35273,10 @@ static void save_and_set_param(char *opt_param, int value) {
 
 
     csv_param_name[csv_param_index] = opt_param;
-    csv_param_value[csv_param_index] = ((int) ((*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift))[(int) param_idx]));
+    csv_param_value[csv_param_index] = ((int) global_options.x_param_values[(int) param_idx]);
     csv_param_index ++;
-# 305 "/opt/gcc-plugins/src/acf_plugin.c"
-    set_param_value(opt_param, value, (*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift)), csv_param_set);
+# 311 "/opt/gcc-plugins/src/acf_plugin.c"
+    set_param_value(opt_param, value, global_options.x_param_values, csv_param_set);
 
 
 
@@ -35301,13 +35305,13 @@ add_param(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
     opt_value = acf_entry->opt_args[1].av.int_arg;
 
     if (verbose) {
- fprintf(stdout, "%s: Attaching param to "
-  "function %s: %s=%d", plugin_name,
-  cur_func_name, opt_param, opt_value);
+ fprintf(stderr, "%s: Attaching param to " "function %s: %s=%d", plugin_name, cur_func_name, opt_param, opt_value)
+
+                                      ;
  if (acf_entry->opt_file == ((void *)0))
-     fprintf(stdout, "\n");
+     fprintf(stderr, "\n");
  else
-     fprintf(stdout, " (file: %s)\n", acf_entry->opt_file);
+     fprintf(stderr, " (file: %s)\n", acf_entry->opt_file);
     }
 
     save_and_set_param(opt_param, opt_value);
@@ -35318,7 +35322,7 @@ static void restore_param_values() {
 
     for ( i = 0; i < csv_param_index; i++) {
 
- set_param_value(csv_param_name[i], csv_param_value[i], (*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift)), csv_param_set);
+ set_param_value(csv_param_name[i], csv_param_value[i], global_options.x_param_values, csv_param_set);
 
 
 
@@ -35475,11 +35479,6 @@ static void fill_csv_options(tree decl, int pass) {
 
 
 
-static void event_callback(void *gcc_data,void *data){
-    (void)gcc_data;
-    fprintf(stderr,"%s called\n",plugin_event_name[*(int*)data]);
-}
-
 extern void cplus_decl_attributes(tree *, tree, int) __attribute__((weak));
 
 void attribute_injector_start_unit_callback(void *gcc_data __attribute__ ((__unused__)),
@@ -35496,7 +35495,7 @@ void attribute_injector_start_unit_callback(void *gcc_data __attribute__ ((__unu
 static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
     tree decl=(tree)gcc_data;
     const char *decl_fullname;
-# 548 "/opt/gcc-plugins/src/acf_plugin.c"
+# 549 "/opt/gcc-plugins/src/acf_plugin.c"
     fill_csv_options(decl, 1);
 }
 
@@ -35591,13 +35590,15 @@ int plugin_init(struct plugin_name_args *plugin_na,
     plugin_name=plugin_na->base_name;
     FILE *fcsv;
     int csv_arg_pos = -1;
-    int hwi_arg_pos = -1;
-    long hwi_size_var;
-    unsigned char hwi_ok;
-    int plugin_buildtime_hwi = 0;
+
+
+
+
+
+
     unsigned char bad = 0;
     int i;
-# 679 "/opt/gcc-plugins/src/acf_plugin.c"
+# 682 "/opt/gcc-plugins/src/acf_plugin.c"
     if ((version->basever[0] < '4') ||
  ((version->basever[0] == '4') && (version->basever[2] < '6'))) {
  error("%s: build gcc and load gcc versions are incompatible.", plugin_name);
@@ -35626,9 +35627,11 @@ int plugin_init(struct plugin_name_args *plugin_na,
      if (strcmp(plugin_na->argv[i].key, verbose_key) == 0) {
   verbose = 1;
      }
-     if (strcmp(plugin_na->argv[i].key, hwi_size) == 0) {
-  hwi_arg_pos = i;
-     }
+
+
+
+
+
      if (strcmp(plugin_na->argv[i].key, acf_csv_file_key) == 0) {
   csv_arg_pos = i;
      }
@@ -35646,11 +35649,15 @@ int plugin_init(struct plugin_name_args *plugin_na,
  fprintf(stderr,
   "Usage for %s: -fplugin=<path>/%s.so "
   "-fplugin-arg-%s-%s= <path-to-csv-file> "
-  "[-fplugin-arg-%s-%s= <size_in_bytes>] "
+
+
+
   "[-fplugin-arg-%s-%s]\n",
   plugin_name, plugin_name,
   plugin_name, acf_csv_file_key,
-  plugin_name, hwi_size,
+
+
+
   plugin_name, verbose_key);
  return 1;
     }
@@ -35668,42 +35675,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
        plugin_na->argv[csv_arg_pos].key);
  return 1;
     }
-
-    hwi_ok = 0;
-    if (hwi_arg_pos != -1 && strcmp(plugin_na->argv[hwi_arg_pos].key, hwi_size) == 0) {
- if (plugin_na->argv[hwi_arg_pos].value &&
-     strcmp(plugin_na->argv[hwi_arg_pos].value, "") != 0) {
-     (*__errno_location ()) = 0;
-     gcc_runtime_hwi = strtol(plugin_na->argv[hwi_arg_pos].value, ((void *)0), 0);
-     if (!(*__errno_location ())) {
-
-
-
-  hwi_ok = 1;
-
-
-  plugin_buildtime_hwi = sizeof(hwi_size_var);
-
-
-
-
-  if (gcc_runtime_hwi != plugin_buildtime_hwi) {
-
-
-      hwi_shift = (2 * (gcc_runtime_hwi - plugin_buildtime_hwi));
-  }
-
-
-
-
-     }
- }
-    }
-
-
-
-
-
+# 796 "/opt/gcc-plugins/src/acf_plugin.c"
     register_callback(plugin_na->base_name,
         PLUGIN_START_UNIT,
         &attribute_injector_start_unit_callback,((void *)0));
@@ -35727,6 +35699,6 @@ int plugin_init(struct plugin_name_args *plugin_na,
      register_callback (plugin_na->base_name,
           PLUGIN_PASS_MANAGER_SETUP,
           ((void *)0), &lto_clean_optimize_info);
-# 822 "/opt/gcc-plugins/src/acf_plugin.c"
+# 833 "/opt/gcc-plugins/src/acf_plugin.c"
     return 0;
 }

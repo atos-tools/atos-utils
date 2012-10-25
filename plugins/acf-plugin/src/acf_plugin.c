@@ -73,28 +73,28 @@ static const char *plugin_name;
 static void do_indent(int tab_number){
     int i;
     for(i=0;i<tab_number;++i){
-	printf("\t");
+	PRINTF("\t");
     }
 }
 
 static void print_pass_list(struct opt_pass *pass,int tab_number){
     do_indent(tab_number);
-    printf("%d: ", pass->static_pass_number);
+    PRINTF("%d: ", pass->static_pass_number);
     switch(pass->type){
     case GIMPLE_PASS:
-	printf("GIMPLE_PASS");
+	PRINTF("GIMPLE_PASS");
 	break;
     case RTL_PASS:
-	printf("RTL_PASS");
+	PRINTF("RTL_PASS");
 	break;
     case SIMPLE_IPA_PASS:
-	printf("SIMPLE_IPA_PASS");
+	PRINTF("SIMPLE_IPA_PASS");
 	break;
     case IPA_PASS:
-	printf("IPA_PASS");
+	PRINTF("IPA_PASS");
 	break;
     }
-    printf(": %s\n",pass->name);
+    PRINTF(": %s\n",pass->name);
     if(pass->sub){
 	print_pass_list(pass->sub,tab_number+1);
     }
@@ -143,7 +143,8 @@ add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tre
     int i;
 
     if (verbose) {
-	fprintf(stdout, "acf_plugin: Attaching attribute to "
+        const char *sep = "";
+	VERBOSE("acf_plugin: Attaching attribute to "
 		"function %s: %s ",
 		cur_func_name, acf_entry->opt_attr);
 	for (i = 0; i < acf_entry->attr_arg_number; i++) {
@@ -151,18 +152,19 @@ add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tre
 	    case NO_TYPE:
 		break;
 	    case STR_TYPE:
-		fprintf(stdout, "%s,", (acf_entry->opt_args[i].av.str_arg != NULL ?
+	        VERBOSE("%s%s", sep, (acf_entry->opt_args[i].av.str_arg != NULL ?
 				       acf_entry->opt_args[i].av.str_arg : "(null),"));
 		break;
 	    case INT_TYPE:
-		fprintf(stdout, "#%d,", acf_entry->opt_args[i].av.int_arg);
+	        VERBOSE("%s#%d", sep, acf_entry->opt_args[i].av.int_arg);
 		break;
 	    }
+	    sep = ",";
 	}
 	if (acf_entry->opt_file == NULL)
-	    fprintf(stdout, "\n");
+	    VERBOSE("\n");
 	else
-	    fprintf(stdout, " (file: %s)\n", acf_entry->opt_file);
+	    VERBOSE(" (file: %s)\n", acf_entry->opt_file);
     }
 
     if (acf_entry->attr_arg_number != 0) {
@@ -228,13 +230,13 @@ add_lto_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
 #endif
 
 	if (verbose) {
-	    fprintf(stdout, "acf_plugin: Attaching attribute to "
+	    VERBOSE("acf_plugin: Attaching attribute to "
 		    "function %s: %s %s",
 		    cur_func_name, acf_entry->opt_attr, acf_entry->opt_args[0].av.str_arg);
 	    if (acf_entry->opt_file == NULL)
-		fprintf(stdout, "\n");
+		VERBOSE("\n");
 	    else
-		fprintf(stdout, " (file: %s)\n", acf_entry->opt_file);
+		VERBOSE(" (file: %s)\n", acf_entry->opt_file);
 	}
 
 	if (save_options == NULL) {
@@ -299,9 +301,9 @@ static void save_and_set_param(char *opt_param, int value) {
 
 #if defined(USE_GLOBAL_PARAMS) && defined (HWI_SHIFT) && defined(ACF_DEBUG)
     if (hwi_shift)
-	fprintf(stderr, "Default x_param_value address= %p, \n" \
-		"Shifted x_param_value= %p\n",
-		&(global_options.x_param_values), param_values);
+	DEBUG("Default x_param_value address= %p, \n" \
+	      "Shifted x_param_value= %p\n",
+	      &(global_options.x_param_values), param_values);
 #endif
 
     // Set new param value
@@ -335,13 +337,13 @@ add_param(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
     opt_value = acf_entry->opt_args[1].av.int_arg;
 
     if (verbose) {
-	fprintf(stdout, "%s: Attaching param to "
+	VERBOSE("%s: Attaching param to "
 		"function %s: %s=%d", plugin_name,
 		cur_func_name, opt_param, opt_value);
 	if (acf_entry->opt_file == NULL)
-	    fprintf(stdout, "\n");
+	    VERBOSE("\n");
 	else
-	    fprintf(stdout, " (file: %s)\n", acf_entry->opt_file);
+	    VERBOSE(" (file: %s)\n", acf_entry->opt_file);
     }
 
     save_and_set_param(opt_param, opt_value);
@@ -390,15 +392,15 @@ static bool func_name_match(const char *acf_func, const char *cur_func) {
 
     if (*suffix == '\0') {
 #ifdef ACF_DEBUG
-	fprintf(stderr, "func_name_match is true for function %s\n", cur_func);
+	DEBUG("func_name_match is true for function %s\n", cur_func);
 #endif
 	return true;
     }
 
     if (*suffix != '.') {
 #ifdef ACF_DEBUG
-	fprintf(stderr, "For function %s, suffix %s does not match cloning suffix\n",
-		acf_func, suffix);
+	DEBUG("For function %s, suffix %s does not match cloning suffix\n",
+	      acf_func, suffix);
 #endif
 	return false;
     }
@@ -416,15 +418,15 @@ static bool func_name_match(const char *acf_func, const char *cur_func) {
 	      MATCH_TOKEN("clone", token, token_len) ||
 	      MATCH_TOKEN("constprop", token, token_len))) {
 #ifdef ACF_DEBUG
-	    fprintf(stderr, "For function %s, suffix %s does not match cloning suffix\n",
-		    acf_func, suffix);
+	    DEBUG("For function %s, suffix %s does not match cloning suffix\n",
+		   acf_func, suffix);
 #endif
 	    return false;
 	}
     } while (next_token != NULL);
 
 #ifdef ACF_DEBUG
-    fprintf(stderr, "func_name_match is true for function %s\n", cur_func);
+    DEBUG("func_name_match is true for function %s\n", cur_func);
 #endif
     return true;
 }
@@ -437,9 +439,9 @@ static bool source_file_match(char *opt_file, char *input_file)
 
     if (opt_file == NULL || input_file == NULL) {
 #ifdef ACF_DEBUG
-	fprintf(stderr, "Source file %s, %s: unspecified\n",
-		(opt_file == NULL?"(null)":opt_file),
-		(input_file == NULL?"(null)":input_file));
+	DEBUG("Source file %s, %s: unspecified\n",
+	      (opt_file == NULL?"(null)":opt_file),
+	      (input_file == NULL?"(null)":input_file));
 #endif
 	return true;
     }
@@ -452,8 +454,8 @@ static bool source_file_match(char *opt_file, char *input_file)
 	ret = !strcmp(opt_file, input_file);
     }
 #ifdef ACF_DEBUG
-    fprintf(stderr, "Source file %s, %s: %s\n", opt_file, input_file,
-	    (ret?"matching":"not matching"));
+    DEBUG("Source file %s, %s: %s\n", opt_file, input_file,
+	  (ret?"matching":"not matching"));
 #endif
     return ret;
 }
@@ -509,11 +511,6 @@ static void fill_csv_options(tree decl, int pass) {
 /* Add ACF callbacks to GCC
 /* ============================================================ */
 
-static void event_callback(void *gcc_data,void *data){
-    (void)gcc_data;
-    fprintf(stderr,"%s called\n",plugin_event_name[*(int*)data]);
-}
-
 extern void cplus_decl_attributes(tree *, tree, int) __attribute__((weak));
 
 void attribute_injector_start_unit_callback(void *gcc_data ATTRIBUTE_UNUSED,
@@ -538,9 +535,9 @@ static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
     if(DECL_P(decl)&&is_targetable_decl(decl) &&
        MATCH(decl, match_tree_code(equal_to(FUNCTION_DECL)))) {
 	decl_fullname=lang_hooks.decl_printable_name(decl,2);
-	fprintf(stderr,"acf_plugin: Processing function %s (%s)\n",
-		decl_fullname,
-		IDENTIFIER_POINTER (DECL_ASSEMBLER_NAME (cfun->decl)));
+	DEBUG("acf_plugin: Processing function %s (%s)\n",
+	      decl_fullname,
+	      IDENTIFIER_POINTER (DECL_ASSEMBLER_NAME (cfun->decl)));
     }
 #endif /* ACF_TRACE */
 
@@ -585,7 +582,7 @@ static void lto_clean_optimize_callback(void) {
     struct cgraph_node *node;
 
     //    if (verbose)
-    //	printf("New pass lto_clean_optimize_callback\n");
+    //	VERBOSE("New pass lto_clean_optimize_callback\n");
 
     for (node = cgraph_nodes; node; node = node->next) {
 	tree decl_node = node->decl;
@@ -662,15 +659,15 @@ int plugin_init(struct plugin_name_args *plugin_na,
 #endif
 
 #ifdef ACF_DEBUG
-    fprintf(stderr, "---------------------\n");
-    fprintf(stderr,"Hello World from the %s !\n", plugin_name);
+    DEBUG("---------------------\n");
+    DEBUG("Hello World from the %s !\n", plugin_name);
     if (plugin_na->argc >= 1)
-	fprintf(stderr, "args number= %d\n", plugin_na->argc);
+	DEBUG("args number= %d\n", plugin_na->argc);
     for (i = 0; i < plugin_na->argc; i++) {
-	fprintf(stderr, "key_arg= (%s) -> arg_value= (%s)\n",
-		plugin_na->argv[i].key, plugin_na->argv[i].value);
+	DEBUG("key_arg= (%s) -> arg_value= (%s)\n",
+	      plugin_na->argv[i].key, plugin_na->argv[i].value);
     }
-    fprintf(stderr, "---------------------\n");
+    DEBUG("---------------------\n");
 #endif
 
     // Check the plugin is used with appropriate compiler version
@@ -696,7 +693,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
 	break;
     case 1:
 	if (strcmp(plugin_na->argv[0].key, "test") == 0) {
-	  fprintf(stderr, "test OK\n");
+	  PRINTF("test OK\n");
 	  return 0;
 	} else if (strcmp(plugin_na->argv[0].key, acf_csv_file_key) == 0) {
 	    csv_arg_pos = 0;
@@ -768,14 +765,14 @@ int plugin_init(struct plugin_name_args *plugin_na,
 	    gcc_runtime_hwi = strtol(plugin_na->argv[hwi_arg_pos].value, NULL, 0);
 	    if (!errno) {
 #ifdef ACF_DEBUG
-		fprintf(stderr,"gcc HOST_WIDE_INT size from parameters: %d\n", gcc_runtime_hwi);
+		DEBUG("gcc HOST_WIDE_INT size from parameters: %d\n", gcc_runtime_hwi);
 #endif
 		hwi_ok = true;
 
 		/* Get plugin HOST_WIDE_INT size */
 		plugin_buildtime_hwi = sizeof(hwi_size_var);
 #ifdef ACF_DEBUG
-		fprintf(stderr,"Plugin HOST_WIDE_INT size: %d\n", plugin_buildtime_hwi);
+		DEBUG("Plugin HOST_WIDE_INT size: %d\n", plugin_buildtime_hwi);
 #endif
 
 		if (gcc_runtime_hwi != plugin_buildtime_hwi) {
@@ -785,14 +782,14 @@ int plugin_init(struct plugin_name_args *plugin_na,
 		}
 #ifdef ACF_DEBUG
 		if (hwi_shift)
-		    fprintf(stderr,"HOST_WIDE_INT shift: %d\n", hwi_shift);
+		    DEBUG("HOST_WIDE_INT shift: %d\n", hwi_shift);
 #endif
 	    }
 	}
     }
 #ifdef ACF_DEBUG
     if (!hwi_ok)
-	fprintf(stderr,"Warning: No HOST_WIDE_TYPE size in parameters\n");
+	DEBUG("Warning: No HOST_WIDE_TYPE size in parameters\n");
 #endif
 #endif /* HWI_SHIFT */
 
@@ -821,15 +818,15 @@ int plugin_init(struct plugin_name_args *plugin_na,
 			       NULL, &lto_clean_optimize_info);
 
 #ifdef PRINT_PASS_LIST
-    printf("\n####### ALL PASSES LIST #######\n");
+    PRINTF("\n####### ALL PASSES LIST #######\n");
     print_pass_list(all_passes,0);
-    printf("\n\n####### ALL SMALL IPA PASSES LIST #######\n");
+    PRINTF("\n\n####### ALL SMALL IPA PASSES LIST #######\n");
     print_pass_list(all_small_ipa_passes,0);
-    printf("\n\n####### ALL REGULAR IPA PASSES LIST #######\n");
+    PRINTF("\n\n####### ALL REGULAR IPA PASSES LIST #######\n");
     print_pass_list(all_regular_ipa_passes,0);
-    printf("\n\n####### ALL LOWERING PASSES LIST #######\n");
+    PRINTF("\n\n####### ALL LOWERING PASSES LIST #######\n");
     print_pass_list(all_lowering_passes,0);
-    printf("\n\n####### ALL LTO GEN PASSES LIST #######\n");
+    PRINTF("\n\n####### ALL LTO GEN PASSES LIST #######\n");
     print_pass_list(all_lto_gen_passes,0);
 #endif /* PRINT_PASS_LIST */
 

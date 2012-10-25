@@ -18,33 +18,33 @@ acf_plugin warning: discarded line 69: more than 13 entries
 acf_plugin warning: discarded line 70: more than 13 entries
 acf_plugin warning: discarded line 71: more than 13 entries
 acf_plugin warning: discarded line 72: more than 13 entries
-acf_plugin: Attaching attribute to function _Z8tab_initPi: optimize O0,
-acf_plugin: Attaching attribute to function _Z6squarei: optimize O3,
-acf_plugin: Attaching attribute to function _Z6squarei: optimize #2, (file: hello-cpp.cpp)
+acf_plugin: Attaching attribute to function _Z8tab_initPi: optimize O0
+acf_plugin: Attaching attribute to function _Z6squarei: optimize O3
+acf_plugin: Attaching attribute to function _Z6squarei: optimize #2 (file: hello-cpp.cpp)
 acf_plugin: Attaching attribute to function _Z9tab_printPi: noinline 
-acf_plugin: Attaching attribute to function _Z9tab_printPi: optimize Os,
-acf_plugin: Attaching attribute to function _Z5func1Pi: optimize O2,
-acf_plugin: Attaching attribute to function _Z5func1Pi: section .mysectionname,
-acf_plugin: Attaching attribute to function _Z5func1Pi: optimize tree-parallelize-loops=12,
-acf_plugin: Attaching attribute to function _Z5func1Pi: optimize ira-algorithm=priority,
-acf_plugin: Attaching attribute to function _Z5func1Pi: optimize ira-algorithm=CB,
-acf_plugin: Attaching attribute to function _Z5func1Pi: optimize ira-region=all,
-acf_plugin: Attaching attribute to function _Z5func1Pi: optimize ira-region=mixed,
-acf_plugin: Attaching attribute to function _Z5func1Pi: optimize ira-region=one,
-acf_plugin: Attaching attribute to function _Z5func1Pi: optimize sched-stalled-insns=9,
-acf_plugin: Attaching attribute to function _Z5func1Pi: optimize unroll-loops,
-acf_plugin: Attaching attribute to function _Z5func1Pi: optimize O1,
-acf_plugin: Attaching attribute to function _Z5func2Pi: optimize O3,
-acf_plugin: Attaching attribute to function _Z5func2Pi: optimize O1,
+acf_plugin: Attaching attribute to function _Z9tab_printPi: optimize Os
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize O2
+acf_plugin: Attaching attribute to function _Z5func1Pi: section .mysectionname
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize tree-parallelize-loops=12
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize ira-algorithm=priority
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize ira-algorithm=CB
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize ira-region=all
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize ira-region=mixed
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize ira-region=one
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize sched-stalled-insns=9
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize unroll-loops
+acf_plugin: Attaching attribute to function _Z5func1Pi: optimize O1
+acf_plugin: Attaching attribute to function _Z5func2Pi: optimize O3
+acf_plugin: Attaching attribute to function _Z5func2Pi: optimize O1
 acf_plugin: Attaching attribute to function _Z5func2Pi: cold 
 acf_plugin: Attaching attribute to function _Z5func2Pi: cold 
 acf_plugin: Attaching attribute to function _Z5func2Pi: cold 
-acf_plugin: Attaching attribute to function _Z5func2Pi: optimize unroll-loops, (file: hello-cpp.cpp)
-acf_plugin: Attaching attribute to function _Z5func2Pi: optimize s, (file: hello-cpp.cpp)
-acf_plugin: Attaching attribute to function _Z5func2Pi: optimize O0, (file: hello-cpp.cpp)
+acf_plugin: Attaching attribute to function _Z5func2Pi: optimize unroll-loops (file: hello-cpp.cpp)
+acf_plugin: Attaching attribute to function _Z5func2Pi: optimize s (file: hello-cpp.cpp)
+acf_plugin: Attaching attribute to function _Z5func2Pi: optimize O0 (file: hello-cpp.cpp)
 acf_plugin: Attaching attribute to function _Z5func2Pi: cold 
 acf_plugin: Attaching attribute to function _Z5func2Pi: cold 
-acf_plugin: Attaching attribute to function main: optimize Os,
+acf_plugin: Attaching attribute to function main: optimize Os
 acf_plugin: Attaching attribute to function main: cold 
 acf_plugin: Attaching param to function _Z5func1Pi: max-unroll-times=8
 acf_plugin: Attaching param to function _Z5func1Pi: max-inline-insns=400

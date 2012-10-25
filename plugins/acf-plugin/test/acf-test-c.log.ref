@@ -18,14 +18,14 @@ acf_plugin warning: discarded line 69: more than 13 entries
 acf_plugin warning: discarded line 70: more than 13 entries
 acf_plugin warning: discarded line 71: more than 13 entries
 acf_plugin warning: discarded line 72: more than 13 entries
-acf_plugin: Attaching attribute to function square: optimize O3,
+acf_plugin: Attaching attribute to function square: optimize O3
 acf_plugin: Attaching attribute to function square: hot 
-acf_plugin: Attaching attribute to function square: optimize Os, (file: hello.c)
-acf_plugin: Attaching attribute to function tab_print: optimize 3,
-acf_plugin: Attaching attribute to function func1: optimize unroll-loops,
-acf_plugin: Attaching attribute to function func1: optimize O1,
+acf_plugin: Attaching attribute to function square: optimize Os (file: hello.c)
+acf_plugin: Attaching attribute to function tab_print: optimize 3
+acf_plugin: Attaching attribute to function func1: optimize unroll-loops
+acf_plugin: Attaching attribute to function func1: optimize O1
 acf_plugin: Attaching attribute to function func2: noinline  (file: hello.c)
-acf_plugin: Attaching attribute to function main: optimize Os,
+acf_plugin: Attaching attribute to function main: optimize Os
 acf_plugin: Attaching attribute to function main: cold 
-acf_plugin: Attaching attribute to function main: optimize s, (file: hello.c)
+acf_plugin: Attaching attribute to function main: optimize s (file: hello.c)
 acf_plugin: Attaching param to function func1: max-unroll-times=4

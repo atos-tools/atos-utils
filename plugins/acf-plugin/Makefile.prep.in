@@ -28,6 +28,7 @@ CPPFLAGS=@CPPFLAGS@
 PREP_INCLUDES=-I$(shell $(COMPILER) $(CFLAGS) -print-file-name=plugin)/include
 
 SRCS=$(wildcard $(srcdir)/src/*.c)
+HEADERS=$(wildcard $(srcdir)/src/*.h)
 PREPS=$(patsubst  $(srcdir)/src/%.c, $(prepdir)/prep/%_prep.c, $(SRCS))
 
 .PHONY: all generate-prep-sources
@@ -36,7 +37,7 @@ all: generate-prep-sources
 
 generate-prep-sources:  $(PREPS)
 
-$(PREPS): $(prepdir)/prep/%_prep.c: $(srcdir)/src/%.c $(builddir)/Makefile.prep
+$(PREPS): $(prepdir)/prep/%_prep.c: $(srcdir)/src/%.c $(builddir)/Makefile.prep $(HEADERS)
 	mkdir -p $(prepdir)/prep && $(COMPILER) $(CFLAGS) $(CPPFLAGS) $(PREP_INCLUDES) -E $(srcdir)/src/$*.c -o $(prepdir)/prep/$*_prep.c
 
 $(builddir)/Makefile.prep: $(srcdir)/Makefile.prep.in

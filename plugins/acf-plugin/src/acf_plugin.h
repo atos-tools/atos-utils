@@ -64,6 +64,10 @@ typedef struct acf_ftable_entry {
 extern "C" {
 #endif
 
+#define PRINTF(...) fprintf(stderr, __VA_ARGS__)
+#define VERBOSE(...) fprintf(stderr, __VA_ARGS__)
+#define DEBUG(...) fprintf(stderr, __VA_ARGS__)
+
 /* Return number of functions if cvs file parsing ok, negative value otherwise */
 int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p, int verbose);
 

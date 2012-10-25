@@ -13,12 +13,12 @@ acf_plugin.so: $(SRC)
 	$(COMPILER) $(CFLAGS) $(CPPFLAGS) -fPIC -shared  $(SRC) -o $@
 
 acf-test-c: $(TESTC) ./acf_plugin.so $(testdir)/test.csv
-	-$(TESTGCC) $(TESTCFLAGS) $(ACF_PLUGIN_OPT) $< -o $@  | tee acf-test-c.log 2>&1
+	-$(TESTGCC) $(TESTCFLAGS) $(ACF_PLUGIN_OPT) $< -o $@  2>&1 | tee acf-test-c.log
 	@echo "Checking diff with reference output:"
 	diff acf-test-c.log $(testdir)/acf-test-c.log.ref
 
 acf-test-cpp: $(TESTCPP) ./acf_plugin.so $(testdir)/test.csv
-	-$(TESTGPP) $(TESTCFLAGS) $(ACF_PLUGIN_OPT) $< -o $@ | tee acf-test-cpp.log 2>&1
+	-$(TESTGPP) $(TESTCFLAGS) $(ACF_PLUGIN_OPT) $< -o $@ 2>&1 | tee acf-test-cpp.log
 	@echo "Checking diff with reference output:"
 	diff acf-test-cpp.log $(testdir)/acf-test-cpp.log.ref
 

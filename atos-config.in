@@ -281,7 +281,6 @@ prepare_flag_files()
     done
 }
 
-/bin/rm -f $configuration_path/config.json
 if [ -f "$configuration_path/compilers" ]; then
     for compiler in `cat $configuration_path/compilers`; do
 	    compiler_test $compiler > $tmpdir/config.txt

@@ -77,21 +77,74 @@ def get_cc_command_additional_flags(optfile, args):
     if len(outputs) != 1: return shlex.split(def_opts)
     return shlex.split(obj_opts.get(outputs[0], def_opts))
 
-def invoque_compile_command(args, optfile=None):
-    status = process.system(
-        args + get_cc_command_additional_flags(optfile, args),
-        print_output=True)
+def invoque_compile_command(args):
+
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument(
+        '--atos-fctmap', dest='fctmap', action='store', default=None)
+    parser.add_argument(
+        '--atos-optfile', dest='optfile', action='store', default=None)
+
+    cwd = os.path.abspath(os.getcwd())
+    args = list(args or [])
+    env_ACFLAGS = os.environ.get("ACFLAGS")
+    if env_ACFLAGS: args.extend(process.cmdline2list(env_ACFLAGS))
+
+    (opts, args) = parser.parse_known_args(args)
+
+    env_PROFILE_DIR = os.environ.get("PROFILE_DIR")
+    profdir_common_len = env_PROFILE_DIR and len(
+        os.environ.get("COMMON_PROFILE_DIR_PREFIX", "")) or 0
+    env_PROFILE_DIR_OPT = os.environ.get("PROFILE_DIR_OPT")
+
+    if is_cc_compile_command(args):  # CC command
+
+        output = atos_lib.get_output_option_value(args)
+        if env_PROFILE_DIR and env_PROFILE_DIR_OPT:
+            suffix = not (output and os.path.isabs(output)) and cwd[
+                profdir_common_len:] or ''
+            args.append("%s=%s/%s" % (
+                    env_PROFILE_DIR_OPT, env_PROFILE_DIR, suffix))
+
+    else:  # CCLD command
+
+        env_ALDFLAGS = os.environ.get("ALDFLAGS")
+        if env_ALDFLAGS: args.extend(process.cmdline2list(env_ALDFLAGS))
+
+        env_ALDLTOFLAGS = os.environ.get("ALDLTOFLAGS")
+        if env_ALDLTOFLAGS: args.extend(process.cmdline2list(env_ALDLTOFLAGS))
+
+        env_ALDSOFLAGS = os.environ.get("ALDSOFLAGS")
+        if env_ALDSOFLAGS and atos_lib.is_shared_lib_link(args):
+            args.extend(process.cmdline2list(env_ALDSOFLAGS))
+
+        env_ALDMAINFLAGS = os.environ.get("ALDMAINFLAGS")
+        if env_ALDMAINFLAGS and not atos_lib.is_shared_lib_link(args):
+            args.extend(process.cmdline2list(env_ALDMAINFLAGS))
+
+        if env_PROFILE_DIR and env_PROFILE_DIR_OPT:
+            suffix = cwd[profdir_common_len:]
+            args.append("%s=%s/%s" % (
+                    env_PROFILE_DIR_OPT, env_PROFILE_DIR, suffix))
+
+    if opts.optfile:
+        args.extend(get_cc_command_additional_flags(opts.optfile, args))
+
+    status = process.system(args, print_output=True)
+
+    if opts.fctmap:
+        update_function_map(opts.fctmap, args)
+
     return status
 
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description='atos-driver', add_help=False)
+    parser = argparse.ArgumentParser(description='atos-driver')
 
     parser.add_argument('--atos-help', dest='help',
                       action='store_true', default=False,
                       help='print help message')
-
     parser.add_argument('--atos-debug', dest='debug',
                       action='store_true', default=False,
                       help='print debug information (default: False)')
@@ -100,28 +153,15 @@ if __name__ == "__main__":
                       help='only print commands (default: False)')
     parser.add_argument('--atos-version', action='version',
                         version='atos-driver version ' + VERSION)
-
-    parser.add_argument('--atos-fctmap', dest='fctmap',
-                      action='store', default=None,
-                      help='write function map in <fctmap> file')
-    parser.add_argument('--atos-optfile', dest='optfile',
-                      action='store', default=None,
-                      help='set option file')
+    # TODO: fix proot cc_opts plugin and remove --atos-tmp
+    parser.add_argument('--atos-tmp', dest='tmp', action='store_true')
 
     (opts, args) = parser.parse_known_args()
-
-    if opts.help:
-        parser.print_help()
-        parser.exit()
 
     process.setup(vars(opts))
 
     logger.setup(vars(opts))
 
-    status = 0
-
-    if args: status = invoque_compile_command(args, optfile=opts.optfile)
-
-    if opts.fctmap: update_function_map(opts.fctmap, args)
+    status = invoque_compile_command(args)
 
     sys.exit(status)

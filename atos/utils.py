@@ -198,14 +198,14 @@ def run_atos_build(args):
             (variant, atos_lib.hashid(variant)))
     logf.write("Building variant %s\n" % variant)
 
-    make_options = []
-    compile_options = args.options and [args.options] or []
+    driver_env = {}
+    compile_options = args.options and args.options.split() or []
+    link_options = []
 
     atos_driver = os.getenv("ATOS_DRIVER")
-    if atos_driver == None:
+    if not atos_driver:
         atos_driver = os.path.join(globals.BINDIR, "atos-driver")
-    if atos_driver == '0':
-        atos_driver = None
+    assert atos_driver and os.path.isfile(atos_driver)
 
     opt_rebuild = args.force
     build_force = os.path.join(args.configuration_path, "build.force")
@@ -223,6 +223,7 @@ def run_atos_build(args):
         with open(os.path.join(profile_path, "variant.txt"), "w") as variantf:
             variantf.write(pvariant)
         compile_options += ["-fprofile-generate"]
+        link_options += ["-lgcov", "-lc"]
 
         remote_profile_path = args.remote_path
         if not remote_profile_path:
@@ -230,52 +231,69 @@ def run_atos_build(args):
                 args.configuration_path, 'default_values.remote_profile_path')
         if remote_profile_path:
             profile_path = remote_profile_path
-        make_options += ["PROFILE_DIR=%s" % profile_path]
+        driver_env.update({"PROFILE_DIR": profile_path})
 
     if args.uopts != None:
         compile_options += ["-fprofile-use", "-fprofile-correction",
                             "-Wno-error=coverage-mismatch"]
-        make_options += ["PROFILE_DIR=%s" % profile_path]
+        driver_env.update({"PROFILE_DIR": profile_path})
 
-    build_mk = os.path.join(args.configuration_path, "build.mk")
-    compile_options = " ".join(compile_options)
+    if args.gopts != None or args.uopts != None:
+        common_profdir_prefix = atos_lib.get_config_value(
+            args.configuration_path, 'build_opts.common_profdir_prefix', '')
+        driver_env.update({"COMMON_PROFILE_DIR_PREFIX": common_profdir_prefix})
+        driver_env.update({"PROFILE_DIR_OPT": "-fprofile-dir"})
+
+    if "-flto" in compile_options:
+        lto_flags = atos_lib.get_config_value(
+            args.configuration_path, 'build_opts.lto_flags', '')
+        driver_env.update({"ALDLTOFLAGS": lto_flags})
+
+    driver_env.update({"ACFLAGS": " ".join(compile_options)})
+    driver_env.update({"ALDFLAGS": " ".join(link_options)})
+    # useless for now
+    driver_env.update({"ALDSOFLAGS": ""})
+    driver_env.update({"ALDMAINFLAGS": ""})
+
+    # add driver build variables to environment
+    map(lambda (k, v): os.putenv(k, str(v)), driver_env.items())
+
     if not args.command and not opt_rebuild:
+        build_mk = os.path.join(args.configuration_path, "build.mk")
         if not os.path.isfile(build_mk):
             error("optimized build file missing: %s" % build_mk)
             error("atos-deps was not run or configuration path mismatch")
             return 1
         # if the configuration path contains a build.mk execute it
-        command = ["make", "-f", build_mk, "-j", str(args.jobs)]
-        command.append("ACFLAGS=%s" % compile_options)
-        command.extend(make_options)
-        if atos_driver:
-            command.append("ATOS_DRIVER=%s" % atos_driver)
-        if compile_options.find("-flto") != -1:
-            command.append("LTO=1")
+        command = ["make", "-f", build_mk, "-j", str(args.jobs),
+                   "ATOS_DRIVER=" + atos_driver]
         status, output = process.system(
             atos_lib.timeout_command() + command,
             get_output=True, output_stderr=True)
     else:
-        # else use proot cc_opts addon (force mode)
         build_sh = os.path.join(args.configuration_path, "build.sh")
-        ccregexp = args.ccname and ("^%s$" % args.ccname) or args.ccregexp
-        command = atos_lib.proot_command(
-            PROOT_IGNORE_ELF_INTERPRETER=1,
-            PROOT_ADDON_CC_OPTS=1,
-            PROOT_ADDON_CC_OPTS_ARGS="%s" % compile_options,
-            PROOT_ADDON_CC_OPTS_CCRE=ccregexp,
-            PROOT_ADDON_CC_OPTS_DRIVER=atos_driver)
         if not args.command:
             if not os.path.isfile(build_sh):
                 error("build script missing: %s" % build_sh)
                 error("atos-build was not run or configuration path mismatch")
                 return 1
-            command.append(build_sh)
-        else:
-            command.extend(args.command)
+        # else use proot cc_opts addon (force mode)
+        ccregexp = args.ccname and ("^%s$" % args.ccname) or args.ccregexp
+        command = atos_lib.proot_command(
+            PROOT_IGNORE_ELF_INTERPRETER=1,
+            PROOT_ADDON_CC_OPTS=1,
+            # driver must be added even if there is no CC_OPTS_ARGS set
+            # TODO: fix proot cc_opts plugin and remove --atos-tmp
+            PROOT_ADDON_CC_OPTS_ARGS="--atos-tmp",
+            PROOT_ADDON_CC_OPTS_CCRE=ccregexp,
+            PROOT_ADDON_CC_OPTS_DRIVER=atos_driver)
+        command.extend(args.command or [build_sh])
         status, output = process.system(
             atos_lib.timeout_command() + command,
             get_output=True, output_stderr=True)
+
+    # remove driver build variables from environment
+    map(lambda (k, v): os.unsetenv(k), driver_env.items())
 
     logf.write('%s\n' % output)
     if status:
@@ -327,31 +345,28 @@ def run_atos_deps(args):
         graph.output_makefile(output_file)
 
     # For now only write targets if configuration dir is there
-    try:
-        f = open(os.path.join(args.configuration_path, "targets"), "w")
-    except:
-        pass
-    else:
-        f.write("\n".join(executables
-                          if args.force else graph.get_targets()) + "\n")
-        f.close()
+    if not os.path.isdir(args.configuration_path):
+        return 0
 
-    try:
-        f = open(os.path.join(args.configuration_path, "objects"), "w")
-    except:
-        pass
-    else:
-        f.write("\n".join(graph.get_objects()) + "\n")
-        f.close()
+    with open(os.path.join(args.configuration_path, "targets"), "w") as f:
+        print >>f, "\n".join(
+            executables if args.force else graph.get_targets())
 
-    # For now only write compilers if configuration dir is there
-    try:
-        f = open(os.path.join(args.configuration_path, "compilers"), "w")
-    except:
-        pass
-    else:
-        f.write('\n'.join(graph.get_compilers()) + '\n')
-        f.close()
+    with open(os.path.join(args.configuration_path, "objects"), "w") as f:
+        print >>f, "\n".join(graph.get_objects())
+
+    with open(os.path.join(args.configuration_path, "compilers"), "w") as f:
+        print >>f, '\n'.join(graph.get_compilers())
+
+    # list of options that should be passed to linker in case of LTO build
+    config_file = os.path.join(args.configuration_path, 'config.json')
+
+    atos_lib.json_config(config_file).add_value(
+        "build_opts.lto_flags", ' '.join(graph.get_lto_opts()))
+
+    atos_lib.json_config(config_file).add_value(
+        "build_opts.common_profdir_prefix",
+        graph.common_relative_profdir_prefix())
 
     return 0
 

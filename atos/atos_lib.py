@@ -916,4 +916,15 @@ def get_input_source_files(args):
             inputs.append(args[i])
     return inputs
 
+def is_shared_lib_link(args):
+    """ Returns true if building a shared lib. """
+    args = atos_lib.expand_response_file(args)
+    i = 0
+    while i + 1 < len(args):
+        i = i + 1
+        m = re.search("^-shared$", args[i])
+        if m != None:
+            return True
+    return False
+
 # ####################################################################

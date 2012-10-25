@@ -34,11 +34,11 @@ $ROOT/bin/atos-opt -r -a -O2 -f
 
 
 # verify that build-force mode is supported
-$ROOT/bin/atos-build -f -a "-O2 --atos-debug"
+$ROOT/bin/atos-build -f -a "-O2"
 
 
 # verify that build-make mode is supported
-$ROOT/bin/atos-build -a "-O2 --atos-debug"
+$ROOT/bin/atos-build -a "-O2"
 
 
 # file-by-file exploration based on existing configs

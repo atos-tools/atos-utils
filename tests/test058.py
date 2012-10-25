@@ -98,13 +98,14 @@ assert os.path.isfile("sha1-c.O0")
 
 
 #
-# TODO
+# fdo + force mode (#180488)
 #
 
-if False:  # does not work for now (#180488)
-    status = utils.invoque("atos-build", args, options="-O2", gopts="-O2", force=True)
-    assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-generate")) == 2
-    assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-dir")) == 2
+nb_prof_gen = len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-generate"))
+nb_prof_dir = len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-dir"))
+status = utils.invoque("atos-build", args, options="-O2", gopts="-O2", force=True)
+assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-generate")) == nb_prof_gen + 1
+assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-dir")) == nb_prof_dir + 1
 
 
 

@@ -199,7 +199,8 @@ class DependencyGraph:
         """ Get the list of options that should be passed to linker
         in case of LTO build. """
         def is_lto_opt(arg):
-            return (arg.startswith('-m') or arg.startswith('-f'))
+            return (arg.startswith('-m') or arg.startswith('-f')
+                    or arg.startswith('-O'))
         optflags = []
         for node in self.dg.nodes():
             for attr, value in self.node_attributes()[node]:
@@ -255,12 +256,6 @@ class DependencyGraph:
                 compilers.add(value['command']['arg0'])
         return list(compilers)
 
-    def is_shared_link(self, value):
-        """ Returns true if linking a shared lib. """
-        return (
-            value['kind'] == "CCLD" and
-            SimpleCCInterpreter.is_shared_lib_link(value['command']['args']))
-
     def recipe_args(self, dependency):
         """ Fixup some options that may not support mixed .c and .o files. """
         # TODO: we may build a response file when detecting large lines
@@ -287,15 +282,6 @@ class DependencyGraph:
         mkfile.write(".SUFFIXES:\n")
         mkfile.write("all: ROOT\n")
         mkfile.write("FORCE:\n")
-        mkfile.write("ifeq ($(LTO),1)\n")
-        mkfile.write("LTOFLAGS=%s\n" % (' '.join(self.get_lto_opts())))
-        mkfile.write("endif\n")
-        mkfile.write("define profdir\n")
-        mkfile.write(
-            "$(if $(PROFILE_DIR),-fprofile-dir=$(PROFILE_DIR)/$(1),)\n")
-        mkfile.write("endef\n")
-        mkfile.write("ROOT: F_ACFLAGS=$(ACFLAGS)\n")
-        mkfile.write("ROOT: F_ALDFLAGS=$(ALDFLAGS)\n")
         # TODO: may include per target/file flags,
         #       a better solution should be implemented
         #mkfile.write("MAKEDIR:=$(dir $(MAKEFILE_LIST))\n")
@@ -309,23 +295,11 @@ class DependencyGraph:
                 if attr == "target":
                     target = value
                 if attr == "dependency":
-                    append = ""
-                    if value['kind'] == "CC":
-                        append = (" $(F_ACFLAGS) $(call profdir," +
-                                  self.get_profdir_suffix(value) + ")")
-                    if value['kind'] == "CCLD":
-                        append = (" $(LTOFLAGS) $(F_ACFLAGS) $(F_ALDFLAGS) " +
-                                  "$(call profdir," +
-                                  self.get_profdir_suffix(value) + ")")
-                        if self.is_shared_link(value):
-                            append = append + " $(ALDSOFLAGS)"
-                        else:
-                            append = append + " $(ALDMAINFLAGS)"
                     # TODO: handle quotes in command
                     recipe = (
                         "$(QUIET)cd " + value['command']['cwd'] +
                         " && $(ATOS_DRIVER) " +
-                        " ".join(self.recipe_args(value)) + append)
+                        " ".join(self.recipe_args(value)))
                     recipe = re.sub(r'(["\'])', r'\\\1', recipe)
             deps = []
             for dep in self.dg.neighbors(node):
@@ -503,19 +477,6 @@ class SimpleCCInterpreter:
         self.input_files = None
         self.output_files = None
         self.expanded_args = None
-
-    @staticmethod
-    def is_shared_lib_link(args):
-        """ Returns true if building a shared lib. """
-        # TODO, make this non static
-        args = atos_lib.expand_response_file(args)
-        i = 0
-        while i + 1 < len(args):
-            i = i + 1
-            m = re.search("^-shared$", args[i])
-            if m != None:
-                return True
-        return False
 
     def get_expanded_args(self):
         """ Returns the exanded args list, after response file expansion. """

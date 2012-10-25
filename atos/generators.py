@@ -235,7 +235,8 @@ def gen_flags_file(flags_file=None, base_flags=None, **kwargs):
 
 
 def gen_rnd_uniform_deps(
-    flags_file=None, optim_levels=None, base_flags=None, **kwargs):
+    flags_file=None, optim_levels=None, base_flags=None,
+    nbiters=None, **kwargs):
     """
     generate random meaningful combination of compiler flags using dependencies
     """
@@ -247,8 +248,11 @@ def gen_rnd_uniform_deps(
     optim_levels = (optim_levels or '').split(',')
     optim_levels = optim_flag_list.optim_flag.optlevel(optim_levels)
     base_flags = base_flags or ''
+    nbiters = nbiters and int(nbiters) or 100
+    if not nbiters: return
 
-    while True:
+    for ic in itertools.count():
+        if ic >= nbiters: break
         handled_flags = set()
         available_flags = flag_list.available_flags(base_flags)
         flags = base_flags or optim_levels.rand()
@@ -280,7 +284,7 @@ def _gen_variants(generator, optim_variants=None):
 
 
 def gen_staged(
-    optim_levels=None, optim_variants=None, nbiters_stage=None, fine_expl=None,
+    optim_levels=None, optim_variants=None, nbiters=None, fine_expl=None,
     configuration_path='atos-configurations', seed='0', expl_cookie=None,
     **kwargs):
     """
@@ -294,7 +298,7 @@ def gen_staged(
         functools.partial(os.path.join, configuration_path), flags_lists)
     flags_lists = filter(os.path.isfile, flags_lists)
     tradeoff_coeffs = [5, 1, 0.2]
-    nbiters_stage = nbiters_stage and int(nbiters_stage) or 100
+    nbiters = nbiters and int(nbiters) or 100
     random.seed(int(seed))
 
     # list of generators used during staged exploration
@@ -318,10 +322,10 @@ def gen_staged(
             gen_args = atos_lib.default_obj(**kwargs).update(
                 base_flags=flags, optim_levels=optim_levels, **args)
             generator = _gen_variants(
-                fct(**vars(gen_args)), optim_variants=variants)
+                fct(nbiters=nbiters, **vars(gen_args)),
+                optim_variants=variants)
             # exploration loop
             for ic in itertools.count():
-                if ic >= nbiters_stage: break
                 try: cfg = generator.next()
                 except StopIteration: break
                 run_cookie = atos_lib.compute_cookie(
@@ -349,7 +353,7 @@ def gen_staged(
 def gen_function_by_function(
     acf_plugin_path,
     prof_script, imgpath, csv_dir, hot_th, cold_opts='-Os noinline cold',
-    flags_file=None, nbiters_stage=None,
+    flags_file=None, per_func_nbiters=None,
     base_flags=None, base_variant=None, optim_variants=None,
     configuration_path='atos-configurations', expl_cookie=None, **kwargs):
     """
@@ -400,7 +404,7 @@ def gen_function_by_function(
     assert acf_plugin_path and os.path.isfile(acf_plugin_path)
 
     tradeoff_coeffs = [5, 1, 0.2]
-    nbiters_stage = nbiters_stage and int(nbiters_stage)
+    per_func_nbiters = per_func_nbiters and int(per_func_nbiters)
     optim_variants = base_variant and [base_variant] or (
         optim_variants or 'base').split(',')
     base_flags = base_flags or '-O2'
@@ -426,7 +430,7 @@ def gen_function_by_function(
     yield config(flags=acf_csv_opt(
             cold_func_flags, base_flags), variant=base_variant)
 
-    if not (flags_file or nbiters_stage): return
+    if not (flags_file or per_func_nbiters): return
 
     expl_cookie = expl_cookie or atos_lib.new_cookie()
 
@@ -473,7 +477,7 @@ def gen_function_by_function(
             else:  # else, perform a classic staged exploration
                 debug('gen_function_by_function: staged_exploration')
                 generator = gen_staged(
-                    nbiters_stage=nbiters_stage, expl_cookie=func_cookie,
+                    nbiters=per_func_nbiters, expl_cookie=func_cookie,
                     configuration_path=configuration_path, **kwargs)
 
             # run exploration loop on newly selected hot_func
@@ -521,7 +525,7 @@ def gen_function_by_function(
 
 def gen_file_by_file(
     prof_script, imgpath, csv_dir, hot_th, cold_opts="-Os",
-    flags_file=None, nbiters_stage=None,
+    flags_file=None, per_file_nbiters=None,
     base_flags=None, base_variant=None, optim_variants=None,
     configuration_path='atos-configurations', expl_cookie=None, **kwargs):
     """
@@ -542,7 +546,7 @@ def gen_file_by_file(
     # TODO: some code can now be factorized with gen_function_by_function
 
     tradeoff_coeffs = [5, 1, 0.2]
-    nbiters_stage = nbiters_stage and int(nbiters_stage)
+    per_file_nbiters = per_file_nbiters and int(per_file_nbiters)
     optim_variants = base_variant and [base_variant] or (
         optim_variants or 'base').split(',')
     base_flags = base_flags or '-O2'
@@ -574,7 +578,7 @@ def gen_file_by_file(
     yield config(
         flags=fbf_csv_opt(cold_obj_flags), variant=base_variant)
 
-    if not (flags_file or nbiters_stage): return
+    if not (flags_file or per_file_nbiters): return
 
     expl_cookie = expl_cookie or atos_lib.new_cookie()
 
@@ -603,7 +607,7 @@ def gen_file_by_file(
             else:  # else, perform a classic staged exploration
                 debug('gen_file_by_file: staged_exploration')
                 generator = gen_staged(
-                    nbiters_stage=nbiters_stage, expl_cookie=obj_cookie,
+                    nbiters=per_file_nbiters, expl_cookie=obj_cookie,
                     configuration_path=configuration_path, **kwargs)
 
             # run exploration loop on newly selected hot_obj
@@ -788,9 +792,6 @@ def run_exploration_loop(args=None, **kwargs):
         generator_ = gen_args.generator(**vars(gen_args))
 
         for ic in itertools.count():
-            if ic == gen_args.nbiters:
-                debug('max_iter reached - exploration stopped')
-                break
             try:
                 cfg = generator_.next()
             except StopIteration:

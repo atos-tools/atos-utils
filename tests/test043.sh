@@ -14,8 +14,20 @@ $ROOT/bin/atos-opt -r -a "-O2"
 
 $ROOT/bin/atos-opt -r -a "-O3"
 
+# default optim_levels are -Os,-O2,-O3
 $ROOT/bin/atos gen \
-    --seed=0 --nbiters=1 --optim-variants=base --generator=gen_base \
+    --seed=0 --optim-variants=base --generator=gen_base \
     OPT-O2 OPT-O3
 
-[ `cat atos-configurations/results.db | grep " time: " | wc -l` -eq 5 ]
+# Number of runs: 9
+# REF (atos-init) + OPT-O2 + OPT-O3 + |OPT-O2, OPT-O3| x | -Os -O2, -O3|
+[ `grep " REF: time:" atos-configurations/results.db | wc -l` -eq 1 ]
+[ `grep " OPT-O2: time:" atos-configurations/results.db | wc -l` -eq 1 ]
+[ `grep " OPT-O3: time:" atos-configurations/results.db | wc -l` -eq 1 ]
+[ `grep " OPT-O2-Os: time:" atos-configurations/results.db | wc -l` -eq 1 ]
+[ `grep " OPT-O2-O2: time:" atos-configurations/results.db | wc -l` -eq 1 ]
+[ `grep " OPT-O2-O3: time:" atos-configurations/results.db | wc -l` -eq 1 ]
+[ `grep " OPT-O3-Os: time:" atos-configurations/results.db | wc -l` -eq 1 ]
+[ `grep " OPT-O3-O2: time:" atos-configurations/results.db | wc -l` -eq 1 ]
+[ `grep " OPT-O3-O3: time:" atos-configurations/results.db | wc -l` -eq 1 ]
+[ `cat atos-configurations/results.db | grep " time: " | wc -l` -eq 9 ]

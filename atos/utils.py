@@ -415,6 +415,7 @@ def run_atos_init(args):
             process.commands.unlink('%s/build.sh' % args.configuration_path)
             process.commands.unlink('%s/build.force' % args.configuration_path)
             process.commands.unlink('%s/build.audit' % args.configuration_path)
+            process.commands.unlink('%s/config.json' % args.configuration_path)
         if args.run_script:
             message("Cleaning run audit...")
             process.commands.unlink('%s/run.sh' % args.configuration_path)

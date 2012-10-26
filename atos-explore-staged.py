@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #
 # Copyright (C) STMicroelectronics Ltd. 2012
 #
@@ -15,23 +16,15 @@
 # You should have received a copy of the GNU General Public License
 # v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
 #
+#
+# Usage: get usage with atos-explore-acf -h
+#
 
-import sys, os, signal
+import sys, os
+sys.path.insert(0, os.path.abspath(os.path.join(
+            os.path.dirname(__file__), '..', 'lib', 'atos', 'python')))
+from atos import arguments
+from atos import utils
 
-def check_python_version_():
-    try:
-        assert sys.hexversion >= 0x02060000
-    except:
-        print >>sys.stderr, \
-            'error: python version >= 2.6 is required by ATOS tools'
-        sys.exit(1)
-
-def handle_signal_(sig, sigframe):
-    print >>sys.stderr, "Interrupted by signal %d" % sig
-    sys.exit(128 + sig)
-
-# Fail early if python version is not supported
-check_python_version_()
-
-# Avoid KeyboardInterrupt backtrace in case of ^C
-if not os.getenv("ATOS_DEBUG"): signal.signal(signal.SIGINT, handle_signal_)
+args = arguments.parser("atos-explore-staged").parse_args()
+utils.execute("atos-explore-staged", args)

@@ -46,6 +46,7 @@ def parser(tool):
         "atos-explore-loop": parsers.atos_explore_loop,
         "atos-explore-optim": parsers.atos_explore_optim,
         "atos-explore-acf": parsers.atos_explore_acf,
+        "atos-explore-staged": parsers.atos_explore_staged,
         "atos-cookie": parsers.atos_cookie,
         "atos-lib": parsers.atos_lib,
         "atos-gen": parsers.atos_gen,
@@ -173,6 +174,21 @@ class parsers:
         sub = subs.add_parser("help", help="get full ATOS tools manual")
         parsers.atos_help(sub)
 
+        sub = subs.add_parser("init", help="initialize atos environment")
+        parsers.atos_init(sub)
+
+        sub = subs.add_parser("explore", help="exploration of common variants")
+        parsers.atos_explore(sub)
+
+        sub = subs.add_parser("explore-staged", help="full staged exploration")
+        parsers.atos_explore_staged(sub)
+
+        sub = subs.add_parser("explore-acf", help="fine grain exploration")
+        parsers.atos_explore_acf(sub)
+
+        sub = subs.add_parser("play", help="play an existing variant")
+        parsers.atos_play(sub)
+
         sub = subs.add_parser("audit",
                 help="audit and generate a build template "
                 "to be used by atos-build")
@@ -185,17 +201,8 @@ class parsers:
                 help="generate the build system from a previous build audit")
         parsers.atos_deps(sub)
 
-        sub = subs.add_parser("explore", help="exploration of common variants")
-        parsers.atos_explore(sub)
-
-        sub = subs.add_parser("init", help="initialize atos environment")
-        parsers.atos_init(sub)
-
         sub = subs.add_parser("opt", help="build and run a variant")
         parsers.atos_opt(sub)
-
-        sub = subs.add_parser("play", help="play an existing variant")
-        parsers.atos_play(sub)
 
         sub = subs.add_parser("profile", help="generate a profile build")
         parsers.atos_profile(sub)
@@ -253,6 +260,7 @@ class parsers:
         args.output(parser, default="build.audit")
         args.force(parser)
         args.debug(parser)
+        args.log_file(parser)
         args.quiet(parser)
         args.dryrun(parser)
         args.version(parser)
@@ -278,6 +286,7 @@ class parsers:
         args.genprofile(group)
         args.force(parser)
         args.debug(parser)
+        args.log_file(parser)
         args.quiet(parser)
         args.dryrun(parser)
         args.version(parser)
@@ -300,6 +309,7 @@ class parsers:
         args.force(parser)
         args.quiet(parser)
         args.debug(parser)
+        args.log_file(parser)
         args.dryrun(parser)
         args.version(parser)
         return parser
@@ -321,8 +331,11 @@ class parsers:
         args.results_script(parser)
         args.clean(parser)
         args.cookie(parser)
+        args.optim_levels(parser)
+        args.optim_variants(parser)
         args.reuse(parser)
         args.debug(parser)
+        args.log_file(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
         args.version(parser)
@@ -346,6 +359,7 @@ class parsers:
         args.cookie(parser)
         args.reuse(parser)
         args.debug(parser)
+        args.log_file(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
         args.version(parser)
@@ -369,6 +383,7 @@ class parsers:
         args.cookie(parser)
         args.reuse(parser)
         args.debug(parser)
+        args.log_file(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
         args.version(parser)
@@ -392,6 +407,7 @@ class parsers:
         args.cookie(parser)
         args.reuse(parser)
         args.debug(parser)
+        args.log_file(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
         args.version(parser)
@@ -422,6 +438,40 @@ class parsers:
         args.cookie(parser)
         args.reuse(parser)
         args.debug(parser)
+        args.log_file(parser)
+        args.quiet(parser)
+        args.dryrun(parser, ("--dryrun",))
+        args.version(parser)
+        return parser
+
+    @staticmethod
+    def atos_explore_staged(parser=None):
+        """ atos explore staged arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-explore-staged",
+                                        description="ATOS explore staged tool")
+
+        args.exes(parser)
+        args.configuration_path(parser)
+        args.build_script(parser)
+        args.force(parser)
+        args.run_script(parser)
+        args.nbruns(parser, default=1)
+        args.remote_path(parser)
+        args.results_script(parser)
+        args.prof_script(parser)
+        args.clean(parser)
+        args.cookie(parser)
+        args.reuse(parser)
+        args.seed(parser)
+        args.nbiters(parser)
+        args.per_func_nbiters(parser)
+        args.optim_levels(parser)
+        args.optim_variants(parser)
+        args.atos_explore.file_by_file(parser, ("--file-by-file",))
+        args.atos_explore.hot_threshold(parser)
+        args.debug(parser)
+        args.log_file(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
         args.version(parser)
@@ -444,7 +494,9 @@ class parsers:
         args.nbruns(parser, default=1)
         args.remote_path(parser)
         args.atos_init.no_run(parser)
+        args.cookie(parser)
         args.debug(parser)
+        args.log_file(parser)
         args.force(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
@@ -532,11 +584,14 @@ class parsers:
 
         args.configuration_path(parser)
         args.tradeoffs(parser)
+        args.cookie(parser)
         args.atos_lib.query(parser)
         args.atos_lib.targets(parser)
         args.atos_lib.groupname(parser)
         args.atos_lib.refid(parser)
         args.atos_lib.frontier(parser)
+        args.atos_lib.table(parser)
+        args.atos_lib.reverse(parser)
         return parser
 
     @staticmethod
@@ -629,6 +684,7 @@ class parsers:
         args.options(parser)
         args.cookie(parser)
         args.debug(parser)
+        args.log_file(parser)
         args.force(parser, ("--force",))
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
@@ -653,6 +709,7 @@ class parsers:
         args.cookie(parser)
         args.reuse(parser)
         args.debug(parser)
+        args.log_file(parser)
         args.quiet(parser)
         args.dryrun(parser)
         args.version(parser)
@@ -672,10 +729,14 @@ class parsers:
         args.atos_play.nbpoints(parser)
         args.atos_play.ref(parser)
         args.atos_play.localid(parser)
-        args.atos_play.printconfig(parser)
-        args.atos_play.printvariant(parser)
+        group = parser.add_mutually_exclusive_group()
+        args.atos_play.printconfig(group)
+        args.atos_play.printvariant(group)
+        args.atos_play.printtable(group)
+        args.atos_play.reverse(parser)
         args.id(parser)
         args.debug(parser)
+        args.log_file(parser)
         args.force(parser, ("--force",))
         args.quiet(parser)
         args.dryrun(parser)
@@ -694,6 +755,7 @@ class parsers:
         args.remote_path(parser, ("-b", "--remote_path"))
         args.options(parser, ("-g", "--options"))
         args.debug(parser)
+        args.log_file(parser)
         args.force(parser)
         args.quiet(parser)
         args.dryrun(parser)
@@ -713,6 +775,7 @@ class parsers:
         args.results_script(parser)
         args.force(parser)
         args.debug(parser)
+        args.log_file(parser)
         args.quiet(parser)
         args.dryrun(parser)
         args.version(parser)
@@ -740,6 +803,7 @@ class parsers:
         args.id(parser)
         args.atos_run.silent(parser)
         args.debug(parser)
+        args.log_file(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
         args.version(parser)
@@ -758,6 +822,7 @@ class parsers:
         args.genprofile(prof_group)
         args.options(parser)
         args.debug(parser)
+        args.log_file(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
         args.version(parser)
@@ -776,6 +841,7 @@ class parsers:
         args.nbruns(parser)
         args.cookie(parser)
         args.debug(parser)
+        args.log_file(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
         args.version(parser)
@@ -916,6 +982,13 @@ class args:
              dest="debug",
              help="debug mode",
              action="store_true")
+
+    @staticmethod
+    def log_file(parser, args=("--log-file",)):
+        parser.add_argument(
+            *args,
+             dest="log_file",
+             help="log file for debug mode, defaults to stderr")
 
     @staticmethod
     def exes(parser, args=("-e", "--executables")):
@@ -1211,6 +1284,14 @@ class args:
                  action="store_true")
 
         @staticmethod
+        def table(parser, args=("--table",)):
+            parser.add_argument(
+                *args,
+                 dest="table",
+                 help="output textual table form",
+                 action="store_true")
+
+        @staticmethod
         def remote_configuration_path(parser, args=("-R", "--C2")):
             parser.add_argument(
                 *args,
@@ -1365,6 +1446,21 @@ class args:
                                  dest="printvariant",
                                  action='store_true',
                                  help="print configuration variant id only")
+
+        @staticmethod
+        def printtable(parser, args=("-T", "--printtable")):
+            parser.add_argument(*args,
+                                 dest="printtable",
+                                 action='store_true',
+                                 help="print results table only")
+
+        @staticmethod
+        def reverse(parser, args=("-X", "--reverse")):
+            parser.add_argument(
+                *args,
+                 dest="reverse",
+                 help="swap line/columns of results table",
+                 action="store_true")
 
     class atos_run:
         """ Namespace for non common atos-run arguments. """

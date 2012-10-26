@@ -54,6 +54,7 @@ def invoque(tool, args, **kwargs):
         "atos-explore-loop": run_atos_explore_loop,
         "atos-explore-optim": run_atos_explore_optim,
         "atos-explore-acf": run_atos_explore_acf,
+        "atos-explore-staged": run_atos_explore_staged,
         "atos-cookie": run_atos_cookie,
         "atos-lib": run_atos_lib,
         "atos-gen": run_atos_gen,
@@ -208,7 +209,7 @@ def run_atos_build(args):
     logf.write("Building variant %s\n" % variant)
 
     driver_env = {}
-    compile_options = args.options and args.options.split() or []
+    compile_options = args.options != None and args.options.split() or []
     link_options = []
 
     atos_driver = os.getenv("ATOS_DRIVER")
@@ -222,9 +223,15 @@ def run_atos_build(args):
         opt_rebuild = int(open(build_force).read().strip())
 
     if args.gopts != None or args.uopts != None:
-        pvariant = atos_lib.variant_id(args.gopts or args.uopts or "")
+        pvariant = args.gopts if args.gopts != None else args.uopts
+        pvariant_id = atos_lib.pvariant_id(pvariant)
+        if args.uopts != None:
+            message("Using profile variant %s [%s]..." %
+                    (pvariant_id, atos_lib.hashid(pvariant_id)))
+            logf.write("Using profile variant %s [%s]\n" %
+                       (pvariant_id, atos_lib.hashid(pvariant_id)))
         profile_path = os.path.abspath(args.path) if args.path else \
-            atos_lib.get_profile_path(args.configuration_path, pvariant)
+            atos_lib.get_profile_path(args.configuration_path, pvariant_id)
 
     if args.gopts != None:
         process.commands.rmtree(profile_path)
@@ -382,28 +389,12 @@ def run_atos_deps(args):
 def run_atos_explore(args):
     """ ATOS explore tool implementation. """
 
-    invoque("atos-init", args)
+    status = invoque("atos-init", args)
+    if status != 0: return status
 
-    for opt_level in ['-O2', '-Os', '-O3']:
-        for opts in ['', '-flto', '-funroll-loops', '-flto -funroll-loops']:
-            options = ' '.join([opt_level, opts])
-            status = invoque("atos-build", args, options=options)
-            if status == 0:
-                invoque("atos-run", args, record=True, options=options)
-
-        status = invoque("atos-profile", args, options=opt_level)
-        if status != 0: continue  # skip profile variants
-
-        for opts in ['', '-flto', '-funroll-loops', '-flto -funroll-loops']:
-            options = ' '.join([opt_level, opts])
-            status = invoque(
-                "atos-build", args, uopts=opt_level, options=options)
-            if status == 0:
-                status = invoque("atos-run", args, record=True,
-                                 uopts=opt_level, options=options)
-
-    message("Completed.")
-    return 0
+    status = generators.run_exploration_loop(
+        args, generator=generators.gen_basic)
+    return status
 
 def run_atos_init(args):
     """ ATOS init tool implementation. """
@@ -527,10 +518,14 @@ def run_atos_lib(args):
         if args.ref: client.compute_speedups(args.ref)
 
         if args.tradeoffs:
-            atos_lib.pprint_list(
-                map(lambda x: client.tradeoff(x).dict(), args.tradeoffs))
+            results = map(lambda x: client.tradeoff(x).dict(), args.tradeoffs)
         else:
-            atos_lib.pprint_list(client.get_results(args.frontier))
+            results = client.get_results(args.frontier)
+
+        if args.table:
+            atos_lib.pprint_speedups(results, reverse=args.reverse)
+        else:
+            atos_lib.pprint_list(results)
         return 0
 
     elif args.subcmd_lib == "push":
@@ -724,28 +719,42 @@ def run_atos_gen(args):
 def run_atos_opt(args):
     """ ATOS opt tool implementation. """
 
+    def merge_cookies(entry):
+        updated = False
+        if args.cookies:
+            cookies = 'cookies' in entry and \
+                set(entry['cookies'].split(',')) or set()
+            opt_cookies = set(args.cookies)
+            if not opt_cookies.issubset(cookies):
+                cookies = ",".join(list(cookies.union(opt_cookies)))
+                entry.update({'cookies': cookies})
+                updated = True
+        return updated
+
     options = args.options or ""
-    uopts = args.uopts or (args.fdo and options or None)
+    uopts = args.uopts
+    if uopts == None and args.fdo: uopts = options
     if args.lto: options += " -flto"
 
     if args.reuse and args.profile:
-        variant = atos_lib.variant_id(options, None, uopts)
+        variant_id = atos_lib.variant_id(options, None, uopts)
         profile_path = atos_lib.get_oprofile_path(
-            args.configuration_path, variant)
+            args.configuration_path, variant_id)
         if os.path.isdir(profile_path):
             for f in os.listdir(profile_path):
                 filepath = os.path.join(profile_path, f)
                 if os.path.isfile(filepath):
                     process.commands.copyfile(filepath, f)
-            message("Skipping profile of variant %s..." % variant)
+            message("Skipping profile of variant %s..." % variant_id)
             return 0
 
     if args.reuse:  # do nothing if existing run results
-        variant = atos_lib.variant_id(options, None, uopts)
+        variant_id = atos_lib.variant_id(options, None, uopts)
         db = atos_lib.atos_db.db(args.configuration_path)
-        results = atos_lib.atos_client_db(db).query({"variant": variant})
+        results = atos_lib.atos_client_db(db).\
+            update_results({"variant": variant_id}, merge_cookies)
         if results:
-            message("Skipping variant %s..." % variant)
+            message("Skipping variant %s..." % variant_id)
             return 0
 
     if args.fdo:
@@ -801,8 +810,10 @@ def run_atos_play(args):
                 tradeoffs = [0.2]
             else:  # objective == "time"
                 tradeoffs = [5.0]
-        all_points = list(atos_lib.atos_client_results(
-            atos_db, [target_id]).results.values())
+        client = atos_lib.atos_client_results(
+            atos_db, [target_id])
+        client.compute_speedups('REF')
+        all_points = list(client.results.values())
         nbtr = max(1, args.nbpoints / len(tradeoffs))
         for tradeoff in tradeoffs:
             selected = atos_lib.atos_client_results.select_tradeoffs(
@@ -821,6 +832,9 @@ def run_atos_play(args):
     elif args.printconfig:
         for result in results:
             print atos_lib.atos_db_file.entry_str(result),
+        return 0
+    elif args.printtable:
+        atos_lib.pprint_speedups(results, reverse=args.reverse)
         return 0
     elif len(results) > 1:
         error('more than one build requested')
@@ -937,7 +951,7 @@ def run_atos_run(args):
             os.putenv("REMOTE_PROFILE_DIR", remote_path)
             os.putenv("LOCAL_PROFILE_DIR", atos_lib.get_profile_path(
                     args.configuration_path,
-                    atos_lib.variant_id(args.gopts)))
+                    atos_lib.pvariant_id(args.gopts)))
 
         run_script = os.path.join(args.configuration_path, "run.sh")
         run_script = args.command or [run_script]
@@ -1158,9 +1172,11 @@ def run_atos_explore_inline(args):
     flags_file = args.flags_file or os.path.join(
         args.configuration_path, "flags.inline.cfg")
 
-    status = generators.run_exploration_loop(
-        args, flags_file=flags_file, generator=generators.gen_rnd_uniform_deps)
-
+    generator = generators.gen_maxiters(
+        generators.gen_rnd_uniform_deps(flags_file=flags_file,
+                                        optim_levels=args.optim_levels),
+        args.nbiters)
+    status = generators.run_exploration_loop(args, generator=generator)
     return status
 
 def run_atos_explore_loop(args):
@@ -1169,9 +1185,11 @@ def run_atos_explore_loop(args):
     flags_file = args.flags_file or os.path.join(
         args.configuration_path, "flags.loop.cfg")
 
-    status = generators.run_exploration_loop(
-        args, flags_file=flags_file, generator=generators.gen_rnd_uniform_deps)
-
+    generator = generators.gen_maxiters(
+        generators.gen_rnd_uniform_deps(flags_file=flags_file,
+                                        optim_levels=args.optim_levels),
+        args.nbiters)
+    status = generators.run_exploration_loop(args, generator=generator)
     return status
 
 def run_atos_explore_optim(args):
@@ -1180,9 +1198,21 @@ def run_atos_explore_optim(args):
     flags_file = args.flags_file or os.path.join(
         args.configuration_path, "flags.optim.cfg")
 
-    status = generators.run_exploration_loop(
-        args, flags_file=flags_file, generator=generators.gen_rnd_uniform_deps)
+    generator = generators.gen_maxiters(
+        generators.gen_rnd_uniform_deps(flags_file=flags_file,
+                                        optim_levels=args.optim_levels),
+        args.nbiters)
+    status = generators.run_exploration_loop(args, generator=generator)
+    return status
 
+def run_atos_explore_staged(args):
+    """ ATOS explore-acf tool implementation. """
+
+    status = invoque("atos-init", args)
+    if status != 0: return status
+
+    status = generators.run_exploration_loop(
+        args, generator=generators.gen_staged)
     return status
 
 def run_atos_explore_acf(args):
@@ -1197,7 +1227,7 @@ def run_atos_explore_acf(args):
     prof_script = args.prof_script or os.path.join(
         args.configuration_path, "profile.sh")
     if not os.path.isfile(prof_script):
-        error("profiling script not specified")
+        error("profiling script not specified or missing: %s" % prof_script)
         return 1
 
     csv_dir = os.path.join(args.configuration_path, 'acf_csv_dir')

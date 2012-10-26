@@ -618,7 +618,7 @@ def query_config_values(configuration_path, query, default=None):
 
 def get_available_optim_variants(configuration_path):
     variants = ['lto', 'fdo', 'lipo']
-    enabled = []
+    enabled = ['base']
     for variant in variants:
         variant_enabled = query_config_values(
             configuration_path, "$.compilers[*].%s_enabled" % variant)

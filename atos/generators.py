@@ -352,7 +352,7 @@ def gen_staged(
 
 def gen_function_by_function(
     acf_plugin_path,
-    prof_script, imgpath, csv_dir, hot_th, cold_opts='-Os noinline cold',
+    imgpath, csv_dir, hot_th, cold_opts='-Os noinline cold',
     flags_file=None, per_func_nbiters=None,
     base_flags=None, base_variant=None, optim_variants=None,
     configuration_path='atos-configurations', expl_cookie=None, **kwargs):
@@ -410,18 +410,13 @@ def gen_function_by_function(
     base_flags = base_flags or '-O2'
     base_variant = base_variant or 'base'
 
-    # reference run
-    debug('gen_function_by_function: reference run')
-    yield config(flags=base_flags, variant=base_variant)
-
     # run profiling script
     debug('gen_function_by_function: profiling run')
-    status = process.system(prof_script)
-    if status: return
+    yield config(flags=base_flags, variant=base_variant, profile=True)
 
     # get cold functions list and initialize func_flags map
     cold_funcs, hot_funcs = profile.partition_symbols_loc(
-        imgpath=imgpath, hot_th=hot_th)
+        imgpath=imgpath, hot_th=hot_th, oprof_output="oprof.out")
     cold_func_flags = dict(
         map(lambda x: (x, filter_options(cold_opts)), cold_funcs))
 
@@ -447,10 +442,11 @@ def gen_function_by_function(
 
             # parse oprof.out for new hot functions list
             debug('gen_function_by_function: profiling run')
-            status = process.system(prof_script)
-            if status: return
+            yield config(
+                flags=acf_csv_opt(base_func_flags, base_flags),
+                variant=variant, profile=True)
             cold_funcs, hot_funcs = profile.partition_symbols_loc(
-                imgpath=imgpath, hot_th=hot_th)
+                imgpath=imgpath, hot_th=hot_th, oprof_output="oprof.out")
             debug('gen_function_by_function: hot funcs=' + str(hot_funcs))
 
             # discard already processed hot functions and select next hot_func
@@ -524,7 +520,7 @@ def gen_function_by_function(
                     coeff_func_flags, base_flags), variant=variant)
 
 def gen_file_by_file(
-    prof_script, imgpath, csv_dir, hot_th, cold_opts="-Os",
+    imgpath, csv_dir, hot_th, cold_opts="-Os",
     flags_file=None, per_file_nbiters=None,
     base_flags=None, base_variant=None, optim_variants=None,
     configuration_path='atos-configurations', expl_cookie=None, **kwargs):
@@ -560,14 +556,14 @@ def gen_file_by_file(
     fct_map = profile.read_function_to_file_map(mapfile.name)
     process.commands.unlink(mapfile.name)
 
-    # run profiling script and get sample counts
+    # run profiling script
     debug('gen_file_by_file: profiling run')
-    status = process.system(prof_script)
-    if status: return
+    yield config(flags=base_flags, variant=base_variant, profile=True)
 
     # partition function symbols, then object files
     cold_objs, hot_objs = profile.partition_object_files(
-        imgpath=imgpath, hot_th=hot_th, fct_map=fct_map)
+        imgpath=imgpath, hot_th=hot_th, fct_map=fct_map,
+        oprof_output="oprof.out")
     debug('gen_file_by_file: hot objects: ' + str(hot_objs))
     debug('gen_file_by_file: cold objects: ' + str(cold_objs))
 
@@ -588,9 +584,29 @@ def gen_file_by_file(
         debug('gen_file_by_file: exploration - ' + variant)
 
         base_obj_flags = dict(cold_obj_flags)
+        hot_objs_processed = []
         obj_to_cookie, cookie_to_flags = {}, {}
 
-        for curr_hot_obj in hot_objs:  # loop on hot object files
+        while True:  # loop on hot object files
+
+            # parse oprof.out for new hot objects list
+            debug('gen_file_by_file: profiling run')
+            yield config(
+                flags=fbf_csv_opt(base_obj_flags),
+                variant=variant, profile=True)
+            cold_objs, hot_objs = profile.partition_object_files(
+                imgpath=imgpath, hot_th=hot_th, fct_map=fct_map,
+                oprof_output="oprof.out")
+            debug('gen_file_by_file: hot objs=' + str(hot_objs))
+
+            # discard already processed hot functions and select next hot_func
+            hot_objs_unprocessed = [
+                f for f in hot_objs if not f in hot_objs_processed]
+            debug('gen_file_by_file: hot_objs_unprocessed= ' + str(
+                    hot_objs_unprocessed))
+            if not hot_objs_unprocessed: break
+            curr_hot_obj = hot_objs_unprocessed.pop()
+            hot_objs_processed.append(curr_hot_obj)
             debug('gen_file_by_file: hot_obj: ' + str(curr_hot_obj))
 
             # keep track of current hot_obj results
@@ -734,7 +750,7 @@ def run_exploration_loop(args=None, **kwargs):
             only_frontier=True, objects=True)
         return map(lambda x: x.variant, results)
 
-    def step(flags, variant, cookies=None):
+    def step(flags, variant, cookies=None, profile=None):
         debug('step: %s, %s' % (variant, flags))
         # add flags from base_variant_configuration
         flags = (base_flags and (base_flags + ' ') or '') + flags
@@ -752,7 +768,7 @@ def run_exploration_loop(args=None, **kwargs):
         if cookies: run_cookies.extend(cookies)
         utils.invoque(
             "atos-opt", opt_args, options=flags, fdo=fdo, lto=lto,
-            record=True, cookies=run_cookies)
+            record=True, profile=profile, cookies=run_cookies)
         # print debug info
         results = get_run_results(cookie=run_cookie, **vars(gen_args))
         debug('step-> ' + str(results))
@@ -794,9 +810,12 @@ def run_exploration_loop(args=None, **kwargs):
                 debug('stopiteration - exploration stopped')
                 break
             if cfg.variant is not None:
-                step(flags=cfg.flags, variant=cfg.variant, cookies=cfg.cookies)
+                step(
+                    flags=cfg.flags, variant=cfg.variant,
+                    cookies=cfg.cookies, profile=cfg.profile)
             else:
                 variants = base_variant and [base_variant] or optim_variants
                 for variant in variants:
-                    step(flags=cfg.flags, variant=variant, cookies=cfg.cookies)
+                    step(flags=cfg.flags, variant=variant,
+                         cookies=cfg.cookies, profile=cfg.profile)
     return 0

@@ -250,7 +250,7 @@ def get_file(debug_info, vma):
 # ####################################################################
 
 
-def get_samples(imgpath=None, oprof_output="./oprof.out"):
+def get_samples(imgpath, oprof_output):
     is_binary = not os.path.isdir(imgpath.split(':')[0])
     binary, bin_path = '', ''
     if is_binary: binary = imgpath
@@ -328,8 +328,9 @@ def get_localized_symbols_partition(hot_cold_partition, debug_infos):
 # ####################################################################
 
 
-def partition_symbols_loc(imgpath, hot_th):
-    samples, binary_list = get_samples(imgpath=imgpath)
+def partition_symbols_loc(imgpath, hot_th, oprof_output):
+    samples, binary_list = get_samples(
+        imgpath=imgpath, oprof_output=oprof_output)
     if not samples: return [], []
     debug_infos = create_debug_info_lists(samples, binary_list)
     hot_cold_partition = partition_symbols(samples, int(hot_th))
@@ -338,8 +339,9 @@ def partition_symbols_loc(imgpath, hot_th):
     return cold_list, hot_list
 
 
-def partition_object_files(imgpath, hot_th, fct_map):
-    samples, _ = get_samples(imgpath=imgpath)
+def partition_object_files(imgpath, hot_th, fct_map, oprof_output):
+    samples, _ = get_samples(
+        imgpath=imgpath, oprof_output=oprof_output)
     if not samples: return [], []
     hot_cold_partition = partition_symbols(samples, int(hot_th))
     cold_list, hot_list = partition_objects(hot_cold_partition, fct_map)

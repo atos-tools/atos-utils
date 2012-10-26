@@ -12,7 +12,7 @@ gcc -c $SRCDIR/examples/sha1-c/sha1.c -o sha1.o
 gcc -o sha1-c sha.o sha1.o
 EOF
 
-cat > ./oprof.out <<EOF
+cat > ./oprof.in <<EOF
 vma              samples   %       linenr_info                    image_name symbol_name
 0000000000400b93 353965337 52.2748 (no localization information)  sha1-c  SHA1ProcessMessageBlock
 0000000000400a86 260243456 38.4336 (no localization information)  sha1-c  SHA1Input
@@ -25,7 +25,7 @@ EOF
 
 $ROOT/bin/atos-init \
     -r "$SRCDIR/examples/sha1-c/run.sh" \
-    -b "sh ./build.sh" -p "/bin/true"
+    -b "sh ./build.sh" -p "/bin/cp oprof.in oprof.out"
 
 
 

@@ -49,6 +49,7 @@ def invoque(tool, args, **kwargs):
         "atos-raudit": run_atos_raudit,
         "atos-run": run_atos_run,
         "atos-replay": run_atos_replay,
+        "atos-run-profile": run_atos_run_profile,
         "atos-explore-inline": run_atos_explore_inline,
         "atos-explore-loop": run_atos_explore_loop,
         "atos-explore-optim": run_atos_explore_optim,
@@ -420,6 +421,7 @@ def run_atos_init(args):
             process.commands.unlink('%s/run.audit' % args.configuration_path)
         message("Cleaning all profiles...")
         process.commands.rmtree('%s/profiles' % args.configuration_path)
+        process.commands.rmtree('%s/oprofiles' % args.configuration_path)
         message("Cleaning all results...")
         process.commands.unlink('%s/results.db' % args.configuration_path)
 
@@ -717,6 +719,17 @@ def run_atos_opt(args):
     uopts = args.uopts or (args.fdo and options or None)
     if args.lto: options += " -flto"
 
+    if args.reuse and args.profile:
+        variant = atos_lib.variant_id(options, None, uopts)
+        profile_path = atos_lib.get_oprofile_path(
+            args.configuration_path, variant)
+        if os.path.isdir(profile_path):
+            profile_file = "oprof.out"
+            process.commands.copyfile(
+                os.path.join(profile_path, profile_file), profile_file)
+            message("Skipping profile of variant %s..." % variant)
+            return 0
+
     if args.reuse:  # do nothing if existing run results
         variant = atos_lib.variant_id(options, None, uopts)
         db = atos_lib.atos_db.db(args.configuration_path)
@@ -731,6 +744,11 @@ def run_atos_opt(args):
 
     status = invoque("atos-build", args, options=options, uopts=uopts)
     if status: return status
+
+    if args.profile:
+        status = invoque(
+            "atos-run-profile", args, options=options, uopts=uopts)
+        return status
 
     status = invoque("atos-run", args, options=options, uopts=uopts)
     return status
@@ -842,6 +860,39 @@ def run_atos_raudit(args):
 
     status = process.system(args.command, print_output=True)
     return status
+
+def run_atos_run_profile(args):
+    """ ATOS run profile tool implementation. """
+
+    variant = atos_lib.variant_id(
+        args.options, args.gopts, args.uopts)
+
+    profile_file = "oprof.out"
+    profile_path = atos_lib.get_oprofile_path(
+        args.configuration_path, variant)
+
+    process.commands.unlink(profile_file)
+    process.commands.rmtree(profile_path)
+
+    message("Running profile variant %s..." % variant)
+
+    prof_script = os.path.join(args.configuration_path, "profile.sh")
+    prof_script = process.cmdline2list(args.prof_script) or [prof_script]
+
+    status, output = process.system(
+        atos_lib.timeout_command() + prof_script,
+        get_output=True, output_stderr=True)
+
+    if status or not os.path.isfile(profile_file):
+        message("FAILURE while running profile variant %s..." % variant)
+        return 2
+
+    process.commands.mkdir(profile_path)
+    process.commands.copyfile(
+        profile_file, os.path.join(profile_path, profile_file))
+
+    debug("SUCCESS running profile variant %s\n" % variant)
+    return 0
 
 def run_atos_run(args):
     """ ATOS run tool implementation. """

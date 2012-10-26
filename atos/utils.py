@@ -76,14 +76,22 @@ def invoque(tool, args, **kwargs):
                 arguments.parser(tool)._actions))
         arg_list, remainder = [tool], []
         for key, value in tool_args(tool, args, **kwargs).__dict__.items():
-            if (key == 'dryrun' or key not in dest_to_opt.keys()
-                or value == dest_to_opt[key].default):
+            if key == 'dryrun' or key not in dest_to_opt.keys():
                 continue
+            default = dest_to_opt[key].default
+            if value == default: continue
+            # default can be False while action.default is None
+            if default is False and not bool(value): continue
             if not dest_to_opt[key].option_strings:
                 remainder.extend(value)
+                continue
+            option_string = dest_to_opt[key].option_strings[-1]
+            if isinstance(value, list):
+                map(lambda x: arg_list.extend([option_string, x]), value)
             else:
-                arg_list.append(dest_to_opt[key].option_strings[-1])
+                arg_list.append(option_string)
                 if dest_to_opt[key].nargs != 0: arg_list.append(str(value))
+
         process.debug(process.list2cmdline(arg_list + remainder))
         return 0
 

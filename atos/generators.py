@@ -552,7 +552,8 @@ def gen_file_by_file(
     debug('gen_file_by_file: function to object map')
     mapfile = tempfile.NamedTemporaryFile(delete=False)
     mapfile.close()
-    yield config(flags="-O2 -g --atos-fctmap=%s" % (mapfile.name))
+    yield config(
+        flags="-O2 -g --atos-fctmap=%s" % (mapfile.name), variant='base')
     fct_map = profile.read_function_to_file_map(mapfile.name)
     process.commands.unlink(mapfile.name)
 
@@ -775,7 +776,10 @@ def run_exploration_loop(args=None, **kwargs):
 
     gen_args = dict(vars(args or {}).items() + kwargs.items())
     gen_args = atos_lib.default_obj(**gen_args)
-    optim_variants = (gen_args.optim_variants or 'base').split(',')
+    # run on all available variants by default
+    optim_variants = (
+        gen_args.optim_variants and gen_args.optim_variants.split(',')
+        or atos_lib.get_available_optim_variants(gen_args.configuration_path))
     base_variants = gen_args.base_variants or [None]
     base_variants = sum(map(
             lambda x: (  # replace 'frontier' by correspondind ids

@@ -59,4 +59,17 @@ results = atos_lib.results_filter_cookie(
 assert len(results) == 2
 
 
+# atos-explore-*
+
+cookies = [atos_lib.new_cookie(), atos_lib.new_cookie(), atos_lib.new_cookie()]
+expl_cookie = atos_lib.unique_cookie(cookies)
+
+status = utils.invoque(
+    "atos-explore-inline", args, nbiters=10, optim_variants='base', cookies=cookies)
+assert status == 0
+results_expl = atos_lib.results_filter_cookie(
+    common.atos_results(), expl_cookie)
+results_ck1 = atos_lib.results_filter_cookie(
+    common.atos_results(), cookies[0])
+assert len(results_expl) and len(results_expl) == len(results_ck1)
 

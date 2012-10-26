@@ -248,7 +248,7 @@ def gen_rnd_uniform_deps(
     optim_levels = (optim_levels or '').split(',')
     optim_levels = optim_flag_list.optim_flag.optlevel(optim_levels)
     base_flags = base_flags or ''
-    nbiters = int(nbiters) if nbiters else 100
+    nbiters = int(nbiters) if nbiters != None else 100
     if not nbiters: return
 
     for ic in itertools.count():
@@ -298,7 +298,7 @@ def gen_staged(
         functools.partial(os.path.join, configuration_path), flags_lists)
     flags_lists = filter(os.path.isfile, flags_lists)
     tradeoff_coeffs = [5, 1, 0.2]
-    nbiters = int(nbiters) if nbiters else 100
+    nbiters = int(nbiters) if nbiters != None else 100
     random.seed(int(seed))
 
     # list of generators used during staged exploration
@@ -307,12 +307,13 @@ def gen_staged(
         generators += [(gen_rnd_uniform_deps, {'flags_file': flags_file})]
 
     expl_cookie = expl_cookie or atos_lib.new_cookie()
+    stage_cookies = []
     cookie_to_cfg = {}
     selected_configs = [(None, optim_variants)]
 
     for (fct, args) in generators:
-        stage_cookie = atos_lib.compute_cookie(
-            expl_cookie, fct.func_name, args)
+        stage_cookies.append(atos_lib.compute_cookie(
+                expl_cookie, fct.func_name, args))
 
         # run exploration on previously selected configs
         for (flags, variants) in selected_configs:
@@ -325,20 +326,20 @@ def gen_staged(
                 fct(nbiters=nbiters, **vars(gen_args)),
                 optim_variants=variants)
             # exploration loop
-            for ic in itertools.count():
+            while True:
                 try: cfg = generator.next()
                 except StopIteration: break
                 run_cookie = atos_lib.compute_cookie(
-                    stage_cookie, cfg.flags, cfg.variant)
+                    stage_cookies[-1], cfg.flags, cfg.variant)
                 cookie_to_cfg[run_cookie] = (cfg.flags, cfg.variant)
                 yield cfg.extend_cookies(
-                    [expl_cookie, stage_cookie, run_cookie])
+                    [expl_cookie, stage_cookies[-1], run_cookie])
 
         # select tradeoffs configs (flags, variants) for next exploration
-        selected_results = get_run_tradeoffs(
-            tradeoff_coeffs, stage_cookie, configuration_path)
+        selected_results = get_run_tradeoffs(tradeoff_coeffs, stage_cookies,
+                                             configuration_path)
         selected_cookies = sum(map(
-            lambda x: x.cookies.split(','), selected_results), [])
+                lambda x: x.cookies.split(','), selected_results), [])
         selected_configs = filter(
             bool, map(lambda x: cookie_to_cfg.get(x, None), selected_cookies))
         debug('gen_staged: tradeoffs for next stages: ' + str(
@@ -346,7 +347,7 @@ def gen_staged(
 
     # get best tradeoffs for the whole exploration
     tradeoffs = get_run_tradeoffs(
-        tradeoff_coeffs, expl_cookie, configuration_path)
+        tradeoff_coeffs, [expl_cookie], configuration_path)
     debug('gen_staged: final tradeoffs: %s' % (str(tradeoffs)))
 
 
@@ -494,7 +495,7 @@ def gen_function_by_function(
             # explore other funcs with best perf flags for current func
             perf_coeff = sorted(tradeoff_coeffs)[-1]
             perf_results = get_run_tradeoffs(
-                [perf_coeff], func_cookie, configuration_path)
+                [perf_coeff], [func_cookie], configuration_path)
             perf_cookies = sum(map(
                     lambda x: x.cookies.split(','), perf_results), [])
             perf_flags = filter(
@@ -509,7 +510,7 @@ def gen_function_by_function(
             coeff_func_flags = dict(base_func_flags.items())
             for hot_func in func_to_cookie.keys():
                 coeff_results = get_run_tradeoffs(
-                    [coeff], func_to_cookie[hot_func], configuration_path)
+                    [coeff], [func_to_cookie[hot_func]], configuration_path)
                 coeff_cookies = sum(map(
                         lambda x: x.cookies.split(','), coeff_results), [])
                 coeff_flags = filter(bool, map(
@@ -639,7 +640,7 @@ def gen_file_by_file(
             # explore other objs with best perf flags for current obj
             perf_coeff = sorted(tradeoff_coeffs)[-1]
             perf_results = get_run_tradeoffs(
-                [perf_coeff], obj_cookie, configuration_path)
+                [perf_coeff], [obj_cookie], configuration_path)
             perf_cookies = sum(map(
                     lambda x: x.cookies.split(','), perf_results), [])
             perf_flags = filter(
@@ -654,7 +655,7 @@ def gen_file_by_file(
             coeff_obj_flags = dict(base_obj_flags.items())
             for hot_obj in obj_to_cookie.keys():
                 coeff_results = get_run_tradeoffs(
-                    [coeff], obj_to_cookie[hot_obj], configuration_path)
+                    [coeff], [obj_to_cookie[hot_obj]], configuration_path)
                 coeff_cookies = sum(map(
                         lambda x: x.cookies.split(','), coeff_results), [])
                 coeff_flags = filter(bool, map(
@@ -669,9 +670,9 @@ def gen_file_by_file(
 
 
 def get_run_tradeoffs(
-    tradeoffs, cookie=None, configuration_path=None):
+    tradeoffs, cookies=None, configuration_path=None):
     results = get_run_results(
-        cookie=cookie, configuration_path=configuration_path)
+        matches=cookies, configuration_path=configuration_path)
     fselect = atos_lib.atos_client_results.select_tradeoff
     results = map(
         lambda x: fselect(results, perf_size_ratio=x), tradeoffs)
@@ -680,10 +681,10 @@ def get_run_tradeoffs(
     return results
 
 
-def get_run_results(cookie, configuration_path, **kwargs):
+def get_run_results(matches, configuration_path, **kwargs):
     db = atos_lib.atos_db.db(configuration_path)
-    results = atos_lib.results_filter_cookie(
-        db.get_results(), cookie)
+    results = atos_lib.results_filter_cookies(
+        db.get_results(), matches)
     # filter out failures
     results = filter(
         lambda x: "FAILURE" not in x.values(), results)
@@ -766,7 +767,7 @@ def run_exploration_loop(args=None, **kwargs):
             "atos-opt", opt_args, options=flags, fdo=fdo, lto=lto,
             record=True, profile=profile, cookies=run_cookies)
         # print debug info
-        results = get_run_results(cookie=run_cookie, **vars(gen_args))
+        results = get_run_results(matches=[run_cookie], **vars(gen_args))
         debug('step-> ' + str(results))
 
     gen_args = dict(vars(args or {}).items() + kwargs.items())

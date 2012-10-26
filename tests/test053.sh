@@ -79,7 +79,7 @@ nb_played=`$ROOT/bin/atos lib query | wc -l`
 
 # 2 hot functions for default treshold hot=70, cold=30
 # -> only 3 new runs without list of flags to explore (base, ref)
-[ "`expr $nb_played`" == "6" ]
+[ "`expr $nb_played`" == "5" ]
 
 echo "-O2 -finline-functions" > flags.txt
 echo "-O3 -funroll-loops"     >> flags.txt

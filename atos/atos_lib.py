@@ -599,6 +599,11 @@ def get_profile_path(configuration_path, variant):
     return os.path.abspath(os.path.join(configuration_path,
                                         "profiles", hashid(variant)))
 
+def get_oprofile_path(configuration_path, variant):
+    """ Returns the local oprofile path for the given variant. """
+    return os.path.abspath(
+        os.path.join(configuration_path, "oprofiles", hashid(variant)))
+
 def get_config_value(configuration_path, key, default=None):
     config_file = os.path.join(configuration_path, 'config.json')
     if not os.path.isfile(config_file): return default

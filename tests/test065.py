@@ -83,20 +83,20 @@ with open("oprof.out", "w") as oprof:
 
 # testing function partitionning
 
-cold_funcs, hot_funcs = profile.partition_symbols_loc(".", 0)
+cold_funcs, hot_funcs = profile.partition_symbols_loc(".", 0, "oprof.out")
 assert len(cold_funcs) == 7 and not hot_funcs
-cold_funcs, hot_funcs = profile.partition_symbols_loc(".", 100)
+cold_funcs, hot_funcs = profile.partition_symbols_loc(".", 100, "oprof.out")
 assert len(hot_funcs) == 7 and not cold_funcs
 # todo: no reliable debug infos, need to actually run the profile
 # assert all(map(lambda (s, l): l is None, hot_funcs))
 
 utils.invoque("atos-build", args, options="-O2 -g")
-cold_funcs, hot_funcs = profile.partition_symbols_loc(".", 100)
+cold_funcs, hot_funcs = profile.partition_symbols_loc(".", 100, "oprof.out")
 assert len(hot_funcs) == 7 and not cold_funcs
 # todo: check that debugs infos are correctly set
 # we must give right addresses for that in oprof.out
 
-cold_funcs, hot_funcs = profile.partition_symbols_loc(".", 70)
+cold_funcs, hot_funcs = profile.partition_symbols_loc(".", 70, "oprof.out")
 assert len(hot_funcs) == 2 and len(cold_funcs) == 5
 hot_funcs_syms = map(lambda (s, l): s, hot_funcs)
 assert 'SHA1ProcessMessageBlock' in hot_funcs_syms
@@ -225,8 +225,9 @@ gen = generators.gen_function_by_function(
     csv_dir="csv2", hot_th="70", cold_opts="-Os",
     base_flags="-O2", flags_file="flags.txt")
 cfg = generated_configs(gen, cfg_to_res=cfg_result)
-# ref + cold + (2 funcs * 3 flags) + 3 tradeoffs
-assert len(cfg) == 11
+cfg = filter(lambda x: not x.profile, cfg)
+# cold + (2 funcs * (3 flags) + 3 tradeoffs
+assert len(cfg) == 10
 
 # best-perf tradeoff composition (flags1, flags1)
 size_cfg = cfg[-3]
@@ -260,9 +261,10 @@ gen = generators.gen_function_by_function(
     csv_dir="csv", hot_th="70", cold_opts="-Os",
     base_flags="-O2", per_func_nbiters="100", optim_levels="-O2")
 cfg = generated_configs(gen, cfg_to_res=cfg_result)
-# ref + cold + 3 final tradeoffs
+cfg = filter(lambda x: not x.profile, cfg)
+# cold + 3 final tradeoffs
 # + (2 funcs * (1 base + inline * 100 + loop * 100 * 2 tradeoffs)
-assert len(cfg) == 607
+assert len(cfg) == 606
 
 # best-perf tradeoff composition (flags1, flags1)
 size_cfg = cfg[-3]

@@ -41,6 +41,7 @@ def parser(tool):
         "atos-raudit": parsers.atos_raudit,
         "atos-run": parsers.atos_run,
         "atos-replay": parsers.atos_replay,
+        "atos-run-profile": parsers.atos_run_profile,
         "atos-explore-inline": parsers.atos_explore_inline,
         "atos-explore-loop": parsers.atos_explore_loop,
         "atos-explore-optim": parsers.atos_explore_optim,
@@ -212,6 +213,9 @@ class parsers:
 
         sub = subs.add_parser("cookie", help="generate a cookie")
         parsers.atos_cookie(sub)
+
+        sub = subs.add_parser("run-profile", help=argparse.SUPPRESS)
+        parsers.atos_run_profile(sub)
 
         sub = subs.add_parser("lib", help=argparse.SUPPRESS)
         parsers.atos_lib(sub)
@@ -616,6 +620,7 @@ class parsers:
         args.configuration_path(parser)
         args.atos_opt.lto(parser)
         args.atos_opt.fdo(parser)
+        args.atos_opt.profile(parser)
         args.reuse(parser)
         args.record(parser)
         args.remote_path(parser, ("-b", "--remote_path"))
@@ -734,6 +739,24 @@ class parsers:
         args.output(parser)
         args.id(parser)
         args.atos_run.silent(parser)
+        args.debug(parser)
+        args.quiet(parser)
+        args.dryrun(parser, ("--dryrun",))
+        args.version(parser)
+        return parser
+
+    @staticmethod
+    def atos_run_profile(parser=None):
+        """ atos run profile arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-run-profile",
+                                        description="ATOS run profile tool")
+        args.command(parser)
+        args.configuration_path(parser)
+        prof_group = parser.add_mutually_exclusive_group()
+        args.useprofile(prof_group)
+        args.genprofile(prof_group)
+        args.options(parser)
         args.debug(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
@@ -1288,6 +1311,13 @@ class args:
                                  dest="fdo",
                                  action='store_true',
                                  help="use feedback directed optimizations")
+
+        @staticmethod
+        def profile(parser, args=("--profile",)):
+            parser.add_argument(*args,
+                                 dest="profile",
+                                 action='store_true',
+                                 help="run in profiling mode")
 
     class atos_play:
         """ Namespace for non common atos-play arguments. """

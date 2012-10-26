@@ -203,7 +203,6 @@ add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tre
 
 static struct cl_optimization loc_save_options, *save_options;
 
-/* TO DO: Handle options taking multiple parameters */
 static void
 add_lto_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
 
@@ -212,6 +211,7 @@ add_lto_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
     if (!strcmp("optimize", acf_entry->opt_attr)) {
 	char opt_name[128];
 	int opt_value = 1;
+	char *opt_str = NULL;
 	size_t opt_index;
 
 	strcpy(opt_name, "-f");
@@ -219,8 +219,16 @@ add_lto_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
 	    opt_value = 0;
 	    strcat(opt_name, acf_entry->opt_args[0].av.str_arg + strlen("no-"));
 	}
-	else
-	    strcat(opt_name, acf_entry->opt_args[0].av.str_arg);
+	else {
+	  if ((opt_str = strchr(acf_entry->opt_args[0].av.str_arg, '=')) != NULL) {
+	    opt_str ++;
+	    opt_value = atoi(opt_str);
+	  }
+	  else
+	    opt_value = 1;
+	  strcat(opt_name, acf_entry->opt_args[0].av.str_arg);
+	}
+
 	opt_index = find_opt(opt_name+1, CL_OPTIMIZATION);
 
 #ifdef USE_GLOBAL_PARAMS
@@ -252,11 +260,11 @@ add_lto_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
 	{
 	    struct cl_option_handlers handlers;
 	    set_default_handlers (&handlers);
-	    handle_generated_option(&global_options, &global_options_set, opt_index, NULL, opt_value,
+	    handle_generated_option(&global_options, &global_options_set, opt_index, opt_str, opt_value,
 				    CL_OPTIMIZATION, DK_UNSPECIFIED, UNKNOWN_LOCATION, &handlers, NULL);
 	}
 #else
-	set_option(&cl_options[opt_index], opt_value, NULL);
+	set_option(&cl_options[opt_index], opt_value, opt_str == NULL ? NULL : xstrdup(opt_str));
 #endif
     }
 

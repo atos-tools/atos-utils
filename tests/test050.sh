@@ -28,4 +28,7 @@ $ROOT/bin/atos-init \
 
     $ROOT/bin/atos-audit --dryrun gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c
 
+    $ROOT/bin/atos-explore-inline --dryrun -M 10
+
+
 ) 2>&1

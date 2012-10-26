@@ -70,7 +70,7 @@ def setup(kwargs):
     global _quiet, _debug
     _debug = kwargs.get('debug', False) or os.getenv("ATOS_DEBUG")
     dryrun = kwargs.get('dryrun', False) or os.getenv("ATOS_DRYRUN")
-    log_file = kwargs.get('log', None) or os.getenv("ATOS_DEBUG_FILE")
+    log_file = kwargs.get('log_file', None) or os.getenv("ATOS_DEBUG_FILE")
     _quiet = kwargs.get('quiet', False)
 
     log_fmt = (

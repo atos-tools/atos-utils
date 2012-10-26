@@ -65,7 +65,7 @@ def cleanup(*args):
 sys.exit = __builtin__.exit = sys.excepthook = cleanup
 
 # register for catcheable signals
-signal.signal(signal.SIGINT, cleanup)
+if not os.getenv("ATOS_DEBUG"): signal.signal(signal.SIGINT, cleanup)
 signal.signal(signal.SIGQUIT, cleanup)
 signal.signal(signal.SIGTERM, cleanup)
 

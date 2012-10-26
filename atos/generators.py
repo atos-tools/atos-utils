@@ -206,82 +206,282 @@ class config(atos_lib.default_obj):
 # ####################################################################
 
 
-def gen_base(optim_levels=None, **kwargs):
+class config_generator:
     """
-    generate basic configurations
+    Abstract class for optimization configuraton generation.
     """
-    debug('gen_base')
+    class UnimplementedException(Exception):
+        pass
 
-    optim_levels = (
-        optim_levels and optim_levels.split(',') or [])
+    def generate(self):
+        raise self.UnimplementedException()
 
-    for optlevel in optim_levels:
-        yield config(flags=optlevel)
+    @staticmethod
+    def test():
+        generator = config_generator()
+        try:
+            generator.generate()
+        except config_generator.UnimplementedException:
+            return
+        except:
+            assert(False)
+        assert(False)
 
-
-def gen_flags_file(flags_file=None, base_flags=None, **kwargs):
+class gen_config(config_generator):
     """
-    generate configurations based on flag lists from a file
+    Generates a single configuration.
     """
-    debug('gen_flags_file')
+    def __init__(self, **config_kwargs):
+        self.config_ = config(**config_kwargs)
 
-    assert flags_file and os.path.isfile(flags_file)
-    base_flags = base_flags and (base_flags + ' ') or ''
+    def generate(self):
+        debug('gen_config: %s' % str(self.config_))
+        yield self.config_
 
-    for line in open(flags_file):
-        line = line.split('#', 1)[0].strip()
-        if not line: continue
-        yield config(flags=(base_flags + line))
+    @staticmethod
+    def test():
+        idx = 0
+        for cfg in gen_config(variant='base').generate():
+            idx += 1
+        assert(idx == 1)
+        assert(len(cfg.__dict__.items()) == 1)
+        assert(cfg.variant == 'base')
 
-
-def gen_rnd_uniform_deps(
-    flags_file=None, optim_levels=None, base_flags=None,
-    nbiters=None, **kwargs):
+class gen_maxiters(config_generator):
     """
-    generate random meaningful combination of compiler flags using dependencies
+    Limits the generator to a fixed number of iterations.
     """
-    debug('gen_rnd_uniform_deps [%s]' % str(flags_file))
+    def __init__(self, parent=None, maxiters=None,
+                 **ignored_kwargs):
+        self.maxiters_ = maxiters
+        self.parent_ = parent or gen_config()
+        assert(isinstance(self.parent_, config_generator))
 
-    assert flags_file and os.path.isfile(flags_file)
-    flag_list = optim_flag_list(flags_file)
-    if not flag_list.flag_list: return  # empty list case
-    optim_levels = (optim_levels or '').split(',')
-    optim_levels = optim_flag_list.optim_flag.optlevel(optim_levels)
-    base_flags = base_flags or ''
-    nbiters = int(nbiters) if nbiters != None else 100
-    if not nbiters: return
+    def generate(self):
+        debug('gen_maxiters: %s' % str(self.maxiters_))
+        generator = self.parent_.generate()
+        for ic in itertools.count():
+            if self.maxiters_ != None and ic >= self.maxiters_:
+                break
+            try:
+                yield generator.next()
+            except StopIteration:
+                break
 
-    for ic in itertools.count():
-        if ic >= nbiters: break
-        handled_flags = set()
-        available_flags = flag_list.available_flags(base_flags)
-        flags = base_flags or optim_levels.rand()
-        while True:
-            for f in sorted(list(available_flags), key=str):
-                if random.randint(0, 1): continue
-                flags += ' ' + f.rand()
-            handled_flags |= available_flags
-            available_flags = (
-                flag_list.available_flags(base_flags + ' ' + flags)
-                - handled_flags)
-            if not available_flags: break
-        yield config(flags=flags)
+    @staticmethod
+    def test():
+        idx = 0
+        generator = gen_maxiters(gen_config(), 0)
+        for cfg in generator.generate():
+            idx += 1
+        assert(idx == 0)
+        generator = gen_maxiters(gen_config())
+        for cfg in generator.generate():
+            idx += 1
+        assert(idx == 1)
+        generator = gen_maxiters(gen_config(), 1)
+        for cfg in generator.generate():
+            idx += 1
+        assert(idx == 2)
 
-
-def _gen_variants(generator, optim_variants=None):
+class gen_base(config_generator):
     """
-    generate variants (base, fdo, lto, ...) for generated flags
+    Generates basic build configurations from the
+    optim_levels given in the constructor.
     """
+    def __init__(self, parent=None, optim_levels=None,
+                 **ignored_kwargs):
+        self.optim_levels_ = (
+            optim_levels and optim_levels.split(',') or [])
+        self.parent_ = parent or gen_config()
+        assert(isinstance(self.parent_, config_generator))
 
-    optim_variants = (
-        optim_variants and optim_variants.split(',') or [None])
+    def generate(self):
+        debug('gen_base: %s' % str(self.optim_levels_))
+        for cfg in self.parent_.generate():
+            if not self.optim_levels_:
+                yield cfg
+            else:
+                for level in self.optim_levels_:
+                    yield cfg.copy().update(flags=level)
 
-    while True:
-        try: cfg = generator.next()
-        except StopIteration: break
-        for variant in optim_variants:
-            yield cfg.copy().update(variant=variant)
+    @staticmethod
+    def test():
+        variant = 'base'
+        levels = '-O1,-O2,-O3'
+        expected_flgs = levels.split(',')
+        for cfg in gen_base(gen_config(variant=variant),
+                            levels).generate():
+            print str(cfg)
+            assert(cfg.flags == expected_flgs.pop(0))
+            assert(cfg.variant == variant)
 
+class gen_variants(config_generator):
+    """
+    Generates build configurations from the
+    optim_variants and given in the constructor.
+    """
+    def __init__(self, parent=None, optim_variants=None,
+                 **ignored_kwargs):
+        self.optim_variants_ = (
+            optim_variants and optim_variants.split(',') or [])
+        self.parent_ = parent or gen_config()
+        assert(isinstance(self.parent_, config_generator))
+
+    def generate(self):
+        debug('gen_variants: %s' % str(self.optim_variants_))
+        for cfg in self.parent_.generate():
+            if not self.optim_variants_:
+                yield cfg
+            else:
+                for variant in self.optim_variants_:
+                    yield cfg.copy().update(variant=variant)
+
+    @staticmethod
+    def test():
+        levels = '-O1,-O2,-O3'
+        variants = 'base,lto,fdo,fdo+lto'
+        expected_flgs = levels.split(',')
+        expected_vars = variants.split(',')
+        generator = gen_variants(gen_base(gen_config(), levels), variants)
+        idx = 0
+        for cfg in generator.generate():
+            print str(cfg)
+            assert(cfg.flags == expected_flgs[idx / len(expected_vars)])
+            assert(cfg.variant == expected_vars[idx % len(expected_vars)])
+            idx += 1
+
+class gen_flags_file(config_generator):
+    """
+    Generate configurations based on flag lists from a file.
+    Flags are appended to the child generator flags.
+    """
+    def __init__(self, parent=None, flags_file=None,
+                 **ignored_kwargs):
+        assert flags_file and os.path.isfile(flags_file)
+        self.flags_file_ = flags_file
+        self.parent_ = parent or gen_config()
+        assert(isinstance(self.parent_, config_generator))
+
+    def generate(self):
+        debug('gen_flags_file')
+        flags_list = []
+        with open(self.flags_file_) as f:
+            for line in f:
+                flags = line.split('#', 1)[0].strip()
+                if flags: flags_list.append(flags)
+        for cfg in self.parent_.generate():
+            if not flags_list:
+                yield cfg
+            else:
+                for flags in flags_list:
+                    if cfg.flags: flags = " ".join([cfg.flags, flags])
+                    yield cfg.copy().update(flags=flags)
+
+    @staticmethod
+    def test():
+        flags = ['-O2', '-O2 -funroll-loops']
+        tmpf = tempfile.NamedTemporaryFile(delete=False)
+        tmpname = tmpf.name
+        try:
+            tmpf.write("# Test flags\n")
+            for flag in flags:
+                tmpf.write(" %s # test flags\n" % flag)
+            tmpf.close()
+            generator = gen_flags_file(gen_config(variant='base'),
+                                       tmpname)
+            for cfg in generator.generate():
+                print str(cfg)
+                assert(cfg.flags == flags.pop(0))
+                assert(cfg.variant == 'base')
+        finally:
+            os.unlink(tmpname)
+
+class gen_rnd_uniform_deps(config_generator):
+    """
+    Generate random meaningful combination of flags using dependencies.
+    """
+    def __init__(self, parent=None, flags_file=None, optim_levels=None,
+                 **ignored_kwargs):
+        assert flags_file and os.path.isfile(flags_file)
+        self.flags_file_ = flags_file
+        self.optim_levels_ = (optim_levels or '').split(',')
+        self.optim_levels_ = optim_flag_list.optim_flag.optlevel(
+            self.optim_levels_)
+        self.parent_ = parent or gen_config()
+        assert(isinstance(self.parent_, config_generator))
+
+    def generate(self):
+        debug('gen_rnd_uniform_deps [%s]' % str(self.flags_file_))
+        flag_list = optim_flag_list(self.flags_file_)
+
+        for cfg in self.parent_.generate():
+            if not flag_list.flag_list:
+                # empty list case
+                yield cfg
+            else:
+                base_flags = cfg.flags or ''
+                while True:
+                    handled_flags = set()
+                    available_flags = flag_list.available_flags(base_flags)
+                    flags = base_flags or self.optim_levels_.rand()
+                    while True:
+                        for f in sorted(list(available_flags), key=str):
+                            if random.randint(0, 1): continue
+                            flags += ' ' + f.rand()
+                        handled_flags |= available_flags
+                        available_flags = (
+                            flag_list.available_flags(base_flags + ' ' + flags)
+                            - handled_flags)
+                        if not available_flags: break
+                    yield cfg.copy().update(flags=flags)
+
+    @staticmethod
+    def test():
+        random.seed(0)
+        # Expected results with seed(0)
+        expected_flgs = [
+            '-O2 --param inline-call-cost=18 -fno-inline-small',
+            '-O2 --param inline-call-cost=20',
+            '-O2 --param inline-call-cost=25',
+            '-O2',
+            '-O2 -fno-inline-small',
+            '-O2 -finline-small']
+        levels = '-O2'
+        tmpf = tempfile.NamedTemporaryFile(delete=False)
+        tmpname = tmpf.name
+        try:
+            tmpf.write("# Test dependency flags\n")
+            tmpf.write("-finline-small|-fno-inline-small\n")
+            tmpf.write("--param inline-call-cost=[4..32]\n")
+            tmpf.write("-finline: --param inline-call-cost=\n")
+            tmpf.write("-finline: -finline-small\n")
+            tmpf.write("=> -O2\n")
+            tmpf.write("-O2 => -finline\n")
+            tmpf.close()
+            generator = gen_maxiters(
+                gen_rnd_uniform_deps(gen_config(),
+                                     tmpname,
+                                     levels),
+                6)
+            for cfg in generator.generate():
+                print str(cfg)
+                #assert(cfg.flags == expected_flgs.pop(0))
+        finally:
+            os.unlink(tmpname)
+
+def gen_basic(optim_levels=None, optim_variants=None, expl_cookie=None,
+    **kwargs):
+    """
+    Perform basic exploration on flags and variants.
+    """
+    debug('gen_basic')
+    generator = gen_variants(
+        gen_base(optim_levels=optim_levels),
+        optim_variants=optim_variants)
+
+    for cfg in generator.generate():
+        yield cfg.extend_cookies([expl_cookie])
 
 def gen_staged(
     optim_levels=None, optim_variants=None, nbiters=None, fine_expl=None,
@@ -302,33 +502,37 @@ def gen_staged(
     random.seed(int(seed))
 
     # list of generators used during staged exploration
-    generators = [(gen_base, {})]
+    generators = [(gen_base,
+                   {'optim_levels': optim_levels},
+                   None)]
     for flags_file in flags_lists:
-        generators += [(gen_rnd_uniform_deps, {'flags_file': flags_file})]
+        generators += [(gen_rnd_uniform_deps,
+                        {'optim_levels': optim_levels,
+                         'flags_file': flags_file},
+                        nbiters)]
 
     expl_cookie = expl_cookie or atos_lib.new_cookie()
     stage_cookies = []
     cookie_to_cfg = {}
     selected_configs = [(None, optim_variants)]
 
-    for (fct, args) in generators:
+    for (stage_generator, args, maxiters) in generators:
         stage_cookies.append(atos_lib.compute_cookie(
-                expl_cookie, fct.func_name, args))
+                expl_cookie, stage_generator.__name__, args))
 
         # run exploration on previously selected configs
         for (flags, variants) in selected_configs:
-            debug('gen_staged: generator %s' % str((fct, flags, variants)))
+            debug('gen_staged: generator %s' %
+                  str((stage_generator.__name__, flags, variants)))
 
-            # build generator for next exploration
-            gen_args = atos_lib.default_obj(**kwargs).update(
-                base_flags=flags, optim_levels=optim_levels, **args)
-            generator = _gen_variants(
-                fct(nbiters=nbiters, **vars(gen_args)),
+            generator = gen_variants(
+                gen_maxiters(
+                    stage_generator(
+                        gen_config(flags=flags),
+                        **args),
+                    maxiters=maxiters),
                 optim_variants=variants)
-            # exploration loop
-            while True:
-                try: cfg = generator.next()
-                except StopIteration: break
+            for cfg in generator.generate():
                 run_cookie = atos_lib.compute_cookie(
                     stage_cookies[-1], cfg.flags, cfg.variant)
                 cookie_to_cfg[run_cookie] = (cfg.flags, cfg.variant)
@@ -405,7 +609,7 @@ def gen_function_by_function(
     assert acf_plugin_path and os.path.isfile(acf_plugin_path)
 
     tradeoff_coeffs = [5, 1, 0.2]
-    per_func_nbiters = per_func_nbiters and int(per_func_nbiters)
+    per_func_nbiters = int(per_func_nbiters) if per_func_nbiters != None else 0
     optim_variants = base_variant and [base_variant] or (
         optim_variants or 'base').split(',')
     base_flags = base_flags or '-O2'
@@ -468,9 +672,7 @@ def gen_function_by_function(
             # create the generator that will be used for curr_hot_func expl
             if flags_file:  # if requested, explore on flag list
                 debug('gen_function_by_function: file: %s ' % (flags_file))
-                generator = gen_flags_file(
-                    flags_file=flags_file, expl_cookie=func_cookie,
-                    configuration_path=configuration_path, **kwargs)
+                generator = gen_flags_file(flags_file=flags_file).generate()
             else:  # else, perform a classic staged exploration
                 debug('gen_function_by_function: staged_exploration')
                 generator = gen_staged(
@@ -543,7 +745,7 @@ def gen_file_by_file(
     # TODO: some code can now be factorized with gen_function_by_function
 
     tradeoff_coeffs = [5, 1, 0.2]
-    per_file_nbiters = per_file_nbiters and int(per_file_nbiters)
+    per_file_nbiters = int(per_file_nbiters) if per_file_nbiters != None else 0
     optim_variants = base_variant and [base_variant] or (
         optim_variants or 'base').split(',')
     base_flags = base_flags or '-O2'
@@ -613,9 +815,7 @@ def gen_file_by_file(
             # create the generator that will be used for curr_hot_obj expl
             if flags_file:  # if requested, explore on flags list
                 debug('gen_file_by_file: file: %s ' % (flags_file))
-                generator = gen_flags_file(
-                    flags_file=flags_file, expl_cookie=obj_cookie,
-                    configuration_path=configuration_path, **kwargs)
+                generator = gen_flags_file(flags_file=flags_file).generate()
             else:  # else, perform a classic staged exploration
                 debug('gen_file_by_file: staged_exploration')
                 generator = gen_staged(
@@ -747,6 +947,8 @@ def run_exploration_loop(args=None, **kwargs):
         return map(lambda x: x.variant, results)
 
     def step(flags, variant, cookies=None, profile=None):
+        flags = flags or ''
+        variant = variant or 'base'
         debug('step: %s, %s' % (variant, flags))
         # add flags from base_variant_configuration
         flags = (base_flags and (base_flags + ' ') or '') + flags
@@ -803,7 +1005,12 @@ def run_exploration_loop(args=None, **kwargs):
         gen_args.update(
             base_flags=base_flags, base_variant=base_variant,
             expl_cookie=expl_cookie)
-        generator_ = gen_args.generator(**vars(gen_args))
+        if isinstance(gen_args.generator, config_generator):
+            generator_ = gen_args.generator.generate()
+        else:
+            generator_ = gen_args.generator(**vars(gen_args))
+            if isinstance(generator_, config_generator):
+                generator_ = generator_.generate()
 
         for ic in itertools.count():
             try:
@@ -821,3 +1028,12 @@ def run_exploration_loop(args=None, **kwargs):
                     step(flags=cfg.flags, variant=variant,
                          cookies=cfg.cookies, profile=cfg.profile)
     return 0
+
+if __name__ == "__main__":
+    config_generator.test()
+    gen_config.test()
+    gen_maxiters.test()
+    gen_base.test()
+    gen_variants.test()
+    gen_flags_file.test()
+    gen_rnd_uniform_deps.test()

@@ -52,6 +52,12 @@ class atos_db():
     #   ex: get('$[?(@.target="x" && @.variant="REF")]'
     def get_results(self, query=None): raise NotImplementedError
 
+    # update the results returned by query with the update_fct
+    #   returns the list of results
+    #   update_fct must return True if an entry is actually updated
+    def update_results(self, query=None, update_fct=None):
+        raise NotImplementedError
+
     #
     @staticmethod
     def db(atos_configuration):
@@ -102,11 +108,25 @@ class atos_db_file(atos_db):
         self.results.extend(entries)
         self._write_entries(entries)
 
+    def update_results(self, query=None, update_fct=None):
+        assert(update_fct != None)
+        entries = self.get_results(query)
+        updated = False
+        for entry in entries:
+            if update_fct(entry): updated = True
+        if updated: self._write_all()
+        return entries
+
     def _write_entries(self, entries):
         entries_str = ''.join(
             atos_db_file.entry_str(entry) for entry in entries)
         with process.open_locked(self.db_file, 'a') as db_file:
             db_file.write(entries_str)
+
+    def _write_all(self):
+        with process.open_locked(self.db_file, 'w') as db_file:
+            for entry in self.results:
+                db_file.write(atos_db_file.entry_str(entry))
 
     def _read_results(self):
         if not os.path.exists(self.db_file): return
@@ -168,6 +188,21 @@ class atos_db_json(atos_db):
             self.results.extend(entries)
             json.dump(self.results, db_file, sort_keys=True, indent=4)
 
+    def update_results(self, query=None, update_fct=None):
+        assert(update_fct != None)
+        with process.open_locked(self.db_file, 'r+') as db_file:
+            self.results = json.load(db_file)
+            entries = self.get_results(query)
+            updated = False
+            for entry in entries:
+                if update_fct(entry): updated = True
+            if updated:
+                db_file.seek(0)
+                db_file.truncate()
+                json.dump(self.results, db_file, sort_keys=True,
+                          indent=4)
+        return entries
+
     def _read_results(self):
         self.results = json.load(process.open_locked(self.db_file))
 
@@ -197,6 +232,20 @@ class atos_db_pickle(atos_db):
             db_file.truncate()
             self.results.extend(entries)
             pickle.dump(self.results, db_file, -1)
+
+    def update_results(self, query=None, update_fct=None):
+        assert(update_fct != None)
+        with process.open_locked(self.db_file, 'r+') as db_file:
+            self.results = pickle.load(db_file)
+            entries = self.get_results(query)
+            updated = False
+            for entry in entries:
+                if update_fct(entry): updated = True
+            if updated:
+                db_file.seek(0)
+                db_file.truncate()
+                pickle.dump(self.results, db_file, -1)
+        return entries
 
     def _read_results(self):
         self.results = pickle.load(process.open_locked(self.db_file))
@@ -401,6 +450,9 @@ class atos_client_db():
         self.db.add_results([entry])
         return True, entry
 
+    def update_results(self, query, update_fct):
+        return self.db.update_results(query, update_fct)
+
     @staticmethod
     def db_load(inf):
         return json.load(inf)
@@ -578,16 +630,23 @@ def hashid(s):
     return md5sum(s + '\n')
 
 def variant_id(options=None, gopts=None, uopts=None):
-    if not (options or gopts or uopts):
+    if options == None: options = ""
+    if options == "" and gopts == None and uopts == None:
         return "REF"
     res_variant = "OPT"
-    if gopts:
+    if gopts != None:
         res_variant += "-fprofile-generate" + "".join(gopts.split())
-    elif uopts:
+    elif uopts != None:
         res_variant += "-fprofile-use" + "".join(uopts.split())
     else: pass
-    if options:
+    if options != None:
         res_variant += "".join(options.split())
+    return res_variant
+
+def pvariant_id(popts=None):
+    assert(popts != None)
+    res_variant = "OPT"
+    res_variant += "-fprofile-generate" + "".join(popts.split())
     return res_variant
 
 def target_id(executables):
@@ -734,6 +793,18 @@ def pprint_table(results, out=None, reverse=False):
             print >>out, fmt % ('%s' % (results[y][x])),
             if x < xmax - 1: print >>out, '|',
         print >>out, ''
+
+def pprint_speedups(results, out=None, reverse=False):
+    """
+    Simple print of speedup and size reductions as a table.
+    """
+    table = [['speedup', 'sizered', 'target', 'variant_id']]
+    for result in results:
+        table += [['%+6.2f%%' % (result['speedup'] * 100),
+                   '%+6.2f%%' % (result['sizered'] * 100),
+                   result['target'],
+                   hashid(result['variant'])]]
+    pprint_table(table, out, reverse)
 
 def execpath(file):
     """

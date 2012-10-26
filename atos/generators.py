@@ -248,7 +248,7 @@ def gen_rnd_uniform_deps(
     optim_levels = (optim_levels or '').split(',')
     optim_levels = optim_flag_list.optim_flag.optlevel(optim_levels)
     base_flags = base_flags or ''
-    nbiters = nbiters and int(nbiters) or 100
+    nbiters = int(nbiters) if nbiters else 100
     if not nbiters: return
 
     for ic in itertools.count():
@@ -298,7 +298,7 @@ def gen_staged(
         functools.partial(os.path.join, configuration_path), flags_lists)
     flags_lists = filter(os.path.isfile, flags_lists)
     tradeoff_coeffs = [5, 1, 0.2]
-    nbiters = nbiters and int(nbiters) or 100
+    nbiters = int(nbiters) if nbiters else 100
     random.seed(int(seed))
 
     # list of generators used during staged exploration
@@ -775,6 +775,7 @@ def run_exploration_loop(args=None, **kwargs):
     optim_variants = (
         gen_args.optim_variants and gen_args.optim_variants.split(',')
         or atos_lib.get_available_optim_variants(gen_args.configuration_path))
+    gen_args.optim_variants = ','.join(optim_variants)
     base_variants = gen_args.base_variants or [None]
     base_variants = sum(map(
             lambda x: (  # replace 'frontier' by correspondind ids

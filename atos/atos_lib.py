@@ -664,6 +664,13 @@ def results_filter_cookie(results, cookie):
     return filter(
         lambda x: cookie in x.get('cookies', '').split(','), results)
 
+def results_filter_cookies(results, cookies):
+    if not cookies: return results
+    return filter(
+        lambda x: not set(cookies).isdisjoint(
+            set(x.get('cookies', '').split(','))),
+        results)
+
 def new_cookie():
     """ Generates a new universally unique cookie. """
     return compute_cookie(os.uname(), os.getpid(), os.getppid(), time.time())

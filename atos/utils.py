@@ -724,9 +724,10 @@ def run_atos_opt(args):
         profile_path = atos_lib.get_oprofile_path(
             args.configuration_path, variant)
         if os.path.isdir(profile_path):
-            profile_file = "oprof.out"
-            process.commands.copyfile(
-                os.path.join(profile_path, profile_file), profile_file)
+            for f in os.listdir(profile_path):
+                filepath = os.path.join(profile_path, f)
+                if os.path.isfile(filepath):
+                    process.commands.copyfile(filepath, f)
             message("Skipping profile of variant %s..." % variant)
             return 0
 
@@ -867,6 +868,9 @@ def run_atos_run_profile(args):
     variant = atos_lib.variant_id(
         args.options, args.gopts, args.uopts)
 
+    # TODO: define default map & profile filenames in globals.py
+    #  and add an option for fctmap file handling
+    fctmap_file = "fctmap.out"
     profile_file = "oprof.out"
     profile_path = atos_lib.get_oprofile_path(
         args.configuration_path, variant)
@@ -890,6 +894,9 @@ def run_atos_run_profile(args):
     process.commands.mkdir(profile_path)
     process.commands.copyfile(
         profile_file, os.path.join(profile_path, profile_file))
+    if os.path.isfile(fctmap_file):
+        process.commands.copyfile(
+            fctmap_file, os.path.join(profile_path, fctmap_file))
 
     debug("SUCCESS running profile variant %s\n" % variant)
     return 0

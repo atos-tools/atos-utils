@@ -193,7 +193,8 @@ def run_atos_build(args):
     logf = atos_lib.open_atos_log_file(
         args.configuration_path, "build", variant)
 
-    message("Building variant %s..." % variant)
+    message("Building variant %s [%s]..." %
+            (variant, atos_lib.hashid(variant)))
     logf.write("Building variant %s\n" % variant)
 
     make_options = []
@@ -947,7 +948,8 @@ def run_atos_run(args):
 
     logf = atos_lib.open_atos_log_file(
         args.configuration_path, "run", variant)
-    message("Running variant " + variant + "...")
+    message("Running variant %s [%s]..." %
+            (variant, atos_lib.hashid(variant)))
 
     failure = False
 

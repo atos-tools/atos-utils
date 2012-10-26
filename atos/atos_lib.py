@@ -648,10 +648,20 @@ def results_filter_cookie(results, cookie):
         lambda x: cookie in x.get('cookies', '').split(','), results)
 
 def new_cookie():
+    """ Generates a new universally unique cookie. """
     return compute_cookie(os.uname(), os.getpid(), os.getppid(), time.time())
 
 def compute_cookie(*args):
+    """ Generate a cookie from the given list. """
     return sha1sum(str(args))
+
+def unique_cookie(cookies):
+    """ Generate a unique or new cookie from the given list of cookies. """
+    if cookies:
+        assert(isinstance(cookies, list))
+        cookie = cookies[0] if len(cookies) == 1 else compute_cookie(*cookies)
+    else: cookie = new_cookie()
+    return cookie
 
 def result_entry(d):
     try:

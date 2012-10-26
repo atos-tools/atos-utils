@@ -53,6 +53,7 @@ def invoque(tool, args, **kwargs):
         "atos-explore-loop": run_atos_explore_loop,
         "atos-explore-optim": run_atos_explore_optim,
         "atos-explore-acf": run_atos_explore_acf,
+        "atos-cookie": run_atos_cookie,
         "atos-lib": run_atos_lib,
         "atos-gen": run_atos_gen,
         }
@@ -95,7 +96,7 @@ def invoque(tool, args, **kwargs):
     # depends upon the global setting
     assert(kwargs.get('dryrun') == None)
 
-    dryrun = args.dryrun and not _at_toplevel
+    dryrun = 'dryrun' in vars(args) and args.dryrun and not _at_toplevel
     _at_toplevel = False
     if dryrun:
         status = dryrun_tool(tool, args, **kwargs)
@@ -1059,6 +1060,11 @@ def run_atos_replay(args):
              record=True, options=result_conf, uopts=result_uconf,
              command=[args.run_script])
 
+    return 0
+
+def run_atos_cookie(args):
+    """ ATOS cookie generator implementation. """
+    print atos_lib.unique_cookie(args.cookies)
     return 0
 
 def run_atos_explore_inline(args):

@@ -773,11 +773,7 @@ def run_exploration_loop(args=None, **kwargs):
         return 1
 
     # exploration cookie (used for keeping configs already ran)
-    if gen_args.cookies:
-        if len(gen_args.cookies) > 1:
-            expl_cookie = atos_lib.compute_cookie(gen_args.cookies)
-        else: expl_cookie = gen_args.cookies[0]
-    else: expl_cookie = atos_lib.new_cookie()
+    expl_cookie = atos_lib.unique_cookie(gen_args.cookies)
 
     message("Identifier of exploration: " + str(expl_cookie))
 

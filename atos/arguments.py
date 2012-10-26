@@ -45,6 +45,7 @@ def parser(tool):
         "atos-explore-loop": parsers.atos_explore_loop,
         "atos-explore-optim": parsers.atos_explore_optim,
         "atos-explore-acf": parsers.atos_explore_acf,
+        "atos-cookie": parsers.atos_cookie,
         "atos-lib": parsers.atos_lib,
         "atos-gen": parsers.atos_gen,
         }
@@ -176,26 +177,26 @@ class parsers:
                 "to be used by atos-build")
         parsers.atos_audit(sub)
 
-        sub = subs.add_parser("build", help="build system")
+        sub = subs.add_parser("build", help="build a variant")
         parsers.atos_build(sub)
 
         sub = subs.add_parser("dep",
                 help="generate the build system from a previous build audit")
         parsers.atos_deps(sub)
 
-        sub = subs.add_parser("explore", help="do the exploration of options")
+        sub = subs.add_parser("explore", help="exploration of common variants")
         parsers.atos_explore(sub)
 
         sub = subs.add_parser("init", help="initialize atos environment")
         parsers.atos_init(sub)
 
-        sub = subs.add_parser("opt", help="opt system")
+        sub = subs.add_parser("opt", help="build and run a variant")
         parsers.atos_opt(sub)
 
-        sub = subs.add_parser("play", help="play tool")
+        sub = subs.add_parser("play", help="play an existing variant")
         parsers.atos_play(sub)
 
-        sub = subs.add_parser("profile", help="generate the profile build")
+        sub = subs.add_parser("profile", help="generate a profile build")
         parsers.atos_profile(sub)
 
         sub = subs.add_parser("raudit",
@@ -203,12 +204,14 @@ class parsers:
                  "to be used by atos-build")
         parsers.atos_raudit(sub)
 
-        sub = subs.add_parser("run",
-                 help="run system")
+        sub = subs.add_parser("run", help="run a variant")
         parsers.atos_run(sub)
 
-        sub = subs.add_parser("replay", help="replay system")
+        sub = subs.add_parser("replay", help="replay a session")
         parsers.atos_replay(sub)
+
+        sub = subs.add_parser("cookie", help="generate a cookie")
+        parsers.atos_cookie(sub)
 
         sub = subs.add_parser("lib", help=argparse.SUPPRESS)
         parsers.atos_lib(sub)
@@ -755,6 +758,17 @@ class parsers:
         args.version(parser)
         return parser
 
+    @staticmethod
+    def atos_cookie(parser=None):
+        """ atos cookie arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-cookie",
+                                        description="ATOS cookie generator")
+        args.cookie(parser)
+        args.version(parser)
+        return parser
+
+
 class args:
     """
     Container namespace for single options declarators.
@@ -935,7 +949,7 @@ class args:
         parser.add_argument(*args,
                              dest="cookies",
                              action='append',
-                             help=argparse.SUPPRESS)
+                             help="use to identify results")
 
     @staticmethod
     def tradeoffs(parser, args=("-s", "--tradeoffs")):

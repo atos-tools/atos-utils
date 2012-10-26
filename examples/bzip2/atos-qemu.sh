@@ -7,7 +7,8 @@ case $arch in
 esac
 
 QEMU=${QEMU:-qemu-$arch}
-QEMU_INST="$QEMU -count-ifetch"
+TCG_PLUGIN=${QEMU_PLUGIN+"-tcg-plugin ${QEMU_PLUGIN}"}
+QEMU_INST="$QEMU -count-ifetch ${TCG_PLUGIN}"
 
 cleanup() {
     local code=$?

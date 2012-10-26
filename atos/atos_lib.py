@@ -616,6 +616,18 @@ def query_config_values(configuration_path, query, default=None):
     client = json_config(config_file)
     return client.query(strtoquery(query)) or default
 
+def get_available_optim_variants(configuration_path):
+    variants = ['lto', 'fdo', 'lipo']
+    enabled = []
+    for variant in variants:
+        variant_enabled = query_config_values(
+            configuration_path, "$.compilers[*].%s_enabled" % variant)
+        variant_enabled = variant_enabled and all(map(int, variant_enabled))
+        if variant_enabled: enabled.append(variant)
+    if 'fdo' in enabled and 'lto' in enabled:
+        enabled.append('fdo+lto')
+    return enabled
+
 def strtodict(s):
     # 'aa:xx,bb:yy' -> {'aa':'xx','bb':'yy'}
     d = {}

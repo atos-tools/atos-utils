@@ -160,6 +160,7 @@ EOF
 
         # unsupported features
 	echo "lto_enabled 0"
+	echo "fdo_enabled 0"
 	echo "graphite_enabled 0"
 	echo "libgomp_enabled 0"
 	echo "plugin_acf none"
@@ -198,6 +199,9 @@ EOF
         # lto
 	result=`$compiler -O2 -flto -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`
 	echo "lto_enabled $result"
+
+	# fdo
+	echo "fdo_enabled 1"
 
         # graphite
 	result=`$compiler -O2 -floop-block -o $tmpdir/test.out $tmpdir/test.c 2>/dev/null && echo 1 || echo 0`

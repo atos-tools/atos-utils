@@ -86,5 +86,5 @@ nb_played2=`$ROOT/bin/atos lib query | wc -l`
 
 [ "$expl_cookie1" == "$expl_cookie2" ]
 
-[ $nb_played1 -eq `expr $nb_played2 - 1` ] # atos-fctmap run not yet kept
+[ $nb_played1 -eq $nb_played2 ]
 

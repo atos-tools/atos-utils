@@ -547,19 +547,13 @@ def gen_file_by_file(
         optim_variants or 'base').split(',')
     base_flags = base_flags or '-O2'
     base_variant = base_variant or 'base'
-
-    # run atos-fctmap and compute function-to-object-file map
-    debug('gen_file_by_file: function to object map')
-    mapfile = tempfile.NamedTemporaryFile(delete=False)
-    mapfile.close()
-    yield config(
-        flags="-O2 -g --atos-fctmap=%s" % (mapfile.name), variant='base')
-    fct_map = profile.read_function_to_file_map(mapfile.name)
-    process.commands.unlink(mapfile.name)
+    fctmap_flags = " -g --atos-fctmap=fctmap.out"
 
     # run profiling script
     debug('gen_file_by_file: profiling run')
-    yield config(flags=base_flags, variant=base_variant, profile=True)
+    yield config(
+        flags=base_flags + fctmap_flags, variant=base_variant, profile=True)
+    fct_map = profile.read_function_to_file_map("fctmap.out")
 
     # partition function symbols, then object files
     cold_objs, hot_objs = profile.partition_object_files(

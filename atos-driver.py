@@ -27,8 +27,22 @@ sys.path.insert(0, os.path.abspath(os.path.join(
 from atos import atos_lib
 from atos import process
 from atos import logger
+from atos import globals
 
 import re, shlex, argparse
+
+def compile_command_kind(args):
+    basename = os.path.basename(args[0])
+    m = re.search(globals.DEFAULT_DRIVER_CC_PYREGEXP, basename)
+    if m != None and m.group(1) != None:
+        if '-c' in args:
+            return 'CC'
+        else:
+            return 'CCLD'
+    m = re.search(globals.DEFAULT_DRIVER_AR_PYREGEXP, basename)
+    if m != None and m.group(1) != None:
+        return 'AR'
+    return None
 
 def get_object_function_list(objfile):
     status, output = process.system(
@@ -44,8 +58,8 @@ def get_object_function_list(objfile):
         funclist.append(name)
     return funclist
 
-def update_function_map(mapfile, args):
-    if not is_cc_compile_command(args): return
+def update_cc_function_map(mapfile, args):
+    if compile_command_kind(args) != 'CC': return
     outputs = get_cc_output_files(args)
     if len(outputs) != 1: return
     funclist = get_object_function_list(outputs[0])
@@ -54,12 +68,9 @@ def update_function_map(mapfile, args):
         f.write(''.join(
                 map(lambda x: '%s %s\n' % (outputs[0], x), funclist)))
 
-def is_cc_compile_command(args):
-    return '-c' in args
-
 def get_cc_output_files(args):
     def objext(i): return os.path.splitext(i)[0] + '.o'
-    assert is_cc_compile_command(args)
+    assert compile_command_kind(args) == 'CC'
     output = atos_lib.get_output_option_value(args)
     if output: return [output]
     inputs = atos_lib.get_input_source_files(args)
@@ -72,7 +83,7 @@ def get_cc_command_additional_flags(optfile, args):
         obj, opts = line.strip().split(',', 1)
         obj_opts[obj] = opts
     def_opts = obj_opts.get('*', '')
-    if not is_cc_compile_command(args): return shlex.split(def_opts)
+    if compile_command_kind(args) != 'CC': return shlex.split(def_opts)
     outputs = get_cc_output_files(args)
     if len(outputs) != 1: return shlex.split(def_opts)
     return shlex.split(obj_opts.get(outputs[0], def_opts))
@@ -87,8 +98,6 @@ def invoque_compile_command(args):
 
     cwd = os.path.abspath(os.getcwd())
     args = list(args or [])
-    env_ACFLAGS = os.environ.get("ACFLAGS")
-    if env_ACFLAGS: args.extend(process.cmdline2list(env_ACFLAGS))
 
     (opts, args) = parser.parse_known_args(args)
 
@@ -96,8 +105,12 @@ def invoque_compile_command(args):
     profdir_common_len = env_PROFILE_DIR and len(
         os.environ.get("COMMON_PROFILE_DIR_PREFIX", "")) or 0
     env_PROFILE_DIR_OPT = os.environ.get("PROFILE_DIR_OPT")
+    kind = compile_command_kind(args)
 
-    if is_cc_compile_command(args):  # CC command
+    if kind == 'CC':
+
+        env_ACFLAGS = os.environ.get("ACFLAGS")
+        if env_ACFLAGS: args.extend(process.cmdline2list(env_ACFLAGS))
 
         output = atos_lib.get_output_option_value(args)
         if env_PROFILE_DIR and env_PROFILE_DIR_OPT:
@@ -106,7 +119,10 @@ def invoque_compile_command(args):
             args.append("%s=%s/%s" % (
                     env_PROFILE_DIR_OPT, env_PROFILE_DIR, suffix))
 
-    else:  # CCLD command
+    elif kind == 'CCLD':
+
+        env_ACFLAGS = os.environ.get("ACFLAGS")
+        if env_ACFLAGS: args.extend(process.cmdline2list(env_ACFLAGS))
 
         env_ALDFLAGS = os.environ.get("ALDFLAGS")
         if env_ALDFLAGS: args.extend(process.cmdline2list(env_ALDFLAGS))
@@ -127,13 +143,13 @@ def invoque_compile_command(args):
             args.append("%s=%s/%s" % (
                     env_PROFILE_DIR_OPT, env_PROFILE_DIR, suffix))
 
-    if opts.optfile:
+    if (kind == 'CC' or kind == 'CCLD') and opts.optfile:
         args.extend(get_cc_command_additional_flags(opts.optfile, args))
 
     status = process.system(args, print_output=True)
 
-    if opts.fctmap:
-        update_function_map(opts.fctmap, args)
+    if (kind == 'CC' or kind == 'CCLD') and opts.fctmap:
+        update_cc_function_map(opts.fctmap, args)
 
     return status
 

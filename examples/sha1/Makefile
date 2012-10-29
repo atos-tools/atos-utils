@@ -8,6 +8,7 @@
 #  Copyright (C) STMicroelectronics International NV
 #  Christophe Guillon <christophe.guillon@st.com>
 #  Added support for building shared lib
+#  Added archive generation for testing archives
 #
 #############################################################################
 #  $Id: Makefile 12 2009-06-22 19:34:25Z paulej $
@@ -26,17 +27,21 @@ CFLAGS	= -c -O2 -Wall -D_FILE_OFFSET_BITS=64
 LIBS	=
 
 OBJS	= sha1.o
+LIBSHA1 = libsha1.a
 
-all: sha shacmp shatest sha-shared
+all: sha shacmp shatest 
 
-sha: sha.o $(OBJS)
-	$(CC) -o $@ sha.o $(OBJS) $(LIBS)
+libsha1.a: $(OBJS)
+	ar cr $@ $(OBJS)
 
-shacmp: shacmp.o $(OBJS)
-	$(CC) -o $@ shacmp.o $(OBJS) $(LIBS)
+sha: sha.o $(LIBSHA1)
+	$(CC) $(LDFLAGS) -o $@ sha.o -L. -lsha1 $(LIBS)
 
-shatest: shatest.o $(OBJS)
-	$(CC) -o $@ shatest.o $(OBJS) $(LIBS)
+shacmp: shacmp.o $(LIBSHA1)
+	$(CC) $(LDFLAGS) -o $@ shacmp.o -L. -lsha1 $(LIBS)
+
+shatest: shatest.o $(LIBSHA1)
+	$(CC) $(LDFLAGS) -o $@ shatest.o -L. -lsha1 $(LIBS)
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -o $@ $<
@@ -51,4 +56,4 @@ sha-shared: sha.o sha.so
 	$(CC) -o $@ sha.o ./sha.so $(LIBS)
 
 clean:
-	$(RM) *.o *.so sha shacmp shatest sha-shared
+	$(RM) *.o *.so *.a sha shacmp shatest sha-shared

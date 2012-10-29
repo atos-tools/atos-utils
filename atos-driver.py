@@ -99,18 +99,19 @@ def invoque_compile_command(args):
     cwd = os.path.abspath(os.getcwd())
     args = list(args or [])
 
+    kind = compile_command_kind(args)
+    if kind == 'CC' or kind == 'CCLD':
+        env_ACFLAGS = os.environ.get("ACFLAGS")
+        if env_ACFLAGS: args.extend(process.cmdline2list(env_ACFLAGS))
+
     (opts, args) = parser.parse_known_args(args)
 
     env_PROFILE_DIR = os.environ.get("PROFILE_DIR")
     profdir_common_len = env_PROFILE_DIR and len(
         os.environ.get("COMMON_PROFILE_DIR_PREFIX", "")) or 0
     env_PROFILE_DIR_OPT = os.environ.get("PROFILE_DIR_OPT")
-    kind = compile_command_kind(args)
 
     if kind == 'CC':
-
-        env_ACFLAGS = os.environ.get("ACFLAGS")
-        if env_ACFLAGS: args.extend(process.cmdline2list(env_ACFLAGS))
 
         output = atos_lib.get_output_option_value(args)
         if env_PROFILE_DIR and env_PROFILE_DIR_OPT:
@@ -120,9 +121,6 @@ def invoque_compile_command(args):
                     env_PROFILE_DIR_OPT, env_PROFILE_DIR, suffix))
 
     elif kind == 'CCLD':
-
-        env_ACFLAGS = os.environ.get("ACFLAGS")
-        if env_ACFLAGS: args.extend(process.cmdline2list(env_ACFLAGS))
 
         env_ALDFLAGS = os.environ.get("ALDFLAGS")
         if env_ALDFLAGS: args.extend(process.cmdline2list(env_ALDFLAGS))

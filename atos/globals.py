@@ -38,4 +38,7 @@ DEFAULT_CONFIGURATION_PATH = "./atos-configurations"
 DEFAULT_TOOLS_CREGEXP = "-\?\(clang\|gcc\|g++\|cc\|armlink\|c++\|ar\)$"
 
 # Default compiler driver/linker python regexp.
-DEFAULT_DRIVER_PYREGEXP = "(clang|gcc|g\+\+|cc|armlink|c\+\+)$"
+DEFAULT_DRIVER_CC_PYREGEXP = "(clang|gcc|g\+\+|cc|armlink|c\+\+)$"
+
+# Default archiver python regexp.
+DEFAULT_DRIVER_AR_PYREGEXP = "(ar)$"

@@ -444,10 +444,10 @@ class SimpleCmdInterpreter:
         """ Returns a suitable interpreter for the given command. """
         basename = os.path.basename(command['args'][0])
         # TODO: put these regexps in a configuration file
-        m = re.search(globals.DEFAULT_DRIVER_PYREGEXP, basename)
+        m = re.search(globals.DEFAULT_DRIVER_CC_PYREGEXP, basename)
         if m != None and m.group(1) != None:
             return SimpleCCInterpreter(command)
-        m = re.search("(ar)$", basename)
+        m = re.search(globals.DEFAULT_DRIVER_AR_PYREGEXP, basename)
         if m != None and m.group(1) != None:
             return SimpleARInterpreter(command)
         raise Exception("unrecognized command: " + basename)

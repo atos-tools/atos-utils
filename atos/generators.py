@@ -548,7 +548,7 @@ def gen_file_by_file(
         optim_variants or 'base').split(',')
     base_flags = base_flags or '-O2'
     base_variant = base_variant or 'base'
-    fctmap_flags = " -g --atos-fctmap=fctmap.out"
+    fctmap_flags = " -g --atos-fctmap=%s/fctmap.out" % os.getcwd()
 
     # run profiling script
     debug('gen_file_by_file: profiling run')

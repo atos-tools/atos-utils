@@ -20,4 +20,10 @@ $ROOT/bin/atos-opt -r -a "-O3"
 
 $ROOT/bin/atos-opt -r -a "-Os"
 
-[ `$ROOT/bin/atos-play -P -s 5 -s 0.2 -N 5 | uniq | wc -l` -eq 4 ]
+# Will output 2 points with a single tradeoff
+[ `$ROOT/bin/atos-play -P -s 5 -N 2 | wc -l` -eq 2 ]
+
+# With several tradeoffs, we cannot guarantee that the
+# same point is not selected several times.
+# Hence we may gat only 1 point actually.
+[ `$ROOT/bin/atos-play -P -s 5 - s 0.2 | wc -l` -ge 1 ]

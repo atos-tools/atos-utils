@@ -277,7 +277,7 @@ class atos_client_results():
                 filter(lambda x: x[0][0] != '_', self.__dict__.items()))
 
         def compute_speedup(self, ref):
-            self.speedup = ((ref.time / self.time) - 1.0)
+            self.speedup = ((float(ref.time) / float(self.time)) - 1.0)
             self.sizered = (1.0 - (float(self.size) / float(ref.size)))
             return self.speedup, self.sizered
 

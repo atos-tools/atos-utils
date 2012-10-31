@@ -145,13 +145,19 @@ def run_atos_help(args):
         print
         print "Browse the manual with the following commands:"
         print
+        print "The must read sections:"
         print "  atos help intro    : displays ATOS short introduction."
         print "  atos help tutorial : displays ATOS tutorial."
         print
+        print "Some explorations results for examples of usage:"
+        print "  atos help example-sha1 : exploration on sha1 example."
+
+        print
+        print "Detailed usage for each of the ATOS commands:"
         print \
             "  atos help COMMAND  : display manual for the given atos COMMAND."
-        print \
-            "                      Execute ``atos -h`` for available COMMANDs."
+        print
+        print "Execute ``atos -h`` for the list of available COMMANDs."
         print
         return 0
     for topic in args.topics:

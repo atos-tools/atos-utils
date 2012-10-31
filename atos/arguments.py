@@ -221,13 +221,16 @@ class parsers:
         sub = subs.add_parser("cookie", help="generate a cookie")
         parsers.atos_cookie(sub)
 
-        sub = subs.add_parser("run-profile", help=argparse.SUPPRESS)
+        sub = subs.add_parser("run-profile",
+                              help="run a variant in profile collection mode")
         parsers.atos_run_profile(sub)
 
-        sub = subs.add_parser("lib", help=argparse.SUPPRESS)
+        sub = subs.add_parser("lib",
+                              help="internal API access to ATOS library")
         parsers.atos_lib(sub)
 
-        sub = subs.add_parser("gen", help=argparse.SUPPRESS)
+        sub = subs.add_parser("gen",
+                              help="internal API access to ATOS generators")
         parsers.atos_gen(sub)
 
         return parser

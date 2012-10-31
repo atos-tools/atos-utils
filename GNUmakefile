@@ -33,7 +33,7 @@ CONFIG_SCRIPTS_CFG_IN=flags.inline.cfg.in flags.loop.cfg.in flags.optim.cfg.in
 PYTHON_LIB_SCRIPTS_IN=$(addprefix atos/, __init__.py globals.py utils.py arguments.py atos_deps.py logger.py process.py profile.py)
 PYTHON_LIB_EXE_SCRIPTS_IN=$(addprefix atos/, atos_lib.py generators.py)
 PYTHON_SCRIPTS_IN=atos.py atos-help.py atos-audit.py atos-build.py atos-deps.py atos-explore.py atos-init.py atos-opt.py atos-play.py atos-profile.py atos-raudit.py atos-run.py atos-driver.py atos-timeout.py atos-replay.py atos-explore-inline.py atos-explore-loop.py atos-explore-optim.py atos-explore-acf.py atos-cookie.py atos-explore-staged.py
-SHARED_RSTS_IN=$(addprefix doc/, intro.rst tutorial.rst)
+SHARED_RSTS_IN=$(addprefix doc/, intro.rst tutorial.rst example-sha1.rst)
 SHARED_MANS_IN=$(SHARED_RSTS_IN)
 SHARED_HTMLS_IN=$(SHARED_RSTS_IN)
 SHARED_IMAGES_IN=$(addprefix doc/images/, graph-sha1-first.png graph-sha1-staged.png)
@@ -57,8 +57,8 @@ INSTALLED_EXES=$(addprefix $(PREFIX)/,$(ALL_EXES))
 ALL_DATAS=$(CONFIG_SCRIPTS_CFG) $(PYTHON_LIB_SCRIPTS) $(SHARED_IMAGES) $(SHARED_RSTS)
 INSTALLED_DATAS=$(addprefix $(PREFIX)/,$(ALL_DATAS))
 
-ALL_DOCS=$(SHARED_MANS) $(SHARED_HTMLS)
-INSTALLED_DOCS=$(addprefix $(PREFIX)/,$(ALL_DOCS))
+ALL_DOCS=$(SHARED_MANS) $(SHARED_HTMLS) $(SHARED_IMAGES) $(SHARED_RSTS)
+INSTALLED_DOCS=$(addprefix $(PREFIX)/,$(SHARED_MANS) $(SHARED_HTMLS))
 
 COVERAGE_DIR=$(abspath .)/coverage
 
@@ -193,7 +193,7 @@ $(SHARED_HTMLS): share/atos/doc/%.html: $(srcdir)doc/%.rst
 	$(QUIET_RST2HTML)install -d $(dir $@) && sed -e 's!@VERSION@!$(VERSION)!g' <$< | $(RST2HTML) >$@
 
 $(SHARED_IMAGES): share/atos/%: $(srcdir)%
-	$(QUIET_CP_DATA)install -d $(dir $@) && cp $< $@
+	$(QUIET_CP)install -d $(dir $@) && cp $< $@
 
 #
 # Rules for python-checks

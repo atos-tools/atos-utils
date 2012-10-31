@@ -475,7 +475,7 @@ For the SHA1 C++ example, this run script might be:
 
 ::
 
-  $ cat run_qemu.sh
+  $ cat run-qemu.sh
   #!/usr/bin/env bash
   set -e
   tmpfile=`mktemp /tmp/run.XXXXXX`
@@ -489,7 +489,7 @@ A full staged exploration can then be performed with:
 
 ::
 
-  $ atos-explore-staged -M 50 -b "make clean all" -r ./run_qemu.sh
+  $ atos-explore-staged -M 50 -b "make clean all" -r ./run-qemu.sh
 
 Cross compilation and remote execution
 --------------------------------------
@@ -507,12 +507,12 @@ with QEMU to run the binary in a given target root file system.
 
  ::
 
-  $ cat build_arm.sh
+  $ cat build-arm.sh
   #!/usr/bin/env bash
   set -e
   arm-linux-androideabi-g++ -o sha -O2 -D_FILE_OFFSET_BITS=64 sha1.cpp sha.cpp
 
-  $ cat run_qemu_arm.sh
+  $ cat run-qemu-arm.sh
   #!/usr/bin/env bash
   set -e
   tmpfile=`mktemp /tmp/run.XXXXXX`
@@ -521,7 +521,7 @@ with QEMU to run the binary in a given target root file system.
   [ ${PIPESTATUS[0]} = 0 ] || exit 1
   awk '{if ($1 == "qemu:") { print "user " $10 / 1000000000; }}' <$tmpfile
 
-  $ atos-explore-staged -M 50 -b ./build_arm.sh -r ./run_qemu_arm.sh
+  $ atos-explore-staged -M 50 -b ./build-arm.sh -r ./run-qemu-arm.sh
 
 One might also want to execute the program remotely, like on a board if
 available.
@@ -549,7 +549,7 @@ Such a run script can look like:
 
 ::
 
-  $ cat run_remote.sh
+  $ cat run-remote.sh
   #!/usr/bin/env bash
   set -e
   [ "$REMOTE_PROFILE_DIR" = "" ] || ssh remote_machine /bin/rm -fr $REMOTE_PROFILE_DIR
@@ -564,7 +564,7 @@ A first level exploration could then be performed with:
 
 ::
 
-  $ atos-explore -b "make clean all" -r ./run_remote.sh -B /tmp/profile
+  $ atos-explore -b "make clean all" -r ./run-remote.sh -B /tmp/profile
 
 Custom script for results
 -------------------------

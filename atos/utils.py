@@ -825,7 +825,7 @@ def run_atos_play(args):
             selected = atos_lib.atos_client_results.select_tradeoffs(
                 all_points, tradeoff, nbtr) or []
             results.extend(selected)
-            map(all_points.remove, selected)
+        results = list(set(results))
         results = map(lambda x: x.dict(), results)
 
     if not results:

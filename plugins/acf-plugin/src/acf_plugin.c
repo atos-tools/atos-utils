@@ -104,6 +104,32 @@ static void print_pass_list(struct opt_pass *pass,int tab_number){
 }
 #endif /* PRINT_PASS_LIST */
 
+static void trace_attached_acf(acf_ftable_entry_t *acf_entry, const char *acf_type, const char *func_name) {
+    const char *sep = "";
+    int i;
+    VERBOSE("%s: Attaching %s to "
+	    "function %s: %s ",
+	    plugin_name, acf_type, func_name, acf_entry->opt_attr);
+    for (i = 0; i < acf_entry->attr_arg_number; i++) {
+	switch (acf_entry->opt_args[i].arg_type) {
+	case NO_TYPE:
+	    break;
+	case STR_TYPE:
+	    VERBOSE("%s%s", sep, (acf_entry->opt_args[i].av.str_arg != NULL ?
+				  acf_entry->opt_args[i].av.str_arg : "(null),"));
+	    break;
+	case INT_TYPE:
+	    VERBOSE("%s#%d", sep, acf_entry->opt_args[i].av.int_arg);
+	    break;
+	}
+	sep = ",";
+    }
+    if (acf_entry->opt_file == NULL)
+	VERBOSE("\n");
+    else
+	VERBOSE(" (file: %s)\n", acf_entry->opt_file);
+}
+
 /* ============================================================ */
 /* Add attributes to function during function parsing
 /* ============================================================ */
@@ -142,30 +168,8 @@ add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tre
     tree argument_list = NULL_TREE;
     int i;
 
-    if (verbose) {
-        const char *sep = "";
-	VERBOSE("acf_plugin: Attaching attribute to "
-		"function %s: %s ",
-		cur_func_name, acf_entry->opt_attr);
-	for (i = 0; i < acf_entry->attr_arg_number; i++) {
-	    switch (acf_entry->opt_args[i].arg_type) {
-	    case NO_TYPE:
-		break;
-	    case STR_TYPE:
-	        VERBOSE("%s%s", sep, (acf_entry->opt_args[i].av.str_arg != NULL ?
-				       acf_entry->opt_args[i].av.str_arg : "(null),"));
-		break;
-	    case INT_TYPE:
-	        VERBOSE("%s#%d", sep, acf_entry->opt_args[i].av.int_arg);
-		break;
-	    }
-	    sep = ",";
-	}
-	if (acf_entry->opt_file == NULL)
-	    VERBOSE("\n");
-	else
-	    VERBOSE(" (file: %s)\n", acf_entry->opt_file);
-    }
+    if (verbose)
+	trace_attached_acf(acf_entry, "attribute", cur_func_name);
 
     if (acf_entry->attr_arg_number != 0) {
 	for (i = 0; i < acf_entry->attr_arg_number; i++) {
@@ -237,15 +241,8 @@ add_lto_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
 	    return;
 #endif
 
-	if (verbose) {
-	    VERBOSE("acf_plugin: Attaching attribute to "
-		    "function %s: %s %s",
-		    cur_func_name, acf_entry->opt_attr, acf_entry->opt_args[0].av.str_arg);
-	    if (acf_entry->opt_file == NULL)
-		VERBOSE("\n");
-	    else
-		VERBOSE(" (file: %s)\n", acf_entry->opt_file);
-	}
+	if (verbose)
+	    trace_attached_acf(acf_entry, "attribute", cur_func_name);
 
 	if (save_options == NULL) {
 	    save_options = &loc_save_options;
@@ -344,15 +341,8 @@ add_param(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
     opt_param = acf_entry->opt_args[0].av.str_arg;
     opt_value = acf_entry->opt_args[1].av.int_arg;
 
-    if (verbose) {
-	VERBOSE("%s: Attaching param to "
-		"function %s: %s=%d", plugin_name,
-		cur_func_name, opt_param, opt_value);
-	if (acf_entry->opt_file == NULL)
-	    VERBOSE("\n");
-	else
-	    VERBOSE(" (file: %s)\n", acf_entry->opt_file);
-    }
+    if (verbose)
+	trace_attached_acf(acf_entry, "param", cur_func_name);
 
     save_and_set_param(opt_param, opt_value);
 }
@@ -543,8 +533,8 @@ static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
     if(DECL_P(decl)&&is_targetable_decl(decl) &&
        MATCH(decl, match_tree_code(equal_to(FUNCTION_DECL)))) {
 	decl_fullname=lang_hooks.decl_printable_name(decl,2);
-	DEBUG("acf_plugin: Processing function %s (%s)\n",
-	      decl_fullname,
+	DEBUG("%s: Processing function %s (%s)\n",
+	      plugin_name, decl_fullname,
 	      IDENTIFIER_POINTER (DECL_ASSEMBLER_NAME (cfun->decl)));
     }
 #endif /* ACF_TRACE */

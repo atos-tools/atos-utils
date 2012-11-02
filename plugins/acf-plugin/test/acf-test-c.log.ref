@@ -28,4 +28,4 @@ acf_plugin: Attaching attribute to function func2: noinline  (file: hello.c)
 acf_plugin: Attaching attribute to function main: optimize Os
 acf_plugin: Attaching attribute to function main: cold 
 acf_plugin: Attaching attribute to function main: optimize s (file: hello.c)
-acf_plugin: Attaching param to function func1: max-unroll-times=4
+acf_plugin: Attaching param to function func1: param max-unroll-times,#4

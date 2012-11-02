@@ -369,28 +369,19 @@ class atos_client_results():
     @staticmethod
     def select_tradeoffs(frontier, perf_size_ratio=4, nb_points=3):
         if not frontier: return None
-        # copy frontier points
-        frontier_orig = sorted(
-            frontier, key=lambda x: x.size)
-        frontier_copy = map(
-            lambda x: atos_client_results.result(x.dict()), frontier_orig)
-        # fake reference
-        ref = atos_client_results.result(
-            {'time': frontier_copy[0].time, 'size': frontier_copy[-1].size})
-        # compute speedups/sizereds
-        map(lambda x: x.compute_speedup(ref), frontier_copy)
-        # find best tradeoff (ratio * sizered + speedup)
+        # speedups must be already computed
+        assert all(map(lambda x: getattr(
+                    x, 'speedup', None) is not None, frontier))
+        # find best tradeoff (ratio * speedup + sizered)
+        # this is the higher ordinate value at abscissa 0
         tradeoffs = map(lambda x: (
                 (perf_size_ratio * x.speedup) + x.sizered, x),
-                        frontier_copy)
+                        frontier)
         # also sort by variant_id (to get a deterministic behavior)
         tradeoffs = sorted(tradeoffs, key=lambda x: (x[0], x[1].variant))
-        # take the "nb_points" best variants
+        # return the "nb_points" best variants
         tradeoffs = map(lambda x: x[1], tradeoffs[-nb_points:])
-        # return corresponding points
-        tradeoffs_points = map(
-            lambda x: frontier_orig[frontier_copy.index(x)], tradeoffs)
-        return tradeoffs_points
+        return tradeoffs
 
     def _get_group_results(self, group_targets, group_name, query):
         if not group_targets: return {}

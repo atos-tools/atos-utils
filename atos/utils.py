@@ -521,7 +521,7 @@ def run_atos_lib(args):
             args.targets and atos_lib.strtolist(args.targets),
             atos_lib.strtoquery(args.query), args.group_name)
 
-        if args.ref: client.compute_speedups(args.ref)
+        client.compute_speedups(args.ref)
 
         if args.tradeoffs:
             results = map(lambda x: client.tradeoff(x).dict(), args.tradeoffs)

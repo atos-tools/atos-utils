@@ -28,7 +28,7 @@ assert status == 0
 
 # reference results
 entry = {'target': 'sha1-c', 'variant': 'REF', 'conf': '',
-         'time': 10000, 'size': 10000}
+         'time': 1000, 'size': 1000}
 db = atos_lib.atos_db.db('atos-configurations')
 atos_lib.atos_client_db(db).add_result(entry)
 

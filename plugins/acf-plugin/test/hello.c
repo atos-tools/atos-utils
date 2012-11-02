@@ -112,5 +112,7 @@ int main(int argc, char **argv) {
     res = func2(tab);
     tab_print(tab);
 
+    func3(tab, tab+1, tab+2, tab+3, tab+4, tab+5, tab+6, tab+7);
+
     return 0;
 }

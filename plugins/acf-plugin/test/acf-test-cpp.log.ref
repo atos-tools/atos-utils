@@ -46,5 +46,5 @@ acf_plugin: Attaching attribute to function _Z5func2Pi: cold
 acf_plugin: Attaching attribute to function _Z5func2Pi: cold 
 acf_plugin: Attaching attribute to function main: optimize Os
 acf_plugin: Attaching attribute to function main: cold 
-acf_plugin: Attaching param to function _Z5func1Pi: max-unroll-times=8
-acf_plugin: Attaching param to function _Z5func1Pi: max-inline-insns=400
+acf_plugin: Attaching param to function _Z5func1Pi: param max-unroll-times,#8
+acf_plugin: Attaching param to function _Z5func1Pi: param max-inline-insns,#400

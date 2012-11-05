@@ -34,6 +34,9 @@ usage=`$ROOT/bin/atos help --help 2>&1 | head -n 1 | awk '{print $1, $2, $3;}'`
 help=`$ROOT/bin/atos help | grep "ATOS auto tuning optimization system manual"`
 [ "$help" != "" ]
 
+help=`$ROOT/bin/atos-help | grep "ATOS auto tuning optimization system manual"`
+[ "$help" != "" ]
+
 help=`$ROOT/bin/atos help intro | grep "ATOS Introduction"`
 [ "$help" != "" ]
 

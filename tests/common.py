@@ -41,6 +41,8 @@ def skip(msg=''):
 
 @atexit.register
 def cleanup(*args):
+    # run other exit functions before calling os._exit
+    atexit._run_exitfuncs()
     if not keeptest:
         os.chdir(tmpdir)
         shutil.rmtree(tstdir)

@@ -587,15 +587,6 @@ class default_obj(object):
     def __getattr__(self, name):
         return None
 
-def timer(func):
-    def wrapper(*args, **kwargs):
-        t0 = time.time()
-        res = func(*args, **kwargs)
-        t1 = time.time()
-        print 'timer: %r %.2fs' % (func.__name__, t1 - t0)
-        return res
-    return wrapper
-
 def average(l):
     return sum(l) / len(l)
 
@@ -913,16 +904,6 @@ def generate_script(script_path, command, environ=None):
             f.write("export " + key + "\n")
         f.write("exec " + command + "\n")
     commands.chmod(script_path, 0755)
-
-
-def getarg(key, default=None):
-    # TODO: to be removed when argument parsing will be factorized
-    import inspect
-    lastframe = inspect.stack()[-1][0]
-    argstruct = 'args' in lastframe.f_globals and 'args' or 'opts'
-    try:
-        return eval('lastframe.f_globals["%s"].%s' % (argstruct, key))
-    except: return default
 
 def proot_command(**kwargs):
     status, uname = process.system('/bin/uname -m', get_output=True)

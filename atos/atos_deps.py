@@ -233,19 +233,6 @@ class DependencyGraph:
                 else: pass
         return os.path.commonprefix(outputs)
 
-    def get_profdir_suffix(self, value):
-        """ Get the profile dir suffix for a CC/CCLD dependency """
-        if not hasattr(self, 'common_profdir_prefix_len'):
-            self.common_profdir_prefix_len = len(
-                self.common_relative_profdir_prefix())
-        if value['kind'] == "CC":
-            output_value = atos_lib.get_output_option_value(
-                value['command']['args'])
-            if output_value and os.path.isabs(output_value): return ''
-        if value['kind'] == "CC" or value['kind'] == "CCLD":
-            return value['command']['cwd'][self.common_profdir_prefix_len:]
-        else: assert 0
-
     def get_compilers(self):
         """ Get the list of compilers. """
         compilers = set()
@@ -707,3 +694,6 @@ class CCDEPSParser:
     def get_commands(self):
         """ Returns the constructed command list.  """
         return self.commands
+
+if __name__ == "__main__":
+    DGraphTest().test()

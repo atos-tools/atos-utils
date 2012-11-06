@@ -1147,7 +1147,7 @@ def run_atos_replay(args):
     # reference run
     status = invoque("atos-run", args,
                   configuration_path=args.results_path, record=True,
-                  command=[args.run_script])
+                  command=process.cmdline2list(args.run_script))
     if status != 0: return status
 
     # get frontier results
@@ -1165,7 +1165,7 @@ def run_atos_replay(args):
 
         invoque("atos-run", args, configuration_path=args.results_path,
              record=True, options=result_conf, uopts=result_uconf,
-             command=[args.run_script])
+             command=process.cmdline2list(args.run_script))
 
     return 0
 

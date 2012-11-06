@@ -754,7 +754,7 @@ def run_atos_opt(args):
             message("Skipping profile of variant %s..." % variant_id)
             return 0
 
-    if args.reuse:  # do nothing if existing run results
+    if args.reuse and not args.profile:
         variant_id = atos_lib.variant_id(options, None, uopts)
         db = atos_lib.atos_db.db(args.configuration_path)
         results = atos_lib.atos_client_db(db).\
@@ -909,8 +909,10 @@ def run_atos_run_profile(args):
 
     message("Running profile variant %s..." % variant)
 
-    prof_script = os.path.join(args.configuration_path, "profile.sh")
-    prof_script = process.cmdline2list(args.prof_script) or [prof_script]
+    if 'prof_script' in vars(args) and args.prof_script:
+        prof_script = process.cmdline2list(args.prof_script)
+    else:
+        prof_script = [os.path.join(args.configuration_path, "profile.sh")]
 
     status, output = process.system(
         atos_lib.timeout_command() + prof_script,

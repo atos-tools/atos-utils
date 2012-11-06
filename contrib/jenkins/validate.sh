@@ -80,6 +80,10 @@ echo "Retrieving binary build of qemu-system-arm package..."
 wget -q -O qemu-system-arm-devimage.tgz http://aci-hostname:8000/job/cec-okla-atos-qemu-system-arm/lastStableBuild/artifact/qemu-system-arm-devimage.tgz
 tar xvzf qemu-system-arm-devimage.tgz -C $DEVIMAGE
 
+echo "Extracting gcc-4.7.2 native build"
+rm -rf prebuilt/gcc-4.7.2
+git clone gitolite@hostname:atos/gcc-prebuilt-ubuntu-10.04-x86-64-gcc-4.7.2.git prebuilt/gcc-4.7.2
+
 # echo "export path and license file for rvct toolset..."
 # export ARMLMD_LICENSE_FILE=8224@gmx333:8224@gnx334:8224@gnx335
 # ARMCCPATH=/sw/st/gnu_compil/comp/arm/rvds/ds5.01-build-64/linux/bin
@@ -94,6 +98,11 @@ cd $BUILD
 make -f $GITROOT/GNUmakefile -j 4 distclean
 make -f $GITROOT/GNUmakefile -j 4 all doc
 
+#
+# Add gcc-4.7.2 to path only for tests as this compiler does not
+# support -m32 and thus cannot compile ATOS plugins
+#
+PATH=$WORKSPACE/prebuilt/gcc-4.7.2/bin:$PATH
 echo "Checking atos-utils..."
 make COVERAGE_DIR=$WORKSPACE/coverage -f $GITROOT/GNUmakefile -j 4 coverage
 make -f $GITROOT/GNUmakefile examples-nograph
@@ -102,7 +111,7 @@ echo "Installing atos-utils..."
 make -f $GITROOT/GNUmakefile -j 4 install install-doc PREFIX=$DEVIMAGE/usr/local
 
 echo "Checking installed version of atos-utils with long tests..."
-ROOT=$DEVIMAGE/usr/local LONG_TESTS=${LONG_TESTS} make -f $GITROOT/GNUmakefile -j 4 check
+ROOT=$DEVIMAGE/usr/local make -f $GITROOT/GNUmakefile -j 4 check
 
 echo "Archiving atos-utils..."
 cd $DEVIMAGE

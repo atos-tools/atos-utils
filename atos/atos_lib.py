@@ -316,7 +316,8 @@ class atos_client_results():
             group_targets, group_name, query)
 
     def compute_frontier(self):
-        if not self.results: return []
+        self.frontier = []
+        if not self.results: return self.frontier
         maybe_on_frontier, mustbe_on_frontier = self.results.values(), set()
         for (variant, c1) in self.results.items():
             on_frontier = True

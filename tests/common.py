@@ -41,6 +41,12 @@ def skip(msg=''):
 
 @atexit.register
 def cleanup(*args):
+    # in case of exception, current function should be removed
+    # of exit functions list
+    try:
+        if atexit._exithandlers[0][0] == cleanup:
+            atexit._exithandlers.pop(0)
+    except: pass
     # run other exit functions before calling os._exit
     atexit._run_exitfuncs()
     if not keeptest:

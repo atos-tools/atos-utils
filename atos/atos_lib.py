@@ -986,7 +986,7 @@ def get_input_source_files(args):
 
 def is_shared_lib_link(args):
     """ Returns true if building a shared lib. """
-    args = atos_lib.expand_response_file(args)
+    args = expand_response_file(args)
     i = 0
     while i + 1 < len(args):
         i = i + 1

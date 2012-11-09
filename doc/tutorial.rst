@@ -24,32 +24,44 @@ For instance:
 
 ::
 
-  $ tar xvzf atos-1.0.0.tgz
-  $ export PATH=$PWD/atos-1.0.O/bin:$PATH
-  $ atos-explore -v
-  atos-explore version 1.0.0
+  $ tar xvzf atos-2.0.tgz
+  $ export PATH=$PWD/atos-2.0/bin:$PATH
+  $ atos -v
+  atos version 2.0
 
 First Exploration
 -----------------
 Run a first exploration for a host program, for example the SHA1 C++
-implementation that can be found in ``atos-x.y.z/share/atos/examples/sha1``:
+implementation that can be found in ``atos-x.y/share/atos/examples/sha1``:
 
 ::
 
   $ cd share/atos/examples/sha1
   $ atos-explore -b "make clean all" -r "./run.sh"
-  $ atos-play -p -f time	# prints performance first tradeoff
-  ATOS: shatest-shacmp-sha-shared-sha-sha.so: OPT-Os-flto-funroll-loops: version: 1.0.0
-  ATOS: shatest-shacmp-sha-shared-sha-sha.so: OPT-Os-flto-funroll-loops: -Os -flto -funroll-loops
-  ATOS: shatest-shacmp-sha-shared-sha-sha.so: OPT-Os-flto-funroll-loops: size: 26163
-  ATOS: shatest-shacmp-sha-shared-sha-sha.so: OPT-Os-flto-funroll-loops: time: 150.0
-  $ atos-play -p -f size	# prints code size first tradeoff
-  ATOS: shatest-shacmp-sha-shared-sha-sha.so: OPT-Os-flto-funroll-loops: version: 1.0.0
-  ATOS: shatest-shacmp-sha-shared-sha-sha.so: OPT-Os-flto-funroll-loops: -Os -flto -funroll-loops
-  ATOS: shatest-shacmp-sha-shared-sha-sha.so: OPT-Os-flto-funroll-loops: size: 26163
-  ATOS: shatest-shacmp-sha-shared-sha-sha.so: OPT-Os-flto-funroll-loops: time: 150.0
-  $ atos-graph			# and select manually a preferred configuration id by clicking on the corresponding point
-  $ atos-play -l e69f17ade7a5e5983109280f1f9c3731	# rebuilds the selected configuration
+  ...
+  $ atos-play -T		# prints performance first best tradeoff
+  speedup | sizered |             target |                       variant_id
+  +25.87% | -14.92% | shacmp-shatest-sha | fc1af17c2477323d64ddd87a53ac8208
+  # Positive speedups and positive sizered are improvements
+  
+  $ atos-play -T -f size	# prints size first best tradeoff
+  speedup | sizered |             target |                       variant_id
+  +16.43% | +14.92% | shacmp-shatest-sha | dffc8f4cd610ab6c46c19ec0d059ce29 
+
+  $ atos-play -p		# prints configuration
+  ATOS: shacmp-shatest-sha: OPT-fprofile-use-Os-Os-flto: sizered: -0.149247207382
+  ATOS: shacmp-shatest-sha: OPT-fprofile-use-Os-Os-flto: speedup: 0.258687258687
+  ATOS: shacmp-shatest-sha: OPT-fprofile-use-Os-Os-flto: version: 2.0
+  ATOS: shacmp-shatest-sha: OPT-fprofile-use-Os-Os-flto: conf: -Os -flto
+  ATOS: shacmp-shatest-sha: OPT-fprofile-use-Os-Os-flto: uconf: -Os
+  ATOS: shacmp-shatest-sha: OPT-fprofile-use-Os-Os-flto: size: 23663
+  ATOS: shacmp-shatest-sha: OPT-fprofile-use-Os-Os-flto: time: 1295.0
+  
+  $ atos-graph			# select a configuration id by clicking on the points
+  ...
+  $ atos-play -l fc1af17c2477323d64ddd87a53ac8208 # rebuilds the configuration
+  Playing optimized build shacmp-shatest-sha:OPT-fprofile-use-Os-Os-flto...
+  Building variant OPT-fprofile-use-Os-Os-flto [fc1af17c2477323d64ddd87a53ac8208]...
 
 Depending on your compiler capabilities, the build configurations ran by
 ``atos-explore`` will be a combination of ``-O2/-Os/-O3``, feedback directed
@@ -66,7 +78,17 @@ default behavior of the tools when no more option is given is to do a ``time
 -p`` on top of the run script, hence the run script just have to execute the
 application with a representative dataset.
 
-The ``atos-play`` tool can be used to print found configurations given an
+One could note that in this example, the actual executable or library to be
+optimized is not specified. By default atos-explore will optimize all
+executables and libraries that are built by the user's build system.
+Otherwise the ``-e "executables ..."`` option can be specified.
+Actually for this example, only the ``sha`` executable is of interest and
+the command could have been::
+
+  $ atos-explore -b "make clean all" -r "./run.sh" -e sha
+
+
+The ``atos-play`` tool can be used to print configurations given an
 objective criterion. With the ``-p`` option it prints out the variant, options
 and timing/size results, by default selecting a performance first best
 tradeoff (the ``-f time`` option is the default actually). If one wants a size
@@ -86,13 +108,13 @@ The resulting graph is show below:
 .. image:: images/graph-sha1-first.png
    :alt: Results space after a first level exploration
 
-The best configuration is the point on the top right of the figure which is
-best in both code size and performance dimensions. It gives a speedup of 53.33%
-with a code size reduction of 15.52% compared to the reference build.
+The best configuration for performance is the red point on the top left of the
+figure which gives a 25.87% speedup, though increasing code size by 14.92%.
+The best configuration for size is the red point on the right of the figure
+and gives both improvements in performance (16.43% speedup) and size (14.92%
+reduction).
 
-In the example exploration above, the best performance and best size
-configurations are the same. This is infrequent and fortunately it simplifies
-the choice of the preferred configuration. To help this choice, the atos-graph
+In order to help the choice of a prefered configuration, the atos-graph
 tool displays a frontier in red where all best points are highlighted such
 that manual selection is simplified.
 
@@ -283,29 +305,49 @@ This command will highlight the three common tradeoffs and mark for reference
 the selected points (the ``-H`` option is given a regexp, in this case the
 Os/O2/O3 basic configurations).
 
+
+Actually all the commands above are automatically ran by the
+staged exploration that can be simply executed with::
+
+  $ atos-explore-staged
+
+By default the value for the number of iteration is ``-M 100``.
+Expect to have an exploration time in the order of O(9.M) in the worst case,
+i.e. with M == 100, the exploration will build and run 900 times the
+application. For the current example, a simple build+run takes 5 seconds,
+thus expect a run time of 1h15min for this command.
+
+The graph with an aggressive performance tradeoff and a reasonable size
+tradeoff is generated with::
+
+  $ atos-graph -s 20 -s 0.2 -H'^OPT-O[s23]$'
+
+Note that we use there the ``-H`` option for highlighting the Os,O2,O3
+configurations. The options takes a regexp as argument for the variant
+identifier and displays the corresponding points in the graph with in yellow.
+
 The resulting graph is show in this figure:
 
 .. image:: images/graph-sha1-staged.png
    :alt: Results space of SHA1 after staged exploration
 
-One can notice that the
-exploration found a point which is both the best performance tradeoff and the
-best code size tradeoff. It gives, compared to the reference build, a speedup
-of 76.92% and a code size reduction of 15.21%. This is much better than both
-the ``-O3`` point at 27.78% speedup and the ``-Os`` point at 7.56% code size
-reduction.
+
+It gives, compared to the reference build, a speedup for the performance first
+tradeoff of 28.35%. The speedup and size reduction for the size first
+tradefoff are 23.48% and 16.07% respectively.
+
+These results are much better than the standars Os, O2, O3 points where for
+instance the ``-O3`` point at gives a 4.49% speedup only, and the ``-Os``
+point reduce size by only 9.06% while regressing performance by 5.23%.
 
 Note also, that the result is now better than the best point after the first
-level exploration in term of speedup (76.92% compared to 53.33%) with a
-negligible difference in term of size reduction (15.21% compared to 15.52%).
+level exploration in term of speedup (28.35% compared to 25.87%).
 
-The configuration can then be rebuilt with for instance:
-
-::
+The configuration can then be rebuilt with for instance with::
 
   $ atos-play -f time
-  Playing optimized build shatest-shacmp-sha-shared-sha-sha.so:
-  OPT-Os-funroll-loops--parammax-inline-insns-auto=195--paraminline-unit-growth=41--parammax-inline-recursive-depth-auto=4--parammax-inline-insns-recursive=396--parammax-inline-insns-recursive-auto=395-fno-partial-inlining-fno-indirect-inlining-finline-small-functions--paramlarge-stack-frame-growth=1885-fexpensive-optimizations-fsplit-ivs-in-unroller-fno-tree-vect-loop-version-fpredictive-commoning--parammax-average-unrolled-insns=631--paramlim-expensive=396--parammax-iterations-computation-cost=43--paramiv-consider-all-candidates-bound=24-fno-loop-block-fno-loop-interchange-fmove-loop-invariants-ftree-dce-fno-peel-loops-ftree-loop-distribution-ftree-loop-im-ftree-loop-ivcanon-ftree-vectorize-funroll-all-loops-fno-unswitch-loops-fno-prefetch-loop-arrays--parammin-vect-loop-bound=741-fgcse-sm-fgcse-after-reload-fno-dce-fdse-fno-if-conversion2-fno-ira-share-save-slots-fdelayed-branch-fsched-spec-load-dangerous-fno-sched-stalled-insns-fno-sched-stalled-insns-dep-fno-selective-scheduling-fsel-sched-pipelining-fno-caller-saves-fno-conserve-stack-fipa-reference-fipa-cp-clone-fno-tree-ccp-ftree-builtin-call-dce-fno-tree-ch-fno-align-functions-falign-labels-falign-jumps-fcprop-registers-fno-float-store-fsingle-precision-constant-fbranch-target-load-optimize--parammax-crossjump-edges=301--parammin-crossjump-insns=2--parammax-sched-region-blocks=29--parammax-sched-region-insns=177--parammin-spec-prob=45--paramsched-spec-prob-cutoff=72--parammax-jump-thread-duplication-stmts=30-fipa-sra-fno-sched-group-heuristic-fsched-critical-path-heuristic-fsched-rank-heuristic-fsched-last-insn-heuristic-fno-sched-dep-count-heuristic-fno-tree-phiprop--paramipa-sra-ptr-growth-factor=1-ffp-contract=off-fno-devirtualize-fno-combine-stack-adjustments-fno-ipa-profile-fno-tree-bit-ccp-fno-tree-loop-distribute-patterns-fcompare-elim--parammax-gcse-insertion-ratio=41--paramgcse-unrestricted-cost=7-foptimize-sibling-calls-fno-auto-inc-dec-fno-modulo-sched-fmodulo-sched-allow-regmoves-fcse-skip-blocks-fgcse-flto...
+  Playing optimized build
+  shacmp-shatest-sha:OPT-Os--paramlarge-function-growth=174--paramlarge-function-insns=1236--paramlarge-stack-frame-growth=1915--paramlarge-stack-frame=377--paramlarge-unit-insns=22854--parammax-inline-insns-recursive=515--parammax-inline-insns-single=594--parammax-inline-recursive-depth=10--parampartial-inlining-entry-probability=12-fno-indirect-inlining-finline-functions-finline-small-functions-fno-partial-inlining--paramgcse-cost-distance-ratio=11--paramgcse-unrestricted-cost=2--paramhot-bb-frequency-fraction=107--paramipa-sra-ptr-growth-factor=1--parammax-cse-path-length=47--parammax-cselib-memory-locations=797--parammax-hoist-depth=23--parammax-sched-insn-conflict-delay=1--parammax-sched-region-blocks=12--parammin-crossjump-insns=9--paramswitch-conversion-max-branch-ratio=15-falign-functions-fno-align-jumps-fno-align-labels-fbranch-target-load-optimize-fno-btr-bb-exclusive-fconserve-stack-fno-cprop-registers-fcrossjumping-fno-cse-follow-jumps-fdata-sections-fdefer-pop-fno-float-store-fno-forward-propagate-ffp-contract=off-ffunction-sections-fgcse-after-reload-fno-gcse-lm-fno-gcse-sm-fguess-branch-probability-fif-conversion-fif-conversion2-fno-ipa-cp-clone-fipa-profile-fno-ipa-pta-fno-ipa-reference-fno-ipa-sra-fno-ira-loop-pressure-fno-merge-constants-fno-modulo-sched-fomit-frame-pointer-fno-optimize-sibling-calls-fpeephole-fno-peephole2-freciprocal-math-freorder-blocks-fno-reorder-blocks-and-partition-fno-sched-critical-path-heuristic-fsched-group-heuristic-fno-sched-last-insn-heuristic-fno-sched-rank-heuristic-fno-sched-spec-load-fsched-spec-load-dangerous-fno-sched-stalled-insns-dep-fsched2-use-superblocks-fno-selective-scheduling2-fsingle-precision-constant-fsplit-wide-types-ftoplevel-reorder-ftracer-fno-tree-bit-ccp-fno-tree-ccp-fno-tree-ch-ftree-forwprop-fno-tree-loop-if-convert-ftree-pre-ftree-reassoc-fno-tree-sink-fno-tree-sra-fno-tree-vrp--paramtracer-max-code-growth=278--paramtracer-min-branch-probability-feedback=36--paramtracer-min-branch-probability=50--paramtracer-min-branch-ratio=86-flto...
 
 While a staged exploration as demonstrated above is extensively using the
 compiler options for finding application wide best tradeoffs, all options are
@@ -323,48 +365,51 @@ Fine grain exploration
 In order to do fine grain exploration the compiler must be a GCC compiler >=
 4.5 with support for plugins enabled. This feature will be detected by the
 tool and used if available. An exploration on a file by file basis is also
-possible, but this feature is not available yet in ATOS tools 1.0.x.
+possible if the compiler does not support plugins.
 
-In addition to plugin support at compile time, the tool must be assisted at
+In addition the tool must be assisted at
 run time in order to get profile information and identify functions which are
 critical for performance (hot functions), and functions which do not
 contribute to performance (cold functions).
 
-This is not yet automated in the tools, hence one has to specify a specific
-script to the configuration in order to retrieve ``oprofile`` like output
-generated by the run script.
+Hence one has to specify a specific script to the configuration in order
+to retrieve ``oprofile`` like output generated by the run script.
+
+The atos tools support also the ``perf`` tool as an alternative to ``oprofile``.
 
 In order to use the oprofile tool for generating a profile, create a new run
 script adding the ``opcontrol`` commands necessary for initializing, starting and
 stopping oprofile, and generating the oprofile report and
 pass it to the ``atos-init`` tool.
 
-For our SHA1 C++ example, the oprofile run script can for instance consists in:
+For our SHA1 C++ example, the oprofile run script is:
 
 ::
 
-  $ cat run_oprofile.sh
+  $ cat run-oprofile.sh
   #!/usr/bin/env bash
   set -e
   cleanup() {
+    trap - EXIT INT TERM QUIT
     sudo opcontrol --stop
     sudo opcontrol --shutdown
   }
   trap cleanup EXIT INT TERM QUIT
+  rm -f oprof.out
   sudo opcontrol --init
   sudo opcontrol --start-daemon --separate=lib,kernel --no-vmlinux
   sudo opcontrol --reset
   sudo opcontrol --start
-  dd if=/dev/urandom bs=4K count=1K 2>/dev/null | /usr/bin/time -p ./sha
-  [ ${PIPESTATUS[0]} = 0 ] || exit 1
-  opreport -l sha -w -D none
+  `dirname $0`/run.sh
+  opreport -l sha -w -D none >oprof.out
 
-Note that in this setup opcontrol needs sudo privileges. Note also that the
-timing for the application (``./sha`` there) has been included into the
-script.
+Note that opcontrol needs sudo privileges. Use the ``perf``
+tool if available which is simpler to use and does not need privileges.
 
 Note also that for retrieving the oprofile output, ``opreport`` is used,
 with the options to turn off demangling and enable per application report.
+
+The resulting profile output must be dumped into a ``oprof.out`` file.
 
 Once the script is ready, it can be tested for instance on the reference
 configuration by doing:
@@ -374,7 +419,7 @@ configuration by doing:
   $ atos-play -r
   Playing optimized build shatest-shacmp-sha-shared-sha-sha.so:REF...
   Building variant REF...
-  $ ./run_oprofile.sh
+  $ ./run-oprofile.sh
   Using default event: CPU_CLK_UNHALTED:100000:0:1:1
   Using 2.6+ OProfile kernel interface.
   Using log file /var/lib/oprofile/samples/oprofiled.log
@@ -382,12 +427,10 @@ configuration by doing:
   Signalling daemon... done
   Profiler running.
   49F9C561 887EECBC FD4BA2DE 12A9B965 F1DF688E - STDIN
-  real 0.62
-  user 0.26
-  sys 0.00
   Stopping profiling.
   Killing daemon.
   warning: /no-vmlinux could not be found.
+  $ cat oprof.out
   CPU: Intel Sandy Bridge microarchitecture, speed 1.601e+06 MHz (estimated)
   Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (No unit mask) count 100000
   vma      samples  %        image name               symbol name
@@ -404,7 +447,7 @@ The configuration can then be updated with for instance:
 
 ::
 
-  $ atos-init -b "make clean all" -r ./run.sh -p ./run_oprofile.sh -n 0
+  $ atos-init -b "make clean all" -r ./run.sh -p ./run-oprofile.sh -n 0
 
 The ``-p`` option has been added to specify the script that will
 output the profile information.
@@ -414,15 +457,33 @@ reference configuration is not recorded again. This is useful for
 changing the configuration without modifying the results database.
 
 Once the profiling support is setup, an exploration can be executed with a
-partitioning of the hot and cold functions with:
+partitioning of the hot and cold files with:
 
 ::
 
-  $ atos-explore-acf
+  $ atos-explore-acf -N 50 --file-by-file
 
-By default this tool will select the critical functions contributing to 70% of
-the performance and execute an exploration on a function per function
-basis. The other functions, considered cold are optimized for size first.
+By default this tool will select the critical files contributing to 70% of
+the performance and execute an exploration on a file by file basis.
+The other files, considered cold are optimized for size first.
+
+The expected number of build/run when using this tool is O(72.H.N) in the
+worst case, where N is the number of basic iterations and H is the number of
+hot files detected.
+Thus for this example where the build+run takes 5 seconds, expect an exploration
+time of 3600*5 seconds, i.e. 5 hours in the worst case.
+
+The same kind of exploration can be executed on a function by function basis
+if the compiler support plugins::
+
+  $ atos-explore-acf -N 50
+
+Without the ``--file-by-file`` option the default is indeed to explore
+function by function.
+
+In this example the number of hot functions is probably 2, thus expect
+an exploration time of 10 hours for this last command.
+
 
 Full exploration
 ----------------
@@ -439,18 +500,13 @@ results first with for instance:
   $ cp -a atos-configurations atos-configurations-staged
   $ rm -rf atos-configurations
 
-Then do a a full staged exploration with:
+Then do a a full staged exploration with::
 
-::
+  $ atos-init -b "make clean all" -r ./run.sh -p ./run-oprofile.sh
+  $ atos-explore-staged -M 100 -N 50
 
-  $ atos-explore-staged -M 50 -b "make clean all" -r ./run.sh -p ./run_oprofile.sh
-
-Note that this is equivalent to:
-
-::
-
-  $ atos-init -b "make clean all" -r ./run.sh -p ./run_oprofile.sh
-  $ atos-explore-staged -M 50
+Here we specified 100 basic iterations at global level and 50 basic iterations
+at function per function level.
 
 Emulation
 ---------

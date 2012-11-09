@@ -62,6 +62,7 @@ INSTALLED_DOCS=$(addprefix $(PREFIX)/,$(SHARED_MANS) $(SHARED_HTMLS))
 
 COVERAGE_DIR=$(abspath .)/coverage
 
+.FORCE:
 .PHONY: all clean distclean install check tests check-python-dependencies examples examples-nograph install-shared
 
 all: all-local all-plugins
@@ -97,7 +98,7 @@ distclean-plugin:
 distclean-test:
 	install -d tests && $(MAKE) -C tests -f $(abspath $(srcdir)tests/GNUmakefile) distclean
 
-install: $(INSTALLED_EXES) $(INSTALLED_DATAS) install-plugins
+install: $(INSTALLED_EXES) $(INSTALLED_DATAS) install-plugins install-shared
 
 install-plugins:
 	$(QUIET)$(MAKE) $(QUIET_S) -C $(srcdir)plugins/acf-plugin install PLUGIN_PREFIX=$(abspath $(PREFIX)/lib/atos/plugins/)
@@ -142,19 +143,20 @@ examples-bzip2-play:
 	cd $(srcdir)examples/bzip2 && $(abspath bin/atos-explore) -b "make clean all" -r ./run.sh -c && $(abspath bin/atos-play) -p
 
 #
-# Installation of doc and examples
+# Installation of examples
 #
 
-SHARED_DIRS=examples/sha1 examples/sha1-c
+# Trailing '/' is necessary for the git ls-tree
+SHARED_DIRS=examples/sha1/ examples/sha1-c/ examples/bzip2/
 
-SHARED_FILES=$(shell cd $(srcdir) && find $(SHARED_DIRS) -type f)
+SHARED_FILES=$(shell cd $(srcdir) && git ls-tree HEAD $(SHARED_DIRS) | awk '{print $$4;}')
 
 INSTALLED_SHARED_FILES=$(addprefix $(PREFIX)/share/atos/,$(SHARED_FILES))
 
 install-shared: $(INSTALLED_SHARED_FILES)
 
-$(INSTALLED_SHARED_FILES): $(PREFIX)/share/atos/%: $(srcdir)%
-	$(QUIET_INSTALL_DATA)install -D -m 755 $< $@
+$(INSTALLED_SHARED_FILES): $(PREFIX)/share/atos/%: .FORCE
+	$(QUIET_INSTALL_DATA)install -d $(dir $@) && cp -a $(srcdir)$* $(dir $@)
 
 
 #
@@ -204,14 +206,14 @@ check-python-dependencies: $(srcdir)config/python_checks
 #
 # Rules for installation
 #
-$(INSTALLED_EXES): $(PREFIX)/%: %
-	$(QUIET_INSTALL_EXE)install -D -m 755 $< $(PREFIX)/$<
+$(INSTALLED_EXES): $(PREFIX)/%: .FORCE
+	$(QUIET_INSTALL_EXE)install -D -m 755 $* $(PREFIX)/$*
 
-$(INSTALLED_DATAS): $(PREFIX)/%: %
-	$(QUIET_INSTALL_DATA)install -D -m 644 $< $(PREFIX)/$<
+$(INSTALLED_DATAS): $(PREFIX)/%: .FORCE
+	$(QUIET_INSTALL_DATA)install -D -m 644 $* $(PREFIX)/$*
 
-$(INSTALLED_DOCS): $(PREFIX)/%: %
-	$(QUIET_INSTALL_DOC)install -D -m 644 $< $(PREFIX)/$<
+$(INSTALLED_DOCS): $(PREFIX)/%: .FORCE
+	$(QUIET_INSTALL_DOC)install -D -m 644 $* $(PREFIX)/$*
 
 #
 # Manage verbose output

@@ -36,7 +36,7 @@ PYTHON_SCRIPTS_IN=atos.py atos-help.py atos-audit.py atos-build.py atos-deps.py 
 SHARED_RSTS_IN=$(addprefix doc/, intro.rst tutorial.rst benchmarks.rst example-sha1.rst)
 SHARED_MANS_IN=$(SHARED_RSTS_IN)
 SHARED_HTMLS_IN=$(SHARED_RSTS_IN)
-SHARED_IMAGES_IN=$(addprefix doc/images/, graph-sha1-first.png graph-sha1-staged.png atos-v2-zlib-sdk7108.png atos-v2-jpeg-sdk7108.png atos-v2-sha1-qemu-x86-64.png atos-v2-bzip2-qemu-x86-64.png)
+SHARED_IMAGES_IN=$(addprefix doc/images/, graph-sha1-first.png graph-sha1-staged.png atos-v2-zlib-sdk7108.png atos-v2-jpeg-sdk7108.png atos-v2-sha1-qemu-x86-64.png atos-v2-bzip2-qemu-x86-64.png atos-v2-164-gzip-qemu-arm-android.png atos-v2-181-mcf-qemu-arm-android.png atos-v2-255-vortex-qemu-arm-android.png atos-v2-401-bzip2-qemu-arm-android.png atos-v2-429-mcf-qemu-arm-android.png atos-v2-470-lbm-qemu-arm-android.png)
 
 CONFIG_SCRIPTS_EXE=$(CONFIG_SCRIPTS_EXE_IN:%.in=bin/%)
 CONFIG_SCRIPTS_LIB=$(CONFIG_SCRIPTS_LIB_IN:%.in=lib/atos/%)

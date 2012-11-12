@@ -4,13 +4,13 @@
 
 import common
 import os, shutil, filecmp
-from atos import utils
+from atoslib import utils
 
 TEST_CASE = "ATOS atos-build invocation"
 
 log = "debug.log"
 
-args = common.atos_setup_args(ATOS_DEBUG_FILE=log)
+args = common.atos_setup_args(ATOS_DEBUG_FILE=log, ATOS_PREFIX=common.ROOT)
 
 sha1dir = os.path.join(common.SRCDIR, 'examples', 'sha1-c')
 

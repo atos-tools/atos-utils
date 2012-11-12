@@ -30,9 +30,10 @@ RST2HTML=$(srcdir)config/docutils rst2html
 CONFIG_SCRIPTS_EXE_IN=atos-config.in
 CONFIG_SCRIPTS_LIB_IN=
 CONFIG_SCRIPTS_CFG_IN=flags.inline.cfg.in flags.loop.cfg.in flags.optim.cfg.in
-PYTHON_LIB_SCRIPTS_IN=$(addprefix atos/, __init__.py globals.py utils.py arguments.py atos_deps.py logger.py process.py profile.py atos_graph.py)
-PYTHON_LIB_EXE_SCRIPTS_IN=$(addprefix atos/, atos_lib.py generators.py)
-PYTHON_SCRIPTS_IN=atos.py atos-help.py atos-audit.py atos-build.py atos-deps.py atos-explore.py atos-init.py atos-opt.py atos-play.py atos-profile.py atos-raudit.py atos-run.py atos-driver.py atos-timeout.py atos-replay.py atos-explore-inline.py atos-explore-loop.py atos-explore-optim.py atos-explore-acf.py atos-cookie.py atos-explore-staged.py atos-graph.py
+PYTHON_LIB_SCRIPTS_IN=$(addprefix atoslib/, __init__.py globals.py utils.py arguments.py atos_deps.py logger.py process.py profile.py atos_graph.py)
+PYTHON_LIB_EXE_SCRIPTS_IN=$(addprefix atoslib/, atos_lib.py generators.py)
+PYTHON_SCRIPTS_IN=atos.py atos-driver.py atos-timeout.py
+LINKED_SCRIPTS_IN=atos-help atos-audit atos-build atos-deps atos-explore atos-init atos-opt atos-play atos-profile atos-raudit atos-run atos-replay atos-explore-inline atos-explore-loop atos-explore-optim atos-explore-acf atos-cookie atos-explore-staged atos-graph
 SHARED_RSTS_IN=$(addprefix doc/, intro.rst tutorial.rst benchmarks.rst example-sha1.rst)
 SHARED_MANS_IN=$(SHARED_RSTS_IN)
 SHARED_HTMLS_IN=$(SHARED_RSTS_IN)
@@ -44,12 +45,13 @@ CONFIG_SCRIPTS_CFG=$(CONFIG_SCRIPTS_CFG_IN:%.in=lib/atos/config/%)
 PYTHON_LIB_SCRIPTS=$(PYTHON_LIB_SCRIPTS_IN:%.py=lib/atos/python/%.py)
 PYTHON_LIB_EXE_SCRIPTS=$(PYTHON_LIB_EXE_SCRIPTS_IN:%.py=lib/atos/python/%.py)
 PYTHON_SCRIPTS=$(PYTHON_SCRIPTS_IN:%.py=bin/%)
+LINKED_SCRIPTS=$(LINKED_SCRIPTS_IN:%=bin/%)
 SHARED_RSTS=$(SHARED_RSTS_IN:%=share/atos/%)
 SHARED_MANS=$(SHARED_MANS_IN:doc/%.rst=share/atos/man/man1/atos-%.1)
 SHARED_HTMLS=$(SHARED_HTMLS_IN:doc/%.rst=share/atos/doc/%.html)
 SHARED_IMAGES=$(SHARED_IMAGES_IN:%=share/atos/%)
 
-CONFIG_SCRIPTS=$(CONFIG_SCRIPTS_EXE) $(CONFIG_SCRIPTS_LIB) $(PYTHON_LIB_EXE_SCRIPTS) $(PYTHON_SCRIPTS)
+CONFIG_SCRIPTS=$(CONFIG_SCRIPTS_EXE) $(CONFIG_SCRIPTS_LIB) $(PYTHON_LIB_EXE_SCRIPTS) $(PYTHON_SCRIPTS) $(LINKED_SCRIPTS)
 
 ALL_EXES=$(CONFIG_SCRIPTS)
 INSTALLED_EXES=$(addprefix $(PREFIX)/,$(ALL_EXES))
@@ -67,7 +69,7 @@ COVERAGE_DIR=$(abspath .)/coverage
 
 all: all-local all-plugins
 
-all-local: $(ALL_EXES) $(ALL_DATAS)
+all-local: $(ALL_EXES) $(ALL_DATAS) all-shared
 
 doc: $(ALL_DOCS)
 
@@ -78,6 +80,7 @@ clean: clean-local clean-doc clean-plugin clean-test
 
 clean-doc:
 	$(QUIET_CLEAN)rm -f $(ALL_DOCS)
+
 clean-local:
 	$(QUIET_CLEAN)rm -f *.tmp
 
@@ -98,7 +101,9 @@ distclean-plugin:
 distclean-test:
 	install -d tests && $(MAKE) -C tests -f $(abspath $(srcdir)tests/GNUmakefile) distclean
 
-install: $(INSTALLED_EXES) $(INSTALLED_DATAS) install-plugins install-shared
+install: install-local install-plugins
+
+install-local: $(INSTALLED_EXES) $(INSTALLED_DATAS) install-shared
 
 install-plugins:
 	$(QUIET)$(MAKE) $(QUIET_S) -C $(srcdir)plugins/acf-plugin install PLUGIN_PREFIX=$(abspath $(PREFIX)/lib/atos/plugins/)
@@ -151,7 +156,15 @@ SHARED_DIRS=examples/sha1/ examples/sha1-c/ examples/bzip2/
 
 SHARED_FILES=$(shell cd $(srcdir) && git ls-tree HEAD $(SHARED_DIRS) | awk '{print $$4;}')
 
+ALL_SHARED_FILES=$(addprefix share/atos/,$(SHARED_FILES))
 INSTALLED_SHARED_FILES=$(addprefix $(PREFIX)/share/atos/,$(SHARED_FILES))
+
+all-shared: $(ALL_SHARED_FILES)
+
+$(ALL_SHARED_FILES): $(VSTAMP) $(srcdir)GNUmakefile
+
+$(ALL_SHARED_FILES): share/atos/%:
+	$(QUIET_CP)install -d $(dir $@) && cp -a $(srcdir)$* $(dir $@)
 
 install-shared: $(INSTALLED_SHARED_FILES)
 
@@ -176,6 +189,9 @@ $(CONFIG_SCRIPTS_CFG): lib/atos/config/%: $(srcdir)%.in
 $(PYTHON_SCRIPTS): bin/%: $(srcdir)%.py
 	$(QUIET_CHECK)$(srcdir)config/python_checker $<
 	$(QUIET_IN)install -d $(dir $@) && sed -e 's!@VERSION@!$(VERSION)!g' <$< >$@.tmp && chmod 755 $@.tmp && mv $@.tmp $@
+
+$(LINKED_SCRIPTS): bin/%:
+	$(QUIET_IN)install -d $(dir $@) && cd $(dir $@) && ln -sf atos $*
 
 $(PYTHON_LIB_SCRIPTS): lib/atos/python/%.py: $(srcdir)%.py
 	$(QUIET_CHECK)$(srcdir)config/python_checker $<

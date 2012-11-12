@@ -96,32 +96,34 @@ os.chdir(tstdir)
 
 def atos_setup_args(**kwargs):
     import argparse
-    import atos.logger
-    import atos.process
-    import atos.utils
+    import atoslib.globals
+    import atoslib.logger
+    import atoslib.process
+    import atoslib.utils
     # set environment variables
     for key, value in kwargs.items():
         if value is None: continue
         os.environ[str(key)] = str(value)
     # allows to call 'invoque' function from toplevel
-    atos.logger.setup({})
-    atos.process.setup({})
-    atos.utils._at_toplevel = True
+    atoslib.globals.setup(PREFIX=ROOT)
+    atoslib.logger.setup({})
+    atoslib.process.setup({})
+    atoslib.utils._at_toplevel = True
     args = argparse.Namespace()
-    args.dryrun = atos.process._dryrun
+    args.dryrun = atoslib.process._dryrun
     return args
 
 def atos_log_name(prefix="run", configuration_path="atos-configurations",
                   options=None, gopts=None, uopts=None, variant=None):
-    import atos.atos_lib
+    import atoslib.atos_lib
     logdir = os.path.join(configuration_path, "logs")
-    variant = variant or atos.atos_lib.variant_id(options, gopts, uopts)
+    variant = variant or atoslib.atos_lib.variant_id(options, gopts, uopts)
     return os.path.join(logdir, "%s-%s.log" % (
-            prefix, str(atos.atos_lib.hashid(variant))))
+            prefix, str(atoslib.atos_lib.hashid(variant))))
 
 def atos_results(query=None, configuration_path="atos-configurations"):
-    import atos.atos_lib
-    return atos.atos_lib.atos_db.db(configuration_path).get_results(query)
+    import atoslib.atos_lib
+    return atoslib.atos_lib.atos_db.db(configuration_path).get_results(query)
 
 def grep(log, *args):
     import re

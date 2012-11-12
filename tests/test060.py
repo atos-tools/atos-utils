@@ -4,7 +4,7 @@
 
 import common
 import os
-from atos import utils
+from atoslib import utils
 
 TEST_CASE = "ATOS atos-opt invocation"
 

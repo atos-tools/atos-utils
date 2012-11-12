@@ -8,8 +8,8 @@ import random
 import itertools
 import re
 
-from atos import utils
-from atos import generators
+from atoslib import utils
+from atoslib import generators
 
 TEST_CASE = "ATOS generators - simple"
 

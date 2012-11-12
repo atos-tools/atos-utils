@@ -6,7 +6,7 @@ import common
 
 TEST_CASE = "ATOS open locked dryrun"
 
-from atos import process
+from atoslib import process
 
 with open("test", "w") as tmpfile:
     tmpfile.write("hello\n")

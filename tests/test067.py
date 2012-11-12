@@ -8,11 +8,11 @@ import random
 import itertools
 import re
 
-from atos import utils
-from atos import atos_lib
-from atos import process
-from atos import generators
-from atos import profile
+from atoslib import utils
+from atoslib import atos_lib
+from atoslib import process
+from atoslib import generators
+from atoslib import profile
 
 
 TEST_CASE = "ATOS oprofile output formats"

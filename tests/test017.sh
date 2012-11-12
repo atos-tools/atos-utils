@@ -40,7 +40,7 @@ fi
 [ `find atos-config/profiles -name *.gcda | wc -l` -eq 2 ]
 
 # Test on sha1
-cp -a $SRCDIR/examples/sha1 .
+cp -a $ROOT/share/atos/examples/sha1 .
 cd sha1
 $ROOT/bin/atos-audit -C atos-config make clean all
 $ROOT/bin/atos-raudit -C atos-config ./run.sh

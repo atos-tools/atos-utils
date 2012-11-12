@@ -6,7 +6,7 @@ import common
 
 TEST_CASE = "ATOS process module"
 
-from atos import process
+from atoslib import process
 
 args = process.cmdline2list("command '' a\\\ file")
 cmd = process.list2cmdline(args)

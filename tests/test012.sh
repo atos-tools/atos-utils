@@ -6,7 +6,7 @@ source `dirname $0`/common.sh
 
 TEST_CASE="ATOS deps with archives"
 
-cp -a $SRCDIR/examples/sha1 .
+cp -a $ROOT/share/atos/examples/sha1 .
 cd sha1
 # Explicit .a in arguments
 cat >build.sh <<EOF

@@ -17,7 +17,7 @@ atos-configurations/build.sh
 cmp sha1-c sha1-c.ref
 
 # Test on sha1
-cp -a $SRCDIR/examples/sha1 .
+cp -a $ROOT/share/atos/examples/sha1 .
 cd sha1
 make clean
 $ROOT/bin/atos-audit -f make clean all

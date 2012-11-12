@@ -5,8 +5,8 @@
 
 import common
 import os, sys
-from atos import profile
-from atos import process
+from atoslib import profile
+from atoslib import process
 
 TEST_CASE = "ATOS profile defect test 1 - Should be expected to fail"
 

@@ -181,6 +181,18 @@ class parsers:
         sub = subs.add_parser("explore", help="exploration of common variants")
         parsers.atos_explore(sub)
 
+        sub = subs.add_parser("explore-inline",
+                              help="exploration of inlining optimizations")
+        parsers.atos_explore_inline(sub)
+
+        sub = subs.add_parser("explore-loop",
+                              help="exploration of loop optimizations")
+        parsers.atos_explore_loop(sub)
+
+        sub = subs.add_parser("explore-optim",
+                              help="exploration of backend optimizations")
+        parsers.atos_explore_optim(sub)
+
         sub = subs.add_parser("explore-staged", help="full staged exploration")
         parsers.atos_explore_staged(sub)
 
@@ -198,7 +210,7 @@ class parsers:
         sub = subs.add_parser("build", help="build a variant")
         parsers.atos_build(sub)
 
-        sub = subs.add_parser("dep",
+        sub = subs.add_parser("deps",
                 help="generate the build system from a previous build audit")
         parsers.atos_deps(sub)
 

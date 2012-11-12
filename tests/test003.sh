@@ -15,7 +15,7 @@ grep CC_DEPS atos-configurations/build.audit >/dev/null
 grep sha.c atos-configurations/build.audit >/dev/null
 grep sha1-c atos-configurations/build.audit >/dev/null
 
-cp -a $SRCDIR/examples/sha1 .
+cp -a $ROOT/share/atos/examples/sha1 .
 cd sha1
 make clean
 $ROOT/bin/atos-audit make sha

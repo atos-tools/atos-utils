@@ -22,9 +22,13 @@
 
 import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(
-            os.path.dirname(__file__), '..', 'lib', 'atos', 'python')))
-from atos import arguments
-from atos import utils
+            os.path.dirname(sys.argv[0]), '..', 'lib', 'atos', 'python')))
+from atoslib import arguments
+from atoslib import utils
+
+base = os.path.basename(sys.argv[0])
+subcmd = base[5:]
+if subcmd: sys.argv.insert(1, subcmd)
 
 args = arguments.parser("atos").parse_args()
 utils.execute("atos", args)

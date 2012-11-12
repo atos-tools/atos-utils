@@ -12,7 +12,7 @@ build_process_cmd() {
 
 import sys
 sys.path.insert(0, "$ROOT/lib/atos/python")
-from atos import process
+from atoslib import process
 print "Executing command..."
 status = process.system("/bin/sleep 10", print_output=True)
 print "should not get there"

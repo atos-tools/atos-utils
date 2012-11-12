@@ -5,7 +5,7 @@
 import common
 
 import os
-from atos import utils, atos_lib
+from atoslib import utils, atos_lib
 
 TEST_CASE = "ATOS atos cookies"
 

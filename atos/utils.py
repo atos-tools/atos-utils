@@ -18,6 +18,7 @@
 
 import sys, os
 import re
+import traceback
 
 import globals
 import arguments
@@ -25,6 +26,7 @@ import atos_lib
 import generators
 import process
 import profile
+import logger
 from logger import debug, warning, error, message, info
 
 _at_toplevel = None
@@ -122,7 +124,20 @@ def execute(tool, args):
     global _at_toplevel
     assert(_at_toplevel == None)
     _at_toplevel = True
-    sys.exit(invoque(tool, args))
+    try:
+        status = invoque(tool, args)
+    except KeyboardInterrupt:
+        raise
+    except SystemExit:
+        raise
+    except:
+        # do not print full stacktrace in case of exception
+        debug(traceback.format_exc())
+        exc_str = "\n".join(
+            traceback.format_exception_only(*sys.exc_info()[:2]))[:-1]
+        logger.internal_error(exc_str)
+    else:
+        sys.exit(status)
 
 def run_atos(args):
     """

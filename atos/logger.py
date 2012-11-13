@@ -123,3 +123,8 @@ def message(msg):
     """ Print an info message on stdout if quiet mode is not set. """
     logging.debug(msg)
     if not _quiet: print msg
+
+def internal_error(msg, exit_status=1):
+    progname = os.path.basename(sys.argv[0])
+    print >>sys.stderr, '%s: internal error: %s' % (progname, msg)
+    if exit_status: sys.exit(exit_status)

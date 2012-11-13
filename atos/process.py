@@ -30,6 +30,7 @@ import tempfile
 import atexit
 import time
 import shutil
+import logger
 
 def cmdline2list(cmd):
     """
@@ -38,7 +39,12 @@ def cmdline2list(cmd):
     to bare ASCII strings.
     """
     assert(isinstance(cmd, (str, unicode)))
-    return shlex.split(str(cmd))
+    try:
+        return shlex.split(str(cmd))
+    except ValueError:
+        logger.internal_error("malformed command (%s) '%s'" % (
+                str(sys.exc_info()[1]), cmd))
+    except: raise
 
 def list2cmdline(args, **kwargs):
     """

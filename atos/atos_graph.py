@@ -355,9 +355,9 @@ def getoptcases(dbpath, opts):
     print '%d points, %d on frontier' % (len(variant_results), len(frontier))
     return variant_results
 
-def optgraph(dbpath, opts):
+def optgraph(opts):
 
-    optcases = getoptcases(dbpath, opts)
+    optcases = getoptcases(opts.configuration_path, opts)
 
     scatters, frontiers = [], []
 
@@ -434,8 +434,9 @@ def optgraph(dbpath, opts):
     return scatters, frontiers
 
 
-def multgraph(dbpathes, opts):
+def multgraph(opts):
 
+    dbpathes = [opts.configuration_path] + opts.configuration_pathes
     nbdb = len(dbpathes)
     optcasesl = [getoptcases(f, opts) for f in dbpathes]
 
@@ -463,7 +464,9 @@ def multgraph(dbpathes, opts):
     return scatters, frontiers
 
 
-def correlgraph(dbpathes, opts):
+def correlgraph(opts):
+
+    dbpathes = [opts.configuration_path] + opts.configuration_pathes
 
     # load results from all databases
     optcasesl = []

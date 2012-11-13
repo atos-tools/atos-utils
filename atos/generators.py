@@ -884,37 +884,11 @@ def get_run_tradeoffs(
 
 
 def get_run_results(matches, configuration_path, **kwargs):
-    def merge_results(results):
-        # filter out failures
-        results = filter(
-            lambda x: "FAILURE" not in x.values(), results)
-        if not results: return None
-        # transform into result objects
-        results = map(
-            atos_lib.atos_client_results.result, results)
-        # compute merged results for each variant
-        variants = list(
-            set(map(lambda x: x.variant, results)))
-        variant_results = []
-        for variant in variants:
-            filtered_results = filter(lambda x: x.variant == variant, results)
-            targets = list(set(map(lambda x: x.target, filtered_results)))
-            # merge multiple runs
-            targets_results = map(
-                atos_lib.atos_client_results.result.merge_multiple_runs,
-                map(lambda x: filter(
-                        lambda y: y.target == x, filtered_results), targets))
-            # merge multiple targets
-            variant_results.append(
-                atos_lib.atos_client_results.result.merge_targets(
-                    'group', targets_results))
-        return variant_results
-
     db = atos_lib.atos_db.db(configuration_path)
-    ref_results = merge_results(
+    ref_results = atos_lib.merge_results(
         atos_lib.results_filter(db.get_results(), {'variant': 'REF'}))
     assert ref_results and len(ref_results) == 1
-    variant_results = merge_results(
+    variant_results = atos_lib.merge_results(
         atos_lib.results_filter_cookies(db.get_results(), matches)) or []
     map(lambda x: x.compute_speedup(ref_results[0]), variant_results)
     return variant_results

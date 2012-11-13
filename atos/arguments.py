@@ -724,6 +724,7 @@ class parsers:
         args.atos_graph.configuration_pathes(parser)
         args.atos_graph.xlim(parser)
         args.atos_graph.ylim(parser)
+        args.atos_graph.cookie(parser)
         args.dryrun(parser)
         args.version(parser)
         return parser
@@ -1668,3 +1669,11 @@ class args:
                 *args,
                  dest="ylim",
                  help="defines the y axis limits")
+
+        @staticmethod
+        def cookie(parser, args=("--cookie",)):
+            parser.add_argument(
+                *args,
+                 dest="cookies",
+                 action='append',
+                 help="cookies used for results filtering")

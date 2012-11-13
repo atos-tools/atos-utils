@@ -50,6 +50,7 @@ def parser(tool):
         "atos-cookie": parsers.atos_cookie,
         "atos-lib": parsers.atos_lib,
         "atos-gen": parsers.atos_gen,
+        "atos-graph": parsers.atos_graph,
         }
     return factories[tool]()
 
@@ -224,6 +225,10 @@ class parsers:
         sub = subs.add_parser("run-profile",
                               help="run a variant in profile collection mode")
         parsers.atos_run_profile(sub)
+
+        sub = subs.add_parser("graph",
+                              help="show exploration results in a graph")
+        parsers.atos_gen(sub)
 
         sub = subs.add_parser("lib",
                               help="internal API access to ATOS library")
@@ -574,7 +579,7 @@ class parsers:
                 description="Query database results")
 
         args.configuration_path(parser)
-        args.atos_lib.query(parser)
+        args.query(parser)
         args.atos_lib.text(parser)
         return parser
 
@@ -588,10 +593,10 @@ class parsers:
         args.configuration_path(parser)
         args.tradeoffs(parser)
         args.cookie(parser)
-        args.atos_lib.query(parser)
-        args.atos_lib.targets(parser)
+        args.query(parser)
+        args.targets(parser)
         args.atos_lib.groupname(parser)
-        args.atos_lib.refid(parser)
+        args.refid(parser)
         args.atos_lib.frontier(parser)
         args.atos_lib.table(parser)
         args.atos_lib.reverse(parser)
@@ -606,7 +611,7 @@ class parsers:
 
         args.configuration_path(parser, ("-C", "--C1"))
         args.atos_lib.remote_configuration_path(parser)
-        args.atos_lib.query(parser)
+        args.query(parser)
         args.atos_lib.replacement(parser)
         args.force(parser)
         return parser
@@ -620,7 +625,7 @@ class parsers:
 
         args.configuration_path(parser, ("-C", "--C1"))
         args.atos_lib.remote_configuration_path(parser)
-        args.atos_lib.query(parser)
+        args.query(parser)
         args.atos_lib.replacement(parser)
         args.force(parser)
         return parser
@@ -633,9 +638,9 @@ class parsers:
                                         description="ATOS lib tool")
 
         args.configuration_path(parser)
-        args.atos_lib.targets(parser)
-        args.atos_lib.query(parser)
-        args.atos_lib.refid(parser)
+        args.targets(parser)
+        args.query(parser)
+        args.refid(parser)
         args.atos_lib.reverse(parser)
         args.atos_lib.mode(parser)
         args.atos_lib.variants(parser)
@@ -660,7 +665,7 @@ class parsers:
                                         description="ATOS lib tool")
 
         args.configuration_path(parser)
-        args.atos_lib.query(parser)
+        args.query(parser)
         args.atos_lib.text(parser)
         args.atos_lib.uniq(parser)
         args.atos_lib.additem(parser)
@@ -691,6 +696,35 @@ class parsers:
         args.force(parser, ("--force",))
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
+        args.version(parser)
+        return parser
+
+    @staticmethod
+    def atos_graph(parser=None):
+        """ atos graph arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-graph",
+                                        description="ATOS graph tool")
+        args.atos_graph.outfile(parser)
+        args.atos_graph.hide(parser)
+        args.id(parser)
+        args.atos_graph.follow(parser)
+        args.atos_graph.correl(parser)
+        args.atos_graph.highlight(parser)
+        args.atos_graph.frontier(parser)
+        args.atos_graph.xd(parser)
+        args.atos_graph.anonymous(parser)
+        args.atos_graph.labels(parser)
+        args.tradeoffs(parser)
+        args.targets(parser)
+        args.refid(parser)
+        args.atos_graph.filter(parser)
+        args.query(parser)
+        args.configuration_path(parser)
+        args.atos_graph.configuration_pathes(parser)
+        args.atos_graph.xlim(parser)
+        args.atos_graph.ylim(parser)
+        args.dryrun(parser)
         args.version(parser)
         return parser
 
@@ -1151,6 +1185,27 @@ class args:
                              action='store_true',
                              help="reuse existing results")
 
+    @staticmethod
+    def targets(parser, args=("-t", "--targets")):
+        parser.add_argument(
+            *args,
+             dest="targets",
+             help="target list")
+
+    @staticmethod
+    def refid(parser, args=("-r", "--refid")):
+        parser.add_argument(
+            *args,
+             dest="ref",
+             help="reference variant id",
+             default="REF")
+
+    @staticmethod
+    def query(parser, args=("-q", "--query")):
+        parser.add_argument(*args,
+                             dest="query",
+                             help="results query values")
+
     class atos_help:
         """ Namespace for non common atos help options. """
 
@@ -1225,12 +1280,6 @@ class args:
         """ Namespace for non common atos lib arguments. """
 
         @staticmethod
-        def query(parser, args=("-q", "--query")):
-            parser.add_argument(*args,
-                                 dest="query",
-                                 help="results query values")
-
-        @staticmethod
         def type(parser, args=("-t", "--type")):
             parser.add_argument(
                 *args,
@@ -1257,26 +1306,11 @@ class args:
                  action="store_true")
 
         @staticmethod
-        def targets(parser, args=("-t", "--targets")):
-            parser.add_argument(
-                *args,
-                 dest="targets",
-                 help="target list")
-
-        @staticmethod
         def groupname(parser, args=("-g", "--group_name")):
             parser.add_argument(
                 *args,
                  dest="group_name",
                  help="target group name")
-
-        @staticmethod
-        def refid(parser, args=("-r", "--refid")):
-            parser.add_argument(
-                *args,
-                 dest="ref",
-                 help="reference variant id",
-                 default="REF")
 
         @staticmethod
         def frontier(parser, args=("-f", "--frontier")):
@@ -1541,3 +1575,96 @@ class args:
                 *args,
                  dest="generator",
                  help="generator used for exploration")
+
+    class atos_graph:
+        """ Namespace for non common atos-graph arguments. """
+
+        @staticmethod
+        def outfile(parser, args=("-o", "--outfile")):
+            parser.add_argument(
+                *args,
+                 dest="outfile", help="output file name")
+
+        @staticmethod
+        def hide(parser, args=("-d", "--hide")):
+            parser.add_argument(
+                *args,
+                 dest="show", action="store_false",
+                 help="do not show resulting graph")
+
+        @staticmethod
+        def follow(parser, args=("--follow",)):
+            parser.add_argument(
+                *args,
+                 dest="follow", action="store_true",
+                 help="continuously update graph with new results")
+
+        @staticmethod
+        def correl(parser, args=("--correl",)):
+            parser.add_argument(
+                *args,
+                 dest="correlation_graph", action="store_true",
+                 help="show correlation graph")
+
+        @staticmethod
+        def highlight(parser, args=("-H", "--highlight")):
+            parser.add_argument(
+                *args,
+                 dest="highlight",
+                 help="highlight points given a regexp")
+
+        @staticmethod
+        def frontier(parser, args=("-F", "--frontier")):
+            parser.add_argument(
+                *args,
+                 dest="frontier_only", action="store_true",
+                 help="display only frontier points")
+
+        @staticmethod
+        def xd(parser, args=("-x",)):
+            parser.add_argument(
+                *args,
+                 dest="xd", type=int, default=0,
+                 help="highlight different options sets -x[0123]")
+
+        @staticmethod
+        def anonymous(parser, args=("-a", "--anonymous")):
+            parser.add_argument(
+                *args,
+                 dest="anonymous", action="store_true",
+                 help="anonymous configuration, no configuration id on graph")
+
+        @staticmethod
+        def labels(parser, args=("-l", "--cfglbl")):
+            parser.add_argument(
+                *args,
+                 dest="labels",
+                 help="atos-configurations labels")
+
+        @staticmethod
+        def filter(parser, args=("-f", "--filter")):
+            parser.add_argument(
+                *args,
+                 dest="filter",
+                 help="filter in the points given by the regexp")
+
+        @staticmethod
+        def configuration_pathes(parser, args=("-D",)):
+            parser.add_argument(
+                *args,
+                 dest="configuration_pathes", action='append',
+                 help="additional configuration pathes")
+
+        @staticmethod
+        def xlim(parser, args=("--xlim",)):
+            parser.add_argument(
+                *args,
+                 dest="xlim",
+                 help="defines the x axis limits")
+
+        @staticmethod
+        def ylim(parser, args=("--ylim",)):
+            parser.add_argument(
+                *args,
+                 dest="ylim",
+                 help="defines the y axis limits")

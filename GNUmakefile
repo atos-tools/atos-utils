@@ -27,12 +27,12 @@ PROOT=proot
 RST2MAN=$(srcdir)config/docutils rst2man --report=3 # Filter warning with images
 RST2HTML=$(srcdir)config/docutils rst2html
 
-CONFIG_SCRIPTS_EXE_IN=atos-graph.in atos-config.in
+CONFIG_SCRIPTS_EXE_IN=atos-config.in
 CONFIG_SCRIPTS_LIB_IN=
 CONFIG_SCRIPTS_CFG_IN=flags.inline.cfg.in flags.loop.cfg.in flags.optim.cfg.in
-PYTHON_LIB_SCRIPTS_IN=$(addprefix atos/, __init__.py globals.py utils.py arguments.py atos_deps.py logger.py process.py profile.py)
+PYTHON_LIB_SCRIPTS_IN=$(addprefix atos/, __init__.py globals.py utils.py arguments.py atos_deps.py logger.py process.py profile.py atos_graph.py)
 PYTHON_LIB_EXE_SCRIPTS_IN=$(addprefix atos/, atos_lib.py generators.py)
-PYTHON_SCRIPTS_IN=atos.py atos-help.py atos-audit.py atos-build.py atos-deps.py atos-explore.py atos-init.py atos-opt.py atos-play.py atos-profile.py atos-raudit.py atos-run.py atos-driver.py atos-timeout.py atos-replay.py atos-explore-inline.py atos-explore-loop.py atos-explore-optim.py atos-explore-acf.py atos-cookie.py atos-explore-staged.py
+PYTHON_SCRIPTS_IN=atos.py atos-help.py atos-audit.py atos-build.py atos-deps.py atos-explore.py atos-init.py atos-opt.py atos-play.py atos-profile.py atos-raudit.py atos-run.py atos-driver.py atos-timeout.py atos-replay.py atos-explore-inline.py atos-explore-loop.py atos-explore-optim.py atos-explore-acf.py atos-cookie.py atos-explore-staged.py atos-graph.py
 SHARED_RSTS_IN=$(addprefix doc/, intro.rst tutorial.rst benchmarks.rst example-sha1.rst)
 SHARED_MANS_IN=$(SHARED_RSTS_IN)
 SHARED_HTMLS_IN=$(SHARED_RSTS_IN)

@@ -318,8 +318,15 @@ class atos_client_results():
     def compute_frontier(self):
         self.frontier = []
         if not self.results: return self.frontier
-        maybe_on_frontier, mustbe_on_frontier = self.results.values(), set()
-        for (variant, c1) in self.results.items():
+        atos_client_results.set_frontier_field(self.results.values())
+        frontier = filter(lambda x: x.on_frontier, self.results.values())
+        self.frontier = sorted(frontier, key=lambda x: x.size)
+        return self.frontier
+
+    @staticmethod
+    def set_frontier_field(results):
+        maybe_on_frontier, mustbe_on_frontier = list(results), set()
+        for c1 in results:
             on_frontier = True
             maybe_on_frontier.remove(c1)
             for c2 in itertools.chain(mustbe_on_frontier, maybe_on_frontier):
@@ -330,9 +337,6 @@ class atos_client_results():
                     break
             if on_frontier: mustbe_on_frontier.add(c1)
             c1.on_frontier = on_frontier
-        self.frontier = sorted(
-            mustbe_on_frontier, key=lambda x: x.size)
-        return self.frontier
 
     def compute_speedups(self, ref_variant='REF'):
         if not self.results: return []
@@ -419,6 +423,32 @@ class atos_client_results():
             results[variant] = atos_client_results.result.merge_multiple_runs(
                 results[variant])
         return results
+
+def merge_results(results):
+    # filter out failures
+    results = filter(
+        lambda x: "FAILURE" not in x.values(), results)
+    if not results: return None
+    # transform into result objects
+    results = map(
+        atos_client_results.result, results)
+    # compute merged results for each variant
+    variants = list(
+        set(map(lambda x: x.variant, results)))
+    variant_results = []
+    for variant in variants:
+        filtered_results = filter(lambda x: x.variant == variant, results)
+        targets = list(set(map(lambda x: x.target, filtered_results)))
+        # merge multiple runs
+        targets_results = map(
+            atos_client_results.result.merge_multiple_runs,
+            map(lambda x: filter(
+                    lambda y: y.target == x, filtered_results), targets))
+        # merge multiple targets
+        variant_results.append(
+            atos_client_results.result.merge_targets(
+                'group', targets_results))
+    return variant_results
 
 
 # ####################################################################

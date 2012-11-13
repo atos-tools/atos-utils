@@ -331,18 +331,29 @@ def point_str(point, short=False, no_id=False):
 
 def getoptcases(dbpath, opts):
     db = atos_lib.atos_db.db(dbpath, no_cache=True)
-    targets = (opts.targets and opts.targets.split(',')
-               or list(set(db.get_results('$[*].target') or [])))
-    opts.query = opts.query and strtoquery(opts.query) or (
-        opts.filter and 'variant:' + opts.filter)
-    client = atos_lib.atos_client_results(
-        db, targets, atos_lib.strtoquery(opts.query), opts.id)
-    client.compute_speedups(opts.ref)
-    frontier = client.compute_frontier()
-    optcases = client.get_results(objects=True)
-    print '%d points, %d on frontier' % (len(optcases), len(frontier))
-    return optcases
-
+    results = db.get_results()
+    if opts.query:
+        results = atos_lib.results_filter(results, opts.query)
+    if opts.filter:
+        results = atos_lib.results_filter(results, 'variant:' + opts.filter)
+    if opts.targets:
+        filtered = []
+        for target in opts.targets.split(','):
+            target_results = atos_lib.results_filter(
+                results, {'target': target})
+            filtered.extend(target_results)
+        results = filtered
+    if opts.cookies:
+        results = atos_lib.results_filter_cookies(results, opts.cookies)
+    ref_results = atos_lib.merge_results(
+        atos_lib.results_filter(results, {'variant': 'REF'}))
+    assert ref_results and len(ref_results) == 1
+    variant_results = atos_lib.merge_results(results) or []
+    map(lambda x: x.compute_speedup(ref_results[0]), variant_results)
+    atos_lib.atos_client_results.set_frontier_field(variant_results)
+    frontier = filter(lambda x: x.on_frontier, variant_results)
+    print '%d points, %d on frontier' % (len(variant_results), len(frontier))
+    return variant_results
 
 def optgraph(dbpath, opts):
 

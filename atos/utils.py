@@ -1322,22 +1322,18 @@ def run_atos_graph(args):
     from atos_graph import draw_graph
     from atos_graph import draw_correl_graph
 
-    dbpath = args.configuration_path
-
     if args.correlation_graph:
-        get_graph_f = (
-            lambda: correlgraph([dbpath] + args.configuration_pathes, args))
-        draw_correl_graph(get_graph_f, opts=args)
+        get_graph_f = lambda: correlgraph(args)
+        draw_correl_graph(get_graph_f, args)
 
     elif args.configuration_pathes:
         # frontier graph
-        get_graph_f = (
-            lambda: multgraph([dbpath] + args.configuration_pathes, args))
-        draw_graph(get_graph_f, opts=args)
+        get_graph_f = lambda: multgraph(args)
+        draw_graph(get_graph_f, args)
 
     else:
         # classic optimization space graph
-        get_graph_f = (lambda: optgraph(dbpath, args))
+        get_graph_f = lambda: optgraph(args)
         draw_graph(get_graph_f, opts=args)
 
     return 0

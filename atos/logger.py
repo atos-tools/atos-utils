@@ -19,6 +19,7 @@
 import sys
 import os
 import logging
+from logging import debug, info, warning
 
 class _ConsoleLogFormatter():
     """
@@ -100,18 +101,6 @@ def setup(kwargs):
         file_log_logger.setFormatter(
             logging.Formatter(log_fmt, log_datefmt))
         root_logger.addHandler(file_log_logger)
-
-def debug(msg, *args, **kwargs):
-    """ Log a debug message on the ATOS logger. """
-    logging.debug(msg, *args, **kwargs)
-
-def info(msg, *args, **kwargs):
-    """ Log an info message on the ATOS logger. """
-    logging.info(msg, *args, **kwargs)
-
-def warning(msg, *args, **kwargs):
-    """ Log a warning message on the ATOS logger. """
-    logging.warning(msg, *args, **kwargs)
 
 def error(msg, *args, **kwargs):
     """ Log an error message on the ATOS logger. """

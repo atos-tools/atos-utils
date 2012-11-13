@@ -67,6 +67,16 @@ class repeattimer():
 
 # ####################################################################
 
+def nowarn(func):
+    def wrapper(*args, **kwargs):
+        import warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            res = func(*args, **kwargs)
+        return res
+    return wrapper
+
+@nowarn
 def draw_graph(getgraph, opts):
     # http://matplotlib.sourceforge.net/index.html
     fg = pl.figure()
@@ -234,7 +244,7 @@ def draw_graph(getgraph, opts):
         pl.show()
         if opts.follow: repeatth.stop()
 
-
+@nowarn
 def draw_correl_graph(getgraph, opts):
     # http://matplotlib.sourceforge.net/index.html
     fg = pl.figure()

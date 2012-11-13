@@ -14,8 +14,6 @@ export PYTHONPATH=$PWD:$PYTHONPATH
 
 for bin in $ROOT/bin/atos*; do
     [ "`basename $bin`" == "atos-driver" ] \
-	&& $bin --atos-version && continue
-    [ "`basename $bin`" == "atos-graph" ] \
-	&& $bin --version && continue
-    $bin -v
-done 2>&1
+	&& $bin --atos-version && continue 2>&1
+    $bin -v 2>&1
+done

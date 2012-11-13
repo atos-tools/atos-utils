@@ -58,6 +58,7 @@ def invoque(tool, args, **kwargs):
         "atos-explore-acf": run_atos_explore_acf,
         "atos-explore-staged": run_atos_explore_staged,
         "atos-cookie": run_atos_cookie,
+        "atos-graph": run_atos_graph,
         "atos-lib": run_atos_lib,
         "atos-gen": run_atos_gen,
         }
@@ -678,8 +679,7 @@ def run_atos_lib(args):
             print atos_lib.atos_db_file.entry_str(result),
 
         else:
-            db = (args and atos_lib.atos_db_file(args[0])
-                  or atos_lib.atos_db.db(args.configuration_path))
+            db = atos_lib.atos_db.db(args.configuration_path)
             status, output = atos_lib.atos_client_db(db).add_result(result)
             if not status:
                 error(output)
@@ -1312,3 +1312,32 @@ def run_atos_explore_acf(args):
             generator=generators.gen_file_by_file)
 
     return status
+
+def run_atos_graph(args):
+    """ ATOS graph tool implementation. """
+
+    from atos_graph import optgraph
+    from atos_graph import multgraph
+    from atos_graph import correlgraph
+    from atos_graph import draw_graph
+    from atos_graph import draw_correl_graph
+
+    dbpath = args.configuration_path
+
+    if args.correlation_graph:
+        get_graph_f = (
+            lambda: correlgraph([dbpath] + args.configuration_pathes, args))
+        draw_correl_graph(get_graph_f, opts=args)
+
+    elif args.configuration_pathes:
+        # frontier graph
+        get_graph_f = (
+            lambda: multgraph([dbpath] + args.configuration_pathes, args))
+        draw_graph(get_graph_f, opts=args)
+
+    else:
+        # classic optimization space graph
+        get_graph_f = (lambda: optgraph(dbpath, args))
+        draw_graph(get_graph_f, opts=args)
+
+    return 0

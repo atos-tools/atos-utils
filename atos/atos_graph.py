@@ -19,22 +19,16 @@
 # Usage: get usage with atos-graph -h
 #
 
-VERSION="@VERSION@"
-
-import sys, os
-sys.path.insert(0, os.path.abspath(os.path.join(
-            os.path.dirname(__file__), '..', 'lib', 'atos', 'python')))
-
+import sys
 import re, math, threading, atexit
+
+import atos_lib
 
 try:
     import pylab as pl
 except:
     print "pylab matplotlib module is not installed"
     sys.exit(1)
-
-from atos import atos_lib
-
 
 
 # ####################################################################
@@ -73,7 +67,6 @@ class repeattimer():
 
 # ####################################################################
 
-
 def draw_graph(getgraph, opts):
     # http://matplotlib.sourceforge.net/index.html
     fg = pl.figure()
@@ -93,24 +86,26 @@ def draw_graph(getgraph, opts):
         # number of points on ratio line
         nbtk = int((ratio >= 1 and 2 or 1 / ratio) * 32)
         # ratio line points coordinates
-        xtks = [xmin + i * ((xmax - xmin) / nbtk) for i in range(nbtk + 1)]
-        ytks = [best.speedup + (1.0/ratio) * (best.sizered-x) for x in xtks]
-        coords = filter(lambda (x,y): y >= ymin and y <= ymax, zip(xtks, ytks))
+        xtk = [xmin + i * ((xmax - xmin) / nbtk) for i in range(nbtk + 1)]
+        ytk = [best.speedup + (1.0 / ratio) * (best.sizered - x) for x in xtk]
+        coords = filter(lambda (x, y): y >= ymin and y <= ymax, zip(xtk, ytk))
         # first plot: selected tradeoff point
-        attrs.update({'label' : '_nolegend_'})
-        attrs.update({'markersize' : 20, 'linewidth' : 0, 'alpha' : 0.4})
+        attrs.update({'label': '_nolegend_'})
+        attrs.update({'markersize': 20, 'linewidth': 0, 'alpha': 0.4})
         plots = [(([best.sizered], [best.speedup]), dict(attrs))]
         # second plot: ratio line
-        attrs.update({'marker' : '', 'linewidth' : 2, 'linestyle' : 'solid'})
+        attrs.update({'marker': '', 'linewidth': 2, 'linestyle': 'solid'})
         plots += [((zip(*coords)[0], zip(*coords)[1]), dict(attrs))]
         return plots
 
     def draw_all():
-        global graph_plots, all_points, selected_points, similar_points # :(
+        global graph_plots, all_points, selected_points, similar_points  # :(
 
         # remove old plots
         old_points = [(p.sizered, p.speedup, p.variant) for p in all_points]
-        for x in list(graph_plots): graph_plots.remove(x); x.remove()
+        for x in list(graph_plots):
+            graph_plots.remove(x)
+            x.remove()
 
         # get graph values
         scatters, frontiers = getgraph()
@@ -119,8 +114,8 @@ def draw_graph(getgraph, opts):
         # draw scatters
         for (points, attrs) in scatters:
             attrsmap = {
-                's' : 20, 'label' : '_nolegend_', 'zorder' : 2,
-                'color' : 'r', 'edgecolor' : 'k' }
+                's': 20, 'label': '_nolegend_', 'zorder': 2,
+                'color': 'r', 'edgecolor': 'k'}
             attrsmap.update(attrs)
             xy = zip(*[(p.sizered, p.speedup) for p in points])
             gr = ax.scatter(*xy, **attrsmap)
@@ -129,14 +124,15 @@ def draw_graph(getgraph, opts):
         # draw frontiers (line plots)
         for (points, attrs) in frontiers:
             attrsmap = {
-                'color' : 'r', 'marker' : 'o', 'label' : '_nolegend_', 'zorder' : 2,
-                'markersize' : 7, 'linestyle' : 'dashed',  'linewidth' : 2 }
+                'color': 'r', 'marker': 'o', 'label': '_nolegend_',
+                'zorder': 2, 'markersize': 7,
+                'linestyle': 'dashed', 'linewidth': 2}
             attrsmap.update(attrs)
             xy = zip(*sorted([(p.sizered, p.speedup) for p in points]))
             gr, = ax.plot(xy[0], xy[1], **attrsmap)
             graph_plots.append(gr)
             # show tradeoffs for each frontier
-            for ratio in opts.tradeoffs:
+            for ratio in opts.tradeoffs or []:
                 for ((xcrd, ycrd), attrs) in \
                         draw_tradeoff_plots(ratio, points, dict(attrsmap)):
                     graph_plots.append(ax.plot(xcrd, ycrd, **attrs)[0])
@@ -145,14 +141,14 @@ def draw_graph(getgraph, opts):
         if opts.show and all_points:
             # workaround pb with pick_event event ind (4000)
             attrsmap = {
-                'color'  : 'b', 'marker': 'o', 'markersize' : 20, 'linewidth' : 0,
-                'alpha' : 0.4 }
+                'color': 'b', 'marker': 'o', 'markersize': 20, 'linewidth': 0,
+                'alpha': 0.4}
             xy = zip(*sorted([(p.sizered, p.speedup) for p in all_points]))
             selected_points, = \
                 ax.plot(xy[0], xy[1], visible=False, picker=4000, **attrsmap)
             graph_plots.append(selected_points)
             # similar point plot
-            attrsmap.update({'color' : 'g'})
+            attrsmap.update({'color': 'g'})
             similar_points, = ax.plot(None, None, visible=False, **attrsmap)
             graph_plots.append(similar_points)
 
@@ -161,10 +157,10 @@ def draw_graph(getgraph, opts):
             new_points = [p for p in all_points if (
                     (p.sizered, p.speedup, p.variant) not in old_points)]
             attrsmap = {
-                'color'  : 'r', 'marker': 'o', 'markersize' : 20, 'linewidth' : 0,
-                'alpha' : 0.4, 'zorder' : 1 }
+                'color': 'r', 'marker': 'o', 'markersize': 20, 'linewidth': 0,
+                'alpha': 0.4, 'zorder': 1}
             if new_points:
-                xy = zip(*[ (p.sizered, p.speedup) for p in new_points])
+                xy = zip(*[(p.sizered, p.speedup) for p in new_points])
                 new_points, = ax.plot(*xy, **attrsmap)
                 graph_plots.append(new_points)
 
@@ -175,8 +171,10 @@ def draw_graph(getgraph, opts):
     # dynamic annotations
     def on_pick(event):
         def closest(x, y):
-            dp = [(math.hypot(p.sizered - x, p.speedup - y), p) for p in all_points]
+            dp = [(math.hypot(p.sizered - x, p.speedup - y), p)
+                  for p in all_points]
             return sorted(dp)[0][1]
+
         def highlight(p):
             # print point on console
             print '-' * 40 + '\n' + point_str(p)
@@ -191,7 +189,8 @@ def draw_graph(getgraph, opts):
             # selected point legend
             main_legend = ax.legend_
             lg = point_str(p, short=True, no_id=opts.anonymous)
-            lp = pl.legend([selected_points], [lg], loc='lower right', numpoints=1)
+            lp = pl.legend(
+                [selected_points], [lg], loc='lower right', numpoints=1)
             pl.setp(lp.get_texts(), fontsize='medium')
             lp.get_frame().set_alpha(0.5)
             pl.gca().add_artist(main_legend)
@@ -208,8 +207,9 @@ def draw_graph(getgraph, opts):
 
     # graph title
     title = 'Optimization Space for %s' % (
-        opts.identifier or opts.targets or (all_points and all_points[0].target))
-    if opts.refid: title += ' [ref=%s]' % opts.refid
+        opts.id or opts.targets or (
+            all_points and all_points[0].target))
+    if opts.ref: title += ' [ref=%s]' % opts.ref
     if opts.filter: title += ' [filter=%s]' % opts.filter
 
     # redraw axis, set labels, legend, grid, ...
@@ -269,7 +269,7 @@ def draw_correl_graph(getgraph, opts):
     # graph title
     try:
         title = 'Correlation Graph for %s' % (
-            opts.identifier or opts.targets or bars[0][0][0].target)
+            opts.id or opts.targets or bars[0][0][0].target)
     except: title = 'Correlation Graph'
 
     # redraw axis, set labels, legend, grid, ...
@@ -320,14 +320,14 @@ def point_str(point, short=False, no_id=False):
 
 
 def getoptcases(dbpath, opts):
-    db = atos_lib.atos_db.db(dbpath)
+    db = atos_lib.atos_db.db(dbpath, no_cache=True)
     targets = (opts.targets and opts.targets.split(',')
                or list(set(db.get_results('$[*].target') or [])))
     opts.query = opts.query and strtoquery(opts.query) or (
         opts.filter and 'variant:' + opts.filter)
     client = atos_lib.atos_client_results(
-        db, targets, atos_lib.strtoquery(opts.query), opts.identifier)
-    client.compute_speedups(opts.refid)
+        db, targets, atos_lib.strtoquery(opts.query), opts.id)
+    client.compute_speedups(opts.ref)
     frontier = client.compute_frontier()
     optcases = client.get_results(objects=True)
     print '%d points, %d on frontier' % (len(optcases), len(frontier))
@@ -345,34 +345,48 @@ def optgraph(dbpath, opts):
     if opts.highlight:
         scatters_def += [
             (opts.highlight, {
-                    's' : 40, 'color' : 'y', 'label' : 'ref cases', 'zorder' : 4})
+                    's': 40, 'color': 'y', 'label': 'ref cases', 'zorder': 4})
             ]
     if opts.xd == 0:
         scatters_def += [
-            ('.*', {'label' : 'opt cases', 'color' : 'b'})
+            ('.*', {'label': 'opt cases', 'color': 'b'})
             ]
     elif opts.xd == 1:
         scatters_def += [
-            ('OPT(-fprofile-use)?-Os.*$', {'label' : '[-Os]', 'color' : 'green'}),
-            ('OPT(-fprofile-use)?-O1.*$', {'label' : '[-O1]', 'color' : 'cyan'}),
-            ('OPT(-fprofile-use)?-O2.*$', {'label' : '[-O2]', 'color' : 'blue'}),
-            ('OPT(-fprofile-use)?-O3.*$', {'label' : '[-O3]', 'color' : 'red'}),
-            ('.*', {'label' : '_nolegend_', 'color' : 'white'})
+            ('OPT(-fprofile-use)?-Os.*$',
+             {'label': '[-Os]', 'color': 'green'}),
+            ('OPT(-fprofile-use)?-O1.*$',
+             {'label': '[-O1]', 'color': 'cyan'}),
+            ('OPT(-fprofile-use)?-O2.*$',
+             {'label': '[-O2]', 'color': 'blue'}),
+            ('OPT(-fprofile-use)?-O3.*$',
+             {'label': '[-O3]', 'color': 'red'}),
+            ('.*',
+             {'label': '_nolegend_', 'color': 'white'})
             ]
     elif opts.xd == 2:
         scatters_def += [
-            ('OPT-fprofile-use.*-flto$', {'label' : '[fdo+lto]', 'color' : 'red'}),
-            ('OPT-fprofile-use.*$', {'label' : '[fdo]', 'color' : 'blue'}),
-            ('.*-flto$', {'label' : '[lto]', 'color' : 'green'}),
-            ('.*', {'label' : '_nolegend_', 'color' : 'white'})
+            ('OPT-fprofile-use.*-flto$',
+             {'label': '[fdo+lto]', 'color': 'red'}),
+            ('OPT-fprofile-use.*$',
+             {'label': '[fdo]', 'color': 'blue'}),
+            ('.*-flto$',
+             {'label': '[lto]', 'color': 'green'}),
+            ('.*',
+             {'label': '_nolegend_', 'color': 'white'})
             ]
     elif opts.xd == 3:
         scatters_def += [
-            ('OPT-fprofile-use-O3.*-flto$', {'label' : '[O3 fdo+lto]', 'color' : 'red'}),
-            ('OPT-fprofile-use-O2.*-flto$', {'label' : '[O2 fdo+lto]', 'color' : 'green'}),
-            ('OPT-fprofile-use-O3.*$', {'label' : '[O3 fdo]', 'color' : 'blue'}),
-            ('OPT-fprofile-use-O2.*$', {'label' : '[O2 fdo]', 'color' : 'cyan'}),
-            ('.*', {'label' : '_nolegend_', 'color' : 'white'})
+            ('OPT-fprofile-use-O3.*-flto$',
+             {'label': '[O3 fdo+lto]', 'color': 'red'}),
+            ('OPT-fprofile-use-O2.*-flto$',
+             {'label': '[O2 fdo+lto]', 'color': 'green'}),
+            ('OPT-fprofile-use-O3.*$',
+             {'label': '[O3 fdo]', 'color': 'blue'}),
+            ('OPT-fprofile-use-O2.*$',
+             {'label': '[O2 fdo]', 'color': 'cyan'}),
+            ('.*',
+             {'label': '_nolegend_', 'color': 'white'})
             ]
 
     # scatters list
@@ -389,10 +403,10 @@ def optgraph(dbpath, opts):
             scatters += [(partitions[opt], attrs_values[opt])]
 
     # frontiers list
-    attrs = { 'label' : 'frontier' }
+    attrs = {'label': 'frontier'}
     if opts.xd != 0:
-        attrs = {'marker' : 'x', 'zorder' : 1, 'mew' : 2,
-                 'markersize' : 9, 'label' : '_nolegend_'}
+        attrs = {'marker': 'x', 'zorder': 1, 'mew': 2,
+                 'markersize': 9, 'label': '_nolegend_'}
     if optcases:
         frontiers += [([c for c in optcases if c.on_frontier], attrs)]
 
@@ -414,15 +428,16 @@ def multgraph(dbpathes, opts):
     # scatters list
     if not opts.frontier_only:
         for i in range(nbdb):
-            attrs = {'color' : colors[i % len(colors)], 'label' : labels[i]}
+            attrs = {'color': colors[i % len(colors)], 'label': labels[i]}
             scatters += [(optcasesl[i], attrs)]
 
     # frontiers
-    attrs = {'marker' : 'x', 'zorder' : 1, 'mew' : 2}
+    attrs = {'marker': 'x', 'zorder': 1, 'mew': 2}
     for i in range(nbdb):
-        attrs.update({'color' : colors[i % len(colors)]})
-        if opts.frontier_only: attrs.update({'label' : 'frontier-' + labels[i]})
-        frontiers += [([c for c in optcasesl[i] if c.on_frontier], dict(attrs))]
+        attrs.update({'color': colors[i % len(colors)]})
+        if opts.frontier_only: attrs.update({'label': 'frontier-' + labels[i]})
+        frontiers += [
+            ([c for c in optcasesl[i] if c.on_frontier], dict(attrs))]
 
     return scatters, frontiers
 
@@ -434,11 +449,11 @@ def correlgraph(dbpathes, opts):
     targets = opts.targets and opts.targets.split('+') or None
     for dbpath in dbpathes:
         client = atos_lib.atos_client_results(
-            atos_lib.atos_db.db(dbpath),
+            atos_lib.atos_db.db(dbpath, no_cache=True),
             targets and targets.split(',') or None,
-            atos_lib.strtoquery(opts.query), opts.identifier)
-        client.compute_speedups(opts.refid)
-        optcasesl.append({ client.values[2] : client.results })
+            atos_lib.strtoquery(opts.query), opts.id)
+        client.compute_speedups(opts.ref)
+        optcasesl.append({client.values[2]: client.results})
 
     # dbfiles labels and colors
     nbdb = len(dbpathes)
@@ -455,110 +470,20 @@ def correlgraph(dbpathes, opts):
     common_target_variant = list(
         reduce(lambda acc, s: acc.intersection(s),
                map(lambda c: set([(t, v) for t in common_targets
-                                  for v in c[t].keys() if v != opts.refid]),
+                                  for v in c[t].keys() if v != opts.ref]),
                    optcasesl)))
 
     # couples of common (target, variant), sorted by speedups
     sorted_common_target_variant = list(reversed(
-            sorted(common_target_variant, key=lambda (t,v): optcasesl[0][t][v].speedup)))
+            sorted(common_target_variant,
+                   key=lambda (t, v): optcasesl[0][t][v].speedup)))
 
     #
     bars = []
     for i in range(nbdb):
-        attrs = { 'color' : colors[i % len(colors)], 'label' : labels[i] }
+        attrs = {'color': colors[i % len(colors)], 'label': labels[i]}
         optcs = map(
             lambda (t, v): optcasesl[i][t][v], sorted_common_target_variant)
         bars += [(optcs, attrs)]
 
     return bars
-
-
-# ####################################################################
-
-
-if __name__ == "__main__":
-
-    import optparse
-    parser = optparse.OptionParser(
-        description='Process optimization space exploration results',
-        usage='%prog [options] [file]',
-        version="atos-graph version " + VERSION)
-    # general graph options
-    parser.add_option('-o', '--outfile', dest='outfile',
-                      action='store', type='string', default=None,
-                      help='set the output file name (default: None)')
-    parser.add_option('-d', '--hide', dest='show',
-                      action='store_false', default=True,
-                      help='do not show resulting graph (default: False)')
-    parser.add_option('-i', '--app_id', dest='identifier',
-                      action='store', type='string', default=None,
-                      help='set the application identifier (default: inferred from executable)')
-    parser.add_option('--follow', dest='follow',
-                      action='store_true', default=False,
-                      help='continuously update graph with new results (default: False)')
-    parser.add_option('--correl', dest='correlation_graph',
-                      action='store_true', default=False,
-                      help='show correlation graph (default: False)')
-    # optimization space graph options
-    parser.add_option('-H', dest='highlight',
-                      action='store', type='string', default=None,
-                      help='highlight points givena regexp')
-    parser.add_option('-F', dest='frontier_only',
-                      action='store_true', default=False,
-                      help='display frontier only')
-    parser.add_option('-x', dest='xd',
-                      action='store', type='int', default=0,
-                      help='highlight different options sets -x[0123]')
-    parser.add_option('-a', dest='anonymous',
-                      action='store_true', default=False,
-                      help='anonymous configuration, omit configuration id on graph')
-    parser.add_option('-l', '--cfglbl', dest='labels',
-                      action='store', type='string', default='',
-                      help='atos-configurations labels')
-    parser.add_option('-s', '--tradeoff', dest='tradeoffs',
-                      action='append', type='float', default=[],
-                      help='selected tradeoff given size/perf ratio')
-    # atos options
-    parser.add_option('-t', '--targets', dest='targets',
-                  action='store', type='string', default=None,
-                      help='set the target list (default: None)')
-    parser.add_option('-r', '--refid', dest='refid',
-                      action='store', type='string', default='REF',
-                      help='set the atos reference run id (default: REF)')
-    parser.add_option('-f', dest='filter',
-                      action='store', type='string', default=None,
-                      help='filter out the points given by the regexp')
-    parser.add_option('-q', dest='query',
-                      action='store', type='string', default=None,
-                      help='query for filtering database results')
-    parser.add_option('-C', dest='configuration_path',
-                      action='store', type='string', default="./atos-configurations",
-                      help='set configuration path (default: ./atos-configurations)')
-    parser.add_option('-D', dest='configuration_pathes',
-                      action='append', type='string', default=[],
-                      help='set additional configuration path for frontier graph (default: None)')
-    parser.add_option('--xlim', dest='xlim',
-                      action='store', type='string', default=None,
-                      help='defines the x axis limits')
-    parser.add_option('--ylim', dest='ylim',
-                      action='store', type='string', default=None,
-                      help='defines the y axis limits')
-
-    (opts, args) = parser.parse_args()
-
-    #
-    dbpath = args[0] if len(args) >= 1 else opts.configuration_path
-
-    if opts.correlation_graph:
-        get_graph_f = (lambda: correlgraph([dbpath] + opts.configuration_pathes, opts))
-        draw_correl_graph(get_graph_f, opts=opts)
-
-    elif opts.configuration_pathes:
-        # frontier graph
-        get_graph_f = (lambda: multgraph([dbpath] + opts.configuration_pathes, opts))
-        draw_graph(get_graph_f, opts=opts)
-
-    else:
-        # classic optimization space graph
-        get_graph_f = (lambda: optgraph(dbpath, opts))
-        draw_graph(get_graph_f, opts=opts)

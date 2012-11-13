@@ -60,7 +60,7 @@ class atos_db():
 
     #
     @staticmethod
-    def db(atos_configuration):
+    def db(atos_configuration, no_cache=False):
         # results.pkl  loadtime:  3.50s  filesize: 229M
         db_pckl = os.path.join(atos_configuration, 'results.pkl')
         # results.json loadtime: 27.63s  filesize: 217M
@@ -82,7 +82,7 @@ class atos_db():
 
         # use already-opened db if any
         db_file = os.path.abspath(db_file)
-        if db_file in atos_db.db_cache.keys():
+        if not no_cache and db_file in atos_db.db_cache.keys():
             return atos_db.db_cache[db_file]
         else:
             new_db = db_func(db_file)

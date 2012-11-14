@@ -16,6 +16,6 @@ if coverage_enabled:
             coverage_dir, ".coverage.%d" % (os.getpid()))
     else:
         coverage_file = ".coverage"
-    cov = coverage.coverage(data_file=coverage_file)
+    cov = coverage.coverage(data_file=coverage_file, branch=True)
     cov.start()
     atexit.register(cov_stop)

@@ -351,8 +351,8 @@ def run_atos_deps(args):
     # For now we include all from atos_deps, we may separate modules later
     from atos_deps import CommandDependencyListFactory
     from atos_deps import CCDEPSParser
-    from atos_deps import SimpleCmdInterpreter
     from atos_deps import DependencyGraphBuilder
+    from cmd_interpreter import SimpleCmdInterpreter
 
     input_file = args.input_file or os.path.join(
         args.configuration_path, "build.audit")

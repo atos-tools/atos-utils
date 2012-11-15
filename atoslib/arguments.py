@@ -18,9 +18,8 @@
 
 import re, os, sys
 import globals
+from atos_argparse import ATOSArgumentParser
 import argparse
-import logger
-import process
 
 def parser(tool):
     """
@@ -53,95 +52,6 @@ def parser(tool):
         "atos-graph": parsers.atos_graph,
         }
     return factories[tool]()
-
-
-class ATOSArgumentParser(argparse.ArgumentParser):
-    """
-    Specialization of parser class for ATOS tools.
-    We add some constraints to the arguments to better match usual
-    option parsing tools such as GNU getopt.
-    Ref to __init__.check_nargs() docstring.
-    """
-    def __init__(self,
-                 prog=None,
-                 usage=None,
-                 description=None,
-                 formatter_class=argparse.ArgumentDefaultsHelpFormatter):
-        def check_nargs(actions):
-            """
-            Check that we only have 0 or 1 argument options.
-            I.e. we do not allow optional or multi arguments options.
-            This simplifies the implementation of the
-            parse_args.prepare_args() function below.
-            """
-            for action in actions:
-                if action.option_strings:
-                    assert(action.nargs == None or
-                           action.nargs == 1 or action.nargs == 0)
-
-        assert(prog != None)
-        super(ATOSArgumentParser, self).__init__(
-            prog=prog, usage=usage, description=description,
-            formatter_class=formatter_class)
-        check_nargs(self._actions)
-
-    def parse_args(self, args=None, namespace=None):
-        """
-        Calls the superclass parse_args and initialize modules with
-        common arguments.
-        """
-        def prepare_args(parser, args):
-            """
-            Ensure that we handle correctly arguments starting with '-'.
-            This is a work around for the unusual behavior of argparse.
-            In the case: prog -a -O (where -O is an argument to -a),
-            we transform the two arguments into: prog -a=-O.
-            Otherwise argparse would treat -O as an option in itself.
-            """
-            def gen_option_map(actions):
-                """ Generate the map option -> action. """
-                option_map = {}
-                for action in actions:
-                    for option in action.option_strings:
-                        option_map[option] = action
-                return option_map
-
-            def gen_subparser_map(actions):
-                """ Generate the map subcmd -> subparser. """
-                subparser_map = {}
-                for action in actions:
-                    if isinstance(action, argparse._SubParsersAction):
-                        subparser_map = action.choices
-                        break
-                return subparser_map
-
-            option_map = gen_option_map(parser._actions)
-            subparser_map = gen_subparser_map(parser._actions)
-            new_args = []
-            i = 0
-            while True:
-                if i >= len(args): break
-                arg = args[i]
-                if arg in subparser_map:
-                    return new_args + [arg] + \
-                        prepare_args(subparser_map[arg], args[(i + 1):])
-                if arg == '--' or arg[0] != '-': break
-                option = arg.split("=", 1)[0]
-                if not option in option_map: break
-                if (option == arg and
-                    option_map[option].nargs != 0 and
-                    i + 1 < len(args) and args[i + 1] != "--"):
-                    arg = "%s=%s" % (arg, args[i + 1])
-                    i += 1
-                new_args.append(arg)
-                i += 1
-            return new_args + args[i:]
-
-        args = prepare_args(self, sys.argv[1:] if args == None else args)
-        args = super(ATOSArgumentParser, self).parse_args(args, namespace)
-        logger.setup(vars(args))
-        process.setup(vars(args))
-        return args
 
 class parsers:
     """

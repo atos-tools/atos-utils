@@ -13,3 +13,5 @@ python $ROOT/lib/atos/python/atoslib/cmd_interpreter.py
 python $ROOT/lib/atos/python/atoslib/generators.py
 
 python $ROOT/lib/atos/python/atoslib/atos_deps.py
+
+python $ROOT/lib/atos/python/atoslib/atos_argparse.py

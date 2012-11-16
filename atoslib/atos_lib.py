@@ -615,7 +615,7 @@ class json_config():
         flags.extend(['-D%s' % (f.upper()) for f in self._compiler_features()])
         return flags
 
-    def prepare_flag_files(self, configuration_path, compilers):
+    def prepare_flag_files(self, configuration_path, compilers, addflags):
         preprocessors = filter(bool, map(
                 lambda x: re.search("(cc|\+\+)", os.path.basename(x)) and x,
                 compilers))
@@ -629,10 +629,11 @@ class json_config():
         for flags_file in flags_files:
             base = os.path.basename(flags_file)
             tmpf = os.path.join(tmpdir, base + ".c")
+            flags = map(lambda x: "-D" + x, addflags or [])
             process.commands.copyfile(flags_file, tmpf)
             ppflags = process.system(
                 [preprocessor, tmpf, "-C", "-P", "-E"] +
-                self.flags_for_flagfiles(),
+                self.flags_for_flagfiles() + flags,
                 check_status=True, get_output=True, no_debug=True)
             with open(os.path.join(configuration_path, base), "w") as destf:
                 print >>destf, ppflags

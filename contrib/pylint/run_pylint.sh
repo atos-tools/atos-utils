@@ -24,12 +24,12 @@
 set -e
 
 [ `which pylint` ] || (
-    echo "`basename $0`: error: pylint not fount in \$PATH"
+    echo "`basename $0`: error: pylint not found in \$PATH"
     exit 1 )
 
 dir=`cd \`dirname $0\`; pwd`
 srcdir=`cd $dir/../.. && pwd`
-pysources="$srcdir/*.py $srcdir/atos/*.py"
+pysources="$srcdir/atoslib/*.py"
 
 pylint --rcfile=$dir/pylint_rc $pysources 2>&1 | (
     grep -v -e "maximum recursion depth exceeded" || true )

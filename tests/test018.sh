@@ -13,6 +13,14 @@ $ROOT/bin/atos-init -C atos-config \
 
 [ `$ROOT/bin/atos lib query -C atos-config | grep target | wc -l` -eq 2 ]
 
+# check for clean config on rebuild
+
+$ROOT/bin/atos-init -C atos-config \
+    -r "$SRCDIR/examples/sha1-c/run.sh" \
+    -b "gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c" \
+
+[ `cat atos-config/config.json | grep driver_version | wc -l` -eq 1 ]
+
 # force option
 
 $ROOT/bin/atos-init -C atos-config-1 \

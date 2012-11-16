@@ -432,18 +432,18 @@ def run_atos_init(args):
 
     process.commands.mkdir(args.configuration_path)
 
+    if args.clean or args.build_script:
+        if args.clean: message("Cleaning build audit...")
+        process.commands.unlink('%s/build.mk' % args.configuration_path)
+        process.commands.unlink('%s/build.sh' % args.configuration_path)
+        process.commands.unlink('%s/build.force' % args.configuration_path)
+        process.commands.unlink('%s/build.audit' % args.configuration_path)
+        process.commands.unlink('%s/config.json' % args.configuration_path)
+    if args.clean or args.run_script:
+        if args.clean: message("Cleaning run audit...")
+        process.commands.unlink('%s/run.sh' % args.configuration_path)
+        process.commands.unlink('%s/run.audit' % args.configuration_path)
     if args.clean:
-        if args.build_script:
-            message("Cleaning build audit...")
-            process.commands.unlink('%s/build.mk' % args.configuration_path)
-            process.commands.unlink('%s/build.sh' % args.configuration_path)
-            process.commands.unlink('%s/build.force' % args.configuration_path)
-            process.commands.unlink('%s/build.audit' % args.configuration_path)
-            process.commands.unlink('%s/config.json' % args.configuration_path)
-        if args.run_script:
-            message("Cleaning run audit...")
-            process.commands.unlink('%s/run.sh' % args.configuration_path)
-            process.commands.unlink('%s/run.audit' % args.configuration_path)
         message("Cleaning all profiles...")
         process.commands.rmtree('%s/profiles' % args.configuration_path)
         process.commands.rmtree('%s/oprofiles' % args.configuration_path)
@@ -1210,12 +1210,12 @@ def run_atos_config(args):
         if args.print_cfg:
             print json.dumps(compiler_entry, sort_keys=True, indent=4)
         else:
-            client = atos_lib.json_config(config_file)
-            client.add_compiler_entry(compiler_entry)
+            json_config = atos_lib.json_config(config_file)
+            json_config.add_compiler_entry(compiler_entry)
 
     if not args.print_cfg and not args.compilers:
-        client = atos_lib.json_config(config_file)
-        client.prepare_flag_files(
+        json_config = atos_lib.json_config(config_file)
+        json_config.prepare_flag_files(
             args.configuration_path, compiler_list, args.flags)
 
     return 0

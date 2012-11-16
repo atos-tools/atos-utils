@@ -21,6 +21,8 @@
 
 import sys, os, re, math, itertools, time, json, hashlib
 import cPickle as pickle
+import tempfile
+import glob
 
 import globals
 import jsonlib
@@ -550,6 +552,9 @@ class json_config():
         for line in open(descr_file):
             k, v = line.strip().split(' ', 1)
             new_cpl[k] = v
+        self.add_compiler_entry(new_cpl)
+
+    def add_compiler_entry(self, new_cpl):
         self.config.setdefault('compilers', []).append(new_cpl)
         self._dump()
 
@@ -591,7 +596,198 @@ class json_config():
                     json_config.compiler_version_number(versions[-1]))])
         # compiler features
         flags.extend(['-D%s' % (f.upper()) for f in self._compiler_features()])
-        return ' '.join(flags)
+        return flags
+
+    def prepare_flag_files(self, configuration_path, compilers):
+        preprocessors = filter(bool, map(
+                lambda x: re.search("(cc|\+\+)", os.path.basename(x)) and x,
+                compilers))
+        assert preprocessors
+        preprocessor = preprocessors[0]
+        assert os.path.isfile(preprocessor)
+
+        tmpdir = tempfile.mkdtemp()
+        flags_files = glob.glob(
+            os.path.join(globals.LIBDIR, "config", "flags.*.cfg"))
+        for flags_file in flags_files:
+            base = os.path.basename(flags_file)
+            tmpf = os.path.join(tmpdir, base + ".c")
+            process.commands.copyfile(flags_file, tmpf)
+            ppflags = process.system(
+                [preprocessor, tmpf, "-C", "-P", "-E"] +
+                self.flags_for_flagfiles(),
+                check_status=True, get_output=True, no_debug=True)
+            with open(os.path.join(configuration_path, base), "w") as destf:
+                print >>destf, ppflags
+        process.commands.rmtree(tmpdir)
+
+    @staticmethod
+    def compiler_config(compiler):
+
+        def get_executable_host(compiler):
+            repl = {
+                "Intel80386": "i386", "Intel80486": "i386",
+                "Intel80586": "i386", "Intel80686": "i386",
+                "x86-64": "x86_64"}
+            status, host = process.system(
+                ["file", compiler], get_output=True)
+            host = host.split(",")[1].strip().replace(" ", "")
+            return repl.get(host, "unknown")
+
+        def get_triplet_alias(triplet):
+            repl = {
+                "i486": "i386", "i586": "i386", "i686": "i386", "sh": "sh4"}
+            alias = triplet.split("-")[0]
+            return repl.get(alias, alias)
+
+        def find_plugin(plugin_name, target_alias, host_alias):
+            plugin_name = plugin_name + ".so"
+            # ex: ${libdir}/plugins/gcc-4.4.3/i386/i386/acf_plugin.so
+            plugin_path = os.path.join(
+                globals.LIBDIR, "plugins", "gcc-" + version,
+                target_alias, host_alias, plugin_name)
+            if not os.path.isfile(plugin_path):
+                # retry using only major/minor version numbers
+                patchlevels = ".".join(version.split(".")[:2] + ["*"])
+                plugins = glob.glob(
+                    os.path.join(
+                        globals.LIBDIR, "plugins", "gcc-" + patchlevels,
+                        target_alias, host_alias, plugin_name))
+                plugin_path = sorted(plugins)[-1]
+            plugin_path = os.path.isfile(
+                plugin_path or "") and plugin_path or "none"
+            return plugin_path
+
+        def resolve_links(path):
+            """
+            Resolve symlinks in order to perform queries on actual file.
+            In particular the 'file' command does not follow symlinks.
+            """
+            while os.path.islink(path):
+                path = os.path.join(os.path.dirname(path),
+                                    os.readlink(path))
+            return path
+
+        assert(os.path.isfile(compiler))
+        compiler = resolve_links(compiler)
+        compiler_basename = os.path.basename(compiler)
+
+        compiler_config = {}
+
+        if compiler_basename in ["armcc", "armlink"]:
+            # arm rvct compiler
+
+            version_string = process.system(
+                [compiler], get_output=True, check_status=True)
+            driver_version = version_string.split("\n")[0]
+            if compiler_basename == "armcc":
+                version = driver_version.split()[3]
+            else:
+                version = driver_version.split()[2]
+
+            compiler_config.update(
+                {"name": "rvct",
+                 "target": "ARM",
+                 "target_alias": "arm",
+                 "host_alias": get_executable_host(compiler),
+                 "id": "%s-%s-%s" % (name, target, version),
+                 "driver_version": driver_version,
+                 "lto_enabled": "0",
+                 "fto_enabled": "0",
+                 "graphite_enabled": "0",
+                 "libgomp_enabled": "0",
+                 "plugins_enabled": "0",
+                 "plugin_acf": "none"
+                 })
+
+        else:
+            # other compilers: gcc, clang, ...
+
+            #
+            # compiler version, ...
+            #
+            version_string = process.system(
+                [compiler, "-v"], get_output=True, check_status=True,
+                output_stderr=True)
+            name = re.search(
+                "(\w*) version", version_string).group(1)
+            version = re.search(
+                " version ([^ ]*)", version_string).group(1)
+            target = process.system(
+                [compiler, "-dumpmachine"], get_output=True,
+                check_status=True).strip()
+            compiler_config["id"] = "%s-%s-%s" % (name, target, version)
+            compiler_config["name"] = name
+            compiler_config["version"] = version
+            compiler_config["target"] = target
+            compiler_config["driver_version"] = version_string
+
+            target_alias = get_triplet_alias(target)
+            host_alias = get_executable_host(compiler)
+            compiler_config["target_alias"] = target_alias
+            compiler_config["host_alias"] = host_alias
+
+            #
+            # acf plugin
+            #
+            acf_path = find_plugin("acf_plugin", target_alias, host_alias)
+            compiler_config["plugin_acf"] = acf_path
+
+            cc1_path = process.system(
+                [compiler, "--print-prog-name=cc1"], get_output=True,
+                check_status=True).strip()
+            try:
+                assert os.path.isfile(cc1_path)
+                obj_t = process.system(
+                    ["objdump", "-t", cc1_path], get_output=True,
+                    check_status=True, no_debug=True)
+                hwi = int(re.search("(\w*)\W*target_newline", obj_t).group(1))
+                expected_hwi = (
+                    (host_alias == "i386" and target_alias != "x86_64")
+                    and 4 or 8)
+                valid_host_wide_int = int(hwi == expected_hwi)
+            except:
+                # check hwi value on other cases
+                valid_host_wide_int = 1
+            compiler_config["valid_host_wide_int"] = str(valid_host_wide_int)
+
+            #
+            # available compiler optimizations and features
+            #
+            tmpdir = tempfile.mkdtemp()
+            test_c = os.path.join(tmpdir, "test.c")
+            test_o = os.path.join(tmpdir, "test.o")
+            with open(test_c, "w") as testf:
+                print >>testf, "#include <stdio.h>"
+                print >>testf, "int main(void)"
+                print >>testf, "{"
+                print >>testf, "  int i;"
+                print >>testf, "  for (i = 0; i < 10; i++)"
+                print >>testf, "  {"
+                print >>testf, "      printf(\"hello\\n\");"
+                print >>testf, "  }"
+                print >>testf, "  return 0;"
+                print >>testf, "}"
+
+            lto_enabled = int(process.system([
+                    compiler, "-O2", "-flto", "-o", test_o, "-c", test_c
+                    ]) == 0)
+            graphite_enabled = int(process.system([
+                    compiler, "-O2", "-floop-block", "-o", test_o, "-c", test_c
+                    ]) == 0)
+            plugins_enabled = int(os.path.isfile(acf_path) and process.system([
+                        compiler, "-O2", "-o", test_o, "-c", test_c,
+                        "-fplugin=" + acf_path, "-fplugin-arg-acf_plugin-test"
+                        ]) == 0)
+
+            compiler_config["lto_enabled"] = str(lto_enabled)
+            compiler_config["fdo_enabled"] = "1"
+            compiler_config["graphite_enabled"] = str(graphite_enabled)
+            compiler_config["libgomp_enabled"] = "0"
+            compiler_config["plugins_enabled"] = str(plugins_enabled)
+            process.commands.rmtree(tmpdir)
+
+        return compiler_config
 
 
 # ####################################################################

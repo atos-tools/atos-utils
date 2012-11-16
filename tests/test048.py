@@ -15,8 +15,7 @@ assert cmd == "command '' a\\\ file"
 status = process.system("false", print_output=False)
 assert status == 1
 
-status = process.system("true", check_status=True)
-assert status == 0
+process.system("true", check_status=True)
 
 status, output = process.system("echo 1", get_output=True)
 assert status == 0 and output.strip() == '1'

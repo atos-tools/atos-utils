@@ -45,7 +45,7 @@ def compile_command_kind(args):
     return None
 
 def get_object_function_list(objfile):
-    status, output = process.system(
+    output = process.system(
         'readelf --wide --symbols ' + objfile,
         check_status=True, get_output=True)
     funclist = []

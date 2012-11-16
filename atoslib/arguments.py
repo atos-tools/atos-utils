@@ -46,6 +46,7 @@ def parser(tool):
         "atos-explore-optim": parsers.atos_explore_optim,
         "atos-explore-acf": parsers.atos_explore_acf,
         "atos-explore-staged": parsers.atos_explore_staged,
+        "atos-config": parsers.atos_config,
         "atos-cookie": parsers.atos_cookie,
         "atos-lib": parsers.atos_lib,
         "atos-gen": parsers.atos_gen,
@@ -140,6 +141,9 @@ class parsers:
 
         sub = subs.add_parser("replay", help="replay a session")
         parsers.atos_replay(sub)
+
+        sub = subs.add_parser("config", help="find compilers configuration")
+        parsers.atos_config(sub)
 
         sub = subs.add_parser("cookie", help="generate a cookie")
         parsers.atos_cookie(sub)
@@ -814,6 +818,19 @@ class parsers:
             parser = ATOSArgumentParser(prog="atos-cookie",
                                         description="ATOS cookie generator")
         args.cookie(parser)
+        args.version(parser)
+        return parser
+
+    @staticmethod
+    def atos_config(parser=None):
+        """ atos config arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-config",
+                                        description="ATOS config generator")
+        args.configuration_path(parser)
+        args.atos_config.compiler(parser)
+        args.atos_config.printcfg(parser)
+        args.atos_config.ppflags(parser)
         args.version(parser)
         return parser
 
@@ -1599,3 +1616,28 @@ class args:
                  dest="cookies",
                  action='append',
                  help="cookies used for results filtering")
+
+    class atos_config:
+        """ Namespace for non common atos-config arguments. """
+
+        @staticmethod
+        def ppflags(parser, args=("-D",)):
+            parser.add_argument(
+                *args,
+                 dest="flags", action='append',
+                 help="additional preprocessing flags")
+
+        @staticmethod
+        def compiler(parser, args=("--compiler",)):
+            parser.add_argument(
+                *args,
+                 dest="compilers", action='append',
+                 help="path to compiler, "
+                 "defaults compilers listed in CONFIGURATION/compilers")
+
+        @staticmethod
+        def printcfg(parser, args=("--print-cfg",)):
+            parser.add_argument(
+                *args,
+                 dest="print_cfg", action='store_true',
+                 help="only print compiler configuration")

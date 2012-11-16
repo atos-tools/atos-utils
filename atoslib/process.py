@@ -198,7 +198,7 @@ def setup(kwargs):
         _real_open = replace_open(_open)
 
 def system(cmd, check_status=False, get_output=False, print_output=False,
-           output_stderr=False, shell=False, stdin_str=False):
+           output_stderr=False, shell=False, stdin_str=False, no_debug=False):
     """
     Executes given command.
     Given command can be a string or a list or arguments.
@@ -220,9 +220,12 @@ def system(cmd, check_status=False, get_output=False, print_output=False,
         get_output=get_output_, output_stderr=output_stderr,
         shell=shell, stdin_str=stdin_str)
     if get_output:
-        logging.debug('\n  | ' + '\n  | '.join(output.split('\n')))
+        if not no_debug:
+            logging.debug('\n  | ' + '\n  | '.join(output.split('\n')))
         logging.debug('command [%s] -> %s' % (printable_cmd, str(status)))
-    if check_status and status: sys.exit(status)
+    if check_status:
+        assert status == 0
+        return get_output and output or None
     return get_output and (status, output) or status
 
 def open_locked(filename, mode='r'):

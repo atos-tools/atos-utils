@@ -154,7 +154,7 @@ class parsers:
 
         sub = subs.add_parser("graph",
                               help="show exploration results in a graph")
-        parsers.atos_gen(sub)
+        parsers.atos_graph(sub)
 
         sub = subs.add_parser("lib",
                               help="internal API access to ATOS library")
@@ -651,6 +651,7 @@ class parsers:
         args.atos_graph.xlim(parser)
         args.atos_graph.ylim(parser)
         args.atos_graph.cookie(parser)
+        args.atos_graph.dbfile(parser)
         args.dryrun(parser)
         args.version(parser)
         return parser
@@ -1616,6 +1617,13 @@ class args:
                  dest="cookies",
                  action='append',
                  help="cookies used for results filtering")
+
+        @staticmethod
+        def dbfile(parser):
+            parser.add_argument(
+                dest="dbfile",
+                nargs=argparse.REMAINDER,
+                help="results file")
 
     class atos_config:
         """ Namespace for non common atos-config arguments. """

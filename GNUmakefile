@@ -27,13 +27,13 @@ PROOT=proot
 RST2MAN=$(srcdir)config/docutils rst2man --report=3 # Filter warning with images
 RST2HTML=$(srcdir)config/docutils rst2html
 
-CONFIG_SCRIPTS_EXE_IN=atos-config.in
+CONFIG_SCRIPTS_EXE_IN=
 CONFIG_SCRIPTS_LIB_IN=
 CONFIG_SCRIPTS_CFG_IN=flags.inline.cfg.in flags.loop.cfg.in flags.optim.cfg.in
 PYTHON_LIB_SCRIPTS_IN=$(addprefix atoslib/, __init__.py globals.py utils.py arguments.py atos_deps.py logger.py process.py profile.py atos_graph.py deep_eq.py cmd_interpreter.py atos_argparse.py)
 PYTHON_LIB_EXE_SCRIPTS_IN=$(addprefix atoslib/, atos_lib.py generators.py)
 PYTHON_SCRIPTS_IN=atos.py atos-driver.py atos-timeout.py
-LINKED_SCRIPTS_IN=atos-help atos-audit atos-build atos-deps atos-explore atos-init atos-opt atos-play atos-profile atos-raudit atos-run atos-replay atos-explore-inline atos-explore-loop atos-explore-optim atos-explore-acf atos-cookie atos-explore-staged atos-graph
+LINKED_SCRIPTS_IN=atos-help atos-audit atos-build atos-deps atos-explore atos-init atos-opt atos-play atos-profile atos-raudit atos-run atos-replay atos-explore-inline atos-explore-loop atos-explore-optim atos-explore-acf atos-cookie atos-explore-staged atos-graph atos-config
 SHARED_RSTS_IN=$(addprefix doc/, intro.rst tutorial.rst benchmarks.rst example-sha1.rst)
 SHARED_MANS_IN=$(SHARED_RSTS_IN)
 SHARED_HTMLS_IN=$(SHARED_RSTS_IN)

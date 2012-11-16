@@ -19,6 +19,7 @@
 import sys, os
 import re
 import traceback
+import json
 
 import globals
 import arguments
@@ -57,6 +58,7 @@ def invoque(tool, args, **kwargs):
         "atos-explore-optim": run_atos_explore_optim,
         "atos-explore-acf": run_atos_explore_acf,
         "atos-explore-staged": run_atos_explore_staged,
+        "atos-config": run_atos_config,
         "atos-cookie": run_atos_cookie,
         "atos-graph": run_atos_graph,
         "atos-lib": run_atos_lib,
@@ -455,12 +457,9 @@ def run_atos_init(args):
         status = invoque("atos-deps", args,
                          all=(not executables))
         if status != 0: return status
-        # TODO: to be replaced by invoque(atos-config)
-        command_config = [
-            os.path.join(globals.BINDIR, "atos-config"),
-            "-C", args.configuration_path]
-        status = process.system(command_config, print_output=True)
+        status = invoque("atos-config", args)
         if status != 0: return status
+
     elif not os.path.isfile(
         os.path.join(args.configuration_path, "build.audit")):
         error("missing build audit, use -b option for specifying build script"
@@ -692,7 +691,7 @@ def run_atos_lib(args):
         if args.query:
             client = atos_lib.json_config(config_file)
             results = client.query(atos_lib.strtoquery(args.query))
-            if args.uniq: results = list(set(results))
+            if args.uniq and results: results = list(set(results))
             atos_lib.pprint_list(results, text=args.text)
 
         elif args.add_item:
@@ -712,7 +711,7 @@ def run_atos_lib(args):
         elif args.cpl_flags:
             if os.path.isfile(config_file):
                 client = atos_lib.json_config(config_file)
-                print client.flags_for_flagfiles()
+                print ' '.join(client.flags_for_flagfiles())
 
         else: pass
         return 0
@@ -1182,6 +1181,41 @@ def run_atos_replay(args):
         invoque("atos-run", args, configuration_path=args.results_path,
              record=True, options=result_conf, uopts=result_uconf,
              command=process.cmdline2list(args.run_script))
+
+    return 0
+
+def run_atos_config(args):
+    """ ATOS config implementation. """
+
+    compiler_list = args.compilers
+
+    if not compiler_list:
+        compilers = os.path.join(args.configuration_path, "compilers")
+
+        if not os.path.isfile(compilers):
+            error("compiler file missing: %s" % compilers)
+            return 1
+
+        with open(compilers) as inf:
+            compiler_list = filter(
+                str, map(lambda x: x.strip(), inf.readlines()))
+
+    config_file = os.path.join(args.configuration_path, 'config.json')
+
+    for compiler in compiler_list:
+        if not os.path.isfile(compiler):
+            error("compiler executable not found: %s" % compiler)
+            return 1
+        compiler_entry = atos_lib.json_config.compiler_config(compiler)
+        if args.print_cfg:
+            print json.dumps(compiler_entry, sort_keys=True, indent=4)
+        else:
+            client = atos_lib.json_config(config_file)
+            client.add_compiler_entry(compiler_entry)
+
+    if not args.print_cfg and not args.compilers:
+        client = atos_lib.json_config(config_file)
+        client.prepare_flag_files(args.configuration_path, compiler_list)
 
     return 0
 

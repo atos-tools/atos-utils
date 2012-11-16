@@ -17,4 +17,4 @@ $ROOT/bin/atos-init -r "./run.sh" \
 
 echo "echo user 0" >> ./run.sh
 
-$ROOT/bin/atos-explore-inline -S0 -M3
+$ROOT/bin/atos-explore-inline -S0 -M3 --optim-levels -O2

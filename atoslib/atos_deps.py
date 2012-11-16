@@ -20,6 +20,7 @@ import sys, os, re
 
 import globals
 import atos_lib
+import process
 
 VERBOSE = 0
 
@@ -286,7 +287,7 @@ class DependencyGraph:
                     recipe = (
                         "$(QUIET)cd " + value['command']['cwd'] +
                         " && $(ATOS_DRIVER) " +
-                        " ".join(self.recipe_args(value)))
+                        process.list2cmdline(self.recipe_args(value)))
                     recipe = re.sub(r'(["\'])', r'\\\1', recipe)
             deps = []
             for dep in self.dg.neighbors(node):

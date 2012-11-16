@@ -29,3 +29,7 @@ echo "`which g++`" >> atos-config/compilers
 $ROOT/bin/atos config -C atos-config
 
 [ `cat atos-config/config.json | grep g++ | wc -l` -ne 0 ]
+
+$ROOT/bin/atos config -C atos-config -D UNSAFE_OPTIMS
+
+[ `cat atos-config/flags.optim.cfg | grep fassociative-math | wc -l` -ne 0 ]

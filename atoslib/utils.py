@@ -1215,7 +1215,8 @@ def run_atos_config(args):
 
     if not args.print_cfg and not args.compilers:
         client = atos_lib.json_config(config_file)
-        client.prepare_flag_files(args.configuration_path, compiler_list)
+        client.prepare_flag_files(
+            args.configuration_path, compiler_list, args.flags)
 
     return 0
 

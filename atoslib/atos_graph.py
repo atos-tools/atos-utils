@@ -357,7 +357,8 @@ def getoptcases(dbpath, opts):
 
 def optgraph(opts):
 
-    optcases = getoptcases(opts.configuration_path, opts)
+    optcases = getoptcases(
+        opts.dbfile and opts.dbfile[0] or opts.configuration_path, opts)
 
     scatters, frontiers = [], []
 

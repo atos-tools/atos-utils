@@ -27,6 +27,7 @@ import glob
 import globals
 import jsonlib
 import process
+import logger
 
 # ####################################################################
 
@@ -62,21 +63,37 @@ class atos_db():
 
     #
     @staticmethod
-    def db(atos_configuration, no_cache=False):
-        # results.pkl  loadtime:  3.50s  filesize: 229M
-        db_pckl = os.path.join(atos_configuration, 'results.pkl')
-        # results.json loadtime: 27.63s  filesize: 217M
-        db_json = os.path.join(atos_configuration, 'results.json')
-        # results.db   loadtime:  5.70s  filesize: 579M
-        db_dflt = os.path.join(atos_configuration, 'results.db')
+    def db(results_path, no_cache=False):
 
-        # select db file in atos-config directory
-        if os.path.exists(db_pckl):
-            db_func, db_file = atos_db_pickle, db_pckl
-        elif os.path.exists(db_json):
-            db_func, db_file = atos_db_json, db_json
+        if os.path.isdir(results_path):
+            atos_configuration = results_path
+            # results.pkl  loadtime:  3.50s  filesize: 229M
+            db_pckl = os.path.join(atos_configuration, 'results.pkl')
+            # results.json loadtime: 27.63s  filesize: 217M
+            db_json = os.path.join(atos_configuration, 'results.json')
+            # results.db   loadtime:  5.70s  filesize: 579M
+            db_dflt = os.path.join(atos_configuration, 'results.db')
+
+            # select db file in atos-config directory
+            if os.path.exists(db_pckl):
+                db_func, db_file = atos_db_pickle, db_pckl
+            elif os.path.exists(db_json):
+                db_func, db_file = atos_db_json, db_json
+            else:
+                db_func, db_file = atos_db_file, db_dflt
+
+        elif os.path.isfile(results_path):
+            ext = os.path.splitext(results_path)
+            if ext == ".pkl":
+                db_func, db_file = atos_db_pickle, results_path
+            elif ext == ".json":
+                db_func, db_file = atos_db_json, results_path
+            else:  # default case: dbfile
+                db_func, db_file = atos_db_file, results_path
+
         else:
-            db_func, db_file = atos_db_file, db_dflt
+            logger.error(
+                "results not found: '%s'" % results_path, exit_status=1)
 
         # create db-cache if necessary
         if not getattr(atos_db, 'db_cache', None):

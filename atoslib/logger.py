@@ -102,10 +102,9 @@ def setup(kwargs):
             logging.Formatter(log_fmt, log_datefmt))
         root_logger.addHandler(file_log_logger)
 
-def error(msg, *args, **kwargs):
+def error(msg, exit_status=None, *args, **kwargs):
     """ Log an error message on the ATOS logger. """
     logging.error(msg, *args, **kwargs)
-    exit_status = int(kwargs.get('fatal', 0))
     if exit_status: sys.exit(exit_status)
 
 def message(msg):

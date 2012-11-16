@@ -24,30 +24,39 @@ class ATOSArgumentParser(argparse.ArgumentParser):
     Specialization of parser class for ATOS tools.
     We add some constraints to the arguments to better match usual
     option parsing tools such as GNU getopt.
-    Ref to __init__.check_nargs() docstring.
+    Ref to check_action_arg docstring.
     """
     def __init__(self,
                  prog=None,
                  usage=None,
                  description=None,
                  formatter_class=argparse.ArgumentDefaultsHelpFormatter):
-        def check_nargs(actions):
-            """
-            Check that we only have 0 or 1 argument options.
-            I.e. we do not allow optional or multi arguments options.
-            This simplifies the implementation of the
-            parse_args.prepare_args() function below.
-            """
-            for action in actions:
-                if action.option_strings:
-                    assert(action.nargs == None or
-                           action.nargs == 1 or action.nargs == 0)
-
         assert(prog != None)
         super(ATOSArgumentParser, self).__init__(
             prog=prog, usage=usage, description=description,
             formatter_class=formatter_class)
-        check_nargs(self._actions)
+
+    def check_action_arg(self, action):
+        """
+        Check that we only have 0 or 1 argument options.
+        I.e. we do not allow optional or multi arguments options.
+        Also check that long options always start with '--'.
+        This simplifies the implementation of the
+        parse_args.prepare_args() function below.
+        """
+        if action.option_strings:
+            assert(action.nargs == None or
+                   action.nargs == 1 or action.nargs == 0)
+            assert all(
+                map(lambda option_string: (
+                        len(option_string) <= 2 or option_string[:2] == "--"),
+                    action.option_strings))
+
+    def add_argument(self, *args, **kwargs):
+        action = super(ATOSArgumentParser, self).add_argument(
+            *args, **kwargs)
+        self.check_action_arg(action)
+        return action
 
     def parse_args(self, args=None, namespace=None):
         """
@@ -89,7 +98,9 @@ class ATOSArgumentParser(argparse.ArgumentParser):
                     return new_args + [arg] + \
                         prepare_args(subparser_map[arg], args[(i + 1):])
                 if arg == '--' or arg[0] != '-': break
-                option = arg.split("=", 1)[0]
+                if len(arg) > 2 and arg[0] == '-' and arg[1] != '-':
+                    option = arg[:2]  # handle -Xval case
+                else: option = arg.split("=", 1)[0]
                 if not option in option_map: break
                 if (option == arg and
                     option_map[option].nargs != 0 and

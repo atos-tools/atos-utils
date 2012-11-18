@@ -691,7 +691,8 @@ def run_atos_lib(args):
         if args.query:
             client = atos_lib.json_config(config_file)
             results = client.query(atos_lib.strtoquery(args.query))
-            if args.uniq and results: results = list(set(results))
+            if args.uniq and results:
+                results = atos_lib.list_unique(results)
             atos_lib.pprint_list(results, text=args.text)
 
         elif args.add_item:
@@ -840,7 +841,7 @@ def run_atos_play(args):
             selected = atos_lib.atos_client_results.select_tradeoffs(
                 all_points, tradeoff, nbtr) or []
             results.extend(selected)
-        results = list(set(results))
+        results = atos_lib.list_unique(results)
         results = map(lambda x: x.dict(), results)
 
     if not results:
@@ -1023,7 +1024,8 @@ def run_atos_run(args):
         entry.update({'time': str(time)})
         entry.update({'size': str(size)})
         if args.cookies:
-            entry.update({'cookies': ','.join(list(set(args.cookies)))})
+            entry.update({'cookies': ','.join(
+                        atos_lib.list_unique(args.cookies))})
         if args.output_file:
             db = atos_lib.atos_db_file(args.output_file)
             atos_lib.atos_client_db(db).add_result(entry)

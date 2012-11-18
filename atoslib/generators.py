@@ -878,8 +878,9 @@ def get_run_tradeoffs(
     fselect = atos_lib.atos_client_results.select_tradeoff
     results = map(
         lambda x: fselect(results, perf_size_ratio=x), tradeoffs)
-    # result objects can be none in case of failure
-    results = list(set(filter(bool, results)))
+    # Returns unique list of results, also filter
+    # None result objects returned in case of failure
+    results = atos_lib.list_unique(filter(bool, results))
     return results
 
 

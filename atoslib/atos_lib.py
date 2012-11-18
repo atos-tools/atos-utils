@@ -327,7 +327,8 @@ class atos_client_results():
         query = query or {}
         self.db = atos_db
         if not group_targets:
-            group_targets = list(set(self.db.get_results('$[*].target') or []))
+            group_targets = list_unique(
+                self.db.get_results('$[*].target') or [])
         group_name = group_name or '+'.join(group_targets)
         self.values = (group_targets, query, group_name)
         # results: {variant: [result_obj]}
@@ -452,12 +453,11 @@ def merge_results(results):
     results = map(
         atos_client_results.result, results)
     # compute merged results for each variant
-    variants = list(
-        set(map(lambda x: x.variant, results)))
+    variants = list_unique(map(lambda x: x.variant, results))
     variant_results = []
     for variant in variants:
         filtered_results = filter(lambda x: x.variant == variant, results)
-        targets = list(set(map(lambda x: x.target, filtered_results)))
+        targets = list_unique(map(lambda x: x.target, filtered_results))
         # merge multiple runs
         targets_results = map(
             atos_client_results.result.merge_multiple_runs,
@@ -851,6 +851,16 @@ def md5sum(s):
 
 def sha1sum(s):
     return hashlib.sha1(s).hexdigest()
+
+def list_unique(seq):
+    """
+    Returns a new list with no duplicate elements.
+    The initial list order is preserved.
+    This function should be used in favor of list(set(seq))
+    which does not preserve order.
+    """
+    seen = set()
+    return [x for x in seq if x not in seen and not seen.add(x)]
 
 def hashid(s):
     # return same results as 'echo s | md5sum'

@@ -671,7 +671,7 @@ class json_config():
                     os.path.join(
                         globals.LIBDIR, "plugins", "gcc-" + patchlevels,
                         target_alias, host_alias, plugin_name))
-                plugin_path = sorted(plugins)[-1]
+                plugin_path = plugins and sorted(plugins)[-1]
             plugin_path = os.path.isfile(
                 plugin_path or "") and plugin_path or "none"
             return plugin_path

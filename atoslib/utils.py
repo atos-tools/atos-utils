@@ -236,6 +236,7 @@ def run_atos_build(args):
     driver_env = {}
     compile_options = args.options != None and args.options.split() or []
     link_options = []
+    shared_link_options, main_link_options = [], []
 
     atos_driver = os.getenv("ATOS_DRIVER")
     if not atos_driver:
@@ -264,7 +265,7 @@ def run_atos_build(args):
         with open(os.path.join(profile_path, "variant.txt"), "w") as variantf:
             variantf.write(pvariant)
         compile_options += ["-fprofile-generate"]
-        link_options += ["-lgcov", "-lc"]
+        shared_link_options += ["-lgcov", "-lc"]
 
         remote_profile_path = args.remote_path
         if not remote_profile_path:
@@ -292,9 +293,8 @@ def run_atos_build(args):
 
     driver_env.update({"ACFLAGS": " ".join(compile_options)})
     driver_env.update({"ALDFLAGS": " ".join(link_options)})
-    # useless for now
-    driver_env.update({"ALDSOFLAGS": ""})
-    driver_env.update({"ALDMAINFLAGS": ""})
+    driver_env.update({"ALDSOFLAGS": " ".join(shared_link_options)})
+    driver_env.update({"ALDMAINFLAGS": " ".join(main_link_options)})
 
     # add driver build variables to environment
     map(lambda (k, v): os.putenv(k, str(v)), driver_env.items())

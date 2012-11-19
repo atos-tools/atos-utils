@@ -832,6 +832,7 @@ class parsers:
         args.atos_config.compiler(parser)
         args.atos_config.printcfg(parser)
         args.atos_config.ppflags(parser)
+        args.debug(parser)
         args.version(parser)
         return parser
 

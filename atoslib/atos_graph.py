@@ -343,10 +343,10 @@ def getoptcases(dbpath, opts):
                 results, {'target': target})
             filtered.extend(target_results)
         results = filtered
-    if opts.cookies:
-        results = atos_lib.results_filter_cookies(results, opts.cookies)
     ref_results = atos_lib.merge_results(
         atos_lib.results_filter(results, {'variant': 'REF'}))
+    if opts.cookies:
+        results = atos_lib.results_filter_cookies(results, opts.cookies)
     assert ref_results and len(ref_results) == 1
     variant_results = atos_lib.merge_results(results) or []
     map(lambda x: x.compute_speedup(ref_results[0]), variant_results)

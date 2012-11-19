@@ -21,7 +21,7 @@ graph()
     NBPOINTS=50
     $ROOT/bin/atos lib create_db -C $CFGNAME
     $ROOT/bin/atos lib add_result -C $CFGNAME \
-	-r "target:X,variant:REF,time:100,size:100,cookies:cookie-ref"
+	-r "target:X,variant:REF,time:100,size:100"
     N=0
     while [ $N -lt $NBPOINTS ]; do
 	cookie="cookie-`rnd 0 2`"
@@ -37,6 +37,6 @@ echo "Running test in: $TMPTEST"
 # should show about 20/30 points
 while [ 1 -eq 1 ]; do
     $ROOT/bin/atos-graph -C `graph` \
-	--tradeoff=4 --tradeoff=1 --tradeoff=0.25 --cookie=cookie-0 --cookie=cookie-ref
+	--tradeoff=4 --tradeoff=1 --tradeoff=0.25 --cookie=cookie-0
 done
 

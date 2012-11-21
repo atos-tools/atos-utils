@@ -118,11 +118,13 @@ def invoque_compile_command(args):
 
     if opts.audit_file:
 
+        exp_args = atos_lib.expand_response_file(args)
+
         with open(opts.audit_file, "a") as outfile:
             print >>outfile, ": ".join(
                 ["CC_DEPS",
                  '"%s"' % os.path.abspath(which(args[0])),
-                 ", ".join(map(lambda x: '"%s"' % x, args)) + ": ",
+                 ", ".join(map(lambda x: '"%s"' % x, exp_args)) + ": ",
                  '"%s"' % cwd]
                 )
             outfile.flush()

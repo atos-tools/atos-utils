@@ -805,6 +805,8 @@ class parsers:
         args.results_script(parser)
         args.nbruns(parser)
         args.cookie(parser)
+        args.atos_replay.no_ref(parser)
+        args.atos_replay.variants(parser)
         args.debug(parser)
         args.log_file(parser)
         args.quiet(parser)
@@ -1462,6 +1464,20 @@ class args:
                  dest="results_path",
                  help="directory for qualified results",
                  default="atos-qualif")
+
+        @staticmethod
+        def no_ref(parser, args=("--no-ref",)):
+            parser.add_argument(
+                *args,
+                 dest="no_ref", action='store_true', default=False,
+                 help="do not run reference")
+
+        @staticmethod
+        def variants(parser):
+            parser.add_argument(
+                "variants",
+                nargs=argparse.REMAINDER,
+                help="identifiers of variants")
 
     class atos_explore:
         """ Namespace for non common atos-explore-* arguments. """

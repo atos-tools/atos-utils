@@ -1158,25 +1158,36 @@ def run_atos_replay(args):
     result_target_file = os.path.join(args.results_path, 'targets')
     process.commands.copyfile(config_target_file, result_target_file)
 
-    # reference build
-    status = invoque("atos-build", args)
-    if status != 0: return status
+    if not args.no_ref:
+        # reference build
+        status = invoque("atos-build", args)
+        if status != 0: return status
 
-    # reference run
-    status = invoque("atos-run", args,
-                  configuration_path=args.results_path, record=True,
-                  command=process.cmdline2list(args.run_script))
-    if status != 0: return status
+        # reference run
+        status = invoque("atos-run", args,
+                         configuration_path=args.results_path, record=True,
+                         command=process.cmdline2list(args.run_script))
+        if status != 0: return status
 
     # get frontier results
     results_db = atos_lib.atos_db.db(args.configuration_path)
     results_client = atos_lib.atos_client_results(results_db)
-    results = results_client.get_results(only_frontier=True, objects=True)
+    if args.variants:
+        results = []
+        for variant in args.variants:
+            res_variant = atos_lib.atos_client_db(results_db).query(
+                {'variant': variant})
+            if not res_variant:
+                warning("variant not found: '%s'" % variant)
+                continue
+            results.append(atos_lib.atos_client_results.result(res_variant[0]))
+    else:
+        results_client = atos_lib.atos_client_results(results_db)
+        results = results_client.get_results(only_frontier=True, objects=True)
 
     for result in results:
         result_conf = getattr(result, 'conf', None)
         result_uconf = getattr(result, 'uconf', None)
-
         status = invoque(
             "atos-build", args, options=result_conf, uopts=result_uconf)
         if status != 0: continue

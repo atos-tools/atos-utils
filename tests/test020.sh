@@ -29,3 +29,14 @@ nb_replayed=`$ROOT/bin/atos lib query -C atos-config-replay | grep -v REF | wc -
 nb_frontier=`$ROOT/bin/atos lib speedups -C atos-configurations -f | grep -v REF | wc -l`
 
 [ $nb_replayed -eq $nb_frontier ]
+
+$ROOT/bin/atos-replay -C atos-configurations -R atos-config-replay_O0 -r "./run.sh 1K" --no-ref OPT-O0 REF
+
+cat > variants_exp <<EOF
+OPT-O0
+REF
+EOF
+
+cat atos-config-replay_O0/results.db | awk '{ print $3 }' | sed 's/://' | sort -u > variants
+
+diff variants variants_exp

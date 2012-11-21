@@ -88,6 +88,14 @@ def get_cc_command_additional_flags(optfile, args):
     if len(outputs) != 1: return shlex.split(def_opts)
     return shlex.split(obj_opts.get(outputs[0], def_opts))
 
+def which(name):
+    env_PATH = os.environ.get('PATH', None)
+    if not env_PATH: return None
+    for p in env_PATH.split(os.pathsep):
+        p = os.path.join(p, name)
+        if os.access(p, os.X_OK): return p
+    return None
+
 def invoque_compile_command(args):
 
     parser = argparse.ArgumentParser(add_help=False)
@@ -95,6 +103,8 @@ def invoque_compile_command(args):
         '--atos-fctmap', dest='fctmap', action='store', default=None)
     parser.add_argument(
         '--atos-optfile', dest='optfile', action='store', default=None)
+    parser.add_argument(
+        '--atos-audit', dest='audit_file', action='store', default=None)
 
     cwd = os.path.abspath(os.getcwd())
     args = list(args or [])
@@ -105,6 +115,20 @@ def invoque_compile_command(args):
         if env_ACFLAGS: args.extend(process.cmdline2list(env_ACFLAGS))
 
     (opts, args) = parser.parse_known_args(args)
+
+    if opts.audit_file:
+
+        with open(opts.audit_file, "a") as outfile:
+            print >>outfile, ": ".join(
+                ["CC_DEPS",
+                 '"%s"' % os.path.abspath(which(args[0])),
+                 ", ".join(map(lambda x: '"%s"' % x, args)) + ": ",
+                 '"%s"' % cwd]
+                )
+            outfile.flush()
+
+        status = process.system(args, print_output=True)
+        return status
 
     env_PROFILE_DIR = os.environ.get("PROFILE_DIR")
     profdir_common_len = env_PROFILE_DIR and len(
@@ -156,9 +180,6 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='atos-driver')
 
-    parser.add_argument('--atos-help', dest='help',
-                      action='store_true', default=False,
-                      help='print help message')
     parser.add_argument('--atos-debug', dest='debug',
                       action='store_true', default=False,
                       help='print debug information (default: False)')
@@ -168,7 +189,8 @@ if __name__ == "__main__":
     parser.add_argument('--atos-version', action='version',
                         version='atos-driver version ' + VERSION)
     # TODO: fix proot cc_opts plugin and remove --atos-tmp
-    parser.add_argument('--atos-tmp', dest='tmp', action='store_true')
+    parser.add_argument('--atos-tmp', dest='tmp', action='store_true',
+                        help=argparse.SUPPRESS)
 
     (opts, args) = parser.parse_known_args()
 

@@ -205,19 +205,24 @@ def run_atos_audit(args):
         args.configuration_path, "build.audit")
 
     process.commands.mkdir(args.configuration_path)
+    process.commands.unlink(output_file)
     process.commands.touch(output_file)
 
+    atos_driver = atos_lib.driver_path()
     build_sh = os.path.join(args.configuration_path, "build.sh")
     atos_lib.generate_script(build_sh, args.command)
     force_sh = os.path.join(args.configuration_path, "build.force")
     with open(force_sh, 'w') as file_force:
         file_force.write(str(int(args.force)))
+    audit_flag = "--atos-audit=" + os.path.abspath(output_file)
 
     command = atos_lib.proot_command(
         PROOT_IGNORE_ELF_INTERPRETER=1,
-        PROOT_ADDON_CC_DEPS=1,
-        PROOT_ADDON_CC_DEPS_OUTPUT=output_file,
-        PROOT_ADDON_CC_DEPS_CCRE=ccregexp) + args.command
+        PROOT_ADDON_CC_OPTS=1,
+        PROOT_ADDON_CC_OPTS_ARGS=audit_flag,
+        PROOT_ADDON_CC_OPTS_CCRE=ccregexp,
+        PROOT_ADDON_CC_OPTS_DRIVER=atos_driver) + args.command
+
     status = process.system(command, print_output=True)
     return status
 
@@ -237,11 +242,7 @@ def run_atos_build(args):
     compile_options = args.options != None and args.options.split() or []
     link_options = []
     shared_link_options, main_link_options = [], []
-
-    atos_driver = os.getenv("ATOS_DRIVER")
-    if not atos_driver:
-        atos_driver = os.path.join(globals.BINDIR, "atos-driver")
-    assert atos_driver and os.path.isfile(atos_driver)
+    atos_driver = atos_lib.driver_path()
 
     opt_rebuild = args.force
     build_force = os.path.join(args.configuration_path, "build.force")

@@ -687,7 +687,8 @@ class json_config():
             return path
 
         assert(os.path.isfile(compiler))
-        compiler = resolve_links(compiler)
+        compiler = os.path.abspath(compiler)
+        compiler_real = resolve_links(compiler)
         compiler_basename = os.path.basename(compiler)
 
         compiler_config = {}
@@ -707,7 +708,7 @@ class json_config():
                 {"name": "rvct",
                  "target": "ARM",
                  "target_alias": "arm",
-                 "host_alias": get_executable_host(compiler),
+                 "host_alias": get_executable_host(compiler_real),
                  "id": "%s-%s-%s" % (name, target, version),
                  "driver_version": driver_version,
                  "lto_enabled": "0",
@@ -741,7 +742,7 @@ class json_config():
             compiler_config["driver_version"] = version_string
 
             target_alias = get_triplet_alias(target)
-            host_alias = get_executable_host(compiler)
+            host_alias = get_executable_host(compiler_real)
             compiler_config["target_alias"] = target_alias
             compiler_config["host_alias"] = host_alias
 
@@ -1181,6 +1182,12 @@ def timeout_command():
     else:
         timeout = timeout and process.cmdline2list(timeout) or []
     return timeout
+
+def driver_path():
+    atos_driver = os.getenv("ATOS_DRIVER") or os.path.join(
+        globals.BINDIR, "atos-driver")
+    assert atos_driver and os.path.isfile(atos_driver)
+    return atos_driver
 
 def open_atos_log_file(configuration_path, name_prefix, variant_id):
     logs_dir = os.path.join(configuration_path, "logs")

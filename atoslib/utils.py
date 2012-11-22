@@ -956,8 +956,7 @@ def run_atos_run(args):
         def one_size(exe):
             if not os.path.isfile(exe):
                 if not os.path.isabs(exe):
-                    status, exe = process.system(
-                        ["/usr/bin/which", exe], get_output=True)
+                    exe = process.commands.which(exe)
                 else:
                     exe = None
             if not exe: return None

@@ -431,6 +431,32 @@ def run_atos_init(args):
               " the list of executables must be specified (-e option)")
         return 1
 
+    # Check that given scripts are executables
+    if args.build_script:
+        build_command = process.cmdline2list(args.build_script)
+        if process.commands.which(build_command[0]) == None:
+            error("in build command, '%s' executable not found and not in PATH"
+                  % build_command[0])
+            return 1
+    if args.run_script:
+        run_command = process.cmdline2list(args.run_script)
+        if process.commands.which(run_command[0]) == None:
+            error("in run command, '%s' executable not found and not in PATH"
+                  % run_command[0])
+            return 1
+    if args.results_script:
+        results_command = process.cmdline2list(args.results_script)
+        if process.commands.which(results_command[0]) == None:
+            error("in results command, '%s' executable not found "
+                  "and not in PATH" % results_command[0])
+            return 1
+    if args.prof_script:
+        prof_command = process.cmdline2list(args.prof_script)
+        if process.commands.which(prof_command[0]) == None:
+            error("in profile command, '%s' executable not found "
+                  "and not in PATH" % prof_command[0])
+            return 1
+
     process.commands.mkdir(args.configuration_path)
 
     if args.clean or args.build_script:
@@ -453,7 +479,7 @@ def run_atos_init(args):
 
     if args.build_script:
         status = invoque("atos-audit", args,
-                         command=process.cmdline2list(args.build_script))
+                         command=build_command)
         if status != 0: return status
         status = invoque("atos-deps", args,
                          all=(not executables))
@@ -479,7 +505,7 @@ def run_atos_init(args):
 
     if args.run_script:
         status = invoque("atos-raudit", args,
-                         command=process.cmdline2list(args.run_script))
+                         command=run_command)
         if status != 0: return status
     elif not os.path.isfile(
         os.path.join(args.configuration_path, "run.audit")):

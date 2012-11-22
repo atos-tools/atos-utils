@@ -307,3 +307,74 @@ class commands():
         logging.debug('cp %s %s' % (src, dst))
         if _dryrun: return
         shutil.copyfile(src, dst)
+
+    @staticmethod
+    def chdir(path):
+        logging.debug('cd %s' % (path))
+        os.chdir(path)
+
+    @staticmethod
+    def which(execname):
+        if os.path.dirname(execname) != "":
+            if os.access(execname, os.X_OK):
+                return os.path.abspath(execname)
+        else:
+            env_PATH = os.environ.get('PATH', None)
+            if not env_PATH: return None
+            for p in env_PATH.split(os.pathsep):
+                if p == "": continue
+                p = os.path.join(p, execname)
+                if os.access(p, os.X_OK):
+                    return os.path.abspath(p)
+        return None
+
+    @staticmethod
+    def test():
+        def test_which(tmpdir):
+            commands.chdir(tmpdir)
+            oldpath = None
+            if 'PATH' in os.environ:
+                oldpath = os.environ.pop('PATH')
+            tmpfile = tempfile.NamedTemporaryFile(dir=tmpdir, delete=False)
+            tmpname = tmpfile.name
+            execname = os.path.basename(tmpname)
+            # Full path, but not executable
+            assert(commands.which(tmpname) == None)
+            # No PATH defined
+            assert(commands.which(execname) == None)
+            commands.chmod(tmpname, 0755)
+            # Full path, and  executable
+            assert(commands.which(tmpname) == tmpname)
+            # Relative path, and  executable
+            assert(commands.which("./%s" % execname) == tmpname)
+            # No PATH defined
+            assert(commands.which(execname) == None)
+            os.environ['PATH'] = ""
+            # No matching PATH
+            assert(commands.which(execname) == None)
+            os.environ['PATH'] = "/undef::%s" % tmpdir
+            # Matching PATH and executable
+            assert(commands.which(execname) == tmpname)
+            os.environ['PATH'] = ":/usr//../%s" % tmpdir
+            # Matching PATH is canonicalized
+            assert(commands.which(execname) == tmpname)
+            if oldpath == None:
+                os.environ.pop('PATH')
+            else:
+                os.environ['PATH'] = oldpath
+            return True
+
+        print "TESTING process.commands..."
+        cwd = os.getcwd()
+        tmpdir = tempfile.mkdtemp()
+        try:
+            test_which(tmpdir)
+        finally:
+            commands.chdir(cwd)
+            commands.rmtree(tmpdir)
+        print "SUCCESS process.commands"
+        return True
+
+if __name__ == "__main__":
+    passed = commands.test()
+    if not passed: sys.exit(1)

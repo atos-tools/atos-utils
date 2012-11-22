@@ -88,14 +88,6 @@ def get_cc_command_additional_flags(optfile, args):
     if len(outputs) != 1: return shlex.split(def_opts)
     return shlex.split(obj_opts.get(outputs[0], def_opts))
 
-def which(name):
-    env_PATH = os.environ.get('PATH', None)
-    if not env_PATH: return None
-    for p in env_PATH.split(os.pathsep):
-        p = os.path.join(p, name)
-        if os.access(p, os.X_OK): return p
-    return None
-
 def invoque_compile_command(args):
 
     parser = argparse.ArgumentParser(add_help=False)
@@ -123,7 +115,7 @@ def invoque_compile_command(args):
         with open(opts.audit_file, "a") as outfile:
             print >>outfile, ": ".join(
                 ["CC_DEPS",
-                 '"%s"' % os.path.abspath(which(args[0])),
+                 '"%s"' % process.commands.which(args[0]),
                  ", ".join(map(lambda x: '"%s"' % x, exp_args)) + ": ",
                  '"%s"' % cwd]
                 )

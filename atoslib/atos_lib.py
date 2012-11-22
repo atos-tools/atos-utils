@@ -1044,19 +1044,6 @@ def pprint_speedups(results, out=None, reverse=False):
                    hashid(result['variant'])]]
     pprint_table(table, out, reverse)
 
-def execpath(file):
-    """
-    Gets the full executable path for the given file.
-    Returns None if the command is not found or not executable.
-    """
-    try:
-        status, output = process.system(
-            ["/usr/bin/which", file], get_output=True)
-    except OSError:
-        output = ""
-    if output == "": return None
-    return output.rstrip("\n")
-
 def pager_cmd():
     """
     Gets a cmd array for executing a pager.
@@ -1070,10 +1057,10 @@ def pager_cmd():
     if pager != None:
         return process.cmdline2list(pager)
     pager = "less"
-    if execpath(pager) != None:
+    if process.commands.which(pager) != None:
         return [pager]
     pager = "more"
-    if execpath(pager) != None:
+    if process.commands.which(pager) != None:
         return [pager]
     return None
 
@@ -1115,7 +1102,7 @@ def help_man(topic):
     Do not return error if the mancall fails. For instance
     the user may interrupt the display, but this is not an error.
     """
-    man = execpath("man")
+    man = process.commands.which("man")
     page = "atos-" + topic
     manpage = os.path.join(globals.MANDIR, "man1", page + ".1")
     if man and os.path.exists(manpage):

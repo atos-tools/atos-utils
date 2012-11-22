@@ -6,6 +6,22 @@ source `dirname $0`/common.sh
 
 TEST_CASE="ATOS init audits"
 
+# check user errors
+
+$ROOT/bin/atos-init -b "undef" 2>&1 | grep -i "error: in build command, 'undef' executable not found"
+[ ${PIPESTATUS[0]} = 1 ]
+$ROOT/bin/atos-init -r "undef" 2>&1 | grep -i "error: in run command, 'undef' executable not found"
+[ ${PIPESTATUS[0]} = 1 ]
+$ROOT/bin/atos-init -t "undef" 2>&1 | grep -i "error: in results command, 'undef' executable not found"
+[ ${PIPESTATUS[0]} = 1 ]
+$ROOT/bin/atos-init -p "undef" 2>&1 | grep -i "error: in profile command, 'undef' executable not found"
+[ ${PIPESTATUS[0]} = 1 ]
+
+# Check that init errors failed before creation of config dir
+[ ! -d atos-configurations ]
+
+# Check correct configuration and targets
+
 $ROOT/bin/atos-init -C atos-config \
     -r "$SRCDIR/examples/sha1-c/run.sh" \
     -b "gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c" \

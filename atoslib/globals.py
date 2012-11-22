@@ -30,11 +30,15 @@ DEFAULT_CONFIGURATION_PATH = None
 DEFAULT_TOOLS_CREGEXP = None
 DEFAULT_DRIVER_CC_PYREGEXP = None
 DEFAULT_DRIVER_AR_PYREGEXP = None
+DEFAULT_TIME_CMD = None
+DEFAULT_SIZE_CMD = None
 
 def setup(**kwargs):
     global PREFIX, BINDIR, LIBDIR, SHAREDIR, MANDIR, DOCDIR, PYTHONDIR
     global DEFAULT_CONFIGURATION_PATH, DEFAULT_TOOLS_CREGEXP, \
         DEFAULT_DRIVER_CC_PYREGEXP, DEFAULT_DRIVER_AR_PYREGEXP
+    global DEFAULT_SIZE_CMD, DEFAULT_TIME_CMD
+
     PREFIX = kwargs.get('PREFIX', os.path.abspath(
             os.path.join(os.path.dirname(sys.argv[0]), '..')))
     BINDIR = kwargs.get('BINDIR', os.path.join(PREFIX, 'bin'))
@@ -62,6 +66,10 @@ def setup(**kwargs):
     DEFAULT_DRIVER_AR_PYREGEXP = kwargs.get(
         'DEFAULT_DRIVER_AR_PYREGEXP',
         "(ar)$")
+
+    # Default time/size commands
+    DEFAULT_TIME_CMD = "time -p"
+    DEFAULT_SIZE_CMD = "size"
 
     # Setup Path to python libs
     sys.path.insert(0, PYTHONDIR)

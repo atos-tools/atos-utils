@@ -263,6 +263,8 @@ class parsers:
         args.nbruns(parser, default=1)
         args.remote_path(parser)
         args.results_script(parser)
+        args.size_cmd(parser)
+        args.time_cmd(parser)
         args.clean(parser)
         args.cookie(parser)
         args.optim_levels(parser)
@@ -394,6 +396,8 @@ class parsers:
         args.remote_path(parser)
         args.results_script(parser)
         args.prof_script(parser)
+        args.size_cmd(parser)
+        args.time_cmd(parser)
         args.clean(parser)
         args.cookie(parser)
         args.reuse(parser)
@@ -425,6 +429,8 @@ class parsers:
         args.run_script(parser)
         args.results_script(parser)
         args.prof_script(parser)
+        args.size_cmd(parser)
+        args.time_cmd(parser)
         args.nbruns(parser, default=1)
         args.remote_path(parser)
         args.atos_init.no_run(parser)
@@ -738,6 +744,8 @@ class parsers:
         args.configuration_path(parser)
         args.output(parser, default="run.audit")
         args.results_script(parser)
+        args.size_cmd(parser)
+        args.time_cmd(parser)
         args.force(parser)
         args.debug(parser)
         args.log_file(parser)
@@ -757,6 +765,8 @@ class parsers:
         args.nbruns(parser)
         args.remote_path(parser, ("-b", "--remote_path"))
         args.results_script(parser)
+        args.size_cmd(parser)
+        args.time_cmd(parser)
         prof_group = parser.add_mutually_exclusive_group()
         args.useprofile(prof_group)
         args.genprofile(prof_group)
@@ -803,6 +813,8 @@ class parsers:
         args.atos_replay.results_path(parser)
         args.run_script(parser)
         args.results_script(parser)
+        args.size_cmd(parser)
+        args.time_cmd(parser)
         args.nbruns(parser)
         args.cookie(parser)
         args.atos_replay.no_ref(parser)
@@ -947,6 +959,22 @@ class args:
             *args,
              dest="results_script",
              help="results_script for specific instrumentation")
+
+    @staticmethod
+    def size_cmd(parser, args=("--size-cmd",)):
+        parser.add_argument(
+            *args,
+             dest="size_cmd",
+             help="if specified, overrides bintutils size command "
+             "[default: %s]" % globals.DEFAULT_SIZE_CMD)
+
+    @staticmethod
+    def time_cmd(parser, args=("--time-cmd",)):
+        parser.add_argument(
+            *args,
+             dest="time_cmd",
+             help="if specified, overrides posix time command "
+             "[default: %s]" % globals.DEFAULT_TIME_CMD)
 
     @staticmethod
     def clean(parser, args=("-c", "--clean")):

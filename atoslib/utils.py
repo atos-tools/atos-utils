@@ -456,6 +456,18 @@ def run_atos_init(args):
             error("in profile command, '%s' executable not found "
                   "and not in PATH" % prof_command[0])
             return 1
+    if args.size_cmd:
+        size_command = process.cmdline2list(args.size_cmd)
+        if process.commands.which(size_command[0]) == None:
+            error("in size command, '%s' executable not found "
+                  "and not in PATH" % size_command[0])
+            return 1
+    if args.time_cmd:
+        time_command = process.cmdline2list(args.time_cmd)
+        if process.commands.which(time_command[0]) == None:
+            error("in time command, '%s' executable not found "
+                  "and not in PATH" % time_command[0])
+            return 1
 
     process.commands.mkdir(args.configuration_path)
 
@@ -502,6 +514,16 @@ def run_atos_init(args):
     if args.nbruns and args.nbruns != 1:
         atos_lib.json_config(config_file).add_value(
             "default_values.nb_runs", str(args.nbruns))
+
+    time_cmd = globals.DEFAULT_TIME_CMD
+    if args.time_cmd: time_cmd = args.time_cmd
+    atos_lib.json_config(config_file).add_value(
+        "default_values.time_cmd", time_cmd)
+
+    size_cmd = globals.DEFAULT_SIZE_CMD
+    if args.size_cmd: size_cmd = args.size_cmd
+    atos_lib.json_config(config_file).add_value(
+        "default_values.size_cmd", size_cmd)
 
     if args.run_script:
         status = invoque("atos-raudit", args,
@@ -987,10 +1009,10 @@ def run_atos_run(args):
                     exe = None
             if not exe: return None
             status, output = process.system(
-                ["/usr/bin/size", exe.strip()], get_output=True)
+                process.cmdline2list(size_command) + [exe], get_output=True)
             if args.dryrun: return 0
             if status or not output: return None
-            return int(output.splitlines()[1].split()[3])
+            return int(output.splitlines()[-1].split()[3])
         executables_size = map(one_size, executables)
         if None in executables_size:
             return None
@@ -1007,7 +1029,8 @@ def run_atos_run(args):
         run_script = args.command or [run_script]
 
         status, output = process.system(
-            atos_lib.timeout_command() + ["/usr/bin/time", "-p"] + run_script,
+            atos_lib.timeout_command() + process.cmdline2list(time_command) +
+            run_script,
             get_output=True, output_stderr=True)
 
         if args.dryrun or status:
@@ -1067,6 +1090,18 @@ def run_atos_run(args):
             debug("CHKFAILURE [%s]" % fail_message)
         return fail_condition
 
+    def check_cmd(cmd, msg=""):
+        cmd_list = process.cmdline2list(cmd)
+        if not process.commands.which(cmd_list[0]):
+            error("%s: command not found: %s" % (msg, cmd_list[0]))
+            return False
+        return True
+
+    if not os.path.isdir(args.configuration_path):
+        error("configuration path not found: %s: run atos-init first" %
+              args.configuration_path)
+        return 1
+
     variant = args.variant or atos_lib.variant_id(
         args.options, args.gopts, args.uopts)
 
@@ -1079,6 +1114,16 @@ def run_atos_run(args):
     if args.gopts and not remote_path:
         remote_path = atos_lib.get_config_value(
             args.configuration_path, 'default_values.remote_profile_path')
+
+    time_command = args.time_cmd
+    if not args.time_cmd:
+        time_command = atos_lib.time_command(args.configuration_path)
+    if not check_cmd(time_command, "in time command"): return 1
+
+    size_command = args.size_cmd
+    if not args.size_cmd:
+        size_command = atos_lib.size_command(args.configuration_path)
+    if not check_cmd(size_command, "in size command"): return 1
 
     nbruns = args.nbruns
     if nbruns is None:
@@ -1173,6 +1218,10 @@ def run_atos_replay(args):
         error("replay result path must differ from configuration path")
         return 1
 
+    if not args.run_script:
+        error("run_script argument is mandatory for atos-replay")
+        return 1
+
     process.commands.mkdir(args.results_path)
 
     results_db_file = os.path.join(args.results_path, "results.db")
@@ -1183,6 +1232,11 @@ def run_atos_replay(args):
     result_target_file = os.path.join(args.results_path, 'targets')
     process.commands.copyfile(config_target_file, result_target_file)
 
+    time_cmd = globals.DEFAULT_TIME_CMD
+    if args.time_cmd: time_cmd = args.time_cmd
+    size_cmd = globals.DEFAULT_SIZE_CMD
+    if args.size_cmd: size_cmd = args.size_cmd
+
     if not args.no_ref:
         # reference build
         status = invoque("atos-build", args)
@@ -1191,7 +1245,8 @@ def run_atos_replay(args):
         # reference run
         status = invoque("atos-run", args,
                          configuration_path=args.results_path, record=True,
-                         command=process.cmdline2list(args.run_script))
+                         command=process.cmdline2list(args.run_script),
+                         size_cmd=size_cmd, time_cmd=time_cmd)
         if status != 0: return status
 
     # get frontier results
@@ -1218,9 +1273,9 @@ def run_atos_replay(args):
         if status != 0: continue
 
         invoque("atos-run", args, configuration_path=args.results_path,
-             record=True, options=result_conf, uopts=result_uconf,
-             command=process.cmdline2list(args.run_script))
-
+                record=True, options=result_conf, uopts=result_uconf,
+                command=process.cmdline2list(args.run_script),
+                size_cmd=size_cmd, time_cmd=time_cmd)
     return 0
 
 def run_atos_config(args):

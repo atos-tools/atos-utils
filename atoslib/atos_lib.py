@@ -1148,6 +1148,20 @@ def generate_script(script_path, command, environ=None):
         f.write("exec " + command + "\n")
     commands.chmod(script_path, 0755)
 
+def size_command(configuration_path):
+    size_command = get_config_value(
+        configuration_path, 'default_values.size_cmd')
+    if not size_command:
+        size_command = globals.DEFAULT_SIZE_CMD
+    return size_command
+
+def time_command(configuration_path):
+    time_command = get_config_value(
+        configuration_path, 'default_values.time_cmd')
+    if not time_command:
+        time_command = globals.DEFAULT_TIME_CMD
+    return time_command
+
 def proot_command(**kwargs):
     status, uname = process.system('/bin/uname -m', get_output=True)
     arch = uname.rstrip('\n') if uname else 'i386'

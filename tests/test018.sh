@@ -16,6 +16,10 @@ $ROOT/bin/atos-init -t "undef" 2>&1 | grep -i "error: in results command, 'undef
 [ ${PIPESTATUS[0]} = 1 ]
 $ROOT/bin/atos-init -p "undef" 2>&1 | grep -i "error: in profile command, 'undef' executable not found"
 [ ${PIPESTATUS[0]} = 1 ]
+$ROOT/bin/atos-init --size-cmd "undef" 2>&1 | grep -i "error: in size command, 'undef' executable not found"
+[ ${PIPESTATUS[0]} = 1 ]
+$ROOT/bin/atos-init --time-cmd "undef" 2>&1 | grep -i "error: in time command, 'undef' executable not found"
+[ ${PIPESTATUS[0]} = 1 ]
 
 # Check that init errors failed before creation of config dir
 [ ! -d atos-configurations ]
@@ -25,6 +29,8 @@ $ROOT/bin/atos-init -p "undef" 2>&1 | grep -i "error: in profile command, 'undef
 $ROOT/bin/atos-init -C atos-config \
     -r "$SRCDIR/examples/sha1-c/run.sh" \
     -b "gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c" \
+    --time-cmd "/usr/bin/time -p" \
+    --size-cmd "/usr/bin/size" \
     -n 2
 
 [ `$ROOT/bin/atos lib query -C atos-config | grep target | wc -l` -eq 2 ]

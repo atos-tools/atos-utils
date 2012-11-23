@@ -438,23 +438,11 @@ def run_atos_init(args):
             error("in build command, '%s' executable not found and not in PATH"
                   % build_command[0])
             return 1
-    if args.run_script:
-        run_command = process.cmdline2list(args.run_script)
-        if process.commands.which(run_command[0]) == None:
-            error("in run command, '%s' executable not found and not in PATH"
-                  % run_command[0])
-            return 1
     if args.results_script:
         results_command = process.cmdline2list(args.results_script)
         if process.commands.which(results_command[0]) == None:
             error("in results command, '%s' executable not found "
                   "and not in PATH" % results_command[0])
-            return 1
-    if args.prof_script:
-        prof_command = process.cmdline2list(args.prof_script)
-        if process.commands.which(prof_command[0]) == None:
-            error("in profile command, '%s' executable not found "
-                  "and not in PATH" % prof_command[0])
             return 1
     if args.size_cmd:
         size_command = process.cmdline2list(args.size_cmd)
@@ -526,6 +514,11 @@ def run_atos_init(args):
         "default_values.size_cmd", size_cmd)
 
     if args.run_script:
+        run_command = process.cmdline2list(args.run_script)
+        if process.commands.which(run_command[0]) == None:
+            error("in run command, '%s' executable not found and not in PATH"
+                  % run_command[0])
+            return 1
         status = invoque("atos-raudit", args,
                          command=run_command)
         if status != 0: return status
@@ -536,6 +529,11 @@ def run_atos_init(args):
         return 1
 
     if args.prof_script:
+        prof_command = process.cmdline2list(args.prof_script)
+        if process.commands.which(prof_command[0]) == None:
+            error("in profile command, '%s' executable not found "
+                  "and not in PATH" % prof_command[0])
+            return 1
         prof_sh = os.path.join(args.configuration_path, "profile.sh")
         atos_lib.generate_script(prof_sh, args.prof_script)
 

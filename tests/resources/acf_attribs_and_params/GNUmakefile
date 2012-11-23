@@ -78,9 +78,9 @@ $(TESTS): csv_generate
 %.check: %.csv
 	id=$*$(COPT)$(LTOOPT); \
 	$(COMPILER) $(COPT) $(XOPTS) -fplugin=$(plugindir)/acf_plugin.so -fplugin-arg-acf_plugin-verbose -fplugin-arg-acf_plugin-csv_file=$< $(SRCS) -o $$id.out > $$id.trace.log 2>&1 ; \
-	lines=`cat $$id.trace.log | wc -l`; \
+	lines=`cat $$id.trace.log | grep -v "ipa_passes" | wc -l`; \
+	[ "$(LTO)" != "1" ] || lines=`cat $$id.trace.log | grep all_passes | sed -e 's/^.*passes for function //' | sort -u | wc -l`; \
 	expected_lines=`cat $< | wc -l`; \
-	[ "$(LTO)" != 1 ] || expected_lines=`expr $$expected_lines + $$expected_lines`; \
 	if [ "$$lines" -ne "$$expected_lines" ]; then \
 	  echo "$(MAKE) $*.chk $(MK_FLAG) => FAILED"; \
 	  cat $$id.trace.log ; \

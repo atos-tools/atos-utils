@@ -95,7 +95,10 @@
 // statement with no else clause, -fcse-skip-blocks causes CSE to follow
 // the jump around the body of the if.
 // Enabled at levels -O2, -O3, -Os.
+
+#if GCC_VERSION < 40600
 -fcse-skip-blocks|-fno-cse-skip-blocks
+#endif
 
 // Perform a global common subexpression elimination pass. This pass also
 // performs global constant and copy propagation.  Note: When compiling a

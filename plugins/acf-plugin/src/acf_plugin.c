@@ -104,12 +104,12 @@ static void print_pass_list(struct opt_pass *pass,int tab_number){
 }
 #endif /* PRINT_PASS_LIST */
 
-static void trace_attached_acf(acf_ftable_entry_t *acf_entry, const char *acf_type, const char *func_name) {
+static void trace_attached_acf(acf_ftable_entry_t *acf_entry, const char *acf_type,
+			       const char *func_name, const char *acf_pass_name) {
     const char *sep = "";
     int i;
-    VERBOSE("%s: Attaching %s to "
-	    "function %s: %s ",
-	    plugin_name, acf_type, func_name, acf_entry->opt_attr);
+    VERBOSE("%s: %s for function %s, attaching %s: %s ",
+	    plugin_name, acf_pass_name, func_name, acf_type, acf_entry->opt_attr);
     for (i = 0; i < acf_entry->attr_arg_number; i++) {
 	switch (acf_entry->opt_args[i].arg_type) {
 	case NO_TYPE:
@@ -160,8 +160,10 @@ typedef void (*decl_attributes_func_type)
     (tree *decl,tree attributes,int flags);
 static decl_attributes_func_type decl_attributes_func;
 
+/* Will modifiy the attributes flags stored into the tree decl. */
+
 static void
-add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tree decl) {
+add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tree decl, const char *acf_pass_name) {
     tree attribute_identifier = get_identifier(acf_entry->opt_attr);;
     tree attribute_list = NULL_TREE;
     tree argument = NULL_TREE;
@@ -169,7 +171,7 @@ add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tre
     int i;
 
     if (verbose)
-	trace_attached_acf(acf_entry, "attribute", cur_func_name);
+	trace_attached_acf(acf_entry, "attribute", cur_func_name, acf_pass_name);
 
     if (acf_entry->attr_arg_number != 0) {
 	for (i = 0; i < acf_entry->attr_arg_number; i++) {
@@ -205,10 +207,17 @@ add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tre
 /* Add attributes to function in LTO pass
 /* ============================================================ */
 
-static struct cl_optimization loc_save_options, *save_options;
+static struct cl_optimization loc_save_options, *save_options = NULL;
+
+/* Will update the global_options variable, after it has been
+   initialized by a copy of the flags in the tree decl. If not in lto,
+   add_decl_attribute has already been executed and the ACF flags have
+   been stored into the decl tree, and thus already copied into the
+   gobal_options struct.
+*/
 
 static void
-add_lto_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
+add_global_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, const char *acf_pass_name) {
 
     // if starts with "no-", remove it. Then add "f" -->
     // find_opt("fmove-loop-invariants", 1<<13) = 665
@@ -242,7 +251,7 @@ add_lto_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
 #endif
 
 	if (verbose)
-	    trace_attached_acf(acf_entry, "attribute", cur_func_name);
+	    trace_attached_acf(acf_entry, "attribute", cur_func_name, acf_pass_name);
 
 	if (save_options == NULL) {
 	    save_options = &loc_save_options;
@@ -269,6 +278,18 @@ add_lto_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
     //    opt_index = 67;
     //    opt_arg="max-unroll-times=4";
     //    opt_value=4;
+}
+
+static void restore_global_attribute_values() {
+
+    if (save_options != NULL) {
+#ifdef USE_GLOBAL_PARAMS
+	cl_optimization_restore(&global_options, save_options);
+#else
+	cl_optimization_restore(save_options);
+#endif
+	save_options = NULL;
+    }
 }
 
 /* ============================================================ */
@@ -320,7 +341,7 @@ static void save_and_set_param(char *opt_param, int value) {
 }
 
 static void
-add_param(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
+add_global_param(const char *cur_func_name, acf_ftable_entry_t *acf_entry, const char *acf_pass_name) {
     char *opt_param;
     int opt_value;
     bool bad = false;
@@ -342,12 +363,12 @@ add_param(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
     opt_value = acf_entry->opt_args[1].av.int_arg;
 
     if (verbose)
-	trace_attached_acf(acf_entry, "param", cur_func_name);
+	trace_attached_acf(acf_entry, "param", cur_func_name, acf_pass_name);
 
     save_and_set_param(opt_param, opt_value);
 }
 
-static void restore_param_values() {
+static void restore_global_param_values() {
     size_t i;
 
     for ( i = 0; i < csv_param_index; i++) {
@@ -357,6 +378,7 @@ static void restore_param_values() {
 	set_param_value(csv_param_name[i], csv_param_value[i]);
 #endif
     }
+    csv_param_index = 0;
 }
 
 /* ============================================================ */
@@ -458,8 +480,12 @@ static bool source_file_match(char *opt_file, char *input_file)
     return ret;
 }
 
-static void fill_csv_options(tree decl, int pass) {
+static const char *pass_names[] = {"unknown", "dcl passes", "all_passes", "ipa_passes"};
+
+static bool fill_csv_options(tree decl, int acf_pass) {
     const char *cur_func_name = NULL;
+    const char *acf_pass_name = pass_names[acf_pass];
+    bool done = false;
     int i;
 
     static int func_number = 0;
@@ -471,10 +497,13 @@ static void fill_csv_options(tree decl, int pass) {
     }
     if (func_number < 0){
 	/* Error already reported */
-	return;
+	return done;
     }
 
+    /* TBD: Use current_function_decl instead ?? */
     cur_func_name = IDENTIFIER_POINTER (DECL_ASSEMBLER_NAME (cfun->decl));
+
+    //    VERBOSE("%s: fill_csv_options(%s) for function %s\n", plugin_name, acf_pass_name, cur_func_name);
 
     for (i = 0; i < func_number; i++){
 	acf_ftable_entry_t *acf_entry = &acf_ftable[i];
@@ -484,25 +513,30 @@ static void fill_csv_options(tree decl, int pass) {
 	    !source_file_match(acf_entry->opt_file, (char *) main_input_filename))
 	    continue;
 
-	switch (pass) {
+	switch (acf_pass) {
 	case 1:
 	    // Do not handle --param when called on function parsing
-	    if (!IS_CSV_PARAM(acf_entry))
-		add_decl_attribute(cur_func_name, acf_entry, decl);
+	    if (!IS_CSV_PARAM(acf_entry)) {
+		done = true;
+		add_decl_attribute(cur_func_name, acf_entry, decl, acf_pass_name);
+	    }
 	    break;
 	case 2:
+	case 3:
 	    // No need to handle optimize attribute in backend if not
 	    // in lto mode
 	    if (IS_CSV_PARAM(acf_entry))
-		add_param(cur_func_name, acf_entry);
+		add_global_param(cur_func_name, acf_entry, acf_pass_name);
 	    else  if (is_lto())  /* !CSV_PARAM */
-		add_lto_attribute(cur_func_name, acf_entry);
+		add_global_attribute(cur_func_name, acf_entry, acf_pass_name);
+	    done = true;
 	    break;
 	default:
 	    // Unkonwn pass
-	    return;
+	    return done;
 	}
     }
+    return done;
 }
 
 /* ============================================================ */
@@ -533,6 +567,7 @@ static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
     if(DECL_P(decl)&&is_targetable_decl(decl) &&
        MATCH(decl, match_tree_code(equal_to(FUNCTION_DECL)))) {
 	decl_fullname=lang_hooks.decl_printable_name(decl,2);
+	/* TBD: Use current_function_decl instead ?? */
 	DEBUG("%s: Processing function %s (%s)\n",
 	      plugin_name, decl_fullname,
 	      IDENTIFIER_POINTER (DECL_ASSEMBLER_NAME (cfun->decl)));
@@ -547,7 +582,7 @@ static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
     fill_csv_options(decl, 1);
 }
 
-static void param_injector_start_passes_callback(void *gcc_data,void *data) {
+static void param_injector_start_all_passes_callback(void *gcc_data,void *data) {
 
     if (csv_param_name == NULL) {
 	csv_param_name  = (char **)xmalloc(sizeof(char *)*get_num_compiler_params());
@@ -566,14 +601,131 @@ static void param_injector_start_passes_callback(void *gcc_data,void *data) {
 
 static void param_injector_end_passes_callback(void *gcc_data,void *data) {
 
-    if (csv_param_index > 0)
-	restore_param_values();
-    if (save_options != NULL)
+    restore_global_param_values();
+    restore_global_attribute_values();
+}
+
+/*
+  For small_ipa_passes and all_regular_ipa_passes, the events
+  PLUGIN_EARLY_GIMPLE_PASSES_START and PLUGIN_EARLY_GIMPLE_PASSES_END
+  are triggered when entering and exiting a sequence of GIMPLE
+  passes. These GIMPLE passes are executed all together one function
+  at a time. Thus we want to call fill_csv_options each time a
+  sequence of GIMPLE_PASS is executed in the context of a function.
+
+  So as to be as portable as possible from one GCC version to another,
+  we do as follows :
+
+  - On PLUGIN_EARLY_GIMPLE_PASSES_START, we register
+    PLUGIN_PASS_EXECUTION so that we are called when the next pass is
+    called.
+
+  - On PLUGIN_PASS_EXECUTION we cancel this callback, and we add a
+    pass just before the current pass. This pass will be executed as
+    the first pass of a GIMPLE IPA sequence, and will make a call to
+    fill_csv_function.
+
+  - On PLUGIN_EARLY_GIMPLE_PASSES_END, we just restore the default
+    context to avoid a particular function context to be used
+    elsewhere.
+*/
+
+// Called when entering a sequence of GIMPLE_PASS in IPA lists
+
+static unsigned int ipa_gimple_per_func_callback(void) {
+
+    if (csv_param_name == NULL) {
+	csv_param_name  = (char **)xmalloc(sizeof(char *)*get_num_compiler_params());
+	csv_param_value = (int *)xmalloc(sizeof(int) *get_num_compiler_params());
+    }
+
 #ifdef USE_GLOBAL_PARAMS
-	cl_optimization_restore(&global_options, save_options);
-#else
-        cl_optimization_restore(save_options);
+    if (csv_param_set == NULL)
+	csv_param_set = (int *)xmalloc(sizeof(int)*get_num_compiler_params());
 #endif
+
+    restore_global_param_values();
+    restore_global_attribute_values();
+
+    fill_csv_options(NULL, 3);
+}
+
+// Called on the first pass after PLUGIN_EARLY_GIMPLE_PASSES_START was
+// triggered
+
+static void ipa_gimple_init_per_func_callback(void *gcc_data,void *data) {
+
+    // New pass to be inserted before the first GIMPLE_PASS in an IPA list
+    
+    static struct gimple_opt_pass static_pass_ipa_gimple_per_func = {
+	{
+	    GIMPLE_PASS,
+	    "ipa_gimple_per_func",		/* name */
+	    NULL,				/* gate */
+	    &ipa_gimple_per_func_callback,	/* execute */
+	    NULL,				/* sub */
+	    NULL,				/* next */
+	    0,					/* static_pass_number */
+	    TV_NONE,				/* tv_id */
+	    0,					/* properties_required */
+	    0,					/* properties_provided */
+	    0,					/* properties_destroyed */
+	    0,					/* todo_flags_start */
+	    0					/* todo_flags_finish */
+	}
+    };
+
+    unregister_callback(plugin_name, PLUGIN_PASS_EXECUTION);
+
+    // Check if the pass has not already been inserted (is it possible ?)
+    if (strcmp(current_pass->name, "ipa_gimple_per_func") != 0) {
+	// We cannot insert the new pass before current one since the
+	// caller has a pointer on the current pass. So we insert it after, and
+	// we permute the first two passes.
+	struct gimple_opt_pass *pass_ipa_gimple_per_func;
+	struct register_pass_info *ipa_gimple_per_func_info;
+
+	pass_ipa_gimple_per_func = (struct gimple_opt_pass *)xmalloc(sizeof(struct gimple_opt_pass));
+	memcpy(pass_ipa_gimple_per_func, &static_pass_ipa_gimple_per_func, sizeof(struct gimple_opt_pass));
+
+	ipa_gimple_per_func_info = (struct register_pass_info *)xmalloc(sizeof(struct register_pass_info));
+	ipa_gimple_per_func_info->pass = (struct opt_pass *)pass_ipa_gimple_per_func;
+	ipa_gimple_per_func_info->reference_pass_name = current_pass->name;
+	ipa_gimple_per_func_info->ref_pass_instance_number = current_pass->static_pass_number;
+	ipa_gimple_per_func_info->pos_op = PASS_POS_INSERT_AFTER;
+
+	register_callback (plugin_name,
+			   PLUGIN_PASS_MANAGER_SETUP,
+			   NULL, ipa_gimple_per_func_info);
+
+	// Permute the first two passes
+	struct opt_pass copy_current, *next_pass = current_pass->next;
+	memcpy(&copy_current, current_pass, sizeof(struct opt_pass));
+	memcpy(current_pass, next_pass, sizeof(struct opt_pass));
+	memcpy(next_pass, &copy_current, sizeof(struct opt_pass));
+	next_pass->next = current_pass->next;
+	current_pass->next = next_pass;
+    }
+}
+
+// Called when PLUGIN_EARLY_GIMPLE_PASSES_START is triggered
+
+static void ipa_gimple_passes_start_callback(void *gcc_data,void *data) {
+
+    register_callback(plugin_name,
+		      PLUGIN_PASS_EXECUTION,
+		      &ipa_gimple_init_per_func_callback, NULL);
+}
+
+// Called when PLUGIN_EARLY_GIMPLE_PASSES_END is triggered
+
+static void ipa_gimple_passes_end_callback(void *gcc_data,void *data) {
+
+    // In case ipa_gimple_init_per_func_callback was not called after
+    // ipa_gimple_passes_start_callback
+    unregister_callback(plugin_name, PLUGIN_PASS_EXECUTION);
+    restore_global_param_values();
+    restore_global_attribute_values();
 }
 
 static void lto_clean_optimize_callback(void) {
@@ -591,46 +743,6 @@ static void lto_clean_optimize_callback(void) {
 }
 
 static int pre_genericize=PLUGIN_PRE_GENERICIZE;
-static int start_unit=PLUGIN_START_UNIT;
-static int finish_unit=PLUGIN_START_UNIT;
-
-static struct ipa_opt_pass_d lto_clean_optimize_pass = {
-    {
-	IPA_PASS,
-	"lto_clean_optimize",	        /* name */
-	NULL,				/* gate */
-	NULL,        	                /* execute */
-	NULL,				/* sub */
-	NULL,				/* next */
-	0,				/* static_pass_number */
-	TV_NONE,			/* tv_id */
-	0,	                        /* properties_required */
-	0,				/* properties_provided */
-	0,				/* properties_destroyed */
-	0,            			/* todo_flags_start */
-	0                               /* todo_flags_finish */
-    },
-    &lto_clean_optimize_callback,       /* generate_summary */
-    NULL,				/* write_summary */
-    NULL,		         	/* read_summary */
-#ifdef USE_GLOBAL_PARAMS
-    NULL,				/* write_optimization_summary */
-    NULL,				/* read_optimization_summary */
-#else
-    NULL,                               /* function_read_summary */
-#endif
-    NULL,				/* stmt_fixup */
-    0,					/* TODOs */
-    NULL,			        /* function_transform */
-    NULL				/* variable_transform */
-};
-
-static struct register_pass_info lto_clean_optimize_info = {
-    (struct opt_pass *)&lto_clean_optimize_pass,
-    "lto_decls_out",
-    0,
-    PASS_POS_INSERT_BEFORE
-};
 
 int plugin_init(struct plugin_name_args *plugin_na,
 		struct plugin_gcc_version *version){
@@ -791,6 +903,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
 #endif
 #endif /* HWI_SHIFT */
 
+    // Attach function attributes to function node
     register_callback(plugin_na->base_name,
 		      PLUGIN_START_UNIT,
 		      &attribute_injector_start_unit_callback,NULL);
@@ -799,21 +912,70 @@ int plugin_init(struct plugin_name_args *plugin_na,
 		      &attribute_injector_finish_decl_callback,
 		      &pre_genericize);
 
+    // Load function context for all_passes optimizations
     register_callback(plugin_na->base_name,
 		      PLUGIN_ALL_PASSES_START,
-		      &param_injector_start_passes_callback, NULL);
+		      &param_injector_start_all_passes_callback, NULL);
     register_callback(plugin_na->base_name,
 		      PLUGIN_ALL_PASSES_END,
 		      &param_injector_end_passes_callback, NULL);
+
+    // Load function context for the ipa (regular and small_ipa) passes
+    register_callback(plugin_na->base_name,
+		      PLUGIN_EARLY_GIMPLE_PASSES_START,
+		      &ipa_gimple_passes_start_callback, NULL);
+    register_callback(plugin_na->base_name,
+		      PLUGIN_EARLY_GIMPLE_PASSES_END,
+		      &ipa_gimple_passes_end_callback, NULL);
 
     // For GCC versions earlier than 4.7, remove the optimization node
     // that cannot be emitted as GIMPLE bytecode
     if (flag_generate_lto &&
 	((version->basever[0] < '4') ||
-	 ((version->basever[0] == '4') && (version->basever[2] < '7'))))
-	    register_callback (plugin_na->base_name,
-			       PLUGIN_PASS_MANAGER_SETUP,
-			       NULL, &lto_clean_optimize_info);
+	 ((version->basever[0] == '4') && (version->basever[2] < '7')))) {
+
+	static struct ipa_opt_pass_d lto_clean_optimize_pass = {
+	    {
+		IPA_PASS,
+		"lto_clean_optimize",	        /* name */
+		NULL,				/* gate */
+		NULL,        	                /* execute */
+		NULL,				/* sub */
+		NULL,				/* next */
+		0,				/* static_pass_number */
+		TV_NONE,			/* tv_id */
+		0,	                        /* properties_required */
+		0,				/* properties_provided */
+		0,				/* properties_destroyed */
+		0,            			/* todo_flags_start */
+		0                               /* todo_flags_finish */
+	    },
+	    &lto_clean_optimize_callback,       /* generate_summary */
+	    NULL,				/* write_summary */
+	    NULL,		         	/* read_summary */
+#ifdef USE_GLOBAL_PARAMS
+	    NULL,				/* write_optimization_summary */
+	    NULL,				/* read_optimization_summary */
+#else
+	    NULL,                               /* function_read_summary */
+#endif
+	    NULL,				/* stmt_fixup */
+	    0,					/* TODOs */
+	    NULL,			        /* function_transform */
+	    NULL				/* variable_transform */
+	};
+
+	static struct register_pass_info lto_clean_optimize_info = {
+	    (struct opt_pass *)&lto_clean_optimize_pass,
+	    "lto_decls_out",
+	    0,
+	    PASS_POS_INSERT_BEFORE
+	};
+
+	register_callback (plugin_na->base_name,
+			   PLUGIN_PASS_MANAGER_SETUP,
+			   NULL, &lto_clean_optimize_info);
+    }
 
 #ifdef PRINT_PASS_LIST
     PRINTF("\n####### ALL PASSES LIST #######\n");

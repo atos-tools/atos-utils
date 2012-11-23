@@ -42061,12 +42061,12 @@ bool verbose = false;
 int plugin_is_GPL_compatible;
 static const char *plugin_name;
 # 107 "/opt/gcc-plugins/src/acf_plugin.c"
-static void trace_attached_acf(acf_ftable_entry_t *acf_entry, const char *acf_type, const char *func_name) {
+static void trace_attached_acf(acf_ftable_entry_t *acf_entry, const char *acf_type,
+          const char *func_name, const char *acf_pass_name) {
     const char *sep = "";
     int i;
-    fprintf(stderr, "%s: Attaching %s to " "function %s: %s ", plugin_name, acf_type, func_name, acf_entry->opt_attr)
-
-                                                           ;
+    fprintf(stderr, "%s: %s for function %s, attaching %s: %s ", plugin_name, acf_pass_name, func_name, acf_type, acf_entry->opt_attr)
+                                                                          ;
     for (i = 0; i < acf_entry->attr_arg_number; i++) {
  switch (acf_entry->opt_args[i].arg_type) {
  case NO_TYPE:
@@ -42117,8 +42117,10 @@ typedef void (*decl_attributes_func_type)
     (tree *decl,tree attributes,int flags);
 static decl_attributes_func_type decl_attributes_func;
 
+
+
 static void
-add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tree decl) {
+add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tree decl, const char *acf_pass_name) {
     tree attribute_identifier = (__builtin_constant_p (acf_entry->opt_attr) ? get_identifier_with_length ((acf_entry->opt_attr), strlen (acf_entry->opt_attr)) : get_identifier (acf_entry->opt_attr));;
     tree attribute_list = (tree) __null;
     tree argument = (tree) __null;
@@ -42126,7 +42128,7 @@ add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tre
     int i;
 
     if (verbose)
- trace_attached_acf(acf_entry, "attribute", cur_func_name);
+ trace_attached_acf(acf_entry, "attribute", cur_func_name, acf_pass_name);
 
     if (acf_entry->attr_arg_number != 0) {
  for (i = 0; i < acf_entry->attr_arg_number; i++) {
@@ -42162,10 +42164,10 @@ add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tre
 
 
 
-static struct cl_optimization loc_save_options, *save_options;
-
+static struct cl_optimization loc_save_options, *save_options = __null;
+# 219 "/opt/gcc-plugins/src/acf_plugin.c"
 static void
-add_lto_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
+add_global_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, const char *acf_pass_name) {
 
 
 
@@ -42199,7 +42201,7 @@ add_lto_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
 
 
  if (verbose)
-     trace_attached_acf(acf_entry, "attribute", cur_func_name);
+     trace_attached_acf(acf_entry, "attribute", cur_func_name, acf_pass_name);
 
  if (save_options == __null) {
      save_options = &loc_save_options;
@@ -42226,6 +42228,18 @@ add_lto_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
 
 
 
+}
+
+static void restore_global_attribute_values() {
+
+    if (save_options != __null) {
+
+ cl_optimization_restore(&global_options, save_options);
+
+
+
+ save_options = __null;
+    }
 }
 
 
@@ -42260,7 +42274,7 @@ static void save_and_set_param(char *opt_param, int value) {
     csv_param_name[csv_param_index] = opt_param;
     csv_param_value[csv_param_index] = ((int) global_options.x_param_values[(int) param_idx]);
     csv_param_index ++;
-# 316 "/opt/gcc-plugins/src/acf_plugin.c"
+# 337 "/opt/gcc-plugins/src/acf_plugin.c"
     set_param_value(opt_param, value, global_options.x_param_values, csv_param_set);
 
 
@@ -42268,7 +42282,7 @@ static void save_and_set_param(char *opt_param, int value) {
 }
 
 static void
-add_param(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
+add_global_param(const char *cur_func_name, acf_ftable_entry_t *acf_entry, const char *acf_pass_name) {
     char *opt_param;
     int opt_value;
     bool bad = false;
@@ -42290,12 +42304,12 @@ add_param(const char *cur_func_name, acf_ftable_entry_t *acf_entry) {
     opt_value = acf_entry->opt_args[1].av.int_arg;
 
     if (verbose)
- trace_attached_acf(acf_entry, "param", cur_func_name);
+ trace_attached_acf(acf_entry, "param", cur_func_name, acf_pass_name);
 
     save_and_set_param(opt_param, opt_value);
 }
 
-static void restore_param_values() {
+static void restore_global_param_values() {
     size_t i;
 
     for ( i = 0; i < csv_param_index; i++) {
@@ -42305,6 +42319,7 @@ static void restore_param_values() {
 
 
     }
+    csv_param_index = 0;
 }
 
 
@@ -42406,8 +42421,12 @@ static bool source_file_match(char *opt_file, char *input_file)
     return ret;
 }
 
-static void fill_csv_options(tree decl, int pass) {
+static const char *pass_names[] = {"unknown", "dcl passes", "all_passes", "ipa_passes"};
+
+static bool fill_csv_options(tree decl, int acf_pass) {
     const char *cur_func_name = __null;
+    const char *acf_pass_name = pass_names[acf_pass];
+    bool done = false;
     int i;
 
     static int func_number = 0;
@@ -42419,10 +42438,13 @@ static void fill_csv_options(tree decl, int pass) {
     }
     if (func_number < 0){
 
- return;
+ return done;
     }
 
+
     cur_func_name = ((const char *) (decl_assembler_name ((cfun + 0)->decl))->identifier.id.str);
+
+
 
     for (i = 0; i < func_number; i++){
  acf_ftable_entry_t *acf_entry = &acf_ftable[i];
@@ -42432,25 +42454,30 @@ static void fill_csv_options(tree decl, int pass) {
      !source_file_match(acf_entry->opt_file, (char *) global_options.x_main_input_filename))
      continue;
 
- switch (pass) {
+ switch (acf_pass) {
  case 1:
 
-     if (!(strcmp("param", acf_entry->opt_attr) == 0))
-  add_decl_attribute(cur_func_name, acf_entry, decl);
+     if (!(strcmp("param", acf_entry->opt_attr) == 0)) {
+  done = true;
+  add_decl_attribute(cur_func_name, acf_entry, decl, acf_pass_name);
+     }
      break;
  case 2:
+ case 3:
 
 
      if ((strcmp("param", acf_entry->opt_attr) == 0))
-  add_param(cur_func_name, acf_entry);
+  add_global_param(cur_func_name, acf_entry, acf_pass_name);
      else if (is_lto())
-  add_lto_attribute(cur_func_name, acf_entry);
+  add_global_attribute(cur_func_name, acf_entry, acf_pass_name);
+     done = true;
      break;
  default:
 
-     return;
+     return done;
  }
     }
+    return done;
 }
 
 
@@ -42473,11 +42500,11 @@ void attribute_injector_start_unit_callback(void *gcc_data __attribute__ ((__unu
 static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
     tree decl=(tree)gcc_data;
     const char *decl_fullname;
-# 547 "/opt/gcc-plugins/src/acf_plugin.c"
+# 582 "/opt/gcc-plugins/src/acf_plugin.c"
     fill_csv_options(decl, 1);
 }
 
-static void param_injector_start_passes_callback(void *gcc_data,void *data) {
+static void param_injector_start_all_passes_callback(void *gcc_data,void *data) {
 
     if (csv_param_name == __null) {
  csv_param_name = (char **)xmalloc(sizeof(char *)*get_num_compiler_params());
@@ -42496,14 +42523,104 @@ static void param_injector_start_passes_callback(void *gcc_data,void *data) {
 
 static void param_injector_end_passes_callback(void *gcc_data,void *data) {
 
-    if (csv_param_index > 0)
- restore_param_values();
-    if (save_options != __null)
+    restore_global_param_values();
+    restore_global_attribute_values();
+}
+# 635 "/opt/gcc-plugins/src/acf_plugin.c"
+static unsigned int ipa_gimple_per_func_callback(void) {
 
- cl_optimization_restore(&global_options, save_options);
+    if (csv_param_name == __null) {
+ csv_param_name = (char **)xmalloc(sizeof(char *)*get_num_compiler_params());
+ csv_param_value = (int *)xmalloc(sizeof(int) *get_num_compiler_params());
+    }
+
+
+    if (csv_param_set == __null)
+ csv_param_set = (int *)xmalloc(sizeof(int)*get_num_compiler_params());
+
+
+    restore_global_param_values();
+    restore_global_attribute_values();
+
+    fill_csv_options(__null, 3);
+}
 
 
 
+
+static void ipa_gimple_init_per_func_callback(void *gcc_data,void *data) {
+
+
+
+    static struct gimple_opt_pass static_pass_ipa_gimple_per_func = {
+ {
+     GIMPLE_PASS,
+     "ipa_gimple_per_func",
+     __null,
+     &ipa_gimple_per_func_callback,
+     __null,
+     __null,
+     0,
+     TV_NONE,
+     0,
+     0,
+     0,
+     0,
+     0
+ }
+    };
+
+    unregister_callback(plugin_name, PLUGIN_PASS_EXECUTION);
+
+
+    if (strcmp(current_pass->name, "ipa_gimple_per_func") != 0) {
+
+
+
+ struct gimple_opt_pass *pass_ipa_gimple_per_func;
+ struct register_pass_info *ipa_gimple_per_func_info;
+
+ pass_ipa_gimple_per_func = (struct gimple_opt_pass *)xmalloc(sizeof(struct gimple_opt_pass));
+ memcpy(pass_ipa_gimple_per_func, &static_pass_ipa_gimple_per_func, sizeof(struct gimple_opt_pass));
+
+ ipa_gimple_per_func_info = (struct register_pass_info *)xmalloc(sizeof(struct register_pass_info));
+ ipa_gimple_per_func_info->pass = (struct opt_pass *)pass_ipa_gimple_per_func;
+ ipa_gimple_per_func_info->reference_pass_name = current_pass->name;
+ ipa_gimple_per_func_info->ref_pass_instance_number = current_pass->static_pass_number;
+ ipa_gimple_per_func_info->pos_op = PASS_POS_INSERT_AFTER;
+
+ register_callback (plugin_name,
+      PLUGIN_PASS_MANAGER_SETUP,
+      __null, ipa_gimple_per_func_info);
+
+
+ struct opt_pass copy_current, *next_pass = current_pass->next;
+ memcpy(&copy_current, current_pass, sizeof(struct opt_pass));
+ memcpy(current_pass, next_pass, sizeof(struct opt_pass));
+ memcpy(next_pass, &copy_current, sizeof(struct opt_pass));
+ next_pass->next = current_pass->next;
+ current_pass->next = next_pass;
+    }
+}
+
+
+
+static void ipa_gimple_passes_start_callback(void *gcc_data,void *data) {
+
+    register_callback(plugin_name,
+        PLUGIN_PASS_EXECUTION,
+        &ipa_gimple_init_per_func_callback, __null);
+}
+
+
+
+static void ipa_gimple_passes_end_callback(void *gcc_data,void *data) {
+
+
+
+    unregister_callback(plugin_name, PLUGIN_PASS_EXECUTION);
+    restore_global_param_values();
+    restore_global_attribute_values();
 }
 
 static void lto_clean_optimize_callback(void) {
@@ -42521,46 +42638,6 @@ static void lto_clean_optimize_callback(void) {
 }
 
 static int pre_genericize=PLUGIN_PRE_GENERICIZE;
-static int start_unit=PLUGIN_START_UNIT;
-static int finish_unit=PLUGIN_START_UNIT;
-
-static struct ipa_opt_pass_d lto_clean_optimize_pass = {
-    {
- IPA_PASS,
- "lto_clean_optimize",
- __null,
- __null,
- __null,
- __null,
- 0,
- TV_NONE,
- 0,
- 0,
- 0,
- 0,
- 0
-    },
-    &lto_clean_optimize_callback,
-    __null,
-    __null,
-
-    __null,
-    __null,
-
-
-
-    __null,
-    0,
-    __null,
-    __null
-};
-
-static struct register_pass_info lto_clean_optimize_info = {
-    (struct opt_pass *)&lto_clean_optimize_pass,
-    "lto_decls_out",
-    0,
-    PASS_POS_INSERT_BEFORE
-};
 
 int plugin_init(struct plugin_name_args *plugin_na,
   struct plugin_gcc_version *version){
@@ -42576,7 +42653,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
 
     bool bad = false;
     int i;
-# 680 "/opt/gcc-plugins/src/acf_plugin.c"
+# 792 "/opt/gcc-plugins/src/acf_plugin.c"
     if ((version->basever[0] < '4') ||
  ((version->basever[0] == '4') && (version->basever[2] < '6'))) {
  error("%s: build gcc and load gcc versions are incompatible.", plugin_name);
@@ -42653,7 +42730,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
        plugin_na->argv[csv_arg_pos].key);
  return 1;
     }
-# 794 "/opt/gcc-plugins/src/acf_plugin.c"
+# 907 "/opt/gcc-plugins/src/acf_plugin.c"
     register_callback(plugin_na->base_name,
         PLUGIN_START_UNIT,
         &attribute_injector_start_unit_callback,__null);
@@ -42662,21 +42739,70 @@ int plugin_init(struct plugin_name_args *plugin_na,
         &attribute_injector_finish_decl_callback,
         &pre_genericize);
 
+
     register_callback(plugin_na->base_name,
         PLUGIN_ALL_PASSES_START,
-        &param_injector_start_passes_callback, __null);
+        &param_injector_start_all_passes_callback, __null);
     register_callback(plugin_na->base_name,
         PLUGIN_ALL_PASSES_END,
         &param_injector_end_passes_callback, __null);
 
 
+    register_callback(plugin_na->base_name,
+        PLUGIN_EARLY_GIMPLE_PASSES_START,
+        &ipa_gimple_passes_start_callback, __null);
+    register_callback(plugin_na->base_name,
+        PLUGIN_EARLY_GIMPLE_PASSES_END,
+        &ipa_gimple_passes_end_callback, __null);
+
+
 
     if (global_options.x_flag_generate_lto &&
  ((version->basever[0] < '4') ||
-  ((version->basever[0] == '4') && (version->basever[2] < '7'))))
-     register_callback (plugin_na->base_name,
-          PLUGIN_PASS_MANAGER_SETUP,
-          __null, &lto_clean_optimize_info);
-# 831 "/opt/gcc-plugins/src/acf_plugin.c"
+  ((version->basever[0] == '4') && (version->basever[2] < '7')))) {
+
+ static struct ipa_opt_pass_d lto_clean_optimize_pass = {
+     {
+  IPA_PASS,
+  "lto_clean_optimize",
+  __null,
+  __null,
+  __null,
+  __null,
+  0,
+  TV_NONE,
+  0,
+  0,
+  0,
+  0,
+  0
+     },
+     &lto_clean_optimize_callback,
+     __null,
+     __null,
+
+     __null,
+     __null,
+
+
+
+     __null,
+     0,
+     __null,
+     __null
+ };
+
+ static struct register_pass_info lto_clean_optimize_info = {
+     (struct opt_pass *)&lto_clean_optimize_pass,
+     "lto_decls_out",
+     0,
+     PASS_POS_INSERT_BEFORE
+ };
+
+ register_callback (plugin_na->base_name,
+      PLUGIN_PASS_MANAGER_SETUP,
+      __null, &lto_clean_optimize_info);
+    }
+# 993 "/opt/gcc-plugins/src/acf_plugin.c"
     return 0;
 }

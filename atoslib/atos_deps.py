@@ -283,12 +283,10 @@ class DependencyGraph:
                 if attr == "target":
                     target = value
                 if attr == "dependency":
-                    # TODO: handle quotes in command
                     recipe = (
                         "$(QUIET)cd " + value['command']['cwd'] +
                         " && $(ATOS_DRIVER) " +
                         process.list2cmdline(self.recipe_args(value)))
-                    recipe = re.sub(r'(["\'])', r'\\\1', recipe)
             deps = []
             for dep in self.dg.neighbors(node):
                 for attr, value in self.node_attributes()[dep]:

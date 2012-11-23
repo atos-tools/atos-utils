@@ -28,7 +28,7 @@ echo "`which g++`" >> atos-config/compilers
 
 $ROOT/bin/atos config -C atos-config
 
-[ `cat atos-config/config.json | grep g++ | wc -l` -ne 0 ]
+[ `cat atos-config/config.json | grep "\"name\": \"gcc\"" | wc -l` -ne 0 ]
 
 $ROOT/bin/atos config -C atos-config -D UNSAFE_OPTIMS
 

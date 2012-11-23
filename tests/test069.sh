@@ -6,6 +6,9 @@ source `dirname $0`/common.sh
 
 TEST_CASE="ATOS generator/deps unit tests"
 
+# Unitary tests do not necessarily set python path themselves
+export PYTHONPATH=$ROOT/lib/atos/python
+
 python $ROOT/lib/atos/python/atoslib/deep_eq.py -v
 
 python $ROOT/lib/atos/python/atoslib/cmd_interpreter.py

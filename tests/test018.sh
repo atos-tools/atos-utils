@@ -10,11 +10,7 @@ TEST_CASE="ATOS init audits"
 
 $ROOT/bin/atos-init -b "undef" 2>&1 | grep -i "error: in build command, 'undef' executable not found"
 [ ${PIPESTATUS[0]} = 1 ]
-$ROOT/bin/atos-init -r "undef" 2>&1 | grep -i "error: in run command, 'undef' executable not found"
-[ ${PIPESTATUS[0]} = 1 ]
 $ROOT/bin/atos-init -t "undef" 2>&1 | grep -i "error: in results command, 'undef' executable not found"
-[ ${PIPESTATUS[0]} = 1 ]
-$ROOT/bin/atos-init -p "undef" 2>&1 | grep -i "error: in profile command, 'undef' executable not found"
 [ ${PIPESTATUS[0]} = 1 ]
 $ROOT/bin/atos-init --size-cmd "undef" 2>&1 | grep -i "error: in size command, 'undef' executable not found"
 [ ${PIPESTATUS[0]} = 1 ]
@@ -23,6 +19,18 @@ $ROOT/bin/atos-init --time-cmd "undef" 2>&1 | grep -i "error: in time command, '
 
 # Check that init errors failed before creation of config dir
 [ ! -d atos-configurations ]
+
+$ROOT/bin/atos-init -c \
+    -b "gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c" \
+    -r "undef" 2>&1 | grep -i "error: in run command, 'undef' executable not found"
+[ ${PIPESTATUS[0]} = 1 ]
+$ROOT/bin/atos-init -c \
+    -b "gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c" \
+    -r "$SRCDIR/examples/sha1-c/run.sh" \
+    -p "undef" 2>&1 | grep -i "error: in profile command, 'undef' executable not found"
+[ ${PIPESTATUS[0]} = 1 ]
+
+rm -rf atos-configurations
 
 # Check correct configuration and targets
 

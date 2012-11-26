@@ -636,7 +636,10 @@ class json_config():
                 self.flags_for_flagfiles() + flags,
                 check_status=True, get_output=True, no_debug=True)
             with open(os.path.join(configuration_path, base), "w") as destf:
-                print >>destf, ppflags
+                if ppflags:
+                    print >>destf, ppflags
+                else:
+                    logger.warning("%s: empty flag list" % (base))
         process.commands.rmtree(tmpdir)
 
     @staticmethod

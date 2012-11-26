@@ -102,27 +102,21 @@ def invoque_compile_command(args):
     args = list(args or [])
 
     kind = compile_command_kind(args)
+
+    if kind == 'CCLD':
+
+        env_ALDLTOFLAGS = os.environ.get("ALDLTOFLAGS")
+        if env_ALDLTOFLAGS: args.extend(
+            process.cmdline2list(env_ALDLTOFLAGS))
+
     if kind == 'CC' or kind == 'CCLD':
         env_ACFLAGS = os.environ.get("ACFLAGS")
         if env_ACFLAGS: args.extend(process.cmdline2list(env_ACFLAGS))
 
-    (opts, args) = parser.parse_known_args(args)
+    if kind == 'CCLD':
 
-    if opts.audit_file:
-
-        exp_args = atos_lib.expand_response_file(args)
-
-        with open(opts.audit_file, "a") as outfile:
-            print >>outfile, ": ".join(
-                ["CC_DEPS",
-                 '"%s"' % process.commands.which(args[0]),
-                 ", ".join(map(lambda x: '"%s"' % x, exp_args)) + ": ",
-                 '"%s"' % cwd]
-                )
-            outfile.flush()
-
-        status = process.system(args, print_output=True)
-        return status
+        env_ALDFLAGS = os.environ.get("ALDFLAGS")
+        if env_ALDFLAGS: args.extend(process.cmdline2list(env_ALDFLAGS))
 
     env_PROFILE_DIR = os.environ.get("PROFILE_DIR")
     profdir_common_len = env_PROFILE_DIR and len(
@@ -140,11 +134,10 @@ def invoque_compile_command(args):
 
     elif kind == 'CCLD':
 
-        env_ALDFLAGS = os.environ.get("ALDFLAGS")
-        if env_ALDFLAGS: args.extend(process.cmdline2list(env_ALDFLAGS))
-
-        env_ALDLTOFLAGS = os.environ.get("ALDLTOFLAGS")
-        if env_ALDLTOFLAGS: args.extend(process.cmdline2list(env_ALDLTOFLAGS))
+        if env_PROFILE_DIR and env_PROFILE_DIR_OPT:
+            suffix = cwd[profdir_common_len:]
+            args.append("%s=%s/%s" % (
+                    env_PROFILE_DIR_OPT, env_PROFILE_DIR, suffix))
 
         env_ALDSOFLAGS = os.environ.get("ALDSOFLAGS")
         if env_ALDSOFLAGS and atos_lib.is_shared_lib_link(args):
@@ -154,13 +147,21 @@ def invoque_compile_command(args):
         if env_ALDMAINFLAGS and not atos_lib.is_shared_lib_link(args):
             args.extend(process.cmdline2list(env_ALDMAINFLAGS))
 
-        if env_PROFILE_DIR and env_PROFILE_DIR_OPT:
-            suffix = cwd[profdir_common_len:]
-            args.append("%s=%s/%s" % (
-                    env_PROFILE_DIR_OPT, env_PROFILE_DIR, suffix))
+    (opts, args) = parser.parse_known_args(args)
 
     if (kind == 'CC' or kind == 'CCLD') and opts.optfile:
         args.extend(get_cc_command_additional_flags(opts.optfile, args))
+
+    if opts.audit_file:
+        exp_args = atos_lib.expand_response_file(args)
+        with open(opts.audit_file, "a") as outfile:
+            print >>outfile, ": ".join(
+                ["CC_DEPS",
+                 '"%s"' % process.commands.which(args[0]),
+                 ", ".join(map(lambda x: '"%s"' % x, exp_args)) + ": ",
+                 '"%s"' % cwd]
+                )
+            outfile.flush()
 
     status = process.system(args, print_output=True)
 

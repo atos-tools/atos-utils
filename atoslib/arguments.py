@@ -698,7 +698,7 @@ class parsers:
         args.atos_play.objective(group)
         args.tradeoffs(group)
         args.atos_play.nbpoints(parser)
-        args.atos_play.ref(parser)
+        args.atos_play.ref(parser, ("--ref",))
         args.atos_play.localid(parser)
         group = parser.add_mutually_exclusive_group()
         args.atos_play.printconfig(group)
@@ -706,6 +706,11 @@ class parsers:
         args.atos_play.printtable(group)
         args.atos_play.reverse(parser)
         args.id(parser)
+        args.targets(parser, ("--targets",))
+        args.refid(parser)
+        args.atos_graph.cookie(parser)
+        args.atos_graph.filter(parser, ("--filter",))
+        args.query(parser, ("--query",))
         args.debug(parser)
         args.log_file(parser)
         args.force(parser, ("--force",))
@@ -1168,7 +1173,7 @@ class args:
     def refid(parser, args=("-r", "--refid")):
         parser.add_argument(
             *args,
-             dest="ref",
+             dest="refid",
              help="reference variant id",
              default="REF")
 

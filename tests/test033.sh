@@ -26,7 +26,7 @@ $ROOT/bin/atos-play -T -s 5 -s 1 -s 0.2  2>&1
 
 $ROOT/bin/atos-play -T -X -s 5 -s 1 -s 0.2 2>&1
 
-[ `$ROOT/bin/atos-play -p -r | grep "ATOS: sha1-c: REF" | wc -l` -ne 0 ]
+[ `$ROOT/bin/atos-play -p --ref | grep "ATOS: sha1-c: REF" | wc -l` -ne 0 ]
 
 [ `$ROOT/bin/atos-play -p -l d82cd2 | grep "ATOS: sha1-c: REF" | wc -l` -ne 0 ]
 

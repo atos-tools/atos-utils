@@ -444,6 +444,29 @@ class atos_client_results():
                 results[variant])
         return results
 
+def get_results(dbpath, opts):
+    db = atos_db.db(dbpath, no_cache=True)
+    results = db.get_results()
+    if opts.targets:
+        filtered = []
+        for target in opts.targets.split(','):
+            target_results = results_filter(
+                results, {'target': target})
+            filtered.extend(target_results)
+        results = filtered
+    ref_results = merge_results(
+        results_filter(results, {'variant': 'REF'}))
+    assert ref_results and len(ref_results) == 1
+    if opts.query:
+        results = results_filter(results, opts.query)
+    if opts.filter:
+        results = results_filter(results, {'variant': opts.filter})
+    if opts.cookies:
+        results = results_filter_cookies(results, opts.cookies)
+    variant_results = merge_results(results) or []
+    map(lambda x: x.compute_speedup(ref_results[0]), variant_results)
+    return variant_results
+
 def merge_results(results):
     # filter out failures
     results = filter(
@@ -464,9 +487,10 @@ def merge_results(results):
             map(lambda x: filter(
                     lambda y: y.target == x, filtered_results), targets))
         # merge multiple targets
+        group_name = "-".join(targets)
         variant_results.append(
             atos_client_results.result.merge_targets(
-                'group', targets_results))
+                group_name, targets_results))
     return variant_results
 
 

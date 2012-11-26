@@ -311,7 +311,7 @@ class DependencyGraphBuilder:
     def target_match(self, target, output):
         """ Check if output matches a target.
         Assume that target is a suffix of output. """
-        m = re.search(os.path.normpath(target) + "$", output)
+        m = re.search(re.escape(os.path.normpath(target)) + "$", output)
         return m != None
 
     def build_graph(self):

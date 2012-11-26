@@ -308,7 +308,7 @@ def run_atos_build(args):
             return 1
         # if the configuration path contains a build.mk execute it
         command = ["make", "-f", build_mk, "-j", str(args.jobs),
-                   "ATOS_DRIVER=" + atos_driver]
+                   "QUIET=", "ATOS_DRIVER=" + atos_driver]
         status, output = process.system(
             atos_lib.timeout_command() + command,
             get_output=True, output_stderr=True)

@@ -968,13 +968,13 @@
 // down compilation of huge functions. The default value is 30.
 --param max-hoist-depth=[0..60]
 
-#if GCC_VERSION <= 40700
+#if GCC_VERSION < 40700
 // IPA-CP attempts to track all possible types passed to a function's
 // parameter in order to perform devirtualization. devirt-type-list-size
 // is the maximum number of types it stores per a single formal parameter
 // of a function. Default value is 8.
 --param devirt-type-list-size=[2..32]
-#endif // GCC_VERSION <= 40700
+#endif // GCC_VERSION < 40700
 
 #endif // GCC_VERSION >= 40600
 

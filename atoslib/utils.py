@@ -584,7 +584,7 @@ def run_atos_lib(args):
             args.targets and atos_lib.strtolist(args.targets),
             atos_lib.strtoquery(args.query), args.group_name)
 
-        client.compute_speedups(args.ref)
+        client.compute_speedups(args.refid)
 
         if args.tradeoffs:
             results = map(lambda x: client.tradeoff(x).dict(), args.tradeoffs)
@@ -669,7 +669,7 @@ def run_atos_lib(args):
             targets, name = group_targets[num], group_names[num]
             client = atos_lib.atos_client_results(
                 db, targets, atos_lib.strtoquery(args.query), name)
-            if args.ref: client.compute_speedups(args.ref)
+            if args.refid: client.compute_speedups(args.refid)
             all_results[group_names[num]] = client.results
 
         # variants
@@ -845,32 +845,28 @@ def run_atos_play(args):
     """ ATOS play tool implementation. """
 
     if not os.path.isdir(args.configuration_path):
-        error('Configuration missing: ' + args.configuration_path)
+        error('configuration path missing: ' + args.configuration_path)
         return 1
 
-    try:
-        with open(os.path.join(
-                args.configuration_path, "targets")) as targetf:
-            executables = map(lambda x: x.strip(), targetf.readlines())
-    except:
-        error('no target executable available in configuration')
-        return 1
-    target_id = args.id or atos_lib.target_id(executables)
-
-    atos_db = atos_lib.atos_db.db(args.configuration_path)
-
+    all_results = atos_lib.get_results(args.configuration_path, args)
     results = []
     if args.ref:
-        results = atos_lib.atos_client_db(atos_db).query(
-            {'variant': "REF", 'target': target_id})
+        print str(results)
+        results = atos_lib.results_filter(map(lambda x: x.dict(), all_results),
+                                          {'variant': 'REF'})
+        if len(results) == 0:
+            error('REF variant not found in results')
+            return 1
     elif args.localid != None:
-        results = atos_lib.atos_client_db(atos_db).query(
-            {'target': target_id}) or []
         results = filter(
-            lambda x: atos_lib.hashid(x['variant']).startswith(args.localid),
-            results)
+            lambda x: atos_lib.hashid(
+                x['variant']).startswith(args.localid),
+            map(lambda x: x.dict(), all_results))
+        if len(results) == 0:
+            error('variant not found in results, id: %s' % args.localid)
+            return 1
         if len(results) > 1:
-            error('ambiguous local_id: %s' % args.localid)
+            error('multiple variant found, ambiguous id: %s' % args.localid)
             return 1
     else:
         tradeoffs = args.tradeoffs
@@ -879,14 +875,10 @@ def run_atos_play(args):
                 tradeoffs = [0.2]
             else:  # objective == "time"
                 tradeoffs = [5.0]
-        client = atos_lib.atos_client_results(
-            atos_db, [target_id])
-        client.compute_speedups('REF')
-        all_points = list(client.results.values())
         nbtr = max(1, args.nbpoints / len(tradeoffs))
         for tradeoff in tradeoffs:
             selected = atos_lib.atos_client_results.select_tradeoffs(
-                all_points, tradeoff, nbtr) or []
+                all_results, tradeoff, nbtr) or []
             results.extend(selected)
         results = atos_lib.list_unique(results)
         results = map(lambda x: x.dict(), results)
@@ -910,8 +902,7 @@ def run_atos_play(args):
         return 1
     else:
         result = results[0]
-        message('Playing optimized build %s:%s...' % (
-                target_id, result['variant']))
+        message('Playing optimized build %s...' % (result['variant']))
         status = invoque("atos-build", args,
                          options=result.get('conf', None),
                          uopts=result.get('uconf', None),

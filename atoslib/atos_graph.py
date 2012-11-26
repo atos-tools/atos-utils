@@ -219,7 +219,7 @@ def draw_graph(getgraph, opts):
     title = 'Optimization Space for %s' % (
         opts.id or opts.targets or (
             all_points and all_points[0].target))
-    if opts.ref: title += ' [ref=%s]' % opts.ref
+    if opts.refid: title += ' [ref=%s]' % opts.refid
     if opts.filter: title += ' [filter=%s]' % opts.filter
 
     # redraw axis, set labels, legend, grid, ...
@@ -330,26 +330,7 @@ def point_str(point, short=False, no_id=False):
 
 
 def getoptcases(dbpath, opts):
-    db = atos_lib.atos_db.db(dbpath, no_cache=True)
-    results = db.get_results()
-    if opts.query:
-        results = atos_lib.results_filter(results, opts.query)
-    if opts.filter:
-        results = atos_lib.results_filter(results, 'variant:' + opts.filter)
-    if opts.targets:
-        filtered = []
-        for target in opts.targets.split(','):
-            target_results = atos_lib.results_filter(
-                results, {'target': target})
-            filtered.extend(target_results)
-        results = filtered
-    ref_results = atos_lib.merge_results(
-        atos_lib.results_filter(results, {'variant': 'REF'}))
-    if opts.cookies:
-        results = atos_lib.results_filter_cookies(results, opts.cookies)
-    assert ref_results and len(ref_results) == 1
-    variant_results = atos_lib.merge_results(results) or []
-    map(lambda x: x.compute_speedup(ref_results[0]), variant_results)
+    variant_results = atos_lib.get_results(dbpath, opts)
     atos_lib.atos_client_results.set_frontier_field(variant_results)
     frontier = filter(lambda x: x.on_frontier, variant_results)
     print '%d points, %d on frontier' % (len(variant_results), len(frontier))
@@ -477,7 +458,7 @@ def correlgraph(opts):
             atos_lib.atos_db.db(dbpath, no_cache=True),
             targets and targets.split(',') or None,
             atos_lib.strtoquery(opts.query), opts.id)
-        client.compute_speedups(opts.ref)
+        client.compute_speedups(opts.refid)
         optcasesl.append({client.values[2]: client.results})
 
     # dbfiles labels and colors
@@ -495,7 +476,7 @@ def correlgraph(opts):
     common_target_variant = list(
         reduce(lambda acc, s: acc.intersection(s),
                map(lambda c: set([(t, v) for t in common_targets
-                                  for v in c[t].keys() if v != opts.ref]),
+                                  for v in c[t].keys() if v != opts.refid]),
                    optcasesl)))
 
     # couples of common (target, variant), sorted by speedups

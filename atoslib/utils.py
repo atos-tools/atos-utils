@@ -851,7 +851,6 @@ def run_atos_play(args):
     all_results = atos_lib.get_results(args.configuration_path, args)
     results = []
     if args.ref:
-        print str(results)
         results = atos_lib.results_filter(map(lambda x: x.dict(), all_results),
                                           {'variant': 'REF'})
         if len(results) == 0:

@@ -789,7 +789,7 @@ class json_config():
                     check_status=True, no_debug=True)
                 hwi = int(re.search("(\w*)\W*target_newline", obj_t).group(1))
                 expected_hwi = (
-                    (host_alias == "i386" and target_alias != "x86_64")
+                    (host_alias == "i386" and target_alias == "i386")
                     and 4 or 8)
                 valid_host_wide_int = int(hwi == expected_hwi)
             except:

@@ -849,6 +849,9 @@ def run_atos_play(args):
         return 1
 
     all_results = atos_lib.get_results(args.configuration_path, args)
+    if not all_results:
+        error('no result found or reference variant not found')
+        return 1
     results = []
     if args.ref:
         results = atos_lib.results_filter(map(lambda x: x.dict(), all_results),
@@ -856,16 +859,20 @@ def run_atos_play(args):
         if len(results) == 0:
             error('REF variant not found in results')
             return 1
-    elif args.localid != None:
-        results = filter(
-            lambda x: atos_lib.hashid(
-                x['variant']).startswith(args.localid),
-            map(lambda x: x.dict(), all_results))
+    elif args.localid != None or args.variant != None:
+        variant_id = args.variant
+        filter_func = lambda x: x['variant'].startswith(args.variant)
+        if variant_id == None:
+            variant_id = args.localid
+            filter_func = lambda x: atos_lib.hashid(
+                x['variant']).startswith(args.localid)
+        results = filter(filter_func, map(lambda x: x.dict(),
+                                          all_results))
         if len(results) == 0:
-            error('variant not found in results, id: %s' % args.localid)
+            error('variant not found in results, id: %s' % variant_id)
             return 1
         if len(results) > 1:
-            error('multiple variant found, ambiguous id: %s' % args.localid)
+            error('multiple variant found, ambiguous id: %s' % variant_id)
             return 1
     else:
         tradeoffs = args.tradeoffs
@@ -881,11 +888,9 @@ def run_atos_play(args):
             results.extend(selected)
         results = atos_lib.list_unique(results)
         results = map(lambda x: x.dict(), results)
+        assert(len(results) > 0)
 
-    if not results:
-        error('no results found')
-        return 1
-    elif args.printvariant:
+    if args.printvariant:
         for result in results:
             print result['variant']
         return 0
@@ -902,8 +907,12 @@ def run_atos_play(args):
     else:
         result = results[0]
         message('Playing optimized build %s...' % (result['variant']))
+        options_list = []
+        options = result.get('conf', None)
+        if options: options_list.append(options)
+        if args.options: options_list.append(args.options)
         status = invoque("atos-build", args,
-                         options=result.get('conf', None),
+                         options=" ".join(options_list),
                          uopts=result.get('uconf', None),
                          gopts=result.get('gconf', None))
         return status

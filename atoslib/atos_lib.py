@@ -455,8 +455,8 @@ def get_results(dbpath, opts):
             filtered.extend(target_results)
         results = filtered
     ref_results = merge_results(
-        results_filter(results, {'variant': 'REF'}))
-    assert ref_results and len(ref_results) == 1
+        results_filter(results, {'variant': opts.refid}))
+    if not ref_results: return []
     if opts.query:
         results = results_filter(results, opts.query)
     if opts.filter:

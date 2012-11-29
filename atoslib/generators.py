@@ -41,8 +41,8 @@ class optim_flag_list():
             assert bool(frange) ^ bool(fchoice)
             self.range, self.choice = None, None
             if frange:
-                flag, min, max = frange
-                self.range = (flag, int(min), int(max))
+                flag, min, max, step = frange
+                self.range = (flag, int(min), int(max), int(step or 1))
             if fchoice:
                 self.choice = fchoice
 
@@ -54,8 +54,9 @@ class optim_flag_list():
 
         def rand(self):
             if self.range:
-                flag, min, max = self.range
-                return '%s%d' % (flag, random.randint(min, max))
+                flag, min, max, step = self.range
+                val = min + random.randint(0, (max - min) / step) * step
+                return '%s%d' % (flag, val)
             elif self.choice:
                 return random.choice(self.choice)
             else: assert 0
@@ -68,7 +69,7 @@ class optim_flag_list():
                         yield int(val)
                         val = val + step
                 nbvalues = 3
-                flag, min, max = self.range
+                flag, min, max, step = self.range
                 return ['%s%d' % (flag, v) for v in frange(
                         min, max, float(max - min) / (nbvalues - 1))]
             elif self.choice:
@@ -180,7 +181,7 @@ class optim_flag_list():
                         r) for l in lalias for r in ralias]
                 continue
             # range flag
-            reobj = re.match('^(.*)\[(.*)\.\.(.*)\]', line)
+            reobj = re.match('^(.*)\[(.*)\.\.([^,]*)(?:,(.*))?\]', line)
             if reobj:
                 flag_list.extend(
                     [optim_flag_list.optim_flag(frange=reobj.groups())])
@@ -453,7 +454,7 @@ class gen_rnd_uniform_deps(config_generator):
         try:
             tmpf.write("# Test dependency flags\n")
             tmpf.write("-finline-small|-fno-inline-small\n")
-            tmpf.write("--param inline-call-cost=[4..32]\n")
+            tmpf.write("--param inline-call-cost=[4..32,2]\n")
             tmpf.write("-finline: --param inline-call-cost=\n")
             tmpf.write("-finline: -finline-small\n")
             tmpf.write("=> -O2\n")

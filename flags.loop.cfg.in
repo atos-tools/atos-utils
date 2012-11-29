@@ -2,19 +2,33 @@
 
 // Perform dead code elimination (DCE) on trees. This flag is enabled by
 // default at -O and higher.
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_dce(-ftree-dce)
 -ftree-dce|-fno-tree-dce
 
 // Perform loop optimizations on trees. This flag is enabled by default
 // at -O and higher.
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
 -ftree-loop-optimize|-fno-tree-loop-optimize
 
 // Perform induction variable optimizations (strength reduction,
 // induction variable merging and induction variable elimination) on
 // trees.
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_iv_optimize(-fivopts)
 -fivopts|-fno-ivopts
 
 // Enables the loop invariant motion pass in the RTL loop
 // optimizer. Enabled at level -O1
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_loop2
+//          --> pass_rtl_move_loop_invariants(-fmove-loop-invariants)
 -fmove-loop-invariants|-fno-move-loop-invariants
 
 // Peels the loops for that there is enough information that they do not
@@ -22,6 +36,10 @@
 // peeling (i.e. complete removal of loops with small constant number of
 // iterations).
 // Enabled with -fprofile-use.
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_loop2
+//          --> pass_rtl_unroll_and_peel_loops(-fpeel-loops)
 -fpeel-loops|-fno-peel-loops
 
 // Perform loop distribution. This flag can improve cache performance on
@@ -38,6 +56,11 @@
 //           DO I = 1, N
 //              D(I) = E(I) * F
 //           ENDDO
+//
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_loop_distribution(-ftree-loop-distribution || -ftree_loop_distribute_patterns)
 -ftree-loop-distribution|-fno-tree-loop-distribution
 
 // Perform loop invariant motion on trees. This pass moves only
@@ -47,35 +70,76 @@
 // invariant out of the loop, so that we can use just trivial
 // invariantness analysis in loop unswitching. The pass also includes
 // store motion.
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_lim(-ftree-loop-im)
 -ftree-loop-im|-fno-tree-loop-im
 
 // Create a canonical counter for number of iterations in the loop for
 // that determining number of iterations requires complicated
 // analysis. Later optimizations then may determine the number
 // easily. Useful especially in connection with unrolling.
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_iv_canon(-ftree-loop-ivcanon)
 -ftree-loop-ivcanon|-fno-tree-loop-ivcanon
 
 // Perform loop vectorization on trees. This flag is enabled by default
 // at -O3.
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_vectorize(-ftree-vectorize)
+//              --> pass_lower_vector_ssa(-ftree-vectorize)
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_if_conversion(-ftree-vectorize)
 -ftree-vectorize|-fno-tree-vectorize
 
 // Unroll loops whose number of iterations can be determined at compile
 // time or upon entry to the loop. -funroll-loops implies
 // -frerun-cse-after-loop. This option makes code larger, and may or may
 // not make it run faster.
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_loop2
+//          --> pass_rtl_unroll_and_peel_loops(-funroll-loops)
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_complete_unroll(-funroll-loops)
 -funroll-loops|-fno-unroll-loops
 
 // Unroll all loops, even if their number of iterations is uncertain when
 // the loop is entered. This usually makes programs run more
 // slowly. -funroll-all-loops implies the same options as -funroll-loops,
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_loop2
+//          --> pass_rtl_unroll_and_peel_loops(-funroll-loops)
 -funroll-all-loops|-fno-unroll-all-loops
 
 // Move branches with loop invariant conditions out of the loop, with
 // duplicates of the loop on both branches (modified according to result
 // of the condition).
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_loop2
+//          --> pass_rtl_unswitch(-funswitch-loops)
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_tree_unswitch(-funswitch-loops)
 -funswitch-loops|-fno-unswitch-loops
 
 // Enable copy propagation of scalar-evolution information.
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_scev_cprop
 -ftree-scev-cprop|-fno-tree-scev-cprop
 
 // If supported by the target machine, generate instructions to prefetch
@@ -83,16 +147,24 @@
 // This option may generate better or worse code; results are highly
 // dependent on the structure of loops within the source code.
 // Disabled at level -Os.
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_loop_prefetch(-fprefetch-loop-arrays)
 -fprefetch-loop-arrays|-fno-prefetch-loop-arrays
 
 // Perform a number of minor optimizations that
 // are relatively expensive.
 // Enabled at levels -O2, -O3, -Os.
+//  <too many>
 -fexpensive-optimizations|-fno-expensive-optimizations
 
 // Re-run common subexpression elimination after loop optimizations has
 // been performed.
 // Enabled at levels -O2, -O3, -Os.
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_cse2(-frerun-cse-after-loop)
 -frerun-cse-after-loop|-fno-rerun-cse-after-loop
 
 // Enables expressing of values of induction variables in later
@@ -104,6 +176,22 @@
 // reliable. It also does not work at all on some of the architectures
 // due to restrictions in the CSE pass.
 // This optimization is enabled by default.
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_loop2
+//          --> pass_rtl_unroll_and_peel_loops(-fpeel-loops || -funroll-loops)
+//              --> unroll_and_peel_loops
+//                  --> peel_loops_completely
+//                      --> peel_loop_completely*
+//			    --> analyze_insns_in_loop*
+//                  --> unroll_loop_constant_iterations*
+//		        --> analyze_insns_in_loop*
+//                  --> unroll_loop_runtime_iterations*
+//		        --> analyze_insns_in_loop*
+//                  --> peel_loop_simple*
+//		        --> analyze_insns_in_loop*
+//                  --> unroll_loop_stupid*
+//		        --> analyze_insns_in_loop*
 -fsplit-ivs-in-unroller|-fno-split-ivs-in-unroller
 
 // Perform loop versioning when doing loop
@@ -113,98 +201,328 @@
 // generated along with runtime checks for alignment or dependence to
 // control which version is executed. This option is enabled by default
 // except at level -Os where it is disabled.
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_vectorize(-ftree-vectorize)
+//              --> vectorize_loops
+//                  --> vect_analyze_loop_2
+//                      --> vect_enhance_data_refs_alignment*
 -ftree-vect-loop-version|-fno-tree-vect-loop-version
 
 // With this option, the compiler will create multiple copies of some
 // local variables when unrolling a loop which can result in superior
 // code.
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_loop2
+//          --> pass_rtl_unroll_and_peel_loops(-fpeel-loops || -funroll-loops)
+//              --> unroll_and_peel_loops
+//                  --> peel_loops_completely
+//                      --> peel_loop_completely
+//			    --> analyze_insns_in_loop*
+//                  --> unroll_loop_constant_iterations*
+//		        --> analyze_insns_in_loop*
+//                  --> unroll_loop_runtime_iterations*
+//		        --> analyze_insns_in_loop*
+//                  --> peel_loop_simple
+//		        --> analyze_insns_in_loop*
+//                  --> unroll_loop_stupid*
+//		        --> analyze_insns_in_loop*
 -fvariable-expansion-in-unroller|-fno-variable-expansion-in-unroller
 
 // Enable cost model for vectorization.
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_vectorize(-ftree-vectorize)
+//              --> vectorize_loops
+//                  --> vect_analyze_loop_2
+//                      --> vect_analyze_loop_operations
+//                          --> vect_estimate_min_profitable_iters*
 -fvect-cost-model|-fno-vect-cost-model
 
 // Perform predictive commoning optimization, i.e., reusing computations
 // (especially memory loads and stores) performed in previous iterations
 // of loops.
 // This option is enabled at level -O3.
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_predcom(-fpredictive-commoning)
 -fpredictive-commoning|-fno-predictive-commoning
 
 // The minimum number of iterations under which a loop will not get
 // vectorized when -ftree-vectorize is used. The number of iterations
 // after vectorization needs to be greater than the value specified by
 // this option to allow vectorization. The default value is 0.
---param min-vect-loop-bound=[1..1000]
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_vectorize(-ftree-vectorize)
+//              --> vectorize_loops
+//                  --> vect_analyze_loop
+//                      --> vect_analyze_loop_2
+//                          --> vect_analyze_loop_operations*
+//                  --> vect_transform_loop
+//                      --> vect_do_peeling_for_loop_bound
+//                          --> conservative_cost_threshold*
+//                      --> vect_do_peeling_for_alignment
+//                          --> conservative_cost_threshold*
+//                      --> vect_loop_versioning
+//                          --> conservative_cost_threshold*
+--param min-vect-loop-bound=[5..100,5]
 
 // The maximum number of instructions that a loop should have if that
 // loop is unrolled, and if the loop is unrolled, it determines how many
 // times the loop code is unrolled. The default value is 200.
---param max-unrolled-insns=[1..1000]
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_loop2
+//          --> pass_rtl_unroll_and_peel_loops(-fpeel-loops || -funroll-loops)
+//              --> unroll_and_peel_loops
+//                  --> decide_unrolling_and_peeling
+//                      --> decide_unroll_constant_iterations*
+//                      --> decide_unroll_runtime_iterations*
+//                      --> decide_unroll_stupid*
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_loop_prefetch(-fprefetch-loop-arrays)
+//              --> tree_ssa_loop_prefetch
+//                  --> tree_ssa_prefetch_arrays
+//                      --> loop_prefetch_arrays
+//                          --> determine_unroll_factor*
+//                              --> should_unroll_loop_p
+//                                  --> can_unroll_loop_p*
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_predcom
+//              --> tree_predictive_commoning
+//                  --> tree_predictive_commoning_loop
+//                      --> can_unroll_loop_p*
+--param max-unrolled-insns=[5..1000,5]
 
 // The maximum number of unrollings of a single loop.
 // The default value is 8.
---param max-unroll-times=[1..128]
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_predcom
+//              --> tree_predictive_commoning
+//                  --> determine_unroll_factor*
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_loop2
+//          --> pass_rtl_unroll_and_peel_loops(-fpeel-loops || -funroll-loops)
+//              --> unroll_and_peel_loops
+//                  --> decide_unrolling_and_peeling
+//                      --> decide_unroll_constant_iterations*
+//                      --> decide_unroll_runtime_iterations*
+//                      --> decide_unroll_stupid*
+--param max-unroll-times=[4..128,4]
 
 // The maximum number of instructions biased by probabilities of their
 // execution that a loop should have if that loop is unrolled, and if the
 // loop is unrolled, it determines how many times the loop code is
 // unrolled.  The default value is 80.
---param max-average-unrolled-insns=[1..1000]
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_loop2
+//          --> pass_rtl_unroll_and_peel_loops(-fpeel-loops || -funroll-loops)
+//              --> unroll_and_peel_loops
+//                  --> decide_unrolling_and_peeling
+//                      --> decide_unroll_constant_iterations*
+//                      --> decide_unroll_runtime_iterations*
+//                      --> decide_unroll_stupid*
+--param max-average-unrolled-insns=[5..1000,5]
 
 // The maximum number of instructions that a loop should have if that
 // loop is peeled, and if the loop is peeled, it determines how many
 // times the loop code is peeled. The default value is 400.
---param max-peeled-insns=[1..5000]
+// param max-peeled-insns >= 2*(param max-unrolled-insns)
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_loop2
+//          --> pass_rtl_unroll_and_peel_loops(-fpeel-loops || -funroll-loops)
+//              --> unroll_and_peel_loops
+//                  --> decide_unrolling_and_peeling
+//                      --> decide_peel_simple*
+--param max-peeled-insns=[20..2000,20]
 
 // The maximum number of peelings of a single loop.
 // The default value is 16.
---param max-peel-times=[1..128]
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_loop2
+//          --> pass_rtl_unroll_and_peel_loops(-fpeel-loops || -funroll-loops)
+//              --> unroll_and_peel_loops
+//                  --> decide_unrolling_and_peeling
+//                      --> decide_peel_simple*
+--param max-peel-times=[4..128,4]
 
 // The maximum number of insns of a completely peeled loop.
 // The default value is 400.
---param max-completely-peeled-insns=[1..5000]
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_loop2
+//          --> pass_rtl_unroll_and_peel_loops(-fpeel-loops || -funroll-loops)
+//              --> unroll_and_peel_loops
+//                  --> peel_loops_completely
+//                      --> decide_peel_completely*
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_iv_canon(-ftree-loop-ivcanon)
+//              --> canonicalize_induction_variables
+//                  --> canonicalize_loop_induction_variables
+//                      --> try_unroll_loop_completely*
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_complete_unroll
+//              --> tree_complete_unroll(-fpeel-loops || -funroll-loops)
+//                  --> tree_unroll_loops_completely
+//                      --> canonicalize_loop_induction_variables
+//                          --> try_unroll_loop_completely*
+--param max-completely-peeled-insns=[200..4000,200]
 
 // The maximum number of iterations of a loop to be suitable for complete
 // peeling. The default value is 16.
---param max-completely-peel-times=[1..128]
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_loop2
+//          --> pass_rtl_unroll_and_peel_loops(-fpeel-loops || -funroll-loops)
+//              --> unroll_and_peel_loops
+//                  --> peel_loops_completely
+//                      --> decide_peel_completely*
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_iv_canon(-ftree-loop-ivcanon)
+//              --> canonicalize_induction_variables
+//                  --> canonicalize_loop_induction_variables
+//                      --> try_unroll_loop_completely*
+--param max-completely-peel-times=[8..128,8]
 
 // The maximum number of insns of an unswitched loop.
 // The default value is 50.
---param max-unswitch-insns=[1..1000]
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_tree_unswitch(-funswitch-loops)
+//              --> tree_ssa_loop_unswitch
+//                  --> tree_ssa_unswitch_loops*
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_loop2
+//          --> pass_rtl_unswitch(-funswitch-loops)
+//              --> unswitch_loops
+//                  --> unswitch_single_loop*
+--param max-unswitch-insns=[50..1000,50]
 
 // The maximum number of branches unswitched in a single loop.
 // The default value is 3.
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_tree_unswitch(-funswitch-loops)
+//              --> tree_ssa_loop_unswitch
+//                  --> tree_ssa_unswitch_loops
+//                      --> tree_unswitch_single_loop*
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_loop2
+//          --> pass_rtl_unswitch(-funswitch-loops)
+//              --> unswitch_loops
+//                  --> unswitch_single_loop*
 --param max-unswitch-level=[1..10]
 
 // If -fvariable-expansion-in-unroller is used, the maximum number of
 // times that an individual variable will be expanded during loop
 // unrolling. The default value is 1.
+//  --> peel_loops_completely
+//      --> peel_loop_completely
+//          --> apply_opt_in_copies
+//              --> expand_var_during_unrolling*
+//  unroll_loop_constant_iterations
+//  --> apply_opt_in_copies
+//      --> expand_var_during_unrolling*
+//  unroll_loop_runtime_iterations
+//  --> apply_opt_in_copies
+//      --> expand_var_during_unrolling*
+//  peel_loop_simple
+//  --> apply_opt_in_copies
+//      --> expand_var_during_unrolling*
+//  unroll_loop_stupid
+//  --> apply_opt_in_copies
+//      --> expand_var_during_unrolling*
 --param max-variable-expansions-in-unroller=[1..10]
 
 // The minimum cost of an expensive expression in the loop invariant
 // motion. The default value is 20.
---param lim-expensive=[1..500]
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_lim(-ftree-loop-im)
+//              --> tree_ssa_lim
+//                  --> determine_invariantness
+//                      --> determine_invariantness_stmt*
+//                          --> determine_max_movement*
+//                              --> stmt_cost*
+--param lim-expensive=[10..100,10]
 
 // Bound on the cost of an expression to compute the number of
 // iterations. The default value is 10.
---param max-iterations-computation-cost=[1..100]
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_loop2
+//          --> pass_rtl_doloop(-fbranch-count-reg)
+//              --> doloop_optimize_loops
+//                  --> doloop_optimize*
+--param max-iterations-computation-cost=[5..50,5]
 
 // Bound on number of candidates for induction variables below that all
 // candidates are considered for each use in induction variable
 // optimizations. Only the most relevant candidates are considered if
 // there are more candidates, to avoid quadratic time complexity.
 // The default value is 30.
---param iv-consider-all-candidates-bound=[1..100]
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_iv_optimize(-fivopts)
+//              --> tree_ssa_iv_optimize
+//                  --> tree_ssa_iv_optimize_loop
+//                      --> find_iv_candidates
+//                          --> record_important_candidates*
+--param iv-consider-all-candidates-bound=[10..100,10]
 
 // The induction variable optimizations give up on loops that contain
 // more induction variable uses.
 // The default value is 250.
---param iv-max-considered-uses=[1..5000]
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_iv_optimize(-fivopts)
+//              --> tree_ssa_iv_optimize
+//                  --> tree_ssa_iv_optimize_loop*
+--param iv-max-considered-uses=[50..1000,50]
 
 // If number of candidates in the set is smaller than this value, we
 // always try to remove unnecessary ivs from the set during its
 // optimization when a new iv is added to the set.
 // The default value is 10.
---param iv-always-prune-cand-set-bound=[1..50]
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_iv_optimize(-fivopts)
+//              --> tree_ssa_iv_optimize
+//                  --> tree_ssa_iv_optimize_loop
+//                      --> find_optimal_iv_set
+//                          --> find_optimal_iv_set_1
+//                              --> try_improve_iv_set*
+--param iv-always-prune-cand-set-bound=[5..50,5]
 
 // Align loops to a power-of-two boundary, skipping up to n bytes like
 // -falign-functions. The hope is that the loop will be executed many
@@ -213,6 +531,7 @@
 // loops will not be aligned.  If n is not specified or is zero, use a
 // machine-dependent default.
 // Enabled at levels -O2, -O3.
+//  <too many>
 -falign-loops|-fno-align-loops
 // -falign-loops=[1..64]
 
@@ -225,6 +544,11 @@
 // CPU-intensive, rather than constrained e.g. by memory bandwidth. This
 // option implies -pthread, and thus is only supported on targets that
 // have support for -pthread.
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_parallelize_loops(-ftree-parallelize-loops > 0)*
+//              --> parallelize_loops*
 -ftree-parallelize-loops=[1..64]
 
 #endif
@@ -257,6 +581,13 @@
 // transformation, GCC has to be configured with --with-ppl and
 // --with-cloog to enable the Graphite loop transformation
 // infrastructure.
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop
+//          --> pass_graphite
+//              --> pass_graphite_transforms
+//                  --> graphite_transform_loops
+//                      --> apply_poly_transforms*
 -floop-block|-fno-loop-block
 
 // Perform loop interchange transformations on loops. Interchanging two
@@ -281,6 +612,13 @@
 // code transformation, GCC has to be configured with --with-ppl and
 // --with-cloog to enable the Graphite loop transformation
 // infrastructure.
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop
+//          --> pass_graphite
+//              --> pass_graphite_transforms
+//                  --> graphite_transform_loops
+//                      --> apply_poly_transforms*
 -floop-interchange|-fno-loop-interchange
 
 // Perform loop strip mining transformations on loops. Strip mining
@@ -302,6 +640,13 @@
 // configured with --with-ppl and --with-cloog to enable the Graphite
 // loop transformation infrastructure.
 // -floop-strip-mine
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop
+//          --> pass_graphite
+//              --> pass_graphite_transforms
+//                  --> graphite_transform_loops
+//                      --> apply_poly_transforms*
 -floop-strip-mine|-fno-loop-strip-mine
 
 // Perform loop interchange transformations on tree. Same as
@@ -316,6 +661,13 @@
 // of the GIMPLE -> GRAPHITE -> GIMPLE transformation. Some minimal
 // optimizations are also performed by the code generator CLooG, like
 // index splitting and dead code elimination in loops.
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop
+//          --> pass_graphite
+//              --> pass_graphite_transforms
+//                  --> graphite_transform_loops
+//                      --> apply_poly_transforms*
 -fgraphite-identity|-fno-graphite-identity
 
 #endif // GRAPHITE_ENABLED
@@ -327,7 +679,12 @@
 // The maximum number of instructions that a loop should have if that
 // loop is peeled, and if the loop is peeled, it determines how many
 // times the loop code is peeled. The default value is 400.
---param max-once-peeled-insns=[1..5000]
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_complete_unroll
+//              --> tree_complete_unroll(-fpeel-loops || -funroll-loops || -O3)
+--param max-once-peeled-insns=[200..5000,200]
 
 #endif
 
@@ -335,35 +692,80 @@
 
 // Perform basic block vectorization on trees. This flag is enabled by
 // default at -O3 and when -ftree-vectorize is enabled.
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_slp_vectorize(-ftree-slp-vectorize)
 -ftree-slp-vectorize|-fno-tree-slp-vectorize
 
 // The maximum depth of a loop nest suitable for complete peeling.
 // The default value is 8.
---param max-completely-peel-loop-nest-depth=[1..128]
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop(-ftree-loop-optimize)
+//          --> pass_complete_unroll
+//              --> tree_complete_unroll(-fpeel-loops || -funroll-loops || -O3)
+//                  --> tree_unroll_loops_completely*
+//      --> pass_complete_unrolli(>=-O2)
+//          --> tree_complete_unroll_inner
+//              --> tree_unroll_loops_completely*
+--param max-completely-peel-loop-nest-depth=[4..64,4]
 
 #if defined(GRAPHITE_ENABLED)
 
 // Removes the loop nesting structure: transforms the loop nest into a
 // single loop. This transformation can be useful to vectorize all the
 // levels of the loop nest.
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop
+//          --> pass_graphite
+//              --> pass_graphite_transforms
+//                  --> graphite_transform_loops
+//                      --> apply_poly_transforms*
 -floop-flatten|-fno-loop-flatten
 
 // To avoid exponential effects in the Graphite loop transforms, the
 // number of parameters in a Static Control Part (SCoP) is bounded. The
 // default value is 10 parameters. A variable whose value is unknown at
 // compile time and defined outside a SCoP is a parameter of the SCoP.
---param graphite-max-nb-scop-params=[4..128]
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop
+//          --> pass_graphite
+//              --> pass_graphite_transforms
+//                  --> graphite_transform_loops
+//                      --> build_poly_scop*
+--param graphite-max-nb-scop-params=[4..64,4]
 
 // To avoid exponential effects in the detection of SCoPs, the size of
 // the functions analyzed by Graphite is bounded. The default value is
 // 100 basic blocks.
---param graphite-max-bbs-per-function=[32..1024]
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop
+//          --> pass_graphite
+//              --> pass_graphite_transforms
+//                  --> graphite_transform_loops
+//                      --> graphite_initialize*
+--param graphite-max-bbs-per-function=[50..1000,50]
 
 // Loop blocking or strip mining transforms, enabled with -floop-block or
 // -floop-strip-mine, strip mine each loop in the loop nest by a given
 // number of iterations. The strip length can be changed using the
 // loop-block-tile-size parameter. The default value is 51 iterations.
---param loop-block-tile-size=[4..256]
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tree_loop
+//          --> pass_graphite
+//              --> pass_graphite_transforms
+//                  --> graphite_transform_loops
+//                      --> apply_poly_transforms
+//                          --> scop_do_strip_mine
+//                              --> lst_do_strip_mine*
+//                          --> scop_do_block
+//                              --> lst_do_strip_mine*
+--param loop-block-tile-size=[16..256,16]
 
 #endif // GRAPHITE_ENABLED
 
@@ -428,6 +830,8 @@
 -ftree-loop-optimize: -ftree-scev-cprop
 -ftree-loop-optimize: -ftree-vectorize
 -ftree-loop-optimize: -funswitch-loops
+-ftree-loop-optimize: -fpredictive-commoning
+-ftree-loop-optimize: -ftree-parallelize-loops
 -fbranch-count-reg: --param max-iterations-computation-cost=
 -fvariable-expansion-in-unroller: --param max-variable-expansions-in-unroller=
 -fmove-loop-invariants: --param lim-expensive=
@@ -443,6 +847,8 @@
 -fivopts: --param iv-consider-all-candidates-bound=
 -fivopts: --param iv-max-considered-uses=
 -fivopts: --param iv-always-prune-cand-set-bound=
+-ftree-vectorize: -ftree-vect-loop-version
+-ftree-vectorize: -fvect-cost-model
 -ftree-vectorize: --param min-vect-loop-bound=
 -funswitch-loops: --param max-unswitch-insns=, --param max-unswitch-level=
 -floop-block, -floop-strip-mine: --param loop-block-tile-size=
@@ -450,6 +856,8 @@
 -floop-block, -floop-strip-mine: --param graphite-max-bbs-per-function=
 -floop-interchange, -fgraphite-identity, -floop-flatten: --param graphite-max-nb-scop-params=
 -floop-interchange, -fgraphite-identity, -floop-flatten: --param graphite-max-bbs-per-function=
+-fpeel-loops, -funroll-loops, -funroll-all-loops: -fsplit-ivs-in-unroller
+-fpeel-loops, -funroll-loops, -funroll-all-loops: -fvariable-expansion-in-unroller
 
 // flag default values (useful for dep roots)
 
@@ -460,12 +868,13 @@
 -O0 => -fno-move-loop-invariants, -fno-tree-vectorize, -fno-unswitch-loops
 -O1 => -fmove-loop-invariants, -fno-tree-vectorize, -fno-unswitch-loops
 -O2 => -fmove-loop-invariants, -fno-tree-vectorize, -fno-unswitch-loops
--Os => -fmove-loop-invariants, -fno-tree-vectorize, -fno-unswitch-loops
+-Os => -fmove-loop-invariants, -fno-tree-vectorize, -fno-unswitch-loops, -fno-prefetch-loop-arrays
 -O3 => -fmove-loop-invariants, -ftree-vectorize, -funswitch-loops
 #if GCC_VERSION >= 40600
 -Ofast => -fmove-loop-invariants, -ftree-vectorize, -funswitch-loops
 #endif
 -fprofile-use => -fpeel-loops, -funroll-loops
--funroll-loops, -funroll-all-loops => -frerun-cse-after-loop
+-funroll-all-loops => -funroll-loops
+-funroll-loops => -frerun-cse-after-loop
 
 #endif // GCC_VERSION >= 40400

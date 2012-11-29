@@ -208,6 +208,12 @@ def create_debug_info_lists(samples, binary_list, addr2line="addr2line"):
         addr_file.close()
         return dbg_info
     debug_infos = {}
+
+    # Hot fix: Only use debug info from binary when explicitely asked
+    env_FORCE_ADDR2LINE_USAGE = os.environ.get("FORCE_ADDR2LINE_USAGE")
+    if not env_FORCE_ADDR2LINE_USAGE:
+        return debug_infos
+
     for image_name in samples.keys():
         # Get debug information for functions in current binary if available
         # Source file information is used to avoid ambiguities between
@@ -314,13 +320,16 @@ def partition_objects(sym_part, fct_map):
 
 def get_localized_symbols_partition(hot_cold_partition, debug_infos):
     new_cold_list, new_hot_list = [], []
+    source_file = None
     for image_name in hot_cold_partition.keys():
         cold_list, hot_list = hot_cold_partition[image_name]
         for (sym, vma) in hot_list:
-            source_file = get_file(debug_infos[image_name], vma)
+            if debug_infos:
+                source_file = get_file(debug_infos[image_name], vma)
             new_hot_list.append((sym, source_file))
         for (sym, vma) in cold_list:
-            source_file = get_file(debug_infos[image_name], vma)
+            if debug_infos:
+                source_file = get_file(debug_infos[image_name], vma)
             new_cold_list.append((sym, source_file))
     return new_cold_list, new_hot_list
 

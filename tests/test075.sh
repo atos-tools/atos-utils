@@ -23,11 +23,11 @@ rm -f log.txt
 ATOS_DEBUG_FILE=log.txt \
     $ROOT/bin/atos-build -a -O2 -g -O2
 
-[ `cat log.txt | grep "command .* -> 0" | grep "\-o sha.so .* -fprofile-generate" | grep "\-lgcov \-lc" | wc -l` -eq 1 ]
+[ `cat log.txt | grep "command \\[.*\\]$" | grep "\-o sha.so .* -fprofile-generate" | grep "\-lgcov \-lc" | wc -l` -eq 1 ]
 
-[ `cat log.txt | grep "command .* -> 0" | grep "\-o sha .* -fprofile-generate" | wc -l` -eq 1 ]
+[ `cat log.txt | grep "command \\[.*\\]$" | grep "\-o sha .* -fprofile-generate" | wc -l` -eq 1 ]
 
-[ `cat log.txt | grep "command .* -> 0" | grep "\-o sha .* -fprofile-generate" | grep "\-lgcov \-lc" | wc -l` -eq 0 ]
+[ `cat log.txt | grep "command \\[.*\\]$" | grep "\-o sha .* -fprofile-generate" | grep "\-lgcov \-lc" | wc -l` -eq 0 ]
 
 # Test in force mode
 $ROOT/bin/atos-init -c -b "sh ./build.sh" \
@@ -37,9 +37,9 @@ rm -f log.txt
 ATOS_DEBUG_FILE=log.txt \
     $ROOT/bin/atos-build -a -O2 -g -O2
 
-[ `cat log.txt | grep "command .* -> 0" | grep "\-o sha.so .* -fprofile-generate" | grep "\-lgcov \-lc" | wc -l` -eq 1 ]
+[ `cat log.txt | grep "command \\[.*\\]$" | grep "\-o sha.so .* -fprofile-generate" | grep "\-lgcov \-lc" | wc -l` -eq 1 ]
 
-[ `cat log.txt | grep "command .* -> 0" | grep "\-o sha .* -fprofile-generate" | wc -l` -eq 1 ]
+[ `cat log.txt | grep "command \\[.*\\]$" | grep "\-o sha .* -fprofile-generate" | wc -l` -eq 1 ]
 
-[ `cat log.txt | grep "command .* -> 0" | grep "\-o sha .* -fprofile-generate" | grep "\-lgcov \-lc" | wc -l` -eq 0 ]
+[ `cat log.txt | grep "command \\[.*\\]$" | grep "\-o sha .* -fprofile-generate" | grep "\-lgcov \-lc" | wc -l` -eq 0 ]
 

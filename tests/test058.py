@@ -25,11 +25,11 @@ assert status == 0
 #
 
 status = utils.invoque("atos-build", args, options="-O2")
-assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -O2\] -> 0")) == 1
+assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -O2\]$")) == 1
 shutil.copyfile("sha1-c", "sha1-c.O2")
 
 status = utils.invoque("atos-build", args, options="-O3 -g")
-assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -O3 -g\] -> 0")) == 1
+assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -O3 -g\]$")) == 1
 shutil.copyfile("sha1-c", "sha1-c.O3g")
 
 #
@@ -37,11 +37,11 @@ shutil.copyfile("sha1-c", "sha1-c.O3g")
 #
 
 status = utils.invoque("atos-build", args, options="-O2", force=True)
-assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -O2\] -> 0")) == 2
+assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -O2\]$")) == 2
 assert filecmp.cmp("sha1-c", "sha1-c.O2")
 
 status = utils.invoque("atos-build", args, options="-O3 -g", force=True)
-assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -O3 -g\] -> 0")) == 2
+assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -O3 -g\]$")) == 2
 assert filecmp.cmp("sha1-c", "sha1-c.O3g")
 
 #
@@ -49,8 +49,8 @@ assert filecmp.cmp("sha1-c", "sha1-c.O3g")
 #
 
 status = utils.invoque("atos-build", args, options="-O2", gopts="-O2")
-assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-generate.*\] -> 0")) == 1
-assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-dir.*\] -> 0")) == 1
+assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-generate.*\]$")) == 1
+assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-dir.*\]$")) == 1
 
 status = utils.invoque("atos-run", args, options="-O2", gopts="-O2", silent=True)
 assert status == 0
@@ -60,7 +60,7 @@ assert status == 0
 #
 
 status = utils.invoque("atos-build", args, options="-O2", uopts="-O2")
-assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-use.*\] -> 0")) == 1
+assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-use.*\]$")) == 1
 assert not common.grep(common.atos_log_name("build", options="-O2", uopts="-O2"), "gcda not found")
 
 
@@ -70,13 +70,13 @@ assert not common.grep(common.atos_log_name("build", options="-O2", uopts="-O2")
 
 os.makedirs("proftmp")
 status = utils.invoque("atos-build", args, options="-O3", gopts="-O3", path="proftmp")
-assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .*proftmp.*\] -> 0")) == 1
+assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .*proftmp.*\]$")) == 1
 
 status = utils.invoque("atos-run", args, options="-O3", gopts="-O3", silent=True)
 assert status == 0
 
 status = utils.invoque("atos-build", args, options="-O3", uopts="-O3", path="proftmp")
-assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .*proftmp.*\] -> 0")) == 2
+assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .*proftmp.*\]$")) == 2
 assert not common.grep(common.atos_log_name("build", options="-O3", uopts="-O3"), "gcda not found")
 
 #
@@ -92,7 +92,7 @@ assert status == 0 and common.grep(common.atos_log_name("build", variant="XXXO1"
 
 status = utils.invoque("atos-build", args, options="-O0",
                        command=["gcc", "-o", "sha1-c.O0", os.path.join(sha1dir, "sha.c"), os.path.join(sha1dir, "sha1.c")])
-assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -O0.*\] -> 0")) == 1
+assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -O0.*\]$")) == 1
 assert os.path.isfile("sha1-c.O0")
 
 
@@ -101,11 +101,11 @@ assert os.path.isfile("sha1-c.O0")
 # fdo + force mode (#180488)
 #
 
-nb_prof_gen = len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-generate.*\] -> 0"))
-nb_prof_dir = len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-dir.*\] -> 0"))
+nb_prof_gen = len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-generate.*\]$"))
+nb_prof_dir = len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-dir.*\]$"))
 status = utils.invoque("atos-build", args, options="-O2", gopts="-O2", force=True)
-assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-generate.*\] -> 0")) == nb_prof_gen + 1
-assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-dir.*\] -> 0")) == nb_prof_dir + 1
+assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-generate.*\]$")) == nb_prof_gen + 1
+assert status == 0 and len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-dir.*\]$")) == nb_prof_dir + 1
 
 
 

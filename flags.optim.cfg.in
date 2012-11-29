@@ -4,6 +4,9 @@
 // accesses. This pass is always skipped on architectures that do not
 // have instructions to support this. Enabled by default at -O and higher
 // on architectures that support this.
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_inc_dec(-fauto-inc-dec)
 -fauto-inc-dec|-fno-auto-inc-dec
 
 // Always pop the arguments to each function call as soon as that
@@ -11,6 +14,11 @@
 // function call, the compiler normally lets arguments accumulate on the
 // stack for several function calls and pops them all at once.
 // Disabled at levels -O, -O2, -O3, -Os.
+//  <too mamy>
+//  --> expand_call
+//      --> emit_call_1*
+//  emit_library_call_value_1
+//  --> emit_call_1*
 -fdefer-pop|-fno-defer-pop
 
 // Perform a forward propagation pass on RTL. The pass tries to combine
@@ -18,6 +26,10 @@
 // unrolling is active, two passes are performed and the second is
 // scheduled after loop unrolling.
 // This option is enabled by default at optimization levels -O, -O2, -O3, -Os.
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_rtl_fwprop(-fforward-propagate)
+//      --> pass_rtl_fwprop_addr(-fforward-propagate)
 -fforward-propagate|-fno-forward-propagate
 
 // Don't keep the frame pointer in a register for functions that don't
@@ -35,10 +47,15 @@
 // -fno-omit-frame-pointer by configuring GCC with the
 // --enable-frame-pointer configure option.
 // Enabled at levels -O, -O2, -O3, -Os.
+//  <too many>
 -fomit-frame-pointer|-fno-omit-frame-pointer
 
 // Optimize sibling and tail recursive calls.
 // Enabled at levels -O2, -O3, -Os.
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tail_recursion(-foptimize-sibling-calls)
+//      --> pass_tail_calls(-foptimize-sibling-calls)
 -foptimize-sibling-calls|-fno-optimize-sibling-calls
 
 // Attempt to merge identical constants (string constants and floating
@@ -46,11 +63,15 @@
 // for optimized compilation if the assembler and linker support it. Use
 // -fno-merge-constants to inhibit this behavior.  Enabled at levels -O,
 // -O2, -O3, -Os.
+//  <too many>
 -fmerge-constants|-fno-merge-constants
 
 // Perform swing modulo scheduling immediately before the first
 // scheduling pass. This pass looks at innermost loops and reorders their
 // instructions by overlapping different iterations.
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_sms(-fmodulo-sched)
 -fmodulo-sched|-fno-modulo-sched
 
 // Perform more aggressive SMS based modulo scheduling with register
@@ -58,6 +79,15 @@
 // will be deleted which will trigger the generation of reg-moves based
 // on the life-range analysis. This option is effective only with
 // -fmodulo-sched enabled.
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_sms(-fmodulo-sched)
+//          --> sms_schedule
+//              --> create_ddg
+//                  --> build_intra_loop_deps
+//                      --> create_ddg_dep_from_intra_loop_link*
+//                  --> build_inter_loop_deps
+//                      --> add_cross_iteration_register_deps*
 -fmodulo-sched-allow-regmoves|-fmodulo-sched-allow-regmoves
 
 // Do not put function addresses in registers; make each instruction that
@@ -66,6 +96,11 @@
 // that alter the assembler output may be confused by the optimizations
 // performed when this option is not used.
 // The default is -ffunction-cse
+//  <too mamy>
+//  --> expand_call
+//      --> prepare_call_address*
+//  emit_library_call_value_1
+//  --> prepare_call_address*
 -ffunction-cse|-fno-function-cse
 
 // Perform optimizations where we check to see if a jump branches to a
@@ -74,6 +109,10 @@
 // second branch or a point immediately following it, depending on
 // whether the condition is known to be true or false.
 // Enabled at levels -O2, -O3, -Os.
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_jump2
+//          --> rest_of_handle_jump2*
 -fthread-jumps|-fno-thread-jumps
 
 // When using a type that occupies multiple registers, such as long long
@@ -81,6 +120,10 @@
 // independently. This normally generates better code for those types,
 // but may make debugging more difficult.
 // Enabled at levels -O, -O2, -O3, -Os.
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_lower_subreg(-fsplit-wide-types)
+//      --> pass_lower_subreg2(-fsplit-wide-types)
 -fsplit-wide-types|-fno-split-wide-types
 
 // In common subexpression elimination (CSE), scan through jump
@@ -88,6 +131,20 @@
 // path. For example, when CSE encounters an if statement with an else
 // clause, CSE will follow the jump when the condition tested is false.
 // Enabled at levels -O2, -O3, -Os.
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_cse(>= -O1)
+//          --> rest_of_handle_cse
+//              --> cse_main
+//                  --> cse_find_path
+//      --> pass_cse_after_global_opts(>=-O1)
+//          --> rest_of_handle_cse_after_global_opts
+//              --> cse_main
+//                  --> cse_find_path
+//      --> pass_cse2(>=-O1 && -frerun-cse-after-loop)
+//          --> rest_of_handle_cse2
+//              --> cse_main
+//                  --> cse_find_path
 -fcse-follow-jumps|-fno-cse-follow-jumps
 
 // This is similar to -fcse-follow-jumps, but causes CSE to follow jumps
@@ -106,6 +163,11 @@
 // runtime performance if you disable the global common subexpression
 // elimination pass by adding -fno-gcse to the command line.
 // Enabled at levels -O2, -O3, -Os.
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_rtl_cprop(-fgcse)
+//      --> pass_rtl_pre(-fgcse)
+//      --> pass_rtl_hoist(-fgcse)
 -fgcse|-fno-gcse
 
 // When -fgcse-lm is enabled, global common subexpression elimination
@@ -113,6 +175,10 @@
 // themselves. This allows a loop containing a load/store sequence to be
 // changed to a load outside the loop, and a copy/store within the loop.
 // Enabled by default when gcse is enabled.
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_rtl_pre(-fgcse)
+//          --> one_pre_gcse_pass
 -fgcse-lm|-fno-gcse-lm
 
 // When -fgcse-sm is enabled, a store motion pass is run after global
@@ -121,6 +187,9 @@
 // containing a load/store sequence can be changed to a load before the
 // loop and a store after the loop.
 // Not enabled at any optimization level.
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_rtl_store_motion(-fgcse-sm)
 -fgcse-sm|-fno-gcse-sm
 
 // When -fgcse-las is enabled, the global common subexpression
@@ -345,7 +414,10 @@
 // transformation are not affected (see --param
 // struct-reorg-cold-struct-ratio=value).  With this flag, the program
 // debug info reflects a new structure layout.
+#if GCC_VERSION < 40600
+// Comment in gcc 4.6.2 source code says it is broken, and thus desactivated.
 -fipa-struct-reorg|-fno-ipa-struct-reorg
+#endif
 
 // Perform interprocedural pointer analysis and interprocedural
 // modification and reference analysis. This option can cause excessive
@@ -611,7 +683,7 @@
 // branch target registers in within any basic block.
 -fbtr-bb-exclusive|-fno-btr-bb-exclusive
 
-#if GCC_VERSION <= 40700
+#if GCC_VERSION < 40700
 // The threshold ratio (as a percentage) between a structure frequency
 // and the frequency of the hottest structure in the program. This
 // parameter is used by struct-reorg optimization enabled by
@@ -619,34 +691,101 @@
 // calculated by profiling, to the hottest structure frequency in the
 // program is less than this parameter, then structure reorganization is
 // not applied to this structure. The default is 10.
---param struct-reorg-cold-struct-ratio=[0..100]
-#endif // GCC_VERSION <= 40700
+//  reorg_structs
+//  --> exclude_cold_structs*
+#if GCC_VERSION < 40600
+// Comment in gcc source code says it is broken, and thus desactivated.
+--param struct-reorg-cold-struct-ratio=[0..100,10]
+#endif
+#endif // GCC_VERSION < 40700
 
 // When branch is predicted to be taken with probability lower than this
 // threshold (in percent), then it is considered well predictable. The
 // default is 10.
---param predictable-branch-outcome=[0..50]
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_rtl_ifcvt
+//          --> rest_of_handle_if_conversion(-fif-conversion)
+//              --> if_convert
+//                  --> find_if_header
+//                      --> noce_find_if_block
+//                          --> predictable_edge_p*
+//                      --> find_if_case_1
+//                          --> predictable_edge_p*
+//                      --> find_if_case_2
+//                          --> predictable_edge_p*
+--param predictable-branch-outcome=[0..50,5]
 
 // The maximum number of incoming edges to consider for crossjumping. The
 // algorithm used by -fcrossjumping is O(N^2) in the number of edges
 // incoming to each block. Increasing values mean more aggressive
 // optimization, making the compile time increase with probably small
 // improvement in executable size. The default value is 100.
---param max-crossjump-edges=[50..500]
+//  <too many>
+//  --> cleanup_cfg
+//      --> try_optimize_cfg
+//          --> try_crossjump_bb*
+--param max-crossjump-edges=[20..500,20]
 
 // The minimum number of instructions which must be matched at the end of
 // two blocks before crossjumping will be performed on them. This value
 // is ignored in the case where all instructions in the block being
 // crossjumped from are matched. The default value is 5.
---param min-crossjump-insns=[2..10]
+//  <too many>
+//  --> cleanup_cfg
+//      --> try_optimize_cfg
+//          --> try_crossjump_bb
+//              --> try_crossjump_to_edge*
+--param min-crossjump-insns=[2..20,2]
 
 // Select fraction of the maximal count of repetitions of basic block in
 // program given basic block needs to have to be considered hot.
---param hot-bb-count-fraction=[1000..100000]
+//  <too many>
+//  --> optimize_bb_for_size_p
+//      --> maybe_hot_bb_p
+//          --> maybe_hot_count_p*
+//  --> rtl_profile_for_bb
+//      --> maybe_hot_bb_p
+//          --> maybe_hot_count_p*
+//  --> compute_function_frequency
+//      --> maybe_hot_bb_p
+//          --> maybe_hot_count_p*
+//  --> optimize_edge_for_size_p
+//      --> maybe_hot_edge_p
+//          --> maybe_hot_count_p*
+//  --> rtl_profile_for_edge
+//      --> maybe_hot_edge_p
+//          --> maybe_hot_count_p*
+//  all_regular_ipa_passes(in_lto)
+//  --> pass_ipa_cp(-fipa-cp)
+//      --> ipcp_driver
+//          --> ipcp_iterate_stage
+//              --> ipcp_initialize_node_lattices
+//                  --> ipcp_cloning_candidate_p
+//                      --> cgraph_maybe_hot_edge_p*
+//  all_regular_ipa_passes(in_lto)
+//  --> pass_ipa_inline
+//      --> cgraph_decide_inlining
+//          --> cgraph_decide_inlining_of_small_functions
+//              --> cgraph_maybe_hot_edge_p*
+//              --> cgraph_decide_recursive_inlining
+//                  --> cgraph_maybe_hot_edge_p*
+// all_small_ipa_passes(!in_lto)
+// --> pass_early_local_passes(!in_lto)
+//         pass_early_inline(NULL)
+//         --> cgraph_early_inlining
+//             --> cgraph_decide_inlining_incrementally
+//                 --> cgraph_maybe_hot_edge_p*
+--param hot-bb-count-fraction=[5000..100000,5000]
 
 // Select fraction of the entry block frequency of executions of basic
 // block in function given basic block needs to have to be considered hot
---param hot-bb-frequency-fraction=[100..10000]
+//  maybe_hot_bb_p
+//  --> maybe_hot_frequency_p*
+//  maybe_hot_edge_p
+//  --> maybe_hot_frequency_p*
+//  cgraph_maybe_hot_edge_p*
+--param hot-bb-frequency-fraction=[500..10000,500]
 
 // This value is used to limit superblock formation once the given
 // percentage of executed instructions is covered. This limits
@@ -654,15 +793,25 @@
 // is used only when profile feedback is available. The real profiles (as
 // opposed to statically estimated ones) are much less balanced allowing
 // the threshold to be larger value. Default values: 75, 95
---param tracer-dynamic-coverage=[50..100]
---param tracer-dynamic-coverage-feedback=[50..100]
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tracer
+//          --> tracer(-ftracer && -freorder-blocks)
+//              --> tail_duplicate*
+--param tracer-dynamic-coverage=[0..100,5]
+--param tracer-dynamic-coverage-feedback=[0..100,5]
 
 // Stop tail duplication once code growth has reached given
 // percentage. This is rather hokey argument, as most of the duplicates
 // will be eliminated later in cross jumping, so it may be set to much
 // higher values than is the desired code growth.
 // The default value is 100.
---param tracer-max-code-growth=[20..500]
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tracer
+//          --> tracer(-ftracer && -freorder-blocks)
+//              --> tail_duplicate*
+--param tracer-max-code-growth=[20..500,20]
 
 // Stop forward growth if the best edge do have probability lower than
 // this threshold.  Similarly to tracer-dynamic-coverage two values are
@@ -670,96 +819,323 @@
 // compilation without. The value for compilation with profile feedback
 // needs to be more conservative (higher) in order to make tracer
 // effective. Default values: 10
---param tracer-min-branch-ratio=[0..100]
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tracer
+//          --> tracer(-ftracer && -freorder-blocks)
+//              --> tail_duplicate*
+--param tracer-min-branch-ratio=[0..100,5]
 // Stop forward growth if the probability of best edge is less than
 // this threshold (in percent). Used when profile feedback is / is not
 // available
 // Default values: 80, 50
---param tracer-min-branch-probability=[0..100]
---param tracer-min-branch-probability-feedback=[0..100]
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_tracer
+//          --> tracer(-ftracer && -freorder-blocks)
+//              --> tail_duplicate*
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_sched(-fschedule-insns)
+//          --> rest_of_handle_sched(-fselective-scheduling)
+//              --> run_selective_scheduling
+//                  --> sel_global_init
+//                      --> sched_rgn_init
+//                          --> find_single_block_region*
+//                  --> schedule_insns
+//                      --> sched_rgn_init
+//                          --> find_single_block_region*
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_postreload
+//          --> pass_sched2(-fschedule-insns2)
+//              --> rest_of_handle_sched2(-fselective-scheduling2)
+//                  --> run_selective_scheduling
+//                      --> sel_global_init
+//                          --> sched_rgn_init
+//                              --> find_single_block_region*
+//                  --> schedule_insns
+//                      --> sched_rgn_init
+//                          --> find_single_block_region*
+//                  --> schedule_ebbs*
+--param tracer-min-branch-probability=[0..100,5]
+--param tracer-min-branch-probability-feedback=[0..100,5]
 
 // Maximum number of basic blocks on path that cse considers. The default
 // is 10.
---param max-cse-path-length=[5..50]
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_cse
+//          --> rest_of_handle_cse
+//              --> cse_main*
+//                  --> cse_find_path*
+//      --> pass_cse_after_global_opts
+//          --> rest_of_handle_cse_after_global_opts
+//              --> cse_main*
+//                  --> cse_find_path*
+//      --> pass_cse2(-frerun-cse-after-loop)
+//          --> rest_of_handle_cse2
+//              --> cse_main*
+//                  --> cse_find_path*
+--param max-cse-path-length=[5..100,5]
 
 // The maximum instructions CSE process before flushing. The default is
 // 1000.
---param max-cse-insns=[200..5000]
+//  cse_main
+//  --> cse_extended_basic_block*
+--param max-cse-insns=[200..4000,200]
 
 // The maximum number of memory locations cselib should take into
 // account. Increasing values mean more aggressive optimization, making
 // the compile time increase with probably slightly better
 // performance. The default value is 500.
---param max-cselib-memory-locations=[400..800]
+//  pass_variable_tracking(-fvar-tracking)
+//  --> variable_tracking_main_1
+//      --> vt_initialize
+//          --> cselib_preserve_only_values
+//              --> cselib_invalidate_mem*
+//          --> vt_add_function_parameters
+//              --> cselib_preserve_only_values
+//                  --> cselib_invalidate_mem*
+//      --> vt_find_locations
+//          --> dataflow_post_merge_adjust
+//              --> variable_post_merge_new_vals
+//                  --> cselib_invalidate_rtx
+//                      --> cselib_invalidate_mem*
+//  <too many>
+//  --> cselib_process_insn
+//      --> cselib_record_sets
+//          --> cselib_invalidate_rtx
+//              --> cselib_invalidate_mem*
+//      --> cselib_invalidate_rtx
+//          --> cselib_invalidate_mem*
+//      --> cselib_invalidate_mem*
+//  <config?>
+//  --> reload_cse_regs
+//      --> reload_cse_regs_1
+//          --> reload_cse_simplify
+//              --> cselib_invalidate_rtx
+//                  --> cselib_invalidate_mem*
+--param max-cselib-memory-locations=[250..2000,250]
 
 // The maximum number of instructions ready to be issued the scheduler
 // should consider at any given time during the first scheduling
 // pass. Increasing values mean more thorough searches, making the
 // compilation time increase with probably little benefit. The default
 // value is 100.
---param max-sched-ready-insns=[80..200]
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_sched(-fschedule-insns)
+//          --> rest_of_handle_sched
+//              --> schedule_insns
+//                  --> schedule_region
+//                      --> schedule_block*
+//                          --> queue_to_ready*
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_postreload
+//          --> pass_sched2(-fschedule-insns2)
+//              --> rest_of_handle_sched2
+//                  --> schedule_ebbs
+//                      --> schedule_ebb
+//                          --> schedule_block*
+//                               --> queue_to_ready*
+--param max-sched-ready-insns=[20..400,20]
 
 // The maximum number of blocks in a region to be considered for
 // interblock scheduling. The default value is 10.
---param max-sched-region-blocks=[5..40]
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_sched(-fschedule-insns)
+//          --> rest_of_handle_sched(-fselective-scheduling)
+//              --> run_selective_scheduling
+//                  --> sel_global_init
+//                      --> sched_rgn_init
+//                          --> find_rgns(!-fsel-sched-pipelining)
+//                              --> haifa_find_rgns
+//                                  --> too_large*
+//                                  --> extend_rgns
+//                                      --> too_large*
+--param max-sched-region-blocks=[5..50,5]
 
 // The maximum number of blocks in a region to be considered for
 // pipelining in the selective scheduler. The default value is 15.
---param max-pipeline-region-blocks=[10..40]
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_sched(-fschedule-insns)
+//          --> rest_of_handle_sched(-fselective-scheduling)
+//              --> run_selective_scheduling
+//                  --> sel_global_init
+//                      --> sched_rgn_init
+//                          --> find_rgns(-fsel-sched-pipelining)
+//                              --> sel_find_rgns
+//                                  --> make_regions_from_loop_nest
+//                                      --> make_region_from_loop*
+--param max-pipeline-region-blocks=[5..50,5]
 
 // The maximum number of insns in a region to be considered for
 // interblock scheduling. The default value is 100.
---param max-sched-region-insns=[50..400]
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_sched(-fschedule-insns)
+//          --> rest_of_handle_sched(-fselective-scheduling)
+//              --> run_selective_scheduling
+//                  --> sel_global_init
+//                      --> sched_rgn_init
+//                          --> find_rgns(!-fsel-sched-pipelining)
+//                              --> haifa_find_rgns
+//                                  --> too_large*
+//                                  --> extend_rgns
+//                                      --> too_large*
+--param max-sched-region-insns=[50..1000,50]
 
 // The maximum number of insns in a region to be considered for
 // pipelining in the selective scheduler. The default value is 200.
---param max-pipeline-region-insns=[100..500]
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_sched(-fschedule-insns)
+//          --> rest_of_handle_sched(-fselective-scheduling)
+//              --> run_selective_scheduling
+//                  --> sel_global_init
+//                      --> sched_rgn_init
+//                          --> find_rgns(-fsel-sched-pipelining)
+//                              --> sel_find_rgns
+//                                  --> make_regions_from_loop_nest
+//                                      --> make_region_from_loop*
+--param max-pipeline-region-insns=[50..1000,50]
 
 // The minimum probability (in percents) of reaching a source block for
 // interblock speculative scheduling. The default value is 40.
---param min-spec-prob=[0..100]
+//  rest_of_handle_sched(-fselective-scheduling) || rest_of_handle_sched2(-fselective-scheduling2)
+//  --> run_selective_scheduling
+//      --> sel_global_init
+//         --> sched_rgn_init*
+//  rest_of_handle_sched(!-fselective-scheduling) || rest_of_handle_sched2(!-fselective-scheduling2&&!-fsched2-use-superblocks)
+//  --> schedule_insns
+//      --> sched_rgn_init*
+--param min-spec-prob=[0..100,5]
 
 // The maximum number of iterations through CFG to extend regions. 0 -
 // disable region extension, N - do at most N iterations. The default
 // value is 0.
---param max-sched-extend-regions-iters=[0..5]
+//  run_selective_scheduling
+//  --> sel_global_init
+//      --> sched_rgn_init
+//          --> find_rgns(-fsel-sched-pipelining)
+//              --> sel_find_rgns
+//                  --> make_regions_from_the_rest
+//                      --> extend_rgns*
+//          --> find_rgns(!-fsel-sched-pipelining)
+//              --> haifa_find_rgns*
+//                  --> extend_rgns*
+//  rest_of_handle_sched(!-fselective-scheduling) || rest_of_handle_sched2(!-fselective-scheduling2&&!-fsched2-use-superblocks)
+//  --> schedule_insns
+//      --> sched_rgn_init
+--param max-sched-extend-regions-iters=[0..10,2]
 
 // The maximum conflict delay for an insn to be considered for
 // speculative motion. The default value is 3.
---param max-sched-insn-conflict-delay=[1..6]
+//  <too many>
+//  try_ready
+//  --> new_ready*
+--param max-sched-insn-conflict-delay=[1..10]
 
 // The minimal probability of speculation success (in percents), so that
 // speculative insn will be scheduled. The default value is 40.
---param sched-spec-prob-cutoff=[0..100]
+//  rest_of_handle_sched2(-fselective-scheduling2)
+//  --> schedule_ebbs
+//      --> haifa_sched_init
+//          --> sched_init*
+//  pass_sms(-fmodulo-sched)
+//  --> sms_schedule
+//      --> haifa_sched_init
+//          --> sched_init*
+//  <too many>
+//  schedule_insns
+//  --> haifa_sched_init
+//      --> sched_init*
+//  rest_of_handle_sched(-fselective-scheduling)
+//  --> run_selective_scheduling
+//      --> sel_global_init
+//          --> sched_init*
+//  rest_of_handle_sched2(-fselective-scheduling2)
+//  --> run_selective_scheduling
+//      --> sel_global_init
+//          --> sched_init*
+--param sched-spec-prob-cutoff=[0..100,5]
 
 // Minimal distance (in CPU cycles) between store and load targeting same
 // memory locations. The default value is 1.
---param sched-mem-true-dep-cost=[0..3]
+// No reaason for dynamic exploration
+// --param sched-mem-true-dep-cost=[0..3]
 
 // The maximum size of the lookahead window of selective scheduling. It
 // is a depth of search for available instructions. The default value is
 // 50.
---param selsched-max-lookahead=[40..80]
+//  rest_of_handle_sched(-fselective-scheduling)
+//  --> run_selective_scheduling
+//      --> sel_sched_region
+//          --> sel_region_init
+//              --> sel_setup_region_sched_flags*
+//  rest_of_handle_sched2(-fselective-scheduling2)
+//  --> run_selective_scheduling
+//      --> sel_sched_region
+//          --> sel_region_init
+//              --> sel_setup_region_sched_flags*
+--param selsched-max-lookahead=[20..100,10]
 
 // The maximum number of times that an instruction will be scheduled
 // during selective scheduling. This is the limit on the number of
 // iterations through which the instruction may be pipelined. The default
 // value is 2.
---param selsched-max-sched-times=[1..4]
+//  rest_of_handle_sched(-fselective-scheduling) | rest_of_handle_sched2(-fselective-scheduling2)
+//  --> run_selective_scheduling
+//      --> sel_sched_region
+//          --> sel_sched_region_1
+//              --> sel_sched_region_2
+//                  --> schedule_on_fences
+//                      --> fill_insns
+//                          --> find_best_expr
+//                              --> fill_ready_list
+//                                  --> process_pipelined_exprs*
+--param selsched-max-sched-times=[1..8]
 
 // The maximum number of best instructions in the ready list that are
 // considered for renaming in the selective scheduler. The default value
 // is 2.
---param selsched-insns-to-rename=[1..4]
+//  rest_of_handle_sched(-fselective-scheduling) | rest_of_handle_sched2(-fselective-scheduling2)
+//  --> run_selective_scheduling
+//      --> sel_sched_region
+//          --> sel_region_init
+//              --> sel_setup_region_sched_flags*
+--param selsched-insns-to-rename=[1..8]
 
 // Maximum number of statements allowed in a block that needs to be
 // duplicated when threading jumps. Default value is 15.
---param max-jump-thread-duplication-stmts=[10..30]
+//  pass_vrp(-ftree-vrp)
+//  --> execute_vrp
+//      --> vrp_finalize
+//          --> identify_jump_threads
+//              --> thread_across_edge
+//                  --> record_temporary_equivalences_from_stmts_at_dest*
+//  <too many>
+//  walk_dominator_tree
+//  --> dom_opt_leave_block
+//      --> dom_thread_across_edge
+//          --> thread_across_edge
+//              --> record_temporary_equivalences_from_stmts_at_dest*
+--param max-jump-thread-duplication-stmts=[5..50,5]
 
 // Switch initialization conversion will refuse to create arrays that are
 // bigger than switch-conversion-max-branch-ratio times the number of
 // branches in the switch. Default value: 8.
---param switch-conversion-max-branch-ratio=[4..16]
+//  pass_early_local_passes(!in_lto)
+//  --> pass_all_early_optimizations
+//      --> pass_convert_switch(-ftree-switch-conversion)
+//          --> do_switchconv
+//              --> process_switch
+//                  --> check_range*
+--param switch-conversion-max-branch-ratio=[2..16,2]
 
 // Maximum length of the partial antic set computed during the tree
 // partial redundancy elimination optimization (-ftree-pre) when
@@ -769,7 +1145,17 @@
 // parameter sets a limit on the length of the sets that are computed,
 // which prevents the runaway behavior. Setting a value of 0 for this
 // parameter will allow an unlimited set length. Default value: 100.
---param max-partial-antic-length=[0..200]
+//  all_passes
+//  --> pass_all_optimizations(>=-O1)
+//      --> pass_fre(-ftree-fre)
+//          --> execute_pr
+//              --> compute_antic
+//                  --> compute_partial_antic_aux
+//      --> pass_pre(-ftree-pre)
+//          --> execute_pr
+//              --> compute_antic
+//                  --> compute_partial_antic_aux
+--param max-partial-antic-length=[0..200,10]
 
 #endif // GCC_VERSION >= 40400
 
@@ -847,12 +1233,27 @@
 // this parameter. The default value of the parameter is 2 which is
 // minimal number of registers needed for execution of typical
 // instruction. This value is the best found from numerous experiments.
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_loop2
+//          --> pass_rtl_move_loop_invariants(-fmove-loop-invariants)
+//              --> move_loop_invariants
+//                  --> move_single_loop_invariants
+//                      --> find_invariants_to_move
+//                          --> best_gain_for_invariant
+//                              --> gain_for_invariant*
 --param ira-loop-reserved-regs=[1..6]
 
 // IPA-SRA will replace a pointer to an aggregate with one or more new
 // parameters only when their cumulative size is less or equal to
 // ipa-sra-ptr-growth-factor times the size of the original pointer
 // parameter. Default value is 2.
+//  pass_early_local_passes(!in_lto)
+//  --> pass_all_early_optimizations
+//      --> pass_early_ipa_sra(-fipa-sra)
+//          --> ipa_early_sra
+//              --> analyze_all_param_acesses
+//                  --> decide_one_param_reduction*
 --param ipa-sra-ptr-growth-factor=[1..6]
 
 #endif // GCC_VERSION >= 40500
@@ -944,7 +1345,14 @@
 // value for any expression, then RTL PRE will insert or remove the
 // expression and thus leave partially redundant computations in the
 // instruction stream. The default value is 20.
---param max-gcse-insertion-ratio=[5..80]
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_rtl_pre(-fgcse)
+//          --> execute_rtl_pre
+//              --> one_pre_gcse_pass
+//                  --> compute_pre_data
+//                      --> prune_insertions_deletions*
+--param max-gcse-insertion-ratio=[5..80,5]
 
 // Scaling factor in calculation of maximum distance an expression can be
 // moved by GCSE optimizations. This is currently supported only in the
@@ -952,7 +1360,34 @@
 // hoisting will be with simple expressions, i.e., the expressions which
 // have cost less than gcse-unrestricted-cost. Specifying 0 will disable
 // hoisting of simple expressions. The default value is 10.
---param gcse-cost-distance-ratio=[0..50]
+//  all_passes
+//  --> pass_rest_of_compilation
+//      --> pass_rtl_pre(-fgcse)
+//          --> execute_rtl_pre
+//              --> one_pre_gcse_pass
+//                  --> compute_hash_table
+//                      --> compute_hash_table_work
+//                          --> hash_scan_insn
+//                              --> hash_scan_set
+//                                  --> want_to_gcse_p*
+//  pass_rest_of_compilation
+//  --> pass_rtl_hoist(-Os && -fgcse)
+//      --> execute_rtl_hoist
+//          --> one_code_hoisting_pass
+//              --> compute_hash_table
+//                  --> compute_hash_table_work
+//                      --> hash_scan_insn
+//                          --> hash_scan_set
+//                              --> want_to_gcse_p*
+//  pass_rtl_cprop(-fgcse)
+//  --> execute_rtl_cprop
+//      --> one_cprop_pass
+//          --> compute_hash_table
+//              --> compute_hash_table_work
+//                  --> hash_scan_insn
+//                      --> hash_scan_set
+//                          --> want_to_gcse_p*
+--param gcse-cost-distance-ratio=[0..50,5]
 
 // Cost, roughly measured as the cost of a single typical machine
 // instruction, at which GCSE optimizations will not constrain the
@@ -960,20 +1395,36 @@
 // the code hoisting pass. The lesser the cost, the more aggressive code
 // hoisting will be. Specifying 0 will allow all expressions to travel
 // unrestricted distances. The default value is 3.
+//  <same as --param gcse-cost-distance-ratio>
+//              --> want_to_gcse_p*
 --param gcse-unrestricted-cost=[0..9]
 
 // The depth of search in the dominator tree for expressions to
 // hoist. This is used to avoid quadratic behavior in hoisting
 // algorithm. The value of 0 will avoid limiting the search, but may slow
 // down compilation of huge functions. The default value is 30.
---param max-hoist-depth=[0..60]
+//  pass_rest_of_compilation
+//  --> pass_rtl_hoist(-Os && -fgcse)
+//      --> execute_rtl_hoist
+//          --> one_code_hoisting_pass
+//              --> hoist_code*
+--param max-hoist-depth=[0..60,5]
 
 #if GCC_VERSION < 40700
 // IPA-CP attempts to track all possible types passed to a function's
 // parameter in order to perform devirtualization. devirt-type-list-size
 // is the maximum number of types it stores per a single formal parameter
 // of a function. Default value is 8.
---param devirt-type-list-size=[2..32]
+//  all_regular_ipa_passes(in_lto)
+//  --> pass_ipa_cp(-fipa-cp)
+//      --> ipcp_driver
+//          --> ipcp_iterate_stage
+//              --> ipcp_propagate_stage
+//                  --> ipcp_propagate_types
+//                      --> ipcp_add_param_type*
+//                      --> ipcp_copy_types
+//                          --> ipcp_add_param_type*
+--param devirt-type-list-size=[2..32,2]
 #endif // GCC_VERSION < 40700
 
 #endif // GCC_VERSION >= 40600
@@ -1318,7 +1769,7 @@
 
 // The maximum number of instructions to duplicate to a block that jumps
 // to a computed goto. To avoid O(N^2) behavior in a number of passes,
-// GCC factors computed gotos early in the compilation process, and
+// GCC factors computed gotos early in` the compilation process, and
 // unfactors them as late as possible. Only computed jumps at the end of
 // a basic blocks with no more than max-goto-duplication-insns are
 // unfactored. The default value is 8.
@@ -1335,6 +1786,7 @@
 -fgcse, -frerun-cse-after-loop: --param max-cse-path-length=
 -fgcse, -frerun-cse-after-loop: --param max-cse-insns=
 -fgcse, -frerun-cse-after-loop: --param max-cselib-memory-locations=
+-fgcse: -fgcse-lm
 -ftracer: --param tracer-dynamic-coverage=, --param tracer-max-code-growth=
 -ftracer: --param tracer-min-branch-ratio=, --param tracer-min-branch-probability=
 -ftracer: --param tracer-dynamic-coverage-feedback=
@@ -1344,9 +1796,9 @@
 -fprofile-use: --param tracer-min-branch-probability-feedback=
 #endif
 -fcrossjumping: --param max-crossjump-edges=, --param min-crossjump-insns=
--fselective-scheduling: --param selsched-max-lookahead=
--fselective-scheduling: --param selsched-max-sched-times=
--fselective-scheduling: --param selsched-insns-to-rename=
+-fselective-scheduling, -fselective-scheduling2: --param selsched-max-lookahead=
+-fselective-scheduling, -fselective-scheduling2: --param selsched-max-sched-times=
+-fselective-scheduling, -fselective-scheduling2: --param selsched-insns-to-rename=
 -fselective-scheduling: --param max-pipeline-region-blocks=
 -fselective-scheduling: --param max-pipeline-region-insns=
 -fsched-interblock: --param max-sched-region-insns=, --param min-spec-prob=
@@ -1356,12 +1808,13 @@
 -fschedule-insns, -fschedule-insns2: --param max-sched-insn-conflict-delay=
 -fschedule-insns, -fschedule-insns2: --param sched-spec-prob-cutoff=
 -fschedule-insns, -fschedule-insns2: --param sched-mem-true-dep-cost=
+-fmodulo-sched: -fmodulo-sched-allow-regmoves
 -fira-loop-pressure: --param ira-loop-reserved-regs=
 -fipa-struct-reorg: --param struct-reorg-cold-struct-ratio=
--fguess-branch-probability: --param predictable-branch-outcome=
+-fguess-branch-probability, -fif-conversion: --param predictable-branch-outcome=
 -fthread-jumps: --param max-jump-thread-duplication-stmts=
 -ftree-switch-conversion: --param switch-conversion-max-branch-ratio=
--fdevirtualize: --param devirt-type-list-size=
+-fipa-cp: --param devirt-type-list-size=
 -ftree-pre: --param max-partial-antic-length=
 -fipa-sra: --param ipa-sra-ptr-growth-factor=
 -fguess-branch-probability: --param hot-bb-frequency-fraction=

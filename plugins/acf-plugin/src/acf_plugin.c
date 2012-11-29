@@ -35,6 +35,12 @@
 #include "acf_plugin.h"
 
 /* ============================================================ */
+/* Other external declarations
+/* ============================================================ */
+/* Function error() is not always declared in gcc headers. */
+extern void error (const char *, ...);
+
+/* ============================================================ */
 /* Setting of global macros
 /* ============================================================ */
 
@@ -299,7 +305,9 @@ static void restore_global_attribute_values() {
 static char **csv_param_name  = NULL;
 static int   *csv_param_value = NULL;
 static size_t csv_param_index = 0;
+#ifdef USE_GLOBAL_PARAMS
 static int   *csv_param_set   = NULL;
+#endif
 
 // Get the index for a PARAM name
 static bool get_param_idx(char *opt_param, size_t *idx) {
@@ -397,18 +405,22 @@ static int parse_ftable_csv_file(acf_ftable_entry_t **acf_ftable_p,
 
 #define MATCH_TOKEN(match, tok, tok_len) ((strlen(match) == tok_len) && (strncmp(match, tok, tok_len) == 0))
 
-static bool func_name_match(const char *acf_func, const char *cur_func) {
+static bool func_name_match(const acf_ftable_entry_t *acf_entry, const char *cur_func) {
     /* GCC function cloning rename functions with a suffix that starts
        with a '.', and that contains fields separated with '.', that
        can be numbers or one of "clone", "isra", "constprop" or
        "part". */
     const char *suffix, *token, *next_token;
     size_t token_len;
+    const char *acf_func = acf_entry->func_name;
+    size_t acf_func_len = acf_entry->func_name_len;
+    size_t cur_func_len = strlen(cur_func);
 
-    if (strncmp(cur_func, acf_func, strlen(acf_func)))
+    if (cur_func_len < acf_func_len ||
+	memcmp(cur_func, acf_func, acf_func_len) != 0)
 	return false;
 
-    suffix = cur_func+strlen(acf_func);
+    suffix = cur_func+acf_func_len;
 
     if (*suffix == '\0') {
 #ifdef ACF_DEBUG
@@ -453,9 +465,10 @@ static bool func_name_match(const char *acf_func, const char *cur_func) {
 
 /* Check if opt_file from csv configuration file matches
    current compiled file */
-static bool source_file_match(char *opt_file, char *input_file)
+static bool source_file_match(const acf_ftable_entry_t *acf_entry, const char *input_file)
 {
     bool ret;
+    const char *opt_file = acf_entry->opt_file;
 
     if (opt_file == NULL || input_file == NULL) {
 #ifdef ACF_DEBUG
@@ -468,7 +481,7 @@ static bool source_file_match(char *opt_file, char *input_file)
     /* if opt_file name without path, just compare it to basename
        of input_file name.
        Otherwise compare full path. */
-    if (strcmp(basename(opt_file), opt_file) == 0) {
+    if (basename(opt_file) == opt_file) {
 	ret = !strcmp(opt_file, basename(input_file));
     } else {
 	ret = !strcmp(opt_file, input_file);
@@ -509,8 +522,8 @@ static bool fill_csv_options(tree decl, int acf_pass) {
 	acf_ftable_entry_t *acf_entry = &acf_ftable[i];
 
 	// TBD: Do not match input_file_name if is_lto()
-	if (!func_name_match(acf_entry->func_name, cur_func_name) ||
-	    !source_file_match(acf_entry->opt_file, (char *) main_input_filename))
+	if (!func_name_match(acf_entry, cur_func_name) ||
+	    !source_file_match(acf_entry, main_input_filename))
 	    continue;
 
 	switch (acf_pass) {
@@ -558,7 +571,9 @@ void attribute_injector_start_unit_callback(void *gcc_data ATTRIBUTE_UNUSED,
 
 static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
     tree decl=(tree)gcc_data;
+#if ACF_TRACE
     const char *decl_fullname;
+#endif
 #ifdef ACF_REMOTE_DEBUG
     int acf_remote_debug = 1;
 #endif
@@ -648,6 +663,8 @@ static unsigned int ipa_gimple_per_func_callback(void) {
     restore_global_attribute_values();
 
     fill_csv_options(NULL, 3);
+
+    return 0;
 }
 
 // Called on the first pass after PLUGIN_EARLY_GIMPLE_PASSES_START was
@@ -759,14 +776,15 @@ int plugin_init(struct plugin_name_args *plugin_na,
     bool bad = false;
     int i;
 
-#if 0
     /* higly strict version checking : plugin is built by the
        same gcc revision that loads it. */
     if(!plugin_default_version_check(version,&gcc_version)){
-	error("%s: build gcc and load gcc version mismatch.", plugin_name);
-	return 1;
+        /* We do not want to be that restrictive.
+	   Do nothing, but keep check in order to reference gcc_version. */
+	/* error("%s: build gcc and load gcc version mismatch.", plugin_name); */
+	/* return 1; */
+        (void)NULL;
     }
-#endif
 
 #ifdef ACF_DEBUG
     DEBUG("---------------------\n");

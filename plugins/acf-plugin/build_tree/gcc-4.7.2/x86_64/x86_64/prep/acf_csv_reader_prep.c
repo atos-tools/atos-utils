@@ -2660,7 +2660,9 @@ typedef struct {
 
 typedef struct acf_ftable_entry {
     char *func_name;
+    size_t func_name_len;
     char *opt_file;
+    size_t opt_file_len;
     char *opt_attr;
     int attr_arg_number;
     attr_arg opt_args[10];
@@ -2822,10 +2824,8 @@ void readCSV(FILE *file, struct csv_list *clist) {
     char line2[5000];
     char line3[5000];
     char *stptr;
-    int flag = 0;
     int idx = 0;
     int lcount = 0;
-    int lines = 0;
 
 
     while (fgets(line1,sizeof line1,file) != __null) {
@@ -2949,6 +2949,7 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
      int discard = 0;
      int argument_nb = 0;
      int file_null = 0;
+     size_t len;
 
      for(;ccol != __null; ccol = ccol->next_column) {
   switch (table_c) {
@@ -3025,8 +3026,10 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
 
   switch (table_c) {
   case FUNCNAME:
+      len = strlen(ccol->csv_entry);
+                    acf_ftable[table_r].func_name_len = len;
       acf_ftable[table_r].func_name = (char *)
-   malloc(strlen(ccol->csv_entry) + 1);
+   malloc(len + 1);
       strcpy (acf_ftable[table_r].func_name,
        (char *) ccol->csv_entry);
       break;
@@ -3035,8 +3038,10 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
 
    acf_ftable[table_r].opt_file = (char *) __null;
       } else {
+          len = strlen(ccol->csv_entry);
+                        acf_ftable[table_r].opt_file_len = len;
    acf_ftable[table_r].opt_file = (char *)
-       malloc(strlen(ccol->csv_entry) + 1);
+       malloc(len + 1);
    strcpy (acf_ftable[table_r].opt_file,
     (char *)ccol->csv_entry);
       }

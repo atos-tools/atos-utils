@@ -48,7 +48,7 @@ CC=gcc
 CXX=g++
 PLUGIN_gcc=$(CC)
 PLUGIN_gpp=$(CXX)
-PLUGIN_CFLAGS=-O2
+PLUGIN_CFLAGS=-O2 -Wall
 
 # Functions
 gcc_version=$(shell echo $1 | sed 's!gcc-\([^/]*\)/.*!\1!')
@@ -62,7 +62,7 @@ prebuilt_subdir=$(call gcc_host,$1)/gcc-$(call gcc_version,$1)
 gcc_or_gpp=$(shell if [ $(call gcc_major,$1) -gt 4 -o $(call gcc_minor,$1) -ge 7 ]; then echo gpp; else echo gcc; fi)
 prep_compiler=$(call prebuilt_subdir,$1)/bin/$(PLUGIN_$(call gcc_or_gpp,$1))
 prep_cppflags=$(shell if [ "$(call gcc_target,$1)" = arm -o "$(call gcc_target,$1)" = sh4 ]; then echo "-DNEED_64BIT_HOST_WIDE_INT"; else echo ""; fi)
-prep_cflags=-O2
+prep_cflags=-O2 -Wall
 prep_run=$(PREP_RUN_$(call gcc_host,$1))
 run=$(RUN_$(call gcc_host,$1))
 plugin_compiler=$(PLUGIN_$(call gcc_or_gpp,$1))

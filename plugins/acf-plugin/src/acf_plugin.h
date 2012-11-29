@@ -52,7 +52,9 @@ typedef struct {
 
 typedef struct acf_ftable_entry {
     char *func_name;
+    size_t func_name_len;
     char *opt_file;
+    size_t opt_file_len;
     char *opt_attr; /* gcc function attribute or "param" for parameters */
     int attr_arg_number; /* number of args of the attribute/param */
     attr_arg opt_args[MAX_ARGS];  /* list of args of the attribute/param */

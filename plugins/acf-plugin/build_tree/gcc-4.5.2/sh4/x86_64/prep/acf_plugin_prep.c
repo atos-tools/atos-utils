@@ -30064,15 +30064,23 @@ typedef struct {
 
 typedef struct acf_ftable_entry {
     char *func_name;
+    size_t func_name_len;
     char *opt_file;
+    size_t opt_file_len;
     char *opt_attr;
     int attr_arg_number;
     attr_arg opt_args[10];
 } acf_ftable_entry_t;
-# 72 "/opt/gcc-plugins/src/acf_plugin.h"
+# 74 "/opt/gcc-plugins/src/acf_plugin.h"
 int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p, int verbose);
 # 36 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 56 "/opt/gcc-plugins/src/acf_plugin.c"
+
+
+
+
+
+extern void error (const char *, ...);
+# 62 "/opt/gcc-plugins/src/acf_plugin.c"
 acf_ftable_entry_t *acf_ftable;
 const char *acf_csv_file_key="csv_file";
 char *acf_csv_file;
@@ -30088,7 +30096,7 @@ unsigned char verbose = 0;
 
 int plugin_is_GPL_compatible;
 static const char *plugin_name;
-# 107 "/opt/gcc-plugins/src/acf_plugin.c"
+# 113 "/opt/gcc-plugins/src/acf_plugin.c"
 static void trace_attached_acf(acf_ftable_entry_t *acf_entry, const char *acf_type,
           const char *func_name, const char *acf_pass_name) {
     const char *sep = "";
@@ -30193,7 +30201,7 @@ add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tre
 
 
 static struct cl_optimization loc_save_options, *save_options = ((void *)0);
-# 219 "/opt/gcc-plugins/src/acf_plugin.c"
+# 225 "/opt/gcc-plugins/src/acf_plugin.c"
 static void
 add_global_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, const char *acf_pass_name) {
 
@@ -30239,7 +30247,7 @@ add_global_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, c
      cl_optimization_save(save_options);
 
  }
-# 273 "/opt/gcc-plugins/src/acf_plugin.c"
+# 279 "/opt/gcc-plugins/src/acf_plugin.c"
  set_option(&cl_options[opt_index], opt_value, opt_str == ((void *)0) ? ((void *)0) : xstrdup(opt_str));
 
     }
@@ -30269,7 +30277,9 @@ static void restore_global_attribute_values() {
 static char **csv_param_name = ((void *)0);
 static int *csv_param_value = ((void *)0);
 static size_t csv_param_index = 0;
-static int *csv_param_set = ((void *)0);
+
+
+
 
 
 static unsigned char get_param_idx(char *opt_param, size_t *idx) {
@@ -30294,7 +30304,7 @@ static void save_and_set_param(char *opt_param, int value) {
     csv_param_name[csv_param_index] = opt_param;
     csv_param_value[csv_param_index] = (compiler_params[(int) param_idx].value);
     csv_param_index ++;
-# 339 "/opt/gcc-plugins/src/acf_plugin.c"
+# 347 "/opt/gcc-plugins/src/acf_plugin.c"
     set_param_value(opt_param, value);
 
 }
@@ -30356,18 +30366,22 @@ static int parse_ftable_csv_file(acf_ftable_entry_t **acf_ftable_p,
 
 
 
-static unsigned char func_name_match(const char *acf_func, const char *cur_func) {
+static unsigned char func_name_match(const acf_ftable_entry_t *acf_entry, const char *cur_func) {
 
 
 
 
     const char *suffix, *token, *next_token;
     size_t token_len;
+    const char *acf_func = acf_entry->func_name;
+    size_t acf_func_len = acf_entry->func_name_len;
+    size_t cur_func_len = strlen(cur_func);
 
-    if (strncmp(cur_func, acf_func, strlen(acf_func)))
+    if (cur_func_len < acf_func_len ||
+ memcmp(cur_func, acf_func, acf_func_len) != 0)
  return 0;
 
-    suffix = cur_func+strlen(acf_func);
+    suffix = cur_func+acf_func_len;
 
     if (*suffix == '\0') {
 
@@ -30412,9 +30426,10 @@ static unsigned char func_name_match(const char *acf_func, const char *cur_func)
 
 
 
-static unsigned char source_file_match(char *opt_file, char *input_file)
+static unsigned char source_file_match(const acf_ftable_entry_t *acf_entry, const char *input_file)
 {
     unsigned char ret;
+    const char *opt_file = acf_entry->opt_file;
 
     if (opt_file == ((void *)0) || input_file == ((void *)0)) {
 
@@ -30427,7 +30442,7 @@ static unsigned char source_file_match(char *opt_file, char *input_file)
 
 
 
-    if (strcmp(basename(opt_file), opt_file) == 0) {
+    if (basename(opt_file) == opt_file) {
  ret = !strcmp(opt_file, basename(input_file));
     } else {
  ret = !strcmp(opt_file, input_file);
@@ -30468,8 +30483,8 @@ static unsigned char fill_csv_options(tree decl, int acf_pass) {
  acf_ftable_entry_t *acf_entry = &acf_ftable[i];
 
 
- if (!func_name_match(acf_entry->func_name, cur_func_name) ||
-     !source_file_match(acf_entry->opt_file, (char *) main_input_filename))
+ if (!func_name_match(acf_entry, cur_func_name) ||
+     !source_file_match(acf_entry, main_input_filename))
      continue;
 
  switch (acf_pass) {
@@ -30517,8 +30532,7 @@ void attribute_injector_start_unit_callback(void *gcc_data __attribute__ ((__unu
 
 static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
     tree decl=(tree)gcc_data;
-    const char *decl_fullname;
-# 582 "/opt/gcc-plugins/src/acf_plugin.c"
+# 597 "/opt/gcc-plugins/src/acf_plugin.c"
     fill_csv_options(decl, 1);
 }
 
@@ -30544,7 +30558,7 @@ static void param_injector_end_passes_callback(void *gcc_data,void *data) {
     restore_global_param_values();
     restore_global_attribute_values();
 }
-# 635 "/opt/gcc-plugins/src/acf_plugin.c"
+# 650 "/opt/gcc-plugins/src/acf_plugin.c"
 static unsigned int ipa_gimple_per_func_callback(void) {
 
     if (csv_param_name == ((void *)0)) {
@@ -30561,6 +30575,8 @@ static unsigned int ipa_gimple_per_func_callback(void) {
     restore_global_attribute_values();
 
     fill_csv_options(((void *)0), 3);
+
+    return 0;
 }
 
 
@@ -30671,13 +30687,23 @@ int plugin_init(struct plugin_name_args *plugin_na,
 
     unsigned char bad = 0;
     int i;
-# 786 "/opt/gcc-plugins/src/acf_plugin.c"
+
+
+
+    if(!plugin_default_version_check(version,&gcc_version)){
+
+
+
+
+        (void)((void *)0);
+    }
+# 804 "/opt/gcc-plugins/src/acf_plugin.c"
     if (!((version->basever[0] < '4') ||
    ((version->basever[0] == '4') && (version->basever[2] < '6')))) {
  error("%s: build gcc and load gcc versions are incompatible.", plugin_name);
  return 1;
     }
-# 800 "/opt/gcc-plugins/src/acf_plugin.c"
+# 818 "/opt/gcc-plugins/src/acf_plugin.c"
     switch (plugin_na->argc) {
     case 0:
  bad = 1;
@@ -30746,7 +30772,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
        plugin_na->argv[csv_arg_pos].key);
  return 1;
     }
-# 907 "/opt/gcc-plugins/src/acf_plugin.c"
+# 925 "/opt/gcc-plugins/src/acf_plugin.c"
     register_callback(plugin_na->base_name,
         PLUGIN_START_UNIT,
         &attribute_injector_start_unit_callback,((void *)0));
@@ -30819,6 +30845,6 @@ int plugin_init(struct plugin_name_args *plugin_na,
       PLUGIN_PASS_MANAGER_SETUP,
       ((void *)0), &lto_clean_optimize_info);
     }
-# 993 "/opt/gcc-plugins/src/acf_plugin.c"
+# 1011 "/opt/gcc-plugins/src/acf_plugin.c"
     return 0;
 }

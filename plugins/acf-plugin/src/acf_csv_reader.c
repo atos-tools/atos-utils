@@ -195,10 +195,8 @@ void readCSV(FILE *file, struct csv_list *clist) {
     char line2[MAX_LINE_SIZE];
     char line3[MAX_LINE_SIZE];
     char *stptr;
-    int flag = 0;
     int idx = 0;
     int lcount = 0; /* Cell Seperator */
-    int lines = 0; /* number of lines in file */
 
     /* Get a line from file */
     while (fgets(line1,sizeof line1,file) != NULL) {
@@ -322,6 +320,7 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
 	    int discard = 0;
 	    int argument_nb = 0;
 	    int file_null = 0;
+	    size_t len;
 
 	    for(;ccol != NULL; ccol = ccol->next_column) {
 		switch (table_c) {
@@ -398,8 +397,10 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
 #endif
 		switch (table_c) {
 		case FUNCNAME:
+		    len = strlen(ccol->csv_entry);
+                    acf_ftable[table_r].func_name_len = len;
 		    acf_ftable[table_r].func_name = (char *)
-			malloc(strlen(ccol->csv_entry) + 1);
+			malloc(len + 1);
 		    strcpy (acf_ftable[table_r].func_name,
 			    (char *) ccol->csv_entry);
 		    break;
@@ -408,8 +409,10 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
 			// Initialize empty source file information
 			acf_ftable[table_r].opt_file = (char *) NULL;
 		    } else {
+		        len = strlen(ccol->csv_entry);
+                        acf_ftable[table_r].opt_file_len = len;
 			acf_ftable[table_r].opt_file = (char *)
-			    malloc(strlen(ccol->csv_entry) + 1);
+			    malloc(len + 1);
 			strcpy (acf_ftable[table_r].opt_file,
 				(char *)ccol->csv_entry);
 		    }

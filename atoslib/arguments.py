@@ -191,6 +191,10 @@ class parsers:
         args.configuration_path(parser)
         args.ccregexp(parser)
         args.ccname(parser)
+        args.ldregexp(parser)
+        args.ldname(parser)
+        args.arregexp(parser)
+        args.arname(parser)
         args.output(parser, default="build.audit")
         args.force(parser)
         args.debug(parser)
@@ -210,6 +214,10 @@ class parsers:
         args.configuration_path(parser)
         args.ccregexp(parser)
         args.ccname(parser)
+        args.ldregexp(parser)
+        args.ldname(parser)
+        args.arregexp(parser)
+        args.arname(parser)
         args.path(parser)
         args.options(parser)
         args.variant(parser)
@@ -431,6 +439,12 @@ class parsers:
         args.prof_script(parser)
         args.size_cmd(parser)
         args.time_cmd(parser)
+        args.ccregexp(parser)
+        args.ccname(parser)
+        args.ldregexp(parser)
+        args.ldname(parser)
+        args.arregexp(parser)
+        args.arname(parser)
         args.nbruns(parser, default=1)
         args.remote_path(parser)
         args.atos_init.no_run(parser)
@@ -917,19 +931,49 @@ class args:
              help="build_script to be audited and optimized")
 
     @staticmethod
-    def ccregexp(parser, args=("-r", "--ccregexp")):
+    def ccregexp(parser, args=("--ccregexp",)):
         parser.add_argument(
             *args,
              dest="ccregexp",
-             help="specify the compiler tools as a regexp for the basename",
-             default=globals.DEFAULT_TOOLS_CREGEXP)
+             help="specify the compiler tools basename regexp",
+             default=globals.DEFAULT_CCREGEXP)
 
     @staticmethod
-    def ccname(parser, args=("-c", "--ccname")):
+    def ccname(parser, args=("--ccname",)):
         parser.add_argument(
             *args,
              dest="ccname",
-             help="specify the exact compiler driver basename")
+             help="specify the compiler basename, default to CCREGEXP")
+
+    @staticmethod
+    def ldregexp(parser, args=("--ldregexp",)):
+        parser.add_argument(
+            *args,
+             dest="ldregexp",
+             help="specify the linker tools basename regexp",
+             default=globals.DEFAULT_LDREGEXP)
+
+    @staticmethod
+    def ldname(parser, args=("--ldname",)):
+        parser.add_argument(
+            *args,
+             dest="ldname",
+             help="specify the linker basename, defaults to LDREGEXP")
+
+    @staticmethod
+    def arregexp(parser, args=("--arregexp",)):
+        parser.add_argument(
+            *args,
+             dest="arregexp",
+             help="specify the archivers basename regexp",
+             default=globals.DEFAULT_ARREGEXP)
+
+    @staticmethod
+    def arname(parser, args=("--arname",)):
+        parser.add_argument(
+            *args,
+             dest="arname",
+             help="specify the archiver basename, defaults to ARREGEXP")
 
     @staticmethod
     def path(parser, args=("-p", "--path")):

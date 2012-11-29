@@ -28,6 +28,7 @@ import generators
 import process
 import profile
 import logger
+import regexp
 from logger import debug, warning, error, message, info
 
 _at_toplevel = None
@@ -200,7 +201,27 @@ def run_atos_audit(args):
 
     message("Auditing build...")
 
-    ccregexp = args.ccname and ('^%s$' % args.ccname) or args.ccregexp
+    ccregexp = (args.ccname and re.escape(args.ccname)
+                or args.ccregexp)
+    if not regexp.re_utils.re_check(ccregexp):
+        error("malformed compiler regexp: %s" % ccregexp)
+        return 1
+    ldregexp = (args.ldname and re.escape(args.ldname)
+                or args.ldregexp)
+    if not regexp.re_utils.re_check(ldregexp):
+        error("malformed linker regexp: %s" % ldregexp)
+        return 1
+    arregexp = (args.arname and re.escape(args.arname)
+                or args.arregexp)
+    if not regexp.re_utils.re_check(arregexp):
+        error("malformed archiver regexp: %s" % arregexp)
+        return 1
+    binregexp = ("(%s)" % "|".join(
+            map(lambda x: "(%s)" % x,
+                filter(bool, [ccregexp, ldregexp, arregexp]))))
+    cbinregexp = regexp.re_utils.re_to_cregexp(binregexp)
+    assert(cbinregexp)
+
     output_file = args.output_file or os.path.join(
         args.configuration_path, "build.audit")
 
@@ -208,19 +229,28 @@ def run_atos_audit(args):
     process.commands.unlink(output_file)
     process.commands.touch(output_file)
 
+    atos_lib.json_config(args.configuration_path).add_value(
+        "default_values.ccregexp", ccregexp)
+    atos_lib.json_config(args.configuration_path).add_value(
+        "default_values.ldregexp", ldregexp)
+    atos_lib.json_config(args.configuration_path).add_value(
+        "default_values.arregexp", arregexp)
+
     atos_driver = atos_lib.driver_path()
     build_sh = os.path.join(args.configuration_path, "build.sh")
     atos_lib.generate_script(build_sh, args.command)
     force_sh = os.path.join(args.configuration_path, "build.force")
     with open(force_sh, 'w') as file_force:
         file_force.write(str(int(args.force)))
-    audit_flag = "--atos-audit=" + os.path.abspath(output_file)
+    audit_flags = ["--atos-audit=" + os.path.abspath(output_file),
+                   "--atos-cfg=" + os.path.abspath(
+            args.configuration_path)]
 
     command = atos_lib.proot_command(
         PROOT_IGNORE_ELF_INTERPRETER=1,
         PROOT_ADDON_CC_OPTS=1,
-        PROOT_ADDON_CC_OPTS_ARGS=audit_flag,
-        PROOT_ADDON_CC_OPTS_CCRE=ccregexp,
+        PROOT_ADDON_CC_OPTS_ARGS=" ".join(audit_flags),
+        PROOT_ADDON_CC_OPTS_CCRE=("^%s$" % cbinregexp),
         PROOT_ADDON_CC_OPTS_DRIVER=atos_driver) + args.command
 
     status = process.system(command, print_output=True)
@@ -243,6 +273,8 @@ def run_atos_build(args):
     link_options = []
     shared_link_options, main_link_options = [], []
     atos_driver = atos_lib.driver_path()
+    atos_driver_options = ["--atos-cfg=" +
+                           os.path.abspath(args.configuration_path)]
 
     opt_rebuild = args.force
     build_force = os.path.join(args.configuration_path, "build.force")
@@ -301,33 +333,49 @@ def run_atos_build(args):
     map(lambda (k, v): os.putenv(k, str(v)), driver_env.items())
 
     if not args.command and not opt_rebuild:
+        # if the configuration path contains a build.mk execute it
         build_mk = os.path.join(args.configuration_path, "build.mk")
         if not os.path.isfile(build_mk):
             error("optimized build file missing: %s" % build_mk)
             error("atos-deps was not run or configuration path mismatch")
             return 1
-        # if the configuration path contains a build.mk execute it
         command = ["make", "-f", build_mk, "-j", str(args.jobs),
-                   "QUIET=", "ATOS_DRIVER=" + atos_driver]
+                   "QUIET=",
+                   "ATOS_DRIVER=" +
+                   process.list2cmdline([atos_driver] +
+                                        atos_driver_options)]
         status, output = process.system(
             atos_lib.timeout_command() + command,
             get_output=True, output_stderr=True)
     else:
+        # else use proot cc_opts addon (force mode)
         build_sh = os.path.join(args.configuration_path, "build.sh")
         if not args.command:
             if not os.path.isfile(build_sh):
                 error("build script missing: %s" % build_sh)
                 error("atos-build was not run or configuration path mismatch")
                 return 1
-        # else use proot cc_opts addon (force mode)
-        ccregexp = args.ccname and ("^%s$" % args.ccname) or args.ccregexp
+        ccregexp = atos_lib.get_config_value(args.configuration_path,
+                                    'default_values.ccregexp')
+        ldregexp = atos_lib.get_config_value(args.configuration_path,
+                                    'default_values.ldregexp')
+        arregexp = atos_lib.get_config_value(args.configuration_path,
+                                    'default_values.arregexp')
+        binregexp = ("(%s)" % "|".join(
+                map(lambda x: "(%s)" % x,
+                    filter(bool, [ccregexp, ldregexp, arregexp]))))
+        cbinregexp = regexp.re_utils.re_to_cregexp(binregexp)
+        assert(cbinregexp)
         command = atos_lib.proot_command(
             PROOT_IGNORE_ELF_INTERPRETER=1,
             PROOT_ADDON_CC_OPTS=1,
-            # driver must be added even if there is no CC_OPTS_ARGS set
-            # TODO: fix proot cc_opts plugin and remove --atos-tmp
-            PROOT_ADDON_CC_OPTS_ARGS="--atos-tmp",
-            PROOT_ADDON_CC_OPTS_CCRE=ccregexp,
+            # Warning, proot cc_opts plugin splits option arguments
+            # at spaces, do not use list2cmdline there.
+            # Also, args must not be empty otherwise the plugin
+            # will not invoque the driver.
+            # TODO: fix proot cc_opts plugin.
+            PROOT_ADDON_CC_OPTS_ARGS=" ".join(atos_driver_options),
+            PROOT_ADDON_CC_OPTS_CCRE=("^%s$" % cbinregexp),
             PROOT_ADDON_CC_OPTS_DRIVER=atos_driver)
         command.extend(args.command or [build_sh])
         status, output = process.system(
@@ -376,7 +424,8 @@ def run_atos_deps(args):
 
     message("Computing build dependencies...")
     factory = CommandDependencyListFactory(
-        CCDEPSParser(open(input_file)), SimpleCmdInterpreter())
+        CCDEPSParser(open(input_file)),
+        SimpleCmdInterpreter(args.configuration_path))
     factory.build_dependencies()
     dependencies = factory.get_dependencies()
     builder = DependencyGraphBuilder(dependencies, targets)
@@ -1290,6 +1339,10 @@ def run_atos_config(args):
         with open(compilers) as inf:
             compiler_list = filter(
                 str, map(lambda x: x.strip(), inf.readlines()))
+        if not compiler_list:
+            error("no compiler found in configuration, "
+                  "audit did not work correctly")
+            return 1
 
     config_file = os.path.join(args.configuration_path, 'config.json')
 

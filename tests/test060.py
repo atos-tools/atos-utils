@@ -97,14 +97,14 @@ assert len(results) == 3
 #
 
 status = utils.invoque("atos-opt", args, options="-O2", record=True, lto=1)
-assert len(common.grep(log, "DEBUG: command \[gcc .* -flto.*\] -> 0")) == 1
+assert len(common.grep(log, "DEBUG: command \[gcc .* -flto.*\]$")) == 1
 
 #
 #   -b REMOTE_PATH, --remote_path REMOTE_PATH
 #
 
 status = utils.invoque("atos-opt", args, options="-O3", record=True, fdo=1, remote_path="/tmp/aaa")
-assert len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-dir.*\] -> 0", "/tmp/aaa")) == 1
+assert len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-dir.*\]$", "/tmp/aaa")) == 1
 
 #
 #   --force
@@ -112,6 +112,6 @@ assert len(common.grep(log, "DEBUG: command \[gcc .* -fprofile-dir.*\] -> 0", "/
 
 status = utils.invoque("atos-opt", args, options="-Os", force=True, record=True)
 assert status == 0
-assert len(common.grep(log, "DEBUG: command \[gcc .* -Os.*\] -> 0")) == 1
+assert len(common.grep(log, "DEBUG: command \[gcc .* -Os.*\]$")) == 1
 results = common.atos_results({"variant" : "OPT-Os"})
 assert len(results) == 1

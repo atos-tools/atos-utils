@@ -640,12 +640,17 @@ class json_config():
         return flags
 
     def prepare_flag_files(self, configuration_path, compilers, addflags):
-        preprocessors = filter(bool, map(
-                lambda x: re.search("(cc|\+\+)", os.path.basename(x)) and x,
-                compilers))
-        assert preprocessors
-        preprocessor = preprocessors[0]
-        assert os.path.isfile(preprocessor)
+        # Finds first compiler supporting -C -P -E options
+        # TODO: should handle correctly multiple compilers
+        preprocessor = None
+        with tempfile.NamedTemporaryFile(suffix=".c") as f:
+            for compiler in compilers:
+                status = process.system(
+                    [compiler, "-C", "-P", "-E", f.name])
+                if status == 0:
+                    preprocessor = compiler
+                    break
+        assert preprocessor
 
         tmpdir = tempfile.mkdtemp()
         flags_files = glob.glob(

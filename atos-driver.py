@@ -28,21 +28,14 @@ from atoslib import atos_lib
 from atoslib import process
 from atoslib import logger
 from atoslib import globals
+from atoslib import cmd_interpreter
 
 import re, shlex, argparse
 
-def compile_command_kind(args):
-    basename = os.path.basename(args[0])
-    m = re.search(globals.DEFAULT_DRIVER_CC_PYREGEXP, basename)
-    if m != None and m.group(1) != None:
-        if '-c' in args:
-            return 'CC'
-        else:
-            return 'CCLD'
-    m = re.search(globals.DEFAULT_DRIVER_AR_PYREGEXP, basename)
-    if m != None and m.group(1) != None:
-        return 'AR'
-    return None
+def compile_command_kind(opts, args):
+    interpreter = cmd_interpreter.SimpleCmdInterpreter(opts.configuration_path)
+    return interpreter.get_kind({'cwd': os.path.abspath(os.getcwd()),
+                                  'args': args})
 
 def get_object_function_list(objfile):
     output = process.system(
@@ -58,37 +51,37 @@ def get_object_function_list(objfile):
         funclist.append(name)
     return funclist
 
-def update_cc_function_map(mapfile, args):
-    if compile_command_kind(args) != 'CC': return
-    outputs = get_cc_output_files(args)
+def update_cc_function_map(opts, args):
+    if compile_command_kind(opts, args) != 'CC': return
+    outputs = get_cc_output_files(opts, args)
     if len(outputs) != 1: return
     funclist = get_object_function_list(outputs[0])
     if not funclist: funclist = ['#']
-    with process.open_locked(mapfile, 'a') as f:
+    with process.open_locked(opts.fctmap, 'a') as f:
         f.write(''.join(
                 map(lambda x: '%s %s\n' % (outputs[0], x), funclist)))
 
-def get_cc_output_files(args):
+def get_cc_output_files(opts, args):
     def objext(i): return os.path.splitext(i)[0] + '.o'
-    assert compile_command_kind(args) == 'CC'
+    assert compile_command_kind(opts, args) == 'CC'
     output = atos_lib.get_output_option_value(args)
     if output: return [output]
     inputs = atos_lib.get_input_source_files(args)
     return map(objext, inputs)
 
-def get_cc_command_additional_flags(optfile, args):
-    if not optfile: return []
+def get_cc_command_additional_flags(opts, args):
+    if not opts.optfile: return []
     obj_opts = {}
-    for line in open(optfile):
-        obj, opts = line.strip().split(',', 1)
-        obj_opts[obj] = opts
+    for line in open(opts.optfile):
+        obj, flags = line.strip().split(',', 1)
+        obj_opts[obj] = flags
     def_opts = obj_opts.get('*', '')
-    if compile_command_kind(args) != 'CC': return shlex.split(def_opts)
-    outputs = get_cc_output_files(args)
+    if compile_command_kind(opts, args) != 'CC': return shlex.split(def_opts)
+    outputs = get_cc_output_files(opts, args)
     if len(outputs) != 1: return shlex.split(def_opts)
     return shlex.split(obj_opts.get(outputs[0], def_opts))
 
-def invoque_compile_command(args):
+def invoque_compile_command(opts, args):
 
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
@@ -101,7 +94,7 @@ def invoque_compile_command(args):
     cwd = os.path.abspath(os.getcwd())
     args = list(args or [])
 
-    kind = compile_command_kind(args)
+    kind = compile_command_kind(opts, args)
 
     if kind == 'CCLD':
 
@@ -147,10 +140,11 @@ def invoque_compile_command(args):
         if env_ALDMAINFLAGS and not atos_lib.is_shared_lib_link(args):
             args.extend(process.cmdline2list(env_ALDMAINFLAGS))
 
-    (opts, args) = parser.parse_known_args(args)
+    (new_opts, args) = parser.parse_known_args(args)
+    opts.__dict__.update(vars(new_opts))
 
     if (kind == 'CC' or kind == 'CCLD') and opts.optfile:
-        args.extend(get_cc_command_additional_flags(opts.optfile, args))
+        args.extend(get_cc_command_additional_flags(opts, args))
 
     if opts.audit_file:
         exp_args = atos_lib.expand_response_file(args)
@@ -166,7 +160,7 @@ def invoque_compile_command(args):
     status = process.system(args, print_output=True)
 
     if (kind == 'CC' or kind == 'CCLD') and opts.fctmap:
-        update_cc_function_map(opts.fctmap, args)
+        update_cc_function_map(opts, args)
 
     return status
 
@@ -183,9 +177,9 @@ if __name__ == "__main__":
                       help='only print commands (default: False)')
     parser.add_argument('--atos-version', action='version',
                         version='atos-driver version ' + VERSION)
-    # TODO: fix proot cc_opts plugin and remove --atos-tmp
-    parser.add_argument('--atos-tmp', dest='tmp', action='store_true',
-                        help=argparse.SUPPRESS)
+    parser.add_argument('--atos-cfg', dest='configuration_path',
+                        default=globals.DEFAULT_CONFIGURATION_PATH,
+                        help='configuration path')
 
     (opts, args) = parser.parse_known_args()
 
@@ -193,6 +187,6 @@ if __name__ == "__main__":
 
     logger.setup(vars(opts))
 
-    status = invoque_compile_command(args)
+    status = invoque_compile_command(opts, args)
 
     sys.exit(status)

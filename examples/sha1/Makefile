@@ -21,6 +21,7 @@
 #
 
 CC	= g++
+AR	= ar
 
 CFLAGS	= -c -O2 -Wall -D_FILE_OFFSET_BITS=64
 
@@ -32,7 +33,7 @@ LIBSHA1 = libsha1.a
 all: sha shacmp shatest 
 
 libsha1.a: $(OBJS)
-	ar cr $@ $(OBJS)
+	$(AR) cr $@ $(OBJS)
 
 sha: sha.o $(LIBSHA1)
 	$(CC) $(LDFLAGS) -o $@ sha.o -L. -lsha1 $(LIBS)

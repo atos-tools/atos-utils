@@ -15,15 +15,31 @@ ar cr libsha1.a sha1.o
 g++ -o sha sha.o -L. -lsha1 
 EOF
 
-$ROOT/bin/atos-init -b "sh ./build.sh" \
+# Test in optimized mode
+$ROOT/bin/atos-init -c -b "sh ./build.sh" \
     -r "$SRCDIR/examples/sha1/run.sh"
 
+rm -f log.txt
 ATOS_DEBUG_FILE=log.txt \
     $ROOT/bin/atos-build -a -O2 -g -O2
 
-[ `cat log.txt | grep "\-o sha.so .* -fprofile-generate" | grep "\-lgcov \-lc" | wc -l` -eq 1 ]
+[ `cat log.txt | grep "command .* -> 0" | grep "\-o sha.so .* -fprofile-generate" | grep "\-lgcov \-lc" | wc -l` -eq 1 ]
 
-[ `cat log.txt | grep "\-o sha .* -fprofile-generate" | wc -l` -eq 1 ]
+[ `cat log.txt | grep "command .* -> 0" | grep "\-o sha .* -fprofile-generate" | wc -l` -eq 1 ]
 
-[ `cat log.txt | grep "\-o sha .* -fprofile-generate" | grep "\-lgcov \-lc" | wc -l` -eq 0 ]
+[ `cat log.txt | grep "command .* -> 0" | grep "\-o sha .* -fprofile-generate" | grep "\-lgcov \-lc" | wc -l` -eq 0 ]
+
+# Test in force mode
+$ROOT/bin/atos-init -c -b "sh ./build.sh" \
+    -r "$SRCDIR/examples/sha1/run.sh" --force -e sha
+
+rm -f log.txt
+ATOS_DEBUG_FILE=log.txt \
+    $ROOT/bin/atos-build -a -O2 -g -O2
+
+[ `cat log.txt | grep "command .* -> 0" | grep "\-o sha.so .* -fprofile-generate" | grep "\-lgcov \-lc" | wc -l` -eq 1 ]
+
+[ `cat log.txt | grep "command .* -> 0" | grep "\-o sha .* -fprofile-generate" | wc -l` -eq 1 ]
+
+[ `cat log.txt | grep "command .* -> 0" | grep "\-o sha .* -fprofile-generate" | grep "\-lgcov \-lc" | wc -l` -eq 0 ]
 

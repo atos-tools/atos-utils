@@ -27,16 +27,16 @@ MANDIR = None
 DOCDIR = None
 PYTHONDIR = None
 DEFAULT_CONFIGURATION_PATH = None
-DEFAULT_TOOLS_CREGEXP = None
-DEFAULT_DRIVER_CC_PYREGEXP = None
-DEFAULT_DRIVER_AR_PYREGEXP = None
+DEFAULT_CCREGEXP = None
+DEFAULT_LDREGEXP = None
+DEFAULT_ARREGEXP = None
 DEFAULT_TIME_CMD = None
 DEFAULT_SIZE_CMD = None
 
 def setup(**kwargs):
     global PREFIX, BINDIR, LIBDIR, SHAREDIR, MANDIR, DOCDIR, PYTHONDIR
-    global DEFAULT_CONFIGURATION_PATH, DEFAULT_TOOLS_CREGEXP, \
-        DEFAULT_DRIVER_CC_PYREGEXP, DEFAULT_DRIVER_AR_PYREGEXP
+    global DEFAULT_CONFIGURATION_PATH
+    global DEFAULT_CCREGEXP, DEFAULT_LDREGEXP, DEFAULT_ARREGEXP
     global DEFAULT_SIZE_CMD, DEFAULT_TIME_CMD
 
     PREFIX = kwargs.get('PREFIX', os.path.abspath(
@@ -52,20 +52,20 @@ def setup(**kwargs):
     DEFAULT_CONFIGURATION_PATH =  \
         kwargs.get('DEFAULT_CONFIGURATION_PATH', "./atos-configurations")
 
-    # Default tools regexp. This is a C regexp, not a python one.
-    DEFAULT_TOOLS_CREGEXP = kwargs.get(
-        'DEFAULT_TOOLS_CREGEXP',
-        "-\?\(clang\|gcc\|g++\|cc\|armlink\|c++\|ar\)$")
+    # Default compiler basename regexp
+    DEFAULT_CCREGEXP = kwargs.get(
+        'DEFAULT_CCREGEXP',
+        ".*(clang|gcc|g\+\+|cc|c\+\+)")
 
-    # Default compiler driver/linker python regexp.
-    DEFAULT_DRIVER_CC_PYREGEXP = kwargs.get(
-        'DEFAULT_DRIVER_CC_PYREGEXP',
-        "(clang|gcc|g\+\+|cc|armlink|c\+\+)$")
+    # Default linker basename regexp
+    DEFAULT_LDREGEXP = kwargs.get(
+        'DEFAULT_LDREGEXP',
+        "(armlink)")
 
-    # Default archiver python regexp.
-    DEFAULT_DRIVER_AR_PYREGEXP = kwargs.get(
-        'DEFAULT_DRIVER_AR_PYREGEXP',
-        "(ar)$")
+    # Default archiver basename regexp
+    DEFAULT_ARREGEXP = kwargs.get(
+        'DEFAULT_ARREGEXP',
+        "(.*ar)")
 
     # Default time/size commands
     DEFAULT_TIME_CMD = "time -p"

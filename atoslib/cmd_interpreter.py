@@ -25,18 +25,33 @@ import deep_eq
 
 class SimpleCmdInterpreter:
     """ Returns information on a command line for compilations tools. """
-    def __init__(self):
+    def __init__(self, configuration_path=None):
         """ Constructor. """
+        self.configuration_path_ = configuration_path
 
     def select_interpreter(self, command):
         """ Returns a suitable interpreter for the given command. """
         basename = os.path.basename(command['args'][0])
-        # TODO: put these regexps in a configuration file
-        m = re.search(globals.DEFAULT_DRIVER_CC_PYREGEXP, basename)
-        if m != None and m.group(1) != None:
+        if self.configuration_path_:
+            ccregexp = atos_lib.get_config_value(self.configuration_path_,
+                                                 'default_values.ccregexp')
+            ldregexp = atos_lib.get_config_value(self.configuration_path_,
+                                                 'default_values.ldregexp')
+            arregexp = atos_lib.get_config_value(self.configuration_path_,
+                                                 'default_values.arregexp')
+        else:
+            ccregexp = globals.DEFAULT_CCREGEXP
+            ldregexp = globals.DEFAULT_LDREGEXP
+            arregexp = globals.DEFAULT_ARREGEXP
+
+        m = re.match("|".join(
+                map(lambda x: "(%s)" % x,
+                    filter(bool, [ccregexp, ldregexp]))),
+                     basename)
+        if m != None:
             return SimpleCCInterpreter(command)
-        m = re.search(globals.DEFAULT_DRIVER_AR_PYREGEXP, basename)
-        if m != None and m.group(1) != None:
+        m = re.match(arregexp, basename)
+        if m != None:
             return SimpleARInterpreter(command)
         raise Exception("unrecognized command: " + basename)
 

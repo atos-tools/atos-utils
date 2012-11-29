@@ -222,7 +222,7 @@ def system(cmd, check_status=False, get_output=False, print_output=False,
     if get_output:
         if not no_debug:
             logging.debug('\n  | ' + '\n  | '.join(output.split('\n')))
-        logging.debug('command [%s] -> %s' % (printable_cmd, str(status)))
+    logging.debug('command [%s] -> %s' % (printable_cmd, str(status)))
     if check_status:
         assert status == 0
         return get_output and output or None

@@ -709,6 +709,7 @@ class parsers:
         args.nbiters(parser)
         args.per_func_nbiters(parser)
         args.seed(parser)
+        args.tradeoffs(parser)
         args.extra_arguments(parser)
         args.atos_generator.generator(parser)
         args.optim_levels(parser)

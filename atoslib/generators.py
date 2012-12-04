@@ -64,14 +64,13 @@ class optim_flag_list():
                 return random.choice(self.choice)
             else: assert 0
 
-        def values(self):
+        def values(self, nbvalues=3):
             if self.range:
                 def frange(min, max, step):
                     val = float(min)
                     while int(val) <= max:
                         yield int(val)
                         val = val + step
-                nbvalues = 3
                 flag, min, max, step = self.range
                 return ['%s%d' % (flag, v) for v in frange(
                         min, max, float(max - min) / (nbvalues - 1))]
@@ -79,15 +78,8 @@ class optim_flag_list():
                 return list(self.choice)
             else: assert 0
 
-        def isoptlevel(self):
-            return self.optname() == '-O'
-
         def optname(self):
             return optim_flag_list.optim_flag.foptname(self.rand())
-
-        @staticmethod
-        def optlevel(opt):
-            return optim_flag_list.optim_flag(fchoice=opt)
 
         @staticmethod
         def soptname(s):
@@ -105,8 +97,18 @@ class optim_flag_list():
                 s = '-O'
             return s
 
-    def __init__(self, filename):
-        self.load_from_file(filename)
+    def __init__(self, *filenames):
+        self.flag_list = []
+        self.dependencies = {}
+        self.aliases = {}
+        for filename in filenames:
+            self.load_from_file(filename)
+
+    def find(self, flagstr):
+        for flag in self.flag_list:
+            if (optim_flag_list.optim_flag.foptname(flagstr) ==
+                flag.optname()): return flag
+        return None
 
     def available_flags(self, cmdline=''):
         result = []
@@ -123,11 +125,12 @@ class optim_flag_list():
     @staticmethod
     def parse_line(cmdline):
         cmdline = cmdline or ''
-        cmd = [x.strip() for x in cmdline.split(' ')]
+        cmd = [x.strip() for x in cmdline.strip().split(' ')]
         result, idx, cmdlen = [], 0, len(cmd)
         while idx < cmdlen:
             flag = cmd[idx]
-            if flag in ['--param', '-mllvm'] and idx + 1 < cmdlen:
+            if flag in [
+                '--param', '-mllvm', '--atos-optfile'] and idx + 1 < cmdlen:
                 flag += ' ' + cmd[idx + 1]
                 idx += 1
             result += [flag]
@@ -161,7 +164,7 @@ class optim_flag_list():
                 optim_flag_list.optim_flag.foptname(x)])
 
     def load_from_file(self, filename):
-        flag_list, rev_dependencies, aliases = [], {}, {}
+        flag_list, rev_dependencies = [], {}
         # parse flags file
         for line in open(filename):
             line = line.split('#', 1)[0].strip()
@@ -180,7 +183,7 @@ class optim_flag_list():
             if reobj:
                 lalias = [x.strip() for x in reobj.group(1).split(',')]
                 ralias = [x.strip() for x in reobj.group(2).split(',')]
-                [aliases.setdefault(l, []).append(
+                [self.aliases.setdefault(l, []).append(
                         r) for l in lalias for r in ralias]
                 continue
             # range flag
@@ -193,18 +196,15 @@ class optim_flag_list():
             choices = [w.strip() for w in line.split('|')]
             flag_list += [optim_flag_list.optim_flag(fchoice=choices)]
         # dependency dict
-        dependencies = {}
         for flag in flag_list:
             for dep_parent in rev_dependencies.get(flag.optname(), ['']):
-                dependencies.setdefault(dep_parent, []).append(flag)
-        self.flag_list = flag_list
-        self.dependencies = dependencies
-        self.aliases = aliases
+                self.dependencies.setdefault(dep_parent, []).append(flag)
+        self.flag_list.extend(flag_list)
 
 class config(atos_lib.default_obj):
     def extend_cookies(self, cookies):
         self.cookies = self.cookies or []
-        self.cookies.extend(cookies)
+        self.cookies.extend(cookies or [])
         return self
 
 # ####################################################################
@@ -403,9 +403,8 @@ class gen_rnd_uniform_deps(config_generator):
                  **ignored_kwargs):
         assert flags_file and os.path.isfile(flags_file)
         self.flags_file_ = flags_file
-        self.optim_levels_ = (optim_levels or '').split(',')
-        self.optim_levels_ = optim_flag_list.optim_flag.optlevel(
-            self.optim_levels_)
+        self.optim_levels_ = optim_flag_list.optim_flag(
+            fchoice=(optim_levels or '').split(','))
         self.parent_ = parent or gen_config()
         assert(isinstance(self.parent_, config_generator) or isinstance(
                 self.parent_, types.GeneratorType))
@@ -595,15 +594,21 @@ class gen_file_by_file_cfg(config_generator):
         self.base_variant = base_variant or 'base'
         self.kwargs = kwargs
 
-    def fbf_csv_opt(self, obj_flags, base_flags=''):
+    @staticmethod
+    def create_config_csv(obj_flags, csv_dir):
         # build option file containing flags for each object file
         sum_flags = atos_lib.md5sum(str(obj_flags.items()))
-        csv_name = os.path.join(self.csv_dir, 'fbf-%s.csv' % (sum_flags))
-        debug('gen_file_by_file: run [%s] -> %s' % (str(obj_flags), csv_name))
+        csv_name = os.path.join(csv_dir, 'fbf-%s.csv' % (sum_flags))
         with open(csv_name, 'w') as opt_file:
             for (obj, flags) in obj_flags.items():
                 if flags: opt_file.write('%s,%s\n' % (obj, flags))
-        return base_flags + ' --atos-optfile %s' % os.path.abspath(csv_name)
+        return '--atos-optfile=%s' % os.path.abspath(csv_name)
+
+    def fbf_csv_opt(self, obj_flags, base_flags=''):
+        csv_flags = gen_file_by_file_cfg.create_config_csv(
+            obj_flags, self.csv_dir)
+        debug('gen_file_by_file: run [%s] -> %s' % (str(obj_flags), csv_flags))
+        return base_flags + ' ' + csv_flags
 
     def estimate_exploration_size(self):
         # profiling run + simple partitionning
@@ -831,6 +836,20 @@ class gen_function_by_function_cfg(config_generator):
         return csv_opt
 
     @staticmethod
+    def attribute_to_compiler_opt(attr):
+        if attr.startswith('optimize,'):
+            attr = attr.split(',', 1)[1]
+            if len(attr) == 1:  # -Ox options
+                opt = '-O' + attr
+            else:  # -fx options
+                opt = '-f' + attr
+        elif attr.startswith('param,'):
+            attr = attr.split(',', 1)[1]
+            opt = '--param ' + attr.replace(',#', '=')
+        else: opt = ''
+        return opt
+
+    @staticmethod
     def filter_options(flag_str):
         flag_list = optim_flag_list.parse_line(flag_str)
         filter_in = ['^-f', '^-O', '^[^-]', '^--param']  # useless filtering?
@@ -842,12 +861,11 @@ class gen_function_by_function_cfg(config_generator):
                 map(lambda i: not re.match(i, f), filter_out)), flag_list)
         return ' '.join(flag_list)
 
-    def acf_csv_opt(self, obj_flags):
+    @staticmethod
+    def create_config_csv(obj_flags, csv_dir):
         # build option file containing flags for each function
         sum_flags = atos_lib.md5sum(str(obj_flags.items()))
-        csv_name = os.path.join(self.csv_dir, 'acf-%s.csv' % (sum_flags))
-        debug('gen_function_by_function: run [%s] -> %s' % (
-                str(obj_flags), csv_name))
+        csv_name = os.path.join(csv_dir, 'acf-%s.csv' % (sum_flags))
         with open(csv_name, 'w') as opt_file:
             for ((fct, loc), flags) in obj_flags.items():
                 flag_list = map(
@@ -855,11 +873,18 @@ class gen_function_by_function_cfg(config_generator):
                     optim_flag_list.parse_line(flags))
                 for flag in flag_list:
                     opt_file.write('%s,%s,%s\n' % (fct, loc or '', flag))
+        return '-fplugin-arg-acf_plugin-csv_file=' + csv_name
+
+    def acf_csv_opt(self, obj_flags):
+        csv_flags = gen_function_by_function_cfg.create_config_csv(
+            obj_flags, self.csv_dir)
+        debug('gen_function_by_function: run [%s] -> %s' % (
+                str(obj_flags), csv_flags))
         return (
             self.base_flags +
             ' -fplugin=' + self.acf_plugin_path +
             ' -fplugin-arg-acf_plugin-verbose' +
-            ' -fplugin-arg-acf_plugin-csv_file=' + csv_name)
+            ' ' + csv_flags)
 
     def estimate_exploration_size(self):
         # profiling run + simple partitionning
@@ -1038,6 +1063,228 @@ class gen_function_by_function_cfg(config_generator):
 
             variant_progress.update()
         variant_progress.end()
+
+class gen_flag_values(config_generator):
+    """
+    Perform fine exploration based on base flags and variant.
+    """
+    # note: some cases are not well handled
+    # "-Os -O0" will not systematically lead to "-Os" as a best config, for ex
+
+    # TODO: code cleaning & factorization, exploration size estimation
+
+    def __init__(
+        self, variant_id=None, config_flags=None, config_variant=None,
+        nbvalues=None, try_removing=None, tradeoffs=None, keys=None,
+        expl_cookie=None, configuration_path=None, **kwargs):
+        self.nbvalues = int(nbvalues or 10)
+        self.try_removing = int(try_removing or 0)
+        self.tradeoffs = tradeoffs or [5, 1, 0.2]
+        self.keys = keys and keys.split(',')
+        self.expl_cookie = expl_cookie or atos_lib.new_cookie()
+        self.configuration_path = configuration_path
+        self.kwargs = kwargs
+        base_flags, base_variant = variant_id and get_variant_config(
+            variant_id, configuration_path) or (config_flags, config_variant)
+        self.base_variant = base_variant
+        self.flags_list = optim_flag_list.parse_line(base_flags)
+        file_flags_lists = [
+            'flags.inline.cfg', 'flags.loop.cfg', 'flags.optim.cfg']
+        file_flags_lists = filter(os.path.isfile, map(
+            functools.partial(os.path.join, self.configuration_path),
+            file_flags_lists))
+        self.all_flags_list = optim_flag_list(*file_flags_lists)
+
+    def generate(self):
+        debug('gen_flag_values')
+
+        debug('gen_flag_values: initial flags: ' + str(self.flags_list))
+        selected_flag_lists, flags_not_processed = [[]], list(self.flags_list)
+
+        def flag_values(flag_str):
+            opt_flag = self.all_flags_list.find(flag_str)
+
+            if opt_flag:
+                # flag described in flags cfg files
+                #   try without option
+                if self.try_removing: yield config(flags='')
+                #   then try all values
+                for value in opt_flag.values(nbvalues=self.nbvalues):
+                    yield config(flags=value)
+
+            elif flag_str.startswith('--atos-optfile'):
+                # file-by-file flag
+                fbf_file = flag_str[14:].strip('= ')
+                fbf_config_init = dict(
+                    map(lambda x: x.strip().split(',', 1),
+                        open(fbf_file).readlines()))
+                fbf_config = dict(fbf_config_init)
+                debug('gen_flag_values (fbf): fbf_config: [%s]' % str(
+                        fbf_config))
+
+                obj_files = self.keys or fbf_config_init.keys()
+                for obj in obj_files:
+                    flags = fbf_config_init[obj]
+                    debug('gen_flag_values (fbf): obj: [%s]' % str(obj))
+                    obj_cookie, cookie_to_flags = atos_lib.compute_cookie(
+                        self.expl_cookie, obj), {}
+                    generator = gen_flag_values(
+                        config_flags=flags,
+                        configuration_path=self.configuration_path,
+                        nbvalues=self.nbvalues, tradeoffs=self.tradeoffs,
+                        try_removing=self.try_removing,
+                        **self.kwargs)
+                    # TODO: factorize cookie_to_flags & best flags selection in
+                    #   a new generator?
+                    while True:
+                        try: cfg = generator.next()
+                        except StopIteration: break
+                        run_cookie = atos_lib.compute_cookie(
+                            obj_cookie, cfg.flags)
+                        cookie_to_flags[run_cookie] = cfg.flags
+                        new_cfg = dict(fbf_config.items() + [(obj, cfg.flags)])
+                        new_flags = gen_file_by_file_cfg.create_config_csv(
+                            obj_flags=new_cfg,
+                            csv_dir=os.path.dirname(fbf_file))
+                        yield config(
+                            flags=new_flags,
+                            cookies=[obj_cookie, run_cookie]).extend_cookies(
+                            cfg.cookies)
+                    # explore other objs with best perf flags for current obj
+                    perf_coeff = sorted(self.tradeoffs)[-1]
+                    perf_results = get_run_tradeoffs(
+                        [perf_coeff], [obj_cookie], self.configuration_path)
+                    perf_cookies = sum(map(
+                            lambda x: x.cookies.split(','), perf_results), [])
+                    perf_flags = filter(
+                        bool, map(lambda x: cookie_to_flags.get(x, ''),
+                                  perf_cookies))
+                    debug('gen_flag_values (fbf): obj: %s, flags: [%s]' % (
+                            str(obj), str(perf_flags)))
+                    flags_for_obj = (
+                        perf_flags[0] if perf_flags else fbf_config_init[obj])
+                    debug('gen_flag_values (fbf): obj -> ' + str(
+                            flags_for_obj))
+                    fbf_config.update({obj: flags_for_obj})
+
+            elif flag_str.startswith('-fplugin-arg-acf_plugin-csv_file='):
+                # function-by-function flag
+                fbf_file = flag_str.split('=', 1)[1]
+                fbf_config_init = {}
+                for line in open(fbf_file).readlines():
+                    fct, loc, flag = line.split(',', 2)
+                    fbf_config_init[(fct, loc)] = ' '.join([
+                            fbf_config_init.get((fct, loc), ''),
+                            gen_function_by_function_cfg.
+                            attribute_to_compiler_opt(flag.strip())])
+                fbf_config = dict(fbf_config_init)
+                debug('gen_flag_values (fbf): fbf_config: [%s]' % str(
+                        fbf_config))
+
+                if self.keys:
+                    funcs = []
+                    for key in self.keys: funcs.extend(
+                        filter(lambda (f, p): f == key,
+                               fbf_config_init.keys()))
+                else: funcs = fbf_config_init.keys()
+
+                for func in funcs:
+                    flags = fbf_config_init[func]
+                    debug('gen_flag_values (fbf): func: [%s]' % str(func))
+                    func_cookie, cookie_to_flags = atos_lib.compute_cookie(
+                        self.expl_cookie, func), {}
+                    generator = gen_flag_values(
+                        config_flags=flags,
+                        configuration_path=self.configuration_path,
+                        nbvalues=self.nbvalues, tradeoffs=self.tradeoffs,
+                        try_removing=self.try_removing,
+                        **self.kwargs)
+                    while True:
+                        try: cfg = generator.next()
+                        except StopIteration: break
+                        run_cookie = atos_lib.compute_cookie(
+                            func_cookie, cfg.flags)
+                        cookie_to_flags[run_cookie] = cfg.flags
+                        new_cfg = dict(
+                            fbf_config.items() + [(func, cfg.flags)])
+                        new_flags = gen_function_by_function_cfg.\
+                            create_config_csv(
+                            new_cfg, csv_dir=os.path.dirname(fbf_file))
+                        yield config(
+                            flags=new_flags,
+                            cookies=[func_cookie, run_cookie]).extend_cookies(
+                            cfg.cookies)
+                    # explore other funcs with best perf flags for current func
+                    perf_coeff = sorted(self.tradeoffs)[-1]
+                    perf_results = get_run_tradeoffs(
+                        [perf_coeff], [func_cookie], self.configuration_path)
+                    perf_cookies = sum(map(
+                            lambda x: x.cookies.split(','), perf_results), [])
+                    perf_flags = filter(
+                        bool, map(lambda x: cookie_to_flags.get(x, ''),
+                                  perf_cookies))
+                    debug('gen_flag_values (fbf): func: %s, flags: [%s]' % (
+                            str(func), str(perf_flags)))
+                    flags_for_func = (
+                        perf_flags[0] if perf_flags else fbf_config_init[func])
+                    debug('gen_flag_values (fbf): func -> ' + str(
+                            flags_for_func))
+                    fbf_config.update({func: flags_for_func})
+
+            else:
+                # unknown flag (or optim level): keep unchanged
+                # yield config(flags='')  # also try without option ?
+                yield config(flags=flag_str)
+
+        cookie_to_flags = {}
+        while flags_not_processed:
+            flag = flags_not_processed.pop(0)
+            flag_cookie = atos_lib.compute_cookie(self.expl_cookie, flag)
+            debug('gen_flag_values: processing flag ' + str(flag))
+
+            for flags_processed in selected_flag_lists:
+                for cfg_flag_value in flag_values(flag):
+                    flag_value = cfg_flag_value.flags
+                    debug('gen_flag_values: * flag_value for %s: [%s]' % (
+                            flag, flag_value))
+                    debug('gen_flag_values: * already processed flags: ' + str(
+                            flags_processed))
+                    debug('gen_flag_values: * unprocessed flags: ' + str(
+                            flags_not_processed))
+                    cfg_flags = ' '.join(
+                        flags_processed + [flag_value] + flags_not_processed)
+                    run_cookie = atos_lib.compute_cookie(
+                        self.expl_cookie, cfg_flags)
+                    cfg_flag_value.extend_cookies([run_cookie])
+                    cookie_to_flags[run_cookie] = flags_processed + [
+                        flag_value]
+                    yield config(
+                        flags=cfg_flags, variant=self.base_variant,
+                        cookies=[self.expl_cookie, flag_cookie, run_cookie]
+                        ).extend_cookies(cfg_flag_value.cookies)
+
+            selected_results = get_run_tradeoffs(
+                self.tradeoffs, [flag_cookie], self.configuration_path)
+            selected_cookies = sum(map(
+                    lambda x: x.cookies.split(','), selected_results), [])
+            selected_flag_lists = filter(
+                lambda x: x is not None,
+                map(lambda x: cookie_to_flags.get(x, None), selected_cookies))
+
+        # relaunch reference run
+        debug('gen_flag_values: reference')
+        ref_cookie = atos_lib.compute_cookie(self.expl_cookie, self.flags_list)
+        yield config(flags=' '.join(self.flags_list),
+                     variant=self.base_variant, cookies=[ref_cookie])
+
+        # print fine exploration results
+        tradeoffs = get_run_tradeoffs(
+            self.tradeoffs, [ref_cookie], self.configuration_path)
+        debug('gen_flag_values: initial results: %s' % (str(tradeoffs)))
+
+        tradeoffs = get_run_tradeoffs(
+            self.tradeoffs, [self.expl_cookie], self.configuration_path)
+        debug('gen_flag_values: final tradeoffs: %s' % (str(tradeoffs)))
 
 
 # ####################################################################

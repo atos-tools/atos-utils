@@ -22,3 +22,9 @@ python $ROOT/lib/atos/python/atoslib/atos_argparse.py
 python $ROOT/lib/atos/python/atoslib/process.py
 
 python $ROOT/lib/atos/python/atoslib/regexp.py
+
+python $ROOT/lib/atos/python/atoslib/gen_argparse.py
+
+python $ROOT/lib/atos/python/atoslib/cc_arguments.py
+
+python $ROOT/lib/atos/python/atoslib/cc_argparse.py

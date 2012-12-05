@@ -32,10 +32,31 @@ from atoslib import cmd_interpreter
 
 import re, shlex, argparse
 
-def compile_command_kind(opts, args):
-    interpreter = cmd_interpreter.SimpleCmdInterpreter(opts.configuration_path)
-    return interpreter.get_kind({'cwd': os.path.abspath(os.getcwd()),
-                                  'args': args})
+command_interpreter_ = None
+
+def get_interpreter():
+    global command_interpreter_
+    return command_interpreter_
+
+def set_interpreter(opts, args):
+    global command_interpreter_
+    factory = cmd_interpreter.CmdInterpreterFactory(
+        opts.configuration_path)
+    interpreter = factory.get_interpreter(
+        {'cwd': os.path.abspath(os.getcwd()),
+             'args': args})
+    if not (interpreter and interpreter.is_wellformed()):
+        # Ignore unknnow command kind or malformed commands
+        interpreter = None
+    elif not (interpreter.get_kind() == "AR" or
+              interpreter.get_kind() == "CC" and
+              (interpreter.cc_interpreter().has_cc_phase("CC") or
+               interpreter.cc_interpreter().has_cc_phase("LD"))):
+        # Ignore commands which are not AR or a CC driver
+        # running either CC or LD phase
+        interpreter = None
+    command_interpreter_ = interpreter
+    return interpreter
 
 def get_object_function_list(objfile):
     output = process.system(
@@ -52,102 +73,57 @@ def get_object_function_list(objfile):
     return funclist
 
 def update_cc_function_map(opts, args):
-    if compile_command_kind(opts, args) != 'CC': return
-    outputs = get_cc_output_files(opts, args)
-    if len(outputs) != 1: return
+    interpreter = get_interpreter()
+    assert(interpreter != None)
+    if (interpreter.get_kind() != "CC" or
+        not interpreter.cc_interpreter().has_cc_phase("CC") or
+        interpreter.cc_interpreter().last_cc_phase() != "AS"):
+        # TODO: handle function map in LD phase also
+        return
+    outputs = interpreter.cc_interpreter().all_cc_outputs()
+    if len(outputs) != 1:
+        # TODO: handle multiple outputs
+        return
     funclist = get_object_function_list(outputs[0])
     if not funclist: funclist = ['#']
     with process.open_locked(opts.fctmap, 'a') as f:
         f.write(''.join(
                 map(lambda x: '%s %s\n' % (outputs[0], x), funclist)))
 
-def get_cc_output_files(opts, args):
-    def objext(i): return os.path.splitext(i)[0] + '.o'
-    assert compile_command_kind(opts, args) == 'CC'
-    output = atos_lib.get_output_option_value(args)
-    if output: return [output]
-    inputs = atos_lib.get_input_source_files(args)
-    return map(objext, inputs)
-
 def get_cc_command_additional_flags(opts, args):
+    interpreter = get_interpreter()
+    assert(interpreter != None)
+    if not not interpreter.get_kind() == "CC": return []
     if not opts.optfile: return []
     obj_opts = {}
     for line in open(opts.optfile):
         obj, flags = line.strip().split(',', 1)
         obj_opts[obj] = flags
     def_opts = obj_opts.get('*', '')
-    if compile_command_kind(opts, args) != 'CC': return shlex.split(def_opts)
-    outputs = get_cc_output_files(opts, args)
-    if len(outputs) != 1: return shlex.split(def_opts)
+    if not interpreter.cc_interpreter().has_cc_phase("CC"):
+        return shlex.split(def_opts)
+    outputs = interpreter.cc_interpreter().all_cc_outputs()
+    if len(outputs) != 1:
+        # TODO: handle multiple input files
+        return shlex.split(def_opts)
     return shlex.split(obj_opts.get(outputs[0], def_opts))
 
-def invoque_compile_command(opts, args):
+def audit_compile_command(opts, args):
 
-    parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument(
-        '--atos-fctmap', dest='fctmap', action='store', default=None)
-    parser.add_argument(
-        '--atos-optfile', dest='optfile', action='store', default=None)
-    parser.add_argument(
-        '--atos-audit', dest='audit_file', action='store', default=None)
+    args = list(args or [])
+    status = process.system(args, print_output=True)
+
+    if status != 0:
+        # Record command only in case of success
+        return status
 
     cwd = os.path.abspath(os.getcwd())
-    args = list(args or [])
-
-    kind = compile_command_kind(opts, args)
-
-    if kind == 'CCLD':
-
-        env_ALDLTOFLAGS = os.environ.get("ALDLTOFLAGS")
-        if env_ALDLTOFLAGS: args.extend(
-            process.cmdline2list(env_ALDLTOFLAGS))
-
-    if kind == 'CC' or kind == 'CCLD':
-        env_ACFLAGS = os.environ.get("ACFLAGS")
-        if env_ACFLAGS: args.extend(process.cmdline2list(env_ACFLAGS))
-
-    if kind == 'CCLD':
-
-        env_ALDFLAGS = os.environ.get("ALDFLAGS")
-        if env_ALDFLAGS: args.extend(process.cmdline2list(env_ALDFLAGS))
-
-    env_PROFILE_DIR = os.environ.get("PROFILE_DIR")
-    profdir_common_len = env_PROFILE_DIR and len(
-        os.environ.get("COMMON_PROFILE_DIR_PREFIX", "")) or 0
-    env_PROFILE_DIR_OPT = os.environ.get("PROFILE_DIR_OPT")
-
-    if kind == 'CC':
-
-        output = atos_lib.get_output_option_value(args)
-        if env_PROFILE_DIR and env_PROFILE_DIR_OPT:
-            suffix = not (output and os.path.isabs(output)) and cwd[
-                profdir_common_len:] or ''
-            args.append("%s=%s/%s" % (
-                    env_PROFILE_DIR_OPT, env_PROFILE_DIR, suffix))
-
-    elif kind == 'CCLD':
-
-        if env_PROFILE_DIR and env_PROFILE_DIR_OPT:
-            suffix = cwd[profdir_common_len:]
-            args.append("%s=%s/%s" % (
-                    env_PROFILE_DIR_OPT, env_PROFILE_DIR, suffix))
-
-        env_ALDSOFLAGS = os.environ.get("ALDSOFLAGS")
-        if env_ALDSOFLAGS and atos_lib.is_shared_lib_link(args):
-            args.extend(process.cmdline2list(env_ALDSOFLAGS))
-
-        env_ALDMAINFLAGS = os.environ.get("ALDMAINFLAGS")
-        if env_ALDMAINFLAGS and not atos_lib.is_shared_lib_link(args):
-            args.extend(process.cmdline2list(env_ALDMAINFLAGS))
-
-    (new_opts, args) = parser.parse_known_args(args)
-    opts.__dict__.update(vars(new_opts))
-
-    if (kind == 'CC' or kind == 'CCLD') and opts.optfile:
-        args.extend(get_cc_command_additional_flags(opts, args))
-
-    if opts.audit_file:
-        exp_args = atos_lib.expand_response_file(args)
+    interpreter = set_interpreter(opts, args)
+    if interpreter:
+        # TODO: if response file is removed it does not work
+        # correctly, tuhs we expand it there in interpreter.get_args()
+        # though we should not do this due to long command line generation.
+        exp_args = interpreter.get_args()
         outline = ": ".join(
             ["CC_DEPS",
              '"%s"' % process.commands.which(args[0]),
@@ -157,9 +133,82 @@ def invoque_compile_command(opts, args):
             print >>outfile, outline
             outfile.flush()
 
+    return status
+
+def invoque_compile_command(opts, args):
+
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument(
+        '--atos-fctmap', dest='fctmap', action='store', default=None)
+    parser.add_argument(
+        '--atos-optfile', dest='optfile', action='store', default=None)
+
+    cwd = os.path.abspath(os.getcwd())
+    args = list(args or [])
+
+    interpreter = set_interpreter(opts, args)
+
+    has_final_link = (interpreter and interpreter.get_kind() == "CC" and
+                      interpreter.cc_interpreter().has_cc_phase("LD") and
+                      (interpreter.cc_interpreter().is_ld_kind("program") or
+                       interpreter.cc_interpreter().is_ld_kind("shared")))
+    has_cc = (interpreter and interpreter.get_kind() == "CC" and
+              interpreter.cc_interpreter().has_cc_phase("CC"))
+
+    if has_final_link:
+        env_ALDLTOFLAGS = os.environ.get("ALDLTOFLAGS")
+        if env_ALDLTOFLAGS: args.extend(
+            process.cmdline2list(env_ALDLTOFLAGS))
+
+    if has_cc or has_final_link:
+        env_ACFLAGS = os.environ.get("ACFLAGS")
+        if env_ACFLAGS: args.extend(process.cmdline2list(env_ACFLAGS))
+
+    if has_final_link:
+        env_ALDFLAGS = os.environ.get("ALDFLAGS")
+        if env_ALDFLAGS: args.extend(process.cmdline2list(env_ALDFLAGS))
+
+    env_PROFILE_DIR = os.environ.get("PROFILE_DIR")
+    profdir_common_len = env_PROFILE_DIR and len(
+        os.environ.get("COMMON_PROFILE_DIR_PREFIX", "")) or 0
+    env_PROFILE_DIR_OPT = os.environ.get("PROFILE_DIR_OPT")
+
+    if has_cc:
+        # TODO: use interpreter.get_output_files() ?
+        output = atos_lib.get_output_option_value(args)
+        if env_PROFILE_DIR and env_PROFILE_DIR_OPT:
+            suffix = not (output and os.path.isabs(output)) and cwd[
+                profdir_common_len:] or ''
+            args.append("%s=%s/%s" % (
+                    env_PROFILE_DIR_OPT, env_PROFILE_DIR, suffix))
+
+    elif has_final_link:
+
+        if env_PROFILE_DIR and env_PROFILE_DIR_OPT:
+            suffix = cwd[profdir_common_len:]
+            args.append("%s=%s/%s" % (
+                    env_PROFILE_DIR_OPT, env_PROFILE_DIR, suffix))
+
+    if has_final_link:
+        env_ALDSOFLAGS = os.environ.get("ALDSOFLAGS")
+        if (env_ALDSOFLAGS and
+            interpreter.cc_interpreter().is_ld_kind("shared")):
+            args.extend(process.cmdline2list(env_ALDSOFLAGS))
+
+        env_ALDMAINFLAGS = os.environ.get("ALDMAINFLAGS")
+        if (env_ALDMAINFLAGS and
+            interpreter.cc_interpreter().is_ld_kind("program")):
+            args.extend(process.cmdline2list(env_ALDMAINFLAGS))
+
+    (new_opts, args) = parser.parse_known_args(args)
+    opts.__dict__.update(vars(new_opts))
+
+    if (has_cc or has_final_link) and opts.optfile:
+        args.extend(get_cc_command_additional_flags(opts, args))
+
     status = process.system(args, print_output=True)
 
-    if (kind == 'CC' or kind == 'CCLD') and opts.fctmap:
+    if (has_cc or has_final_link) and opts.fctmap:
         update_cc_function_map(opts, args)
 
     return status
@@ -180,6 +229,8 @@ if __name__ == "__main__":
     parser.add_argument('--atos-cfg', dest='configuration_path',
                         default=globals.DEFAULT_CONFIGURATION_PATH,
                         help='configuration path')
+    parser.add_argument('--atos-audit', dest='audit_file',
+                        action='store', default=None)
 
     (opts, args) = parser.parse_known_args()
 
@@ -187,6 +238,9 @@ if __name__ == "__main__":
 
     logger.setup(vars(opts))
 
-    status = invoque_compile_command(opts, args)
+    if opts.audit_file:
+        status = audit_compile_command(opts, args)
+    else:
+        status = invoque_compile_command(opts, args)
 
     sys.exit(status)

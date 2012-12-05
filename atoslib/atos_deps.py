@@ -190,7 +190,9 @@ class DependencyGraph:
                     target = value
                 if attr == "dependency":
                     dep = value
-            if dep and dep['kind'] == "CC":
+            if (dep and dep.kind() == "CC" and
+                dep.interpreter().cc_interpreter().has_cc_phase("CC") and
+                dep.interpreter().cc_interpreter().last_cc_phase() == "AS"):
                 objects.append(target)
         return objects
 
@@ -203,10 +205,11 @@ class DependencyGraph:
         optflags = []
         for node in self.dg.nodes():
             for attr, value in self.node_attributes()[node]:
-                if (attr != 'dependency' or
-                    value['kind'] not in ["CC", "CCLDR"]): continue
-                optflags += [x for x in value['command']['args']
-                             if is_lto_opt(x) and x not in optflags]
+                if (attr == 'dependency' and value.kind() == "CC" and
+                    value.interpreter().cc_interpreter().has_cc_phase("CC")):
+                    optflags += [x for x in
+                                 value.interpreter().get_args()[1:]
+                                 if is_lto_opt(x) and x not in optflags]
         return optflags
 
     def common_relative_profdir_prefix(self):
@@ -215,22 +218,27 @@ class DependencyGraph:
         outputs = []
         for node in self.dg.nodes():
             for attr, value in self.node_attributes()[node]:
-                if attr != 'dependency': continue
-                if value['kind'] == "CCLD" or value['kind'] == "CCLDR":
+                if attr != 'dependency' or value.kind() != "CC":
+                    continue
+                if value.interpreter().cc_interpreter().has_cc_phase("LD"):
                     # consider that gcda files can be generated in cwd
                     # (CCLD commands could be ignored here if no source
                     #  files in input)
-                    outputs.append(value['command']['cwd'])
-                elif value['kind'] == "CC":
-                    output_value = atos_lib.get_output_option_value(
-                        value['command']['args'])
-                    # ignore output if designated with an absolute path
-                    # (profdir will be prof_dir/full_path)
-                    if output_value and os.path.isabs(output_value): continue
-                    outputs.extend(value['outputs'])
+                    outputs.append(value.command()['cwd'])
+                elif value.interpreter().cc_interpreter().has_cc_phase("CC"):
+                    # We must use the unmodified output arguments of the
+                    # CC command line, not the normalized one returned by
+                    # value.outputs() for instance.
+                    output_files = \
+                        value.interpreter().cc_interpreter().all_cc_outputs()
+                    # Ensured at dependency building,
+                    # though it's a TODO to handle multiple outputs
+                    assert(len(output_files) == 1)
+                    output = output_files[0]
+                    if os.path.isabs(output): continue
+                    outputs.extend(value.outputs())
                     # no common prefix longer than cwd
-                    outputs.append(value['command']['cwd'])
-                else: pass
+                    outputs.append(value.command()['cwd'])
         return os.path.commonprefix(outputs)
 
     def get_compilers(self):
@@ -239,15 +247,17 @@ class DependencyGraph:
         for node in self.dg.nodes():
             for attr, value in self.node_attributes()[node]:
                 if (attr != 'dependency' or
-                    value['kind'] not in ["CC", "CCLD", "CCLDR"]):
+                    value.kind() != "CC"):
                     continue
-                compilers.add(value['command']['arg0'])
+                compilers.add(value.command()['arg0'])
         return list(compilers)
 
     def recipe_args(self, dependency):
         """ Fixup some options that may not support mixed .c and .o files. """
-        # TODO: we may build a response file when detecting large lines
-        args = dependency['command']['args']
+        # TODO: we should uses interpreter.args() after response
+        # file expansion and build a response file when detecting
+        # large lines
+        args = dependency.command()['args']
         i = 0
         new_args = []
         while i < len(args):
@@ -284,7 +294,7 @@ class DependencyGraph:
                     target = value
                 if attr == "dependency":
                     recipe = (
-                        "$(QUIET)cd " + value['command']['cwd'] +
+                        "$(QUIET)cd " + value.command()['cwd'] +
                         " && $(ATOS_DRIVER) " +
                         process.list2cmdline(self.recipe_args(value)))
             deps = []
@@ -322,11 +332,13 @@ class DependencyGraphBuilder:
         if self.targets == "all" or self.targets == "last":
             for i in range(len(self.deplist)):
                 dependency = self.deplist[len(self.deplist) - i - 1]
-                if len(dependency['outputs']) != 1:
-                    continue
-                if dependency['kind'] == "CCLD" and len(dependency[
-                        'outputs']) == 1:
-                    referenced_outputs.add(dependency['outputs'][0])
+                if (dependency.kind() == "CC" and
+                    (dependency.interpreter().cc_interpreter().
+                     is_ld_kind("program") or
+                     dependency.interpreter().cc_interpreter().
+                     is_ld_kind("shared"))):
+                    assert(len(dependency.outputs()) == 1)
+                    referenced_outputs.add(dependency.outputs()[0])
                     if self.targets == "last":
                         break
             targets = list(referenced_outputs)
@@ -339,13 +351,15 @@ class DependencyGraphBuilder:
 
         for i in range(len(self.deplist)):
             dependency = self.deplist[len(self.deplist) - i - 1]
-            if len(dependency['outputs']) != 1:
+            if len(dependency.outputs()) != 1:
+                # TODO: should handle multiple outputs
                 continue
-            output = dependency['outputs'][0]
+            output = dependency.outputs()[0]
             found = False
             for target in unmatched_targets:
                 if self.target_match(target, output):
                     if output in referenced_outputs:
+                        # TODO: should allow multiple references
                         raise Exception(
                             "Output file referenced several times: " + output)
                     unmatched_targets.remove(target)
@@ -360,7 +374,7 @@ class DependencyGraphBuilder:
                     if last_target_node:
                         self.graph.add_edge(last_target_node, output)
                     last_target_node = output
-                    for inp in dependency['inputs']:
+                    for inp in dependency.inputs():
                         available_inputs.add(inp)
                         if not self.graph.has_node(inp):
                             self.graph.add_node(inp, attrs=[('target', inp)])
@@ -369,6 +383,7 @@ class DependencyGraphBuilder:
             if not found:
                 if output in available_inputs:
                     if output in referenced_outputs:
+                        # TODO: should allow multiple references
                         raise Exception(
                             "Output file referenced several times: " + output)
                     referenced_outputs.add(output)
@@ -379,7 +394,7 @@ class DependencyGraphBuilder:
                             output)
                     self.graph.node_attributes()[output] = [
                         ('target', output), ('dependency', dependency)]
-                    for inp in dependency['inputs']:
+                    for inp in dependency.inputs():
                         available_inputs.add(inp)
                         if not self.graph.has_node(inp):
                             self.graph.add_node(inp, attrs=[('target', inp)])
@@ -405,44 +420,95 @@ class DependencyGraphBuilder:
         """ Returns the dependency graph. """
         return self.graph
 
+class Dependency:
+    """
+    Class representing a build command dependency.
+    """
+    def __init__(self, command, interpreter):
+        assert(interpreter.is_wellformed())
+        self.command_ = command
+        self.interpreter_ = interpreter
+
+    def kind(self):
+        """
+        Returns dependency recipe kind as returned by the command
+        interpreter.
+        """
+        return self.interpreter_.get_kind()
+
+    def outputs(self):
+        """
+        Returns dependency recipe outputs as returned by the command
+        interpreter.
+        """
+        return self.interpreter_.get_output_files()
+
+    def inputs(self):
+        """
+        Returns dependency recipe inputs as returned by the command
+        interpreter.
+        """
+        return self.interpreter_.get_input_files()
+
+    def command(self):
+        """
+        Returns the associated command.
+        """
+        return self.command_
+
+    def interpreter(self):
+        """
+        Returns the associated command interpreter.
+        """
+        return self.interpreter_
+
 class DependencyListBuilder:
     """ Class for building dependency list. """
     def __init__(self):
         """ Constructor. """
         self.deps = []
 
-    def add_dependency(self, command, kind, inputs, outputs):
-        """ Add a dependency consisting of a node and input/output lists. """
-        dependency = {'command': command, 'kind': kind,
-                      'inputs': inputs, 'outputs': outputs}
-        self.deps.append(dependency)
+    def add_dependency(self, command, interpreter):
+        """
+        Add a dependency, i.e. a command and its associated interpreter.
+        """
+        self.deps.append(Dependency(command, interpreter))
 
     def get_dependencies(self):
         """ Returns the dependency list. """
         return self.deps
 
 class CommandDependencyListFactory:
-    """ Creates a build dependency from a command parser and a
-    command interpreter. """
-    def __init__(self, parser, interpreter):
+    """
+    Creates a build dependency list from a command parser and a
+    command interpreter factory.
+    """
+    def __init__(self, parser, interp_factory):
         """ Constructor. """
-        self.deps = DependencyListBuilder()
-        self.parser = parser
-        self.interpreter = interpreter
+        self.deps_ = DependencyListBuilder()
+        self.parser_ = parser
+        self.interp_factory_ = interp_factory
 
     def get_dependencies(self):
         """ Returns the build dependencies. """
-        return self.deps.get_dependencies()
+        return self.deps_.get_dependencies()
 
     def build_dependencies(self):
         """ Compute dependencies.  """
-        self.parser.parse()
-        commands = self.parser.get_commands()
-        for command in commands:
-            input_files = self.interpreter.get_input_files(command)
-            output_files = self.interpreter.get_output_files(command)
-            kind = self.interpreter.get_kind(command)
-            self.deps.add_dependency(command, kind, input_files, output_files)
+        self.parser_.parse()
+        for command in self.parser_.get_commands():
+            interpreter = self.interp_factory_.get_interpreter(command)
+            if not (interpreter and interpreter.is_wellformed()):
+                continue
+            # Filter commands that we need for dependencies
+            # TODO: for now we do not support separate CC and AS
+            # compilation. I.e. objects built like this will not be
+            # optimized.
+            if (interpreter.get_kind() == "AR" or
+                interpreter.get_kind() == "CC" and
+                (interpreter.cc_interpreter().has_cc_phase("CC") or
+                 interpreter.cc_interpreter().has_cc_phase("LD"))):
+                self.deps_.add_dependency(command, interpreter)
 
 class CCDEPSParser:
     """ Parses the output of a cc_deps addon file. """

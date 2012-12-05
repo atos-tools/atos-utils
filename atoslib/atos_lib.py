@@ -1229,13 +1229,13 @@ def open_atos_log_file(configuration_path, name_prefix, variant_id):
         logs_dir, "%s-%s.log" % (name_prefix, hashid(variant_id)))
     return open(log_file, "w")
 
-def expand_response_file(args):
+def expand_response_file(args, cwd="."):
     """ Return the actual args list, after response expansion. """
     # TODO: should use the SimpleCmdInterpreter interface
     def expand_arg(arg):
         m = re.search("^@(.+)$", arg)
         if m:
-            f = open(m.group(1))
+            f = open(os.path.join(cwd, m.group(1)))
             args = sum([i.strip().split() for i in f.readlines()], [])
             f.close()
         else:

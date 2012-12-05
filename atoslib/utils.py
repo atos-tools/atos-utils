@@ -403,7 +403,7 @@ def run_atos_deps(args):
     from atos_deps import CommandDependencyListFactory
     from atos_deps import CCDEPSParser
     from atos_deps import DependencyGraphBuilder
-    from cmd_interpreter import SimpleCmdInterpreter
+    from cmd_interpreter import CmdInterpreterFactory
 
     input_file = args.input_file or os.path.join(
         args.configuration_path, "build.audit")
@@ -423,14 +423,14 @@ def run_atos_deps(args):
         raise Exception("Missing target file list.")
 
     message("Computing build dependencies...")
-    factory = CommandDependencyListFactory(
+    deps_builder = CommandDependencyListFactory(
         CCDEPSParser(open(input_file)),
-        SimpleCmdInterpreter(args.configuration_path))
-    factory.build_dependencies()
-    dependencies = factory.get_dependencies()
-    builder = DependencyGraphBuilder(dependencies, targets)
-    builder.build_graph()
-    graph = builder.get_graph()
+        CmdInterpreterFactory(args.configuration_path))
+    deps_builder.build_dependencies()
+    dependencies = deps_builder.get_dependencies()
+    graph_builder = DependencyGraphBuilder(dependencies, targets)
+    graph_builder.build_graph()
+    graph = graph_builder.get_graph()
 
     if not args.force:
         graph.output_makefile(output_file)

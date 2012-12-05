@@ -27,13 +27,17 @@ CFLAGS	= -c -O2 -Wall -D_FILE_OFFSET_BITS=64
 
 LIBS	=
 
+RELOC   = sha1.ro
 OBJS	= sha1.o
 LIBSHA1 = libsha1.a
 
-all: sha shacmp shatest 
+all: sha shacmp shatest sha-shared
 
-libsha1.a: $(OBJS)
-	$(AR) cr $@ $(OBJS)
+$(RELOC): $(OBJS)
+	$(CC) -r -nostdlib -o $@ $(OBJS)
+
+libsha1.a: $(RELOC)
+	$(AR) cr $@ $(RELOC)
 
 sha: sha.o $(LIBSHA1)
 	$(CC) $(LDFLAGS) -o $@ sha.o -L. -lsha1 $(LIBS)
@@ -58,3 +62,8 @@ sha-shared: sha.o sha.so
 
 clean:
 	$(RM) *.o *.so *.a sha shacmp shatest sha-shared
+
+depend.mak:
+	$(CC) -MM sha.cpp shacmp.cpp shatest.cpp sha1.cpp >$@
+
+include depend.mak

@@ -93,7 +93,7 @@ def update_cc_function_map(opts, args):
 def get_cc_command_additional_flags(opts, args):
     interpreter = get_interpreter()
     assert(interpreter != None)
-    if not not interpreter.get_kind() == "CC": return []
+    if interpreter.get_kind() != "CC": return []
     if not opts.optfile: return []
     obj_opts = {}
     for line in open(opts.optfile):

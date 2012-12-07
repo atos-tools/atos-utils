@@ -66,4 +66,4 @@ clean:
 depend.mak:
 	$(CC) -MM sha.cpp shacmp.cpp shatest.cpp sha1.cpp >$@
 
-include depend.mak
+-include depend.mak

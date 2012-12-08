@@ -20,10 +20,18 @@ int main(int argc, char *argv[])
 EOF
 gcc -o gcc gcc.c
 
-# Audit a build with this surdriver
-$ROOT/bin/atos-audit ./gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c
+# Audit a build in legacy mode with this surdriver
+$ROOT/bin/atos-audit --legacy ./gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c
 [ -f atos-configurations/build.audit ]
 
 # Check that we recorded a single gcc invocation
 lines=`grep CC_DEPS atos-configurations/build.audit | wc -l | cut -f1 -d' '`
+[ "$lines" = 1 ]
+
+# Audit a build with this surdriver
+$ROOT/bin/atos-audit  ./gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c
+[ -d atos-configurations/build.stg ]
+
+# Check that we recorded a single gcc invocation
+lines=`wc -l atos-configurations/build.stg/recipes | cut -f1 -d' '`
 [ "$lines" = 1 ]

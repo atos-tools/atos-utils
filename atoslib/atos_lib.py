@@ -600,11 +600,14 @@ class json_config():
         self._dump()
 
     def add_value(self, key, value):
+        # Allow only string values in config
+        assert(isinstance(value, (str, unicode)))
         jsonlib.set_item(self.config, key, value)
         self._dump()
 
-    def get_value(self, key):
-        return jsonlib.get_item(self.config, key)
+    def get_value(self, key, default=None):
+        item = jsonlib.get_item(self.config, key)
+        return item if item != False else default
 
     @staticmethod
     def compiler_version_number(version_str):
@@ -936,14 +939,12 @@ def get_oprofile_path(configuration_path, variant):
 def get_config_value(configuration_path, key, default=None):
     config_file = os.path.join(configuration_path, 'config.json')
     if not os.path.isfile(config_file): return default
-    client = json_config(config_file)
-    return client.get_value(key) or default
+    return json_config(config_file).get_value(key, default)
 
 def query_config_values(configuration_path, query, default=None):
     config_file = os.path.join(configuration_path, 'config.json')
     if not os.path.isfile(config_file): return default
-    client = json_config(config_file)
-    return client.query(strtoquery(query)) or default
+    return json_config(config_file).query(strtoquery(query)) or default
 
 def get_available_optim_variants(configuration_path):
     variants = ['lto', 'fdo', 'lipo']
@@ -1229,64 +1230,22 @@ def open_atos_log_file(configuration_path, name_prefix, variant_id):
         logs_dir, "%s-%s.log" % (name_prefix, hashid(variant_id)))
     return open(log_file, "w")
 
-def expand_response_file(args, cwd="."):
-    """ Return the actual args list, after response expansion. """
-    # TODO: should use the SimpleCmdInterpreter interface
-    def expand_arg(arg):
-        m = re.search("^@(.+)$", arg)
-        if m:
-            f = open(os.path.join(cwd, m.group(1)))
-            args = sum([i.strip().split() for i in f.readlines()], [])
-            f.close()
-        else:
-            args = [arg]
+def expand_response_file(args, cwd, prefix="@"):
+    """
+    Return the actual args list, after response expansion.
+    The expansion recursively opens files in arguments starting
+    with the given prefix.
+    """
+    def expand_args(args, new_args):
+        for arg in new_args:
+            if len(arg) > len(prefix) and arg.find(prefix) == 0:
+                with open(os.path.join(cwd, arg[len(prefix):])) as f:
+                    exp_args = sum([process.cmdline2list(l.strip())
+                                    for l in f.readlines()], [])
+                    expand_args(args, exp_args)
+            else:
+                args.append(arg)
         return args
-    return sum([expand_arg(arg) for arg in args], [])
-
-def get_output_option_value(args):
-    """ Get value of -o option from CC command line args. """
-    # TODO: should use the SimpleCmdInterpreter interface
-    args = expand_response_file(args)
-    output = None
-    i = 0
-    while i + 1 < len(args):
-        i = i + 1
-        m = re.search("^-o(.*)$", args[i])
-        if m != None:
-            output = m.group(1)
-            if output == "":
-                if i + 1 < len(args):
-                    output = args[i + 1]
-                    i = i + 1
-                continue
-    return output
-
-def get_input_source_files(args):
-    """ Get input source file of CC command. """
-    # TODO: should use the SimpleCmdInterpreter interface
-    args = expand_response_file(args)
-    inputs = []
-    i = 0
-    while i + 1 < len(args):
-        i = i + 1
-        m = re.search("^-o(.*)$", args[i])
-        if m != None:
-            if m.group(1) == "": i = i + 1
-            continue
-        m = re.search("\\.(c|cc|cxx|cpp|c\+\+|C|i|ii)$", args[i])
-        if m != None:
-            inputs.append(args[i])
-    return inputs
-
-def is_shared_lib_link(args):
-    """ Returns true if building a shared lib. """
-    args = expand_response_file(args)
-    i = 0
-    while i + 1 < len(args):
-        i = i + 1
-        m = re.search("^-shared$", args[i])
-        if m != None:
-            return True
-    return False
+    return expand_args([], args)
 
 # ####################################################################

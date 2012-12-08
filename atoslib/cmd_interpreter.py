@@ -34,8 +34,33 @@ class CmdInterpreterFactory:
         """ Constructor. """
         self.configuration_path_ = configuration_path
 
-    def get_interpreter(self, command):
-        """ Returns a suitable interpreter for the given command. """
+    def get_interpreter(self, command, kind=None):
+        """
+        Returns a suitable interpreter for the given command.
+        If kind is specified, calls directly the corresponding
+        interpreter constructor.
+        Otherwise the command kind is infered from the command
+        arguments.
+        """
+        if kind == None:
+            return self.get_interpreter(command,
+                                        self.get_command_kind(command))
+        if kind == "CC":
+            return CCInterpreter(command)
+        elif kind == "AR":
+            return SimpleARInterpreter(command)
+        return None
+
+    def get_command_kind(self, command):
+        """
+        Infer the command kind from the command arguments.
+        Note that if a configuration_path was given to the
+        factory constructor, the command regexps are read from there.
+        The currently recognized commands are:
+        "CC": a C/C++ driver
+        "AR": an archiver
+        If no command is recognized, "UNK" is returned.
+        """
         basename = os.path.basename(command['args'][0])
         if self.configuration_path_:
             ccregexp = atos_lib.get_config_value(self.configuration_path_,
@@ -49,16 +74,16 @@ class CmdInterpreterFactory:
             ldregexp = globals.DEFAULT_LDREGEXP
             arregexp = globals.DEFAULT_ARREGEXP
 
-        m = re.match("|".join(
-                map(lambda x: "(%s)" % x,
-                    filter(bool, [ccregexp, ldregexp]))),
-                     basename)
-        if m != None:
-            return CCInterpreter(command)
-        m = re.match(arregexp, basename)
-        if m != None:
-            return SimpleARInterpreter(command)
-        return None
+        regexps = []
+        regexps.append(("CC",
+                        re.compile("|".join(
+                        map(lambda x: "(%s)" % x,
+                            filter(bool, [ccregexp, ldregexp]))))))
+        regexps.append(("AR", re.compile(arregexp)))
+        for kind, regexp in regexps:
+            if regexp.match(basename):
+                return kind
+        return "UNK"
 
     @staticmethod
     def test():

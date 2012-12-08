@@ -30,6 +30,7 @@ import profile
 import logger
 import regexp
 from logger import debug, warning, error, message, info
+from atoslib.recipes import RecipeStorage, RecipeManager
 
 _at_toplevel = None
 
@@ -222,12 +223,18 @@ def run_atos_audit(args):
     cbinregexp = regexp.re_utils.re_to_cregexp(binregexp)
     assert(cbinregexp)
 
-    output_file = args.output_file or os.path.join(
-        args.configuration_path, "build.audit")
-
-    process.commands.mkdir(args.configuration_path)
-    process.commands.unlink(output_file)
-    process.commands.touch(output_file)
+    if args.legacy:
+        output_file = args.output_file or os.path.join(
+            args.configuration_path, "build.audit")
+        process.commands.mkdir(args.configuration_path)
+        process.commands.unlink(output_file)
+        process.commands.touch(output_file)
+    else:
+        output_file = args.output_file or os.path.join(
+            args.configuration_path, "build.stg")
+        stg = RecipeStorage(output_file)
+        stg.clear_all()
+        stg.init_recipes_file()
 
     atos_lib.json_config(args.configuration_path).add_value(
         "default_values.ccregexp", ccregexp)
@@ -235,16 +242,22 @@ def run_atos_audit(args):
         "default_values.ldregexp", ldregexp)
     atos_lib.json_config(args.configuration_path).add_value(
         "default_values.arregexp", arregexp)
+    atos_lib.json_config(args.configuration_path).add_value(
+        "default_values.legacy_audit", str(int(bool(args.legacy))))
 
-    atos_driver = atos_lib.driver_path()
     build_sh = os.path.join(args.configuration_path, "build.sh")
     atos_lib.generate_script(build_sh, args.command)
+
     force_sh = os.path.join(args.configuration_path, "build.force")
     with open(force_sh, 'w') as file_force:
         file_force.write(str(int(args.force)))
+
+    atos_driver = atos_lib.driver_path()
     audit_flags = ["--atos-audit=" + os.path.abspath(output_file),
                    "--atos-cfg=" + os.path.abspath(
             args.configuration_path)]
+    if args.legacy: audit_flags += ["--atos-legacy"]
+    if args.debug: audit_flags += ["--atos-debug"]
 
     command = atos_lib.proot_command(
         PROOT_IGNORE_ELF_INTERPRETER=1,
@@ -275,11 +288,18 @@ def run_atos_build(args):
     atos_driver = atos_lib.driver_path()
     atos_driver_options = ["--atos-cfg=" +
                            os.path.abspath(args.configuration_path)]
+    if args.debug: atos_driver_options += ["--atos-debug"]
+
+    legacy = args.legacy
+    if not legacy:
+        legacy = int(atos_lib.get_config_value(
+                args.configuration_path, 'default_values.legacy_audit', "0"))
 
     opt_rebuild = args.force
     build_force = os.path.join(args.configuration_path, "build.force")
     if not opt_rebuild and os.path.isfile(build_force):
-        opt_rebuild = int(open(build_force).read().strip())
+        with open(build_force) as f:
+            opt_rebuild = int(f.read().strip())
 
     if args.gopts != None or args.uopts != None:
         pvariant = args.gopts if args.gopts != None else args.uopts
@@ -399,14 +419,32 @@ def run_atos_build(args):
 def run_atos_deps(args):
     """ ATOS deps tool implementation. """
 
-    # For now we include all from atos_deps, we may separate modules later
-    from atos_deps import CommandDependencyListFactory
-    from atos_deps import CCDEPSParser
-    from atos_deps import DependencyGraphBuilder
-    from cmd_interpreter import CmdInterpreterFactory
+    legacy = args.legacy
+    if not legacy:
+        legacy = int(atos_lib.get_config_value(
+                args.configuration_path, 'default_values.legacy_audit', "0"))
 
-    input_file = args.input_file or os.path.join(
-        args.configuration_path, "build.audit")
+    opt_rebuild = args.force
+    build_force = os.path.join(args.configuration_path, "build.force")
+    if not opt_rebuild and os.path.isfile(build_force):
+        with open(build_force) as f:
+            opt_rebuild = int(f.read().strip())
+
+    if legacy:
+        # For now we include all from atos_deps,
+        # we may separate modules later.
+        from atos_deps import CommandDependencyListFactory
+        from atos_deps import CCDEPSParser
+        from atos_deps import DependencyGraphBuilder
+        from cmd_interpreter import CmdInterpreterFactory
+
+    if legacy:
+        input_file = args.input_file or os.path.join(
+            args.configuration_path, "build.audit")
+    else:
+        input_stg = args.input_file or os.path.join(
+            args.configuration_path, "build.stg")
+
     output_file = args.output_file or os.path.join(
         args.configuration_path, "build.mk")
 
@@ -423,38 +461,49 @@ def run_atos_deps(args):
         raise Exception("Missing target file list.")
 
     message("Computing build dependencies...")
-    deps_builder = CommandDependencyListFactory(
-        CCDEPSParser(open(input_file)),
-        CmdInterpreterFactory(args.configuration_path))
-    deps_builder.build_dependencies()
-    dependencies = deps_builder.get_dependencies()
-    graph_builder = DependencyGraphBuilder(dependencies, targets)
-    graph_builder.build_graph()
-    graph = graph_builder.get_graph()
+    if legacy:
+        deps_builder = CommandDependencyListFactory(
+            CCDEPSParser(open(input_file)),
+            CmdInterpreterFactory(args.configuration_path))
+        deps_builder.build_dependencies()
+        dependencies = deps_builder.get_dependencies()
+        graph_builder = DependencyGraphBuilder(dependencies, targets)
+        graph_builder.build_graph()
+        graph = graph_builder.get_graph()
 
-    if not args.force:
-        graph.output_makefile(output_file)
+        if not opt_rebuild:
+            graph.output_makefile(output_file)
+    else:
+        stg = RecipeStorage(input_stg)
+        if not os.path.isfile(stg.recipes_path()):
+            error("can't build dependencies, run atos-audit first: "
+                  "audit file missing: %s" % stg.recipes_path())
+            return 1
+        graph = RecipeManager(stg).recipe_graph(targets=targets)
+        with open(output_file, "w") as f:
+            graph.write_makefile(f, prefix="$(ATOS_DRIVER)")
 
     # For now only write targets if configuration dir is there
     if not os.path.isdir(args.configuration_path):
         return 0
 
     with open(os.path.join(args.configuration_path, "targets"), "w") as f:
-        print >>f, "\n".join(
-            executables if args.force else graph.get_targets())
+        targets = executables if opt_rebuild else graph.get_targets()
+        if targets: print >>f, "\n".join(targets)
 
     with open(os.path.join(args.configuration_path, "objects"), "w") as f:
-        print >>f, "\n".join(graph.get_objects())
+        objects = graph.get_objects()
+        if objects: print >>f, "\n".join(objects),
 
     with open(os.path.join(args.configuration_path, "compilers"), "w") as f:
-        print >>f, '\n'.join(graph.get_compilers())
+        compilers = graph.get_compilers()
+        if compilers: print >>f, "\n".join(compilers),
 
     # list of options that should be passed to linker in case of LTO build
     config_file = os.path.join(args.configuration_path, 'config.json')
 
     atos_lib.json_config(config_file).add_value(
         "build_opts.lto_flags", ' '.join(graph.get_lto_opts()))
-
     atos_lib.json_config(config_file).add_value(
         "build_opts.common_profdir_prefix",
         graph.common_relative_profdir_prefix())
@@ -514,6 +563,7 @@ def run_atos_init(args):
         process.commands.unlink('%s/build.sh' % args.configuration_path)
         process.commands.unlink('%s/build.force' % args.configuration_path)
         process.commands.unlink('%s/build.audit' % args.configuration_path)
+        process.commands.rmtree('%s/build.stg' % args.configuration_path)
         process.commands.unlink('%s/config.json' % args.configuration_path)
     if args.clean or args.run_script:
         if args.clean: message("Cleaning run audit...")
@@ -536,8 +586,13 @@ def run_atos_init(args):
         status = invoque("atos-config", args)
         if status != 0: return status
 
-    elif not os.path.isfile(
-        os.path.join(args.configuration_path, "build.audit")):
+    elif (
+        not (os.path.isfile(
+                os.path.join(args.configuration_path, "build.audit")) or
+             os.path.isdir(
+                os.path.join(args.configuration_path, "build.stg")))
+        or not os.path.isfile(
+            os.path.join(args.configuration_path, "config.json"))):
         error("missing build audit, use -b option for specifying build script"
               " or use atos-audit tool")
         return 1

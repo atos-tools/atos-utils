@@ -29,6 +29,7 @@ from atoslib import process
 from atoslib import logger
 from atoslib import globals
 from atoslib import cmd_interpreter
+from atoslib.recipes import RecipeStorage
 
 import re, shlex, argparse
 
@@ -108,9 +109,8 @@ def get_cc_command_additional_flags(opts, args):
         return shlex.split(def_opts)
     return shlex.split(obj_opts.get(outputs[0], def_opts))
 
-def audit_compile_command(opts, args):
+def legacy_audit_compile_command(opts, args):
 
-    args = list(args or [])
     status = process.system(args, print_output=True)
 
     if status != 0:
@@ -120,9 +120,9 @@ def audit_compile_command(opts, args):
     cwd = os.path.abspath(os.getcwd())
     interpreter = set_interpreter(opts, args)
     if interpreter:
-        # TODO: if response file is removed it does not work
-        # correctly, tuhs we expand it there in interpreter.get_args()
-        # though we should not do this due to long command line generation.
+        # TODO: if response file is removed it does not work,
+        # thus we expand it there in interpreter.get_args().
+        # We should change this as it may build a too long command line.
         exp_args = interpreter.get_args()
         outline = ": ".join(
             ["CC_DEPS",
@@ -135,6 +135,49 @@ def audit_compile_command(opts, args):
 
     return status
 
+def audit_compile_command(opts, args):
+    if opts.legacy:
+        return legacy_audit_compile_command(opts, args)
+
+    def filter_envs(envs):
+        """
+        Filter out ATOS internal keys in environment.
+        In particular PROOT envs used for the audit.
+        """
+        return dict((k, v) for k, v in envs.items() if
+                    k.find("PROOT_ADDON_CC_OPTS") != 0)
+
+    interpreter = set_interpreter(opts, args)
+    if not interpreter:
+        # Do not record this command, just run it
+        return process.system(args, print_output=True)
+
+    stgdir = opts.audit_file
+    if stgdir == None:
+        stgdir = os.path.join(opts.configuration_path, "build.stg")
+    stg = RecipeStorage(stgdir)
+
+    # TODO: if response file is removed it does not work,
+    # thus we expand it there in interpreter.get_args().
+    # We should change this as it may build a too long command line.
+    inputs = interpreter.get_input_files()
+    inps_digest = stg.store_path_ref_list(map(os.path.abspath, inputs))
+    status = process.system(args, print_output=True)
+    if status != 0:
+        return status
+    prog = process.commands.which(args[0])
+    cwd = os.getcwd()
+    exp_args = interpreter.get_args()
+    envs = filter_envs(dict(os.environ))
+    kind = interpreter.get_kind()
+    cnod_digest = stg.store_cmd_node(prog, cwd, exp_args, envs, kind)
+    outputs = interpreter.get_output_files()
+    outs_digest = stg.store_path_ref_list(map(os.path.abspath, outputs))
+    rnod_digest = stg.store_recipe_node(
+                    cnod_digest, inps_digest, outs_digest)
+    stg.append_recipes_file(rnod_digest)
+    return status
+
 def invoque_compile_command(opts, args):
 
     parser = argparse.ArgumentParser(add_help=False)
@@ -144,7 +187,6 @@ def invoque_compile_command(opts, args):
         '--atos-optfile', dest='optfile', action='store', default=None)
 
     cwd = os.path.abspath(os.getcwd())
-    args = list(args or [])
 
     interpreter = set_interpreter(opts, args)
 
@@ -174,11 +216,11 @@ def invoque_compile_command(opts, args):
     env_PROFILE_DIR_OPT = os.environ.get("PROFILE_DIR_OPT")
 
     if has_cc:
-        # TODO: use interpreter.get_output_files() ?
-        output = atos_lib.get_output_option_value(args)
+        cc_outputs = interpreter.cc_interpreter().all_cc_outputs()
+        assert(len(cc_outputs) >= 1)
         if env_PROFILE_DIR and env_PROFILE_DIR_OPT:
-            suffix = not (output and os.path.isabs(output)) and cwd[
-                profdir_common_len:] or ''
+            abs_output_dir = os.path.isabs(cc_outputs[0])
+            suffix = '' if abs_output_dir else cwd[profdir_common_len:]
             args.append("%s=%s/%s" % (
                     env_PROFILE_DIR_OPT, env_PROFILE_DIR, suffix))
 
@@ -231,6 +273,8 @@ if __name__ == "__main__":
                         help='configuration path')
     parser.add_argument('--atos-audit', dest='audit_file',
                         action='store', default=None)
+    parser.add_argument('--atos-legacy', dest='legacy',
+                        action='store_true', default=None)
 
     (opts, args) = parser.parse_known_args()
 

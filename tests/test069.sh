@@ -15,7 +15,7 @@ python $ROOT/lib/atos/python/atoslib/cmd_interpreter.py
 
 python $ROOT/lib/atos/python/atoslib/generators.py
 
-python $ROOT/lib/atos/python/atoslib/atos_deps.py
+python $ROOT/lib/atos/python/atoslib/graphs.py
 
 python $ROOT/lib/atos/python/atoslib/atos_argparse.py
 
@@ -28,3 +28,7 @@ python $ROOT/lib/atos/python/atoslib/gen_argparse.py
 python $ROOT/lib/atos/python/atoslib/cc_arguments.py
 
 python $ROOT/lib/atos/python/atoslib/cc_argparse.py
+
+python $ROOT/lib/atos/python/atoslib/obj_storage.py
+
+python $ROOT/lib/atos/python/atoslib/recipes.py

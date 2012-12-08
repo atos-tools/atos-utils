@@ -16,7 +16,7 @@ $ROOT/bin/atos-deps -a -C atos-configurations-1
 [ `diff atos-configurations-1/build.mk atos-configurations/build.mk | wc -l` -eq 0 ]
 
 mkdir atos-configurations-2
-$ROOT/bin/atos-deps -a -C atos-configurations-2 -i atos-configurations-1/build.audit
+$ROOT/bin/atos-deps -a -C atos-configurations-2 -i atos-configurations-1/build.stg
 [ -f atos-configurations-2/build.mk -a -f atos-configurations-2/targets ]
 [ `diff atos-configurations-1/build.mk atos-configurations-2/build.mk | wc -l` -eq 0 ]
 

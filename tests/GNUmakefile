@@ -32,7 +32,7 @@ COVERAGE_OPTS+=ATOS_COVERAGE_DIR=$(COVERAGE_DIR)
 endif
 FORCE=.FORCE
 
-.PHONY: all tests clean distclean $(CHKS) .FORCE
+.PHONY: all tests coverage clean distclean $(CHKS) .FORCE
 
 all: tests
 

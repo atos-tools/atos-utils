@@ -21,160 +21,28 @@ import sys, os, re
 import globals
 import atos_lib
 import process
+from graphs import DGraph
 
-VERBOSE = 0
-
-class DGraph:
-    """ A class implementing a directed graph.  """
-    def __init__(self):
-        self.nodes_ = {}
-        self.edges_ = {}
-        self.node_attrs_ = {}
-        return
-
-    def add_node(self, node, attrs=None):
-        if attrs == None: attrs = []
-        self.nodes_[node] = node
-        self.node_attrs_[node] = attrs
-
-    def has_node(self, node):
-        return node in self.nodes_
-
-    def del_node(self, node):
-        for (edge, val) in self.edges_.items():
-            (src, dst) = edge
-            if src == node or dst == node:
-                self.edges_.pop((src, dst))
-        self.nodes_.pop(node)
-        self.node_attrs_.pop(node)
-
-    def add_edge(self, edge):
-        self.edges_[edge] = edge
-
-    def has_edge(self, edge):
-        return edge in self.edges_
-
-    def del_edge(self, edge):
-        self.edges_.pop(edge)
-
-    def nodes(self):
-        return list(self.nodes_)
-
-    def edges(self):
-        return list(self.edges_)
-
-    def neighbors(self, node):
-        neighbors = []
-        for (src, dst) in self.edges_:
-            if src == node:
-                neighbors.append(dst)
-        return neighbors
-
-    def node_attrs(self):
-        return self.node_attrs_
-
-class DGraphTest:
-    """ Test class for DGraph. Test with DGraphTest().test(). """
-    def __init__(self):
-        self.dg = DGraph()
-
-    def test(self):
-        def print_graph():
-            print "test graph:"
-            for node in self.dg.nodes():
-                print "node: " + node + " : ",
-                print " ".join(
-                    [str(x) for x in self.dg.node_attrs()[node]]) + " : ",
-                print " ".join(self.dg.neighbors(node))
-            print "edges: " + " ".join([str(x) for x in self.dg.edges()])
-        print_graph()
-        self.dg.add_node('ROOT')
-        self.dg.add_node('./file1.o', [
-                ('target', 'file1.o'), ('srcs', ['file1.c', 'file3.h'])])
-        self.dg.add_node('./file2.o', [
-                ('target', 'file2.o'), ('srcs', ['file2.c', 'file3.h'])])
-        self.dg.add_edge(('./main.exe', './file1.o'))
-        self.dg.add_edge(('./main.exe', './file2.o'))
-        self.dg.add_edge(('./file2.o', './file3.h'))
-        self.dg.add_edge(('./file1.o', './file3.h'))
-        self.dg.add_node('./file3.h', [
-                ('target', 'file3.h'), ('srcs', ['file3.h.in'])])
-        self.dg.add_node('./main.exe', [
-                ('target', 'main.exe'), ('srcs', ['file1.o', 'file2.o'])])
-        self.dg.add_edge(('ROOT', './main.exe'))
-        print_graph()
-        if self.dg.has_node('./file1.o'): self.dg.del_node('./file1.o')
-        if self.dg.has_edge(('ROOT', './main.exe')):
-            self.dg.del_edge(('ROOT', './main.exe'))
-        print_graph()
-        return True
-
-class DependencyGraph:
-    """ A class implementing a dependency graph. """
-    def __init__(self, dg=None):
-        """ Constructor. Optionally pass a Dgraph as argument.  """
-        global VERBOSE
-        self.dg = dg
-        if self.dg == None:
-            self.dg = DGraph()
-        self.verbose = VERBOSE
-
-    def add_node(self, node, attrs=None):
-        """ Add a node. """
-        if self.verbose:
-            print "ADD_NODE: " + node
-        self.dg.add_node(node, attrs=attrs)
-
-    def del_node(self, node):
-        """ Delete a node and related edges. """
-        self.dg.del_node(node)
-
-    def has_node(self, node):
-        """ Returns whether the graph contains the node. """
-        return self.dg.has_node(node)
-
-    def add_edge(self, src, dst):
-        """ Add an edge. """
-        if self.verbose:
-            print "ADD_EDGE: " + src + " " + dst
-        self.dg.add_edge((src, dst))
-
-    def del_edge(self, src, dst):
-        """ Delete an edge. """
-        self.dg.del_edge((src, dst))
-
-    def has_edge(self, src, dst):
-        """ Returns whether the graph contains the edge. """
-        return self.dg.has_edge((src, dst))
-
-    def nodes(self):
-        """ Returns the list of nodes. """
-        return self.dg.nodes()
-
-    def edges(self):
-        """ Returns the list of edges. """
-        return self.dg.edges()
-
+class DependencyGraph(DGraph):
+    """
+    A class implementing a dependency graph.
+    """
     def graph(self):
         """ Get the graph as a nodes, edges map. """
         return {'nodes': self.nodes(), 'edges': self.edges()}
 
-    def node_attributes(self):
-        """ Get the node attributes. """
-        return self.dg.node_attrs()
-
     def get_makedep(self):
         """ Get a makefile like output. """
         mk = ""
-        for node in self.dg.nodes():
-            mk = mk + node + ": " + " ".join(self.dg.neighbors(node)) + "\n"
+        for node in self.nodes():
+            mk = mk + node + ": " + " ".join(self.succs(node)) + "\n"
         return mk
 
     def get_targets(self):
         """ Get the list of targets. """
         targets = []
-        for node in self.dg.neighbors("ROOT"):
-            for attr, value in self.node_attributes()[node]:
+        for node in self.succs("ROOT"):
+            for attr, value in self.node_attrs(node):
                 if attr == "target":
                     targets.append(value)
         return targets
@@ -182,10 +50,10 @@ class DependencyGraph:
     def get_objects(self):
         """ Get the list of object files. """
         objects = []
-        for node in self.dg.nodes():
+        for node in self.nodes():
             target = None
             dep = None
-            for attr, value in self.node_attributes()[node]:
+            for attr, value in self.node_attrs(node):
                 if attr == "target":
                     target = value
                 if attr == "dependency":
@@ -203,8 +71,8 @@ class DependencyGraph:
             return (arg.startswith('-m') or arg.startswith('-f')
                     or arg.startswith('-O'))
         optflags = []
-        for node in self.dg.nodes():
-            for attr, value in self.node_attributes()[node]:
+        for node in self.nodes():
+            for attr, value in self.node_attrs(node):
                 if (attr == 'dependency' and value.kind() == "CC" and
                     value.interpreter().cc_interpreter().has_cc_phase("CC")):
                     optflags += [x for x in
@@ -213,28 +81,26 @@ class DependencyGraph:
         return optflags
 
     def common_relative_profdir_prefix(self):
-        """ Get the common path prefix of all targets of cc commands designated
-        with a relative path. """
+        """
+        Get the common path prefix of all targets of cc commands designated
+        with a relative path.
+        """
         outputs = []
-        for node in self.dg.nodes():
-            for attr, value in self.node_attributes()[node]:
+        for node in self.nodes():
+            for attr, value in self.node_attrs(node):
                 if attr != 'dependency' or value.kind() != "CC":
                     continue
-                if value.interpreter().cc_interpreter().has_cc_phase("LD"):
-                    # consider that gcda files can be generated in cwd
-                    # (CCLD commands could be ignored here if no source
-                    #  files in input)
-                    outputs.append(value.command()['cwd'])
-                elif value.interpreter().cc_interpreter().has_cc_phase("CC"):
+                if value.interpreter().cc_interpreter().has_cc_phase("CC"):
                     # We must use the unmodified output arguments of the
                     # CC command line, not the normalized one returned by
                     # value.outputs() for instance.
-                    output_files = \
+                    cc_outputs = \
                         value.interpreter().cc_interpreter().all_cc_outputs()
-                    # Ensured at dependency building,
+                    # In case of multiple outputs in CC phases, all outputs are
+                    # in the same directory, thus the first one is sufficient
                     # though it's a TODO to handle multiple outputs
-                    assert(len(output_files) == 1)
-                    output = output_files[0]
+                    assert(len(cc_outputs) >= 1)
+                    output = cc_outputs[0]
                     if os.path.isabs(output): continue
                     outputs.extend(value.outputs())
                     # no common prefix longer than cwd
@@ -244,8 +110,8 @@ class DependencyGraph:
     def get_compilers(self):
         """ Get the list of compilers. """
         compilers = set()
-        for node in self.dg.nodes():
-            for attr, value in self.node_attributes()[node]:
+        for node in self.nodes():
+            for attr, value in self.node_attrs(node):
                 if (attr != 'dependency' or
                     value.kind() != "CC"):
                     continue
@@ -286,10 +152,10 @@ class DependencyGraph:
         #mkfile.write("-include $(MAKEDIR)/build-target-flags.mk\n")
         #mkfile.write("-include $(MAKEDIR)/build-file-flags.mk\n")
         mkfile.write("\n")
-        for node in self.dg.nodes():
+        for node in self.nodes():
             target = node
             recipe = None
-            for attr, value in self.node_attributes()[node]:
+            for attr, value in self.node_attrs(node):
                 if attr == "target":
                     target = value
                 if attr == "dependency":
@@ -298,8 +164,8 @@ class DependencyGraph:
                         " && $(ATOS_DRIVER) " +
                         process.list2cmdline(self.recipe_args(value)))
             deps = []
-            for dep in self.dg.neighbors(node):
-                for attr, value in self.node_attributes()[dep]:
+            for dep in self.succs(node):
+                for attr, value in self.node_attrs(dep):
                     if attr == "target":
                         deps.append(value)
             mkfile.write(target + ": $(FORCE) " + " ".join(deps) + "\n")
@@ -392,8 +258,9 @@ class DependencyGraphBuilder:
                         raise Exception(
                             "Expected to have seen output in dependencies: " +
                             output)
-                    self.graph.node_attributes()[output] = [
-                        ('target', output), ('dependency', dependency)]
+                    self.graph.set_node_attrs(output,
+                                              [('target', output),
+                                               ('dependency', dependency)])
                     for inp in dependency.inputs():
                         available_inputs.add(inp)
                         if not self.graph.has_node(inp):
@@ -410,7 +277,7 @@ class DependencyGraphBuilder:
             if node == "ROOT":
                 continue
             real = False
-            for attr, value in self.graph.node_attributes()[node]:
+            for attr, value in self.graph.node_attrs(node):
                 if attr == "dependency":
                     real = True
             if not real:
@@ -552,7 +419,3 @@ class CCDEPSParser:
     def get_commands(self):
         """ Returns the constructed command list.  """
         return self.commands
-
-if __name__ == "__main__":
-    passed = DGraphTest().test()
-    if not passed: sys.exit(1)

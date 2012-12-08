@@ -196,6 +196,7 @@ class parsers:
         args.arregexp(parser)
         args.arname(parser)
         args.output(parser, default="build.audit")
+        args.legacy(parser)
         args.force(parser)
         args.debug(parser)
         args.log_file(parser)
@@ -226,6 +227,7 @@ class parsers:
         group = parser.add_mutually_exclusive_group()
         args.useprofile(group)
         args.genprofile(group)
+        args.legacy(parser)
         args.force(parser)
         args.debug(parser)
         args.log_file(parser)
@@ -248,6 +250,7 @@ class parsers:
         args.output(parser, default="build.mk")
         args.atos_deps.last(parser)
         args.atos_deps.all(parser)
+        args.legacy(parser)
         args.force(parser)
         args.quiet(parser)
         args.debug(parser)
@@ -266,6 +269,7 @@ class parsers:
         args.exes(parser)
         args.configuration_path(parser)
         args.build_script(parser)
+        args.legacy(parser)
         args.force(parser)
         args.run_script(parser)
         args.nbruns(parser, default=1)
@@ -398,6 +402,7 @@ class parsers:
         args.exes(parser)
         args.configuration_path(parser)
         args.build_script(parser)
+        args.legacy(parser)
         args.force(parser)
         args.run_script(parser)
         args.nbruns(parser, default=1)
@@ -451,6 +456,7 @@ class parsers:
         args.cookie(parser)
         args.debug(parser)
         args.log_file(parser)
+        args.legacy(parser)
         args.force(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
@@ -639,6 +645,7 @@ class parsers:
         args.cookie(parser)
         args.debug(parser)
         args.log_file(parser)
+        args.legacy(parser)
         args.force(parser, ("--force",))
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
@@ -729,6 +736,7 @@ class parsers:
         args.query(parser, ("--query",))
         args.debug(parser)
         args.log_file(parser)
+        args.legacy(parser)
         args.force(parser, ("--force",))
         args.quiet(parser)
         args.dryrun(parser)
@@ -748,6 +756,7 @@ class parsers:
         args.options(parser, ("-g", "--options"))
         args.debug(parser)
         args.log_file(parser)
+        args.legacy(parser)
         args.force(parser)
         args.quiet(parser)
         args.dryrun(parser)
@@ -767,6 +776,7 @@ class parsers:
         args.results_script(parser)
         args.size_cmd(parser)
         args.time_cmd(parser)
+        args.legacy(parser)
         args.force(parser)
         args.debug(parser)
         args.log_file(parser)
@@ -914,6 +924,13 @@ class args:
              dest="configuration_path",
              help="atos configuration working directory",
              default=globals.DEFAULT_CONFIGURATION_PATH)
+
+    @staticmethod
+    def legacy(parser, args=("--legacy",)):
+        parser.add_argument(
+            *args,
+             action="store_true",
+             help="use legacy scheme for audit and exploration")
 
     @staticmethod
     def force(parser, args=("-f", "--force")):

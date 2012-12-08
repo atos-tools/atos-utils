@@ -18,6 +18,7 @@
 
 import os
 import sys
+import errno
 import re
 import shlex
 import logging
@@ -228,8 +229,9 @@ def system(cmd, check_status=False, get_output=False, print_output=False,
         return get_output and output or None
     return get_output and (status, output) or status
 
-def open_locked(filename, mode='r'):
-    while True:
+def open_locked(filename, mode='r', timeout=None):
+    delay = 0
+    while timeout == None or delay <= timeout:
         outf = open(filename, mode)
         if _dryrun and not isinstance(outf, file):
             return outf
@@ -237,7 +239,8 @@ def open_locked(filename, mode='r'):
             fcntl.flock(outf, fcntl.LOCK_EX | fcntl.LOCK_NB)
             return outf
         except: outf.close()
-        time.sleep(1)
+        time.sleep(0.2)
+        delay += 0.2
 
 def _open(name, *args):
     if not _dryrun:
@@ -268,7 +271,12 @@ class commands():
         logging.debug('mkdir -p ' + dirname)
         if os.path.isdir(dirname): return
         if _dryrun: return
-        os.makedirs(dirname)
+        try:
+            os.makedirs(dirname)
+        except OSError, e:
+            # If dir already exists, ignore error
+            if e.errno == errno.EEXIST: return
+            raise
 
     @staticmethod
     def touch(filename):
@@ -303,6 +311,12 @@ class commands():
             os.unlink(path)
 
     @staticmethod
+    def link(src, dst):
+        logging.debug('ln %s %s' % (src, dst))
+        if _dryrun: return
+        os.link(src, dst)
+
+    @staticmethod
     def copyfile(src, dst):
         logging.debug('cp %s %s' % (src, dst))
         if _dryrun: return
@@ -310,11 +324,12 @@ class commands():
 
     @staticmethod
     def chdir(path):
-        logging.debug('cd %s' % (path))
+        logging.debug('cd %s' % path)
         os.chdir(path)
 
     @staticmethod
     def which(execname):
+        logging.debug('which %s' % execname)
         if os.path.dirname(execname) != "":
             if os.access(execname, os.X_OK):
                 return os.path.abspath(execname)
@@ -327,6 +342,20 @@ class commands():
                 if os.access(p, os.X_OK):
                     return os.path.abspath(p)
         return None
+
+    @staticmethod
+    def diff(path1, path2):
+        """
+        Diff two files, returns True in case of diff.
+        """
+        logging.debug('diff %s %s' % (path1, path2))
+        with open(path1, "rb") as f1:
+            with open(path2, "rb") as f2:
+                while True:
+                    b1 = f1.read(4096)
+                    b2 = f2.read(4096)
+                    if b1 != b2: return True
+                    if not b1: return False
 
     @staticmethod
     def test():
@@ -364,11 +393,27 @@ class commands():
                 os.environ['PATH'] = oldpath
             return True
 
+        def test_diff(tmpdir):
+            commands.chdir(tmpdir)
+            commands.touch("empty")
+            assert(not commands.diff("empty", "empty"))
+            with open("afile", "w") as f:
+                f.write("afile\n")
+            assert(not commands.diff("afile", "afile"))
+            assert(commands.diff("afile", "empty"))
+            assert(commands.diff("empty", "afile"))
+            with open("bfile", "w") as f:
+                f.write("afile\n")
+                f.write("plus some line\n")
+            assert(commands.diff("afile", "bfile"))
+            assert(commands.diff("bfile", "afile"))
+
         print "TESTING process.commands..."
         cwd = os.getcwd()
         tmpdir = tempfile.mkdtemp()
         try:
             test_which(tmpdir)
+            test_diff(tmpdir)
         finally:
             commands.chdir(cwd)
             commands.rmtree(tmpdir)

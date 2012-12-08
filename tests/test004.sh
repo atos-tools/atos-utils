@@ -8,7 +8,7 @@ TEST_CASE="ATOS deps target/-l/-a"
 
 $ROOT/bin/atos-audit gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c
 $ROOT/bin/atos-deps sha1-c
-[ -f atos-configurations/targets ]
+[ -f atos-configurations/targets -a `wc -l <atos-configurations/targets` = 1 ]
 [ -f atos-configurations/objects ]
 [ -f atos-configurations/build.mk ]
 targets=`cat atos-configurations/targets`
@@ -19,8 +19,12 @@ mv sha1-c sha1-c.ref
 make -f atos-configurations/build.mk
 cmp sha1-c sha1-c.ref
 
+mv sha1-c sha1-c.ref
 $ROOT/bin/atos-deps -l
-make -f atos-configurations/build.mk sha1-c
+[ -f atos-configurations/targets -a `wc -l <atos-configurations/targets` = 1 ]
+[ -f atos-configurations/objects ]
+[ -f atos-configurations/build.mk ]
+make -f atos-configurations/build.mk $PWD/sha1-c
 cmp sha1-c sha1-c.ref
 
 cp -a $ROOT/share/atos/examples/sha1 .

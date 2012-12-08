@@ -6,6 +6,10 @@ source `dirname $0`/common.sh
 
 TEST_CASE="ATOS deps PROFILE_DIR"
 
+# Run the test in both legacy an new mode
+for legacy in "--legacy" ""; do
+
+rm -rf atos-configurations*
 mkdir TMPDIR; cd TMPDIR
 
 cat > ./build.sh <<EOF
@@ -52,7 +56,7 @@ cat > ./run.sh <<EOF
   done
 EOF
 
-$ROOT/bin/atos-audit sh ./build.sh
+$ROOT/bin/atos-audit $legacy sh ./build.sh
 $ROOT/bin/atos-raudit sh ./run.sh
 $ROOT/bin/atos-deps -a
 $ROOT/bin/atos-profile -g -O2
@@ -78,7 +82,7 @@ cat > ./run.2.sh <<EOF
   ( dd if=/dev/urandom status=noxfer iflag=fullblock bs=320 count=32 2> /dev/null) | ./TMP7/sha1-c
 EOF
 
-$ROOT/bin/atos-audit -C atos-configurations-2 sh ./build.2.sh
+$ROOT/bin/atos-audit $legacy  -C atos-configurations-2 sh ./build.2.sh
 $ROOT/bin/atos-raudit -C atos-configurations-2 sh ./run.2.sh
 $ROOT/bin/atos-deps -a -C atos-configurations-2
 $ROOT/bin/atos-profile -C atos-configurations-2 -g -O2
@@ -102,7 +106,7 @@ cat > ./run.3.sh <<EOF
   ( dd if=/dev/urandom status=noxfer iflag=fullblock bs=320 count=32 2> /dev/null) | ./TMP8/sha1-c
 EOF
 
-$ROOT/bin/atos-audit -C atos-configurations-3 sh ./build.3.sh
+$ROOT/bin/atos-audit  $legacy -C atos-configurations-3 sh ./build.3.sh
 $ROOT/bin/atos-raudit -C atos-configurations-3 sh ./run.3.sh
 $ROOT/bin/atos-deps -a -C atos-configurations-3
 $ROOT/bin/atos-profile -C atos-configurations-3 -g -O2
@@ -111,3 +115,4 @@ $ROOT/bin/atos-build -C atos-configurations-3 -a -O2 -u -O2
 [ `find atos-configurations-3/logs -name *.log -exec grep "gcda not found" {} ";" | wc -l` -eq 0 ]
 [ `ls atos-configurations-3/profiles | grep gcda | wc -l` -eq 0 ]
 
+done # for legacy in ...

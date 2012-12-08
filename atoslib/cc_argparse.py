@@ -165,6 +165,14 @@ class CCArgumentInterpreter:
         assert(kind in ["program", "relocatable", "shared"])
         return self.ld_kind_ == kind
 
+    def has_final_link(self):
+        """
+        Returns true is the compiler is doing a final link phase,
+        i.e. running LD and generating shared object or program file.
+        """
+        return self.has_cc_phase("LD") and (self.is_ld_kind("program") or
+                                            self.is_ld_kind("shared"))
+
 class CCArgumentProcessor:
     def __init__(self, namespace, cwd=".", desc=cc_arguments.CCArgumentsDesc):
         self.ns_ = namespace

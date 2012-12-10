@@ -1113,6 +1113,110 @@ extern int ftrylockfile (FILE *__stream) throw () ;
 
 
 extern void funlockfile (FILE *__stream) throw ();
+# 835 "/usr/include/stdio.h" 3 4
+# 1 "/usr/include/bits/stdio.h" 1 3 4
+# 33 "/usr/include/bits/stdio.h" 3 4
+inline int
+vprintf (__const char *__restrict __fmt, __gnuc_va_list __arg)
+{
+  return vfprintf (stdout, __fmt, __arg);
+}
+
+
+inline int
+getchar (void)
+{
+  return _IO_getc (stdin);
+}
+
+
+
+
+inline int
+fgetc_unlocked (FILE *__fp)
+{
+  return (__builtin_expect (((__fp)->_IO_read_ptr >= (__fp)->_IO_read_end), 0) ? __uflow (__fp) : *(unsigned char *) (__fp)->_IO_read_ptr++);
+}
+
+
+
+
+
+inline int
+getc_unlocked (FILE *__fp)
+{
+  return (__builtin_expect (((__fp)->_IO_read_ptr >= (__fp)->_IO_read_end), 0) ? __uflow (__fp) : *(unsigned char *) (__fp)->_IO_read_ptr++);
+}
+
+
+inline int
+getchar_unlocked (void)
+{
+  return (__builtin_expect (((stdin)->_IO_read_ptr >= (stdin)->_IO_read_end), 0) ? __uflow (stdin) : *(unsigned char *) (stdin)->_IO_read_ptr++);
+}
+
+
+
+
+inline int
+putchar (int __c)
+{
+  return _IO_putc (__c, stdout);
+}
+
+
+
+
+inline int
+fputc_unlocked (int __c, FILE *__stream)
+{
+  return (__builtin_expect (((__stream)->_IO_write_ptr >= (__stream)->_IO_write_end), 0) ? __overflow (__stream, (unsigned char) (__c)) : (unsigned char) (*(__stream)->_IO_write_ptr++ = (__c)));
+}
+
+
+
+
+
+inline int
+putc_unlocked (int __c, FILE *__stream)
+{
+  return (__builtin_expect (((__stream)->_IO_write_ptr >= (__stream)->_IO_write_end), 0) ? __overflow (__stream, (unsigned char) (__c)) : (unsigned char) (*(__stream)->_IO_write_ptr++ = (__c)));
+}
+
+
+inline int
+putchar_unlocked (int __c)
+{
+  return (__builtin_expect (((stdout)->_IO_write_ptr >= (stdout)->_IO_write_end), 0) ? __overflow (stdout, (unsigned char) (__c)) : (unsigned char) (*(stdout)->_IO_write_ptr++ = (__c)));
+}
+
+
+
+
+
+inline __ssize_t
+getline (char **__lineptr, size_t *__n, FILE *__stream)
+{
+  return __getdelim (__lineptr, __n, '\n', __stream);
+}
+
+
+
+
+
+inline int
+feof_unlocked (FILE *__stream) throw ()
+{
+  return (((__stream)->_flags & 0x10) != 0);
+}
+
+
+inline int
+ferror_unlocked (FILE *__stream) throw ()
+{
+  return (((__stream)->_flags & 0x20) != 0);
+}
+# 836 "/usr/include/stdio.h" 2 3 4
 # 844 "/usr/include/stdio.h" 3 4
 }
 # 21 "/opt/gcc-plugins/src/acf_csv_reader.c" 2
@@ -1696,6 +1800,108 @@ extern unsigned long long int __strtoull_internal (__const char *
          char **__restrict __endptr,
          int __base, int __group)
      throw () __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
+
+
+
+extern __inline double
+strtod (__const char *__restrict __nptr, char **__restrict __endptr) throw ()
+{
+  return __strtod_internal (__nptr, __endptr, 0);
+}
+extern __inline long int
+strtol (__const char *__restrict __nptr, char **__restrict __endptr, int __base) throw ()
+
+{
+  return __strtol_internal (__nptr, __endptr, __base, 0);
+}
+extern __inline unsigned long int
+strtoul (__const char *__restrict __nptr, char **__restrict __endptr, int __base) throw ()
+
+{
+  return __strtoul_internal (__nptr, __endptr, __base, 0);
+}
+
+
+
+
+extern __inline float
+strtof (__const char *__restrict __nptr, char **__restrict __endptr) throw ()
+{
+  return __strtof_internal (__nptr, __endptr, 0);
+}
+
+extern __inline long double
+strtold (__const char *__restrict __nptr, char **__restrict __endptr) throw ()
+{
+  return __strtold_internal (__nptr, __endptr, 0);
+}
+
+
+
+
+
+__extension__ extern __inline long long int
+strtoq (__const char *__restrict __nptr, char **__restrict __endptr, int __base) throw ()
+
+{
+  return __strtoll_internal (__nptr, __endptr, __base, 0);
+}
+__extension__ extern __inline unsigned long long int
+strtouq (__const char *__restrict __nptr, char **__restrict __endptr, int __base) throw ()
+
+{
+  return __strtoull_internal (__nptr, __endptr, __base, 0);
+}
+
+
+
+
+__extension__ extern __inline long long int
+strtoll (__const char *__restrict __nptr, char **__restrict __endptr, int __base) throw ()
+
+{
+  return __strtoll_internal (__nptr, __endptr, __base, 0);
+}
+__extension__ extern __inline unsigned long long int
+strtoull (__const char * __restrict __nptr, char **__restrict __endptr, int __base) throw ()
+
+{
+  return __strtoull_internal (__nptr, __endptr, __base, 0);
+}
+
+
+
+
+extern __inline double
+atof (__const char *__nptr) throw ()
+{
+  return strtod (__nptr, (char **) __null);
+}
+extern __inline int
+atoi (__const char *__nptr) throw ()
+{
+  return (int) strtol (__nptr, (char **) __null, 10);
+}
+extern __inline long int
+atol (__const char *__nptr) throw ()
+{
+  return strtol (__nptr, (char **) __null, 10);
+}
+
+
+
+
+__extension__ extern __inline long long int
+atoll (__const char *__nptr) throw ()
+{
+  return strtoll (__nptr, (char **) __null, 10);
+}
+
 # 429 "/usr/include/stdlib.h" 3 4
 extern char *l64a (long int __n) throw () ;
 

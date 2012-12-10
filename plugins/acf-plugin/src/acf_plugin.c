@@ -35,13 +35,13 @@
 #include "acf_plugin.h"
 
 /* ============================================================ */
-/* Other external declarations
+/* Other external declarations */
 /* ============================================================ */
 /* Function error() is not always declared in gcc headers. */
 extern void error (const char *, ...);
 
 /* ============================================================ */
-/* Setting of global macros
+/* Setting of global macros */
 /* ============================================================ */
 
 #ifdef param_values
@@ -137,7 +137,7 @@ static void trace_attached_acf(acf_ftable_entry_t *acf_entry, const char *acf_ty
 }
 
 /* ============================================================ */
-/* Add attributes to function during function parsing
+/* Add attributes to function during function parsing */
 /* ============================================================ */
 
 extern tree maybe_constant_value (tree) __attribute__((weak));
@@ -210,7 +210,7 @@ add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tre
 }
 
 /* ============================================================ */
-/* Add attributes to function in LTO pass
+/* Add attributes to function in LTO pass */
 /* ============================================================ */
 
 static struct cl_optimization loc_save_options, *save_options = NULL;
@@ -299,7 +299,7 @@ static void restore_global_attribute_values() {
 }
 
 /* ============================================================ */
-/* Add params to function in backend or LTO pass
+/* Add params to function in backend or LTO pass */
 /* ============================================================ */
 
 static char **csv_param_name  = NULL;
@@ -390,7 +390,7 @@ static void restore_global_param_values() {
 }
 
 /* ============================================================ */
-/* Read CSV file and set attributes and params
+/* Read CSV file and set attributes and params */
 /* ============================================================ */
 
 static int parse_ftable_csv_file(acf_ftable_entry_t **acf_ftable_p,
@@ -553,7 +553,7 @@ static bool fill_csv_options(tree decl, int acf_pass) {
 }
 
 /* ============================================================ */
-/* Add ACF callbacks to GCC
+/* Add ACF callbacks to GCC */
 /* ============================================================ */
 
 extern void cplus_decl_attributes(tree *, tree, int) __attribute__((weak));

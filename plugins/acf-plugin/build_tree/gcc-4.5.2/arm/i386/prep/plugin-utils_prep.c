@@ -168,6 +168,90 @@ extern unsigned long long int __strtoull_internal (__const char *
          char **__restrict __endptr,
          int __base, int __group)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
+
+
+
+extern __inline double
+__attribute__ ((__nothrow__)) strtod (__const char *__restrict __nptr, char **__restrict __endptr)
+{
+  return __strtod_internal (__nptr, __endptr, 0);
+}
+extern __inline long int
+__attribute__ ((__nothrow__)) strtol (__const char *__restrict __nptr, char **__restrict __endptr, int __base)
+
+{
+  return __strtol_internal (__nptr, __endptr, __base, 0);
+}
+extern __inline unsigned long int
+__attribute__ ((__nothrow__)) strtoul (__const char *__restrict __nptr, char **__restrict __endptr, int __base)
+
+{
+  return __strtoul_internal (__nptr, __endptr, __base, 0);
+}
+
+# 364 "/usr/include/stdlib.h" 3 4
+__extension__ extern __inline long long int
+__attribute__ ((__nothrow__)) strtoq (__const char *__restrict __nptr, char **__restrict __endptr, int __base)
+
+{
+  return __strtoll_internal (__nptr, __endptr, __base, 0);
+}
+__extension__ extern __inline unsigned long long int
+__attribute__ ((__nothrow__)) strtouq (__const char *__restrict __nptr, char **__restrict __endptr, int __base)
+
+{
+  return __strtoull_internal (__nptr, __endptr, __base, 0);
+}
+
+
+
+
+__extension__ extern __inline long long int
+__attribute__ ((__nothrow__)) strtoll (__const char *__restrict __nptr, char **__restrict __endptr, int __base)
+
+{
+  return __strtoll_internal (__nptr, __endptr, __base, 0);
+}
+__extension__ extern __inline unsigned long long int
+__attribute__ ((__nothrow__)) strtoull (__const char * __restrict __nptr, char **__restrict __endptr, int __base)
+
+{
+  return __strtoull_internal (__nptr, __endptr, __base, 0);
+}
+
+
+
+
+extern __inline double
+__attribute__ ((__nothrow__)) atof (__const char *__nptr)
+{
+  return strtod (__nptr, (char **) ((void *)0));
+}
+extern __inline int
+__attribute__ ((__nothrow__)) atoi (__const char *__nptr)
+{
+  return (int) strtol (__nptr, (char **) ((void *)0), 10);
+}
+extern __inline long int
+__attribute__ ((__nothrow__)) atol (__const char *__nptr)
+{
+  return strtol (__nptr, (char **) ((void *)0), 10);
+}
+
+
+
+
+__extension__ extern __inline long long int
+__attribute__ ((__nothrow__)) atoll (__const char *__nptr)
+{
+  return strtoll (__nptr, (char **) ((void *)0), 10);
+}
+
 # 429 "/usr/include/stdlib.h" 3 4
 extern char *l64a (long int __n) __attribute__ ((__nothrow__)) ;
 
@@ -1933,6 +2017,96 @@ extern int ftrylockfile (FILE *__stream) __attribute__ ((__nothrow__)) ;
 
 
 extern void funlockfile (FILE *__stream) __attribute__ ((__nothrow__));
+# 835 "/usr/include/stdio.h" 3 4
+# 1 "/usr/include/bits/stdio.h" 1 3 4
+# 33 "/usr/include/bits/stdio.h" 3 4
+extern __inline int
+vprintf (__const char *__restrict __fmt, __gnuc_va_list __arg)
+{
+  return vfprintf (stdout, __fmt, __arg);
+}
+
+
+extern __inline int
+getchar (void)
+{
+  return _IO_getc (stdin);
+}
+
+
+
+
+extern __inline int
+fgetc_unlocked (FILE *__fp)
+{
+  return (__builtin_expect (((__fp)->_IO_read_ptr >= (__fp)->_IO_read_end), 0) ? __uflow (__fp) : *(unsigned char *) (__fp)->_IO_read_ptr++);
+}
+
+
+
+
+
+extern __inline int
+getc_unlocked (FILE *__fp)
+{
+  return (__builtin_expect (((__fp)->_IO_read_ptr >= (__fp)->_IO_read_end), 0) ? __uflow (__fp) : *(unsigned char *) (__fp)->_IO_read_ptr++);
+}
+
+
+extern __inline int
+getchar_unlocked (void)
+{
+  return (__builtin_expect (((stdin)->_IO_read_ptr >= (stdin)->_IO_read_end), 0) ? __uflow (stdin) : *(unsigned char *) (stdin)->_IO_read_ptr++);
+}
+
+
+
+
+extern __inline int
+putchar (int __c)
+{
+  return _IO_putc (__c, stdout);
+}
+
+
+
+
+extern __inline int
+fputc_unlocked (int __c, FILE *__stream)
+{
+  return (__builtin_expect (((__stream)->_IO_write_ptr >= (__stream)->_IO_write_end), 0) ? __overflow (__stream, (unsigned char) (__c)) : (unsigned char) (*(__stream)->_IO_write_ptr++ = (__c)));
+}
+
+
+
+
+
+extern __inline int
+putc_unlocked (int __c, FILE *__stream)
+{
+  return (__builtin_expect (((__stream)->_IO_write_ptr >= (__stream)->_IO_write_end), 0) ? __overflow (__stream, (unsigned char) (__c)) : (unsigned char) (*(__stream)->_IO_write_ptr++ = (__c)));
+}
+
+
+extern __inline int
+putchar_unlocked (int __c)
+{
+  return (__builtin_expect (((stdout)->_IO_write_ptr >= (stdout)->_IO_write_end), 0) ? __overflow (stdout, (unsigned char) (__c)) : (unsigned char) (*(stdout)->_IO_write_ptr++ = (__c)));
+}
+# 121 "/usr/include/bits/stdio.h" 3 4
+extern __inline int
+__attribute__ ((__nothrow__)) feof_unlocked (FILE *__stream)
+{
+  return (((__stream)->_flags & 0x10) != 0);
+}
+
+
+extern __inline int
+__attribute__ ((__nothrow__)) ferror_unlocked (FILE *__stream)
+{
+  return (((__stream)->_flags & 0x20) != 0);
+}
+# 836 "/usr/include/stdio.h" 2 3 4
 # 844 "/usr/include/stdio.h" 3 4
 
 # 43 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/system.h" 2
@@ -2036,6 +2210,18 @@ extern int toascii (int __c) __attribute__ ((__nothrow__));
 
 extern int _toupper (int) __attribute__ ((__nothrow__));
 extern int _tolower (int) __attribute__ ((__nothrow__));
+# 190 "/usr/include/ctype.h" 3 4
+extern __inline int
+__attribute__ ((__nothrow__)) tolower (int __c)
+{
+  return __c >= -128 && __c < 256 ? (*__ctype_tolower_loc ())[__c] : __c;
+}
+
+extern __inline int
+__attribute__ ((__nothrow__)) toupper (int __c)
+{
+  return __c >= -128 && __c < 256 ? (*__ctype_toupper_loc ())[__c] : __c;
+}
 # 323 "/usr/include/ctype.h" 3 4
 
 # 123 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/safe-ctype.h" 2
@@ -2248,6 +2434,13 @@ extern int strncasecmp (__const char *__s1, __const char *__s2, size_t __n)
 extern char *strsep (char **__restrict __stringp,
        __const char *__restrict __delim)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+# 414 "/usr/include/string.h" 3 4
+# 1 "/usr/include/bits/string.h" 1 3 4
+# 415 "/usr/include/string.h" 2 3 4
+
+
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/include-fixed/bits/string2.h" 1 3 4
+# 418 "/usr/include/string.h" 2 3 4
 # 426 "/usr/include/string.h" 3 4
 
 # 199 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/system.h" 2
@@ -3712,6 +3905,10 @@ extern int posix_fallocate (int __fd, __off_t __offset, __off_t __len);
 extern int __sigismember (__const __sigset_t *, int);
 extern int __sigaddset (__sigset_t *, int);
 extern int __sigdelset (__sigset_t *, int);
+# 117 "/usr/include/bits/sigset.h" 3 4
+extern __inline int __sigismember (__const __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return (__set->__val[__word] & __mask) ? 1 : 0; }
+extern __inline int __sigaddset ( __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return ((__set->__val[__word] |= __mask), 0); }
+extern __inline int __sigdelset ( __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return ((__set->__val[__word] &= ~__mask), 0); }
 # 34 "/usr/include/signal.h" 2 3 4
 
 
@@ -4812,7 +5009,59 @@ extern intmax_t wcstoimax (__const __gwchar_t *__restrict __nptr,
 extern uintmax_t wcstoumax (__const __gwchar_t *__restrict __nptr,
        __gwchar_t ** __restrict __endptr, int __base)
      __attribute__ ((__nothrow__));
-# 459 "/usr/include/inttypes.h" 3 4
+# 396 "/usr/include/inttypes.h" 3 4
+extern __inline intmax_t
+__attribute__ ((__nothrow__)) strtoimax (__const char *__restrict nptr, char **__restrict endptr, int base)
+
+{
+  return __strtoll_internal (nptr, endptr, base, 0);
+}
+# 414 "/usr/include/inttypes.h" 3 4
+extern __inline uintmax_t
+__attribute__ ((__nothrow__)) strtoumax (__const char *__restrict nptr, char **__restrict endptr, int base)
+
+{
+  return __strtoull_internal (nptr, endptr, base, 0);
+}
+
+
+
+__extension__
+extern long long int __wcstoll_internal (__const __gwchar_t *
+      __restrict __nptr,
+      __gwchar_t **__restrict __endptr,
+      int __base, int __group) __attribute__ ((__nothrow__));
+
+
+extern __inline intmax_t
+__attribute__ ((__nothrow__)) wcstoimax (__const __gwchar_t *__restrict nptr, __gwchar_t **__restrict endptr, int base)
+
+{
+  return __wcstoll_internal (nptr, endptr, base, 0);
+}
+
+
+
+
+__extension__
+extern unsigned long long int __wcstoull_internal (__const __gwchar_t *
+         __restrict __nptr,
+         __gwchar_t **
+         __restrict __endptr,
+         int __base,
+         int __group) __attribute__ ((__nothrow__));
+
+
+extern __inline uintmax_t
+__attribute__ ((__nothrow__)) wcstoumax (__const __gwchar_t *__restrict nptr, __gwchar_t **__restrict endptr, int base)
+
+{
+  return __wcstoull_internal (nptr, endptr, base, 0);
+}
+
+
+
+
 
 # 423 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/system.h" 2
 # 472 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/system.h"
@@ -5774,7 +6023,7 @@ extern const unsigned char mode_fbit[NUM_MACHINE_MODES];
 
 
 
-extern const unsigned long mode_mask_array[NUM_MACHINE_MODES];
+extern const unsigned long long mode_mask_array[NUM_MACHINE_MODES];
 
 
 
@@ -7527,8 +7776,8 @@ typedef const struct basic_block_def *const_basic_block;
 # 54 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/double-int.h"
 typedef struct
 {
-  unsigned long low;
-  long high;
+  unsigned long long low;
+  long long high;
 } double_int;
 
 union tree_node;
@@ -7543,18 +7792,18 @@ double_int tree_to_double_int (const union tree_node *);
 
 
 static __inline__ double_int
-shwi_to_double_int (long cst)
+shwi_to_double_int (long long cst)
 {
   double_int r;
 
-  r.low = (unsigned long) cst;
+  r.low = (unsigned long long) cst;
   r.high = cst < 0 ? -1 : 0;
 
   return r;
 }
 # 93 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/double-int.h"
 static __inline__ double_int
-uhwi_to_double_int (unsigned long cst)
+uhwi_to_double_int (unsigned long long cst)
 {
   double_int r;
 
@@ -7579,8 +7828,8 @@ double_int double_int_neg (double_int);
 unsigned char double_int_fits_in_hwi_p (double_int, unsigned char);
 unsigned char double_int_fits_in_shwi_p (double_int);
 unsigned char double_int_fits_in_uhwi_p (double_int);
-long double_int_to_shwi (double_int);
-unsigned long double_int_to_uhwi (double_int);
+long long double_int_to_shwi (double_int);
+unsigned long long double_int_to_uhwi (double_int);
 double_int double_int_div (double_int, double_int, unsigned char, unsigned);
 double_int double_int_sdiv (double_int, double_int, unsigned);
 double_int double_int_udiv (double_int, double_int, unsigned);
@@ -7622,7 +7871,7 @@ double_int_one_p (double_int cst)
 static __inline__ unsigned char
 double_int_minus_one_p (double_int cst)
 {
-  return (cst.low == (~((unsigned long) 0)) && cst.high == -1);
+  return (cst.low == (~((unsigned long long) 0)) && cst.high == -1);
 }
 
 
@@ -12429,12 +12678,12 @@ extern tree build_var_debug_value_stat (tree, tree );
 
 
 
-extern tree build_int_cst (tree, long);
-extern tree build_int_cst_type (tree, long);
-extern tree build_int_cstu (tree, unsigned long);
-extern tree build_int_cst_wide (tree, unsigned long, long);
+extern tree build_int_cst (tree, long long);
+extern tree build_int_cst_type (tree, long long);
+extern tree build_int_cstu (tree, unsigned long long);
+extern tree build_int_cst_wide (tree, unsigned long long, long long);
 extern tree build_int_cst_wide_type (tree,
-         unsigned long, long);
+         unsigned long long, long long);
 extern tree build_vector (tree, tree);
 extern tree build_vector_from_ctor (tree, VEC_constructor_elt_gc *);
 extern tree build_constructor (tree, VEC_constructor_elt_gc *);
@@ -12511,7 +12760,7 @@ extern int tree_int_cst_equal (const_tree, const_tree);
 extern int tree_int_cst_lt (const_tree, const_tree);
 extern int tree_int_cst_compare (const_tree, const_tree);
 extern int host_integerp (const_tree, int);
-extern long tree_low_cst (const_tree, int);
+extern long long tree_low_cst (const_tree, int);
 extern int tree_int_cst_msb (const_tree);
 extern int tree_int_cst_sgn (const_tree);
 extern int tree_int_cst_sign_bit (const_tree);
@@ -12719,13 +12968,13 @@ extern unsigned int expr_align (const_tree);
 extern tree expr_first (tree);
 extern tree expr_last (tree);
 extern tree size_in_bytes (const_tree);
-extern long int_size_in_bytes (const_tree);
-extern long max_int_size_in_bytes (const_tree);
+extern long long int_size_in_bytes (const_tree);
+extern long long max_int_size_in_bytes (const_tree);
 extern tree tree_expr_size (const_tree);
 extern tree bit_position (const_tree);
-extern long int_bit_position (const_tree);
+extern long long int_bit_position (const_tree);
 extern tree byte_position (const_tree);
-extern long int_byte_position (const_tree);
+extern long long int_byte_position (const_tree);
 
 
 
@@ -12745,7 +12994,7 @@ extern tree sizetype_tab[(int) TYPE_KIND_LAST];
 
 
 
-extern tree size_int_kind (long, enum size_type_kind);
+extern tree size_int_kind (long long, enum size_type_kind);
 
 
 extern tree size_binop_loc (location_t, enum tree_code, tree, tree);
@@ -12816,10 +13065,10 @@ extern tree ctor_to_list (tree);
 
 extern VEC_tree_gc *ctor_to_vec (tree);
 # 4395 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/tree.h"
-extern unsigned char categorize_ctor_elements (const_tree, long *, long *,
+extern unsigned char categorize_ctor_elements (const_tree, long long *, long long *,
           unsigned char *);
 
-extern long count_type_elements (const_tree, unsigned char);
+extern long long count_type_elements (const_tree, unsigned char);
 
 
 
@@ -12941,7 +13190,7 @@ handled_component_p (const_tree t)
 
 
 
-extern tree get_inner_reference (tree, long *, long *,
+extern tree get_inner_reference (tree, long long *, long long *,
      tree *, enum machine_mode *, int *, int *,
      unsigned char);
 
@@ -13164,43 +13413,43 @@ extern void fold_undefer_overflow_warnings (unsigned char, const_gimple, int);
 extern void fold_undefer_and_ignore_overflow_warnings (void);
 extern unsigned char fold_deferring_overflow_warnings_p (void);
 
-extern tree force_fit_type_double (tree, unsigned long, long,
+extern tree force_fit_type_double (tree, unsigned long long, long long,
        int, unsigned char);
 
-extern int fit_double_type (unsigned long, long,
-       unsigned long *, long *, const_tree);
-extern int add_double_with_sign (unsigned long, long,
-     unsigned long, long,
-     unsigned long *, long *,
+extern int fit_double_type (unsigned long long, long long,
+       unsigned long long *, long long *, const_tree);
+extern int add_double_with_sign (unsigned long long, long long,
+     unsigned long long, long long,
+     unsigned long long *, long long *,
      unsigned char);
 
 
-extern int neg_double (unsigned long, long,
-         unsigned long *, long *);
-extern int mul_double_with_sign (unsigned long, long,
-     unsigned long, long,
-     unsigned long *, long *,
+extern int neg_double (unsigned long long, long long,
+         unsigned long long *, long long *);
+extern int mul_double_with_sign (unsigned long long, long long,
+     unsigned long long, long long,
+     unsigned long long *, long long *,
      unsigned char);
 
 
-extern void lshift_double (unsigned long, long,
-      long, unsigned int,
-      unsigned long *, long *, int);
-extern void rshift_double (unsigned long, long,
-      long, unsigned int,
-      unsigned long *, long *, int);
-extern void lrotate_double (unsigned long, long,
-       long, unsigned int,
-       unsigned long *, long *);
-extern void rrotate_double (unsigned long, long,
-       long, unsigned int,
-       unsigned long *, long *);
+extern void lshift_double (unsigned long long, long long,
+      long long, unsigned int,
+      unsigned long long *, long long *, int);
+extern void rshift_double (unsigned long long, long long,
+      long long, unsigned int,
+      unsigned long long *, long long *, int);
+extern void lrotate_double (unsigned long long, long long,
+       long long, unsigned int,
+       unsigned long long *, long long *);
+extern void rrotate_double (unsigned long long, long long,
+       long long, unsigned int,
+       unsigned long long *, long long *);
 
-extern int div_and_round_double (enum tree_code, int, unsigned long,
-     long, unsigned long,
-     long, unsigned long *,
-     long *, unsigned long *,
-     long *);
+extern int div_and_round_double (enum tree_code, int, unsigned long long,
+     long long, unsigned long long,
+     long long, unsigned long long *,
+     long long *, unsigned long long *,
+     long long *);
 
 enum operand_equal_flag
 {
@@ -13244,7 +13493,7 @@ extern tree div_if_zero_remainder (enum tree_code, const_tree, const_tree);
 extern unsigned char tree_swap_operands_p (const_tree, const_tree, unsigned char);
 extern enum tree_code swap_tree_comparison (enum tree_code);
 
-extern unsigned char ptr_difference_const (tree, tree, long *);
+extern unsigned char ptr_difference_const (tree, tree, long long *);
 extern enum tree_code invert_tree_comparison (enum tree_code, unsigned char);
 
 extern unsigned char tree_expr_nonzero_p (tree);
@@ -13300,7 +13549,7 @@ extern tree std_gimplify_va_arg_expr (tree, tree, gimple_seq *, gimple_seq *);
 extern tree build_va_arg_indirect_ref (tree);
 extern tree build_string_literal (int, const char *);
 extern unsigned char validate_arglist (const_tree, ...);
-extern rtx builtin_memset_read_str (void *, long, enum machine_mode);
+extern rtx builtin_memset_read_str (void *, long long, enum machine_mode);
 extern unsigned char can_trust_pointer_alignment (void);
 extern int get_pointer_alignment (tree, unsigned int);
 extern unsigned char is_builtin_name (const char *);
@@ -13332,10 +13581,10 @@ extern int simple_cst_equal (const_tree, const_tree);
 extern hashval_t iterative_hash_expr (const_tree, hashval_t);
 extern hashval_t iterative_hash_exprs_commutative (const_tree,
                                                    const_tree, hashval_t);
-extern hashval_t iterative_hash_host_wide_int (long, hashval_t);
+extern hashval_t iterative_hash_host_wide_int (long long, hashval_t);
 extern hashval_t iterative_hash_hashval_t (hashval_t, hashval_t);
-extern hashval_t iterative_hash_host_wide_int (long, hashval_t);
-extern int compare_tree_int (const_tree, unsigned long);
+extern hashval_t iterative_hash_host_wide_int (long long, hashval_t);
+extern int compare_tree_int (const_tree, unsigned long long);
 extern int type_list_equal (const_tree, const_tree);
 extern int chain_member (const_tree, const_tree);
 extern tree type_hash_lookup (unsigned int, tree);
@@ -13353,10 +13602,10 @@ extern void init_ttree (void);
 extern void build_common_tree_nodes (unsigned char, unsigned char);
 extern void build_common_tree_nodes_2 (int);
 extern void build_common_builtin_nodes (void);
-extern tree build_nonstandard_integer_type (unsigned long, int);
+extern tree build_nonstandard_integer_type (unsigned long long, int);
 extern tree build_range_type (tree, tree, tree);
 extern unsigned char subrange_type_for_debug_p (const_tree, tree *, tree *);
-extern long int_cst_value (const_tree);
+extern long long int_cst_value (const_tree);
 extern long long widest_int_cst_value (const_tree);
 
 extern unsigned char fields_compatible_p (const_tree, const_tree);
@@ -13472,7 +13721,7 @@ extern char *dwarf2out_cfi_label (unsigned char);
 
 
 
-extern void dwarf2out_def_cfa (const char *, unsigned, long);
+extern void dwarf2out_def_cfa (const char *, unsigned, long long);
 
 
 
@@ -13480,11 +13729,11 @@ extern void dwarf2out_window_save (const char *);
 
 
 
-extern void dwarf2out_reg_save (const char *, unsigned, long);
+extern void dwarf2out_reg_save (const char *, unsigned, long long);
 
 
 
-extern void dwarf2out_return_save (const char *, long);
+extern void dwarf2out_return_save (const char *, long long);
 
 
 
@@ -13622,10 +13871,10 @@ extern unsigned char ssa_name_nonnegative_p (const_tree);
 
 extern void init_object_sizes (void);
 extern void fini_object_sizes (void);
-extern unsigned long compute_builtin_object_size (tree, int);
+extern unsigned long long compute_builtin_object_size (tree, int);
 
 
-extern unsigned long highest_pow2_factor (const_tree);
+extern unsigned long long highest_pow2_factor (const_tree);
 extern tree build_personality_function (const char *);
 
 
@@ -14139,7 +14388,7 @@ enum ix86_stack_slot
 struct machine_cfa_state
 {
   rtx reg;
-  long offset;
+  long long offset;
 };
 
 struct machine_function {
@@ -16573,7 +16822,7 @@ struct lang_hooks
   void (*print_error_function) (struct diagnostic_context *, const char *,
     struct diagnostic_info *);
 # 386 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/langhooks.h"
-  long (*to_target_charset) (long);
+  long long (*to_target_charset) (long long);
 
 
 
@@ -17224,7 +17473,7 @@ extern int cpp_defined (cpp_reader *, const unsigned char *, int);
 
 
 
-typedef unsigned long cpp_num_part;
+typedef unsigned long long cpp_num_part;
 typedef struct cpp_num cpp_num;
 struct cpp_num
 {
@@ -20496,9 +20745,9 @@ extern tree fname_decl (location_t, unsigned, tree);
 extern void check_function_arguments (tree, int, tree *, tree);
 extern void check_function_arguments_recurse (void (*)
            (void *, tree,
-            unsigned long),
+            unsigned long long),
            void *, tree,
-           unsigned long);
+           unsigned long long);
 extern unsigned char check_builtin_function_arguments (tree, int, tree *);
 extern void check_function_format (tree, int, tree *);
 extern void set_Wformat (int);
@@ -20513,7 +20762,7 @@ extern tree c_common_fixed_point_type_for_size (unsigned int, unsigned int,
 extern tree c_common_unsigned_type (tree);
 extern tree c_common_signed_type (tree);
 extern tree c_common_signed_or_unsigned_type (int, tree);
-extern tree c_build_bitfield_integer_type (unsigned long, int);
+extern tree c_build_bitfield_integer_type (unsigned long long, int);
 extern unsigned char decl_with_nonnull_addr_p (const_tree);
 extern tree c_fully_fold (tree, unsigned char, unsigned char *);
 extern tree decl_constant_value_for_optimization (tree);
@@ -20582,7 +20831,7 @@ extern unsigned char c_promoting_integer_type_p (const_tree);
 extern int self_promoting_args_p (const_tree);
 extern tree strip_pointer_operator (tree);
 extern tree strip_pointer_or_array_types (tree);
-extern long c_common_to_target_charset (long);
+extern long long c_common_to_target_charset (long long);
 
 
 extern void c_parse_file (void);
@@ -21100,7 +21349,7 @@ struct rtl_data {
 
 
 
-  long x_frame_offset;
+  long long x_frame_offset;
 
 
   rtx x_parm_birth_insn;
@@ -21415,12 +21664,12 @@ extern tree blocks_nreverse (tree);
 
 
 
-extern long get_frame_size (void);
+extern long long get_frame_size (void);
 
 
 
 
-extern unsigned char frame_offset_overflow (long, tree);
+extern unsigned char frame_offset_overflow (long long, tree);
 
 
 
@@ -22131,7 +22380,7 @@ struct real_value {
 };
 # 83 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/real.h"
 extern char test_real_width
-  [sizeof(struct real_value) <= (((128 + (8 * 4)) + 32)/(8 * 4) + (((128 + (8 * 4)) + 32)%(8 * 4) ? 1 : 0))*sizeof(long) ? 1 : -1];
+  [sizeof(struct real_value) <= (((128 + (8 * 4)) + 32)/(8 * 8) + (((128 + (8 * 4)) + 32)%(8 * 8) ? 1 : 0))*sizeof(long long) ? 1 : -1];
 # 121 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/real.h"
 struct real_format
 {
@@ -22232,8 +22481,8 @@ extern void real_to_hexadecimal (char *, const struct real_value *,
      size_t, size_t, int);
 
 
-extern long real_to_integer (const struct real_value *);
-extern void real_to_integer2 (long *, long *,
+extern long long real_to_integer (const struct real_value *);
+extern void real_to_integer2 (long long *, long long *,
          const struct real_value *);
 
 
@@ -22244,7 +22493,7 @@ extern void real_from_string3 (struct real_value *, const char *, enum machine_m
 
 
 extern void real_from_integer (struct real_value *, enum machine_mode,
-          unsigned long, long, int);
+          unsigned long long, long long, int);
 
 extern long real_to_target_fmt (long *, const struct real_value *,
     const struct real_format *);
@@ -22362,7 +22611,7 @@ extern unsigned char real_sqrt (struct real_value *, enum machine_mode,
 
 
 extern unsigned char real_powi (struct real_value *, enum machine_mode,
-         const struct real_value *, long);
+         const struct real_value *, long long);
 
 
 extern void real_trunc (struct real_value *, enum machine_mode,
@@ -22993,7 +23242,7 @@ typedef struct mem_attrs
 # 159 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/rtl.h"
 typedef struct reg_attrs {
   tree decl;
-  long offset;
+  long long offset;
 } reg_attrs;
 
 
@@ -23029,7 +23278,7 @@ struct block_symbol {
 
 
 
-  long offset;
+  long long offset;
 };
 
 static __inline__ void VEC_rtx_must_be_pointer_type (void) { (void)((rtx)1 == (void *)1); } typedef struct VEC_rtx_base { unsigned num; unsigned alloc; rtx vec[1]; } VEC_rtx_base; typedef struct VEC_rtx_none { VEC_rtx_base base; } VEC_rtx_none; static __inline__ unsigned VEC_rtx_base_length (const VEC_rtx_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ rtx VEC_rtx_base_last (const VEC_rtx_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ rtx VEC_rtx_base_index (const VEC_rtx_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_rtx_base_iterate (const VEC_rtx_base *vec_, unsigned ix_, rtx *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (rtx) 0; return 0; } } static __inline__ size_t VEC_rtx_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_rtx_base, vec) + alloc_ * sizeof(rtx); } static __inline__ void VEC_rtx_base_embedded_init (VEC_rtx_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_rtx_base_space (VEC_rtx_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ rtx *VEC_rtx_base_quick_push (VEC_rtx_base *vec_, rtx obj_ ) { rtx *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ rtx VEC_rtx_base_pop (VEC_rtx_base *vec_ ) { rtx obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_rtx_base_truncate (VEC_rtx_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ rtx VEC_rtx_base_replace (VEC_rtx_base *vec_, unsigned ix_, rtx obj_ ) { rtx old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ rtx *VEC_rtx_base_quick_insert (VEC_rtx_base *vec_, unsigned ix_, rtx obj_ ) { rtx *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (rtx)); *slot_ = obj_; return slot_; } static __inline__ rtx VEC_rtx_base_ordered_remove (VEC_rtx_base *vec_, unsigned ix_ ) { rtx *slot_; rtx obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (rtx)); return obj_; } static __inline__ rtx VEC_rtx_base_unordered_remove (VEC_rtx_base *vec_, unsigned ix_ ) { rtx *slot_; rtx obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_rtx_base_block_remove (VEC_rtx_base *vec_, unsigned ix_, unsigned len_ ) { rtx *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (rtx)); } static __inline__ rtx *VEC_rtx_base_address (VEC_rtx_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_rtx_base_lower_bound (VEC_rtx_base *vec_, const rtx obj_, unsigned char (*lessthan_)(const rtx, const rtx) ) { unsigned int len_ = VEC_rtx_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { rtx middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_rtx_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
@@ -23046,7 +23295,7 @@ struct object_block {
   unsigned int alignment;
 
 
-  long size;
+  long long size;
 # 224 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/rtl.h"
   VEC_rtx_gc *objects;
 # 234 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/rtl.h"
@@ -23111,7 +23360,7 @@ struct
 
   union u {
     rtunion fld[1];
-    long hwint[1];
+    long long hwint[1];
     struct block_symbol block_sym;
     struct real_value rv;
     struct fixed_value fv;
@@ -23361,11 +23610,11 @@ extern int simplify_subreg_regno (unsigned int, enum machine_mode,
       unsigned int, enum machine_mode);
 extern unsigned int subreg_nregs (const_rtx);
 extern unsigned int subreg_nregs_with_regno (unsigned int, const_rtx);
-extern unsigned long nonzero_bits (const_rtx, enum machine_mode);
+extern unsigned long long nonzero_bits (const_rtx, enum machine_mode);
 extern unsigned int num_sign_bit_copies (const_rtx, enum machine_mode);
 extern unsigned char constant_pool_constant_p (rtx);
 extern unsigned char truncated_to_mode (enum machine_mode, const_rtx);
-extern int low_bitmask_len (enum machine_mode, unsigned long);
+extern int low_bitmask_len (enum machine_mode, unsigned long long);
 # 1543 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/rtl.h"
 extern int generating_concat_p;
 
@@ -23375,19 +23624,19 @@ extern int currently_expanding_to_rtl;
 
 
 
-extern int ceil_log2 (unsigned long);
+extern int ceil_log2 (unsigned long long);
 
 
 extern void set_stack_check_libfunc (rtx);
-extern long trunc_int_for_mode (long, enum machine_mode);
-extern rtx plus_constant (rtx, long);
+extern long long trunc_int_for_mode (long long, enum machine_mode);
+extern rtx plus_constant (rtx, long long);
 
 
 extern rtx gen_blockage (void);
 extern rtvec gen_rtvec (int, ...);
 extern rtx copy_insn_1 (rtx);
 extern rtx copy_insn (rtx);
-extern rtx gen_int_mode (long, enum machine_mode);
+extern rtx gen_int_mode (long long, enum machine_mode);
 extern rtx emit_copy_of_insn_after (rtx, rtx);
 extern void set_reg_attrs_from_value (rtx, rtx);
 extern void set_reg_attrs_for_parm (rtx, rtx);
@@ -23454,7 +23703,7 @@ extern void start_sequence (void);
 extern void push_to_sequence (rtx);
 extern void push_to_sequence2 (rtx, rtx);
 extern void end_sequence (void);
-extern rtx immed_double_const (long, long,
+extern rtx immed_double_const (long long, long long,
           enum machine_mode);
 
 
@@ -23473,11 +23722,11 @@ extern enum machine_mode get_pool_mode (const_rtx);
 extern rtx simplify_subtraction (rtx);
 
 
-extern rtx assign_stack_local (enum machine_mode, long, int);
-extern rtx assign_stack_local_1 (enum machine_mode, long, int, unsigned char);
-extern rtx assign_stack_temp (enum machine_mode, long, int);
+extern rtx assign_stack_local (enum machine_mode, long long, int);
+extern rtx assign_stack_local_1 (enum machine_mode, long long, int, unsigned char);
+extern rtx assign_stack_temp (enum machine_mode, long long, int);
 extern rtx assign_stack_temp_for_type (enum machine_mode,
-           long, int, tree);
+           long long, int, tree);
 extern rtx assign_temp (tree, int, int, int);
 
 
@@ -23634,9 +23883,9 @@ extern unsigned char nonzero_address_p (const_rtx);
 extern int rtx_unstable_p (const_rtx);
 extern unsigned char rtx_varies_p (const_rtx, unsigned char);
 extern unsigned char rtx_addr_varies_p (const_rtx, unsigned char);
-extern long get_integer_term (const_rtx);
+extern long long get_integer_term (const_rtx);
 extern rtx get_related_value (const_rtx);
-extern unsigned char offset_within_block_p (const_rtx, long);
+extern unsigned char offset_within_block_p (const_rtx, long long);
 extern void split_const (rtx, rtx *, rtx *);
 extern int reg_mentioned_p (const_rtx, const_rtx);
 extern int count_occurrences (const_rtx, const_rtx, int);
@@ -23925,14 +24174,14 @@ extern rtx gen_rtx_fmt__stat (enum rtx_code, enum machine_mode mode );
 
 
 extern rtx gen_rtx_fmt_w_stat (enum rtx_code, enum machine_mode mode,
-           long arg0 );
+           long long arg0 );
 
 
 
 extern rtx gen_rtx_fmt_www_stat (enum rtx_code, enum machine_mode mode,
-           long arg0,
-           long arg1,
-           long arg2 );
+           long long arg0,
+           long long arg1,
+           long long arg2 );
 
 
 
@@ -24059,7 +24308,7 @@ extern rtx gen_rtx_fmt_Ee_stat (enum rtx_code, enum machine_mode mode,
            rtvec arg0, rtx arg1 );
 # 2052 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/rtl.h" 2
 # 2063 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/rtl.h"
-extern rtx gen_rtx_CONST_INT (enum machine_mode, long);
+extern rtx gen_rtx_CONST_INT (enum machine_mode, long long);
 extern rtx gen_rtx_CONST_VECTOR (enum machine_mode, rtvec);
 extern rtx gen_raw_REG (enum machine_mode, int);
 extern rtx gen_rtx_REG (enum machine_mode, unsigned);
@@ -24229,7 +24478,7 @@ extern void expand_naked_return (void);
 extern void emit_jump (rtx);
 
 
-extern rtx move_by_pieces (rtx, rtx, unsigned long,
+extern rtx move_by_pieces (rtx, rtx, unsigned long long,
       unsigned int, int);
 
 
@@ -24364,7 +24613,7 @@ struct rtl_hooks
   rtx (*gen_lowpart) (enum machine_mode, rtx);
   rtx (*gen_lowpart_no_emit) (enum machine_mode, rtx);
   rtx (*reg_nonzero_bits) (const_rtx, enum machine_mode, const_rtx, enum machine_mode,
-      unsigned long, unsigned long *);
+      unsigned long long, unsigned long long *);
   rtx (*reg_num_sign_bit_copies) (const_rtx, enum machine_mode, const_rtx, enum machine_mode,
       unsigned int, unsigned int *);
   unsigned char (*reg_truncated_to_mode) (enum machine_mode, const_rtx);

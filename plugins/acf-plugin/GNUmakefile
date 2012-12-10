@@ -124,7 +124,7 @@ $(CONFIGURE_PREP_PLUGINS): $(PREP_BUILDDIR)/%/Makefile.prep: $(SRCDIR)/Makefile.
 	$(QUIET)\
 	mkdir -p $(PREP_BUILDDIR)/$(call plugin_subdir,$*) && \
 	cd $(PREP_BUILDDIR)/$(call plugin_subdir,$*) && \
-	$(call prep_run,$*) $(GUEST_SRCDIR)/configure --configure-prep CC="$(GUEST_PREBUILT)/$(call prep_compiler,$*)" CFLAGS="$(prep_cflags,$*)" CPPFLAGS="$(prep_cppflags,$*)"
+	$(call prep_run,$*) $(GUEST_SRCDIR)/configure --configure-prep CC="$(GUEST_PREBUILT)/$(call prep_compiler,$*)" CFLAGS="$(call prep_cflags,$*)" CPPFLAGS="$(call prep_cppflags,$*)"
 
 $(ALL_PREP_PLUGINS): $(PREP_BUILDDIR)/%/all.phony: $(PREP_BUILDDIR)/%/Makefile.prep
 	@echo "Building prep plugin for $*"

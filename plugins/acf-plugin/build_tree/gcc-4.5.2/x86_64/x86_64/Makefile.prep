@@ -22,7 +22,7 @@ srcdir=/opt/gcc-plugins
 prepdir=$(builddir)
 
 COMPILER=/opt/gcc-plugins/prebuilt/x86_64/gcc-4.5.2/bin/gcc
-CFLAGS=
+CFLAGS=-O2 -Wall
 CPPFLAGS=
 
 PREP_INCLUDES=-I$(shell $(COMPILER) $(CFLAGS) -print-file-name=plugin)/include

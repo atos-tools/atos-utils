@@ -22,8 +22,8 @@ srcdir=/opt/gcc-plugins
 prepdir=$(builddir)
 
 COMPILER=/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/gcc
-CFLAGS=
-CPPFLAGS=
+CFLAGS=-O2 -Wall
+CPPFLAGS=-DNEED_64BIT_HOST_WIDE_INT
 
 PREP_INCLUDES=-I$(shell $(COMPILER) $(CFLAGS) -print-file-name=plugin)/include
 

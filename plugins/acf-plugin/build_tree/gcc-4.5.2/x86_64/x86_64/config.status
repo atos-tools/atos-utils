@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-exec /opt/gcc-plugins/configure --status '--configure-prep' 'CC=/opt/gcc-plugins/prebuilt/x86_64/gcc-4.5.2/bin/gcc' 'CFLAGS=' 'CPPFLAGS='
+exec /opt/gcc-plugins/configure --status '--configure-prep' 'CC=/opt/gcc-plugins/prebuilt/x86_64/gcc-4.5.2/bin/gcc' 'CFLAGS=-O2 -Wall' 'CPPFLAGS='

@@ -1135,6 +1135,110 @@ extern int ftrylockfile (FILE *__stream) throw () ;
 
 
 extern void funlockfile (FILE *__stream) throw ();
+# 835 "/usr/include/stdio.h" 3 4
+# 1 "/usr/include/bits/stdio.h" 1 3 4
+# 33 "/usr/include/bits/stdio.h" 3 4
+inline int
+vprintf (__const char *__restrict __fmt, __gnuc_va_list __arg)
+{
+  return vfprintf (stdout, __fmt, __arg);
+}
+
+
+inline int
+getchar (void)
+{
+  return _IO_getc (stdin);
+}
+
+
+
+
+inline int
+fgetc_unlocked (FILE *__fp)
+{
+  return (__builtin_expect (((__fp)->_IO_read_ptr >= (__fp)->_IO_read_end), 0) ? __uflow (__fp) : *(unsigned char *) (__fp)->_IO_read_ptr++);
+}
+
+
+
+
+
+inline int
+getc_unlocked (FILE *__fp)
+{
+  return (__builtin_expect (((__fp)->_IO_read_ptr >= (__fp)->_IO_read_end), 0) ? __uflow (__fp) : *(unsigned char *) (__fp)->_IO_read_ptr++);
+}
+
+
+inline int
+getchar_unlocked (void)
+{
+  return (__builtin_expect (((stdin)->_IO_read_ptr >= (stdin)->_IO_read_end), 0) ? __uflow (stdin) : *(unsigned char *) (stdin)->_IO_read_ptr++);
+}
+
+
+
+
+inline int
+putchar (int __c)
+{
+  return _IO_putc (__c, stdout);
+}
+
+
+
+
+inline int
+fputc_unlocked (int __c, FILE *__stream)
+{
+  return (__builtin_expect (((__stream)->_IO_write_ptr >= (__stream)->_IO_write_end), 0) ? __overflow (__stream, (unsigned char) (__c)) : (unsigned char) (*(__stream)->_IO_write_ptr++ = (__c)));
+}
+
+
+
+
+
+inline int
+putc_unlocked (int __c, FILE *__stream)
+{
+  return (__builtin_expect (((__stream)->_IO_write_ptr >= (__stream)->_IO_write_end), 0) ? __overflow (__stream, (unsigned char) (__c)) : (unsigned char) (*(__stream)->_IO_write_ptr++ = (__c)));
+}
+
+
+inline int
+putchar_unlocked (int __c)
+{
+  return (__builtin_expect (((stdout)->_IO_write_ptr >= (stdout)->_IO_write_end), 0) ? __overflow (stdout, (unsigned char) (__c)) : (unsigned char) (*(stdout)->_IO_write_ptr++ = (__c)));
+}
+
+
+
+
+
+inline __ssize_t
+getline (char **__lineptr, size_t *__n, FILE *__stream)
+{
+  return __getdelim (__lineptr, __n, '\n', __stream);
+}
+
+
+
+
+
+inline int
+feof_unlocked (FILE *__stream) throw ()
+{
+  return (((__stream)->_flags & 0x10) != 0);
+}
+
+
+inline int
+ferror_unlocked (FILE *__stream) throw ()
+{
+  return (((__stream)->_flags & 0x20) != 0);
+}
+# 836 "/usr/include/stdio.h" 2 3 4
 # 844 "/usr/include/stdio.h" 3 4
 }
 # 43 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/system.h" 2
@@ -2444,6 +2548,108 @@ extern unsigned long long int __strtoull_internal (__const char *
          char **__restrict __endptr,
          int __base, int __group)
      throw () __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
+
+
+
+extern __inline double
+strtod (__const char *__restrict __nptr, char **__restrict __endptr) throw ()
+{
+  return __strtod_internal (__nptr, __endptr, 0);
+}
+extern __inline long int
+strtol (__const char *__restrict __nptr, char **__restrict __endptr, int __base) throw ()
+
+{
+  return __strtol_internal (__nptr, __endptr, __base, 0);
+}
+extern __inline unsigned long int
+strtoul (__const char *__restrict __nptr, char **__restrict __endptr, int __base) throw ()
+
+{
+  return __strtoul_internal (__nptr, __endptr, __base, 0);
+}
+
+
+
+
+extern __inline float
+strtof (__const char *__restrict __nptr, char **__restrict __endptr) throw ()
+{
+  return __strtof_internal (__nptr, __endptr, 0);
+}
+
+extern __inline long double
+strtold (__const char *__restrict __nptr, char **__restrict __endptr) throw ()
+{
+  return __strtold_internal (__nptr, __endptr, 0);
+}
+
+
+
+
+
+__extension__ extern __inline long long int
+strtoq (__const char *__restrict __nptr, char **__restrict __endptr, int __base) throw ()
+
+{
+  return __strtoll_internal (__nptr, __endptr, __base, 0);
+}
+__extension__ extern __inline unsigned long long int
+strtouq (__const char *__restrict __nptr, char **__restrict __endptr, int __base) throw ()
+
+{
+  return __strtoull_internal (__nptr, __endptr, __base, 0);
+}
+
+
+
+
+__extension__ extern __inline long long int
+strtoll (__const char *__restrict __nptr, char **__restrict __endptr, int __base) throw ()
+
+{
+  return __strtoll_internal (__nptr, __endptr, __base, 0);
+}
+__extension__ extern __inline unsigned long long int
+strtoull (__const char * __restrict __nptr, char **__restrict __endptr, int __base) throw ()
+
+{
+  return __strtoull_internal (__nptr, __endptr, __base, 0);
+}
+
+
+
+
+extern __inline double
+atof (__const char *__nptr) throw ()
+{
+  return strtod (__nptr, (char **) __null);
+}
+extern __inline int
+atoi (__const char *__nptr) throw ()
+{
+  return (int) strtol (__nptr, (char **) __null, 10);
+}
+extern __inline long int
+atol (__const char *__nptr) throw ()
+{
+  return strtol (__nptr, (char **) __null, 10);
+}
+
+
+
+
+__extension__ extern __inline long long int
+atoll (__const char *__nptr) throw ()
+{
+  return strtoll (__nptr, (char **) __null, 10);
+}
+
 # 429 "/usr/include/stdlib.h" 3 4
 extern char *l64a (long int __n) throw () ;
 
@@ -5148,6 +5354,10 @@ extern "C" {
 extern int __sigismember (__const __sigset_t *, int);
 extern int __sigaddset (__sigset_t *, int);
 extern int __sigdelset (__sigset_t *, int);
+# 117 "/usr/include/bits/sigset.h" 3 4
+extern __inline int __sigismember (__const __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return (__set->__val[__word] & __mask) ? 1 : 0; }
+extern __inline int __sigaddset ( __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return ((__set->__val[__word] |= __mask), 0); }
+extern __inline int __sigdelset ( __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return ((__set->__val[__word] &= ~__mask), 0); }
 # 34 "/usr/include/signal.h" 2 3 4
 
 
@@ -6517,6 +6727,51 @@ extern intmax_t wcstoimax (__const wchar_t *__restrict __nptr,
 extern uintmax_t wcstoumax (__const wchar_t *__restrict __nptr,
        wchar_t ** __restrict __endptr, int __base)
      throw ();
+# 333 "/usr/include/inttypes.h" 3 4
+extern __inline intmax_t
+strtoimax (__const char *__restrict nptr, char **__restrict endptr, int base) throw ()
+
+{
+  return __strtol_internal (nptr, endptr, base, 0);
+}
+# 348 "/usr/include/inttypes.h" 3 4
+extern __inline uintmax_t
+strtoumax (__const char *__restrict nptr, char **__restrict endptr, int base) throw ()
+
+{
+  return __strtoul_internal (nptr, endptr, base, 0);
+}
+
+
+
+extern long int __wcstol_internal (__const wchar_t * __restrict __nptr,
+       wchar_t **__restrict __endptr,
+       int __base, int __group) throw ();
+
+
+extern __inline intmax_t
+wcstoimax (__const wchar_t *__restrict nptr, wchar_t **__restrict endptr, int base) throw ()
+
+{
+  return __wcstol_internal (nptr, endptr, base, 0);
+}
+
+
+
+
+extern unsigned long int __wcstoul_internal (__const wchar_t *
+          __restrict __nptr,
+          wchar_t **
+          __restrict __endptr,
+          int __base, int __group) throw ();
+
+
+extern __inline uintmax_t
+wcstoumax (__const wchar_t *__restrict nptr, wchar_t **__restrict endptr, int base) throw ()
+
+{
+  return __wcstoul_internal (nptr, endptr, base, 0);
+}
 # 459 "/usr/include/inttypes.h" 3 4
 }
 # 488 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/system.h" 2
@@ -16174,7 +16429,14 @@ extern size_t __mbrlen (__const char *__restrict __s, size_t __n,
 extern size_t mbrlen (__const char *__restrict __s, size_t __n,
         mbstate_t *__restrict __ps) throw ();
 
-# 357 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/include-fixed/wchar.h" 3 4
+# 350 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/include-fixed/wchar.h" 3 4
+extern __inline __attribute__ ((__gnu_inline__)) size_t
+mbrlen (__const char *__restrict __s, size_t __n, mbstate_t *__restrict __ps) throw ()
+
+{ return (__ps != __null
+   ? mbrtowc (__null, __s, __n, __ps) : __mbrlen (__s, __n, __null)); }
+
+
 
 
 
@@ -16319,7 +16581,72 @@ extern float __wcstof_internal (__const wchar_t *__restrict __nptr,
 extern long double __wcstold_internal (__const wchar_t *__restrict __nptr,
            wchar_t **__restrict __endptr,
            int __group) throw ();
-# 602 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/include-fixed/wchar.h" 3 4
+# 537 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/include-fixed/wchar.h" 3 4
+__extension__
+extern long long int __wcstoll_internal (__const wchar_t *__restrict __nptr,
+      wchar_t **__restrict __endptr,
+      int __base, int __group) throw ();
+
+
+
+
+__extension__
+extern unsigned long long int __wcstoull_internal (__const wchar_t *
+         __restrict __nptr,
+         wchar_t **
+         __restrict __endptr,
+         int __base,
+         int __group) throw ();
+
+
+
+
+
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) double
+wcstod (__const wchar_t *__restrict __nptr, wchar_t **__restrict __endptr) throw ()
+
+{ return __wcstod_internal (__nptr, __endptr, 0); }
+extern __inline __attribute__ ((__gnu_inline__)) long int
+wcstol (__const wchar_t *__restrict __nptr, wchar_t **__restrict __endptr, int __base) throw ()
+
+{ return __wcstol_internal (__nptr, __endptr, __base, 0); }
+extern __inline __attribute__ ((__gnu_inline__)) unsigned long int
+wcstoul (__const wchar_t *__restrict __nptr, wchar_t **__restrict __endptr, int __base) throw ()
+
+{ return __wcstoul_internal (__nptr, __endptr, __base, 0); }
+
+
+
+extern __inline __attribute__ ((__gnu_inline__)) float
+wcstof (__const wchar_t *__restrict __nptr, wchar_t **__restrict __endptr) throw ()
+
+{ return __wcstof_internal (__nptr, __endptr, 0); }
+
+extern __inline __attribute__ ((__gnu_inline__)) long double
+wcstold (__const wchar_t *__restrict __nptr, wchar_t **__restrict __endptr) throw ()
+
+{ return __wcstold_internal (__nptr, __endptr, 0); }
+
+__extension__
+extern __inline __attribute__ ((__gnu_inline__)) long long int
+wcstoq (__const wchar_t *__restrict __nptr, wchar_t **__restrict __endptr, int __base) throw ()
+
+{ return __wcstoll_internal (__nptr, __endptr, __base, 0); }
+__extension__
+extern __inline __attribute__ ((__gnu_inline__)) unsigned long long int
+wcstouq (__const wchar_t *__restrict __nptr, wchar_t **__restrict __endptr, int __base) throw ()
+
+{ return __wcstoull_internal (__nptr, __endptr, __base, 0); }
+
+
+
+
+
+
+
 extern wchar_t *wcpcpy (wchar_t *__dest, __const wchar_t *__src) throw ();
 
 

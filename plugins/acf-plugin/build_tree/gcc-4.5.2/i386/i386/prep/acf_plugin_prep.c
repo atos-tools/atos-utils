@@ -1133,6 +1133,110 @@ extern int ftrylockfile (FILE *__stream) __attribute__ ((__nothrow__)) ;
 
 
 extern void funlockfile (FILE *__stream) __attribute__ ((__nothrow__));
+# 835 "/usr/include/stdio.h" 3 4
+# 1 "/usr/include/bits/stdio.h" 1 3 4
+# 33 "/usr/include/bits/stdio.h" 3 4
+extern __inline int
+vprintf (__const char *__restrict __fmt, __gnuc_va_list __arg)
+{
+  return vfprintf (stdout, __fmt, __arg);
+}
+
+
+extern __inline int
+getchar (void)
+{
+  return _IO_getc (stdin);
+}
+
+
+
+
+extern __inline int
+fgetc_unlocked (FILE *__fp)
+{
+  return (__builtin_expect (((__fp)->_IO_read_ptr >= (__fp)->_IO_read_end), 0) ? __uflow (__fp) : *(unsigned char *) (__fp)->_IO_read_ptr++);
+}
+
+
+
+
+
+extern __inline int
+getc_unlocked (FILE *__fp)
+{
+  return (__builtin_expect (((__fp)->_IO_read_ptr >= (__fp)->_IO_read_end), 0) ? __uflow (__fp) : *(unsigned char *) (__fp)->_IO_read_ptr++);
+}
+
+
+extern __inline int
+getchar_unlocked (void)
+{
+  return (__builtin_expect (((stdin)->_IO_read_ptr >= (stdin)->_IO_read_end), 0) ? __uflow (stdin) : *(unsigned char *) (stdin)->_IO_read_ptr++);
+}
+
+
+
+
+extern __inline int
+putchar (int __c)
+{
+  return _IO_putc (__c, stdout);
+}
+
+
+
+
+extern __inline int
+fputc_unlocked (int __c, FILE *__stream)
+{
+  return (__builtin_expect (((__stream)->_IO_write_ptr >= (__stream)->_IO_write_end), 0) ? __overflow (__stream, (unsigned char) (__c)) : (unsigned char) (*(__stream)->_IO_write_ptr++ = (__c)));
+}
+
+
+
+
+
+extern __inline int
+putc_unlocked (int __c, FILE *__stream)
+{
+  return (__builtin_expect (((__stream)->_IO_write_ptr >= (__stream)->_IO_write_end), 0) ? __overflow (__stream, (unsigned char) (__c)) : (unsigned char) (*(__stream)->_IO_write_ptr++ = (__c)));
+}
+
+
+extern __inline int
+putchar_unlocked (int __c)
+{
+  return (__builtin_expect (((stdout)->_IO_write_ptr >= (stdout)->_IO_write_end), 0) ? __overflow (stdout, (unsigned char) (__c)) : (unsigned char) (*(stdout)->_IO_write_ptr++ = (__c)));
+}
+
+
+
+
+
+extern __inline __ssize_t
+getline (char **__lineptr, size_t *__n, FILE *__stream)
+{
+  return __getdelim (__lineptr, __n, '\n', __stream);
+}
+
+
+
+
+
+extern __inline int
+__attribute__ ((__nothrow__)) feof_unlocked (FILE *__stream)
+{
+  return (((__stream)->_flags & 0x10) != 0);
+}
+
+
+extern __inline int
+__attribute__ ((__nothrow__)) ferror_unlocked (FILE *__stream)
+{
+  return (((__stream)->_flags & 0x20) != 0);
+}
+# 836 "/usr/include/stdio.h" 2 3 4
 # 844 "/usr/include/stdio.h" 3 4
 
 # 43 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/system.h" 2
@@ -1266,6 +1370,18 @@ extern int toascii (int __c) __attribute__ ((__nothrow__));
 
 extern int _toupper (int) __attribute__ ((__nothrow__));
 extern int _tolower (int) __attribute__ ((__nothrow__));
+# 190 "/usr/include/ctype.h" 3 4
+extern __inline int
+__attribute__ ((__nothrow__)) tolower (int __c)
+{
+  return __c >= -128 && __c < 256 ? (*__ctype_tolower_loc ())[__c] : __c;
+}
+
+extern __inline int
+__attribute__ ((__nothrow__)) toupper (int __c)
+{
+  return __c >= -128 && __c < 256 ? (*__ctype_toupper_loc ())[__c] : __c;
+}
 # 233 "/usr/include/ctype.h" 3 4
 # 1 "/usr/include/xlocale.h" 1 3 4
 # 28 "/usr/include/xlocale.h" 3 4
@@ -2099,6 +2215,13 @@ extern void *memfrob (void *__s, size_t __n) __attribute__ ((__nothrow__)) __att
 
 
 extern char *basename (__const char *__filename) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+# 414 "/usr/include/string.h" 3 4
+# 1 "/usr/include/bits/string.h" 1 3 4
+# 415 "/usr/include/string.h" 2 3 4
+
+
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/include-fixed/bits/string2.h" 1 3 4
+# 418 "/usr/include/string.h" 2 3 4
 # 426 "/usr/include/string.h" 3 4
 
 # 199 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/system.h" 2
@@ -2350,6 +2473,108 @@ extern unsigned long long int __strtoull_internal (__const char *
          char **__restrict __endptr,
          int __base, int __group)
      __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+
+
+
+
+
+
+
+
+extern __inline double
+__attribute__ ((__nothrow__)) strtod (__const char *__restrict __nptr, char **__restrict __endptr)
+{
+  return __strtod_internal (__nptr, __endptr, 0);
+}
+extern __inline long int
+__attribute__ ((__nothrow__)) strtol (__const char *__restrict __nptr, char **__restrict __endptr, int __base)
+
+{
+  return __strtol_internal (__nptr, __endptr, __base, 0);
+}
+extern __inline unsigned long int
+__attribute__ ((__nothrow__)) strtoul (__const char *__restrict __nptr, char **__restrict __endptr, int __base)
+
+{
+  return __strtoul_internal (__nptr, __endptr, __base, 0);
+}
+
+
+
+
+extern __inline float
+__attribute__ ((__nothrow__)) strtof (__const char *__restrict __nptr, char **__restrict __endptr)
+{
+  return __strtof_internal (__nptr, __endptr, 0);
+}
+
+extern __inline long double
+__attribute__ ((__nothrow__)) strtold (__const char *__restrict __nptr, char **__restrict __endptr)
+{
+  return __strtold_internal (__nptr, __endptr, 0);
+}
+
+
+
+
+
+__extension__ extern __inline long long int
+__attribute__ ((__nothrow__)) strtoq (__const char *__restrict __nptr, char **__restrict __endptr, int __base)
+
+{
+  return __strtoll_internal (__nptr, __endptr, __base, 0);
+}
+__extension__ extern __inline unsigned long long int
+__attribute__ ((__nothrow__)) strtouq (__const char *__restrict __nptr, char **__restrict __endptr, int __base)
+
+{
+  return __strtoull_internal (__nptr, __endptr, __base, 0);
+}
+
+
+
+
+__extension__ extern __inline long long int
+__attribute__ ((__nothrow__)) strtoll (__const char *__restrict __nptr, char **__restrict __endptr, int __base)
+
+{
+  return __strtoll_internal (__nptr, __endptr, __base, 0);
+}
+__extension__ extern __inline unsigned long long int
+__attribute__ ((__nothrow__)) strtoull (__const char * __restrict __nptr, char **__restrict __endptr, int __base)
+
+{
+  return __strtoull_internal (__nptr, __endptr, __base, 0);
+}
+
+
+
+
+extern __inline double
+__attribute__ ((__nothrow__)) atof (__const char *__nptr)
+{
+  return strtod (__nptr, (char **) ((void *)0));
+}
+extern __inline int
+__attribute__ ((__nothrow__)) atoi (__const char *__nptr)
+{
+  return (int) strtol (__nptr, (char **) ((void *)0), 10);
+}
+extern __inline long int
+__attribute__ ((__nothrow__)) atol (__const char *__nptr)
+{
+  return strtol (__nptr, (char **) ((void *)0), 10);
+}
+
+
+
+
+__extension__ extern __inline long long int
+__attribute__ ((__nothrow__)) atoll (__const char *__nptr)
+{
+  return strtoll (__nptr, (char **) ((void *)0), 10);
+}
+
 # 429 "/usr/include/stdlib.h" 3 4
 extern char *l64a (long int __n) __attribute__ ((__nothrow__)) ;
 
@@ -4951,6 +5176,10 @@ extern int posix_fallocate64 (int __fd, __off64_t __offset, __off64_t __len);
 extern int __sigismember (__const __sigset_t *, int);
 extern int __sigaddset (__sigset_t *, int);
 extern int __sigdelset (__sigset_t *, int);
+# 117 "/usr/include/bits/sigset.h" 3 4
+extern __inline int __sigismember (__const __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return (__set->__val[__word] & __mask) ? 1 : 0; }
+extern __inline int __sigaddset ( __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return ((__set->__val[__word] |= __mask), 0); }
+extern __inline int __sigdelset ( __sigset_t *__set, int __sig) { unsigned long int __mask = (((unsigned long int) 1) << (((__sig) - 1) % (8 * sizeof (unsigned long int)))); unsigned long int __word = (((__sig) - 1) / (8 * sizeof (unsigned long int))); return ((__set->__val[__word] &= ~__mask), 0); }
 # 34 "/usr/include/signal.h" 2 3 4
 
 
@@ -6214,7 +6443,59 @@ extern intmax_t wcstoimax (__const __gwchar_t *__restrict __nptr,
 extern uintmax_t wcstoumax (__const __gwchar_t *__restrict __nptr,
        __gwchar_t ** __restrict __endptr, int __base)
      __attribute__ ((__nothrow__));
-# 459 "/usr/include/inttypes.h" 3 4
+# 396 "/usr/include/inttypes.h" 3 4
+extern __inline intmax_t
+__attribute__ ((__nothrow__)) strtoimax (__const char *__restrict nptr, char **__restrict endptr, int base)
+
+{
+  return __strtoll_internal (nptr, endptr, base, 0);
+}
+# 414 "/usr/include/inttypes.h" 3 4
+extern __inline uintmax_t
+__attribute__ ((__nothrow__)) strtoumax (__const char *__restrict nptr, char **__restrict endptr, int base)
+
+{
+  return __strtoull_internal (nptr, endptr, base, 0);
+}
+
+
+
+__extension__
+extern long long int __wcstoll_internal (__const __gwchar_t *
+      __restrict __nptr,
+      __gwchar_t **__restrict __endptr,
+      int __base, int __group) __attribute__ ((__nothrow__));
+
+
+extern __inline intmax_t
+__attribute__ ((__nothrow__)) wcstoimax (__const __gwchar_t *__restrict nptr, __gwchar_t **__restrict endptr, int base)
+
+{
+  return __wcstoll_internal (nptr, endptr, base, 0);
+}
+
+
+
+
+__extension__
+extern unsigned long long int __wcstoull_internal (__const __gwchar_t *
+         __restrict __nptr,
+         __gwchar_t **
+         __restrict __endptr,
+         int __base,
+         int __group) __attribute__ ((__nothrow__));
+
+
+extern __inline uintmax_t
+__attribute__ ((__nothrow__)) wcstoumax (__const __gwchar_t *__restrict nptr, __gwchar_t **__restrict endptr, int base)
+
+{
+  return __wcstoull_internal (nptr, endptr, base, 0);
+}
+
+
+
+
 
 # 423 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/system.h" 2
 # 540 "/opt/gcc-plugins/prebuilt/i386/gcc-4.5.2/bin/../lib/gcc/i686-pc-linux-gnu/4.5.2/plugin/include/system.h"

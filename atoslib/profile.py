@@ -20,7 +20,7 @@
 # Usage: get usage with atos-acf-oprofile -h
 #
 
-import sys, os, re, tempfile, commands
+import sys, os, re, tempfile, commands, operator
 from logging import debug, info, warning, error
 
 
@@ -285,13 +285,14 @@ def partition_symbols(samples, hot_th=50):
         image_total_count = sum(map(lambda x: int(x[1]), image_samples))
         image_cold_part = int(
             float(image_total_count) * float(100 - hot_th) / 100.0)
-        image_sym_list = list(set(map(lambda x: (x[-1], x[0]), image_samples)))
+        image_sym_list = list(
+            set(map(lambda x: (x[-1], x[0], int(x[1])), image_samples)))
 
         image_cold_list, curr_count = [], 0
         for (vma, count, _, _, _, _, sym) in image_samples:
             curr_count += int(count)
             if curr_count > image_cold_part: break
-            image_cold_list.append((sym, vma))
+            image_cold_list.append((sym, vma, int(count)))
 
         image_hot_list = filter(
             lambda x: x not in image_cold_list, image_sym_list)
@@ -301,18 +302,22 @@ def partition_symbols(samples, hot_th=50):
 
 
 def partition_objects(sym_part, fct_map):
+    file_list = list(
+        set(sum(fct_map.values(), [])))
     # list of all hot function for all images
     hot_functions = []
     for (cold, hot) in sym_part.values():
         hot_functions.extend(hot)
     # hot files are files that contains hot functions)
-    hot_files = []
-    for (sym, vma) in hot_functions:
-        hot_files.extend(fct_map.get(sym, []))
-    hot_files = list(set(hot_files))
+    hot_files, hot_count = [], {}
+    for (sym, vma, count) in hot_functions:
+        func_files = fct_map.get(sym, [])
+        for f in func_files:
+            hot_count[f] = hot_count.setdefault(f, 0) + count
+        hot_files.extend(func_files)
+    hot_files = sorted(
+        list(set(hot_files)), key=lambda x: hot_count.get(x, 0))
     # cold files are all other files
-    file_list = list(
-        set(sum(fct_map.values(), [])))
     cold_files = filter(
         lambda x: x not in hot_files, file_list)
     return cold_files, hot_files
@@ -323,14 +328,20 @@ def get_localized_symbols_partition(hot_cold_partition, debug_infos):
     source_file = None
     for image_name in hot_cold_partition.keys():
         cold_list, hot_list = hot_cold_partition[image_name]
-        for (sym, vma) in hot_list:
+        for (sym, vma, count) in hot_list:
             if debug_infos:
                 source_file = get_file(debug_infos[image_name], vma)
-            new_hot_list.append((sym, source_file))
-        for (sym, vma) in cold_list:
+            new_hot_list.append((sym, source_file, count))
+        for (sym, vma, count) in cold_list:
             if debug_infos:
                 source_file = get_file(debug_infos[image_name], vma)
-            new_cold_list.append((sym, source_file))
+            new_cold_list.append((sym, source_file, count))
+    new_cold_list = map(
+        operator.itemgetter(0, 1),
+        sorted(new_cold_list, key=operator.itemgetter(2)))
+    new_hot_list = map(
+        operator.itemgetter(0, 1),
+        sorted(new_hot_list, key=operator.itemgetter(2)))
     return new_cold_list, new_hot_list
 
 

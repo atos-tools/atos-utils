@@ -163,6 +163,8 @@ class RecipeGraph():
         The graph includes edges for input/output of commands in recipes_deps.
         It also include additional edges used for serialization of targets
         in recipe_xdeps.
+        It also includes additional edges used for seerialisation of outputs
+        that share a common path (anti and output deps) in recipe_pdeps.
         """
         assert(isinstance(self.recipes, list))
         # Compute recipes inputs/outputs
@@ -179,7 +181,6 @@ class RecipeGraph():
         # Set .ROOT node dependent on recipes for which some output is not used
         # Set recipes for which some input is not seen dependent on .TAIL node
         recipe_deps = {'.ROOT': [], '.TAIL': []}
-        recipe_xdeps = {'.ROOT': [], '.TAIL': []}
         inpref_recipes = {}
         for recipe in reversed([".TAIL"] + self.recipes):
             outrefs = (recipe_outputs[recipe] if recipe != ".TAIL"
@@ -200,8 +201,7 @@ class RecipeGraph():
         # We add extra deps between shared objects and targets as it
         # may cause issue if the shared objects dependencies are not correctly
         # tracked.
-        # TODO: must add also xdep between all common paths
-        # TODO: do we need to distinguish xdeps for targets and othe xdeps?
+        recipe_xdeps = {'.ROOT': [], '.TAIL': []}
         last_target = None
         for recipe in reversed(self.recipes):
             if self.is_target(recipe):
@@ -210,15 +210,40 @@ class RecipeGraph():
                 last_target = recipe
             recipe_xdeps[recipe] = []
 
+        # We add additional deps between outputs that share the same path.
+        # Actually we record all anti and output dependencies based on path.
+        # TODO: do we need to distinguish xdeps and pdeps?
+        recipe_pdeps = {'.ROOT': [], '.TAIL': []}
+        last_output_recipes = {}
+        for recipe in reversed(self.recipes):
+            recipe_pdeps[recipe] = []
+            for inpath in [self.stg.load_path_ref(x)['path'] for x in
+                           recipe_inputs[recipe]]:
+                last_recipe = last_output_recipes.get(inpath, None)
+                if last_recipe != None:
+                    recipe_pdeps[last_recipe].append(recipe)
+            for outpath in [self.stg.load_path_ref(x)['path'] for x in
+                            recipe_outputs[recipe]]:
+                last_recipe = last_output_recipes.get(outpath, None)
+                if last_recipe != None:
+                    recipe_pdeps[last_recipe].append(recipe)
+            for outpath in [self.stg.load_path_ref(x)['path'] for x in
+                            recipe_outputs[recipe]]:
+                last_output_recipes[outpath] = recipe
+
         self.recipe_deps = recipe_deps
         self.recipe_xdeps = recipe_xdeps
+        self.recipe_pdeps = recipe_pdeps
 
     def get_dfs_recipes(self, root=".ROOT", xdeps=True):
         def dfs_(current, seen, out):
             if current in seen: return
             seen.add(current)
-            for recipe in (self.recipe_deps[current] +
-                           self.recipe_xdeps[current]):
+            if xdeps: deps = (self.recipe_deps[current] +
+                              self.recipe_xdeps[current] +
+                              self.recipe_pdeps[current])
+            else: deps = self.recipe_deps[current]
+            for recipe in deps:
                 dfs_(recipe, seen, out)
             if current not in [".ROOT", ".TAIL"]:
                 out.append(current)
@@ -261,6 +286,7 @@ class RecipeGraph():
         for recipe in reversed(self.get_dfs_recipes()):
             rnode = self.stg.load_recipe_node(recipe)
             deps = self.recipe_deps[recipe]
+            pdeps = self.recipe_pdeps[recipe]
             xdeps = self.recipe_xdeps[recipe]
             if self.is_target(recipe):
                 # We add an explicit target for the last built target path
@@ -281,10 +307,11 @@ class RecipeGraph():
             if xdeps:
                 f.write("%s_xdeps_1=%s\n" % (recipe, " ".join(xdeps)))
                 f.write("%s_xdeps=$(%s_xdeps_$(XDEPS))\n" % (recipe, recipe))
-                f.write(" ".join(["%s: $(%s_xdeps)" % (recipe, recipe)] + deps)
+                f.write(" ".join(["%s: $(%s_xdeps)" % (recipe, recipe)] +
+                                 pdeps + deps)
                         + "\n")
             else:
-                f.write(" ".join(["%s:" % recipe] + deps) + "\n")
+                f.write(" ".join(["%s:" % recipe] + pdeps + deps) + "\n")
             cmd = self.stg.load_cmd_node(rnode['command'])
             f.write("\t$(QUIET)cd %s && %s %s\n\n" %
                     (list2cmdline([cmd['cwd']]), prefix,

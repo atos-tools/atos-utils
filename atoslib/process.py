@@ -323,6 +323,22 @@ class commands():
         shutil.copyfile(src, dst)
 
     @staticmethod
+    def link_or_copyfile(src, dst):
+        logging.debug('ln -f %s %s' % (src, dst))
+        if _dryrun: return
+        try:
+            os.unlink(dst)
+        except OSError, e:
+            if e.errno != errno.ENOENT:
+                raise
+        try:
+            os.link(src, dst)
+        except OSError, e:
+            if e.errno != errno.EXDEV:
+                raise
+            shutil.copyfile(src, dst)
+
+    @staticmethod
     def chdir(path):
         logging.debug('cd %s' % path)
         os.chdir(path)

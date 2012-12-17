@@ -281,15 +281,6 @@ def run_atos_build(args):
             (variant, atos_lib.hashid(variant)))
     logf.write("Building variant %s\n" % variant)
 
-    driver_env = {}
-    compile_options = args.options != None and args.options.split() or []
-    link_options = []
-    shared_link_options, main_link_options = [], []
-    atos_driver = atos_lib.driver_path()
-    atos_driver_options = ["--atos-cfg=" +
-                           os.path.abspath(args.configuration_path)]
-    if args.debug: atos_driver_options += ["--atos-debug"]
-
     legacy = args.legacy
     if not legacy:
         legacy = int(atos_lib.get_config_value(
@@ -300,6 +291,18 @@ def run_atos_build(args):
     if not opt_rebuild and os.path.isfile(build_force):
         with open(build_force) as f:
             opt_rebuild = int(f.read().strip())
+
+    driver_env = {}
+    compile_options = args.options != None and args.options.split() or []
+    link_options = []
+    shared_link_options, main_link_options = [], []
+    atos_driver = atos_lib.driver_path()
+    atos_driver_options = ["--atos-cfg=%s" %
+                           os.path.abspath(args.configuration_path)]
+    if legacy: atos_driver_options += ["--atos-legacy"]
+    if not args.command and not opt_rebuild:
+        atos_driver_options += ["--atos-recipe=$@"]
+    if args.debug: atos_driver_options += ["--atos-debug"]
 
     if args.gopts != None or args.uopts != None:
         pvariant = args.gopts if args.gopts != None else args.uopts
@@ -362,8 +365,7 @@ def run_atos_build(args):
         command = ["make", "-f", build_mk, "-j", str(args.jobs),
                    "QUIET=",
                    "ATOS_DRIVER=" +
-                   process.list2cmdline([atos_driver] +
-                                        atos_driver_options)]
+                   " ".join([atos_driver] + atos_driver_options)]
         status, output = process.system(
             atos_lib.timeout_command() + command,
             get_output=True, output_stderr=True)

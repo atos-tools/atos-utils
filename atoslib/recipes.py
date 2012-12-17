@@ -97,7 +97,7 @@ class RecipeStorage(ObjStorage):
         return rnod
 
     def recipes_path(self):
-        return self.get_full_path_("recipes")
+        return self.get_stg_path_("recipes")
 
     def init_recipes_file(self):
         path = self.recipes_path()
@@ -124,6 +124,27 @@ class RecipeManager():
         assert(isinstance(self.stg, RecipeStorage))
         with open(self.stg.recipes_path()) as f:
             return [x.strip() for x in f.readlines()]
+
+class RecipeNode():
+    def __init__(self, storage, recipe, cwd=os.getcwd()):
+        self.stg = storage
+        self.cwd = cwd
+        self.recipe = recipe
+
+    def fetch_input_files(self):
+        """
+        Get the inputs of the recipe into the expected input paths.
+        Fetch from the object storage if the input is not actually
+        present in the expected path.
+        """
+        rnode = self.stg.load_recipe_node(self.recipe)
+        for path_ref in [self.stg.load_path_ref(x) for x in
+                         self.stg.load_path_ref_list(rnode['inputs'])]:
+            path = path_ref['path']
+            if not os.path.exists(path):
+                commands.link_or_copyfile(
+                    self.stg.get_blob_path(path_ref['digest']),
+                    path)
 
 class RecipeGraph():
     def __init__(self, storage, recipes, expected_targets="all",

@@ -29,7 +29,7 @@ from atoslib import process
 from atoslib import logger
 from atoslib import globals
 from atoslib import cmd_interpreter
-from atoslib.recipes import RecipeStorage
+from atoslib.recipes import RecipeStorage, RecipeNode
 
 import re, shlex, argparse
 
@@ -248,6 +248,15 @@ def invoque_compile_command(opts, args):
     if (has_cc or has_final_link) and opts.optfile:
         args.extend(get_cc_command_additional_flags(opts, args))
 
+    if not opts.legacy and opts.recipe_digest:
+        # Read recipe node and prepare input files.
+        stgdir = opts.audit_file
+        if stgdir == None:
+            stgdir = os.path.join(opts.configuration_path, "build.stg")
+        stg = RecipeStorage(stgdir)
+        recipe_node = RecipeNode(stg, opts.recipe_digest, cwd)
+        recipe_node.fetch_input_files()
+
     status = process.system(args, print_output=True)
 
     if (has_cc or has_final_link) and opts.fctmap:
@@ -275,6 +284,8 @@ if __name__ == "__main__":
                         action='store', default=None)
     parser.add_argument('--atos-legacy', dest='legacy',
                         action='store_true', default=None)
+    parser.add_argument('--atos-recipe', dest='recipe_digest',
+                        action='store', default=None)
 
     (opts, args) = parser.parse_known_args()
 

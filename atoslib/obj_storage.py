@@ -161,7 +161,7 @@ class ObjStorage():
     def clear_all(self):
         process.commands.rmtree(self.stg_path_)
 
-    def get_full_path_(self, obj_path):
+    def get_stg_path_(self, obj_path):
         return os.path.join(self.stg_path_, obj_path)
 
     def get_digest_path_(self, digest):
@@ -169,7 +169,7 @@ class ObjStorage():
         return os.path.join(digest[:2], digest[2:])
 
     def get_local_tmpdir_(self):
-        tmpdir = self.get_full_path_("tmp")
+        tmpdir = self.get_stg_path_("tmp")
         process.commands.mkdir(tmpdir)
         return tmpdir
 
@@ -183,14 +183,13 @@ class ObjStorage():
         return digest.hexdigest()
 
     def make_dirpath_(self, obj_path):
-        dirname = os.path.dirname(self.get_full_path_(obj_path))
+        dirname = os.path.dirname(obj_path)
         process.commands.mkdir(dirname)
 
     def commit_local_file_(self, obj_path, content_path):
         self.make_dirpath_(obj_path)
-        full_obj_path = self.get_full_path_(obj_path)
         try:
-            process.commands.link(content_path, full_obj_path)
+            process.commands.link(content_path, obj_path)
         except OSError, e:
             # If object already exists, it's ok as obj_path
             # uniquely identify the content to be written.
@@ -198,7 +197,7 @@ class ObjStorage():
             # files are the same. In the highly imporbable case
             # of conflict, we raise an exception.
             if e.errno == errno.EEXIST:
-                if process.commands.diff(content_path, full_obj_path):
+                if process.commands.diff(content_path, obj_path):
                     raise ObjStorage.KeyConflictError()
                 return
             raise
@@ -244,8 +243,7 @@ class ObjStorage():
         return digest
 
     def load_content_(self, obj_path):
-        full_path = self.get_full_path_(obj_path)
-        with open(full_path, "rb") as f:
+        with open(obj_path, "rb") as f:
             return f.read()
 
     def load_obj(self, obj_digest):
@@ -253,12 +251,14 @@ class ObjStorage():
         return self.writer.parse_obj(self.load_content_(obj_path))[1]
 
     def get_obj_path(self, obj_digest):
-        return os.path.join("objects",
-                            self.get_digest_path_(obj_digest))
+        return self.get_stg_path_(
+            os.path.join("objects",
+                         self.get_digest_path_(obj_digest)))
 
     def get_blob_path(self, blob_digest):
-        return os.path.join("blobs",
-                            self.get_digest_path_(blob_digest))
+        return self.get_stg_path_(
+            os.path.join("blobs",
+                         self.get_digest_path_(blob_digest)))
 
     @staticmethod
     def test():

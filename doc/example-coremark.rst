@@ -36,7 +36,10 @@ The results obtained on this configuration compared to the standard build config
 
 Remaining Work
 --------------
-The exploration file by file and function by function should be run.
+The exploration file by file and function by function should be run. This
+example shows only a basic exploration where flags are applied to the whole
+application.
+
 Though currently, there is no support in ATOS tools 2.0 for PC-sampling
 based profiling on OS21. The support of -pg option for generating profile will
 be added in a future version.
@@ -141,3 +144,12 @@ To get the global best perf/size tradeoffs over all runs, do::
     speedup | sizered |       target |                       variant_id
     +17.63% |  -5.34% | coremark.exe | 57eda65a5010df53f666c3aa2c85ca92
     +13.21% |  +0.00% | coremark.exe | ea4063e6ca22c363f01d3307a113a6d4
+
+The resulting exploration space graph is shown below:
+
+.. image:: images/atos-v2-coremark-sdk7108.png
+   :alt: Results space after staged exploration
+
+Note that for the size axis, the staged effect is due to the sh4 embedded
+toolchain that aligns and pads program size to multiple of page sizes (4096
+bytes in this case).

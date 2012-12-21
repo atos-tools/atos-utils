@@ -171,6 +171,7 @@ def run_atos_help(args):
         print
         print "Some explorations results and examples of usage:"
         print "  atos help example-sha1 : exploration on sha1 example."
+        print "  atos help example-coremark : exploration on coremark example."
         print
         print "Benchmarking results:"
         print "  atos help benchmarks : Benchmarks results summary."

@@ -1150,8 +1150,14 @@ def run_atos_run(args):
         exe_time = sum(
             map(lambda x: float(x.split()[1]) * 1000, lines_user), 0.0)
 
-        lines_filtered = filter(
-            lambda x: not re.match("^(user|real|sys) ", x), lines_output)
+        # remove last output of time command added by atos
+        lines_filtered = list(lines_output)
+        for i in ["^user ", "^real ", "^sys "]:
+            def reindex(l, r):
+                for i in xrange(len(l) - 1, -1, -1):
+                    if re.match(r, l[i]): return i
+            last_index = reindex(lines_filtered, i)
+            if last_index: lines_filtered.pop(last_index)
         real_output = '\n'.join(lines_filtered) + '\n'
 
         os.unsetenv("REMOTE_PROFILE_DIR")

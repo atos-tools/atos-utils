@@ -331,11 +331,13 @@ def run_atos_build(args):
         if remote_profile_path:
             profile_path = remote_profile_path
         driver_env.update({"PROFILE_DIR": profile_path})
+        driver_env.update({"PROFILE_GEN": "1"})
 
     if args.uopts != None:
         compile_options += ["-fprofile-use", "-fprofile-correction",
                             "-Wno-error=coverage-mismatch"]
         driver_env.update({"PROFILE_DIR": profile_path})
+        driver_env.update({"PROFILE_USE": "1"})
 
     if args.gopts != None or args.uopts != None:
         common_profdir_prefix = atos_lib.get_config_value(

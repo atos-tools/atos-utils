@@ -354,6 +354,8 @@ def run_atos_build(args):
     driver_env.update({"ALDFLAGS": " ".join(link_options)})
     driver_env.update({"ALDSOFLAGS": " ".join(shared_link_options)})
     driver_env.update({"ALDMAINFLAGS": " ".join(main_link_options)})
+    debug("build env: %s\n" %
+          ' '.join(map(lambda (k, v): '%s=%s' % (k, v), driver_env.items())))
 
     # add driver build variables to environment
     map(lambda (k, v): os.putenv(k, str(v)), driver_env.items())

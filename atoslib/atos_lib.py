@@ -614,7 +614,10 @@ class json_config():
         vspl = version_str.split('.', 2)
         major = int((len(vspl) >= 1) and vspl[0] or 0)
         minor = int((len(vspl) >= 2) and vspl[1] or 0)
-        patch = int((len(vspl) >= 3) and vspl[2] or 0)
+        try:
+            patch = int((len(vspl) >= 3) and vspl[2] or 0)
+        except:  # patchlevel can be a string, like in 4.6.x-google
+            patch = 0
         nstr = '%d%02d%02d' % (major, minor, patch)
         return int(nstr)
 

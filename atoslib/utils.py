@@ -294,7 +294,11 @@ def run_atos_build(args):
             opt_rebuild = int(f.read().strip())
 
     driver_env = {}
-    compile_options = args.options != None and args.options.split() or []
+
+    compile_options = os.getenv("ATOS_ACFLAGS", "").split()
+    compile_options.extend(
+        args.options != None and args.options.split() or [])
+
     link_options = []
     shared_link_options, main_link_options = [], []
     atos_driver = atos_lib.driver_path()

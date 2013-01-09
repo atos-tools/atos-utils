@@ -486,7 +486,7 @@ def gen_basic(optim_levels=None, optim_variants=None, expl_cookie=None,
 def gen_staged(
     optim_levels=None, optim_variants=None, nbiters=None, fine_expl=None,
     configuration_path='atos-configurations', seed='0', expl_cookie=None,
-    **kwargs):
+    tradeoffs=None, **kwargs):
     """
     perform staged exploration
     """
@@ -497,7 +497,7 @@ def gen_staged(
     flags_lists = map(
         functools.partial(os.path.join, configuration_path), flags_lists)
     flags_lists = filter(os.path.isfile, flags_lists)
-    tradeoff_coeffs = [5, 1, 0.2]
+    tradeoff_coeffs = tradeoffs or [5, 1, 0.2]
     nbiters = int(nbiters) if nbiters != None else 100
     random.seed(int(seed))
 
@@ -560,7 +560,8 @@ def gen_function_by_function(
     imgpath, csv_dir, hot_th, cold_opts='-Os noinline cold',
     flags_file=None, per_func_nbiters=None,
     base_flags=None, base_variant=None, optim_variants=None,
-    configuration_path='atos-configurations', expl_cookie=None, **kwargs):
+    configuration_path='atos-configurations', expl_cookie=None,
+    tradeoffs=None, **kwargs):
     """
     perform per function exploration
     """
@@ -608,7 +609,7 @@ def gen_function_by_function(
     debug('gen_function_by_function')
     assert acf_plugin_path and os.path.isfile(acf_plugin_path)
 
-    tradeoff_coeffs = [5, 1, 0.2]
+    tradeoff_coeffs = tradeoffs or [5, 1, 0.2]
     per_func_nbiters = int(per_func_nbiters) if per_func_nbiters != None else 0
     optim_variants = base_variant and [base_variant] or (
         optim_variants or 'base').split(',')
@@ -677,7 +678,8 @@ def gen_function_by_function(
                 debug('gen_function_by_function: staged_exploration')
                 generator = gen_staged(
                     nbiters=per_func_nbiters, expl_cookie=func_cookie,
-                    configuration_path=configuration_path, **kwargs)
+                    configuration_path=configuration_path,
+                    tradeoffs=tradeoff_coeffs, **kwargs)
 
             # run exploration loop on newly selected hot_func
             while True:
@@ -726,7 +728,8 @@ def gen_file_by_file(
     imgpath, csv_dir, hot_th, cold_opts="-Os",
     flags_file=None, per_file_nbiters=None,
     base_flags=None, base_variant=None, optim_variants=None,
-    configuration_path='atos-configurations', expl_cookie=None, **kwargs):
+    configuration_path='atos-configurations', expl_cookie=None,
+    tradeoffs=None, **kwargs):
     """
     perform per file exploration
     """
@@ -744,7 +747,7 @@ def gen_file_by_file(
     debug('gen_file_by_file')
     # TODO: some code can now be factorized with gen_function_by_function
 
-    tradeoff_coeffs = [5, 1, 0.2]
+    tradeoff_coeffs = tradeoffs or [5, 1, 0.2]
     per_file_nbiters = int(per_file_nbiters) if per_file_nbiters != None else 0
     optim_variants = base_variant and [base_variant] or (
         optim_variants or 'base').split(',')
@@ -822,7 +825,8 @@ def gen_file_by_file(
                 debug('gen_file_by_file: staged_exploration')
                 generator = gen_staged(
                     nbiters=per_file_nbiters, expl_cookie=obj_cookie,
-                    configuration_path=configuration_path, **kwargs)
+                    configuration_path=configuration_path,
+                    tradeoffs=tradeoff_coeffs, **kwargs)
 
             # run exploration loop on newly selected hot_obj
             while True:

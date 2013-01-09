@@ -580,7 +580,7 @@ def gen_function_by_function(
 
     def filter_options(flag_str):
         flag_list = optim_flag_list.parse_line(flag_str)
-        filter_in = ['^-f', '^-O', '^[^-]']
+        filter_in = ['^-f', '^-O', '^[^-]', '^--param']  # useless filtering?
         flag_list = filter(
             lambda f: any(map(lambda i: re.match(i, f), filter_in)), flag_list)
         filter_out = ['^-fprofile', '^-flto']
@@ -597,7 +597,8 @@ def gen_function_by_function(
                 str(obj_flags), csv_name))
         with open(csv_name, 'w') as opt_file:
             for ((fct, loc), flags) in obj_flags.items():
-                flag_list = map(compiler_opt_to_attribute, flags.split())
+                flag_list = map(compiler_opt_to_attribute,
+                                optim_flag_list.parse_line(flags))
                 for flag in flag_list:
                     opt_file.write('%s,%s,%s\n' % (fct, loc or '', flag))
         return (

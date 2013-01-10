@@ -942,8 +942,16 @@ def run_atos_opt(args):
             return 0
 
     if args.fdo:
-        status = invoque("atos-profile", args, options=uopts, uopts=None)
-        if status: return status
+        skip = False
+        if args.reuse:
+            variant_id = atos_lib.variant_id(None, uopts, None)
+            profile_path = atos_lib.get_profile_path(
+                args.configuration_path, variant_id)
+            skip = os.path.isdir(profile_path)
+            if skip: message("Skipping profile of variant %s..." % variant_id)
+        if not skip:
+            status = invoque("atos-profile", args, options=uopts, uopts=None)
+            if status: return status
 
     status = invoque("atos-build", args, options=options, uopts=uopts)
     if status: return status

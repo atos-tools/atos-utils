@@ -16,6 +16,7 @@
 # v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
 #
 
+import sys
 
 class re_utils():
     """

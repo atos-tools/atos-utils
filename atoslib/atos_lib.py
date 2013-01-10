@@ -747,7 +747,7 @@ class json_config():
                  "target": "ARM",
                  "target_alias": "arm",
                  "host_alias": get_executable_host(compiler_real),
-                 "id": "%s-%s-%s" % (name, target, version),
+                 "id": "armcc-%s" % (version),
                  "driver_version": driver_version,
                  "lto_enabled": "0",
                  "fto_enabled": "0",

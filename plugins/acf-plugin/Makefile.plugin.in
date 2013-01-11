@@ -24,8 +24,9 @@ testdir=$(srcdir)/test
 
 SRC= $(wildcard $(prepdir)/prep/*.c)
 
-TESTC=$(wildcard $(testdir)/*.c)
-TESTCPP=$(wildcard $(testdir)/*.cpp)
+TESTC=$(wildcard $(testdir)/hello*.c)
+TESTCPP=$(wildcard $(testdir)/hello*.cpp)
+TESTPARAM=$(wildcard $(testdir)/test-param*.c)
 
 COMPILER=@CC@
 CFLAGS=@CFLAGS@

@@ -465,23 +465,30 @@ class RecipeGraph():
         TODO: a duplicate of atos_deps.get_lto_opts for the moment,
         should move all this into a specific class or into
         the CCInterpreter class.
-        TODO: should get and store the information per target
         """
         def is_lto_opt(arg):
             return (arg.startswith('-m') or arg.startswith('-f')
                     or arg.startswith('-O'))
-        optflags = []
-        for recipe in self.get_objects_recipes() + self.get_targets_recipes():
-            rnode = self.stg.load_recipe_node(recipe)
-            cmd = self.stg.load_cmd_node(rnode['command'])
-            interpreter = \
-                CmdInterpreterFactory().get_interpreter(cmd, cmd['kind'])
-            assert(interpreter != None)
-            if interpreter.get_kind() != "CC": continue
-            if interpreter.cc_interpreter().has_cc_phase("CC"):
-                optflags += [x for x in
-                             interpreter.get_args()[1:]
-                             if is_lto_opt(x) and x not in optflags]
+
+        optflags = {}
+        for target_recipe in self.get_targets_recipes():
+            rnode_target = self.stg.load_recipe_node(target_recipe)
+            target_path = self.stg.load_path_ref(
+                self.stg.load_path_ref_list(
+                    rnode_target['outputs'])[0])['path']
+            for recipe in self.get_dfs_recipes(root=target_recipe,
+                                               xdeps=False):
+                rnode = self.stg.load_recipe_node(recipe)
+                cmd = self.stg.load_cmd_node(rnode['command'])
+                interpreter = \
+                    CmdInterpreterFactory().get_interpreter(cmd, cmd['kind'])
+                assert(interpreter != None)
+                if interpreter.get_kind() != "CC": continue
+                if interpreter.cc_interpreter().has_cc_phase("CC"):
+                    optflags.setdefault(target_path, [])
+                    optflags[target_path].extend(
+                        [x for x in interpreter.get_args()[1:]
+                         if is_lto_opt(x) and x not in optflags[target_path]])
         return optflags
 
     def common_relative_profdir_prefix(self):

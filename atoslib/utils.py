@@ -350,9 +350,9 @@ def run_atos_build(args):
         driver_env.update({"PROFILE_DIR_OPT": "-fprofile-dir"})
 
     if "-flto" in compile_options:
-        lto_flags = atos_lib.get_config_value(
-            args.configuration_path, 'build_opts.lto_flags', '')
-        driver_env.update({"ALDLTOFLAGS": lto_flags})
+        for (target_sum, lto_flags) in atos_lib.get_config_value(
+            args.configuration_path, 'build_opts.lto_flags', {}).items():
+            driver_env.update({"ALDLTOFLAGS_" + target_sum: lto_flags})
 
     driver_env.update({"ACFLAGS": " ".join(compile_options)})
     driver_env.update({"ALDFLAGS": " ".join(link_options)})
@@ -510,12 +510,15 @@ def run_atos_deps(args):
         compilers = graph.get_compilers()
         if compilers: print >>f, "\n".join(compilers),
 
-    # list of options that should be passed to linker in case of LTO build
     config_file = os.path.join(args.configuration_path, 'config.json')
+    json_config = atos_lib.json_config(config_file)
 
-    atos_lib.json_config(config_file).add_value(
-        "build_opts.lto_flags", ' '.join(graph.get_lto_opts()))
-    atos_lib.json_config(config_file).add_value(
+    # list of options that should be passed to linker in case of LTO build
+    for (k, v) in graph.get_lto_opts().items():
+        json_config.add_value("build_opts.lto_flags.%s" % (
+                atos_lib.sha1sum(k)), ' '.join(v))
+
+    json_config.add_value(
         "build_opts.common_profdir_prefix",
         graph.common_relative_profdir_prefix())
 

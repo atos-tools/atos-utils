@@ -30,8 +30,7 @@ from atoslib import logger
 from atoslib import globals
 from atoslib import cmd_interpreter
 from atoslib.recipes import RecipeStorage, RecipeNode
-
-import re, shlex, argparse
+import re, shlex, argparse, functools
 
 command_interpreter_ = None
 
@@ -197,10 +196,17 @@ def invoque_compile_command(opts, args):
     has_cc = (interpreter and interpreter.get_kind() == "CC" and
               interpreter.cc_interpreter().has_cc_phase("CC"))
 
+    cc_outputs = ((has_final_link or has_cc) and
+                  interpreter.cc_interpreter().all_cc_outputs())
+
     if has_final_link:
-        env_ALDLTOFLAGS = os.environ.get("ALDLTOFLAGS")
-        if env_ALDLTOFLAGS: args.extend(
-            process.cmdline2list(env_ALDLTOFLAGS))
+        cc_output_pathes = map(os.path.abspath, map(
+                functools.partial(os.path.join, os.getcwd()), cc_outputs))
+        cc_output_sums = map(atos_lib.sha1sum, cc_output_pathes)
+        for output_sum in cc_output_sums:
+            env_ALDLTOFLAGS = os.environ.get("ALDLTOFLAGS_" + output_sum)
+            if env_ALDLTOFLAGS: args.extend(
+                process.cmdline2list(env_ALDLTOFLAGS))
 
     if has_cc or has_final_link:
         env_ACFLAGS = os.environ.get("ACFLAGS")
@@ -216,7 +222,6 @@ def invoque_compile_command(opts, args):
     env_PROFILE_DIR_OPT = os.environ.get("PROFILE_DIR_OPT")
 
     if has_cc:
-        cc_outputs = interpreter.cc_interpreter().all_cc_outputs()
         assert(len(cc_outputs) >= 1)
         if env_PROFILE_DIR and env_PROFILE_DIR_OPT:
             abs_output_dir = os.path.isabs(cc_outputs[0])
@@ -225,7 +230,6 @@ def invoque_compile_command(opts, args):
                     env_PROFILE_DIR_OPT, env_PROFILE_DIR, suffix))
 
     elif has_final_link:
-
         if env_PROFILE_DIR and env_PROFILE_DIR_OPT:
             suffix = cwd[profdir_common_len:]
             args.append("%s=%s/%s" % (

@@ -78,7 +78,8 @@ class DependencyGraph(DGraph):
                     optflags += [x for x in
                                  value.interpreter().get_args()[1:]
                                  if is_lto_opt(x) and x not in optflags]
-        return optflags
+        optflags_dict = dict(map(lambda x: (x, optflags), self.get_targets()))
+        return optflags_dict
 
     def common_relative_profdir_prefix(self):
         """

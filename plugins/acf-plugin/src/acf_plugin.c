@@ -75,6 +75,8 @@ int hwi_shift = 0;
 int plugin_is_GPL_compatible;
 static const char *plugin_name;
 
+static bool LTO_clean_optimize = false;
+
 #ifdef PRINT_PASS_LIST
 static void do_indent(int tab_number){
     int i;
@@ -213,7 +215,38 @@ add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tre
 /* Add attributes to function in LTO pass */
 /* ============================================================ */
 
+/* Save and restore compiler option context */
+
 static struct cl_optimization loc_save_options, *save_options = NULL;
+#ifdef USE_GLOBAL_PARAMS
+static int save_optimize_fast;
+#endif
+
+static void save_global_attribute_values() {
+
+    if (save_options == NULL) {
+	save_options = &loc_save_options;
+#ifdef USE_GLOBAL_PARAMS
+	cl_optimization_save(save_options, &global_options);
+	save_optimize_fast = global_options.x_optimize_fast;
+#else
+	cl_optimization_save(save_options);
+#endif
+    }
+}
+
+static void restore_global_attribute_values() {
+
+    if (save_options != NULL) {
+#ifdef USE_GLOBAL_PARAMS
+	cl_optimization_restore(&global_options, save_options);
+	global_options.x_optimize_fast = save_optimize_fast;
+#else
+	cl_optimization_restore(save_options);
+#endif
+	save_options = NULL;
+    }
+}
 
 /* Will update the global_options variable, after it has been
    initialized by a copy of the flags in the tree decl. If not in lto,
@@ -229,26 +262,57 @@ add_global_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, c
     // find_opt("fmove-loop-invariants", 1<<13) = 665
     if (!strcmp("optimize", acf_entry->opt_attr)) {
 	char opt_name[128];
-	int opt_value = 1;
+	int opt_value = 0;
 	char *opt_str = NULL;
 	size_t opt_index;
 
-	strcpy(opt_name, "-f");
-	if (!strncmp("no-", acf_entry->opt_args[0].av.str_arg, strlen("no-"))) {
-	    opt_value = 0;
-	    strcat(opt_name, acf_entry->opt_args[0].av.str_arg + strlen("no-"));
-	}
-	else {
-	  if ((opt_str = strchr(acf_entry->opt_args[0].av.str_arg, '=')) != NULL) {
-	    opt_str ++;
-	    opt_value = atoi(opt_str);
-	  }
-	  else
-	    opt_value = 1;
-	  strcat(opt_name, acf_entry->opt_args[0].av.str_arg);
+	// The optimize attribute only accepts the following options :
+	// O<num>, <num> => -O<num>
+	// Os, Ofast => -Os, -Ofast
+	// <option> => -f<option>
+	if (acf_entry->opt_args[0].av.str_arg[0] == 'O') {
+	    /* O<num> */
+	    if ((acf_entry->opt_args[0].av.str_arg[1] >= '0') &&
+		(acf_entry->opt_args[0].av.str_arg[1] <= '9')) {
+		strcpy(opt_name, "O");
+		opt_str = acf_entry->opt_args[0].av.str_arg+1;
+	    }
+	    else if (acf_entry->opt_args[0].av.str_arg[1] == '\0') {
+		opt_value = 1;
+	    }
+	    else {
+		/* Os, Ofast */
+		strcpy(opt_name, acf_entry->opt_args[0].av.str_arg);
+	    }
 	}
 
-	opt_index = find_opt(opt_name+1, CL_OPTIMIZATION);
+	/* <num> */
+	else if ((acf_entry->opt_args[0].av.str_arg[0] >= '0') &&
+		 (acf_entry->opt_args[0].av.str_arg[0] <= '9')) {
+	    strcpy(opt_name, "O");
+	    opt_str = acf_entry->opt_args[0].av.str_arg;
+	}
+
+	/* <option> */
+	else {
+	    strcpy(opt_name, "f");
+	    if (!strncmp("no-", acf_entry->opt_args[0].av.str_arg, strlen("no-"))) {
+		strcat(opt_name, acf_entry->opt_args[0].av.str_arg + strlen("no-"));
+		opt_value = 0;
+	    }
+	    else {
+		strcat(opt_name, acf_entry->opt_args[0].av.str_arg);
+		if ((opt_str = strchr(acf_entry->opt_args[0].av.str_arg, '=')) != NULL)
+		    opt_str ++;
+		else
+		    opt_value = 1;
+	    }
+	}
+
+	if (opt_str)
+	    opt_value = atoi(opt_str);
+
+	opt_index = find_opt(opt_name, CL_OPTIMIZATION);
 
 #ifdef USE_GLOBAL_PARAMS
 	if ((opt_index >= cl_options_count) ||
@@ -259,24 +323,50 @@ add_global_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, c
 	if (verbose)
 	    trace_attached_acf(acf_entry, "attribute", cur_func_name, acf_pass_name);
 
-	if (save_options == NULL) {
-	    save_options = &loc_save_options;
-#ifdef USE_GLOBAL_PARAMS
-	    cl_optimization_save(save_options, &global_options);
-#else
-	    cl_optimization_save(save_options);
-#endif
-	}
+	save_global_attribute_values();
 
 #ifdef USE_GLOBAL_PARAMS
 	{
 	    struct cl_option_handlers handlers;
 	    set_default_handlers (&handlers);
-	    handle_generated_option(&global_options, &global_options_set, opt_index, opt_str, opt_value,
-				    CL_OPTIMIZATION, DK_UNSPECIFIED, UNKNOWN_LOCATION, &handlers, NULL);
+	    switch (opt_index) {
+	    case OPT_O:
+		global_options.x_optimize = opt_value;
+		if ((unsigned int) global_options.x_optimize > 255)
+		    global_options.x_optimize = 255;
+		global_options.x_optimize_size = 0;
+		global_options.x_optimize_fast = 0;
+		break;
+	    case OPT_Os:
+		global_options.x_optimize = 2;
+		global_options.x_optimize_size = 1;
+		global_options.x_optimize_fast = 0;
+		break;
+	    case OPT_Ofast:
+		global_options.x_optimize = 3;
+		global_options.x_optimize_size = 0;
+		global_options.x_optimize_fast = 1;
+		break;
+	    default:
+		handle_generated_option(&global_options, &global_options_set, opt_index, opt_str, opt_value,
+					CL_OPTIMIZATION, DK_UNSPECIFIED, UNKNOWN_LOCATION, &handlers, NULL);
+	    }
 	}
 #else
-	set_option(&cl_options[opt_index], opt_value, opt_str == NULL ? NULL : xstrdup(opt_str));
+	switch (opt_index) {
+	case OPT_O:
+	    optimize = opt_value;
+	    if ((unsigned int) optimize > 255)
+		optimize = 255;
+	    optimize_size = 0;
+	    break;
+	case OPT_Os:
+	    optimize = 2;
+	    optimize_size = 1;
+	    break;
+	default:
+	    set_option(&cl_options[opt_index], opt_value, opt_str == NULL ? NULL : xstrdup(opt_str));
+	}
 #endif
     }
 
@@ -284,18 +374,6 @@ add_global_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, c
     //    opt_index = 67;
     //    opt_arg="max-unroll-times=4";
     //    opt_value=4;
-}
-
-static void restore_global_attribute_values() {
-
-    if (save_options != NULL) {
-#ifdef USE_GLOBAL_PARAMS
-	cl_optimization_restore(&global_options, save_options);
-#else
-	cl_optimization_restore(save_options);
-#endif
-	save_options = NULL;
-    }
 }
 
 /* ============================================================ */
@@ -527,20 +605,20 @@ static bool fill_csv_options(tree decl, int acf_pass) {
 	    continue;
 
 	switch (acf_pass) {
-	case 1:
+	case 1: /* DECL pass */
 	    // Do not handle --param when called on function parsing
 	    if (!IS_CSV_PARAM(acf_entry)) {
 		done = true;
 		add_decl_attribute(cur_func_name, acf_entry, decl, acf_pass_name);
 	    }
 	    break;
-	case 2:
-	case 3:
-	    // No need to handle optimize attribute in backend if not
-	    // in lto mode
+	case 2: /* ALL passes */
+	case 3: /* IPA passes */
 	    if (IS_CSV_PARAM(acf_entry))
 		add_global_param(cur_func_name, acf_entry, acf_pass_name);
-	    else  if (is_lto())  /* !CSV_PARAM */
+	    // Need to handle optimize attribute in backend only in
+	    // lto mode for versions before 4.7.0
+	    else  if (is_lto() && LTO_clean_optimize)  /* !CSV_PARAM */
 		add_global_attribute(cur_func_name, acf_entry, acf_pass_name);
 	    done = true;
 	    break;
@@ -948,9 +1026,11 @@ int plugin_init(struct plugin_name_args *plugin_na,
 
     // For GCC versions earlier than 4.7, remove the optimization node
     // that cannot be emitted as GIMPLE bytecode
-    if (flag_generate_lto &&
-	((version->basever[0] < '4') ||
-	 ((version->basever[0] == '4') && (version->basever[2] < '7')))) {
+    if ((version->basever[0] < '4') ||
+	((version->basever[0] == '4') && (version->basever[2] < '7')))
+	LTO_clean_optimize = true;
+
+    if (flag_generate_lto && LTO_clean_optimize) {
 
 	static struct ipa_opt_pass_d lto_clean_optimize_pass = {
 	    {

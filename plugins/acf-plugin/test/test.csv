@@ -96,3 +96,16 @@ _Z5func1Pi,,optimize,unroll-loops
 _Z5func1Pi,,optimize,O1
 _Z5func1Pi,,param,max-unroll-times,#8
 _Z5func1Pi,,param,max-inline-insns,#400
+
+% Check --param has real effect
+func_unroll1,,optimize,O2
+func_unroll1,,optimize,unroll-loops
+func_unroll1,,param,max-unroll-times,#1
+
+func_unroll2,,optimize,O2
+func_unroll2,,optimize,unroll-loops
+func_unroll2,,param,max-unroll-times,#2
+
+func_unroll4,,optimize,O2
+func_unroll4,,optimize,unroll-loops
+func_unroll4,,param,max-unroll-times,#4

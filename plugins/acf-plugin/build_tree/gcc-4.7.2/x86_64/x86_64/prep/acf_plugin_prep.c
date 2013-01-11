@@ -41838,7 +41838,9 @@ bool verbose = false;
 
 int plugin_is_GPL_compatible;
 static const char *plugin_name;
-# 113 "/opt/gcc-plugins/src/acf_plugin.c"
+
+static bool LTO_clean_optimize = false;
+# 115 "/opt/gcc-plugins/src/acf_plugin.c"
 static void trace_attached_acf(acf_ftable_entry_t *acf_entry, const char *acf_type,
           const char *func_name, const char *acf_pass_name) {
     const char *sep = "";
@@ -41942,8 +41944,39 @@ add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tre
 
 
 
+
+
 static struct cl_optimization loc_save_options, *save_options = __null;
-# 225 "/opt/gcc-plugins/src/acf_plugin.c"
+
+static int save_optimize_fast;
+
+
+static void save_global_attribute_values() {
+
+    if (save_options == __null) {
+ save_options = &loc_save_options;
+
+ cl_optimization_save(save_options, &global_options);
+ save_optimize_fast = global_options.x_optimize_fast;
+
+
+
+    }
+}
+
+static void restore_global_attribute_values() {
+
+    if (save_options != __null) {
+
+ cl_optimization_restore(&global_options, save_options);
+ global_options.x_optimize_fast = save_optimize_fast;
+
+
+
+ save_options = __null;
+    }
+}
+# 258 "/opt/gcc-plugins/src/acf_plugin.c"
 static void
 add_global_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, const char *acf_pass_name) {
 
@@ -41951,26 +41984,57 @@ add_global_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, c
 
     if (!strcmp("optimize", acf_entry->opt_attr)) {
  char opt_name[128];
- int opt_value = 1;
+ int opt_value = 0;
  char *opt_str = __null;
  size_t opt_index;
 
- strcpy(opt_name, "-f");
- if (!strncmp("no-", acf_entry->opt_args[0].av.str_arg, strlen("no-"))) {
-     opt_value = 0;
-     strcat(opt_name, acf_entry->opt_args[0].av.str_arg + strlen("no-"));
- }
- else {
-   if ((opt_str = strchr(acf_entry->opt_args[0].av.str_arg, '=')) != __null) {
-     opt_str ++;
-     opt_value = atoi(opt_str);
-   }
-   else
-     opt_value = 1;
-   strcat(opt_name, acf_entry->opt_args[0].av.str_arg);
+
+
+
+
+ if (acf_entry->opt_args[0].av.str_arg[0] == 'O') {
+
+     if ((acf_entry->opt_args[0].av.str_arg[1] >= '0') &&
+  (acf_entry->opt_args[0].av.str_arg[1] <= '9')) {
+  strcpy(opt_name, "O");
+  opt_str = acf_entry->opt_args[0].av.str_arg+1;
+     }
+     else if (acf_entry->opt_args[0].av.str_arg[1] == '\0') {
+  opt_value = 1;
+     }
+     else {
+
+  strcpy(opt_name, acf_entry->opt_args[0].av.str_arg);
+     }
  }
 
- opt_index = find_opt(opt_name+1, (1U << 18));
+
+ else if ((acf_entry->opt_args[0].av.str_arg[0] >= '0') &&
+   (acf_entry->opt_args[0].av.str_arg[0] <= '9')) {
+     strcpy(opt_name, "O");
+     opt_str = acf_entry->opt_args[0].av.str_arg;
+ }
+
+
+ else {
+     strcpy(opt_name, "f");
+     if (!strncmp("no-", acf_entry->opt_args[0].av.str_arg, strlen("no-"))) {
+  strcat(opt_name, acf_entry->opt_args[0].av.str_arg + strlen("no-"));
+  opt_value = 0;
+     }
+     else {
+  strcat(opt_name, acf_entry->opt_args[0].av.str_arg);
+  if ((opt_str = strchr(acf_entry->opt_args[0].av.str_arg, '=')) != __null)
+      opt_str ++;
+  else
+      opt_value = 1;
+     }
+ }
+
+ if (opt_str)
+     opt_value = atoi(opt_str);
+
+ opt_index = find_opt(opt_name, (1U << 18));
 
 
  if ((opt_index >= cl_options_count) ||
@@ -41981,43 +42045,42 @@ add_global_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, c
  if (verbose)
      trace_attached_acf(acf_entry, "attribute", cur_func_name, acf_pass_name);
 
- if (save_options == __null) {
-     save_options = &loc_save_options;
-
-     cl_optimization_save(save_options, &global_options);
-
-
-
- }
+ save_global_attribute_values();
 
 
  {
      struct cl_option_handlers handlers;
      set_default_handlers (&handlers);
-     handle_generated_option(&global_options, &global_options_set, opt_index, opt_str, opt_value,
-        (1U << 18), DK_UNSPECIFIED, ((source_location) 0), &handlers, __null);
+     switch (opt_index) {
+     case OPT_O:
+  global_options.x_optimize = opt_value;
+  if ((unsigned int) global_options.x_optimize > 255)
+      global_options.x_optimize = 255;
+  global_options.x_optimize_size = 0;
+  global_options.x_optimize_fast = 0;
+  break;
+     case OPT_Os:
+  global_options.x_optimize = 2;
+  global_options.x_optimize_size = 1;
+  global_options.x_optimize_fast = 0;
+  break;
+     case OPT_Ofast:
+  global_options.x_optimize = 3;
+  global_options.x_optimize_size = 0;
+  global_options.x_optimize_fast = 1;
+  break;
+     default:
+  handle_generated_option(&global_options, &global_options_set, opt_index, opt_str, opt_value,
+     (1U << 18), DK_UNSPECIFIED, ((source_location) 0), &handlers, __null);
+     }
  }
-
-
-
+# 371 "/opt/gcc-plugins/src/acf_plugin.c"
     }
 
 
 
 
 
-}
-
-static void restore_global_attribute_values() {
-
-    if (save_options != __null) {
-
- cl_optimization_restore(&global_options, save_options);
-
-
-
- save_options = __null;
-    }
 }
 
 
@@ -42054,7 +42117,7 @@ static void save_and_set_param(char *opt_param, int value) {
     csv_param_name[csv_param_index] = opt_param;
     csv_param_value[csv_param_index] = ((int) global_options.x_param_values[(int) param_idx]);
     csv_param_index ++;
-# 345 "/opt/gcc-plugins/src/acf_plugin.c"
+# 423 "/opt/gcc-plugins/src/acf_plugin.c"
     set_param_value(opt_param, value, global_options.x_param_values, csv_param_set);
 
 
@@ -42249,11 +42312,11 @@ static bool fill_csv_options(tree decl, int acf_pass) {
      break;
  case 2:
  case 3:
-
-
      if ((strcmp("param", acf_entry->opt_attr) == 0))
   add_global_param(cur_func_name, acf_entry, acf_pass_name);
-     else if (is_lto())
+
+
+     else if (is_lto() && LTO_clean_optimize)
   add_global_attribute(cur_func_name, acf_entry, acf_pass_name);
      done = true;
      break;
@@ -42284,7 +42347,7 @@ void attribute_injector_start_unit_callback(void *gcc_data __attribute__ ((__unu
 
 static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
     tree decl=(tree)gcc_data;
-# 597 "/opt/gcc-plugins/src/acf_plugin.c"
+# 675 "/opt/gcc-plugins/src/acf_plugin.c"
     fill_csv_options(decl, 1);
 }
 
@@ -42310,7 +42373,7 @@ static void param_injector_end_passes_callback(void *gcc_data,void *data) {
     restore_global_param_values();
     restore_global_attribute_values();
 }
-# 650 "/opt/gcc-plugins/src/acf_plugin.c"
+# 728 "/opt/gcc-plugins/src/acf_plugin.c"
 static unsigned int ipa_gimple_per_func_callback(void) {
 
     if (csv_param_name == __null) {
@@ -42449,7 +42512,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
 
         (void)__null;
     }
-# 810 "/opt/gcc-plugins/src/acf_plugin.c"
+# 888 "/opt/gcc-plugins/src/acf_plugin.c"
     if ((version->basever[0] < '4') ||
  ((version->basever[0] == '4') && (version->basever[2] < '6'))) {
  error("%s: build gcc and load gcc versions are incompatible.", plugin_name);
@@ -42526,7 +42589,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
        plugin_na->argv[csv_arg_pos].key);
  return 1;
     }
-# 925 "/opt/gcc-plugins/src/acf_plugin.c"
+# 1003 "/opt/gcc-plugins/src/acf_plugin.c"
     register_callback(plugin_na->base_name,
         PLUGIN_START_UNIT,
         &attribute_injector_start_unit_callback,__null);
@@ -42553,9 +42616,11 @@ int plugin_init(struct plugin_name_args *plugin_na,
 
 
 
-    if (global_options.x_flag_generate_lto &&
- ((version->basever[0] < '4') ||
-  ((version->basever[0] == '4') && (version->basever[2] < '7')))) {
+    if ((version->basever[0] < '4') ||
+ ((version->basever[0] == '4') && (version->basever[2] < '7')))
+ LTO_clean_optimize = true;
+
+    if (global_options.x_flag_generate_lto && LTO_clean_optimize) {
 
  static struct ipa_opt_pass_d lto_clean_optimize_pass = {
      {
@@ -42599,6 +42664,6 @@ int plugin_init(struct plugin_name_args *plugin_na,
       PLUGIN_PASS_MANAGER_SETUP,
       __null, &lto_clean_optimize_info);
     }
-# 1011 "/opt/gcc-plugins/src/acf_plugin.c"
+# 1091 "/opt/gcc-plugins/src/acf_plugin.c"
     return 0;
 }

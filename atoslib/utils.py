@@ -637,9 +637,9 @@ def run_atos_init(args):
         atos_lib.json_config(config_file).add_value(
             "default_values.remote_profile_path", args.remote_path)
 
-    if args.nbruns and args.nbruns != 1:
-        atos_lib.json_config(config_file).add_value(
-            "default_values.nb_runs", str(args.nbruns))
+    nbruns = args.nbruns or 1
+    atos_lib.json_config(config_file).add_value(
+        "default_values.nb_runs", str(nbruns))
 
     time_cmd = globals.DEFAULT_TIME_CMD
     if args.time_cmd: time_cmd = args.time_cmd
@@ -1285,8 +1285,8 @@ def run_atos_run(args):
 
     nbruns = args.nbruns
     if nbruns is None:
-        nbruns = args.gopts and 1 or atos_lib.get_config_value(
-                args.configuration_path, "default_values.nb_runs", 1)
+        nbruns = args.gopts and 1 or int(atos_lib.get_config_value(
+                args.configuration_path, "default_values.nb_runs", 1))
 
     if results_script:
         executables, target_id = None, None

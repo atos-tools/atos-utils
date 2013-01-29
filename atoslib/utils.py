@@ -65,6 +65,7 @@ def invoque(tool, args, **kwargs):
         "atos-graph": run_atos_graph,
         "atos-lib": run_atos_lib,
         "atos-gen": run_atos_gen,
+        "atos-web": run_atos_web,
         }
 
     def tool_args(tool, args, **kwargs):
@@ -1597,5 +1598,133 @@ def run_atos_graph(args):
         # classic optimization space graph
         get_graph_f = lambda: optgraph(args)
         draw_graph(get_graph_f, opts=args)
+
+    return 0
+
+def run_atos_web(args):
+    """ ATOS web interface """
+
+    def get(url, arguments=[]):
+        import urllib
+        import urllib2
+        proxy_support = urllib2.ProxyHandler({})
+        opener = urllib2.build_opener(proxy_support)
+
+        if len(arguments) > 0:
+            return opener.open("http://%s%s?%s" % (args.server, url,
+                               urllib.urlencode(arguments))).read()
+        else:
+            return opener.open("http://%s%s" % (args.server, url)).read()
+
+    def op_create(url, count):
+        assert(len(args.operation) == count)
+        arguments = dict(token.split('=', 1) for token in args.operation[1:])
+        print get(url, arguments)
+        return 0
+
+    def op_list(url):
+        assert(len(args.operation) == 1)
+        print get(url)
+        return 0
+
+    def op_details(url):
+        assert(len(args.operation) == 2)
+        print get(url % (args.operation[1]))
+        return 0
+
+    message("Using the server '%s'" % (args.server))
+
+    # Subcommands
+    if args.subcmd_web == "project":
+        if args.operation[0] == 'create':
+            return op_create('/api/1.0/project/add/', 4)
+        elif args.operation[0] == 'list':
+            return op_list('/api/1.0/project/')
+        elif args.operation[0] == 'details':
+            return op_details('/api/1.0/project/%s/')
+        else:
+            print >>sys.stderr, "atos-web-project: unknow operation '%s'"\
+                                % (args.operation[0])
+
+    elif args.subcmd_web == "experiment":
+        if args.operation[0] == 'create':
+            return op_create("/api/1.0/project/%s/experiment/add/"
+                             % (args.project), 2)
+        elif args.operation[0] == 'list':
+            return op_list("/api/1.0/project/%s/experiment/"
+                           % (args.project))
+        elif args.operation[0] == 'details':
+            return op_details("/api/1.0/project/%s/experiment/%%s/"
+                              % (args.project))
+        else:
+            print >>sys.stderr, "atos-web-experiment: unknow operation '%s'"\
+                                % (args.operation[0])
+            return 1
+
+    elif args.subcmd_web == "target":
+        if args.operation[0] == 'create':
+            return op_create("/api/1.0/project/%s/experiment/%s/target/add"
+                             % (args.project, args.experiment), 2)
+        elif args.operation[0] == 'list':
+            return op_list("/api/1.0/project/%s/experiment/%s/target/"
+                           % (args.project, args.experiment))
+        elif args.operation[0] == 'details':
+            return op_details("/api/1.0/project/%s/experiment/%s/target/%%s/"
+                              % (args.project, args.experiment))
+        else:
+            print >>sys.stderr, "atos-web-target: unknow operation '%s'"\
+                                % (args.operation[0])
+            return 1
+
+    elif args.subcmd_web == "run":
+        if args.operation[0] == 'create':
+            # Pushing all the runs
+            if len(args.operation) == 2:
+                if args.operation[1] != "all":
+                    print >>sys.stderr, "atos-web-run: unknow create '%s'"\
+                                         % (args.operation[1])
+                    return 1
+
+                # Get the list of targets
+                targets = get("/api/1.0/project/%s/experiment/%s/target/"
+                              % (args.project, args.experiment))
+                targets = json.loads(targets)
+                target = ''
+                for element in targets:
+                    if element['id'] == args.target:
+                        target = element['name']
+                message("Target name: %s" % (target))
+
+                results = atos_lib.atos_db.db(args.configuration_path) \
+                                          .get_results({'target': target})
+
+                for result in results:
+                    message("Pushing run %s"
+                            % (atos_lib.hashid(result['variant'])))
+                    get("/api/1.0/project/%s/experiment/%s/target/%s/run/add/"
+                        % (args.project, args.experiment, args.target),
+                        {'hash_id': atos_lib.hashid(result['variant']),
+                         'version': result['version'],
+                         'conf': result['conf'],
+                         'uconf': result.get('uconf', ''),
+                         'time': result['time'],
+                         'size': result['size']})
+                return 0
+            else:
+                return op_create(
+                        "/api/1.0/project/%s/experiment/%s/target/%s/run/add/"
+                        % (args.project, args.experiment, args.target), 7)
+            return 0
+        elif args.operation[0] == 'list':
+            return op_list("/api/1.0/project/%s/experiment/%s/target/%s/run/"
+                           % (args.project, args.experiment, args.target))
+        elif args.operation[0] == 'details':
+            return op_details(
+                        "/api/1.0/project/%s/experiment/%s/target/%s/run/%%s/"
+                        % (args.project, args.experiment, args.target))
+    else:
+        print >>sys.stderr, "atos-web: unknow operation '%s' for "\
+                            "'run' command" % (args.operation[0])
+        return 1
 
     return 0

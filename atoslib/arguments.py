@@ -51,6 +51,7 @@ def parser(tool):
         "atos-lib": parsers.atos_lib,
         "atos-gen": parsers.atos_gen,
         "atos-graph": parsers.atos_graph,
+        "atos-web": parsers.atos_web,
         }
     return factories[tool]()
 
@@ -163,6 +164,10 @@ class parsers:
         sub = subs.add_parser("gen",
                               help="internal API access to ATOS generators")
         parsers.atos_gen(sub)
+
+        sub = subs.add_parser("web",
+                              help="web user interface API")
+        parsers.atos_web(sub)
 
         return parser
 
@@ -881,6 +886,88 @@ class parsers:
         args.atos_config.ppflags(parser)
         args.debug(parser)
         args.version(parser)
+        return parser
+
+    @staticmethod
+    def atos_web(parser=None):
+        """ atos web arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-web",
+                                        description="ATOS web tool")
+
+        args.atos_web.server(parser)
+
+        subs = parser.add_subparsers(
+            title="atos web commands",
+            dest="subcmd_web",
+            description="see short description of commands below",
+            help="available atos web commands")
+
+        sub = subs.add_parser("project", help="Manage projects")
+        parsers.atos_web_project(sub)
+
+        sub = subs.add_parser("experiment", help="Manage experiments")
+        parsers.atos_web_experiment(sub)
+
+        sub = subs.add_parser("target", help="Manage targets")
+        parsers.atos_web_target(sub)
+
+        sub = subs.add_parser("run", help="Manage runs")
+        parsers.atos_web_run(sub)
+
+        return parser
+
+    @staticmethod
+    def atos_web_project(parser=None):
+        """ atos web project arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(
+                prog="atos-web-project",
+                description="Manage web projects")
+
+        args.atos_web.operation(parser)
+
+        return parser
+
+    @staticmethod
+    def atos_web_experiment(parser=None):
+        """ atos web experiment arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(
+                prog="atos-web-experiment",
+                description="Manage web experiments")
+
+        args.atos_web.operation(parser)
+        args.atos_web.project(parser)
+        return parser
+
+    @staticmethod
+    def atos_web_target(parser=None):
+        """ atos web target arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(
+                prog="atos-web-target",
+                description="Manage web targets")
+
+        args.atos_web.operation(parser)
+        args.atos_web.project(parser)
+        args.atos_web.experiment(parser)
+        return parser
+
+    @staticmethod
+    def atos_web_run(parser=None):
+        """ atos web run argument parsers factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(
+                prog="atos-web-run",
+                description="Manage web runs")
+
+        args.atos_web.operation(parser)
+        args.atos_web.project(parser)
+        args.atos_web.experiment(parser)
+        args.atos_web.target(parser)
+        args.configuration_path(parser)
+
         return parser
 
 
@@ -1764,3 +1851,49 @@ class args:
                 *args,
                  dest="print_cfg", action='store_true',
                  help="only print compiler configuration")
+
+    class atos_web:
+        """ Namespace for non common atos-web arguments. """
+
+        @staticmethod
+        def server(parser, args=("--server",)):
+            parser.add_argument(
+                *args,
+                dest="server",
+                help="Remote server (server:port)",
+                required=True)
+
+        @staticmethod
+        def operation(parser):
+            parser.add_argument(
+                "operation",
+                nargs=argparse.REMAINDER,
+                help="operations to realize, should be 'create', "
+                     "'list' or 'details'")
+
+        @staticmethod
+        def project(parser, args=("--project",)):
+            parser.add_argument(
+                *args,
+                dest="project",
+                type=int,
+                help="Current project identifier",
+                required=True)
+
+        @staticmethod
+        def experiment(parser, args=("--experiment",)):
+            parser.add_argument(
+                *args,
+                dest="experiment",
+                type=int,
+                help="Current experiment identifier",
+                required=True)
+
+        @staticmethod
+        def target(parser, args=("--target",)):
+            parser.add_argument(
+                *("--target",),
+                dest="target",
+                type=int,
+                help="Current target identifier",
+                required=True)

@@ -517,7 +517,7 @@ class parsers:
         if parser == None:
             parser = ATOSArgumentParser(
                 prog="atos-lib-createdb",
-                description="=Create a new empty database")
+                description="Create a new empty database")
 
         args.configuration_path(parser)
         args.atos_lib.type(parser)

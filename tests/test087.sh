@@ -6,6 +6,8 @@ source `dirname $0`/common.sh
 
 TEST_CASE="ATOS profile --reuse"
 
+[ `gcc -v --help 2>&1 | grep "\-flto" | wc -l` != 0 ] || skip "non lto compiler"
+
 cat > build.sh <<EOF
 gcc -c $SRCDIR/examples/sha1-c/sha.c -o sha.o
 gcc -c $SRCDIR/examples/sha1-c/sha1.c -o sha1.o

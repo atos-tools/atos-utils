@@ -21,6 +21,8 @@ import sys, os, itertools, re
 import random
 import functools
 import tempfile
+import types
+import itertools
 
 import process
 import profile
@@ -217,11 +219,22 @@ class config_generator:
     def generate(self):
         raise self.UnimplementedException()
 
+    def next(self):
+        self.__generator__ = getattr(
+            self, '__generator__', self.generate())
+        return self.__generator__.next()
+
+    def __iter__(self):
+        return self.generate()
+
+    def __call__(self, *args, **kwargs):
+        return self.generate()
+
     @staticmethod
     def test():
         generator = config_generator()
         try:
-            generator.generate()
+            generator.next()
         except config_generator.UnimplementedException:
             return
         except:
@@ -242,7 +255,7 @@ class gen_config(config_generator):
     @staticmethod
     def test():
         idx = 0
-        for cfg in gen_config(variant='base').generate():
+        for cfg in gen_config(variant='base'):
             idx += 1
         assert(idx == 1)
         assert(len(cfg.__dict__.items()) == 1)
@@ -256,11 +269,12 @@ class gen_maxiters(config_generator):
                  **ignored_kwargs):
         self.maxiters_ = maxiters
         self.parent_ = parent or gen_config()
-        assert(isinstance(self.parent_, config_generator))
+        assert(isinstance(self.parent_, config_generator) or isinstance(
+                self.parent_, types.GeneratorType))
 
     def generate(self):
         debug('gen_maxiters: %s' % str(self.maxiters_))
-        generator = self.parent_.generate()
+        generator = self.parent_
         for ic in itertools.count():
             if self.maxiters_ != None and ic >= self.maxiters_:
                 break
@@ -273,15 +287,15 @@ class gen_maxiters(config_generator):
     def test():
         idx = 0
         generator = gen_maxiters(gen_config(), 0)
-        for cfg in generator.generate():
+        for cfg in generator():
             idx += 1
         assert(idx == 0)
         generator = gen_maxiters(gen_config())
-        for cfg in generator.generate():
+        for cfg in generator():
             idx += 1
         assert(idx == 1)
         generator = gen_maxiters(gen_config(), 1)
-        for cfg in generator.generate():
+        for cfg in generator():
             idx += 1
         assert(idx == 2)
 
@@ -295,11 +309,12 @@ class gen_base(config_generator):
         self.optim_levels_ = (
             optim_levels and optim_levels.split(',') or [])
         self.parent_ = parent or gen_config()
-        assert(isinstance(self.parent_, config_generator))
+        assert(isinstance(self.parent_, config_generator) or isinstance(
+                self.parent_, types.GeneratorType))
 
     def generate(self):
         debug('gen_base: %s' % str(self.optim_levels_))
-        for cfg in self.parent_.generate():
+        for cfg in self.parent_():
             if not self.optim_levels_:
                 yield cfg
             else:
@@ -312,7 +327,7 @@ class gen_base(config_generator):
         levels = '-O1,-O2,-O3'
         expected_flgs = levels.split(',')
         for cfg in gen_base(gen_config(variant=variant),
-                            levels).generate():
+                            levels)():
             print str(cfg)
             assert(cfg.flags == expected_flgs.pop(0))
             assert(cfg.variant == variant)
@@ -327,11 +342,12 @@ class gen_variants(config_generator):
         self.optim_variants_ = (
             optim_variants and optim_variants.split(',') or [])
         self.parent_ = parent or gen_config()
-        assert(isinstance(self.parent_, config_generator))
+        assert(isinstance(self.parent_, config_generator) or isinstance(
+                self.parent_, types.GeneratorType))
 
     def generate(self):
         debug('gen_variants: %s' % str(self.optim_variants_))
-        for cfg in self.parent_.generate():
+        for cfg in self.parent_():
             if not self.optim_variants_:
                 yield cfg
             else:
@@ -346,7 +362,7 @@ class gen_variants(config_generator):
         expected_vars = variants.split(',')
         generator = gen_variants(gen_base(gen_config(), levels), variants)
         idx = 0
-        for cfg in generator.generate():
+        for cfg in generator():
             print str(cfg)
             assert(cfg.flags == expected_flgs[idx / len(expected_vars)])
             assert(cfg.variant == expected_vars[idx % len(expected_vars)])
@@ -362,7 +378,8 @@ class gen_flags_file(config_generator):
         assert flags_file and os.path.isfile(flags_file)
         self.flags_file_ = flags_file
         self.parent_ = parent or gen_config()
-        assert(isinstance(self.parent_, config_generator))
+        assert(isinstance(self.parent_, config_generator) or isinstance(
+                self.parent_, types.GeneratorType))
 
     def generate(self):
         debug('gen_flags_file')
@@ -371,7 +388,7 @@ class gen_flags_file(config_generator):
             for line in f:
                 flags = line.split('#', 1)[0].strip()
                 if flags: flags_list.append(flags)
-        for cfg in self.parent_.generate():
+        for cfg in self.parent_():
             if not flags_list:
                 yield cfg
             else:
@@ -391,7 +408,7 @@ class gen_flags_file(config_generator):
             tmpf.close()
             generator = gen_flags_file(gen_config(variant='base'),
                                        tmpname)
-            for cfg in generator.generate():
+            for cfg in generator():
                 print str(cfg)
                 assert(cfg.flags == flags.pop(0))
                 assert(cfg.variant == 'base')
@@ -410,13 +427,14 @@ class gen_rnd_uniform_deps(config_generator):
         self.optim_levels_ = optim_flag_list.optim_flag.optlevel(
             self.optim_levels_)
         self.parent_ = parent or gen_config()
-        assert(isinstance(self.parent_, config_generator))
+        assert(isinstance(self.parent_, config_generator) or isinstance(
+                self.parent_, types.GeneratorType))
 
     def generate(self):
         debug('gen_rnd_uniform_deps [%s]' % str(self.flags_file_))
         flag_list = optim_flag_list(self.flags_file_)
 
-        for cfg in self.parent_.generate():
+        for cfg in self.parent_():
             if not flag_list.flag_list:
                 # empty list case
                 yield cfg
@@ -465,11 +483,15 @@ class gen_rnd_uniform_deps(config_generator):
                                      tmpname,
                                      levels),
                 6)
-            for cfg in generator.generate():
+            for cfg in generator():
                 print str(cfg)
                 #assert(cfg.flags == expected_flgs.pop(0))
         finally:
             os.unlink(tmpname)
+
+
+# ####################################################################
+
 
 def gen_basic(optim_levels=None, optim_variants=None, expl_cookie=None,
     **kwargs):
@@ -481,59 +503,87 @@ def gen_basic(optim_levels=None, optim_variants=None, expl_cookie=None,
         gen_base(optim_levels=optim_levels),
         optim_variants=optim_variants)
 
-    for cfg in generator.generate():
+    for cfg in generator():
         yield cfg.extend_cookies([expl_cookie])
 
-def gen_staged(
-    optim_levels=None, optim_variants=None, nbiters=None, fine_expl=None,
-    configuration_path='atos-configurations', seed='0', expl_cookie=None,
-    tradeoffs=None, **kwargs):
-    """
-    perform staged exploration
-    """
-    debug('gen_staged')
+def gen_explore_inline(
+    optim_levels=None, nbiters=None, configuration_path=None, **kwargs):
+    flags_file = os.path.join(configuration_path, "flags.inline.cfg")
+    return gen_maxiters(
+        gen_rnd_uniform_deps(flags_file=flags_file, optim_levels=optim_levels),
+        nbiters)
 
-    flags_lists = [
-        'flags.inline.cfg', 'flags.loop.cfg', 'flags.optim.cfg']
-    flags_lists = map(
-        functools.partial(os.path.join, configuration_path), flags_lists)
-    flags_lists = filter(os.path.isfile, flags_lists)
+def gen_explore_loop(
+    optim_levels=None, nbiters=None, configuration_path=None, **kwargs):
+    flags_file = os.path.join(configuration_path, "flags.loop.cfg")
+    return gen_maxiters(
+        gen_rnd_uniform_deps(flags_file=flags_file, optim_levels=optim_levels),
+        nbiters)
+
+def gen_explore_optim(
+    optim_levels=None, nbiters=None, configuration_path=None, **kwargs):
+    flags_file = os.path.join(configuration_path, "flags.optim.cfg")
+    return gen_maxiters(
+        gen_rnd_uniform_deps(flags_file=flags_file, optim_levels=optim_levels),
+        nbiters)
+
+def gen_chained_exploration(
+    generators_args=None, expl_cookie=None, stage_cookie=None,
+    tradeoffs=None, nbiters=None, optim_variants=None, configuration_path=None,
+    **kwargs):
+    """
+    perform exploration by chaining generators.
+    """
+    debug('gen_chained_exploration')
+
     tradeoff_coeffs = tradeoffs or [5, 1, 0.2]
     nbiters = int(nbiters) if nbiters != None else 100
-    random.seed(int(seed))
 
-    # list of generators used during staged exploration
-    generators = [(gen_base,
-                   {'optim_levels': optim_levels},
-                   None)]
-    for flags_file in flags_lists:
-        generators += [(gen_rnd_uniform_deps,
-                        {'optim_levels': optim_levels,
-                         'flags_file': flags_file},
-                        nbiters)]
-
-    expl_cookie = expl_cookie or atos_lib.new_cookie()
-    stage_cookies = []
-    cookie_to_cfg = {}
     selected_configs = [(None, optim_variants)]
+    expl_cookie = expl_cookie or atos_lib.new_cookie()
+    stage_cookies, cookie_to_cfg = [], {}
 
-    for (stage_generator, args, maxiters) in generators:
+    if stage_cookie:
+        # select tradeoffs configs (flags, variants) for first exploration
+        # note that it does not work for function/file explorations
+        selected_results = get_run_tradeoffs(
+            tradeoff_coeffs, stage_cookies, configuration_path)
+        selected_configs = filter(
+            bool, map(get_result_config, selected_results))
+        debug('gen_chained_exploration: tradeoffs for first stage: ' + str(
+                selected_configs))
+
+    if not generators_args:
+        generators_args = []
+        for i in itertools.count(1):
+            generator_i = kwargs.get('generator%d' % i, None)
+            if not generator_i: break
+            gen_i_list = generator_i.split(',')
+            gen_i, gen_i_args = eval(gen_i_list.pop(0)), {}
+            for arg in gen_i_list:
+                key, value = arg.split(':', 1)
+                gen_i_args[key] = value
+            generators_args += [(gen_i, gen_i_args)]
+
+    for (generator, generator_args) in generators_args:
+        debug('gen_chained_exploration: generator ' + str(
+                (generator, generator_args)))
+
         stage_cookies.append(atos_lib.compute_cookie(
-                expl_cookie, stage_generator.__name__, args))
+                expl_cookie, generator.__name__, generator_args))
 
-        # run exploration on previously selected configs
-        for (flags, variants) in selected_configs:
-            debug('gen_staged: generator %s' %
-                  str((stage_generator.__name__, flags, variants)))
-
-            generator = gen_variants(
-                gen_maxiters(
-                    stage_generator(
-                        gen_config(flags=flags),
-                        **args),
-                    maxiters=maxiters),
-                optim_variants=variants)
-            for cfg in generator.generate():
+        for (flags, variant) in selected_configs:
+            debug('gen_chained_exploration: config ' + str((flags, variant)))
+            gen_args = dict(kwargs)
+            gen_args.update(generator_args or {})
+            gen_args.update({'configuration_path': configuration_path})
+            gen_args.update({'parent': gen_config(flags=flags)})
+            gen_args.update({'expl_cookie': expl_cookie})
+            debug('gen_chained_exploration: args ' + str(gen_args))
+            generator_ = gen_variants(gen_maxiters(
+                    generator(**gen_args),
+                    maxiters=nbiters), optim_variants=variant)
+            for cfg in generator_:
                 run_cookie = atos_lib.compute_cookie(
                     stage_cookies[-1], cfg.flags, cfg.variant)
                 cookie_to_cfg[run_cookie] = (cfg.flags, cfg.variant)
@@ -541,19 +591,42 @@ def gen_staged(
                     [expl_cookie, stage_cookies[-1], run_cookie])
 
         # select tradeoffs configs (flags, variants) for next exploration
-        selected_results = get_run_tradeoffs(tradeoff_coeffs, stage_cookies,
-                                             configuration_path)
+        selected_results = get_run_tradeoffs(
+            tradeoff_coeffs, stage_cookies, configuration_path)
         selected_cookies = sum(map(
                 lambda x: x.cookies.split(','), selected_results), [])
         selected_configs = filter(
             bool, map(lambda x: cookie_to_cfg.get(x, None), selected_cookies))
-        debug('gen_staged: tradeoffs for next stages: ' + str(
+        debug('gen_chained_exploration: tradeoffs for next stages: ' + str(
                 selected_configs))
 
     # get best tradeoffs for the whole exploration
     tradeoffs = get_run_tradeoffs(
         tradeoff_coeffs, [expl_cookie], configuration_path)
-    debug('gen_staged: final tradeoffs: %s' % (str(tradeoffs)))
+    debug('gen_chained_exploration: final tradeoffs: %s' % (str(tradeoffs)))
+
+
+def gen_staged(configuration_path='atos-configurations', seed='0', **kwargs):
+    """
+    perform staged exploration
+    """
+    debug('gen_staged')
+
+    random.seed(int(seed))
+
+    # list of generators used during staged exploration
+    generators = [(gen_base, {})]
+    flags_files = ['flags.inline.cfg', 'flags.loop.cfg', 'flags.optim.cfg']
+    for flags_file in flags_files:
+        flags_file = os.path.join(configuration_path, flags_file)
+        if not os.path.isfile(flags_file): continue
+        generators += [(gen_rnd_uniform_deps, {'flags_file': flags_file})]
+
+    chained_generator = gen_chained_exploration(
+        generators_args=generators,
+        configuration_path=configuration_path, **kwargs)
+
+    return chained_generator
 
 
 def gen_function_by_function(
@@ -675,7 +748,7 @@ def gen_function_by_function(
             # create the generator that will be used for curr_hot_func expl
             if flags_file:  # if requested, explore on flag list
                 debug('gen_function_by_function: file: %s ' % (flags_file))
-                generator = gen_flags_file(flags_file=flags_file).generate()
+                generator = gen_flags_file(flags_file=flags_file)
             else:  # else, perform a classic staged exploration
                 debug('gen_function_by_function: staged_exploration')
                 generator = gen_staged(
@@ -822,7 +895,7 @@ def gen_file_by_file(
             # create the generator that will be used for curr_hot_obj expl
             if flags_file:  # if requested, explore on flags list
                 debug('gen_file_by_file: file: %s ' % (flags_file))
-                generator = gen_flags_file(flags_file=flags_file).generate()
+                generator = gen_flags_file(flags_file=flags_file)
             else:  # else, perform a classic staged exploration
                 debug('gen_file_by_file: staged_exploration')
                 generator = gen_staged(
@@ -908,7 +981,11 @@ def get_variant_config(variant_id, configuration_path, **kwargs):
     if not results:
         warning("variant not found: '%s'" % variant_id)
         return None
-    conf, uconf = results[0].get('conf', ''), results[0].get('uconf', None)
+    return get_result_config(atos_lib.atos_client_results.result(results[0]))
+
+def get_result_config(result):
+    conf = result.dict().get('conf', '')
+    uconf = result.dict().get('uconf', None)
     # deduce optim_variant from conf & uconf
     variantd = {
         (0, 0, 0): 'base',
@@ -964,6 +1041,10 @@ def run_exploration_loop(args=None, **kwargs):
 
     gen_args = dict(vars(args or {}).items() + kwargs.items())
     gen_args = atos_lib.default_obj(**gen_args)
+    # handle extra arguments
+    for arg in gen_args.extra_args or []:
+        key, value = arg.split('=', 1)
+        gen_args.__dict__[key] = value
     # run on all available variants by default
     optim_variants = (
         gen_args.optim_variants and gen_args.optim_variants.split(',')
@@ -995,12 +1076,7 @@ def run_exploration_loop(args=None, **kwargs):
         gen_args.update(
             base_flags=base_flags, base_variant=base_variant,
             expl_cookie=expl_cookie)
-        if isinstance(gen_args.generator, config_generator):
-            generator_ = gen_args.generator.generate()
-        else:
-            generator_ = gen_args.generator(**vars(gen_args))
-            if isinstance(generator_, config_generator):
-                generator_ = generator_.generate()
+        generator_ = gen_args.generator(**vars(gen_args))
 
         for ic in itertools.count():
             try:

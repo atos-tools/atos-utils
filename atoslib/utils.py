@@ -65,7 +65,7 @@ def invoque(tool, args, **kwargs):
         "atos-cookie": run_atos_cookie,
         "atos-graph": run_atos_graph,
         "atos-lib": run_atos_lib,
-        "atos-gen": run_atos_gen,
+        "atos-generator": run_atos_generator,
         "atos-web": run_atos_web,
         }
 
@@ -902,8 +902,8 @@ def run_atos_lib(args):
         else: pass
         return 0
 
-def run_atos_gen(args):
-    """ ATOS gen tool implementation. """
+def run_atos_generator(args):
+    """ ATOS generator tool implementation. """
     try:
         assert args.generator
         generator = eval('generators.%s' % args.generator)
@@ -913,11 +913,6 @@ def run_atos_gen(args):
 
     gen_args = arguments.argparse.Namespace()
     gen_args.__dict__.update(vars(args))
-
-    for arg in args.args or []:
-        key, value = arg.split('=')
-        gen_args.__dict__[key] = value
-
     status = generators.run_exploration_loop(
         gen_args, generator=generator)
 

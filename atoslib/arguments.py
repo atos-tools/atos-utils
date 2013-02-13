@@ -49,7 +49,7 @@ def parser(tool):
         "atos-config": parsers.atos_config,
         "atos-cookie": parsers.atos_cookie,
         "atos-lib": parsers.atos_lib,
-        "atos-gen": parsers.atos_gen,
+        "atos-generator": parsers.atos_generator,
         "atos-graph": parsers.atos_graph,
         "atos-web": parsers.atos_web,
         }
@@ -161,9 +161,9 @@ class parsers:
                               help="internal API access to ATOS library")
         parsers.atos_lib(sub)
 
-        sub = subs.add_parser("gen",
+        sub = subs.add_parser("generator",
                               help="internal API access to ATOS generators")
-        parsers.atos_gen(sub)
+        parsers.atos_generator(sub)
 
         sub = subs.add_parser("web",
                               help="web user interface API")
@@ -691,18 +691,18 @@ class parsers:
         return parser
 
     @staticmethod
-    def atos_gen(parser=None):
+    def atos_generator(parser=None):
         """ atos gen arguments parser factory. """
         if parser == None:
-            parser = ATOSArgumentParser(prog="atos-gen",
+            parser = ATOSArgumentParser(prog="atos-generator",
                                         description="ATOS gen tool")
         args.configuration_path(parser)
         args.base_variants(parser)
         args.nbiters(parser)
         args.per_func_nbiters(parser)
         args.seed(parser)
-        args.atos_gen.arguments(parser)
-        args.atos_gen.generator(parser)
+        args.extra_arguments(parser)
+        args.atos_generator.generator(parser)
         args.optim_levels(parser)
         args.optim_variants(parser)
         args.cookie(parser)
@@ -1335,6 +1335,14 @@ class args:
                              dest="query",
                              help="results query values")
 
+    @staticmethod
+    def extra_arguments(parser, args=("--extra-arg",)):
+        parser.add_argument(
+            *args,
+             dest="extra_args",
+             action='append',
+             help="argument for generator ('key=value')")
+
     class atos_help:
         """ Namespace for non common atos help options. """
 
@@ -1701,16 +1709,8 @@ class args:
                  help="cold functions attributes",
                  default="noinline cold")
 
-    class atos_gen:
-        """ Namespace for non common atos-gen arguments. """
-
-        @staticmethod
-        def arguments(parser, args=("--arg",)):
-            parser.add_argument(
-                *args,
-                 dest="args",
-                 action='append',
-                 help="argument for generator ('key=value')")
+    class atos_generator:
+        """ Namespace for non common atos-generator arguments. """
 
         @staticmethod
         def generator(parser, args=("--generator",)):

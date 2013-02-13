@@ -15,7 +15,7 @@ $ROOT/bin/atos-opt -r -a "-O2"
 $ROOT/bin/atos-opt -r -a "-O3"
 
 # default optim_levels are -Os,-O2,-O3
-$ROOT/bin/atos gen \
+$ROOT/bin/atos generator \
     --seed=0 --optim-variants=base --generator=gen_base \
     OPT-O2 OPT-O3
 

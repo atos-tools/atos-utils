@@ -165,7 +165,7 @@ class optim_flag_list():
             line = line.split('//', 1)[0].strip()
             if not line: continue
             # dependency
-            reobj = re.match('^(.*):(.*)', line)
+            reobj = re.match('^(.*)::(.*)', line)
             if reobj:
                 ldeps = [x.strip() for x in reobj.group(1).split(',')]
                 rdeps = [x.strip() for x in reobj.group(2).split(',')]

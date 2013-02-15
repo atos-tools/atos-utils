@@ -341,43 +341,43 @@
 
 // flag dependencies
 
--finline: -fearly-inlining
--finline: -finline-functions
--finline: -finline-functions-called-once
--finline: -finline-small-functions
--finline-functions: -findirect-inlining
--finline-functions: -fpartial-inlining
--finline-small-functions: -findirect-inlining
--finline-small-functions: -fpartial-inlining
--fearly-inlining: --param early-inlining-insns=
--fearly-inlining: --param max-early-inliner-iterations=
--fpartial-inlining: --param partial-inlining-entry-probability=
--Os, -O1, -O2, -O3: --param max-inline-recursive-depth=
--Os, -O1, -O2, -O3: --param max-inline-recursive-depth-auto=
--Os, -O1, -O2, -O3: --param min-inline-recursive-probability=
--Os, -O1, -O2, -O3: --param max-inline-insns-recursive=
--Os, -O1, -O2, -O3: --param max-inline-insns-recursive-auto=
+-finline :: -fearly-inlining
+-finline :: -finline-functions
+-finline :: -finline-functions-called-once
+-finline :: -finline-small-functions
+-finline-functions :: -findirect-inlining
+-finline-functions :: -fpartial-inlining
+-finline-small-functions :: -findirect-inlining
+-finline-small-functions :: -fpartial-inlining
+-fearly-inlining :: --param early-inlining-insns=
+-fearly-inlining :: --param max-early-inliner-iterations=
+-fpartial-inlining :: --param partial-inlining-entry-probability=
+-Os, -O1, -O2, -O3 :: --param max-inline-recursive-depth=
+-Os, -O1, -O2, -O3 :: --param max-inline-recursive-depth-auto=
+-Os, -O1, -O2, -O3 :: --param min-inline-recursive-probability=
+-Os, -O1, -O2, -O3 :: --param max-inline-insns-recursive=
+-Os, -O1, -O2, -O3 :: --param max-inline-insns-recursive-auto=
 #if GCC_VERSION >= 40600
--Ofast: --param max-inline-recursive-depth=
--Ofast: --param max-inline-recursive-depth-auto=
--Ofast: --param min-inline-recursive-probability=
--Ofast: --param max-inline-insns-recursive=
--Ofast: --param max-inline-insns-recursive-auto=
+-Ofast :: --param max-inline-recursive-depth=
+-Ofast :: --param max-inline-recursive-depth-auto=
+-Ofast :: --param min-inline-recursive-probability=
+-Ofast :: --param max-inline-insns-recursive=
+-Ofast :: --param max-inline-insns-recursive-auto=
 #endif
--finline: --param max-inline-insns-single=
--finline: --param max-inline-insns-auto=
--finline: --param inline-call-cost=
--finline: --param inline-unit-growth=
--finline: --param large-function-growth=
--finline: --param large-stack-frame-growth=
--finline: --param large-function-insns=
--finline: --param large-stack-frame=
--finline: --param large-unit-insns=
--fguess-branch-probability: --param hot-bb-frequency-fraction=
--fguess-branch-probability: --param hot-bb-count-fraction=
+-finline :: --param max-inline-insns-single=
+-finline :: --param max-inline-insns-auto=
+-finline :: --param inline-call-cost=
+-finline :: --param inline-unit-growth=
+-finline :: --param large-function-growth=
+-finline :: --param large-stack-frame-growth=
+-finline :: --param large-function-insns=
+-finline :: --param large-stack-frame=
+-finline :: --param large-unit-insns=
+-fguess-branch-probability :: --param hot-bb-frequency-fraction=
+-fguess-branch-probability :: --param hot-bb-count-fraction=
 #if GCC_VERSION >= 40600
--fprofile-use: --param hot-bb-frequency-fraction=
--fprofile-use: --param hot-bb-count-fraction=
+-fprofile-use :: --param hot-bb-frequency-fraction=
+-fprofile-use :: --param hot-bb-count-fraction=
 #endif
 // flag default values (useful for dep roots)
 

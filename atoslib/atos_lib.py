@@ -612,8 +612,11 @@ class json_config():
     @staticmethod
     def compiler_version_number(version_str):
         vspl = version_str.split('.', 2)
-        major = int((len(vspl) >= 1) and vspl[0] or 0)
-        minor = int((len(vspl) >= 2) and vspl[1] or 0)
+        try:
+            major = int((len(vspl) >= 1) and vspl[0] or 0)
+            minor = int((len(vspl) >= 2) and vspl[1] or 0)
+        except:
+            return 0
         try:
             patch = int((len(vspl) >= 3) and vspl[2] or 0)
         except:  # patchlevel can be a string, like in 4.6.x-google
@@ -746,103 +749,135 @@ class json_config():
                 {"name": "rvct",
                  "target": "ARM",
                  "target_alias": "arm",
+                 "version": version,
                  "host_alias": get_executable_host(compiler_real),
                  "id": "armcc-%s" % (version),
                  "driver_version": driver_version,
                  "lto_enabled": "0",
-                 "fto_enabled": "0",
+                 "fdo_enabled": "0",
                  "graphite_enabled": "0",
                  "libgomp_enabled": "0",
                  "plugins_enabled": "0",
                  "plugin_acf": "none"
                  })
+            return compiler_config
 
-        else:
-            # other compilers: gcc, clang, ...
-
-            #
-            # compiler version, ...
-            #
+        if compiler_basename in ["stxp70cc", "stxp70++"]:
+            # stxp70 open64 compiler
             version_string = process.system(
                 [compiler, "-v"], get_output=True, check_status=True,
                 output_stderr=True)
-            name = re.search(
-                "(\w*) version", version_string).group(1)
             version = re.search(
-                " version ([^ ]*)", version_string).group(1)
+                "Version ([^ ]*)", version_string).group(1)
             target = process.system(
                 [compiler, "-dumpmachine"], get_output=True,
                 check_status=True).strip()
-            compiler_config["id"] = "%s-%s-%s" % (name, target, version)
-            compiler_config["name"] = name
-            compiler_config["version"] = version
-            compiler_config["target"] = target
-            compiler_config["driver_version"] = version_string
-
             target_alias = get_triplet_alias(target)
-            host_alias = get_executable_host(compiler_real)
-            compiler_config["target_alias"] = target_alias
-            compiler_config["host_alias"] = host_alias
 
-            #
-            # acf plugin
-            #
-            acf_path = find_plugin("acf_plugin", target_alias, host_alias)
-            compiler_config["plugin_acf"] = acf_path
+            compiler_config.update(
+                {"name": compiler_basename,
+                 "target": target,
+                 "target_alias": target_alias,
+                 "version": version,
+                 "host_alias": get_executable_host(compiler_real),
+                 "id": "%s-%s" % (compiler_basename, version),
+                 "driver_version": version_string,
+                 "lto_enabled": "1",
+                 "fdo_enabled": "1",
+                 #
+                 "lto_flags": "-ipa",
+                 "fdo_gen_flags": "-fprofile-arcs",
+                 "fdo_use_flags": "-fbranch-probabilities",
+                 "fdo_dir_flags": "none",
+                 #
+                 "graphite_enabled": "0",
+                 "libgomp_enabled": "0",
+                 "plugins_enabled": "0",
+                 "plugin_acf": "none"
+                 })
+            return compiler_config
 
-            cc1_path = process.system(
-                [compiler, "--print-prog-name=cc1"], get_output=True,
-                check_status=True).strip()
-            try:
-                assert os.path.isfile(cc1_path)
-                obj_t = process.system(
-                    ["objdump", "-t", cc1_path], get_output=True,
-                    check_status=True, no_debug=True)
-                hwi = int(re.search("(\w*)\W*target_newline", obj_t).group(1))
-                expected_hwi = (
-                    (host_alias == "i386" and target_alias == "i386")
-                    and 4 or 8)
-                valid_host_wide_int = int(hwi == expected_hwi)
-            except:
-                # check hwi value on other cases
-                valid_host_wide_int = 1
-            compiler_config["valid_host_wide_int"] = str(valid_host_wide_int)
+        # other compilers: gcc, clang, ...
 
-            #
-            # available compiler optimizations and features
-            #
-            tmpdir = tempfile.mkdtemp()
-            test_c = os.path.join(tmpdir, "test.c")
-            test_o = os.path.join(tmpdir, "test.o")
-            with open(test_c, "w") as testf:
-                print >>testf, "#include <stdio.h>"
-                print >>testf, "int main(void)"
-                print >>testf, "{"
-                print >>testf, "  int i;"
-                print >>testf, "  for (i = 0; i < 10; i++)"
-                print >>testf, "  {"
-                print >>testf, "      printf(\"hello\\n\");"
-                print >>testf, "  }"
-                print >>testf, "  return 0;"
-                print >>testf, "}"
+        #
+        # compiler version, ...
+        #
+        version_string = process.system(
+            [compiler, "-v"], get_output=True, check_status=True,
+            output_stderr=True)
+        name = re.search(
+            "(\w*) version", version_string).group(1)
+        version = re.search(
+            " version ([^ ]*)", version_string).group(1)
+        target = process.system(
+            [compiler, "-dumpmachine"], get_output=True,
+            check_status=True).strip()
+        compiler_config["id"] = "%s-%s-%s" % (name, target, version)
+        compiler_config["name"] = name
+        compiler_config["version"] = version
+        compiler_config["target"] = target
+        compiler_config["driver_version"] = version_string
+        target_alias = get_triplet_alias(target)
+        host_alias = get_executable_host(compiler_real)
+        compiler_config["target_alias"] = target_alias
+        compiler_config["host_alias"] = host_alias
 
-            lto_enabled = int(process.system([
-                    compiler, "-O2", "-flto", "-o", test_o, "-c", test_c
+        #
+        # acf plugin
+        #
+        acf_path = find_plugin("acf_plugin", target_alias, host_alias)
+        compiler_config["plugin_acf"] = acf_path
+
+        cc1_path = process.system(
+            [compiler, "--print-prog-name=cc1"], get_output=True,
+            check_status=True).strip()
+        try:
+            assert os.path.isfile(cc1_path)
+            obj_t = process.system(
+                ["objdump", "-t", cc1_path], get_output=True,
+                check_status=True, no_debug=True)
+            hwi = int(re.search("(\w*)\W*target_newline", obj_t).group(1))
+            expected_hwi = (
+                (host_alias == "i386" and target_alias == "i386")
+                and 4 or 8)
+            valid_host_wide_int = int(hwi == expected_hwi)
+        except:
+            # check hwi value on other cases
+            valid_host_wide_int = 1
+        compiler_config["valid_host_wide_int"] = str(valid_host_wide_int)
+        #
+        # available compiler optimizations and features
+        #
+        tmpdir = tempfile.mkdtemp()
+        test_c = os.path.join(tmpdir, "test.c")
+        test_o = os.path.join(tmpdir, "test.o")
+        with open(test_c, "w") as testf:
+            print >>testf, "#include <stdio.h>"
+            print >>testf, "int main(void)"
+            print >>testf, "{"
+            print >>testf, "  int i;"
+            print >>testf, "  for (i = 0; i < 10; i++)"
+            print >>testf, "  {"
+            print >>testf, "      printf(\"hello\\n\");"
+            print >>testf, "  }"
+            print >>testf, "  return 0;"
+            print >>testf, "}"
+        lto_enabled = int(process.system([
+                compiler, "-O2", "-flto", "-o", test_o, "-c", test_c
+                ]) == 0)
+        graphite_enabled = int(process.system([
+                compiler, "-O2", "-floop-block", "-o", test_o, "-c", test_c
+                ]) == 0)
+        plugins_enabled = int(os.path.isfile(acf_path) and process.system([
+                    compiler, "-O2", "-o", test_o, "-c", test_c,
+                    "-fplugin=" + acf_path, "-fplugin-arg-acf_plugin-test"
                     ]) == 0)
-            graphite_enabled = int(process.system([
-                    compiler, "-O2", "-floop-block", "-o", test_o, "-c", test_c
-                    ]) == 0)
-            plugins_enabled = int(os.path.isfile(acf_path) and process.system([
-                        compiler, "-O2", "-o", test_o, "-c", test_c,
-                        "-fplugin=" + acf_path, "-fplugin-arg-acf_plugin-test"
-                        ]) == 0)
-
-            compiler_config["lto_enabled"] = str(lto_enabled)
-            compiler_config["fdo_enabled"] = "1"
-            compiler_config["graphite_enabled"] = str(graphite_enabled)
-            compiler_config["libgomp_enabled"] = "0"
-            compiler_config["plugins_enabled"] = str(plugins_enabled)
-            process.commands.rmtree(tmpdir)
+        compiler_config["lto_enabled"] = str(lto_enabled)
+        compiler_config["fdo_enabled"] = "1"
+        compiler_config["graphite_enabled"] = str(graphite_enabled)
+        compiler_config["libgomp_enabled"] = "0"
+        compiler_config["plugins_enabled"] = str(plugins_enabled)
+        process.commands.rmtree(tmpdir)
 
         return compiler_config
 
@@ -917,13 +952,13 @@ def variant_id(options=None, gopts=None, uopts=None):
     else: pass
     if options != None:
         res_variant += "".join(options.split())
-    return res_variant
+    return res_variant.replace(':', '_')
 
 def pvariant_id(popts=None):
     assert(popts != None)
     res_variant = "OPT"
     res_variant += "-fprofile-generate" + "".join(popts.split())
-    return res_variant
+    return res_variant.replace(':', '_')
 
 def target_id(executables):
     """ Returns the target id given the list of executables. """
@@ -1252,3 +1287,48 @@ def expand_response_file(args, cwd, prefix="@"):
     return expand_args([], args)
 
 # ####################################################################
+
+def config_compiler_flags(key, default=None, config_path=None):
+    compiler_flags = query_config_values(
+        config_path, "$.compilers[*].%s" % key)
+    compiler_flags = compiler_flags and list(compiler_flags)[0] or default
+    if compiler_flags == "none": return []
+    return compiler_flags.split()
+
+def save_gcda_files_if_necessary(gopts, config_path=None, prof_path=None):
+    compiler_fdo_dir_flag = config_compiler_flags(
+        "fdo_dir_flags", default="-fprofile-dir", config_path=config_path)
+    if compiler_fdo_dir_flag: return
+    profile_path = (
+        os.path.abspath(prof_path) if prof_path else
+        get_profile_path(config_path, pvariant_id(gopts)))
+    # some compilers have no fprofile-dir option and generate gcda files in
+    # the same directories as object files. in that case, we must move
+    # gcdas in profile path after fdo training. these files will be
+    # restored before the profile-use build.
+    obj_dirs, gcda_files = [], []
+    for objs_file in ["objects", "targets"]:
+        lines = open(
+            os.path.join(config_path, objs_file)).readlines()
+        obj_dirs.extend(map(lambda x: os.path.dirname(x.strip()), lines))
+    for obj_dir in list(set(obj_dirs)):
+        gcda_files.extend(glob.glob(os.path.join(obj_dir, "*.gcda")))
+        gcda_files.extend(glob.glob(os.path.join(obj_dir, "*.gcno")))
+    for gcda_file in gcda_files:
+        gcda_dest = profile_path + os.path.sep + gcda_file
+        process.commands.mkdir(os.path.dirname(gcda_dest))
+        process.commands.copyfile(gcda_file, gcda_dest)
+        process.commands.unlink(gcda_file)
+
+def restore_gcda_files_if_necessary(config_path=None, prof_path=None):
+    compiler_fdo_dir_flag = config_compiler_flags(
+        "fdo_dir_flags", default="-fprofile-dir", config_path=config_path)
+    if compiler_fdo_dir_flag: return
+    prof_path = os.path.abspath(prof_path)
+    for root, dirnames, filenames in os.walk(prof_path):
+        gcda_files = filter(
+            lambda x: x.endswith('.gcda') or x.endswith('.gcno'), filenames)
+        gcda_files = map(lambda x: os.path.join(root, x), gcda_files)
+        for gcda_file in gcda_files:
+            gcda_dest = gcda_file[len(prof_path):]
+            process.commands.copyfile(gcda_file, gcda_dest)

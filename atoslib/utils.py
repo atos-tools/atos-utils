@@ -20,6 +20,7 @@ import sys, os
 import re
 import traceback
 import json
+import glob
 
 import globals
 import arguments
@@ -326,7 +327,10 @@ def run_atos_build(args):
         process.commands.mkdir(profile_path)
         with open(os.path.join(profile_path, "variant.txt"), "w") as variantf:
             variantf.write(pvariant)
-        compile_options += ["-fprofile-generate"]
+        compiler_fdo_gen_flags = atos_lib.config_compiler_flags(
+            "fdo_gen_flags", default="-fprofile-generate",
+            config_path=args.configuration_path)
+        compile_options += compiler_fdo_gen_flags
         shared_link_options += ["-lgcov", "-lc"]
 
         remote_profile_path = args.remote_path
@@ -339,18 +343,33 @@ def run_atos_build(args):
         driver_env.update({"PROFILE_GEN": "1"})
 
     if args.uopts != None:
-        compile_options += ["-fprofile-use", "-fprofile-correction",
-                            "-Wno-error=coverage-mismatch"]
+        fdo_use_flags_default = [
+            "-fprofile-use", "-fprofile-correction",
+            "-Wno-error=coverage-mismatch"]
+        compiler_fdo_use_flags = atos_lib.config_compiler_flags(
+            "fdo_use_flags", default=" ".join(fdo_use_flags_default),
+            config_path=args.configuration_path)
+        compile_options += compiler_fdo_use_flags
         driver_env.update({"PROFILE_DIR": profile_path})
         driver_env.update({"PROFILE_USE": "1"})
+        atos_lib.restore_gcda_files_if_necessary(
+            config_path=args.configuration_path, prof_path=profile_path)
 
     if args.gopts != None or args.uopts != None:
         common_profdir_prefix = atos_lib.get_config_value(
             args.configuration_path, 'build_opts.common_profdir_prefix', '')
         driver_env.update({"COMMON_PROFILE_DIR_PREFIX": common_profdir_prefix})
-        driver_env.update({"PROFILE_DIR_OPT": "-fprofile-dir"})
+        compiler_fdo_dir_flag = atos_lib.config_compiler_flags(
+            "fdo_dir_flags", default="-fprofile-dir",
+            config_path=args.configuration_path)
+        if compiler_fdo_dir_flag:
+            driver_env.update({
+                    "PROFILE_DIR_OPT": " ".join(compiler_fdo_dir_flag)})
 
-    if "-flto" in compile_options:
+    compiler_lto_flag = atos_lib.config_compiler_flags(
+            "lto_flags", default="-flto", config_path=args.configuration_path)
+    compiler_lto_flag = " ".join(compiler_lto_flag)
+    if compiler_lto_flag in compile_options:
         for (target_sum, lto_flags) in atos_lib.get_config_value(
             args.configuration_path, 'build_opts.lto_flags', {}).items():
             driver_env.update({"ALDLTOFLAGS_" + target_sum: lto_flags})
@@ -922,7 +941,11 @@ def run_atos_opt(args):
     options = args.options or ""
     uopts = args.uopts
     if uopts == None and args.fdo: uopts = options
-    if args.lto: options += " -flto"
+    if args.lto:
+        compiler_lto_flag = atos_lib.config_compiler_flags(
+            "lto_flags", default="-flto", config_path=args.configuration_path)
+        compiler_lto_flag = " ".join(compiler_lto_flag)
+        options += " " + compiler_lto_flag
 
     if args.reuse and args.profile:
         variant_id = atos_lib.variant_id(options, None, uopts)
@@ -1056,7 +1079,12 @@ def run_atos_profile(args):
 
     status = invoque(
         "atos-run", args, gopts=options, options=options, silent=True)
-    return status
+    if status: return status
+
+    atos_lib.save_gcda_files_if_necessary(
+        options, config_path=args.configuration_path, prof_path=args.path)
+
+    return 0
 
 def run_atos_raudit(args):
     """ ATOS raudit tool implementation. """

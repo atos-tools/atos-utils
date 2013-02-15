@@ -819,45 +819,44 @@
 #if GCC_VERSION >= 40400
 
 // flag dependencies
-
--ftree-loop-optimize: -fcheck-data-deps
--ftree-loop-optimize: -fivopts
--ftree-loop-optimize: -fprefetch-loop-arrays
--ftree-loop-optimize: -ftree-dce
--ftree-loop-optimize: -ftree-loop-distribution
--ftree-loop-optimize: -ftree-loop-im
--ftree-loop-optimize: -ftree-loop-ivcanon
--ftree-loop-optimize: -ftree-scev-cprop
--ftree-loop-optimize: -ftree-vectorize
--ftree-loop-optimize: -funswitch-loops
--ftree-loop-optimize: -fpredictive-commoning
--ftree-loop-optimize: -ftree-parallelize-loops
--fbranch-count-reg: --param max-iterations-computation-cost=
--fvariable-expansion-in-unroller: --param max-variable-expansions-in-unroller=
--fmove-loop-invariants: --param lim-expensive=
--funroll-loops: --param max-unroll-times=
--funroll-loops: --param max-unrolled-insns=
--funroll-loops: --param max-average-unrolled-insns=
--fpeel-loops: --param max-once-peeled-insns=
--fpeel-loops: --param max-peeled-insns=
--fpeel-loops: --param max-peel-times=
--fpeel-loops: --param max-completely-peeled-insns=
--fpeel-loops: --param max-completely-peel-times=
--fpeel-loops: --param max-completely-peel-loop-nest-depth=
--fivopts: --param iv-consider-all-candidates-bound=
--fivopts: --param iv-max-considered-uses=
--fivopts: --param iv-always-prune-cand-set-bound=
--ftree-vectorize: -ftree-vect-loop-version
--ftree-vectorize: -fvect-cost-model
--ftree-vectorize: --param min-vect-loop-bound=
--funswitch-loops: --param max-unswitch-insns=, --param max-unswitch-level=
--floop-block, -floop-strip-mine: --param loop-block-tile-size=
--floop-block, -floop-strip-mine: --param graphite-max-nb-scop-params=
--floop-block, -floop-strip-mine: --param graphite-max-bbs-per-function=
--floop-interchange, -fgraphite-identity, -floop-flatten: --param graphite-max-nb-scop-params=
--floop-interchange, -fgraphite-identity, -floop-flatten: --param graphite-max-bbs-per-function=
--fpeel-loops, -funroll-loops, -funroll-all-loops: -fsplit-ivs-in-unroller
--fpeel-loops, -funroll-loops, -funroll-all-loops: -fvariable-expansion-in-unroller
+-ftree-loop-optimize :: -fcheck-data-deps
+-ftree-loop-optimize :: -fivopts
+-ftree-loop-optimize :: -fprefetch-loop-arrays
+-ftree-loop-optimize :: -ftree-dce
+-ftree-loop-optimize :: -ftree-loop-distribution
+-ftree-loop-optimize :: -ftree-loop-im
+-ftree-loop-optimize :: -ftree-loop-ivcanon
+-ftree-loop-optimize :: -ftree-scev-cprop
+-ftree-loop-optimize :: -ftree-vectorize
+-ftree-loop-optimize :: -funswitch-loops
+-ftree-loop-optimize :: -fpredictive-commoning
+-ftree-loop-optimize :: -ftree-parallelize-loops
+-fbranch-count-reg :: --param max-iterations-computation-cost=
+-fvariable-expansion-in-unroller :: --param max-variable-expansions-in-unroller=
+-fmove-loop-invariants :: --param lim-expensive=
+-funroll-loops :: --param max-unroll-times=
+-funroll-loops :: --param max-unrolled-insns=
+-funroll-loops :: --param max-average-unrolled-insns=
+-fpeel-loops :: --param max-once-peeled-insns=
+-fpeel-loops :: --param max-peeled-insns=
+-fpeel-loops :: --param max-peel-times=
+-fpeel-loops :: --param max-completely-peeled-insns=
+-fpeel-loops :: --param max-completely-peel-times=
+-fpeel-loops :: --param max-completely-peel-loop-nest-depth=
+-fivopts :: --param iv-consider-all-candidates-bound=
+-fivopts :: --param iv-max-considered-uses=
+-fivopts :: --param iv-always-prune-cand-set-bound=
+-ftree-vectorize :: -ftree-vect-loop-version
+-ftree-vectorize :: -fvect-cost-model
+-ftree-vectorize :: --param min-vect-loop-bound=
+-funswitch-loops :: --param max-unswitch-insns=, --param max-unswitch-level=
+-floop-block, -floop-strip-mine :: --param loop-block-tile-size=
+-floop-block, -floop-strip-mine :: --param graphite-max-nb-scop-params=
+-floop-block, -floop-strip-mine :: --param graphite-max-bbs-per-function=
+-floop-interchange, -fgraphite-identity, -floop-flatten :: --param graphite-max-nb-scop-params=
+-floop-interchange, -fgraphite-identity, -floop-flatten :: --param graphite-max-bbs-per-function=
+-fpeel-loops, -funroll-loops, -funroll-all-loops :: -fsplit-ivs-in-unroller
+-fpeel-loops, -funroll-loops, -funroll-all-loops :: -fvariable-expansion-in-unroller
 
 // flag default values (useful for dep roots)
 

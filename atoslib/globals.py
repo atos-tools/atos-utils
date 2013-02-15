@@ -55,7 +55,7 @@ def setup(**kwargs):
     # Default compiler basename regexp
     DEFAULT_CCREGEXP = kwargs.get(
         'DEFAULT_CCREGEXP',
-        ".*(clang|gcc|g\+\+|cc|c\+\+)")
+        ".*(clang|gcc|g\+\+|cc|c\+\+|stxp70cc|stxp70c\+\+)")
 
     # Default linker basename regexp
     DEFAULT_LDREGEXP = kwargs.get(

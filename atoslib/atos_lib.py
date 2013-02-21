@@ -476,10 +476,16 @@ def merge_results(results):
     results = map(
         atos_client_results.result, results)
     # compute merged results for each variant
-    variants = list_unique(map(lambda x: x.variant, results))
+    variants = {}
+    ordered_variants = []
+    for result in results:
+        if result.variant not in variants:
+            variants[result.variant] = []
+            ordered_variants.append(result.variant)
+        variants[result.variant].append(result)
     variant_results = []
-    for variant in variants:
-        filtered_results = filter(lambda x: x.variant == variant, results)
+    for variant in ordered_variants:
+        filtered_results = variants[variant]
         targets = list_unique(map(lambda x: x.target, filtered_results))
         # merge multiple runs
         targets_results = map(

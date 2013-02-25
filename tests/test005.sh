@@ -13,7 +13,7 @@ cat >gcc.c <<EOF
 
 int main(int argc, char *argv[])
 {
-  argv[0] = "gcc";
+  argv[0] = "$real_gcc";
   execvp("$real_gcc", argv);
   return 1;
 }

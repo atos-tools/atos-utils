@@ -230,17 +230,6 @@ class config_generator:
     def __call__(self, *args, **kwargs):
         return self.generate()
 
-    @staticmethod
-    def test():
-        generator = config_generator()
-        try:
-            generator.next()
-        except config_generator.UnimplementedException:
-            return
-        except:
-            assert(False)
-        assert(False)
-
 class gen_config(config_generator):
     """
     Generates a single configuration.
@@ -251,15 +240,6 @@ class gen_config(config_generator):
     def generate(self):
         debug('gen_config: %s' % str(self.config_))
         yield self.config_
-
-    @staticmethod
-    def test():
-        idx = 0
-        for cfg in gen_config(variant='base'):
-            idx += 1
-        assert(idx == 1)
-        assert(len(cfg.__dict__.items()) == 1)
-        assert(cfg.variant == 'base')
 
 class gen_maxiters(config_generator):
     """
@@ -283,22 +263,6 @@ class gen_maxiters(config_generator):
             except StopIteration:
                 break
 
-    @staticmethod
-    def test():
-        idx = 0
-        generator = gen_maxiters(gen_config(), 0)
-        for cfg in generator():
-            idx += 1
-        assert(idx == 0)
-        generator = gen_maxiters(gen_config())
-        for cfg in generator():
-            idx += 1
-        assert(idx == 1)
-        generator = gen_maxiters(gen_config(), 1)
-        for cfg in generator():
-            idx += 1
-        assert(idx == 2)
-
 class gen_base(config_generator):
     """
     Generates basic build configurations from the
@@ -321,17 +285,6 @@ class gen_base(config_generator):
                 for level in self.optim_levels_:
                     yield cfg.copy().update(flags=level)
 
-    @staticmethod
-    def test():
-        variant = 'base'
-        levels = '-O1,-O2,-O3'
-        expected_flgs = levels.split(',')
-        for cfg in gen_base(gen_config(variant=variant),
-                            levels)():
-            print str(cfg)
-            assert(cfg.flags == expected_flgs.pop(0))
-            assert(cfg.variant == variant)
-
 class gen_variants(config_generator):
     """
     Generates build configurations from the
@@ -353,20 +306,6 @@ class gen_variants(config_generator):
             else:
                 for variant in self.optim_variants_:
                     yield cfg.copy().update(variant=variant)
-
-    @staticmethod
-    def test():
-        levels = '-O1,-O2,-O3'
-        variants = 'base,lto,fdo,fdo+lto'
-        expected_flgs = levels.split(',')
-        expected_vars = variants.split(',')
-        generator = gen_variants(gen_base(gen_config(), levels), variants)
-        idx = 0
-        for cfg in generator():
-            print str(cfg)
-            assert(cfg.flags == expected_flgs[idx / len(expected_vars)])
-            assert(cfg.variant == expected_vars[idx % len(expected_vars)])
-            idx += 1
 
 class gen_flags_file(config_generator):
     """
@@ -395,25 +334,6 @@ class gen_flags_file(config_generator):
                 for flags in flags_list:
                     if cfg.flags: flags = " ".join([cfg.flags, flags])
                     yield cfg.copy().update(flags=flags)
-
-    @staticmethod
-    def test():
-        flags = ['-O2', '-O2 -funroll-loops']
-        tmpf = tempfile.NamedTemporaryFile(delete=False)
-        tmpname = tmpf.name
-        try:
-            tmpf.write("# Test flags\n")
-            for flag in flags:
-                tmpf.write(" %s # test flags\n" % flag)
-            tmpf.close()
-            generator = gen_flags_file(gen_config(variant='base'),
-                                       tmpname)
-            for cfg in generator():
-                print str(cfg)
-                assert(cfg.flags == flags.pop(0))
-                assert(cfg.variant == 'base')
-        finally:
-            os.unlink(tmpname)
 
 class gen_rnd_uniform_deps(config_generator):
     """
@@ -454,40 +374,6 @@ class gen_rnd_uniform_deps(config_generator):
                             - handled_flags)
                         if not available_flags: break
                     yield cfg.copy().update(flags=flags)
-
-    @staticmethod
-    def test():
-        random.seed(0)
-        # Expected results with seed(0)
-        expected_flgs = [
-            '-O2 --param inline-call-cost=18 -fno-inline-small',
-            '-O2 --param inline-call-cost=20',
-            '-O2 --param inline-call-cost=25',
-            '-O2',
-            '-O2 -fno-inline-small',
-            '-O2 -finline-small']
-        levels = '-O2'
-        tmpf = tempfile.NamedTemporaryFile(delete=False)
-        tmpname = tmpf.name
-        try:
-            tmpf.write("# Test dependency flags\n")
-            tmpf.write("-finline-small|-fno-inline-small\n")
-            tmpf.write("--param inline-call-cost=[4..32,2]\n")
-            tmpf.write("-finline: --param inline-call-cost=\n")
-            tmpf.write("-finline: -finline-small\n")
-            tmpf.write("=> -O2\n")
-            tmpf.write("-O2 => -finline\n")
-            tmpf.close()
-            generator = gen_maxiters(
-                gen_rnd_uniform_deps(gen_config(),
-                                     tmpname,
-                                     levels),
-                6)
-            for cfg in generator():
-                print str(cfg)
-                #assert(cfg.flags == expected_flgs.pop(0))
-        finally:
-            os.unlink(tmpname)
 
 
 # ####################################################################
@@ -1094,12 +980,3 @@ def run_exploration_loop(args=None, **kwargs):
                     step(flags=cfg.flags, variant=variant,
                          cookies=cfg.cookies, profile=cfg.profile)
     return 0
-
-if __name__ == "__main__":
-    config_generator.test()
-    gen_config.test()
-    gen_maxiters.test()
-    gen_base.test()
-    gen_variants.test()
-    gen_flags_file.test()
-    gen_rnd_uniform_deps.test()

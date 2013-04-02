@@ -551,7 +551,7 @@ def run_atos_explore(args):
     if status != 0: return status
 
     status = generators.run_exploration_loop(
-        args, generator=generators.gen_basic)
+        args, generator=generators.gen_explore)
     return status
 
 def run_atos_init(args):
@@ -1479,40 +1479,22 @@ def run_atos_cookie(args):
 def run_atos_explore_inline(args):
     """ ATOS explore-inline tool implementation. """
 
-    flags_file = args.flags_file or os.path.join(
-        args.configuration_path, "flags.inline.cfg")
-
-    generator = generators.gen_maxiters(
-        generators.gen_rnd_uniform_deps(flags_file=flags_file,
-                                        optim_levels=args.optim_levels),
-        args.nbiters)
-    status = generators.run_exploration_loop(args, generator=generator)
+    status = generators.run_exploration_loop(
+        args, generator=generators.gen_explore_inline)
     return status
 
 def run_atos_explore_loop(args):
     """ ATOS explore-loop tool implementation. """
 
-    flags_file = args.flags_file or os.path.join(
-        args.configuration_path, "flags.loop.cfg")
-
-    generator = generators.gen_maxiters(
-        generators.gen_rnd_uniform_deps(flags_file=flags_file,
-                                        optim_levels=args.optim_levels),
-        args.nbiters)
-    status = generators.run_exploration_loop(args, generator=generator)
+    status = generators.run_exploration_loop(
+        args, generator=generators.gen_explore_loop)
     return status
 
 def run_atos_explore_optim(args):
     """ ATOS explore-optim tool implementation. """
 
-    flags_file = args.flags_file or os.path.join(
-        args.configuration_path, "flags.optim.cfg")
-
-    generator = generators.gen_maxiters(
-        generators.gen_rnd_uniform_deps(flags_file=flags_file,
-                                        optim_levels=args.optim_levels),
-        args.nbiters)
-    status = generators.run_exploration_loop(args, generator=generator)
+    status = generators.run_exploration_loop(
+        args, generator=generators.gen_explore_optim)
     return status
 
 def run_atos_explore_staged(args):

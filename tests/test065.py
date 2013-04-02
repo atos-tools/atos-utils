@@ -48,7 +48,7 @@ def generated_configs(gen, max_iter=None, cfg_to_res=None):
     for ic in itertools.count():
         if ic == max_iter: break
         try:
-            cfg = gen.send(None)
+            cfg = gen.next()
             configs.append(cfg)
             if not cfg_to_res: continue
             target, time, size = cfg_to_res(cfg)
@@ -119,7 +119,8 @@ process.commands.touch("plugin.so")
 gen = generators.gen_function_by_function(
     acf_plugin_path="plugin.so", hwi_size="7",
     prof_script="./profile.sh", imgpath=".",
-    csv_dir="csv", hot_th="70", cold_opts="-Os")
+    csv_dir="csv", hot_th="70", cold_opts="-Os",
+    configuration_path="atos-configurations")
 cfg = generated_configs(gen)
 assert len(cfg) == 2  # default run + cold options
 assert query_configs(cfg, flags='-O2', variant='base')
@@ -130,7 +131,8 @@ gen = generators.gen_function_by_function(
     acf_plugin_path="plugin.so", hwi_size="8",
     prof_script="./profile.sh", imgpath=".",
     csv_dir="csv", hot_th="70", cold_opts="-Os",
-    base_flags="-O3")
+    base_flags="-O3",
+    configuration_path="atos-configurations")
 cfg = generated_configs(gen)
 assert len(cfg) == 2  # default run + cold options
 assert query_configs(cfg, flags='-O3', variant='base')
@@ -140,7 +142,8 @@ gen = generators.gen_function_by_function(
     acf_plugin_path="plugin.so", hwi_size="8",
     prof_script="./profile.sh", imgpath=".",
     csv_dir="csv", hot_th="70", cold_opts="-Os",
-    base_flags="-O4", base_variant="fdo", optim_variants='base,lto')
+    base_flags="-O4", base_variant="fdo", optim_variants='base,lto',
+    configuration_path="atos-configurations")
 cfg = generated_configs(gen)
 assert len(cfg) == 2  # default run + cold options
 assert query_configs(cfg, flags='-O4', variant='fdo')
@@ -150,7 +153,8 @@ gen = generators.gen_function_by_function(
     acf_plugin_path="plugin.so", hwi_size="8",
     prof_script="./profile.sh", imgpath=".",
     csv_dir="csv", hot_th="70", cold_opts="-Os",
-    base_flags="-O5", optim_variants='base,lto')
+    base_flags="-O5", optim_variants='base,lto',
+    configuration_path="atos-configurations")
 cfg = generated_configs(gen)
 assert len(cfg) == 2  # default run + cold options
 assert query_configs(cfg, flags='-O5', variant='base')
@@ -162,7 +166,8 @@ gen = generators.gen_function_by_function(
     acf_plugin_path="plugin.so", hwi_size="8",
     prof_script="./profile.sh", imgpath=".",
     csv_dir="csv", hot_th="70", cold_opts="-Os",
-    base_flags="-O2")
+    base_flags="-O2",
+    configuration_path="atos-configurations")
 cfg = generated_configs(gen)
 assert len(cfg) == 2  # default run + cold options
 assert query_configs(cfg, flags='-O2', variant='base')
@@ -186,7 +191,8 @@ gen = generators.gen_function_by_function(
     acf_plugin_path="plugin.so", hwi_size="8",
     prof_script="./profile.sh", imgpath=".",
     csv_dir="csv", hot_th="99", cold_opts="-O0 -fnothing",
-    base_flags="-O2")
+    base_flags="-O2",
+    configuration_path="atos-configurations")
 cfg = generated_configs(gen)
 cold_cfg = query_configs(cfg, flags='-O2 -fplugin=.*', variant='base')[0]
 cold_csv = re.sub(".*csv_file=([A-Za-z0-9/\-\.]*).*", "\\1", cold_cfg.flags)
@@ -223,7 +229,8 @@ gen = generators.gen_function_by_function(
     acf_plugin_path="plugin.so", hwi_size="8",
     prof_script="./profile.sh", imgpath=".",
     csv_dir="csv2", hot_th="70", cold_opts="-Os",
-    base_flags="-O2", flags_file="flags.txt")
+    base_flags="-O2", flags_file="flags.txt",
+    configuration_path="atos-configurations")
 cfg = generated_configs(gen, cfg_to_res=cfg_result)
 cfg = filter(lambda x: not x.profile, cfg)
 # cold + (2 funcs * (3 flags) + 3 tradeoffs
@@ -259,7 +266,8 @@ gen = generators.gen_function_by_function(
     acf_plugin_path="plugin.so", hwi_size="8",
     prof_script="./profile.sh", imgpath=".",
     csv_dir="csv", hot_th="70", cold_opts="-Os",
-    base_flags="-O2", per_func_nbiters=100, optim_levels="-O2")
+    base_flags="-O2", per_func_nbiters=100, optim_levels="-O2",
+    configuration_path="atos-configurations")
 cfg = generated_configs(gen, cfg_to_res=cfg_result)
 cfg = filter(lambda x: not x.profile, cfg)
 # cold + 3 final tradeoffs

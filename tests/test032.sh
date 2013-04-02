@@ -13,4 +13,4 @@ $ROOT/bin/atos-init \
 $ROOT/bin/atos-explore-optim -S0 -M5 -Vbase,fdo
 
 [ -d atos-configurations ]
-[ `$ROOT/bin/atos lib query -q'variant:OPT-.*' | wc -l` -eq 10 ]
+[ `$ROOT/bin/atos lib query -q'variant:OPT-.*' | wc -l` -eq 5 ]

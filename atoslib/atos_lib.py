@@ -23,6 +23,8 @@ import sys, os, re, math, itertools, time, json, hashlib, signal
 import cPickle as pickle
 import tempfile
 import glob
+import threading
+import atexit
 
 import globals
 import jsonlib
@@ -1443,3 +1445,39 @@ class repeatalarm():
 if __name__ == "__main__":
     passed = repeatalarm.test()
     if not passed: sys.exit(1)
+
+# ####################################################################
+
+class repeattimer():
+
+    all_timers = []
+
+    def __init__(self, func, pause=1.0):
+        self.func = func
+        self.pause = pause
+        self.ev = threading.Event()
+        self.th = threading.Thread(target=self.update)
+        self.th.daemon = True
+        repeattimer.all_timers.append(self)
+
+    def update(self):
+        while True:
+            self.ev.wait(self.pause)
+            if self.ev.isSet():
+                break
+            self.func()
+
+    def start(self):
+        self.th.start()
+        return self
+
+    def stop(self):
+        repeattimer.all_timers.remove(self)
+        self.ev.set()
+        self.th.join()
+
+    @staticmethod
+    @atexit.register
+    def stopall():
+        for th in list(repeattimer.all_timers):
+            th.stop()

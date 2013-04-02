@@ -20,7 +20,7 @@
 #
 
 import sys
-import re, math, threading, atexit, signal
+import re, math
 
 import atos_lib
 
@@ -34,39 +34,6 @@ except:
 # ####################################################################
 
 
-class repeattimer():
-
-    allth = []
-
-    def __init__(self, func, pause=1.0):
-        self.func = func
-        self.pause = pause
-        self.ev = threading.Event()
-        self.th = threading.Thread(target=self.update)
-        self.th.daemon = True
-        repeattimer.allth += [self]
-
-    def update(self):
-        while True:
-            self.ev.wait(self.pause)
-            if self.ev.isSet(): break
-            self.func()
-
-    def start(self):
-        self.th.start()
-        return self
-
-    def stop(self):
-        self.ev.set()
-
-    @staticmethod
-    @atexit.register
-    def stopall():
-        for th in repeattimer.allth: th.stop()
-
-
-# ####################################################################
-
 def nowarn(func):
     def wrapper(*args, **kwargs):
         import warnings
@@ -75,6 +42,10 @@ def nowarn(func):
             res = func(*args, **kwargs)
         return res
     return wrapper
+
+
+# ####################################################################
+
 
 @nowarn
 def draw_graph(getgraph, opts):

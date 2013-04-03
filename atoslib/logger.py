@@ -19,6 +19,7 @@
 import sys
 import os
 import logging
+import traceback
 from logging import debug, info, warning
 
 class _ConsoleLogFormatter():
@@ -114,5 +115,13 @@ def message(msg):
 
 def internal_error(msg, exit_status=1):
     progname = os.path.basename(sys.argv[0])
-    print >>sys.stderr, '%s: internal error: %s' % (progname, msg)
+    try:
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        last_trace = traceback.extract_tb(exc_traceback)[-1]
+        loc_str = "(%s:%d): " % (
+            os.path.basename(last_trace[0]), last_trace[1])
+
+    except:
+        loc_str = ""
+    print >>sys.stderr, '%s: internal error: %s%s' % (progname, loc_str, msg)
     if exit_status: sys.exit(exit_status)

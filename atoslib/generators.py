@@ -29,6 +29,7 @@ import profile
 import utils
 import arguments
 import atos_lib
+import progress
 from logger import debug, warning, error, info, message
 
 
@@ -216,6 +217,9 @@ class config_generator:
     class UnimplementedException(Exception):
         pass
 
+    def estimate_exploration_size(self):
+        return None
+
     def generate(self):
         raise self.UnimplementedException()
 
@@ -237,9 +241,41 @@ class gen_config(config_generator):
     def __init__(self, **config_kwargs):
         self.config_ = config(**config_kwargs)
 
+    def estimate_exploration_size(self):
+        return 1
+
     def generate(self):
         debug('gen_config: %s' % str(self.config_))
         yield self.config_
+
+class gen_progress(config_generator):
+    """
+    Shows generator progress.
+    """
+    def __init__(self, parent=None, descr='config', **ignored_kwargs):
+        assert parent
+        self.parent_ = parent
+        self.maxiters_ = self.parent_.estimate_exploration_size()
+        self.descr = descr
+
+    def estimate_exploration_size(self):
+        return self.parent_.estimate_exploration_size()
+
+    def generate(self):
+        self.progress_ = progress.exploration_progress(
+            descr=self.descr, maxval=self.maxiters_, visible=self.maxiters_)
+        generator = self.parent_
+        for ic in itertools.count(1):
+            try:
+                self.maxiters_ = self.parent_.estimate_exploration_size()
+                self.progress_.update(
+                    value=(ic - 1), maxval=self.maxiters_)
+                yield generator.next()
+                # self.progress_.update(
+                #     value=ic, maxval=self.maxiters_)
+            except StopIteration:
+                break
+        self.progress_.end()
 
 class gen_maxiters(config_generator):
     """
@@ -251,6 +287,12 @@ class gen_maxiters(config_generator):
         self.parent_ = parent or gen_config()
         assert(isinstance(self.parent_, config_generator) or isinstance(
                 self.parent_, types.GeneratorType))
+
+    def estimate_exploration_size(self):
+        size = self.parent_.estimate_exploration_size()
+        if self.maxiters_:
+            size = min(size or self.maxiters_, self.maxiters_)
+        return size
 
     def generate(self):
         debug('gen_maxiters: %s' % str(self.maxiters_))
@@ -276,6 +318,12 @@ class gen_base(config_generator):
         assert(isinstance(self.parent_, config_generator) or isinstance(
                 self.parent_, types.GeneratorType))
 
+    def estimate_exploration_size(self):
+        size = self.parent_.estimate_exploration_size()
+        nb_optim_levels = len(self.optim_levels_)
+        if size: size *= nb_optim_levels
+        return size
+
     def generate(self):
         debug('gen_base: %s' % str(self.optim_levels_))
         for cfg in self.parent_:
@@ -297,6 +345,12 @@ class gen_variants(config_generator):
         self.parent_ = parent or gen_config()
         assert(isinstance(self.parent_, config_generator) or isinstance(
                 self.parent_, types.GeneratorType))
+
+    def estimate_exploration_size(self):
+        size = self.parent_.estimate_exploration_size()
+        nb_optim_variants = len(self.optim_variants_)
+        if size: size *= nb_optim_variants
+        return size
 
     def generate(self):
         debug('gen_variants: %s' % str(self.optim_variants_))
@@ -325,6 +379,12 @@ class gen_flags_file(config_generator):
                 flags = line.split('#', 1)[0].strip()
                 if flags: self.flags_list_.append(flags)
 
+    def estimate_exploration_size(self):
+        size = self.parent_.estimate_exploration_size()
+        nb_flags = len(self.flags_list_)
+        if size: size *= nb_flags
+        return size
+
     def generate(self):
         debug('gen_flags_file')
         for cfg in self.parent_:
@@ -350,6 +410,11 @@ class gen_rnd_uniform_deps(config_generator):
         assert(isinstance(self.parent_, config_generator) or isinstance(
                 self.parent_, types.GeneratorType))
         self.flag_list_ = optim_flag_list(self.flags_file_)
+
+    def estimate_exploration_size(self):
+        if not self.flag_list_.flag_list:
+            return self.parent_.estimate_exploration_size()
+        return None
 
     def generate(self):
         debug('gen_rnd_uniform_deps [%s]' % str(self.flags_file_))
@@ -425,15 +490,47 @@ class gen_chained_exploration(config_generator):
             gen_args.update({'expl_cookie': self.expl_cookie})
             generators_args_full.append((generator, gen_args))
         self.generators_args = generators_args_full
+        # initial list of number of tradeoffs for each stage
+        self.stage_tradeoffs = []
+        if len(self.generators_args) >= 1:
+            self.stage_tradeoffs += [initial_tradeoffs]
+            self.stage_tradeoffs += (
+                [len(self.tradeoffs)] * (len(self.generators_args) - 1))
+
+    def estimate_exploration_size(self):
+        if getattr(self, 'generator_size', None) is None:
+            self.generator_size = []
+            for (generator, generator_args) in self.generators_args:
+                gen_base_ = gen_variants(
+                    parent=gen_config(), optim_variants='base')
+                generator_ = generator(
+                    parent=gen_base_, **generator_args)
+                generator_ = gen_maxiters(
+                    parent=generator_, maxiters=self.nbiters)
+                self.generator_size.append(
+                    generator_.estimate_exploration_size())
+        # TODO: does not work on variable size generators
+        # generator sizes estimated at the beginning, once for all
+        expl_size = 0
+        for n in range(len(self.generators_args)):
+            expl_size += self.generator_size[n] * self.stage_tradeoffs[n]
+        return expl_size
 
     def generate(self):
         debug('gen_chained_exploration')
         stage_cookies, cookie_to_cfg = [], {}
-        for (generator, generator_args) in self.generators_args:
+        stage_progress = progress.exploration_progress(
+            descr='stage', maxval=len(self.generators_args))
+        for (nstage, (generator, generator_args)) \
+                in enumerate(self.generators_args):
             debug('gen_chained_exploration: generator ' + str(
                     (generator, generator_args)))
             stage_cookies.append(atos_lib.compute_cookie(
                     self.expl_cookie, generator.__name__, generator_args))
+            nb_tradeoffs = sum(
+                map(lambda (_, vr): vr and len(vr.split(',')) or 1,
+                    self.selected_configs))
+            self.stage_tradeoffs[nstage] = nb_tradeoffs
             for (flags, variant) in self.selected_configs:
                 debug('gen_chained_exploration: config ' + str(
                         (flags, variant)))
@@ -444,12 +541,14 @@ class gen_chained_exploration(config_generator):
                     parent=gen_base_, **generator_args)
                 generator_ = gen_maxiters(
                     parent=generator_, maxiters=self.nbiters)
+                generator_ = gen_progress(generator_)
                 for cfg in generator_:
                     run_cookie = atos_lib.compute_cookie(
                         stage_cookies[-1], cfg.flags, cfg.variant)
                     cookie_to_cfg[run_cookie] = (cfg.flags, cfg.variant)
                     yield cfg.extend_cookies(
                         [self.expl_cookie, stage_cookies[-1], run_cookie])
+            stage_progress.update()
 
             # select tradeoffs configs (flags, variants) for next exploration
             selected_results = get_run_tradeoffs(
@@ -462,6 +561,7 @@ class gen_chained_exploration(config_generator):
             debug('gen_chained_exploration: tradeoffs for next stages: ' + str(
                     self.selected_configs))
 
+        stage_progress.end()
         # get best tradeoffs for the whole exploration
         tradeoffs = get_run_tradeoffs(
             self.tradeoffs, [self.expl_cookie], self.configuration_path)
@@ -505,6 +605,37 @@ class gen_file_by_file_cfg(config_generator):
                 if flags: opt_file.write('%s,%s\n' % (obj, flags))
         return base_flags + ' --atos-optfile %s' % os.path.abspath(csv_name)
 
+    def estimate_exploration_size(self):
+        # profiling run + simple partitionning
+        expl_size = 2
+        if not (self.flags_file or self.per_file_nbiters):
+            return expl_size
+        if getattr(self, 'generator_size', None) is None:
+            if self.flags_file:
+                generator = gen_flags_file(
+                    flags_file=self.flags_file)
+            else:
+                generator = gen_staged(
+                    nbiters=self.per_file_nbiters,
+                    tradeoffs=self.tradeoffs, **self.kwargs)
+            est_expl_size = generator.estimate_exploration_size()
+            est_nb_objs = 5  # depends on threshold/...
+            self.generator_size = [
+                dict([(objnum, est_expl_size) for objnum in range(
+                            est_nb_objs)])] * len(self.optim_variants)
+        # for each variant in optim_variants
+        for variant_expl in self.generator_size:
+            # for each hot objects
+            # - profiling run + exploration
+            for hotobj_expl in variant_expl.values():
+                expl_size += hotobj_expl + 1
+            # + 1 (last profiling)
+            expl_size += 1
+            # for each tradeoff: resulting run
+            expl_size += len(self.tradeoffs)
+
+        return expl_size
+
     def generate(self):
         # TODO: some code can now be factorized with gen_function_by_function
         debug('gen_file_by_file')
@@ -538,12 +669,23 @@ class gen_file_by_file_cfg(config_generator):
 
         # file-by-file exploration
 
+        variant_progress = progress.exploration_progress(
+            descr='variant', maxval=len(self.optim_variants),
+            visible=(len(self.optim_variants) > 1))
+        # update estimated exploration size
+        for variant_num in range(len(self.optim_variants)):
+            for x in self.generator_size[variant_num].keys():
+                if x >= len(hot_objs): del self.generator_size[variant_num][x]
+
         for (variant_num, variant) in enumerate(self.optim_variants):
             debug('gen_file_by_file: exploration - ' + variant)
 
             base_obj_flags = dict(cold_obj_flags)
             hot_objs_processed = []
             obj_to_cookie, cookie_to_flags = {}, {}
+
+            obj_progress = progress.exploration_progress(
+                descr='file', maxval=len(self.generator_size[variant_num]))
 
             while True:  # loop on hot object files
 
@@ -565,6 +707,7 @@ class gen_file_by_file_cfg(config_generator):
                 if not hot_objs_unprocessed: break
                 curr_hot_obj = hot_objs_unprocessed.pop()
                 hot_objs_processed.append(curr_hot_obj)
+                hot_obj_num = len(hot_objs_processed) - 1
 
                 debug('gen_file_by_file: hot_obj: ' + str(curr_hot_obj))
 
@@ -586,6 +729,9 @@ class gen_file_by_file_cfg(config_generator):
 
                 # run exploration loop on newly selected hot_obj
                 while True:
+                    # update estimated exploration size
+                    self.generator_size[variant_num][hot_obj_num] = (
+                        generator.estimate_exploration_size())
                     try: cfg = generator.next()
                     except StopIteration: break
                     # compose csv
@@ -612,6 +758,13 @@ class gen_file_by_file_cfg(config_generator):
                               perf_cookies))
                 if perf_flags: base_obj_flags.update(
                     {curr_hot_obj: perf_flags[0]})
+                obj_progress.update()
+
+            obj_progress.end()
+
+            # update estimated exploration size
+            for x in self.generator_size[variant_num].keys():
+                if x > hot_obj_num: del self.generator_size[variant_num][x]
 
             # compose config from best tradeoffs
             debug('gen_file_by_file: compose best tradeoffs variants')
@@ -631,6 +784,9 @@ class gen_file_by_file_cfg(config_generator):
                         {hot_obj: coeff_flags[0]})
                 yield config(flags=self.fbf_csv_opt(
                         coeff_obj_flags, self.base_flags), variant=variant)
+
+            variant_progress.update()
+        variant_progress.end()
 
 class gen_function_by_function_cfg(config_generator):
     """
@@ -705,6 +861,37 @@ class gen_function_by_function_cfg(config_generator):
             ' -fplugin-arg-acf_plugin-verbose' +
             ' -fplugin-arg-acf_plugin-csv_file=' + csv_name)
 
+    def estimate_exploration_size(self):
+        # profiling run + simple partitionning
+        expl_size = 2
+        if not (self.flags_file or self.per_func_nbiters):
+            return expl_size
+        if getattr(self, 'generator_size', None) is None:
+            if self.flags_file:
+                generator = gen_flags_file(
+                    flags_file=self.flags_file)
+            else:
+                generator = gen_staged(
+                    nbiters=self.per_func_nbiters,
+                    tradeoffs=self.tradeoffs, **self.kwargs)
+            est_expl_size = generator.estimate_exploration_size()
+            est_nb_objs = 5  # depends on threshold/...
+            self.generator_size = [
+                dict([(objnum, est_expl_size) for objnum in range(
+                            est_nb_objs)])] * len(self.optim_variants)
+        # for each variant in optim_variants
+        for variant_expl in self.generator_size:
+            # for each hot func
+            # - profiling run + exploration
+            for hotobj_expl in variant_expl.values():
+                expl_size += hotobj_expl + 1
+            # + 1 (last profiling)
+            expl_size += 1
+            # for each tradeoff: resulting run
+            expl_size += len(self.tradeoffs)
+
+        return expl_size
+
     def generate(self):
         # TODO: some code can now be factorized with gen_file_by_file
         debug('gen_function_by_function')
@@ -730,12 +917,23 @@ class gen_function_by_function_cfg(config_generator):
 
         # function-by-function exploration
 
+        variant_progress = progress.exploration_progress(
+            descr='variant', maxval=len(self.optim_variants),
+            visible=(len(self.optim_variants) > 1))
+        # update estimated exploration size
+        for variant_num in range(len(self.optim_variants)):
+            for x in self.generator_size[variant_num].keys():
+                if x >= len(hot_funcs): del self.generator_size[variant_num][x]
+
         for variant in self.optim_variants:
             debug('gen_function_by_function: exploration - ' + variant)
 
             base_func_flags = dict(cold_func_flags)
             hot_funcs_processed = []
             func_to_cookie, cookie_to_flags = {}, {}
+
+            obj_progress = progress.exploration_progress(
+                descr='func', maxval=len(self.generator_size[variant_num]))
 
             while True:  # loop on hot functions
 
@@ -756,6 +954,7 @@ class gen_function_by_function_cfg(config_generator):
                 if not hot_funcs_unprocessed: break
                 curr_hot_func = hot_funcs_unprocessed.pop()
                 hot_funcs_processed.append(curr_hot_func)
+                hot_func_num = len(hot_funcs_processed) - 1
 
                 debug('gen_function_by_function: hot_func: ' + str(
                         curr_hot_func))
@@ -779,6 +978,9 @@ class gen_function_by_function_cfg(config_generator):
 
                 # run exploration loop on newly selected hot_func
                 while True:
+                    # update estimated exploration size
+                    self.generator_size[variant_num][hot_func_num] = (
+                        generator.estimate_exploration_size())
                     try: cfg = generator.next()
                     except StopIteration: break
                     # compose csv
@@ -807,6 +1009,13 @@ class gen_function_by_function_cfg(config_generator):
                               perf_cookies))
                 if perf_flags: base_func_flags.update(
                     {curr_hot_func: perf_flags[0]})
+                obj_progress.update()
+
+            obj_progress.end()
+
+            # update estimated exploration size
+            for x in self.generator_size[variant_num].keys():
+                if x > hot_func_num: del self.generator_size[variant_num][x]
 
             # compose config from best tradeoffs
             debug('gen_function_by_function: compose best tradeoffs variants')
@@ -827,6 +1036,9 @@ class gen_function_by_function_cfg(config_generator):
                 yield config(flags=self.acf_csv_opt(
                         coeff_func_flags), variant=variant)
 
+            variant_progress.update()
+        variant_progress.end()
+
 
 # ####################################################################
 
@@ -836,38 +1048,43 @@ def gen_explore_inline(
     configuration_path=None, **kwargs):
     flags_file = flags_file or os.path.join(
         configuration_path, "flags.inline.cfg")
-    return gen_maxiters(
+    return gen_progress(
+        parent=gen_maxiters(
             gen_variants(gen_rnd_uniform_deps(
                     flags_file=flags_file, optim_levels=optim_levels,
                     **kwargs), optim_variants=optim_variants),
-            nbiters)
+            nbiters), descr='expl-inline')
 
 def gen_explore_loop(
     optim_levels=None, optim_variants=None, nbiters=None, flags_file=None,
     configuration_path=None, **kwargs):
     flags_file = flags_file or os.path.join(
         configuration_path, "flags.loop.cfg")
-    return gen_maxiters(
+    return gen_progress(
+        parent=gen_maxiters(
             gen_variants(gen_rnd_uniform_deps(
                     flags_file=flags_file, optim_levels=optim_levels,
                     **kwargs), optim_variants=optim_variants),
-            nbiters)
+            nbiters), descr='expl-loop')
 
 def gen_explore_optim(
     optim_levels=None, optim_variants=None, nbiters=None, flags_file=None,
     configuration_path=None, **kwargs):
     flags_file = flags_file or os.path.join(
         configuration_path, "flags.optim.cfg")
-    return gen_maxiters(
+    return gen_progress(
+        parent=gen_maxiters(
             gen_variants(gen_rnd_uniform_deps(
                     flags_file=flags_file, optim_levels=optim_levels,
                     **kwargs), optim_variants=optim_variants),
-            nbiters)
+            nbiters), descr='expl-optim')
 
 def gen_explore(
     optim_levels=None, optim_variants=None, **kwargs):
-    return gen_variants(gen_base(optim_levels=optim_levels),
-                        optim_variants=optim_variants)
+    return gen_progress(
+        parent=gen_variants(gen_base(optim_levels=optim_levels),
+                            optim_variants=optim_variants),
+        descr='expl-base')
 
 def gen_staged(configuration_path='atos-configurations', seed='0', **kwargs):
     """
@@ -883,17 +1100,21 @@ def gen_staged(configuration_path='atos-configurations', seed='0', **kwargs):
         (gen_explore_loop, {}),
         (gen_explore_optim, {})]
 
-    chained_generator = gen_chained_exploration(
-        generators_args=generators,
-        configuration_path=configuration_path, **kwargs)
+    chained_generator = gen_progress(
+        parent=gen_chained_exploration(
+            generators_args=generators,
+            configuration_path=configuration_path,
+            **kwargs), descr='expl-staged')
 
     return chained_generator
 
 def gen_file_by_file(**kwargs):
-    return gen_file_by_file_cfg(**kwargs)
+    return gen_progress(
+        parent=gen_file_by_file_cfg(**kwargs), descr='expl-file')
 
 def gen_function_by_function(**kwargs):
-    return gen_function_by_function_cfg(**kwargs)
+    return gen_progress(
+        parent=gen_function_by_function_cfg(**kwargs), descr='expl-func')
 
 
 # ####################################################################

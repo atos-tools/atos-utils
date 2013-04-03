@@ -20,7 +20,6 @@ import sys, os
 import re
 import traceback
 import json
-import glob
 
 import globals
 import arguments
@@ -30,6 +29,8 @@ import process
 import profile
 import logger
 import regexp
+import progress
+
 from logger import debug, warning, error, message, info
 from atoslib.recipes import RecipeStorage, RecipeManager
 
@@ -269,7 +270,11 @@ def run_atos_audit(args):
         PROOT_ADDON_CC_OPTS_CCRE=("^%s$" % cbinregexp),
         PROOT_ADDON_CC_OPTS_DRIVER=atos_driver) + args.command
 
+    build_progress = progress.timer_progress(
+        progress_type="build", config_path=args.configuration_path)
     status = process.system(command, print_output=True)
+    build_progress.end(status=status)
+
     return status
 
 def run_atos_build(args):
@@ -395,9 +400,6 @@ def run_atos_build(args):
                    "QUIET=",
                    "ATOS_DRIVER=" +
                    " ".join([atos_driver] + atos_driver_options)]
-        status, output = process.system(
-            atos_lib.timeout_command() + command,
-            get_output=True, output_stderr=True)
     else:
         # else use proot cc_opts addon (force mode)
         build_sh = os.path.join(args.configuration_path, "build.sh")
@@ -429,9 +431,14 @@ def run_atos_build(args):
             PROOT_ADDON_CC_OPTS_CCRE=("^%s$" % cbinregexp),
             PROOT_ADDON_CC_OPTS_DRIVER=atos_driver)
         command.extend(args.command or [build_sh])
-        status, output = process.system(
-            atos_lib.timeout_command() + command,
-            get_output=True, output_stderr=True)
+
+    build_progress = progress.timer_progress(
+        progress_type="build", variant_id=variant,
+        config_path=args.configuration_path)
+    status, output = process.system(
+        atos_lib.timeout_command() + command,
+        get_output=True, output_stderr=True)
+    build_progress.end(status=status)
 
     # remove driver build variables from environment
     map(lambda (k, v): os.unsetenv(k), driver_env.items())
@@ -1100,7 +1107,11 @@ def run_atos_raudit(args):
             get_res_sh = os.path.join(args.configuration_path, "get_res.sh")
             atos_lib.generate_script(get_res_sh, args.results_script)
 
+    run_progress = progress.timer_progress(
+        progress_type="run", config_path=args.configuration_path)
     status = process.system(args.command, print_output=True)
+    run_progress.end(status=status)
+
     return status
 
 def run_atos_run_profile(args):
@@ -1175,10 +1186,14 @@ def run_atos_run(args):
         run_script = os.path.join(args.configuration_path, "run.sh")
         run_script = args.command or [run_script]
 
+        run_progress = progress.timer_progress(
+            progress_type="run", variant_id=variant,
+            config_path=args.configuration_path)
         status, output = process.system(
             atos_lib.timeout_command() + process.cmdline2list(time_command) +
             run_script,
             get_output=True, output_stderr=True)
+        run_progress.end(status=status)
 
         if args.dryrun or status:
             return status, 0.0, output

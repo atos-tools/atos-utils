@@ -255,27 +255,62 @@ class gen_progress(config_generator):
     def __init__(self, parent=None, descr='config', **ignored_kwargs):
         assert parent
         self.parent_ = parent
-        self.maxiters_ = self.parent_.estimate_exploration_size()
         self.descr = descr
 
     def estimate_exploration_size(self):
         return self.parent_.estimate_exploration_size()
 
     def generate(self):
+        maxiter = self.parent_.estimate_exploration_size()
         self.progress_ = progress.exploration_progress(
-            descr=self.descr, maxval=self.maxiters_, visible=self.maxiters_)
-        generator = self.parent_
+            descr=self.descr, maxval=maxiter, visible=maxiter)
         for ic in itertools.count(1):
             try:
-                self.maxiters_ = self.parent_.estimate_exploration_size()
-                self.progress_.update(
-                    value=(ic - 1), maxval=self.maxiters_)
-                yield generator.next()
-                # self.progress_.update(
-                #     value=ic, maxval=self.maxiters_)
+                maxiter = self.parent_.estimate_exploration_size()
+                self.progress_.update(value=(ic - 1), maxval=maxiter)
+                yield self.parent_.next()
             except StopIteration:
                 break
         self.progress_.end()
+
+class gen_record_flags(config_generator):
+    """
+    Record yield flags for treadeoffs selection.
+    """
+    def __init__(
+        self, parent=None, gen_cookie=None,
+        configuration_path=None, **ignored_kwargs):
+        self.parent_ = parent
+        self.configuration_path_ = configuration_path
+        self.gen_cookie = gen_cookie or atos_lib.new_cookie()
+        assert parent and configuration_path
+
+    def estimate_exploration_size(self):
+        return self.parent_.estimate_exploration_size()
+
+    def generate(self):
+        self.gen_cookie = atos_lib.new_cookie()
+        self.cookie_to_cfg = {}
+        while True:
+            try:
+                cfg = self.parent_.next()
+            except StopIteration:
+                break
+            run_cookie = atos_lib.compute_cookie(
+                self.gen_cookie, cfg.flags)
+            self.cookie_to_cfg[run_cookie] = (cfg.flags, cfg.variant)
+            yield cfg.extend_cookies([run_cookie])
+
+    def tradeoff_config(self, tradeoff):
+        tradeoff_results = get_run_tradeoffs(
+            [tradeoff], [self.gen_cookie], self.configuration_path_)
+        tradeoff_cookies = sum(map(
+                lambda x: x.cookies.split(','), tradeoff_results), [])
+        tradeoff_config = filter(
+            bool, map(lambda x: self.cookie_to_cfg.get(x, ''),
+                      tradeoff_cookies))
+        return tradeoff_config[0] if tradeoff_config else (None, None)
+
 
 class gen_maxiters(config_generator):
     """
@@ -1124,47 +1159,36 @@ class gen_flag_values(config_generator):
 
                 obj_files = self.keys or fbf_config_init.keys()
                 for obj in obj_files:
-                    flags = fbf_config_init[obj]
                     debug('gen_flag_values (fbf): obj: [%s]' % str(obj))
-                    obj_cookie, cookie_to_flags = atos_lib.compute_cookie(
-                        self.expl_cookie, obj), {}
                     generator = gen_flag_values(
-                        config_flags=flags,
+                        config_flags=fbf_config_init[obj],
                         configuration_path=self.configuration_path,
                         nbvalues=self.nbvalues, tradeoffs=self.tradeoffs,
                         try_removing=self.try_removing,
                         **self.kwargs)
-                    # TODO: factorize cookie_to_flags & best flags selection in
-                    #   a new generator?
+                    generator = gen_record_flags(
+                        parent=generator,
+                        configuration_path=self.configuration_path,
+                        gen_cookie=atos_lib.compute_cookie(
+                            self.expl_cookie, obj))
                     while True:
-                        try: cfg = generator.next()
-                        except StopIteration: break
-                        run_cookie = atos_lib.compute_cookie(
-                            obj_cookie, cfg.flags)
-                        cookie_to_flags[run_cookie] = cfg.flags
-                        new_cfg = dict(fbf_config.items() + [(obj, cfg.flags)])
+                        try:
+                            cfg = generator.next()
+                        except StopIteration:
+                            break
+                        new_cfg = dict(
+                            fbf_config.items() + [(obj, cfg.flags)])
                         new_flags = gen_file_by_file_cfg.create_config_csv(
                             obj_flags=new_cfg,
                             csv_dir=os.path.dirname(fbf_file))
                         yield config(
-                            flags=new_flags,
-                            cookies=[obj_cookie, run_cookie]).extend_cookies(
-                            cfg.cookies)
+                            flags=new_flags, cookies=cfg.cookies)
                     # explore other objs with best perf flags for current obj
                     perf_coeff = sorted(self.tradeoffs)[-1]
-                    perf_results = get_run_tradeoffs(
-                        [perf_coeff], [obj_cookie], self.configuration_path)
-                    perf_cookies = sum(map(
-                            lambda x: x.cookies.split(','), perf_results), [])
-                    perf_flags = filter(
-                        bool, map(lambda x: cookie_to_flags.get(x, ''),
-                                  perf_cookies))
-                    debug('gen_flag_values (fbf): obj: %s, flags: [%s]' % (
-                            str(obj), str(perf_flags)))
                     flags_for_obj = (
-                        perf_flags[0] if perf_flags else fbf_config_init[obj])
-                    debug('gen_flag_values (fbf): obj -> ' + str(
-                            flags_for_obj))
+                        generator.tradeoff_config(perf_coeff)[0]
+                        or fbf_config_init[obj])
+                    debug('gen_flag_values (fbf): flg: ' + str(flags_for_obj))
                     fbf_config.update({obj: flags_for_obj})
 
             elif flag_str.startswith('-fplugin-arg-acf_plugin-csv_file='):
@@ -1189,46 +1213,37 @@ class gen_flag_values(config_generator):
                 else: funcs = fbf_config_init.keys()
 
                 for func in funcs:
-                    flags = fbf_config_init[func]
                     debug('gen_flag_values (fbf): func: [%s]' % str(func))
-                    func_cookie, cookie_to_flags = atos_lib.compute_cookie(
-                        self.expl_cookie, func), {}
                     generator = gen_flag_values(
-                        config_flags=flags,
+                        config_flags=fbf_config_init[func],
                         configuration_path=self.configuration_path,
                         nbvalues=self.nbvalues, tradeoffs=self.tradeoffs,
                         try_removing=self.try_removing,
                         **self.kwargs)
+                    generator = gen_record_flags(
+                        parent=generator,
+                        configuration_path=self.configuration_path,
+                        gen_cookie=atos_lib.compute_cookie(
+                            self.expl_cookie, func))
+
                     while True:
-                        try: cfg = generator.next()
-                        except StopIteration: break
-                        run_cookie = atos_lib.compute_cookie(
-                            func_cookie, cfg.flags)
-                        cookie_to_flags[run_cookie] = cfg.flags
+                        try:
+                            cfg = generator.next()
+                        except StopIteration:
+                            break
                         new_cfg = dict(
                             fbf_config.items() + [(func, cfg.flags)])
                         new_flags = gen_function_by_function_cfg.\
                             create_config_csv(
                             new_cfg, csv_dir=os.path.dirname(fbf_file))
                         yield config(
-                            flags=new_flags,
-                            cookies=[func_cookie, run_cookie]).extend_cookies(
-                            cfg.cookies)
+                            flags=new_flags, cookies=cfg.cookies)
                     # explore other funcs with best perf flags for current func
                     perf_coeff = sorted(self.tradeoffs)[-1]
-                    perf_results = get_run_tradeoffs(
-                        [perf_coeff], [func_cookie], self.configuration_path)
-                    perf_cookies = sum(map(
-                            lambda x: x.cookies.split(','), perf_results), [])
-                    perf_flags = filter(
-                        bool, map(lambda x: cookie_to_flags.get(x, ''),
-                                  perf_cookies))
-                    debug('gen_flag_values (fbf): func: %s, flags: [%s]' % (
-                            str(func), str(perf_flags)))
                     flags_for_func = (
-                        perf_flags[0] if perf_flags else fbf_config_init[func])
-                    debug('gen_flag_values (fbf): func -> ' + str(
-                            flags_for_func))
+                        generator.tradeoff_config(perf_coeff)[0]
+                        or fbf_config_init[func])
+                    debug('gen_flag_values (fbf): flg: ' + str(flags_for_func))
                     fbf_config.update({func: flags_for_func})
 
             else:

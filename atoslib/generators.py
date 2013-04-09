@@ -80,7 +80,12 @@ class optim_flag_list():
             else: assert 0
 
         def optname(self):
-            return optim_flag_list.optim_flag.foptname(self.rand())
+            if self.range:
+                flag, min, max, step = self.range
+                flag_val = '%s%d' % (flag, min)
+            elif self.choice:
+                flag_val = self.choice[0]
+            return optim_flag_list.optim_flag.foptname(flag_val)
 
         @staticmethod
         def soptname(s):
@@ -494,6 +499,7 @@ class gen_rnd_uniform_deps(config_generator):
                 # empty list case
                 yield cfg
             else:
+                # bug? loops only on the first parent-generated cfg
                 base_flags = cfg.flags or ''
                 while True:
                     handled_flags = set()
@@ -1364,6 +1370,166 @@ class gen_flag_values(config_generator):
         debug('gen_flag_values: final tradeoffs: %s' % (str(tradeoffs)))
 
 
+class gen_genetic_deps(config_generator):
+    """
+    Generate genetic evolution of previous items, using dependencies.
+    """
+
+    def __init__(self, parent=None, flags_files=None, optim_levels=None,
+                 mutate_prob=None, mutate_rate=None, mutate_remove=None,
+                 evolve_rate=None, configuration_path=None,
+                 **ignored_kwargs):
+        assert flags_files
+        assert configuration_path
+        self.flags_files_ = flags_files.split(',')
+        self.configuration_path = configuration_path
+        assert all(map(os.path.isfile, self.flags_files_))
+        self.optim_levels_ = optim_flag_list.optim_flag(
+            fchoice=(optim_levels or '').split(','))
+        self.parent_ = parent or gen_config()
+        assert(isinstance(self.parent_, config_generator) or isinstance(
+                self.parent_, types.GeneratorType))
+        self.flag_list_ = optim_flag_list(*self.flags_files_)
+        self.mutate_prob = float(
+            mutate_prob) if (mutate_prob is not None) else 0.3
+        self.mutate_rate = float(
+            mutate_rate) if (mutate_rate is not None) else 0.3
+        self.evolve_rate = float(
+            evolve_rate) if (evolve_rate is not None) else 0.3
+        self.mutate_remove = float(
+            mutate_remove) if (mutate_remove is not None) else 0.1
+
+    def estimate_exploration_size(self):
+        if not self.flag_list_.flag_list:
+            return 1
+        return None
+
+    def generate(self):
+        debug('gen_genetic_deps [%s]' % str(self.flags_files_))
+
+        base_cfg = self.parent_.next()
+        # ensure that there is no other parent cfg
+        try:
+            self.parent_.next()
+            assert 0
+        except: pass
+
+        # handle case of empty flag list
+        if not self.flag_list_.flag_list:
+            yield base_cfg
+            return
+
+        debug('gen_genetic_deps: base_cfg: %s' % str(base_cfg))
+        config_set, nb_retry, max_retry = set(), 0, 100
+        base_flags = base_cfg.flags or ''
+
+        while True:
+            debug('gen_genetic_deps: flags: [%s]' % str(base_flags))
+            flags, new_flags = optim_flag_list.parse_line(base_flags), []
+            mutate_flags = (random.random() < self.mutate_prob)
+            debug('gen_genetic_deps: %s' % (
+                    mutate_flags and 'MUTATE' or 'EVOLVE'))
+
+            # already-set flags
+            for flag in flags:
+                opt_name = optim_flag_list.optim_flag.foptname(flag)
+                obj_flag = self.flag_list_.find(flag)
+
+                available_flags = self.flag_list_.available_flags(
+                    ' '.join(new_flags))
+                flag_is_available = (
+                    (not obj_flag) or obj_flag in available_flags)
+                if not flag_is_available:
+                    debug('gen_genetic_deps: unavailable flag: ' + flag)
+                    continue
+
+                evolve_flag = (random.random() < self.evolve_rate)
+                mutate_flag = (random.random() < self.mutate_rate)
+                remove_flag = (random.random() < self.mutate_remove)
+
+                # MUTATION
+                if mutate_flags:
+                    if mutate_flag:
+                        if remove_flag:
+                            if opt_name != '-O':  # case of optimization level
+                                debug('gen_genetic_deps: remove flag=%s'
+                                      % (flag))
+                                continue
+                        else:
+                            # mutate current flag
+                            if opt_name == '-O':  # case of optimization level
+                                new_flag = self.optim_levels_.rand()
+                                new_flags.append(new_flag)
+                                debug('gen_genetic_deps: mutate flag=%s->%s' %
+                                      (flag, new_flag))
+                                continue
+                            elif obj_flag:
+                                new_flag = obj_flag.rand()
+                                new_flags.append(new_flag)
+                                debug('gen_genetic_deps: mutate flag=%s->%s' %
+                                      (flag, new_flag))
+                                continue
+                            else:  # case of unknown flag: keep unchanged
+                                pass
+
+                # EVOLUTION
+                else:
+                    # evolve_flags: only modify existing flags
+                    if evolve_flag and obj_flag:
+                        if obj_flag.range:
+                            flag_, min, max, step = obj_flag.range
+                            range = (max - min) / step
+                            # extract current value
+                            curval = int(flag.replace(opt_name, ''))
+                            newval = curval + random.randint(
+                                -range / 8, range / 8) * step
+                            if newval < min: newval = min
+                            elif newval > max: newval = max
+                            new_flag = opt_name + str(newval)
+                        else:
+                            new_flag = obj_flag.rand()
+                        new_flags.append(new_flag)
+                        debug('gen_genetic_deps: evolve flag=%s->%s' % (
+                                flag, new_flag))
+                        continue
+
+                # keep flag unchanged
+                debug('gen_genetic_deps: keep flag=%s' % (flag))
+                new_flags.append(flag)
+
+            # MUTATION
+            # consider adding new flags
+            if mutate_flags:
+                handled_flags = set(
+                    filter(bool, map(self.flag_list_.find, flags)))
+                while True:
+                    available_flags = self.flag_list_.available_flags(
+                        ' '.join(new_flags)) - handled_flags
+                    if not available_flags: break
+                    for flag in sorted(list(available_flags), key=str):
+                        mutate_flag = (random.random() < self.mutate_rate)
+                        if mutate_flag:
+                            new_flag = flag.rand()
+                            new_flags.append(new_flag)
+                            debug('gen_genetic_deps: add flag=%s' % (new_flag))
+                    handled_flags |= available_flags
+
+            flags = ' '.join(new_flags)
+            if flags in config_set:
+                debug('gen_genetic_deps: flags in config_set: [%s]' % (flags))
+                nb_retry += 1
+                if nb_retry >= max_retry:
+                    debug('gen_genetic_deps: nb_retry=%d: give up' % nb_retry)
+                    return
+                continue
+
+            config_set.add(flags)
+            nb_retry = 0
+
+            debug('gen_genetic_deps: yield [%s]' % flags)
+            yield base_cfg.copy().update(flags=flags)
+
+
 # ####################################################################
 
 
@@ -1450,9 +1616,10 @@ def gen_explore(
             optim_variants=optim_variants),
         descr='expl-base')
 
-def gen_staged(configuration_path=None, seed='0', **kwargs):
+def gen_staged(
+    configuration_path=None, seed='0', **kwargs):
     """
-    Perform staged exploration.
+    perform staged exploration
     """
     assert configuration_path
 
@@ -1460,6 +1627,7 @@ def gen_staged(configuration_path=None, seed='0', **kwargs):
 
     random.seed(int(seed))
 
+    # list of generators used during staged exploration
     generators = [
         (gen_base, {}),
         (gen_explore_inline, {}),
@@ -1472,6 +1640,41 @@ def gen_staged(configuration_path=None, seed='0', **kwargs):
             configuration_path=configuration_path,
             **kwargs),
         descr='expl-staged')
+
+    return chained_generator
+
+def gen_genetic(
+    flags_files=None, generations='10', seed='0', nbpoints=None,
+    configuration_path=None, **kwargs):
+    """
+    perform genetic exploration
+    """
+    assert configuration_path
+
+    debug('gen_genetic')
+
+    random.seed(int(seed))
+
+    nbpoints = nbpoints and int(nbpoints) or 2
+
+    flags_files = flags_files or [
+        'flags.inline.cfg', 'flags.loop.cfg', 'flags.optim.cfg']
+    flags_files = filter(os.path.isfile, map(
+            functools.partial(os.path.join, configuration_path),
+            flags_files))
+    flags_files = ','.join(flags_files)
+
+    # list of generators used during genetic exploration
+    generators = [
+        (gen_base, {})] + int(generations) * [
+        (gen_genetic_deps, {'flags_files': flags_files})]
+
+    chained_generator = gen_progress(
+        parent=gen_chained_exploration(
+            generators_args=generators,
+            nbpoints=nbpoints,
+            configuration_path=configuration_path,
+            **kwargs), descr='expl-genetic')
 
     return chained_generator
 

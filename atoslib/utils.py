@@ -62,6 +62,7 @@ def invoque(tool, args, **kwargs):
         "atos-explore-optim": run_atos_explore_optim,
         "atos-explore-acf": run_atos_explore_acf,
         "atos-explore-staged": run_atos_explore_staged,
+        "atos-explore-genetic": run_atos_explore_genetic,
         "atos-config": run_atos_config,
         "atos-cookie": run_atos_cookie,
         "atos-graph": run_atos_graph,
@@ -1602,6 +1603,16 @@ def run_atos_explore_staged(args):
 
     status = generators.run_exploration_loop(
         args, generator=generators.gen_staged)
+    return status
+
+def run_atos_explore_genetic(args):
+    """ ATOS explore-acf tool implementation. """
+
+    status = invoque("atos-init", args)
+    if status != 0: return status
+
+    status = generators.run_exploration_loop(
+        args, generator=generators.gen_genetic)
     return status
 
 def run_atos_explore_acf(args):

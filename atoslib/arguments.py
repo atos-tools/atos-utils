@@ -46,6 +46,7 @@ def parser(tool):
         "atos-explore-optim": parsers.atos_explore_optim,
         "atos-explore-acf": parsers.atos_explore_acf,
         "atos-explore-staged": parsers.atos_explore_staged,
+        "atos-explore-genetic": parsers.atos_explore_genetic,
         "atos-config": parsers.atos_config,
         "atos-cookie": parsers.atos_cookie,
         "atos-lib": parsers.atos_lib,
@@ -107,6 +108,10 @@ class parsers:
 
         sub = subs.add_parser("explore-staged", help="full staged exploration")
         parsers.atos_explore_staged(sub)
+
+        sub = subs.add_parser(
+            "explore-genetic", help="full genetic exploration")
+        parsers.atos_explore_genetic(sub)
 
         sub = subs.add_parser("explore-acf", help="fine grain exploration")
         parsers.atos_explore_acf(sub)
@@ -435,6 +440,48 @@ class parsers:
         args.atos_explore.hot_threshold(parser)
         args.tradeoffs(parser)
         args.jobs(parser)
+        args.debug(parser)
+        args.log_file(parser)
+        args.quiet(parser)
+        args.dryrun(parser, ("--dryrun",))
+        args.version(parser)
+        return parser
+
+    @staticmethod
+    def atos_explore_genetic(parser=None):
+        """ atos explore genetic arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(
+                prog="atos-explore-genetic",
+                description="ATOS explore genetic tool")
+
+        args.exes(parser)
+        args.configuration_path(parser)
+        args.build_script(parser)
+        args.legacy(parser)
+        args.force(parser)
+        args.prof_script(parser)
+        args.run_script(parser)
+        args.nbruns(parser)
+        args.remote_path(parser)
+        args.results_script(parser)
+        args.size_cmd(parser)
+        args.time_cmd(parser)
+        args.clean(parser)
+        args.cookie(parser)
+        args.reuse(parser)
+        args.seed(parser)
+        args.nbiters(parser)
+        args.optim_levels(parser)
+        args.optim_variants(parser)
+        args.tradeoffs(parser)
+        args.atos_explore.generations(parser)
+        args.atos_explore.flags(parser)
+        args.atos_explore.mutate_prob(parser)
+        args.atos_explore.mutate_rate(parser)
+        args.atos_explore.mutate_remove(parser)
+        args.atos_explore.evolve_rate(parser)
+        args.atos_explore.nbpoints(parser)
         args.debug(parser)
         args.log_file(parser)
         args.quiet(parser)
@@ -1740,6 +1787,58 @@ class args:
                  dest="cold_attrs",
                  help="cold functions attributes",
                  default="noinline cold")
+
+        @staticmethod
+        def generations(parser, args=("--generations",)):
+            parser.add_argument(
+                *args,
+                 dest="generations",
+                 help="number of generations",
+                 default="10")
+
+        @staticmethod
+        def flags(parser, args=("-F", "--flags")):
+            parser.add_argument(
+                *args, action='append',
+                 dest="flags_files",
+                 help="flags list filenames",
+                 default=None)
+
+        @staticmethod
+        def mutate_prob(parser, args=("--mutate-prob",)):
+            parser.add_argument(
+                *args,
+                 dest="mutate_prob", type=float, default=0.3,
+                 help="mutation probability")
+
+        @staticmethod
+        def mutate_rate(parser, args=("--mutate-rate",)):
+            parser.add_argument(
+                *args,
+                 dest="mutate_rate", type=float, default=0.3,
+                 help="mutation rate")
+
+        @staticmethod
+        def mutate_remove(parser, args=("--mutate-remove-rate",)):
+            parser.add_argument(
+                *args,
+                 dest="mutate_remove", type=float, default=0.1,
+                 help="mutation remove rate")
+
+        @staticmethod
+        def evolve_rate(parser, args=("--evolve-rate",)):
+            parser.add_argument(
+                *args,
+                 dest="evolve_rate", type=float, default=0.3,
+                 help="evolve rate")
+
+        @staticmethod
+        def nbpoints(parser, args=("--nbpoints",)):
+            parser.add_argument(
+                *args,
+                 dest="nbpoints",
+                 type=int, default=None,
+                 help="number of selected points for each tradeoff")
 
     class atos_generator:
         """ Namespace for non common atos-generator arguments. """

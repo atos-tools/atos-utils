@@ -11,7 +11,7 @@ cat > getres.sh <<EOF
 time=0
 while read line; do
  if [ \`echo \$line | grep "^AAA" | wc -l\` -ne 0 ]; then
-    time="\`echo \$line | awk '{ print \$2 " + 1"}' | bc\`"
+    time="\`echo \$line | awk '{ print \$2 + 1}'\`"
     break
  fi
 done < <(cat -)
@@ -45,11 +45,11 @@ cat > getres.sh <<EOF
 time=0
 while read line; do
   [[ "\$line" = "real "* ]] \
-        && time=\`echo \$time + \\\`echo \$line | awk '{ print \$2 }'\\\` | bc\`
+        && time=\`echo \$line | awk '{ print \$2 + '"\$time"' }'\`
   [[ "\$line" = "user "* ]] \
-        && time=\`echo \$time + \\\`echo \$line | awk '{ print \$2 }'\\\` | bc\`
+        && time=\`echo \$line | awk '{ print \$2 + '"\$time"' }'\`
   [[ "\$line" = "sys "* ]] \
-        && time=\`echo \$time + \\\`echo \$line | awk '{ print \$2 }'\\\` | bc\`
+        && time=\`echo \$line | awk '{ print \$2 + '"\$time"' }'\`
 done < <(cat -)
 echo "ATOS: x: size: 100"
 echo "ATOS: x: time: \$time"

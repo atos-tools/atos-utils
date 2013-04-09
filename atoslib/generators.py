@@ -434,16 +434,17 @@ class gen_rnd_uniform_deps(config_generator):
     """
     Generate random meaningful combination of flags using dependencies.
     """
-    def __init__(self, parent=None, flags_file=None, optim_levels=None,
+    def __init__(self, parent=None, flags_files=None, optim_levels=None,
                  **ignored_kwargs):
-        assert flags_file and os.path.isfile(flags_file)
-        self.flags_file_ = flags_file
+        assert flags_files
+        self.flags_files_ = flags_files.split(',')
+        assert all(map(os.path.isfile, self.flags_files_))
         self.optim_levels_ = optim_flag_list.optim_flag(
             fchoice=(optim_levels or '').split(','))
         self.parent_ = parent or gen_config()
         assert(isinstance(self.parent_, config_generator) or isinstance(
                 self.parent_, types.GeneratorType))
-        self.flag_list_ = optim_flag_list(self.flags_file_)
+        self.flag_list_ = optim_flag_list(*self.flags_files_)
 
     def estimate_exploration_size(self):
         if not self.flag_list_.flag_list:
@@ -451,8 +452,7 @@ class gen_rnd_uniform_deps(config_generator):
         return None
 
     def generate(self):
-        debug('gen_rnd_uniform_deps [%s]' % str(self.flags_file_))
-        self.flag_list_ = optim_flag_list(self.flags_file_)
+        debug('gen_rnd_uniform_deps [%s]' % str(self.flags_files_))
 
         for cfg in self.parent_:
             if not self.flag_list_.flag_list:
@@ -1313,7 +1313,7 @@ def gen_explore_inline(
     return gen_progress(
         parent=gen_maxiters(
             gen_variants(gen_rnd_uniform_deps(
-                    flags_file=flags_file, optim_levels=optim_levels,
+                    flags_files=flags_file, optim_levels=optim_levels,
                     **kwargs), optim_variants=optim_variants),
             nbiters), descr='expl-inline')
 
@@ -1325,7 +1325,7 @@ def gen_explore_loop(
     return gen_progress(
         parent=gen_maxiters(
             gen_variants(gen_rnd_uniform_deps(
-                    flags_file=flags_file, optim_levels=optim_levels,
+                    flags_files=flags_file, optim_levels=optim_levels,
                     **kwargs), optim_variants=optim_variants),
             nbiters), descr='expl-loop')
 
@@ -1337,9 +1337,25 @@ def gen_explore_optim(
     return gen_progress(
         parent=gen_maxiters(
             gen_variants(gen_rnd_uniform_deps(
-                    flags_file=flags_file, optim_levels=optim_levels,
+                    flags_files=flags_file, optim_levels=optim_levels,
                     **kwargs), optim_variants=optim_variants),
             nbiters), descr='expl-optim')
+
+def gen_explore_random(
+    optim_levels=None, optim_variants=None, nbiters=None,
+    configuration_path=None, **kwargs):
+    file_flags_lists = [
+        'flags.inline.cfg', 'flags.loop.cfg', 'flags.optim.cfg']
+    file_flags_lists = filter(os.path.isfile, map(
+            functools.partial(os.path.join, configuration_path),
+            file_flags_lists))
+    file_flags_lists = ','.join(file_flags_lists)
+    return gen_progress(
+        parent=gen_maxiters(
+            gen_variants(gen_rnd_uniform_deps(
+                    flags_files=file_flags_lists, optim_levels=optim_levels,
+                    **kwargs), optim_variants=optim_variants),
+            nbiters), descr='expl-random')
 
 def gen_explore(
     optim_levels=None, optim_variants=None, **kwargs):
@@ -1369,6 +1385,10 @@ def gen_staged(configuration_path='atos-configurations', seed='0', **kwargs):
             **kwargs), descr='expl-staged')
 
     return chained_generator
+
+def gen_chained(**kwargs):
+    return gen_progress(
+        parent=gen_chained_exploration(**kwargs), descr='expl-chained')
 
 def gen_file_by_file(**kwargs):
     return gen_progress(

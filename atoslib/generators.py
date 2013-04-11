@@ -657,7 +657,9 @@ class gen_file_by_file_cfg(config_generator):
             else:
                 generator = gen_staged(
                     nbiters=self.per_file_nbiters,
-                    tradeoffs=self.tradeoffs, **self.kwargs)
+                    tradeoffs=self.tradeoffs,
+                    configuration_path=self.configuration_path,
+                    **self.kwargs)
             est_expl_size = generator.estimate_exploration_size()
             est_nb_objs = 5  # depends on threshold/...
             self.generator_size = [
@@ -933,7 +935,9 @@ class gen_function_by_function_cfg(config_generator):
             else:
                 generator = gen_staged(
                     nbiters=self.per_func_nbiters,
-                    tradeoffs=self.tradeoffs, **self.kwargs)
+                    tradeoffs=self.tradeoffs,
+                    configuration_path=self.configuration_path,
+                    **self.kwargs)
             est_expl_size = generator.estimate_exploration_size()
             est_nb_objs = 5  # depends on threshold/...
             self.generator_size = [

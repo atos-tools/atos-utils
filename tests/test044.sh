@@ -78,3 +78,8 @@ $ROOT/bin/atos-explore-acf -f -x 100 -F ./flags_list.txt
 
 # file-by-file staged exploration
 $ROOT/bin/atos-explore-acf -Y "" -x 100 -f -N 1 --optim-variants "base,fdo" --optim-levels "-Os,-O2,-O3"
+
+
+# file-by-file staged exploration
+mv atos-configurations atos-cfg
+$ROOT/bin/atos-explore-acf -C atos-cfg -Y "" -x 100 -f -N 1 --optim-variants "base,fdo" --optim-levels "-Os,-O2,-O3"

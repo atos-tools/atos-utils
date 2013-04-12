@@ -484,26 +484,26 @@ class gen_chained_exploration(config_generator):
 
     def __init__(
         self, generators_args=None, expl_cookie=None,
-        stage_cookie=None, tradeoffs=None, nbiters=None, optim_variants=None,
-        configuration_path=None, **kwargs):
+        stage_cookie=None, tradeoffs=None, nbiters=None, nbpoints=None,
+        optim_variants=None, configuration_path=None, **kwargs):
         self.expl_cookie = expl_cookie or atos_lib.new_cookie()
         self.tradeoffs = tradeoffs or [5, 1, 0.2]
         self.nbiters = int(nbiters) if nbiters != None else 100
         self.configuration_path = configuration_path
+        self.nbpoints = nbpoints and int(nbpoints) or 1
         # tradeoffs configs (flags, variants) for first exploration
         if stage_cookie:
             # does not work for function/file explorations
             selected_results = get_run_tradeoffs(
-                self.tradeoffs, [stage_cookie], configuration_path)
+                self.tradeoffs, [stage_cookie], configuration_path,
+                self.nbpoints)
             self.selected_configs = filter(
                 bool, map(get_result_config, selected_results))
             debug('gen_chained_exploration: tradeoffs for first stage: ' + str(
                     self.selected_configs))
-            initial_tradeoffs = len(self.selected_configs)
         else:
             self.selected_configs = [(None, optim_variants)]
-            initial_tradeoffs = optim_variants and len(
-                optim_variants.split(',')) or 1
+        initial_tradeoffs = len(self.selected_configs)
         # list of chained (generator, generator_arguments)
         if not generators_args:
             generators_args = []
@@ -529,7 +529,8 @@ class gen_chained_exploration(config_generator):
         if len(self.generators_args) >= 1:
             self.stage_tradeoffs += [initial_tradeoffs]
             self.stage_tradeoffs += (
-                [len(self.tradeoffs)] * (len(self.generators_args) - 1))
+                [len(self.tradeoffs) * self.nbpoints] * (
+                    len(self.generators_args) - 1))
 
     def estimate_exploration_size(self):
         if getattr(self, 'generator_size', None) is None:
@@ -561,10 +562,7 @@ class gen_chained_exploration(config_generator):
                     (generator, generator_args)))
             stage_cookies.append(atos_lib.compute_cookie(
                     self.expl_cookie, generator.__name__, generator_args))
-            nb_tradeoffs = sum(
-                map(lambda (_, vr): vr and len(vr.split(',')) or 1,
-                    self.selected_configs))
-            self.stage_tradeoffs[nstage] = nb_tradeoffs
+            self.stage_tradeoffs[nstage] = len(self.selected_configs)
             for (flags, variant) in self.selected_configs:
                 debug('gen_chained_exploration: config ' + str(
                         (flags, variant)))
@@ -586,7 +584,8 @@ class gen_chained_exploration(config_generator):
 
             # select tradeoffs configs (flags, variants) for next exploration
             selected_results = get_run_tradeoffs(
-                self.tradeoffs, stage_cookies, self.configuration_path)
+                self.tradeoffs, stage_cookies, self.configuration_path,
+                self.nbpoints)
             selected_cookies = sum(map(
                     lambda x: x.cookies.split(','), selected_results), [])
             self.selected_configs = filter(
@@ -1407,15 +1406,17 @@ def gen_function_by_function(**kwargs):
 
 
 def get_run_tradeoffs(
-    tradeoffs, cookies=None, configuration_path=None):
+    tradeoffs, cookies=None, configuration_path=None, nb_points=1):
     results = get_run_results(
         matches=cookies, configuration_path=configuration_path)
-    fselect = atos_lib.atos_client_results.select_tradeoff
     results = map(
-        lambda x: fselect(results, perf_size_ratio=x), tradeoffs)
+        lambda x: atos_lib.atos_client_results.select_tradeoffs(
+            results, perf_size_ratio=x, nb_points=nb_points), tradeoffs)
+    # flatten results list
+    results = sum(filter(bool, results), [])
     # Returns unique list of results, also filter
     # None result objects returned in case of failure
-    results = atos_lib.list_unique(filter(bool, results))
+    results = atos_lib.list_unique(results)
     return results
 
 

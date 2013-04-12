@@ -31,6 +31,16 @@ $ROOT/bin/atos-init \
 
 echo "#"
 echo "#"
+echo "# EXPLORE progress"
+echo "#"
+echo "#"
+
+$ROOT/bin/atos-explore \
+    --optim-levels=-O2,-O3 --optim-variants=base,fdo
+
+
+echo "#"
+echo "#"
 echo "# EXPLORE-ACF progress"
 echo "#"
 echo "#"
@@ -57,3 +67,12 @@ echo "#"
 $ROOT/bin/atos-explore \
     --optim-levels=-O2,-O3 --optim-variants=base --quiet
 
+
+echo "#"
+echo "#"
+echo "# EXPLORE staged"
+echo "#"
+echo "#"
+
+$ROOT/bin/atos-explore-staged \
+    --optim-levels=-O2 --optim-variants=base,fdo --nbiters=5

@@ -48,3 +48,10 @@ $ROOT/bin/atos generator \
     --extra-arg=generator6=gen_explore_loop \
     --extra-arg=generator7=gen_explore_optim \
     --nbiters=2 --optim-levels=-O3 --optim-variants=base --tradeoffs=5
+
+# multiple tradeoff selection
+$ROOT/bin/atos generator \
+    --generator=gen_chained \
+    --extra-arg=generator1=gen_base \
+    --extra-arg=generator2=gen_explore_inline \
+    --extra-arg=nbpoints=3 --nbiters=3 --tradeoffs=5

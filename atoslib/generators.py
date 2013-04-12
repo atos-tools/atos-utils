@@ -234,6 +234,27 @@ class config_generator:
     def __call__(self, *args, **kwargs):
         return self.generate()
 
+    def cookie(self, *args, **kwargs):
+        def record(cookie):
+            if not record_cookie: return cookie
+            if not configuration_path: return cookie
+            argstr = args and str(args) or None
+            db = atos_lib.atos_cookie_db_json.cookie_db(configuration_path)
+            db.add_cookie(cookie, parent=parent_cookie, argstr=argstr)
+            return cookie
+        record_cookie = kwargs.get('record', True)
+        configuration_path = getattr(self, 'configuration_path', None)
+        parent_cookie = (len(args) >= 1 and args[0] or None)
+        if not parent_cookie:
+            # new exploration cookie
+            return record(atos_lib.new_cookie())
+        if len(args) <= 1:
+            # cookie already existing
+            return parent_cookie
+        # computed cookie
+        new_cookie = atos_lib.compute_cookie(*args)
+        return record(new_cookie)
+
 class gen_config(config_generator):
     """
     Generates a single configuration.
@@ -282,22 +303,20 @@ class gen_record_flags(config_generator):
         configuration_path=None, **ignored_kwargs):
         self.parent_ = parent
         self.configuration_path_ = configuration_path
-        self.gen_cookie = gen_cookie or atos_lib.new_cookie()
+        self.gen_cookie = self.cookie(gen_cookie)
         assert parent and configuration_path
 
     def estimate_exploration_size(self):
         return self.parent_.estimate_exploration_size()
 
     def generate(self):
-        self.gen_cookie = atos_lib.new_cookie()
         self.cookie_to_cfg = {}
         while True:
             try:
                 cfg = self.parent_.next()
             except StopIteration:
                 break
-            run_cookie = atos_lib.compute_cookie(
-                self.gen_cookie, cfg.flags)
+            run_cookie = self.cookie(self.gen_cookie, cfg.flags, record=False)
             self.cookie_to_cfg[run_cookie] = (cfg.flags, cfg.variant)
             yield cfg.extend_cookies([run_cookie])
 
@@ -486,7 +505,7 @@ class gen_chained_exploration(config_generator):
         self, generators_args=None, expl_cookie=None,
         stage_cookie=None, tradeoffs=None, nbiters=None, nbpoints=None,
         optim_variants=None, configuration_path=None, **kwargs):
-        self.expl_cookie = expl_cookie or atos_lib.new_cookie()
+        self.expl_cookie = self.cookie(expl_cookie)
         self.tradeoffs = tradeoffs or [5, 1, 0.2]
         self.nbiters = int(nbiters) if nbiters != None else 100
         self.configuration_path = configuration_path
@@ -560,8 +579,8 @@ class gen_chained_exploration(config_generator):
                 in enumerate(self.generators_args):
             debug('gen_chained_exploration: generator ' + str(
                     (generator, generator_args)))
-            stage_cookies.append(atos_lib.compute_cookie(
-                    self.expl_cookie, generator.__name__, generator_args))
+            stage_cookies.append(self.cookie(
+                    self.expl_cookie, nstage, generator.__name__))
             self.stage_tradeoffs[nstage] = len(self.selected_configs)
             for (flags, variant) in self.selected_configs:
                 debug('gen_chained_exploration: config ' + str(
@@ -575,8 +594,9 @@ class gen_chained_exploration(config_generator):
                     parent=generator_, maxiters=self.nbiters)
                 generator_ = gen_progress(generator_)
                 for cfg in generator_:
-                    run_cookie = atos_lib.compute_cookie(
-                        stage_cookies[-1], cfg.flags, cfg.variant)
+                    run_cookie = self.cookie(
+                        stage_cookies[-1], cfg.flags, cfg.variant,
+                        record=False)
                     cookie_to_cfg[run_cookie] = (cfg.flags, cfg.variant)
                     yield cfg.extend_cookies(
                         [self.expl_cookie, stage_cookies[-1], run_cookie])
@@ -618,7 +638,7 @@ class gen_file_by_file_cfg(config_generator):
         self.hot_th = hot_th
         self.cold_opts = cold_opts
         self.base_flags = base_flags or '-O2'  # TODO ?!!!
-        self.expl_cookie = expl_cookie or atos_lib.new_cookie()
+        self.expl_cookie = self.cookie(expl_cookie)
         self.tradeoffs = tradeoffs or [5, 1, 0.2]
         self.per_file_nbiters = int(
             per_file_nbiters) if per_file_nbiters != None else 0
@@ -753,7 +773,7 @@ class gen_file_by_file_cfg(config_generator):
                 debug('gen_file_by_file: hot_obj: ' + str(curr_hot_obj))
 
                 # keep track of current hot_obj results
-                obj_cookie = atos_lib.compute_cookie(
+                obj_cookie = self.cookie(
                     self.expl_cookie, variant, curr_hot_obj)
                 obj_to_cookie[curr_hot_obj] = obj_cookie
 
@@ -781,7 +801,8 @@ class gen_file_by_file_cfg(config_generator):
                     run_obj_flags = dict(base_obj_flags.items() + [
                             (curr_hot_obj, curr_hot_flags)])
                     # keep track of hot_obj flags for current run
-                    run_cookie = atos_lib.compute_cookie(obj_cookie, cfg.flags)
+                    run_cookie = self.cookie(
+                        obj_cookie, cfg.flags, record=False)
                     cookie_to_flags[run_cookie] = curr_hot_flags
                     yield cfg.update(
                         flags=self.fbf_csv_opt(run_obj_flags),
@@ -848,7 +869,7 @@ class gen_function_by_function_cfg(config_generator):
         self.hot_th = hot_th
         self.cold_opts = cold_opts
         self.base_flags = base_flags or '-O2'  # TODO ?!!!
-        self.expl_cookie = expl_cookie or atos_lib.new_cookie()
+        self.expl_cookie = self.cookie(expl_cookie)
         self.tradeoffs = tradeoffs or [5, 1, 0.2]
         self.per_func_nbiters = int(
             per_func_nbiters) if per_func_nbiters != None else 0
@@ -1023,7 +1044,7 @@ class gen_function_by_function_cfg(config_generator):
                         curr_hot_func))
 
                 # keep track of current hot_func results
-                func_cookie = atos_lib.compute_cookie(
+                func_cookie = self.cookie(
                     self.expl_cookie, variant, curr_hot_func)
                 func_to_cookie[curr_hot_func] = func_cookie
 
@@ -1053,8 +1074,8 @@ class gen_function_by_function_cfg(config_generator):
                     run_func_flags = dict(base_func_flags.items() + [
                             (curr_hot_func, curr_hot_flags)])
                     # keep track of hot_func flags for current run
-                    run_cookie = atos_lib.compute_cookie(
-                        func_cookie, cfg.flags)
+                    run_cookie = self.cookie(
+                        func_cookie, cfg.flags, record=False)
                     cookie_to_flags[run_cookie] = curr_hot_flags
                     yield cfg.update(
                         flags=self.acf_csv_opt(run_func_flags),
@@ -1119,7 +1140,7 @@ class gen_flag_values(config_generator):
         self.try_removing = int(try_removing or 0)
         self.tradeoffs = tradeoffs or [5, 1, 0.2]
         self.keys = keys and keys.split(',')
-        self.expl_cookie = expl_cookie or atos_lib.new_cookie()
+        self.expl_cookie = self.cookie(expl_cookie)
         self.configuration_path = configuration_path
         self.kwargs = kwargs
         base_flags, base_variant = variant_id and get_variant_config(
@@ -1172,8 +1193,8 @@ class gen_flag_values(config_generator):
                     generator = gen_record_flags(
                         parent=generator,
                         configuration_path=self.configuration_path,
-                        gen_cookie=atos_lib.compute_cookie(
-                            self.expl_cookie, obj))
+                        gen_cookie=self.cookie(self.expl_cookie, obj))
+
                     while True:
                         try:
                             cfg = generator.next()
@@ -1226,8 +1247,7 @@ class gen_flag_values(config_generator):
                     generator = gen_record_flags(
                         parent=generator,
                         configuration_path=self.configuration_path,
-                        gen_cookie=atos_lib.compute_cookie(
-                            self.expl_cookie, func))
+                        gen_cookie=self.cookie(self.expl_cookie, func))
 
                     while True:
                         try:
@@ -1257,7 +1277,7 @@ class gen_flag_values(config_generator):
         cookie_to_flags = {}
         while flags_not_processed:
             flag = flags_not_processed.pop(0)
-            flag_cookie = atos_lib.compute_cookie(self.expl_cookie, flag)
+            flag_cookie = self.cookie(self.expl_cookie, flag)
             debug('gen_flag_values: processing flag ' + str(flag))
 
             for flags_processed in selected_flag_lists:
@@ -1271,8 +1291,7 @@ class gen_flag_values(config_generator):
                             flags_not_processed))
                     cfg_flags = ' '.join(
                         flags_processed + [flag_value] + flags_not_processed)
-                    run_cookie = atos_lib.compute_cookie(
-                        self.expl_cookie, cfg_flags)
+                    run_cookie = self.cookie(self.expl_cookie, cfg_flags)
                     cfg_flag_value.extend_cookies([run_cookie])
                     cookie_to_flags[run_cookie] = flags_processed + [
                         flag_value]
@@ -1291,7 +1310,8 @@ class gen_flag_values(config_generator):
 
         # relaunch reference run
         debug('gen_flag_values: reference')
-        ref_cookie = atos_lib.compute_cookie(self.expl_cookie, self.flags_list)
+        ref_cookie = self.cookie(
+            self.expl_cookie, self.flags_list, record=False)
         yield config(flags=' '.join(self.flags_list),
                      variant=self.base_variant, cookies=[ref_cookie])
 

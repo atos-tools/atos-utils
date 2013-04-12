@@ -1481,3 +1481,40 @@ class repeattimer():
     def stopall():
         for th in list(repeattimer.all_timers):
             th.stop()
+
+
+# ####################################################################
+
+
+class atos_cookie_db_json():
+
+    db_cache = {}
+
+    def __init__(self, atos_config):
+        self.db_file = os.path.join(
+            atos_config, "cookies.db")
+        # create db file if not already existing
+        if not os.path.exists(self.db_file):
+            json.dump({}, open(self.db_file, 'w'))
+        # load existing results
+        self.cookies = json.load(
+            process.open_locked(self.db_file))
+
+    def add_cookie(self, value, parent=None, argstr=None):
+        cookie = self.cookies.setdefault(value, {})
+        if argstr:
+            cookie['args'] = argstr
+        if parent:
+            parent_node = self.cookies.setdefault(parent, {})
+            parent_node.setdefault('succs', []).append(value)
+        # dump resulting db
+        with process.open_locked(self.db_file, 'w') as db_file:
+            json.dump(self.cookies, db_file, sort_keys=True, indent=4)
+
+    @staticmethod
+    def cookie_db(atos_config):
+        db = atos_cookie_db_json.db_cache.get(atos_config, None)
+        if not db:
+            db = atos_cookie_db_json(atos_config)
+            atos_cookie_db_json.db_cache[atos_config] = db
+        return db

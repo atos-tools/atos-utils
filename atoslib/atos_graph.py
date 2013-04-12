@@ -23,6 +23,7 @@ import sys
 import re, math
 
 import atos_lib
+import logger
 
 try:
     import pylab as pl
@@ -307,6 +308,7 @@ def getoptcases(dbpath, opts):
     print '%d points, %d on frontier' % (len(variant_results), len(frontier))
     return variant_results
 
+
 def optgraph(opts):
 
     optcases = getoptcases(
@@ -362,6 +364,29 @@ def optgraph(opts):
             ('.*',
              {'label': '_nolegend_', 'color': 'white'})
             ]
+    elif opts.xd == 4:
+        if not (opts.cookies and len(opts.cookies) == 1):
+            logger.error("xd=4 only works with a given cookie", exit_status=1)
+        db = atos_lib.atos_cookie_db_json.cookie_db(opts.configuration_path)
+        root_cookie = db.cookies.get(opts.cookies[0], None)
+        assert root_cookie, "root cookie not found"
+        stage_cookies = root_cookie.get('succs', [])
+        # find generation_number and set corresponding field
+        for c in optcases:
+            stage_num = None
+            for (nstage, stage_cookie) in enumerate(stage_cookies):
+                if stage_cookie in c.cookies.split(','):
+                    stage_num = 's%d' % nstage
+                    break
+            if stage_num: c.variant += '-' + stage_num
+        # create scatters for each stage
+        for (nstage, stage_cookie) in enumerate(stage_cookies):
+            cdelta = 0.3 + nstage * (0.7 / (len(stage_cookies) + 1))
+            scatters_def += [
+                ('.*-s%d$' % nstage, {'label': '[stage-%d]' % nstage,
+                                      'color': (0, cdelta, cdelta)})]
+        scatters_def += [
+            ('.*', {'label': '[stage-?]', 'color': (0.0, 1.0, 1.0)})]
 
     # scatters list
     if not opts.frontier_only:

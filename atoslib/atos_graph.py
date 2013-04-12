@@ -27,6 +27,7 @@ import logger
 
 try:
     import pylab as pl
+    import matplotlib
 except:
     print "pylab matplotlib module is not installed"
     sys.exit(1)
@@ -273,6 +274,36 @@ def draw_correl_graph(getgraph, opts):
         fg.canvas.mpl_connect('pick_event', on_pick)
         pl.show()
 
+@nowarn
+def draw_heat_graph(getgraph, opts):
+    # from pyevolve_graph script
+
+    stage_points = getgraph()
+
+    fg = pl.figure()
+    ax = fg.add_subplot(111)
+
+    pl.imshow(
+        stage_points, aspect="auto", interpolation="gaussian",
+        cmap=matplotlib.cm.__dict__["jet"])
+    pl.title("Population scores along the generations")
+
+    def labelfmt(x, pos=0):
+        # there is surely a better way to do that
+        return (float(x) == int(x)) and '%d' % (x) or ''
+    ax.xaxis.set_major_formatter(pl.FuncFormatter(labelfmt))
+
+    pl.xlabel('Generations -->')
+    pl.ylabel('Sorted Population Results')
+    pl.grid(True)
+    pl.colorbar()
+
+    if opts.outfile:
+        fg.savefig(opts.outfile)
+
+    if opts.show:
+        pl.show()
+
 
 # ####################################################################
 
@@ -489,3 +520,52 @@ def correlgraph(opts):
         bars += [(optcs, attrs)]
 
     return bars
+
+
+def heatgraph(opts):
+    def gen_number(result, cookie_to_gen):
+        result_cookies = result.dict().get('cookies', '').split(',')
+        for cookie in result_cookies:
+            if cookie in cookie_to_gen:
+                return cookie_to_gen[cookie]
+        return None
+
+    def cfg_result(res):
+        if not opts.tradeoffs:
+            return res.speedup
+        return (
+            res.speedup + (res.sizered / opts.tradeoffs[0])) * 100.0
+
+    # get exploration results
+    optcases = getoptcases(
+        opts.dbfile and opts.dbfile[0] or opts.configuration_path, opts)
+
+    # build cookie_to_gen map
+    cookie_db = atos_lib.atos_cookie_db_json.cookie_db(
+        opts.configuration_path)
+    root_cookie = cookie_db.cookies.get(opts.cookies[0], None)
+    assert root_cookie, "root cookie not found"
+    stage_cookies = root_cookie.get('succs', [])
+    cookie_to_gen = dict(map(lambda (n, c): (c, n), enumerate(stage_cookies)))
+
+    # build list of generation results
+    all_points = []
+    tradeoff = opts.tradeoffs and opts.tradeoffs[0]
+
+    gen_values = sorted(cookie_to_gen.values())[1:]
+    for gen in gen_values:
+        gen_results = filter(
+            lambda res: gen_number(res, cookie_to_gen) == gen, optcases)
+        gen_points = map(cfg_result, gen_results)
+        all_points.append(gen_points)
+    print "gensz", map(lambda x: len(x), all_points)
+
+    # add missing points and sort each generation results
+    max_gen_size = max(map(lambda x: len(x), all_points))
+    for gen_points in all_points:
+        gen_points.extend([0.0] * (max_gen_size - len(gen_points)))
+        gen_points.sort()
+    print "gensz", map(lambda x: len(x), all_points)
+    all_points = map(list, zip(*all_points))
+
+    return all_points

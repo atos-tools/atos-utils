@@ -1602,12 +1602,21 @@ def run_atos_graph(args):
     from atos_graph import optgraph
     from atos_graph import multgraph
     from atos_graph import correlgraph
+    from atos_graph import heatgraph
     from atos_graph import draw_graph
     from atos_graph import draw_correl_graph
+    from atos_graph import draw_heat_graph
 
     if args.correlation_graph:
         get_graph_f = lambda: correlgraph(args)
         draw_correl_graph(get_graph_f, args)
+
+    elif args.heat_graph:
+        if not (args.cookies and len(args.cookies) == 1):
+            error("--heat must be used with one given cookie")
+            return 1
+        get_graph_f = lambda: heatgraph(args)
+        draw_heat_graph(get_graph_f, args)
 
     elif args.configuration_pathes:
         # frontier graph

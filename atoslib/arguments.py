@@ -678,6 +678,7 @@ class parsers:
         args.id(parser)
         args.atos_graph.follow(parser)
         args.atos_graph.correl(parser)
+        args.atos_graph.heat(parser)
         args.atos_graph.highlight(parser)
         args.atos_graph.frontier(parser)
         args.atos_graph.xd(parser)
@@ -1754,6 +1755,13 @@ class args:
                 *args,
                  dest="correlation_graph", action="store_true",
                  help="show correlation graph")
+
+        @staticmethod
+        def heat(parser, args=("--heat",)):
+            parser.add_argument(
+                *args,
+                 dest="heat_graph", action="store_true",
+                 help="show heat graph")
 
         @staticmethod
         def highlight(parser, args=("-H", "--highlight")):

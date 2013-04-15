@@ -153,8 +153,16 @@ examples-bzip2-play:
 
 # Trailing '/' is necessary for the git ls-tree
 SHARED_DIRS=examples/sha1/ examples/sha1-c/ examples/bzip2/
-
-SHARED_FILES=$(shell cd $(srcdir) && git ls-tree HEAD $(SHARED_DIRS) | awk '{print $$4;}')
+SHARED_FILES=$(shell cd $(srcdir) && find $(SHARED_DIRS) -type f \
+	-name 'README' -o \
+	-name 'README.atos' -o \
+	-name 'Makefile' -o \
+	-name 'GNUmakefile' -o \
+	-name '*.txt' -o \
+	-name '*.c' -o \
+	-name '*.cpp' -o \
+	-name '*.h' -o \
+	-name '*.sh')
 
 ALL_SHARED_FILES=$(addprefix share/atos/,$(SHARED_FILES))
 INSTALLED_SHARED_FILES=$(addprefix $(PREFIX)/share/atos/,$(SHARED_FILES))

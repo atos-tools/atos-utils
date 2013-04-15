@@ -1634,8 +1634,8 @@ def run_atos_web(args):
         opener = urllib2.build_opener(proxy_support)
 
         if len(arguments) > 0:
-            return opener.open("http://%s%s?%s" % (args.server, url,
-                               urllib.urlencode(arguments))).read()
+            return opener.open("http://%s%s" % (args.server, url),
+                               urllib.urlencode(arguments)).read()
         else:
             return opener.open("http://%s%s" % (args.server, url)).read()
 
@@ -1686,7 +1686,7 @@ def run_atos_web(args):
 
     elif args.subcmd_web == "target":
         if args.operation[0] == 'create':
-            return op_create("/api/1.0/project/%s/experiment/%s/target/add"
+            return op_create("/api/1.0/project/%s/experiment/%s/target/add/"
                              % (args.project, args.experiment), 2)
         elif args.operation[0] == 'list':
             return op_list("/api/1.0/project/%s/experiment/%s/target/"

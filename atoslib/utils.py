@@ -1726,7 +1726,7 @@ def run_atos_web(args):
                             % (atos_lib.hashid(result['variant'])))
                     get("/api/1.0/project/%s/experiment/%s/target/%s/run/add/"
                         % (args.project, args.experiment, args.target),
-                        {'hash_id': atos_lib.hashid(result['variant']),
+                        {'hash': atos_lib.hashid(result['variant']),
                          'version': result['version'],
                          'conf': result['conf'],
                          'uconf': result.get('uconf', ''),

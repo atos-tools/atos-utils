@@ -22983,7 +22983,7 @@ extern tree add_builtin_function_ext_scope (const char *name, tree type,
          const char *library_name,
          tree attrs);
 # 27 "/opt/gcc-plugins/src/plugin-utils.h" 2
-# 38 "/opt/gcc-plugins/src/plugin-utils.h"
+# 39 "/opt/gcc-plugins/src/plugin-utils.h"
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/c-pragma.h" 1
 # 24 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/c-pragma.h"
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cpplib.h" 1
@@ -23805,7 +23805,7 @@ extern enum cpp_ttype c_lex_with_flags (tree *, location_t *, unsigned char *,
      int);
 
 extern void c_pp_lookup_pragma (unsigned int, const char **, const char **);
-# 39 "/opt/gcc-plugins/src/plugin-utils.h" 2
+# 40 "/opt/gcc-plugins/src/plugin-utils.h" 2
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/c-common.h" 1
 # 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/c-common.h"
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/splay-tree.h" 1
@@ -27799,7 +27799,7 @@ extern enum omp_clause_default_kind c_omp_predetermined_sharing (tree);
 extern unsigned char c_omp_sharing_predetermined (tree);
 extern tree c_omp_remap_decl (tree, unsigned char);
 extern void record_types_used_by_current_var_decl (tree);
-# 40 "/opt/gcc-plugins/src/plugin-utils.h" 2
+# 41 "/opt/gcc-plugins/src/plugin-utils.h" 2
 
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/function.h" 1
 # 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/function.h"
@@ -28664,7 +28664,7 @@ extern int get_next_funcdef_no (void);
 
 extern unsigned char optimize_function_for_size_p (struct function *);
 extern unsigned char optimize_function_for_speed_p (struct function *);
-# 42 "/opt/gcc-plugins/src/plugin-utils.h" 2
+# 43 "/opt/gcc-plugins/src/plugin-utils.h" 2
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/rtl.h" 1
 # 47 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/rtl.h"
 enum rtx_code {
@@ -31262,7 +31262,7 @@ extern void _fatal_insn_not_found (const_rtx, const char *, int, const char *)
      __attribute__ ((__noreturn__));
 extern void _fatal_insn (const char *, const_rtx, const char *, int, const char *)
      __attribute__ ((__noreturn__));
-# 43 "/opt/gcc-plugins/src/plugin-utils.h" 2
+# 44 "/opt/gcc-plugins/src/plugin-utils.h" 2
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/emit-rtl.h" 1
 # 24 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/emit-rtl.h"
 extern void set_mem_alias_set (rtx, alias_set_type);
@@ -31348,8 +31348,8 @@ get_max_uid (void)
 {
   return (&x_rtl)->emit.x_cur_insn_uid;
 }
-# 44 "/opt/gcc-plugins/src/plugin-utils.h" 2
-# 208 "/opt/gcc-plugins/src/plugin-utils.h"
+# 45 "/opt/gcc-plugins/src/plugin-utils.h" 2
+# 209 "/opt/gcc-plugins/src/plugin-utils.h"
 int is_gcc();
 
 
@@ -31367,7 +31367,7 @@ unsigned char is_targetable_decl(tree decl);
 
 
 unsigned char is_targetable_type(tree type);
-# 325 "/opt/gcc-plugins/src/plugin-utils.h"
+# 326 "/opt/gcc-plugins/src/plugin-utils.h"
 unsigned char comparison_set_rtx_1(rtx match_input,rtx *cc_op,rtx *op1,rtx *op2);
 # 27 "/opt/gcc-plugins/src/acf_plugin.c" 2
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree-pass.h" 1
@@ -36099,18 +36099,18 @@ static void restore_global_attribute_values() {
 static void
 add_global_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, const char *acf_pass_name) {
 
-
-
+    // if starts with "no-", remove it. Then add "f" -->
+    // find_opt("fmove-loop-invariants", 1<<13) = 665
     if (!strcmp("optimize", acf_entry->opt_attr)) {
  char opt_name[128];
  int opt_value = 0;
  char *opt_str = ((void *)0);
  size_t opt_index;
 
-
-
-
-
+ // The global_options.x_optimize attribute only accepts the following options :
+ // O<num>, <num> => -O<num>
+ // Os, Ofast => -Os, -Ofast
+ // <option> => -f<option>
  if (acf_entry->opt_args[0].av.str_arg[0] == 'O') {
 
      if ((acf_entry->opt_args[0].av.str_arg[1] >= '0') &&
@@ -36196,10 +36196,10 @@ add_global_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, c
 # 371 "/opt/gcc-plugins/src/acf_plugin.c"
     }
 
-
-
-
-
+    // An example for --param max-unroll-times=4
+    // opt_index = 67;
+    // opt_arg="max-unroll-times=4";
+    // opt_value=4;
 }
 
 
@@ -36213,7 +36213,7 @@ static size_t csv_param_index = 0;
 static int *csv_param_set = ((void *)0);
 
 
-
+// Get the index for a PARAM name
 static unsigned char get_param_idx(char *opt_param, size_t *idx) {
     size_t i, num_compiler_params = get_num_compiler_params();
 
@@ -36232,11 +36232,13 @@ static void save_and_set_param(char *opt_param, int value) {
     if (!get_param_idx(opt_param, &param_idx))
  return;
 
-
+    // Save current param value
     csv_param_name[csv_param_index] = opt_param;
     csv_param_value[csv_param_index] = ((int) global_options.x_param_values[(int) param_idx]);
     csv_param_index ++;
-# 423 "/opt/gcc-plugins/src/acf_plugin.c"
+# 421 "/opt/gcc-plugins/src/acf_plugin.c"
+    // Set new param value
+
     set_param_value(opt_param, value, global_options.x_param_values, csv_param_set);
 
 
@@ -36411,19 +36413,19 @@ static unsigned char fill_csv_options(tree decl, int acf_pass) {
 
     cur_func_name = ((const char *) (decl_assembler_name ((cfun + 0)->decl))->identifier.id.str);
 
-
+    // fprintf(stderr, "%s: fill_csv_options(%s) for function %s\n", plugin_name, acf_pass_name, cur_func_name);
 
     for (i = 0; i < func_number; i++){
  acf_ftable_entry_t *acf_entry = &acf_ftable[i];
 
-
+ // TBD: Do not match input_file_name if is_lto()
  if (!func_name_match(acf_entry, cur_func_name) ||
      !source_file_match(acf_entry, global_options.x_main_input_filename))
      continue;
 
  switch (acf_pass) {
  case 1:
-
+     // Do not handle --param when called on function parsing
      if (!(strcmp("param", acf_entry->opt_attr) == 0)) {
   done = 1;
   add_decl_attribute(cur_func_name, acf_entry, decl, acf_pass_name);
@@ -36433,14 +36435,14 @@ static unsigned char fill_csv_options(tree decl, int acf_pass) {
  case 3:
      if ((strcmp("param", acf_entry->opt_attr) == 0))
   add_global_param(cur_func_name, acf_entry, acf_pass_name);
-
-
+     // Need to handle global_options.x_optimize attribute in backend only in
+     // lto mode for versions before 4.7.0
      else if (is_lto() && LTO_clean_optimize)
   add_global_attribute(cur_func_name, acf_entry, acf_pass_name);
      done = 1;
      break;
  default:
-
+     // Unkonwn pass
      return done;
  }
     }
@@ -36492,7 +36494,9 @@ static void param_injector_end_passes_callback(void *gcc_data,void *data) {
     restore_global_param_values();
     restore_global_attribute_values();
 }
-# 728 "/opt/gcc-plugins/src/acf_plugin.c"
+# 726 "/opt/gcc-plugins/src/acf_plugin.c"
+// Called when entering a sequence of GIMPLE_PASS in IPA lists
+
 static unsigned int ipa_gimple_per_func_callback(void) {
 
     if (csv_param_name == ((void *)0)) {
@@ -36513,12 +36517,12 @@ static unsigned int ipa_gimple_per_func_callback(void) {
     return 0;
 }
 
-
-
+// Called on the first pass after PLUGIN_EARLY_GIMPLE_PASSES_START was
+// triggered
 
 static void ipa_gimple_init_per_func_callback(void *gcc_data,void *data) {
 
-
+    // New pass to be inserted before the first GIMPLE_PASS in an IPA list
 
     static struct gimple_opt_pass static_pass_ipa_gimple_per_func = {
  {
@@ -36540,11 +36544,11 @@ static void ipa_gimple_init_per_func_callback(void *gcc_data,void *data) {
 
     unregister_callback(plugin_name, PLUGIN_PASS_EXECUTION);
 
-
+    // Check if the pass has not already been inserted (is it possible ?)
     if (strcmp(current_pass->name, "ipa_gimple_per_func") != 0) {
-
-
-
+ // We cannot insert the new pass before current one since the
+ // caller has a pointer on the current pass. So we insert it after, and
+ // we permute the first two passes.
  struct gimple_opt_pass *pass_ipa_gimple_per_func;
  struct register_pass_info *ipa_gimple_per_func_info;
 
@@ -36561,7 +36565,7 @@ static void ipa_gimple_init_per_func_callback(void *gcc_data,void *data) {
       PLUGIN_PASS_MANAGER_SETUP,
       ((void *)0), ipa_gimple_per_func_info);
 
-
+ // Permute the first two passes
  struct opt_pass copy_current, *next_pass = current_pass->next;
  memcpy(&copy_current, current_pass, sizeof(struct opt_pass));
  memcpy(current_pass, next_pass, sizeof(struct opt_pass));
@@ -36571,7 +36575,7 @@ static void ipa_gimple_init_per_func_callback(void *gcc_data,void *data) {
     }
 }
 
-
+// Called when PLUGIN_EARLY_GIMPLE_PASSES_START is triggered
 
 static void ipa_gimple_passes_start_callback(void *gcc_data,void *data) {
 
@@ -36580,12 +36584,12 @@ static void ipa_gimple_passes_start_callback(void *gcc_data,void *data) {
         &ipa_gimple_init_per_func_callback, ((void *)0));
 }
 
-
+// Called when PLUGIN_EARLY_GIMPLE_PASSES_END is triggered
 
 static void ipa_gimple_passes_end_callback(void *gcc_data,void *data) {
 
-
-
+    // In case ipa_gimple_init_per_func_callback was not called after
+    // ipa_gimple_passes_start_callback
     unregister_callback(plugin_name, PLUGIN_PASS_EXECUTION);
     restore_global_param_values();
     restore_global_attribute_values();
@@ -36594,13 +36598,13 @@ static void ipa_gimple_passes_end_callback(void *gcc_data,void *data) {
 static void lto_clean_optimize_callback(void) {
     struct cgraph_node *node;
 
-
-
+    // if (verbose)
+    // fprintf(stderr, "New pass lto_clean_optimize_callback\n");
 
     for (node = cgraph_nodes; node; node = node->next) {
  tree decl_node = node->decl;
-
-
+ // Remove the optimization node that cannot be emited as
+ // GIMPLE bytecode for gcc < 4.7
  ((decl_node)->function_decl.function_specific_optimization) = ((void *)0);
     }
 }
@@ -36631,7 +36635,16 @@ int plugin_init(struct plugin_name_args *plugin_na,
 
         (void)((void *)0);
     }
-# 888 "/opt/gcc-plugins/src/acf_plugin.c"
+# 879 "/opt/gcc-plugins/src/acf_plugin.c"
+    // Check the plugin is used with appropriate compiler version
+    // regarding access to PARAM values
+
+
+
+
+
+
+
     if ((version->basever[0] < '4') ||
  ((version->basever[0] == '4') && (version->basever[2] < '6'))) {
  error("%s: build gcc and load gcc versions are incompatible.", plugin_name);
@@ -36708,7 +36721,8 @@ int plugin_init(struct plugin_name_args *plugin_na,
        plugin_na->argv[csv_arg_pos].key);
  return 1;
     }
-# 1003 "/opt/gcc-plugins/src/acf_plugin.c"
+# 1002 "/opt/gcc-plugins/src/acf_plugin.c"
+    // Attach function attributes to function node
     register_callback(plugin_na->base_name,
         PLUGIN_START_UNIT,
         &attribute_injector_start_unit_callback,((void *)0));
@@ -36717,7 +36731,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
         &attribute_injector_finish_decl_callback,
         &pre_genericize);
 
-
+    // Load function context for all_passes optimizations
     register_callback(plugin_na->base_name,
         PLUGIN_ALL_PASSES_START,
         &param_injector_start_all_passes_callback, ((void *)0));
@@ -36725,7 +36739,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
         PLUGIN_ALL_PASSES_END,
         &param_injector_end_passes_callback, ((void *)0));
 
-
+    // Load function context for the ipa (regular and small_ipa) passes
     register_callback(plugin_na->base_name,
         PLUGIN_EARLY_GIMPLE_PASSES_START,
         &ipa_gimple_passes_start_callback, ((void *)0));
@@ -36733,8 +36747,8 @@ int plugin_init(struct plugin_name_args *plugin_na,
         PLUGIN_EARLY_GIMPLE_PASSES_END,
         &ipa_gimple_passes_end_callback, ((void *)0));
 
-
-
+    // For GCC versions earlier than 4.7, remove the optimization node
+    // that cannot be emitted as GIMPLE bytecode
     if ((version->basever[0] < '4') ||
  ((version->basever[0] == '4') && (version->basever[2] < '7')))
  LTO_clean_optimize = 1;

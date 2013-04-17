@@ -63,6 +63,10 @@ gcc_or_gpp=$(shell if [ $(call gcc_major,$1) -gt 4 -o $(call gcc_minor,$1) -ge 7
 prep_compiler=$(call prebuilt_subdir,$1)/bin/$(PLUGIN_$(call gcc_or_gpp,$1))
 prep_cppflags=$(shell if [ "$(call gcc_target,$1)" = arm -o "$(call gcc_target,$1)" = sh4 ]; then echo "-DNEED_64BIT_HOST_WIDE_INT"; else echo ""; fi)
 prep_cflags=-O2 -Wall
+# Avoid builtins that may vary with compilers versions.
+prep_cflags+=-fno-builtin -ansi
+# Tell files that include string.h that it defines correct C++ protos, this avoids use of builtins for string functions in gcc >= 4.6.
+prep_cflags+=-D__CORRECT_ISO_CPP_STRING_H_PROTO
 prep_run=$(PREP_RUN_$(call gcc_host,$1))
 run=$(RUN_$(call gcc_host,$1))
 plugin_compiler=$(PLUGIN_$(call gcc_or_gpp,$1))
@@ -80,6 +84,9 @@ CHECK_PLUGINS=$(addsuffix /check.phony, $(addprefix $(PLUGIN_BUILDDIR)/, $(GCC_S
 
 .FORCE:
 .PHONY: all configure clean distclean install check tests prep all-prep clean-prep distclean-prep
+
+default:
+	echo $(ALL_PREP_PLUGINS)
 
 all: $(ALL_PLUGINS)
 

@@ -32,9 +32,10 @@
 #include "c-family/c-pragma.h"
 #include "c-family/c-common.h"
 #else
-// cp/cp-tree.h (can't be included with prior GCC version)
-// thus, GCC 4.5 and 4.6 can't use many C++ specific tree
-// checks.
+/* cp/cp-tree.h (can't be included with prior GCC version)
+ * thus, GCC 4.5 and 4.6 can't use many C++ specific tree
+ * checks.
+ */
 #include "c-pragma.h"
 #include "c-common.h"
 #endif
@@ -174,21 +175,21 @@ match as a default matcher.
 		type MATCH_INPUT=MATCH_TEMP_INPUT; \
 		matcher; \
 	})
-//MATCH_TEMP_INPUT seems useless here, but is not. Indeed value may
-//depend on MATCHED. In C, the following doesn't work :
-//int a=1;
-//{
-//	int a=a*2;
-//	printf("%i\n",a);
-//}
-//
-//You should use a temporary:
-//int a=1;
-//{
-//	int b=a;
-//	int a=b*2;
-//	printf("%i\n",a);
-//}
+/* MATCH_TEMP_INPUT seems useless here, but is not. Indeed value may */
+/* depend on MATCHED. In C, the following doesn't work : */
+/* int a=1; */
+/* { */
+/* 	int a=a*2; */
+/* 	printf("%i\n",a); */
+/* } */
+
+/* You should use a temporary: */
+/* int a=1; */
+/* { */
+/* 	int b=a; */
+/* 	int a=b*2; */
+/* 	printf("%i\n",a); */
+/* } */
 
 #define MATCH(value,matchers) MATCH_TYPE(__typeof__(value),value,matchers)
 
@@ -204,23 +205,23 @@ match as a default matcher.
 		true; \
 	})
 
-//return non zero in C mode
+/* return non zero in C mode */
 int is_gcc();
 
-//return non zero in C++ mode
+/* return non zero in C++ mode */
 int is_gpp();
 
-//return non zero in LTO mode
+/* return non zero in LTO mode */
 int is_lto();
 
-//add a include unit (must be called upon PLUGIN_UNIT_START)
+/* add a include unit (must be called upon PLUGIN_UNIT_START) */
 void cpp_include(const char *file);
 
-//check if this decl is fully targetable from command line
+/* check if this decl is fully targetable from command line */
 bool is_targetable_decl(tree decl);
 
 #if __GCC_VERSION__>=40600
-//check if this type is fully targetable from command line
+/* check if this type is fully targetable from command line */
 bool is_targetable_type(tree type);
 #endif
 
@@ -324,7 +325,7 @@ bool is_targetable_type(tree type);
 
 bool comparison_set_rtx_1(rtx match_input,rtx *cc_op,rtx *op1,rtx *op2);
 
-//true if a SET rxt actually enclose a COMPARE RTX setting condition code
+/* true if a SET rxt actually enclose a COMPARE RTX setting condition code */
 #define comparison_set_rtx(cc_op_matcher,op1_matcher,op2_matcher) \
 	({ \
 		bool MATCHED=false; \

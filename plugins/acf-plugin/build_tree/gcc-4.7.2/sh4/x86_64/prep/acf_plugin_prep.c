@@ -2279,29 +2279,7 @@ namespace std __attribute__ ((__visibility__ ("default")))
   using ::strpbrk;
   using ::strrchr;
   using ::strstr;
-
-
-  inline void*
-  memchr(void* __s, int __c, size_t __n)
-  { return __builtin_memchr(__s, __c, __n); }
-
-  inline char*
-  strchr(char* __s, int __n)
-  { return __builtin_strchr(__s, __n); }
-
-  inline char*
-  strpbrk(char* __s1, const char* __s2)
-  { return __builtin_strpbrk(__s1, __s2); }
-
-  inline char*
-  strrchr(char* __s, int __n)
-  { return __builtin_strrchr(__s, __n); }
-
-  inline char*
-  strstr(char* __s1, const char* __s2)
-  { return __builtin_strstr(__s1, __s2); }
-
-
+# 122 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/../../../../include/c++/4.7.2/cstring" 3
 
 }
 # 208 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/system.h" 2
@@ -34302,7 +34280,7 @@ extern void c_pp_lookup_pragma (unsigned int, const char **, const char **);
 
 extern tree pragma_extern_prefix;
 # 33 "/opt/gcc-plugins/src/plugin-utils.h" 2
-# 42 "/opt/gcc-plugins/src/plugin-utils.h"
+# 43 "/opt/gcc-plugins/src/plugin-utils.h"
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/rtl.h" 1
 # 47 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/rtl.h"
 enum rtx_code {
@@ -37041,7 +37019,7 @@ extern void _fatal_insn_not_found (const_rtx, const char *, int, const char *)
      __attribute__ ((__noreturn__));
 extern void _fatal_insn (const char *, const_rtx, const char *, int, const char *)
      __attribute__ ((__noreturn__));
-# 43 "/opt/gcc-plugins/src/plugin-utils.h" 2
+# 44 "/opt/gcc-plugins/src/plugin-utils.h" 2
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/emit-rtl.h" 1
 # 24 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/emit-rtl.h"
 extern void set_mem_alias_set (rtx, alias_set_type);
@@ -37133,8 +37111,8 @@ get_max_uid (void)
 {
   return (&x_rtl)->emit.x_cur_insn_uid;
 }
-# 44 "/opt/gcc-plugins/src/plugin-utils.h" 2
-# 208 "/opt/gcc-plugins/src/plugin-utils.h"
+# 45 "/opt/gcc-plugins/src/plugin-utils.h" 2
+# 209 "/opt/gcc-plugins/src/plugin-utils.h"
 int is_gcc();
 
 
@@ -37152,7 +37130,7 @@ bool is_targetable_decl(tree decl);
 
 
 bool is_targetable_type(tree type);
-# 325 "/opt/gcc-plugins/src/plugin-utils.h"
+# 326 "/opt/gcc-plugins/src/plugin-utils.h"
 bool comparison_set_rtx_1(rtx match_input,rtx *cc_op,rtx *op1,rtx *op2);
 # 27 "/opt/gcc-plugins/src/acf_plugin.c" 2
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree-pass.h" 1

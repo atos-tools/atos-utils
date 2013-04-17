@@ -22,7 +22,7 @@ srcdir=/opt/gcc-plugins
 prepdir=$(builddir)
 
 COMPILER=/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/g++
-CFLAGS=-O2 -Wall
+CFLAGS=-O2 -Wall -fno-builtin -ansi -D__CORRECT_ISO_CPP_STRING_H_PROTO
 CPPFLAGS=-DNEED_64BIT_HOST_WIDE_INT
 
 PREP_INCLUDES=-I$(shell $(COMPILER) $(CFLAGS) -print-file-name=plugin)/include

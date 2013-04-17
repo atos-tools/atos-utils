@@ -392,7 +392,7 @@ class CCArgumentsDesc:
         {'str': "-U", 'nargs': 1},
         {'str': "-undef"},
         {'str': "-I-"},
-        {'str': "-I"},
+        {'str': "-I", 'nargs': 1},
         # Options -M/-MM imply -E
         {'str': "-M", 'dest': "opt_M"},
         {'str': "-MM", 'dest': "opt_MM"},

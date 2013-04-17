@@ -316,8 +316,9 @@ class CCArgumentParser:
         print "TESTING CCArgumentsParser..."
         parser = CCArgumentParser("gcc")
         ns = parser.parse_args(shlex.split(
-                "-o out.o -c in.c --help"),
+                "-o out.o -c in.c --help -I/path"),
                                TestNameSpace())
+        deep_eq(ns.unknown_flags, [], _assert=True)
         deep_eq(ns.output_kind, 'nooutput', _assert=True)
         deep_eq(ns.outputs, ["out.o"], _assert=True)
         deep_eq(ns.input_pairs, [('SRC_C', "in.c")], _assert=True)

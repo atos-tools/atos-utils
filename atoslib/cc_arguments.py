@@ -485,6 +485,12 @@ class CCArgumentsDesc:
         {'str': "--sysroot", 'nargs': 1, 'optsep': "="},
         {'str': "--no-sysroot-suffix"},
 
+        # Misc. options
+        # http://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html
+        # Other specific options that are not treated by
+        # regexp options below.
+        {'str': "-pthread"},
+
         # Machine dependent options
         # http://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html
         # We assume that all machine dependent options are

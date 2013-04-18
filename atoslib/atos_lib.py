@@ -689,6 +689,16 @@ class json_config():
     @staticmethod
     def compiler_config(compiler):
 
+        def is_valid_flag(compiler, flag):
+            """
+            Check that the the given flag is accepted by the compiler driver.
+            Note that this does not ensure that the flag is actually useful or
+            does the right thing, it just check that the return code is 0.
+            """
+            with tempfile.NamedTemporaryFile(suffix=".c") as f:
+                print >>f, "void empty(void) {}"
+                return process.system([compiler, "-E", f.name, flag]) == 0
+
         def get_executable_host(compiler):
             repl = {
                 "Intel80386": "i386", "Intel80486": "i386",
@@ -878,8 +888,12 @@ class json_config():
                     compiler, "-O2", "-o", test_o, "-c", test_c,
                     "-fplugin=" + acf_path, "-fplugin-arg-acf_plugin-test"
                     ]) == 0)
+        # For FDO, we just check that the expected flags are valid
+        fdo_enabled = int(is_valid_flag(compiler, "-fprofile-generate") and
+                          is_valid_flag(compiler, "-fprofile-use") and
+                          is_valid_flag(compiler, "-fprofile-dir=/path"))
         compiler_config["lto_enabled"] = str(lto_enabled)
-        compiler_config["fdo_enabled"] = "1"
+        compiler_config["fdo_enabled"] = str(fdo_enabled)
         compiler_config["graphite_enabled"] = str(graphite_enabled)
         compiler_config["libgomp_enabled"] = "0"
         compiler_config["plugins_enabled"] = str(plugins_enabled)

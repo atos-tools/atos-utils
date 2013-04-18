@@ -52,20 +52,41 @@ def setup(**kwargs):
     DEFAULT_CONFIGURATION_PATH =  \
         kwargs.get('DEFAULT_CONFIGURATION_PATH', "./atos-configurations")
 
+    # Utilitary regexp fragments
+    #   supported compiler drivers base names
+    cc_bases = "(clang|gcc|g\+\+|cc|c\+\+)"
+    #   supported archivers base names
+    ar_bases = "(ar)"
+    #   target names that may be direct prefix of base names
+    cross_target_pfx = "(sh4|st40|arm|st200|stxp70)"
+    #   otherwise generic optional prefixes, typically '.*-'
+    generic_pfx = "(.*-)"
+
     # Default compiler basename regexp
+    # Either the bare cc basenames (ex: gcc) or
+    # prefixed a cross target prefix (ex: armcc) or
+    # prefixed by a generic prefix (ex: .*-gcc).
     DEFAULT_CCREGEXP = kwargs.get(
         'DEFAULT_CCREGEXP',
-        ".*(clang|gcc|g\+\+|cc|c\+\+|stxp70cc|stxp70c\+\+)")
+        "(%s)|(%s%s)|(%s%s)" % (cc_bases,
+                                cross_target_pfx, cc_bases,
+                                generic_pfx, cc_bases))
 
     # Default linker basename regexp
+    # This is for particular cases, we currently support invocation
+    # of linker only through the compiler driver.
+    # ARM RVCT is an exception where link is done with armlink.
     DEFAULT_LDREGEXP = kwargs.get(
         'DEFAULT_LDREGEXP',
         "(armlink)")
 
     # Default archiver basename regexp
+    # Same scheme as for CCREGEXP.
     DEFAULT_ARREGEXP = kwargs.get(
         'DEFAULT_ARREGEXP',
-        "(.*ar)")
+        "(%s)|(%s%s)|(%s%s)" % (ar_bases,
+                                cross_target_pfx, ar_bases,
+                                generic_pfx, ar_bases))
 
     # Default time/size commands
     DEFAULT_TIME_CMD = "time -p"

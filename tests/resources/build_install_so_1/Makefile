@@ -14,6 +14,9 @@ install: all
 libtest.so: test.o
 	$(CC) -shared -o $@ $^ 
 
+%.o: %.c
+	$(CC) -fpic -c $< -o $@
+
 clean:
 	rm -f .libs/* *.o *.so
 

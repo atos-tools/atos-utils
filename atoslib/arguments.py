@@ -228,7 +228,7 @@ class parsers:
         args.options(parser)
         args.variant(parser)
         args.remote_path(parser, ("-b", "--remote_path"))
-        args.atos_build.jobs(parser)
+        args.jobs(parser)
         group = parser.add_mutually_exclusive_group()
         args.useprofile(group)
         args.genprofile(group)
@@ -287,6 +287,7 @@ class parsers:
         args.optim_levels(parser)
         args.optim_variants(parser)
         args.reuse(parser)
+        args.jobs(parser)
         args.debug(parser)
         args.log_file(parser)
         args.quiet(parser)
@@ -311,6 +312,7 @@ class parsers:
         args.base_variants(parser)
         args.cookie(parser)
         args.reuse(parser)
+        args.jobs(parser)
         args.debug(parser)
         args.log_file(parser)
         args.quiet(parser)
@@ -335,6 +337,7 @@ class parsers:
         args.base_variants(parser)
         args.cookie(parser)
         args.reuse(parser)
+        args.jobs(parser)
         args.debug(parser)
         args.log_file(parser)
         args.quiet(parser)
@@ -359,6 +362,7 @@ class parsers:
         args.base_variants(parser)
         args.cookie(parser)
         args.reuse(parser)
+        args.jobs(parser)
         args.debug(parser)
         args.log_file(parser)
         args.quiet(parser)
@@ -391,6 +395,7 @@ class parsers:
         args.tradeoffs(parser)
         args.cookie(parser)
         args.reuse(parser)
+        args.jobs(parser)
         args.debug(parser)
         args.log_file(parser)
         args.quiet(parser)
@@ -428,6 +433,7 @@ class parsers:
         args.atos_explore.file_by_file(parser, ("--file-by-file",))
         args.atos_explore.hot_threshold(parser)
         args.tradeoffs(parser)
+        args.jobs(parser)
         args.debug(parser)
         args.log_file(parser)
         args.quiet(parser)
@@ -465,6 +471,7 @@ class parsers:
         args.log_file(parser)
         args.legacy(parser)
         args.force(parser)
+        args.jobs(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
         args.version(parser)
@@ -654,6 +661,7 @@ class parsers:
         args.log_file(parser)
         args.legacy(parser)
         args.force(parser, ("--force",))
+        args.jobs(parser)
         args.quiet(parser)
         args.dryrun(parser, ("--dryrun",))
         args.version(parser)
@@ -1315,6 +1323,15 @@ class args:
                              help="reuse existing results")
 
     @staticmethod
+    def jobs(parser, args=("-j", "--jobs")):
+        parser.add_argument(
+            *args,
+             dest="jobs",
+             type=int,
+             help="use JOBS parallel thread when possible for building",
+             default=4)
+
+    @staticmethod
     def targets(parser, args=("-t", "--targets")):
         parser.add_argument(
             *args,
@@ -1361,18 +1378,6 @@ class args:
                  dest="text",
                  action="store_true",
                  help="display textual manual for TOPICS")
-
-    class atos_build:
-        """ Namespace for non common atos-build arguments. """
-
-        @staticmethod
-        def jobs(parser, args=("-j", "--jobs")):
-            parser.add_argument(
-                *args,
-                 dest="jobs",
-                 type=int,
-                 help="use JOBS parallel thread when possible for building",
-                 default=4)
 
     class atos_deps:
         """ Namespace for non common atos-deps arguments. """

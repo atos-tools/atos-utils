@@ -1329,7 +1329,7 @@ class args:
              dest="jobs",
              type=int,
              help="use JOBS parallel thread when possible for building",
-             default=4)
+             default=globals.DEFAULT_BUILD_JOBS)
 
     @staticmethod
     def targets(parser, args=("-t", "--targets")):

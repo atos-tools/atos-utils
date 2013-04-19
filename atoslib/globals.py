@@ -32,12 +32,23 @@ DEFAULT_LDREGEXP = None
 DEFAULT_ARREGEXP = None
 DEFAULT_TIME_CMD = None
 DEFAULT_SIZE_CMD = None
+DEFAULT_BUILD_JOBS = None
 
 def setup(**kwargs):
     global PREFIX, BINDIR, LIBDIR, SHAREDIR, MANDIR, DOCDIR, PYTHONDIR
     global DEFAULT_CONFIGURATION_PATH
     global DEFAULT_CCREGEXP, DEFAULT_LDREGEXP, DEFAULT_ARREGEXP
-    global DEFAULT_SIZE_CMD, DEFAULT_TIME_CMD
+    global DEFAULT_SIZE_CMD, DEFAULT_TIME_CMD, DEFAULT_BUILD_JOBS
+
+    def estimated_build_jobs():
+        """ Estimates a reasonable number of build jobs. """
+        try:
+            # Map to the number of CPUs
+            jobs = os.sysconf("SC_NPROCESSORS_ONLN")
+        except ValueError:
+            # Otherwise use a common value
+            jobs = 4
+        return jobs
 
     PREFIX = kwargs.get('PREFIX', os.path.abspath(
             os.path.join(os.path.dirname(sys.argv[0]), '..')))
@@ -91,6 +102,10 @@ def setup(**kwargs):
     # Default time/size commands
     DEFAULT_TIME_CMD = "time -p"
     DEFAULT_SIZE_CMD = "size"
+
+    # Determine default build jobs
+    DEFAULT_BUILD_JOBS = kwargs.get(
+        'DEFAULT_BUILD_JOBS', estimated_build_jobs())
 
     # Setup Path to python libs
     sys.path.insert(0, PYTHONDIR)

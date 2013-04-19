@@ -61,6 +61,13 @@ try:
 except:
     print "not installed: please install from: http://www.scipy.org/PyLab or from your package manager python-matplotlib-tk"
     print "warning: atos-graph will not be available"
+try:
+    print "Check python requests...",
+    import requests
+    print "ok"
+except:
+    print "not installed: please install from http://www.python-requests.org/ or from your package manager python-requests"
+    print "warning: atos-web will not be available"
 
 if errors:
     exit(1)

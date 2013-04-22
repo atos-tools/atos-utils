@@ -33,40 +33,6 @@ except:
 
 # ####################################################################
 
-
-class repeattimer():
-
-    allth = []
-
-    def __init__(self, func, pause=1.0):
-        self.func = func
-        self.pause = pause
-        self.ev = threading.Event()
-        self.th = threading.Thread(target=self.update)
-        self.th.daemon = True
-        repeattimer.allth += [self]
-
-    def update(self):
-        while True:
-            self.ev.wait(self.pause)
-            if self.ev.isSet(): break
-            self.func()
-
-    def start(self):
-        self.th.start()
-        return self
-
-    def stop(self):
-        self.ev.set()
-
-    @staticmethod
-    @atexit.register
-    def stopall():
-        for th in repeattimer.allth: th.stop()
-
-
-# ####################################################################
-
 def nowarn(func):
     def wrapper(*args, **kwargs):
         import warnings
@@ -240,9 +206,11 @@ def draw_graph(getgraph, opts):
 
     if opts.show:
         fg.canvas.mpl_connect('pick_event', on_pick)
-        if opts.follow: repeatth = repeattimer(on_timer, 5.0).start()
+        if opts.follow:
+            timer = fg.canvas.new_timer(interval=5000)
+            timer.add_callback(on_timer)
+            timer.start()
         pl.show()
-        if opts.follow: repeatth.stop()
 
 @nowarn
 def draw_correl_graph(getgraph, opts):

@@ -1636,35 +1636,81 @@ def run_atos_web(args):
 
     def op_create(url):
         arguments = dict(token.split('=', 1) for token in args.operation[1:])
-        r = requests.put("http://%s%s" % (args.server, url), arguments)
-
-        if r.status_code == 200 and r.json()['status'] == 'success':
+        try:
+            r = requests.put("http://%s%s" % (args.server, url), arguments)
+        except requests.exceptions.RequestException as ex:
+            error("Error while doing the PUT request\n %s" % (ex))
             return
-        else:
-            print("Error while creating: %s" % (arguments))
-            if r.status_code == 200:
-                print("=> %s" % (r.json()['message']))
-            elif r.status_code == 404:
-                print("=> Object not found")
+
+        try:
+            if r.status_code == 200 and r.json()['status'] == 'success':
+                return
+            else:
+                error("Error while creating: %s" % (arguments))
+                if r.status_code == 200:
+                    error("=> %s" % (r.json()['message']))
+                elif r.status_code == 404:
+                    error("=> Object not found")
+        except ValueError:
+            error("The answer is not a valid json object")
+            return
+        except TypeError:
+            error("The json object is not formated as expected")
+            return
+        except KeyError:
+            error("The json object is missing some required fields")
+            return
 
     def op_list(url, banner, key_id='id', key_name='name'):
-        r = requests.get("http://%s%s" % (args.server, url))
+        try:
+            r = requests.get("http://%s%s" % (args.server, url))
+        except requests.exceptions.RequestException as ex:
+            error("Error while doing the GET request\n %s" % (ex))
+            return
+
         if r.status_code == 200:
-            print(banner)
-            for l in r.json():
-                print(" %s: %s" % (l[key_id], l[key_name]))
+            try:
+                obj = r.json()
+            except ValueError:
+                error("The answer is not a valid json object")
+                return
+            message(banner)
+            try:
+                for l in obj:
+                    message(" %s: %s" % (l[key_id], l[key_name]))
+            except TypeError:
+                error("The json object is not formated as expected")
+                return
+            except KeyError:
+                error("The json object is missing some required fields")
+                return
         else:
-            print("Error while listing on %s" % (args.server))
+            error("Error while listing on %s" % (args.server))
 
     def op_details(url, key_name='name'):
-        r = requests.get("http://%s%s" % (args.server, url))
+        try:
+            r = requests.get("http://%s%s" % (args.server, url))
+        except requests.exceptions.RequestException as ex:
+            error("Error while doing the GET request\n %s" % (ex))
+            return
+
         if r.status_code == 200:
-            obj = r.json()
-            print("Details of '%s'" % (obj[key_name]))
-            for key in obj.keys():
-                print(" %s: %s" % (key, obj[key]))
+            try:
+                obj = r.json()
+                message("Details of '%s'" % (obj[key_name]))
+                for key in obj.keys():
+                    message(" %s: %s" % (key, obj[key]))
+            except ValueError:
+                error("The answer is not a valid json object")
+                return
+            except TypeError:
+                error("The json object is not formated as expected")
+                return
+            except KeyError:
+                error("The json object is missing some required fields")
+                return
         else:
-            print("Object not found at '%s'" % (url))
+            error("Object not found at '%s'" % (url))
 
     # Subcommands
     if args.subcmd_web == "project":
@@ -1675,8 +1721,8 @@ def run_atos_web(args):
         elif args.operation[0] == 'details':
             op_details("/api/1.0/projects/%s" % (args.operation[1]))
         else:
-            print >>sys.stderr, "atos-web-project: unknow operation '%s'"\
-                                % (args.operation[0])
+            error("atos-web-project: unknow operation '%s'"
+                  % (args.operation[0]))
 
     elif args.subcmd_web == "experiment":
         if args.operation[0] == 'create':
@@ -1690,8 +1736,8 @@ def run_atos_web(args):
             op_details("/api/1.0/projects/%s/experiments/%s"
                             % (args.project, args.operation[1]))
         else:
-            print >>sys.stderr, "atos-web-experiment: unknow operation '%s'"\
-                                % (args.operation[0])
+            error("atos-web-experiment: unknow operation '%s'"
+                  % (args.operation[0]))
             return 1
 
     elif args.subcmd_web == "target":
@@ -1708,8 +1754,8 @@ def run_atos_web(args):
                             % (args.project, args.experiment,
                                args.operation[1]))
         else:
-            print >>sys.stderr, "atos-web-target: unknow operation '%s'"\
-                                % (args.operation[0])
+            error("atos-web-target: unknow operation '%s'"
+                  % (args.operation[0]))
             return 1
 
     elif args.subcmd_web == "run":
@@ -1722,7 +1768,7 @@ def run_atos_web(args):
                         % (args.server, args.project, args.experiment,
                            args.target))
                 if r.status_code != 200:
-                    print("Uname to find the target %d" % (args.target))
+                    error("Uname to find the target %d" % (args.target))
                     return 1
                 target = r.json()['name']
                 message("Target name: %s" % (target))
@@ -1745,9 +1791,9 @@ def run_atos_web(args):
                 % (args.server, args.project, args.experiment, args.target),
                 values)
                     if r.status_code != 200:
-                        print("Unknown error")
+                        error("Unknown error")
                     elif r.json()['status'] == 'failure':
-                        print("Error: %s" % (r.json()['message']))
+                        error("Error: %s" % (r.json()['message']))
             else:
                 op_create(
                     "/api/1.0/projects/%s/experiments/%s/targets/%s/runs"
@@ -1765,8 +1811,8 @@ def run_atos_web(args):
                     % (args.project, args.experiment, args.target,
                        args.operation[1]), 'hash')
     else:
-        print >>sys.stderr, "atos-web: unknow operation '%s' for "\
-                            "'run' command" % (args.operation[0])
+        error("atos-web: unknow operation '%s' for 'run' command"
+              % (args.operation[0]))
         return 1
 
     return 0

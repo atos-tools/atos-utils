@@ -20,7 +20,7 @@
 #
 
 import sys
-import re, math, threading, atexit
+import re, math, threading, atexit, signal
 
 import atos_lib
 
@@ -240,9 +240,9 @@ def draw_graph(getgraph, opts):
 
     if opts.show:
         fg.canvas.mpl_connect('pick_event', on_pick)
-        if opts.follow: repeatth = repeattimer(on_timer, 5.0).start()
+        if opts.follow: timer = atos_lib.repeatalarm(on_timer, 5.0).start()
         pl.show()
-        if opts.follow: repeatth.stop()
+        if opts.follow: timer.stop()
 
 @nowarn
 def draw_correl_graph(getgraph, opts):

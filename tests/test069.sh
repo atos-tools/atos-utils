@@ -32,3 +32,5 @@ python $ROOT/lib/atos/python/atoslib/cc_argparse.py
 python $ROOT/lib/atos/python/atoslib/obj_storage.py
 
 python $ROOT/lib/atos/python/atoslib/recipes.py
+
+python $ROOT/lib/atos/python/atoslib/atos_lib.py

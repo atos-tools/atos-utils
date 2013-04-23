@@ -7,8 +7,14 @@ TMPDIR=${TMPDIR:-/tmp}
 KEEPTEST=${KEEPTEST:-0}
 _skipped=0
 
+test_cleanup() {
+    : # Override this function in the test if some local cleanup is needed
+}
+
 cleanup() {
     local exit=$?
+    trap - INT QUIT TERM EXIT
+    test_cleanup
     cd $TMPDIR # ensure not in TMPTEST before cleaning
     [ ! -d "$TMPTEST" -o "$KEEPTEST" != 0 ] || rm -rf $TMPTEST
     [ $exit != 0 -o $_skipped = 1 ] || success

@@ -1634,6 +1634,11 @@ def run_atos_web(args):
     """ ATOS web interface """
     import requests
 
+    # Lower request module verbosity
+    import logging
+    requests_log = logging.getLogger("requests")
+    requests_log.setLevel(logging.WARNING)
+
     def op_create(url):
         arguments = dict(token.split('=', 1) for token in args.operation[1:])
         try:

@@ -19,7 +19,7 @@
 # Usage: get usage with atos-lib -h
 #
 
-import sys, os, re, math, itertools, time, json, hashlib
+import sys, os, re, math, itertools, time, json, hashlib, signal
 import cPickle as pickle
 import tempfile
 import glob
@@ -1352,3 +1352,94 @@ def restore_gcda_files_if_necessary(config_path=None, prof_path=None):
         for gcda_file in gcda_files:
             gcda_dest = gcda_file[len(prof_path):]
             process.commands.copyfile(gcda_file, gcda_dest)
+
+# ####################################################################
+
+class repeatalarm():
+    """
+    Implements a timer based on SIGALRM signal.
+    Only one such timer can be setup at a time.
+    The called function will be executed from a signal
+    handler, hence the processing there may be restricted
+    depending on the platform.
+    """
+
+    current_timer = None
+
+    @staticmethod
+    def _on_timer(signum, frame):
+        """ Signal handler for SIGALARM. """
+        timer = repeatalarm.current_timer
+        assert(timer != None)
+        timer.func()
+        if timer.once:
+            timer.stop()
+        else:
+            timer.start()
+
+    def __init__(self, func, pause=1.0, once=False):
+        """
+        Initialize a timer with the function to be called,
+        the pause interval and whether it must be scheduled
+        once or repeated.
+        """
+        assert(repeatalarm.current_timer == None)
+        repeatalarm.current_timer = self
+        self.pause = max(int(pause), 1)
+        self.once = once
+        self.func = func
+        signal.alarm(0)
+        signal.signal(signal.SIGALRM, repeatalarm._on_timer)
+
+    def start(self):
+        """
+        Must be called to start the timer.
+        """
+        assert(repeatalarm.current_timer == self)
+        signal.alarm(self.pause)
+        return self
+
+    def stop(self):
+        """
+        Must be called before destroying a timer and
+        before creating a new timer.
+        Note that for once timers, this function is called
+        implicitely.
+        This function can be called several time.
+        """
+        if repeatalarm.current_timer == None:
+            return
+        assert(repeatalarm.current_timer == self)
+        signal.alarm(0)
+        signal.signal(signal.SIGALRM, signal.SIG_DFL)
+        repeatalarm.current_timer = None
+
+    @staticmethod
+    def test():
+        """ Call repeatalarm.test() for unitary testing. """
+        def on_timer():
+            num[0] += 1
+
+        def sleep_uninterruptible(pause):
+            start = time.time()
+            while time.time() - start < pause:
+                time.sleep(1)
+
+        print "TESTING atos_lib.repeatalarm..."
+        num = [None]
+        num[0] = 0
+        timer = repeatalarm(on_timer, pause=1, once=True).start()
+        sleep_uninterruptible(3)
+        timer.stop()
+        assert(num[0] == 1)
+        num[0] = 0
+        timer = repeatalarm(on_timer, pause=1).start()
+        sleep_uninterruptible(3)
+        timer.stop()
+        assert(num[0] >= 2)
+        print "PASSED atos_lib.repeatalarm"
+        return True
+
+if __name__ == "__main__":
+    passed = repeatalarm.test()
+    if not passed: sys.exit(1)

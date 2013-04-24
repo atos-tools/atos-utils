@@ -60,6 +60,7 @@ class CCArgumentInterpreter:
         phases = set()
         cc_phase_inputs = {}
         cc_inputs = []
+        cmd_inputs = []
         cc_outputs = []
         first_cc_phase_ = None
         last_cc_phase = desc.output_phase.get(namespace.output_kind, None)
@@ -71,8 +72,11 @@ class CCArgumentInterpreter:
                 if last_cc_phase in inputs_phases:
                     if not inputs_phases[0] in cc_phase_inputs:
                         cc_phase_inputs[inputs_phases[0]] = []
-                    cc_phase_inputs[inputs_phases[0]].append(fname)
-                    cc_inputs.append(fname)
+                    cc_phase_inputs[inputs_phases[0]].append((src_kind, fname))
+                    if inputs_phases[0] == 'CMD':
+                        cmd_inputs.append((src_kind, fname))
+                    else:
+                        cc_inputs.append((src_kind, fname))
                     last_idx = inputs_phases.index(last_cc_phase)
                     phases = phases.union(set(inputs_phases[:last_idx + 1]))
         if len(cc_inputs) == 0:
@@ -92,13 +96,13 @@ class CCArgumentInterpreter:
             if last_cc_phase == "AS" or last_cc_phase == "CC":
                 suffix = ".s" if last_cc_phase == "CC" else ".o"
                 cc_outputs = map(
-                    lambda x: replace_suffix(os.path.basename(x), suffix),
+                    lambda x: replace_suffix(os.path.basename(x[1]), suffix),
                     cc_inputs)
             elif last_cc_phase == "CPP":
                 # Outputs to stdout
                 cc_outputs = []
 
-        self.cc_inputs_ = cc_inputs
+        self.cc_inputs_ = cmd_inputs + cc_inputs
         self.cc_outputs_ = cc_outputs
         self.cc_phase_inputs_ = cc_phase_inputs
         self.cc_phases_ = sorted(list(phases))
@@ -119,6 +123,15 @@ class CCArgumentInterpreter:
         I.e. if all phases are intermediate phases for some
         file, the file will not be reported.
         """
+        return map(lambda y: y[1], self.cc_phases_input_pairs(phases))
+
+    def cc_phases_input_pairs(self, phases):
+        """
+        Returns the input pairs (src_kind, fname)
+        for the given C/C++ phases that are explicit in the command line.
+        I.e. if all phases are intermediate phases for some
+        file, the file will not be reported.
+        """
         return sum(map(lambda x: self.cc_phase_inputs_.get(x, []),
                        phases), [])
 
@@ -131,11 +144,44 @@ class CCArgumentInterpreter:
         """
         return self.cc_phases_inputs([phase])
 
-    def all_cc_inputs(self,):
+    def cc_phase_input_pairs(self, phase):
         """
-        Returns all the inputs files for the C/C++ flow.
+        Returns the inputs pairs (src_kind, fname)
+        for the given C/C++ phase that are explicit in the command line.
+        I.e. if the phase is an intermediate phase for some
+        file, the file will not be reported.
+        """
+        return self.cc_phases_input_pairs([phase])
+
+    def all_cc_inputs(self):
+        """
+        Returns all the inputs files for the C/C++ phases implied by
+        the driver command line.
+        This is equivalent to cc_phase_inputs() for each
+        cc_phase implied by the command.
+        """
+        return map(lambda x: x[1], self.all_cc_input_pairs())
+
+    def all_cc_input_pairs(self):
+        """
+        Returns all the input pairs (src_knd, fname)
+        for the C/C++ phases implied by the driver command line.
+        This is equivalent to cc_phase_input_pairs() for each
+        cc_phase implied by the command.
         """
         return self.cc_inputs_
+
+    def all_pch_inputs(self):
+        """
+        Returns all the PCH inputs that need to be present.
+        This is a specific case, in the case where the
+        corresponding header is not present, it should be
+        created such that the compiler falls back to it when
+        the precompiled header is not compatible.
+        """
+        return map(lambda y: y[1],
+                   filter(lambda x: x[0] == 'SRC_PCH',
+                          self.cc_inputs_))
 
     def all_cc_outputs(self):
         """
@@ -233,6 +279,18 @@ class CCArgumentProcessor:
 
     def opt_E(self, args):
         self.ns_.output_kind = 'preprocessed'
+
+    def opt_include(self, args):
+        # We track explicit inclusion of headers for which
+        # a precompiled header exists.
+        # The actual header may not exist, and this should
+        # be handled by the client.
+        header = args[1]
+        precompiled_header = "%s.gch" % header
+        precompiled_header_path = os.path.normpath(
+            os.path.join(self.ns_.cwd, precompiled_header))
+        if os.path.exists(precompiled_header_path):
+            self.append_input_('SRC_PCH', precompiled_header)
 
     def opt_M(self, args):
         # Implies -E but generates dependencies
@@ -453,12 +511,21 @@ class CCArgumentParser:
         deep_eq(interp.has_cc_phase("LD"), True, _assert=True)
         deep_eq(interp.last_cc_phase(), "LD", _assert=True)
         deep_eq(interp.all_cc_outputs(), ["all.exe"], _assert=True)
+        deep_eq(interp.cc_phase_input_pairs("CPP"),
+                [('SRC_C', "in1.c"), ('SRC_C', "in2.c"),
+                 ('SRC_SPP', "in7.S")], _assert=True)
         deep_eq(interp.cc_phase_inputs("CPP"),
                 ["in1.c", "in2.c", "in7.S"], _assert=True)
+        deep_eq(interp.cc_phase_input_pairs("CC"),
+                [('SRC_I', "in3.i"), ('SRC_II', "in4.ii")], _assert=True)
         deep_eq(interp.cc_phase_inputs("CC"),
                 ["in3.i", "in4.ii"], _assert=True)
+        deep_eq(interp.cc_phase_input_pairs("AS"),
+                [('SRC_S', "in5.s")], _assert=True)
         deep_eq(interp.cc_phase_inputs("AS"),
                 ["in5.s"], _assert=True)
+        deep_eq(interp.cc_phase_input_pairs("LD"),
+                [('SRC_LNK', "in6.o")], _assert=True)
         deep_eq(interp.cc_phase_inputs("LD"), ["in6.o"], _assert=True)
 
         ns = parser.parse_args(shlex.split(
@@ -539,6 +606,9 @@ class CCArgumentParser:
         print >>f, "// An unreadable archive"
         f.close()
         os.chmod("%s/libe.a" % tmpdir, 0000)
+        f = open("%s/include.gch" % tmpdir, 'w')
+        print >>f, "// An unreadable pre-compiled header"
+        f.close()
 
         ns = parser.parse_args(shlex.split(
                 "-o out.so -shared -L. -Lundef -L%s "
@@ -546,19 +616,35 @@ class CCArgumentParser:
                 "-x c a_c_file b_c_file -x none "
                 ".libs/lib1.so l2.a "
                 "-x cpp-output i_file -x c++cpp-output ii_file "
+                "-include %s/include "
                 "-lundef -la -lb -lc -ld -le"
-                "-shared" % tmpdir),
+                "-shared" %
+                (tmpdir, tmpdir)),
                                TestNameSpace())
         interp = CCArgumentInterpreter(ns)
         deep_eq(interp.is_ld_kind("shared"), True, _assert=True)
-        deep_eq(interp.cc_phase_inputs("CPP"),
-                ["file1.c", "file2.cpp", "a_c_file",
-                 "b_c_file"], _assert=True)
-        deep_eq(interp.cc_phase_inputs("CC"),
-                ["i_file", "ii_file"], _assert=True)
-        deep_eq(interp.cc_phase_inputs("LD"),
-                ["file3.o", ".libs/lib1.so", "l2.a"] +
+        deep_eq(interp.all_cc_inputs(),
+                ["%s/include.gch" % tmpdir,
+                 "file1.c", "file2.cpp", "file3.o", "a_c_file",
+                 "b_c_file", ".libs/lib1.so", "l2.a",
+                 "i_file", "ii_file"] +
                 map(lambda x: os.path.join(tmpdir, x),
+                    ["liba.so", "libb.a", "libc.so"]),
+                _assert=True)
+        deep_eq(interp.cc_phase_input_pairs("CMD"),
+                [('SRC_PCH', "%s/include.gch" % tmpdir)],
+                _assert=True)
+        deep_eq(interp.cc_phase_input_pairs("CPP"),
+                [('SRC_C', "file1.c"), ('SRC_CC', "file2.cpp"),
+                 ('SRC_C', "a_c_file"), ('SRC_C', "b_c_file")],
+                _assert=True)
+        deep_eq(interp.cc_phase_input_pairs("CC"),
+                [('SRC_I', "i_file"), ('SRC_II', "ii_file")],
+                _assert=True)
+        deep_eq(interp.cc_phase_input_pairs("LD"),
+                [('SRC_LNK', "file3.o"), ('SRC_LNK', ".libs/lib1.so"),
+                 ('SRC_LNK', "l2.a")] +
+                map(lambda x: ('SRC_LNK', os.path.join(tmpdir, x)),
                     ["liba.so", "libb.a", "libc.so"]),
                 _assert=True)
         shutil.rmtree(tmpdir)

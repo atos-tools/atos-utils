@@ -48,7 +48,7 @@ class CmdInterpreterFactory:
         if kind == "CC":
             return CCInterpreter(command)
         elif kind == "AR":
-            return SimpleARInterpreter(command)
+            return ARInterpreter(command)
         return None
 
     def get_command_kind(self, command):
@@ -151,7 +151,7 @@ class CCInterpreter:
     The information is used by the atos-driver or the dependency builder.
     """
     class NameSpace():
-        """ Simple sontainer for argument values. """
+        """ Simple container for argument values. """
         pass
 
     def __init__(self, command):
@@ -159,7 +159,7 @@ class CCInterpreter:
         self.command_ = command
         self.expanded_args_ = self.get_expanded_args_()
         self.interp_ = self.parse_args_()
-        self.input_files_ = None
+        self.input_pairs_ = None
         self.output_files_ = None
 
     def get_expanded_args_(self):
@@ -216,17 +216,26 @@ class CCInterpreter:
         None.
         """
         assert(self.interp_ != None)
-        if self.input_files_ == None:
+        return map(lambda x: x[1], self.get_input_pairs())
+
+    def get_input_pairs(self):
+        """
+        Get input files pairs (src_kind, fname) to be processed as
+        dependencies from a CC command line args (C/C++ driver input files).
+        It is invalid to call this function if interpreter() is None.
+        """
+        assert(self.interp_ != None)
+        if self.input_pairs_ == None:
             cwd = self.command_['cwd']
-            self.input_files_ = map(
-                lambda x: os.path.normpath(os.path.join(cwd, x)),
-                self.interp_.all_cc_inputs())
-        return self.input_files_
+            self.input_pairs_ = map(
+                lambda x: (x[0], os.path.normpath(os.path.join(cwd, x[1]))),
+                self.interp_.all_cc_input_pairs())
+        return self.input_pairs_
 
     def get_output_files(self):
         """
-        Get outptu files to be processed as some dependency source
-        for a CC command (all C/C++ driver output files).
+        Get output files to be processed as some dependency targets
+        for a CC command (C/C++ driver output files).
         It is invalid to call this function if interpreter() is
         None.
         """
@@ -247,23 +256,26 @@ class CCInterpreter:
         assert(cc.cc_interpreter() != None)
         deep_eq(cc.get_kind(), "CC", _assert=True)
         deep_eq(cc.get_output_files(), ["a.out"], _assert=True)
+        deep_eq(cc.get_input_pairs(),
+                [('SRC_LNK', "a.o"), ('SRC_LNK', "b.o"),
+                 ('SRC_C', "c.c"), ('SRC_LNK', "d.ro"),
+                 ('SRC_LNK', "e.os"), ('SRC_LNK', "f.a")], _assert=True)
         deep_eq(cc.get_input_files(),
                 ["a.o", "b.o", "c.c", "d.ro", "e.os", "f.a"], _assert=True)
         print "SUCCESS: CCInterpreter"
-
         return True
 
-class SimpleARInterpreter:
+class ARInterpreter:
     """ Returns information on a command line for a AR archiver.
     There are a number of limitations:
-    - only .o files are searched for input
-    - only 'ar ...r... input_files...' form is recognized
+    - no check is done on actual input kind, all are 'SRC_AR' source kind,
+    - only 'ar ...r... input_files...' form is recognized.
     """
     def __init__(self, command):
         """ Constructor. """
         self.command_ = command
         self.expanded_args_ = self.get_expanded_args_()
-        self.input_files_ = None
+        self.input_pairs_ = None
         self.output_files_ = None
 
     def get_expanded_args_(self):
@@ -291,16 +303,19 @@ class SimpleARInterpreter:
         return "AR"
 
     def get_input_files(self):
-        """ Get input files from AR command line (object files only). """
-        if self.input_files_ != None:
-            return self.input_files_
+        """ Get input files from AR command line. """
+        return map(lambda x: x[1], self.get_input_pairs())
+
+    def get_input_pairs(self):
+        """ Get input pairs (src_kind, abs_fname) from AR command line. """
+        if self.input_pairs_ != None:
+            return self.input_pairs_
         args = self.get_args()
         cwd = self.command_['cwd']
-        inputs = []
-        for i in range(len(args[3:])):
-            inputs.append(
-                os.path.normpath(os.path.join(cwd, args[i + 3])))
-        self.input_files = inputs
+        inputs = map(lambda x: ('SRC_AR',
+                                os.path.normpath(os.path.join(cwd, x))),
+                     args[3:])
+        self.input_pairs = inputs
         return inputs
 
     def get_output_files(self):
@@ -323,8 +338,27 @@ class SimpleARInterpreter:
         self.outputs = outputs
         return outputs
 
+    @staticmethod
+    def test():
+        print "TESTING: ARInterpreter..."
+        cc = ARInterpreter(
+            {'args': shlex.split("ar cru lib.a a.o b.o c.c"),
+             'cwd': "."})
+        deep_eq(cc.get_kind(), "AR", _assert=True)
+        deep_eq(cc.get_output_files(), ["lib.a"], _assert=True)
+        deep_eq(cc.get_input_pairs(),
+                [('SRC_AR', "a.o"), ('SRC_AR', "b.o"),
+                 ('SRC_AR', "c.c")], _assert=True)
+        deep_eq(cc.get_input_files(),
+                ["a.o", "b.o", "c.c"], _assert=True)
+        print "SUCCESS: ARInterpreter"
+
+        return True
+
 if __name__ == "__main__":
     passed = CCInterpreter.test()
+    if not passed: sys.exit(1)
+    passed = ARInterpreter.test()
     if not passed: sys.exit(1)
     passed = CmdInterpreterFactory.test()
     if not passed: sys.exit(1)

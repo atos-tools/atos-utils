@@ -138,6 +138,35 @@ def audit_compile_command(opts, args):
     if opts.legacy:
         return legacy_audit_compile_command(opts, args)
 
+    def prepare_inputs(input_pairs):
+        """
+        This function prepare inputs and ensure that they are
+        available for dependency computation from the given
+        input pairs (src_kind, abs_path) given.
+        This includes:
+        - handling of pre-compiled headers,
+        - handling of missing inputs, removed from dependencies.
+        """
+        actual_inputs = []
+        for (src_kind, abs_path) in input_pairs:
+            actual_input = abs_path
+            if src_kind == 'SRC_PCH':
+                # Ensure that there is an existing fallback include
+                # for the precompiled header (.gch) and
+                # return the fallback include instead of the .gch.
+                # An empty fallback include is created when missing.
+                # This will have the effect of ignoring the
+                # precompiled header when it is not compatible with
+                # the options forced by the driver.
+                (fallback_header, ext) = abs_path.rsplit(".", 1)
+                assert(ext == "gch")
+                actual_input = fallback_header
+                if not os.path.exists(fallback_header):
+                    process.commands.touch(fallback_header)
+            if os.path.exists(actual_input):
+                actual_inputs.append(actual_input)
+        return actual_inputs
+
     def filter_envs(envs):
         """
         Filter out ATOS internal keys in environment.
@@ -159,8 +188,9 @@ def audit_compile_command(opts, args):
     # TODO: if response file is removed it does not work,
     # thus we expand it there in interpreter.get_args().
     # We should change this as it may build a too long command line.
-    inputs = interpreter.get_input_files()
-    inps_digest = stg.store_path_ref_list(map(os.path.abspath, inputs))
+    input_pairs = interpreter.get_input_pairs()
+    actual_inputs = prepare_inputs(input_pairs)
+    inps_digest = stg.store_path_ref_list(map(os.path.abspath, actual_inputs))
     status = process.system(args, print_output=True)
     if status != 0:
         return status

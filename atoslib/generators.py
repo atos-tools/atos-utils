@@ -518,9 +518,11 @@ class gen_chained_exploration(config_generator):
                 self.nbpoints)
             self.selected_configs = filter(
                 bool, map(get_result_config, selected_results))
+            self.initial_optim_variants = 'base'
             debug('gen_chained_exploration: tradeoffs for first stage: ' + str(
                     self.selected_configs))
         else:
+            self.initial_optim_variants = optim_variants
             self.selected_configs = [(None, optim_variants)]
         initial_tradeoffs = len(self.selected_configs)
         # list of chained (generator, generator_arguments)
@@ -554,15 +556,17 @@ class gen_chained_exploration(config_generator):
     def estimate_exploration_size(self):
         if getattr(self, 'generator_size', None) is None:
             self.generator_size = []
+            optim_variants = self.initial_optim_variants
             for (generator, generator_args) in self.generators_args:
                 gen_base_ = gen_variants(
-                    parent=gen_config(), optim_variants='base')
+                    parent=gen_config(), optim_variants=optim_variants)
                 generator_ = generator(
                     parent=gen_base_, **generator_args)
                 generator_ = gen_maxiters(
                     parent=generator_, maxiters=self.nbiters)
                 self.generator_size.append(
                     generator_.estimate_exploration_size())
+                optim_variants = 'base'  # tradeoff optim_variant
         # TODO: does not work on variable size generators
         # generator sizes estimated at the beginning, once for all
         expl_size = 0

@@ -91,17 +91,18 @@ class CCArgumentsDesc:
         }
 
     # Phase lists common to some source files
-    cc_phases = ["CPP", "CC", "AS", "LD"]
-    as_phases = ["CPP", "AS", "LD"]
+    cc_phases = ["CMD", "CPP", "CC", "AS", "LD"]
+    as_phases = ["CMD", "CPP", "AS", "LD"]
 
     # Mapping from C/C++/ASM source kinds to consuming phases.
-    cc_source_phases = {'SRC_C': cc_phases,
-                        'SRC_CC': cc_phases,
-                        'SRC_SPP': as_phases,
-                        'SRC_I': cc_phases[1:],
-                        'SRC_II': cc_phases[1:],
-                        'SRC_S': cc_phases[2:],
-                        'SRC_LNK': cc_phases[3:]
+    cc_source_phases = {'SRC_PCH': cc_phases,
+                        'SRC_C': cc_phases[1:],
+                        'SRC_CC': cc_phases[1:],
+                        'SRC_SPP': as_phases[1:],
+                        'SRC_I': cc_phases[2:],
+                        'SRC_II': cc_phases[2:],
+                        'SRC_S': cc_phases[3:],
+                        'SRC_LNK': cc_phases[4:]
                         }
 
     # Output kind as inferred from the command line, with mapping
@@ -110,7 +111,7 @@ class CCArgumentsDesc:
         'nooutput': None,       # Command kind is CC --version for instance
         'preprocessed': "CPP",  # Command kind is CC -E
         'assembly': "CC",       # Command kind is CC -S
-        'object': "AS",	        # Command kind is CC -c
+        'object': "AS",         # Command kind is CC -c
         'relocatable': "LD",    # Command kind is CC -r
         'executable': "LD",     # Command kind is CC without any of -E/-c/-S
         'dependencies': None    # Command kind is CC -M / CC -MM
@@ -411,7 +412,7 @@ class CCArgumentsDesc:
         {'str': "-nostdinc"},
         # {'str': "-nostdinc++"}, # Also in C++ dialect options
         # Options with arguments
-        {'str': "-include", 'nargs': 1},
+        {'str': "-include", 'nargs': 1, 'dest': "opt_include"},
         {'str': "-imacros", 'nargs': 1},
         {'str': "-idirafter", 'nargs': 1},
         {'str': "-iprefix", 'nargs': 1},

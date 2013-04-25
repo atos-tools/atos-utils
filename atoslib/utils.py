@@ -486,6 +486,7 @@ def run_atos_deps(args):
     output_file = args.output_file or os.path.join(
         args.configuration_path, "build.mk")
 
+    targets_file_used = False
     targets = None
     executables = args.exes and args.exes.split() or args.executables
     if executables:
@@ -495,8 +496,19 @@ def run_atos_deps(args):
     if args.all:
         targets = "all"
 
-    if targets == None:
-        raise Exception("Missing target file list.")
+    targets_file = os.path.join(args.configuration_path, "targets")
+    if targets == None and not opt_rebuild:
+        if os.path.exists(targets_file):
+            with open(targets_file) as f:
+                targets = filter(
+                    lambda x: x != "" and not x.startswith("#"),
+                    map(lambda x: x.strip(), f.readlines()))
+            targets_file_used = True
+
+    if targets == None or len(targets) == 0:
+        error("targets list not specified or "
+              "targets file empty (%s)" % targets_file)
+        return 1
 
     message("Computing build dependencies...")
     if legacy:
@@ -525,9 +537,15 @@ def run_atos_deps(args):
     if not os.path.isdir(args.configuration_path):
         return 0
 
-    with open(os.path.join(args.configuration_path, "targets"), "w") as f:
-        targets = executables if opt_rebuild else graph.get_targets()
-        if targets: print >>f, "\n".join(targets)
+    if not targets_file_used:
+        with open(targets_file, "w") as f:
+            targets = executables if opt_rebuild else graph.get_targets()
+            print >>f, "# Targets list that will be rebuilt by ATOS"
+            print >>f, "# Prefix with '#' or remove useless targets"
+            if targets:
+                print >>f, "\n".join(targets)
+            else:
+                print >>f, "# ERROR: empty target list, audit failed.\n"
 
     with open(os.path.join(args.configuration_path, "objects"), "w") as f:
         objects = graph.get_objects()
@@ -601,6 +619,9 @@ def run_atos_init(args):
     if args.clean or args.build_script:
         if args.clean: message("Cleaning build audit...")
         process.commands.unlink('%s/build.mk' % args.configuration_path)
+        process.commands.unlink('%s/targets' % args.configuration_path)
+        process.commands.unlink('%s/objects' % args.configuration_path)
+        process.commands.unlink('%s/compilers' % args.configuration_path)
         process.commands.unlink('%s/build.sh' % args.configuration_path)
         process.commands.unlink('%s/build.force' % args.configuration_path)
         process.commands.unlink('%s/build.audit' % args.configuration_path)
@@ -1304,7 +1325,9 @@ def run_atos_run(args):
         try:
             with open(os.path.join(
                     args.configuration_path, "targets")) as targetf:
-                executables = map(lambda x: x.strip(), targetf.readlines())
+                executables = filter(
+                    lambda x: x != "" and not x.startswith("#"),
+                    map(lambda x: x.strip(), targetf.readlines()))
         except:
             error('no target executable available in configuration')
             return 1

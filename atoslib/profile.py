@@ -384,6 +384,8 @@ def get_image_pathes(exes=None, configuration_path='atos-configuration'):
     if not imgpath and os.path.isfile(targets_filename):
         with open(targets_filename) as targets_file:
             imgpath = map(
-                lambda x: os.path.dirname(x.strip()), targets_file.readlines())
+                lambda x: os.path.dirname(x),
+                filter(lambda x: x != "" and not x.startswith("#"),
+                       map(lambda x: x.strip(), targets_file.readlines())))
             imgpath = ":".join(list(set(imgpath)))
     return imgpath

@@ -582,6 +582,7 @@ class gen_chained_exploration(config_generator):
         generators_args_full = []
         for (generator, generator_args) in generators_args:
             gen_args = dict(kwargs)
+            gen_args.update({'optim_variants': optim_variants})
             gen_args.update(generator_args or {})
             gen_args.update({'configuration_path': self.configuration_path})
             gen_args.update({'expl_cookie': self.expl_cookie})
@@ -607,9 +608,10 @@ class gen_chained_exploration(config_generator):
                     gen_flags_pruning(
                         **generator_args).estimate_exploration_size()
                     if pruning else 0)
-                nb_tradeoffs = len(
-                    self.selected_configs) if (nstage == 0) else (len(
-                    self.tradeoffs) * self.nbpoints)
+                is_aggreg_expl = 'aggregate' in generator_args
+                nb_tradeoffs = 1 if is_aggreg_expl else (
+                    len(self.selected_configs) if (nstage == 0) else (len(
+                            self.tradeoffs) * self.nbpoints))
                 self.expl_size.append([gen_size] * nb_tradeoffs)
                 self.prng_size.append([prn_size] * nb_tradeoffs)
                 optim_variants = 'base'  # tradeoff optim_variant
@@ -643,16 +645,37 @@ class gen_chained_exploration(config_generator):
                     generator.__name__, generator_args, nstage,
                     descr="stage number %d" % (nstage)))
             self.update_progress_estimate(nstage, len(self.selected_configs))
-            for (ntradeoff, (flags, variant)) \
-                    in enumerate(self.selected_configs):
-                debug('gen_chained_exploration: config ' + str(
-                        (flags, variant)))
-                debug('gen_chained_exploration: args ' + str(generator_args))
-                gen_base_ = gen_variants(
-                    parent=gen_config(self.configuration_path, flags=flags),
-                    optim_variants=variant)
+            debug('gen_chained_exploration: args ' + str(generator_args))
+            if not 'aggregate' in generator_args:
+                for (ntradeoff, (flags, variant)) \
+                        in enumerate(self.selected_configs):
+                    debug('gen_chained_exploration: config ' + str(
+                            (flags, variant)))
+                    gen_base_ = gen_variants(parent=gen_config(
+                            self.configuration_path, flags=flags),
+                        optim_variants=variant)
+                    generator_ = generator(
+                        parent=gen_base_, **generator_args)
+                    generator_ = gen_maxiters(
+                        parent=generator_, maxiters=self.nbiters)
+                    generator_ = gen_progress(
+                        parent=generator_,
+                        configuration_path=self.configuration_path)
+                    for cfg in generator_:
+                        self.update_progress_estimate(
+                            nstage, ntradeoff,
+                            size=generator_.estimate_exploration_size())
+                        run_cookie = self.cookie(
+                            stage_cookies[-1], cfg.flags, cfg.variant,
+                            record=False)
+                        cookie_to_cfg[run_cookie] = (cfg.flags, cfg.variant)
+                        yield cfg.extend_cookies(
+                            [self.expl_cookie, stage_cookies[-1], run_cookie])
+            else:
+                debug('gen_chained_exploration: configs ' + str(
+                        (self.selected_configs)))
                 generator_ = generator(
-                    parent=gen_base_, **generator_args)
+                    configs=self.selected_configs, **generator_args)
                 generator_ = gen_maxiters(
                     parent=generator_, maxiters=self.nbiters)
                 generator_ = gen_progress(
@@ -660,8 +683,7 @@ class gen_chained_exploration(config_generator):
                     configuration_path=self.configuration_path)
                 for cfg in generator_:
                     self.update_progress_estimate(
-                        nstage, ntradeoff,
-                        size=generator_.estimate_exploration_size())
+                        nstage, 0, size=generator_.estimate_exploration_size())
                     run_cookie = self.cookie(
                         stage_cookies[-1], cfg.flags, cfg.variant,
                         record=False)
@@ -2073,6 +2095,84 @@ class gen_genetic_deps(config_generator):
 
             debug('gen_genetic_deps: yield [%s]' % flags)
             yield base_cfg.copy().update(flags=flags)
+
+class gen_genetic_crossover(config_generator):
+    """
+    Generate genetic evolution of previous items, using dependencies.
+    """
+
+    def __init__(
+        self, configs=None, configuration_path=None, **ignored_kwargs):
+        self.configs = configs
+        flags_files = [
+            'flags.inline.cfg', 'flags.loop.cfg', 'flags.optim.cfg']
+        flags_files = filter(os.path.isfile, map(
+                functools.partial(os.path.join, configuration_path),
+                flags_files))
+        self.flag_list = optim_flag_list(flags_files)
+        self.configuration_path = configuration_path
+
+    def estimate_exploration_size(self):
+        return None  # TODO
+
+    def generate(self):
+        debug('gen_crossover')
+        assert len(self.configs) >= 2
+
+        while True:
+            # select a subset of config for crossover
+            nb_configs = random.randint(2, len(self.configs))
+            selected_configs = random.sample(self.configs, nb_configs)
+            debug('gen_crossover: %d selected configs: %s' % (
+                    nb_configs, selected_configs))
+
+            config_flags, config_variants = map(list, zip(*selected_configs))
+            random.shuffle(config_flags)
+            variant = random.choice(config_variants)
+            debug('gen_crossover: variant %s -> %s' % (
+                    str(config_variants), variant))
+            debug('gen_crossover: flags=' + str(config_flags))
+
+            flags_val = {}
+            for flag_lists in config_flags:
+                flags = optim_flag_list.parse_line(flag_lists)
+                for flag in flags:
+                    flag_name = optim_flag_list.optim_flag.foptname(flag)
+                    flags_val.setdefault(flag_name, []).append(flag)
+
+            for (flag, values) in flags_val.items():
+                missing = len(config_flags) - len(values)
+                flags_val[flag].extend([''] * missing)
+            debug('gen_crossover: flags_val=' + str(flags_val))
+
+            new_flags = []
+
+            # start with the optimization level
+            new_flags.append(
+                random.choice(flags_val.pop('-O', [''])))
+
+            # loop on selected config flags
+            while True:
+                available_flags = self.flag_list.available_flags(
+                    ' '.join(new_flags))
+                available_flags_set = []
+
+                for flag in flags_val.keys():
+                    obj_flag = self.flag_list.find(flag)
+                    flag_is_available = (
+                        (not obj_flag) or obj_flag in available_flags)
+                    if flag_is_available:  # pragma: branch_uncovered
+                        available_flags_set.append(flag)
+
+                if not available_flags_set: break
+
+                for flag in available_flags_set:
+                    new_flags.append(
+                        random.choice(flags_val.pop(flag)))
+
+            flags = ' '.join(new_flags)
+            debug('gen_crossover: yield [%s] [%s]' % (flags, variant))
+            yield config(flags=flags, variant=variant)
 
 
 # ####################################################################

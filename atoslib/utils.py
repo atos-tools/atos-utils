@@ -1768,7 +1768,8 @@ def run_atos_web(args):
             # Pushing all the runs
             if len(args.operation) == 2 and args.operation[1] == "all":
                 # Get the list of targets
-                r = requests.get(
+                session = requests.Session()
+                r = session.get(
                     "http://%s/api/1.0/projects/%s/experiments/%s/targets/%s"
                         % (args.server, args.project, args.experiment,
                            args.target))
@@ -1791,7 +1792,7 @@ def run_atos_web(args):
                          'uconf': result.get('uconf', ''),
                          'time': result['time'],
                          'size': result['size']}
-                    r = requests.put(
+                    r = session.put(
                 "http://%s/api/1.0/projects/%s/experiments/%s/targets/%s/runs"
                 % (args.server, args.project, args.experiment, args.target),
                 values)

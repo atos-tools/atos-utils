@@ -1806,6 +1806,11 @@ def run_atos_web(args):
                                           .get_results({'target': target})
 
                 for result in results:
+                    if result['time'] == 'FAILURE' or \
+                       result['size'] == 'FAILURE':
+                        message("Not pushing failed run %s"
+                                % (atos_lib.hashid(result['variant'])))
+                        continue
                     message("Pushing run %s"
                             % (atos_lib.hashid(result['variant'])))
                     values = {

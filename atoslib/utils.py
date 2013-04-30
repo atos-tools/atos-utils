@@ -1819,7 +1819,8 @@ def run_atos_web(args):
                          'conf': result['conf'],
                          'uconf': result.get('uconf', ''),
                          'time': result['time'],
-                         'size': result['size']}
+                         'size': result['size'],
+                         'cookies': result.get('cookies', '')}
                     r = session.put(
                 "http://%s/api/1.0/projects/%s/experiments/%s/targets/%s/runs"
                 % (args.server, args.project, args.experiment, args.target),

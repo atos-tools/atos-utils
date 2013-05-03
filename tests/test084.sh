@@ -45,15 +45,19 @@ if [ "`config_query '$.compilers[*].plugins_enabled'`" != "1" ]; then
     skip "plugins not supported by compiler"
 fi
 
+
+# launch a function by function exploration
 $ROOT/bin/atos-explore-acf --hot-th=50 -F ./flags_list.txt --optim-variants=base --optim-levels=-O0
 
-param_variant=`grep -H large-function atos-configurations/acf_csv_dir/* | tail -1 | sed 's/:.*//' | sed 's/.*\///'`
-[ ! -z "$param_variant" ]
-param_variant=`$ROOT/bin/atos lib query -t -q'$[*].variant' | grep $param_variant | tail -1`
+# choose one of the run with an acf csv file
+last_csv_variant=`$ROOT/bin/atos lib query -t -q'$[*].variant' | grep csv | tail -1`
+[ ! -z "$last_csv_variant" ]
 
+# perform fine flag tuning exploration on it
 $ROOT/bin/atos generator --generator=gen_flag_values  \
     --extra-arg=nbvalues=10 --extra-arg=try_removing=0 \
-    --extra-arg=keys=SHA1ProcessMessageBlock --extra-arg=variant_id=$param_variant \
+    --extra-arg=keys=SHA1ProcessMessageBlock --extra-arg=variant_id=$last_csv_variant \
     --tradeoffs=5
 
+# verify that exploration was done on one of the parameter flag (large-function-growth)
 [ `cat atos-configurations/acf_csv_dir/*.csv | grep param | grep large | grep -v 400 | wc -l` -ne 0 ]

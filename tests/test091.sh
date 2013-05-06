@@ -6,13 +6,14 @@ source `dirname $0`/common.sh
 
 TEST_CASE="ATOS generators - open64 flags"
 
-# export PATH=$BASE/STxP70/STxP70_Toolset_2012.2/bin:$PATH
-# export PATH=$BASE/STxP70/STxP70_Toolset_2012.2/stxp70cc/4.3/bin:$PATH
-# export PATH=$BASE/STxP70/STxP70_Toolset_2012.2/gnu/4.5.2/bin:$PATH
-# export PATH=$BASE/STxP70/STxP70_Toolset_2012.2/gnu/4.5.2/i686-pc-linux-gnu/bin:$PATH
-# export PATH=$BASE/STxP70/STxP70_Toolset_2012.2/jre/bin:$PATH
-# export SX=$BASE/STxP70/STxP70_Toolset_2012.2
-# export STXP70CC_VERSION=4.3
+ # export BASE=/home/compwork/robine/
+ # export SX=$BASE/STxP70/STxP70_Toolset_2012.2_With_Updates
+ # export PATH=$SX/bin:$PATH
+ # export PATH=$SX/stxp70cc/4.3/bin:$PATH
+ # export PATH=$SX/gnu/4.5.2/bin:$PATH
+ # export PATH=$SX/gnu/4.5.2/i686-pc-linux-gnu/bin:$PATH
+ # export PATH=$SX/jre/bin:$PATH
+ # export STXP70CC_VERSION=4.3
 
 [ "`which stxp70cc 2>/dev/null`" != "" ] || skip "stxp70cc compiler not found"
 [ "`which sxrun 2>/dev/null`" != "" ]    || skip "stxp70cc compiler not found"
@@ -27,6 +28,8 @@ EOF
 
 $ROOT/bin/atos-init \
     -b "sh build.sh" -r "sxrun sha1-c sha.o"
+
+$ROOT/bin/atos-opt -r -f -l -a -O2
 
 $ROOT/bin/atos-explore --log-file="expl.log"
 

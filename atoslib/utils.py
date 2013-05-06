@@ -962,13 +962,25 @@ def run_atos_opt(args):
         return updated
 
     options = args.options or ""
+
     uopts = args.uopts
-    if uopts == None and args.fdo: uopts = options
+
+    if uopts == None and args.fdo:
+        uopts = options
+
     if args.lto:
         compiler_lto_flag = atos_lib.config_compiler_flags(
             "lto_flags", default="-flto", config_path=args.configuration_path)
         compiler_lto_flag = " ".join(compiler_lto_flag)
         options += " " + compiler_lto_flag
+
+        if args.uopts == None and args.fdo:
+            # add lto flags to profile_gen options if necessary
+            fdo_gen_lto = int(atos_lib.config_compiler_flags(
+                    "fdo_gen_lto", default="0",
+                    config_path=args.configuration_path)[0])
+            if fdo_gen_lto:
+                uopts += " " + compiler_lto_flag
 
     if args.reuse and args.profile:
         variant_id = atos_lib.variant_id(options, None, uopts)

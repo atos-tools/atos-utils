@@ -637,7 +637,7 @@ class gen_file_by_file_cfg(config_generator):
         flags_file=None, optim_variants=None, base_variant=None,
         **kwargs):
         self.imgpath = imgpath
-        self.csv_dir = csv_dir
+        self.csv_dir = os.path.abspath(csv_dir)
         self.configuration_path = configuration_path
         self.hot_th = hot_th
         self.cold_opts = cold_opts
@@ -660,7 +660,7 @@ class gen_file_by_file_cfg(config_generator):
         with open(csv_name, 'w') as opt_file:
             for (obj, flags) in obj_flags.items():
                 if flags: opt_file.write('%s,%s\n' % (obj, flags))
-        return '--atos-optfile=%s' % os.path.abspath(csv_name)
+        return '--atos-optfile=%s' % csv_name
 
     def fbf_csv_opt(self, obj_flags, base_flags=''):
         csv_flags = gen_file_by_file_cfg.create_config_csv(
@@ -866,7 +866,7 @@ class gen_function_by_function_cfg(config_generator):
         flags_file=None, optim_variants=None, base_variant=None,
         **kwargs):
         self.imgpath = imgpath
-        self.csv_dir = csv_dir
+        self.csv_dir = os.path.abspath(csv_dir)
         self.configuration_path = configuration_path
         assert acf_plugin_path and os.path.isfile(acf_plugin_path)
         self.acf_plugin_path = acf_plugin_path

@@ -1805,7 +1805,11 @@ def run_atos_web(args):
                 results = atos_lib.atos_db.db(args.configuration_path) \
                                           .get_results({'target': target})
 
+                order = 0
                 for result in results:
+                    # The order is the run number. It should be incremented
+                    # even if the run failed
+                    order += 1
                     if result['time'] == 'FAILURE' or \
                        result['size'] == 'FAILURE':
                         message("Not pushing failed run %s"
@@ -1814,6 +1818,7 @@ def run_atos_web(args):
                     message("Pushing run %s"
                             % (atos_lib.hashid(result['variant'])))
                     values = {
+                         'order': order,
                          'hash': atos_lib.hashid(result['variant']),
                          'version': result['version'],
                          'conf': result['conf'],

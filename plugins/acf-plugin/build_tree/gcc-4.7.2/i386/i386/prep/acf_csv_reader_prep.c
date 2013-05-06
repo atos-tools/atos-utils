@@ -25,7 +25,7 @@
 # 362 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include-fixed/features.h" 2 3 4
 # 29 "/usr/include/stdio.h" 2 3 4
 
-extern "C" {
+
 
 
 
@@ -147,10 +147,6 @@ __extension__ typedef unsigned int __socklen_t;
 
 typedef struct _IO_FILE FILE;
 
-
-
-
-
 # 62 "/usr/include/stdio.h" 3 4
 typedef struct _IO_FILE __FILE;
 # 72 "/usr/include/stdio.h" 3 4
@@ -159,6 +155,8 @@ typedef struct _IO_FILE __FILE;
 # 1 "/usr/include/_G_config.h" 1 3 4
 # 14 "/usr/include/_G_config.h" 3 4
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include/stddef.h" 1 3 4
+# 325 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include/stddef.h" 3 4
+typedef long int wchar_t;
 # 354 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include/stddef.h" 3 4
 typedef unsigned int wint_t;
 # 15 "/usr/include/_G_config.h" 2 3 4
@@ -455,7 +453,7 @@ struct _IO_FILE {
 };
 
 
-
+typedef struct _IO_FILE _IO_FILE;
 
 
 struct _IO_FILE_plus;
@@ -485,37 +483,7 @@ typedef int __io_seek_fn (void *__cookie, __off64_t *__pos, int __w);
 
 
 typedef int __io_close_fn (void *__cookie);
-
-
-
-
-typedef __io_read_fn cookie_read_function_t;
-typedef __io_write_fn cookie_write_function_t;
-typedef __io_seek_fn cookie_seek_function_t;
-typedef __io_close_fn cookie_close_function_t;
-
-
-typedef struct
-{
-  __io_read_fn *read;
-  __io_write_fn *write;
-  __io_seek_fn *seek;
-  __io_close_fn *close;
-} _IO_cookie_io_functions_t;
-typedef _IO_cookie_io_functions_t cookie_io_functions_t;
-
-struct _IO_cookie_file;
-
-
-extern void _IO_cookie_init (struct _IO_cookie_file *__cfile, int __read_write,
-        void *__cookie, _IO_cookie_io_functions_t __fns);
-
-
-
-
-extern "C" {
-
-
+# 413 "/usr/include/libio.h" 3 4
 extern int __underflow (_IO_FILE *);
 extern int __uflow (_IO_FILE *);
 extern int __overflow (_IO_FILE *, int);
@@ -525,8 +493,8 @@ extern wint_t __woverflow (_IO_FILE *, wint_t);
 # 451 "/usr/include/libio.h" 3 4
 extern int _IO_getc (_IO_FILE *__fp);
 extern int _IO_putc (int __c, _IO_FILE *__fp);
-extern int _IO_feof (_IO_FILE *__fp) throw ();
-extern int _IO_ferror (_IO_FILE *__fp) throw ();
+extern int _IO_feof (_IO_FILE *__fp) __attribute__ ((__nothrow__));
+extern int _IO_ferror (_IO_FILE *__fp) __attribute__ ((__nothrow__));
 
 extern int _IO_peekc_locked (_IO_FILE *__fp);
 
@@ -534,9 +502,9 @@ extern int _IO_peekc_locked (_IO_FILE *__fp);
 
 
 
-extern void _IO_flockfile (_IO_FILE *) throw ();
-extern void _IO_funlockfile (_IO_FILE *) throw ();
-extern int _IO_ftrylockfile (_IO_FILE *) throw ();
+extern void _IO_flockfile (_IO_FILE *) __attribute__ ((__nothrow__));
+extern void _IO_funlockfile (_IO_FILE *) __attribute__ ((__nothrow__));
+extern int _IO_ftrylockfile (_IO_FILE *) __attribute__ ((__nothrow__));
 # 481 "/usr/include/libio.h" 3 4
 extern int _IO_vfscanf (_IO_FILE * __restrict, const char * __restrict,
    __gnuc_va_list, int *__restrict);
@@ -548,15 +516,8 @@ extern size_t _IO_sgetn (_IO_FILE *, void *, size_t);
 extern __off64_t _IO_seekoff (_IO_FILE *, __off64_t, int, int);
 extern __off64_t _IO_seekpos (_IO_FILE *, __off64_t, int);
 
-extern void _IO_free_backup_area (_IO_FILE *) throw ();
-# 543 "/usr/include/libio.h" 3 4
-}
+extern void _IO_free_backup_area (_IO_FILE *) __attribute__ ((__nothrow__));
 # 73 "/usr/include/stdio.h" 2 3 4
-
-
-
-
-typedef __gnuc_va_list va_list;
 # 86 "/usr/include/stdio.h" 3 4
 
 
@@ -565,8 +526,6 @@ typedef _G_fpos_t fpos_t;
 
 
 
-
-typedef _G_fpos64_t fpos64_t;
 # 138 "/usr/include/stdio.h" 3 4
 # 1 "/usr/include/bits/stdio_lim.h" 1 3 4
 # 139 "/usr/include/stdio.h" 2 3 4
@@ -585,15 +544,15 @@ extern struct _IO_FILE *stderr;
 
 
 
-extern int remove (__const char *__filename) throw ();
+extern int remove (__const char *__filename) __attribute__ ((__nothrow__));
 
-extern int rename (__const char *__old, __const char *__new) throw ();
-
-
+extern int rename (__const char *__old, __const char *__new) __attribute__ ((__nothrow__));
 
 
-extern int renameat (int __oldfd, __const char *__old, int __newfd,
-       __const char *__new) throw ();
+
+
+
+
 
 
 
@@ -603,24 +562,10 @@ extern int renameat (int __oldfd, __const char *__old, int __newfd,
 
 
 extern FILE *tmpfile (void);
-# 181 "/usr/include/stdio.h" 3 4
-extern FILE *tmpfile64 (void);
+# 185 "/usr/include/stdio.h" 3 4
+extern char *tmpnam (char *__s) __attribute__ ((__nothrow__));
 
-
-
-extern char *tmpnam (char *__s) throw ();
-
-
-
-
-
-extern char *tmpnam_r (char *__s) throw ();
-# 203 "/usr/include/stdio.h" 3 4
-extern char *tempnam (__const char *__dir, __const char *__pfx)
-     throw () __attribute__ ((__malloc__));
-
-
-
+# 208 "/usr/include/stdio.h" 3 4
 
 
 
@@ -633,13 +578,7 @@ extern int fclose (FILE *__stream);
 
 extern int fflush (FILE *__stream);
 
-# 228 "/usr/include/stdio.h" 3 4
-extern int fflush_unlocked (FILE *__stream);
-# 238 "/usr/include/stdio.h" 3 4
-extern int fcloseall (void);
-
-
-
+# 242 "/usr/include/stdio.h" 3 4
 
 
 
@@ -657,58 +596,18 @@ extern FILE *freopen (__const char *__restrict __filename,
         FILE *__restrict __stream);
 # 269 "/usr/include/stdio.h" 3 4
 
-
-extern FILE *fopen64 (__const char *__restrict __filename,
-        __const char *__restrict __modes);
-extern FILE *freopen64 (__const char *__restrict __filename,
-   __const char *__restrict __modes,
-   FILE *__restrict __stream);
+# 300 "/usr/include/stdio.h" 3 4
 
 
 
-
-extern FILE *fdopen (int __fd, __const char *__modes) throw ();
-
-
-
-
-
-extern FILE *fopencookie (void *__restrict __magic_cookie,
-     __const char *__restrict __modes,
-     _IO_cookie_io_functions_t __io_funcs) throw ();
-
-
-extern FILE *fmemopen (void *__s, size_t __len, __const char *__modes) throw ();
-
-
-
-
-extern FILE *open_memstream (char **__bufloc, size_t *__sizeloc) throw ();
-
-
-
-
-
-
-extern void setbuf (FILE *__restrict __stream, char *__restrict __buf) throw ();
+extern void setbuf (FILE *__restrict __stream, char *__restrict __buf) __attribute__ ((__nothrow__));
 
 
 
 extern int setvbuf (FILE *__restrict __stream, char *__restrict __buf,
-      int __modes, size_t __n) throw ();
+      int __modes, size_t __n) __attribute__ ((__nothrow__));
 
-
-
-
-
-extern void setbuffer (FILE *__restrict __stream, char *__restrict __buf,
-         size_t __size) throw ();
-
-
-extern void setlinebuf (FILE *__stream) throw ();
-
-
-
+# 322 "/usr/include/stdio.h" 3 4
 
 
 
@@ -723,7 +622,7 @@ extern int fprintf (FILE *__restrict __stream,
 extern int printf (__const char *__restrict __format, ...);
 
 extern int sprintf (char *__restrict __s,
-      __const char *__restrict __format, ...) throw ();
+      __const char *__restrict __format, ...) __attribute__ ((__nothrow__));
 
 
 
@@ -738,49 +637,9 @@ extern int vfprintf (FILE *__restrict __s, __const char *__restrict __format,
 extern int vprintf (__const char *__restrict __format, __gnuc_va_list __arg);
 
 extern int vsprintf (char *__restrict __s, __const char *__restrict __format,
-       __gnuc_va_list __arg) throw ();
+       __gnuc_va_list __arg) __attribute__ ((__nothrow__));
 
-
-
-
-
-extern int snprintf (char *__restrict __s, size_t __maxlen,
-       __const char *__restrict __format, ...)
-     throw () __attribute__ ((__format__ (__printf__, 3, 4)));
-
-extern int vsnprintf (char *__restrict __s, size_t __maxlen,
-        __const char *__restrict __format, __gnuc_va_list __arg)
-     throw () __attribute__ ((__format__ (__printf__, 3, 0)));
-
-
-
-
-
-
-extern int vasprintf (char **__restrict __ptr, __const char *__restrict __f,
-        __gnuc_va_list __arg)
-     throw () __attribute__ ((__format__ (__printf__, 2, 0)));
-extern int __asprintf (char **__restrict __ptr,
-         __const char *__restrict __fmt, ...)
-     throw () __attribute__ ((__format__ (__printf__, 2, 3)));
-extern int asprintf (char **__restrict __ptr,
-       __const char *__restrict __fmt, ...)
-     throw () __attribute__ ((__format__ (__printf__, 2, 3)));
-
-
-
-
-
-
-
-extern int vdprintf (int __fd, __const char *__restrict __fmt,
-       __gnuc_va_list __arg)
-     __attribute__ ((__format__ (__printf__, 2, 0)));
-extern int dprintf (int __fd, __const char *__restrict __fmt, ...)
-     __attribute__ ((__format__ (__printf__, 2, 3)));
-
-
-
+# 394 "/usr/include/stdio.h" 3 4
 
 
 
@@ -795,34 +654,9 @@ extern int fscanf (FILE *__restrict __stream,
 extern int scanf (__const char *__restrict __format, ...) ;
 
 extern int sscanf (__const char *__restrict __s,
-     __const char *__restrict __format, ...) throw ();
+     __const char *__restrict __format, ...) __attribute__ ((__nothrow__));
 
-
-
-
-
-
-
-
-extern int vfscanf (FILE *__restrict __s, __const char *__restrict __format,
-      __gnuc_va_list __arg)
-     __attribute__ ((__format__ (__scanf__, 2, 0))) ;
-
-
-
-
-
-extern int vscanf (__const char *__restrict __format, __gnuc_va_list __arg)
-     __attribute__ ((__format__ (__scanf__, 1, 0))) ;
-
-
-extern int vsscanf (__const char *__restrict __s,
-      __const char *__restrict __format, __gnuc_va_list __arg)
-     throw () __attribute__ ((__format__ (__scanf__, 2, 0)));
-
-
-
-
+# 436 "/usr/include/stdio.h" 3 4
 
 
 
@@ -837,14 +671,7 @@ extern int getc (FILE *__stream);
 
 extern int getchar (void);
 
-# 460 "/usr/include/stdio.h" 3 4
-extern int getc_unlocked (FILE *__stream);
-extern int getchar_unlocked (void);
-# 471 "/usr/include/stdio.h" 3 4
-extern int fgetc_unlocked (FILE *__stream);
-
-
-
+# 475 "/usr/include/stdio.h" 3 4
 
 
 
@@ -862,30 +689,7 @@ extern int putc (int __c, FILE *__stream);
 
 extern int putchar (int __c);
 
-# 504 "/usr/include/stdio.h" 3 4
-extern int fputc_unlocked (int __c, FILE *__stream);
-
-
-
-
-
-
-
-extern int putc_unlocked (int __c, FILE *__stream);
-extern int putchar_unlocked (int __c);
-
-
-
-
-
-
-extern int getw (FILE *__stream);
-
-
-extern int putw (int __w, FILE *__stream);
-
-
-
+# 527 "/usr/include/stdio.h" 3 4
 
 
 
@@ -901,29 +705,7 @@ extern char *fgets (char *__restrict __s, int __n, FILE *__restrict __stream)
 
 extern char *gets (char *__s) ;
 
-# 550 "/usr/include/stdio.h" 3 4
-extern char *fgets_unlocked (char *__restrict __s, int __n,
-        FILE *__restrict __stream) ;
-# 566 "/usr/include/stdio.h" 3 4
-extern __ssize_t __getdelim (char **__restrict __lineptr,
-          size_t *__restrict __n, int __delimiter,
-          FILE *__restrict __stream) ;
-extern __ssize_t getdelim (char **__restrict __lineptr,
-        size_t *__restrict __n, int __delimiter,
-        FILE *__restrict __stream) ;
-
-
-
-
-
-
-
-extern __ssize_t getline (char **__restrict __lineptr,
-       size_t *__restrict __n,
-       FILE *__restrict __stream) ;
-
-
-
+# 585 "/usr/include/stdio.h" 3 4
 
 
 
@@ -958,17 +740,7 @@ extern size_t fread (void *__restrict __ptr, size_t __size,
 extern size_t fwrite (__const void *__restrict __ptr, size_t __size,
         size_t __n, FILE *__restrict __s) ;
 
-# 627 "/usr/include/stdio.h" 3 4
-extern int fputs_unlocked (__const char *__restrict __s,
-      FILE *__restrict __stream);
-# 638 "/usr/include/stdio.h" 3 4
-extern size_t fread_unlocked (void *__restrict __ptr, size_t __size,
-         size_t __n, FILE *__restrict __stream) ;
-extern size_t fwrite_unlocked (__const void *__restrict __ptr, size_t __size,
-          size_t __n, FILE *__restrict __stream) ;
-
-
-
+# 645 "/usr/include/stdio.h" 3 4
 
 
 
@@ -986,13 +758,6 @@ extern long int ftell (FILE *__stream) ;
 
 extern void rewind (FILE *__stream);
 
-# 674 "/usr/include/stdio.h" 3 4
-extern int fseeko (FILE *__stream, __off_t __off, int __whence);
-
-
-
-
-extern __off_t ftello (FILE *__stream) ;
 # 693 "/usr/include/stdio.h" 3 4
 
 
@@ -1008,31 +773,16 @@ extern int fgetpos (FILE *__restrict __stream, fpos_t *__restrict __pos);
 extern int fsetpos (FILE *__stream, __const fpos_t *__pos);
 # 716 "/usr/include/stdio.h" 3 4
 
+# 725 "/usr/include/stdio.h" 3 4
 
 
-extern int fseeko64 (FILE *__stream, __off64_t __off, int __whence);
-extern __off64_t ftello64 (FILE *__stream) ;
-extern int fgetpos64 (FILE *__restrict __stream, fpos64_t *__restrict __pos);
-extern int fsetpos64 (FILE *__stream, __const fpos64_t *__pos);
+extern void clearerr (FILE *__stream) __attribute__ ((__nothrow__));
 
+extern int feof (FILE *__stream) __attribute__ ((__nothrow__)) ;
 
+extern int ferror (FILE *__stream) __attribute__ ((__nothrow__)) ;
 
-
-extern void clearerr (FILE *__stream) throw ();
-
-extern int feof (FILE *__stream) throw () ;
-
-extern int ferror (FILE *__stream) throw () ;
-
-
-
-
-extern void clearerr_unlocked (FILE *__stream) throw ();
-extern int feof_unlocked (FILE *__stream) throw () ;
-extern int ferror_unlocked (FILE *__stream) throw () ;
-
-
-
+# 742 "/usr/include/stdio.h" 3 4
 
 
 
@@ -1046,183 +796,35 @@ extern void perror (__const char *__s);
 
 
 # 1 "/usr/include/bits/sys_errlist.h" 1 3 4
-# 27 "/usr/include/bits/sys_errlist.h" 3 4
-extern int sys_nerr;
-extern __const char *__const sys_errlist[];
-
-
-extern int _sys_nerr;
-extern __const char *__const _sys_errlist[];
 # 755 "/usr/include/stdio.h" 2 3 4
-
-
-
-
-extern int fileno (FILE *__stream) throw () ;
-
-
-
-
-extern int fileno_unlocked (FILE *__stream) throw () ;
-# 774 "/usr/include/stdio.h" 3 4
-extern FILE *popen (__const char *__command, __const char *__modes) ;
-
-
-
-
-
-extern int pclose (FILE *__stream);
-
-
-
-
-
-extern char *ctermid (char *__s) throw ();
-
-
-
-
-
-extern char *cuserid (char *__s);
-
-
-
-
-struct obstack;
-
-
-extern int obstack_printf (struct obstack *__restrict __obstack,
-      __const char *__restrict __format, ...)
-     throw () __attribute__ ((__format__ (__printf__, 2, 3)));
-extern int obstack_vprintf (struct obstack *__restrict __obstack,
-       __const char *__restrict __format,
-       __gnuc_va_list __args)
-     throw () __attribute__ ((__format__ (__printf__, 2, 0)));
-
-
-
-
-
-
-
-extern void flockfile (FILE *__stream) throw ();
-
-
-
-extern int ftrylockfile (FILE *__stream) throw () ;
-
-
-extern void funlockfile (FILE *__stream) throw ();
 # 835 "/usr/include/stdio.h" 3 4
 # 1 "/usr/include/bits/stdio.h" 1 3 4
 # 33 "/usr/include/bits/stdio.h" 3 4
-inline int
+extern __inline int
 vprintf (__const char *__restrict __fmt, __gnuc_va_list __arg)
 {
   return vfprintf (stdout, __fmt, __arg);
 }
 
 
-inline int
+extern __inline int
 getchar (void)
 {
   return _IO_getc (stdin);
 }
-
-
-
-
-inline int
-fgetc_unlocked (FILE *__fp)
-{
-  return (__builtin_expect (((__fp)->_IO_read_ptr >= (__fp)->_IO_read_end), 0) ? __uflow (__fp) : *(unsigned char *) (__fp)->_IO_read_ptr++);
-}
-
-
-
-
-
-inline int
-getc_unlocked (FILE *__fp)
-{
-  return (__builtin_expect (((__fp)->_IO_read_ptr >= (__fp)->_IO_read_end), 0) ? __uflow (__fp) : *(unsigned char *) (__fp)->_IO_read_ptr++);
-}
-
-
-inline int
-getchar_unlocked (void)
-{
-  return (__builtin_expect (((stdin)->_IO_read_ptr >= (stdin)->_IO_read_end), 0) ? __uflow (stdin) : *(unsigned char *) (stdin)->_IO_read_ptr++);
-}
-
-
-
-
-inline int
+# 75 "/usr/include/bits/stdio.h" 3 4
+extern __inline int
 putchar (int __c)
 {
   return _IO_putc (__c, stdout);
 }
-
-
-
-
-inline int
-fputc_unlocked (int __c, FILE *__stream)
-{
-  return (__builtin_expect (((__stream)->_IO_write_ptr >= (__stream)->_IO_write_end), 0) ? __overflow (__stream, (unsigned char) (__c)) : (unsigned char) (*(__stream)->_IO_write_ptr++ = (__c)));
-}
-
-
-
-
-
-inline int
-putc_unlocked (int __c, FILE *__stream)
-{
-  return (__builtin_expect (((__stream)->_IO_write_ptr >= (__stream)->_IO_write_end), 0) ? __overflow (__stream, (unsigned char) (__c)) : (unsigned char) (*(__stream)->_IO_write_ptr++ = (__c)));
-}
-
-
-inline int
-putchar_unlocked (int __c)
-{
-  return (__builtin_expect (((stdout)->_IO_write_ptr >= (stdout)->_IO_write_end), 0) ? __overflow (stdout, (unsigned char) (__c)) : (unsigned char) (*(stdout)->_IO_write_ptr++ = (__c)));
-}
-
-
-
-
-
-inline __ssize_t
-getline (char **__lineptr, size_t *__n, FILE *__stream)
-{
-  return __getdelim (__lineptr, __n, '\n', __stream);
-}
-
-
-
-
-
-inline int
-feof_unlocked (FILE *__stream) throw ()
-{
-  return (((__stream)->_flags & 0x10) != 0);
-}
-
-
-inline int
-ferror_unlocked (FILE *__stream) throw ()
-{
-  return (((__stream)->_flags & 0x20) != 0);
-}
 # 836 "/usr/include/stdio.h" 2 3 4
 # 844 "/usr/include/stdio.h" 3 4
-}
+
 # 21 "/opt/gcc-plugins/src/acf_csv_reader.c" 2
 # 1 "/usr/include/string.h" 1 3 4
 # 28 "/usr/include/string.h" 3 4
-extern "C" {
+
 
 
 
@@ -1235,158 +837,87 @@ extern "C" {
 
 extern void *memcpy (void *__restrict __dest,
        __const void *__restrict __src, size_t __n)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern void *memmove (void *__dest, __const void *__src, size_t __n)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
+
+# 57 "/usr/include/string.h" 3 4
 
 
-
-
-
-
-extern void *memccpy (void *__restrict __dest, __const void *__restrict __src,
-        int __c, size_t __n)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
-
-
-
-
-
-extern void *memset (void *__s, int __c, size_t __n) throw () __attribute__ ((__nonnull__ (1)));
+extern void *memset (void *__s, int __c, size_t __n) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
 
 
 extern int memcmp (__const void *__s1, __const void *__s2, size_t __n)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern void *memchr (__const void *__s, int __c, size_t __n)
-      throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+      __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 
-
-
-
-
-extern void *rawmemchr (__const void *__s, int __c)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
-
-
-extern void *memrchr (__const void *__s, int __c, size_t __n)
-      throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
-
-
-
+# 82 "/usr/include/string.h" 3 4
 
 
 extern char *strcpy (char *__restrict __dest, __const char *__restrict __src)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
 
 extern char *strncpy (char *__restrict __dest,
         __const char *__restrict __src, size_t __n)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern char *strcat (char *__restrict __dest, __const char *__restrict __src)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
 
 extern char *strncat (char *__restrict __dest, __const char *__restrict __src,
-        size_t __n) throw () __attribute__ ((__nonnull__ (1, 2)));
+        size_t __n) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern int strcmp (__const char *__s1, __const char *__s2)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 extern int strncmp (__const char *__s1, __const char *__s2, size_t __n)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern int strcoll (__const char *__s1, __const char *__s2)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 extern size_t strxfrm (char *__restrict __dest,
          __const char *__restrict __src, size_t __n)
-     throw () __attribute__ ((__nonnull__ (2)));
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
 
-
-
-
-
-
-# 1 "/usr/include/xlocale.h" 1 3 4
-# 28 "/usr/include/xlocale.h" 3 4
-typedef struct __locale_struct
-{
-
-  struct locale_data *__locales[13];
-
-
-  const unsigned short int *__ctype_b;
-  const int *__ctype_tolower;
-  const int *__ctype_toupper;
-
-
-  const char *__names[13];
-} *__locale_t;
-# 119 "/usr/include/string.h" 2 3 4
-
-
-extern int strcoll_l (__const char *__s1, __const char *__s2, __locale_t __l)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2, 3)));
-
-extern size_t strxfrm_l (char *__dest, __const char *__src, size_t __n,
-    __locale_t __l) throw () __attribute__ ((__nonnull__ (2, 4)));
-
-
-
-
-extern char *strdup (__const char *__s)
-     throw () __attribute__ ((__malloc__)) __attribute__ ((__nonnull__ (1)));
-
-
-
-
-
-
-extern char *strndup (__const char *__string, size_t __n)
-     throw () __attribute__ ((__malloc__)) __attribute__ ((__nonnull__ (1)));
 # 165 "/usr/include/string.h" 3 4
 
 
 extern char *strchr (__const char *__s, int __c)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 
 extern char *strrchr (__const char *__s, int __c)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
 
-
-
-
-
-extern char *strchrnul (__const char *__s, int __c)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
-
-
+# 181 "/usr/include/string.h" 3 4
 
 
 
 extern size_t strcspn (__const char *__s, __const char *__reject)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 extern size_t strspn (__const char *__s, __const char *__accept)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 extern char *strpbrk (__const char *__s, __const char *__accept)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 extern char *strstr (__const char *__haystack, __const char *__needle)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
 
 
 
 extern char *strtok (char *__restrict __s, __const char *__restrict __delim)
-     throw () __attribute__ ((__nonnull__ (2)));
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2)));
 
 
 
@@ -1394,222 +925,230 @@ extern char *strtok (char *__restrict __s, __const char *__restrict __delim)
 extern char *__strtok_r (char *__restrict __s,
     __const char *__restrict __delim,
     char **__restrict __save_ptr)
-     throw () __attribute__ ((__nonnull__ (2, 3)));
-
-extern char *strtok_r (char *__restrict __s, __const char *__restrict __delim,
-         char **__restrict __save_ptr)
-     throw () __attribute__ ((__nonnull__ (2, 3)));
-
-
-
-
-extern char *strcasestr (__const char *__haystack, __const char *__needle)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
-
-
-
-
-
-
-extern void *memmem (__const void *__haystack, size_t __haystacklen,
-       __const void *__needle, size_t __needlelen)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 3)));
-
-
-
-extern void *__mempcpy (void *__restrict __dest,
-   __const void *__restrict __src, size_t __n)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
-extern void *mempcpy (void *__restrict __dest,
-        __const void *__restrict __src, size_t __n)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
-
-
-
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (2, 3)));
+# 240 "/usr/include/string.h" 3 4
 
 
 extern size_t strlen (__const char *__s)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
-
-
-
-
-
-extern size_t strnlen (__const char *__string, size_t __maxlen)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
-
-
-
-
-
-extern char *strerror (int __errnum) throw ();
-
-# 281 "/usr/include/string.h" 3 4
-extern char *strerror_r (int __errnum, char *__buf, size_t __buflen)
-     throw () __attribute__ ((__nonnull__ (2)));
-
-
-
-
-
-extern void __bzero (void *__s, size_t __n) throw () __attribute__ ((__nonnull__ (1)));
-
-
-
-extern void bcopy (__const void *__src, void *__dest, size_t __n)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
-
-
-extern void bzero (void *__s, size_t __n) throw () __attribute__ ((__nonnull__ (1)));
-
-
-extern int bcmp (__const void *__s1, __const void *__s2, size_t __n)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
-
-
-extern char *index (__const char *__s, int __c)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
-
-
-extern char *rindex (__const char *__s, int __c)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
-
-
-
-extern int ffs (int __i) throw () __attribute__ ((__const__));
-
-
-
-
-extern int ffsl (long int __l) throw () __attribute__ ((__const__));
-
-__extension__ extern int ffsll (long long int __ll)
-     throw () __attribute__ ((__const__));
-
-
-
-
-extern int strcasecmp (__const char *__s1, __const char *__s2)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
-
-
-extern int strncasecmp (__const char *__s1, __const char *__s2, size_t __n)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
-
-
-
-
-
-extern int strcasecmp_l (__const char *__s1, __const char *__s2,
-    __locale_t __loc)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2, 3)));
-
-extern int strncasecmp_l (__const char *__s1, __const char *__s2,
-     size_t __n, __locale_t __loc)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2, 4)));
-
-
-
-
-
-extern char *strsep (char **__restrict __stringp,
-       __const char *__restrict __delim)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
-
-
-
-
-extern int strverscmp (__const char *__s1, __const char *__s2)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
-
-
-extern char *strsignal (int __sig) throw ();
-
-
-extern char *__stpcpy (char *__restrict __dest, __const char *__restrict __src)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
-extern char *stpcpy (char *__restrict __dest, __const char *__restrict __src)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
-
-
-
-extern char *__stpncpy (char *__restrict __dest,
-   __const char *__restrict __src, size_t __n)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
-extern char *stpncpy (char *__restrict __dest,
-        __const char *__restrict __src, size_t __n)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
-
-
-extern char *strfry (char *__string) throw () __attribute__ ((__nonnull__ (1)));
-
-
-extern void *memfrob (void *__s, size_t __n) throw () __attribute__ ((__nonnull__ (1)));
-
-
-
-
-
-
-extern char *basename (__const char *__filename) throw () __attribute__ ((__nonnull__ (1)));
-# 426 "/usr/include/string.h" 3 4
+     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1)));
+
+# 254 "/usr/include/string.h" 3 4
+
+
+extern char *strerror (int __errnum) __attribute__ ((__nothrow__));
+
+# 288 "/usr/include/string.h" 3 4
+extern void __bzero (void *__s, size_t __n) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+# 414 "/usr/include/string.h" 3 4
+# 1 "/usr/include/bits/string.h" 1 3 4
+# 415 "/usr/include/string.h" 2 3 4
+
+
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include-fixed/bits/string2.h" 1 3 4
+# 61 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include-fixed/bits/string2.h" 3 4
+# 1 "/usr/include/endian.h" 1 3 4
+# 37 "/usr/include/endian.h" 3 4
+# 1 "/usr/include/bits/endian.h" 1 3 4
+# 38 "/usr/include/endian.h" 2 3 4
+# 62 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include-fixed/bits/string2.h" 2 3 4
+# 403 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include-fixed/bits/string2.h" 3 4
+extern void *__rawmemchr (const void *__s, int __c);
+# 978 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include-fixed/bits/string2.h" 3 4
+extern __inline size_t __strcspn_c1 (__const char *__s, int __reject);
+extern __inline size_t
+__strcspn_c1 (__const char *__s, int __reject)
+{
+  register size_t __result = 0;
+  while (__s[__result] != '\0' && __s[__result] != __reject)
+    ++__result;
+  return __result;
 }
+
+extern __inline size_t __strcspn_c2 (__const char *__s, int __reject1,
+         int __reject2);
+extern __inline size_t
+__strcspn_c2 (__const char *__s, int __reject1, int __reject2)
+{
+  register size_t __result = 0;
+  while (__s[__result] != '\0' && __s[__result] != __reject1
+  && __s[__result] != __reject2)
+    ++__result;
+  return __result;
+}
+
+extern __inline size_t __strcspn_c3 (__const char *__s, int __reject1,
+         int __reject2, int __reject3);
+extern __inline size_t
+__strcspn_c3 (__const char *__s, int __reject1, int __reject2,
+       int __reject3)
+{
+  register size_t __result = 0;
+  while (__s[__result] != '\0' && __s[__result] != __reject1
+  && __s[__result] != __reject2 && __s[__result] != __reject3)
+    ++__result;
+  return __result;
+}
+# 1054 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include-fixed/bits/string2.h" 3 4
+extern __inline size_t __strspn_c1 (__const char *__s, int __accept);
+extern __inline size_t
+__strspn_c1 (__const char *__s, int __accept)
+{
+  register size_t __result = 0;
+
+  while (__s[__result] == __accept)
+    ++__result;
+  return __result;
+}
+
+extern __inline size_t __strspn_c2 (__const char *__s, int __accept1,
+        int __accept2);
+extern __inline size_t
+__strspn_c2 (__const char *__s, int __accept1, int __accept2)
+{
+  register size_t __result = 0;
+
+  while (__s[__result] == __accept1 || __s[__result] == __accept2)
+    ++__result;
+  return __result;
+}
+
+extern __inline size_t __strspn_c3 (__const char *__s, int __accept1,
+        int __accept2, int __accept3);
+extern __inline size_t
+__strspn_c3 (__const char *__s, int __accept1, int __accept2, int __accept3)
+{
+  register size_t __result = 0;
+
+  while (__s[__result] == __accept1 || __s[__result] == __accept2
+  || __s[__result] == __accept3)
+    ++__result;
+  return __result;
+}
+# 1130 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include-fixed/bits/string2.h" 3 4
+extern __inline char *__strpbrk_c2 (__const char *__s, int __accept1,
+         int __accept2);
+extern __inline char *
+__strpbrk_c2 (__const char *__s, int __accept1, int __accept2)
+{
+
+  while (*__s != '\0' && *__s != __accept1 && *__s != __accept2)
+    ++__s;
+  return *__s == '\0' ? ((void *)0) : (char *) (size_t) __s;
+}
+
+extern __inline char *__strpbrk_c3 (__const char *__s, int __accept1,
+         int __accept2, int __accept3);
+extern __inline char *
+__strpbrk_c3 (__const char *__s, int __accept1, int __accept2,
+       int __accept3)
+{
+
+  while (*__s != '\0' && *__s != __accept1 && *__s != __accept2
+  && *__s != __accept3)
+    ++__s;
+  return *__s == '\0' ? ((void *)0) : (char *) (size_t) __s;
+}
+# 1182 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include-fixed/bits/string2.h" 3 4
+extern __inline char *__strtok_r_1c (char *__s, char __sep, char **__nextp);
+extern __inline char *
+__strtok_r_1c (char *__s, char __sep, char **__nextp)
+{
+  char *__result;
+  if (__s == ((void *)0))
+    __s = *__nextp;
+  while (*__s == __sep)
+    ++__s;
+  __result = ((void *)0);
+  if (*__s != '\0')
+    {
+      __result = __s++;
+      while (*__s != '\0')
+ if (*__s++ == __sep)
+   {
+     __s[-1] = '\0';
+     break;
+   }
+      *__nextp = __s;
+    }
+  return __result;
+}
+# 1214 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include-fixed/bits/string2.h" 3 4
+extern char *__strsep_g (char **__stringp, __const char *__delim);
+# 1232 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include-fixed/bits/string2.h" 3 4
+extern __inline char *__strsep_1c (char **__s, char __reject);
+extern __inline char *
+__strsep_1c (char **__s, char __reject)
+{
+  register char *__retval = *__s;
+  if (__retval != ((void *)0) && (*__s = (__extension__ (__builtin_constant_p (__reject) && !__builtin_constant_p (__retval) && (__reject) == '\0' ? (char *) __rawmemchr (__retval, __reject) : __builtin_strchr (__retval, __reject)))) != ((void *)0))
+    *(*__s)++ = '\0';
+  return __retval;
+}
+
+extern __inline char *__strsep_2c (char **__s, char __reject1, char __reject2);
+extern __inline char *
+__strsep_2c (char **__s, char __reject1, char __reject2)
+{
+  register char *__retval = *__s;
+  if (__retval != ((void *)0))
+    {
+      register char *__cp = __retval;
+      while (1)
+ {
+   if (*__cp == '\0')
+     {
+       __cp = ((void *)0);
+   break;
+     }
+   if (*__cp == __reject1 || *__cp == __reject2)
+     {
+       *__cp++ = '\0';
+       break;
+     }
+   ++__cp;
+ }
+      *__s = __cp;
+    }
+  return __retval;
+}
+
+extern __inline char *__strsep_3c (char **__s, char __reject1, char __reject2,
+       char __reject3);
+extern __inline char *
+__strsep_3c (char **__s, char __reject1, char __reject2, char __reject3)
+{
+  register char *__retval = *__s;
+  if (__retval != ((void *)0))
+    {
+      register char *__cp = __retval;
+      while (1)
+ {
+   if (*__cp == '\0')
+     {
+       __cp = ((void *)0);
+   break;
+     }
+   if (*__cp == __reject1 || *__cp == __reject2 || *__cp == __reject3)
+     {
+       *__cp++ = '\0';
+       break;
+     }
+   ++__cp;
+ }
+      *__s = __cp;
+    }
+  return __retval;
+}
+# 418 "/usr/include/string.h" 2 3 4
+# 426 "/usr/include/string.h" 3 4
+
 # 22 "/opt/gcc-plugins/src/acf_csv_reader.c" 2
 # 1 "/usr/include/stdlib.h" 1 3 4
 # 33 "/usr/include/stdlib.h" 3 4
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include/stddef.h" 1 3 4
 # 34 "/usr/include/stdlib.h" 2 3 4
 
-extern "C" {
 
-
-
-
-
-
-# 1 "/usr/include/bits/waitflags.h" 1 3 4
-# 43 "/usr/include/stdlib.h" 2 3 4
-# 1 "/usr/include/bits/waitstatus.h" 1 3 4
-# 65 "/usr/include/bits/waitstatus.h" 3 4
-# 1 "/usr/include/endian.h" 1 3 4
-# 37 "/usr/include/endian.h" 3 4
-# 1 "/usr/include/bits/endian.h" 1 3 4
-# 38 "/usr/include/endian.h" 2 3 4
-# 66 "/usr/include/bits/waitstatus.h" 2 3 4
-
-union wait
-  {
-    int w_status;
-    struct
-      {
-
- unsigned int __w_termsig:7;
- unsigned int __w_coredump:1;
- unsigned int __w_retcode:8;
- unsigned int:16;
-
-
-
-
-
-
-
-      } __wait_terminated;
-    struct
-      {
-
- unsigned int __w_stopval:8;
- unsigned int __w_stopsig:8;
- unsigned int:16;
-
-
-
-
-
-
-      } __wait_stopped;
-  };
-# 44 "/usr/include/stdlib.h" 2 3 4
 # 96 "/usr/include/stdlib.h" 3 4
 
 
@@ -1629,159 +1168,62 @@ typedef struct
 
 
 
-
-
-
-
-__extension__ typedef struct
-  {
-    long long int quot;
-    long long int rem;
-  } lldiv_t;
-
-
 # 140 "/usr/include/stdlib.h" 3 4
-extern size_t __ctype_get_mb_cur_max (void) throw () ;
+extern size_t __ctype_get_mb_cur_max (void) __attribute__ ((__nothrow__)) ;
 
 
 
 
 extern double atof (__const char *__nptr)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
 
 extern int atoi (__const char *__nptr)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
 
 extern long int atol (__const char *__nptr)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
 
-
-
-
-
-__extension__ extern long long int atoll (__const char *__nptr)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
-
-
-
+# 163 "/usr/include/stdlib.h" 3 4
 
 
 extern double strtod (__const char *__restrict __nptr,
         char **__restrict __endptr)
-     throw () __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
 
-
-
-
-
-extern float strtof (__const char *__restrict __nptr,
-       char **__restrict __endptr) throw () __attribute__ ((__nonnull__ (1))) ;
-
-extern long double strtold (__const char *__restrict __nptr,
-       char **__restrict __endptr)
-     throw () __attribute__ ((__nonnull__ (1))) ;
-
-
-
+# 182 "/usr/include/stdlib.h" 3 4
 
 
 extern long int strtol (__const char *__restrict __nptr,
    char **__restrict __endptr, int __base)
-     throw () __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
 
 extern unsigned long int strtoul (__const char *__restrict __nptr,
       char **__restrict __endptr, int __base)
-     throw () __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
 
-
-
-
-__extension__
-extern long long int strtoq (__const char *__restrict __nptr,
-        char **__restrict __endptr, int __base)
-     throw () __attribute__ ((__nonnull__ (1))) ;
-
-__extension__
-extern unsigned long long int strtouq (__const char *__restrict __nptr,
-           char **__restrict __endptr, int __base)
-     throw () __attribute__ ((__nonnull__ (1))) ;
-
-
-
-
-
-__extension__
-extern long long int strtoll (__const char *__restrict __nptr,
-         char **__restrict __endptr, int __base)
-     throw () __attribute__ ((__nonnull__ (1))) ;
-
-__extension__
-extern unsigned long long int strtoull (__const char *__restrict __nptr,
-     char **__restrict __endptr, int __base)
-     throw () __attribute__ ((__nonnull__ (1))) ;
-
-# 240 "/usr/include/stdlib.h" 3 4
-extern long int strtol_l (__const char *__restrict __nptr,
-     char **__restrict __endptr, int __base,
-     __locale_t __loc) throw () __attribute__ ((__nonnull__ (1, 4))) ;
-
-extern unsigned long int strtoul_l (__const char *__restrict __nptr,
-        char **__restrict __endptr,
-        int __base, __locale_t __loc)
-     throw () __attribute__ ((__nonnull__ (1, 4))) ;
-
-__extension__
-extern long long int strtoll_l (__const char *__restrict __nptr,
-    char **__restrict __endptr, int __base,
-    __locale_t __loc)
-     throw () __attribute__ ((__nonnull__ (1, 4))) ;
-
-__extension__
-extern unsigned long long int strtoull_l (__const char *__restrict __nptr,
-       char **__restrict __endptr,
-       int __base, __locale_t __loc)
-     throw () __attribute__ ((__nonnull__ (1, 4))) ;
-
-extern double strtod_l (__const char *__restrict __nptr,
-   char **__restrict __endptr, __locale_t __loc)
-     throw () __attribute__ ((__nonnull__ (1, 3))) ;
-
-extern float strtof_l (__const char *__restrict __nptr,
-         char **__restrict __endptr, __locale_t __loc)
-     throw () __attribute__ ((__nonnull__ (1, 3))) ;
-
-extern long double strtold_l (__const char *__restrict __nptr,
-         char **__restrict __endptr,
-         __locale_t __loc)
-     throw () __attribute__ ((__nonnull__ (1, 3))) ;
-
-
-
-
-
-
+# 279 "/usr/include/stdlib.h" 3 4
 extern double __strtod_internal (__const char *__restrict __nptr,
      char **__restrict __endptr, int __group)
-     throw () __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
 extern float __strtof_internal (__const char *__restrict __nptr,
     char **__restrict __endptr, int __group)
-     throw () __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
 extern long double __strtold_internal (__const char *__restrict __nptr,
            char **__restrict __endptr,
            int __group)
-     throw () __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
 
 extern long int __strtol_internal (__const char *__restrict __nptr,
        char **__restrict __endptr,
        int __base, int __group)
-     throw () __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
 
 
 
 extern unsigned long int __strtoul_internal (__const char *__restrict __nptr,
           char **__restrict __endptr,
           int __base, int __group)
-     throw () __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
 
 
 
@@ -1790,7 +1232,7 @@ __extension__
 extern long long int __strtoll_internal (__const char *__restrict __nptr,
       char **__restrict __endptr,
       int __base, int __group)
-     throw () __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
 
 
 
@@ -1799,7 +1241,7 @@ extern unsigned long long int __strtoull_internal (__const char *
          __restrict __nptr,
          char **__restrict __endptr,
          int __base, int __group)
-     throw () __attribute__ ((__nonnull__ (1))) ;
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
 
 
 
@@ -1809,702 +1251,55 @@ extern unsigned long long int __strtoull_internal (__const char *
 
 
 extern __inline double
-strtod (__const char *__restrict __nptr, char **__restrict __endptr) throw ()
+__attribute__ ((__nothrow__)) strtod (__const char *__restrict __nptr, char **__restrict __endptr)
 {
   return __strtod_internal (__nptr, __endptr, 0);
 }
 extern __inline long int
-strtol (__const char *__restrict __nptr, char **__restrict __endptr, int __base) throw ()
+__attribute__ ((__nothrow__)) strtol (__const char *__restrict __nptr, char **__restrict __endptr, int __base)
 
 {
   return __strtol_internal (__nptr, __endptr, __base, 0);
 }
 extern __inline unsigned long int
-strtoul (__const char *__restrict __nptr, char **__restrict __endptr, int __base) throw ()
+__attribute__ ((__nothrow__)) strtoul (__const char *__restrict __nptr, char **__restrict __endptr, int __base)
 
 {
   return __strtoul_internal (__nptr, __endptr, __base, 0);
 }
 
-
-
-
-extern __inline float
-strtof (__const char *__restrict __nptr, char **__restrict __endptr) throw ()
-{
-  return __strtof_internal (__nptr, __endptr, 0);
-}
-
-extern __inline long double
-strtold (__const char *__restrict __nptr, char **__restrict __endptr) throw ()
-{
-  return __strtold_internal (__nptr, __endptr, 0);
-}
-
-
-
-
-
-__extension__ extern __inline long long int
-strtoq (__const char *__restrict __nptr, char **__restrict __endptr, int __base) throw ()
-
-{
-  return __strtoll_internal (__nptr, __endptr, __base, 0);
-}
-__extension__ extern __inline unsigned long long int
-strtouq (__const char *__restrict __nptr, char **__restrict __endptr, int __base) throw ()
-
-{
-  return __strtoull_internal (__nptr, __endptr, __base, 0);
-}
-
-
-
-
-__extension__ extern __inline long long int
-strtoll (__const char *__restrict __nptr, char **__restrict __endptr, int __base) throw ()
-
-{
-  return __strtoll_internal (__nptr, __endptr, __base, 0);
-}
-__extension__ extern __inline unsigned long long int
-strtoull (__const char * __restrict __nptr, char **__restrict __endptr, int __base) throw ()
-
-{
-  return __strtoull_internal (__nptr, __endptr, __base, 0);
-}
-
-
-
+# 395 "/usr/include/stdlib.h" 3 4
 
 extern __inline double
-atof (__const char *__nptr) throw ()
+__attribute__ ((__nothrow__)) atof (__const char *__nptr)
 {
-  return strtod (__nptr, (char **) __null);
+  return strtod (__nptr, (char **) ((void *)0));
 }
 extern __inline int
-atoi (__const char *__nptr) throw ()
+__attribute__ ((__nothrow__)) atoi (__const char *__nptr)
 {
-  return (int) strtol (__nptr, (char **) __null, 10);
+  return (int) strtol (__nptr, (char **) ((void *)0), 10);
 }
 extern __inline long int
-atol (__const char *__nptr) throw ()
+__attribute__ ((__nothrow__)) atol (__const char *__nptr)
 {
-  return strtol (__nptr, (char **) __null, 10);
+  return strtol (__nptr, (char **) ((void *)0), 10);
 }
 
+# 496 "/usr/include/stdlib.h" 3 4
 
 
+extern int rand (void) __attribute__ ((__nothrow__));
 
-__extension__ extern __inline long long int
-atoll (__const char *__nptr) throw ()
-{
-  return strtoll (__nptr, (char **) __null, 10);
-}
+extern void srand (unsigned int __seed) __attribute__ ((__nothrow__));
 
-# 429 "/usr/include/stdlib.h" 3 4
-extern char *l64a (long int __n) throw () ;
+# 587 "/usr/include/stdlib.h" 3 4
 
 
-extern long int a64l (__const char *__s)
-     throw () __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1))) ;
-
-
-
-
-# 1 "/usr/include/sys/types.h" 1 3 4
-# 29 "/usr/include/sys/types.h" 3 4
-extern "C" {
-
-
-
-
-
-typedef __u_char u_char;
-typedef __u_short u_short;
-typedef __u_int u_int;
-typedef __u_long u_long;
-typedef __quad_t quad_t;
-typedef __u_quad_t u_quad_t;
-typedef __fsid_t fsid_t;
-
-
-
-
-typedef __loff_t loff_t;
-
-
-
-typedef __ino_t ino_t;
-
-
-
-
-
-
-typedef __ino64_t ino64_t;
-
-
-
-
-typedef __dev_t dev_t;
-
-
-
-
-typedef __gid_t gid_t;
-
-
-
-
-typedef __mode_t mode_t;
-
-
-
-
-typedef __nlink_t nlink_t;
-
-
-
-
-typedef __uid_t uid_t;
-
-
-
-
-
-typedef __off_t off_t;
-
-
-
-
-
-
-typedef __off64_t off64_t;
-
-
-
-
-typedef __pid_t pid_t;
-
-
-
-
-typedef __id_t id_t;
-
-
-
-
-typedef __ssize_t ssize_t;
-
-
-
-
-
-typedef __daddr_t daddr_t;
-typedef __caddr_t caddr_t;
-
-
-
-
-
-typedef __key_t key_t;
-# 133 "/usr/include/sys/types.h" 3 4
-# 1 "/usr/include/time.h" 1 3 4
-# 59 "/usr/include/time.h" 3 4
-
-
-typedef __clock_t clock_t;
-
-
-
-# 75 "/usr/include/time.h" 3 4
-
-
-typedef __time_t time_t;
-
-
-
-# 93 "/usr/include/time.h" 3 4
-typedef __clockid_t clockid_t;
-# 105 "/usr/include/time.h" 3 4
-typedef __timer_t timer_t;
-# 134 "/usr/include/sys/types.h" 2 3 4
-
-
-
-typedef __useconds_t useconds_t;
-
-
-
-typedef __suseconds_t suseconds_t;
-
-
-
-
-
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include/stddef.h" 1 3 4
-# 148 "/usr/include/sys/types.h" 2 3 4
-
-
-
-typedef unsigned long int ulong;
-typedef unsigned short int ushort;
-typedef unsigned int uint;
-# 195 "/usr/include/sys/types.h" 3 4
-typedef int int8_t __attribute__ ((__mode__ (__QI__)));
-typedef int int16_t __attribute__ ((__mode__ (__HI__)));
-typedef int int32_t __attribute__ ((__mode__ (__SI__)));
-typedef int int64_t __attribute__ ((__mode__ (__DI__)));
-
-
-typedef unsigned int u_int8_t __attribute__ ((__mode__ (__QI__)));
-typedef unsigned int u_int16_t __attribute__ ((__mode__ (__HI__)));
-typedef unsigned int u_int32_t __attribute__ ((__mode__ (__SI__)));
-typedef unsigned int u_int64_t __attribute__ ((__mode__ (__DI__)));
-
-typedef int register_t __attribute__ ((__mode__ (__word__)));
-# 220 "/usr/include/sys/types.h" 3 4
-# 1 "/usr/include/sys/select.h" 1 3 4
-# 31 "/usr/include/sys/select.h" 3 4
-# 1 "/usr/include/bits/select.h" 1 3 4
-# 32 "/usr/include/sys/select.h" 2 3 4
-
-
-# 1 "/usr/include/bits/sigset.h" 1 3 4
-# 23 "/usr/include/bits/sigset.h" 3 4
-typedef int __sig_atomic_t;
-
-
-
-
-typedef struct
-  {
-    unsigned long int __val[(1024 / (8 * sizeof (unsigned long int)))];
-  } __sigset_t;
-# 35 "/usr/include/sys/select.h" 2 3 4
-
-
-
-typedef __sigset_t sigset_t;
-
-
-
-
-
-# 1 "/usr/include/time.h" 1 3 4
-# 121 "/usr/include/time.h" 3 4
-struct timespec
-  {
-    __time_t tv_sec;
-    long int tv_nsec;
-  };
-# 45 "/usr/include/sys/select.h" 2 3 4
-
-# 1 "/usr/include/bits/time.h" 1 3 4
-# 69 "/usr/include/bits/time.h" 3 4
-struct timeval
-  {
-    __time_t tv_sec;
-    __suseconds_t tv_usec;
-  };
-# 47 "/usr/include/sys/select.h" 2 3 4
-# 55 "/usr/include/sys/select.h" 3 4
-typedef long int __fd_mask;
-# 67 "/usr/include/sys/select.h" 3 4
-typedef struct
-  {
-
-
-
-    __fd_mask fds_bits[1024 / (8 * sizeof (__fd_mask))];
-
-
-
-
-
-  } fd_set;
-
-
-
-
-
-
-typedef __fd_mask fd_mask;
-# 99 "/usr/include/sys/select.h" 3 4
-extern "C" {
-# 109 "/usr/include/sys/select.h" 3 4
-extern int select (int __nfds, fd_set *__restrict __readfds,
-     fd_set *__restrict __writefds,
-     fd_set *__restrict __exceptfds,
-     struct timeval *__restrict __timeout);
-# 121 "/usr/include/sys/select.h" 3 4
-extern int pselect (int __nfds, fd_set *__restrict __readfds,
-      fd_set *__restrict __writefds,
-      fd_set *__restrict __exceptfds,
-      const struct timespec *__restrict __timeout,
-      const __sigset_t *__restrict __sigmask);
-
-
-}
-# 221 "/usr/include/sys/types.h" 2 3 4
-
-
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include-fixed/sys/sysmacros.h" 1 3 4
-# 38 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include-fixed/sys/sysmacros.h" 3 4
-__extension__
-extern __inline __attribute__ ((__gnu_inline__)) unsigned int gnu_dev_major (unsigned long long int __dev)
-     throw ();
-__extension__
-extern __inline __attribute__ ((__gnu_inline__)) unsigned int gnu_dev_minor (unsigned long long int __dev)
-     throw ();
-__extension__
-extern __inline __attribute__ ((__gnu_inline__)) unsigned long long int gnu_dev_makedev (unsigned int __major,
-       unsigned int __minor)
-     throw ();
-
-
-__extension__ extern __inline __attribute__ ((__gnu_inline__)) unsigned int
-gnu_dev_major (unsigned long long int __dev) throw ()
-{
-  return ((__dev >> 8) & 0xfff) | ((unsigned int) (__dev >> 32) & ~0xfff);
-}
-
-__extension__ extern __inline __attribute__ ((__gnu_inline__)) unsigned int
-gnu_dev_minor (unsigned long long int __dev) throw ()
-{
-  return (__dev & 0xff) | ((unsigned int) (__dev >> 12) & ~0xff);
-}
-
-__extension__ extern __inline __attribute__ ((__gnu_inline__)) unsigned long long int
-gnu_dev_makedev (unsigned int __major, unsigned int __minor) throw ()
-{
-  return ((__minor & 0xff) | ((__major & 0xfff) << 8)
-   | (((unsigned long long int) (__minor & ~0xff)) << 12)
-   | (((unsigned long long int) (__major & ~0xfff)) << 32));
-}
-# 224 "/usr/include/sys/types.h" 2 3 4
-
-
-
-
-typedef __blksize_t blksize_t;
-
-
-
-
-
-
-typedef __blkcnt_t blkcnt_t;
-
-
-
-typedef __fsblkcnt_t fsblkcnt_t;
-
-
-
-typedef __fsfilcnt_t fsfilcnt_t;
-# 262 "/usr/include/sys/types.h" 3 4
-typedef __blkcnt64_t blkcnt64_t;
-typedef __fsblkcnt64_t fsblkcnt64_t;
-typedef __fsfilcnt64_t fsfilcnt64_t;
-
-
-
-
-
-# 1 "/usr/include/bits/pthreadtypes.h" 1 3 4
-# 36 "/usr/include/bits/pthreadtypes.h" 3 4
-typedef unsigned long int pthread_t;
-
-
-typedef union
-{
-  char __size[36];
-  long int __align;
-} pthread_attr_t;
-
-
-typedef struct __pthread_internal_slist
-{
-  struct __pthread_internal_slist *__next;
-} __pthread_slist_t;
-
-
-
-
-typedef union
-{
-  struct __pthread_mutex_s
-  {
-    int __lock;
-    unsigned int __count;
-    int __owner;
-
-
-    int __kind;
-    unsigned int __nusers;
-    __extension__ union
-    {
-      int __spins;
-      __pthread_slist_t __list;
-    };
-  } __data;
-  char __size[24];
-  long int __align;
-} pthread_mutex_t;
-
-typedef union
-{
-  char __size[4];
-  long int __align;
-} pthread_mutexattr_t;
-
-
-
-
-typedef union
-{
-  struct
-  {
-    int __lock;
-    unsigned int __futex;
-    __extension__ unsigned long long int __total_seq;
-    __extension__ unsigned long long int __wakeup_seq;
-    __extension__ unsigned long long int __woken_seq;
-    void *__mutex;
-    unsigned int __nwaiters;
-    unsigned int __broadcast_seq;
-  } __data;
-  char __size[48];
-  __extension__ long long int __align;
-} pthread_cond_t;
-
-typedef union
-{
-  char __size[4];
-  long int __align;
-} pthread_condattr_t;
-
-
-
-typedef unsigned int pthread_key_t;
-
-
-
-typedef int pthread_once_t;
-
-
-
-
-
-typedef union
-{
-  struct
-  {
-    int __lock;
-    unsigned int __nr_readers;
-    unsigned int __readers_wakeup;
-    unsigned int __writer_wakeup;
-    unsigned int __nr_readers_queued;
-    unsigned int __nr_writers_queued;
-
-
-    unsigned char __flags;
-    unsigned char __shared;
-    unsigned char __pad1;
-    unsigned char __pad2;
-    int __writer;
-  } __data;
-  char __size[32];
-  long int __align;
-} pthread_rwlock_t;
-
-typedef union
-{
-  char __size[8];
-  long int __align;
-} pthread_rwlockattr_t;
-
-
-
-
-
-typedef volatile int pthread_spinlock_t;
-
-
-
-
-typedef union
-{
-  char __size[20];
-  long int __align;
-} pthread_barrier_t;
-
-typedef union
-{
-  char __size[4];
-  int __align;
-} pthread_barrierattr_t;
-# 271 "/usr/include/sys/types.h" 2 3 4
-
-
-}
-# 439 "/usr/include/stdlib.h" 2 3 4
-
-
-
-
-
-
-extern long int random (void) throw ();
-
-
-extern void srandom (unsigned int __seed) throw ();
-
-
-
-
-
-extern char *initstate (unsigned int __seed, char *__statebuf,
-   size_t __statelen) throw () __attribute__ ((__nonnull__ (2)));
-
-
-
-extern char *setstate (char *__statebuf) throw () __attribute__ ((__nonnull__ (1)));
-
-
-
-
-
-
-
-struct random_data
-  {
-    int32_t *fptr;
-    int32_t *rptr;
-    int32_t *state;
-    int rand_type;
-    int rand_deg;
-    int rand_sep;
-    int32_t *end_ptr;
-  };
-
-extern int random_r (struct random_data *__restrict __buf,
-       int32_t *__restrict __result) throw () __attribute__ ((__nonnull__ (1, 2)));
-
-extern int srandom_r (unsigned int __seed, struct random_data *__buf)
-     throw () __attribute__ ((__nonnull__ (2)));
-
-extern int initstate_r (unsigned int __seed, char *__restrict __statebuf,
-   size_t __statelen,
-   struct random_data *__restrict __buf)
-     throw () __attribute__ ((__nonnull__ (2, 4)));
-
-extern int setstate_r (char *__restrict __statebuf,
-         struct random_data *__restrict __buf)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
-
-
-
-
-
-
-extern int rand (void) throw ();
-
-extern void srand (unsigned int __seed) throw ();
-
-
-
-
-extern int rand_r (unsigned int *__seed) throw ();
-
-
-
-
-
-
-
-extern double drand48 (void) throw ();
-extern double erand48 (unsigned short int __xsubi[3]) throw () __attribute__ ((__nonnull__ (1)));
-
-
-extern long int lrand48 (void) throw ();
-extern long int nrand48 (unsigned short int __xsubi[3])
-     throw () __attribute__ ((__nonnull__ (1)));
-
-
-extern long int mrand48 (void) throw ();
-extern long int jrand48 (unsigned short int __xsubi[3])
-     throw () __attribute__ ((__nonnull__ (1)));
-
-
-extern void srand48 (long int __seedval) throw ();
-extern unsigned short int *seed48 (unsigned short int __seed16v[3])
-     throw () __attribute__ ((__nonnull__ (1)));
-extern void lcong48 (unsigned short int __param[7]) throw () __attribute__ ((__nonnull__ (1)));
-
-
-
-
-
-struct drand48_data
-  {
-    unsigned short int __x[3];
-    unsigned short int __old_x[3];
-    unsigned short int __c;
-    unsigned short int __init;
-    unsigned long long int __a;
-  };
-
-
-extern int drand48_r (struct drand48_data *__restrict __buffer,
-        double *__restrict __result) throw () __attribute__ ((__nonnull__ (1, 2)));
-extern int erand48_r (unsigned short int __xsubi[3],
-        struct drand48_data *__restrict __buffer,
-        double *__restrict __result) throw () __attribute__ ((__nonnull__ (1, 2)));
-
-
-extern int lrand48_r (struct drand48_data *__restrict __buffer,
-        long int *__restrict __result)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
-extern int nrand48_r (unsigned short int __xsubi[3],
-        struct drand48_data *__restrict __buffer,
-        long int *__restrict __result)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
-
-
-extern int mrand48_r (struct drand48_data *__restrict __buffer,
-        long int *__restrict __result)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
-extern int jrand48_r (unsigned short int __xsubi[3],
-        struct drand48_data *__restrict __buffer,
-        long int *__restrict __result)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
-
-
-extern int srand48_r (long int __seedval, struct drand48_data *__buffer)
-     throw () __attribute__ ((__nonnull__ (2)));
-
-extern int seed48_r (unsigned short int __seed16v[3],
-       struct drand48_data *__buffer) throw () __attribute__ ((__nonnull__ (1, 2)));
-
-extern int lcong48_r (unsigned short int __param[7],
-        struct drand48_data *__buffer)
-     throw () __attribute__ ((__nonnull__ (1, 2)));
-
-
-
-
-
-
-
-
-
-extern void *malloc (size_t __size) throw () __attribute__ ((__malloc__)) ;
+extern void *malloc (size_t __size) __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) ;
 
 extern void *calloc (size_t __nmemb, size_t __size)
-     throw () __attribute__ ((__malloc__)) ;
+     __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) ;
 
 
 
@@ -2513,124 +1308,37 @@ extern void *calloc (size_t __nmemb, size_t __size)
 
 
 extern void *realloc (void *__ptr, size_t __size)
-     throw () __attribute__ ((__malloc__)) __attribute__ ((__warn_unused_result__));
+     __attribute__ ((__nothrow__)) __attribute__ ((__malloc__)) __attribute__ ((__warn_unused_result__));
 
-extern void free (void *__ptr) throw ();
+extern void free (void *__ptr) __attribute__ ((__nothrow__));
 
-
-
-
-extern void cfree (void *__ptr) throw ();
+# 626 "/usr/include/stdlib.h" 3 4
 
 
+extern void abort (void) __attribute__ ((__nothrow__)) __attribute__ ((__noreturn__));
 
-# 1 "/usr/include/alloca.h" 1 3 4
-# 25 "/usr/include/alloca.h" 3 4
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include/stddef.h" 1 3 4
-# 26 "/usr/include/alloca.h" 2 3 4
 
-extern "C" {
+
+extern int atexit (void (*__func) (void)) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1)));
+
+# 642 "/usr/include/stdlib.h" 3 4
 
 
 
 
+extern void exit (int __status) __attribute__ ((__nothrow__)) __attribute__ ((__noreturn__));
 
-extern void *alloca (size_t __size) throw ();
-
-
-
+# 658 "/usr/include/stdlib.h" 3 4
 
 
-}
-# 613 "/usr/include/stdlib.h" 2 3 4
-
-
-
-
-extern void *valloc (size_t __size) throw () __attribute__ ((__malloc__)) ;
-
-
-
-
-extern int posix_memalign (void **__memptr, size_t __alignment, size_t __size)
-     throw () __attribute__ ((__nonnull__ (1))) ;
-
-
-
-
-extern void abort (void) throw () __attribute__ ((__noreturn__));
-
-
-
-extern int atexit (void (*__func) (void)) throw () __attribute__ ((__nonnull__ (1)));
-
-
-
-
-
-extern int on_exit (void (*__func) (int __status, void *__arg), void *__arg)
-     throw () __attribute__ ((__nonnull__ (1)));
-
-
-
-
-
-
-extern void exit (int __status) throw () __attribute__ ((__noreturn__));
-
-
-
-
-
-
-extern void _Exit (int __status) throw () __attribute__ ((__noreturn__));
-
-
-
-
-
-
-extern char *getenv (__const char *__name) throw () __attribute__ ((__nonnull__ (1))) ;
+extern char *getenv (__const char *__name) __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
 
 
 
 
 extern char *__secure_getenv (__const char *__name)
-     throw () __attribute__ ((__nonnull__ (1))) ;
-
-
-
-
-
-extern int putenv (char *__string) throw () __attribute__ ((__nonnull__ (1)));
-
-
-
-
-
-extern int setenv (__const char *__name, __const char *__value, int __replace)
-     throw () __attribute__ ((__nonnull__ (2)));
-
-
-extern int unsetenv (__const char *__name) throw ();
-
-
-
-
-
-
-extern int clearenv (void) throw ();
-# 698 "/usr/include/stdlib.h" 3 4
-extern char *mktemp (char *__template) throw () __attribute__ ((__nonnull__ (1))) ;
-# 709 "/usr/include/stdlib.h" 3 4
-extern int mkstemp (char *__template) __attribute__ ((__nonnull__ (1))) ;
-# 719 "/usr/include/stdlib.h" 3 4
-extern int mkstemp64 (char *__template) __attribute__ ((__nonnull__ (1))) ;
-# 729 "/usr/include/stdlib.h" 3 4
-extern char *mkdtemp (char *__template) throw () __attribute__ ((__nonnull__ (1))) ;
-
-
-
+     __attribute__ ((__nothrow__)) __attribute__ ((__nonnull__ (1))) ;
+# 733 "/usr/include/stdlib.h" 3 4
 
 
 
@@ -2638,27 +1346,11 @@ extern char *mkdtemp (char *__template) throw () __attribute__ ((__nonnull__ (1)
 
 extern int system (__const char *__command) ;
 
-
-
-
-
-
-
-extern char *canonicalize_file_name (__const char *__name)
-     throw () __attribute__ ((__nonnull__ (1))) ;
-# 756 "/usr/include/stdlib.h" 3 4
-extern char *realpath (__const char *__restrict __name,
-         char *__restrict __resolved) throw () ;
-
-
-
-
-
-
+# 764 "/usr/include/stdlib.h" 3 4
 typedef int (*__compar_fn_t) (__const void *, __const void *);
 
 
-typedef __compar_fn_t comparison_fn_t;
+
 
 
 
@@ -2676,13 +1368,13 @@ extern void qsort (void *__base, size_t __nmemb, size_t __size,
 
 
 
-extern int abs (int __x) throw () __attribute__ ((__const__)) ;
-extern long int labs (long int __x) throw () __attribute__ ((__const__)) ;
+extern int abs (int __x) __attribute__ ((__nothrow__)) __attribute__ ((__const__)) ;
+extern long int labs (long int __x) __attribute__ ((__nothrow__)) __attribute__ ((__const__)) ;
 
 
 
-__extension__ extern long long int llabs (long long int __x)
-     throw () __attribute__ ((__const__)) ;
+
+
 
 
 
@@ -2691,153 +1383,34 @@ __extension__ extern long long int llabs (long long int __x)
 
 
 extern div_t div (int __numer, int __denom)
-     throw () __attribute__ ((__const__)) ;
+     __attribute__ ((__nothrow__)) __attribute__ ((__const__)) ;
 extern ldiv_t ldiv (long int __numer, long int __denom)
-     throw () __attribute__ ((__const__)) ;
+     __attribute__ ((__nothrow__)) __attribute__ ((__const__)) ;
+
+# 870 "/usr/include/stdlib.h" 3 4
 
 
 
-
-__extension__ extern lldiv_t lldiv (long long int __numer,
-        long long int __denom)
-     throw () __attribute__ ((__const__)) ;
-
-# 821 "/usr/include/stdlib.h" 3 4
-extern char *ecvt (double __value, int __ndigit, int *__restrict __decpt,
-     int *__restrict __sign) throw () __attribute__ ((__nonnull__ (3, 4))) ;
-
-
-
-
-extern char *fcvt (double __value, int __ndigit, int *__restrict __decpt,
-     int *__restrict __sign) throw () __attribute__ ((__nonnull__ (3, 4))) ;
-
-
-
-
-extern char *gcvt (double __value, int __ndigit, char *__buf)
-     throw () __attribute__ ((__nonnull__ (3))) ;
-
-
-
-
-extern char *qecvt (long double __value, int __ndigit,
-      int *__restrict __decpt, int *__restrict __sign)
-     throw () __attribute__ ((__nonnull__ (3, 4))) ;
-extern char *qfcvt (long double __value, int __ndigit,
-      int *__restrict __decpt, int *__restrict __sign)
-     throw () __attribute__ ((__nonnull__ (3, 4))) ;
-extern char *qgcvt (long double __value, int __ndigit, char *__buf)
-     throw () __attribute__ ((__nonnull__ (3))) ;
-
-
-
-
-extern int ecvt_r (double __value, int __ndigit, int *__restrict __decpt,
-     int *__restrict __sign, char *__restrict __buf,
-     size_t __len) throw () __attribute__ ((__nonnull__ (3, 4, 5)));
-extern int fcvt_r (double __value, int __ndigit, int *__restrict __decpt,
-     int *__restrict __sign, char *__restrict __buf,
-     size_t __len) throw () __attribute__ ((__nonnull__ (3, 4, 5)));
-
-extern int qecvt_r (long double __value, int __ndigit,
-      int *__restrict __decpt, int *__restrict __sign,
-      char *__restrict __buf, size_t __len)
-     throw () __attribute__ ((__nonnull__ (3, 4, 5)));
-extern int qfcvt_r (long double __value, int __ndigit,
-      int *__restrict __decpt, int *__restrict __sign,
-      char *__restrict __buf, size_t __len)
-     throw () __attribute__ ((__nonnull__ (3, 4, 5)));
-
-
-
-
-
-
-
-extern int mblen (__const char *__s, size_t __n) throw () ;
+extern int mblen (__const char *__s, size_t __n) __attribute__ ((__nothrow__)) ;
 
 
 extern int mbtowc (wchar_t *__restrict __pwc,
-     __const char *__restrict __s, size_t __n) throw () ;
+     __const char *__restrict __s, size_t __n) __attribute__ ((__nothrow__)) ;
 
 
-extern int wctomb (char *__s, wchar_t __wchar) throw () ;
+extern int wctomb (char *__s, wchar_t __wchar) __attribute__ ((__nothrow__)) ;
 
 
 
 extern size_t mbstowcs (wchar_t *__restrict __pwcs,
-   __const char *__restrict __s, size_t __n) throw ();
+   __const char *__restrict __s, size_t __n) __attribute__ ((__nothrow__));
 
 extern size_t wcstombs (char *__restrict __s,
    __const wchar_t *__restrict __pwcs, size_t __n)
-     throw ();
+     __attribute__ ((__nothrow__));
 
-
-
-
-
-
-
-
-extern int rpmatch (__const char *__response) throw () __attribute__ ((__nonnull__ (1))) ;
-# 909 "/usr/include/stdlib.h" 3 4
-extern int getsubopt (char **__restrict __optionp,
-        char *__const *__restrict __tokens,
-        char **__restrict __valuep)
-     throw () __attribute__ ((__nonnull__ (1, 2, 3))) ;
-
-
-
-
-
-extern void setkey (__const char *__key) throw () __attribute__ ((__nonnull__ (1)));
-
-
-
-
-
-
-
-extern int posix_openpt (int __oflag) ;
-
-
-
-
-
-
-
-extern int grantpt (int __fd) throw ();
-
-
-
-extern int unlockpt (int __fd) throw ();
-
-
-
-
-extern char *ptsname (int __fd) throw () ;
-
-
-
-
-
-
-extern int ptsname_r (int __fd, char *__buf, size_t __buflen)
-     throw () __attribute__ ((__nonnull__ (2)));
-
-
-extern int getpt (void);
-
-
-
-
-
-
-extern int getloadavg (double __loadavg[], int __nelem)
-     throw () __attribute__ ((__nonnull__ (1)));
 # 977 "/usr/include/stdlib.h" 3 4
-}
+
 # 23 "/opt/gcc-plugins/src/acf_csv_reader.c" 2
 
 # 1 "/opt/gcc-plugins/src/acf_plugin.h" 1
@@ -2869,24 +1442,43 @@ typedef struct acf_ftable_entry {
     int attr_arg_number;
     attr_arg opt_args[10];
 } acf_ftable_entry_t;
-
-
-
-
-extern "C" {
-
-
-
-
-
-
-
+# 74 "/opt/gcc-plugins/src/acf_plugin.h"
 int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p, int verbose);
-
-
-}
 # 25 "/opt/gcc-plugins/src/acf_csv_reader.c" 2
-# 59 "/opt/gcc-plugins/src/acf_csv_reader.c"
+
+// Parse a .csv file of attributes per functions of the form:
+// func_name, filename, attribute_name, attribute_arguments.
+// For C++ functions, the mangled name must be used.
+// Only the 1st entry (function name) and 3rd entry (attribute name)
+// are mandatory.
+// Malformed lines are discarded.
+// All entries after attribute name are considered attribute arguments.
+// There are two types of attribute arguments:
+// - strings (default without extra syntax)
+// - integers with extra '#' at begining of value (no spaces allowd before '#')
+// Attribute arguments parsing is stopped at first ((void *)0) argument. Following
+// arguments are discarded but line is not.
+// Examples:
+// square,,optimize,O3
+// main,file1.c,optimize,Os
+// _Z5func2Pi,,noinline,file2.cpp
+// _Z5func1Pi,/path1/path2/file2.cpp,noinline,
+// _Z5func1Pi,/path1/path2/file2.cpp,nonnull,#1,#3,#7,#9
+// _Z5func1Pi,/path1/path2/file2.cpp,section,.mysectionname
+// _Z5func1Pi,,optimize,tree-parallelize-loops=12
+// _Z5func1Pi,,optimize,fp-contract=fast
+// GCC --param option support: When "param" keyword is used
+// as attribute name, the two following attribute arguments are
+// considered as a GCC parameter name and its value.
+// Example:
+// _Z5func1Pi,,param,max-unroll-times,#4
+// _Z5func1Pi,,param,max-inline-insns,#400
+
+// Usage: acf_ftable_size = acf_parse_csv(csv_file, &acf_ftable, verbose);
+
+
+
+
 struct csv_list {
     struct csv_row *rows;
     struct csv_row *last_row;
@@ -2911,8 +1503,8 @@ int acf_ftable_size = 0;
 
 void csv_list_init(struct csv_list *clist) {
     clist->rows_number = 0;
-    clist->rows = (struct csv_row *) __null;
-    clist->last_row = (struct csv_row *) __null;
+    clist->rows = (struct csv_row *) ((void *)0);
+    clist->last_row = (struct csv_row *) ((void *)0);
 
     return;
 }
@@ -2921,9 +1513,9 @@ void add_row(struct csv_list *clist) {
     struct csv_row *row_entry;
 
     row_entry = (struct csv_row *) malloc(sizeof(struct csv_row));
-    row_entry->next_row = (struct csv_row *) __null;
-    row_entry->columns = (struct csv_column *) __null;
-    row_entry->last_column = (struct csv_column *) __null;
+    row_entry->next_row = (struct csv_row *) ((void *)0);
+    row_entry->columns = (struct csv_column *) ((void *)0);
+    row_entry->last_column = (struct csv_column *) ((void *)0);
     row_entry->columns_number = 0;
 
     if (clist->rows_number == 0) {
@@ -2942,7 +1534,7 @@ void add_column(struct csv_list *clist, char *value) {
     struct csv_column *col_entry;
 
     col_entry = (struct csv_column *) malloc(sizeof(struct csv_column));
-    col_entry->next_column = (struct csv_column *) __null;
+    col_entry->next_column = (struct csv_column *) ((void *)0);
     col_entry->csv_entry = (char *) malloc(strlen(value) + 1);
     strcpy(col_entry->csv_entry, value);
 
@@ -2970,12 +1562,12 @@ void csv_list_display(struct csv_list *clist) {
  crow = clist->rows;
     }
 
-    while (crow != __null) {
+    while (crow != ((void *)0)) {
  if (crow->columns_number == 0) {
      fprintf(stderr, "\n");
  } else {
      ccol = crow->columns;
-     while (ccol != __null) {
+     while (ccol != ((void *)0)) {
   fprintf(stderr, "{%s},", ccol->csv_entry);
   ccol = ccol->next_column;
      }
@@ -2996,7 +1588,7 @@ void acf_ftable_display(acf_ftable_entry_t *acf_ftable) {
 
   for (table_r = 0; table_r < acf_ftable_size; table_r++) {
       fprintf(stderr, "%s,", acf_ftable[table_r].func_name);
-      fprintf(stderr, "%s,", (acf_ftable[table_r].opt_file != __null ? acf_ftable[table_r].opt_file : "(null)"))
+      fprintf(stderr, "%s,", (acf_ftable[table_r].opt_file != ((void *)0) ? acf_ftable[table_r].opt_file : "(null)"))
                                                  ;
       fprintf(stderr, "%s,", acf_ftable[table_r].opt_attr);
       if (acf_ftable[table_r].attr_arg_number == 0) {
@@ -3007,7 +1599,7 @@ void acf_ftable_display(acf_ftable_entry_t *acf_ftable) {
    case NO_TYPE:
        break;
    case STR_TYPE:
-       fprintf(stderr, "\'%s\',", (acf_ftable[table_r].opt_args[i].av.str_arg != __null ? acf_ftable[table_r].opt_args[i].av.str_arg : "(null),"))
+       fprintf(stderr, "\'%s\',", (acf_ftable[table_r].opt_args[i].av.str_arg != ((void *)0) ? acf_ftable[table_r].opt_args[i].av.str_arg : "(null),"))
                                                                 ;
        break;
    case INT_TYPE:
@@ -3030,7 +1622,7 @@ void readCSV(FILE *file, struct csv_list *clist) {
     int lcount = 0;
 
 
-    while (fgets(line1,sizeof line1,file) != __null) {
+    while (fgets(line1,sizeof line1,file) != ((void *)0)) {
  lcount = 0;
 
 
@@ -3101,7 +1693,7 @@ void readCSV(FILE *file, struct csv_list *clist) {
     }
 }
 
-
+// Return number of functions if csv file parsing ok, negative value otherwise
 int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
     int verbose) {
     FILE *file;
@@ -3118,7 +1710,7 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
     csv_list_init(&parsed_csv);
     readCSV(file, &parsed_csv);
 
-
+    // Populate acf_ftable
     if (parsed_csv.rows_number == 0) {
  if (verbose)
      fprintf(stderr, "acf_plugin warning: No entry found in CSV file : %s\n", filename)
@@ -3128,7 +1720,7 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
  int tsize = parsed_csv.rows_number * sizeof(acf_ftable_entry_t);
 
  *acf_ftable_p = (acf_ftable_entry_t *) malloc(tsize);
- if (*acf_ftable_p == __null) {
+ if (*acf_ftable_p == ((void *)0)) {
      fprintf(stderr, "acf_plugin error: malloc() failed: size= %d\n", tsize);
      return -1;
  }
@@ -3140,7 +1732,7 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
     table_r = 0;
 
     crow = parsed_csv.rows;
-    for(; crow != __null; crow = crow->next_row, cur_line++) {
+    for(; crow != ((void *)0); crow = crow->next_row, cur_line++) {
  int j;
 
  if(crow->columns_number) {
@@ -3153,10 +1745,10 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
      int file_null = 0;
      size_t len;
 
-     for(;ccol != __null; ccol = ccol->next_column) {
+     for(;ccol != ((void *)0); ccol = ccol->next_column) {
   switch (table_c) {
   case FUNCNAME:
-      if (strcmp ((char *) ccol->csv_entry, "") == 0) {
+      if (__extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p ((char *) ccol->csv_entry) && __builtin_constant_p ("") && (__s1_len = strlen ((char *) ccol->csv_entry), __s2_len = strlen (""), (!((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) || __s1_len >= 4) && (!((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) || __s2_len >= 4)) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) && (__s1_len = strlen ((char *) ccol->csv_entry), __s1_len < 4) ? (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s2 = (__const unsigned char *) (__const char *) (""); register int __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) && (__s2_len = strlen (""), __s2_len < 4) ? (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s1 = (__const unsigned char *) (__const char *) ((char *) ccol->csv_entry); register int __result = __s1[0] - ((__const unsigned char *) (__const char *) (""))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((__const unsigned char *) (__const char *) (""))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((__const unsigned char *) (__const char *) (""))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((__const unsigned char *) (__const char *) (""))[3]); } } __result; }))) : __builtin_strcmp ((char *) ccol->csv_entry, "")))); }) == 0) {
    if (verbose)
        fprintf(stderr, "acf_plugin warning: discarded line %d: " "function name unspecified\n", cur_line)
 
@@ -3165,12 +1757,12 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
       }
       break;
   case FILENAME:
-      if (strcmp((char *) ccol->csv_entry, "") == 0) {
+      if (__extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p ((char *) ccol->csv_entry) && __builtin_constant_p ("") && (__s1_len = strlen ((char *) ccol->csv_entry), __s2_len = strlen (""), (!((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) || __s1_len >= 4) && (!((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) || __s2_len >= 4)) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) && (__s1_len = strlen ((char *) ccol->csv_entry), __s1_len < 4) ? (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s2 = (__const unsigned char *) (__const char *) (""); register int __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) && (__s2_len = strlen (""), __s2_len < 4) ? (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s1 = (__const unsigned char *) (__const char *) ((char *) ccol->csv_entry); register int __result = __s1[0] - ((__const unsigned char *) (__const char *) (""))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((__const unsigned char *) (__const char *) (""))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((__const unsigned char *) (__const char *) (""))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((__const unsigned char *) (__const char *) (""))[3]); } } __result; }))) : __builtin_strcmp ((char *) ccol->csv_entry, "")))); }) == 0) {
    file_null = 1;
       }
       break;
   case ATTRIBUTE:
-      if (strcmp((char *) ccol->csv_entry, "") == 0) {
+      if (__extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p ((char *) ccol->csv_entry) && __builtin_constant_p ("") && (__s1_len = strlen ((char *) ccol->csv_entry), __s2_len = strlen (""), (!((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) || __s1_len >= 4) && (!((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) || __s2_len >= 4)) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) && (__s1_len = strlen ((char *) ccol->csv_entry), __s1_len < 4) ? (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s2 = (__const unsigned char *) (__const char *) (""); register int __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) && (__s2_len = strlen (""), __s2_len < 4) ? (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s1 = (__const unsigned char *) (__const char *) ((char *) ccol->csv_entry); register int __result = __s1[0] - ((__const unsigned char *) (__const char *) (""))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((__const unsigned char *) (__const char *) (""))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((__const unsigned char *) (__const char *) (""))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((__const unsigned char *) (__const char *) (""))[3]); } } __result; }))) : __builtin_strcmp ((char *) ccol->csv_entry, "")))); }) == 0) {
    if (verbose)
        fprintf(stderr, "acf_plugin warning: discarded line %d: " "attribute unspecified\n", cur_line)
 
@@ -3179,8 +1771,8 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
       }
       break;
   case FIRST_ARG:
-      for (j = 0; j < 10 && ccol != __null; j++, ccol = ccol->next_column) {
-   if (strcmp((char *) ccol->csv_entry, "") != 0) {
+      for (j = 0; j < 10 && ccol != ((void *)0); j++, ccol = ccol->next_column) {
+   if (__extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p ((char *) ccol->csv_entry) && __builtin_constant_p ("") && (__s1_len = strlen ((char *) ccol->csv_entry), __s2_len = strlen (""), (!((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) || __s1_len >= 4) && (!((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) || __s2_len >= 4)) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) && (__s1_len = strlen ((char *) ccol->csv_entry), __s1_len < 4) ? (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s2 = (__const unsigned char *) (__const char *) (""); register int __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) && (__s2_len = strlen (""), __s2_len < 4) ? (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s1 = (__const unsigned char *) (__const char *) ((char *) ccol->csv_entry); register int __result = __s1[0] - ((__const unsigned char *) (__const char *) (""))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((__const unsigned char *) (__const char *) (""))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((__const unsigned char *) (__const char *) (""))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((__const unsigned char *) (__const char *) (""))[3]); } } __result; }))) : __builtin_strcmp ((char *) ccol->csv_entry, "")))); }) != 0) {
        argument_nb++;
        table_c++;
    } else {
@@ -3188,7 +1780,7 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
        break;
    }
       }
-      if (ccol && ccol->next_column != __null) {
+      if (ccol && ccol->next_column != ((void *)0)) {
    if (verbose)
        fprintf(stderr, "acf_plugin warning: line %d: discarded entries " "after null argument\n", cur_line)
                                           ;
@@ -3199,7 +1791,7 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
   }
   table_c++;
 
-  if (ccol == __null)
+  if (ccol == ((void *)0))
       break;
      }
 
@@ -3222,7 +1814,7 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
 
      ccol = crow->columns;
      table_c = 0;
-     for(;ccol != __null; ccol = ccol->next_column) {
+     for(;ccol != ((void *)0); ccol = ccol->next_column) {
 
 
 
@@ -3237,8 +1829,8 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
       break;
   case FILENAME:
       if (file_null) {
-
-   acf_ftable[table_r].opt_file = (char *) __null;
+   // Initialize empty source file information
+   acf_ftable[table_r].opt_file = (char *) ((void *)0);
       } else {
           len = strlen(ccol->csv_entry);
                         acf_ftable[table_r].opt_file_len = len;
@@ -3256,12 +1848,12 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
       break;
   case FIRST_ARG:
       if (argument_nb == 0) {
-
+   // Initialize empty argument
    acf_ftable[table_r].attr_arg_number = 0;
    acf_ftable[table_r].opt_args[0].arg_type = NO_TYPE;
       } else {
    acf_ftable[table_r].attr_arg_number = argument_nb;
-   for (j = 0; j < argument_nb && ccol != __null ; j++, ccol = ccol->next_column) {
+   for (j = 0; j < argument_nb && ccol != ((void *)0) ; j++, ccol = ccol->next_column) {
 
        if (ccol->csv_entry[0] == '#') {
     acf_ftable[table_r].opt_args[j].arg_type = INT_TYPE;
@@ -3282,10 +1874,10 @@ int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p,
   }
   table_c++;
 
-  if (ccol == __null)
+  if (ccol == ((void *)0))
       break;
      }
-
+     // Initialize empty argument
      if (table_c == FIRST_ARG) {
   acf_ftable[table_r].attr_arg_number = 0;
   acf_ftable[table_r].opt_args[0].arg_type = NO_TYPE;

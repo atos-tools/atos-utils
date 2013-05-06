@@ -721,18 +721,19 @@ class json_config():
             alias = triplet.split("-")[0]
             return repl.get(alias, alias)
 
-        def find_plugin(plugin_name, target_alias, host_alias):
+        def find_plugin(plugin_name, target_alias, host_alias, compiler_lang):
             plugin_name = plugin_name + ".so"
             # ex: ${libdir}/plugins/gcc-4.4.3/i386/i386/acf_plugin.so
             plugin_path = os.path.join(
-                globals.LIBDIR, "plugins", "gcc-" + version,
+                globals.LIBDIR, "plugins", compiler_lang + "-" + version,
                 target_alias, host_alias, plugin_name)
             if not os.path.isfile(plugin_path):
                 # retry using only major/minor version numbers
                 patchlevels = ".".join(version.split(".")[:2] + ["*"])
                 plugins = glob.glob(
                     os.path.join(
-                        globals.LIBDIR, "plugins", "gcc-" + patchlevels,
+                        globals.LIBDIR, "plugins",
+                        compiler_lang + "-" + patchlevels,
                         target_alias, host_alias, plugin_name))
                 plugin_path = plugins and sorted(plugins)[-1]
             plugin_path = os.path.isfile(
@@ -846,12 +847,6 @@ class json_config():
         compiler_config["target_alias"] = target_alias
         compiler_config["host_alias"] = host_alias
 
-        #
-        # acf plugin
-        #
-        acf_path = find_plugin("acf_plugin", target_alias, host_alias)
-        compiler_config["plugin_acf"] = acf_path
-
         cc1_path = process.system(
             [compiler, "--print-prog-name=cc1"], get_output=True,
             check_status=True).strip()
@@ -892,6 +887,16 @@ class json_config():
         graphite_enabled = int(process.system([
                 compiler, "-O2", "-floop-block", "-o", test_o, "-c", test_c
                 ]) == 0)
+        #
+        # acf plugin
+        #
+        acf_path = find_plugin("acf_plugin", target_alias, host_alias, "gcc")
+        if os.path.isfile(acf_path) and process.system([
+            compiler, "-O2", "-o", test_o, "-c", test_c,
+            "-fplugin=" + acf_path, "-fplugin-arg-acf_plugin-test"]) != 0:
+            acf_path = find_plugin("acf_plugin", target_alias, host_alias,
+                                   "g++")
+        compiler_config["plugin_acf"] = acf_path
         plugins_enabled = int(os.path.isfile(acf_path) and process.system([
                     compiler, "-O2", "-o", test_o, "-c", test_c,
                     "-fplugin=" + acf_path, "-fplugin-arg-acf_plugin-test"
@@ -980,7 +985,13 @@ def variant_id(options=None, gopts=None, uopts=None):
     else: pass
     if options != None:  # pragma: branch_uncovered
         res_variant += "".join(options.split())
-    return res_variant.replace(':', '_')
+    # TODO: This is a partial workaround. While it is acceptable for
+    # now, we will have to rewrite this, by removing pathes from
+    # variant_id for example.
+    replacements = {':': '_', '+': '_'}
+    for (old, new) in replacements.items():
+        res_variant = res_variant.replace(old, new)
+    return res_variant
 
 def pvariant_id(popts=None):
     assert(popts != None)

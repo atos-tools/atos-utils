@@ -807,6 +807,8 @@ class json_config():
                  "fdo_gen_flags": "-fprofile-arcs",
                  "fdo_use_flags": "-fbranch-probabilities",
                  "fdo_dir_flags": "none",
+                 # set lto flags for instrumentation build:
+                 "fdo_gen_lto": "1",
                  #
                  "graphite_enabled": "0",
                  "libgomp_enabled": "0",
@@ -1336,6 +1338,7 @@ def save_gcda_files_if_necessary(gopts, config_path=None, prof_path=None):
     for obj_dir in list(set(obj_dirs)):
         gcda_files.extend(glob.glob(os.path.join(obj_dir, "*.gcda")))
         gcda_files.extend(glob.glob(os.path.join(obj_dir, "*.gcno")))
+    gcda_files = set(map(os.path.abspath, gcda_files))
     for gcda_file in gcda_files:
         gcda_dest = profile_path + os.path.sep + gcda_file
         process.commands.mkdir(os.path.dirname(gcda_dest))

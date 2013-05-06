@@ -38,10 +38,10 @@ RUN_x86_64=$(PROOT64) -b $(BUILDDIR)
 PREP_RUN_i386=$(PROOT32) -b $(BUILDDIR):$(GUEST_BUILDDIR) 
 PREP_RUN_x86_64=$(PROOT64) -b $(BUILDDIR):$(GUEST_BUILDDIR) 
 
-GCC_VERSIONS=4.5.2 4.6.2 4.7.2
+GCC_COMPILERS=gcc-4.5.2 gcc-4.6.2 gcc-4.7.2 g++-4.7.2 
 GCC_TARGETS_HOSTS=i386/i386 x86_64/x86_64 arm/i386 arm/x86_64 sh4/i386 sh4/x86_64
 
-GCC_SUBDIRS:=$(foreach version, $(GCC_VERSIONS), $(addprefix gcc-$(version)/, $(GCC_TARGETS_HOSTS)))
+GCC_SUBDIRS:=$(foreach version, $(GCC_COMPILERS), $(addprefix $(version)/, $(GCC_TARGETS_HOSTS)))
 CONFIGURE_PREP_PLUGINS:=$(addsuffix /Makefile.prep, $(addprefix $(PREP_BUILDDIR)/, $(GCC_SUBDIRS)))
 ALL_PREP_PLUGINS:=$(addsuffix /all.phony, $(addprefix $(PREP_BUILDDIR)/, $(GCC_SUBDIRS)))
 CC=gcc
@@ -51,16 +51,17 @@ PLUGIN_gpp=$(CXX)
 PLUGIN_CFLAGS=-O2 -Wall
 
 # Functions
-gcc_version=$(shell echo $1 | sed 's!gcc-\([^/]*\)/.*!\1!')
-gcc_major=$(shell echo $1 | sed 's!gcc-\([^.]*\)\.[^.]*\.[^/]*/.*!\1!')
-gcc_minor=$(shell echo $1 | sed 's!gcc-[^.]*\.\([^.]*\)\.[^/]*/.*!\1!')
-gcc_patch=$(shell echo $1 | sed 's!gcc-[^.]*\.[^.]*\.\([^/]*\)/.*!\1!')
-gcc_target=$(shell echo $1 | sed 's!gcc-[^/]*/\([^/]*\).*!\1!')
-gcc_host=$(shell echo $1 | sed 's!gcc-[^/]*/[^/]*/\([^/]*\).*!\1!')
-plugin_subdir=gcc-$(call gcc_version,$1)/$(call gcc_target,$1)/$(call gcc_host,$1)
+gcc_version=$(shell echo $1 | sed 's!g..-\([^/]*\)/.*!\1!')
+gcc_major=$(shell echo $1 | sed 's!g..-\([^.]*\)\.[^.]*\.[^/]*/.*!\1!')
+gcc_minor=$(shell echo $1 | sed 's!g..-[^.]*\.\([^.]*\)\.[^/]*/.*!\1!')
+gcc_patch=$(shell echo $1 | sed 's!g..-[^.]*\.[^.]*\.\([^/]*\)/.*!\1!')
+gcc_target=$(shell echo $1 | sed 's!g..-[^/]*/\([^/]*\).*!\1!')
+gcc_host=$(shell echo $1 | sed 's!g..-[^/]*/[^/]*/\([^/]*\).*!\1!')
+gcc_or_gpp=$(shell echo $1 | sed 's!\(g..\)-[^/]*/.*!\1!')
+compiler_varname=$(shell echo $(call gcc_or_gpp,$1) | sed 's!g++!gpp!')
+plugin_subdir=$(call gcc_or_gpp,$1)-$(call gcc_version,$1)/$(call gcc_target,$1)/$(call gcc_host,$1)
 prebuilt_subdir=$(call gcc_host,$1)/gcc-$(call gcc_version,$1)
-gcc_or_gpp=$(shell if [ $(call gcc_major,$1) -gt 4 -o $(call gcc_minor,$1) -ge 7 ]; then echo gpp; else echo gcc; fi)
-prep_compiler=$(call prebuilt_subdir,$1)/bin/$(PLUGIN_$(call gcc_or_gpp,$1))
+prep_compiler=$(call prebuilt_subdir,$1)/bin/$(PLUGIN_$(call compiler_varname,$1))
 prep_cppflags=$(shell if [ "$(call gcc_target,$1)" = arm -o "$(call gcc_target,$1)" = sh4 ]; then echo "-DNEED_64BIT_HOST_WIDE_INT"; else echo ""; fi)
 prep_cflags=-O2 -Wall
 # Avoid builtins that may vary with compilers versions.
@@ -69,7 +70,7 @@ prep_cflags+=-fno-builtin -ansi
 prep_cflags+=-D__CORRECT_ISO_CPP_STRING_H_PROTO
 prep_run=$(PREP_RUN_$(call gcc_host,$1))
 run=$(RUN_$(call gcc_host,$1))
-plugin_compiler=$(PLUGIN_$(call gcc_or_gpp,$1))
+plugin_compiler=$(PLUGIN_$(call compiler_varname,$1))
 plugin_cppflags=
 plugin_cflags=$(shell if [ "$(call gcc_host,$1)" = i386 ]; then echo "-m32 $(PLUGIN_CFLAGS)"; else echo "$(PLUGIN_CFLAGS)"; fi)
 prebuilt_gcc=$(call prebuilt_subdir,$1)/bin/$(PLUGIN_gcc)

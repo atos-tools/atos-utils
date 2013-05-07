@@ -174,7 +174,7 @@ assert query_configs(cfg, flags='-O2', variant='base')
 assert query_configs(cfg, flags='-O2 -fplugin=.*', variant='base')
 
 cold_cfg = query_configs(cfg, flags='-O2 -fplugin=.*', variant='base')[0]
-cold_csv = re.sub(".*csv_file=([A-Za-z0-9/\-\.]*).*", "\\1", cold_cfg.flags)
+cold_csv = re.sub(".*csv_file=([^ ]*).*", "\\1", cold_cfg.flags)
 assert os.path.isfile(cold_csv)
 cold_csv_lines = open(cold_csv).readlines()
 assert len(cold_csv_lines) == 5
@@ -195,7 +195,7 @@ gen = generators.gen_function_by_function(
     configuration_path="atos-configurations")
 cfg = generated_configs(gen)
 cold_cfg = query_configs(cfg, flags='-O2 -fplugin=.*', variant='base')[0]
-cold_csv = re.sub(".*csv_file=([A-Za-z0-9/\-\.]*).*", "\\1", cold_cfg.flags)
+cold_csv = re.sub(".*csv_file=([^ ]*).*", "\\1", cold_cfg.flags)
 assert os.path.isfile(cold_csv)
 cold_csv_lines = open(cold_csv).readlines()
 assert len(cold_csv_lines) == 8 # 4 cold funcs * 2 flags
@@ -215,7 +215,7 @@ with open('flags.txt', 'w') as flagsf:
     print >>flagsf, '-fflag4'
 
 def cfg_result(cfg):
-    csvfile = re.sub(".*csv_file=([A-Za-z0-9/\-\.]*).*", "\\1", cfg.flags)
+    csvfile = re.sub(".*csv_file=([^ ]*).*", "\\1", cfg.flags)
     if not os.path.isfile(csvfile): csvfile = None
     nb_flags1 = csvfile and len(common.grep(csvfile, "flag1")) or 0
     nb_flags2 = csvfile and len(common.grep(csvfile, "flag2")) or 0
@@ -238,13 +238,13 @@ assert len(cfg) == 10
 
 # best-perf tradeoff composition (flags1, flags1)
 size_cfg = cfg[-3]
-size_csv = re.sub(".*csv_file=([A-Za-z0-9/\-\.]*).*", "\\1", size_cfg.flags)
+size_csv = re.sub(".*csv_file=([^ ]*).*", "\\1", size_cfg.flags)
 assert len(common.grep(size_csv, "flag1")) == 2
 assert len(common.grep(size_csv, "flag2")) == 0
 
 # best-size tradeoff composition (flags2, flags2)
 perf_cfg = cfg[-1]
-perf_csv = re.sub(".*csv_file=([A-Za-z0-9/\-\.]*).*", "\\1", perf_cfg.flags)
+perf_csv = re.sub(".*csv_file=([^ ]*).*", "\\1", perf_cfg.flags)
 assert len(common.grep(perf_csv, "flag2")) == 2
 assert len(common.grep(perf_csv, "flag1")) == 0
 
@@ -276,14 +276,14 @@ assert len(cfg) == 610
 
 # best-perf tradeoff composition (flags1, flags1)
 size_cfg = cfg[-3]
-size_csv = re.sub(".*csv_file=([A-Za-z0-9/\-\.]*).*", "\\1", size_cfg.flags)
+size_csv = re.sub(".*csv_file=([^ ]*).*", "\\1", size_cfg.flags)
 assert len(common.grep(size_csv, "flag1")) == 2
 assert len(common.grep(size_csv, "flag3")) == 2
 assert len(common.grep(size_csv, "flag2")) == 0
 
 # best-size tradeoff composition (flags2, flags2)
 perf_cfg = cfg[-1]
-perf_csv = re.sub(".*csv_file=([A-Za-z0-9/\-\.]*).*", "\\1", perf_cfg.flags)
+perf_csv = re.sub(".*csv_file=([^ ]*).*", "\\1", perf_cfg.flags)
 assert len(common.grep(perf_csv, "flag2")) == 2
 assert len(common.grep(size_csv, "flag3")) == 2
 assert len(common.grep(perf_csv, "flag1")) == 0

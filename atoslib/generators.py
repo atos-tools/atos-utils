@@ -30,6 +30,7 @@ import utils
 import arguments
 import atos_lib
 import progress
+import logger
 from logger import debug, warning, error, info, message
 
 
@@ -1508,17 +1509,19 @@ def run_exploration_loop(args=None, **kwargs):
         opt_args = arguments.argparse.Namespace()
         opt_args.__dict__.update(vars(args or {}))
         opt_args.__dict__.update(kwargs)
-        run_cookie = atos_lib.new_cookie()
         run_cookies = gen_args.cookies and list(gen_args.cookies) or []
-        run_cookies.append(run_cookie)
+        if logger._debug:
+            run_cookie = atos_lib.new_cookie()
+            run_cookies.append(run_cookie)
         if cookies: run_cookies.extend(cookies)
         run_cookies = list(set(run_cookies))
         utils.invoque(
             "atos-opt", opt_args, options=flags, fdo=fdo, lto=lto,
             record=True, profile=profile, cookies=run_cookies)
         # print debug info
-        results = get_run_results(matches=[run_cookie], **vars(gen_args))
-        debug('step-> ' + str(results))
+        if logger._debug:
+            results = get_run_results(matches=[run_cookie], **vars(gen_args))
+            debug('step-> ' + str(results))
 
     gen_args = dict(vars(args or {}).items() + kwargs.items())
     gen_args = atos_lib.default_obj(**gen_args)

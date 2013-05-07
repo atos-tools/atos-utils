@@ -1514,7 +1514,7 @@ def run_exploration_loop(args=None, **kwargs):
             run_cookie = atos_lib.new_cookie()
             run_cookies.append(run_cookie)
         if cookies: run_cookies.extend(cookies)
-        run_cookies = list(set(run_cookies))
+        run_cookies = atos_lib.list_unique(run_cookies)
         utils.invoque(
             "atos-opt", opt_args, options=flags, fdo=fdo, lto=lto,
             record=True, profile=profile, cookies=run_cookies)

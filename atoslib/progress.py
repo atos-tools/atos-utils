@@ -117,11 +117,15 @@ def _display_progress(last_iter=False, timer_completed=False):
                 remaining_time_str(remaining),
                 completion * 100.0)
             status_str += " " + status
-        # clear previous msg and fill the line
-        cols = int(os.popen("tput cols", "r").readline())
-        nb_spaces = cols - len(status_str) - 1
+        # pad with space to clear previous message and
+        # clamp msg to terminal width,
+        with os.popen("tput cols", "r") as tput:
+            cols = int(tput.readline())
+        nb_spaces = max(cols - len(status_str), 0)
+        status_str += nb_spaces * " "
+        status_str = status_str[:cols]
         last_char = "\n" if last_iter else "\r"
-        status_str = "\r" + status_str + nb_spaces * " " + last_char
+        status_str = "\r" + status_str + last_char
     else:
         status_str += "\n"
 

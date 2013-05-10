@@ -27,7 +27,10 @@ def check_python_version_():
         sys.exit(1)
 
 def handle_signal_(sig, sigframe):
+    print
+    sys.stdout.flush()
     print >>sys.stderr, "Interrupted by signal %d" % sig
+    sys.stderr.flush()
     sys.exit(128 + sig)
 
 # Fail early if python version is not supported

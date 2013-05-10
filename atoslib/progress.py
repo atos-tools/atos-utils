@@ -86,7 +86,7 @@ def _display_progress(last_iter=False, timer_completed=False):
             main_progress.maxval - main_progress.value + 1)
         main_remaining = _one_iteration_est and (
             main_remaining_nb * _one_iteration_est) or None
-        status = "Remaining exploration time: %s, %.0f%% done" % (
+        status = "Remaining exploration time: %s, %3.0f%% done" % (
             remaining_time_str(main_remaining), main_completion * 100)
         status_str += status
 
@@ -104,15 +104,17 @@ def _display_progress(last_iter=False, timer_completed=False):
 
     if sys.stdout.isatty():  # no line update if stdout is not a tty
         for timer_progress in _timer_progresses:
-            if not timer_progress.estimated_time:
+            estimated = timer_progress.estimated()
+            if not estimated:
                 continue
             elapsed = timer_progress.elapsed()
-            completion = timer_completed and 1.0 or min(
-                elapsed / timer_progress.estimated_time, 1.0)
-            remaining = completion and (
-                elapsed / completion - elapsed) or None
-            status = "Current %s: %s remaining, %.0f%% done." % (
-                timer_progress.progress_type, remaining_time_str(remaining),
+            completion = (1.0 if timer_completed else
+                          min(elapsed / estimated, 1.0))
+            remaining = (0.0 if timer_completed else
+                         max(estimated - elapsed, 0.0))
+            status = "%16s: %s remaining, %3.0f%% done." % (
+                "Current " + timer_progress.progress_type,
+                remaining_time_str(remaining),
                 completion * 100.0)
             status_str += " " + status
         # clear previous msg and fill the line
@@ -175,9 +177,9 @@ class timer_progress():
         self.progress_type = progress_type
         self.variant_id = variant_id
         self.time_file = os.path.join(config_path, progress_type + '.time')
-        self.estimated_time = timer_progress.load_estimation_time(
+        self.estimated_time_ = timer_progress.load_estimation_time(
             self.time_file)
-        self.start_time = time.time()
+        self.start_time_ = time.time()
         _timer_progresses.append(self)
         _start_progress_timer()
         _display_progress()
@@ -191,7 +193,12 @@ class timer_progress():
         _timer_progresses.remove(self)
 
     def elapsed(self):
-        return time.time() - self.start_time
+        """ Returns elapsed time since timer creation. """
+        return time.time() - self.start_time_
+
+    def estimated(self):
+        """ Returns currently estimated time or None. """
+        return self.estimated_time_
 
     @staticmethod
     def load_estimation_times(config_path):

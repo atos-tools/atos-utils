@@ -270,10 +270,7 @@ def run_atos_audit(args):
         PROOT_ADDON_CC_OPTS_CCRE=("^%s$" % cbinregexp),
         PROOT_ADDON_CC_OPTS_DRIVER=atos_driver) + args.command
 
-    build_progress = progress.timer_progress(
-        progress_type="build", config_path=args.configuration_path)
     status = process.system(command, print_output=True)
-    build_progress.end(status=status)
 
     return status
 
@@ -625,12 +622,14 @@ def run_atos_init(args):
         process.commands.unlink('%s/build.sh' % args.configuration_path)
         process.commands.unlink('%s/build.force' % args.configuration_path)
         process.commands.unlink('%s/build.audit' % args.configuration_path)
+        process.commands.unlink('%s/build.time' % args.configuration_path)
         process.commands.rmtree('%s/build.stg' % args.configuration_path)
         process.commands.unlink('%s/config.json' % args.configuration_path)
     if args.clean or args.run_script:
         if args.clean: message("Cleaning run audit...")
         process.commands.unlink('%s/run.sh' % args.configuration_path)
         process.commands.unlink('%s/run.audit' % args.configuration_path)
+        process.commands.unlink('%s/run.time' % args.configuration_path)
     if args.clean:
         message("Cleaning all profiles...")
         process.commands.rmtree('%s/profiles' % args.configuration_path)
@@ -1140,10 +1139,7 @@ def run_atos_raudit(args):
             get_res_sh = os.path.join(args.configuration_path, "get_res.sh")
             atos_lib.generate_script(get_res_sh, args.results_script)
 
-    run_progress = progress.timer_progress(
-        progress_type="run", config_path=args.configuration_path)
     status = process.system(args.command, print_output=True)
-    run_progress.end(status=status)
 
     return status
 
@@ -1435,22 +1431,15 @@ def run_atos_replay(args):
     result_target_file = os.path.join(args.results_path, 'targets')
     process.commands.copyfile(config_target_file, result_target_file)
 
+    if os.path.isfile(os.path.join(args.configuration_path, 'build.time')):
+        process.commands.copyfile(
+            os.path.join(args.configuration_path, 'build.time'),
+            os.path.join(args.results_path, 'build.time'))
+
     time_cmd = globals.DEFAULT_TIME_CMD
     if args.time_cmd: time_cmd = args.time_cmd
     size_cmd = globals.DEFAULT_SIZE_CMD
     if args.size_cmd: size_cmd = args.size_cmd
-
-    if not args.no_ref:
-        # reference build
-        status = invoque("atos-build", args)
-        if status != 0: return status
-
-        # reference run
-        status = invoque("atos-run", args,
-                         configuration_path=args.results_path, record=True,
-                         command=process.cmdline2list(args.run_script),
-                         size_cmd=size_cmd, time_cmd=time_cmd)
-        if status != 0: return status
 
     # get frontier results
     results_db = atos_lib.atos_db.db(args.configuration_path)
@@ -1468,17 +1457,38 @@ def run_atos_replay(args):
         results_client = atos_lib.atos_client_results(results_db)
         results = results_client.get_results(only_frontier=True, objects=True)
 
+    replay_progress = progress.exploration_progress(
+        descr="replay",
+        maxval=len(results) + (0 if args.no_ref else 1),
+        config_path=args.results_path)
+
+    if not args.no_ref:
+        # reference build
+        status = invoque("atos-build", args)
+        if status != 0: return status
+
+        # reference run
+        status = invoque("atos-run", args,
+                         configuration_path=args.results_path, record=True,
+                         command=process.cmdline2list(args.run_script),
+                         size_cmd=size_cmd, time_cmd=time_cmd)
+        if status != 0: return status
+        replay_progress.update()
+
     for result in results:
         result_conf = getattr(result, 'conf', None)
         result_uconf = getattr(result, 'uconf', None)
         status = invoque(
             "atos-build", args, options=result_conf, uopts=result_uconf)
-        if status != 0: continue
+        if status == 0:
+            invoque("atos-run", args, configuration_path=args.results_path,
+                    record=True, options=result_conf, uopts=result_uconf,
+                    command=process.cmdline2list(args.run_script),
+                    size_cmd=size_cmd, time_cmd=time_cmd)
+        replay_progress.update()
 
-        invoque("atos-run", args, configuration_path=args.results_path,
-                record=True, options=result_conf, uopts=result_uconf,
-                command=process.cmdline2list(args.run_script),
-                size_cmd=size_cmd, time_cmd=time_cmd)
+    replay_progress.end()
+
     return 0
 
 def run_atos_config(args):

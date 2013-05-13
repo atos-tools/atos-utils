@@ -82,7 +82,7 @@ def cfg_result(cfg):
 #        configuration_path='atos-configurations', seed='0')
 #
 
-gen = generators.gen_staged()
+gen = generators.gen_staged(configuration_path='atos-configurations')
 cfg = generated_configs(gen)
 # no optim_levels: ref config only
 assert len(cfg) == 1
@@ -104,7 +104,8 @@ with open('atos-configurations/flags.optim.cfg', 'w') as flagsf:
     print >>flagsf, '-5555|-6666'
 
 gen = generators.gen_staged(
-    optim_levels='-O2,-O3', optim_variants='base', nbiters=50)
+    optim_levels='-O2,-O3', optim_variants='base', nbiters=50,
+    configuration_path='atos-configurations')
 cfg = generated_configs(gen, cfg_to_res=cfg_result)
 # 2 base configs (O2, O3)
 # + (3 * flags_file) * (1 tradeoff variant) * 50
@@ -122,7 +123,8 @@ assert query_configs(cfg, flags='-O2 -1111 -3333 -5555')
 assert query_configs(cfg, flags='-O2 -1111 -3333 -6666')
 
 gen = generators.gen_staged(
-    optim_levels='-O2,-O3', optim_variants='base,fdo', nbiters=50)
+    optim_levels='-O2,-O3', optim_variants='base,fdo', nbiters=50,
+    configuration_path='atos-configurations')
 cfg = generated_configs(gen, cfg_to_res=cfg_result)
 # (O2, O3) * 2 (base, fdo)
 # + 50 * inline * 2 (base, fdo)

@@ -260,7 +260,8 @@ class gen_config(config_generator):
     """
     Generates a single configuration.
     """
-    def __init__(self, **config_kwargs):
+    def __init__(self, configuration_path=None, **config_kwargs):
+        self.configuration_path = configuration_path
         self.config_ = config(**config_kwargs)
 
     def estimate_exploration_size(self):
@@ -274,9 +275,12 @@ class gen_progress(config_generator):
     """
     Shows generator progress.
     """
-    def __init__(self, parent=None, descr='config', **ignored_kwargs):
+    def __init__(self, parent=None, descr='config',
+                 configuration_path=None, **ignored_kwargs):
         assert parent
         self.parent_ = parent
+        self.configuration_path = (
+            configuration_path or parent and parent.configuration_path)
         self.descr = descr
 
     def estimate_exploration_size(self):
@@ -285,7 +289,8 @@ class gen_progress(config_generator):
     def generate(self):
         maxiter = self.parent_.estimate_exploration_size()
         self.progress_ = progress.exploration_progress(
-            descr=self.descr, maxval=maxiter, visible=maxiter)
+            descr=self.descr, maxval=maxiter, visible=maxiter,
+            config_path=self.configuration_path)
         for ic in itertools.count(1):
             try:
                 maxiter = self.parent_.estimate_exploration_size()
@@ -299,13 +304,13 @@ class gen_record_flags(config_generator):
     """
     Record yield flags for treadeoffs selection.
     """
-    def __init__(
-        self, parent=None, gen_cookie=None,
-        configuration_path=None, **ignored_kwargs):
+    def __init__(self, parent=None, gen_cookie=None,
+                 configuration_path=None, **ignored_kwargs):
+        assert parent
         self.parent_ = parent
-        self.configuration_path_ = configuration_path
+        self.configuration_path = (
+            configuration_path or parent and parent.configuration_path)
         self.gen_cookie = self.cookie(gen_cookie)
-        assert parent and configuration_path
 
     def estimate_exploration_size(self):
         return self.parent_.estimate_exploration_size()
@@ -323,7 +328,7 @@ class gen_record_flags(config_generator):
 
     def tradeoff_config(self, tradeoff):
         tradeoff_results = get_run_tradeoffs(
-            [tradeoff], [self.gen_cookie], self.configuration_path_)
+            [tradeoff], [self.gen_cookie], self.configuration_path)
         tradeoff_cookies = sum(map(
                 lambda x: x.cookies.split(','), tradeoff_results), [])
         tradeoff_config = filter(
@@ -337,11 +342,13 @@ class gen_maxiters(config_generator):
     Limits the generator to a fixed number of iterations.
     """
     def __init__(self, parent=None, maxiters=None,
-                 **ignored_kwargs):
-        self.maxiters_ = maxiters
-        self.parent_ = parent or gen_config()
+                 configuration_path=None, **ignored_kwargs):
+        self.parent_ = parent or gen_config(configuration_path)
         assert(isinstance(self.parent_, config_generator) or isinstance(
                 self.parent_, types.GeneratorType))
+        self.configuration_path = (
+            configuration_path or parent and parent.configuration_path)
+        self.maxiters_ = maxiters
 
     def estimate_exploration_size(self):
         size = self.parent_.estimate_exploration_size()
@@ -366,12 +373,14 @@ class gen_base(config_generator):
     optim_levels given in the constructor.
     """
     def __init__(self, parent=None, optim_levels=None,
-                 **ignored_kwargs):
-        self.optim_levels_ = (
-            optim_levels and optim_levels.split(',') or [])
-        self.parent_ = parent or gen_config()
+                 configuration_path=None, **ignored_kwargs):
+        self.parent_ = parent or gen_config(configuration_path)
         assert(isinstance(self.parent_, config_generator) or isinstance(
                 self.parent_, types.GeneratorType))
+        self.configuration_path = (
+            configuration_path or parent and parent.configuration_path)
+        self.optim_levels_ = (
+            optim_levels and optim_levels.split(',') or [])
 
     def estimate_exploration_size(self):
         size = self.parent_.estimate_exploration_size()
@@ -394,12 +403,14 @@ class gen_variants(config_generator):
     optim_variants and given in the constructor.
     """
     def __init__(self, parent=None, optim_variants=None,
-                 **ignored_kwargs):
-        self.optim_variants_ = (
-            optim_variants and optim_variants.split(',') or [])
-        self.parent_ = parent or gen_config()
+                 configuration_path=None, **ignored_kwargs):
+        self.parent_ = parent or gen_config(configuration_path)
         assert(isinstance(self.parent_, config_generator) or isinstance(
                 self.parent_, types.GeneratorType))
+        self.configuration_path = (
+            configuration_path or parent and parent.configuration_path)
+        self.optim_variants_ = (
+            optim_variants and optim_variants.split(',') or [])
 
     def estimate_exploration_size(self):
         size = self.parent_.estimate_exploration_size()
@@ -422,12 +433,14 @@ class gen_flags_file(config_generator):
     Flags are appended to the child generator flags.
     """
     def __init__(self, parent=None, flags_file=None,
-                 **ignored_kwargs):
-        assert flags_file and os.path.isfile(flags_file)
-        self.flags_file_ = flags_file
-        self.parent_ = parent or gen_config()
+                 configuration_path=None, **ignored_kwargs):
+        self.parent_ = parent or gen_config(configuration_path)
         assert(isinstance(self.parent_, config_generator) or isinstance(
                 self.parent_, types.GeneratorType))
+        self.configuration_path = (
+            configuration_path or parent and parent.configuration_path)
+        assert flags_file and os.path.isfile(flags_file)
+        self.flags_file_ = flags_file
         self.flags_list_ = []
         with open(self.flags_file_) as f:
             for line in f:
@@ -455,15 +468,17 @@ class gen_rnd_uniform_deps(config_generator):
     Generate random meaningful combination of flags using dependencies.
     """
     def __init__(self, parent=None, flags_files=None, optim_levels=None,
-                 **ignored_kwargs):
+                 configuration_path=None, **ignored_kwargs):
+        self.parent_ = parent or gen_config(configuration_path)
+        assert(isinstance(self.parent_, config_generator) or isinstance(
+                self.parent_, types.GeneratorType))
+        self.configuration_path = (
+            configuration_path or parent and parent.configuration_path)
         assert flags_files
         self.flags_files_ = flags_files.split(',')
         assert all(map(os.path.isfile, self.flags_files_))
         self.optim_levels_ = optim_flag_list.optim_flag(
             fchoice=(optim_levels or '').split(','))
-        self.parent_ = parent or gen_config()
-        assert(isinstance(self.parent_, config_generator) or isinstance(
-                self.parent_, types.GeneratorType))
         self.flag_list_ = optim_flag_list(*self.flags_files_)
 
     def estimate_exploration_size(self):
@@ -503,13 +518,13 @@ class gen_chained_exploration(config_generator):
     """
 
     def __init__(
-        self, generators_args=None, expl_cookie=None,
-        stage_cookie=None, tradeoffs=None, nbiters=None, nbpoints=None,
-        optim_variants=None, configuration_path=None, **kwargs):
+        self, generators_args=None, expl_cookie=None, stage_cookie=None,
+        tradeoffs=None, nbiters=None, nbpoints=None, optim_variants=None,
+        configuration_path=None, **kwargs):
+        self.configuration_path = configuration_path
         self.expl_cookie = self.cookie(expl_cookie)
         self.tradeoffs = tradeoffs or [5, 1, 0.2]
         self.nbiters = int(nbiters) if nbiters != None else 100
-        self.configuration_path = configuration_path
         self.nbpoints = nbpoints and int(nbpoints) or 1
         # tradeoffs configs (flags, variants) for first exploration
         if stage_cookie:
@@ -560,7 +575,8 @@ class gen_chained_exploration(config_generator):
             optim_variants = self.initial_optim_variants
             for (generator, generator_args) in self.generators_args:
                 gen_base_ = gen_variants(
-                    parent=gen_config(), optim_variants=optim_variants)
+                    parent=gen_config(self.configuration_path),
+                    optim_variants=optim_variants)
                 generator_ = generator(
                     parent=gen_base_, **generator_args)
                 generator_ = gen_maxiters(
@@ -579,7 +595,8 @@ class gen_chained_exploration(config_generator):
         debug('gen_chained_exploration')
         stage_cookies, cookie_to_cfg = [], {}
         stage_progress = progress.exploration_progress(
-            descr='stage', maxval=len(self.generators_args))
+            descr='stage', maxval=len(self.generators_args),
+            config_path=self.configuration_path)
         for (nstage, (generator, generator_args)) \
                 in enumerate(self.generators_args):
             debug('gen_chained_exploration: generator ' + str(
@@ -592,12 +609,15 @@ class gen_chained_exploration(config_generator):
                         (flags, variant)))
                 debug('gen_chained_exploration: args ' + str(generator_args))
                 gen_base_ = gen_variants(
-                    parent=gen_config(flags=flags), optim_variants=variant)
+                    parent=gen_config(self.configuration_path, flags=flags),
+                    optim_variants=variant)
                 generator_ = generator(
                     parent=gen_base_, **generator_args)
                 generator_ = gen_maxiters(
                     parent=generator_, maxiters=self.nbiters)
-                generator_ = gen_progress(generator_)
+                generator_ = gen_progress(
+                    parent=generator_,
+                    configuration_path=self.configuration_path)
                 for cfg in generator_:
                     run_cookie = self.cookie(
                         stage_cookies[-1], cfg.flags, cfg.variant,
@@ -632,11 +652,13 @@ class gen_file_by_file_cfg(config_generator):
     """
 
     def __init__(
-        self, imgpath, csv_dir, configuration_path=None,
+        self, imgpath, csv_dir,
         hot_th="70", cold_opts="-Os", base_flags=None,
         expl_cookie=None, tradeoffs=None, per_file_nbiters=None,
         flags_file=None, optim_variants=None, base_variant=None,
-        **kwargs):
+        configuration_path=None, **kwargs):
+        assert imgpath
+        assert csv_dir
         self.imgpath = imgpath
         self.csv_dir = os.path.abspath(csv_dir)
         self.configuration_path = configuration_path
@@ -677,7 +699,8 @@ class gen_file_by_file_cfg(config_generator):
         if getattr(self, 'generator_size', None) is None:
             if self.flags_file:
                 generator = gen_flags_file(
-                    flags_file=self.flags_file)
+                    flags_file=self.flags_file,
+                    configuration_path=self.configuration_path)
             else:
                 generator = gen_staged(
                     nbiters=self.per_file_nbiters,
@@ -737,7 +760,8 @@ class gen_file_by_file_cfg(config_generator):
 
         variant_progress = progress.exploration_progress(
             descr='variant', maxval=len(self.optim_variants),
-            visible=(len(self.optim_variants) > 1))
+            visible=(len(self.optim_variants) > 1),
+            config_path=self.configuration_path)
         # update estimated exploration size
         for variant_num in range(len(self.optim_variants)):
             for x in self.generator_size[variant_num].keys():
@@ -751,7 +775,8 @@ class gen_file_by_file_cfg(config_generator):
             obj_to_cookie, cookie_to_flags = {}, {}
 
             obj_progress = progress.exploration_progress(
-                descr='file', maxval=len(self.generator_size[variant_num]))
+                descr='file', maxval=len(self.generator_size[variant_num]),
+                config_path=self.configuration_path)
 
             while True:  # loop on hot object files
 
@@ -785,7 +810,9 @@ class gen_file_by_file_cfg(config_generator):
                 # create the generator that will be used for curr_hot_obj expl
                 if self.flags_file:  # if requested, explore on flags list
                     debug('gen_file_by_file: file: %s ' % (self.flags_file))
-                    generator = gen_flags_file(flags_file=self.flags_file)
+                    generator = gen_flags_file(
+                        flags_file=self.flags_file,
+                        configuration_path=self.configuration_path)
                 else:  # else, perform a classic staged exploration
                     debug('gen_file_by_file: staged_exploration')
                     generator = gen_staged(
@@ -861,11 +888,13 @@ class gen_function_by_function_cfg(config_generator):
     """
 
     def __init__(
-        self, imgpath, csv_dir, configuration_path=None, acf_plugin_path=None,
+        self, imgpath, csv_dir, acf_plugin_path=None,
         hot_th="70", cold_opts="-Os noinline cold", base_flags=None,
         expl_cookie=None, tradeoffs=None, per_func_nbiters=None,
         flags_file=None, optim_variants=None, base_variant=None,
-        **kwargs):
+        configuration_path=None, **kwargs):
+        assert imgpath
+        assert csv_dir
         self.imgpath = imgpath
         self.csv_dir = os.path.abspath(csv_dir)
         self.configuration_path = configuration_path
@@ -956,7 +985,8 @@ class gen_function_by_function_cfg(config_generator):
         if getattr(self, 'generator_size', None) is None:
             if self.flags_file:
                 generator = gen_flags_file(
-                    flags_file=self.flags_file)
+                    flags_file=self.flags_file,
+                    configuration_path=self.configuration_path)
             else:
                 generator = gen_staged(
                     nbiters=self.per_func_nbiters,
@@ -1008,7 +1038,8 @@ class gen_function_by_function_cfg(config_generator):
 
         variant_progress = progress.exploration_progress(
             descr='variant', maxval=len(self.optim_variants),
-            visible=(len(self.optim_variants) > 1))
+            visible=(len(self.optim_variants) > 1),
+            config_path=self.configuration_path)
         # update estimated exploration size
         for variant_num in range(len(self.optim_variants)):
             for x in self.generator_size[variant_num].keys():
@@ -1022,7 +1053,8 @@ class gen_function_by_function_cfg(config_generator):
             func_to_cookie, cookie_to_flags = {}, {}
 
             obj_progress = progress.exploration_progress(
-                descr='func', maxval=len(self.generator_size[variant_num]))
+                descr='func', maxval=len(self.generator_size[variant_num]),
+                config_path=self.configuration_path)
 
             while True:  # loop on hot functions
 
@@ -1057,7 +1089,9 @@ class gen_function_by_function_cfg(config_generator):
                 if self.flags_file:  # if requested, explore on flag list
                     debug('gen_function_by_function: file: %s ' % (
                             self.flags_file))
-                    generator = gen_flags_file(flags_file=self.flags_file)
+                    generator = gen_flags_file(
+                        flags_file=self.flags_file,
+                        configuration_path=self.configuration_path)
                 else:  # else, perform a classic staged exploration
                     debug('gen_function_by_function: staged_exploration')
                     generator = gen_staged(
@@ -1141,12 +1175,12 @@ class gen_flag_values(config_generator):
         self, variant_id=None, config_flags=None, config_variant=None,
         nbvalues=None, try_removing=None, tradeoffs=None, keys=None,
         expl_cookie=None, configuration_path=None, **kwargs):
+        self.configuration_path = configuration_path
         self.nbvalues = int(nbvalues or 10)
         self.try_removing = int(try_removing or 0)
         self.tradeoffs = tradeoffs or [5, 1, 0.2]
         self.keys = keys and keys.split(',')
         self.expl_cookie = self.cookie(expl_cookie)
-        self.configuration_path = configuration_path
         self.kwargs = kwargs
         base_flags, base_variant = variant_id and get_variant_config(
             variant_id, configuration_path) or (config_flags, config_variant)
@@ -1336,42 +1370,58 @@ class gen_flag_values(config_generator):
 def gen_explore_inline(
     optim_levels=None, optim_variants=None, nbiters=None, flags_file=None,
     configuration_path=None, **kwargs):
+    assert configuration_path
     flags_file = flags_file or os.path.join(
         configuration_path, "flags.inline.cfg")
     return gen_progress(
-        parent=gen_maxiters(
-            gen_variants(gen_rnd_uniform_deps(
+        gen_maxiters(
+            gen_variants(
+                gen_rnd_uniform_deps(
                     flags_files=flags_file, optim_levels=optim_levels,
-                    **kwargs), optim_variants=optim_variants),
-            nbiters), descr='expl-inline')
+                    configuration_path=configuration_path,
+                    **kwargs),
+                optim_variants=optim_variants),
+            nbiters),
+        descr='expl-inline')
 
 def gen_explore_loop(
     optim_levels=None, optim_variants=None, nbiters=None, flags_file=None,
     configuration_path=None, **kwargs):
+    assert configuration_path
     flags_file = flags_file or os.path.join(
         configuration_path, "flags.loop.cfg")
     return gen_progress(
-        parent=gen_maxiters(
-            gen_variants(gen_rnd_uniform_deps(
+        gen_maxiters(
+            gen_variants(
+                gen_rnd_uniform_deps(
                     flags_files=flags_file, optim_levels=optim_levels,
-                    **kwargs), optim_variants=optim_variants),
-            nbiters), descr='expl-loop')
+                    configuration_path=configuration_path,
+                    **kwargs),
+                optim_variants=optim_variants),
+            nbiters),
+        descr='expl-loop')
 
 def gen_explore_optim(
     optim_levels=None, optim_variants=None, nbiters=None, flags_file=None,
     configuration_path=None, **kwargs):
+    assert configuration_path
     flags_file = flags_file or os.path.join(
         configuration_path, "flags.optim.cfg")
     return gen_progress(
-        parent=gen_maxiters(
-            gen_variants(gen_rnd_uniform_deps(
+        gen_maxiters(
+            gen_variants(
+                gen_rnd_uniform_deps(
                     flags_files=flags_file, optim_levels=optim_levels,
-                    **kwargs), optim_variants=optim_variants),
-            nbiters), descr='expl-optim')
+                    configuration_path=configuration_path,
+                    **kwargs),
+                optim_variants=optim_variants),
+            nbiters),
+        descr='expl-optim')
 
 def gen_explore_random(
     optim_levels=None, optim_variants=None, nbiters=None,
     configuration_path=None, **kwargs):
+    assert configuration_path
     file_flags_lists = [
         'flags.inline.cfg', 'flags.loop.cfg', 'flags.optim.cfg']
     file_flags_lists = filter(os.path.isfile, map(
@@ -1379,23 +1429,33 @@ def gen_explore_random(
             file_flags_lists))
     file_flags_lists = ','.join(file_flags_lists)
     return gen_progress(
-        parent=gen_maxiters(
-            gen_variants(gen_rnd_uniform_deps(
+        gen_maxiters(
+            gen_variants(
+                gen_rnd_uniform_deps(
                     flags_files=file_flags_lists, optim_levels=optim_levels,
-                    **kwargs), optim_variants=optim_variants),
-            nbiters), descr='expl-random')
+                    configuration_path=configuration_path,
+                    **kwargs),
+                optim_variants=optim_variants),
+            nbiters),
+        descr='expl-random')
 
 def gen_explore(
-    optim_levels=None, optim_variants=None, **kwargs):
+    optim_levels=None, optim_variants=None,
+    configuration_path=None, **kwargs):
+    assert configuration_path
     return gen_progress(
-        parent=gen_variants(gen_base(optim_levels=optim_levels),
-                            optim_variants=optim_variants),
+        gen_variants(
+            gen_base(optim_levels=optim_levels,
+                     configuration_path=configuration_path),
+            optim_variants=optim_variants),
         descr='expl-base')
 
-def gen_staged(configuration_path='atos-configurations', seed='0', **kwargs):
+def gen_staged(configuration_path=None, seed='0', **kwargs):
     """
-    perform staged exploration
+    Perform staged exploration.
     """
+    assert configuration_path
+
     debug('gen_staged')
 
     random.seed(int(seed))
@@ -1407,24 +1467,34 @@ def gen_staged(configuration_path='atos-configurations', seed='0', **kwargs):
         (gen_explore_optim, {})]
 
     chained_generator = gen_progress(
-        parent=gen_chained_exploration(
+        gen_chained_exploration(
             generators_args=generators,
             configuration_path=configuration_path,
-            **kwargs), descr='expl-staged')
+            **kwargs),
+        descr='expl-staged')
 
     return chained_generator
 
-def gen_chained(**kwargs):
+def gen_chained(configuration_path=None, **kwargs):
+    assert configuration_path
     return gen_progress(
-        parent=gen_chained_exploration(**kwargs), descr='expl-chained')
+        gen_chained_exploration(configuration_path=configuration_path,
+                                **kwargs),
+        descr='expl-chained')
 
-def gen_file_by_file(**kwargs):
+def gen_file_by_file(configuration_path=None, **kwargs):
+    assert configuration_path
     return gen_progress(
-        parent=gen_file_by_file_cfg(**kwargs), descr='expl-file')
+        gen_file_by_file_cfg(configuration_path=configuration_path,
+                             **kwargs),
+        descr='expl-file')
 
-def gen_function_by_function(**kwargs):
+def gen_function_by_function(configuration_path=None, **kwargs):
+    assert configuration_path
     return gen_progress(
-        parent=gen_function_by_function_cfg(**kwargs), descr='expl-func')
+        gen_function_by_function_cfg(configuration_path=configuration_path,
+                                     **kwargs),
+        descr='expl-func')
 
 
 # ####################################################################
@@ -1432,6 +1502,7 @@ def gen_function_by_function(**kwargs):
 
 def get_run_tradeoffs(
     tradeoffs, cookies=None, configuration_path=None, nb_points=1):
+    assert configuration_path
     results = get_run_results(
         matches=cookies, configuration_path=configuration_path)
     results = map(

@@ -919,6 +919,9 @@ class parsers:
         sub = subs.add_parser("experiment", help="Manage experiments")
         parsers.atos_web_experiment(sub)
 
+        sub = subs.add_parser("cookie", help="Manage cookies")
+        parsers.atos_web_cookie(sub)
+
         sub = subs.add_parser("target", help="Manage targets")
         parsers.atos_web_target(sub)
 
@@ -936,7 +939,6 @@ class parsers:
                 description="Manage web projects")
 
         args.atos_web.operation(parser)
-
         return parser
 
     @staticmethod
@@ -949,6 +951,19 @@ class parsers:
 
         args.atos_web.operation(parser)
         args.atos_web.project(parser)
+        return parser
+
+    @staticmethod
+    def atos_web_cookie(parser=None):
+        """ atos web cookie arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(
+                prog="atos-web-cookie",
+                description="Manage web cookies")
+
+        args.atos_web.project(parser)
+        args.atos_web.experiment(parser)
+        args.configuration_path(parser)
         return parser
 
     @staticmethod

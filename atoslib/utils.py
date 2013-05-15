@@ -1774,6 +1774,50 @@ def run_atos_web(args):
             error("atos-web-project: unknow operation '%s'"
                   % (args.operation[0]))
 
+    elif args.subcmd_web == 'cookie':
+        # Open the cookie database
+        try:
+            fd = open(os.path.join(args.configuration_path, 'cookies.db'))
+        except IOError as e:
+            error("Unable to open '%s': '%s'" %
+                        (os.path.join(args.configuration_path, 'cookies.db'),
+                         e.strerror))
+            return
+
+        # Get the cookie list for hash <=> id mapping
+        r = requests.get(
+                "http://%s/api/1.0/projects/%d/experiments/%d/cookies" %
+                            (args.server, args.project, args.experiment))
+        if r.status_code != 200:
+            error('Project not found')
+            return
+
+        cookies_mapping = dict((c['hash'], c['id']) for c in r.json())
+
+        # Load the cookie json file
+        import json
+        cookies_db = json.load(fd)
+        for cookie in cookies_db:
+            message("Looking at '%s'" % (cookie))
+            if not 'succs' in cookies_db[cookie]:
+                message(' -> No child')
+                continue
+            children = cookies_db[cookie]['succs']
+            message(' -> Pushing children:\n   * ' + '\n   * '.join(children))
+
+            r = requests.put(
+        "http://%s/api/1.0/projects/%d/experiments/%d/cookies/%d/children" %
+                        (args.server, args.project, args.experiment,
+                         cookies_mapping[cookie]),
+                    {'children': ','.join(children)})
+            if not (r.status_code == 200 and r.json()['status'] == 'success'):
+                error("Error while pushing: %s" % (cookie))
+                if r.status_code == 200:
+                    error("=> %s" % (r.json()['message']))
+                else:
+                    error('=> Cookie not found')
+        return
+
     elif args.subcmd_web == "experiment":
         if args.operation[0] == 'create':
             op_create("/api/1.0/projects/%s/experiments"

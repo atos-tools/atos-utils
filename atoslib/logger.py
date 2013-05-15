@@ -51,16 +51,25 @@ class _ConsoleLogFormatter():
 class _ModuleLogFilter():
     """
     Filter for log messages.
-
-    Filter messages which come from a given module.
+    Append a module/levelno filter for each module/levelno to be included.
+    If filter_out is true, the module/levelno will be excluded unless
+    included again by another filter.
     """
-    def __init__(self, module=None):
-        self.module = module
+    def __init__(self):
+        self.filters = []
+
+    def append(self, module=None, level=None, filter_out=False):
+        self.filters.append(
+            {'module': module, 'level': level, 'filter_out': filter_out})
+        return self
 
     def filter(self, record):
-        filtered_out = (
-            self.module and self.module != record.module)
-        return not filtered_out
+        included = False
+        for flt in self.filters:
+            if flt['module'] == None or flt['module'] == record.module:
+                if flt['level'] == None or flt['level'] <= record.levelno:
+                    included = not flt['filter_out']
+        return included
 
 _debug = False
 _quiet = False
@@ -90,7 +99,9 @@ def setup(kwargs):
     console_log_handler = logging.StreamHandler()
     if dryrun:
         console_log_handler.setFormatter(logging.Formatter())
-        console_log_handler.addFilter(_ModuleLogFilter('process'))
+        console_log_handler.addFilter(
+            _ModuleLogFilter().append(module=None, level=logging.WARNING).
+            append(module='process', level=logging.DEBUG))
     else:
         console_log_handler.setFormatter(
             _ConsoleLogFormatter(console_log_handler, log_fmt, log_datefmt))

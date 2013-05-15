@@ -872,7 +872,7 @@ class json_config():
         test_c = os.path.join(tmpdir, "test.c")
         test_o = os.path.join(tmpdir, "test.o")
         with open(test_c, "w") as testf:
-            print >>testf, "#include <stdio.h>"
+            print >>testf, "int printf(const char *fmt, ...);"
             print >>testf, "int main(void)"
             print >>testf, "{"
             print >>testf, "  int i;"

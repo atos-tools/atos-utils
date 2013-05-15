@@ -19,8 +19,11 @@ echo " pid=$server_pid"
 
 # Wait for the server to find the right port number
 do_loop=true
-while [ $do_loop != false ]
+index=0
+max_loop=5
+while [ $do_loop != false -a $index != $max_loop ]
 do
+  index=$((index + 1))
   if [ -f server.conf ]
   then
     line=$(egrep "port=[0-9]+" server.conf 2>/dev/null || true)
@@ -36,6 +39,8 @@ do
     sleep 1
   fi
 done
+
+[ $index = $max_loop ] && exit 1
 
 # Doing the tests now
 echo "================="

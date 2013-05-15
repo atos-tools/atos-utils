@@ -13,7 +13,7 @@ test_cleanup() {
 }
 
 echo "spawn the server process"
-python $ROOT/tests/server-test096.py > test096-server.log 2>&1 &
+python $SRCDIR/tests/server-test096.py > test096-server.log 2>&1 &
 server_pid=$!
 echo " pid=$server_pid"
 

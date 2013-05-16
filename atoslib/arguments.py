@@ -233,6 +233,7 @@ class parsers:
         args.useprofile(group)
         args.genprofile(group)
         args.legacy(parser)
+        args.blacklist(parser)
         args.force(parser)
         args.debug(parser)
         args.log_file(parser)
@@ -470,6 +471,7 @@ class parsers:
         args.debug(parser)
         args.log_file(parser)
         args.legacy(parser)
+        args.blacklist(parser)
         args.force(parser)
         args.jobs(parser)
         args.quiet(parser)
@@ -660,6 +662,7 @@ class parsers:
         args.debug(parser)
         args.log_file(parser)
         args.legacy(parser)
+        args.blacklist(parser)
         args.force(parser, ("--force",))
         args.jobs(parser)
         args.quiet(parser)
@@ -1045,6 +1048,13 @@ class args:
             *args,
              action="store_true",
              help="use legacy scheme for audit and exploration")
+
+    @staticmethod
+    def blacklist(parser, args=("--blacklist",)):
+        parser.add_argument(
+            *args,
+             action="store_true",
+             help="initialize the objects blacklist automatically")
 
     @staticmethod
     def force(parser, args=("-f", "--force")):

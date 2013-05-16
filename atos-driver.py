@@ -209,13 +209,28 @@ def audit_compile_command(opts, args):
 
 def invoque_compile_command(opts, args):
 
+    cwd = os.path.abspath(os.getcwd())
+
+    stg, recipe_node = None, None
+    if not opts.legacy and opts.recipe_digest:
+        stgdir = opts.audit_file
+        if stgdir == None:
+            stgdir = os.path.join(opts.configuration_path, "build.stg")
+        stg = RecipeStorage(stgdir)
+        recipe_node = RecipeNode(stg, opts.recipe_digest, cwd)
+
+    if recipe_node and stg.blacklist_contains(opts.recipe_digest):
+        # If blacklisted, do not run the command at all
+        logger.debug("skip compilation for blacklisted command: %s" %
+                     opts.recipe_digest)
+        recipe_node.get_output_files()
+        return 0
+
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
         '--atos-fctmap', dest='fctmap', action='store', default=None)
     parser.add_argument(
         '--atos-optfile', dest='optfile', action='store', default=None)
-
-    cwd = os.path.abspath(os.getcwd())
 
     interpreter = set_interpreter(opts, args)
 
@@ -282,16 +297,17 @@ def invoque_compile_command(opts, args):
     if (has_cc or has_final_link) and opts.optfile:
         args.extend(get_cc_command_additional_flags(opts, args))
 
-    if not opts.legacy and opts.recipe_digest:
-        # Read recipe node and prepare input files.
-        stgdir = opts.audit_file
-        if stgdir == None:
-            stgdir = os.path.join(opts.configuration_path, "build.stg")
-        stg = RecipeStorage(stgdir)
-        recipe_node = RecipeNode(stg, opts.recipe_digest, cwd)
+    if recipe_node:
         recipe_node.fetch_input_files()
 
     status = process.system(args, print_output=True)
+
+    if recipe_node and status != 0 and opts.update_blacklist:
+        logger.warning("failed to recompile, blacklisting %s" %
+                       opts.recipe_digest)
+        stg.blacklist_append(opts.recipe_digest)
+        recipe_node.get_output_files()
+        return 0
 
     if (has_cc or has_final_link) and opts.fctmap:
         update_cc_function_map(opts, args)
@@ -320,6 +336,8 @@ if __name__ == "__main__":
                         action='store_true', default=None)
     parser.add_argument('--atos-recipe', dest='recipe_digest',
                         action='store', default=None)
+    parser.add_argument('--atos-update-blacklist', dest='update_blacklist',
+                        action='store_true', default=None)
 
     (opts, args) = parser.parse_known_args()
 

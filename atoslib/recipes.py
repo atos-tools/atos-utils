@@ -111,6 +111,33 @@ class RecipeStorage(ObjStorage):
             f.write("%s\n" % rnod_digest)
             f.flush()
 
+    def blacklist_path(self):
+        return self.get_stg_path_("blacklist")
+
+    def blacklist_init(self):
+        path = self.blacklist_path()
+        commands.mkdir(os.path.dirname(path))
+        commands.unlink(path)
+        commands.touch(path)
+
+    def blacklist_append(self, rnod_digest):
+        with open(self.blacklist_path(), "a",
+                  len(rnod_digest) + 1) as f:
+            f.write("%s\n" % rnod_digest)
+            f.flush()
+
+    def blacklist_recipes(self):
+        if not os.path.exists(self.blacklist_path()):
+            return []
+        with open(self.blacklist_path()) as f:
+            blacklist = filter(
+                lambda x: x != "" and not x.startswith("#"),
+                map(lambda x: x.strip(), f.readlines()))
+        return blacklist
+
+    def blacklist_contains(self, rnod_digest):
+        return rnod_digest in self.blacklist_recipes()
+
 class RecipeManager():
 
     def __init__(self, storage):
@@ -145,6 +172,19 @@ class RecipeNode():
                 commands.link_or_copyfile(
                     self.stg.get_blob_path(path_ref['digest']),
                     path)
+
+    def get_output_files(self):
+        """
+        Get the output files of the recipe into the expected ouput paths.
+        Get from the object storage, whether the file is present or not.
+        """
+        rnode = self.stg.load_recipe_node(self.recipe)
+        for path_ref in [self.stg.load_path_ref(x) for x in
+                         self.stg.load_path_ref_list(rnode['outputs'])]:
+            path = path_ref['path']
+            commands.link_or_copyfile(
+                self.stg.get_blob_path(path_ref['digest']),
+                path)
 
 class RecipeGraph():
     def __init__(self, storage, recipes, expected_targets="all",

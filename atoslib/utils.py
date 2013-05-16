@@ -272,6 +272,11 @@ def run_atos_audit(args):
 
     status = process.system(command, print_output=True)
 
+    if status != 0:
+        error("build command failed (exit status %d)."
+              " Check the build command and retry (%s)." %
+              (status, process.list2cmdline(args.command)))
+
     return status
 
 def run_atos_build(args):
@@ -311,6 +316,8 @@ def run_atos_build(args):
     if legacy: atos_driver_options += ["--atos-legacy"]
     if not args.command and not opt_rebuild:
         atos_driver_options += ["--atos-recipe=$@"]
+        if args.blacklist:
+            atos_driver_options += ["--atos-update-blacklist"]
     if args.debug: atos_driver_options += ["--atos-debug"]
 
     if args.gopts != None or args.uopts != None:
@@ -393,6 +400,10 @@ def run_atos_build(args):
             error("optimized build file missing: %s" % build_mk)
             error("atos-deps was not run or configuration path mismatch")
             return 1
+        if args.blacklist:
+            stg = RecipeStorage(
+                os.path.join(args.configuration_path, "build.stg"))
+            stg.blacklist_init()
         command = ["make", "-f", build_mk, "-j", str(args.jobs),
                    "QUIET=",
                    "ATOS_DRIVER=" +
@@ -705,8 +716,18 @@ def run_atos_init(args):
     # Record the reference if necessary
     if (args.clean or args.build_script or args.run_script) and \
             not args.no_run:
-        status = invoque("atos-opt", args, record=True)
-        if status != 0: return status
+        status = invoque("atos-build", args, blacklist=True)
+        if status != 0:
+            error("unable to compile the reference build. "
+                  "Refer to the log file; %s/logs/build-%s.log." %
+                  (args.configuration_path, atos_lib.hashid("REF")))
+            return status
+        status = invoque("atos-run", args, record=True)
+        if status != 0:
+            error("run of reference build failed. "
+                  "Refer to the log file: %s/logs/run-%s.log." %
+                  (args.configuration_path, atos_lib.hashid("REF")))
+            return status
 
     return 0
 
@@ -1124,7 +1145,7 @@ def run_atos_raudit(args):
     """ ATOS raudit tool implementation. """
 
     if not args.command:
-        error('atos-raudit: missing run command')
+        error("missing run command.")
         return 1
 
     message("Auditing run...")
@@ -1140,6 +1161,11 @@ def run_atos_raudit(args):
             atos_lib.generate_script(get_res_sh, args.results_script)
 
     status = process.system(args.command, print_output=True)
+
+    if status != 0:
+        error("run command failed (exit status %d). "
+              " Check the run command and retry (%s)." %
+              (status, process.list2cmdline(args.command)))
 
     return status
 

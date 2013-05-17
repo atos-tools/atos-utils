@@ -82,6 +82,7 @@ def setup(kwargs):
     _debug = kwargs.get('debug', False) or os.getenv("ATOS_DEBUG")
     dryrun = kwargs.get('dryrun', False) or os.getenv("ATOS_DRYRUN")
     log_file = kwargs.get('log_file', None) or os.getenv("ATOS_DEBUG_FILE")
+    debug_fd = kwargs.get('debug_fd', None)
     _quiet = kwargs.get('quiet', False)
 
     log_fmt = (
@@ -96,7 +97,12 @@ def setup(kwargs):
     if _debug: console_log_level = logging.DEBUG
     if _quiet: console_log_level = logging.ERROR
 
-    console_log_handler = logging.StreamHandler()
+    if debug_fd:
+        console_stream = os.fdopen(int(debug_fd), "a")
+    else:
+        console_stream = sys.stderr
+
+    console_log_handler = logging.StreamHandler(console_stream)
     if dryrun:
         console_log_handler.setFormatter(logging.Formatter())
         console_log_handler.addFilter(

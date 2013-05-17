@@ -262,6 +262,10 @@ def run_atos_audit(args):
             args.configuration_path)]
     if args.legacy: audit_flags += ["--atos-legacy"]
     if args.debug: audit_flags += ["--atos-debug"]
+    fd = os.dup(2)
+    audit_flags += ["--atos-debug-fd", "%d" % fd]
+    if args.log_file:
+        audit_flags += ["--atos-log-file", args.log_file]
 
     command = atos_lib.proot_command(
         PROOT_IGNORE_ELF_INTERPRETER=1,
@@ -319,6 +323,10 @@ def run_atos_build(args):
         if args.blacklist:
             atos_driver_options += ["--atos-update-blacklist"]
     if args.debug: atos_driver_options += ["--atos-debug"]
+    fd = os.dup(2)
+    atos_driver_options += ["--atos-debug-fd", "%d" % fd]
+    if args.log_file:
+        atos_driver_options += ["--atos-log-file", args.log_file]
 
     if args.gopts != None or args.uopts != None:
         pvariant = args.gopts if args.gopts != None else args.uopts
@@ -416,12 +424,15 @@ def run_atos_build(args):
                 error("build script missing: %s" % build_sh)
                 error("atos-build was not run or configuration path mismatch")
                 return 1
-        ccregexp = atos_lib.get_config_value(args.configuration_path,
-                                    'default_values.ccregexp')
-        ldregexp = atos_lib.get_config_value(args.configuration_path,
-                                    'default_values.ldregexp')
-        arregexp = atos_lib.get_config_value(args.configuration_path,
-                                    'default_values.arregexp')
+        ccregexp = (atos_lib.get_config_value(args.configuration_path,
+                                              'default_values.ccregexp') or
+                    globals.DEFAULT_CCREGEXP)
+        ldregexp = (atos_lib.get_config_value(args.configuration_path,
+                                              'default_values.ldregexp') or
+                    globals.DEFAULT_LDREGEXP)
+        arregexp = (atos_lib.get_config_value(args.configuration_path,
+                                              'default_values.arregexp') or
+                    globals.DEFAULT_ARREGEXP)
         binregexp = ("(%s)" % "|".join(
                 map(lambda x: "(%s)" % x,
                     filter(bool, [ccregexp, ldregexp, arregexp]))))

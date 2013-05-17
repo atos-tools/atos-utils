@@ -342,11 +342,17 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='atos-driver')
 
     parser.add_argument('--atos-debug', dest='debug',
-                      action='store_true', default=False,
-                      help='print debug information (default: False)')
+                        action='store_true', default=False,
+                        help='print debug information (default: False)')
+    parser.add_argument('--atos-log-file', dest='log_file',
+                        default=None,
+                        help='dup log to given file')
+    parser.add_argument('--atos-debug-fd', dest='debug_fd',
+                        default=None,
+                        help='print debug to specified fd (default: 2)')
     parser.add_argument('--atos-dryrun', dest='dryrun',
-                      action='store_true', default=False,
-                      help='only print commands (default: False)')
+                        action='store_true', default=False,
+                        help='only print commands (default: False)')
     parser.add_argument('--atos-version', action='version',
                         version='atos-driver version ' + VERSION)
     parser.add_argument('--atos-cfg', dest='configuration_path',

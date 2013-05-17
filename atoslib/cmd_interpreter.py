@@ -63,12 +63,15 @@ class CmdInterpreterFactory:
         """
         basename = os.path.basename(command['args'][0])
         if self.configuration_path_:
-            ccregexp = atos_lib.get_config_value(self.configuration_path_,
-                                                 'default_values.ccregexp')
-            ldregexp = atos_lib.get_config_value(self.configuration_path_,
-                                                 'default_values.ldregexp')
-            arregexp = atos_lib.get_config_value(self.configuration_path_,
-                                                 'default_values.arregexp')
+            ccregexp = (atos_lib.get_config_value(self.configuration_path_,
+                                                  'default_values.ccregexp') or
+                        globals.DEFAULT_CCREGEXP)
+            ldregexp = (atos_lib.get_config_value(self.configuration_path_,
+                                                  'default_values.ldregexp') or
+                        globals.DEFAULT_LDREGEXP)
+            arregexp = (atos_lib.get_config_value(self.configuration_path_,
+                                                  'default_values.arregexp') or
+                        globals.DEFAULT_ARREGEXP)
         else:
             ccregexp = globals.DEFAULT_CCREGEXP
             ldregexp = globals.DEFAULT_LDREGEXP

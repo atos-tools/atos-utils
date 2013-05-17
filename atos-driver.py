@@ -142,14 +142,17 @@ def audit_compile_command(opts, args):
         """
         This function prepare inputs and ensure that they are
         available for dependency computation from the given
-        input pairs (src_kind, abs_path) given.
+        input pairs (src_kind, path).
         This includes:
+        - making input paths absolute paths,
         - handling of pre-compiled headers,
-        - handling of missing inputs, removed from dependencies.
+        - handling of missing inputs, removed from dependencies,
+        - handling of non regular file ("/dev/null" for instance),
+        removed from dependencies.
         """
         actual_inputs = []
-        for (src_kind, abs_path) in input_pairs:
-            actual_input = abs_path
+        for (src_kind, path) in input_pairs:
+            actual_input = os.path.abspath(path)
             if src_kind == 'SRC_PCH':
                 # Ensure that there is an existing fallback include
                 # for the precompiled header (.gch) and
@@ -158,14 +161,32 @@ def audit_compile_command(opts, args):
                 # This will have the effect of ignoring the
                 # precompiled header when it is not compatible with
                 # the options forced by the driver.
-                (fallback_header, ext) = abs_path.rsplit(".", 1)
+                (fallback_header, ext) = actual_input.rsplit(".", 1)
                 assert(ext == "gch")
                 actual_input = fallback_header
                 if not os.path.exists(fallback_header):
                     process.commands.touch(fallback_header)
-            if os.path.exists(actual_input):
+            if os.path.exists(actual_input) and os.path.isfile(actual_input):
                 actual_inputs.append(actual_input)
         return actual_inputs
+
+    def prepare_outputs(output_paths):
+        """
+        This function prepare outputs and ensure that they are
+        available for dependency computation from the given
+        ouputs path list.
+        This includes:
+        - making output paths absolute paths,
+        - handling of missing outputs, ignored,
+        - handling of non regular file ("/dev/null" for instance),
+        ignored.
+        """
+        actual_outputs = []
+        for path in output_paths:
+            actual_output = os.path.abspath(path)
+            if os.path.exists(actual_output) and os.path.isfile(actual_output):
+                actual_outputs.append(actual_output)
+        return actual_outputs
 
     def filter_envs(envs):
         """
@@ -190,7 +211,7 @@ def audit_compile_command(opts, args):
     # We should change this as it may build a too long command line.
     input_pairs = interpreter.get_input_pairs()
     actual_inputs = prepare_inputs(input_pairs)
-    inps_digest = stg.store_path_ref_list(map(os.path.abspath, actual_inputs))
+    inps_digest = stg.store_path_ref_list(actual_inputs)
     status = process.system(args, print_output=True)
     if status != 0:
         return status
@@ -201,7 +222,8 @@ def audit_compile_command(opts, args):
     kind = interpreter.get_kind()
     cnod_digest = stg.store_cmd_node(prog, cwd, exp_args, envs, kind)
     outputs = interpreter.get_output_files()
-    outs_digest = stg.store_path_ref_list(map(os.path.abspath, outputs))
+    actual_outputs = prepare_outputs(outputs)
+    outs_digest = stg.store_path_ref_list(actual_outputs)
     rnod_digest = stg.store_recipe_node(
                     cnod_digest, inps_digest, outs_digest)
     stg.append_recipes_file(rnod_digest)

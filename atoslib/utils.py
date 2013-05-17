@@ -1788,6 +1788,31 @@ def run_atos_web(args):
         else:
             error("Object not found at '%s'" % (url))
 
+    def load_cookies_db(configuration_path):
+        """
+        Load the cookies.db file and return the list of cookies listed inside
+        """
+        try:
+            fd = open(os.path.join(configuration_path, 'cookies.db'))
+        except IOError:
+            return []
+
+        return [c for c in json.load(fd)]
+
+    def filter_cookies(cookies_db, cookies):
+        """
+        Filter out the cookies that are not listed in cookies_db
+        """
+        # Do not filter if the cookies_db is empty
+        if not cookies_db:
+            return cookies
+
+        filtered = []
+        for cookie in cookies:
+            if cookie in cookies_db:
+                filtered.append(cookie)
+        return filtered
+
     # Subcommands
     if args.subcmd_web == "project":
         if args.operation[0] == 'create':
@@ -1821,7 +1846,6 @@ def run_atos_web(args):
         cookies_mapping = dict((c['hash'], c['id']) for c in r.json())
 
         # Load the cookie json file
-        import json
         cookies_db = json.load(fd)
         for cookie in cookies_db:
             message("Looking at '%s'" % (cookie))
@@ -1894,6 +1918,10 @@ def run_atos_web(args):
                 target = r.json()['name']
                 message("Target name: %s" % (target))
 
+                # Get the cookies to keep
+                cookies_db = load_cookies_db(args.configuration_path)
+
+                # Load the result database
                 results = atos_lib.atos_db.db(args.configuration_path) \
                                           .get_results({'target': target})
 
@@ -1909,6 +1937,11 @@ def run_atos_web(args):
                         continue
                     message("Pushing run %s"
                             % (atos_lib.hashid(result['variant'])))
+
+                    # Select only the cookies present in cookies_db
+                    run_cookies = result.get('cookies', '').split(',')
+                    filtered_cookies = filter_cookies(cookies_db, run_cookies)
+                    # Push the run
                     values = {
                          'order': order,
                          'hash': atos_lib.hashid(result['variant']),
@@ -1917,7 +1950,7 @@ def run_atos_web(args):
                          'uconf': result.get('uconf', ''),
                          'time': result['time'],
                          'size': result['size'],
-                         'cookies': result.get('cookies', '')}
+                         'cookies': ','.join(filtered_cookies)}
                     r = session.put(
                 "http://%s/api/1.0/projects/%s/experiments/%s/targets/%s/runs"
                 % (args.server, args.project, args.experiment, args.target),

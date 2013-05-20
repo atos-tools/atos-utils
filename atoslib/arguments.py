@@ -398,6 +398,9 @@ class parsers:
         args.atos_explore.hot_threshold(parser)
         args.atos_explore.cold_options(parser)
         args.atos_explore.cold_attributes(parser)
+        args.atos_explore.genetic(parser)
+        args.atos_explore.random(parser)
+        args.extra_arguments(parser)
         args.tradeoffs(parser)
         args.cookie(parser)
         args.reuse(parser)
@@ -1787,6 +1790,18 @@ class args:
                  dest="cold_attrs",
                  help="cold functions attributes",
                  default="noinline cold")
+
+        @staticmethod
+        def genetic(parser, args=("--genetic",)):
+            parser.add_argument(
+                *args, dest="genetic", action="store_true",
+                 help="use genetic exploration")
+
+        @staticmethod
+        def random(parser, args=("--random",)):
+            parser.add_argument(
+                *args, dest="random", action="store_true",
+                 help="use random flags exploration")
 
         @staticmethod
         def generations(parser, args=("--generations",)):

@@ -661,7 +661,8 @@ class gen_file_by_file_cfg(config_generator):
         self, imgpath, csv_dir,
         hot_th="70", cold_opts="-Os", base_flags=None,
         expl_cookie=None, tradeoffs=None, per_file_nbiters=None,
-        flags_file=None, optim_variants=None, base_variant=None,
+        flags_file=None, genetic=None, random=None,
+        optim_variants=None, base_variant=None,
         configuration_path=None, **kwargs):
         assert imgpath
         assert csv_dir
@@ -676,6 +677,8 @@ class gen_file_by_file_cfg(config_generator):
         self.per_file_nbiters = int(
             per_file_nbiters) if per_file_nbiters != None else 0
         self.flags_file = flags_file
+        self.genetic = bool(genetic)
+        self.random = bool(random)
         self.optim_variants = base_variant and [base_variant] or (
             optim_variants or 'base').split(',')
         self.base_variant = base_variant or 'base'
@@ -819,6 +822,18 @@ class gen_file_by_file_cfg(config_generator):
                     generator = gen_flags_file(
                         flags_file=self.flags_file,
                         configuration_path=self.configuration_path)
+                elif self.genetic:
+                    debug('gen_file_by_file: genetic_exploration')
+                    generator = gen_genetic(
+                        nbiters=self.per_file_nbiters, expl_cookie=obj_cookie,
+                        configuration_path=self.configuration_path,
+                        tradeoffs=self.tradeoffs, **self.kwargs)
+                elif self.random:
+                    debug('gen_file_by_file: random_exploration')
+                    generator = gen_explore_random(
+                        nbiters=self.per_file_nbiters, expl_cookie=obj_cookie,
+                        configuration_path=self.configuration_path,
+                        **self.kwargs)
                 else:  # else, perform a classic staged exploration
                     debug('gen_file_by_file: staged_exploration')
                     generator = gen_staged(
@@ -897,7 +912,8 @@ class gen_function_by_function_cfg(config_generator):
         self, imgpath, csv_dir, acf_plugin_path=None,
         hot_th="70", cold_opts="-Os noinline cold", base_flags=None,
         expl_cookie=None, tradeoffs=None, per_func_nbiters=None,
-        flags_file=None, optim_variants=None, base_variant=None,
+        flags_file=None, genetic=None, random=None,
+        optim_variants=None, base_variant=None,
         configuration_path=None, **kwargs):
         assert imgpath
         assert csv_dir
@@ -914,6 +930,8 @@ class gen_function_by_function_cfg(config_generator):
         self.per_func_nbiters = int(
             per_func_nbiters) if per_func_nbiters != None else 0
         self.flags_file = flags_file
+        self.genetic = bool(genetic)
+        self.random = bool(random)
         self.optim_variants = base_variant and [base_variant] or (
             optim_variants or 'base').split(',')
         self.base_variant = base_variant or 'base'
@@ -1098,13 +1116,24 @@ class gen_function_by_function_cfg(config_generator):
                     generator = gen_flags_file(
                         flags_file=self.flags_file,
                         configuration_path=self.configuration_path)
+                elif self.genetic:
+                    debug('gen_function_by_function: genetic_exploration')
+                    generator = gen_genetic(
+                        nbiters=self.per_func_nbiters, expl_cookie=func_cookie,
+                        configuration_path=self.configuration_path,
+                        tradeoffs=self.tradeoffs, **self.kwargs)
+                elif self.random:
+                    debug('gen_function_by_function: random_exploration')
+                    generator = gen_explore_random(
+                        nbiters=self.per_func_nbiters, expl_cookie=func_cookie,
+                        configuration_path=self.configuration_path,
+                        **self.kwargs)
                 else:  # else, perform a classic staged exploration
                     debug('gen_function_by_function: staged_exploration')
                     generator = gen_staged(
                         nbiters=self.per_func_nbiters, expl_cookie=func_cookie,
                         configuration_path=self.configuration_path,
                         tradeoffs=self.tradeoffs, **self.kwargs)
-
                 # run exploration loop on newly selected hot_func
                 while True:
                     # update estimated exploration size

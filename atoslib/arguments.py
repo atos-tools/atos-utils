@@ -44,9 +44,11 @@ def parser(tool):
         "atos-explore-inline": parsers.atos_explore_inline,
         "atos-explore-loop": parsers.atos_explore_loop,
         "atos-explore-optim": parsers.atos_explore_optim,
+        "atos-explore-random": parsers.atos_explore_random,
         "atos-explore-acf": parsers.atos_explore_acf,
         "atos-explore-staged": parsers.atos_explore_staged,
         "atos-explore-genetic": parsers.atos_explore_genetic,
+        "atos-explore-flag-values": parsers.atos_explore_flag_values,
         "atos-config": parsers.atos_config,
         "atos-cookie": parsers.atos_cookie,
         "atos-lib": parsers.atos_lib,
@@ -106,12 +108,20 @@ class parsers:
                               help="exploration of backend optimizations")
         parsers.atos_explore_optim(sub)
 
+        sub = subs.add_parser("explore-random",
+                              help="exploration of all optimizations")
+        parsers.atos_explore_random(sub)
+
         sub = subs.add_parser("explore-staged", help="full staged exploration")
         parsers.atos_explore_staged(sub)
 
         sub = subs.add_parser(
             "explore-genetic", help="full genetic exploration")
         parsers.atos_explore_genetic(sub)
+
+        sub = subs.add_parser(
+            "explore-flag-values", help="flag values exploration")
+        parsers.atos_explore_flag_values(sub)
 
         sub = subs.add_parser("explore-acf", help="fine grain exploration")
         parsers.atos_explore_acf(sub)
@@ -377,6 +387,31 @@ class parsers:
         return parser
 
     @staticmethod
+    def atos_explore_random(parser=None):
+        """ atos explore random arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-explore-random",
+                                        description="ATOS explore random tool")
+        args.configuration_path(parser)
+        args.nbruns(parser)
+        args.remote_path(parser)
+        args.seed(parser)
+        args.nbiters(parser)
+        args.flags(parser)
+        args.optim_levels(parser)
+        args.optim_variants(parser)
+        args.base_variants(parser)
+        args.cookie(parser)
+        args.reuse(parser)
+        args.jobs(parser)
+        args.debug(parser)
+        args.log_file(parser)
+        args.quiet(parser)
+        args.dryrun(parser, ("--dryrun",))
+        args.version(parser)
+        return parser
+
+    @staticmethod
     def atos_explore_acf(parser=None):
         """ atos explore acf arguments parser factory. """
         if parser == None:
@@ -485,6 +520,42 @@ class parsers:
         args.atos_explore.mutate_remove(parser)
         args.atos_explore.evolve_rate(parser)
         args.atos_explore.nbpoints(parser)
+        args.debug(parser)
+        args.log_file(parser)
+        args.quiet(parser)
+        args.dryrun(parser, ("--dryrun",))
+        args.version(parser)
+        return parser
+
+    @staticmethod
+    def atos_explore_flag_values(parser=None):
+        """ atos explore flag values arguments parser factory. """
+        if parser == None:
+            parser = ATOSArgumentParser(
+                prog="atos-explore-flag-values",
+                description="ATOS explore flag values tool")
+
+        args.exes(parser)
+        args.configuration_path(parser)
+        args.build_script(parser)
+        args.legacy(parser)
+        args.force(parser)
+        args.prof_script(parser)
+        args.run_script(parser)
+        args.nbruns(parser)
+        args.remote_path(parser)
+        args.results_script(parser)
+        args.size_cmd(parser)
+        args.time_cmd(parser)
+        args.atos_explore.variant_id(parser)
+        args.clean(parser)
+        args.cookie(parser)
+        args.reuse(parser)
+        args.seed(parser)
+        args.nbiters(parser)
+        args.optim_levels(parser)
+        args.optim_variants(parser)
+        args.tradeoffs(parser)
         args.debug(parser)
         args.log_file(parser)
         args.quiet(parser)
@@ -1854,6 +1925,14 @@ class args:
                  dest="nbpoints",
                  type=int, default=None,
                  help="number of selected points for each tradeoff")
+
+        @staticmethod
+        def variant_id(parser, args=("--variant_id",)):
+            parser.add_argument(
+                *args,
+                 dest="variant_id",
+                 help="identifier of base variant",
+                 default=None)
 
     class atos_generator:
         """ Namespace for non common atos-generator arguments. """

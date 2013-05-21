@@ -341,7 +341,6 @@ class gen_record_flags(config_generator):
                       tradeoff_cookies))
         return tradeoff_config[0] if tradeoff_config else (None, None)
 
-
 class gen_maxiters(config_generator):
     """
     Limits the generator to a fixed number of iterations.
@@ -1397,7 +1396,6 @@ class gen_flag_values(config_generator):
         tradeoffs = get_run_tradeoffs(
             self.tradeoffs, [self.expl_cookie], self.configuration_path)
         debug('gen_flag_values: final tradeoffs: %s' % (str(tradeoffs)))
-
 
 class gen_genetic_deps(config_generator):
     """

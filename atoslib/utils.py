@@ -60,9 +60,11 @@ def invoque(tool, args, **kwargs):
         "atos-explore-inline": run_atos_explore_inline,
         "atos-explore-loop": run_atos_explore_loop,
         "atos-explore-optim": run_atos_explore_optim,
+        "atos-explore-random": run_atos_explore_random,
         "atos-explore-acf": run_atos_explore_acf,
         "atos-explore-staged": run_atos_explore_staged,
         "atos-explore-genetic": run_atos_explore_genetic,
+        "atos-explore-flag-values": run_atos_explore_flag_values,
         "atos-config": run_atos_config,
         "atos-cookie": run_atos_cookie,
         "atos-graph": run_atos_graph,
@@ -1595,6 +1597,13 @@ def run_atos_explore_optim(args):
         args, generator=generators.gen_explore_optim)
     return status
 
+def run_atos_explore_random(args):
+    """ ATOS explore-random tool implementation. """
+
+    status = generators.run_exploration_loop(
+        args, generator=generators.gen_explore_random)
+    return status
+
 def run_atos_explore_staged(args):
     """ ATOS explore-acf tool implementation. """
 
@@ -1613,6 +1622,16 @@ def run_atos_explore_genetic(args):
 
     status = generators.run_exploration_loop(
         args, generator=generators.gen_genetic)
+    return status
+
+def run_atos_explore_flag_values(args):
+    """ ATOS explore-flag-values tool implementation. """
+
+    status = invoque("atos-init", args)
+    if status != 0: return status
+
+    status = generators.run_exploration_loop(
+        args, generator=generators.gen_flag_values)
     return status
 
 def run_atos_explore_acf(args):

@@ -241,25 +241,9 @@ class config_generator:
         return self.generate()
 
     def cookie(self, *args, **kwargs):
-        def record(cookie):
-            if not record_cookie: return cookie
-            if not configuration_path: return cookie
-            argstr = args and str(args) or None
-            db = atos_lib.atos_cookie_db_json.cookie_db(configuration_path)
-            db.add_cookie(cookie, parent=parent_cookie, argstr=argstr)
-            return cookie
-        record_cookie = kwargs.get('record', True)
         configuration_path = getattr(self, 'configuration_path', None)
-        parent_cookie = (len(args) >= 1 and args[0] or None)
-        if not parent_cookie:
-            # new exploration cookie
-            return record(atos_lib.new_cookie())
-        if len(args) <= 1:
-            # cookie already existing
-            return parent_cookie
-        # computed cookie
-        new_cookie = atos_lib.compute_cookie(*args)
-        return record(new_cookie)
+        kwargs.update({'configuration_path': configuration_path})
+        return new_run_cookie(*args, **kwargs)
 
 class gen_config(config_generator):
     """
@@ -607,7 +591,9 @@ class gen_chained_exploration(config_generator):
             debug('gen_chained_exploration: generator ' + str(
                     (generator, generator_args)))
             stage_cookies.append(self.cookie(
-                    self.expl_cookie, nstage, generator.__name__))
+                    self.expl_cookie,
+                    generator.__name__, generator_args, nstage,
+                    descr="stage number %d" % (nstage)))
             self.stage_tradeoffs[nstage] = len(self.selected_configs)
             for (flags, variant) in self.selected_configs:
                 debug('gen_chained_exploration: config ' + str(
@@ -812,7 +798,8 @@ class gen_file_by_file_cfg(config_generator):
 
                 # keep track of current hot_obj results
                 obj_cookie = self.cookie(
-                    self.expl_cookie, variant, curr_hot_obj)
+                    self.expl_cookie, curr_hot_obj, variant,
+                    descr="object %s, variant %s" % (curr_hot_obj, variant))
                 obj_to_cookie[curr_hot_obj] = obj_cookie
 
                 # create the generator that will be used for curr_hot_obj expl
@@ -1105,7 +1092,8 @@ class gen_function_by_function_cfg(config_generator):
 
                 # keep track of current hot_func results
                 func_cookie = self.cookie(
-                    self.expl_cookie, variant, curr_hot_func)
+                    self.expl_cookie, curr_hot_func, variant,
+                    descr="function %s, variant %s" % (curr_hot_func, variant))
                 func_to_cookie[curr_hot_func] = func_cookie
 
                 # create the generator that will be used for curr_hot_func expl
@@ -1730,6 +1718,31 @@ def gen_function_by_function(configuration_path=None, **kwargs):
 # ####################################################################
 
 
+def new_run_cookie(*args, **kwargs):
+    def record(cookie):
+        if not record_cookie: return cookie
+        if not configuration_path: return cookie
+        argstr = args and str(args) or None
+        db = atos_lib.atos_cookie_db_json.cookie_db(configuration_path)
+        db.add_cookie(
+            cookie, parent=parent_cookie, description=cookie_descr)
+        return cookie
+    record_cookie = kwargs.get('record', True)
+    cookie_descr = kwargs.get('descr', None)
+    configuration_path = kwargs.get('configuration_path', True)
+    parent_cookie = (len(args) >= 1 and args[0] or None)
+    if not parent_cookie:
+        # new exploration cookie
+        return record(atos_lib.new_cookie())
+    if len(args) <= 1:
+        # cookie already existing
+        expl_cookie, parent_cookie = parent_cookie, None
+        return record(expl_cookie)
+    # computed cookie
+    new_cookie = atos_lib.compute_cookie(*args)
+    return record(new_cookie)
+
+
 def get_run_tradeoffs(
     tradeoffs, cookies=None, configuration_path=None, nb_points=1):
     assert configuration_path
@@ -1848,7 +1861,10 @@ def run_exploration_loop(args=None, **kwargs):
         return 1
 
     # exploration cookie (used for keeping configs already ran)
-    expl_cookie = atos_lib.unique_cookie(gen_args.cookies)
+    expl_cookie = new_run_cookie(
+        atos_lib.unique_cookie(gen_args.cookies),
+        descr="exploration root cookie",
+        configuration_path=gen_args.configuration_path)
     gen_args.cookies = (gen_args.cookies or []) + [expl_cookie]
 
     message("Identifier of exploration: " + str(expl_cookie))

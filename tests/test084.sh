@@ -50,7 +50,15 @@ fi
 $ROOT/bin/atos-explore-acf --hot-th=50 -F ./flags_list.txt --optim-variants=base --optim-levels=-O0
 
 # choose one of the run with an acf csv file
-last_csv_variant=`$ROOT/bin/atos lib query -t -q'$[*].variant' | grep csv | tail -1`
+all_csv_variant=`$ROOT/bin/atos lib query -t -q'$[*].variant' | grep csv`
+for csv_variant in $all_csv_variant; do
+    # do not select one of the reference csv file (with no flags from flags_list)
+    csv_file=`echo $csv_variant | sed 's/.*\///g'`
+    if [ `cat atos-configurations/acf_csv_dir/$csv_file | grep large-function-growth | wc -l` -ne 0 ]; then
+	last_csv_variant=$csv_variant
+	break
+    fi
+done
 [ ! -z "$last_csv_variant" ]
 
 # perform fine flag tuning exploration on it

@@ -1,0 +1,48 @@
+#!/bin/sh
+#
+# Copyright (C) STMicroelectronics Ltd. 2012
+#
+# This file is part of ATOS.
+#
+# ATOS is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License v2.0
+# as published by the Free Software Foundation
+#
+# ATOS is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
+#
+
+#
+# atos-proot version @VERSION@
+#
+# usage atos-proot <proot options...>
+#
+# This is a simple wrapper for proot that enables
+# redefinition of the actual proot executable
+# through the ATOS_PROOT env var.
+# Also if ATOS_PROOT_ARGS is non empty proot is called
+# with this args in front of the proot options given on
+# the command line
+
+#
+# proot is searched in priority order in:
+# - "$ATOS_PROOT" if specified, or
+# - $dir/../lib/atos/<arch>/bin/proot, or
+# - proot (searched in PATH).
+#
+
+[ -n "$ATOS_PROOT" ] && exec "$ATOS_PROOT" $ATOS_PROOT_ARGS ${1+"$@"}
+
+dir=`dirname $0`
+arch=`uname -m`
+case "$arch" in
+     i[456]86) arch=i386
+esac
+proot=proot
+[ -x "$dir/../lib/atos/$arch/proot" ] && proot="$dir/../lib/atos/$arch/proot"
+exec "$proot" $ATOS_PROOT_ARGS ${1+"$@"}

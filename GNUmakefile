@@ -27,7 +27,7 @@ PROOT=proot
 RST2MAN=$(srcdir)config/docutils rst2man --report=3 # Filter warning with images
 RST2HTML=$(srcdir)config/docutils rst2html
 
-CONFIG_SCRIPTS_EXE_IN=
+CONFIG_SCRIPTS_EXE_IN=atos-proot.in
 CONFIG_SCRIPTS_LIB_IN=
 CONFIG_SCRIPTS_CFG_IN=flags.inline.cfg.in flags.loop.cfg.in flags.optim.cfg.in
 PYTHON_LIB_SCRIPTS_IN=$(addprefix atoslib/, __init__.py globals.py utils.py arguments.py atos_deps.py logger.py process.py profile.py atos_graph.py deep_eq.py cmd_interpreter.py atos_argparse.py regexp.py gen_argparse.py cc_arguments.py cc_argparse.py obj_storage.py graphs.py recipes.py progress.py)

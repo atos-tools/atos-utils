@@ -1262,11 +1262,7 @@ def time_command(configuration_path):
     return time_command
 
 def proot_command(**kwargs):
-    status, uname = process.system('/bin/uname -m', get_output=True)
-    arch = uname.rstrip('\n') if uname else 'i386'
-    if arch in ['i386', 'i486', 'i586', 'i686']: arch = 'i386'
-    proot_exec = os.path.join(globals.LIBDIR, arch, 'bin', 'proot')
-    proot_bin = proot_exec if os.path.isfile(proot_exec) else "proot"
+    proot_bin = os.path.join(globals.BINDIR, 'atos-proot')
     command = ["env"]
     for key, value in kwargs.items():
         if value is None: continue  # pragma: uncovered

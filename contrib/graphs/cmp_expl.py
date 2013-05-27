@@ -25,8 +25,7 @@
 #
 
 import sys, os, commands
-import itertools
-import pylab as pl
+import itertools, functools, operator
 
 atos_graph_bin = commands.getoutput("which atos-graph")
 assert atos_graph_bin, "ATOS tools not found in $$PATH"
@@ -39,6 +38,8 @@ sys.path.append(lib_dir)
 from atoslib import atos_lib
 
 def draw_search_graph(plots):
+    import pylab as pl
+
     fg = pl.figure()
     ax = fg.add_subplot(111)
 
@@ -73,43 +74,62 @@ def searchgraph(opts, configs):
             cfg_split and cfg_split.pop(0) or "db-" + str(n))
         color = (
             cfg_split and cfg_split.pop(0) or colors[n % len(colors)])
-        optcasesl = map(lambda x: atos_lib.get_results(
-                x, atos_lib.default_obj(refid='REF')), dbpathes)
-        for optcases in optcasesl:
-            for optcase in optcases:
-                optcase.result = (
-                    (optcase.speedup * opts.tradeoff + optcase.sizered)
-                    if opts.tradeoff is not None else optcase.speedup)
-        db_groups.append((optcasesl, label, color))
-        print label, map(len, optcasesl)
+        # load results from all atos_config directories
+        results = map(lambda x: atos_lib.get_results(
+            x, atos_lib.default_obj(refid='REF')), dbpathes)
+        # compute result field (perf/size tradeoff) for each result
+        def set_result(optcase): optcase.result = (
+            (optcase.speedup * opts.tradeoff + optcase.sizered)
+            if opts.tradeoff is not None else optcase.speedup)
+        filter(functools.partial(filter, set_result), results)
+        if opts.nbiters: results = map(lambda r: r[:opts.nbiters], results)
+        db_groups.append((results, label, color))
+        # print label, map(len, results)
 
     plots = []
-    for (optcasesl, label, color) in db_groups:
+    for (results, label, color) in db_groups:
 
-        max_optcasesl = []
-        for optcases in optcasesl:
+        # compute best point at each iteration of all exploration
+        all_bests = []
+        for optcases in results:
             max_optcases = []
             max_opt = len(optcases) and optcases[0] or None
             for optcase in optcases:
                 if optcase.result > max_opt.result:
                     max_opt = optcase
                 max_optcases += [max_opt]
-            max_optcasesl.append(max_optcases)
+            all_bests.append(max_optcases)
 
-        # average best result
+        # compute average of best points at each iteration
+        best_avg = []
+        # list of list of best at each iteration
+        all_bests_it = itertools.izip_longest(*all_bests)
+        for mx in all_bests_it:
+            if None in mx: break # one of the explorations is over
+            values = map(lambda x: x.result, list(mx))
+            average = sum(values) / len(values)
+            optavg = atos_lib.default_obj(result=average)
+            best_avg.append(optavg)
+
+        # graph plots
         attrs = {
             'linewidth': 2,
             'color': color, 'label': label + '-avg-max'}
-        avgmax_optcases = []
-        max_optcasesl2 = itertools.izip_longest(*max_optcasesl)
-        for mx in max_optcasesl2:
-            if None in mx: break
-            vals = map(lambda x: x.result, list(mx))
-            avg = sum(vals) / len(vals)
-            optavg = atos_lib.default_obj(result=avg)
-            avgmax_optcases.append(optavg)
-        plots += [(avgmax_optcases, dict(attrs))]
+        plots += [(best_avg, dict(attrs))]
         attrs['label'] = None
+
+        # output: nb_iterations, last_result, and average
+        best_avg_res = map(operator.attrgetter('result'), best_avg)
+        best_avg_avg = sum(best_avg_res) / len(best_avg_res)
+
+        stdev_last_bests = atos_lib.standard_deviation(
+            map(lambda results: results[-1].result, all_bests))
+        stdev_avg_bests = atos_lib.standard_deviation(
+            best_avg_res)
+
+        print "%-10s last=%.4f (stdv=%.4f) avg=%.4f (stdv=%.4f) nbiter=%d" % (
+            label, best_avg_res[-1], stdev_last_bests,
+            best_avg_avg, stdev_avg_bests, len(best_avg_res))
 
     return plots
 
@@ -121,9 +141,13 @@ if __name__ == "__main__":
       description='Graph for exploration algorithm comparison')
    parser.add_option(
        "--tradeoff", dest="tradeoff", type=float, default=None)
+   parser.add_option(
+       "--nograph", dest="graph", action='store_false', default=True)
+   parser.add_option(
+       "--nbiters", dest="nbiters", type=int, default=None)
 
    (opts, args) = parser.parse_args()
 
    plots = searchgraph(opts, args)
 
-   draw_search_graph(plots)
+   if opts.graph: draw_search_graph(plots)

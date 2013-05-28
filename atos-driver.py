@@ -322,6 +322,7 @@ def invoque_compile_command(opts, args):
     if recipe_node:
         recipe_node.fetch_input_files()
 
+    args = atos_lib.replace_incompatible_options(args)
     status = process.system(args, print_output=True)
 
     if recipe_node and status != 0 and opts.update_blacklist:

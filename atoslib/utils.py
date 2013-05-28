@@ -1806,6 +1806,8 @@ def run_atos_web(args):
         try:
             fd = open(os.path.join(configuration_path, 'cookies.db'))
         except IOError:
+            error("Unable to open the cookie database at '%s'" %
+                    (os.path.join(configuration_path, 'cookies.db')))
             return []
 
         return [c for c in json.load(fd)]

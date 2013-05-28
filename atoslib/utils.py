@@ -1846,9 +1846,9 @@ def run_atos_web(args):
         """
         Filter out the cookies that are not listed in cookies_db
         """
-        # Do not filter if the cookies_db is empty
+        # Filter everithing out if the cookies_db is empty
         if not cookies_db:
-            return cookies
+            return []
 
         filtered = []
         for cookie in cookies:

@@ -192,6 +192,14 @@ better performance results, but can also find better size tradeoffs.
 This runs the exploration of other compiler flags and parameters, for instance
 scheduling flags or register allocation parameters.
 
+::
+
+  $ atos-explore-random -M 50
+
+This runs a random exploration of all known compiler flags and parameters (
+inline, loop and optim). This exploration can help getting good results within
+a small numbers of iterations.
+
 Note that, at any time, one can observe the current results database with
 ``atos-graph``, optionally the database can be observed while the explorations
 are running with:
@@ -484,6 +492,15 @@ function by function.
 In this example the number of hot functions is probably 2, thus expect
 an exploration time of 10 hours for this last command.
 
+Fine tuning of existing exploration results
+-------------------------------------------
+It is sometimes possible to improve the best results found by an exploration
+by trying small variations of that results. This new exploration will try each
+possible value of each flag of a given configuration (Hill climbing algorithm).
+It can be run with the following command, where argument of the variant_id flag
+is the identifier of the configuration to be tuned::
+
+   $ explore-flag-values --variant_id=`atos-play -P`
 
 Full exploration
 ----------------

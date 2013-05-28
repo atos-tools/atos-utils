@@ -30,6 +30,7 @@ import globals
 import jsonlib
 import process
 import logger
+import cc_arguments
 
 # ####################################################################
 
@@ -1309,6 +1310,21 @@ def expand_response_file(args, cwd, prefix="@"):
                 args.append(arg)
         return args
     return expand_args([], args)
+
+def replace_incompatible_options(command_line_args):
+    command_line = process.list2cmdline(command_line_args)
+    incompatible_options = cc_arguments.CCArgumentsDesc.incompatible_options
+    for (incomp_set, replacement) in incompatible_options:
+        match = True
+        for incomp_opt in incomp_set:
+            if not re.search(incomp_opt, command_line):
+                match = False
+                break
+        if match:
+            for incomp_opt in incomp_set:
+                command_line = re.sub(incomp_opt, "", command_line)
+            command_line += " " + replacement
+    return process.cmdline2list(command_line)
 
 # ####################################################################
 

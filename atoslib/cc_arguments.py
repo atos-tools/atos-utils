@@ -518,6 +518,23 @@ class CCArgumentsDesc:
         {'re': r"-.*", 'dest': "opt_other"},
         ]
 
+    # List of incompatible cc options as a list of tuples:
+    #  (set([incompatible_options]), replacement option)
+    # This list is not exhaustive.
+    # Incompatible options on a same CC command line are generally
+    # not a problem (ex: -finline -fno-inline, which is the same as
+    # -fno-inline).
+    # Nevertheless, it must be handled in some cases, like during
+    # LTO build involving unsafe options. (ex: -fstrict-aliasing on
+    # some objects, -fno-strict-aliasing on others). In such cases,
+    # we cannot keep the command line unchanged and must choose a
+    # replacement.
+
+    incompatible_options = [
+        (set(["-fstrict-aliasing", "-fno-strict-aliasing"]),
+         "-fno-strict-aliasing"),
+        ]
+
     @staticmethod
     def test():
         print "TESTING CCArgumentsDesc..."

@@ -1892,6 +1892,14 @@ def run_atos_web(args):
         cookies_db = json.load(fd)
         for cookie in cookies_db:
             message("Looking at '%s'" % (cookie))
+            # Push the description if available
+            description = cookies_db[cookie].get('description')
+            if description:
+                requests.put(
+                    "http://%s/api/1.0/projects/%d/experiments/%d/cookies" %
+                        (args.server, args.project, args.experiment),
+                    {'hash': cookie, 'description': description})
+
             if not 'succs' in cookies_db[cookie]:
                 message(' -> No child')
                 continue

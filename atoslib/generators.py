@@ -686,7 +686,7 @@ class gen_file_by_file_cfg(config_generator):
     @staticmethod
     def create_config_csv(obj_flags, csv_dir):
         # build option file containing flags for each object file
-        sum_flags = atos_lib.md5sum(str(obj_flags.items()))
+        sum_flags = atos_lib.md5sum(str(sorted(obj_flags.items())))
         csv_name = os.path.join(csv_dir, 'fbf-%s.csv' % (sum_flags))
         with open(csv_name, 'w') as opt_file:
             for (obj, flags) in obj_flags.items():
@@ -978,7 +978,7 @@ class gen_function_by_function_cfg(config_generator):
     @staticmethod
     def create_config_csv(obj_flags, csv_dir):
         # build option file containing flags for each function
-        sum_flags = atos_lib.md5sum(str(obj_flags.items()))
+        sum_flags = atos_lib.md5sum(str(sorted(obj_flags.items())))
         csv_name = os.path.join(csv_dir, 'acf-%s.csv' % (sum_flags))
         with open(csv_name, 'w') as opt_file:
             for ((fct, loc), flags) in obj_flags.items():

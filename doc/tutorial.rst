@@ -114,7 +114,7 @@ The best configuration for size is the red point on the right of the figure
 and gives both improvements in performance (16.43% speedup) and size (14.92%
 reduction).
 
-In order to help the choice of a prefered configuration, the atos-graph
+In order to help the choice of a preferred configuration, the atos-graph
 tool displays a frontier in red where all best points are highlighted such
 that manual selection is simplified.
 
@@ -344,7 +344,7 @@ It gives, compared to the reference build, a speedup for the performance first
 tradeoff of 28.35%. The speedup and size reduction for the size first
 tradefoff are 23.48% and 16.07% respectively.
 
-These results are much better than the standars Os, O2, O3 points where for
+These results are much better than the standards Os, O2, O3 points where for
 instance the ``-O3`` point at gives a 4.49% speedup only, and the ``-Os``
 point reduce size by only 9.06% while regressing performance by 5.23%.
 
@@ -357,13 +357,60 @@ The configuration can then be rebuilt with for instance with::
   Playing optimized build
   shacmp-shatest-sha:OPT-Os--paramlarge-function-growth=174--paramlarge-function-insns=1236--paramlarge-stack-frame-growth=1915--paramlarge-stack-frame=377--paramlarge-unit-insns=22854--parammax-inline-insns-recursive=515--parammax-inline-insns-single=594--parammax-inline-recursive-depth=10--parampartial-inlining-entry-probability=12-fno-indirect-inlining-finline-functions-finline-small-functions-fno-partial-inlining--paramgcse-cost-distance-ratio=11--paramgcse-unrestricted-cost=2--paramhot-bb-frequency-fraction=107--paramipa-sra-ptr-growth-factor=1--parammax-cse-path-length=47--parammax-cselib-memory-locations=797--parammax-hoist-depth=23--parammax-sched-insn-conflict-delay=1--parammax-sched-region-blocks=12--parammin-crossjump-insns=9--paramswitch-conversion-max-branch-ratio=15-falign-functions-fno-align-jumps-fno-align-labels-fbranch-target-load-optimize-fno-btr-bb-exclusive-fconserve-stack-fno-cprop-registers-fcrossjumping-fno-cse-follow-jumps-fdata-sections-fdefer-pop-fno-float-store-fno-forward-propagate-ffp-contract=off-ffunction-sections-fgcse-after-reload-fno-gcse-lm-fno-gcse-sm-fguess-branch-probability-fif-conversion-fif-conversion2-fno-ipa-cp-clone-fipa-profile-fno-ipa-pta-fno-ipa-reference-fno-ipa-sra-fno-ira-loop-pressure-fno-merge-constants-fno-modulo-sched-fomit-frame-pointer-fno-optimize-sibling-calls-fpeephole-fno-peephole2-freciprocal-math-freorder-blocks-fno-reorder-blocks-and-partition-fno-sched-critical-path-heuristic-fsched-group-heuristic-fno-sched-last-insn-heuristic-fno-sched-rank-heuristic-fno-sched-spec-load-fsched-spec-load-dangerous-fno-sched-stalled-insns-dep-fsched2-use-superblocks-fno-selective-scheduling2-fsingle-precision-constant-fsplit-wide-types-ftoplevel-reorder-ftracer-fno-tree-bit-ccp-fno-tree-ccp-fno-tree-ch-ftree-forwprop-fno-tree-loop-if-convert-ftree-pre-ftree-reassoc-fno-tree-sink-fno-tree-sra-fno-tree-vrp--paramtracer-max-code-growth=278--paramtracer-min-branch-probability-feedback=36--paramtracer-min-branch-probability=50--paramtracer-min-branch-ratio=86-flto...
 
-While a staged exploration as demonstrated above is extensively using the
-compiler options for finding application wide best tradeoffs, all options are
-passed globally to the build system, thus there is no opportunity to improve
-code size in part of the applications where performance is less
-important. Also for complex applications there is no opportunity to improve
-performance with specific options in a given module and different options in
-another one.
+Genetic Exploration
+-------------------
+
+In the previous section we saw how to explore the various compiler
+options by staging the exploration on three preselected sets, namely
+the inlining, loop and optim sets. However, this kind of exploration
+has two drawbacks :
+
+- A staged exploration will sometimes miss a configuration that can
+  only be obtained when two options from two different option sets
+  must be present. For example, if an inlining option brings no
+  improvement when used alone, it has little chance to be part of the
+  preferred configurations selected at the end of the inline stage. But
+  if this specific inlining option combined with an option from the
+  loop options set for example would result in a better tradeoff, it
+  will not be found by the staged exploration.
+
+- The stage exploration generates random option configurations from
+  within an option set. It means that an option that has been seen to
+  improve the tradeoff has an equally probability to be selected as an
+  option which has no, or even negative, impact on the tradeoff.
+
+In order to alleviate these two limitations we have implemented a
+genetic algorithm to explore the set of compiler options. A genetic
+algorithm do not split the option set in predefined sets, thus
+alleviating the first problem. A genetic algorithm will repeatedly
+select a set of preferred configurations and will continue explorations
+from these configurations, thus focusing on good options and avoiding
+exploring poor performing options.
+
+A genetic algorithm may find configurations that a staged exploration
+would not have reached, and may find best tradeoffs in less
+explorations, thus in less time. A genetic exploration will be run
+with the following command:
+
+::
+
+  $ atos-explore-genetic -M 50 --generations=20
+
+With these options, we configure the genetic algorithm to work on a
+set of 50 option configurations, and to make them evolve over 20
+generations. Genetic transformations, i.e. evolution and mutation, are
+used to explore new option configurations starting from a set of
+preferred configurations in previous generations.
+
+
+While staged and genetic explorations, as demonstrated above, are
+extensively using the compiler options for finding application wide
+best tradeoffs, all options are passed globally to the build system,
+thus there is no opportunity to improve code size in part of the
+applications where performance is less important. Also for complex
+applications there is no opportunity to improve performance with
+specific options in a given module and different options in another
+one.
 
 We will see next how to do a finer grain exploration, in particular by
 exploring the build configurations function per function.

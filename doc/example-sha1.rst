@@ -87,6 +87,15 @@ Full staged exploration (M=100 base iterations)::
     +29.92% | -16.47% | sha-shatest-shacmp | 9f869a5a9ceeefa68a1c53cb44663a47
      -4.44% | +11.05% | sha-shatest-shacmp | 44928198f90a4e71b14474d6c84dba14
 
+Full genetic exploration (M=15, generations=10)::
+
+     $sh atos-init -c -C atos-configurations-gen-1 -b "make clean all" -r ./run-qemu.sh -p ./run-qemu-oprofile.sh
+     $sh /usr/bin/time -p atos-explore-genetic -C atos-configurations-gen-1 -M15 --generations=10  --cookie gen300 --reuse --log-file atos-explore-gen-300-debug.log 2>&1 | tee atos-explore-gen-300.log
+     $sh atos-play -C atos-configurations-stg-1 -T -s 5 -s 1 -s 0.2
+     speedup | sizered |                               target |                       variant_id 
+     +28.94% | -18.07% | sha-shacmp-shatest-sha.so-sha-shared | adb5668dc63958f5272338a69032f002 
+     +15.06% |  +3.69% | sha-shacmp-shatest-sha.so-sha-shared | 317d131bcda3b0b8e42fdd672b306197 
+      -3.13% |  +9.40% | sha-shacmp-shatest-sha.so-sha-shared | 2134b45952ba347a0a54c5be9c39598e 
 
 Quick file by file exploration (N=1 base iterations)::
 

@@ -284,6 +284,7 @@ def run_atos_audit(args):
               " Check the build command and retry (%s)." %
               (status, process.list2cmdline(args.command)))
 
+    os.close(fd)
     return status
 
 def run_atos_build(args):
@@ -464,6 +465,7 @@ def run_atos_build(args):
 
     # remove driver build variables from environment
     map(lambda (k, v): os.unsetenv(k), driver_env.items())
+    os.close(fd)
 
     logf.write('%s\n' % output)
     if status:

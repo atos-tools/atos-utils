@@ -1030,6 +1030,7 @@ class parsers:
                                         description="ATOS web tool")
 
         args.atos_web.server(parser)
+        args.version(parser)
 
         subs = parser.add_subparsers(
             title="atos web commands",

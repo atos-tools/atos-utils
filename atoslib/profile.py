@@ -31,7 +31,7 @@ def check_format(oprof_output):
     profile_formats = [
         # vma samples  %   image name  symbol name
         # 04004c0 1424923 85.6763  a.out main
-        r'vma +samples +% +image[ _]name +symbol[ _]name *',
+        r'vma +samples +% +(image|app)[ _]name +symbol[ _]name *',
         # vma samples  %  linenr info      image name  symbol name
         # 0c144 20626 20.3311 (no localization information)  a.out main
         r'vma +samples +% +linenr[ _]info +image[ _]name +symbol[ _]name *',

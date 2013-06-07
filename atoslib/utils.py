@@ -1891,7 +1891,12 @@ def run_atos_web(args):
         cookies_mapping = dict((c['hash'], c['id']) for c in r.json())
 
         # Load the cookie json file
-        cookies_db = json.load(fd)
+        try:
+            cookies_db = json.load(fd)
+        except ValueError as e:
+            error("Unable to load the cookies database: '%s'" % (e.message))
+            return
+
         for cookie in cookies_db:
             message("Looking at '%s'" % (cookie))
             # Push the description if available
@@ -1908,17 +1913,21 @@ def run_atos_web(args):
             children = cookies_db[cookie]['succs']
             message(' -> Pushing children:\n   * ' + '\n   * '.join(children))
 
-            r = requests.put(
+            try:
+                r = requests.put(
         "http://%s/api/1.0/projects/%d/experiments/%d/cookies/%d/children" %
                         (args.server, args.project, args.experiment,
                          cookies_mapping[cookie]),
                     {'children': ','.join(children)})
-            if not (r.status_code == 200 and r.json()['status'] == 'success'):
-                error("Error while pushing: %s" % (cookie))
-                if r.status_code == 200:
-                    error("=> %s" % (r.json()['message']))
-                else:
-                    error('=> Cookie not found')
+                if not (r.status_code == 200 and
+                        r.json()['status'] == 'success'):
+                    error("Error while pushing: %s" % (cookie))
+                    if r.status_code == 200:
+                        error("=> %s" % (r.json()['message']))
+                    else:
+                        error('=> Cookie not found')
+            except KeyError:
+                error('=> Parent cookie not found')
         return
 
     elif args.subcmd_web == "experiment":

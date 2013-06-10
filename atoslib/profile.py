@@ -45,6 +45,9 @@ def check_format(oprof_output):
         # Overhead Samples Command Shared Object Symbol
         # 0.84%     1      hello.u /tmp/hello.u  0x000000000670 d [.] func1
         r'# +Overhead +Samples +Command +Shared Object +Symbol *',
+        # vma samples  %   symbol name
+        # 0008c07c 181      17.8854  _ZN16Player_Generic_c23ProcessDecode
+        r'vma +samples +% +symbol[ _]name *',
         ]
     for line in open(oprof_output):
         for num, rexp in enumerate(profile_formats):
@@ -82,6 +85,8 @@ def parse_binary_list(oprof_output, oprofile_format, binary, bin_path):
                 # handle (no-location-information) case
                 #   0000000 156636 9.4180 (no location information) no-vmlinux
                 image_name = (words[3] == '(no') and words[6] or words[4]
+            elif oprofile_format == 6:
+                image_name = "default"
 
         # detect if we are in an interesting region of the profile file
         if image_name != 'anon':
@@ -89,6 +94,9 @@ def parse_binary_list(oprof_output, oprofile_format, binary, bin_path):
                 # Handle -e <binary> option
                 if not (image_name, binary) in binary_list:
                     binary_list += [(image_name, binary)]
+            elif image_name == 'default':
+                if not (image_name, None) in binary_list:
+                    binary_list += [(image_name, None)]
             else:
                 ret_path = find_binary_in_path(image_name, bin_path)
                 if ret_path and not (image_name, ret_path) in binary_list:
@@ -124,9 +132,12 @@ def parse_profile(oprof_output, oprofile_format, binary_list):
             if words[3] == '(no':
                 words[3] = ' '.join(words[3:6])
                 del words[4:6]
-            image_name = (
-                (oprofile_format == 1 or oprofile_format == 4)
-                and words[3] or words[4])
+            if oprofile_format == 1 or oprofile_format == 4:
+                image_name = words[3]
+            elif oprofile_format == 6:
+                image_name = "default"
+            else:
+                image_name = words[4]
 
         # detect if we are in an interesting region of the profile file
         for (bin, path) in binary_list:
@@ -153,7 +164,8 @@ def parse_profile(oprof_output, oprofile_format, binary_list):
                     linenr = words.pop(3)
                 if oprofile_format in [1, 2, 3, 4]:
                     sym = words[4]
-
+                elif oprofile_format == 6:
+                    sym = words[3]
             # merge multiple entries for same image_name/sym
             sym_found = False
             sym = sym.split('.')[0]

@@ -1864,6 +1864,23 @@ def run_atos_web(args):
                 filtered.append(cookie)
         return filtered
 
+    def print_progress(percent):
+        # Only print progress in a tty
+        if sys.stdout.isatty():
+            # pad with space to clear previous message and
+            # clamp msg to terminal width,
+            with os.popen("tput cols", "r") as tput:
+                # Remove 8 caracters for '[===>] xx%'
+                cols = int(tput.readline()) - 8
+            # Check that we have enough space in the terminal
+            if cols <= 0:
+                return
+            # Print '[===>] xx%'
+            status = '\r[' + int(cols * percent / 100) * "=" + '>]'
+            status += " %d%%" % (percent)
+            sys.stdout.write(status)
+            sys.stdout.flush()
+
     # Subcommands
     if args.subcmd_web == "project":
         if len(args.operation) == 0:
@@ -2016,17 +2033,17 @@ def run_atos_web(args):
                                           .get_results({'target': target})
 
                 order = 0
+                num_results = len(results)
                 for result in results:
                     # The order is the run number. It should be incremented
                     # even if the run failed
                     order += 1
+                    print_progress((order / (float)(num_results)) * 100)
                     if result['time'] == 'FAILURE' or \
                        result['size'] == 'FAILURE':
                         message("Not pushing failed run %s"
                                 % (atos_lib.hashid(result['variant'])))
                         continue
-                    message("Pushing run %s"
-                            % (atos_lib.hashid(result['variant'])))
 
                     # Select only the cookies present in cookies_db
                     run_cookies = result.get('cookies', '').split(',')

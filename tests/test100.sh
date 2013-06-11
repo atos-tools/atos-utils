@@ -31,6 +31,9 @@ $ROOT/bin/atos-explore-genetic \
 # generation-2: 2 points * 5 iters
 # generation-3: 2 points * 5 iters
 # generation-4: 2 points * 5 iters
-$ROOT/bin/atos lib query -C atos-config
-$ROOT/bin/atos lib query -C atos-config | wc -l
-[ `$ROOT/bin/atos lib query -C atos-config | wc -l` -eq 37 ]
+if [ `$ROOT/bin/atos lib query -C atos-config | wc -l` -ne 37 ]; then
+    echo "$PWD" 1>&2
+    cp -fr $PWD /home/compwork/moynault/atos-tmp
+    $ROOT/bin/atos lib query -C atos-config | wc -l 1>&2
+    exit 1
+fi

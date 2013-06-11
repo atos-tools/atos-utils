@@ -1860,11 +1860,18 @@ def run_atos_web(args):
 
     # Subcommands
     if args.subcmd_web == "project":
+        if len(args.operation) == 0:
+            error("Missing operation: should be create, list or details")
+            return
+
         if args.operation[0] == 'create':
             op_create('/api/1.0/projects')
         elif args.operation[0] == 'list':
             op_list('/api/1.0/projects', "Projects on %s" % (args.server))
         elif args.operation[0] == 'details':
+            if len(args.operation) < 2:
+                error("The operation expect a project id as parameter")
+                return
             op_details("/api/1.0/projects/%s" % (args.operation[1]))
         else:
             error("atos-web-project: unknow operation '%s'"
@@ -1931,6 +1938,9 @@ def run_atos_web(args):
         return
 
     elif args.subcmd_web == "experiment":
+        if len(args.operation) == 0:
+            error("Missing operation: should be create, list or details")
+            return
         if args.operation[0] == 'create':
             op_create("/api/1.0/projects/%s/experiments"
                         % (args.project))
@@ -1939,6 +1949,9 @@ def run_atos_web(args):
                      "Experiment for project %d on %s"
                         % (args.project, args.server))
         elif args.operation[0] == 'details':
+            if len(args.operation) < 2:
+                error("The operation expect an experiment id as parameter")
+                return
             op_details("/api/1.0/projects/%s/experiments/%s"
                             % (args.project, args.operation[1]))
         else:
@@ -1947,6 +1960,9 @@ def run_atos_web(args):
             return 1
 
     elif args.subcmd_web == "target":
+        if len(args.operation) == 0:
+            error("Missing operation: should be create, list or details")
+            return
         if args.operation[0] == 'create':
             op_create("/api/1.0/projects/%s/experiments/%s/targets"
                        % (args.project, args.experiment))
@@ -1956,6 +1972,9 @@ def run_atos_web(args):
                      "Target for project %d on %s"
                         % (args.project, args.server))
         elif args.operation[0] == 'details':
+            if len(args.operation) < 2:
+                error("The operation expect a target id as parameter")
+                return
             op_details("/api/1.0/projects/%s/experiments/%s/targets/%s"
                             % (args.project, args.experiment,
                                args.operation[1]))
@@ -1965,6 +1984,9 @@ def run_atos_web(args):
             return 1
 
     elif args.subcmd_web == "run":
+        if len(args.operation) == 0:
+            error("Missing operation: should be create, list or details")
+            return
         if args.operation[0] == 'create':
             # Pushing all the runs
             if len(args.operation) == 2 and args.operation[1] == "all":
@@ -2033,13 +2055,16 @@ def run_atos_web(args):
                         % (args.experiment, args.target, args.server),
                      'id', 'hash')
         elif args.operation[0] == 'details':
+            if len(args.operation) < 2:
+                error("The operation expect a run id as parameter")
+                return
             op_details(
                 "/api/1.0/projects/%s/experiments/%s/targets/%s/runs/%s"
                     % (args.project, args.experiment, args.target,
                        args.operation[1]), 'hash')
-    else:
-        error("atos-web: unknow operation '%s' for 'run' command"
-              % (args.operation[0]))
-        return 1
+        else:
+            error("atos-web-run: unknown operation '%s'"
+                  % (args.operation[0]))
+            return 1
 
     return 0

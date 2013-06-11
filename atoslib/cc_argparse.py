@@ -40,10 +40,10 @@ class CCArgumentInterpreter:
             prefix = re.sub("\.[^.]*$", "", filename)
             return "%s%s" % (prefix, suffix)
 
-        def cc_phase_parent(phase):
+        def cc_phase_parent(phase):  # pragma: uncovered
             return desc.cc_phase_dependencies(phase)
 
-        def cc_phase_has_parent(phase, parent):
+        def cc_phase_has_parent(phase, parent):  # pragma: uncovered
             current = cc_phase_parent(phase)
             while current:
                 if current == parent:
@@ -67,18 +67,17 @@ class CCArgumentInterpreter:
         if last_cc_phase == None:
             return
         for src_kind, fname in namespace.input_pairs:
-            inputs_phases = desc.cc_source_phases.get(src_kind, None)
-            if inputs_phases:
-                if last_cc_phase in inputs_phases:
-                    if not inputs_phases[0] in cc_phase_inputs:
-                        cc_phase_inputs[inputs_phases[0]] = []
-                    cc_phase_inputs[inputs_phases[0]].append((src_kind, fname))
-                    if inputs_phases[0] == 'CMD':
-                        cmd_inputs.append((src_kind, fname))
-                    else:
-                        cc_inputs.append((src_kind, fname))
-                    last_idx = inputs_phases.index(last_cc_phase)
-                    phases = phases.union(set(inputs_phases[:last_idx + 1]))
+            inputs_phases = desc.cc_source_phases.get(src_kind, [])
+            if last_cc_phase in inputs_phases:
+                if not inputs_phases[0] in cc_phase_inputs:
+                    cc_phase_inputs[inputs_phases[0]] = []
+                cc_phase_inputs[inputs_phases[0]].append((src_kind, fname))
+                if inputs_phases[0] == 'CMD':
+                    cmd_inputs.append((src_kind, fname))
+                else:
+                    cc_inputs.append((src_kind, fname))
+                last_idx = inputs_phases.index(last_cc_phase)
+                phases = phases.union(set(inputs_phases[:last_idx + 1]))
         if len(cc_inputs) == 0:
             raise CCArgumentError("no input")
         assert(len(namespace.outputs) <= 1)
@@ -98,7 +97,7 @@ class CCArgumentInterpreter:
                 cc_outputs = map(
                     lambda x: replace_suffix(os.path.basename(x[1]), suffix),
                     cc_inputs)
-            elif last_cc_phase == "CPP":
+            elif last_cc_phase == "CPP":  # pragma: branch_always
                 # Outputs to stdout
                 cc_outputs = []
 
@@ -374,6 +373,11 @@ class CCArgumentParser:
         print "TESTING CCArgumentsParser..."
         parser = CCArgumentParser("gcc")
         ns = parser.parse_args(shlex.split(
+                "-E in.c"), TestNameSpace())
+        interp = CCArgumentInterpreter(ns)
+
+        parser = CCArgumentParser("gcc")
+        ns = parser.parse_args(shlex.split(
                 "-o out.o -c in.c --help -I/path -pthread"),
                                TestNameSpace())
         deep_eq(ns.unknown_flags, [], _assert=True)
@@ -634,6 +638,8 @@ class CCArgumentParser:
         deep_eq(interp.cc_phase_input_pairs("CMD"),
                 [('SRC_PCH', "%s/include.gch" % tmpdir)],
                 _assert=True)
+        deep_eq(interp.all_pch_inputs(),
+                ["%s/include.gch" % tmpdir], _assert=True)
         deep_eq(interp.cc_phase_input_pairs("CPP"),
                 [('SRC_C', "file1.c"), ('SRC_CC', "file2.cpp"),
                  ('SRC_C', "a_c_file"), ('SRC_C', "b_c_file")],
@@ -647,6 +653,13 @@ class CCArgumentParser:
                 map(lambda x: ('SRC_LNK', os.path.join(tmpdir, x)),
                     ["liba.so", "libb.a", "libc.so"]),
                 _assert=True)
+
+        ns = parser.parse_args(shlex.split(
+                "-o out.o -c in.c "
+                "-include %s/include-unk" % (tmpdir)),
+                               TestNameSpace())
+        interp = CCArgumentInterpreter(ns)
+
         shutil.rmtree(tmpdir)
         print "SUCCESS CCArgumentsParser"
         return True

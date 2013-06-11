@@ -101,7 +101,7 @@ def _process_output(process, output_file, print_output, output_stderr):
         if not fil: return
         flags = flg or fcntl.fcntl(fil, fcntl.F_GETFL)
         new_flags = msk and (flags | msk) or flags
-        if not fil.closed:
+        if not fil.closed:  # pragma: branch_uncovered
             fcntl.fcntl(fil, fcntl.F_SETFL, new_flags)
         return flags
     # set flags to get non-blocking read of stdio/stderr
@@ -182,7 +182,7 @@ def setup(kwargs):
     Must be called before any thread creation.
     """
     global _initialized, _dryrun, _real_open
-    if _initialized: return
+    if _initialized: return  # pragma: uncovered
     _initialized = True
 
     def replace_open(fake_open):
@@ -211,11 +211,7 @@ def system(cmd, check_status=False, get_output=False, print_output=False,
         logging.info(printable_cmd)
         return get_output and (0, "") or 0
     logging.debug('command [%s]' % printable_cmd)
-    root_logger = logging.getLogger()
-    debug_mode = root_logger.isEnabledFor(logging.DEBUG)
-    quiet_mode = not root_logger.isEnabledFor(logging.INFO)
-    print_output = print_output and not quiet_mode
-    get_output_ = get_output or debug_mode
+    get_output_ = get_output or logger._debug
     status, output = _subcall(
         cmd, print_output=print_output,
         get_output=get_output_, output_stderr=output_stderr,
@@ -231,7 +227,7 @@ def system(cmd, check_status=False, get_output=False, print_output=False,
 
 def open_locked(filename, mode='r', timeout=None):
     delay = 0
-    while timeout == None or delay <= timeout:
+    while timeout == None or delay <= timeout:  # pragma: uncovered
         outf = open(filename, mode)
         if _dryrun and not isinstance(outf, file):
             return outf
@@ -243,8 +239,7 @@ def open_locked(filename, mode='r', timeout=None):
         delay += 0.2
 
 def _open(name, *args):
-    if not _dryrun:
-        return _real_open(name, *args)
+    assert _dryrun
     modes = set(args[0]) if args else None
     if not modes:
         return _real_open(name, *args)
@@ -260,9 +255,11 @@ def debug(msg, *args, **kwargs):
 class CtxStringIO(StringIO.StringIO):
     """ StringIO with context manager support class """
 
-    def __exit__(self, exc_type, exc_val, exc_tb): self.close()
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
 
-    def __enter__(self): return self
+    def __enter__(self):
+        return self
 
 class commands():
 
@@ -352,7 +349,7 @@ class commands():
         else:
             env_PATH = os.environ.get('PATH', None)
             if not env_PATH: return None
-            for p in env_PATH.split(os.pathsep):
+            for p in env_PATH.split(os.pathsep):  # pragma: branch_always
                 if p == "": continue
                 p = os.path.join(p, execname)
                 if os.access(p, os.X_OK):
@@ -374,7 +371,9 @@ class commands():
                     if not b1: return False
 
     @staticmethod
-    def test():
+    def test():  # pragma: uncovered (ignore test funcs)
+        global _initialized
+
         def test_which(tmpdir):
             commands.chdir(tmpdir)
             oldpath = None
@@ -433,7 +432,27 @@ class commands():
         finally:
             commands.chdir(cwd)
             commands.rmtree(tmpdir)
+        commands.rmtree("foo")
+        commands.unlink("foo")
+        commands.mkdir("tmp")
+        commands.touch("foo")
+        commands.link("foo", "lnk")
+        commands.rmtree("foo")
         print "SUCCESS process.commands"
+
+        print "TESTING process.commands (dryrun)..."
+        _initialized = False
+        setup({'dryrun': True})
+        commands.mkdir("tmp2")
+        commands.touch("foo")
+        commands.chmod("foo", 0000)
+        commands.rmtree("tmp2")
+        commands.copyfile("foo", "bar")
+        commands.link_or_copyfile("foo", "baz")
+        commands.link("foo", "babar")
+        commands.unlink("foo")
+        print "SUCCESS process.commands (dryrun)"
+
         return True
 
 if __name__ == "__main__":

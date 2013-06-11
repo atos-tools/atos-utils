@@ -7,9 +7,15 @@ source `dirname $0`/common.sh
 TEST_CASE="ATOS debug mode"
 
 $ROOT/bin/atos-init \
+    --log-file=./debug-00.log \
     -r "$SRCDIR/examples/sha1-c/run.sh" \
     -b "gcc -o sha1-c $SRCDIR/examples/sha1-c/sha.c $SRCDIR/examples/sha1-c/sha1.c"
 
+[ -f ./debug-00.log ]
+
+$ROOT/bin/atos-build -a "-O2" --log-file=./debug-01.log
+
+[ -f ./debug-01.log ]
 
 export ATOS_DEBUG_FILE=./debug-1.log
 

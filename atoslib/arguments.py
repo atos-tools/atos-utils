@@ -649,7 +649,7 @@ class parsers:
     @staticmethod
     def atos_lib_createdb(parser=None):
         """ atos lib createdb arguments parser factory. """
-        if parser == None:
+        if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(
                 prog="atos-lib-createdb",
                 description="Create a new empty database")
@@ -662,7 +662,7 @@ class parsers:
     @staticmethod
     def atos_lib_query(parser=None):
         """ atos lib query arguments parser factory. """
-        if parser == None:
+        if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(
                 prog="atos-lib-query",
                 description="Query database results")
@@ -675,7 +675,7 @@ class parsers:
     @staticmethod
     def atos_lib_speedups(parser=None):
         """ atos lib speedups arguments parser factory. """
-        if parser == None:
+        if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(prog="atos-lib-speedups",
                                         description="ATOS lib tool")
 
@@ -694,7 +694,7 @@ class parsers:
     @staticmethod
     def atos_lib_push(parser=None):
         """ atos lib push arguments parser factory. """
-        if parser == None:
+        if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(prog="atos-lib-push",
                                         description="ATOS lib tool")
 
@@ -708,7 +708,7 @@ class parsers:
     @staticmethod
     def atos_lib_pull(parser=None):
         """ atos lib pull arguments parser factory. """
-        if parser == None:
+        if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(prog="atos-lib-pull",
                                         description="ATOS lib tool")
 
@@ -722,7 +722,7 @@ class parsers:
     @staticmethod
     def atos_lib_report(parser=None):
         """ atos lib report arguments parser factory. """
-        if parser == None:
+        if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(prog="atos-lib-report",
                                         description="ATOS lib tool")
 
@@ -738,7 +738,7 @@ class parsers:
     @staticmethod
     def atos_lib_addresult(parser=None):
         """ atos lib add_result arguments parser factory. """
-        if parser == None:
+        if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(prog="atos-lib-add_result",
                                         description="ATOS lib tool")
 
@@ -749,7 +749,7 @@ class parsers:
     @staticmethod
     def atos_lib_config(parser=None):
         """ atos lib config arguments parser factory. """
-        if parser == None:
+        if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(prog="atos-lib-config",
                                         description="ATOS lib tool")
 
@@ -794,7 +794,7 @@ class parsers:
     @staticmethod
     def atos_graph(parser=None):
         """ atos graph arguments parser factory. """
-        if parser == None:
+        if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(prog="atos-graph",
                                         description="ATOS graph tool")
         args.atos_graph.outfile(parser)
@@ -1058,7 +1058,7 @@ class parsers:
     @staticmethod
     def atos_web_project(parser=None):
         """ atos web project arguments parser factory. """
-        if parser == None:
+        if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(
                 prog="atos-web-project",
                 description="Manage web projects")
@@ -1069,7 +1069,7 @@ class parsers:
     @staticmethod
     def atos_web_experiment(parser=None):
         """ atos web experiment arguments parser factory. """
-        if parser == None:
+        if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(
                 prog="atos-web-experiment",
                 description="Manage web experiments")
@@ -1081,7 +1081,7 @@ class parsers:
     @staticmethod
     def atos_web_cookie(parser=None):
         """ atos web cookie arguments parser factory. """
-        if parser == None:
+        if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(
                 prog="atos-web-cookie",
                 description="Manage web cookies")
@@ -1094,7 +1094,7 @@ class parsers:
     @staticmethod
     def atos_web_target(parser=None):
         """ atos web target arguments parser factory. """
-        if parser == None:
+        if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(
                 prog="atos-web-target",
                 description="Manage web targets")
@@ -1107,7 +1107,7 @@ class parsers:
     @staticmethod
     def atos_web_run(parser=None):
         """ atos web run argument parsers factory. """
-        if parser == None:
+        if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(
                 prog="atos-web-run",
                 description="Manage web runs")

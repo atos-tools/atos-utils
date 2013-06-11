@@ -47,7 +47,7 @@ fi
 
 
 # launch a function by function exploration
-$ROOT/bin/atos-explore-acf --hot-th=50 -F ./flags_list.txt --optim-variants=base --optim-levels=-O0
+$ROOT/bin/atos-explore-acf --hot-th=50 -Y "-Os cold" -F ./flags_list.txt --optim-variants=base --optim-levels=-O0
 
 # choose one of the run with an acf csv file
 all_csv_variant=`$ROOT/bin/atos lib query -t -q'$[*].variant' | grep csv`
@@ -69,3 +69,9 @@ $ROOT/bin/atos generator --generator=gen_flag_values  \
 
 # verify that exploration was done on one of the parameter flag (large-function-growth)
 [ `cat atos-configurations/acf_csv_dir/*.csv | grep param | grep large | grep -v 400 | wc -l` -ne 0 ]
+
+# retry with different arguments
+$ROOT/bin/atos generator --generator=gen_flag_values  \
+    --extra-arg=nbvalues=2 --extra-arg=try_removing=1 \
+    --extra-arg=variant_id=$last_csv_variant \
+    --tradeoffs=5

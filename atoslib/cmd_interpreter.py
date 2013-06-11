@@ -92,7 +92,7 @@ class CmdInterpreterFactory:
     def test():
         def test_eq(x, y):
             res = deep_eq(x, y)
-            if not res:
+            if not res:  # pragma: uncovered (error)
                 print "FAILURE: %s and %s differ" % (str(x), str(y))
             return res
 
@@ -130,22 +130,36 @@ class CmdInterpreterFactory:
                  ["a.o", "b.o", "c.c", "d.ro", "e.os", "f.a"],
              'expected_outputs': ["a.out"]
              },
+            {'command':
+                 {'args': ["proot"], 'cwd': "."},
+             'expected_kind': "UNK",
+             'expected_inputs': [],
+             'expected_outputs': []
+             },
+
             ]
         passed = True
         for t in tests:
             cmd = t['command']
             print "TEST: %s" % process.list2cmdline(cmd['args'])
             interpreter = CmdInterpreterFactory().get_interpreter(cmd)
-            kind = interpreter.get_kind()
-            outputs = interpreter.get_output_files()
-            inputs = interpreter.get_input_files()
-            if (test_eq(kind, t['expected_kind']) and
-                test_eq(outputs, t['expected_outputs']) and
-                test_eq(inputs, t['expected_inputs'])):
-                print "SUCCESS: %s" % process.list2cmdline(cmd['args'])
+            if not interpreter:
+                if test_eq("UNK", t['expected_kind']):
+                    print "SUCCESS: %s" % process.list2cmdline(cmd['args'])
+                else:  # pragma: uncovered (error)
+                    print "FAILURE: %s" % process.list2cmdline(cmd['args'])
+                    passed = False
             else:
-                print "FAILURE: %s" % process.list2cmdline(cmd['args'])
-                passed = False
+                kind = interpreter.get_kind()
+                outputs = interpreter.get_output_files()
+                inputs = interpreter.get_input_files()
+                if (test_eq(kind, t['expected_kind']) and
+                    test_eq(outputs, t['expected_outputs']) and
+                    test_eq(inputs, t['expected_inputs'])):
+                    print "SUCCESS: %s" % process.list2cmdline(cmd['args'])
+                else:  # pragma: uncovered
+                    print "FAILURE: %s" % process.list2cmdline(cmd['args'])
+                    passed = False
         return passed
 
 class CCInterpreter:
@@ -318,7 +332,7 @@ class ARInterpreter:
         inputs = map(lambda x: ('SRC_AR',
                                 os.path.normpath(os.path.join(cwd, x))),
                      args[3:])
-        self.input_pairs = inputs
+        self.input_pairs_ = inputs
         return inputs
 
     def get_output_files(self):
@@ -338,7 +352,7 @@ class ARInterpreter:
                 outputs = [os.path.normpath(os.path.join(cwd, args[i + 1]))]
             else:
                 break
-        self.outputs = outputs
+        self.output_files_ = outputs
         return outputs
 
     @staticmethod
@@ -349,11 +363,16 @@ class ARInterpreter:
              'cwd': "."})
         deep_eq(cc.get_kind(), "AR", _assert=True)
         deep_eq(cc.get_output_files(), ["lib.a"], _assert=True)
+        deep_eq(cc.get_output_files(), ["lib.a"], _assert=True)
         deep_eq(cc.get_input_pairs(),
                 [('SRC_AR', "a.o"), ('SRC_AR', "b.o"),
                  ('SRC_AR', "c.c")], _assert=True)
         deep_eq(cc.get_input_files(),
                 ["a.o", "b.o", "c.c"], _assert=True)
+        cc = ARInterpreter(
+            {'args': shlex.split("ar -v"),
+             'cwd': "."})
+        deep_eq(cc.get_output_files(), [], _assert=True)
         print "SUCCESS: ARInterpreter"
 
         return True

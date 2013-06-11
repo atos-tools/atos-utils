@@ -49,10 +49,10 @@ def check_format(oprof_output):
         # 0008c07c 181      17.8854  _ZN16Player_Generic_c23ProcessDecode
         r'vma +samples +% +symbol[ _]name *',
         ]
-    for line in open(oprof_output):
+    for line in open(oprof_output):  # pragma: branch_uncovered
         for num, rexp in enumerate(profile_formats):
             if re.match(rexp, line): return num + 1
-    return None
+    return None  # pragma: uncovered (error)
 
 
 def parse_binary_list(oprof_output, oprofile_format, binary, bin_path):
@@ -85,11 +85,11 @@ def parse_binary_list(oprof_output, oprofile_format, binary, bin_path):
                 # handle (no-location-information) case
                 #   0000000 156636 9.4180 (no location information) no-vmlinux
                 image_name = (words[3] == '(no') and words[6] or words[4]
-            elif oprofile_format == 6:
+            elif oprofile_format == 6:  # pragma: branch_always
                 image_name = "default"
 
         # detect if we are in an interesting region of the profile file
-        if image_name != 'anon':
+        if image_name != 'anon':  # pragma: branch_uncovered
             if os.path.basename(image_name) == os.path.basename(binary):
                 # Handle -e <binary> option
                 if not (image_name, binary) in binary_list:
@@ -156,7 +156,7 @@ def parse_profile(oprof_output, oprofile_format, binary_list):
             else:  # oprofile format
                 vma, samps, percent = words[0:3]
                 linenr, app_name = ' ', ' '
-                if oprofile_format == 3:
+                if oprofile_format == 3:  # pragma: uncovered
                     app_name = words.pop(5)
                 elif oprofile_format == 4:
                     app_name = words.pop(4)
@@ -164,7 +164,7 @@ def parse_profile(oprof_output, oprofile_format, binary_list):
                     linenr = words.pop(3)
                 if oprofile_format in [1, 2, 3, 4]:
                     sym = words[4]
-                elif oprofile_format == 6:
+                elif oprofile_format == 6:  # pragma: branch_always
                     sym = words[3]
             # merge multiple entries for same image_name/sym
             sym_found = False
@@ -190,7 +190,8 @@ def parse_profile(oprof_output, oprofile_format, binary_list):
     return samples
 
 
-def create_debug_info_lists(samples, binary_list, addr2line="addr2line"):
+def create_debug_info_lists(
+    samples, binary_list, addr2line="addr2line"):  # pragma: uncovered
     def create_debug_info_list(binary_file, addr_file_path, addr2line):
         dbg_info = {}
         status, res = commands.getstatusoutput(
@@ -247,7 +248,7 @@ def create_debug_info_lists(samples, binary_list, addr2line="addr2line"):
     return debug_infos
 
 
-def get_file(debug_info, vma):
+def get_file(debug_info, vma):  # pragma: uncovered
     # returns the basename of the file
     (debug_func, debug_file, debug_line) = debug_info[vma]
     if debug_func == '??' or debug_file == '??':
@@ -273,14 +274,14 @@ def get_samples(imgpath, oprof_output):
     binary, bin_path = '', ''
     if is_binary: binary = imgpath
     else: bin_path = imgpath
-    if binary and not os.path.isfile(binary):
+    if binary and not os.path.isfile(binary):  # pragma: uncovered (error)
         error('binary file not found: "%s"' % binary)
         return None, None
-    if not os.path.isfile(oprof_output):
+    if not os.path.isfile(oprof_output):  # pragma: uncovered (error)
         error('profile file not found: "%s"' % oprof_output)
         return None, None
     oprofile_format = check_format(oprof_output)
-    if not oprofile_format:
+    if not oprofile_format:  # pragma: uncovered (error)
         error('oprofile output format not supported')
         return None, None
     binary_list = parse_binary_list(
@@ -341,11 +342,11 @@ def get_localized_symbols_partition(hot_cold_partition, debug_infos):
     for image_name in hot_cold_partition.keys():
         cold_list, hot_list = hot_cold_partition[image_name]
         for (sym, vma, count) in hot_list:
-            if debug_infos:
+            if debug_infos:  # pragma: uncovered
                 source_file = get_file(debug_infos[image_name], vma)
             new_hot_list.append((sym, source_file, count))
         for (sym, vma, count) in cold_list:
-            if debug_infos:
+            if debug_infos:  # pragma: uncovered
                 source_file = get_file(debug_infos[image_name], vma)
             new_cold_list.append((sym, source_file, count))
     new_cold_list = map(
@@ -363,7 +364,7 @@ def get_localized_symbols_partition(hot_cold_partition, debug_infos):
 def partition_symbols_loc(imgpath, hot_th, oprof_output):
     samples, binary_list = get_samples(
         imgpath=imgpath, oprof_output=oprof_output)
-    if not samples: return [], []
+    if not samples: return [], []  # pragma: uncovered
     debug_infos = create_debug_info_lists(samples, binary_list)
     hot_cold_partition = partition_symbols(samples, int(hot_th))
     cold_list, hot_list = get_localized_symbols_partition(
@@ -374,7 +375,7 @@ def partition_symbols_loc(imgpath, hot_th, oprof_output):
 def partition_object_files(imgpath, hot_th, fct_map, oprof_output):
     samples, _ = get_samples(
         imgpath=imgpath, oprof_output=oprof_output)
-    if not samples: return [], []
+    if not samples: return [], []  # pragma: uncovered
     hot_cold_partition = partition_symbols(samples, int(hot_th))
     cold_list, hot_list = partition_objects(hot_cold_partition, fct_map)
     return cold_list, hot_list
@@ -384,7 +385,7 @@ def read_function_to_file_map(mapfile):
     fct_map = {}
     for line in open(mapfile):
         words = line.split()
-        if len(words) < 2: continue
+        if len(words) < 2: continue  # pragma: uncovered
         obj, fct = words[:2]
         fct_map.setdefault(fct, []).append(obj)
     return fct_map
@@ -393,7 +394,8 @@ def read_function_to_file_map(mapfile):
 def get_image_pathes(exes=None, configuration_path='atos-configuration'):
     imgpath = exes and exes.split()
     targets_filename = os.path.join(configuration_path, "targets")
-    if not imgpath and os.path.isfile(targets_filename):
+    if not imgpath and os.path.isfile(  # pragma: branch_uncovered
+        targets_filename):
         with open(targets_filename) as targets_file:
             imgpath = map(
                 lambda x: os.path.dirname(x),

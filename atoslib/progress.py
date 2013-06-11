@@ -88,7 +88,7 @@ def _display_progress(expl_stage="update", timer_stage="update"):
         elif expl_stage == "update":
             status = "Remaining time: %s," % (
                 remaining_time_str(main_estimated))
-        elif expl_stage == "end":
+        elif expl_stage == "end":  # pragma: branch_always
             status = "Elapsed time: %s," % (
                 remaining_time_str(main_progress.elapsed()))
         status_str += "%s %3.0f%% done" % (status, main_completion * 100)
@@ -101,11 +101,10 @@ def _display_progress(expl_stage="update", timer_stage="update"):
                     progress_detail.descr,
                     min(progress_detail.value + 1, progress_detail.maxval),
                     progress_detail.maxval)]
-        if progress_strings:
-            status_str += " (%s)" % ", ".join(progress_strings)
-        status_str += "."
+        status_str += " (%s)." % ", ".join(progress_strings)
 
-    if sys.stdout.isatty():  # no line update if stdout is not a tty
+    # no line update if stdout is not a tty
+    if sys.stdout.isatty():  # pragma: uncovered
         for timer in timer_progress.timers():
             estimated = timer.estimated()
             if not estimated:
@@ -133,9 +132,8 @@ def _display_progress(expl_stage="update", timer_stage="update"):
     else:
         status_str += "\n"
 
-    if status_str:
-        sys.stdout.write(status_str)
-        sys.stdout.flush()
+    sys.stdout.write(status_str)
+    sys.stdout.flush()
 
 class exploration_progress():
     """
@@ -171,12 +169,10 @@ class exploration_progress():
         """
         if not config.progress_enabled: return
         if not self.visible: return
-        if self.value is None:
-            self.value = 0
-        if value is not None:
-            self.value = value
+        if value is None:
+            self.value = 1
         else:
-            self.value += 1
+            self.value = value
         if maxval is not None:
             self.maxval = maxval
         if self.is_main_exploration:
@@ -264,16 +260,16 @@ class timer_progress():
         """ Returns elapsed time since timer creation. """
         return time.time() - self.start_time_
 
-    def estimated(self):
+    def estimated(self):  # pragma: uncovered (not isatty)
         """ Returns currently estimated time or None. """
         return self.estimate_.get_estimated_time(self.progress_type_)
 
-    def progress_type(self):
+    def progress_type(self):  # pragma: uncovered (not isatty)
         """ Returns the progress type as passed in the constructor. """
         return self.progress_type_
 
     @staticmethod
-    def timers():
+    def timers():  # pragma: uncovered (not isatty)
         """ Returns the currently active list of timers. """
         return timer_progress.timers_
 

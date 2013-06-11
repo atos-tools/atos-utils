@@ -20,3 +20,8 @@ $ROOT/bin/atos-init \
 $ROOT/bin/atos-explore --reuse --cookie=unknown 2>&1 | tee atos.log
 
 [ `cat atos.log | grep "Skipping profile" | wc -l` -eq 3 ]
+
+# negative case (bad use of reuse option)
+$ROOT/bin/atos-explore --reuse 2>&1 | tee atos.log
+
+[ `cat atos.log | grep "reuse option must be used with" | wc -l` -ne 0 ]

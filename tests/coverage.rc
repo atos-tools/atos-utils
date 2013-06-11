@@ -1,0 +1,53 @@
+[report]
+# Regexes for lines to exclude from consideration
+exclude_lines =
+
+# unreachable (non-executable) statements
+    pragma: unreachable
+
+# fatal error code
+    pragma: fatal
+
+# code still not covered
+    pragma: uncovered
+
+# standard pragma
+    pragma: no cover
+
+# debug
+    def __repr__
+
+# exceptions
+    except
+    raise
+
+partial_branches =
+
+# branch still not covered
+    pragma: branch_uncovered
+
+# standard pragma
+    pragma: no branch
+
+partial_branches_always =
+
+# branches always taken
+    pragma: branch_always
+
+    while True:
+    while 1:
+    while False:
+    while 0:
+    if True:
+    if 1:
+    if False:
+    if 0:
+
+[report]
+
+precision = 1
+show_missing = 1
+
+[html]
+
+title = "Coverage report (strict)"

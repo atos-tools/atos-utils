@@ -6,11 +6,19 @@ import common
 
 TEST_CASE = "ATOS process module"
 
-from atoslib import process
+from atoslib import process, logger
+
+logger.setup({})
 
 args = process.cmdline2list("command '' a\\\ file")
 cmd = process.list2cmdline(args)
 assert cmd == "command '' a\\\ file"
+
+status = process.system("false", get_output=False, print_output=True)
+assert status == 1
+
+status, output = process.system("false", get_output=True, no_debug=True)
+assert status == 1
 
 status = process.system("false", print_output=False)
 assert status == 1
@@ -58,4 +66,3 @@ assert status == 0
 process.setup({'dryrun': True})
 status = process.system("false")
 assert status == 0
-

@@ -73,3 +73,10 @@ results_ck1 = atos_lib.results_filter_cookie(
     common.atos_results(), cookies[0])
 assert len(results_expl) and len(results_expl) == len(results_ck1)
 
+status = utils.invoque(
+    "atos-explore-loop", args, nbiters=1, optim_variants='base', cookies=cookies)
+assert status == 0
+
+status = utils.invoque(
+    "atos-explore-optim", args, nbiters=1, optim_variants='base', cookies=cookies)
+assert status == 0

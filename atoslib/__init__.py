@@ -21,7 +21,7 @@ import sys, os, signal
 def check_python_version_():
     try:
         assert sys.hexversion >= 0x02060000
-    except:  # pragma: no cover
+    except:  # pragma: fatal
         print >>sys.stderr, \
             'error: python version >= 2.6 is required by ATOS tools'
         sys.exit(1)

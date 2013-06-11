@@ -13,7 +13,7 @@ cp -a $SRCDIR/tests/resources/build_install_so_1/* .
 $ROOT/bin/atos-init -c -b "make clean all install" -r ./main.exe -e "main.exe libtest.so"
 mv main.exe main.exe.ref
 make clean
-$ROOT/bin/atos-opt
+$ROOT/bin/atos-opt 2>&1
 diff main.exe main.exe.ref
 
 # Build an verify whether we can just specify the main program name
@@ -21,7 +21,7 @@ diff main.exe main.exe.ref
 $ROOT/bin/atos-init -c -b "make clean all install" -r ./main.exe -e "main.exe"
 mv main.exe main.exe.ref
 make clean
-$ROOT/bin/atos-opt
+$ROOT/bin/atos-opt 2>&1
 diff main.exe main.exe.ref
 
 

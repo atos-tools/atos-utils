@@ -183,7 +183,7 @@ class GenArgumentParser():
         return (namespace, parsed_args)
 
     def process_argument_(self, namespace, action, args):
-        if namespace == None: return
+        assert namespace
         if action == None:
             assert(args[0] == None)
             if not hasattr(namespace, 'REMAINDER'):
@@ -202,13 +202,13 @@ class GenArgumentParser():
             eval("namespace.%s(args)" % dest)
         elif len(args) == 1:
             setattr(namespace, dest, True)
-        elif len(args) > 1:
+        elif len(args) > 1:  # pragma: branch_always
             setattr(namespace, dest, args[1])
 
     def prepare_arguments_(self):
         def build_regexps(regexp_actions):
             if len(regexp_actions) == 0:
-                return None
+                return []
             # Create a list of global regexp with a symbolic group
             # for each option regexp.
             # We split the regexps list into chunks as python
@@ -223,7 +223,7 @@ class GenArgumentParser():
                 count = chunk_count
                 if cc == chunk_nb:
                     count = len(regexp_actions) - i
-                    if count == 0: break
+                    if count == 0: break  # pragma: branch_uncovered
                 regexp = "^(%s)$" % (
                     "|".join(map(
                             lambda x: x[0],
@@ -262,6 +262,9 @@ class GenArgumentParser():
                 self.X_kind = args[0][2:]
                 self.X_arg = args[1]
         print "TESTING: GenArgumentParser..."
+        parser = GenArgumentParser()
+        ns, args = parser.parse_args(shlex.split(
+                "-E -oout.i file.c file2.cc"))
         parser = GenArgumentParser()
         parser.add_argument("-E")
         parser.add_argument("-c")

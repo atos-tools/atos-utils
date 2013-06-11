@@ -68,7 +68,7 @@ class atos_db():
     @staticmethod
     def db(results_path, no_cache=False):
 
-        if os.path.isdir(results_path):
+        if os.path.isdir(results_path):  # pragma: branch_uncovered
             atos_configuration = results_path
             # results.pkl  loadtime:  3.50s  filesize: 229M
             db_pckl = os.path.join(atos_configuration, 'results.pkl')
@@ -85,7 +85,7 @@ class atos_db():
             else:
                 db_func, db_file = atos_db_file, db_dflt
 
-        elif os.path.isfile(results_path):
+        elif os.path.isfile(results_path):  # pragma: uncovered
             ext = os.path.splitext(results_path)
             if ext == ".pkl":
                 db_func, db_file = atos_db_pickle, results_path
@@ -94,7 +94,7 @@ class atos_db():
             else:  # default case: dbfile
                 db_func, db_file = atos_db_file, results_path
 
-        else:
+        else:  # pragma: uncovered (error)
             logger.error(
                 "results not found: '%s'" % results_path, exit_status=1)
 
@@ -151,11 +151,11 @@ class atos_db_file(atos_db):
                 db_file.write(atos_db_file.entry_str(entry))
 
     def _read_results(self):
-        if not os.path.exists(self.db_file): return
+        if not os.path.exists(self.db_file): return  # pragma: uncovered
         curdict, size, time = {}, None, None
         for line in process.open_locked(self.db_file):
             words = line.split(':', 4)
-            if len(words) < 4: continue
+            if len(words) < 4: continue  # pragma: uncovered
             # ATOS: target: variant_id: key: value
             target, variant, key, value = [
                 w.strip() for w in words[1:]]
@@ -210,7 +210,7 @@ class atos_db_json(atos_db):
             self.results.extend(entries)
             json.dump(self.results, db_file, sort_keys=True, indent=4)
 
-    def update_results(self, query=None, update_fct=None):
+    def update_results(self, query=None, update_fct=None):  # pragma: uncovered
         assert(update_fct != None)
         with process.open_locked(self.db_file, 'r+') as db_file:
             self.results = json.load(db_file)
@@ -255,7 +255,7 @@ class atos_db_pickle(atos_db):
             self.results.extend(entries)
             pickle.dump(self.results, db_file, -1)
 
-    def update_results(self, query=None, update_fct=None):
+    def update_results(self, query=None, update_fct=None):  # pragma: uncovered
         assert(update_fct != None)
         with process.open_locked(self.db_file, 'r+') as db_file:
             self.results = pickle.load(db_file)
@@ -291,7 +291,7 @@ class atos_client_results():
         def __repr__(self):
             return '<%s:%s>' % (self.target, self.variant)
 
-        def __str__(self):
+        def __str__(self):  # pragma: uncovered
             return str(self.dict())
 
         def dict(self):
@@ -340,7 +340,7 @@ class atos_client_results():
 
     def compute_frontier(self):
         self.frontier = []
-        if not self.results: return self.frontier
+        if not self.results: return self.frontier  # pragma: uncovered
         atos_client_results.set_frontier_field(self.results.values())
         frontier = filter(lambda x: x.on_frontier, self.results.values())
         self.frontier = sorted(frontier, key=lambda x: x.size)
@@ -353,7 +353,8 @@ class atos_client_results():
             on_frontier = True
             maybe_on_frontier.remove(c1)
             for c2 in itertools.chain(mustbe_on_frontier, maybe_on_frontier):
-                if c2.time == c1.time and c2.size == c1.size:
+                if (c2.time == c1.time and c2.size == c1.size
+                    ):  # pragma: uncovered
                     pass
                 elif c2.time <= c1.time and c2.size <= c1.size:
                     on_frontier = False
@@ -362,34 +363,34 @@ class atos_client_results():
             c1.on_frontier = on_frontier
 
     def compute_speedups(self, ref_variant='REF'):
-        if not self.results: return []
+        if not self.results: return []  # pragma: uncovered
         assert ref_variant in self.results.keys()
         for (variant, result) in self.results.items():
             result.compute_speedup(self.results[ref_variant])
         return self.results.values()
 
-    def get_last_result(self, variant):
+    def get_last_result(self, variant):  # pragma: uncovered
         if variant not in self.results.keys():
             return None
         return self.results[variant]._last
 
     def get_results(self, only_frontier=False, objects=False):
-        if only_frontier:
+        if only_frontier:  # pragma: uncovered
             if not hasattr(self, 'frontier'):
                 self.compute_frontier()
             results = self.frontier
-        else: results = self.results.values()
+        else: results = self.results.values()  # pragma: uncovered
         if not objects:
             results = map(lambda x: x.dict(), results)
         return results
 
-    def tradeoff(self, perf_size_ratio=4):
+    def tradeoff(self, perf_size_ratio=4):  # pragma: uncovered
         return atos_client_results.select_tradeoff(
             getattr(self, 'frontier', None) or self.compute_frontier(),
             perf_size_ratio)
 
     @staticmethod
-    def select_tradeoff(frontier, perf_size_ratio=4):
+    def select_tradeoff(frontier, perf_size_ratio=4):  # pragma: uncovered
         res_point = atos_client_results.select_tradeoffs(
             frontier, perf_size_ratio, 1)
         return res_point and res_point[0] or None
@@ -412,7 +413,7 @@ class atos_client_results():
         return tradeoffs
 
     def _get_group_results(self, group_targets, group_name, query):
-        if not group_targets: return {}
+        if not group_targets: return {}  # pragma: uncovered
         # get results for each target of the group
         results, target_results = {}, {}
         for target in group_targets:
@@ -438,7 +439,8 @@ class atos_client_results():
         # create results dict
         results = {}  # {variant: [result_obj]}
         for res in reslist:
-            if 'FAILURE' in [res['size'], res['time']]: continue
+            if 'FAILURE' in [res['size'], res['time']]:  # pragma: uncovered
+                continue
             results.setdefault(res['variant'], []).append(
                 atos_client_results.result(res))
         # merge multiple runs (average execution times)
@@ -450,7 +452,7 @@ class atos_client_results():
 def get_results(dbpath, opts):
     db = atos_db.db(dbpath, no_cache=True)
     results = db.get_results()
-    if opts.targets:
+    if opts.targets:  # pragma: uncovered
         filtered = []
         for target in opts.targets.split(','):
             target_results = results_filter(
@@ -460,11 +462,11 @@ def get_results(dbpath, opts):
     ref_results = merge_results(
         results_filter(results, {'variant': opts.refid}))
     if not ref_results: return []
-    if opts.query:
+    if opts.query:  # pragma: uncovered
         results = results_filter(results, opts.query)
-    if opts.filter:
+    if opts.filter:  # pragma: uncovered
         results = results_filter(results, {'variant': opts.filter})
-    if opts.cookies:
+    if opts.cookies:  # pragma: uncovered
         results = results_filter_cookies(results, opts.cookies)
     variant_results = merge_results(results) or []
     map(lambda x: x.compute_speedup(ref_results[0]), variant_results)
@@ -516,7 +518,8 @@ class atos_client_db():
 
     def add_result(self, entry):
         required_fields = set(atos_db.required_fields)
-        if not set(entry.keys()).issuperset(required_fields):
+        if not set(entry.keys()).issuperset(
+            required_fields):   # pragma: uncovered (error)
             missing_fields = list(
                 required_fields.difference(set(entry.keys())))
             return False, 'missing fields: %s' % str(missing_fields)
@@ -539,7 +542,7 @@ class atos_client_db():
     @staticmethod
     def db_query(db, query=None, replacement=None):
         results = db.get_results(query)
-        if replacement:
+        if replacement:  # pragma: uncovered
             for result in results:
                 result.update(replacement)
         return results
@@ -547,12 +550,12 @@ class atos_client_db():
     @staticmethod
     def db_transfer(db, results, force):
         required_keys, missing_keys = set(atos_db.required_keys), set()
-        if not force:
+        if not force:  # pragma: uncovered
             result_keys = set(results.keys())
             for result in results:
                 if not result_keys.issuperset(required_keys):
                     missing_keys |= required_keys.difference(result_keys)
-        if missing_keys:
+        if missing_keys:  # pragma: uncovered (error)
             return False, 'missing keys: %s' % str(missing_keys)
         db.add_results(results)
         return True, len(results)
@@ -586,7 +589,7 @@ class json_config():
             feature_sets += [
                 set([k for (k, v) in compiler.items() if k.endswith('_enabled')
                       and v == '1'])]
-        if not feature_sets: return []
+        if not feature_sets: return []  # pragma: uncovered
         enabled = feature_sets[0]
         for features in feature_sets:
             enabled = enabled.intersection(features)
@@ -597,7 +600,7 @@ class json_config():
         if print_res: pprint_list(results, text=True)
         return results
 
-    def add_compiler(self, descr_file):
+    def add_compiler(self, descr_file):  # pragma: uncovered
         new_cpl = {}
         for line in open(descr_file):
             k, v = line.strip().split(' ', 1)
@@ -635,7 +638,7 @@ class json_config():
 
     def flags_for_flagfiles(self):
         compilers = self.config.get('compilers', [])
-        if not compilers: return ''
+        if not compilers: return ''  # pragma: uncovered
         flags = []
         # compiler name
         # temporary fix for multiple compilers pb
@@ -644,7 +647,7 @@ class json_config():
         flags.append('-D%s' % compiler_name.upper())
         # compiler versions
         versions = sorted([c['version'] for c in compilers])
-        if versions:
+        if versions:  # pragma: branch_uncovered
             # min version
             flags.extend(['-D%s_VERSION=%d' % (
                     compiler_name,
@@ -662,10 +665,10 @@ class json_config():
         # TODO: should handle correctly multiple compilers
         preprocessor = None
         with tempfile.NamedTemporaryFile(suffix=".c") as f:
-            for compiler in compilers:
+            for compiler in compilers:  # pragma: branch_uncovered
                 status = process.system(
                     [compiler, "-C", "-P", "-E", f.name])
-                if status == 0:
+                if status == 0:  # pragma: branch_uncovered
                     preprocessor = compiler
                     break
         assert preprocessor
@@ -683,9 +686,9 @@ class json_config():
                 self.flags_for_flagfiles() + flags,
                 check_status=True, get_output=True, no_debug=True)
             with open(os.path.join(configuration_path, base), "w") as destf:
-                if ppflags:
+                if ppflags:  # pragma: branch_uncovered
                     print >>destf, ppflags
-                else:
+                else:  # pragma: uncovered
                     logger.warning("%s: empty flag list" % (base))
         process.commands.rmtree(tmpdir)
 
@@ -753,7 +756,7 @@ class json_config():
 
         compiler_config = {}
 
-        if compiler_basename in ["armcc", "armlink"]:
+        if compiler_basename in ["armcc", "armlink"]:  # pragma: uncovered
             # arm rvct compiler
 
             version_string = process.system(
@@ -781,7 +784,7 @@ class json_config():
                  })
             return compiler_config
 
-        if compiler_basename in ["stxp70cc", "stxp70++"]:
+        if compiler_basename in ["stxp70cc", "stxp70++"]:  # pragma: uncovered
             # stxp70 open64 compiler
             version_string = process.system(
                 [compiler, "-v"], get_output=True, check_status=True,
@@ -858,10 +861,10 @@ class json_config():
                 ["objdump", "-t", cc1_path], get_output=True,
                 check_status=True, no_debug=True)
             hwi = int(re.search("(\w*)\W*target_newline", obj_t).group(1))
-            expected_hwi = (
+            expected_hwi = (  # pragma: uncovered
                 (host_alias == "i386" and target_alias == "i386")
                 and 4 or 8)
-            valid_host_wide_int = int(hwi == expected_hwi)
+            valid_host_wide_int = int(hwi == expected_hwi)  # pragma: uncovered
         except:
             # check hwi value on other cases
             valid_host_wide_int = 1
@@ -942,7 +945,7 @@ def standard_deviation(l):
     variance = average([((x - avg) ** 2) for x in l])
     return math.sqrt(variance)
 
-def variation_coefficient(l):
+def variation_coefficient(l):  # pragma: uncovered
     return (standard_deviation(l) / average(l))
 
 def md5sum(s):
@@ -975,7 +978,7 @@ def variant_id(options=None, gopts=None, uopts=None):
     elif uopts != None:
         res_variant += "-fprofile-use" + "".join(uopts.split())
     else: pass
-    if options != None:
+    if options != None:  # pragma: branch_uncovered
         res_variant += "".join(options.split())
     return res_variant.replace(':', '_')
 
@@ -1006,7 +1009,7 @@ def get_config_value(configuration_path, key, default=None):
 
 def query_config_values(configuration_path, query, default=None):
     config_file = os.path.join(configuration_path, 'config.json')
-    if not os.path.isfile(config_file): return default
+    if not os.path.isfile(config_file): return default  # pragma: uncovered
     return json_config(config_file).query(strtoquery(query)) or default
 
 def get_available_optim_variants(configuration_path):
@@ -1025,9 +1028,9 @@ def strtodict(s):
     # 'aa:xx,bb:yy' -> {'aa':'xx','bb':'yy'}
     d = {}
     if s == '': return d
-    if s[0] == '[':
+    if s[0] == '[':  # pragma: uncovered
         return json.loads(s)[0]
-    if s[0] == '{':
+    if s[0] == '{':  # pragma: uncovered
         return json.loads(s)
     for kv in s.split(','):
         k, v = kv.split(':')
@@ -1041,7 +1044,7 @@ def strtoquery(s):
         return strtodict(s)
     return s
 
-def strtolist(s):
+def strtolist(s):  # pragma: uncovered
     return s.split(',')
 
 def results_filter(results, query):
@@ -1053,12 +1056,12 @@ def results_filter(results, query):
                     query.items())), results))
 
 def results_filter_cookie(results, cookie):
-    if not cookie: return results
+    if not cookie: return results  # pragma: uncovered
     return filter(
         lambda x: cookie in x.get('cookies', '').split(','), results)
 
 def results_filter_cookies(results, cookies):
-    if not cookies: return results
+    if not cookies: return results  # pragma: uncovered
     return filter(
         lambda x: not set(cookies).isdisjoint(
             set(x.get('cookies', '').split(','))),
@@ -1146,19 +1149,19 @@ def pager_cmd():
     Returns None if no pager is available
     """
     pager = os.getenv("ATOS_PAGER")
-    if pager == None:
+    if pager == None:  # pragma: branch_uncovered
         pager = os.getenv("PAGER")
     if pager == "":
         return None
     if pager != None:
         return process.cmdline2list(pager)
     pager = "less"
-    if process.commands.which(pager) != None:
+    if process.commands.which(pager) != None:  # pragma: branch_uncovered
         return [pager]
-    pager = "more"
-    if process.commands.which(pager) != None:
+    pager = "more"  # pragma: uncovered
+    if process.commands.which(pager) != None:  # pragma: uncovered
         return [pager]
-    return None
+    return None  # pragma: uncovered
 
 def pagercall(txtfile):
     """
@@ -1178,7 +1181,7 @@ def pagercall(txtfile):
         status = 0
     return status
 
-def mancall(page):
+def mancall(page):  # pragma: uncovered
     """
     Execute man for the given page.
     Returns the exit status of the command.
@@ -1191,7 +1194,7 @@ def mancall(page):
         sys.exit(1)
     return status
 
-def help_man(topic):
+def help_man(topic):  # pragma: uncovered
     """
     Displays the manpage for topic.
     Returns non 0 if man command or manpage are not available.
@@ -1266,7 +1269,7 @@ def proot_command(**kwargs):
     proot_bin = proot_exec if os.path.isfile(proot_exec) else "proot"
     command = ["env"]
     for key, value in kwargs.items():
-        if value is None: continue
+        if value is None: continue  # pragma: uncovered
         command.append("%s=%s" % (str(key), str(value)))
     command.append(proot_bin)
     command.extend(["-w", os.getcwd(), "/"])
@@ -1274,9 +1277,9 @@ def proot_command(**kwargs):
 
 def timeout_command():
     timeout = os.getenv("TIMEOUT")
-    if timeout == None:
+    if timeout == None:  # pragma: branch_uncovered
         timeout = [os.path.join(globals.BINDIR, "atos-timeout"), "3600"]
-    else:
+    else:  # pragma: uncovered
         timeout = timeout and process.cmdline2list(timeout) or []
     return timeout
 
@@ -1305,7 +1308,7 @@ def expand_response_file(args, cwd, prefix="@"):
                 with open(os.path.join(cwd, arg[len(prefix):])) as f:
                     exp_args = sum([process.cmdline2list(l.strip())
                                     for l in f.readlines()], [])
-                    expand_args(args, exp_args)
+                    expand_args(args, exp_args)  # pragma: uncovered
             else:
                 args.append(arg)
         return args
@@ -1332,10 +1335,11 @@ def config_compiler_flags(key, default=None, config_path=None):
     compiler_flags = query_config_values(
         config_path, "$.compilers[*].%s" % key)
     compiler_flags = compiler_flags and list(compiler_flags)[0] or default
-    if compiler_flags == "none": return []
+    if compiler_flags == "none": return []  # pragma: uncovered
     return compiler_flags.split()
 
-def save_gcda_files_if_necessary(gopts, config_path=None, prof_path=None):
+def save_gcda_files_if_necessary(
+    gopts, config_path=None, prof_path=None):  # pragma: uncovered
     compiler_fdo_dir_flag = config_compiler_flags(
         "fdo_dir_flags", default="-fprofile-dir", config_path=config_path)
     if compiler_fdo_dir_flag: return
@@ -1361,7 +1365,8 @@ def save_gcda_files_if_necessary(gopts, config_path=None, prof_path=None):
         process.commands.copyfile(gcda_file, gcda_dest)
         process.commands.unlink(gcda_file)
 
-def restore_gcda_files_if_necessary(config_path=None, prof_path=None):
+def restore_gcda_files_if_necessary(
+    config_path=None, prof_path=None):  # pragma: uncovered
     compiler_fdo_dir_flag = config_compiler_flags(
         "fdo_dir_flags", default="-fprofile-dir", config_path=config_path)
     if compiler_fdo_dir_flag: return

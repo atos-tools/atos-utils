@@ -1754,7 +1754,13 @@ def run_atos_web(args):
     requests_log.setLevel(logging.WARNING)
 
     def op_create(url):
-        arguments = dict(token.split('=', 1) for token in args.operation[1:])
+        try:
+            arguments = dict(token.split('=', 1)
+                                for token in args.operation[1:])
+        except ValueError:
+            error("Arguments should be written 'key=value'")
+            return
+
         try:
             r = requests.put("http://%s%s" % (args.server, url), arguments)
         except requests.exceptions.RequestException as ex:

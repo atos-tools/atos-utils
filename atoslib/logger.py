@@ -133,7 +133,7 @@ def message(msg):
         that no progress output remains.
         """
         write_str = msg + "\n"
-        if sys.stdout.isatty():
+        if sys.stdout.isatty():  # pragma: uncovered
             with os.popen("tput cols", "r") as tput:
                 cols = int(tput.readline())
             write_str = "\r" + " " * cols + "\r" + write_str

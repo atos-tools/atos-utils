@@ -168,8 +168,8 @@ class RecipeNode():
         for path_ref in [self.stg.load_path_ref(x) for x in
                          self.stg.load_path_ref_list(rnode['inputs'])]:
             path = path_ref['path']
-            if not os.path.exists(path):
-                commands.link_or_copyfile(
+            if not os.path.exists(path):  # pragma: branch_uncovered
+                commands.link_or_copyfile(  # pragma: branch_uncovered
                     self.stg.get_blob_path(path_ref['digest']),
                     path)
 
@@ -182,7 +182,7 @@ class RecipeNode():
         for path_ref in [self.stg.load_path_ref(x) for x in
                          self.stg.load_path_ref_list(rnode['outputs'])]:
             path = path_ref['path']
-            commands.link_or_copyfile(
+            commands.link_or_copyfile(  # pragma: branch_uncovered
                 self.stg.get_blob_path(path_ref['digest']),
                 path)
 
@@ -260,12 +260,12 @@ class RecipeGraph():
             for inpath in [self.stg.load_path_ref(x)['path'] for x in
                            recipe_inputs[recipe]]:
                 last_recipe = last_output_recipes.get(inpath, None)
-                if last_recipe != None:
+                if last_recipe != None:  # pragma: uncovered
                     recipe_pdeps[last_recipe].append(recipe)
             for outpath in [self.stg.load_path_ref(x)['path'] for x in
                             recipe_outputs[recipe]]:
                 last_recipe = last_output_recipes.get(outpath, None)
-                if last_recipe != None:
+                if last_recipe != None:  # pragma: uncovered
                     recipe_pdeps[last_recipe].append(recipe)
             for outpath in [self.stg.load_path_ref(x)['path'] for x in
                             recipe_outputs[recipe]]:
@@ -336,7 +336,7 @@ class RecipeGraph():
                 # targets are built at the same path.
                 path = self.stg.load_path_ref(
                     self.stg.load_path_ref_list(rnode['outputs'])[0])['path']
-                if not path in target_path_seen:
+                if not path in target_path_seen:  # pragma: branch_uncovered
                     target_path_seen.add(path)
                     f.write("%s: $(FORCE)\n" % path)
                     f.write("\t$(QUIET)$(MAKE) -f $(MAKEFILE_LIST) "
@@ -364,7 +364,8 @@ class RecipeGraph():
         Returns True is the output of the recipe is a shared object
         or an executable program.
         """
-        if recipe in [".ROOT", ".TAIL"]: return False
+        if recipe in [".ROOT", ".TAIL"]:  # pragma: uncovered
+            return False
         rnode = self.stg.load_recipe_node(recipe)
         cmd = self.stg.load_cmd_node(rnode['command'])
         interpreter = \
@@ -474,7 +475,8 @@ class RecipeGraph():
                     for x in outrefs:
                         triplet = (self.stg.load_path_ref(x)['path'],
                                    recipe, target_recipe)
-                        if triplet not in objects_triplets:
+                        if (triplet not in  # pragma: branch_uncovered
+                            objects_triplets):
                             objects_triplets.append(triplet)
         self.filtered_objects_cache = objects_triplets
         return objects_triplets
@@ -490,10 +492,11 @@ class RecipeGraph():
             interpreter = \
                 CmdInterpreterFactory().get_interpreter(cmd, cmd['kind'])
             assert(interpreter != None)
-            if interpreter.get_kind() != "CC": continue
+            if interpreter.get_kind() != "CC":  # pragma: uncovered
+                continue
             has_cc = interpreter.cc_interpreter().has_cc_phase("CC")
             has_final_link = interpreter.cc_interpreter().has_final_link()
-            if has_cc or has_final_link:
+            if has_cc or has_final_link:  # pragma: branch_uncovered
                 compiler = cmd['arg0']
                 if not compiler in compilers: compilers.append(compiler)
         return compilers
@@ -546,7 +549,8 @@ class RecipeGraph():
             interpreter = \
                 CmdInterpreterFactory().get_interpreter(cmd, cmd['kind'])
             assert(interpreter != None)
-            if interpreter.get_kind() != "CC": continue
+            if interpreter.get_kind() != "CC":  # pragma: uncovered
+                continue
             if interpreter.cc_interpreter().has_cc_phase("CC"):
                 # We must use the unmodified output arguments of the
                 # CC command line, not the normalized one returned by
@@ -564,7 +568,7 @@ class RecipeGraph():
         return os.path.commonprefix(outputs)
 
     @staticmethod
-    def test():
+    def test():  # pragma: uncovered (ignore test funcs)
         print "TESTING RecipeManager..."
         tmpdir = tempfile.mkdtemp()
         try:
@@ -594,6 +598,21 @@ class RecipeGraph():
                     cnod_digest, inps_digest, outs_digest)
                 print "%s rnod %s" % (base, rnod_digest)
                 stg.append_recipes_file(rnod_digest)
+                cnod = stg.load_obj(cnod_digest)
+                env = stg.load_envs(cnod['envs'])
+                print "env", env
+                recipe_node = RecipeNode(stg, rnod_digest, cwd)
+                recipe_node.fetch_input_files()
+                recipe_node.get_output_files()
+                # commands.unlink(os.path.join(tmpdir, src))
+                # recipe_node.fetch_input_files()
+
+            assert not stg.blacklist_recipes()
+            stg.blacklist_init()
+            print "blacklist_path", stg.blacklist_path()
+            stg.blacklist_append(rnod_digest)
+            print "blacklist_recipes", stg.blacklist_recipes()
+            assert stg.blacklist_contains(rnod_digest)
 
             for dest, objs in (("main.exe", ("a.o", "b.o")),
                                ("main2.exe", ("a.o", "c.o"))):

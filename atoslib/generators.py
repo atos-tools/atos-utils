@@ -61,9 +61,9 @@ class optim_flag_list():
                 flag, min, max, step = self.range
                 val = min + random.randint(0, (max - min) / step) * step
                 return '%s%d' % (flag, val)
-            elif self.choice:
+            elif self.choice:  # pragma: branch_always
                 return random.choice(self.choice)
-            else: assert 0
+            else: assert 0  # pragma: unreachable
 
         def values(self, nbvalues=3):
             if self.range:
@@ -75,15 +75,15 @@ class optim_flag_list():
                 flag, min, max, step = self.range
                 return ['%s%d' % (flag, v) for v in frange(
                         min, max, float(max - min) / (nbvalues - 1))]
-            elif self.choice:
+            elif self.choice:  # pragma: branch_always
                 return list(self.choice)
-            else: assert 0
+            else: assert 0  # pragma: unreachable
 
         def optname(self):
             if self.range:
                 flag, min, max, step = self.range
                 flag_val = '%s%d' % (flag, min)
-            elif self.choice:
+            elif self.choice:  # pragma: branch_always
                 flag_val = self.choice[0]
             return optim_flag_list.optim_flag.foptname(flag_val)
 
@@ -224,7 +224,7 @@ class config_generator:
         pass
 
     def estimate_exploration_size(self):
-        return None
+        raise self.UnimplementedException()
 
     def generate(self):
         raise self.UnimplementedException()
@@ -280,7 +280,7 @@ class gen_progress(config_generator):
         self.progress_ = progress.exploration_progress(
             descr=self.descr, maxval=maxiter, visible=maxiter,
             config_path=self.configuration_path)
-        for ic in itertools.count(1):
+        for ic in itertools.count(1):  # pragma: branch_always
             try:
                 maxiter = self.parent_.estimate_exploration_size()
                 self.progress_.update(value=(ic - 1), maxval=maxiter)
@@ -301,7 +301,7 @@ class gen_record_flags(config_generator):
             configuration_path or parent and parent.configuration_path)
         self.gen_cookie = self.cookie(gen_cookie)
 
-    def estimate_exploration_size(self):
+    def estimate_exploration_size(self):  # pragma: uncovered
         return self.parent_.estimate_exploration_size()
 
     def generate(self):
@@ -313,7 +313,7 @@ class gen_record_flags(config_generator):
                 break
             run_cookie = self.cookie(self.gen_cookie, cfg.flags, record=False)
             self.cookie_to_cfg[run_cookie] = (cfg.flags, cfg.variant)
-            yield cfg.extend_cookies([run_cookie])
+            yield cfg.extend_cookies([self.gen_cookie, run_cookie])
 
     def tradeoff_config(self, tradeoff):
         tradeoff_results = get_run_tradeoffs(
@@ -347,7 +347,7 @@ class gen_maxiters(config_generator):
     def generate(self):
         debug('gen_maxiters: %s' % str(self.maxiters_))
         generator = self.parent_
-        for ic in itertools.count():
+        for ic in itertools.count():  # pragma: branch_always
             if self.maxiters_ != None and ic >= self.maxiters_:
                 break
             try:
@@ -533,7 +533,7 @@ class gen_chained_exploration(config_generator):
         # list of chained (generator, generator_arguments)
         if not generators_args:
             generators_args = []
-            for i in itertools.count(1):
+            for i in itertools.count(1):  # pragma: branch_always
                 generator_i = kwargs.get('generator%d' % i, None)
                 if not generator_i: break
                 gen_i_list = generator_i.split(',')
@@ -1415,7 +1415,7 @@ class gen_genetic_deps(config_generator):
             mutate_remove) if (mutate_remove is not None) else 0.1
 
     def estimate_exploration_size(self):
-        if not self.flag_list_.flag_list:
+        if not self.flag_list_.flag_list:  # pragma: uncovered
             return 1
         return None
 
@@ -1426,11 +1426,11 @@ class gen_genetic_deps(config_generator):
         # ensure that there is no other parent cfg
         try:
             self.parent_.next()
-            assert 0
+            assert 0  # pragma: unreachable
         except: pass
 
         # handle case of empty flag list
-        if not self.flag_list_.flag_list:
+        if not self.flag_list_.flag_list:  # pragma: uncovered
             yield base_cfg
             return
 
@@ -1466,25 +1466,28 @@ class gen_genetic_deps(config_generator):
                 if mutate_flags:
                     if mutate_flag:
                         if remove_flag:
-                            if opt_name != '-O':  # case of optimization level
+                            if opt_name != '-O':  # pragma: branch_uncovered
+                                # case of optimization level
                                 debug('gen_genetic_deps: remove flag=%s'
                                       % (flag))
                                 continue
                         else:
                             # mutate current flag
-                            if opt_name == '-O':  # case of optimization level
+                            if opt_name == '-O':  # pragma: branch_uncovered
+                                # case of optimization level
                                 new_flag = self.optim_levels_.rand()
                                 new_flags.append(new_flag)
                                 debug('gen_genetic_deps: mutate flag=%s->%s' %
                                       (flag, new_flag))
                                 continue
-                            elif obj_flag:
+                            elif obj_flag:  # pragma: branch_always
                                 new_flag = obj_flag.rand()
                                 new_flags.append(new_flag)
                                 debug('gen_genetic_deps: mutate flag=%s->%s' %
                                       (flag, new_flag))
                                 continue
-                            else:  # case of unknown flag: keep unchanged
+                            else:  # pragma: uncovered
+                                # case of unknown flag: keep unchanged
                                 pass
 
                 # EVOLUTION
@@ -1533,7 +1536,7 @@ class gen_genetic_deps(config_generator):
             if flags in config_set:
                 debug('gen_genetic_deps: flags in config_set: [%s]' % (flags))
                 nb_retry += 1
-                if nb_retry >= max_retry:
+                if nb_retry >= max_retry:  # pragma: uncovered
                     debug('gen_genetic_deps: nb_retry=%d: give up' % nb_retry)
                     return
                 continue
@@ -1721,7 +1724,7 @@ def gen_function_by_function(configuration_path=None, **kwargs):
 def new_run_cookie(*args, **kwargs):
     def record(cookie):
         if not record_cookie: return cookie
-        if not configuration_path: return cookie
+        assert configuration_path
         argstr = args and str(args) or None
         db = atos_lib.atos_cookie_db_json.cookie_db(configuration_path)
         db.add_cookie(

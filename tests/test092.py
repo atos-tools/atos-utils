@@ -9,10 +9,22 @@ import itertools
 import re
 import tempfile
 
+from atoslib import atos_lib, utils
 from atoslib import generators
 
 
 TEST_CASE = "ATOS generators - unit tests"
+
+
+# common setup
+
+args = common.atos_setup_args(ATOS_DEBUG_FILE="debug.log")
+sha1dir = os.path.join(common.SRCDIR, 'examples', 'sha1-c')
+status = utils.invoque(
+    "atos-init", args, run_script=os.path.join(sha1dir, "run.sh"),
+    build_script="gcc -o sha1-c %s %s" % (
+        os.path.join(sha1dir, "sha.c"), os.path.join(sha1dir, "sha1.c")))
+assert status == 0
 
 
 #
@@ -113,6 +125,24 @@ try:
 finally:
     os.unlink(tmpname)
 
+# case of empty flag list
+tmpf = tempfile.NamedTemporaryFile(delete=False)
+tmpname = tmpf.name
+try:
+    tmpf.write("# Test flags\n")
+    tmpf.close()
+    generator = generators.gen_flags_file(
+        generators.gen_config(flags='-O0', variant='base'), tmpname)
+    nbcfg = 0
+    for cfg in generator():
+        nbcfg += 1
+        print str(cfg)
+        assert(cfg.flags == '-O0')
+        assert(cfg.variant == 'base')
+    assert nbcfg == 1
+finally:
+    os.unlink(tmpname)
+
 
 #
 # gen_rnd_uniform_deps
@@ -146,3 +176,42 @@ try:
         print str(cfg)
 finally:
     os.unlink(tmpname)
+
+
+
+#
+# optim_flag_list
+#
+
+tmpf = tempfile.NamedTemporaryFile(delete=False)
+tmpname = tmpf.name
+try:
+    tmpf.write("# Test dependency flags\n")
+    tmpf.write("-finline-small|-fno-inline-small\n")
+    tmpf.write("--param inline-call-cost=[4..32]\n")
+    tmpf.write("-finline: --param inline-call-cost=\n")
+    tmpf.write("-finline: -finline-small\n")
+    tmpf.write("=> -O2\n")
+    tmpf.write("-O2 => -finline\n")
+    tmpf.close()
+    fl = generators.optim_flag_list(tmpname)
+    print fl.flag_list
+    for flag in fl.flag_list:
+        print flag.values()
+    assert fl.find("-fno-inline-small")
+    assert not fl.find("unknown")
+finally:
+    os.unlink(tmpname)
+
+
+#
+# gen_chained_exploration
+#
+
+# case of empty chain
+
+for cfg in generators.gen_chained_exploration(
+    generators_args=[], expl_cookie='expl_cookie',
+    configuration_path='atos-configurations')():
+    print str(cfg)
+    assert 0

@@ -16,6 +16,8 @@ $ROOT/bin/atos-timeout 5 sleep 1 2>&1
 test $? = 0
 $ROOT/bin/atos-timeout 1 sleep 5 2>&1 | grep "Terminated after timeout"
 test ${PIPESTATUS[0]} = 124
+$ROOT/bin/atos-timeout -s 9 -d 1 sleep 5 2>&1 | grep "Killed after timeout"
+test ${PIPESTATUS[0]} = 124
 $ROOT/bin/atos-timeout -s 9 1 sleep 5 2>&1 | grep "Killed after timeout"
 test ${PIPESTATUS[0]} = 124
 $ROOT/bin/atos-timeout -s 15 -k 1 1 ./uninterruptible.sh 5 2>&1 | grep "Killed after timeout"
@@ -25,3 +27,9 @@ grep "Terminated after timeout" test.out
 test $res = 124
 $ROOT/bin/atos-timeout 1 $ROOT/bin/atos-timeout 2 sleep 5 2>&1 | grep "Terminated after timeout"
 test ${PIPESTATUS[0]} = 124
+# negative cases
+(
+$ROOT/bin/atos-timeout 1 sleepx 4 || true
+touch sleepx
+$ROOT/bin/atos-timeout 1 ./sleepx 4 || true
+) 2>&1

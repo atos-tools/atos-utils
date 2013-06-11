@@ -27,3 +27,6 @@ nb_played=`$ROOT/bin/atos lib query | wc -l`
 
 [ "`expr $nb_frontier + 5`" == "$nb_played" ]
 
+$ROOT/bin/atos-explore-inline -S0 -M1 OPT-Ox 2>&1 | tee LOG
+
+[ `cat LOG | grep "warning: variant not found" | wc -l` -ne 0 ]

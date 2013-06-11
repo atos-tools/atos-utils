@@ -144,6 +144,17 @@ def deep_eq(_v1, _v2, datetime_fudge=default_fudge, _assert=False):
 
     return op(c1, c2)
 
+def test():
+    print "TESTING deep_eq..."
+    try:
+        deep_eq(1, 2, _assert=True)
+    except: pass
+    else: return False  # pragma: unreachable
+    print "SUCCESS deep_eq"
+    return True
+
 if __name__ == "__main__":
-    import doctest
+    import doctest, sys
     doctest.testmod()
+    passed = test()
+    sys.exit(0 if passed else 1)

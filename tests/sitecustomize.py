@@ -12,10 +12,12 @@ if coverage_enabled:
 
     if os.getenv("ATOS_COVERAGE_DIR"):
         coverage_dir = os.getenv("ATOS_COVERAGE_DIR")
-        coverage_file = os.path.join(
-            coverage_dir, ".coverage.%d" % (os.getpid()))
+        coverage_file = os.path.join(coverage_dir, ".coverage")
     else:
         coverage_file = ".coverage"
-    cov = coverage.coverage(data_file=coverage_file, branch=True)
+    cov = coverage.coverage(
+        data_file=coverage_file,
+        data_suffix=True,
+        branch=True)
     cov.start()
     atexit.register(cov_stop)

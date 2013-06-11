@@ -81,7 +81,7 @@ def update_cc_function_map(opts, args):
         # TODO: handle function map in LD phase also
         return
     outputs = interpreter.cc_interpreter().all_cc_outputs()
-    if len(outputs) != 1:
+    if len(outputs) != 1:  # pragma: uncovered
         # TODO: handle multiple outputs
         return
     funclist = get_object_function_list(outputs[0])
@@ -92,9 +92,10 @@ def update_cc_function_map(opts, args):
 
 def get_cc_command_additional_flags(opts, args):
     interpreter = get_interpreter()
-    assert(interpreter != None)
-    if interpreter.get_kind() != "CC": return []
-    if not opts.optfile: return []
+    assert interpreter
+    assert opts.optfile
+    if interpreter.get_kind() != "CC":  # pragma: uncovered
+        return []
     obj_opts = {}
     for line in open(opts.optfile):
         obj, flags = line.strip().split(',', 1)
@@ -103,7 +104,7 @@ def get_cc_command_additional_flags(opts, args):
     if not interpreter.cc_interpreter().has_cc_phase("CC"):
         return shlex.split(def_opts)
     outputs = interpreter.cc_interpreter().all_cc_outputs()
-    if len(outputs) != 1:
+    if len(outputs) != 1:  # pragma: uncovered
         # TODO: handle multiple input files
         return shlex.split(def_opts)
     return shlex.split(obj_opts.get(outputs[0], def_opts))
@@ -112,13 +113,13 @@ def legacy_audit_compile_command(opts, args):
 
     status = process.system(args, print_output=True)
 
-    if status != 0:
+    if status != 0:  # pragma: uncovered (error)
         # Record command only in case of success
         return status
 
     cwd = os.path.abspath(os.getcwd())
     interpreter = set_interpreter(opts, args)
-    if interpreter:
+    if interpreter:  # pragma: branch_uncovered
         # TODO: if response file is removed it does not work,
         # thus we expand it there in interpreter.get_args().
         # We should change this as it may build a too long command line.
@@ -153,7 +154,7 @@ def audit_compile_command(opts, args):
         actual_inputs = []
         for (src_kind, path) in input_pairs:
             actual_input = os.path.abspath(path)
-            if src_kind == 'SRC_PCH':
+            if src_kind == 'SRC_PCH':  # pragma: uncovered
                 # Ensure that there is an existing fallback include
                 # for the precompiled header (.gch) and
                 # return the fallback include instead of the .gch.
@@ -202,7 +203,7 @@ def audit_compile_command(opts, args):
         return process.system(args, print_output=True)
 
     stgdir = opts.audit_file
-    if stgdir == None:
+    if stgdir == None:  # pragma: uncovered
         stgdir = os.path.join(opts.configuration_path, "build.stg")
     stg = RecipeStorage(stgdir)
 
@@ -236,12 +237,13 @@ def invoque_compile_command(opts, args):
     stg, recipe_node = None, None
     if not opts.legacy and opts.recipe_digest:
         stgdir = opts.audit_file
-        if stgdir == None:
+        if stgdir == None:  # pragma: branch_uncovered
             stgdir = os.path.join(opts.configuration_path, "build.stg")
         stg = RecipeStorage(stgdir)
         recipe_node = RecipeNode(stg, opts.recipe_digest, cwd)
 
-    if recipe_node and stg.blacklist_contains(opts.recipe_digest):
+    if recipe_node and stg.blacklist_contains(
+        opts.recipe_digest):  # pragma: uncovered
         # If blacklisted, do not run the command at all
         logger.debug("skip compilation for blacklisted command: %s" %
                      opts.recipe_digest)
@@ -309,8 +311,8 @@ def invoque_compile_command(opts, args):
             args.extend(process.cmdline2list(env_ALDSOFLAGS))
 
         env_ALDMAINFLAGS = os.environ.get("ALDMAINFLAGS")
-        if (env_ALDMAINFLAGS and
-            interpreter.cc_interpreter().is_ld_kind("program")):
+        if (env_ALDMAINFLAGS and interpreter.cc_interpreter().is_ld_kind(
+                "program")):  # pragma: uncovered
             args.extend(process.cmdline2list(env_ALDMAINFLAGS))
 
     (new_opts, args) = parser.parse_known_args(args)
@@ -325,7 +327,8 @@ def invoque_compile_command(opts, args):
     args = atos_lib.replace_incompatible_options(args)
     status = process.system(args, print_output=True)
 
-    if recipe_node and status != 0 and opts.update_blacklist:
+    if (recipe_node and status != 0
+        and opts.update_blacklist):  # pragma: uncovered (error)
         logger.warning("failed to recompile, blacklisting %s" %
                        opts.recipe_digest)
         stg.blacklist_append(opts.recipe_digest)
@@ -338,7 +341,7 @@ def invoque_compile_command(opts, args):
     return status
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: branch_always
 
     parser = argparse.ArgumentParser(description='atos-driver')
 

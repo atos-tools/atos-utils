@@ -47,7 +47,7 @@ class LocalArgumentParser(argparse.ArgumentParser):
         super(LocalArgumentParser, self).__init__(
             prog=prog, description=description)
 
-    def exit(self, status=0, message=None):
+    def exit(self, status=0, message=None):  # pragma: uncovered
         """ Always exit with status CANCELED on error. """
         if status != 0:
             status = ExitCodes.CANCELED
@@ -129,7 +129,7 @@ class Monitor():
         except OSError:
             return []
         output = proc.communicate()[0]
-        if proc.returncode != 0:
+        if proc.returncode != 0:  # pragma: uncovered
             return []
         ps_pid = proc.pid
         return filter(filter_ps_pid,
@@ -156,7 +156,7 @@ class Monitor():
         raise Monitor.TimeoutException()
 
     @staticmethod
-    def interrupt_handler(signum, frame):
+    def interrupt_handler(signum, frame):  # pragma: uncovered
         """ Handler for signals that require immediate exit. """
         print >>sys.stderr, \
             "atos-timeout: interrupted by signal %d" % signum

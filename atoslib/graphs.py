@@ -151,8 +151,7 @@ class DGraph:
         assert(len(dg.edges_attrs()) == 3)
         assert(len(dg.nodes_succs_) == 4)
         assert(len(dg.nodes_attrs()) == 4)
-        if dg.has_edge('ROOT', './main.exe'):
-            dg.del_edge('ROOT', './main.exe')
+        dg.del_edge('ROOT', './main.exe')
         assert(len(dg.edges_attrs()) == 2)
         assert(len(dg.nodes_succs_) == 4)
         assert(len(dg.nodes_attrs()) == 4)

@@ -51,7 +51,7 @@ class ObjWriter():
             return self.make_blob_(obj)
         elif isinstance(obj, list):
             return self.make_clst_(obj)
-        elif isinstance(obj, dict):
+        elif isinstance(obj, dict):  # pragma: branch_always
             return self.make_cmap_(obj)
 
     def parse_blob_(self, content):
@@ -94,9 +94,9 @@ class ObjWriter():
             (size, obj) = self.parse_blob_(content)
         elif kind == "clst ":
             (size, obj) = self.parse_clst_(content)
-        elif kind == "cmap ":
+        elif kind == "cmap ":  # pragma: branch_always
             (size, obj) = self.parse_cmap_(content)
-        else:
+        else:  # pragma: unreachable
             assert(False)
         return (size, obj)
 
@@ -303,7 +303,7 @@ class ObjStorage():
                     tmpdir, "storage", "objects",
                     "08",
                     "6fdd7631d586d121a6192c5987834ac6cbf9f0"), "wb") as f:
-                f.write("An erroneous object\n")
+                f.write("An erroneous object\n")  # pragma: branch_uncovered
             try:
                 assert(stg.store_obj("") == None)
             except ObjStorage.KeyConflictError:

@@ -77,7 +77,7 @@ def invoque(tool, args, **kwargs):
         """ Returns the args arguments modified by kwargs. """
         tool_args = arguments.argparse.Namespace()
         for action in arguments.parser(tool)._actions:
-            if action.dest is None: continue
+            if action.dest is None: continue  # pragma: uncovered (impossible?)
             tool_args.__dict__[action.dest] = action.default
         tool_args.__dict__.update(vars(args))
         tool_args.__dict__.update(kwargs)
@@ -195,7 +195,7 @@ def run_atos_help(args):
             status = atos_lib.help_man(topic)
         else:
             status = atos_lib.help_man(topic)
-            if status != 0:
+            if status != 0:  # pragma: uncovered
                 status = atos_lib.help_text(topic)
         if status != 0:
             print >>sys.stderr, "atos-help: " + \
@@ -211,17 +211,17 @@ def run_atos_audit(args):
 
     ccregexp = (args.ccname and re.escape(args.ccname)
                 or args.ccregexp)
-    if not regexp.re_utils.re_check(ccregexp):
+    if not regexp.re_utils.re_check(ccregexp):  # pragma: uncovered (error)
         error("malformed compiler regexp: %s" % ccregexp)
         return 1
     ldregexp = (args.ldname and re.escape(args.ldname)
                 or args.ldregexp)
-    if not regexp.re_utils.re_check(ldregexp):
+    if not regexp.re_utils.re_check(ldregexp):  # pragma: uncovered (error)
         error("malformed linker regexp: %s" % ldregexp)
         return 1
     arregexp = (args.arname and re.escape(args.arname)
                 or args.arregexp)
-    if not regexp.re_utils.re_check(arregexp):
+    if not regexp.re_utils.re_check(arregexp):  # pragma: uncovered (error)
         error("malformed archiver regexp: %s" % arregexp)
         return 1
     binregexp = ("(%s)" % "|".join(
@@ -279,7 +279,7 @@ def run_atos_audit(args):
 
     status = process.system(command, print_output=True)
 
-    if status != 0:
+    if status != 0:  # pragma: uncovered (error)
         error("build command failed (exit status %d)."
               " Check the build command and retry (%s)." %
               (status, process.list2cmdline(args.command)))
@@ -383,7 +383,7 @@ def run_atos_build(args):
         compiler_fdo_dir_flag = atos_lib.config_compiler_flags(
             "fdo_dir_flags", default="-fprofile-dir",
             config_path=args.configuration_path)
-        if compiler_fdo_dir_flag:
+        if compiler_fdo_dir_flag:  # pragma: uncovered (stxp70)
             driver_env.update({
                     "PROFILE_DIR_OPT": " ".join(compiler_fdo_dir_flag)})
 
@@ -408,7 +408,7 @@ def run_atos_build(args):
     if not args.command and not opt_rebuild:
         # if the configuration path contains a build.mk execute it
         build_mk = os.path.join(args.configuration_path, "build.mk")
-        if not os.path.isfile(build_mk):
+        if not os.path.isfile(build_mk):  # pragma: uncovered (error)
             error("optimized build file missing: %s" % build_mk)
             error("atos-deps was not run or configuration path mismatch")
             return 1
@@ -424,7 +424,7 @@ def run_atos_build(args):
         # else use proot cc_opts addon (force mode)
         build_sh = os.path.join(args.configuration_path, "build.sh")
         if not args.command:
-            if not os.path.isfile(build_sh):
+            if not os.path.isfile(build_sh):  # pragma: uncovered (error)
                 error("build script missing: %s" % build_sh)
                 error("atos-build was not run or configuration path mismatch")
                 return 1
@@ -468,7 +468,7 @@ def run_atos_build(args):
     os.close(fd)
 
     logf.write('%s\n' % output)
-    if status:
+    if status:  # pragma: uncovered (error)
         message("FAILURE while building variant %s... " % (variant))
         logf.write("FAILURE while building variant %s\n" % (variant))
         logf.close()
@@ -521,7 +521,7 @@ def run_atos_deps(args):
         targets = "all"
 
     targets_file = os.path.join(args.configuration_path, "targets")
-    if targets == None and not opt_rebuild:
+    if targets == None and not opt_rebuild:  # pragma: uncovered
         if os.path.exists(targets_file):
             with open(targets_file) as f:
                 targets = filter(
@@ -529,7 +529,7 @@ def run_atos_deps(args):
                     map(lambda x: x.strip(), f.readlines()))
             targets_file_used = True
 
-    if targets == None or len(targets) == 0:
+    if targets == None or len(targets) == 0:  # pragma: uncovered (error)
         error("targets list not specified or "
               "targets file empty (%s)" % targets_file)
         return 1
@@ -545,11 +545,11 @@ def run_atos_deps(args):
         graph_builder.build_graph()
         graph = graph_builder.get_graph()
 
-        if not opt_rebuild:
+        if not opt_rebuild:  # pragma: branch_uncovered
             graph.output_makefile(output_file)
     else:
         stg = RecipeStorage(input_stg)
-        if not os.path.isfile(stg.recipes_path()):
+        if not os.path.isfile(stg.recipes_path()):  # pragma: uncovered (error)
             error("can't build dependencies, run atos-audit first: "
                   "audit file missing: %s" % stg.recipes_path())
             return 1
@@ -558,17 +558,17 @@ def run_atos_deps(args):
             graph.write_makefile(f, prefix="$(ATOS_DRIVER)")
 
     # For now only write targets if configuration dir is there
-    if not os.path.isdir(args.configuration_path):
+    if not os.path.isdir(args.configuration_path):  # pragma: uncovered
         return 0
 
-    if not targets_file_used:
+    if not targets_file_used:  # pragma: branch_uncovered
         with open(targets_file, "w") as f:
             targets = executables if opt_rebuild else graph.get_targets()
             print >>f, "# Targets list that will be rebuilt by ATOS"
             print >>f, "# Prefix with '#' or remove useless targets"
-            if targets:
+            if targets:  # pragma: branch_always
                 print >>f, "\n".join(targets)
-            else:
+            else:  # pragma: uncovered (error)
                 print >>f, "# ERROR: empty target list, audit failed.\n"
 
     with open(os.path.join(args.configuration_path, "objects"), "w") as f:
@@ -597,7 +597,7 @@ def run_atos_explore(args):
     """ ATOS explore tool implementation. """
 
     status = invoque("atos-init", args)
-    if status != 0: return status
+    if status != 0: return status  # pragma: uncovered (error)
 
     status = generators.run_exploration_loop(
         args, generator=generators.gen_explore)
@@ -615,25 +615,25 @@ def run_atos_init(args):
     # Check that given scripts are executables
     if args.build_script:
         build_command = process.cmdline2list(args.build_script)
-        if process.commands.which(build_command[0]) == None:
+        if not process.commands.which(build_command[0]):  # pragma: uncovered
             error("in build command, '%s' executable not found and not in PATH"
                   % build_command[0])
             return 1
     if args.results_script:
         results_command = process.cmdline2list(args.results_script)
-        if process.commands.which(results_command[0]) == None:
+        if not process.commands.which(results_command[0]):  # pragma: uncovered
             error("in results command, '%s' executable not found "
                   "and not in PATH" % results_command[0])
             return 1
     if args.size_cmd:
         size_command = process.cmdline2list(args.size_cmd)
-        if process.commands.which(size_command[0]) == None:
+        if not process.commands.which(size_command[0]):  # pragma: uncovered
             error("in size command, '%s' executable not found "
                   "and not in PATH" % size_command[0])
             return 1
     if args.time_cmd:
         time_command = process.cmdline2list(args.time_cmd)
-        if process.commands.which(time_command[0]) == None:
+        if not process.commands.which(time_command[0]):  # pragma: uncovered
             error("in time command, '%s' executable not found "
                   "and not in PATH" % time_command[0])
             return 1
@@ -667,12 +667,12 @@ def run_atos_init(args):
     if args.build_script:
         status = invoque("atos-audit", args,
                          command=build_command)
-        if status != 0: return status
+        if status != 0: return status  # pragma: uncovered (error)
         status = invoque("atos-deps", args,
                          all=(not executables))
-        if status != 0: return status
+        if status != 0: return status  # pragma: uncovered (error)
         status = invoque("atos-config", args)
-        if status != 0: return status
+        if status != 0: return status  # pragma: uncovered (error)
 
     elif (
         not (os.path.isfile(
@@ -680,7 +680,8 @@ def run_atos_init(args):
              os.path.isdir(
                 os.path.join(args.configuration_path, "build.stg")))
         or not os.path.isfile(
-            os.path.join(args.configuration_path, "config.json"))):
+            os.path.join(args.configuration_path, "config.json"))
+        ):  # pragma: uncovered (error)
         error("missing build audit, use -b option for specifying build script"
               " or use atos-audit tool")
         return 1
@@ -713,9 +714,9 @@ def run_atos_init(args):
             return 1
         status = invoque("atos-raudit", args,
                          command=run_command)
-        if status != 0: return status
-    elif not os.path.isfile(
-        os.path.join(args.configuration_path, "run.audit")):
+        if status != 0: return status  # pragma: uncovered (error)
+    elif not os.path.isfile(os.path.join(args.configuration_path, "run.audit")
+                            ):  # pragma: uncovered (error)
         error("missing run audit, use -r option for specifying run script"
               " or use atos-raudit tool")
         return 1
@@ -733,13 +734,13 @@ def run_atos_init(args):
     if (args.clean or args.build_script or args.run_script) and \
             not args.no_run:
         status = invoque("atos-build", args, blacklist=True)
-        if status != 0:
+        if status != 0:  # pragma: uncovered (error)
             error("unable to compile the reference build. "
                   "Refer to the log file; %s/logs/build-%s.log." %
                   (args.configuration_path, atos_lib.hashid("REF")))
             return status
         status = invoque("atos-run", args, record=True)
-        if status != 0:
+        if status != 0:  # pragma: uncovered (error)
             error("run of reference build failed. "
                   "Refer to the log file: %s/logs/run-%s.log." %
                   (args.configuration_path, atos_lib.hashid("REF")))
@@ -751,7 +752,7 @@ def run_atos_lib(args):
     """ ATOS lib tool implementation. """
 
     if args.subcmd_lib == "create_db":
-        if not os.path.exists(args.configuration_path):
+        if not os.path.exists(args.configuration_path):  # pragma: uncovered
             os.makedirs(args.configuration_path)
         if args.type == 'results_db':
             db_file = os.path.join(args.configuration_path, 'results.db')
@@ -759,10 +760,10 @@ def run_atos_lib(args):
         elif args.type == 'json':
             db_file = os.path.join(args.configuration_path, 'results.json')
             db = atos_lib.atos_db_json(db_file)
-        elif args.type == 'pickle':
+        elif args.type == 'pickle':  # pragma: branch_always
             db_file = os.path.join(args.configuration_path, 'results.pkl')
             db = atos_lib.atos_db_pickle(db_file)
-        else: assert 0
+        else: assert 0  # pragma: unreachable
         if args.shared: process.commands.chmod(db_file, 0660)
         info('created new database in "%s"' % db_file)
         return 0
@@ -788,12 +789,12 @@ def run_atos_lib(args):
 
         client.compute_speedups(args.refid)
 
-        if args.tradeoffs:
+        if args.tradeoffs:  # pragma: uncovered
             results = map(lambda x: client.tradeoff(x).dict(), args.tradeoffs)
         else:
             results = client.get_results(args.frontier)
 
-        if args.table:
+        if args.table:  # pragma: uncovered (error)
             atos_lib.pprint_speedups(results, reverse=args.reverse)
         else:
             atos_lib.pprint_list(results)
@@ -816,7 +817,7 @@ def run_atos_lib(args):
         if status:
             info('exported %d results' % (output))
             return 0
-        else:
+        else:  # pragma: uncovered (error)
             error(output)
             return 1
 
@@ -837,7 +838,7 @@ def run_atos_lib(args):
         if status:
             info('imported %d results' % (output))
             return 0
-        else:
+        else:  # pragma: uncovered (error)
             error(output)
             return 1
 
@@ -852,7 +853,7 @@ def run_atos_lib(args):
                 if len(spl) > 1:
                     group_targets += [spl[1].split(',')]
                     group_names += [spl[0]]
-                else:
+                else:  # pragma: uncovered
                     group_targets += [spl[0].split(',')]
                     group_names += ['+'.join(group_targets[-1])]
         else:
@@ -894,7 +895,7 @@ def run_atos_lib(args):
                             all_results[target][variant].time,
                             all_results[target][variant].speedup * 100)]
 
-                elif args.mode == 'sizered':
+                elif args.mode == 'sizered':  # pragma: uncovered
                     table[-1] += ['%.0f %+6.1f%%' % (
                             all_results[target][variant].size,
                             all_results[target][variant].sizered * 100)]
@@ -913,14 +914,14 @@ def run_atos_lib(args):
                             (atos_lib.standard_deviation(results) / avg_res)
                         * 100)]
 
-                else: assert 0
+                else: assert 0  # pragma: unreachable
 
             if args.mode == 'stdev': table += [None]
 
         atos_lib.pprint_table(table, reverse=args.reverse)
         return 0
 
-    elif args.subcmd_lib == "add_result":
+    elif args.subcmd_lib == "add_result":  # pragma: uncovered
         result = atos_lib.strtodict(args.result)
 
         if args.configuration_path == '-':
@@ -929,12 +930,12 @@ def run_atos_lib(args):
         else:
             db = atos_lib.atos_db.db(args.configuration_path)
             status, output = atos_lib.atos_client_db(db).add_result(result)
-            if not status:
+            if not status:  # pragma: uncovered (error)
                 error(output)
                 return 1
         return 0
 
-    elif args.subcmd_lib == "config":
+    elif args.subcmd_lib == "config":  # pragma: uncovered (TODO: remove ?)
         config_file = os.path.join(args.configuration_path, 'config.json')
 
         if args.query:
@@ -1015,18 +1016,17 @@ def run_atos_opt(args):
             fdo_gen_lto = int(atos_lib.config_compiler_flags(
                     "fdo_gen_lto", default="0",
                     config_path=args.configuration_path)[0])
-            if fdo_gen_lto:
+            if fdo_gen_lto:  # pragma: uncovered
                 uopts += " " + compiler_lto_flag
 
     if args.reuse and args.profile:
         variant_id = atos_lib.variant_id(options, None, uopts)
         profile_path = atos_lib.get_oprofile_path(
             args.configuration_path, variant_id)
-        if os.path.isdir(profile_path):
+        if os.path.isdir(profile_path):  # pragma: branch_uncovered
             for f in os.listdir(profile_path):
                 filepath = os.path.join(profile_path, f)
-                if os.path.isfile(filepath):
-                    process.commands.copyfile(filepath, f)
+                process.commands.copyfile(filepath, f)
             message("Skipping profile of variant %s..." % variant_id)
             return 0
 
@@ -1049,10 +1049,10 @@ def run_atos_opt(args):
             if skip: message("Skipping profile of variant %s..." % variant_id)
         if not skip:
             status = invoque("atos-profile", args, options=uopts, uopts=None)
-            if status: return status
+            if status: return status  # pragma: uncovered (error)
 
     status = invoque("atos-build", args, options=options, uopts=uopts)
-    if status: return status
+    if status: return status  # pragma: uncovered (error)
 
     if args.profile:
         status = invoque(
@@ -1146,11 +1146,11 @@ def run_atos_profile(args):
 
     status = invoque(
         "atos-build", args, gopts=options, options=options)
-    if status: return status
+    if status: return status  # pragma: uncovered (error)
 
     status = invoque(
         "atos-run", args, gopts=options, options=options, silent=True)
-    if status: return status
+    if status: return status  # pragma: uncovered (error)
 
     atos_lib.save_gcda_files_if_necessary(
         options, config_path=args.configuration_path, prof_path=args.path)
@@ -1160,13 +1160,13 @@ def run_atos_profile(args):
 def run_atos_raudit(args):
     """ ATOS raudit tool implementation. """
 
-    if not args.command:
+    if not args.command:  # pragma: uncovered (error)
         error("missing run command.")
         return 1
 
     message("Auditing run...")
 
-    if not args.output_file:
+    if not args.output_file:  # pragma: branch_uncovered
         process.commands.mkdir(args.configuration_path)
         output_file = os.path.join(args.configuration_path, "run.audit")
         process.commands.touch(output_file)
@@ -1178,7 +1178,7 @@ def run_atos_raudit(args):
 
     status = process.system(args.command, print_output=True)
 
-    if status != 0:
+    if status != 0:  # pragma: uncovered (error)
         error("run command failed (exit status %d). "
               " Check the run command and retry (%s)." %
               (status, process.list2cmdline(args.command)))
@@ -1203,16 +1203,17 @@ def run_atos_run_profile(args):
 
     message("Running profile variant %s..." % variant)
 
-    if 'prof_script' in vars(args) and args.prof_script:
+    if 'prof_script' in vars(
+        args) and args.prof_script:  # pragma: branch_uncovered
         prof_script = process.cmdline2list(args.prof_script)
-    else:
+    else:  # pragma: uncovered
         prof_script = [os.path.join(args.configuration_path, "profile.sh")]
 
     status, output = process.system(
         atos_lib.timeout_command() + prof_script,
         get_output=True, output_stderr=True)
 
-    if status or not os.path.isfile(profile_file):
+    if status or not os.path.isfile(profile_file):  # pragma: uncovered (error)
         message("FAILURE while running profile variant %s..." % variant)
         return 2
 
@@ -1230,7 +1231,7 @@ def run_atos_run(args):
     """ ATOS run tool implementation. """
 
     def get_size(executables):
-        def one_size(exe):
+        def one_size(exe):  # pragma: uncovered
             if not os.path.isfile(exe):
                 if not os.path.isabs(exe):
                     exe = process.commands.which(exe)
@@ -1240,10 +1241,10 @@ def run_atos_run(args):
             status, output = process.system(
                 process.cmdline2list(size_command) + [exe], get_output=True)
             if args.dryrun: return 0
-            if status or not output: return None
+            if status or not output: return None  # pragma: uncovered
             return int(output.splitlines()[-1].split()[3])
         executables_size = map(one_size, executables)
-        if None in executables_size:
+        if None in executables_size:  # pragma: uncovered
             return None
         return sum(executables_size)
 
@@ -1283,7 +1284,8 @@ def run_atos_run(args):
         lines_filtered = list(lines_output)
         for i in ["^user ", "^real ", "^sys "]:
             def reindex(l, r):
-                for i in xrange(len(l) - 1, -1, -1):
+                for i in xrange(  # pragma: branch_uncovered
+                    len(l) - 1, -1, -1):
                     if re.match(r, l[i]): return i
             last_index = reindex(lines_filtered, i)
             if last_index: lines_filtered.pop(last_index)
@@ -1324,19 +1326,20 @@ def run_atos_run(args):
             print >>sys.stderr, atos_lib.atos_db_file.entry_str(entry),
 
     def check_failure(failure, fail_condition, fail_message):
-        if failure: return failure
+        if failure: return failure  # pragma: uncovered (error)
         if fail_condition:
             debug("CHKFAILURE [%s]" % fail_message)
         return fail_condition
 
     def check_cmd(cmd, msg=""):
         cmd_list = process.cmdline2list(cmd)
-        if not process.commands.which(cmd_list[0]):
+        if not process.commands.which(
+            cmd_list[0]):  # pragma: uncovered (error)
             error("%s: command not found: %s" % (msg, cmd_list[0]))
             return False
         return True
 
-    if not os.path.isdir(args.configuration_path):
+    if not os.path.isdir(args.configuration_path):  # pragma: uncovered (error)
         error("configuration path not found: %s: run atos-init first" %
               args.configuration_path)
         return 1
@@ -1357,12 +1360,14 @@ def run_atos_run(args):
     time_command = args.time_cmd
     if not args.time_cmd:
         time_command = atos_lib.time_command(args.configuration_path)
-    if not check_cmd(time_command, "in time command"): return 1
+    if not check_cmd(
+        time_command, "in time command"): return 1  # pragma: uncovered (error)
 
     size_command = args.size_cmd
     if not args.size_cmd:
         size_command = atos_lib.size_command(args.configuration_path)
-    if not check_cmd(size_command, "in size command"): return 1
+    if not check_cmd(
+        size_command, "in size command"): return 1  # pragma: uncovered (error)
 
     nbruns = args.nbruns
     if nbruns is None:
@@ -1375,7 +1380,7 @@ def run_atos_run(args):
         try:
             with open(os.path.join(
                     args.configuration_path, "targets")) as targetf:
-                executables = filter(
+                executables = filter(  # pragma: branch_uncovered
                     lambda x: x != "" and not x.startswith("#"),
                     map(lambda x: x.strip(), targetf.readlines()))
         except:
@@ -1438,7 +1443,7 @@ def run_atos_run(args):
         else:  # no "ATOS: targ: time: ..." lines
             output_run_results(target_id, variant, exe_time, exe_size)
 
-        if failure: break
+        if failure: break  # pragma: branch_uncovered (error)
         logf.write("SUCCESS running variant %s\n" % variant)
         n = n + 1
 
@@ -1454,26 +1459,28 @@ def run_atos_run(args):
 def run_atos_replay(args):
     """ ATOS opt tool implementation. """
 
-    if os.path.abspath(args.results_path) == \
-            os.path.abspath(args.configuration_path):
+    if os.path.abspath(
+        args.results_path) == os.path.abspath(
+        args.configuration_path):  # pragma: uncovered (error)
         error("replay result path must differ from configuration path")
         return 1
 
-    if not args.run_script:
+    if not args.run_script:  # pragma: uncovered (error)
         error("run_script argument is mandatory for atos-replay")
         return 1
 
     process.commands.mkdir(args.results_path)
 
     results_db_file = os.path.join(args.results_path, "results.db")
-    if not os.path.isfile(results_db_file):
+    if not os.path.isfile(results_db_file):  # pragma: uncovered
         atos_lib.atos_db_file(results_db_file)
 
     config_target_file = os.path.join(args.configuration_path, 'targets')
     result_target_file = os.path.join(args.results_path, 'targets')
     process.commands.copyfile(config_target_file, result_target_file)
 
-    if os.path.isfile(os.path.join(args.configuration_path, 'build.time')):
+    if os.path.isfile(  # pragma: uncovered
+        os.path.join(args.configuration_path, 'build.time')):
         process.commands.copyfile(
             os.path.join(args.configuration_path, 'build.time'),
             os.path.join(args.results_path, 'build.time'))
@@ -1491,7 +1498,7 @@ def run_atos_replay(args):
         for variant in args.variants:
             res_variant = atos_lib.atos_client_db(results_db).query(
                 {'variant': variant})
-            if not res_variant:
+            if not res_variant:  # pragma: uncovered (error)
                 warning("variant not found: '%s'" % variant)
                 continue
             results.append(atos_lib.atos_client_results.result(res_variant[0]))
@@ -1507,14 +1514,14 @@ def run_atos_replay(args):
     if not args.no_ref:
         # reference build
         status = invoque("atos-build", args)
-        if status != 0: return status
+        if status != 0: return status  # pragma: uncovered (error)
 
         # reference run
         status = invoque("atos-run", args,
                          configuration_path=args.results_path, record=True,
                          command=process.cmdline2list(args.run_script),
                          size_cmd=size_cmd, time_cmd=time_cmd)
-        if status != 0: return status
+        if status != 0: return status  # pragma: uncovered (error)
         replay_progress.update()
 
     for result in results:
@@ -1522,7 +1529,7 @@ def run_atos_replay(args):
         result_uconf = getattr(result, 'uconf', None)
         status = invoque(
             "atos-build", args, options=result_conf, uopts=result_uconf)
-        if status == 0:
+        if status == 0:  # pragma: branch_always (error)
             invoque("atos-run", args, configuration_path=args.results_path,
                     record=True, options=result_conf, uopts=result_uconf,
                     command=process.cmdline2list(args.run_script),
@@ -1548,7 +1555,7 @@ def run_atos_config(args):
         with open(compilers) as inf:
             compiler_list = filter(
                 str, map(lambda x: x.strip(), inf.readlines()))
-        if not compiler_list:
+        if not compiler_list:  # pragma: uncovered (error)
             error("no compiler found in configuration, "
                   "audit did not work correctly")
             return 1
@@ -1610,7 +1617,7 @@ def run_atos_explore_staged(args):
     """ ATOS explore-acf tool implementation. """
 
     status = invoque("atos-init", args)
-    if status != 0: return status
+    if status != 0: return status  # pragma: uncovered (error)
 
     status = generators.run_exploration_loop(
         args, generator=generators.gen_staged)
@@ -1620,7 +1627,7 @@ def run_atos_explore_genetic(args):
     """ ATOS explore-acf tool implementation. """
 
     status = invoque("atos-init", args)
-    if status != 0: return status
+    if status != 0: return status  # pragma: uncovered (error)
 
     status = generators.run_exploration_loop(
         args, generator=generators.gen_genetic)
@@ -1630,7 +1637,7 @@ def run_atos_explore_flag_values(args):
     """ ATOS explore-flag-values tool implementation. """
 
     status = invoque("atos-init", args)
-    if status != 0: return status
+    if status != 0: return status  # pragma: uncovered (error)
 
     status = generators.run_exploration_loop(
         args, generator=generators.gen_flag_values)
@@ -1641,13 +1648,13 @@ def run_atos_explore_acf(args):
 
     imgpath = profile.get_image_pathes(
         args.exes, args.configuration_path)
-    if not imgpath:
+    if not imgpath:  # pragma: uncovered (error)
         error("executables must be specified (-e option)")
         return 1
 
     prof_script = args.prof_script or os.path.join(
         args.configuration_path, "profile.sh")
-    if not os.path.isfile(prof_script):
+    if not os.path.isfile(prof_script):  # pragma: uncovered (error)
         error("profiling script not specified or missing: %s" % prof_script)
         return 1
 
@@ -1672,16 +1679,17 @@ def run_atos_explore_acf(args):
         plugins_enabled = plugins_enabled and bool(int(
             list(set(plugins_enabled))[0])) or False
 
-        if not acf_plugin_path:
+        if not acf_plugin_path:  # pragma: uncovered
             warning("compiler not supported by acf plugin")
             warning("switching to file-by-file exploration")
             file_by_file = True
 
-        elif host_wide_int and not all(map(int, host_wide_int)):
+        elif host_wide_int and not all(
+            map(int, host_wide_int)):  # pragma: uncovered (error)
             error("compiler not supported by acf plugin (wrong hwi_size)")
             return 1
 
-        elif not plugins_enabled:
+        elif not plugins_enabled:  # pragma: uncovered
             warning("compiler does not support plugins")
             warning("switching to file-by-file exploration")
             file_by_file = True
@@ -1710,7 +1718,7 @@ def run_atos_explore_acf(args):
 
     return status
 
-def run_atos_graph(args):
+def run_atos_graph(args):  # pragma: uncovered
     """ ATOS graph tool implementation. """
 
     from atos_graph import optgraph
@@ -1744,7 +1752,7 @@ def run_atos_graph(args):
 
     return 0
 
-def run_atos_web(args):
+def run_atos_web(args):  # pragma: uncovered
     """ ATOS web interface """
     import requests
 

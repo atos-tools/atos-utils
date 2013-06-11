@@ -46,3 +46,9 @@ $ROOT/bin/atos-explore-acf \
     --hot-th=50 --tradeoffs=5.0 --optim-variants=base --optim-levels=-O2 \
     --random --per-func-nbiters=1 --log-file=log3
 [ `grep gen_rnd_uniform_deps log3 | wc -l` -ne 0 ]
+
+$ROOT/bin/atos-explore-acf \
+    --hot-th=50 --tradeoffs=5.0 --optim-variants=base --optim-levels=-O2 \
+    --file-by-file \
+    --random --per-func-nbiters=1 --log-file=log4
+[ `grep gen_rnd_uniform_deps log4 | wc -l` -ne 0 ]

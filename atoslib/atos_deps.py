@@ -27,11 +27,11 @@ class DependencyGraph(DGraph):
     """
     A class implementing a dependency graph.
     """
-    def graph(self):
+    def graph(self):  # pragma: uncovered
         """ Get the graph as a nodes, edges map. """
         return {'nodes': self.nodes(), 'edges': self.edges()}
 
-    def get_makedep(self):
+    def get_makedep(self):  # pragma: uncovered
         """ Get a makefile like output. """
         mk = ""
         for node in self.nodes():
@@ -129,7 +129,7 @@ class DependencyGraph(DGraph):
         new_args = []
         while i < len(args):
             m = re.search("^--hash-style", args[i])
-            if m != None:
+            if m != None:  # pragma: uncovered
                 new_args.append("-Wl," + args[i])
             else:
                 new_args.append(args[i])
@@ -196,7 +196,8 @@ class DependencyGraphBuilder:
         and input/output lists. """
         self.graph.add_node("ROOT")
         referenced_outputs = set()
-        if self.targets == "all" or self.targets == "last":
+        if (self.targets == "all" or self.targets == "last"
+            ):  # pragma: branch_uncovered
             for i in range(len(self.deplist)):
                 dependency = self.deplist[len(self.deplist) - i - 1]
                 if (dependency.kind() == "CC" and
@@ -206,10 +207,10 @@ class DependencyGraphBuilder:
                      is_ld_kind("shared"))):
                     assert(len(dependency.outputs()) == 1)
                     referenced_outputs.add(dependency.outputs()[0])
-                    if self.targets == "last":
+                    if self.targets == "last":  # pragma: uncovered
                         break
             targets = list(referenced_outputs)
-        else:
+        else:  # pragma: uncovered
             targets = self.targets
         unmatched_targets = targets[:]  # keep targets untouched
         available_inputs = set()
@@ -218,7 +219,7 @@ class DependencyGraphBuilder:
 
         for i in range(len(self.deplist)):
             dependency = self.deplist[len(self.deplist) - i - 1]
-            if len(dependency.outputs()) != 1:
+            if len(dependency.outputs()) != 1:  # pragma: uncovered
                 # TODO: should handle multiple outputs
                 continue
             output = dependency.outputs()[0]
@@ -245,10 +246,11 @@ class DependencyGraphBuilder:
                         available_inputs.add(inp)
                         if not self.graph.has_node(inp):
                             self.graph.add_node(inp, attrs=[('target', inp)])
-                        if not self.graph.has_edge(output, inp):
+                        if not self.graph.has_edge(  # pragma: branch_uncovered
+                            output, inp):
                             self.graph.add_edge(output, inp)
             if not found:
-                if output in available_inputs:
+                if output in available_inputs:  # pragma: branch_uncovered
                     if output in referenced_outputs:
                         # TODO: should allow multiple references
                         raise Exception(
@@ -266,10 +268,11 @@ class DependencyGraphBuilder:
                         available_inputs.add(inp)
                         if not self.graph.has_node(inp):
                             self.graph.add_node(inp, attrs=[('target', inp)])
-                        if not self.graph.has_edge(output, inp):
+                        if not self.graph.has_edge(  # pragma: branch_uncovered
+                            output, inp):
                             self.graph.add_edge(output, inp)
         # Check for unmatched targets
-        if len(unmatched_targets) > 0:
+        if len(unmatched_targets) > 0:  # pragma: uncovered (error)
             for target in unmatched_targets:
                 print >> sys.stderr, "warning: unmatched target executable, " \
                     "will not be optimized: " + target
@@ -366,13 +369,14 @@ class CommandDependencyListFactory:
         self.parser_.parse()
         for command in self.parser_.get_commands():
             interpreter = self.interp_factory_.get_interpreter(command)
-            if not (interpreter and interpreter.is_wellformed()):
+            if not (interpreter and interpreter.is_wellformed()
+                    ):  # pragma: uncovered
                 continue
             # Filter commands that we need for dependencies
             # TODO: for now we do not support separate CC and AS
             # compilation. I.e. objects built like this will not be
             # optimized.
-            if (interpreter.get_kind() == "AR" or
+            if (interpreter.get_kind() == "AR" or  # pragma: branch_uncovered
                 interpreter.get_kind() == "CC" and
                 (interpreter.cc_interpreter().has_cc_phase("CC") or
                  interpreter.cc_interpreter().has_cc_phase("LD"))):

@@ -38,13 +38,11 @@ all: tests
 
 tests: tests_report
 
-coverage:
+coverage: $(srcdir)check_coverage.sh
 	mkdir -p $(COVERAGE_DIR)
 	cd $(COVERAGE_DIR) && rm -rf .coverage* coverage
 	$(MAKE) COVERAGE=1 -f $(firstword $(MAKEFILE_LIST)) tests
-	cd $(COVERAGE_DIR) && coverage combine
-	cd $(COVERAGE_DIR) && coverage html -d html --include='/*/bin/*,/*/lib/atos/python/atoslib/*,/*/lib/atos/atos-*' --omit '/*/atos-graph'
-	cd $(COVERAGE_DIR) && coverage report --include='/*/bin/*,/*/lib/atos/python/atoslib/*,/*/lib/atos/atos-*' --omit '/*/atos-graph' | tail -1 | awk '{print "COVERAGE", $$6 , ":", ($$2 + $$4) - ($$3 + $$5), "/", ($$2 + $$4)}'
+	COVERAGE_DIR=$(COVERAGE_DIR) $(srcdir)check_coverage.sh
 
 clean: clean-coverage
 	rm -f *.out *.err *.pyc tests_report.txt

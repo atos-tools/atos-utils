@@ -541,9 +541,10 @@ an exploration time of 10 hours for this last command.
 
 if ``oprofile`` is not available or user hasn't sudo privileges, the ``perf``
 profiling tool can be used instead. ``perf record`` takes a command as argument
-and generates by default an output file named "perf.data" containing the profile
-information for the execution of the given command. The ``-f`` option is required
-for ATOS in order to overwrite existing data file.
+and generates profile information for the execution of the given command.
+The ``-f`` option is required for ATOS in order to overwrite existing data file.
+The ``-o`` option must be used to specify the name of the file containing the
+profile information.
 
 ``perf report`` command can then be used to extract information from this file,
 like the opreport command for oprofile.
@@ -552,6 +553,7 @@ ATOS expects information obtained only with the following options of
 
 - -n, --show-nr-samples: show a column with the number of samples for each symbol
 - -v, --verbose:  be more verbose (show symbol address, etc)
+- -i, --input:  specify the input file name
 
 For our SHA1 C++ example, the perf run script is:
 
@@ -561,8 +563,8 @@ For our SHA1 C++ example, the perf run script is:
   #!/usr/bin/env bash
   set -e
   rm -f oprof.out
-  perf record -f `dirname $0`/run.sh
-  perf report -v -n > oprof.out
+  perf record -f -o perf.data `dirname $0`/run.sh
+  perf report -i perf.data -v -n > oprof.out
 
 Fine tuning of existing exploration results
 -------------------------------------------

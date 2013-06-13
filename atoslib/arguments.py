@@ -1909,14 +1909,14 @@ class args:
         def mutate_remove(parser, args=("--mutate-remove-rate",)):
             parser.add_argument(
                 *args,
-                 dest="mutate_remove", type=float, default=0.1,
+                 dest="mutate_remove", type=float, default=0.3,
                  help="mutation remove rate")
 
         @staticmethod
         def evolve_rate(parser, args=("--evolve-rate",)):
             parser.add_argument(
                 *args,
-                 dest="evolve_rate", type=float, default=0.3,
+                 dest="evolve_rate", type=float, default=0.2,
                  help="evolve rate")
 
         @staticmethod

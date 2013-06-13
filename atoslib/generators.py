@@ -1673,8 +1673,6 @@ def gen_genetic(
 
     random.seed(int(seed))
 
-    nbpoints = nbpoints and int(nbpoints) or 2
-
     flags_files = flags_files or [
         'flags.inline.cfg', 'flags.loop.cfg', 'flags.optim.cfg']
     flags_files = filter(os.path.isfile, map(

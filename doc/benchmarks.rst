@@ -25,6 +25,29 @@ ATOS Release 3.0
 
 The tables below show some benchmarking results from the ATOS exploration performed on various configurations:
 
+
+The tables below show some benchmarking results from the ATOS exploration performed on various configurations:
+
++--------------------+-----------------+----------------------+-----------------+--------------+--------------+
+| Benchmark id       | atos version    | configuration        | trade-off       | speed-up     |size-reduction|
++====================+=================+======================+=================+==============+==============+
+| jpeg  (*)          | 3.0-rc1         | sh4 STLinux gcc-4.7.2| perf driven     |  +30.53%     |  -13.50%     |
++--------------------+-----------------+----------------------+-----------------+--------------+--------------+
+|                    |                 |   STIH207 board      | perf-size driven|  +27.38%     |   -3.82%     |
++--------------------+-----------------+----------------------+-----------------+--------------+--------------+
+|                    |                 |                      | size driven     |   +5.83%     |   +1.71%     |
++--------------------+-----------------+----------------------+-----------------+--------------+--------------+
+| zlib  (**)         | 3.0-rc1         | sh4 STLinux gcc-4.7.2| perf driven     |   +8.37%     |  +14.90%     |
++--------------------+-----------------+----------------------+-----------------+--------------+--------------+
+|                    |                 |   STIH207 board      | perf-size driven|   idem       |   idem       |
++--------------------+-----------------+----------------------+-----------------+--------------+--------------+
+|                    |                 |                      | size driven     |   -2.58%     |  +25.98%     |
++--------------------+-----------------+----------------------+-----------------+--------------+--------------+
+
+(*) `jpeg v3.0-rc exploration graph <file:./images/atos-v3-jpeg-STIH207.png>`_
+
+(**) `zlib v3.0-rc exploration graph <file:./images/atos-v3-zlib-STIH207.png>`_
+
 SPECint2000 ARM/Android
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -104,9 +127,9 @@ The tables below show some benchmarking results from the ATOS exploration perfor
 |                    |                 |                      | size driven     |   +0.75%     |  +12.39%     |
 +--------------------+-----------------+----------------------+-----------------+--------------+--------------+
 
-(*) `jpeg exploration graph <file:./images/atos-v2-jpeg-sdk7108.png>`_
+(*) `jpeg v2.0-rc exploration graph <file:./images/atos-v2-jpeg-sdk7108.png>`_
 
-(**) `zlib exploration graph <file:./images/atos-v2-zlib-sdk7108.png>`_
+(**) `zlib v2.0-rc exploration graph <file:./images/atos-v2-zlib-sdk7108.png>`_
 
 +--------------------+-----------------+----------------------+-----------------+--------------+--------------+
 | Benchmark id       | atos version    | configuration        | trade-off       | speed-up     |size-reduction|

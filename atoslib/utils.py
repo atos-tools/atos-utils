@@ -175,6 +175,9 @@ def run_atos_help(args):
         print "  atos help intro    : displays ATOS short introduction."
         print "  atos help tutorial : displays ATOS tutorial."
         print
+        print "Read the release notes with:"
+        print "  atos help release-notes : display release notes."
+        print
         print "Some explorations results and examples of usage:"
         print "  atos help example-sha1 : exploration on sha1 example."
         print "  atos help example-coremark : exploration on coremark example."
@@ -183,7 +186,7 @@ def run_atos_help(args):
         print "  atos help benchmarks : Benchmarks results summary."
         print
         print "Detailed usage for each of the ATOS commands:"
-        print "  atos help COMMAND  : display manual for the given COMMAND."
+        print "  atos COMMAND -h  : display usage for the given COMMAND."
         print
         print "Execute ``atos -h`` for the list of available COMMANDs."
         print

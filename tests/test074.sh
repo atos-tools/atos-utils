@@ -26,6 +26,7 @@ int main(){
    printf("XXX: <%s>\n", XXX);
    printf("YYY: <\"%s\">\n", YYY);
    printf("ZZZ: <\'%c\'>\n", ZZZ);
+   printf("user 1\n");
    return 0;
 }
 EOF

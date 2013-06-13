@@ -10,6 +10,7 @@ cat >hello.c <<EOF
 #include <stdio.h>
 int main() {
    printf("Hello world!\n");
+   printf("user 1\n");
    return 0;
 }
 EOF

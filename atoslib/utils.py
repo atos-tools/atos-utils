@@ -1297,8 +1297,8 @@ def run_atos_run(args):
 
     def output_run_results(target, variant, time, size):
         if args.silent: return
-        if time is None: time = "FAILURE"
-        if size is None: size = "FAILURE"
+        if not time: time = "FAILURE"
+        if not size: size = "FAILURE"
         entry = {}
         entry.update({'target': target})
         entry.update({'variant': variant})
@@ -1327,6 +1327,7 @@ def run_atos_run(args):
 
     def check_failure(failure, fail_condition, fail_message):
         if failure: return failure  # pragma: uncovered (error)
+        if args.dryrun: return failure
         if fail_condition:
             debug("CHKFAILURE [%s]" % fail_message)
         return fail_condition
@@ -1437,11 +1438,15 @@ def run_atos_run(args):
                 exe_size = res.get('size', None)
                 output_run_results(target, variant, exe_time, exe_size)
                 failure = check_failure(
-                    failure, exe_time is None, "get_res time failure")
+                    failure, not exe_time, "get_res time failure")
                 failure = check_failure(
-                    failure, exe_size is None, "get_res size failure")
+                    failure, not exe_size, "get_res size failure")
         else:  # no "ATOS: targ: time: ..." lines
             output_run_results(target_id, variant, exe_time, exe_size)
+            failure = check_failure(
+                failure, not exe_time, "res time failure")
+            failure = check_failure(
+                failure, not exe_size, "res size failure")
 
         if failure: break  # pragma: branch_uncovered (error)
         logf.write("SUCCESS running variant %s\n" % variant)

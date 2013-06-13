@@ -52,7 +52,7 @@ EOF
 
 cat > ./run.sh <<EOF
   for i in ./ ./TMP2 ./TMP3 ./TMP4 ./TMP5 ./TMP6; do
-    ( dd if=/dev/urandom status=noxfer iflag=fullblock bs=320 count=32 2> /dev/null) | \$i/sha1-c
+    ( dd if=/dev/urandom status=noxfer iflag=fullblock bs=4K count=1K 2> /dev/null) | \$i/sha1-c
   done
 EOF
 
@@ -79,7 +79,7 @@ cat > ./build.2.sh <<EOF
 EOF
 
 cat > ./run.2.sh <<EOF
-  ( dd if=/dev/urandom status=noxfer iflag=fullblock bs=320 count=32 2> /dev/null) | ./TMP7/sha1-c
+  ( dd if=/dev/urandom status=noxfer iflag=fullblock bs=4K count=1K 2> /dev/null) | ./TMP7/sha1-c
 EOF
 
 $ROOT/bin/atos-audit $legacy  -C atos-configurations-2 sh ./build.2.sh
@@ -103,7 +103,7 @@ cat > ./build.3.sh <<EOF
 EOF
 
 cat > ./run.3.sh <<EOF
-  ( dd if=/dev/urandom status=noxfer iflag=fullblock bs=320 count=32 2> /dev/null) | ./TMP8/sha1-c
+  ( dd if=/dev/urandom status=noxfer iflag=fullblock bs=4K count=1K 2> /dev/null) | ./TMP8/sha1-c
 EOF
 
 $ROOT/bin/atos-audit  $legacy -C atos-configurations-3 sh ./build.3.sh

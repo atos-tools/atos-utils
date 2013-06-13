@@ -20,7 +20,8 @@ echo "" >empty.c
 gcc -c empty.c -o empty3.o
 gcc -c empty.c -o /dev/null
 
-echo "int main() { return 0; }" >void.c
+echo "#include <stdio.h>"      >void.c
+echo "int main() { printf(\"user 1\\\\\n\"); return 0; }" >>void.c
 gcc -o void.exe void.c
 
 EOF

@@ -42,11 +42,11 @@ class re_utils():
         """
         Transform a python regexp to a POSIX
         basic regexp for the regcomp(3) function.
-        We do support only \,.,?,*,+,|,(,),^,$
+        We do support only \,.,?,*,+,|,(,),^,$,-
         regexp chars.
         """
         cnoquote = ['?', '+', '|', '(', ')']
-        cquote = ['\\', '.', '*', '^', '$']
+        cquote = ['\\', '.', '*', '^', '$', '-']
         cregexp = ""
         i = 0
         while i < len(regexp):
@@ -82,6 +82,8 @@ class re_utils():
         assert(not t)
         t = re_utils.re_check("\\")
         assert(not t)
+        t = re_utils.re_to_cregexp("\\-")
+        assert(t == "\\-")
         t = re_utils.re_to_cregexp("\\\\\\.\\*\\^\\$")
         assert(t == "\\\\\\.\\*\\^\\$")
         t = re_utils.re_to_cregexp("\\?\\+\\(\\)\\|")

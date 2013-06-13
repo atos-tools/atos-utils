@@ -20,6 +20,8 @@ ln -s $gpp i386-g++
 ln -s $ar i386-ar
 ln -s $ld i386-ld
 
+ln -s $gpp gcc-4.7.real
+
 # Build with standard tool names
 $ROOT/bin/atos-init -c \
     -r "./run.sh" \
@@ -35,6 +37,17 @@ $ROOT/bin/atos-init -c \
     -r "./run.sh" \
     -b "make CC=./xxx AR=./yyy LD=./zzz clean all" \
     --ccname xxx --arname yyy --ldname zzz -e sha
+md5=`md5sum sha|cut -f1 -d' '`
+[ "$md5" = "$md5_REF" ]
+$ROOT/bin/atos-build -a -O3
+md5=`md5sum sha|cut -f1 -d' '`
+[ "$md5" = "$md5_O3" ]
+
+# Build with tool names specified by name
+$ROOT/bin/atos-init -c \
+    -r "./run.sh" \
+    -b "make CC=./gcc-4.7.real AR=./yyy LD=./zzz clean all" \
+    --ccname gcc-4.7.real --arname yyy --ldname zzz -e sha
 md5=`md5sum sha|cut -f1 -d' '`
 [ "$md5" = "$md5_REF" ]
 $ROOT/bin/atos-build -a -O3

@@ -20,15 +20,13 @@ echo "" >empty.c
 gcc -c empty.c -o empty3.o
 gcc -c empty.c -o /dev/null
 
-echo "#include <stdio.h>"      >void.c
-echo "int main() { printf(\"user 1\\\\\n\"); return 0; }" >>void.c
+echo 'int main() { return 0; }' >void.c
 gcc -o void.exe void.c
-
 EOF
 chmod 755 build.sh
 
 # Check that autdit works correctly
-$ROOT/bin/atos init -c -b ./build.sh -r ./void.exe
+$ROOT/bin/atos init -c -b ./build.sh -r "echo user 1"
 [ -f void.exe ]
 
 # Clear all input and outputs

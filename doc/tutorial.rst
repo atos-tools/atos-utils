@@ -730,3 +730,11 @@ for instance:
 ::
 
   $ atos-explore -b "make clean all" -r ./run.sh -t ./get_results.sh
+
+Publishing results
+------------------
+
+When the exploration is finished, it's sometimes useful to share the results
+with others. ATOS Portal is then used to share, store and explore the results.
+The full documentation and tutorial for ATOS Portal can be seen at
+http://hostname:8001/help/

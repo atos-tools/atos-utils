@@ -115,10 +115,12 @@ def parse_profile(oprof_output, oprofile_format, binary_list):
             # Discard compiler generated symbols:
             #           0.01%   1 sha1-c  ./sha1-c            \
             #          0x00000000000005c3 d [.] printf@plt
-            if not re.match(
-                r'^ +[\d\.]+% +\d+ +.* +.* +[0-9a-fA-Fx]+ '
-                '+[\w!\.] +\[[\.kguH]\] +\w+$', line):
+
+            if not re.match(  # TODO: must be optimized
+                r'^ +[\d\.]+% +\d+ +\S* +\S* +[0-9a-fA-Fx]+ '
+                '+[\w!\.] +\[[\.kguH]\] +\w+ *$', line):
                 continue
+
             # we're on a symbol line:
             words = line.split()
             image_name = os.path.basename(words[3])

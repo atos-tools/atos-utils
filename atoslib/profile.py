@@ -170,7 +170,7 @@ def parse_profile(oprof_output, oprofile_format, binary_list):
                     sym = words[3]
             # merge multiple entries for same image_name/sym
             sym_found = False
-            sym = sym.split('.')[0]
+            sym = sym.split('.')[0] or sym
             if image_name in samples.keys():
                 for (vma_c, samps_c, percent_c, linenr_c, image_name_c,
                      app_name_c, sym_c) in samples[image_name]:
@@ -302,7 +302,6 @@ def partition_symbols(samples, hot_th=50):
             float(image_total_count) * float(100 - hot_th) / 100.0)
         image_sym_list = list(
             set(map(lambda x: (x[-1], x[0], int(x[1])), image_samples)))
-
         image_cold_list, curr_count = [], 0
         for (vma, count, _, _, _, _, sym) in image_samples:
             curr_count += int(count)
@@ -311,6 +310,14 @@ def partition_symbols(samples, hot_th=50):
 
         image_hot_list = filter(
             lambda x: x not in image_cold_list, image_sym_list)
+
+        # discard unexpected symbols (like asm functions) from cold/hot lists
+        image_cold_list = filter(
+            lambda (sym, _1, _2): re.match("^[A-Za-z0-9_]*$", sym),
+            image_cold_list)
+        image_hot_list = filter(
+            lambda (sym, _1, _2): re.match("^[A-Za-z0-9_]*$", sym),
+            image_hot_list)
 
         partitions[image_name] = (image_cold_list, image_hot_list)
     return partitions

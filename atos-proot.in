@@ -44,5 +44,5 @@ case "$arch" in
      i[456]86) arch=i386
 esac
 proot=proot
-[ -x "$dir/../lib/atos/$arch/proot" ] && proot="$dir/../lib/atos/$arch/proot"
+[ -x "$dir/../lib/atos/$arch/bin/proot" ] && proot="$dir/../lib/atos/$arch/bin/proot"
 exec "$proot" $ATOS_PROOT_ARGS ${1+"$@"}

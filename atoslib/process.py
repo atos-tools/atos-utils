@@ -323,6 +323,7 @@ class commands():
     def link_or_copyfile(src, dst):
         logging.debug('ln -f %s %s' % (src, dst))
         if _dryrun: return
+        do_copy = True
         try:
             os.unlink(dst)
         except OSError, e:
@@ -330,10 +331,12 @@ class commands():
                 raise
         try:
             os.link(src, dst)
+            do_copy = False
         except OSError, e:
             if e.errno != errno.EXDEV:
                 raise
-            shutil.copyfile(src, dst)
+        if do_copy:
+            shutil.copyfile(src, dst)  # pragma: uncovered
 
     @staticmethod
     def chdir(path):
@@ -429,15 +432,21 @@ class commands():
         try:
             test_which(tmpdir)
             test_diff(tmpdir)
+            commands.chdir(tmpdir)
+            commands.rmtree("foo")
+            commands.unlink("foo")
+            commands.mkdir("tmp")
+            commands.touch("foo")
+            commands.unlink("foo")
+            commands.touch("foo")
+            commands.link("foo", "lnk")
+            commands.copyfile("foo", "bar")
+            commands.link_or_copyfile("foo", "baz")
+            commands.rmtree("tmp")
+            commands.rmtree("foo")
         finally:
             commands.chdir(cwd)
             commands.rmtree(tmpdir)
-        commands.rmtree("foo")
-        commands.unlink("foo")
-        commands.mkdir("tmp")
-        commands.touch("foo")
-        commands.link("foo", "lnk")
-        commands.rmtree("foo")
         print "SUCCESS process.commands"
 
         print "TESTING process.commands (dryrun)..."

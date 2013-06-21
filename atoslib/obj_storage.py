@@ -209,14 +209,6 @@ class ObjStorage():
             self.commit_local_file_(obj_path, f.name)
 
     def store_file_content_(self, obj_path, content_path):
-        local = True
-        try:
-            self.commit_local_file_(obj_path, content_path)
-        except OSError, e:
-            if e.errno != errno.EXDEV:
-                raise
-            local = False
-        if local: return
         with tempfile.NamedTemporaryFile(dir=self.get_local_tmpdir_()) as f:
             process.commands.copyfile(content_path, f.name)
             self.commit_local_file_(obj_path, f.name)

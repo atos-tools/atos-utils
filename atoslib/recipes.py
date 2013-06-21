@@ -169,7 +169,7 @@ class RecipeNode():
                          self.stg.load_path_ref_list(rnode['inputs'])]:
             path = path_ref['path']
             if not os.path.exists(path):  # pragma: branch_uncovered
-                commands.link_or_copyfile(  # pragma: branch_uncovered
+                commands.copyfile(  # pragma: branch_uncovered
                     self.stg.get_blob_path(path_ref['digest']),
                     path)
 
@@ -182,7 +182,7 @@ class RecipeNode():
         for path_ref in [self.stg.load_path_ref(x) for x in
                          self.stg.load_path_ref_list(rnode['outputs'])]:
             path = path_ref['path']
-            commands.link_or_copyfile(  # pragma: branch_uncovered
+            commands.copyfile(  # pragma: branch_uncovered
                 self.stg.get_blob_path(path_ref['digest']),
                 path)
 

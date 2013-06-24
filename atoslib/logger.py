@@ -20,6 +20,7 @@ import sys
 import os
 import logging
 import traceback
+import atexit
 from logging import debug, info, warning
 
 class _ConsoleLogFormatter():
@@ -125,23 +126,24 @@ def error(msg, exit_status=None, *args, **kwargs):
     logging.error(msg, *args, **kwargs)
     if exit_status: sys.exit(exit_status)
 
-def message(msg):
-    """ Print an info message on stdout if quiet mode is not set. """
-    def clear_tty_print(fhandle, msg):
-        """
-        In the case where it is a tty, clear the whole line to ensure
-        that no progress output remains.
-        """
-        write_str = msg + "\n"
-        if sys.stdout.isatty():  # pragma: uncovered
-            with os.popen("tput cols", "r") as tput:
-                cols = int(tput.readline())
-            write_str = "\r" + " " * cols + "\r" + write_str
+@atexit.register
+def clear_tty_print(fhandle=sys.stdout):
+    """
+    In the case where it is a tty, clear the whole line to ensure
+    that no progress output remains.
+    """
+    if sys.stdout.isatty():  # pragma: uncovered
+        with os.popen("tput cols", "r") as tput:
+            cols = int(tput.readline())
+        write_str = "\r" + " " * cols + "\r"
         sys.stdout.write(write_str)
 
+def message(msg):
+    """ Print an info message on stdout if quiet mode is not set. """
     logging.debug(msg)
     if not _quiet:
-        clear_tty_print(sys.stdout, msg)
+        clear_tty_print(sys.stdout)
+        sys.stdout.write(msg + "\n")
         sys.stdout.flush()
 
 def internal_error(msg, exit_status=1):

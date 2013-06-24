@@ -1454,7 +1454,7 @@ class gen_genetic_deps(config_generator):
                     ' '.join(new_flags))
                 flag_is_available = (
                     (not obj_flag) or obj_flag in available_flags)
-                if not flag_is_available:
+                if not flag_is_available:  # pragma: branch_uncovered
                     debug('gen_genetic_deps: unavailable flag: ' + flag)
                     continue
 

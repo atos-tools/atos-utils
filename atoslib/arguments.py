@@ -296,6 +296,7 @@ class parsers:
         args.nbruns(parser)
         args.remote_path(parser)
         args.results_script(parser)
+        args.prof_script(parser)
         args.size_cmd(parser)
         args.time_cmd(parser)
         args.clean(parser)

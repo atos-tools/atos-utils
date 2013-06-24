@@ -23,16 +23,10 @@ EOF
 gcc -c $SRCDIR/examples/sha1-c/sha.c -o sha.o
 ln -fs sha.o link-sha.o
 
-$ROOT/bin/atos-init -b "sh build.sh" -r "echo user 1" --debug
+$ROOT/bin/atos-init -b "sh build.sh" -r "echo user 1"
 
 # Remove all objects.
 # If the link was not correctly handled, the build will fail
 # with a link-sha.o: no such file or directory error.
 rm -f *.o
 $ROOT/bin/atos-build
-
-
-
-
-
-

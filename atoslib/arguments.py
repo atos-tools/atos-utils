@@ -21,7 +21,7 @@ import globals
 from atos_argparse import ATOSArgumentParser
 import argparse
 
-def parser(tool):
+def parser(tool, parser=None):
     """
     Arguments parser factory for the given tool.
     Dispatch to the corresponding per tool factory.
@@ -56,7 +56,7 @@ def parser(tool):
         "atos-graph": parsers.atos_graph,
         "atos-web": parsers.atos_web,
         }
-    return factories[tool]()
+    return factories[tool](parser)
 
 class parsers:
     """
@@ -70,581 +70,1190 @@ class parsers:
     """
 
     @staticmethod
-    def atos():
+    def help_message(help_msg, hidden=False):
+        # tuple will be interpreted by atoshelpformatter as a
+        # hidden-by-default help message
+        if hidden:
+            return (help_msg,)
+        return help_msg
+
+    @staticmethod
+    def update_parser(parser, description):
+        parser.description = description
+        parser.epilog = (
+            "run '%s -h -v' to see all available options." % parser.prog)
+        return parser
+
+    @staticmethod
+    def add_subparser(sub_parsers, tool, help, hidden=False):
+        sub = sub_parsers.add_parser(
+            tool, help=parsers.help_message(help, hidden))
+        parser("atos-" + tool, parser=sub)
+
+    @staticmethod
+    def atos(parser=None):
         """ atos tool arguments parser factory. """
         parser = ATOSArgumentParser(
             prog="atos",
             description="ATOS auto tuning optimization system tool, "
             "see available commands below "
-            "or run 'atos help' for the full manual.")
-        args.quiet(parser)
-        args.dryrun(parser)
+            "or run 'atos help' for the full manual.",
+            epilog="Run 'atos -h -v' to see all available commands.")
+
         args.version(parser)
         subs = parser.add_subparsers(
             title="atos commands",
-            dest="subcmd",
-            description="see short description of commands below and " +
-            "run 'atos COMMAND -h' for each command options",
-            help="available atos commands")
+            dest="subcmd", help="",
+            description="See short description of commands below and " +
+            "run 'atos COMMAND -h' for each command options.")
 
-        sub = subs.add_parser("help", help="get full ATOS tools manual")
-        parsers.atos_help(sub)
+        parsers.add_subparser(
+            subs, "help",
+            help="get full ATOS tools manual")
 
-        sub = subs.add_parser("init", help="initialize atos environment")
-        parsers.atos_init(sub)
+        parsers.add_subparser(
+            subs, "init",
+            help="initialize atos environment")
 
-        sub = subs.add_parser("explore", help="exploration of common variants")
-        parsers.atos_explore(sub)
+        parsers.add_subparser(
+            subs, "opt",
+            help="build and run a variant")
 
-        sub = subs.add_parser("explore-inline",
-                              help="exploration of inlining optimizations")
-        parsers.atos_explore_inline(sub)
+        parsers.add_subparser(
+            subs, "explore",
+            help="exploration of common variants")
 
-        sub = subs.add_parser("explore-loop",
-                              help="exploration of loop optimizations")
-        parsers.atos_explore_loop(sub)
+        parsers.add_subparser(
+            subs, "explore-inline",
+            help="exploration of inlining optimizations")
 
-        sub = subs.add_parser("explore-optim",
-                              help="exploration of backend optimizations")
-        parsers.atos_explore_optim(sub)
+        parsers.add_subparser(
+            subs, "explore-loop",
+            help="exploration of loop optimizations")
 
-        sub = subs.add_parser("explore-random",
-                              help="exploration of all optimizations")
-        parsers.atos_explore_random(sub)
+        parsers.add_subparser(
+            subs, "explore-optim",
+            help="exploration of backend optimizations")
 
-        sub = subs.add_parser("explore-staged", help="full staged exploration")
-        parsers.atos_explore_staged(sub)
+        parsers.add_subparser(
+            subs, "explore-random",
+            help="exploration of all optimizations")
 
-        sub = subs.add_parser(
-            "explore-genetic", help="full genetic exploration")
-        parsers.atos_explore_genetic(sub)
+        parsers.add_subparser(
+            subs, "explore-staged",
+            help="full staged exploration")
 
-        sub = subs.add_parser(
-            "explore-flag-values", help="flag values exploration")
-        parsers.atos_explore_flag_values(sub)
+        parsers.add_subparser(
+            subs, "explore-genetic",
+            help="full genetic exploration")
 
-        sub = subs.add_parser("explore-acf", help="fine grain exploration")
-        parsers.atos_explore_acf(sub)
+        parsers.add_subparser(
+            subs, "explore-flag-values",
+            help="flag values exploration")
 
-        sub = subs.add_parser("play", help="play an existing variant")
-        parsers.atos_play(sub)
+        parsers.add_subparser(
+            subs, "explore-acf",
+            help="fine grain exploration")
 
-        sub = subs.add_parser("audit",
-                help="audit and generate a build template "
-                "to be used by atos-build")
-        parsers.atos_audit(sub)
+        parsers.add_subparser(
+            subs, "play",
+            help="play an existing variant")
 
-        sub = subs.add_parser("build", help="build a variant")
-        parsers.atos_build(sub)
+        parsers.add_subparser(
+            subs, "graph",
+            help="show exploration results in a graph", hidden=True)
 
-        sub = subs.add_parser("deps",
-                help="generate the build system from a previous build audit")
-        parsers.atos_deps(sub)
+        parsers.add_subparser(
+            subs, "build",
+            help="build a variant", hidden=True)
 
-        sub = subs.add_parser("opt", help="build and run a variant")
-        parsers.atos_opt(sub)
+        parsers.add_subparser(
+            subs, "run",
+            help="run a variant", hidden=True)
 
-        sub = subs.add_parser("profile", help="generate a profile build")
-        parsers.atos_profile(sub)
+        parsers.add_subparser(
+            subs, "replay",
+            help="replay a session", hidden=True)
 
-        sub = subs.add_parser("raudit",
-                 help="audit and generate a run template "
-                 "to be used by atos-build")
-        parsers.atos_raudit(sub)
+        parsers.add_subparser(
+            subs, "profile",
+            help="generate a profile build", hidden=True)
 
-        sub = subs.add_parser("run", help="run a variant")
-        parsers.atos_run(sub)
+        parsers.add_subparser(
+            subs, "run-profile",
+            help="run a variant in profile collection mode", hidden=True)
 
-        sub = subs.add_parser("replay", help="replay a session")
-        parsers.atos_replay(sub)
+        parsers.add_subparser(
+            subs, "audit",
+            help=("audit and generate a build "
+                  "template to be used by atos-build"), hidden=True)
 
-        sub = subs.add_parser("config", help="find compilers configuration")
-        parsers.atos_config(sub)
+        parsers.add_subparser(
+            subs, "raudit",
+            help=("audit and generate a run template "
+                  "to be used by atos-build"), hidden=True)
 
-        sub = subs.add_parser("cookie", help="generate a cookie")
-        parsers.atos_cookie(sub)
+        parsers.add_subparser(
+            subs, "deps",
+            help="generate the build system from a previous build audit",
+            hidden=True)
 
-        sub = subs.add_parser("run-profile",
-                              help="run a variant in profile collection mode")
-        parsers.atos_run_profile(sub)
+        parsers.add_subparser(
+            subs, "config",
+            help="find compilers configuration", hidden=True)
 
-        sub = subs.add_parser("graph",
-                              help="show exploration results in a graph")
-        parsers.atos_graph(sub)
+        parsers.add_subparser(
+            subs, "cookie",
+            help="generate a cookie", hidden=True)
 
-        sub = subs.add_parser("lib",
-                              help="internal API access to ATOS library")
-        parsers.atos_lib(sub)
+        parsers.add_subparser(
+            subs, "generator",
+            help="internal API access to ATOS generators", hidden=True)
 
-        sub = subs.add_parser("generator",
-                              help="internal API access to ATOS generators")
-        parsers.atos_generator(sub)
+        parsers.add_subparser(
+            subs, "lib",
+            help="internal API access to ATOS library", hidden=True)
 
-        sub = subs.add_parser("web",
-                              help="web user interface API")
-        parsers.atos_web(sub)
+        parsers.add_subparser(
+            subs, "web",
+            help="web user interface API", hidden=True)
 
         return parser
 
     @staticmethod
     def atos_help(parser=None):
         """ atos-help arguments parser factory. """
+        description = (
+            "ATOS help tool. get full ATOS tools manual.")
         if parser == None:
-            parser = ATOSArgumentParser(prog="atos-help",
-                                             description="ATOS help tool")
-        parser.add_argument(
-            "topics",
-            nargs=argparse.REMAINDER,
-            help="help topics. Execute 'atos help' for available topics.")
+            parser = ATOSArgumentParser(prog="atos-help")
+        parsers.update_parser(parser, description=description)
+        args.atos_help.topics(parser)
         args.atos_help.text(parser)
         args.atos_help.man(parser)
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_audit(parser=None):
-        """ atos audit arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(prog="atos-audit",
-                                        description="ATOS audit tool")
-        args.command(parser)
-        args.configuration_path(parser)
-        args.ccregexp(parser)
-        args.ccname(parser)
-        args.ldregexp(parser)
-        args.ldname(parser)
-        args.arregexp(parser)
-        args.arname(parser)
-        args.output(parser, default="build.audit")
-        args.legacy(parser)
-        args.force(parser)
-        args.debug(parser)
-        args.log_file(parser)
-        args.quiet(parser)
-        args.dryrun(parser)
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_build(parser=None):
-        """ atos build arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(prog="atos-build",
-                                        description="ATOS build tool")
-        args.command(parser)
-        args.configuration_path(parser)
-        args.ccregexp(parser)
-        args.ccname(parser)
-        args.ldregexp(parser)
-        args.ldname(parser)
-        args.arregexp(parser)
-        args.arname(parser)
-        args.path(parser)
-        args.options(parser)
-        args.variant(parser)
-        args.remote_path(parser, ("-b", "--remote_path"))
-        args.jobs(parser)
-        group = parser.add_mutually_exclusive_group()
-        args.useprofile(group)
-        args.genprofile(group)
-        args.legacy(parser)
-        args.blacklist(parser)
-        args.force(parser)
-        args.debug(parser)
-        args.log_file(parser)
-        args.quiet(parser)
-        args.dryrun(parser)
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_deps(parser=None):
-        """ atos dep arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(
-                prog="atos-deps",
-                description="ATOS dependency and build system generation tool")
-        args.executables(parser)
-        args.exes(parser)
-        args.configuration_path(parser)
-        args.atos_deps.input(parser)
-        args.output(parser, default="build.mk")
-        args.atos_deps.last(parser)
-        args.atos_deps.all(parser)
-        args.legacy(parser)
-        args.force(parser)
-        args.quiet(parser)
-        args.debug(parser)
-        args.log_file(parser)
-        args.dryrun(parser)
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_explore(parser=None):
-        """ atos explore arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(prog="atos-explore",
-                                        description="ATOS explore tool")
-        args.executables(parser)
-        args.exes(parser)
-        args.configuration_path(parser)
-        args.build_script(parser)
-        args.legacy(parser)
-        args.force(parser)
-        args.run_script(parser)
-        args.nbruns(parser)
-        args.remote_path(parser)
-        args.results_script(parser)
-        args.prof_script(parser)
-        args.size_cmd(parser)
-        args.time_cmd(parser)
-        args.clean(parser)
-        args.cookie(parser)
-        args.optim_levels(parser)
-        args.optim_variants(parser)
-        args.reuse(parser)
-        args.jobs(parser)
-        args.debug(parser)
-        args.log_file(parser)
-        args.quiet(parser)
-        args.dryrun(parser, ("--dryrun",))
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_explore_inline(parser=None):
-        """ atos explore inline arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(prog="atos-explore-inline",
-                                        description="ATOS explore inline tool")
-        args.configuration_path(parser)
-        args.nbruns(parser)
-        args.remote_path(parser)
-        args.seed(parser)
-        args.nbiters(parser)
-        args.flags(parser)
-        args.optim_levels(parser)
-        args.optim_variants(parser)
-        args.base_variants(parser)
-        args.cookie(parser)
-        args.reuse(parser)
-        args.jobs(parser)
-        args.debug(parser)
-        args.log_file(parser)
-        args.quiet(parser)
-        args.dryrun(parser, ("--dryrun",))
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_explore_loop(parser=None):
-        """ atos explore loop arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(prog="atos-explore-loop",
-                                        description="ATOS explore loop tool")
-        args.configuration_path(parser)
-        args.nbruns(parser)
-        args.remote_path(parser)
-        args.seed(parser)
-        args.nbiters(parser)
-        args.flags(parser)
-        args.optim_levels(parser)
-        args.optim_variants(parser)
-        args.base_variants(parser)
-        args.cookie(parser)
-        args.reuse(parser)
-        args.jobs(parser)
-        args.debug(parser)
-        args.log_file(parser)
-        args.quiet(parser)
-        args.dryrun(parser, ("--dryrun",))
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_explore_optim(parser=None):
-        """ atos explore optim arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(prog="atos-explore-optim",
-                                        description="ATOS explore optim tool")
-        args.configuration_path(parser)
-        args.nbruns(parser)
-        args.remote_path(parser)
-        args.seed(parser)
-        args.nbiters(parser)
-        args.flags(parser)
-        args.optim_levels(parser)
-        args.optim_variants(parser)
-        args.base_variants(parser)
-        args.cookie(parser)
-        args.reuse(parser)
-        args.jobs(parser)
-        args.debug(parser)
-        args.log_file(parser)
-        args.quiet(parser)
-        args.dryrun(parser, ("--dryrun",))
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_explore_random(parser=None):
-        """ atos explore random arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(prog="atos-explore-random",
-                                        description="ATOS explore random tool")
-        args.configuration_path(parser)
-        args.nbruns(parser)
-        args.remote_path(parser)
-        args.seed(parser)
-        args.nbiters(parser)
-        args.flags(parser)
-        args.optim_levels(parser)
-        args.optim_variants(parser)
-        args.base_variants(parser)
-        args.cookie(parser)
-        args.reuse(parser)
-        args.jobs(parser)
-        args.debug(parser)
-        args.log_file(parser)
-        args.quiet(parser)
-        args.dryrun(parser, ("--dryrun",))
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_explore_acf(parser=None):
-        """ atos explore acf arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(prog="atos-explore-acf",
-                                        description="ATOS explore acf tool")
-
-        args.exes(parser)
-        args.configuration_path(parser)
-        args.nbruns(parser)
-        args.remote_path(parser)
-        args.prof_script(parser)
-        args.seed(parser)
-        args.per_func_nbiters(parser)
-        args.flags(parser)
-        args.optim_levels(parser)
-        args.optim_variants(parser)
-        args.base_variants(parser)
-        args.atos_explore.file_by_file(parser)
-        args.atos_explore.hot_threshold(parser)
-        args.atos_explore.cold_options(parser)
-        args.atos_explore.cold_attributes(parser)
-        args.atos_explore.genetic(parser)
-        args.atos_explore.random(parser)
-        args.extra_arguments(parser)
-        args.tradeoffs(parser)
-        args.cookie(parser)
-        args.reuse(parser)
-        args.jobs(parser)
-        args.debug(parser)
-        args.log_file(parser)
-        args.quiet(parser)
-        args.dryrun(parser, ("--dryrun",))
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_explore_staged(parser=None):
-        """ atos explore staged arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(prog="atos-explore-staged",
-                                        description="ATOS explore staged tool")
-
-        args.exes(parser)
-        args.configuration_path(parser)
-        args.build_script(parser)
-        args.legacy(parser)
-        args.force(parser)
-        args.run_script(parser)
-        args.nbruns(parser)
-        args.remote_path(parser)
-        args.results_script(parser)
-        args.prof_script(parser)
-        args.size_cmd(parser)
-        args.time_cmd(parser)
-        args.clean(parser)
-        args.cookie(parser)
-        args.reuse(parser)
-        args.seed(parser)
-        args.nbiters(parser)
-        args.per_func_nbiters(parser)
-        args.optim_levels(parser)
-        args.optim_variants(parser)
-        args.atos_explore.file_by_file(parser, ("--file-by-file",))
-        args.atos_explore.hot_threshold(parser)
-        args.tradeoffs(parser)
-        args.jobs(parser)
-        args.debug(parser)
-        args.log_file(parser)
-        args.quiet(parser)
-        args.dryrun(parser, ("--dryrun",))
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_explore_genetic(parser=None):
-        """ atos explore genetic arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(
-                prog="atos-explore-genetic",
-                description="ATOS explore genetic tool")
-
-        args.exes(parser)
-        args.configuration_path(parser)
-        args.build_script(parser)
-        args.legacy(parser)
-        args.force(parser)
-        args.prof_script(parser)
-        args.run_script(parser)
-        args.nbruns(parser)
-        args.remote_path(parser)
-        args.results_script(parser)
-        args.size_cmd(parser)
-        args.time_cmd(parser)
-        args.clean(parser)
-        args.cookie(parser)
-        args.reuse(parser)
-        args.seed(parser)
-        args.nbiters(parser)
-        args.optim_levels(parser)
-        args.optim_variants(parser)
-        args.tradeoffs(parser)
-        args.atos_explore.generations(parser)
-        args.atos_explore.flags(parser)
-        args.atos_explore.mutate_prob(parser)
-        args.atos_explore.mutate_rate(parser)
-        args.atos_explore.mutate_remove(parser)
-        args.atos_explore.evolve_rate(parser)
-        args.atos_explore.nbpoints(parser)
-        args.debug(parser)
-        args.log_file(parser)
-        args.quiet(parser)
-        args.dryrun(parser, ("--dryrun",))
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_explore_flag_values(parser=None):
-        """ atos explore flag values arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(
-                prog="atos-explore-flag-values",
-                description="ATOS explore flag values tool")
-
-        args.exes(parser)
-        args.configuration_path(parser)
-        args.build_script(parser)
-        args.legacy(parser)
-        args.force(parser)
-        args.prof_script(parser)
-        args.run_script(parser)
-        args.nbruns(parser)
-        args.remote_path(parser)
-        args.results_script(parser)
-        args.size_cmd(parser)
-        args.time_cmd(parser)
-        args.atos_explore.variant_id(parser)
-        args.clean(parser)
-        args.cookie(parser)
-        args.reuse(parser)
-        args.seed(parser)
-        args.nbiters(parser)
-        args.optim_levels(parser)
-        args.optim_variants(parser)
-        args.tradeoffs(parser)
-        args.debug(parser)
-        args.log_file(parser)
-        args.quiet(parser)
-        args.dryrun(parser, ("--dryrun",))
-        args.version(parser)
+        args.version(parser, hidden=True)
         return parser
 
     @staticmethod
     def atos_init(parser=None):
         """ atos init arguments parser factory. """
+        description = (
+            "ATOS init tool. Environment initialization.")
         if parser == None:
-            parser = ATOSArgumentParser(prog="atos-init",
-                                        description="ATOS init tool")
+            parser = ATOSArgumentParser(prog="atos-init")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # build and run options
+        group = parser.add_argument_group(
+            'Build and Run Options')
+        args.build_script(group)
+        args.run_script(group)
+        args.results_script(group)
+        args.prof_script(group)
+        args.nbruns(group)
+        args.remote_path(group, hidden=True)
+        args.atos_init.no_run(group)
+        args.cookie(group, hidden=True)
+        args.jobs(group, hidden=True)
+        args.size_cmd(group, hidden=True)
+        args.time_cmd(group, hidden=True)
+        args.force(group, hidden=True)
+        args.legacy(group, hidden=True)
+        args.blacklist(group, hidden=True)
+        # audit options
+        group = parser.add_argument_group(
+            'Audit Options')
+        args.exes(group, hidden=True)
+        args.ccregexp(group, hidden=True)
+        args.ccname(group, hidden=True)
+        args.ldregexp(group, hidden=True)
+        args.ldname(group, hidden=True)
+        args.arregexp(group, hidden=True)
+        args.arname(group, hidden=True)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, ("--dryrun",), hidden=True)
+        args.version(group, hidden=True)
+        # positional arguments
         args.executables(parser)
+        # other optional arguments
+        args.clean(parser, hidden=True)
+        return parser
+
+    @staticmethod
+    def atos_opt(parser=None):
+        """ atos opt arguments parser factory. """
+        description = (
+            "ATOS opt tool. build and run a variant.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-opt")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # configuration variant options
+        group = parser.add_argument_group(
+            'Variant Configuration Options')
+        args.options(group)
+        args.useprofile(group)
+        args.atos_opt.lto(group)
+        args.atos_opt.fdo(group)
+        args.atos_opt.profile(group)
+        # build and run options
+        group = parser.add_argument_group(
+            'Run Options')
+        args.record(group)
+        args.remote_path(group, ("-b", "--remote_path"), hidden=True)
+        args.nbruns(group, hidden=True)
+        args.reuse(group, hidden=True)
+        args.cookie(group, hidden=True)
+        args.legacy(group, hidden=True)
+        args.blacklist(group, hidden=True)
+        args.force(group, ("--force",), hidden=True)
+        args.jobs(group, hidden=True)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, ("--dryrun",), hidden=True)
+        args.version(group, hidden=True)
+        return parser
+
+    @staticmethod
+    def atos_explore(parser=None):
+        """ atos explore arguments parser factory. """
+        description = (
+            "ATOS explore tool. exploration of common variants.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-explore")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # exploration options
+        group = parser.add_argument_group(
+            'Exploration Options')
+        args.optim_levels(group)
+        args.optim_variants(group)
+        # build and run options
+        group = parser.add_argument_group(
+            'Build and Run Options')
+        args.build_script(group)
+        args.run_script(group)
+        args.results_script(group)
+        args.prof_script(group)
+        args.nbruns(group)
+        args.remote_path(group, hidden=True)
+        args.size_cmd(group, hidden=True)
+        args.time_cmd(group, hidden=True)
+        args.force(group, hidden=True)
+        args.legacy(group, hidden=True)
+        args.exes(group, hidden=True)
+        args.cookie(group, hidden=True)
+        args.reuse(group, hidden=True)
+        args.clean(group, hidden=True)
+        args.jobs(group, hidden=True)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, ("--dryrun",), hidden=True)
+        args.version(group, hidden=True)
+        # positional arguments
+        args.executables(parser)
+        return parser
+
+    @staticmethod
+    def atos_explore_inline(parser=None):
+        """ atos explore inline arguments parser factory. """
+        description = (
+            "ATOS explore-inline tool. " +
+            "exploration of inlining optimizations.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-explore-inline")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # exploration options
+        group = parser.add_argument_group(
+            'Exploration Options')
+        args.nbiters(group)
+        args.optim_levels(group)
+        args.optim_variants(group)
+        args.seed(group, hidden=True)
+        args.flags(group, hidden=True)
+        # build and run options
+        group = parser.add_argument_group(
+            'Build and Run Options')
+        args.cookie(group, hidden=True)
+        args.reuse(group, hidden=True)
+        args.jobs(group, hidden=True)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, ("--dryrun",), hidden=True)
+        args.version(group, hidden=True)
+        # positional arguments
+        args.base_variants(parser)
+        return parser
+
+    @staticmethod
+    def atos_explore_loop(parser=None):
+        """ atos explore loop arguments parser factory. """
+        description = (
+            "ATOS explore-loop tool. " +
+            "exploration of loop optimizations.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-explore-loop")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # exploration options
+        group = parser.add_argument_group(
+            'Exploration Options')
+        args.nbiters(group)
+        args.optim_levels(group)
+        args.optim_variants(group)
+        args.seed(group, hidden=True)
+        args.flags(group, hidden=True)
+        # build and run options
+        group = parser.add_argument_group(
+            'Build and Run Options')
+        args.cookie(group, hidden=True)
+        args.reuse(group, hidden=True)
+        args.jobs(group, hidden=True)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, ("--dryrun",), hidden=True)
+        args.version(group, hidden=True)
+        # positional arguments
+        args.base_variants(parser)
+        return parser
+
+    @staticmethod
+    def atos_explore_optim(parser=None):
+        """ atos explore optim arguments parser factory. """
+        description = (
+            "ATOS explore-optim tool. " +
+            "exploration of backend optimizations.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-explore-optim")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # exploration options
+        group = parser.add_argument_group(
+            'Exploration Options')
+        args.nbiters(group)
+        args.optim_levels(group)
+        args.optim_variants(group)
+        args.seed(group, hidden=True)
+        args.flags(group, hidden=True)
+        # build and run options
+        group = parser.add_argument_group(
+            'Build and Run Options')
+        args.cookie(group, hidden=True)
+        args.reuse(group, hidden=True)
+        args.jobs(group, hidden=True)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, ("--dryrun",), hidden=True)
+        args.version(group, hidden=True)
+        # positional arguments
+        args.base_variants(parser)
+        return parser
+
+    @staticmethod
+    def atos_explore_random(parser=None):
+        """ atos explore random arguments parser factory. """
+        description = (
+            "ATOS explore-random tool. " +
+            "exploration of all optimizations.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-explore-random")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # exploration options
+        group = parser.add_argument_group(
+            'Exploration Options')
+        args.nbiters(group)
+        args.optim_levels(group)
+        args.optim_variants(group)
+        args.seed(group, hidden=True)
+        args.flags(group, hidden=True)
+        # build and run options
+        group = parser.add_argument_group(
+            'Build and Run Options')
+        args.cookie(group, hidden=True)
+        args.reuse(group, hidden=True)
+        args.jobs(group, hidden=True)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, ("--dryrun",), hidden=True)
+        args.version(group, hidden=True)
+        # positional arguments
+        args.base_variants(parser)
+        return parser
+
+    @staticmethod
+    def atos_explore_staged(parser=None):
+        """ atos explore staged arguments parser factory. """
+        description = (
+            "ATOS explore-staged tool. " +
+            "full staged exploration.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-explore-staged")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # exploration options
+        group = parser.add_argument_group(
+            'Exploration Options')
+        args.nbiters(group)
+        args.tradeoffs(group)
+        args.optim_levels(group)
+        args.optim_variants(group)
+        args.seed(group, hidden=True)
+        args.flags(group, hidden=True)
+        # build and run options
+        group = parser.add_argument_group(
+            'Build and Run Options')  # hide this group?
+        args.build_script(group)
+        args.run_script(group)
+        args.results_script(group)
+        args.prof_script(group)
+        args.nbruns(group)
+        args.remote_path(group, hidden=True)
+        args.cookie(group, hidden=True)
+        args.size_cmd(group, hidden=True)
+        args.time_cmd(group, hidden=True)
+        args.force(group, hidden=True)
+        args.legacy(group, hidden=True)
+        args.reuse(group, hidden=True)
+        args.jobs(group, hidden=True)
+        args.exes(group, hidden=True)
+        args.clean(group, hidden=True)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, ("--dryrun",), hidden=True)
+        args.version(group, hidden=True)
+        # positional arguments
+        args.base_variants(parser)
+        return parser
+
+    @staticmethod
+    def atos_explore_genetic(parser=None):
+        """ atos explore genetic arguments parser factory. """
+        description = (
+            "ATOS explore-genetic tool. " +
+            "full genetic exploration.")
+        if parser == None:
+            parser = ATOSArgumentParser(
+                prog="atos-explore-genetic")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # exploration options
+        group = parser.add_argument_group(
+            'Exploration Options')
+        args.nbiters(group)
+        args.tradeoffs(group)
+        args.optim_levels(group)
+        args.optim_variants(group)
+        args.atos_explore.generations(group)
+        args.atos_explore.mutate_prob(group)
+        args.atos_explore.mutate_rate(group)
+        args.atos_explore.mutate_remove(group)
+        args.atos_explore.evolve_rate(group)
+        args.atos_explore.nbpoints(group)
+        args.atos_explore.flags(group, hidden=True)
+        args.seed(group, hidden=True)
+        # build and run options
+        group = parser.add_argument_group(
+            'Build and Run Options')  # hide this group?
+        args.build_script(group)
+        args.run_script(group)
+        args.results_script(group)
+        args.prof_script(group)
+        args.nbruns(group)
+        args.remote_path(group, hidden=True)
+        args.cookie(group, hidden=True)
+        args.size_cmd(group, hidden=True)
+        args.time_cmd(group, hidden=True)
+        args.force(group, hidden=True)
+        args.legacy(group, hidden=True)
+        args.reuse(group, hidden=True)
+        args.jobs(group, hidden=True)
+        args.exes(group, hidden=True)
+        args.clean(group, hidden=True)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, ("--dryrun",), hidden=True)
+        args.version(group, hidden=True)
+        # positional arguments
+        args.base_variants(parser)
+        return parser
+
+    @staticmethod
+    def atos_explore_flag_values(parser=None):
+        """ atos explore flag values arguments parser factory. """
+        description = (
+            "ATOS explore-flag-values tool. " +
+            "flag values exploration.")
+        if parser == None:
+            parser = ATOSArgumentParser(
+                prog="atos-explore-flag-values")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # exploration options
+        group = parser.add_argument_group(
+            'Exploration Options')
+        args.atos_explore.variant_id(group)
+        args.tradeoffs(group)
+        args.optim_levels(group)
+        args.optim_variants(group)
+        args.seed(group, hidden=True)
+        # build and run options
+        group = parser.add_argument_group(
+            'Build and Run Options')  # hide this group?
+        args.build_script(group)
+        args.run_script(group)
+        args.results_script(group)
+        args.prof_script(group)
+        args.nbruns(group)
+        args.remote_path(group, hidden=True)
+        args.cookie(group, hidden=True)
+        args.size_cmd(group, hidden=True)
+        args.time_cmd(group, hidden=True)
+        args.force(group, hidden=True)
+        args.legacy(group, hidden=True)
+        args.reuse(group, hidden=True)
+        args.jobs(group, hidden=True)
+        args.exes(group, hidden=True)
+        args.clean(group, hidden=True)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, ("--dryrun",), hidden=True)
+        args.version(group, hidden=True)
+        return parser
+
+    @staticmethod
+    def atos_explore_acf(parser=None):
+        """ atos explore acf arguments parser factory. """
+        description = (
+            "ATOS explore-acf tool. " +
+            "fine grain exploration.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-explore-acf")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # exploration options
+        group = parser.add_argument_group(
+            'Exploration Options')
+        args.atos_explore.file_by_file(group)
+        args.per_func_nbiters(group)
+        args.atos_explore.hot_threshold(group)
+        args.atos_explore.cold_options(group)
+        args.atos_explore.cold_attributes(group)
+        args.atos_explore.genetic(group)
+        args.atos_explore.random(group)
+        args.tradeoffs(group)
+        args.optim_levels(group)
+        args.optim_variants(group)
+        args.seed(group, hidden=True)
+        args.flags(group, hidden=True)
+        args.extra_arguments(group)
+        # build and run options
+        group = parser.add_argument_group(
+            'Profile and Run Options')
+        args.prof_script(group)
+        args.exes(group, hidden=True)
+        args.cookie(group, hidden=True)
+        args.reuse(group, hidden=True)
+        args.jobs(group, hidden=True)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, ("--dryrun",), hidden=True)
+        args.version(group, hidden=True)
+        # positional arguments
+        args.base_variants(parser)
+        return parser
+
+    @staticmethod
+    def atos_play(parser=None):
+        """ atos play arguments parser factory. """
+        description = (
+            "ATOS play tool. play an existing variant.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-play")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # objective options
+        group = parser.add_argument_group(
+            'Selection Options')
+        group_ex = group.add_mutually_exclusive_group()
+        args.atos_play.objective(group_ex)
+        args.tradeoffs(group_ex)
+        args.atos_play.nbpoints(group)
+        args.atos_play.ref(group, ("--ref",))
+        args.atos_play.localid(group)
+        args.variant(group)
+        args.id(group)
+        args.options(group)
+        args.targets(group, ("--targets",))
+        args.refid(group)
+        args.query(group, ("--query",))
+        args.atos_graph.cookie(group)
+        args.atos_graph.filter(group, ("--filter",))
+        # objective options
+        group = parser.add_argument_group(
+            'Output Options')
+        group_ex = group.add_mutually_exclusive_group()
+        args.atos_play.printconfig(group_ex)
+        args.atos_play.printvariant(group_ex)
+        args.atos_play.printtable(group_ex)
+        args.atos_play.reverse(group)
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, hidden=True)
+        args.version(group, hidden=True)
+        # positional arguments
+        args.command(parser)
+        return parser
+
+    @staticmethod
+    def atos_graph(parser=None):
+        """ atos graph arguments parser factory. """
+        description = (
+            "ATOS graph tool. show exploration results.")
+        if parser == None:  # pragma: uncovered
+            parser = ATOSArgumentParser(prog="atos-graph")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        args.atos_graph.configuration_pathes(group)
+        # configuration options
+        group = parser.add_argument_group(
+            'Graph Options')
+        args.atos_graph.correl(group)
+        args.atos_graph.heat(group)
+        args.tradeoffs(group)
+        args.atos_graph.highlight(group)
+        args.atos_graph.frontier(group)
+        args.atos_graph.xd(group)
+        args.atos_graph.anonymous(group)
+        args.atos_graph.labels(group)
+        args.id(group)
+        args.atos_graph.xlim(group)
+        args.atos_graph.ylim(group)
+        # objective options
+        group = parser.add_argument_group(
+            'Selection Options')
+        args.targets(group)
+        args.refid(group)
+        args.atos_graph.filter(group)
+        args.query(group)
+        args.atos_graph.cookie(group)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.dryrun(group, hidden=True)
+        args.version(group, hidden=True)
+        # other optional arguments
+        args.atos_graph.outfile(parser)
+        args.atos_graph.hide(parser)
+        args.atos_graph.follow(parser)
+        # positional argument
+        args.atos_graph.dbfile(parser)
+        return parser
+
+    @staticmethod
+    def atos_build(parser=None):
+        """ atos build arguments parser factory. """
+        description = (
+            "ATOS build tool. build a variant.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-build")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # configuration variant options
+        group = parser.add_argument_group(
+            'Variant Configuration Options')
+        args.options(group)
+        group_ex = group.add_mutually_exclusive_group()
+        args.genprofile(group_ex)
+        args.useprofile(group_ex)
+        # audit options
+        group = parser.add_argument_group(
+            'Build Options')
+        args.ccregexp(group, hidden=True)
+        args.ccname(group, hidden=True)
+        args.ldregexp(group, hidden=True)
+        args.ldname(group, hidden=True)
+        args.arregexp(group, hidden=True)
+        args.arname(group, hidden=True)
+        args.remote_path(group, ("-b", "--remote_path"), hidden=True)
+        args.path(group, hidden=True)
+        args.jobs(group, hidden=True)
+        args.legacy(group, hidden=True)
+        args.blacklist(group, hidden=True)
+        args.force(group, hidden=True)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, hidden=True)
+        args.version(group, hidden=True)
+        # other options
+        args.command(parser)
+        args.variant(parser, hidden=True)
+        return parser
+
+    @staticmethod
+    def atos_run(parser=None):
+        """ atos run arguments parser factory. """
+        description = (
+            "ATOS run tool. run a variant.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-run")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # build and run options
+        group = parser.add_argument_group(
+            'Build and Run Options')
+        args.command(group)
+        args.options(group)
+        prof_group = group.add_mutually_exclusive_group()
+        args.useprofile(prof_group)
+        args.genprofile(prof_group)
+        args.nbruns(group)
+        args.remote_path(group, ("-b", "--remote_path"), hidden=True)
+        args.results_script(group)
+        args.size_cmd(group, hidden=True)
+        args.time_cmd(group, hidden=True)
+        args.record(group)
+        args.cookie(group, hidden=True)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, ("--dryrun",), hidden=True)
+        args.version(group, hidden=True)
+        # other options
+        args.atos_run.silent(parser)
+        args.variant(parser, hidden=True)
+        args.output(parser, hidden=True)
+        args.id(parser)
+        return parser
+
+    @staticmethod
+    def atos_replay(parser=None):
+        """ atos replay arguments parser factory. """
+        description = (
+            "ATOS explore-replay tool. replay a session.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-replay")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        args.atos_replay.results_path(group)
+        # build and run options
+        group = parser.add_argument_group(
+            'Build and Run Options')
+        args.run_script(group)
+        args.results_script(group)
+        args.nbruns(group)
+        args.cookie(group, hidden=True)
+        args.atos_replay.no_ref(group)
+        args.size_cmd(group, hidden=True)
+        args.time_cmd(group, hidden=True)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, ("--dryrun",), hidden=True)
+        args.version(group, hidden=True)
+        # positional arguments
+        args.atos_replay.variants(parser)
+        return parser
+
+    @staticmethod
+    def atos_profile(parser=None):
+        """ atos profile arguments parser factory. """
+        description = (
+            "ATOS profile generation tool. " +
+            "generate a profile build.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-profile")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        group = parser.add_argument_group(
+            'Profile Options')
+        args.remote_path(group, ("-b", "--remote_path"), hidden=True)
+        args.options(group, ("-g", "--options"))
+        args.path(group, hidden=True)
+        args.legacy(group, hidden=True)
+        args.force(group, hidden=True)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, hidden=True)
+        args.version(group, hidden=True)
+        return parser
+
+    @staticmethod
+    def atos_run_profile(parser=None):
+        """ atos run profile arguments parser factory. """
+        description = (
+            "ATOS run profile tool. " +
+            "run a variant in profile collection mode.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-run-profile")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # build and run options
+        group = parser.add_argument_group(
+            'Build and Run Options')
+        args.command(group)
+        args.options(group)
+        prof_group = group.add_mutually_exclusive_group()
+        args.useprofile(prof_group)
+        args.genprofile(prof_group)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, hidden=True)
+        args.version(group, hidden=True)
+        return parser
+
+    @staticmethod
+    def atos_audit(parser=None):
+        """ atos audit arguments parser factory. """
+        description = (
+            "ATOS audit tool. audit and generate a build template" +
+            "to be used by atos-build.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-audit")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # audit options
+        group = parser.add_argument_group(
+            'Audit Options')
+        args.ccregexp(group, hidden=True)
+        args.ccname(group, hidden=True)
+        args.ldregexp(group, hidden=True)
+        args.ldname(group, hidden=True)
+        args.arregexp(group, hidden=True)
+        args.arname(group, hidden=True)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, hidden=True)
+        args.version(group, hidden=True)
+        # other options
+        args.command(parser)
+        args.output(parser, default="build.audit", hidden=True)
+        args.legacy(group, hidden=True)
+        args.force(group, hidden=True)
+        return parser
+
+    @staticmethod
+    def atos_raudit(parser=None):
+        """ atos raudit arguments parser factory. """
+        description = (
+            "ATOS raudit tool. " +
+            "audit and generate a run template to be used by atos-run.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-raudit")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # build and run options
+        group = parser.add_argument_group(
+            'Run and results Options')
+        args.results_script(group)
+        args.size_cmd(group, hidden=True)
+        args.time_cmd(group, hidden=True)
+        args.force(group, hidden=True)
+        args.legacy(group, hidden=True)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, hidden=True)
+        args.version(group, hidden=True)
+        # other options
+        args.command(parser)
+        args.output(parser, default="run.audit", hidden=True)
+        return parser
+
+    @staticmethod
+    def atos_deps(parser=None):
+        """ atos dep arguments parser factory. """
+        description = (
+            "ATOS dependency and build system generation tool. " +
+            "generate the build system from a previous build audit.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-deps")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, hidden=True)
+        args.version(group, hidden=True)
+        # other options
+        args.executables(parser)
+        args.exes(group, hidden=True)
+        args.atos_deps.input(parser)
+        args.output(parser, default="build.mk", hidden=True)
+        args.atos_deps.last(parser)
+        args.atos_deps.all(parser)
+        args.legacy(group, hidden=True)
+        args.force(group, hidden=True)
+        return parser
+
+    @staticmethod
+    def atos_config(parser=None):
+        """ atos config arguments parser factory. """
+        description = (
+            "ATOS config generator. find compilers configuration.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-config")
+        parsers.update_parser(parser, description=description)
         args.configuration_path(parser)
-        args.clean(parser)
-        args.exes(parser)
-        args.build_script(parser)
-        args.run_script(parser)
-        args.results_script(parser)
-        args.prof_script(parser)
-        args.size_cmd(parser)
-        args.time_cmd(parser)
-        args.ccregexp(parser)
-        args.ccname(parser)
-        args.ldregexp(parser)
-        args.ldname(parser)
-        args.arregexp(parser)
-        args.arname(parser)
-        args.nbruns(parser)
-        args.remote_path(parser)
-        args.atos_init.no_run(parser)
-        args.cookie(parser)
-        args.debug(parser)
-        args.log_file(parser)
-        args.legacy(parser)
-        args.blacklist(parser)
-        args.force(parser)
-        args.jobs(parser)
-        args.quiet(parser)
-        args.dryrun(parser, ("--dryrun",))
-        args.version(parser)
+        args.atos_config.compiler(parser)
+        args.atos_config.printcfg(parser)
+        args.atos_config.ppflags(parser)
+        args.debug(parser, hidden=True)
+        args.version(parser, hidden=True)
+        return parser
+
+    @staticmethod
+    def atos_cookie(parser=None):
+        """ atos cookie arguments parser factory. """
+        description = (
+            "ATOS cookie generator. generate a cookie.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-cookie")
+        parsers.update_parser(parser, description=description)
+        args.cookie(parser, hidden=False)
+        args.version(parser, hidden=True)
+        return parser
+
+    @staticmethod
+    def atos_generator(parser=None):
+        """ atos gen arguments parser factory. """
+        description = (
+            "ATOS gen tool. internal API access to ATOS generators.")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-generator")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # exploration options
+        group = parser.add_argument_group(
+            'Exploration Options')
+        args.atos_generator.generator(group)
+        args.base_variants(group)
+        args.tradeoffs(group)
+        args.optim_levels(group)
+        args.optim_variants(group)
+        args.nbiters(group)
+        args.per_func_nbiters(group)
+        args.seed(group, hidden=True)
+        args.extra_arguments(group)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, hidden=True)
+        args.version(group, hidden=True)
+        # other options
+        args.cookie(group, hidden=True)
+        args.reuse(group, hidden=True)
         return parser
 
     @staticmethod
     def atos_lib(parser=None):
         """ atos lib arguments parser factory. """
+        description = (
+            "ATOS lib tool. internal API access to ATOS library.")
         if parser == None:
-            parser = ATOSArgumentParser(prog="atos-lib",
-                                        description="ATOS lib tool")
-
+            parser = ATOSArgumentParser(prog="atos-lib")
+        parsers.update_parser(parser, description=description)
         subs = parser.add_subparsers(
             title="atos lib commands",
             dest="subcmd_lib",
             description="see short description of commands below and " +
             "run 'atos lib COMMAND -h' for each command options",
             help="available atos lib commands")
-
         sub = subs.add_parser("create_db", help="Create a new empty database")
         parsers.atos_lib_createdb(sub)
-
-        sub = subs.add_parser("query",
-                help="Query database results")
+        sub = subs.add_parser(
+            "query", help="Query database results")
         parsers.atos_lib_query(sub)
-
         sub = subs.add_parser("speedups", help="Get results")
         parsers.atos_lib_speedups(sub)
-
-        sub = subs.add_parser("push",
-                              help="Export results to another database")
+        sub = subs.add_parser(
+            "push", help="Export results to another database")
         parsers.atos_lib_push(sub)
-
-        sub = subs.add_parser("pull",
-                              help="Import results from another database")
+        sub = subs.add_parser(
+            "pull", help="Import results from another database")
         parsers.atos_lib_pull(sub)
-
-        sub = subs.add_parser("report",
-                              help="Print results")
+        sub = subs.add_parser(
+            "report", help="Print results")
         parsers.atos_lib_report(sub)
-
-        sub = subs.add_parser("add_result",
-                              help="Add result to database")
+        sub = subs.add_parser(
+            "add_result", help="Add result to database")
         parsers.atos_lib_addresult(sub)
-
-        sub = subs.add_parser("config",
-                              help=argparse.SUPPRESS)
+        sub = subs.add_parser(
+            "config", help="Compiler configuration")
         parsers.atos_lib_config(sub)
+        return parser
 
+    @staticmethod
+    def atos_web(parser=None):
+        """ atos web arguments parser factory. """
+        description = (
+                "ATOS web tool. web user interface API")
+        if parser == None:
+            parser = ATOSArgumentParser(prog="atos-web")
+        parsers.update_parser(parser, description=description)
+        args.atos_web.server(parser)
+        args.version(parser, hidden=True)
+        subs = parser.add_subparsers(
+            title="atos web commands",
+            dest="subcmd_web",
+            description="see short description of commands below",
+            help="available atos web commands")
+        sub = subs.add_parser("project", help="Manage projects")
+        parsers.atos_web_project(sub)
+        sub = subs.add_parser("experiment", help="Manage experiments")
+        parsers.atos_web_experiment(sub)
+        sub = subs.add_parser("cookie", help="Manage cookies")
+        parsers.atos_web_cookie(sub)
+        sub = subs.add_parser("target", help="Manage targets")
+        parsers.atos_web_target(sub)
+        sub = subs.add_parser("run", help="Manage runs")
+        parsers.atos_web_run(sub)
         return parser
 
     @staticmethod
@@ -654,7 +1263,6 @@ class parsers:
             parser = ATOSArgumentParser(
                 prog="atos-lib-createdb",
                 description="Create a new empty database")
-
         args.configuration_path(parser)
         args.atos_lib.type(parser)
         args.atos_lib.shared(parser)
@@ -667,7 +1275,6 @@ class parsers:
             parser = ATOSArgumentParser(
                 prog="atos-lib-query",
                 description="Query database results")
-
         args.configuration_path(parser)
         args.query(parser)
         args.atos_lib.text(parser)
@@ -679,7 +1286,6 @@ class parsers:
         if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(prog="atos-lib-speedups",
                                         description="ATOS lib tool")
-
         args.configuration_path(parser)
         args.tradeoffs(parser)
         args.cookie(parser)
@@ -698,7 +1304,6 @@ class parsers:
         if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(prog="atos-lib-push",
                                         description="ATOS lib tool")
-
         args.configuration_path(parser, ("-C", "--C1"))
         args.atos_lib.remote_configuration_path(parser)
         args.query(parser)
@@ -712,7 +1317,6 @@ class parsers:
         if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(prog="atos-lib-pull",
                                         description="ATOS lib tool")
-
         args.configuration_path(parser, ("-C", "--C1"))
         args.atos_lib.remote_configuration_path(parser)
         args.query(parser)
@@ -726,7 +1330,6 @@ class parsers:
         if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(prog="atos-lib-report",
                                         description="ATOS lib tool")
-
         args.configuration_path(parser)
         args.targets(parser)
         args.query(parser)
@@ -742,7 +1345,6 @@ class parsers:
         if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(prog="atos-lib-add_result",
                                         description="ATOS lib tool")
-
         args.configuration_path(parser)
         args.atos_lib.result(parser)
         return parser
@@ -753,7 +1355,6 @@ class parsers:
         if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(prog="atos-lib-config",
                                         description="ATOS lib tool")
-
         args.configuration_path(parser)
         args.query(parser)
         args.atos_lib.text(parser)
@@ -765,305 +1366,12 @@ class parsers:
         return parser
 
     @staticmethod
-    def atos_opt(parser=None):
-        """ atos opt arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(prog="atos-opt",
-                                        description="ATOS opt tool")
-        args.configuration_path(parser)
-        args.atos_opt.lto(parser)
-        args.atos_opt.fdo(parser)
-        args.atos_opt.profile(parser)
-        args.reuse(parser)
-        args.record(parser)
-        args.remote_path(parser, ("-b", "--remote_path"))
-        args.useprofile(parser)
-        args.nbruns(parser)
-        args.options(parser)
-        args.cookie(parser)
-        args.debug(parser)
-        args.log_file(parser)
-        args.legacy(parser)
-        args.blacklist(parser)
-        args.force(parser, ("--force",))
-        args.jobs(parser)
-        args.quiet(parser)
-        args.dryrun(parser, ("--dryrun",))
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_graph(parser=None):
-        """ atos graph arguments parser factory. """
-        if parser == None:  # pragma: uncovered
-            parser = ATOSArgumentParser(prog="atos-graph",
-                                        description="ATOS graph tool")
-        args.atos_graph.outfile(parser)
-        args.atos_graph.hide(parser)
-        args.id(parser)
-        args.atos_graph.follow(parser)
-        args.atos_graph.correl(parser)
-        args.atos_graph.heat(parser)
-        args.atos_graph.highlight(parser)
-        args.atos_graph.frontier(parser)
-        args.atos_graph.xd(parser)
-        args.atos_graph.anonymous(parser)
-        args.atos_graph.labels(parser)
-        args.tradeoffs(parser)
-        args.targets(parser)
-        args.refid(parser)
-        args.atos_graph.filter(parser)
-        args.query(parser)
-        args.configuration_path(parser)
-        args.atos_graph.configuration_pathes(parser)
-        args.atos_graph.xlim(parser)
-        args.atos_graph.ylim(parser)
-        args.atos_graph.cookie(parser)
-        args.atos_graph.dbfile(parser)
-        args.dryrun(parser)
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_generator(parser=None):
-        """ atos gen arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(prog="atos-generator",
-                                        description="ATOS gen tool")
-        args.configuration_path(parser)
-        args.base_variants(parser)
-        args.nbiters(parser)
-        args.per_func_nbiters(parser)
-        args.seed(parser)
-        args.tradeoffs(parser)
-        args.extra_arguments(parser)
-        args.atos_generator.generator(parser)
-        args.optim_levels(parser)
-        args.optim_variants(parser)
-        args.cookie(parser)
-        args.reuse(parser)
-        args.debug(parser)
-        args.log_file(parser)
-        args.quiet(parser)
-        args.dryrun(parser)
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_play(parser=None):
-        """ atos play arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(prog="atos-play",
-                                        description="ATOS play tool")
-        args.command(parser)
-        args.configuration_path(parser)
-        group = parser.add_mutually_exclusive_group()
-        args.atos_play.objective(group)
-        args.tradeoffs(group)
-        args.atos_play.nbpoints(parser)
-        args.atos_play.ref(parser, ("--ref",))
-        args.atos_play.localid(parser)
-        args.variant(parser)
-        group = parser.add_mutually_exclusive_group()
-        args.atos_play.printconfig(group)
-        args.atos_play.printvariant(group)
-        args.atos_play.printtable(group)
-        args.atos_play.reverse(parser)
-        args.id(parser)
-        args.options(parser)
-        args.targets(parser, ("--targets",))
-        args.refid(parser)
-        args.atos_graph.cookie(parser)
-        args.atos_graph.filter(parser, ("--filter",))
-        args.query(parser, ("--query",))
-        args.debug(parser)
-        args.log_file(parser)
-        args.legacy(parser)
-        args.force(parser, ("--force",))
-        args.quiet(parser)
-        args.dryrun(parser)
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_profile(parser=None):
-        """ atos profile arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(
-                prog="atos-profile",
-                description="ATOS profile generation tool")
-        args.configuration_path(parser)
-        args.path(parser)
-        args.remote_path(parser, ("-b", "--remote_path"))
-        args.options(parser, ("-g", "--options"))
-        args.debug(parser)
-        args.log_file(parser)
-        args.legacy(parser)
-        args.force(parser)
-        args.quiet(parser)
-        args.dryrun(parser)
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_raudit(parser=None):
-        """ atos raudit arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(
-                prog="atos-raudit",
-                description="ATOS raudit tool")
-        args.command(parser)
-        args.configuration_path(parser)
-        args.output(parser, default="run.audit")
-        args.results_script(parser)
-        args.size_cmd(parser)
-        args.time_cmd(parser)
-        args.legacy(parser)
-        args.force(parser)
-        args.debug(parser)
-        args.log_file(parser)
-        args.quiet(parser)
-        args.dryrun(parser)
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_run(parser=None):
-        """ atos run arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(prog="atos-run",
-                                        description="ATOS run tool")
-        args.command(parser)
-        args.configuration_path(parser)
-        args.nbruns(parser)
-        args.remote_path(parser, ("-b", "--remote_path"))
-        args.results_script(parser)
-        args.size_cmd(parser)
-        args.time_cmd(parser)
-        prof_group = parser.add_mutually_exclusive_group()
-        args.useprofile(prof_group)
-        args.genprofile(prof_group)
-        args.record(parser)
-        args.variant(parser)
-        args.options(parser)
-        args.cookie(parser)
-        args.output(parser)
-        args.id(parser)
-        args.atos_run.silent(parser)
-        args.debug(parser)
-        args.log_file(parser)
-        args.quiet(parser)
-        args.dryrun(parser, ("--dryrun",))
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_run_profile(parser=None):
-        """ atos run profile arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(prog="atos-run-profile",
-                                        description="ATOS run profile tool")
-        args.command(parser)
-        args.configuration_path(parser)
-        prof_group = parser.add_mutually_exclusive_group()
-        args.useprofile(prof_group)
-        args.genprofile(prof_group)
-        args.options(parser)
-        args.debug(parser)
-        args.log_file(parser)
-        args.quiet(parser)
-        args.dryrun(parser, ("--dryrun",))
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_replay(parser=None):
-        """ atos replay arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(prog="atos-replay",
-                                        description="ATOS replay tool")
-        args.configuration_path(parser)
-        args.atos_replay.results_path(parser)
-        args.run_script(parser)
-        args.results_script(parser)
-        args.size_cmd(parser)
-        args.time_cmd(parser)
-        args.nbruns(parser)
-        args.cookie(parser)
-        args.atos_replay.no_ref(parser)
-        args.atos_replay.variants(parser)
-        args.debug(parser)
-        args.log_file(parser)
-        args.quiet(parser)
-        args.dryrun(parser, ("--dryrun",))
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_cookie(parser=None):
-        """ atos cookie arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(prog="atos-cookie",
-                                        description="ATOS cookie generator")
-        args.cookie(parser)
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_config(parser=None):
-        """ atos config arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(prog="atos-config",
-                                        description="ATOS config generator")
-        args.configuration_path(parser)
-        args.atos_config.compiler(parser)
-        args.atos_config.printcfg(parser)
-        args.atos_config.ppflags(parser)
-        args.debug(parser)
-        args.version(parser)
-        return parser
-
-    @staticmethod
-    def atos_web(parser=None):
-        """ atos web arguments parser factory. """
-        if parser == None:
-            parser = ATOSArgumentParser(prog="atos-web",
-                                        description="ATOS web tool")
-
-        args.atos_web.server(parser)
-        args.version(parser)
-
-        subs = parser.add_subparsers(
-            title="atos web commands",
-            dest="subcmd_web",
-            description="see short description of commands below",
-            help="available atos web commands")
-
-        sub = subs.add_parser("project", help="Manage projects")
-        parsers.atos_web_project(sub)
-
-        sub = subs.add_parser("experiment", help="Manage experiments")
-        parsers.atos_web_experiment(sub)
-
-        sub = subs.add_parser("cookie", help="Manage cookies")
-        parsers.atos_web_cookie(sub)
-
-        sub = subs.add_parser("target", help="Manage targets")
-        parsers.atos_web_target(sub)
-
-        sub = subs.add_parser("run", help="Manage runs")
-        parsers.atos_web_run(sub)
-
-        return parser
-
-    @staticmethod
     def atos_web_project(parser=None):
         """ atos web project arguments parser factory. """
         if parser == None:  # pragma: uncovered
             parser = ATOSArgumentParser(
                 prog="atos-web-project",
                 description="Manage web projects")
-
         args.atos_web.operation(parser)
         return parser
 
@@ -1074,7 +1382,6 @@ class parsers:
             parser = ATOSArgumentParser(
                 prog="atos-web-experiment",
                 description="Manage web experiments")
-
         args.atos_web.operation(parser)
         args.atos_web.project(parser)
         return parser
@@ -1086,7 +1393,6 @@ class parsers:
             parser = ATOSArgumentParser(
                 prog="atos-web-cookie",
                 description="Manage web cookies")
-
         args.atos_web.project(parser)
         args.atos_web.experiment(parser)
         args.configuration_path(parser)
@@ -1099,7 +1405,6 @@ class parsers:
             parser = ATOSArgumentParser(
                 prog="atos-web-target",
                 description="Manage web targets")
-
         args.atos_web.operation(parser)
         args.atos_web.project(parser)
         args.atos_web.experiment(parser)
@@ -1112,7 +1417,6 @@ class parsers:
             parser = ATOSArgumentParser(
                 prog="atos-web-run",
                 description="Manage web runs")
-
         args.atos_web.operation(parser)
         args.atos_web.project(parser)
         args.atos_web.experiment(parser)
@@ -1120,7 +1424,6 @@ class parsers:
         args.configuration_path(parser)
 
         return parser
-
 
 class args:
     """
@@ -1136,25 +1439,31 @@ class args:
     """
 
     @staticmethod
-    def version(parser, args=("-v", "--version")):
+    def version(parser, args=("-v", "--version"), hidden=False):
+        help_msg = parsers.help_message(
+            "output version string", hidden)
         parser.add_argument(
             *args,
-             help="output version string",
+             help=help_msg,
              action="version",
              version="atos version " + globals.VERSION)
 
     @staticmethod
-    def quiet(parser, args=("-q", "--quiet")):
+    def quiet(parser, args=("-q", "--quiet"), hidden=False):
+        help_msg = parsers.help_message(
+            "quiet output", hidden)
         parser.add_argument(
             *args,
-             help="quiet output",
+             help=help_msg,
              action="store_true")
 
     @staticmethod
-    def dryrun(parser, args=("-n", "--dryrun")):
+    def dryrun(parser, args=("-n", "--dryrun"), hidden=False):
+        help_msg = parsers.help_message(
+            "dry run, output commands only", hidden)
         parser.add_argument(
             *args,
-             help="dry run, output commands only",
+             help=help_msg,
              action="store_true")
 
     @staticmethod
@@ -1166,26 +1475,32 @@ class args:
              default=globals.DEFAULT_CONFIGURATION_PATH)
 
     @staticmethod
-    def legacy(parser, args=("--legacy",)):
+    def legacy(parser, args=("--legacy",), hidden=False):
+        help_msg = parsers.help_message(
+            "use legacy scheme for audit and exploration", hidden)
         parser.add_argument(
             *args,
              action="store_true",
-             help="use legacy scheme for audit and exploration")
+             help=help_msg)
 
     @staticmethod
-    def blacklist(parser, args=("--blacklist",)):
+    def blacklist(parser, args=("--blacklist",), hidden=False):
+        help_msg = parsers.help_message(
+            "initialize the objects blacklist automatically", hidden)
         parser.add_argument(
             *args,
              action="store_true",
-             help="initialize the objects blacklist automatically")
+             help=help_msg)
 
     @staticmethod
-    def force(parser, args=("-f", "--force")):
+    def force(parser, args=("-f", "--force"), hidden=False):
+        help_msg = parsers.help_message(
+            "use atos tools in force rebuild mode, "
+            "the full build command will be re-executed", hidden)
         parser.add_argument(
             *args,
              action="store_true",
-             help="use atos tools in force rebuild mode, "
-             "the full build command will be re-executed")
+             help=help_msg)
 
     @staticmethod
     def build_script(parser, args=("-b", "--build-script")):
@@ -1195,62 +1510,81 @@ class args:
              help="build_script to be audited and optimized")
 
     @staticmethod
-    def ccregexp(parser, args=("--ccregexp",)):
+    def ccregexp(parser, args=("--ccregexp",), hidden=False):
+        help_msg = parsers.help_message(
+            "specify the compiler tools basename regexp", hidden)
         parser.add_argument(
             *args,
              dest="ccregexp",
-             help="specify the compiler tools basename regexp",
+             help=help_msg,
              default=globals.DEFAULT_CCREGEXP)
 
     @staticmethod
-    def ccname(parser, args=("--ccname",)):
+    def ccname(parser, args=("--ccname",), hidden=False):
+        help_msg = parsers.help_message(
+            "specify the compiler basename, default to CCREGEXP",
+            hidden)
         parser.add_argument(
             *args,
              dest="ccname",
-             help="specify the compiler basename, default to CCREGEXP")
+             help=help_msg)
 
     @staticmethod
-    def ldregexp(parser, args=("--ldregexp",)):
+    def ldregexp(parser, args=("--ldregexp",), hidden=False):
+        help_msg = parsers.help_message(
+            "specify the linker tools basename regexp", hidden)
         parser.add_argument(
             *args,
              dest="ldregexp",
-             help="specify the linker tools basename regexp",
+             help=help_msg,
              default=globals.DEFAULT_LDREGEXP)
 
     @staticmethod
-    def ldname(parser, args=("--ldname",)):
+    def ldname(parser, args=("--ldname",), hidden=False):
+        help_msg = parsers.help_message(
+            "specify the linker basename, defaults to LDREGEXP", hidden)
         parser.add_argument(
             *args,
              dest="ldname",
-             help="specify the linker basename, defaults to LDREGEXP")
+             help=help_msg)
 
     @staticmethod
-    def arregexp(parser, args=("--arregexp",)):
+    def arregexp(parser, args=("--arregexp",), hidden=False):
+        help_msg = parsers.help_message(
+            "specify the archivers basename regexp", hidden)
         parser.add_argument(
             *args,
              dest="arregexp",
-             help="specify the archivers basename regexp",
+             help=help_msg,
              default=globals.DEFAULT_ARREGEXP)
 
     @staticmethod
-    def arname(parser, args=("--arname",)):
+    def arname(parser, args=("--arname",), hidden=False):
+        help_msg = parsers.help_message(
+            "specify the archiver basename, defaults to ARREGEXP",
+            hidden)
         parser.add_argument(
             *args,
              dest="arname",
-             help="specify the archiver basename, defaults to ARREGEXP")
+             help=help_msg)
 
     @staticmethod
-    def path(parser, args=("-p", "--path")):
-        parser.add_argument(*args,
-                             dest="path",
-                             help="path to profile files")
-
-    @staticmethod
-    def remote_path(parser, args=("-B", "--remote-path")):
+    def path(parser, args=("-p", "--path"), hidden=True):
+        help_msg = parsers.help_message(
+            "path to profile files", hidden)
         parser.add_argument(
             *args,
-             dest="remote_path",
-             help="remote path to profile files for cross execution")
+             dest="path",
+             help=help_msg)
+
+    @staticmethod
+    def remote_path(parser, args=("-B", "--remote_path"), hidden=False):
+        help_msg = parsers.help_message(
+                "remote path to profile files for cross execution", hidden)
+        parser.add_argument(
+            *args,
+            dest="remote_path",
+            help=help_msg)
 
     @staticmethod
     def run_script(parser, args=("-r", "--run-script")):
@@ -1260,12 +1594,14 @@ class args:
              help="run_script to be audited and optimized")
 
     @staticmethod
-    def nbruns(parser, default=None, args=("-n", "--nbruns")):
+    def nbruns(parser, default=None, args=("-n", "--nbruns"), hidden=False):
+        help_msg = parsers.help_message(
+            "number of executions of <run_script>", hidden)
         parser.add_argument(
             *args,
              dest="nbruns",
              type=int,
-             help="number of executions of <run_script>",
+             help=help_msg,
              default=default)
 
     @staticmethod
@@ -1276,51 +1612,63 @@ class args:
              help="results_script for specific instrumentation")
 
     @staticmethod
-    def size_cmd(parser, args=("--size-cmd",)):
+    def size_cmd(parser, hidden=False):
+        help_msg = parsers.help_message(
+            "if specified, overrides bintutils size command "
+            "[default: %s]" % globals.DEFAULT_SIZE_CMD, hidden)
         parser.add_argument(
-            *args,
+            "--size-cmd",
              dest="size_cmd",
-             help="if specified, overrides bintutils size command "
-             "[default: %s]" % globals.DEFAULT_SIZE_CMD)
+             help=help_msg)
 
     @staticmethod
-    def time_cmd(parser, args=("--time-cmd",)):
+    def time_cmd(parser, hidden=False):
+        help_msg = parsers.help_message(
+            "if specified, overrides posix time command "
+            "[default: %s]" % globals.DEFAULT_TIME_CMD, hidden)
         parser.add_argument(
-            *args,
+            "--time-cmd",
              dest="time_cmd",
-             help="if specified, overrides posix time command "
-             "[default: %s]" % globals.DEFAULT_TIME_CMD)
+             help=help_msg)
 
     @staticmethod
-    def clean(parser, args=("-c", "--clean")):
+    def clean(parser, args=("-c", "--clean"), hidden=False):
+        help_msg = parsers.help_message(
+            "clean results and profiles before exploration", hidden)
         parser.add_argument(
             *args,
              dest="clean",
-             help="clean results and profiles before exploration",
+             help=help_msg,
              action="store_true")
 
     @staticmethod
-    def debug(parser, args=("-d", "--debug")):
+    def debug(parser, args=("-d", "--debug"), hidden=False):
+        help_msg = parsers.help_message(
+            "debug mode", hidden)
         parser.add_argument(
             *args,
              dest="debug",
-             help="debug mode",
+             help=help_msg,
              action="store_true")
 
     @staticmethod
-    def log_file(parser, args=("--log-file",)):
+    def log_file(parser, args=("--log-file",), hidden=False):
+        help_msg = parsers.help_message(
+            "log file for debug mode, defaults to stderr", hidden)
         parser.add_argument(
             *args,
              dest="log_file",
-             help="log file for debug mode, defaults to stderr")
+             help=help_msg)
 
     @staticmethod
-    def exes(parser, args=("-e", "--executables")):
+    def exes(parser, args=("-e", "--executables"), hidden=False):
+        help_msg = parsers.help_message(
+            "executables to be instrumented, "
+            "defaults to args of command or all generated executables", hidden)
         parser.add_argument(
             *args,
              dest="exes",
-             help="executables to be instrumented, "
-             "defaults to args of command or all generated executables")
+             help=help_msg)
 
     @staticmethod
     def id(parser, args=("-i", "--identifier")):
@@ -1337,12 +1685,14 @@ class args:
             help="append given options to the compilation commands")
 
     @staticmethod
-    def output(parser, default="None", args=("-o", "--output")):
+    def output(parser, default="None", args=("-o", "--output"), hidden=False):
+        help_msg = parsers.help_message(
+            "output description file, defaults to CONFIGURATION_PATH/"
+            + default, hidden)
         parser.add_argument(
             *args,
              dest="output_file",
-             help="output description file, defaults to CONFIGURATION_PATH/"
-             + default)
+             help=help_msg)
 
     @staticmethod
     def useprofile(parser, args=("-u", "--useprof")):
@@ -1365,11 +1715,15 @@ class args:
                              help="record results")
 
     @staticmethod
-    def cookie(parser, args=("--cookie",)):
-        parser.add_argument(*args,
-                             dest="cookies",
-                             action='append',
-                             help="use to identify results")
+    def cookie(parser, args=("--cookie",), hidden=False):
+        help_msg = parsers.help_message(
+            "use to identify results",
+            hidden)
+        parser.add_argument(
+            *args,
+             dest="cookies",
+             action='append',
+             help=help_msg)
 
     @staticmethod
     def tradeoffs(parser, args=("-s", "--tradeoffs")):
@@ -1380,18 +1734,24 @@ class args:
                              help="selected tradeoff given size/perf ratio")
 
     @staticmethod
-    def variant(parser, args=("-w", "--variant")):
+    def variant(parser, args=("-w", "--variant"), hidden=False):
+        help_msg = parsers.help_message(
+            "identifier of variant",
+            hidden)
         parser.add_argument(
             *args,
              dest="variant",
-             help="identifier of variant")
+             help=help_msg)
 
     @staticmethod
-    def seed(parser, args=("-S", "--seed")):
+    def seed(parser, args=("-S", "--seed"), hidden=False):
+        help_msg = parsers.help_message(
+            "seed for random generator",
+            hidden)
         parser.add_argument(
             *args,
              dest="seed",
-             help="seed for random generator",
+             help=help_msg,
              default=0)
 
     @staticmethod
@@ -1413,11 +1773,14 @@ class args:
              default=None)
 
     @staticmethod
-    def flags(parser, args=("-F", "--flags")):
+    def flags(parser, args=("-F", "--flags"), hidden=False):
+        help_msg = parsers.help_message(
+            "flags list filename",
+            hidden)
         parser.add_argument(
             *args,
              dest="flags_file",
-             help="flags list filename",
+             help=help_msg,
              default=None)
 
     @staticmethod
@@ -1466,19 +1829,26 @@ class args:
                              help="script to get profile information")
 
     @staticmethod
-    def reuse(parser, args=("--reuse",)):
-        parser.add_argument(*args,
-                             dest="reuse",
-                             action='store_true',
-                             help="reuse existing results")
+    def reuse(parser, args=("--reuse",), hidden=False):
+        help_msg = parsers.help_message(
+            "reuse existing results",
+            hidden)
+        parser.add_argument(
+            *args,
+             dest="reuse",
+             action='store_true',
+             help=help_msg)
 
     @staticmethod
-    def jobs(parser, args=("-j", "--jobs")):
+    def jobs(parser, args=("-j", "--jobs"), hidden=False):
+        help_msg = parsers.help_message(
+            "use JOBS parallel thread when possible for building",
+            hidden)
         parser.add_argument(
             *args,
              dest="jobs",
              type=int,
-             help="use JOBS parallel thread when possible for building",
+             help=help_msg,
              default=globals.DEFAULT_BUILD_JOBS)
 
     @staticmethod
@@ -1528,6 +1898,13 @@ class args:
                  dest="text",
                  action="store_true",
                  help="display textual manual for TOPICS")
+
+        @staticmethod
+        def topics(parser):
+            parser.add_argument(
+                "topics",
+                nargs=argparse.REMAINDER,
+                help="help topics. Execute 'atos help' for available topics.")
 
     class atos_deps:
         """ Namespace for non common atos-deps arguments. """
@@ -1885,11 +2262,14 @@ class args:
                  default="10")
 
         @staticmethod
-        def flags(parser, args=("-F", "--flags")):
+        def flags(parser, args=("-F", "--flags"), hidden=False):
+            help_msg = parsers.help_message(
+                "flags list filenames",
+                hidden)
             parser.add_argument(
                 *args, action='append',
                  dest="flags_files",
-                 help="flags list filenames",
+                 help=help_msg,
                  default=None)
 
         @staticmethod

@@ -681,8 +681,12 @@ class json_config():
             tmpf = os.path.join(tmpdir, base + ".c")
             flags = map(lambda x: "-D" + x, addflags or [])
             process.commands.copyfile(flags_file, tmpf)
+            # Run the preprocessor. The -C option could be
+            # specified to keep comments inline but some
+            # compilers insert /* */ comments that are not
+            # filtered out.
             ppflags = process.system(
-                [preprocessor, tmpf, "-C", "-P", "-E"] +
+                [preprocessor, tmpf, "-P", "-E"] +
                 self.flags_for_flagfiles() + flags,
                 check_status=True, get_output=True, no_debug=True)
             with open(os.path.join(configuration_path, base), "w") as destf:

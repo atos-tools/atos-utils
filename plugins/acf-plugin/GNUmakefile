@@ -40,8 +40,13 @@ PREP_RUN_x86_64=$(PROOT64) -b $(BUILDDIR):$(GUEST_BUILDDIR)
 
 GCC_COMPILERS=gcc-4.5.2 gcc-4.6.2 gcc-4.7.2 g++-4.7.2 
 GCC_TARGETS_HOSTS=i386/i386 x86_64/x86_64 arm/i386 arm/x86_64 sh4/i386 sh4/x86_64
+# Subset of GCC_TARGETS_HOSTS that can be actually tested.
+# For now we are unable to test non native plugins without more effort.
+GCC_CHECK_COMPILERS=gcc-4.5.2 gcc-4.6.2 g++-4.7.2
+GCC_CHECK_TARGETS_HOSTS=i386/i386 x86_64/x86_64
 
 GCC_SUBDIRS:=$(foreach version, $(GCC_COMPILERS), $(addprefix $(version)/, $(GCC_TARGETS_HOSTS)))
+GCC_CHECK_SUBDIRS:=$(foreach version, $(GCC_CHECK_COMPILERS), $(addprefix $(version)/, $(GCC_CHECK_TARGETS_HOSTS)))
 CONFIGURE_PREP_PLUGINS:=$(addsuffix /Makefile.prep, $(addprefix $(PREP_BUILDDIR)/, $(GCC_SUBDIRS)))
 ALL_PREP_PLUGINS:=$(addsuffix /all.phony, $(addprefix $(PREP_BUILDDIR)/, $(GCC_SUBDIRS)))
 CC=gcc
@@ -81,7 +86,7 @@ test_gpp=$(RUN_$(call gcc_host,$1)) $(PREBUILT)/$(call prebuilt_gpp,$1)
 CONFIGURE_PLUGINS:=$(addsuffix /Makefile.plugin, $(addprefix $(PLUGIN_BUILDDIR)/, $(GCC_SUBDIRS)))
 ALL_PLUGINS:=$(addsuffix /all.phony, $(addprefix $(PLUGIN_BUILDDIR)/, $(GCC_SUBDIRS)))
 INSTALLED_PLUGINS:=$(addsuffix /acf_plugin.so, $(addprefix $(PLUGIN_PREFIX)/, $(GCC_SUBDIRS)))
-CHECK_PLUGINS=$(addsuffix /check.phony, $(addprefix $(PLUGIN_BUILDDIR)/, $(GCC_SUBDIRS)))
+CHECK_PLUGINS=$(addsuffix /check.phony, $(addprefix $(PLUGIN_BUILDDIR)/, $(GCC_CHECK_SUBDIRS)))
 
 .FORCE:
 .PHONY: all configure clean distclean install check tests prep all-prep clean-prep distclean-prep

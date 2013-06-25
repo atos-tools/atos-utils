@@ -1466,7 +1466,7 @@ class gen_genetic_deps(config_generator):
                 if mutate_flags:
                     if mutate_flag:
                         if remove_flag:
-                            if opt_name != '-O':  # pragma: branch_uncovered
+                            if opt_name != '-O':  # pragma: uncovered
                                 # case of optimization level
                                 debug('gen_genetic_deps: remove flag=%s'
                                       % (flag))

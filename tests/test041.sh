@@ -64,3 +64,11 @@ help=`$ROOT/bin/atos help not_found_section 2>&1 | grep "manual not found"`
 # without 'make doc'.
 help=`$ROOT/bin/atos help -m intro 2>&1 | grep -e "ATOS Introduction" -e  "manual not found for"`
 [ "$help" != "" ]
+
+help_default=`$ROOT/bin/atos -h | wc -l`
+help_verbose=`$ROOT/bin/atos -h -v | wc -l`
+[ $help_default -lt $help_verbose ]
+
+help_default=`$ROOT/bin/atos-explore -h | wc -l`
+help_verbose=`$ROOT/bin/atos-explore -h -v | wc -l`
+[ $help_default -lt $help_verbose ]

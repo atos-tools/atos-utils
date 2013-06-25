@@ -19,6 +19,43 @@
 import sys
 import argparse
 
+class ATOSHelpFormatter(argparse.ArgumentDefaultsHelpFormatter):
+
+    # redefine max_help_position
+    def __init__(
+        self, prog, indent_increment=2, max_help_position=28, width=None):
+        return super(
+            ATOSHelpFormatter, self).__init__(
+            prog, indent_increment, max_help_position, width)
+
+    # do not display list of subcommands
+    def _metavar_formatter(self, action, default_metavar):
+        if not action.metavar and action.choices is not None:
+            action.metavar = ''
+        return super(
+            ATOSHelpFormatter, self)._metavar_formatter(
+            action, default_metavar)
+
+    # handle hidden help message tuples
+    def _format_action(self, action):
+        # save current help attribute (possibly be a tuple)
+        old_help = action.help
+        # workaround argparse display bug
+        self._action_max_length += 1
+        # handle hidden help message tuples
+        if isinstance(action.help, tuple):
+            if not ATOSArgumentParser.verbose_help:
+                return ""
+            else:
+                action.help = action.help[0]
+        # format_action
+        help_msg = super(
+            ATOSHelpFormatter, self)._format_action(action)
+        # restore original action attributes
+        action.help = old_help
+        self._action_max_length -= 1
+        return help_msg
+
 class ATOSArgumentParser(argparse.ArgumentParser):
     """
     Specialization of parser class for ATOS tools.
@@ -30,11 +67,24 @@ class ATOSArgumentParser(argparse.ArgumentParser):
                  prog=None,
                  usage=None,
                  description=None,
-                 formatter_class=argparse.ArgumentDefaultsHelpFormatter):
+                 epilog=None,
+                 formatter_class=ATOSHelpFormatter):
         assert(prog != None)
         super(ATOSArgumentParser, self).__init__(
             prog=prog, usage=usage, description=description,
-            formatter_class=formatter_class)
+            epilog=epilog, formatter_class=formatter_class)
+
+    def print_help(self, file=None):
+        # set verbose_help for ATOSHelpFormatter.format_action
+        ATOSArgumentParser.verbose_help = ('-v' in ATOSArgumentParser.args)
+        # sort subparsers: subparsers, optional, positional
+        if (len(self._action_groups) >= 2 and  # pragma: branch_always
+            self._action_groups[0].title.startswith('positional')):
+            self._action_groups = (
+                self._action_groups[2:]
+                + [self._action_groups[1]]
+                + [self._action_groups[0]])
+        super(ATOSArgumentParser, self).print_help(file)
 
     def check_action_arg(self, action):
         """
@@ -110,8 +160,9 @@ class ATOSArgumentParser(argparse.ArgumentParser):
                 new_args.append(arg)
                 i += 1
             return new_args + args[i:]
-
-        args = prepare_args(self, sys.argv[1:] if args == None else args)
+        # needed to properly handle the 'atos -h -v' case
+        ATOSArgumentParser.args = sys.argv[1:] if args == None else args
+        args = prepare_args(self, ATOSArgumentParser.args)
         args = super(ATOSArgumentParser, self).parse_args(args, namespace)
         return args
 

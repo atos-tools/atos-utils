@@ -346,6 +346,7 @@ class parsers:
             'Exploration Options')
         args.optim_levels(group)
         args.optim_variants(group)
+        args.extra_arguments(group, hidden=True)
         # build and run options
         group = parser.add_argument_group(
             'Build and Run Options')
@@ -397,6 +398,7 @@ class parsers:
         args.optim_variants(group)
         args.seed(group, hidden=True)
         args.flags(group, hidden=True)
+        args.extra_arguments(group, hidden=True)
         # build and run options
         group = parser.add_argument_group(
             'Build and Run Options')
@@ -475,6 +477,7 @@ class parsers:
         args.optim_variants(group)
         args.seed(group, hidden=True)
         args.flags(group, hidden=True)
+        args.extra_arguments(group, hidden=True)
         # build and run options
         group = parser.add_argument_group(
             'Build and Run Options')
@@ -514,6 +517,7 @@ class parsers:
         args.optim_variants(group)
         args.seed(group, hidden=True)
         args.flags(group, hidden=True)
+        args.extra_arguments(group, hidden=True)
         # build and run options
         group = parser.add_argument_group(
             'Build and Run Options')
@@ -554,6 +558,7 @@ class parsers:
         args.optim_variants(group)
         args.seed(group, hidden=True)
         args.flags(group, hidden=True)
+        args.extra_arguments(group, hidden=True)
         # build and run options
         group = parser.add_argument_group(
             'Build and Run Options')  # hide this group?
@@ -613,6 +618,7 @@ class parsers:
         args.atos_explore.nbpoints(group)
         args.atos_explore.flags(group, hidden=True)
         args.seed(group, hidden=True)
+        args.extra_arguments(group, hidden=True)
         # build and run options
         group = parser.add_argument_group(
             'Build and Run Options')  # hide this group?
@@ -661,10 +667,13 @@ class parsers:
         group = parser.add_argument_group(
             'Exploration Options')
         args.atos_explore.variant_id(group)
+        args.atos_explore.nb_values(group)
+        args.atos_explore.try_removing(group)
         args.tradeoffs(group)
         args.optim_levels(group)
         args.optim_variants(group)
         args.seed(group, hidden=True)
+        args.extra_arguments(group, hidden=True)
         # build and run options
         group = parser.add_argument_group(
             'Build and Run Options')  # hide this group?
@@ -721,7 +730,7 @@ class parsers:
         args.optim_variants(group)
         args.seed(group, hidden=True)
         args.flags(group, hidden=True)
-        args.extra_arguments(group)
+        args.extra_arguments(group, hidden=True)
         # build and run options
         group = parser.add_argument_group(
             'Profile and Run Options')
@@ -1873,12 +1882,15 @@ class args:
                              help="results query values")
 
     @staticmethod
-    def extra_arguments(parser, args=("--extra-arg",)):
+    def extra_arguments(parser, args=("--extra-arg",), hidden=False):
+        help_msg = parsers.help_message(
+            "argument for generator ('key=value')",
+            hidden)
         parser.add_argument(
             *args,
              dest="extra_args",
              action='append',
-             help="argument for generator ('key=value')")
+             help=help_msg)
 
     class atos_help:
         """ Namespace for non common atos help options. """
@@ -2315,6 +2327,21 @@ class args:
                  dest="variant_id",
                  help="identifier of base variant",
                  default=None)
+
+        @staticmethod
+        def nb_values(parser, args=("--nbvalues",)):
+            parser.add_argument(
+                *args,
+                 dest="nbvalues",
+                 help="number of parameter values tested for each parameters",
+                 default=10)
+
+        @staticmethod
+        def try_removing(parser, args=("--try-removing",)):
+            parser.add_argument(
+                *args,
+                 dest="try_removing", action="store_true",
+                 help="try to remove configuration flags")
 
     class atos_generator:
         """ Namespace for non common atos-generator arguments. """

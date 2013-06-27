@@ -1347,7 +1347,8 @@ class gen_flag_values(config_generator):
 
             else:
                 # unknown flag (or optim level): keep unchanged
-                # yield config(flags='')  # also try without option ?
+                if self.try_removing:  # try without option
+                    yield config(flags='')
                 yield config(flags=flag_str)
 
         cookie_to_flags = {}
@@ -1384,18 +1385,7 @@ class gen_flag_values(config_generator):
                 lambda x: x is not None,
                 map(lambda x: cookie_to_flags.get(x, None), selected_cookies))
 
-        # relaunch reference run
-        debug('gen_flag_values: reference')
-        ref_cookie = self.cookie(
-            self.expl_cookie, self.flags_list, record=False)
-        yield config(flags=' '.join(self.flags_list),
-                     variant=self.base_variant, cookies=[ref_cookie])
-
         # print fine exploration results
-        tradeoffs = get_run_tradeoffs(
-            self.tradeoffs, [ref_cookie], self.configuration_path)
-        debug('gen_flag_values: initial results: %s' % (str(tradeoffs)))
-
         tradeoffs = get_run_tradeoffs(
             self.tradeoffs, [self.expl_cookie], self.configuration_path)
         debug('gen_flag_values: final tradeoffs: %s' % (str(tradeoffs)))

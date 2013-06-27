@@ -1582,6 +1582,11 @@ def run_atos_config(args):
         json_config = atos_lib.json_config(config_file)
         json_config.prepare_flag_files(
             args.configuration_path, compiler_list, args.flags)
+        # print compiler config
+        logger.message("Compilers found:")
+        for compiler in json_config.config.get('compilers', []):
+            logger.message(
+                "  " + atos_lib.json_config.compiler_entry_str(compiler))
 
     return 0
 

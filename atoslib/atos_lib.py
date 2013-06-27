@@ -622,6 +622,21 @@ class json_config():
         return item if item != False else default
 
     @staticmethod
+    def compiler_entry_str(entry):
+        # gcc (gcc-x86_64-unknown-linux-gnu-4.6.2): ...
+        #    fdo_enabled, lto_enabled, plugins_enabled
+        output_str = entry.get('basename')
+        id_str = entry.get('id', '')
+        if id_str: output_str += ' (%s)' % id_str
+        features = []
+        for feature in ['fdo', 'lto', 'plugins', 'graphite']:
+            enabled = entry.get(feature + '_enabled', False)
+            features += ['%s=%s' % (
+                    feature, enabled and 'on' or 'off')]
+        output_str += ': ' + ', '.join(features)
+        return output_str
+
+    @staticmethod
     def compiler_version_number(version_str):
         vspl = version_str.split('.', 2)
         try:
@@ -758,7 +773,6 @@ class json_config():
         compiler = os.path.abspath(compiler)
         compiler_real = resolve_links(compiler)
         compiler_basename = os.path.basename(compiler)
-
         compiler_config = {}
 
         if compiler_basename in ["armcc", "armlink"]:  # pragma: uncovered
@@ -774,6 +788,7 @@ class json_config():
 
             compiler_config.update(
                 {"name": "rvct",
+                 "basename": compiler_basename,
                  "target": "ARM",
                  "target_alias": "arm",
                  "version": version,
@@ -803,6 +818,7 @@ class json_config():
 
             compiler_config.update(
                 {"name": compiler_basename,
+                 "basename": compiler_basename,
                  "target": target,
                  "target_alias": target_alias,
                  "version": version,
@@ -843,6 +859,7 @@ class json_config():
             check_status=True).strip()
         compiler_config["id"] = "%s-%s-%s" % (name, target, version)
         compiler_config["name"] = name
+        compiler_config["basename"] = compiler_basename
         compiler_config["version"] = version
         compiler_config["target"] = target
         compiler_config["driver_version"] = version_string

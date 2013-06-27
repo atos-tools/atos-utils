@@ -123,9 +123,9 @@ gen = generators.gen_function_by_function(
     configuration_path="atos-configurations")
 cfg = generated_configs(gen)
 assert len(cfg) == 2  # default run + cold options
-assert query_configs(cfg, flags='-O2', variant='base')
+assert query_configs(cfg, flags='', variant='base')
 assert query_configs(
-    cfg, flags='-O2 -fplugin=plugin.so .*', variant='base')
+    cfg, flags=' -fplugin=plugin.so .*', variant='base')
 
 gen = generators.gen_function_by_function(
     acf_plugin_path="plugin.so", hwi_size="8",
@@ -233,8 +233,8 @@ gen = generators.gen_function_by_function(
     configuration_path="atos-configurations")
 cfg = generated_configs(gen, cfg_to_res=cfg_result)
 cfg = filter(lambda x: not x.profile, cfg)
-# cold + (2 funcs * (3 flags) + 3 tradeoffs
-assert len(cfg) == 10
+# cold + (2 funcs * (3 flags) + 3 tradeoffs + 3 (tradeoffs w/cold_opts)
+assert len(cfg) == 13
 
 # best-perf tradeoff composition (flags1, flags1)
 size_cfg = cfg[-3]
@@ -270,9 +270,9 @@ gen = generators.gen_function_by_function(
     configuration_path="atos-configurations")
 cfg = generated_configs(gen, cfg_to_res=cfg_result)
 cfg = filter(lambda x: not x.profile, cfg)
-# cold + 3 final tradeoffs
+# cold + 3 (final tradeoffs) + 3 (final tradeoffs w/cold_opts)
 # + (2 funcs * (1 base + inline * 100 + loop * 100 * 2 tradeoffs + optim * 1 * 2 tradeoffs)
-assert len(cfg) == 610
+assert len(cfg) == 613
 
 # best-perf tradeoff composition (flags1, flags1)
 size_cfg = cfg[-3]

@@ -656,7 +656,7 @@ class gen_file_by_file_cfg(config_generator):
         self.configuration_path = configuration_path
         self.hot_th = hot_th
         self.cold_opts = cold_opts
-        self.base_flags = base_flags or '-O2'  # TODO ?!!!
+        self.base_flags = base_flags or ''
         self.expl_cookie = self.cookie(expl_cookie)
         self.tradeoffs = tradeoffs or [5, 1, 0.2]
         self.per_file_nbiters = int(
@@ -716,6 +716,8 @@ class gen_file_by_file_cfg(config_generator):
             expl_size += 1
             # for each tradeoff: resulting run
             expl_size += len(self.tradeoffs)
+            # for each tradeoff: resulting run w/cold_opts
+            if self.cold_opts: expl_size += len(self.tradeoffs)
 
         return expl_size
 
@@ -764,7 +766,7 @@ class gen_file_by_file_cfg(config_generator):
         for (variant_num, variant) in enumerate(self.optim_variants):
             debug('gen_file_by_file: exploration - ' + variant)
 
-            base_obj_flags = dict(cold_obj_flags)
+            base_obj_flags = {}  # explore without cold flags
             hot_objs_processed = []
             obj_to_cookie, cookie_to_flags = {}, {}
 
@@ -885,6 +887,12 @@ class gen_file_by_file_cfg(config_generator):
                         {hot_obj: coeff_flags[0]})
                 yield config(flags=self.fbf_csv_opt(
                         coeff_obj_flags, self.base_flags), variant=variant)
+                # also try with cold options if needed
+                if not self.cold_opts: continue
+                debug('gen_file_by_file: cold coeff: ' + str(coeff))
+                coeff_obj_flags.update(cold_obj_flags)
+                yield config(flags=self.fbf_csv_opt(
+                        coeff_obj_flags, self.base_flags), variant=variant)
 
             variant_progress.update()
         variant_progress.end()
@@ -910,7 +918,7 @@ class gen_function_by_function_cfg(config_generator):
         self.acf_plugin_path = acf_plugin_path
         self.hot_th = hot_th
         self.cold_opts = cold_opts
-        self.base_flags = base_flags or '-O2'  # TODO ?!!!
+        self.base_flags = base_flags or ''
         self.expl_cookie = self.cookie(expl_cookie)
         self.tradeoffs = tradeoffs or [5, 1, 0.2]
         self.per_func_nbiters = int(
@@ -944,10 +952,10 @@ class gen_function_by_function_cfg(config_generator):
                 opt = '-O' + attr
             else:  # -fx options
                 opt = '-f' + attr
-        elif attr.startswith('param,'):
+        elif attr.startswith('param,'):  # pragma: branch_always
             attr = attr.split(',', 1)[1]
             opt = '--param ' + attr.replace(',#', '=')
-        else: opt = ''
+        else: opt = ''  # pragma: uncovered
         return opt
 
     @staticmethod
@@ -1018,7 +1026,8 @@ class gen_function_by_function_cfg(config_generator):
             expl_size += 1
             # for each tradeoff: resulting run
             expl_size += len(self.tradeoffs)
-
+            # for each tradeoff: resulting run w/cold_opts
+            if self.cold_opts: expl_size += len(self.tradeoffs)
         return expl_size
 
     def generate(self):
@@ -1058,7 +1067,7 @@ class gen_function_by_function_cfg(config_generator):
         for variant in self.optim_variants:
             debug('gen_function_by_function: exploration - ' + variant)
 
-            base_func_flags = dict(cold_func_flags)
+            base_func_flags = {}  # explore without cold flags
             hot_funcs_processed = []
             func_to_cookie, cookie_to_flags = {}, {}
 
@@ -1178,6 +1187,12 @@ class gen_function_by_function_cfg(config_generator):
                             coeff_cookies))
                     if coeff_flags: coeff_func_flags.update(
                         {hot_func: coeff_flags[0]})
+                yield config(flags=self.acf_csv_opt(
+                        coeff_func_flags), variant=variant)
+                # also try with cold options if needed
+                if not self.cold_opts: continue
+                debug('gen_function_by_function: cold coeff: ' + str(coeff))
+                coeff_func_flags.update(cold_func_flags)
                 yield config(flags=self.acf_csv_opt(
                         coeff_func_flags), variant=variant)
 

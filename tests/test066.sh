@@ -23,10 +23,14 @@ vma              samples   %       linenr_info                    image_name sym
 0000000000400a3f 20        0.0000  (no localization information)  sha1-c  SHA1Result
 EOF
 
-$ROOT/bin/atos-init \
-    -r "$SRCDIR/examples/sha1-c/run.sh" \
-    -b "sh ./build.sh" -p "/bin/cp oprof.in oprof.out"
+# there is a bug in --reuse when a same binary doesn't always
+# give the same execution time (bug #220027)
+cat > run.sh <<EOF
+echo user \`size sha1-c | tail -1 | awk '{ print \$4 }'\`
+EOF
 
+$ROOT/bin/atos-init \
+    -r "sh ./run.sh" -b "sh ./build.sh" -p "/bin/cp oprof.in oprof.out"
 
 
 

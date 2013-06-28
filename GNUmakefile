@@ -38,6 +38,7 @@ SHARED_RSTS_IN=$(addprefix doc/, intro.rst tutorial.rst benchmarks.rst example-s
 SHARED_MANS_IN=$(SHARED_RSTS_IN)
 SHARED_HTMLS_IN=$(SHARED_RSTS_IN)
 SHARED_IMAGES_IN=$(addprefix doc/images/, graph-sha1-first.png graph-sha1-staged.png atos-v2-zlib-sdk7108.png atos-v2-jpeg-sdk7108.png atos-v2-sha1-qemu-x86-64.png atos-v2-bzip2-qemu-x86-64.png atos-v2-164-gzip-qemu-arm-android.png atos-v2-181-mcf-qemu-arm-android.png atos-v2-255-vortex-qemu-arm-android.png atos-v2-401-bzip2-qemu-arm-android.png atos-v2-429-mcf-qemu-arm-android.png atos-v2-470-lbm-qemu-arm-android.png atos-v2-coremark-sdk7108.png atos-v3-jpeg-STIH207.png atos-v3-zlib-STIH207.png)
+PLUGINS_SRCS_IN=acf_csv_reader.c acf_plugin.c plugin-utils.c acf_plugin.h plugin-utils.h GNUmakefile include/README include/gmp.h include/config/vxworks-dummy.h include/config/arm/arm-cores.def
 
 CONFIG_SCRIPTS_EXE=$(CONFIG_SCRIPTS_EXE_IN:%.in=bin/%)
 CONFIG_SCRIPTS_LIB=$(CONFIG_SCRIPTS_LIB_IN:%.in=lib/atos/%)
@@ -50,13 +51,14 @@ SHARED_RSTS=$(SHARED_RSTS_IN:%=share/atos/%)
 SHARED_MANS=$(SHARED_MANS_IN:doc/%.rst=share/atos/man/man1/atos-%.1)
 SHARED_HTMLS=$(SHARED_HTMLS_IN:doc/%.rst=share/atos/doc/%.html)
 SHARED_IMAGES=$(SHARED_IMAGES_IN:%=share/atos/%)
+PLUGINS_SRCS=$(PLUGINS_SRCS_IN:%=lib/atos/plugins/src/%)
 
 CONFIG_SCRIPTS=$(CONFIG_SCRIPTS_EXE) $(CONFIG_SCRIPTS_LIB) $(PYTHON_LIB_EXE_SCRIPTS) $(PYTHON_SCRIPTS) $(LINKED_SCRIPTS)
 
 ALL_EXES=$(CONFIG_SCRIPTS)
 INSTALLED_EXES=$(addprefix $(PREFIX)/,$(ALL_EXES))
 
-ALL_DATAS=$(CONFIG_SCRIPTS_CFG) $(PYTHON_LIB_SCRIPTS) $(SHARED_IMAGES) $(SHARED_RSTS)
+ALL_DATAS=$(CONFIG_SCRIPTS_CFG) $(PYTHON_LIB_SCRIPTS) $(SHARED_IMAGES) $(SHARED_RSTS) $(PLUGINS_SRCS)
 INSTALLED_DATAS=$(addprefix $(PREFIX)/,$(ALL_DATAS))
 
 ALL_DOCS=$(SHARED_MANS) $(SHARED_HTMLS) $(SHARED_IMAGES) $(SHARED_RSTS)
@@ -219,6 +221,9 @@ $(SHARED_HTMLS): share/atos/doc/%.html: $(srcdir)doc/%.rst
 	$(QUIET_RST2HTML)install -d $(dir $@) && sed -e 's!@VERSION@!$(VERSION)!g' <$< | $(RST2HTML) >$@
 
 $(SHARED_IMAGES): share/atos/%: $(srcdir)%
+	$(QUIET_CP)install -d $(dir $@) && cp $< $@
+
+$(PLUGINS_SRCS): lib/atos/plugins/src/%: $(srcdir)plugins/acf-plugin/src/%
 	$(QUIET_CP)install -d $(dir $@) && cp $< $@
 
 #

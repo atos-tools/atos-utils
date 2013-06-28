@@ -129,7 +129,7 @@ def _process_output(process, output_file, print_output, output_stderr):
         setfl(process.stderr, flg=errflags)
 
 def _subcall(cmd, get_output=False, print_output=False, output_stderr=False,
-             shell=False, stdin_str=False):
+             shell=False, stdin_str=False, cwd=None):
     """
     Executes given command.
     Returns exit_code and output.
@@ -150,6 +150,8 @@ def _subcall(cmd, get_output=False, print_output=False, output_stderr=False,
     elif get_output or not print_output:
         popen_kwargs.update(
             {'stdout': subprocess.PIPE, 'stderr': subprocess.PIPE})
+    if cwd:
+        popen_kwargs.update({'cwd': cwd})
     if stdin_str:
         stdin_tmp = tempfile.TemporaryFile()
         stdin_tmp.write(stdin_str)
@@ -199,7 +201,8 @@ def setup(kwargs):
         _real_open = replace_open(_open)
 
 def system(cmd, check_status=False, get_output=False, print_output=False,
-           output_stderr=False, shell=False, stdin_str=False, no_debug=False):
+           output_stderr=False, shell=False, stdin_str=False, no_debug=False,
+           cwd=None):
     """
     Executes given command.
     Given command can be a string or a list or arguments.
@@ -215,7 +218,7 @@ def system(cmd, check_status=False, get_output=False, print_output=False,
     status, output = _subcall(
         cmd, print_output=print_output,
         get_output=get_output_, output_stderr=output_stderr,
-        shell=shell, stdin_str=stdin_str)
+        shell=shell, stdin_str=stdin_str, cwd=cwd)
     if get_output:
         if not no_debug:
             logging.debug('\n  | ' + '\n  | '.join(output.split('\n')))

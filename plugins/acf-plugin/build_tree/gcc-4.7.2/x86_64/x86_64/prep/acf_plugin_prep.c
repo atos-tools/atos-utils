@@ -41134,6 +41134,58 @@ static void lto_clean_optimize_callback(void) {
 
 static int pre_genericize=PLUGIN_PRE_GENERICIZE;
 
+
+static int plugin_test_global_params(void)
+{
+    // Check that compiler and plugin do see the same gcc_options struct.
+
+    // Make sure the plugin do not allocate a struct smaller than the
+    // one from the compiler, take twice the siwe of the plugin size.
+    struct gcc_options tmp_opt[2], tmp_opt_set[2];
+    int i, plugin_offset_param_values, gcc_offset_param_values;
+
+    plugin_offset_param_values = (int)__builtin_offsetof (struct gcc_options, x_param_values)
+                           ;
+
+    gcc_offset_param_values = -1;
+    init_options_struct(tmp_opt, tmp_opt_set);
+    for (i = 0; i < (int)(sizeof(struct gcc_options)/sizeof(int *)); i++) {
+ if (((int **)tmp_opt_set)[i] != 0) {
+     gcc_offset_param_values = i * sizeof(int *);
+     break;
+ }
+    }
+
+    if (plugin_offset_param_values != gcc_offset_param_values) {
+ if (gcc_offset_param_values == -1) {
+     error("%s: unable to check offset of field x_param_values in struct "
+    "gcc_options\n", plugin_name);
+ }
+ else {
+     error("%s: offset of field x_param_values in struct gcc_options "
+    "does not match between compiler (%d) and plugin (%d).\n",
+    plugin_name,
+    gcc_offset_param_values, plugin_offset_param_values);
+ }
+ return 1;
+    }
+    return 0;
+}
+
+
+
+
+
+
+
+static int plugin_test(void)
+{
+  int status;
+
+  status = plugin_test_global_params();
+  return status;
+}
+
 int plugin_init(struct plugin_name_args *plugin_na,
   struct plugin_gcc_version *version){
 
@@ -41158,7 +41210,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
 
         (void)((void *)0);
     }
-# 879 "/opt/gcc-plugins/src/acf_plugin.c"
+# 931 "/opt/gcc-plugins/src/acf_plugin.c"
     // Check the plugin is used with appropriate compiler version
     // regarding access to PARAM values
 
@@ -41182,8 +41234,9 @@ int plugin_init(struct plugin_name_args *plugin_na,
  break;
     case 1:
  if (strcmp(plugin_na->argv[0].key, "test") == 0) {
-   fprintf(stderr, "test OK\n");
-   return 0;
+   int status = plugin_test();
+   fprintf(stderr, "%s: plugin test.\n", status == 0 ? "PASSED": "FAILED");
+   return status;
  } else if (strcmp(plugin_na->argv[0].key, acf_csv_file_key) == 0) {
      csv_arg_pos = 0;
  } else {
@@ -41244,7 +41297,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
        plugin_na->argv[csv_arg_pos].key);
  return 1;
     }
-# 1002 "/opt/gcc-plugins/src/acf_plugin.c"
+# 1055 "/opt/gcc-plugins/src/acf_plugin.c"
     // Attach function attributes to function node
     register_callback(plugin_na->base_name,
         PLUGIN_START_UNIT,
@@ -41320,6 +41373,6 @@ int plugin_init(struct plugin_name_args *plugin_na,
       PLUGIN_PASS_MANAGER_SETUP,
       ((void *)0), &lto_clean_optimize_info);
     }
-# 1091 "/opt/gcc-plugins/src/acf_plugin.c"
+# 1144 "/opt/gcc-plugins/src/acf_plugin.c"
     return 0;
 }

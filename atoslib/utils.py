@@ -651,6 +651,7 @@ def run_atos_init(args):
         process.commands.unlink('%s/build.audit' % args.configuration_path)
         process.commands.unlink('%s/build.time' % args.configuration_path)
         process.commands.rmtree('%s/build.stg' % args.configuration_path)
+        process.commands.rmtree('%s/plugins' % args.configuration_path)
         process.commands.unlink('%s/config.json' % args.configuration_path)
     if args.clean or args.run_script:
         if args.clean: message("Cleaning run audit...")
@@ -1571,7 +1572,8 @@ def run_atos_config(args):
         if not os.path.isfile(compiler):
             error("compiler executable not found: %s" % compiler)
             return 1
-        compiler_entry = atos_lib.json_config.compiler_config(compiler)
+        compiler_entry = atos_lib.json_config.compiler_config(
+            args.configuration_path, compiler)
         if args.print_cfg:
             print json.dumps(compiler_entry, sort_keys=True, indent=4)
         else:

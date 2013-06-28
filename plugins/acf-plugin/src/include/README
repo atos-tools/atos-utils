@@ -1,0 +1,12 @@
+This directory contains the include files that may
+not be installed in the target compiler plugin
+include files.
+
+In particular the following files are generally missing.
+
+Host related files:
+- gmp.h : this one is not present on the host if the package libgmp-dev is not installed.
+
+Target compiler related files:
+- config/vxworks-dummy.h,
+  config/arm/arm-cores.def: are missing in the plugin includes for ARM compiler 4.7.2.

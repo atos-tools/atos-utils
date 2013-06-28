@@ -31451,6 +31451,20 @@ static void lto_clean_optimize_callback(void) {
 }
 
 static int pre_genericize=PLUGIN_PRE_GENERICIZE;
+# 880 "/opt/gcc-plugins/src/acf_plugin.c"
+static int plugin_test_global_params(void)
+{
+  return 0;
+}
+
+
+static int plugin_test(void)
+{
+  int status;
+
+  status = plugin_test_global_params();
+  return status;
+}
 
 int plugin_init(struct plugin_name_args *plugin_na,
   struct plugin_gcc_version *version){
@@ -31476,7 +31490,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
 
         (void)((void *)0);
     }
-# 879 "/opt/gcc-plugins/src/acf_plugin.c"
+# 931 "/opt/gcc-plugins/src/acf_plugin.c"
     // Check the plugin is used with appropriate compiler version
     // regarding access to PARAM values
 
@@ -31485,15 +31499,16 @@ int plugin_init(struct plugin_name_args *plugin_na,
  error("%s: build gcc and load gcc versions are incompatible.", plugin_name);
  return 1;
     }
-# 896 "/opt/gcc-plugins/src/acf_plugin.c"
+# 948 "/opt/gcc-plugins/src/acf_plugin.c"
     switch (plugin_na->argc) {
     case 0:
  bad = 1;
  break;
     case 1:
  if (strcmp(plugin_na->argv[0].key, "test") == 0) {
-   fprintf(stderr, "test OK\n");
-   return 0;
+   int status = plugin_test();
+   fprintf(stderr, "%s: plugin test.\n", status == 0 ? "PASSED": "FAILED");
+   return status;
  } else if (strcmp(plugin_na->argv[0].key, acf_csv_file_key) == 0) {
      csv_arg_pos = 0;
  } else {
@@ -31554,7 +31569,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
        plugin_na->argv[csv_arg_pos].key);
  return 1;
     }
-# 1002 "/opt/gcc-plugins/src/acf_plugin.c"
+# 1055 "/opt/gcc-plugins/src/acf_plugin.c"
     // Attach function attributes to function node
     register_callback(plugin_na->base_name,
         PLUGIN_START_UNIT,
@@ -31630,6 +31645,6 @@ int plugin_init(struct plugin_name_args *plugin_na,
       PLUGIN_PASS_MANAGER_SETUP,
       ((void *)0), &lto_clean_optimize_info);
     }
-# 1091 "/opt/gcc-plugins/src/acf_plugin.c"
+# 1144 "/opt/gcc-plugins/src/acf_plugin.c"
     return 0;
 }

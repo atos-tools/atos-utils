@@ -31,19 +31,23 @@ GUEST_PREBUILT=$(GUEST_SRCDIR)/prebuilt
 
 PREP_BUILDDIR=$(BUILDDIR)/build_tree
 PLUGIN_BUILDDIR=$(BUILDDIR)/build
-PROOT32=$(PROOT) -B -w . -r $(DISTROS)/rhlinux-i586-5el-rootfs
-PROOT64=$(PROOT) -B -w . -r $(DISTROS)/rhlinux-x86_64-5el-rootfs
+PROOT32=env PATH=/usr/local/bin:/usr/bin:/bin $(PROOT) -B -w . -r $(DISTROS)/rhlinux-i586-5el-rootfs
+PROOT64=env PATH=/usr/local/bin:/usr/bin:/bin $(PROOT) -B -w . -r $(DISTROS)/rhlinux-x86_64-5el-rootfs
 RUN_i386=$(PROOT32) -b $(BUILDDIR)
 RUN_x86_64=$(PROOT64) -b $(BUILDDIR)
 PREP_RUN_i386=$(PROOT32) -b $(BUILDDIR):$(GUEST_BUILDDIR) 
 PREP_RUN_x86_64=$(PROOT64) -b $(BUILDDIR):$(GUEST_BUILDDIR) 
 
 GCC_COMPILERS=gcc-4.5.2 gcc-4.6.2 gcc-4.7.2 g++-4.7.2 
-GCC_TARGETS_HOSTS=i386/i386 x86_64/x86_64 arm/i386 arm/x86_64 sh4/i386 sh4/x86_64
+GCC_HOSTS=x86_64 i386
+GCC_NATIVE_TARGETS_HOSTS=$(foreach host, $(GCC_HOSTS), $(host)/$(host))
+GCC_CROSS_TARGETS=arm sh4
+GCC_TARGETS_HOSTS=$(GCC_NATIVE_TARGETS_HOSTS) $(foreach host, $(GCC_HOSTS), $(addsuffix /$(host), $(GCC_CROSS_TARGETS)))
 # Subset of GCC_TARGETS_HOSTS that can be actually tested.
 # For now we are unable to test non native plugins without more effort.
 GCC_CHECK_COMPILERS=gcc-4.5.2 gcc-4.6.2 g++-4.7.2
-GCC_CHECK_TARGETS_HOSTS=i386/i386 x86_64/x86_64
+GCC_CHECK_TARGETS_HOSTS=$(GCC_NATIVE_TARGETS_HOSTS)
+GCC_CHECK_COMPILER=
 
 GCC_SUBDIRS:=$(foreach version, $(GCC_COMPILERS), $(addprefix $(version)/, $(GCC_TARGETS_HOSTS)))
 GCC_CHECK_SUBDIRS:=$(foreach version, $(GCC_CHECK_COMPILERS), $(addprefix $(version)/, $(GCC_CHECK_TARGETS_HOSTS)))

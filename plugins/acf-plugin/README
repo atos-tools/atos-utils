@@ -12,7 +12,8 @@ Build with:
 Full rebuild of all varsions/archs from sources
 -----------------------------------------------
 
-    .dependencies extract
+    ./dependencies extract
+    make distclean-prep
     make prep   # generate preprocessed files in 'build_tree/gcc-<versions>/<hosts>/' dirs
     make all
     make check

@@ -712,7 +712,7 @@ class json_config():
         process.commands.rmtree(tmpdir)
 
     @staticmethod
-    def compiler_config(compiler):
+    def compiler_config(configuration_path, compiler):
 
         def is_valid_flag(compiler, flag):
             """
@@ -740,9 +740,35 @@ class json_config():
             alias = triplet.split("-")[0]
             return repl.get(alias, alias)
 
-        def find_plugin(plugin_name, target_alias, host_alias, compiler_lang):
+        def compile_plugins(plugin_name, install_path,
+                            target_compiler, version,
+                            target_alias, host_alias, compiler_lang):
+            assert(host_alias in ['x86_64', 'i386'])
+            assert(target_alias in ['x86_64', 'i386', 'sh4', 'arm'])
+
+            tmpdir = tempfile.mkdtemp()
+            try:
+                plugin_src = os.path.join(globals.LIBDIR, "plugins", "src")
+                cmd = ['make', '-C%s' % tmpdir,
+                       '-f%s/GNUmakefile' % plugin_src,
+                       'CC=%s' % compiler_lang,
+                       'TARGET_CC=%s' % target_compiler,
+                       'PLUGINS=%s' % plugin_name,
+                       'PLUGINS_PREFIX=%s' % install_path,
+                       'install']
+                (status, output) = process.system(cmd, get_output=True,
+                                                  output_stderr=True,
+                                                  cwd=tmpdir)
+            finally:
+                process.commands.rmtree(tmpdir)
+            return True if status == 0 else False
+
+        def find_plugin(plugin_name, target_alias, host_alias,
+                        compiler_lang):  # pragma: uncovered
+            # This function is called only in the case where the
+            # plugin could not be compiled by the host compiler.
             plugin_name = plugin_name + ".so"
-            # ex: ${libdir}/plugins/gcc-4.4.3/i386/i386/acf_plugin.so
+            # ex: ${libdir}/plugins/gcc-4.4.3/arm/i386/acf_plugin.so
             plugin_path = os.path.join(
                 globals.LIBDIR, "plugins", compiler_lang + "-" + version,
                 target_alias, host_alias, plugin_name)
@@ -758,6 +784,66 @@ class json_config():
             plugin_path = os.path.isfile(
                 plugin_path or "") and plugin_path or "none"
             return plugin_path
+
+        def test_plugin(compiler, plugin_name, plugin_path):
+            tmpdir = tempfile.mkdtemp()
+            try:
+                process.commands.touch("test.c")
+                (status, output) = process.system([
+                        compiler, "-O2", "-o", test_o, "-c", test_c,
+                        "-fplugin=" +
+                        os.path.join(plugin_path, "%s.so" % plugin_name),
+                        "-fplugin-arg-%s-test" % plugin_name],
+                                                  get_output=True,
+                                                  output_stderr=True,
+                                                  cwd=tmpdir)
+            finally:
+                process.commands.rmtree(tmpdir)
+            return True if status == 0 else False
+
+        def get_plugin_path(plugin_name, compiler, version,
+                            target_alias, host_alias):  # pragma: uncovered
+            # This function tries to used compiled plugins or falls back
+            # to pre-compiled plugins.
+            # There is currently no easy way to cover it properly as four
+            # distinct path can be taken depending on the host compiler used.
+            def configuration_plugin_path(compiler_lang):
+                return os.path.join(os.path.abspath(configuration_path),
+                                    "plugins", compiler_lang + "-" + version,
+                                    target_alias, host_alias)
+            # First compile plugins for both gcc and g++ compiled compiler
+            gcc_plugin_path = configuration_plugin_path("gcc")
+            gcc_plugin_ok = compile_plugins(plugin_name,
+                                            gcc_plugin_path,
+                                            compiler, version,
+                                            target_alias, host_alias,
+                                            "gcc")
+            gpp_plugin_path = configuration_plugin_path("g++")
+            gpp_plugin_ok = compile_plugins(plugin_name,
+                                            gpp_plugin_path,
+                                            compiler, version,
+                                            target_alias, host_alias,
+                                            "g++")
+            # Test just compiled plugins
+            if (gcc_plugin_ok and
+                test_plugin(compiler, plugin_name, gcc_plugin_path)):
+                return os.path.join(gcc_plugin_path, "%s.so" % plugin_name)
+            if (gpp_plugin_ok and
+                test_plugin(compiler, plugin_name, gpp_plugin_path)):
+                return os.path.join(gpp_plugin_path, "%s.so" % plugin_name)
+
+            # Then fall-back to precompiled plugins
+            acf_path = find_plugin(plugin_name, target_alias, host_alias,
+                                   "gcc")
+            if (os.path.isfile(acf_path) and
+                test_plugin(compiler, plugin_name, os.path.dirname(acf_path))):
+                return acf_path
+            acf_path = find_plugin(plugin_name, target_alias, host_alias,
+                                   "g++")
+            if (os.path.isfile(acf_path) and
+                test_plugin(compiler, plugin_name, os.path.dirname(acf_path))):
+                return acf_path
+            return None
 
         def resolve_links(path):
             """
@@ -911,17 +997,10 @@ class json_config():
         #
         # acf plugin
         #
-        acf_path = find_plugin("acf_plugin", target_alias, host_alias, "gcc")
-        if os.path.isfile(acf_path) and process.system([
-            compiler, "-O2", "-o", test_o, "-c", test_c,
-            "-fplugin=" + acf_path, "-fplugin-arg-acf_plugin-test"]) != 0:
-            acf_path = find_plugin("acf_plugin", target_alias, host_alias,
-                                   "g++")
-        compiler_config["plugin_acf"] = acf_path
-        plugins_enabled = int(os.path.isfile(acf_path) and process.system([
-                    compiler, "-O2", "-o", test_o, "-c", test_c,
-                    "-fplugin=" + acf_path, "-fplugin-arg-acf_plugin-test"
-                    ]) == 0)
+        acf_path = get_plugin_path("acf_plugin",
+                                   compiler, version, target_alias, host_alias)
+        compiler_config["plugin_acf"] = ("" if acf_path == None else acf_path)
+        plugins_enabled = (0 if acf_path == None else 1)
         # For FDO, we just check that the expected flags are valid
         fdo_enabled = int(is_valid_flag(compiler, "-fprofile-generate") and
                           is_valid_flag(compiler, "-fprofile-use") and

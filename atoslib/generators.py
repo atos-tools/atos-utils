@@ -1231,21 +1231,23 @@ class gen_flag_values(config_generator):
         self.all_flags_list = optim_flag_list(*file_flags_lists)
 
     def generate(self):
-        debug('gen_flag_values')
-
-        debug('gen_flag_values: initial flags: ' + str(self.flags_list))
-        selected_flag_lists, flags_not_processed = [[]], list(self.flags_list)
 
         def flag_values(flag_str):
             opt_flag = self.all_flags_list.find(flag_str)
 
             if opt_flag:
                 # flag described in flags cfg files
+                #   try initial value
+                yield config(flags=flag_str)
                 #   try without option
-                if self.try_removing: yield config(flags='')
-                #   then try all values
+                if self.try_removing:
+                    yield config(flags='')
+                # stop if only pruning
+                if self.nbvalues <= 0:
+                    return
+                # else try all values if not only pruning flags
                 for value in opt_flag.values(nbvalues=self.nbvalues):
-                    yield config(flags=value)
+                    if value != flag_str: yield config(flags=value)
 
             elif flag_str.startswith('--atos-optfile'):
                 # file-by-file flag
@@ -1256,8 +1258,8 @@ class gen_flag_values(config_generator):
                 fbf_config = dict(fbf_config_init)
                 debug('gen_flag_values (fbf): fbf_config: [%s]' % str(
                         fbf_config))
-
                 obj_files = self.keys or fbf_config_init.keys()
+                obj_flags_coeffs = {}
                 for obj in obj_files:
                     debug('gen_flag_values (fbf): obj: [%s]' % str(obj))
                     generator = gen_flag_values(
@@ -1270,7 +1272,6 @@ class gen_flag_values(config_generator):
                         parent=generator,
                         configuration_path=self.configuration_path,
                         gen_cookie=self.cookie(self.expl_cookie, obj))
-
                     while True:
                         try:
                             cfg = generator.next()
@@ -1283,13 +1284,26 @@ class gen_flag_values(config_generator):
                             csv_dir=os.path.dirname(fbf_file))
                         yield config(
                             flags=new_flags, cookies=cfg.cookies)
+                    # record best object flags for each tradeoff
+                    for coeff in self.tradeoffs:
+                        obj_flags_coeffs.setdefault(
+                            obj, {})[coeff] = (
+                            generator.tradeoff_config(coeff)[0]
+                            or fbf_config_init[obj])
                     # explore other objs with best perf flags for current obj
                     perf_coeff = sorted(self.tradeoffs)[-1]
-                    flags_for_obj = (
-                        generator.tradeoff_config(perf_coeff)[0]
-                        or fbf_config_init[obj])
+                    flags_for_obj = obj_flags_coeffs[obj][perf_coeff]
                     debug('gen_flag_values (fbf): flg: ' + str(flags_for_obj))
                     fbf_config.update({obj: flags_for_obj})
+                # compose best csv for each tradeoffs
+                for coeff in self.tradeoffs:
+                    fbf_config = dict(fbf_config_init)
+                    for obj in obj_files: fbf_config.update(
+                        {obj: obj_flags_coeffs[obj][coeff]})
+                    new_flags = gen_file_by_file_cfg.create_config_csv(
+                        obj_flags=fbf_config,
+                        csv_dir=os.path.dirname(fbf_file))
+                    yield config(flags=new_flags)
 
             elif flag_str.startswith('-fplugin-arg-acf_plugin-csv_file='):
                 # function-by-function flag
@@ -1302,16 +1316,15 @@ class gen_flag_values(config_generator):
                             gen_function_by_function_cfg.
                             attribute_to_compiler_opt(flag.strip())])
                 fbf_config = dict(fbf_config_init)
+                func_flags_coeffs = {}
                 debug('gen_flag_values (fbf): fbf_config: [%s]' % str(
                         fbf_config))
-
                 if self.keys:
                     funcs = []
                     for key in self.keys: funcs.extend(
                         filter(lambda (f, p): f == key,
                                fbf_config_init.keys()))
                 else: funcs = fbf_config_init.keys()
-
                 for func in funcs:
                     debug('gen_flag_values (fbf): func: [%s]' % str(func))
                     generator = gen_flag_values(
@@ -1324,7 +1337,6 @@ class gen_flag_values(config_generator):
                         parent=generator,
                         configuration_path=self.configuration_path,
                         gen_cookie=self.cookie(self.expl_cookie, func))
-
                     while True:
                         try:
                             cfg = generator.next()
@@ -1337,19 +1349,36 @@ class gen_flag_values(config_generator):
                             new_cfg, csv_dir=os.path.dirname(fbf_file))
                         yield config(
                             flags=new_flags, cookies=cfg.cookies)
+                    # record best object flags for each tradeoff
+                    for coeff in self.tradeoffs:
+                        func_flags_coeffs.setdefault(
+                            func, {})[coeff] = (
+                            generator.tradeoff_config(coeff)[0]
+                            or fbf_config_init[func])
                     # explore other funcs with best perf flags for current func
                     perf_coeff = sorted(self.tradeoffs)[-1]
-                    flags_for_func = (
-                        generator.tradeoff_config(perf_coeff)[0]
-                        or fbf_config_init[func])
+                    flags_for_func = func_flags_coeffs[func][perf_coeff]
                     debug('gen_flag_values (fbf): flg: ' + str(flags_for_func))
                     fbf_config.update({func: flags_for_func})
+                # compose best csv for each tradeoffs
+                for coeff in self.tradeoffs:
+                    fbf_config = dict(fbf_config_init)
+                    for func in funcs: fbf_config.update(
+                        {func: func_flags_coeffs[func][coeff]})
+                    new_flags = gen_function_by_function_cfg.create_config_csv(
+                        fbf_config, csv_dir=os.path.dirname(fbf_file))
+                    yield config(flags=new_flags)
 
             else:
                 # unknown flag (or optim level): keep unchanged
-                if self.try_removing:  # try without option
-                    yield config(flags='')
+                #   try without option
+                if self.try_removing: yield config(flags='')
                 yield config(flags=flag_str)
+
+        debug('gen_flag_values')
+
+        debug('gen_flag_values: initial flags: ' + str(self.flags_list))
+        selected_flag_lists, flags_not_processed = [[]], list(self.flags_list)
 
         cookie_to_flags = {}
         while flags_not_processed:

@@ -6,6 +6,9 @@ source `dirname $0`/common.sh
 
 TEST_CASE="ATOS acf cold options"
 
+config_query() {
+    $ROOT/bin/atos lib config -u -t -q $*
+}
 
 cat > build.sh <<EOF
 gcc -c $SRCDIR/examples/sha1-c/sha.c -o sha.o
@@ -28,6 +31,17 @@ EOF
 $ROOT/bin/atos-init \
     -r "$SRCDIR/examples/sha1-c/run.sh"  \
     -b "sh ./build.sh" -p "/bin/cp oprof.in oprof.out"
+
+
+# Check if acf plugin is available for host compiler
+if [ ! -f "`config_query '$.compilers[*].plugin_acf'`" ]; then
+    skip "acf plugins not available for compiler"
+fi
+
+# Check if host compiler has plugin support 
+if [ "`config_query '$.compilers[*].plugins_enabled'`" != "1" ]; then
+    skip "plugins not supported by compiler"
+fi
 
 $ROOT/bin/atos-explore-acf \
     --optim-levels=-O2 --optim-variants=base --tradeoffs=5 -N3 --debug 2>&1 | tee LOG1

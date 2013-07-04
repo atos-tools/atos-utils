@@ -49,6 +49,7 @@ def parser(tool, parser=None):
         "atos-explore-staged": parsers.atos_explore_staged,
         "atos-explore-genetic": parsers.atos_explore_genetic,
         "atos-explore-flag-values": parsers.atos_explore_flag_values,
+        "atos-explore-flags-pruning": parsers.atos_explore_flags_pruning,
         "atos-config": parsers.atos_config,
         "atos-cookie": parsers.atos_cookie,
         "atos-lib": parsers.atos_lib,
@@ -150,6 +151,10 @@ class parsers:
         parsers.add_subparser(
             subs, "explore-flag-values",
             help="flag values exploration")
+
+        parsers.add_subparser(
+            subs, "explore-flags-pruning",
+            help="pruning of useless and inefficent flags")
 
         parsers.add_subparser(
             subs, "explore-acf",
@@ -672,6 +677,57 @@ class parsers:
         args.tradeoffs(group)
         args.optim_levels(group)
         args.optim_variants(group)
+        args.seed(group, hidden=True)
+        args.extra_arguments(group, hidden=True)
+        # build and run options
+        group = parser.add_argument_group(
+            'Build and Run Options')  # hide this group?
+        args.build_script(group)
+        args.run_script(group)
+        args.results_script(group)
+        args.prof_script(group)
+        args.nbruns(group)
+        args.remote_path(group, hidden=True)
+        args.cookie(group, hidden=True)
+        args.size_cmd(group, hidden=True)
+        args.time_cmd(group, hidden=True)
+        args.force(group, hidden=True)
+        args.legacy(group, hidden=True)
+        args.reuse(group, hidden=True)
+        args.jobs(group, hidden=True)
+        args.exes(group, hidden=True)
+        args.clean(group, hidden=True)
+        # misc options
+        group = parser.add_argument_group(
+            'Misc Options')
+        args.debug(group, hidden=True)
+        args.log_file(group, hidden=True)
+        args.quiet(group, hidden=True)
+        args.dryrun(group, ("--dryrun",), hidden=True)
+        args.version(group, hidden=True)
+        return parser
+
+    @staticmethod
+    def atos_explore_flags_pruning(parser=None):
+        """ atos explore flag values arguments parser factory. """
+        description = (
+            "ATOS explore-flags-pruning tool. " +
+            "pruning of useless and inefficent flags.")
+        if parser == None:
+            parser = ATOSArgumentParser(
+                prog="atos-explore-flags-pruning")
+        parsers.update_parser(parser, description=description)
+        # configuration options
+        group = parser.add_argument_group(
+            'Configuration Options')
+        args.configuration_path(group)
+        # exploration options
+        group = parser.add_argument_group(
+            'Exploration Options')
+        args.atos_explore.variant_id(group)
+        args.atos_explore.threshold(group)
+        args.atos_explore.tradeoff(group)
+        args.atos_explore.update_ref(group)
         args.seed(group, hidden=True)
         args.extra_arguments(group, hidden=True)
         # build and run options
@@ -2321,7 +2377,7 @@ class args:
                  help="number of selected points for each tradeoff")
 
         @staticmethod
-        def variant_id(parser, args=("--variant_id",)):
+        def variant_id(parser, args=("--variant-id", "--variant_id")):
             parser.add_argument(
                 *args,
                  dest="variant_id",
@@ -2342,6 +2398,29 @@ class args:
                 *args,
                  dest="try_removing", action="store_true",
                  help="try to remove configuration flags")
+
+        @staticmethod
+        def tradeoff(parser, args=("--tradeoff",)):
+            parser.add_argument(
+                *args,
+                 dest="tradeoff", type=float,
+                 help="selected tradeoff given size/perf ratio",
+                 default=5.0)
+
+        @staticmethod
+        def threshold(parser, args=("--threshold",)):
+            parser.add_argument(
+                *args,
+                 dest="threshold",
+                 type=float,
+                 help="execution time threshold percentage",
+                 default=0.0)
+
+        @staticmethod
+        def update_ref(parser, args=("--update-reference",)):
+            parser.add_argument(
+                *args, dest="update_reference", action="store_true",
+                 help="update reference after removing")
 
     class atos_generator:
         """ Namespace for non common atos-generator arguments. """

@@ -23,6 +23,7 @@ import functools
 import tempfile
 import types
 import itertools
+import operator
 
 import process
 import profile
@@ -670,6 +671,12 @@ class gen_file_by_file_cfg(config_generator):
         self.kwargs = kwargs
 
     @staticmethod
+    def read_config_csv(csv_file):
+        return dict(
+            map(lambda x: x.strip().split(',', 1),
+                open(csv_file).readlines()))
+
+    @staticmethod
     def create_config_csv(obj_flags, csv_dir):
         # build option file containing flags for each object file
         sum_flags = atos_lib.md5sum(str(sorted(obj_flags.items())))
@@ -969,6 +976,17 @@ class gen_function_by_function_cfg(config_generator):
             lambda f: all(
                 map(lambda i: not re.match(i, f), filter_out)), flag_list)
         return ' '.join(flag_list)
+
+    @staticmethod
+    def read_config_csv(csv_file):
+        fbf_config = {}
+        for line in open(csv_file).readlines():
+            fct, loc, flag = line.split(',', 2)
+            flag = gen_function_by_function_cfg.attribute_to_compiler_opt(
+                flag.strip())
+            old_flags = fbf_config.get((fct, loc), '')
+            fbf_config[(fct, loc)] = ' '.join([old_flags, flag])
+        return fbf_config
 
     @staticmethod
     def create_config_csv(obj_flags, csv_dir):
@@ -1419,6 +1437,385 @@ class gen_flag_values(config_generator):
             self.tradeoffs, [self.expl_cookie], self.configuration_path)
         debug('gen_flag_values: final tradeoffs: %s' % (str(tradeoffs)))
 
+class gen_flags_pruning(config_generator):
+    """
+    Prune useless and inefficient flags.
+    """
+    def __init__(
+        self, variant_id=None, config_flags=None, config_variant=None,
+        tradeoff=None, threshold=None,
+        update_reference=None, one_by_one=None,
+        random_selection=None, selection_size=None, nb_threshold_runs=None,
+        expl_cookie=None, configuration_path=None, **kwargs):
+        self.configuration_path = configuration_path
+        #
+        self.tradeoff = float(
+            tradeoff) if tradeoff is not None else 5.0
+        self.threshold = float(
+            threshold) if threshold is not None else 0
+        self.update_reference = bool(
+            int(update_reference)) if update_reference is not None else False
+        self.one_by_one = bool(
+            int(one_by_one)) if one_by_one is not None else False
+        self.random_selection = bool(
+            int(random_selection)) if random_selection is not None else False
+        self.selection_size = int(
+            selection_size) if selection_size is not None else 1
+        self.nb_threshold_runs = int(
+            nb_threshold_runs) if nb_threshold_runs is not None else 5
+        #
+        self.base_flags, self.base_variant = variant_id and get_variant_config(
+            variant_id, configuration_path) or (config_flags, config_variant)
+        self.flags_list = gen_flags_pruning.group_flags(
+            optim_flag_list.parse_line(self.base_flags or ''))
+        #
+        self.expl_cookie = self.cookie(
+            expl_cookie, descr="flags pruning")
+        self.kwargs = kwargs
+        # list of flags to be removed
+        self.pruning_attempts = map(list, itertools.combinations(
+                enumerate(self.flags_list), self.selection_size))
+        if self.random_selection: random.shuffle(self.pruning_attempts)
+        self.nb_pruning_attempts = len(self.pruning_attempts)
+        self.special_pruning_attempts = None
+
+    def estimate_exploration_size(self):  # pragma: uncovered
+        if self.base_flags is None:
+            return 20
+        expl_size = 1 + self.nb_pruning_attempts
+        if self.one_by_one:
+            expl_size += 1
+        # special acf flags
+        if self.special_pruning_attempts is None:
+            self.special_pruning_attempts = 0
+            # acf file-by-file flag
+            acf_file_flag = filter(
+                functools.partial(re.search, '--atos-optfile'),
+                self.flags_list)
+            if acf_file_flag:
+                fbf_file = acf_file_flag[0][14:].strip('= ')
+                fbf_config = gen_file_by_file_cfg.read_config_csv(fbf_file)
+                gen_size = 1  # final flags
+                for (obj, flags) in fbf_config.items():
+                    gen_size += self.recursive_pruning(
+                        flags=flags).estimate_exploration_size()
+                self.special_pruning_attempts += gen_size
+            # acf function-by-function flag
+            acf_func_flag = filter(
+                functools.partial(re.search, '-fplugin-arg-acf_plugin'),
+                self.flags_list)
+            if acf_func_flag:
+                fbf_file = re.search(
+                    '-fplugin-arg-acf_plugin-csv_file=([^ ]*)',
+                    acf_func_flag[0]).group(1)
+                fbf_config = (
+                    gen_function_by_function_cfg.read_config_csv(fbf_file))
+                gen_size = 1  # final flags
+                for (obj, flags) in fbf_config.items():
+                    gen_size += self.recursive_pruning(
+                        flags=flags).estimate_exploration_size()
+                self.special_pruning_attempts += gen_size
+        expl_size += self.special_pruning_attempts
+        #
+        return expl_size
+
+    @staticmethod
+    def group_flags(flag_list):
+        result = []
+        index, listlen = 0, len(flag_list)
+        while index < listlen:
+            flag = flag_list[index]
+            if flag.startswith('-fplugin'):
+                sub_list = []
+                while index < listlen and flag_list[
+                    index].startswith('-fplugin'):
+                    sub_list.append(flag_list[index])
+                    index += 1
+                flag = ' '.join(sub_list)
+            result += [flag]
+            index += 1
+        return result
+
+    def run_config(self, *flag_lists, **kwargs):
+        run_flags = ' '.join(sum(flag_lists, []))
+        run_cookie = self.cookie(self.expl_cookie, run_flags, record=False)
+        run_config = config(
+            flags=run_flags, variant=self.base_variant,
+            cookies=[self.expl_cookie, run_cookie])
+        run_config.extend_cookies(kwargs.get('cookies', []))
+        return run_config, run_cookie
+
+    def run_result(self, run_cookie):
+        results = get_run_results(
+            [run_cookie], configuration_path=self.configuration_path)
+        if not results: return None, None  # pragma: uncovered
+        assert len(results) == 1
+        return results[0].time, results[0].size
+
+    def ref_result(self):
+        db = atos_lib.atos_db.db(self.configuration_path)
+        ref_results = atos_lib.merge_results(
+            atos_lib.results_filter(db.get_results(), {'variant': 'REF'}))
+        assert ref_results and len(ref_results) == 1
+        return ref_results[0].time, ref_results[0].size
+
+    def run_tradeoff(self, run_time, run_size):
+        if not (run_time and run_size):  # pragma: uncovered
+            return None
+        run_speedup = (float(self.db_ref_time) / float(run_time)) - 1.0
+        run_sizered = 1.0 - (float(run_size) / float(self.db_ref_size))
+        run_tradeoff = (self.tradeoff * run_speedup) + run_sizered
+        return run_tradeoff
+
+    def update_ref_tradeoff(self, run_time, run_size, run_tradeoff):
+        if not self.update_reference:
+            return
+        if self.one_by_one:  # pragma: uncovered
+            return
+        if run_tradeoff <= self.ref_init_tradeoff:
+            return
+        self.ref_init_tradeoff = run_tradeoff
+        run_time *= (1.0 + self.threshold)
+        self.ref_tradeoff = self.run_tradeoff(run_time, run_size)
+        debug('gen_flags_pruning:   new_ref_tradeoff: %.4f' % (
+                self.ref_tradeoff))
+
+    def recursive_pruning(self, flags):
+        generator = gen_flags_pruning(
+            config_flags=flags,
+            configuration_path=self.configuration_path,
+            tradeoff=self.tradeoff,
+            threshold=self.threshold,
+            update_reference=self.update_reference,
+            one_by_one=self.one_by_one,
+            random_selection=self.random_selection,
+            selection_size=self.selection_size,
+            **self.kwargs)
+        return generator
+
+    def generate(self):
+        debug('gen_flags_pruning')
+        debug('gen_flags_pruning: tradeoff=%.1f threshold=%.2f ' % (
+                self.tradeoff, self.threshold))
+        debug('gen_flags_pruning: initial flags: ' + str(self.flags_list))
+
+        # reference result (REF) for speedup/sizered computation
+        self.db_ref_time, self.db_ref_size = self.ref_result()
+        debug('gen_flags_pruning: db_reference result: (%.1f, %d)' % (
+                self.db_ref_time, self.db_ref_size))
+
+        # threshold computation
+        compute_threshold = (self.threshold < 0)
+        nb_ref_runs = compute_threshold and self.nb_threshold_runs or 1
+        run_times = []
+        for i in range(nb_ref_runs):
+            run_config, ref_cookie = self.run_config(self.flags_list)
+            run_cookie = self.cookie(ref_cookie, i, record=False)
+            yield run_config.extend_cookies([run_cookie])
+            run_time, run_size = self.run_result(run_cookie)
+            assert run_time and run_size
+            run_times.append(run_time)
+            debug('gen_flags_pruning: ref_result (%d/%d): (%.1f, %d)' % (
+                    i + 1, nb_ref_runs, run_time, run_size))
+
+        if compute_threshold:
+            debug('gen_flags_pruning: ref_run_times: ' + str(run_times))
+            self.threshold = atos_lib.variation_coefficient(run_times)
+            debug('gen_flags_pruning: computed threshold=%.2f ' % (
+                    self.threshold))
+            message('explore-flags-pruning: '
+                    'Using estimated threshold of %.2f%%' %
+                    (self.threshold * 100.0))
+
+        # reference results (no flag removed)
+        ref_time, ref_size = self.run_result(ref_cookie)
+        assert ref_time and ref_size
+        self.ref_init_tradeoff = self.run_tradeoff(ref_time, ref_size)
+        debug('gen_flags_pruning: ref_result: (%.1f, %d)' % (
+                ref_time, ref_size))
+        # [(number_of_flags, not_ajusted_tradeoff, run_cookie)]
+        successful_runs = [
+            (len(self.flags_list), self.ref_init_tradeoff, run_cookie)]
+
+        # apply threshold to the reference time (with no flags removed)
+        ref_time *= (1.0 + self.threshold)
+        debug('gen_flags_pruning: updated ref_time: %.1f' % (ref_time))
+
+        # compute reference tradeoff value
+        self.ref_tradeoff = self.run_tradeoff(ref_time, ref_size)
+        debug('gen_flags_pruning: ref_tradeoff: %.4f' % (self.ref_tradeoff))
+
+        # flags successfuly removed
+        flags_removed = []
+
+        while self.pruning_attempts:
+            selected_flags = self.pruning_attempts.pop(0)
+            debug('gen_flags_pruning: processing flag ' + str(selected_flags))
+
+            # run without flag
+            run_flags = list(enumerate(self.flags_list))
+            if not self.one_by_one:
+                map(run_flags.remove, flags_removed)
+            map(run_flags.remove, selected_flags)
+            run_flags = map(operator.itemgetter(1), sorted(run_flags))
+            run_config, run_cookie = self.run_config(run_flags)
+            debug('gen_flags_pruning:   run_flags: ' + str(run_flags))
+            #
+            yield run_config
+
+            # get results, handle failures
+            run_time, run_size = self.run_result(run_cookie)
+            run_tradeoff = self.run_tradeoff(run_time, run_size)
+
+            # take keep/remove decision
+            if run_tradeoff != None and run_tradeoff >= self.ref_tradeoff:
+                debug('gen_flags_pruning:   -> remove flags ' + str(
+                        selected_flags))
+                flags_removed.extend(selected_flags)
+                successful_runs.append(
+                    (len(run_flags), run_tradeoff, run_cookie))
+                # remove pruned flags from pruning_attempts
+                removed_attempts = filter(
+                    lambda s: set(s).intersection(set(selected_flags)),
+                    self.pruning_attempts)
+                map(self.pruning_attempts.remove, removed_attempts)
+                self.nb_pruning_attempts -= len(removed_attempts)
+
+                # eventually update reference tradeoff
+                self.update_ref_tradeoff(run_time, run_size, run_tradeoff)
+                #
+                continue
+
+            debug('gen_flags_pruning:   -> keep flags ' + str(selected_flags))
+
+            # handle special flags (only if selection size == 1)
+            selected_flag = (
+                selected_flags[0][1] if self.selection_size == 1 else '')
+
+            if re.search('--atos-optfile', selected_flag):
+                debug('gen_flags_pruning: acf-file flag -> ' + selected_flag)
+                # file-by-file flag
+                fbf_file = selected_flag[14:].strip('= ')
+                fbf_config = gen_file_by_file_cfg.read_config_csv(fbf_file)
+                fbf_create = functools.partial(
+                    gen_file_by_file_cfg.create_config_csv,
+                    csv_dir=os.path.dirname(fbf_file))
+                debug('gen_flags_pruning (fbf): initial fbf_config: [%s]' % (
+                        str(fbf_config)))
+
+                for obj in fbf_config.keys():
+                    debug('gen_flags_pruning (fbf): obj: [%s]' % (obj))
+                    generator = self.recursive_pruning(flags=fbf_config[obj])
+                    for cfg in generator:
+                        new_cfg = dict(
+                            fbf_config.items() + [(obj, cfg.flags)])
+                        new_flags = fbf_create(obj_flags=new_cfg)
+                        run_config, run_cookie = self.run_config(
+                            run_flags + [new_flags], cookies=cfg.cookies)
+                        yield run_config
+                    # explore other objs with best perf flags for current obj
+                    flags_for_obj = ' '.join(generator.final_flags)
+                    fbf_config.update({obj: flags_for_obj})
+                    debug('gen_flags_pruning (fbf) obj [%s] -> %s' % (
+                            obj, str(flags_for_obj)))
+
+                # update fbf flag
+                new_flags = fbf_create(obj_flags=fbf_config)
+                self.flags_list[selected_flags[0][0]] = new_flags
+                debug('gen_flags_pruning (fbf) new flag -> %s' % new_flags)
+                # run and update tradeoffs
+                run_config, run_cookie = self.run_config(
+                    run_flags + [new_flags])
+                yield run_config
+                run_time, run_size = self.run_result(run_cookie)
+                run_tradeoff = self.run_tradeoff(run_time, run_size)
+                if run_tradeoff != None and (
+                    run_tradeoff >= self.ref_tradeoff):  # pragma: uncovered
+                    successful_runs.append(
+                        (len(run_flags), run_tradeoff, run_cookie))
+                    # eventually update reference tradeoff
+                    self.update_ref_tradeoff(run_time, run_size, run_tradeoff)
+
+            elif re.search('-fplugin-arg-acf_plugin', selected_flag):
+                debug('gen_flags_pruning: acf-file flag -> ' + selected_flag)
+                # function-by-function flag
+                fbf_file = re.search(
+                    '-fplugin-arg-acf_plugin-csv_file=([^ ]*)',
+                    selected_flag).group(1)
+                fbf_config = (
+                    gen_function_by_function_cfg.read_config_csv(fbf_file))
+                fbf_create = lambda obj_flags: re.sub(
+                    '-fplugin-arg-acf_plugin-csv_file=[^ ]*',
+                    gen_function_by_function_cfg.create_config_csv(
+                        csv_dir=os.path.dirname(fbf_file),
+                        obj_flags=obj_flags),
+                    selected_flag)
+                debug('gen_flags_pruning (fbf): initial fbf_config: [%s]' % (
+                        str(fbf_config)))
+
+                for func in fbf_config.keys():
+                    debug('gen_flags_pruning (fbf): func: [%s]' % str(func))
+                    generator = self.recursive_pruning(flags=fbf_config[func])
+                    for cfg in generator:
+                        new_cfg = dict(
+                            fbf_config.items() + [(func, cfg.flags)])
+                        new_flags = fbf_create(obj_flags=new_cfg)
+                        run_config, run_cookie = self.run_config(
+                            run_flags + [new_flags], cookies=cfg.cookies)
+                        yield run_config
+                    # explore other funcs with best perf flags for current func
+                    flags_for_func = ' '.join(generator.final_flags)
+                    fbf_config.update({func: flags_for_func})
+                    debug('gen_flags_pruning (fbf) func [%s] -> %s' % (
+                            func, str(flags_for_func)))
+
+                # update fbf flag
+                new_flags = fbf_create(obj_flags=fbf_config)
+                self.flags_list[selected_flags[0][0]] = new_flags
+                debug('gen_flags_pruning (fbf) new flag -> %s' % new_flags)
+                # run and update tradeoffs
+                run_config, run_cookie = self.run_config(
+                    run_flags + [new_flags])
+                yield run_config
+                run_time, run_size = self.run_result(run_cookie)
+                run_tradeoff = self.run_tradeoff(run_time, run_size)
+                if run_tradeoff != None and (
+                    run_tradeoff >= self.ref_tradeoff):  # pragma: uncovered
+                    successful_runs.append(
+                        (len(run_flags), run_tradeoff, run_cookie))
+                    # eventually update reference tradeoff
+                    self.update_ref_tradeoff(run_time, run_size, run_tradeoff)
+
+        # final flags list
+        final_flags = list(enumerate(self.flags_list))
+        map(final_flags.remove, flags_removed)
+        final_flags = map(operator.itemgetter(1), final_flags)
+        debug('gen_flags_pruning: final flags: ' + str(final_flags))
+        self.final_flags = final_flags
+
+        # try without all removed flags
+        if self.one_by_one:
+            debug('gen_flags_pruning: run_final_flags: ' + str(final_flags))
+            run_config, run_cookie = self.run_config(final_flags)
+            yield run_config
+            run_time, run_size = self.run_result(run_cookie)
+            run_tradeoff = self.run_tradeoff(run_time, run_size)
+            if (run_tradeoff != None and    # pragma: branch_always
+                run_tradeoff >= self.ref_tradeoff):
+                successful_runs.append(
+                    (len(run_flags), self.ref_init_tradeoff, run_cookie))
+
+        # print best variant
+        if successful_runs:  # pragma: branch_always
+            best_run_cookie = sorted(successful_runs)[0][-1]
+            best_run_results = get_run_results(
+                [best_run_cookie], configuration_path=self.configuration_path)
+            assert len(best_run_results) == 1
+            message('explore-flags-pruning: best variant: %s [%s]' % (
+                    best_run_results[0].variant,
+                    atos_lib.hashid(best_run_results[0].variant)))
+
+
 class gen_genetic_deps(config_generator):
     """
     Generate genetic evolution of previous items, using dependencies.
@@ -1748,6 +2145,13 @@ def gen_function_by_function(configuration_path=None, **kwargs):
         gen_function_by_function_cfg(configuration_path=configuration_path,
                                      **kwargs),
         descr='expl-func')
+
+def gen_pruning(configuration_path=None, **kwargs):
+    assert configuration_path
+    return gen_progress(
+        gen_flags_pruning(
+            configuration_path=configuration_path, **kwargs),
+        descr='pruning')
 
 
 # ####################################################################

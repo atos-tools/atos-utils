@@ -65,6 +65,7 @@ def invoque(tool, args, **kwargs):
         "atos-explore-staged": run_atos_explore_staged,
         "atos-explore-genetic": run_atos_explore_genetic,
         "atos-explore-flag-values": run_atos_explore_flag_values,
+        "atos-explore-flags-pruning": run_atos_explore_flags_pruning,
         "atos-config": run_atos_config,
         "atos-cookie": run_atos_cookie,
         "atos-graph": run_atos_graph,
@@ -1663,6 +1664,34 @@ def run_atos_explore_flag_values(args):
 
     status = generators.run_exploration_loop(
         args, generator=generators.gen_flag_values)
+    return status
+
+def run_atos_explore_flags_pruning(args):
+    """ ATOS explore-flags-pruning tool implementation. """
+
+    status = invoque("atos-init", args)
+    if status != 0: return status  # pragma: uncovered (error)
+
+    variant = args.variant_id
+    # select best tradeoff if no variant given
+    if not variant:
+        res_args = vars(args or {})
+        res_args.update({'refid': 'REF'})
+        all_results = atos_lib.get_results(
+            args.configuration_path, atos_lib.default_obj(**res_args))
+        selected = atos_lib.atos_client_results.select_tradeoffs(
+            all_results, args.tradeoff, 1) or []
+        variant = selected and selected[0].variant or None
+
+    if not variant:  # pragma: uncovered (error)
+        error("expected identifier of variant to be pruned")
+        return 1
+
+    message("Pruning variant %s [%s]..." %
+            (variant, atos_lib.hashid(variant)))
+
+    status = generators.run_exploration_loop(
+        args, variant_id=variant, generator=generators.gen_pruning)
     return status
 
 def run_atos_explore_acf(args):

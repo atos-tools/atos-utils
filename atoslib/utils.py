@@ -1260,7 +1260,7 @@ def run_atos_run(args):
         return sum(executables_size)
 
     def get_time():
-        if remote_path and args.gopts:
+        if remote_path != None and args.gopts != None:
             os.putenv("REMOTE_PROFILE_DIR", remote_path)
             os.putenv("LOCAL_PROFILE_DIR", atos_lib.get_profile_path(
                     args.configuration_path,
@@ -1365,7 +1365,7 @@ def run_atos_run(args):
         results_script = os.path.isfile(get_res_sh) and get_res_sh
 
     remote_path = args.remote_path
-    if args.gopts and not remote_path:
+    if args.gopts != None and remote_path == None:
         remote_path = atos_lib.get_config_value(
             args.configuration_path, 'default_values.remote_profile_path')
 
@@ -1383,7 +1383,7 @@ def run_atos_run(args):
 
     nbruns = args.nbruns
     if nbruns is None:
-        nbruns = args.gopts and 1 or int(atos_lib.get_config_value(
+        nbruns = args.gopts != None and 1 or int(atos_lib.get_config_value(
                 args.configuration_path, "default_values.nb_runs", 1))
 
     if results_script:

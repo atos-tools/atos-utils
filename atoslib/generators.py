@@ -1497,7 +1497,7 @@ class gen_genetic_deps(config_generator):
                 remove_flag = (random.random() < self.mutate_remove)
 
                 # MUTATION
-                if mutate_flags:
+                if mutate_flags:  # pragma: uncovered
                     if mutate_flag:
                         if remove_flag:
                             if opt_name != '-O':  # pragma: uncovered
@@ -1551,7 +1551,7 @@ class gen_genetic_deps(config_generator):
 
             # MUTATION
             # consider adding new flags
-            if mutate_flags:
+            if mutate_flags:  # pragma: uncovered
                 handled_flags = set(
                     filter(bool, map(self.flag_list_.find, flags)))
                 while True:

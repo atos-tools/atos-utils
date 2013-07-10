@@ -1131,7 +1131,7 @@ def get_available_optim_variants(configuration_path):
             configuration_path, "$.compilers[*].%s_enabled" % variant)
         variant_enabled = variant_enabled and all(map(int, variant_enabled))
         if variant_enabled: enabled.append(variant)
-    if 'fdo' in enabled and 'lto' in enabled:
+    if 'fdo' in enabled and 'lto' in enabled:  # pragma: uncovered (always)
         enabled.append('fdo+lto')
     return enabled
 

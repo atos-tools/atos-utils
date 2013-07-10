@@ -696,17 +696,24 @@ def run_atos_init(args):
         atos_lib.json_config(config_file).add_value(
             "default_values.remote_profile_path", args.remote_path)
 
-    nbruns = args.nbruns or 1
+    nbruns = int(atos_lib.json_config(config_file).get_value(
+            "default_values.nb_runs", 1))
+    if args.nbruns != None: nbruns = args.nbruns
+    if nbruns < 0:
+        error("number of runs must be >= 0 in --nbruns argument")
+        return 1
     atos_lib.json_config(config_file).add_value(
         "default_values.nb_runs", str(nbruns))
 
-    time_cmd = globals.DEFAULT_TIME_CMD
-    if args.time_cmd: time_cmd = args.time_cmd
+    time_cmd = atos_lib.json_config(config_file).get_value(
+        "default_values.time_cmd", globals.DEFAULT_TIME_CMD)
+    if args.time_cmd != None: time_cmd = args.time_cmd
     atos_lib.json_config(config_file).add_value(
         "default_values.time_cmd", time_cmd)
 
-    size_cmd = globals.DEFAULT_SIZE_CMD
-    if args.size_cmd: size_cmd = args.size_cmd
+    size_cmd = atos_lib.json_config(config_file).get_value(
+        "default_values.size_cmd", globals.DEFAULT_SIZE_CMD)
+    if args.size_cmd != None: size_cmd = args.size_cmd
     atos_lib.json_config(config_file).add_value(
         "default_values.size_cmd", size_cmd)
 

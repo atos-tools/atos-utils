@@ -1924,7 +1924,7 @@ def run_atos_web(args):  # pragma: uncovered
                   % (args.operation[0]))
 
     elif args.subcmd_web == 'cookie':
-        # Open the cookie database
+        # Open the cookie database and return an error if that's not possible
         try:
             fd = open(os.path.join(args.configuration_path, 'cookies.db'))
         except IOError as e:
@@ -1940,7 +1940,6 @@ def run_atos_web(args):  # pragma: uncovered
         if r.status_code != 200:
             error('Project not found')
             return
-
         cookies_mapping = dict((c['hash'], c['id']) for c in r.json())
 
         # Load the cookie json file
@@ -1950,8 +1949,22 @@ def run_atos_web(args):  # pragma: uncovered
             error("Unable to load the cookies database: '%s'" % (e.message))
             return
 
+        # Create the missing cookies
+        # This way we can create the parenting relation shift right after
+        message('Pushing the missing cookies')
         for cookie in cookies_db:
-            message("Looking at '%s'" % (cookie))
+            if cookie not in cookies_mapping:
+                message(" %s" % (cookie))
+                requests.put(
+                  "http://%s/api/1.0/projects/%d/experiments/%d/cookies" %
+                      (args.server, args.project, args.experiment),
+                          {'hash': cookie})
+        message('Done')
+
+        # Push the cookie descriptions and children
+        message('Pushing the details')
+        for cookie in cookies_db:
+            message(" Looking at '%s'" % (cookie))
             # Push the description if available
             description = cookies_db[cookie].get('description')
             if description:
@@ -1961,10 +1974,10 @@ def run_atos_web(args):  # pragma: uncovered
                     {'hash': cookie, 'description': description})
 
             if not 'succs' in cookies_db[cookie]:
-                message(' -> No child')
+                message('  -> No child')
                 continue
             children = cookies_db[cookie]['succs']
-            message(' -> Pushing children:\n   * ' + '\n   * '.join(children))
+            message('  -> Pushing children:\n   * ' + '\n   * '.join(children))
 
             try:
                 r = requests.put(
@@ -1976,11 +1989,11 @@ def run_atos_web(args):  # pragma: uncovered
                         r.json()['status'] == 'success'):
                     error("Error while pushing: %s" % (cookie))
                     if r.status_code == 200:
-                        error("=> %s" % (r.json()['message']))
+                        error(" => %s" % (r.json()['message']))
                     else:
-                        error('=> Cookie not found')
+                        error(' => Cookie not found')
             except KeyError:
-                error('=> Parent cookie not found')
+                error(' => Parent cookie not found')
         return
 
     elif args.subcmd_web == "experiment":

@@ -170,7 +170,7 @@ class exploration_progress():
         if not config.progress_enabled: return
         if not self.visible: return
         if value is None:
-            self.value = 1
+            self.value += 1
         else:
             self.value = value
         if maxval is not None:

@@ -21,6 +21,7 @@ import sys
 import time
 import types
 
+import globals
 import atos_lib
 import process
 import logger
@@ -43,6 +44,9 @@ class config:
     # display of build/run progress messages
     timer_progress_enabled = True
 
+    # number of run for each iteration exploration
+    nb_runs = 1
+
     @staticmethod
     def setup(kwargs):
 
@@ -55,6 +59,14 @@ class config:
         config.timer_progress_enabled = (
             config.progress_enabled and sys.stdout.isatty())
 
+        # get number of runs from command line if any, else from config.json
+        args_nb_runs = kwargs.get(
+            'nbruns', None)
+        args_configuration_path = kwargs.get(
+            'configuration_path', globals.DEFAULT_CONFIGURATION_PATH)
+        config.nb_runs = args_nb_runs if args_nb_runs is not None else int(
+            atos_lib.get_config_value(args_configuration_path,
+                                      "default_values.nb_runs", 1))
 
 # display on stdout a progress status line looking like:
 #    Remaining exploration time: 00:00:07, 65.8% done (expl-func 57/60,
@@ -209,7 +221,7 @@ class exploration_progress():
         build_time = self.estimate_.get_estimated_time('build')
         run_time = self.estimate_.get_estimated_time('run')
         if build_time and run_time:
-            return build_time + run_time
+            return build_time + run_time * config.nb_runs
         else:
             return None
 

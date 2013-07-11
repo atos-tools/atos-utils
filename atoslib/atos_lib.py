@@ -1633,10 +1633,12 @@ class atos_cookie_db_json():
             self.cookies = json.load(
                 process.open_locked(self.db_file))
 
-    def add_cookie(self, value, parent=None, description=None):
+    def add_cookie(self, value, parent=None, description=None, userset=False):
         cookie = self.cookies.setdefault(value, {})
         if description:
             cookie['description'] = description
+        if userset:
+            cookie['userset'] = True
         if parent:
             parent_node = self.cookies.setdefault(parent, {})
             parent_node.setdefault('succs', []).append(value)

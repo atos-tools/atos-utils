@@ -2164,10 +2164,12 @@ def new_run_cookie(*args, **kwargs):
         argstr = args and str(args) or None
         db = atos_lib.atos_cookie_db_json.cookie_db(configuration_path)
         db.add_cookie(
-            cookie, parent=parent_cookie, description=cookie_descr)
+            cookie, parent=parent_cookie,
+            description=cookie_descr, userset=userset)
         return cookie
     record_cookie = kwargs.get('record', True)
     cookie_descr = kwargs.get('descr', None)
+    userset = kwargs.get('userset', False)
     configuration_path = kwargs.get('configuration_path', True)
     parent_cookie = (len(args) >= 1 and args[0] or None)
     if not parent_cookie:
@@ -2303,6 +2305,7 @@ def run_exploration_loop(args=None, **kwargs):
     expl_cookie = new_run_cookie(
         atos_lib.unique_cookie(gen_args.cookies),
         descr="exploration root cookie",
+        userset=(len(gen_args.cookies or []) == 1),
         configuration_path=gen_args.configuration_path)
     gen_args.cookies = (gen_args.cookies or []) + [expl_cookie]
 

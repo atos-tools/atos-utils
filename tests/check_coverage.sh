@@ -7,6 +7,7 @@ set -e
 SRCDIR=`cd \`dirname $0\`; pwd`
 COV_INCLUDE='/*/bin/*,/*/lib/atos/python/atoslib/*,/*/lib/atos/atos-*'
 COV_EXCLUDE='/*/atos-graph'
+STRICT_COVERAGE=${STRICT_COVERAGE-0}
 
 [ -d $COVERAGE_DIR ]
 
@@ -53,4 +54,4 @@ fi
 
 echo "check_coverage_status: $uncovered"
 
-exit $uncovered
+[ "$STRICT_COVERAGE" != 1 ] || exit $uncovered

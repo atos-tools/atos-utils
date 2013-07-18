@@ -32,6 +32,7 @@ import atexit
 import time
 import shutil
 import logger
+import stat
 
 def cmdline2list(cmd):
     """
@@ -128,8 +129,36 @@ def _process_output(process, output_file, print_output, output_stderr):
         setfl(process.stdout, flg=outflags)
         setfl(process.stderr, flg=errflags)
 
+def _close_fds(keep=False):
+    def _close():  # pragma: uncovered
+        opened_files = map(
+            int, os.listdir("/proc/self/fd"))
+        for fd in opened_files:
+            try:
+                # do not close stdin, stdout, stderr
+                if fd <= 2:
+                    continue
+                # do not close some fds as requested
+                if keep and fd in keep:
+                    continue
+                # do not close pipes as it may be used by subprocess module
+                # for transfering exec failure messages (errpipe_write)
+                if stat.S_ISFIFO(os.fstat(fd).st_mode):
+                    continue
+                os.close(fd)
+            except: pass
+    if keep is True:  # pragma: uncovered
+        return None  # keep all fd opened
+    keep = (
+        keep if isinstance(keep, (list, bool))
+        else [keep])
+    max_fd = (
+        "SC_OPEN_MAX" in os.sysconf_names
+        and os.sysconf("SC_OPEN_MAX") or 256)
+    return _close
+
 def _subcall(cmd, get_output=False, print_output=False, output_stderr=False,
-             shell=False, stdin_str=False, cwd=None):
+             shell=False, stdin_str=False, keep_fds=False, cwd=None):
     """
     Executes given command.
     Returns exit_code and output.
@@ -158,7 +187,8 @@ def _subcall(cmd, get_output=False, print_output=False, output_stderr=False,
         stdin_tmp.seek(0)
         popen_kwargs.update({'stdin': stdin_tmp})
     try:
-        process = subprocess.Popen(cmd, shell=shell, **popen_kwargs)
+        process = subprocess.Popen(
+            cmd, shell=shell, preexec_fn=_close_fds(keep_fds), **popen_kwargs)
         if get_output:
             _process_output(
                 process, output_file=outputf, print_output=print_output,
@@ -197,12 +227,11 @@ def setup(kwargs):
         return real_open
 
     _dryrun = kwargs.get('dryrun', False)
-    if _dryrun:
-        _real_open = replace_open(_open)
+    _real_open = replace_open(_open)
 
 def system(cmd, check_status=False, get_output=False, print_output=False,
            output_stderr=False, shell=False, stdin_str=False, no_debug=False,
-           cwd=None):
+           keep_fds=False, cwd=None):
     """
     Executes given command.
     Given command can be a string or a list or arguments.
@@ -218,7 +247,7 @@ def system(cmd, check_status=False, get_output=False, print_output=False,
     status, output = _subcall(
         cmd, print_output=print_output,
         get_output=get_output_, output_stderr=output_stderr,
-        shell=shell, stdin_str=stdin_str, cwd=cwd)
+        shell=shell, stdin_str=stdin_str, keep_fds=keep_fds, cwd=cwd)
     if get_output:
         if not no_debug:
             logging.debug('\n  | ' + '\n  | '.join(output.split('\n')))
@@ -242,14 +271,23 @@ def open_locked(filename, mode='r', timeout=None):
         delay += 0.2
 
 def _open(name, *args):
-    assert _dryrun
-    modes = set(args[0]) if args else None
-    if not modes:
-        return _real_open(name, *args)
-    if not (modes & set(["w", "a", "+"])):
-        return _real_open(name, *args)
-    logging.debug('# open-write ' + name)
-    return CtxStringIO()
+    modes = args[0] if args else "r"
+    if _dryrun and (set(modes) & set(["w", "a", "+"])):
+        # dryrun and write mode: use fake file
+        logging.debug('# open-write ' + name)
+        return CtxStringIO()
+    try:
+        # add close-on-exec (O_CLOEXEC) flag
+        openf = _real_open(name, modes + "e", *args[1:])
+        # as "e" (O_CLOEXEC) could be silently ignored (kernel<2.6.23),
+        # also try the non-atomic way to set this flag
+        fcntl.fcntl(
+            openf, fcntl.F_SETFD,
+            fcntl.fcntl(openf, fcntl.F_GETFD) | fcntl.FD_CLOEXEC)
+    except:
+        logging.debug('warning: cloexec open failure')
+        openf = _real_open(name, *args)
+    return openf
 
 def debug(msg, *args, **kwargs):
     """ Log a process debug message on the ATOS logger. """
@@ -321,6 +359,12 @@ class commands():
         logging.debug('cp %s %s' % (src, dst))
         if _dryrun: return
         shutil.copyfile(src, dst)
+
+    @staticmethod
+    def copytree(src, dst):
+        logging.debug('cp -r %s %s' % (src, dst))
+        if _dryrun: return
+        shutil.copytree(src, dst)
 
     @staticmethod
     def link_or_copyfile(src, dst):
@@ -445,7 +489,9 @@ class commands():
             commands.link("foo", "lnk")
             commands.copyfile("foo", "bar")
             commands.link_or_copyfile("foo", "baz")
+            commands.copytree("tmp", "tmp2")
             commands.rmtree("tmp")
+            commands.rmtree("tmp2")
             commands.rmtree("foo")
         finally:
             commands.chdir(cwd)
@@ -456,6 +502,7 @@ class commands():
         _initialized = False
         setup({'dryrun': True})
         commands.mkdir("tmp2")
+        commands.copytree("tmp2", "tmp3")
         commands.touch("foo")
         commands.chmod("foo", 0000)
         commands.rmtree("tmp2")

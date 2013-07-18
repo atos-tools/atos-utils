@@ -263,6 +263,8 @@ class parsers:
         args.atos_init.no_run(group)
         args.cookie(group, hidden=True)
         args.jobs(group, hidden=True)
+        args.build_jobs(group, hidden=True)
+        args.run_jobs(group, hidden=True)
         args.size_cmd(group, hidden=True)
         args.time_cmd(group, hidden=True)
         args.force(group, hidden=True)
@@ -324,6 +326,8 @@ class parsers:
         args.blacklist(group, hidden=True)
         args.force(group, ("--force",), hidden=True)
         args.jobs(group, hidden=True)
+        args.build_jobs(group, hidden=True)
+        args.run_jobs(group, hidden=True)
         # misc options
         group = parser.add_argument_group(
             'Misc Options')
@@ -370,6 +374,8 @@ class parsers:
         args.reuse(group, hidden=True)
         args.clean(group, hidden=True)
         args.jobs(group, hidden=True)
+        args.build_jobs(group, hidden=True)
+        args.run_jobs(group, hidden=True)
         # misc options
         group = parser.add_argument_group(
             'Misc Options')
@@ -410,6 +416,8 @@ class parsers:
         args.cookie(group, hidden=True)
         args.reuse(group, hidden=True)
         args.jobs(group, hidden=True)
+        args.build_jobs(group, hidden=True)
+        args.run_jobs(group, hidden=True)
         # misc options
         group = parser.add_argument_group(
             'Misc Options')
@@ -449,6 +457,8 @@ class parsers:
         args.cookie(group, hidden=True)
         args.reuse(group, hidden=True)
         args.jobs(group, hidden=True)
+        args.build_jobs(group, hidden=True)
+        args.run_jobs(group, hidden=True)
         # misc options
         group = parser.add_argument_group(
             'Misc Options')
@@ -489,6 +499,8 @@ class parsers:
         args.cookie(group, hidden=True)
         args.reuse(group, hidden=True)
         args.jobs(group, hidden=True)
+        args.build_jobs(group, hidden=True)
+        args.run_jobs(group, hidden=True)
         # misc options
         group = parser.add_argument_group(
             'Misc Options')
@@ -529,6 +541,8 @@ class parsers:
         args.cookie(group, hidden=True)
         args.reuse(group, hidden=True)
         args.jobs(group, hidden=True)
+        args.build_jobs(group, hidden=True)
+        args.run_jobs(group, hidden=True)
         # misc options
         group = parser.add_argument_group(
             'Misc Options')
@@ -580,6 +594,8 @@ class parsers:
         args.legacy(group, hidden=True)
         args.reuse(group, hidden=True)
         args.jobs(group, hidden=True)
+        args.build_jobs(group, hidden=True)
+        args.run_jobs(group, hidden=True)
         args.exes(group, hidden=True)
         args.clean(group, hidden=True)
         # misc options
@@ -640,6 +656,8 @@ class parsers:
         args.legacy(group, hidden=True)
         args.reuse(group, hidden=True)
         args.jobs(group, hidden=True)
+        args.build_jobs(group, hidden=True)
+        args.run_jobs(group, hidden=True)
         args.exes(group, hidden=True)
         args.clean(group, hidden=True)
         # misc options
@@ -695,6 +713,8 @@ class parsers:
         args.legacy(group, hidden=True)
         args.reuse(group, hidden=True)
         args.jobs(group, hidden=True)
+        args.build_jobs(group, hidden=True)
+        args.run_jobs(group, hidden=True)
         args.exes(group, hidden=True)
         args.clean(group, hidden=True)
         # misc options
@@ -746,6 +766,8 @@ class parsers:
         args.legacy(group, hidden=True)
         args.reuse(group, hidden=True)
         args.jobs(group, hidden=True)
+        args.build_jobs(group, hidden=True)
+        args.run_jobs(group, hidden=True)
         args.exes(group, hidden=True)
         args.clean(group, hidden=True)
         # misc options
@@ -795,6 +817,8 @@ class parsers:
         args.cookie(group, hidden=True)
         args.reuse(group, hidden=True)
         args.jobs(group, hidden=True)
+        args.build_jobs(group, hidden=True)
+        args.run_jobs(group, hidden=True)
         # misc options
         group = parser.add_argument_group(
             'Misc Options')
@@ -977,6 +1001,7 @@ class parsers:
         args.time_cmd(group, hidden=True)
         args.record(group)
         args.cookie(group, hidden=True)
+        args.run_jobs(group, hidden=True)
         # misc options
         group = parser.add_argument_group(
             'Misc Options')
@@ -1915,6 +1940,28 @@ class args:
              type=int,
              help=help_msg,
              default=globals.DEFAULT_BUILD_JOBS)
+
+    @staticmethod
+    def build_jobs(parser, args=("--build-jobs",), hidden=False):
+        help_msg = parsers.help_message(
+            "execute BUILD-JOBS parallel build threads",
+            hidden)
+        parser.add_argument(
+            *args,
+             dest="build_jobs",
+             type=int,
+             help=help_msg)
+
+    @staticmethod
+    def run_jobs(parser, args=("--run-jobs",), hidden=False):
+        help_msg = parsers.help_message(
+            "execute RUN-JOBS parallel run threads",
+            hidden)
+        parser.add_argument(
+            *args,
+             dest="run_jobs",
+             type=int,
+             help=help_msg)
 
     @staticmethod
     def targets(parser, args=("-t", "--targets")):

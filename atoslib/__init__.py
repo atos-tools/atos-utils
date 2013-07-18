@@ -16,7 +16,7 @@
 # v2.0 along with ATOS. If not, see <http://www.gnu.org/licenses/>.
 #
 
-import sys, os, signal
+import sys, os, signal, atexit
 
 def check_python_version_():
     try:
@@ -31,7 +31,10 @@ def handle_signal_(sig, sigframe):
     sys.stdout.flush()
     print >>sys.stderr, "Interrupted by signal %d" % sig
     sys.stderr.flush()
-    sys.exit(128 + sig)
+    # run registered exit funcs
+    atexit._run_exitfuncs()  # pragma: uncovered
+    # do not wait for threads termination
+    os._exit(128 + sig)  # pragma: uncovered
 
 # Fail early if python version is not supported
 check_python_version_()

@@ -126,24 +126,27 @@ def error(msg, exit_status=None, *args, **kwargs):
     logging.error(msg, *args, **kwargs)
     if exit_status: sys.exit(exit_status)
 
+def clear_tty_line():
+    clear_line = ''
+    if sys.stdout.isatty():  # pragma: uncovered
+        with os.popen("tput cols", "r") as tput:
+            cols = int(tput.readline())
+        clear_line = "\r" + " " * cols + "\r"
+    return clear_line
+
 @atexit.register
 def clear_tty_print(fhandle=sys.stdout):
     """
     In the case where it is a tty, clear the whole line to ensure
     that no progress output remains.
     """
-    if sys.stdout.isatty():  # pragma: uncovered
-        with os.popen("tput cols", "r") as tput:
-            cols = int(tput.readline())
-        write_str = "\r" + " " * cols + "\r"
-        sys.stdout.write(write_str)
+    sys.stdout.write(clear_tty_line())
 
 def message(msg):
     """ Print an info message on stdout if quiet mode is not set. """
     logging.debug(msg)
     if not _quiet:
-        clear_tty_print(sys.stdout)
-        sys.stdout.write(msg + "\n")
+        sys.stdout.write(clear_tty_line() + msg + "\n")
         sys.stdout.flush()
 
 def internal_error(msg, exit_status=1):

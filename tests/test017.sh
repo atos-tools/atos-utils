@@ -58,7 +58,7 @@ set -xe
 echo "TEST_REMOTE_DIR \$TEST_REMOTE_DIR"
 if [ "\$TEST_REMOTE_DIR" != "" ]; then
     echo "REMOTE_PROFILE_DIR \$REMOTE_PROFILE_DIR"
-    [ "\$REMOTE_PROFILE_DIR" = "\$TEST_REMOTE_DIR" ] || exit 1
+    [ "\`dirname \$REMOTE_PROFILE_DIR\`" = "\$TEST_REMOTE_DIR" ] || exit 1
     echo "LOCAL_PROFILE_DIR \$LOCAL_PROFILE_DIR"
     [ "\$LOCAL_PROFILE_DIR" != "" ] || exit 1
 fi

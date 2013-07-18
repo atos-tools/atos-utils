@@ -19,15 +19,13 @@ $ROOT/bin/atos-init \
     -b "sh ./build.sh"
 
 
-export ATOS_DEBUG_FILE=log1
+export ATOS_DEBUG=1
 
-$ROOT/bin/atos-opt -r -a "-O2 -fno-strict-aliasing"
+$ROOT/bin/atos-opt -r -a "-O2 -fno-strict-aliasing" 2>&1 | tee log1
 
-[ `cat log1 | grep command |grep fstrict-aliasing | grep no-strict-aliasing | wc -l` -eq 0 ]
+[ `cat log1 | grep command | grep gcc | grep fstrict-aliasing | grep no-strict-aliasing | wc -l` -eq 0 ]
 
 
-export ATOS_DEBUG_FILE=log2
+$ROOT/bin/atos-opt -r -l -a -O2 2>&1 | tee log2
 
-$ROOT/bin/atos-opt -r -l -a -O2
-
-[ `cat log2 | grep command | grep fstrict-aliasing | grep no-strict-aliasing | wc -l` -eq 0 ]
+[ `cat log2 | grep command | grep gcc | grep fstrict-aliasing | grep no-strict-aliasing | wc -l` -eq 0 ]

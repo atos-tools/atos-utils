@@ -30,6 +30,7 @@ import globals
 import jsonlib
 import process
 import logger
+import arguments
 import cc_arguments
 
 # ####################################################################
@@ -42,6 +43,9 @@ class atos_db():
     required_keys = ['target', 'environment', 'compiler', 'session']
 
     required_fields = ['target', 'variant', 'size', 'time']
+
+    # used for locking database before r/w accesses in multithreaded mode
+    lock = threading.Lock()
 
     def __init__(self): raise NotImplementedError
 
@@ -124,11 +128,13 @@ class atos_db_file(atos_db):
         self._read_results()
 
     def get_results(self, query=None):
-        return results_filter(self.results, query)
+        with atos_db.lock:
+            return results_filter(self.results, query)
 
     def add_results(self, entries):
-        self.results.extend(entries)
-        self._write_entries(entries)
+        with atos_db.lock:
+            self.results.extend(entries)
+            self._write_entries(entries)
 
     def update_results(self, query=None, update_fct=None):
         assert(update_fct != None)
@@ -200,7 +206,8 @@ class atos_db_json(atos_db):
         self._read_results()
 
     def get_results(self, query=None):
-        return results_filter(self.results, query)
+        with atos_db.lock:
+            return results_filter(self.results, query)
 
     def add_results(self, entries):
         with process.open_locked(self.db_file, 'r+') as db_file:
@@ -245,7 +252,8 @@ class atos_db_pickle(atos_db):
         self._read_results()
 
     def get_results(self, query=None):
-        return results_filter(self.results, query)
+        with atos_db.lock:
+            return results_filter(self.results, query)
 
     def add_results(self, entries):
         with process.open_locked(self.db_file, 'r+') as db_file:
@@ -1069,6 +1077,13 @@ def list_unique(seq):
     seen = set()
     return [x for x in seq if x not in seen and not seen.add(x)]
 
+def namespace(args=None, **kwargs):
+    """ Return a new arguments Namespace with updated values. """
+    new_ns = arguments.argparse.Namespace()
+    args and new_ns.__dict__.update(vars(args))
+    new_ns.__dict__.update(kwargs)
+    return new_ns
+
 def hashid(s):
     # return same results as 'echo s | md5sum'
     return md5sum(s + '\n')
@@ -1081,9 +1096,9 @@ def variant_id(options=None, gopts=None, uopts=None):
     if gopts != None:
         res_variant += "-fprofile-generate" + "".join(gopts.split())
     elif uopts != None:
-        res_variant += "-fprofile-use" + "".join(uopts.split())
-    else: pass
-    if options != None:  # pragma: branch_uncovered
+        res_variant += "-fprofile-use" + "".join(
+            uopts.split()) + "".join(options.split())
+    else:
         res_variant += "".join(options.split())
     # TODO: This is a partial workaround. While it is acceptable for
     # now, we will have to rewrite this, by removing pathes from
@@ -1093,12 +1108,6 @@ def variant_id(options=None, gopts=None, uopts=None):
         res_variant = res_variant.replace(old, new)
     return res_variant
 
-def pvariant_id(popts=None):
-    assert(popts != None)
-    res_variant = "OPT"
-    res_variant += "-fprofile-generate" + "".join(popts.split())
-    return res_variant.replace(':', '_')
-
 def target_id(executables):
     """ Returns the target id given the list of executables. """
     return "-".join(map(os.path.basename, executables))
@@ -1107,6 +1116,17 @@ def get_profile_path(configuration_path, variant):
     """ Returns the local profile path for the given variant. """
     return os.path.abspath(os.path.join(configuration_path,
                                         "profiles", hashid(variant)))
+
+def get_remote_profile_path(args, variant):
+    remote_profile_path = args.remote_path
+    if not remote_profile_path:
+        remote_profile_path = get_config_value(
+            args.configuration_path, 'default_values.remote_profile_path')
+    if not remote_profile_path: return None
+    job_dir = '-'.join(
+        filter(bool, [vars(args).get('job_id', None), hashid(variant)]))
+    remote_profile_path = os.path.join(remote_profile_path, job_dir)
+    return remote_profile_path
 
 def get_oprofile_path(configuration_path, variant):
     """ Returns the local oprofile path for the given variant. """
@@ -1320,7 +1340,6 @@ def help_man(topic):  # pragma: uncovered
         return 0
     return 1
 
-
 def help_text(topic):
     """
     Displays the textual form of the manual for topic.
@@ -1331,7 +1350,6 @@ def help_text(topic):
     if os.path.exists(rst_file):
         return pagercall(rst_file)
     return 1
-
 
 def generate_script(script_path, command, environ=None):
     """
@@ -1374,7 +1392,7 @@ def time_command(configuration_path):
 
 def proot_command(**kwargs):
     proot_bin = os.path.join(globals.BINDIR, 'atos-proot')
-    command = ["env"]
+    command = ["/usr/bin/env"]
     for key, value in kwargs.items():
         if value is None: continue  # pragma: uncovered
         command.append("%s=%s" % (str(key), str(value)))
@@ -1445,14 +1463,16 @@ def config_compiler_flags(key, default=None, config_path=None):
     if compiler_flags == "none": return []  # pragma: uncovered
     return compiler_flags.split()
 
-def save_gcda_files_if_necessary(
-    gopts, config_path=None, prof_path=None):  # pragma: uncovered
+def save_gcda_files_if_necessary(gopts, args):  # pragma: uncovered
+    config_path = args.configuration_path
+    reloc_dir = vars(args).get('reloc_dir', None)
+    if reloc_dir: reloc_dir = os.path.abspath(reloc_dir)
     compiler_fdo_dir_flag = config_compiler_flags(
         "fdo_dir_flags", default="-fprofile-dir", config_path=config_path)
     if compiler_fdo_dir_flag: return
     profile_path = (
-        os.path.abspath(prof_path) if prof_path else
-        get_profile_path(config_path, pvariant_id(gopts)))
+        os.path.abspath(args.path) if args.path else
+        get_profile_path(config_path, variant_id(gopts=gopts)))
     # some compilers have no fprofile-dir option and generate gcda files in
     # the same directories as object files. in that case, we must move
     # gcdas in profile path after fdo training. these files will be
@@ -1462,28 +1482,33 @@ def save_gcda_files_if_necessary(
         lines = open(
             os.path.join(config_path, objs_file)).readlines()
         obj_dirs.extend(map(lambda x: os.path.dirname(x.strip()), lines))
+    if reloc_dir: obj_dirs = map(
+        lambda obj_dir: os.path.abspath(reloc_dir + obj_dir), obj_dirs)
     for obj_dir in list(set(obj_dirs)):
         gcda_files.extend(glob.glob(os.path.join(obj_dir, "*.gcda")))
         gcda_files.extend(glob.glob(os.path.join(obj_dir, "*.gcno")))
     gcda_files = set(map(os.path.abspath, gcda_files))
     for gcda_file in gcda_files:
         gcda_dest = profile_path + os.path.sep + gcda_file
+        if reloc_dir: gcda_dest = gcda_dest.replace(reloc_dir, '')
         process.commands.mkdir(os.path.dirname(gcda_dest))
         process.commands.copyfile(gcda_file, gcda_dest)
         process.commands.unlink(gcda_file)
 
-def restore_gcda_files_if_necessary(
-    config_path=None, prof_path=None):  # pragma: uncovered
+def restore_gcda_files_if_necessary(args, prof_path):  # pragma: uncovered
     compiler_fdo_dir_flag = config_compiler_flags(
-        "fdo_dir_flags", default="-fprofile-dir", config_path=config_path)
+        "fdo_dir_flags", default="-fprofile-dir",
+        config_path=args.configuration_path)
     if compiler_fdo_dir_flag: return
     prof_path = os.path.abspath(prof_path)
+    reloc_dir = vars(args).get('reloc_dir', None)
     for root, dirnames, filenames in os.walk(prof_path):
         gcda_files = filter(
             lambda x: x.endswith('.gcda') or x.endswith('.gcno'), filenames)
         gcda_files = map(lambda x: os.path.join(root, x), gcda_files)
         for gcda_file in gcda_files:
             gcda_dest = gcda_file[len(prof_path):]
+            if reloc_dir: gcda_dest = os.path.abspath(reloc_dir + gcda_dest)
             process.commands.copyfile(gcda_file, gcda_dest)
 
 # ####################################################################
@@ -1654,3 +1679,49 @@ class atos_cookie_db_json():
             db = atos_cookie_db_json(atos_config)
             atos_cookie_db_json.db_cache[atos_config] = db
         return db
+
+
+# ####################################################################
+
+
+def proot_reloc_args(args):
+    """
+    Environment variables for proot reloc_exec addon configuration.
+    """
+    reloc_dir = args.__dict__.get('reloc_dir', None)
+    if not reloc_dir:
+        return {}
+    predef_ignored = os.getenv(
+        'ATOS_RELOC_PREDEF_IGNORED',
+        '/bin/,/etc/,/lib/,/lib32/,/lib64/,/usr/')
+    usrdef_ignored = os.getenv(
+        'ATOS_RELOC_IGNORED', '')
+    handled_prefixes = os.getenv(
+        'ATOS_RELOC_PREFIX', os.getcwd())
+    ignored_prefixes = ','.join(
+        predef_ignored.split(',') + usrdef_ignored.split(',') + [
+            os.path.abspath(args.configuration_path)])
+    return {
+        'PROOT_ADDON_RELOC_EXEC': 1,
+        'PROOT_ADDON_RELOC_EXEC_DIR': reloc_dir,
+        'PROOT_ADDON_RELOC_EXEC_IGNORED': ignored_prefixes,
+        'PROOT_ADDON_RELOC_EXEC_PREFIXES': handled_prefixes,
+        }
+
+def proot_reloc_command(args):
+    """
+    PRoot command for relocated execution.
+    """
+    reloc_dir = args.__dict__.get('reloc_dir', None)
+    if not reloc_dir:
+        return []
+    return proot_command(
+        PROOT_IGNORE_ELF_INTERPRETER=1,  # useless here?
+        **proot_reloc_args(args))
+
+def env_command(*args, **kwargs):
+    env_dict = {}
+    map(env_dict.update, args)
+    map(env_dict.update, kwargs)
+    return ["/usr/bin/env"] + map(
+        lambda (k, v): "%s=%s" % (str(k), str(v)), env_dict.items())

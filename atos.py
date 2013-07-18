@@ -27,6 +27,7 @@ from atoslib import arguments
 from atoslib import utils
 from atoslib import logger
 from atoslib import process
+from atoslib import multiprocess
 from atoslib import progress
 
 base = os.path.basename(sys.argv[0])
@@ -36,5 +37,6 @@ if subcmd: sys.argv.insert(1, subcmd)
 args = arguments.parser("atos").parse_args()
 logger.setup(vars(args))
 process.setup(vars(args))
+multiprocess.setup(vars(args))
 progress.setup(vars(args))
 utils.execute("atos", args)

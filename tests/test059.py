@@ -70,7 +70,7 @@ assert len(results) == 1 and results[0]["time"] == 90000
 
 status = utils.invoque("atos-run", args, options="-O2", gopts="-O1", record=True)
 assert status == 0
-results = common.atos_results({"variant" : "OPT-fprofile-generate-O1-O2"})
+results = common.atos_results({"variant" : "OPT-fprofile-generate-O1"})
 assert len(results) == 1
 
 #
@@ -172,7 +172,7 @@ assert common.grep(common.atos_log_name(variant="X9"), "remote ZZZ")
 local_line = common.grep(common.atos_log_name(variant="X9"), "local")
 expected_prof = os.path.join(
     os.getcwd(), "atos-configurations", "profiles",
-    str(atos_lib.hashid(atos_lib.pvariant_id("-O2"))))
+    str(atos_lib.hashid(atos_lib.variant_id(gopts="-O2"))))
 assert local_line and local_line[0] == "local " + expected_prof
 
 #

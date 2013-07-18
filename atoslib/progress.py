@@ -26,7 +26,7 @@ import atos_lib
 import process
 import logger
 import generators
-
+import multiprocess
 
 def setup(kwargs):
     """
@@ -201,7 +201,7 @@ class exploration_progress():
         exploration_progress.explorations_.remove(self)
 
     def elapsed(self):
-        """ Returns the curretly elapsed time for the exploration. """
+        """ Returns the currently elapsed time for the exploration. """
         return time.time() - self.start_time_
 
     def remaining(self):
@@ -212,16 +212,26 @@ class exploration_progress():
         """ Returns the estimated remaining time or None. """
         iteration_estimate = self.estimated_iteration()
         if iteration_estimate != None:
-            return iteration_estimate * self.remaining()
+            remaining = self.remaining()
+            build_estimate, run_estimate = iteration_estimate
+            # for time estimation, divide remaining build/run numbers
+            # by the size of build/run pools
+            # todo: rewrite that, too much imprecise
+            build_estimate = build_estimate * (remaining / min(
+                    remaining or 1, multiprocess.mp.build_pool_size))
+            run_estimate = run_estimate * (remaining / min(
+                    remaining or 1, multiprocess.mp.run_pool_size))
+            iteration_estimate = build_estimate + run_estimate
+            return iteration_estimate
         else:
             return None
 
     def estimated_iteration(self):
-        """ Get currently estimated iteration time (build+run) or None. """
+        """ Get currently estimated iteration time (build, run) or None. """
         build_time = self.estimate_.get_estimated_time('build')
         run_time = self.estimate_.get_estimated_time('run')
         if build_time and run_time:
-            return build_time + run_time * config.nb_runs
+            return build_time, run_time * config.nb_runs
         else:
             return None
 

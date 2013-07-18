@@ -33,6 +33,7 @@ import atos_lib
 import progress
 import logger
 from logger import debug, warning, error, info, message
+import multiprocess
 
 
 # ####################################################################
@@ -272,22 +273,39 @@ class gen_progress(config_generator):
         self.configuration_path = (
             configuration_path or parent and parent.configuration_path)
         self.descr = descr
+        self.update_lock = multiprocess.threading.Lock()
 
     def estimate_exploration_size(self):
         return self.parent_.estimate_exploration_size()
 
+    def update(self):
+        # update process status on new result notification
+        with self.update_lock: self.progress_.update(
+            maxval=self.parent_.estimate_exploration_size())
+
     def generate(self):
+        progress_cookies = []
         maxiter = self.parent_.estimate_exploration_size()
         self.progress_ = progress.exploration_progress(
             descr=self.descr, maxval=maxiter, visible=maxiter,
             config_path=self.configuration_path)
         for ic in itertools.count(1):  # pragma: branch_always
             try:
-                maxiter = self.parent_.estimate_exploration_size()
-                self.progress_.update(value=(ic - 1), maxval=maxiter)
-                yield self.parent_.next()
+                next_cfg = self.parent_.next()
+                if multiprocess.enabled():
+                    run_cookie = self.cookie(record=False)
+                    progress_cookies.append(run_cookie)
+                    next_cfg.extend_cookies([run_cookie])
+                    # update will be called on atos_opt-thread end
+                    next_cfg.opt_callbacks = (
+                        next_cfg.opt_callbacks or []) + [self.update]
+                else:
+                    maxiter = self.parent_.estimate_exploration_size()
+                    self.progress_.update(value=(ic - 1), maxval=maxiter)
+                yield next_cfg
             except StopIteration:
                 break
+        multiprocess.wait_for_results(progress_cookies)
         self.progress_.end()
 
 class gen_record_flags(config_generator):
@@ -617,7 +635,6 @@ class gen_chained_exploration(config_generator):
                     cookie_to_cfg[run_cookie] = (cfg.flags, cfg.variant)
                     yield cfg.extend_cookies(
                         [self.expl_cookie, stage_cookies[-1], run_cookie])
-            stage_progress.update()
 
             # select tradeoffs configs (flags, variants) for next exploration
             selected_results = get_run_tradeoffs(
@@ -630,6 +647,7 @@ class gen_chained_exploration(config_generator):
                           selected_cookies))
             debug('gen_chained_exploration: tradeoffs for next stages: ' + str(
                     self.selected_configs))
+            stage_progress.update()
 
         stage_progress.end()
         # get best tradeoffs for the whole exploration
@@ -1922,7 +1940,7 @@ class gen_genetic_deps(config_generator):
                                 pass
 
                 # EVOLUTION
-                else:
+                else:  # pragma: uncovered
                     # evolve_flags: only modify existing flags
                     if evolve_flag and obj_flag:
                         if obj_flag.range:
@@ -2201,6 +2219,7 @@ def get_run_tradeoffs(
 
 
 def get_run_results(matches, configuration_path, **kwargs):
+    multiprocess.wait_for_results(matches)
     db = atos_lib.atos_db.db(configuration_path)
     ref_results = atos_lib.merge_results(
         atos_lib.results_filter(db.get_results(), {'variant': 'REF'}))
@@ -2250,9 +2269,9 @@ def run_exploration_loop(args=None, **kwargs):
             only_frontier=True, objects=True)
         return map(lambda x: x.variant, results)
 
-    def step(flags, variant, cookies=None, profile=None):
-        flags = flags or ''
-        variant = variant or 'base'
+    def step(flags, variant, cfg):
+        flags = cfg.flags or ''
+        variant = cfg.variant or 'base'
         debug('step: %s, %s' % (variant, flags))
         # add flags from base_variant_configuration
         flags = (base_flags and (base_flags + ' ') or '') + flags
@@ -2265,16 +2284,19 @@ def run_exploration_loop(args=None, **kwargs):
         opt_args.__dict__.update(vars(args or {}))
         opt_args.__dict__.update(kwargs)
         run_cookies = gen_args.cookies and list(gen_args.cookies) or []
-        if logger._debug:
+        # no debug in mp mode as it will wait for current run
+        debug_step = logger._debug and not multiprocess.enabled()
+        if debug_step:
             run_cookie = atos_lib.new_cookie()
             run_cookies.append(run_cookie)
-        if cookies: run_cookies.extend(cookies)
+        if cfg.cookies: run_cookies.extend(cfg.cookies)
         run_cookies = atos_lib.list_unique(run_cookies)
         utils.invoque(
             "atos-opt", opt_args, options=flags, fdo=fdo, lto=lto,
-            record=True, profile=profile, cookies=run_cookies)
+            record=True, profile=cfg.profile, cookies=run_cookies,
+            opt_callbacks=cfg.opt_callbacks)
         # print debug info
-        if logger._debug:
+        if debug_step:
             results = get_run_results(matches=[run_cookie], **vars(gen_args))
             debug('step-> ' + str(results))
 
@@ -2327,7 +2349,5 @@ def run_exploration_loop(args=None, **kwargs):
             except StopIteration:
                 break
             assert cfg.variant is not None or base_variant
-            step(
-                flags=cfg.flags, variant=cfg.variant or base_variant,
-                cookies=cfg.cookies, profile=cfg.profile)
+            step(flags=cfg.flags, variant=cfg.variant or base_variant, cfg=cfg)
     return 0

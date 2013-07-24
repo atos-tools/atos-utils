@@ -105,8 +105,8 @@ def _display_progress(expl_stage="update", timer_stage="update"):
                 remaining_time_str(main_progress.elapsed()))
         status_str += "%s %3.0f%% done" % (status, main_completion * 100)
 
-        progress_details = (  # remove last exploration progresses (??)
-            explorations[0:1] + explorations[1:-1])
+        progress_details = (
+            explorations[0:1] + explorations[1:])
         progress_strings = []
         for progress_detail in progress_details:
             progress_strings += ["%s %d/%d" % (

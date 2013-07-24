@@ -548,7 +548,6 @@ class gen_chained_exploration(config_generator):
         else:
             self.initial_optim_variants = optim_variants
             self.selected_configs = [(None, optim_variants)]
-        initial_tradeoffs = len(self.selected_configs)
         # list of chained (generator, generator_arguments)
         if not generators_args:
             generators_args = []
@@ -569,19 +568,13 @@ class gen_chained_exploration(config_generator):
             gen_args.update({'expl_cookie': self.expl_cookie})
             generators_args_full.append((generator, gen_args))
         self.generators_args = generators_args_full
-        # initial list of number of tradeoffs for each stage
-        self.stage_tradeoffs = []
-        if len(self.generators_args) >= 1:
-            self.stage_tradeoffs += [initial_tradeoffs]
-            self.stage_tradeoffs += (
-                [len(self.tradeoffs) * self.nbpoints] * (
-                    len(self.generators_args) - 1))
 
     def estimate_exploration_size(self):
-        if getattr(self, 'generator_size', None) is None:
-            self.generator_size = []
+        if getattr(self, 'expl_size', None) is None:
+            self.expl_size, self.prng_size = [], []
             optim_variants = self.initial_optim_variants
-            for (generator, generator_args) in self.generators_args:
+            for (nstage, (generator, generator_args)) \
+                    in enumerate(self.generators_args):
                 gen_base_ = gen_variants(
                     parent=gen_config(self.configuration_path),
                     optim_variants=optim_variants)
@@ -589,18 +582,35 @@ class gen_chained_exploration(config_generator):
                     parent=gen_base_, **generator_args)
                 generator_ = gen_maxiters(
                     parent=generator_, maxiters=self.nbiters)
-                self.generator_size.append(
-                    generator_.estimate_exploration_size())
+                gen_size = generator_.estimate_exploration_size()
+                pruning = generator_args.get('pruning', False)
+                prn_size = (
+                    gen_flags_pruning(
+                        **generator_args).estimate_exploration_size()
+                    if pruning else 0)
+                nb_tradeoffs = len(
+                    self.selected_configs) if (nstage == 0) else (len(
+                    self.tradeoffs) * self.nbpoints)
+                self.expl_size.append([gen_size] * nb_tradeoffs)
+                self.prng_size.append([prn_size] * nb_tradeoffs)
                 optim_variants = 'base'  # tradeoff optim_variant
-        # TODO: does not work on variable size generators
-        # generator sizes estimated at the beginning, once for all
-        expl_size = 0
-        for n in range(len(self.generators_args)):
-            expl_size += self.generator_size[n] * self.stage_tradeoffs[n]
-        return expl_size
+        return sum(sum(self.expl_size, [])) + sum(sum(self.prng_size, []))
+
+    def update_progress_estimate(
+        self, nstage, ntradeoff, size=None, pruning=False):
+        if size and not pruning:
+            self.expl_size[nstage][ntradeoff] = size
+        elif size and pruning:
+            self.prng_size[nstage][ntradeoff] = size
+        elif not size and not pruning:
+            self.expl_size[nstage] = self.expl_size[nstage][:ntradeoff]
+        elif not size and pruning:
+            self.prng_size[nstage] = self.prng_size[nstage][:ntradeoff]
+        else: assert 0  # pragma: unreachable
 
     def generate(self):
         debug('gen_chained_exploration')
+        self.estimate_exploration_size()
         stage_cookies, cookie_to_cfg = [], {}
         stage_progress = progress.exploration_progress(
             descr='stage', maxval=len(self.generators_args),
@@ -613,8 +623,9 @@ class gen_chained_exploration(config_generator):
                     self.expl_cookie,
                     generator.__name__, generator_args, nstage,
                     descr="stage number %d" % (nstage)))
-            self.stage_tradeoffs[nstage] = len(self.selected_configs)
-            for (flags, variant) in self.selected_configs:
+            self.update_progress_estimate(nstage, len(self.selected_configs))
+            for (ntradeoff, (flags, variant)) \
+                    in enumerate(self.selected_configs):
                 debug('gen_chained_exploration: config ' + str(
                         (flags, variant)))
                 debug('gen_chained_exploration: args ' + str(generator_args))
@@ -629,6 +640,9 @@ class gen_chained_exploration(config_generator):
                     parent=generator_,
                     configuration_path=self.configuration_path)
                 for cfg in generator_:
+                    self.update_progress_estimate(
+                        nstage, ntradeoff,
+                        size=generator_.estimate_exploration_size())
                     run_cookie = self.cookie(
                         stage_cookies[-1], cfg.flags, cfg.variant,
                         record=False)
@@ -637,14 +651,46 @@ class gen_chained_exploration(config_generator):
                         [self.expl_cookie, stage_cookies[-1], run_cookie])
 
             # select tradeoffs configs (flags, variants) for next exploration
-            selected_results = get_run_tradeoffs(
-                self.tradeoffs, stage_cookies, self.configuration_path,
-                self.nbpoints)
-            selected_cookies = sum(map(
-                    lambda x: x.cookies.split(','), selected_results), [])
-            self.selected_configs = filter(
-                bool, map(lambda x: cookie_to_cfg.get(x, None),
-                          selected_cookies))
+            self.selected_configs, config_tradeoff = [], {}
+            for tradeoff in self.tradeoffs:
+                selected_results = get_run_tradeoffs(
+                    [tradeoff], stage_cookies, self.configuration_path,
+                    self.nbpoints)
+                selected_cookies = sum(map(
+                        lambda x: x.cookies.split(','), selected_results), [])
+                selected_configs = filter(
+                    bool, map(lambda x: cookie_to_cfg.get(x, None),
+                              selected_cookies))
+                map(lambda x: config_tradeoff.setdefault(x, tradeoff),
+                    selected_configs)
+                self.selected_configs = atos_lib.list_unique(
+                    self.selected_configs + selected_configs)
+
+            if generator_args.get('pruning', False):
+                self.update_progress_estimate(
+                    nstage, len(self.selected_configs), pruning=True)
+                pruned_selected_config = []
+                for (ntradeoff, (flags, variant)) \
+                        in enumerate(self.selected_configs):
+                    pruning_gen = gen_flags_pruning(
+                        config_flags=flags,
+                        config_variant=variant,
+                        tradeoff=config_tradeoff.get((flags, variant)),
+                        **generator_args)
+                    generator_ = gen_progress(
+                        parent=pruning_gen, descr='pruning',
+                        configuration_path=self.configuration_path)
+                    for cfg in generator_:
+                        self.update_progress_estimate(
+                            nstage, ntradeoff, pruning=True,
+                            size=generator_.estimate_exploration_size())
+                        yield cfg
+                    pruned_flags = ' '.join(pruning_gen.final_flags)
+                    pruned_selected_config.append((pruned_flags, variant))
+                self.selected_configs = atos_lib.list_unique(
+                    pruned_selected_config)
+
+            stage_progress.update()
             debug('gen_chained_exploration: tradeoffs for next stages: ' + str(
                     self.selected_configs))
             stage_progress.update()
@@ -1464,6 +1510,7 @@ class gen_flags_pruning(config_generator):
         tradeoff=None, threshold=None,
         update_reference=None, one_by_one=None,
         random_selection=None, selection_size=None, nb_threshold_runs=None,
+        keep_opt_level=None,
         expl_cookie=None, configuration_path=None, **kwargs):
         self.configuration_path = configuration_path
         #
@@ -1481,6 +1528,8 @@ class gen_flags_pruning(config_generator):
             selection_size) if selection_size is not None else 1
         self.nb_threshold_runs = int(
             nb_threshold_runs) if nb_threshold_runs is not None else 5
+        self.keep_opt_level = bool(
+            int(keep_opt_level)) if keep_opt_level is not None else False
         #
         self.base_flags, self.base_variant = variant_id and get_variant_config(
             variant_id, configuration_path) or (config_flags, config_variant)
@@ -1493,6 +1542,13 @@ class gen_flags_pruning(config_generator):
         # list of flags to be removed
         self.pruning_attempts = map(list, itertools.combinations(
                 enumerate(self.flags_list), self.selection_size))
+        if self.keep_opt_level:
+            optim_level_flags = filter(
+                lambda (pos, flag): flag.startswith('-O'),
+                enumerate(self.flags_list))
+            self.pruning_attempts = filter(
+                lambda s: not set(s).intersection(set(optim_level_flags)),
+                self.pruning_attempts)
         if self.random_selection: random.shuffle(self.pruning_attempts)
         self.nb_pruning_attempts = len(self.pruning_attempts)
         self.special_pruning_attempts = None

@@ -10,7 +10,7 @@ from atoslib import atos_lib
 from atoslib import generators
 from atoslib import process
 
-TEST_CASE = "ATOS generators - staged"
+TEST_CASE = "ATOS generators - pruning"
 
 
 args = common.atos_setup_args(ATOS_DEBUG_FILE="debug.log")
@@ -229,6 +229,13 @@ generator_loop(generator)
 generator = generators.gen_flags_pruning(
     variant_id='VAR-1',
     tradeoff=5.0, threshold=-10,
+    configuration_path=atos_config)
+generator_loop(generator)
+
+generator = generators.gen_flags_pruning(
+    variant_id='VAR-1',
+    tradeoff=5.0, threshold=-10,
+    keep_opt_level=1,
     configuration_path=atos_config)
 generator_loop(generator)
 

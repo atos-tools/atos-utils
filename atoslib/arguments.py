@@ -578,6 +578,10 @@ class parsers:
         args.optim_variants(group)
         args.seed(group, hidden=True)
         args.flags(group, hidden=True)
+        args.atos_explore.pruning(group)
+        args.atos_explore.update_ref(group, hidden=True)
+        args.atos_explore.threshold(group, hidden=True)
+        args.atos_explore.keep_opt_level(group, hidden=True)
         args.extra_arguments(group, hidden=True)
         # build and run options
         group = parser.add_argument_group(
@@ -640,6 +644,10 @@ class parsers:
         args.atos_explore.nbpoints(group)
         args.atos_explore.flags(group, hidden=True)
         args.seed(group, hidden=True)
+        args.atos_explore.pruning(group)
+        args.atos_explore.update_ref(group, hidden=True)
+        args.atos_explore.threshold(group, hidden=True)
+        args.atos_explore.keep_opt_level(group, hidden=True)
         args.extra_arguments(group, hidden=True)
         # build and run options
         group = parser.add_argument_group(
@@ -749,6 +757,7 @@ class parsers:
         args.atos_explore.threshold(group)
         args.atos_explore.tradeoff(group)
         args.atos_explore.update_ref(group)
+        args.atos_explore.keep_opt_level(group)
         args.seed(group, hidden=True)
         args.extra_arguments(group, hidden=True)
         # build and run options
@@ -2458,19 +2467,38 @@ class args:
                  default=5.0)
 
         @staticmethod
-        def threshold(parser, args=("--threshold",)):
+        def threshold(parser, args=("--threshold",), hidden=False):
+            help_msg = parsers.help_message(
+                "execution time threshold percentage", hidden)
             parser.add_argument(
                 *args,
                  dest="threshold",
                  type=float,
-                 help="execution time threshold percentage",
+                 help=help_msg,
                  default=0.0)
 
         @staticmethod
-        def update_ref(parser, args=("--update-reference",)):
+        def update_ref(parser, args=("--update-reference",), hidden=False):
+            help_msg = parsers.help_message(
+                "update reference after removing", hidden)
             parser.add_argument(
                 *args, dest="update_reference", action="store_true",
-                 help="update reference after removing")
+                 help=help_msg)
+
+        @staticmethod
+        def keep_opt_level(parser, args=("--keep-opt-level",), hidden=False):
+            help_msg = parsers.help_message(
+                "Do not remove the optimization level flag while pruning",
+                hidden)
+            parser.add_argument(
+                *args, dest="keep_opt_level", action="store_true",
+                 help=help_msg)
+
+        @staticmethod
+        def pruning(parser, args=("--pruning",)):
+            parser.add_argument(
+                *args, dest="pruning", action='store_true',
+                help="prune flags at the end of a stage or generation")
 
     class atos_generator:
         """ Namespace for non common atos-generator arguments. """

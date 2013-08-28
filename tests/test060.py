@@ -48,7 +48,7 @@ status = utils.invoque(
 assert status == 0
 
 results = common.atos_results({"variant" : "OPT-O2"})
-assert len(results) == 2
+assert len(results) == 3
 
 #
 #   -n NBRUNS, --nbruns NBRUNS

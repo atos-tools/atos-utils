@@ -40,11 +40,11 @@ $ROOT/bin/atos generator --generator=gen_staged --extra-arg=nbiters=3 \
 nb_played1=`$ROOT/bin/atos lib query | wc -l`
 
 $ROOT/bin/atos generator --generator=gen_staged --extra-arg=nbiters=3 \
-    --optim-variants=base --cookie=aaaaaaaaaaaaaaaaaaaa --reuse
+    --optim-variants=base --cookie=aaaaaaaaaaaaaaaaaaaa --reuse 2>&1 | tee LOG
 
 nb_played2=`$ROOT/bin/atos lib query | wc -l`
-
-[ $nb_played1 -eq $nb_played2 ]
+[ $nb_played2 -eq `expr $nb_played1 \* 2 - 1` ]
+[ `cat LOG | grep "Reusing results" | wc -l` -ne 0 ]
 
 
 
@@ -59,7 +59,7 @@ nb_played1=`$ROOT/bin/atos lib query | wc -l`
 
 export ATOS_DEBUG_FILE=log2.txt
 
-$ROOT/bin/atos-explore-inline --nbiters=3 --reuse --cookie=$expl_cookie1
+$ROOT/bin/atos-explore-inline --nbiters=3 --reuse --cookie=$expl_cookie1 2>&1 | tee LOG
 
 expl_cookie2=`grep "Identifier of exploration:" log2.txt | sed 's/.* //g'`
 
@@ -67,30 +67,4 @@ nb_played2=`$ROOT/bin/atos lib query | wc -l`
 
 [ "$expl_cookie1" == "$expl_cookie2" ]
 
-[ $nb_played1 -eq $nb_played2 ]
-
-
-
-export ATOS_DEBUG_FILE=log3.txt
-
-$ROOT/bin/atos-explore-acf --file-by-file --hot-th=70 --per-func-nbiters=3 \
-    --optim-levels=-O2 --optim-variants=base,lto
-
-expl_cookie1=`grep "Identifier of exploration:" log3.txt | sed 's/.* //g'`
-
-nb_played1=`$ROOT/bin/atos lib query | wc -l`
-
-export ATOS_DEBUG_FILE=log4.txt
-
-$ROOT/bin/atos-explore-acf --file-by-file --hot-th=70 --per-func-nbiters=3 \
-    --optim-levels=-O2 --optim-variants=base,lto \
-    --reuse --cookie=$expl_cookie1
-
-expl_cookie2=`grep "Identifier of exploration:" log4.txt | sed 's/.* //g'`
-
-nb_played2=`$ROOT/bin/atos lib query | wc -l`
-
-[ "$expl_cookie1" == "$expl_cookie2" ]
-
-[ $nb_played1 -eq $nb_played2 ]
-
+[ `cat LOG | grep "Reusing results" | wc -l` -ne 0 ]

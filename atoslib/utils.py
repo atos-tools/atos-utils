@@ -361,8 +361,6 @@ def run_atos_build(args):
     if args.gopts != None:
         process.commands.rmtree(profile_path)
         process.commands.mkdir(profile_path)
-        with open(os.path.join(profile_path, "variant.txt"), "w") as variantf:
-            variantf.write(args.gopts)
         compiler_fdo_gen_flags = atos_lib.config_compiler_flags(
             "fdo_gen_flags", default="-fprofile-generate",
             config_path=args.configuration_path)
@@ -717,6 +715,11 @@ def run_atos_init(args):
         atos_lib.json_config(config_file).add_value(
             "default_values.run_jobs", str(args.run_jobs))
 
+    # should be enabled by default in the future if working correctly
+    if args.build_script or args.run_script:
+        atos_lib.json_config(config_file).add_value(
+            "default_values.reuse", str(int(bool(args.reuse))))
+
     time_cmd = atos_lib.json_config(config_file).get_value(
         "default_values.time_cmd", globals.DEFAULT_TIME_CMD)
     if args.time_cmd != None: time_cmd = args.time_cmd
@@ -1009,22 +1012,12 @@ def run_atos_generator(args):
 def run_atos_opt(args):
     """ ATOS opt tool implementation. """
 
-    def merge_cookies(entry):
-        updated = False
-        if args.cookies:
-            cookies = 'cookies' in entry and \
-                set(entry['cookies'].split(',')) or set()
-            opt_cookies = set(args.cookies)
-            if not opt_cookies.issubset(cookies):
-                cookies = ",".join(list(cookies.union(opt_cookies)))
-                entry.update({'cookies': cookies})
-                updated = True
-        return updated
+    reuse = args.reuse or bool(
+        int(atos_lib.get_config_value(
+                args.configuration_path, "default_values.reuse", 0)))
 
     options = args.options or ""
-
     uopts = args.uopts
-
     if uopts == None and args.fdo:
         uopts = options
 
@@ -1042,37 +1035,34 @@ def run_atos_opt(args):
             if fdo_gen_lto:  # pragma: uncovered
                 uopts += " " + compiler_lto_flag
 
-    if args.reuse and args.profile:
+    if reuse:
         variant_id = atos_lib.variant_id(options, None, uopts)
-        profile_path = atos_lib.get_oprofile_path(
-            args.configuration_path, variant_id)
-        if os.path.isdir(profile_path):  # pragma: branch_uncovered
-            for f in os.listdir(profile_path):
-                filepath = os.path.join(profile_path, f)
-                process.commands.copyfile(filepath, f)
-            message("Skipping profile of variant %s..." % variant_id)
-            return 0
-
-    if args.reuse and not args.profile:
-        variant_id = atos_lib.variant_id(options, None, uopts)
-        db = atos_lib.atos_db.db(args.configuration_path)
-        results = atos_lib.atos_client_db(db).\
-            update_results({"variant": variant_id}, merge_cookies)
-        if results:
-            message("Skipping variant %s..." % variant_id)
-            return 0
+        if args.profile:  # pragma: uncovered
+            # reuse oprofile dir if already existing for this variant
+            profile_path = atos_lib.get_oprofile_path(
+                args.configuration_path, variant_id)
+            if os.path.isdir(profile_path):
+                for f in os.listdir(profile_path):
+                    filepath = os.path.join(profile_path, f)
+                    process.commands.copyfile(filepath, f)
+                message("Reusing profile of variant %s..." % variant_id)
+                return 0
+        else:
+            # reuse existing results for this variant
+            db = atos_lib.atos_db.db(args.configuration_path)
+            results = atos_lib.merge_results(
+                atos_lib.results_filter(
+                    db.get_results(), {"variant": variant_id}),
+                merge_targets=False)
+            if results:
+                atos_lib.reuse_run_result(
+                    db, variant_id, options, uopts, args, results)
+                message("Reusing results of variant %s..." % variant_id)
+                return 0
 
     if args.fdo:
-        skip = False
-        if args.reuse:
-            variant_id = atos_lib.variant_id(None, uopts, None)
-            profile_path = atos_lib.get_profile_path(
-                args.configuration_path, variant_id)
-            skip = os.path.isdir(profile_path)
-            if skip: message("Skipping profile of variant %s..." % variant_id)
-        if not skip:
-            status = invoque("atos-profile", args, options=uopts, uopts=None)
-            if status: return status  # pragma: uncovered (error)
+        status = invoque("atos-profile", args, options=uopts, uopts=None)
+        if status: return status  # pragma: uncovered (error)
 
     status = invoque("atos-build", args, options=options, uopts=uopts)
     if status: return status  # pragma: uncovered (error)
@@ -1082,7 +1072,8 @@ def run_atos_opt(args):
             "atos-run-profile", args, options=options, uopts=uopts)
         return status
 
-    status = invoque("atos-run", args, options=options, uopts=uopts)
+    status = invoque(
+        "atos-run", args, options=options, uopts=uopts)
     return status
 
 def run_atos_play(args):
@@ -1165,16 +1156,48 @@ def run_atos_profile(args):
     """ ATOS profile tool implementation. """
 
     options = args.options or ''
+    variant_id = atos_lib.variant_id(gopts=options)
+    reuse = args.reuse or bool(
+        int(atos_lib.get_config_value(
+                args.configuration_path, "default_values.reuse", 0)))
+    profile_path = os.path.abspath(args.path) if args.path else \
+        atos_lib.get_profile_path(args.configuration_path, variant_id)
+    variant_file = os.path.join(profile_path, "variant.txt")
+
+    if reuse and os.path.exists(variant_file):
+        # variant.txt is created after profiling run
+        message("Reusing profile variant %s..." % variant_id)
+        return 0
 
     status = invoque(
         "atos-build", args, gopts=options, options=options)
     if status: return status  # pragma: uncovered (error)
 
+    hashsum = atos_lib.target_hash(args)
+
+    if reuse:
+        variants = atos_lib.atos_buildhash_db.hashsum_db(
+            args.configuration_path).get_variants(hashsum)
+        if variants:
+            message("Reusing profiling run for variant %s..." % variant_id)
+            new_profile_path = atos_lib.get_profile_path(
+                args.configuration_path, variants[0])
+            # TODO: reuse new_profile_path directly instead of copying it
+            process.commands.rmtree(profile_path)
+            process.commands.copytree(new_profile_path, profile_path)
+            atos_lib.atos_buildhash_db.hashsum_db(
+                args.configuration_path).add_hashsum(hashsum, variant_id)
+            return 0
+
     status = invoque(
-        "atos-run", args, gopts=options, options=options, silent=True)
+        "atos-run", args, gopts=options, options=options,
+        variant=variant_id, silent=True)
     if status: return status  # pragma: uncovered (error)
 
+    atos_lib.atos_buildhash_db.hashsum_db(
+        args.configuration_path).add_hashsum(hashsum, variant_id)
     atos_lib.save_gcda_files_if_necessary(options, args)
+    with open(variant_file, "w") as variantf: variantf.write(options)
 
     return 0
 
@@ -1252,6 +1275,28 @@ def run_atos_run_profile(args):
 def run_atos_run(args):
     """ ATOS run tool implementation. """
 
+    variant_id = args.variant or atos_lib.variant_id(
+        args.options, args.gopts, args.uopts)
+    reuse = args.reuse or bool(
+        int(atos_lib.get_config_value(
+                args.configuration_path, "default_values.reuse", 0)))
+    hashsum = atos_lib.target_hash(args, variant=variant_id)
+
+    if reuse:
+        # use results of another same-hash variant if exising
+        db = atos_lib.atos_db.db(args.configuration_path)
+        results = atos_lib.merge_results(
+            atos_lib.results_filter(db.get_results(), {'hash': hashsum}))
+        if results:
+            results = atos_lib.merge_results(
+                atos_lib.results_filter(
+                    db.get_results(), {"variant": results[0].variant}),
+                merge_targets=False)
+            atos_lib.reuse_run_result(
+                db, variant_id, args.options, args.uopts, args, results)
+            message("Reusing run results for variant %s..." % variant_id)
+            return 0
+
     nbruns = 1 if args.gopts else args.nbruns
 
     if nbruns is None: nbruns = int(
@@ -1260,7 +1305,7 @@ def run_atos_run(args):
 
     for n in range(nbruns):
         run_args = atos_lib.namespace(
-            args, run_number=n, nbruns=nbruns)
+            args, run_number=n, nbruns=nbruns, hashsum=hashsum)
         status = run_tool_func(run_atos_one_run, run_args)
         if status: return status
 
@@ -1360,6 +1405,9 @@ def run_atos_one_run(args):
         if args.cookies:
             entry.update({'cookies': ','.join(
                         atos_lib.list_unique(args.cookies))})
+        hashsum = vars(args).get('hashsum', None) or atos_lib.target_hash(
+            args, variant=variant)
+        if hashsum: entry.update({'hash': str(hashsum)})
         if args.output_file:
             db = atos_lib.atos_db_file(args.output_file)
             atos_lib.atos_client_db(db).add_result(entry)

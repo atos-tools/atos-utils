@@ -270,6 +270,7 @@ class parsers:
         args.force(group, hidden=True)
         args.legacy(group, hidden=True)
         args.blacklist(group, hidden=True)
+        args.reuse(group, hidden=True)
         # audit options
         group = parser.add_argument_group(
             'Audit Options')
@@ -1002,6 +1003,7 @@ class parsers:
         args.record(group)
         args.cookie(group, hidden=True)
         args.run_jobs(group, hidden=True)
+        args.reuse(group, hidden=True)
         # misc options
         group = parser.add_argument_group(
             'Misc Options')
@@ -1072,6 +1074,7 @@ class parsers:
         args.path(group, hidden=True)
         args.legacy(group, hidden=True)
         args.force(group, hidden=True)
+        args.reuse(group, hidden=True)
         # misc options
         group = parser.add_argument_group(
             'Misc Options')

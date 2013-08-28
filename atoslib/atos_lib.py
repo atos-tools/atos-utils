@@ -62,12 +62,6 @@ class atos_db():
     #   ex: get('$[?(@.target="x" && @.variant="REF")]'
     def get_results(self, query=None): raise NotImplementedError
 
-    # update the results returned by query with the update_fct
-    #   returns the list of results
-    #   update_fct must return True if an entry is actually updated
-    def update_results(self, query=None, update_fct=None):
-        raise NotImplementedError
-
     #
     @staticmethod
     def db(results_path, no_cache=False):
@@ -136,25 +130,11 @@ class atos_db_file(atos_db):
             self.results.extend(entries)
             self._write_entries(entries)
 
-    def update_results(self, query=None, update_fct=None):
-        assert(update_fct != None)
-        entries = self.get_results(query)
-        updated = False
-        for entry in entries:
-            if update_fct(entry): updated = True
-        if updated: self._write_all()
-        return entries
-
     def _write_entries(self, entries):
         entries_str = ''.join(
             atos_db_file.entry_str(entry) for entry in entries)
         with process.open_locked(self.db_file, 'a') as db_file:
             db_file.write(entries_str)
-
-    def _write_all(self):
-        with process.open_locked(self.db_file, 'w') as db_file:
-            for entry in self.results:
-                db_file.write(atos_db_file.entry_str(entry))
 
     def _read_results(self):
         if not os.path.exists(self.db_file): return  # pragma: uncovered
@@ -217,21 +197,6 @@ class atos_db_json(atos_db):
             self.results.extend(entries)
             json.dump(self.results, db_file, sort_keys=True, indent=4)
 
-    def update_results(self, query=None, update_fct=None):  # pragma: uncovered
-        assert(update_fct != None)
-        with process.open_locked(self.db_file, 'r+') as db_file:
-            self.results = json.load(db_file)
-            entries = self.get_results(query)
-            updated = False
-            for entry in entries:
-                if update_fct(entry): updated = True
-            if updated:
-                db_file.seek(0)
-                db_file.truncate()
-                json.dump(self.results, db_file, sort_keys=True,
-                          indent=4)
-        return entries
-
     def _read_results(self):
         self.results = json.load(process.open_locked(self.db_file))
 
@@ -262,20 +227,6 @@ class atos_db_pickle(atos_db):
             db_file.truncate()
             self.results.extend(entries)
             pickle.dump(self.results, db_file, -1)
-
-    def update_results(self, query=None, update_fct=None):  # pragma: uncovered
-        assert(update_fct != None)
-        with process.open_locked(self.db_file, 'r+') as db_file:
-            self.results = pickle.load(db_file)
-            entries = self.get_results(query)
-            updated = False
-            for entry in entries:
-                if update_fct(entry): updated = True
-            if updated:
-                db_file.seek(0)
-                db_file.truncate()
-                pickle.dump(self.results, db_file, -1)
-        return entries
 
     def _read_results(self):
         self.results = pickle.load(process.open_locked(self.db_file))
@@ -480,7 +431,7 @@ def get_results(dbpath, opts):
     map(lambda x: x.compute_speedup(ref_results[0]), variant_results)
     return variant_results
 
-def merge_results(results):
+def merge_results(results, merge_targets=True):
     # filter out failures
     results = filter(
         lambda x: "FAILURE" not in x.values(), results)
@@ -506,10 +457,11 @@ def merge_results(results):
             map(lambda x: filter(
                     lambda y: y.target == x, filtered_results), targets))
         # merge multiple targets
-        group_name = "-".join(targets)
-        variant_results.append(
-            atos_client_results.result.merge_targets(
-                group_name, targets_results))
+        if merge_targets:
+            group_name = "-".join(targets)
+            targets_results = [atos_client_results.result.merge_targets(
+                group_name, targets_results)]
+        variant_results.extend(targets_results)
     return variant_results
 
 
@@ -534,9 +486,6 @@ class atos_client_db():
         entry = result_entry(entry)
         self.db.add_results([entry])
         return True, entry
-
-    def update_results(self, query, update_fct):
-        return self.db.update_results(query, update_fct)
 
     @staticmethod
     def db_load(inf):
@@ -1725,3 +1674,104 @@ def env_command(*args, **kwargs):
     map(env_dict.update, kwargs)
     return ["/usr/bin/env"] + map(
         lambda (k, v): "%s=%s" % (str(k), str(v)), env_dict.items())
+
+
+# ####################################################################
+
+
+class atos_buildhash_db():
+    """
+    Database used for storing hashsum_to_variant map.
+    """
+
+    db_cache = {}
+
+    def __init__(self, atos_config):
+        self.db_file = os.path.join(
+            atos_config, "hashsum.db")
+        # create db file if not already existing
+        if not os.path.exists(self.db_file):
+            json.dump({}, process.open_locked(self.db_file, 'w'))
+        self.hashsums = {}
+        # db still not created in dryrun mode
+        if os.path.exists(self.db_file):  # pragma: branch_always
+            self.hashsums = json.load(
+                process.open_locked(self.db_file))
+
+    def add_hashsum(self, hashsum, variant):
+        if not hashsum: return  # pragma: uncovered
+        variant_hashsums = self.hashsums.setdefault(hashsum, [])
+        if variant in variant_hashsums:
+            return
+        self.hashsums[hashsum].append(variant)
+        with process.open_locked(self.db_file, 'w') as db_file:
+            json.dump(self.hashsums, db_file, sort_keys=True, indent=4)
+
+    def get_variants(self, hashsum):
+        return self.hashsums.get(hashsum, [])
+
+    @staticmethod
+    def hashsum_db(atos_config):
+        db = atos_buildhash_db.db_cache.get(atos_config, None)
+        if not db:
+            db = atos_buildhash_db(atos_config)
+            atos_buildhash_db.db_cache[atos_config] = db
+        return db
+
+def target_hash(args, variant=None):
+    """ Compute, record and return sha1 sum of all targets of a build. """
+    def code_sections_content(target):
+        objdump_output = process.system(
+            objdump_command + ["-h", "-w", target], get_output=True,
+            check_status=True, no_debug=True)
+        code_section_lines = filter(
+            lambda line: line.strip().find(" CODE") != -1,
+            objdump_output.split('\n'))
+        code_sections = map(
+            lambda line: line.split()[1], code_section_lines)
+        code_sections_opt = sum(
+            map(lambda section: ["-j", section], code_sections), [])
+        code_sections_content = process.system(
+            objdump_command + code_sections_opt + ["-s", target],
+            get_output=True, check_status=True, no_debug=True)
+        return code_sections_content
+    if os.getenv("ATOS_NO_BUILD_HASH"):  # pragma: uncovered
+        return
+    objdump = os.getenv(
+        "ATOS_OBJDUMP", "objdump")
+    objdump_command = proot_reloc_command(args) + [objdump]
+    target_file = os.path.join(
+        args.configuration_path, "targets")
+    targets = map(
+        lambda x: x.strip(), open(target_file).readlines())
+    targets = sorted(filter(
+        lambda x: x != "" and not x.startswith("#"),
+        targets))
+    try:
+        hash_refs_list = map(
+            lambda target: str(
+                (target, sha1sum(code_sections_content(target)))),
+            targets)
+    except: return None  # disable target_hash checks on objdump failure
+    result = sha1sum("\n".join(hash_refs_list))
+    if variant: atos_buildhash_db.hashsum_db(
+        args.configuration_path).add_hashsum(result, variant)
+    return result
+
+def reuse_run_result(db, variant_id, options, uopts, args, results):
+    for result in results:
+        new_entry = result.dict()
+        new_entry.update(
+            {'variant': variant_id})
+        new_entry.update(
+            {'version': globals.VERSION})
+        new_entry.update(
+            {'conf': " ".join(process.cmdline2list(options or ""))})
+        if uopts != None: new_entry.update(
+            {'uconf': " ".join(process.cmdline2list(uopts))})
+        if args.cookies: new_entry['cookies'] = ','.join(
+            list_unique(args.cookies))
+        if args.record:
+            db.add_results([new_entry])
+        else:
+            print >>sys.stderr, atos_db_file.entry_str(new_entry),

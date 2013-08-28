@@ -2318,11 +2318,6 @@ def run_exploration_loop(args=None, **kwargs):
                     **vars(gen_args))), base_variants), [])
     assert gen_args.generator
 
-    # previous results wont be found without old exploration cookie
-    if gen_args.reuse and not gen_args.cookies:
-        error(" --reuse option must be used with --cookie option")
-        return 1
-
     # exploration cookie (used for keeping configs already ran)
     expl_cookie = new_run_cookie(
         atos_lib.unique_cookie(gen_args.cookies),

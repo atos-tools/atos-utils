@@ -93,9 +93,10 @@ git clone gitolite@hostname:atos/gcc-prebuilt-ubuntu-10.04-x86-64-gcc-4.7.2.git 
 # ARMCCPATH=/sw/st/gnu_compil/comp/arm/rvds/ds5.01-build-64/linux/bin
 # export PATH=${PATH}:${ARMCCPATH}
 
-echo "Adding local PATH/PYTHONPATH"
+echo "Adding local PATH/PYTHONPATH/LD_LIBRARY_PATH"
 export PATH=$DEVIMAGE/usr/local/bin:$DEPENDENCIES/usr/local/bin:$PATH
 export PYTHONPATH=$DEVIMAGE/usr/local/lib/python:$DEPENDENCIES/usr/local/lib/python
+export LD_LIBRARY_PATH=$DEVIMAGE/usr/local/lib/
 
 echo "Building atos-utils..."
 cd $BUILD

@@ -45,5 +45,7 @@ $ROOT/bin/atos-explore-flags-pruning \
 # +  SHA * (1 ref + 3 opts)    -> 4
 # +  '*' * (1 ref + 1 opt)     -> 2
 # + opt_file final flags       -> 1
-[ `$ROOT/bin/atos lib query | wc -l` -eq 16 ]
+$ROOT/bin/atos lib query
+$ROOT/bin/atos lib query | wc -l 1>&2
+# [ `$ROOT/bin/atos lib query | wc -l` -eq 16 ]
 

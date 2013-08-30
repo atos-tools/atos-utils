@@ -37,11 +37,15 @@ sys.path.append(lib_dir)
 
 from atoslib import atos_lib
 
+def labelfmt(x, pos=0): return '%.2f' % (x+1)
+
 def draw_search_graph(plots):
     import pylab as pl
 
     fg = pl.figure()
     ax = fg.add_subplot(111)
+
+    ax.yaxis.set_major_formatter(pl.FuncFormatter(labelfmt))
 
     for (values, attrs) in plots:
         indexes, width = pl.arange(len(values)), 1.0 / len(plots)
@@ -51,11 +55,10 @@ def draw_search_graph(plots):
         ax.plot(indexes + xoffset, yvalues, **attrs)
 
         legend = ax.legend(loc='best')
-        legend.get_frame().set_alpha(0.2)
-
+        legend.get_frame().set_alpha(0.6)
         fg.canvas.draw()
 
-    pl.ylabel('tradeoff result -->')
+    pl.ylabel('tradeoff improvement -->')
     pl.xlabel('number of tested configurations -->')
     pl.title('Search Graph')
     pl.axhspan(0.0, 0.0)
@@ -81,7 +84,7 @@ def searchgraph(opts, configs):
             x, atos_lib.default_obj(refid='REF')), dbpathes)
         # compute result field (perf/size tradeoff) for each result
         def set_result(optcase): optcase.result = (
-            (optcase.speedup * opts.tradeoff + optcase.sizered)
+            (optcase.speedup + (optcase.sizered / opts.tradeoff))
             if opts.tradeoff is not None else optcase.speedup)
         filter(functools.partial(filter, set_result), results)
         if opts.nbiters: results = map(lambda r: r[:opts.nbiters], results)
@@ -116,7 +119,7 @@ def searchgraph(opts, configs):
         # graph plots
         attrs = {
             'linewidth': 2,
-            'color': color, 'label': label + '-avg-max'}
+            'color': color, 'label': label}
         plots += [(best_avg, dict(attrs))]
         attrs['label'] = None
 

@@ -50,7 +50,9 @@ def draw_search_graph(plots):
         xoffset = width * plots.index((values, attrs))
         ax.plot(indexes + xoffset, yvalues, **attrs)
 
-        ax.legend(loc='lower left')
+        legend = ax.legend(loc='best')
+        legend.get_frame().set_alpha(0.2)
+
         fg.canvas.draw()
 
     pl.ylabel('tradeoff result -->')

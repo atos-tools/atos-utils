@@ -24,21 +24,6 @@
 #include "tree.h"
 #include "tm.h"
 #include "langhooks.h"
-#ifndef __GCC_VERSION__
-#define __GCC_VERSION__ (__GNUC__*10000+__GNUC_MINOR__*100+__GNUC_PATCHLEVEL__)
-#endif
-#if __GCC_VERSION__>=40700
-#include "cp/cp-tree.h"
-#include "c-family/c-pragma.h"
-#include "c-family/c-common.h"
-#else
-/* cp/cp-tree.h (can't be included with prior GCC version)
- * thus, GCC 4.5 and 4.6 can't use many C++ specific tree
- * checks.
- */
-#include "c-pragma.h"
-#include "c-common.h"
-#endif
 #include "function.h"
 #include "rtl.h"
 #include "emit-rtl.h"
@@ -220,11 +205,6 @@ void cpp_include(const char *file);
 /* check if this decl is fully targetable from command line */
 bool is_targetable_decl(tree decl);
 
-#if __GCC_VERSION__>=40600
-/* check if this type is fully targetable from command line */
-bool is_targetable_type(tree type);
-#endif
-
 #define natural greater_or_equal(0)
 
 #define negative_natural lower_or_equal(0)
@@ -260,30 +240,6 @@ bool is_targetable_type(tree type);
 #define gimple_assign(lhs_matcher,subcode_matcher) (MATCH_INPUT!=NULL&&gimple_code(MATCH_INPUT)==GIMPLE_ASSIGN&&MATCH(gimple_assign_lhs(MATCH_INPUT),lhs_matcher)&&MATCH(gimple_expr_code(MATCH_INPUT),subcode_matcher))
 
 #define tree_decl (MATCH_INPUT!=NULL&&DECL_P(MATCH_INPUT))
-
-#if __GCC_VERSION__>=40600
-#define tree_decl_named(name_matcher) \
-	({ \
-		bool MATCHED=false; \
-		 \
-		if(MATCH_INPUT!=NULL_TREE&&DECL_P(MATCH_INPUT)&&!DECL_NAMELESS(MATCH_INPUT)&&DECL_NAME(MATCH_INPUT)!=NULL_TREE){ \
-			MATCHED=MATCH(IDENTIFIER_POINTER(DECL_NAME(MATCH_INPUT)),name_matcher); \
-		} \
-		\
-		MATCHED; \
-	})
-
-#define tree_decl_fullynamed(fullname_matcher) \
-	({ \
-		bool MATCHED=false; \
-		 \
-		if(MATCH_INPUT!=NULL_TREE&&DECL_P(MATCH_INPUT)&&!DECL_NAMELESS(MATCH_INPUT)&&DECL_NAME(MATCH_INPUT)!=NULL_TREE){ \
-			MATCHED=MATCH(lang_hooks.decl_printable_name(MATCH_INPUT,2),name_matcher); \
-		} \
-		\
-		MATCHED; \
-	})
-#endif
 
 #define nonjump_insn(content_matcher) (NONJUMP_INSN_P(MATCH_INPUT)&&MATCH(PATTERN(MATCH_INPUT),content_matcher))
 

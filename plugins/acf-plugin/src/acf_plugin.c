@@ -649,22 +649,14 @@ void attribute_injector_start_unit_callback(void *gcc_data ATTRIBUTE_UNUSED,
 
 static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
     tree decl=(tree)gcc_data;
-#if ACF_TRACE
-    const char *decl_fullname;
-#endif
 #ifdef ACF_REMOTE_DEBUG
     int acf_remote_debug = 1;
 #endif
 
 #if ACF_TRACE
-    if(DECL_P(decl)&&is_targetable_decl(decl) &&
-       MATCH(decl, match_tree_code(equal_to(FUNCTION_DECL)))) {
-	decl_fullname=lang_hooks.decl_printable_name(decl,2);
-	/* TBD: Use current_function_decl instead ?? */
-	DEBUG("%s: Processing function %s (%s)\n",
-	      plugin_name, decl_fullname,
-	      IDENTIFIER_POINTER (DECL_ASSEMBLER_NAME (cfun->decl)));
-    }
+    DEBUG("%s: Processing function %s \n",
+	  plugin_name,
+	  IDENTIFIER_POINTER (DECL_ASSEMBLER_NAME (current_function_decl)));
 #endif /* ACF_TRACE */
 
 #ifdef ACF_REMOTE_DEBUG

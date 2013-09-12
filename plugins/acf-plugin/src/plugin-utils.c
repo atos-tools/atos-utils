@@ -53,22 +53,6 @@ int is_lto(){
 
 
 
-#if __GCC_VERSION__>=40600
-bool is_targetable_decl(tree decl){
-	/* #if __GCC_VERSION__ < 40700 */
-                 /* Some C++ specific definition are not visible as cp/cp-tree.h can't
-		    be included. Suppose to be fixed in >= 4.7, but it is not. */
-		return DECL_NAME(decl)!=NULL_TREE&&!DECL_NAMELESS(decl)&&(DECL_FILE_SCOPE_P(decl)||is_gpp());
-	/* #else */
-	/* 	return DECL_NAME(decl)!=NULL_TREE&&!DECL_NAMELESS(decl)&&(DECL_FILE_SCOPE_P(decl)||(is_gpp()&&(DECL_NAMESPACE_SCOPE_P(decl)||(DECL_CLASS_SCOPE_P(decl)&&((TREE_CODE(decl)==FUNCTION_DECL&&DECL_FUNCTION_MEMBER_P(decl))||DECL_THIS_STATIC(decl)))))); */
-	/* #endif */
-}
-
-bool is_targetable_type(tree type){
-	return TYPE_NAME(type)!=NULL_TREE&&!TYPE_NAMELESS(type)&&TYPE_FILE_SCOPE_P(type);
-}
-#endif
-
 bool comparison_set_rtx_1(rtx match_input,rtx *cc_op,rtx *op1,rtx *op2){
 	if(GET_CODE(match_input)==SET){
 		rtx compare=SET_SRC(match_input);

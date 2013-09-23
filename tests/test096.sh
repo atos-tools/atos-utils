@@ -12,6 +12,8 @@ test_cleanup() {
     [ "$server_pid" = "" ] || kill $server_pid
 }
 
+unset HTTP_PROXY http_proxy
+
 echo "spawn the server process"
 python $SRCDIR/tests/server-test096.py > test096-server.log 2>&1 &
 server_pid=$!

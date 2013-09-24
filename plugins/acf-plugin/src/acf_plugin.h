@@ -31,6 +31,23 @@
 #define CSV_MAX_ENTRIES (3 + MAX_ARGS)
 #define CSV_REQ_ENTRIES 3 /* Only funcname and attribute required but
 			     filename in 2nd position */
+struct csv_list {
+    struct csv_row *rows;
+    struct csv_row *last_row; /* Direct access for row addition */
+    int rows_number;
+};
+
+struct csv_row {
+    struct csv_row *next_row;
+    struct csv_column *columns;
+    struct csv_column *last_column;
+    int columns_number;
+};
+
+struct csv_column {
+    struct csv_column *next_column;
+    char *csv_entry;
+};
 
 typedef enum {FUNCNAME, FILENAME, ATTRIBUTE, FIRST_ARG} acf_columns;
 
@@ -70,11 +87,13 @@ extern "C" {
 #define VERBOSE(...) fprintf(stderr, __VA_ARGS__)
 #define DEBUG(...) fprintf(stderr, __VA_ARGS__)
 
-/* Return number of functions if cvs file parsing ok, negative value otherwise */
-int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p, int verbose);
-
 #ifdef __cplusplus
 }
 #endif
 
+void initCSV(struct csv_list *clist);
+bool readCSV(char *filename, struct csv_list *clist);
+/* Return number of functions if cvs file parsing ok, negative value otherwise */
+int parseCSV(struct csv_list *clist, acf_ftable_entry_t **acf_ftable_p,
+	     int verbose);
 #endif

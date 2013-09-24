@@ -21971,7 +21971,7 @@ extern unsigned char block_may_fallthru (const_tree);
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/flags.h" 1
 # 26 "/opt/gcc-plugins/src/acf_plugin.c" 2
 # 1 "/opt/gcc-plugins/src/plugin-utils.h" 1
-# 26 "/opt/gcc-plugins/src/plugin-utils.h"
+# 25 "/opt/gcc-plugins/src/plugin-utils.h"
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/langhooks.h" 1
 # 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/langhooks.h"
 struct diagnostic_info;
@@ -22393,4825 +22393,758 @@ extern tree add_builtin_function_ext_scope (const char *name, tree type,
          enum built_in_class cl,
          const char *library_name,
          tree attrs);
-# 27 "/opt/gcc-plugins/src/plugin-utils.h" 2
-# 39 "/opt/gcc-plugins/src/plugin-utils.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-pragma.h" 1
-# 24 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-pragma.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/cpplib.h" 1
-# 31 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/cpplib.h"
-typedef struct cpp_reader cpp_reader;
-typedef struct cpp_buffer cpp_buffer;
-typedef struct cpp_options cpp_options;
-typedef struct cpp_token cpp_token;
-typedef struct cpp_string cpp_string;
-typedef struct cpp_hashnode cpp_hashnode;
-typedef struct cpp_macro cpp_macro;
-typedef struct cpp_callbacks cpp_callbacks;
-typedef struct cpp_dir cpp_dir;
-
-struct answer;
-struct _cpp_file;
-# 143 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/cpplib.h"
-enum cpp_ttype
-{
-  CPP_EQ, CPP_NOT, CPP_GREATER, CPP_LESS, CPP_PLUS, CPP_MINUS, CPP_MULT, CPP_DIV, CPP_MOD, CPP_AND, CPP_OR, CPP_XOR, CPP_RSHIFT, CPP_LSHIFT, CPP_COMPL, CPP_AND_AND, CPP_OR_OR, CPP_QUERY, CPP_COLON, CPP_COMMA, CPP_OPEN_PAREN, CPP_CLOSE_PAREN, CPP_EOF, CPP_EQ_EQ, CPP_NOT_EQ, CPP_GREATER_EQ, CPP_LESS_EQ, CPP_PLUS_EQ, CPP_MINUS_EQ, CPP_MULT_EQ, CPP_DIV_EQ, CPP_MOD_EQ, CPP_AND_EQ, CPP_OR_EQ, CPP_XOR_EQ, CPP_RSHIFT_EQ, CPP_LSHIFT_EQ, CPP_HASH, CPP_PASTE, CPP_OPEN_SQUARE, CPP_CLOSE_SQUARE, CPP_OPEN_BRACE, CPP_CLOSE_BRACE, CPP_SEMICOLON, CPP_ELLIPSIS, CPP_PLUS_PLUS, CPP_MINUS_MINUS, CPP_DEREF, CPP_DOT, CPP_SCOPE, CPP_DEREF_STAR, CPP_DOT_STAR, CPP_ATSIGN, CPP_NAME, CPP_AT_NAME, CPP_NUMBER, CPP_CHAR, CPP_WCHAR, CPP_CHAR16, CPP_CHAR32, CPP_OTHER, CPP_STRING, CPP_WSTRING, CPP_STRING16, CPP_STRING32, CPP_UTF8STRING, CPP_OBJC_STRING, CPP_HEADER_NAME, CPP_COMMENT, CPP_MACRO_ARG, CPP_PRAGMA, CPP_PRAGMA_EOL, CPP_PADDING,
-  N_TTYPES,
+# 26 "/opt/gcc-plugins/src/plugin-utils.h" 2
 
 
-  CPP_LAST_EQ = CPP_LSHIFT,
-  CPP_FIRST_DIGRAPH = CPP_HASH,
-  CPP_LAST_PUNCTUATOR= CPP_ATSIGN,
-  CPP_LAST_CPP_OP = CPP_LESS_EQ
-};
+int is_gcc();
 
 
+int is_gpp();
 
 
-enum c_lang {CLK_GNUC89 = 0, CLK_GNUC99, CLK_GNUC1X,
-      CLK_STDC89, CLK_STDC94, CLK_STDC99, CLK_STDC1X,
-      CLK_GNUCXX, CLK_CXX98, CLK_GNUCXX0X, CLK_CXX0X, CLK_ASM};
-
-
-struct cpp_string {
-  unsigned int len;
-  const unsigned char *text;
-};
-# 185 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/cpplib.h"
-enum cpp_token_fld_kind {
-  CPP_TOKEN_FLD_NODE,
-  CPP_TOKEN_FLD_SOURCE,
-  CPP_TOKEN_FLD_STR,
-  CPP_TOKEN_FLD_ARG_NO,
-  CPP_TOKEN_FLD_TOKEN_NO,
-  CPP_TOKEN_FLD_PRAGMA,
-  CPP_TOKEN_FLD_NONE
-};
-
-
-struct cpp_macro_arg {
-
-  unsigned int arg_no;
-};
-
-
-struct cpp_identifier {
-
-  cpp_hashnode *
-   
-
-
-       node;
-};
-
-
-
-struct cpp_token {
-  source_location src_loc;
-  __extension__ enum cpp_ttype type : 8;
-  unsigned short flags;
-
-  union cpp_token_u
-  {
-
-    struct cpp_identifier node;
-
-
-    cpp_token * source;
-
-
-    struct cpp_string str;
-
-
-    struct cpp_macro_arg macro_arg;
-
-
-
-    unsigned int token_no;
-
-
-    unsigned int pragma;
-  } val;
-};
-
-
-extern enum cpp_token_fld_kind cpp_token_val_index (cpp_token *tok);
-# 259 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/cpplib.h"
-typedef unsigned int cppchar_t;
-typedef int cppchar_signed_t;
-
-
-enum cpp_deps_style { DEPS_NONE = 0, DEPS_USER, DEPS_SYSTEM };
-
-
-enum cpp_normalize_level {
-
-  normalized_KC = 0,
-
-  normalized_C,
-
-
-  normalized_identifier_C,
-
-  normalized_none
-};
-
-
-
-struct cpp_options
+int is_lto();
+# 27 "/opt/gcc-plugins/src/acf_plugin.c" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/tree-pass.h" 1
+# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/tree-pass.h"
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/timevar.h" 1
+# 53 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/timevar.h"
+struct timevar_time_def
 {
 
-  unsigned int tabstop;
+  double user;
 
 
-  enum c_lang lang;
 
+  double sys;
 
-  unsigned char cplusplus;
 
+  double wall;
 
-  unsigned char cplusplus_comments;
 
-
-
-
-  unsigned char objc;
-
-
-  unsigned char discard_comments;
-
-
-
-  unsigned char discard_comments_in_macro_exp;
-
-
-  unsigned char trigraphs;
-
-
-  unsigned char digraphs;
-
-
-  unsigned char extended_numbers;
-
-
-  unsigned char uliterals;
-
-
-  unsigned char print_include_names;
-
-
-  unsigned char cpp_warn_deprecated;
-
-
-  unsigned char warn_comments;
-
-
-
-  unsigned char warn_missing_include_dirs;
-
-
-  unsigned char warn_trigraphs;
-
-
-  unsigned char warn_multichar;
-
-
-
-  unsigned char cpp_warn_traditional;
-
-
-  unsigned char cpp_warn_long_long;
-
-
-  unsigned char warn_endif_labels;
-
-
-
-  unsigned char warn_num_sign_change;
-
-
-
-  unsigned char warn_variadic_macros;
-
-
-
-  unsigned char warn_builtin_macro_redefined;
-
-
-
-  unsigned char remap;
-
-
-  unsigned char dollars_in_ident;
-
-
-  unsigned char extended_identifiers;
-
-
-
-  unsigned char warn_dollars;
-
-
-  unsigned char warn_undef;
-
-
-  unsigned char warn_unused_macros;
-
-
-  unsigned char c99;
-
-
-  unsigned char std;
-
-
-  unsigned char cpp_pedantic;
-
-
-
-  unsigned char preprocessed;
-
-
-  unsigned char operator_names;
-
-
-  unsigned char warn_cxx_operator_names;
-
-
-  unsigned char traditional;
-
-
-  const char *narrow_charset;
-
-
-  const char *wide_charset;
-
-
-  const char *input_charset;
-
-
-
-  enum cpp_normalize_level warn_normalize;
-
-
-  unsigned char warn_invalid_pch;
-
-
-  unsigned char restore_pch_deps;
-
-
-  struct
-  {
-
-    enum cpp_deps_style style;
-
-
-    unsigned char missing_files;
-
-
-
-    unsigned char phony_targets;
-
-
-    unsigned char ignore_main_file;
-
-
-
-    unsigned char need_preprocessor_output;
-  } deps;
-
-
-
-
-
-  size_t precision, char_precision, int_precision, wchar_precision;
-
-
-  unsigned char unsigned_char, unsigned_wchar;
-
-
-
-  unsigned char bytes_big_endian;
-
-
-  unsigned char stdc_0_in_system_headers;
-
-
-  unsigned char directives_only;
+  unsigned ggc_mem;
 };
 
 
 
 
-
-
-
-typedef const char *(*missing_header_cb)(cpp_reader *, const char *header, cpp_dir **);
-
-
-struct cpp_callbacks
-{
-
-  void (*line_change) (cpp_reader *, const cpp_token *, int);
-
-
-
-
-
-  void (*file_change) (cpp_reader *, const struct line_map *);
-
-  void (*dir_change) (cpp_reader *, const char *);
-  void (*include) (cpp_reader *, unsigned int, const unsigned char *,
-     const char *, int, const cpp_token **);
-  void (*define) (cpp_reader *, unsigned int, cpp_hashnode *);
-  void (*undef) (cpp_reader *, unsigned int, cpp_hashnode *);
-  void (*ident) (cpp_reader *, unsigned int, const cpp_string *);
-  void (*def_pragma) (cpp_reader *, unsigned int);
-  int (*valid_pch) (cpp_reader *, const char *, int);
-  void (*read_pch) (cpp_reader *, const char *, int, const char *);
-  missing_header_cb missing_header;
-
-
-
-  cpp_hashnode * (*macro_to_expand) (cpp_reader *, const cpp_token *);
-
-
-
-  unsigned char (*error) (cpp_reader *, int, int, source_location, unsigned int,
-   const char *, va_list *)
-       __attribute__ ((__format__ (__printf__, 6, 0))) __attribute__ ((__nonnull__ (6)));
-
-
-
-  void (*used_define) (cpp_reader *, unsigned int, cpp_hashnode *);
-  void (*used_undef) (cpp_reader *, unsigned int, cpp_hashnode *);
-
-
-  void (*before_define) (cpp_reader *);
-
-
-  void (*used) (cpp_reader *, source_location, cpp_hashnode *);
-
-
-  unsigned char (*user_builtin_macro) (cpp_reader *, cpp_hashnode *);
-};
-# 524 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/cpplib.h"
-struct cpp_dir
-{
-
-  struct cpp_dir *next;
-
-
-  char *name;
-  unsigned int len;
-
-
-
-  unsigned char sysp;
-
-
-  unsigned char user_supplied_p;
-
-
-
-  char *canonical_name;
-
-
-
-  const char **name_map;
-
-
-
-
-
-  char *(*construct) (const char *header, cpp_dir *dir);
-
-
-
-  ino_t ino;
-  dev_t dev;
-};
-# 585 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/cpplib.h"
-enum node_type
-{
-  NT_VOID = 0,
-  NT_MACRO,
-  NT_ASSERTION
-};
-
-
-
-enum cpp_builtin_type
-{
-  BT_SPECLINE = 0,
-  BT_DATE,
-  BT_FILE,
-  BT_BASE_FILE,
-  BT_INCLUDE_LEVEL,
-  BT_TIME,
-  BT_STDC,
-  BT_PRAGMA,
-  BT_TIMESTAMP,
-  BT_COUNTER,
-  BT_FIRST_USER,
-  BT_LAST_USER = BT_FIRST_USER + 31
-};
-# 617 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/cpplib.h"
-enum {
-  NTV_MACRO,
-  NTV_ANSWER,
-  NTV_BUILTIN,
-  NTV_ARGUMENT,
-  NTV_NONE
-};
-# 636 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/cpplib.h"
-union _cpp_hashnode_value {
-
-  cpp_macro * macro;
-
-  struct answer * answers;
-
-  enum cpp_builtin_type builtin;
-
-  unsigned short arg_index;
-};
-
-struct cpp_hashnode {
-  struct ht_identifier ident;
-  unsigned int is_directive : 1;
-  unsigned int directive_index : 7;
-
-
-  unsigned char rid_code;
-  __extension__ enum node_type type : 6;
-  unsigned int flags : 10;
-
-  union _cpp_hashnode_value value;
-};
-
-
-
-
-
-
-
-extern cpp_reader *cpp_create_reader (enum c_lang, struct ht *,
-          struct line_maps *);
-
-
-
-extern void cpp_set_line_map (cpp_reader *, struct line_maps *);
-
-
-
-extern void cpp_set_lang (cpp_reader *, enum c_lang);
-
-
-extern void cpp_set_include_chains (cpp_reader *, cpp_dir *, cpp_dir *, int);
-
-
-
-
-
-
-extern cpp_options *cpp_get_options (cpp_reader *);
-extern cpp_callbacks *cpp_get_callbacks (cpp_reader *);
-extern void cpp_set_callbacks (cpp_reader *, cpp_callbacks *);
-extern struct deps *cpp_get_deps (cpp_reader *);
-
-
-
-
-
-
-extern const char *cpp_read_main_file (cpp_reader *, const char *);
-
-
-
-extern void cpp_init_special_builtins (cpp_reader *);
-
-
-extern void cpp_init_builtins (cpp_reader *, int);
-
-
-
-extern void cpp_post_options (cpp_reader *);
-
-
-extern void cpp_init_iconv (cpp_reader *);
-
-
-
-
-extern void cpp_finish (cpp_reader *, FILE *deps_stream);
-
-
-
-extern void cpp_destroy (cpp_reader *);
-
-extern unsigned int cpp_token_len (const cpp_token *);
-extern unsigned char *cpp_token_as_text (cpp_reader *, const cpp_token *);
-extern unsigned char *cpp_spell_token (cpp_reader *, const cpp_token *,
-           unsigned char *, unsigned char);
-extern void cpp_register_pragma (cpp_reader *, const char *, const char *,
-     void (*) (cpp_reader *), unsigned char);
-extern void cpp_register_deferred_pragma (cpp_reader *, const char *,
-       const char *, unsigned, unsigned char, unsigned char);
-extern int cpp_avoid_paste (cpp_reader *, const cpp_token *,
-       const cpp_token *);
-extern const cpp_token *cpp_get_token (cpp_reader *);
-extern const cpp_token *cpp_get_token_with_location (cpp_reader *,
-           source_location *);
-extern const unsigned char *cpp_macro_definition (cpp_reader *,
-        cpp_hashnode *);
-extern void _cpp_backup_tokens (cpp_reader *, unsigned int);
-extern const cpp_token *cpp_peek_token (cpp_reader *, int);
-
-
-extern cppchar_t cpp_interpret_charconst (cpp_reader *, const cpp_token *,
-       unsigned int *, int *);
-
-extern unsigned char cpp_interpret_string (cpp_reader *,
-      const cpp_string *, size_t,
-      cpp_string *, enum cpp_ttype);
-extern unsigned char cpp_interpret_string_notranslate (cpp_reader *,
-           const cpp_string *, size_t,
-           cpp_string *, enum cpp_ttype);
-
-
-extern cppchar_t cpp_host_to_exec_charset (cpp_reader *, cppchar_t);
-
-
-
-extern void cpp_define (cpp_reader *, const char *);
-extern void cpp_define_formatted (cpp_reader *pfile,
-      const char *fmt, ...) __attribute__ ((__format__ (__printf__, 2, 3))) __attribute__ ((__nonnull__ (2)));
-extern void cpp_assert (cpp_reader *, const char *);
-extern void cpp_undef (cpp_reader *, const char *);
-extern void cpp_unassert (cpp_reader *, const char *);
-
-
-extern void cpp_undef_all (cpp_reader *);
-
-extern cpp_buffer *cpp_push_buffer (cpp_reader *, const unsigned char *,
-        size_t, int);
-extern int cpp_defined (cpp_reader *, const unsigned char *, int);
-
-
-
-typedef unsigned long cpp_num_part;
-typedef struct cpp_num cpp_num;
-struct cpp_num
-{
-  cpp_num_part high;
-  cpp_num_part low;
-  unsigned char unsignedp;
-  unsigned char overflow;
-};
-# 818 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/cpplib.h"
-extern unsigned cpp_classify_number (cpp_reader *, const cpp_token *);
-
-
-extern cpp_num cpp_interpret_integer (cpp_reader *, const cpp_token *,
-          unsigned int type);
-
-
-
-cpp_num cpp_num_sign_extend (cpp_num, size_t);
-
-
-
-
-
-enum {
-
-  CPP_DL_WARNING = 0,
-
-  CPP_DL_WARNING_SYSHDR,
-
-  CPP_DL_PEDWARN,
-
-  CPP_DL_ERROR,
-
-
-  CPP_DL_ICE,
-
-  CPP_DL_NOTE,
-
-  CPP_DL_FATAL
-};
-
-
-
-enum {
-  CPP_W_NONE = 0,
-  CPP_W_DEPRECATED,
-  CPP_W_COMMENTS,
-  CPP_W_MISSING_INCLUDE_DIRS,
-  CPP_W_TRIGRAPHS,
-  CPP_W_MULTICHAR,
-  CPP_W_TRADITIONAL,
-  CPP_W_LONG_LONG,
-  CPP_W_ENDIF_LABELS,
-  CPP_W_NUM_SIGN_CHANGE,
-  CPP_W_VARIADIC_MACROS,
-  CPP_W_BUILTIN_MACRO_REDEFINED,
-  CPP_W_DOLLARS,
-  CPP_W_UNDEF,
-  CPP_W_UNUSED_MACROS,
-  CPP_W_CXX_OPERATOR_NAMES,
-  CPP_W_NORMALIZE,
-  CPP_W_INVALID_PCH,
-  CPP_W_WARNING_DIRECTIVE
-};
-
-
-extern unsigned char cpp_error (cpp_reader *, int, const char *msgid, ...)
-  __attribute__ ((__format__ (__printf__, 3, 4))) __attribute__ ((__nonnull__ (3)));
-extern unsigned char cpp_warning (cpp_reader *, int, const char *msgid, ...)
-  __attribute__ ((__format__ (__printf__, 3, 4))) __attribute__ ((__nonnull__ (3)));
-extern unsigned char cpp_pedwarning (cpp_reader *, int, const char *msgid, ...)
-  __attribute__ ((__format__ (__printf__, 3, 4))) __attribute__ ((__nonnull__ (3)));
-extern unsigned char cpp_warning_syshdr (cpp_reader *, int, const char *msgid, ...)
-  __attribute__ ((__format__ (__printf__, 3, 4))) __attribute__ ((__nonnull__ (3)));
-
-
-
-extern unsigned char cpp_errno (cpp_reader *, int, const char *msgid);
-
-
-
-
-extern unsigned char cpp_error_with_line (cpp_reader *, int, source_location,
-                                 unsigned, const char *msgid, ...)
-  __attribute__ ((__format__ (__printf__, 5, 6))) __attribute__ ((__nonnull__ (5)));
-extern unsigned char cpp_warning_with_line (cpp_reader *, int, source_location,
-                                   unsigned, const char *msgid, ...)
-  __attribute__ ((__format__ (__printf__, 5, 6))) __attribute__ ((__nonnull__ (5)));
-extern unsigned char cpp_pedwarning_with_line (cpp_reader *, int, source_location,
-                                      unsigned, const char *msgid, ...)
-  __attribute__ ((__format__ (__printf__, 5, 6))) __attribute__ ((__nonnull__ (5)));
-extern unsigned char cpp_warning_with_line_syshdr (cpp_reader *, int, source_location,
-                                          unsigned, const char *msgid, ...)
-  __attribute__ ((__format__ (__printf__, 5, 6))) __attribute__ ((__nonnull__ (5)));
-
-
-extern int cpp_ideq (const cpp_token *, const char *);
-extern void cpp_output_line (cpp_reader *, FILE *);
-extern unsigned char *cpp_output_line_to_string (cpp_reader *,
-       const unsigned char *);
-extern void cpp_output_token (const cpp_token *, FILE *);
-extern const char *cpp_type2name (enum cpp_ttype, unsigned char flags);
-
-
-
-
-
-extern cppchar_t cpp_parse_escape (cpp_reader *, const unsigned char ** pstr,
-       const unsigned char *limit, int wide);
-
-
-
-
-typedef struct
-{
-
-  char *comment;
-
-
-  source_location sloc;
-} cpp_comment;
-
-
-
-typedef struct
-{
-
-  cpp_comment *entries;
-
-
-  int count;
-
-
-  int allocated;
-} cpp_comment_table;
-
-
-
-extern cpp_comment_table *cpp_get_comments (cpp_reader *);
-
-
-
-
-
-extern cpp_hashnode *cpp_lookup (cpp_reader *, const unsigned char *,
-     unsigned int);
-
-typedef int (*cpp_cb) (cpp_reader *, cpp_hashnode *, void *);
-extern void cpp_forall_identifiers (cpp_reader *, cpp_cb, void *);
-
-
-extern void cpp_scan_nooutput (cpp_reader *);
-extern int cpp_sys_macro_p (cpp_reader *);
-extern unsigned char *cpp_quote_string (unsigned char *, const unsigned char *,
-     unsigned int);
-
-
-extern unsigned char cpp_included (cpp_reader *, const char *);
-extern unsigned char cpp_included_before (cpp_reader *, const char *, source_location);
-extern void cpp_make_system_header (cpp_reader *, int, int);
-extern unsigned char cpp_push_include (cpp_reader *, const char *);
-extern void cpp_change_file (cpp_reader *, enum lc_reason, const char *);
-extern const char *cpp_get_path (struct _cpp_file *);
-extern cpp_dir *cpp_get_dir (struct _cpp_file *);
-extern cpp_buffer *cpp_get_buffer (cpp_reader *);
-extern struct _cpp_file *cpp_get_file (cpp_buffer *);
-extern cpp_buffer *cpp_get_prev (cpp_buffer *);
-extern void cpp_clear_file_cache (cpp_reader *);
-
-
-struct save_macro_data;
-extern int cpp_save_state (cpp_reader *, FILE *);
-extern int cpp_write_pch_deps (cpp_reader *, FILE *);
-extern int cpp_write_pch_state (cpp_reader *, FILE *);
-extern int cpp_valid_state (cpp_reader *, const char *, int);
-extern void cpp_prepare_state (cpp_reader *, struct save_macro_data **);
-extern int cpp_read_state (cpp_reader *, const char *, FILE *,
-      struct save_macro_data *);
-# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-pragma.h" 2
-
-
-
-typedef enum pragma_kind {
-  PRAGMA_NONE = 0,
-
-  PRAGMA_OMP_ATOMIC,
-  PRAGMA_OMP_BARRIER,
-  PRAGMA_OMP_CRITICAL,
-  PRAGMA_OMP_FLUSH,
-  PRAGMA_OMP_FOR,
-  PRAGMA_OMP_MASTER,
-  PRAGMA_OMP_ORDERED,
-  PRAGMA_OMP_PARALLEL,
-  PRAGMA_OMP_PARALLEL_FOR,
-  PRAGMA_OMP_PARALLEL_SECTIONS,
-  PRAGMA_OMP_SECTION,
-  PRAGMA_OMP_SECTIONS,
-  PRAGMA_OMP_SINGLE,
-  PRAGMA_OMP_TASK,
-  PRAGMA_OMP_TASKWAIT,
-  PRAGMA_OMP_THREADPRIVATE,
-
-  PRAGMA_GCC_PCH_PREPROCESS,
-
-  PRAGMA_FIRST_EXTERNAL
-} pragma_kind;
-
-
-
-
-typedef enum pragma_omp_clause {
-  PRAGMA_OMP_CLAUSE_NONE = 0,
-
-  PRAGMA_OMP_CLAUSE_COLLAPSE,
-  PRAGMA_OMP_CLAUSE_COPYIN,
-  PRAGMA_OMP_CLAUSE_COPYPRIVATE,
-  PRAGMA_OMP_CLAUSE_DEFAULT,
-  PRAGMA_OMP_CLAUSE_FIRSTPRIVATE,
-  PRAGMA_OMP_CLAUSE_IF,
-  PRAGMA_OMP_CLAUSE_LASTPRIVATE,
-  PRAGMA_OMP_CLAUSE_NOWAIT,
-  PRAGMA_OMP_CLAUSE_NUM_THREADS,
-  PRAGMA_OMP_CLAUSE_ORDERED,
-  PRAGMA_OMP_CLAUSE_PRIVATE,
-  PRAGMA_OMP_CLAUSE_REDUCTION,
-  PRAGMA_OMP_CLAUSE_SCHEDULE,
-  PRAGMA_OMP_CLAUSE_SHARED,
-  PRAGMA_OMP_CLAUSE_UNTIED
-} pragma_omp_clause;
-
-extern struct cpp_reader* parse_in;
-
-
-
-
-extern void push_visibility (const char *, int);
-extern unsigned char pop_visibility (int);
-
-extern void init_pragma (void);
-
-
-typedef void (*pragma_handler)(struct cpp_reader *);
-extern void c_register_pragma (const char *, const char *, pragma_handler);
-extern void c_register_pragma_with_expansion (const char *, const char *,
-           pragma_handler);
-extern void c_invoke_pragma_handler (unsigned int);
-
-extern void maybe_apply_pragma_weak (tree);
-extern void maybe_apply_pending_pragma_weaks (void);
-extern tree maybe_apply_renaming_pragma (tree, tree);
-extern void add_to_renaming_pragma_list (tree, tree);
-
-extern enum cpp_ttype pragma_lex (tree *);
-# 111 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-pragma.h"
-extern enum cpp_ttype c_lex_with_flags (tree *, location_t *, unsigned char *,
-     int);
-
-extern void c_pp_lookup_pragma (unsigned int, const char **, const char **);
-# 40 "/opt/gcc-plugins/src/plugin-utils.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-common.h" 1
-# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-common.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/splay-tree.h" 1
-# 41 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/splay-tree.h"
-  typedef unsigned long int libi_uhostptr_t;
-  typedef long int libi_shostptr_t;
-# 62 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/splay-tree.h"
-typedef libi_uhostptr_t splay_tree_key;
-typedef libi_uhostptr_t splay_tree_value;
-
-
-typedef struct splay_tree_node_s *splay_tree_node;
-
-
-
-typedef int (*splay_tree_compare_fn) (splay_tree_key, splay_tree_key);
-
-
-
-typedef void (*splay_tree_delete_key_fn) (splay_tree_key);
-
-
-
-typedef void (*splay_tree_delete_value_fn) (splay_tree_value);
-
-
-typedef int (*splay_tree_foreach_fn) (splay_tree_node, void*);
-
-
-
-
-
-typedef void *(*splay_tree_allocate_fn) (int, void *);
-
-
-
-
-
-typedef void (*splay_tree_deallocate_fn) (void *, void *);
-
-
-struct splay_tree_node_s {
-
-  splay_tree_key key;
-
-
-  splay_tree_value value;
-
-
-  splay_tree_node left;
-  splay_tree_node right;
-};
-
-
-struct splay_tree_s {
-
-  splay_tree_node root;
-
-
-  splay_tree_compare_fn comp;
-
-
-  splay_tree_delete_key_fn delete_key;
-
-
-  splay_tree_delete_value_fn delete_value;
-
-
-  splay_tree_allocate_fn allocate;
-
-
-  splay_tree_deallocate_fn deallocate;
-
-
-  void * allocate_data;
-};
-
-typedef struct splay_tree_s *splay_tree;
-
-extern splay_tree splay_tree_new (splay_tree_compare_fn,
-      splay_tree_delete_key_fn,
-      splay_tree_delete_value_fn);
-extern splay_tree splay_tree_new_with_allocator (splay_tree_compare_fn,
-       splay_tree_delete_key_fn,
-       splay_tree_delete_value_fn,
-       splay_tree_allocate_fn,
-       splay_tree_deallocate_fn,
-       void *);
-extern splay_tree splay_tree_new_typed_alloc (splay_tree_compare_fn,
-           splay_tree_delete_key_fn,
-           splay_tree_delete_value_fn,
-           splay_tree_allocate_fn,
-           splay_tree_allocate_fn,
-           splay_tree_deallocate_fn,
-           void *);
-extern void splay_tree_delete (splay_tree);
-extern splay_tree_node splay_tree_insert (splay_tree,
-       splay_tree_key,
-       splay_tree_value);
-extern void splay_tree_remove (splay_tree, splay_tree_key);
-extern splay_tree_node splay_tree_lookup (splay_tree, splay_tree_key);
-extern splay_tree_node splay_tree_predecessor (splay_tree, splay_tree_key);
-extern splay_tree_node splay_tree_successor (splay_tree, splay_tree_key);
-extern splay_tree_node splay_tree_max (splay_tree);
-extern splay_tree_node splay_tree_min (splay_tree);
-extern int splay_tree_foreach (splay_tree, splay_tree_foreach_fn, void*);
-extern int splay_tree_compare_ints (splay_tree_key, splay_tree_key);
-extern int splay_tree_compare_pointers (splay_tree_key, splay_tree_key);
-# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-common.h" 2
-
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/ggc.h" 1
-# 30 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/ggc.h"
-extern const char empty_string[];
-
-
-
-
-
-typedef void (*gt_pointer_operator) (void *, void *);
-
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/gtype-desc.h" 1
-# 23 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/gtype-desc.h"
-enum gt_types_enum {
- gt_ggc_e_24lazy_hex_fp_value_struct,
- gt_ggc_e_15c_inline_static,
- gt_ggc_e_24VEC_c_goto_bindings_p_gc,
- gt_ggc_e_26VEC_c_goto_bindings_p_base,
- gt_ggc_e_15c_goto_bindings,
- gt_ggc_e_7c_scope,
- gt_ggc_e_9c_binding,
- gt_ggc_e_12c_label_vars,
- gt_ggc_e_15c_spot_bindings,
- gt_ggc_e_8c_parser,
- gt_ggc_e_7c_token,
- gt_ggc_e_20VEC_ivarref_entry_gc,
- gt_ggc_e_22VEC_ivarref_entry_base,
- gt_ggc_e_13ivarref_entry,
- gt_ggc_e_22VEC_prot_list_entry_gc,
- gt_ggc_e_24VEC_prot_list_entry_base,
- gt_ggc_e_15prot_list_entry,
- gt_ggc_e_19VEC_msgref_entry_gc,
- gt_ggc_e_21VEC_msgref_entry_base,
- gt_ggc_e_12msgref_entry,
- gt_ggc_e_23VEC_ident_data_tuple_gc,
- gt_ggc_e_25VEC_ident_data_tuple_base,
- gt_ggc_e_16ident_data_tuple,
- gt_ggc_e_15interface_tuple,
- gt_ggc_e_17string_descriptor,
- gt_ggc_e_9imp_entry,
- gt_ggc_e_16hashed_attribute,
- gt_ggc_e_12hashed_entry,
- gt_ggc_e_23VEC_ltrans_partition_gc,
- gt_ggc_e_25VEC_ltrans_partition_base,
- gt_ggc_e_20ltrans_partition_def,
- gt_ggc_e_14builtin_record,
- gt_ggc_e_14string_or_tree,
- gt_ggc_e_11cpool_entry,
- gt_ggc_e_19VEC_method_entry_gc,
- gt_ggc_e_21VEC_method_entry_base,
- gt_ggc_e_14method_entry_d,
- gt_ggc_e_13lang_decl_var,
- gt_ggc_e_14type_assertion,
- gt_ggc_e_14lang_decl_func,
- gt_ggc_e_18treetreehash_entry,
- gt_ggc_e_5CPool,
- gt_ggc_e_3JCF,
- gt_ggc_e_16gfc_powdecl_list,
- gt_ggc_e_16gfc_st_parameter,
- gt_ggc_e_22gfc_st_parameter_field,
- gt_ggc_e_19gfc_intrinsic_map_t,
- gt_ggc_e_17module_htab_entry,
- gt_ggc_e_13binding_level,
- gt_ggc_e_9opt_stack,
- gt_ggc_e_27VEC_pending_redefinition_gc,
- gt_ggc_e_29VEC_pending_redefinition_base,
- gt_ggc_e_22pending_redefinition_d,
- gt_ggc_e_19VEC_pending_weak_gc,
- gt_ggc_e_21VEC_pending_weak_base,
- gt_ggc_e_14pending_weak_d,
- gt_ggc_e_11align_stack,
- gt_ggc_e_18VEC_tree_gc_vec_gc,
- gt_ggc_e_20VEC_tree_gc_vec_base,
- gt_ggc_e_19VEC_const_char_p_gc,
- gt_ggc_e_21VEC_const_char_p_base,
- gt_ggc_e_21pending_abstract_type,
- gt_ggc_e_15VEC_tree_int_gc,
- gt_ggc_e_17VEC_tree_int_base,
- gt_ggc_e_8tree_int,
- gt_ggc_e_9cp_parser,
- gt_ggc_e_34VEC_cp_unparsed_functions_entry_gc,
- gt_ggc_e_36VEC_cp_unparsed_functions_entry_base,
- gt_ggc_e_29cp_unparsed_functions_entry_d,
- gt_ggc_e_27VEC_cp_default_arg_entry_gc,
- gt_ggc_e_29VEC_cp_default_arg_entry_base,
- gt_ggc_e_22cp_default_arg_entry_d,
- gt_ggc_e_17cp_parser_context,
- gt_ggc_e_8cp_lexer,
- gt_ggc_e_8cp_token,
- gt_ggc_e_14cp_token_value,
- gt_ggc_e_10tree_check,
- gt_ggc_e_14constexpr_call,
- gt_ggc_e_16constexpr_fundef,
- gt_ggc_e_22VEC_deferred_access_gc,
- gt_ggc_e_24VEC_deferred_access_base,
- gt_ggc_e_15deferred_access,
- gt_ggc_e_10spec_entry,
- gt_ggc_e_16pending_template,
- gt_ggc_e_21VEC_incomplete_var_gc,
- gt_ggc_e_23VEC_incomplete_var_base,
- gt_ggc_e_16incomplete_var_d,
- gt_ggc_e_21named_label_use_entry,
- gt_ggc_e_28VEC_deferred_access_check_gc,
- gt_ggc_e_30VEC_deferred_access_check_base,
- gt_ggc_e_21deferred_access_check,
- gt_ggc_e_20operator_name_info_t,
- gt_ggc_e_11lang_decl_u,
- gt_ggc_e_14lang_decl_parm,
- gt_ggc_e_12lang_decl_ns,
- gt_ggc_e_12lang_decl_fn,
- gt_ggc_e_12lang_decl_u3,
- gt_ggc_e_12lang_decl_u5,
- gt_ggc_e_13lang_decl_min,
- gt_ggc_e_12lang_decl_u2,
- gt_ggc_e_14lang_decl_base,
- gt_ggc_e_11lang_type_u,
- gt_ggc_e_16lang_type_ptrmem,
- gt_ggc_e_15lang_type_class,
- gt_ggc_e_18sorted_fields_type,
- gt_ggc_e_16lang_type_header,
- gt_ggc_e_18VEC_tree_pair_s_gc,
- gt_ggc_e_20VEC_tree_pair_s_base,
- gt_ggc_e_11tree_pair_s,
- gt_ggc_e_17named_label_entry,
- gt_ggc_e_19c_language_function,
- gt_ggc_e_11stmt_tree_s,
- gt_ggc_e_18tree_template_info,
- gt_ggc_e_32VEC_qualified_typedef_usage_t_gc,
- gt_ggc_e_34VEC_qualified_typedef_usage_t_base,
- gt_ggc_e_25qualified_typedef_usage_s,
- gt_ggc_e_16tree_lambda_expr,
- gt_ggc_e_15tree_trait_expr,
- gt_ggc_e_25tree_argument_pack_select,
- gt_ggc_e_18tree_static_assert,
- gt_ggc_e_16tree_default_arg,
- gt_ggc_e_14cp_token_cache,
- gt_ggc_e_13tree_baselink,
- gt_ggc_e_13tree_overload,
- gt_ggc_e_10ptrmem_cst,
- gt_ggc_e_21template_parm_index_s,
- gt_ggc_e_15lang_identifier,
- gt_ggc_e_19c_common_identifier,
- gt_ggc_e_11saved_scope,
- gt_ggc_e_16cxx_int_tree_map,
- gt_ggc_e_23VEC_cp_label_binding_gc,
- gt_ggc_e_25VEC_cp_label_binding_base,
- gt_ggc_e_16cp_label_binding,
- gt_ggc_e_23VEC_cp_class_binding_gc,
- gt_ggc_e_25VEC_cp_class_binding_base,
- gt_ggc_e_16cp_class_binding,
- gt_ggc_e_24VEC_cxx_saved_binding_gc,
- gt_ggc_e_26VEC_cxx_saved_binding_base,
- gt_ggc_e_17cxx_saved_binding,
- gt_ggc_e_16cp_binding_level,
- gt_ggc_e_11cxx_binding,
- gt_ggc_e_15binding_entry_s,
- gt_ggc_e_15binding_table_s,
- gt_ggc_e_11tinst_level,
- gt_ggc_e_7globals,
- gt_ggc_e_14VEC_tinfo_s_gc,
- gt_ggc_e_16VEC_tinfo_s_base,
- gt_ggc_e_7tinfo_s,
- gt_ggc_e_18gnat_binding_level,
- gt_ggc_e_9elab_info,
- gt_ggc_e_10stmt_group,
- gt_ggc_e_16VEC_parm_attr_gc,
- gt_ggc_e_18VEC_parm_attr_base,
- gt_ggc_e_11parm_attr_d,
- gt_ggc_e_18lto_tree_ref_table,
- gt_ggc_e_17lto_in_decl_state,
- gt_ggc_e_22VEC_ipa_edge_args_t_gc,
- gt_ggc_e_24VEC_ipa_edge_args_t_base,
- gt_ggc_e_15jump_func_value,
- gt_ggc_e_18ipa_member_ptr_cst,
- gt_ggc_e_20ipa_ancestor_jf_data,
- gt_ggc_e_21ipa_pass_through_data,
- gt_ggc_e_20lto_symtab_entry_def,
- gt_ggc_e_11heapvar_map,
- gt_ggc_e_20ssa_operand_memory_d,
- gt_ggc_e_13scev_info_str,
- gt_ggc_e_24VEC_mem_addr_template_gc,
- gt_ggc_e_26VEC_mem_addr_template_base,
- gt_ggc_e_17mem_addr_template,
- gt_ggc_e_12ssa_operands,
- gt_ggc_e_26gimple_type_leader_entry_s,
- gt_ggc_e_33gimple_statement_omp_atomic_store,
- gt_ggc_e_32gimple_statement_omp_atomic_load,
- gt_ggc_e_27gimple_statement_omp_single,
- gt_ggc_e_29gimple_statement_omp_continue,
- gt_ggc_e_29gimple_statement_omp_sections,
- gt_ggc_e_25gimple_statement_omp_task,
- gt_ggc_e_29gimple_statement_omp_parallel,
- gt_ggc_e_24gimple_statement_omp_for,
- gt_ggc_e_19gimple_omp_for_iter,
- gt_ggc_e_29gimple_statement_omp_critical,
- gt_ggc_e_20gimple_statement_asm,
- gt_ggc_e_20gimple_statement_wce,
- gt_ggc_e_20gimple_statement_try,
- gt_ggc_e_24gimple_statement_eh_ctrl,
- gt_ggc_e_20gimple_statement_phi,
- gt_ggc_e_23gimple_statement_eh_mnt,
- gt_ggc_e_26gimple_statement_eh_filter,
- gt_ggc_e_22gimple_statement_catch,
- gt_ggc_e_21gimple_statement_bind,
- gt_ggc_e_20gimple_statement_omp,
- gt_ggc_e_21gimple_statement_call,
- gt_ggc_e_11pt_solution,
- gt_ggc_e_32gimple_statement_with_memory_ops,
- gt_ggc_e_37gimple_statement_with_memory_ops_base,
- gt_ggc_e_25gimple_statement_with_ops,
- gt_ggc_e_30gimple_statement_with_ops_base,
- gt_ggc_e_21gimple_statement_base,
- gt_ggc_e_17gimple_seq_node_d,
- gt_ggc_e_9type_hash,
- gt_ggc_e_16string_pool_data,
- gt_ggc_e_18initial_value_pair,
- gt_ggc_e_23temp_slot_address_entry,
- gt_ggc_e_11eh_status_u,
- gt_ggc_e_15throw_stmt_node,
- gt_ggc_e_21VEC_eh_landing_pad_gc,
- gt_ggc_e_23VEC_eh_landing_pad_base,
- gt_ggc_e_16VEC_eh_region_gc,
- gt_ggc_e_18VEC_eh_region_base,
- gt_ggc_e_11eh_region_u,
- gt_ggc_e_26eh_region_u_must_not_throw,
- gt_ggc_e_19eh_region_u_allowed,
- gt_ggc_e_15eh_region_u_try,
- gt_ggc_e_10eh_catch_d,
- gt_ggc_e_16eh_landing_pad_d,
- gt_ggc_e_11eh_region_d,
- gt_ggc_e_10vcall_insn,
- gt_ggc_e_18VEC_vcall_entry_gc,
- gt_ggc_e_20VEC_vcall_entry_base,
- gt_ggc_e_12vcall_struct,
- gt_ggc_e_18VEC_dcall_entry_gc,
- gt_ggc_e_20VEC_dcall_entry_base,
- gt_ggc_e_12dcall_struct,
- gt_ggc_e_16var_loc_list_def,
- gt_ggc_e_12var_loc_node,
- gt_ggc_e_20VEC_die_arg_entry_gc,
- gt_ggc_e_22VEC_die_arg_entry_base,
- gt_ggc_e_20die_arg_entry_struct,
- gt_ggc_e_16limbo_die_struct,
- gt_ggc_e_20VEC_macinfo_entry_gc,
- gt_ggc_e_22VEC_macinfo_entry_base,
- gt_ggc_e_14macinfo_struct,
- gt_ggc_e_20VEC_pubname_entry_gc,
- gt_ggc_e_22VEC_pubname_entry_base,
- gt_ggc_e_23die_symbol_or_type_node,
- gt_ggc_e_19VEC_dw_attr_node_gc,
- gt_ggc_e_21VEC_dw_attr_node_base,
- gt_ggc_e_18comdat_type_struct,
- gt_ggc_e_25dw_ranges_by_label_struct,
- gt_ggc_e_16dw_ranges_struct,
- gt_ggc_e_14pubname_struct,
- gt_ggc_e_28dw_separate_line_info_struct,
- gt_ggc_e_19dw_line_info_struct,
- gt_ggc_e_14dw_attr_struct,
- gt_ggc_e_19dw_val_struct_union,
- gt_ggc_e_22dw_val_vms_delta_union,
- gt_ggc_e_16dw_val_die_union,
- gt_ggc_e_13dw_vec_struct,
- gt_ggc_e_25VEC_deferred_locations_gc,
- gt_ggc_e_27VEC_deferred_locations_base,
- gt_ggc_e_25deferred_locations_struct,
- gt_ggc_e_18dw_loc_list_struct,
- gt_ggc_e_13dw_val_struct,
- gt_ggc_e_15dwarf_file_data,
- gt_ggc_e_17reg_saved_in_data,
- gt_ggc_e_15queued_reg_save,
- gt_ggc_e_20indirect_string_node,
- gt_ggc_e_19dw_loc_descr_struct,
- gt_ggc_e_19dw_cfi_oprnd_struct,
- gt_ggc_e_13dw_fde_struct,
- gt_ggc_e_13dw_cfi_struct,
- gt_ggc_e_8typeinfo,
- gt_ggc_e_13ipa_edge_args,
- gt_ggc_e_13ipa_jump_func,
- gt_ggc_e_22VEC_alias_set_entry_gc,
- gt_ggc_e_24VEC_alias_set_entry_base,
- gt_ggc_e_17alias_set_entry_d,
- gt_ggc_e_24constant_descriptor_tree,
- gt_ggc_e_15cgraph_asm_node,
- gt_ggc_e_25cgraph_indirect_call_info,
- gt_ggc_e_20varpool_node_set_def,
- gt_ggc_e_28varpool_node_set_element_def,
- gt_ggc_e_23VEC_varpool_node_ptr_gc,
- gt_ggc_e_25VEC_varpool_node_ptr_base,
- gt_ggc_e_19cgraph_node_set_def,
- gt_ggc_e_27cgraph_node_set_element_def,
- gt_ggc_e_22VEC_cgraph_node_ptr_gc,
- gt_ggc_e_24VEC_cgraph_node_ptr_base,
- gt_ggc_e_11cgraph_edge,
- gt_ggc_e_17cgraph_clone_info,
- gt_ggc_e_24VEC_ipa_replace_map_p_gc,
- gt_ggc_e_26VEC_ipa_replace_map_p_base,
- gt_ggc_e_15ipa_replace_map,
- gt_ggc_e_15cgraph_rtl_info,
- gt_ggc_e_18cgraph_global_info,
- gt_ggc_e_17cgraph_local_info,
- gt_ggc_e_17cgraph_thunk_info,
- gt_ggc_e_14inline_summary,
- gt_ggc_e_18lto_file_decl_data,
- gt_ggc_e_12ipa_ref_list,
- gt_ggc_e_16VEC_ipa_ref_t_gc,
- gt_ggc_e_18VEC_ipa_ref_t_base,
- gt_ggc_e_7ipa_ref,
- gt_ggc_e_13ipa_ref_ptr_u,
- gt_ggc_e_12varpool_node,
- gt_ggc_e_11cgraph_node,
- gt_ggc_e_18VEC_basic_block_gc,
- gt_ggc_e_20VEC_basic_block_base,
- gt_ggc_e_24basic_block_il_dependent,
- gt_ggc_e_14gimple_bb_info,
- gt_ggc_e_11rtl_bb_info,
- gt_ggc_e_11VEC_edge_gc,
- gt_ggc_e_13VEC_edge_base,
- gt_ggc_e_14edge_def_insns,
- gt_ggc_e_13VEC_loop_p_gc,
- gt_ggc_e_15VEC_loop_p_base,
- gt_ggc_e_4loop,
- gt_ggc_e_9loop_exit,
- gt_ggc_e_13nb_iter_bound,
- gt_ggc_e_12lpt_decision,
- gt_ggc_e_16noswitch_section,
- gt_ggc_e_15unnamed_section,
- gt_ggc_e_13named_section,
- gt_ggc_e_14section_common,
- gt_ggc_e_24types_used_by_vars_entry,
- gt_ggc_e_17language_function,
- gt_ggc_e_5loops,
- gt_ggc_e_18control_flow_graph,
- gt_ggc_e_9eh_status,
- gt_ggc_e_11stack_usage,
- gt_ggc_e_8rtl_data,
- gt_ggc_e_20initial_value_struct,
- gt_ggc_e_11frame_space,
- gt_ggc_e_20function_subsections,
- gt_ggc_e_13incoming_args,
- gt_ggc_e_13varasm_status,
- gt_ggc_e_17rtx_constant_pool,
- gt_ggc_e_18VEC_temp_slot_p_gc,
- gt_ggc_e_20VEC_temp_slot_p_base,
- gt_ggc_e_9temp_slot,
- gt_ggc_e_9gimple_df,
- gt_ggc_e_6rtl_eh,
- gt_ggc_e_23VEC_call_site_record_gc,
- gt_ggc_e_25VEC_call_site_record_base,
- gt_ggc_e_18call_site_record_d,
- gt_ggc_e_11expr_status,
- gt_ggc_e_11emit_status,
- gt_ggc_e_14sequence_stack,
- gt_ggc_e_15target_libfuncs,
- gt_ggc_e_13libfunc_entry,
- gt_ggc_e_17tree_priority_map,
- gt_ggc_e_12tree_int_map,
- gt_ggc_e_13tree_decl_map,
- gt_ggc_e_8tree_map,
- gt_ggc_e_13tree_map_base,
- gt_ggc_e_14lang_tree_node,
- gt_ggc_e_18tree_target_option,
- gt_ggc_e_24tree_optimization_option,
- gt_ggc_e_19tree_statement_list,
- gt_ggc_e_24tree_statement_list_node,
- gt_ggc_e_14tree_type_decl,
- gt_ggc_e_26tree_translation_unit_decl,
- gt_ggc_e_18tree_function_decl,
- gt_ggc_e_20tree_decl_non_common,
- gt_ggc_e_13tree_var_decl,
- gt_ggc_e_18tree_decl_with_vis,
- gt_ggc_e_14tree_parm_decl,
- gt_ggc_e_15tree_const_decl,
- gt_ggc_e_16tree_result_decl,
- gt_ggc_e_9var_ann_d,
- gt_ggc_e_15tree_label_decl,
- gt_ggc_e_15tree_field_decl,
- gt_ggc_e_18tree_decl_with_rtl,
- gt_ggc_e_16tree_decl_common,
- gt_ggc_e_9lang_decl,
- gt_ggc_e_17tree_decl_minimal,
- gt_ggc_e_10tree_binfo,
- gt_ggc_e_9tree_type,
- gt_ggc_e_9lang_type,
- gt_ggc_e_16tree_type_symtab,
- gt_ggc_e_10die_struct,
- gt_ggc_e_10tree_block,
- gt_ggc_e_15tree_omp_clause,
- gt_ggc_e_9phi_arg_d,
- gt_ggc_e_13tree_ssa_name,
- gt_ggc_e_17ssa_use_operand_d,
- gt_ggc_e_12ptr_info_def,
- gt_ggc_e_8tree_exp,
- gt_ggc_e_17tree_exp_subunion,
- gt_ggc_e_16tree_constructor,
- gt_ggc_e_22VEC_constructor_elt_gc,
- gt_ggc_e_24VEC_constructor_elt_base,
- gt_ggc_e_17constructor_elt_d,
- gt_ggc_e_8tree_vec,
- gt_ggc_e_9tree_list,
- gt_ggc_e_15tree_identifier,
- gt_ggc_e_11tree_vector,
- gt_ggc_e_12tree_complex,
- gt_ggc_e_11tree_string,
- gt_ggc_e_14tree_fixed_cst,
- gt_ggc_e_13tree_real_cst,
- gt_ggc_e_12tree_int_cst,
- gt_ggc_e_11tree_common,
- gt_ggc_e_9tree_base,
- gt_ggc_e_17VEC_alias_pair_gc,
- gt_ggc_e_19VEC_alias_pair_base,
- gt_ggc_e_10alias_pair,
- gt_ggc_e_10target_rtl,
- gt_ggc_e_8function,
- gt_ggc_e_16rtx_def_subunion,
- gt_ggc_e_26rtx_def_debug_implicit_ptr,
- gt_ggc_e_20rtx_def_var_location,
- gt_ggc_e_11rtx_def_fma,
- gt_ggc_e_19rtx_def_us_truncate,
- gt_ggc_e_19rtx_def_ss_truncate,
- gt_ggc_e_16rtx_def_us_minus,
- gt_ggc_e_17rtx_def_us_ashift,
- gt_ggc_e_17rtx_def_ss_ashift,
- gt_ggc_e_14rtx_def_ss_abs,
- gt_ggc_e_14rtx_def_us_neg,
- gt_ggc_e_14rtx_def_ss_neg,
- gt_ggc_e_16rtx_def_ss_minus,
- gt_ggc_e_15rtx_def_us_plus,
- gt_ggc_e_15rtx_def_ss_plus,
- gt_ggc_e_21rtx_def_vec_duplicate,
- gt_ggc_e_18rtx_def_vec_concat,
- gt_ggc_e_18rtx_def_vec_select,
- gt_ggc_e_17rtx_def_vec_merge,
- gt_ggc_e_14rtx_def_lo_sum,
- gt_ggc_e_12rtx_def_high,
- gt_ggc_e_20rtx_def_zero_extract,
- gt_ggc_e_20rtx_def_sign_extract,
- gt_ggc_e_14rtx_def_parity,
- gt_ggc_e_16rtx_def_popcount,
- gt_ggc_e_11rtx_def_ctz,
- gt_ggc_e_11rtx_def_clz,
- gt_ggc_e_11rtx_def_ffs,
- gt_ggc_e_13rtx_def_bswap,
- gt_ggc_e_12rtx_def_sqrt,
- gt_ggc_e_11rtx_def_abs,
- gt_ggc_e_26rtx_def_unsigned_sat_fract,
- gt_ggc_e_17rtx_def_sat_fract,
- gt_ggc_e_30rtx_def_unsigned_fract_convert,
- gt_ggc_e_21rtx_def_fract_convert,
- gt_ggc_e_20rtx_def_unsigned_fix,
- gt_ggc_e_22rtx_def_unsigned_float,
- gt_ggc_e_11rtx_def_fix,
- gt_ggc_e_13rtx_def_float,
- gt_ggc_e_22rtx_def_float_truncate,
- gt_ggc_e_20rtx_def_float_extend,
- gt_ggc_e_16rtx_def_truncate,
- gt_ggc_e_19rtx_def_zero_extend,
- gt_ggc_e_19rtx_def_sign_extend,
- gt_ggc_e_12rtx_def_ltgt,
- gt_ggc_e_12rtx_def_unlt,
- gt_ggc_e_12rtx_def_unle,
- gt_ggc_e_12rtx_def_ungt,
- gt_ggc_e_12rtx_def_unge,
- gt_ggc_e_12rtx_def_uneq,
- gt_ggc_e_15rtx_def_ordered,
- gt_ggc_e_17rtx_def_unordered,
- gt_ggc_e_11rtx_def_ltu,
- gt_ggc_e_11rtx_def_leu,
- gt_ggc_e_11rtx_def_gtu,
- gt_ggc_e_11rtx_def_geu,
- gt_ggc_e_10rtx_def_lt,
- gt_ggc_e_10rtx_def_le,
- gt_ggc_e_10rtx_def_gt,
- gt_ggc_e_10rtx_def_ge,
- gt_ggc_e_10rtx_def_eq,
- gt_ggc_e_10rtx_def_ne,
- gt_ggc_e_19rtx_def_post_modify,
- gt_ggc_e_18rtx_def_pre_modify,
- gt_ggc_e_16rtx_def_post_inc,
- gt_ggc_e_16rtx_def_post_dec,
- gt_ggc_e_15rtx_def_pre_inc,
- gt_ggc_e_15rtx_def_pre_dec,
- gt_ggc_e_12rtx_def_umax,
- gt_ggc_e_12rtx_def_umin,
- gt_ggc_e_12rtx_def_smax,
- gt_ggc_e_12rtx_def_smin,
- gt_ggc_e_16rtx_def_rotatert,
- gt_ggc_e_16rtx_def_lshiftrt,
- gt_ggc_e_16rtx_def_ashiftrt,
- gt_ggc_e_14rtx_def_rotate,
- gt_ggc_e_14rtx_def_ashift,
- gt_ggc_e_11rtx_def_not,
- gt_ggc_e_11rtx_def_xor,
- gt_ggc_e_11rtx_def_ior,
- gt_ggc_e_11rtx_def_and,
- gt_ggc_e_12rtx_def_umod,
- gt_ggc_e_12rtx_def_udiv,
- gt_ggc_e_11rtx_def_mod,
- gt_ggc_e_14rtx_def_us_div,
- gt_ggc_e_14rtx_def_ss_div,
- gt_ggc_e_11rtx_def_div,
- gt_ggc_e_15rtx_def_us_mult,
- gt_ggc_e_15rtx_def_ss_mult,
- gt_ggc_e_12rtx_def_mult,
- gt_ggc_e_11rtx_def_neg,
- gt_ggc_e_13rtx_def_minus,
- gt_ggc_e_12rtx_def_plus,
- gt_ggc_e_15rtx_def_compare,
- gt_ggc_e_20rtx_def_if_then_else,
- gt_ggc_e_11rtx_def_cc0,
- gt_ggc_e_18rtx_def_symbol_ref,
- gt_ggc_e_12fake_union_1,
- gt_ggc_e_17rtx_def_label_ref,
- gt_ggc_e_11rtx_def_mem,
- gt_ggc_e_15rtx_def_concatn,
- gt_ggc_e_14rtx_def_concat,
- gt_ggc_e_23rtx_def_strict_low_part,
- gt_ggc_e_14rtx_def_subreg,
- gt_ggc_e_15rtx_def_scratch,
- gt_ggc_e_11rtx_def_reg,
- gt_ggc_e_10rtx_def_pc,
- gt_ggc_e_13rtx_def_const,
- gt_ggc_e_20rtx_def_const_string,
- gt_ggc_e_20rtx_def_const_vector,
- gt_ggc_e_20rtx_def_const_double,
- gt_ggc_e_19rtx_def_const_fixed,
- gt_ggc_e_17rtx_def_const_int,
- gt_ggc_e_15rtx_def_trap_if,
- gt_ggc_e_17rtx_def_eh_return,
- gt_ggc_e_14rtx_def_return,
- gt_ggc_e_12rtx_def_call,
- gt_ggc_e_15rtx_def_clobber,
- gt_ggc_e_11rtx_def_use,
- gt_ggc_e_11rtx_def_set,
- gt_ggc_e_16rtx_def_prefetch,
- gt_ggc_e_21rtx_def_addr_diff_vec,
- gt_ggc_e_16rtx_def_addr_vec,
- gt_ggc_e_23rtx_def_unspec_volatile,
- gt_ggc_e_14rtx_def_unspec,
- gt_ggc_e_20rtx_def_asm_operands,
- gt_ggc_e_17rtx_def_asm_input,
- gt_ggc_e_16rtx_def_parallel,
- gt_ggc_e_17rtx_def_cond_exec,
- gt_ggc_e_12rtx_def_note,
- gt_ggc_e_18rtx_def_code_label,
- gt_ggc_e_15rtx_def_barrier,
- gt_ggc_e_17rtx_def_call_insn,
- gt_ggc_e_17rtx_def_jump_insn,
- gt_ggc_e_12rtx_def_insn,
- gt_ggc_e_18rtx_def_debug_insn,
- gt_ggc_e_15rtx_def_address,
- gt_ggc_e_16rtx_def_sequence,
- gt_ggc_e_17rtx_def_insn_list,
- gt_ggc_e_17rtx_def_expr_list,
- gt_ggc_e_18rtx_def_debug_expr,
- gt_ggc_e_13rtx_def_value,
- gt_ggc_e_15rtx_def_UnKnown,
- gt_ggc_e_23rtx_def_symbol_subunion,
- gt_ggc_e_21rtx_def_note_subunion,
- gt_ggc_e_23constant_descriptor_rtx,
- gt_ggc_e_11fixed_value,
- gt_ggc_e_10real_value,
- gt_ggc_e_12block_symbol,
- gt_ggc_e_12object_block,
- gt_ggc_e_9reg_attrs,
- gt_ggc_e_9mem_attrs,
- gt_ggc_e_14bitmap_obstack,
- gt_ggc_e_18bitmap_element_def,
- gt_ggc_e_12splay_tree_s,
- gt_ggc_e_17splay_tree_node_s,
- gt_ggc_e_4htab,
- gt_ggc_e_16machine_function,
- gt_ggc_e_17stack_local_entry,
- gt_ggc_e_19machine_frame_state,
- gt_ggc_e_10VEC_rtx_gc,
- gt_ggc_e_12VEC_rtx_base,
- gt_ggc_e_13VEC_gimple_gc,
- gt_ggc_e_15VEC_gimple_base,
- gt_ggc_e_11VEC_tree_gc,
- gt_ggc_e_13VEC_tree_none,
- gt_ggc_e_13VEC_tree_base,
- gt_ggc_e_12VEC_uchar_gc,
- gt_ggc_e_14VEC_uchar_base,
- gt_ggc_e_15basic_block_def,
- gt_ggc_e_8edge_def,
- gt_ggc_e_12gimple_seq_d,
- gt_ggc_e_15cl_optimization,
- gt_ggc_e_16cl_target_option,
- gt_ggc_e_7section,
- gt_ggc_e_18gimple_statement_d,
- gt_ggc_e_9rtvec_def,
- gt_ggc_e_7rtx_def,
- gt_ggc_e_15bitmap_head_def,
- gt_ggc_e_11cpp_macro_u,
- gt_ggc_e_13ht_identifier,
- gt_ggc_e_19_cpp_hashnode_value,
- gt_ggc_e_11cpp_token_u,
- gt_ggc_e_14cpp_identifier,
- gt_ggc_e_9tree_node,
- gt_ggc_e_13cpp_macro_arg,
- gt_ggc_e_6answer,
- gt_ggc_e_9cpp_macro,
- gt_ggc_e_12cpp_hashnode,
- gt_ggc_e_10cpp_string,
- gt_ggc_e_9cpp_token,
- gt_ggc_e_9line_maps,
- gt_ggc_e_8line_map,
- gt_e_II17splay_tree_node_s,
- gt_e_SP9tree_node17splay_tree_node_s,
- gt_e_P9tree_nodeP9tree_node17splay_tree_node_s,
- gt_e_P15interface_tuple4htab,
- gt_e_P17string_descriptor4htab,
- gt_e_P14type_assertion4htab,
- gt_e_P18treetreehash_entry4htab,
- gt_e_P17module_htab_entry4htab,
- gt_e_P21pending_abstract_type4htab,
- gt_e_P14constexpr_call4htab,
- gt_e_P16constexpr_fundef4htab,
- gt_e_P10spec_entry4htab,
- gt_e_P16cxx_int_tree_map4htab,
- gt_e_P17named_label_entry4htab,
- gt_e_P17lto_in_decl_state4htab,
- gt_e_P20lto_symtab_entry_def4htab,
- gt_e_P11heapvar_map4htab,
- gt_e_P8tree_map4htab,
- gt_e_P9tree_nodeP9tree_node12splay_tree_s,
- gt_e_P12varpool_node4htab,
- gt_e_P13scev_info_str4htab,
- gt_e_P12tree_int_map4htab,
- gt_e_P23constant_descriptor_rtx4htab,
- gt_e_P24constant_descriptor_tree4htab,
- gt_e_P12object_block4htab,
- gt_e_P7section4htab,
- gt_e_P17tree_priority_map4htab,
- gt_e_P13tree_decl_map4htab,
- gt_e_P9type_hash4htab,
- gt_e_P23temp_slot_address_entry4htab,
- gt_e_P15throw_stmt_node4htab,
- gt_e_P9reg_attrs4htab,
- gt_e_P9mem_attrs4htab,
- gt_e_P7rtx_def4htab,
- gt_e_SP9tree_node12splay_tree_s,
- gt_e_P10vcall_insn4htab,
- gt_e_P16var_loc_list_def4htab,
- gt_e_P10die_struct4htab,
- gt_e_P15dwarf_file_data4htab,
- gt_e_P20indirect_string_node4htab,
- gt_e_P11cgraph_node4htab,
- gt_e_II12splay_tree_s,
- gt_e_P28varpool_node_set_element_def4htab,
- gt_e_P27cgraph_node_set_element_def4htab,
- gt_e_P11cgraph_edge4htab,
- gt_e_P9loop_exit4htab,
- gt_e_P24types_used_by_vars_entry4htab,
- gt_e_P9tree_node4htab,
- gt_e_P13libfunc_entry4htab,
- gt_types_enum_last
-};
-# 6240 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/gtype-desc.h"
-extern void gt_ggc_mx_c_inline_static (void *);
-
-
-
-extern void gt_ggc_mx_VEC_c_goto_bindings_p_gc (void *);
-
-
-
-extern void gt_ggc_mx_c_goto_bindings (void *);
-
-
-
-extern void gt_ggc_mx_c_scope (void *);
-
-
-
-extern void gt_ggc_mx_c_binding (void *);
-
-
-
-extern void gt_ggc_mx_c_label_vars (void *);
-
-
-
-extern void gt_ggc_mx_c_parser (void *);
-
-
-
-extern void gt_ggc_mx_VEC_ivarref_entry_gc (void *);
-
-
-
-extern void gt_ggc_mx_VEC_prot_list_entry_gc (void *);
-
-
-
-extern void gt_ggc_mx_VEC_msgref_entry_gc (void *);
-
-
-
-extern void gt_ggc_mx_VEC_ident_data_tuple_gc (void *);
-
-
-
-extern void gt_ggc_mx_interface_tuple (void *);
-
-
-
-extern void gt_ggc_mx_string_descriptor (void *);
-
-
-
-extern void gt_ggc_mx_imp_entry (void *);
-
-
-
-extern void gt_ggc_mx_hashed_attribute (void *);
-
-
-
-extern void gt_ggc_mx_hashed_entry (void *);
-
-
-
-extern void gt_ggc_mx_VEC_ltrans_partition_gc (void *);
-
-
-
-extern void gt_ggc_mx_ltrans_partition_def (void *);
-
-
-
-extern void gt_ggc_mx_VEC_method_entry_gc (void *);
-
-
-
-extern void gt_ggc_mx_type_assertion (void *);
-
-
-
-extern void gt_ggc_mx_treetreehash_entry (void *);
-
-
-
-extern void gt_ggc_mx_CPool (void *);
-
-
-
-extern void gt_ggc_mx_JCF (void *);
-
-
-
-extern void gt_ggc_mx_module_htab_entry (void *);
-
-
-
-extern void gt_ggc_mx_binding_level (void *);
-
-
-
-extern void gt_ggc_mx_opt_stack (void *);
-
-
-
-extern void gt_ggc_mx_VEC_pending_redefinition_gc (void *);
-
-
-
-extern void gt_ggc_mx_VEC_pending_weak_gc (void *);
-
-
-
-extern void gt_ggc_mx_align_stack (void *);
-
-
-
-extern void gt_ggc_mx_VEC_tree_gc_vec_gc (void *);
-
-
-
-extern void gt_ggc_mx_VEC_const_char_p_gc (void *);
-
-
-
-extern void gt_ggc_mx_pending_abstract_type (void *);
-
-
-
-extern void gt_ggc_mx_VEC_tree_int_gc (void *);
-
-
-
-extern void gt_ggc_mx_cp_parser (void *);
-
-
-
-extern void gt_ggc_mx_VEC_cp_unparsed_functions_entry_gc (void *);
-
-
-
-extern void gt_ggc_mx_VEC_cp_default_arg_entry_gc (void *);
-
-
-
-extern void gt_ggc_mx_cp_parser_context (void *);
-
-
-
-extern void gt_ggc_mx_cp_lexer (void *);
-
-
-
-extern void gt_ggc_mx_tree_check (void *);
-
-
-
-extern void gt_ggc_mx_constexpr_call (void *);
-
-
-
-extern void gt_ggc_mx_constexpr_fundef (void *);
-
-
-
-extern void gt_ggc_mx_VEC_deferred_access_gc (void *);
-
-
-
-extern void gt_ggc_mx_spec_entry (void *);
-
-
-
-extern void gt_ggc_mx_pending_template (void *);
-
-
-
-extern void gt_ggc_mx_VEC_incomplete_var_gc (void *);
-
-
-
-extern void gt_ggc_mx_named_label_use_entry (void *);
-
-
-
-extern void gt_ggc_mx_VEC_deferred_access_check_gc (void *);
-
-
-
-extern void gt_ggc_mx_sorted_fields_type (void *);
-
-
-
-extern void gt_ggc_mx_VEC_tree_pair_s_gc (void *);
-
-
-
-extern void gt_ggc_mx_named_label_entry (void *);
-
-
-
-extern void gt_ggc_mx_VEC_qualified_typedef_usage_t_gc (void *);
-
-
-
-extern void gt_ggc_mx_cp_token_cache (void *);
-
-
-
-extern void gt_ggc_mx_saved_scope (void *);
-
-
-
-extern void gt_ggc_mx_cxx_int_tree_map (void *);
-
-
-
-extern void gt_ggc_mx_VEC_cp_label_binding_gc (void *);
-
-
-
-extern void gt_ggc_mx_VEC_cp_class_binding_gc (void *);
-
-
-
-extern void gt_ggc_mx_VEC_cxx_saved_binding_gc (void *);
-
-
-
-extern void gt_ggc_mx_cp_binding_level (void *);
-
-
-
-extern void gt_ggc_mx_cxx_binding (void *);
-
-
-
-extern void gt_ggc_mx_binding_entry_s (void *);
-
-
-
-extern void gt_ggc_mx_binding_table_s (void *);
-
-
-
-extern void gt_ggc_mx_tinst_level (void *);
-
-
-
-extern void gt_ggc_mx_VEC_tinfo_s_gc (void *);
-
-
-
-extern void gt_ggc_mx_gnat_binding_level (void *);
-
-
-
-extern void gt_ggc_mx_elab_info (void *);
-
-
-
-extern void gt_ggc_mx_stmt_group (void *);
-
-
-
-extern void gt_ggc_mx_VEC_parm_attr_gc (void *);
-
-
-
-extern void gt_ggc_mx_parm_attr_d (void *);
-
-
-
-extern void gt_ggc_mx_lto_in_decl_state (void *);
-
-
-
-extern void gt_ggc_mx_VEC_ipa_edge_args_t_gc (void *);
-
-
-
-extern void gt_ggc_mx_lto_symtab_entry_def (void *);
-
-
-
-extern void gt_ggc_mx_heapvar_map (void *);
-
-
-
-extern void gt_ggc_mx_ssa_operand_memory_d (void *);
-
-
-
-extern void gt_ggc_mx_scev_info_str (void *);
-
-
-
-extern void gt_ggc_mx_VEC_mem_addr_template_gc (void *);
-
-
-
-extern void gt_ggc_mx_gimple_type_leader_entry_s (void *);
-
-
-
-extern void gt_ggc_mx_gimple_seq_node_d (void *);
-
-
-
-extern void gt_ggc_mx_type_hash (void *);
-
-
-
-extern void gt_ggc_mx_string_pool_data (void *);
-
-
-
-extern void gt_ggc_mx_temp_slot_address_entry (void *);
-
-
-
-extern void gt_ggc_mx_throw_stmt_node (void *);
-
-
-
-extern void gt_ggc_mx_VEC_eh_landing_pad_gc (void *);
-
-
-
-extern void gt_ggc_mx_VEC_eh_region_gc (void *);
-
-
-
-extern void gt_ggc_mx_eh_catch_d (void *);
-
-
-
-extern void gt_ggc_mx_eh_landing_pad_d (void *);
-
-
-
-extern void gt_ggc_mx_eh_region_d (void *);
-
-
-
-extern void gt_ggc_mx_vcall_insn (void *);
-
-
-
-extern void gt_ggc_mx_VEC_vcall_entry_gc (void *);
-
-
-
-extern void gt_ggc_mx_VEC_dcall_entry_gc (void *);
-
-
-
-extern void gt_ggc_mx_var_loc_list_def (void *);
-
-
-
-extern void gt_ggc_mx_var_loc_node (void *);
-
-
-
-extern void gt_ggc_mx_VEC_die_arg_entry_gc (void *);
-
-
-
-extern void gt_ggc_mx_limbo_die_struct (void *);
-
-
-
-extern void gt_ggc_mx_VEC_macinfo_entry_gc (void *);
-
-
-
-extern void gt_ggc_mx_VEC_pubname_entry_gc (void *);
-
-
-
-extern void gt_ggc_mx_VEC_dw_attr_node_gc (void *);
-
-
-
-extern void gt_ggc_mx_comdat_type_struct (void *);
-
-
-
-extern void gt_ggc_mx_dw_ranges_by_label_struct (void *);
-
-
-
-extern void gt_ggc_mx_dw_ranges_struct (void *);
-
-
-
-extern void gt_ggc_mx_dw_separate_line_info_struct (void *);
-
-
-
-extern void gt_ggc_mx_dw_line_info_struct (void *);
-
-
-
-extern void gt_ggc_mx_VEC_deferred_locations_gc (void *);
-
-
-
-extern void gt_ggc_mx_dw_loc_list_struct (void *);
-
-
-
-extern void gt_ggc_mx_dwarf_file_data (void *);
-
-
-
-extern void gt_ggc_mx_queued_reg_save (void *);
-
-
-
-extern void gt_ggc_mx_indirect_string_node (void *);
-
-
-
-extern void gt_ggc_mx_dw_loc_descr_struct (void *);
-
-
-
-extern void gt_ggc_mx_dw_fde_struct (void *);
-
-
-
-extern void gt_ggc_mx_dw_cfi_struct (void *);
-
-
-
-extern void gt_ggc_mx_typeinfo (void *);
-
-
-
-extern void gt_ggc_mx_VEC_alias_set_entry_gc (void *);
-
-
-
-extern void gt_ggc_mx_alias_set_entry_d (void *);
-
-
-
-extern void gt_ggc_mx_constant_descriptor_tree (void *);
-
-
-
-extern void gt_ggc_mx_cgraph_asm_node (void *);
-
-
-
-extern void gt_ggc_mx_cgraph_indirect_call_info (void *);
-
-
-
-extern void gt_ggc_mx_varpool_node_set_def (void *);
-
-
-
-extern void gt_ggc_mx_varpool_node_set_element_def (void *);
-
-
-
-extern void gt_ggc_mx_VEC_varpool_node_ptr_gc (void *);
-
-
-
-extern void gt_ggc_mx_cgraph_node_set_def (void *);
-
-
-
-extern void gt_ggc_mx_cgraph_node_set_element_def (void *);
-
-
-
-extern void gt_ggc_mx_VEC_cgraph_node_ptr_gc (void *);
-
-
-
-extern void gt_ggc_mx_cgraph_edge (void *);
-
-
-
-extern void gt_ggc_mx_VEC_ipa_replace_map_p_gc (void *);
-
-
-
-extern void gt_ggc_mx_ipa_replace_map (void *);
-
-
-
-extern void gt_ggc_mx_lto_file_decl_data (void *);
-
-
-
-extern void gt_ggc_mx_VEC_ipa_ref_t_gc (void *);
-
-
-
-extern void gt_ggc_mx_varpool_node (void *);
-
-
-
-extern void gt_ggc_mx_cgraph_node (void *);
-
-
-
-extern void gt_ggc_mx_VEC_basic_block_gc (void *);
-
-
-
-extern void gt_ggc_mx_gimple_bb_info (void *);
-
-
-
-extern void gt_ggc_mx_rtl_bb_info (void *);
-
-
-
-extern void gt_ggc_mx_VEC_edge_gc (void *);
-
-
-
-extern void gt_ggc_mx_VEC_loop_p_gc (void *);
-
-
-
-extern void gt_ggc_mx_loop (void *);
-
-
-
-extern void gt_ggc_mx_loop_exit (void *);
-
-
-
-extern void gt_ggc_mx_nb_iter_bound (void *);
-
-
-
-extern void gt_ggc_mx_types_used_by_vars_entry (void *);
-
-
-
-extern void gt_ggc_mx_language_function (void *);
-
-
-
-extern void gt_ggc_mx_loops (void *);
-
-
-
-extern void gt_ggc_mx_control_flow_graph (void *);
-
-
-
-extern void gt_ggc_mx_eh_status (void *);
-
-
-
-extern void gt_ggc_mx_stack_usage (void *);
-
-
-
-extern void gt_ggc_mx_initial_value_struct (void *);
-
-
-
-extern void gt_ggc_mx_frame_space (void *);
-
-
-
-extern void gt_ggc_mx_rtx_constant_pool (void *);
-
-
-
-extern void gt_ggc_mx_VEC_temp_slot_p_gc (void *);
-
-
-
-extern void gt_ggc_mx_temp_slot (void *);
-
-
-
-extern void gt_ggc_mx_gimple_df (void *);
-
-
-
-extern void gt_ggc_mx_VEC_call_site_record_gc (void *);
-
-
-
-extern void gt_ggc_mx_call_site_record_d (void *);
-
-
-
-extern void gt_ggc_mx_sequence_stack (void *);
-
-
-
-extern void gt_ggc_mx_libfunc_entry (void *);
-
-
-
-extern void gt_ggc_mx_tree_priority_map (void *);
-
-
-
-extern void gt_ggc_mx_tree_int_map (void *);
-
-
-
-extern void gt_ggc_mx_tree_decl_map (void *);
-
-
-
-extern void gt_ggc_mx_tree_map (void *);
-
-
-
-extern void gt_ggc_mx_lang_tree_node (void *);
-
-
-
-extern void gt_ggc_mx_tree_statement_list_node (void *);
-
-
-
-extern void gt_ggc_mx_var_ann_d (void *);
-
-
-
-extern void gt_ggc_mx_lang_decl (void *);
-
-
-
-extern void gt_ggc_mx_lang_type (void *);
-
-
-
-extern void gt_ggc_mx_die_struct (void *);
-
-
-
-extern void gt_ggc_mx_ptr_info_def (void *);
-
-
-
-extern void gt_ggc_mx_VEC_constructor_elt_gc (void *);
-
-
-
-extern void gt_ggc_mx_VEC_alias_pair_gc (void *);
-
-
-
-extern void gt_ggc_mx_function (void *);
-
-
-
-extern void gt_ggc_mx_constant_descriptor_rtx (void *);
-
-
-
-extern void gt_ggc_mx_fixed_value (void *);
-
-
-
-extern void gt_ggc_mx_real_value (void *);
-
-
-
-extern void gt_ggc_mx_object_block (void *);
-
-
-
-extern void gt_ggc_mx_reg_attrs (void *);
-
-
-
-extern void gt_ggc_mx_mem_attrs (void *);
-
-
-
-extern void gt_ggc_mx_bitmap_obstack (void *);
-
-
-
-extern void gt_ggc_mx_bitmap_element_def (void *);
-
-
-
-extern void gt_ggc_mx_machine_function (void *);
-
-
-
-extern void gt_ggc_mx_stack_local_entry (void *);
-
-
-
-extern void gt_ggc_mx_VEC_rtx_gc (void *);
-
-
-
-extern void gt_ggc_mx_VEC_gimple_gc (void *);
-
-
-
-extern void gt_ggc_mx_VEC_tree_gc (void *);
-
-
-
-extern void gt_ggc_mx_VEC_uchar_gc (void *);
-
-
-
-extern void gt_ggc_mx_basic_block_def (void *);
-
-
-
-extern void gt_ggc_mx_edge_def (void *);
-
-
-
-extern void gt_ggc_mx_gimple_seq_d (void *);
-
-
-
-extern void gt_ggc_mx_section (void *);
-
-
-
-extern void gt_ggc_mx_gimple_statement_d (void *);
-
-
-
-extern void gt_ggc_mx_rtvec_def (void *);
-
-
-
-extern void gt_ggc_mx_rtx_def (void *);
-
-
-
-extern void gt_ggc_mx_bitmap_head_def (void *);
-
-
-
-
-
-
-
-extern void gt_ggc_mx_answer (void *);
-
-
-
-extern void gt_ggc_mx_cpp_macro (void *);
-
-
-
-extern void gt_ggc_mx_cpp_token (void *);
-
-
-
-extern void gt_ggc_mx_line_maps (void *);
-extern void gt_ggc_m_II17splay_tree_node_s (void *);
-extern void gt_ggc_m_SP9tree_node17splay_tree_node_s (void *);
-extern void gt_ggc_m_P9tree_nodeP9tree_node17splay_tree_node_s (void *);
-extern void gt_ggc_m_P15interface_tuple4htab (void *);
-extern void gt_ggc_m_P17string_descriptor4htab (void *);
-extern void gt_ggc_m_P14type_assertion4htab (void *);
-extern void gt_ggc_m_P18treetreehash_entry4htab (void *);
-extern void gt_ggc_m_P17module_htab_entry4htab (void *);
-extern void gt_ggc_m_P21pending_abstract_type4htab (void *);
-extern void gt_ggc_m_P14constexpr_call4htab (void *);
-extern void gt_ggc_m_P16constexpr_fundef4htab (void *);
-extern void gt_ggc_m_P10spec_entry4htab (void *);
-extern void gt_ggc_m_P16cxx_int_tree_map4htab (void *);
-extern void gt_ggc_m_P17named_label_entry4htab (void *);
-extern void gt_ggc_m_P17lto_in_decl_state4htab (void *);
-extern void gt_ggc_m_P20lto_symtab_entry_def4htab (void *);
-extern void gt_ggc_m_P11heapvar_map4htab (void *);
-extern void gt_ggc_m_P8tree_map4htab (void *);
-extern void gt_ggc_m_P9tree_nodeP9tree_node12splay_tree_s (void *);
-extern void gt_ggc_m_P12varpool_node4htab (void *);
-extern void gt_ggc_m_P13scev_info_str4htab (void *);
-extern void gt_ggc_m_P12tree_int_map4htab (void *);
-extern void gt_ggc_m_P23constant_descriptor_rtx4htab (void *);
-extern void gt_ggc_m_P24constant_descriptor_tree4htab (void *);
-extern void gt_ggc_m_P12object_block4htab (void *);
-extern void gt_ggc_m_P7section4htab (void *);
-extern void gt_ggc_m_P17tree_priority_map4htab (void *);
-extern void gt_ggc_m_P13tree_decl_map4htab (void *);
-extern void gt_ggc_m_P9type_hash4htab (void *);
-extern void gt_ggc_m_P23temp_slot_address_entry4htab (void *);
-extern void gt_ggc_m_P15throw_stmt_node4htab (void *);
-extern void gt_ggc_m_P9reg_attrs4htab (void *);
-extern void gt_ggc_m_P9mem_attrs4htab (void *);
-extern void gt_ggc_m_P7rtx_def4htab (void *);
-extern void gt_ggc_m_SP9tree_node12splay_tree_s (void *);
-extern void gt_ggc_m_P10vcall_insn4htab (void *);
-extern void gt_ggc_m_P16var_loc_list_def4htab (void *);
-extern void gt_ggc_m_P10die_struct4htab (void *);
-extern void gt_ggc_m_P15dwarf_file_data4htab (void *);
-extern void gt_ggc_m_P20indirect_string_node4htab (void *);
-extern void gt_ggc_m_P11cgraph_node4htab (void *);
-extern void gt_ggc_m_II12splay_tree_s (void *);
-extern void gt_ggc_m_P28varpool_node_set_element_def4htab (void *);
-extern void gt_ggc_m_P27cgraph_node_set_element_def4htab (void *);
-extern void gt_ggc_m_P11cgraph_edge4htab (void *);
-extern void gt_ggc_m_P9loop_exit4htab (void *);
-extern void gt_ggc_m_P24types_used_by_vars_entry4htab (void *);
-extern void gt_ggc_m_P9tree_node4htab (void *);
-extern void gt_ggc_m_P13libfunc_entry4htab (void *);
-# 7066 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/gtype-desc.h"
-extern void gt_pch_nx_c_inline_static (void *);
-
-
-
-extern void gt_pch_nx_VEC_c_goto_bindings_p_gc (void *);
-
-
-
-extern void gt_pch_nx_c_goto_bindings (void *);
-
-
-
-extern void gt_pch_nx_c_scope (void *);
-
-
-
-extern void gt_pch_nx_c_binding (void *);
-
-
-
-extern void gt_pch_nx_c_label_vars (void *);
-
-
-
-extern void gt_pch_nx_c_parser (void *);
-
-
-
-extern void gt_pch_nx_VEC_ivarref_entry_gc (void *);
-
-
-
-extern void gt_pch_nx_VEC_prot_list_entry_gc (void *);
-
-
-
-extern void gt_pch_nx_VEC_msgref_entry_gc (void *);
-
-
-
-extern void gt_pch_nx_VEC_ident_data_tuple_gc (void *);
-
-
-
-extern void gt_pch_nx_interface_tuple (void *);
-
-
-
-extern void gt_pch_nx_string_descriptor (void *);
-
-
-
-extern void gt_pch_nx_imp_entry (void *);
-
-
-
-extern void gt_pch_nx_hashed_attribute (void *);
-
-
-
-extern void gt_pch_nx_hashed_entry (void *);
-
-
-
-extern void gt_pch_nx_VEC_ltrans_partition_gc (void *);
-
-
-
-extern void gt_pch_nx_ltrans_partition_def (void *);
-
-
-
-extern void gt_pch_nx_VEC_method_entry_gc (void *);
-
-
-
-extern void gt_pch_nx_type_assertion (void *);
-
-
-
-extern void gt_pch_nx_treetreehash_entry (void *);
-
-
-
-extern void gt_pch_nx_CPool (void *);
-
-
-
-extern void gt_pch_nx_JCF (void *);
-
-
-
-extern void gt_pch_nx_module_htab_entry (void *);
-
-
-
-extern void gt_pch_nx_binding_level (void *);
-
-
-
-extern void gt_pch_nx_opt_stack (void *);
-
-
-
-extern void gt_pch_nx_VEC_pending_redefinition_gc (void *);
-
-
-
-extern void gt_pch_nx_VEC_pending_weak_gc (void *);
-
-
-
-extern void gt_pch_nx_align_stack (void *);
-
-
-
-extern void gt_pch_nx_VEC_tree_gc_vec_gc (void *);
-
-
-
-extern void gt_pch_nx_VEC_const_char_p_gc (void *);
-
-
-
-extern void gt_pch_nx_pending_abstract_type (void *);
-
-
-
-extern void gt_pch_nx_VEC_tree_int_gc (void *);
-
-
-
-extern void gt_pch_nx_cp_parser (void *);
-
-
-
-extern void gt_pch_nx_VEC_cp_unparsed_functions_entry_gc (void *);
-
-
-
-extern void gt_pch_nx_VEC_cp_default_arg_entry_gc (void *);
-
-
-
-extern void gt_pch_nx_cp_parser_context (void *);
-
-
-
-extern void gt_pch_nx_cp_lexer (void *);
-
-
-
-extern void gt_pch_nx_tree_check (void *);
-
-
-
-extern void gt_pch_nx_constexpr_call (void *);
-
-
-
-extern void gt_pch_nx_constexpr_fundef (void *);
-
-
-
-extern void gt_pch_nx_VEC_deferred_access_gc (void *);
-
-
-
-extern void gt_pch_nx_spec_entry (void *);
-
-
-
-extern void gt_pch_nx_pending_template (void *);
-
-
-
-extern void gt_pch_nx_VEC_incomplete_var_gc (void *);
-
-
-
-extern void gt_pch_nx_named_label_use_entry (void *);
-
-
-
-extern void gt_pch_nx_VEC_deferred_access_check_gc (void *);
-
-
-
-extern void gt_pch_nx_sorted_fields_type (void *);
-
-
-
-extern void gt_pch_nx_VEC_tree_pair_s_gc (void *);
-
-
-
-extern void gt_pch_nx_named_label_entry (void *);
-
-
-
-extern void gt_pch_nx_VEC_qualified_typedef_usage_t_gc (void *);
-
-
-
-extern void gt_pch_nx_cp_token_cache (void *);
-
-
-
-extern void gt_pch_nx_saved_scope (void *);
-
-
-
-extern void gt_pch_nx_cxx_int_tree_map (void *);
-
-
-
-extern void gt_pch_nx_VEC_cp_label_binding_gc (void *);
-
-
-
-extern void gt_pch_nx_VEC_cp_class_binding_gc (void *);
-
-
-
-extern void gt_pch_nx_VEC_cxx_saved_binding_gc (void *);
-
-
-
-extern void gt_pch_nx_cp_binding_level (void *);
-
-
-
-extern void gt_pch_nx_cxx_binding (void *);
-
-
-
-extern void gt_pch_nx_binding_entry_s (void *);
-
-
-
-extern void gt_pch_nx_binding_table_s (void *);
-
-
-
-extern void gt_pch_nx_tinst_level (void *);
-
-
-
-extern void gt_pch_nx_VEC_tinfo_s_gc (void *);
-
-
-
-extern void gt_pch_nx_gnat_binding_level (void *);
-
-
-
-extern void gt_pch_nx_elab_info (void *);
-
-
-
-extern void gt_pch_nx_stmt_group (void *);
-
-
-
-extern void gt_pch_nx_VEC_parm_attr_gc (void *);
-
-
-
-extern void gt_pch_nx_parm_attr_d (void *);
-
-
-
-extern void gt_pch_nx_lto_in_decl_state (void *);
-
-
-
-extern void gt_pch_nx_VEC_ipa_edge_args_t_gc (void *);
-
-
-
-extern void gt_pch_nx_lto_symtab_entry_def (void *);
-
-
-
-extern void gt_pch_nx_heapvar_map (void *);
-
-
-
-extern void gt_pch_nx_ssa_operand_memory_d (void *);
-
-
-
-extern void gt_pch_nx_scev_info_str (void *);
-
-
-
-extern void gt_pch_nx_VEC_mem_addr_template_gc (void *);
-
-
-
-extern void gt_pch_nx_gimple_type_leader_entry_s (void *);
-
-
-
-extern void gt_pch_nx_gimple_seq_node_d (void *);
-
-
-
-extern void gt_pch_nx_type_hash (void *);
-
-
-
-extern void gt_pch_nx_string_pool_data (void *);
-
-
-
-extern void gt_pch_nx_temp_slot_address_entry (void *);
-
-
-
-extern void gt_pch_nx_throw_stmt_node (void *);
-
-
-
-extern void gt_pch_nx_VEC_eh_landing_pad_gc (void *);
-
-
-
-extern void gt_pch_nx_VEC_eh_region_gc (void *);
-
-
-
-extern void gt_pch_nx_eh_catch_d (void *);
-
-
-
-extern void gt_pch_nx_eh_landing_pad_d (void *);
-
-
-
-extern void gt_pch_nx_eh_region_d (void *);
-
-
-
-extern void gt_pch_nx_vcall_insn (void *);
-
-
-
-extern void gt_pch_nx_VEC_vcall_entry_gc (void *);
-
-
-
-extern void gt_pch_nx_VEC_dcall_entry_gc (void *);
-
-
-
-extern void gt_pch_nx_var_loc_list_def (void *);
-
-
-
-extern void gt_pch_nx_var_loc_node (void *);
-
-
-
-extern void gt_pch_nx_VEC_die_arg_entry_gc (void *);
-
-
-
-extern void gt_pch_nx_limbo_die_struct (void *);
-
-
-
-extern void gt_pch_nx_VEC_macinfo_entry_gc (void *);
-
-
-
-extern void gt_pch_nx_VEC_pubname_entry_gc (void *);
-
-
-
-extern void gt_pch_nx_VEC_dw_attr_node_gc (void *);
-
-
-
-extern void gt_pch_nx_comdat_type_struct (void *);
-
-
-
-extern void gt_pch_nx_dw_ranges_by_label_struct (void *);
-
-
-
-extern void gt_pch_nx_dw_ranges_struct (void *);
-
-
-
-extern void gt_pch_nx_dw_separate_line_info_struct (void *);
-
-
-
-extern void gt_pch_nx_dw_line_info_struct (void *);
-
-
-
-extern void gt_pch_nx_VEC_deferred_locations_gc (void *);
-
-
-
-extern void gt_pch_nx_dw_loc_list_struct (void *);
-
-
-
-extern void gt_pch_nx_dwarf_file_data (void *);
-
-
-
-extern void gt_pch_nx_queued_reg_save (void *);
-
-
-
-extern void gt_pch_nx_indirect_string_node (void *);
-
-
-
-extern void gt_pch_nx_dw_loc_descr_struct (void *);
-
-
-
-extern void gt_pch_nx_dw_fde_struct (void *);
-
-
-
-extern void gt_pch_nx_dw_cfi_struct (void *);
-
-
-
-extern void gt_pch_nx_typeinfo (void *);
-
-
-
-extern void gt_pch_nx_VEC_alias_set_entry_gc (void *);
-
-
-
-extern void gt_pch_nx_alias_set_entry_d (void *);
-
-
-
-extern void gt_pch_nx_constant_descriptor_tree (void *);
-
-
-
-extern void gt_pch_nx_cgraph_asm_node (void *);
-
-
-
-extern void gt_pch_nx_cgraph_indirect_call_info (void *);
-
-
-
-extern void gt_pch_nx_varpool_node_set_def (void *);
-
-
-
-extern void gt_pch_nx_varpool_node_set_element_def (void *);
-
-
-
-extern void gt_pch_nx_VEC_varpool_node_ptr_gc (void *);
-
-
-
-extern void gt_pch_nx_cgraph_node_set_def (void *);
-
-
-
-extern void gt_pch_nx_cgraph_node_set_element_def (void *);
-
-
-
-extern void gt_pch_nx_VEC_cgraph_node_ptr_gc (void *);
-
-
-
-extern void gt_pch_nx_cgraph_edge (void *);
-
-
-
-extern void gt_pch_nx_VEC_ipa_replace_map_p_gc (void *);
-
-
-
-extern void gt_pch_nx_ipa_replace_map (void *);
-
-
-
-extern void gt_pch_nx_lto_file_decl_data (void *);
-
-
-
-extern void gt_pch_nx_VEC_ipa_ref_t_gc (void *);
-
-
-
-extern void gt_pch_nx_varpool_node (void *);
-
-
-
-extern void gt_pch_nx_cgraph_node (void *);
-
-
-
-extern void gt_pch_nx_VEC_basic_block_gc (void *);
-
-
-
-extern void gt_pch_nx_gimple_bb_info (void *);
-
-
-
-extern void gt_pch_nx_rtl_bb_info (void *);
-
-
-
-extern void gt_pch_nx_VEC_edge_gc (void *);
-
-
-
-extern void gt_pch_nx_VEC_loop_p_gc (void *);
-
-
-
-extern void gt_pch_nx_loop (void *);
-
-
-
-extern void gt_pch_nx_loop_exit (void *);
-
-
-
-extern void gt_pch_nx_nb_iter_bound (void *);
-
-
-
-extern void gt_pch_nx_types_used_by_vars_entry (void *);
-
-
-
-extern void gt_pch_nx_language_function (void *);
-
-
-
-extern void gt_pch_nx_loops (void *);
-
-
-
-extern void gt_pch_nx_control_flow_graph (void *);
-
-
-
-extern void gt_pch_nx_eh_status (void *);
-
-
-
-extern void gt_pch_nx_stack_usage (void *);
-
-
-
-extern void gt_pch_nx_initial_value_struct (void *);
-
-
-
-extern void gt_pch_nx_frame_space (void *);
-
-
-
-extern void gt_pch_nx_rtx_constant_pool (void *);
-
-
-
-extern void gt_pch_nx_VEC_temp_slot_p_gc (void *);
-
-
-
-extern void gt_pch_nx_temp_slot (void *);
-
-
-
-extern void gt_pch_nx_gimple_df (void *);
-
-
-
-extern void gt_pch_nx_VEC_call_site_record_gc (void *);
-
-
-
-extern void gt_pch_nx_call_site_record_d (void *);
-
-
-
-extern void gt_pch_nx_sequence_stack (void *);
-
-
-
-extern void gt_pch_nx_libfunc_entry (void *);
-
-
-
-extern void gt_pch_nx_tree_priority_map (void *);
-
-
-
-extern void gt_pch_nx_tree_int_map (void *);
-
-
-
-extern void gt_pch_nx_tree_decl_map (void *);
-
-
-
-extern void gt_pch_nx_tree_map (void *);
-
-
-
-extern void gt_pch_nx_lang_tree_node (void *);
-
-
-
-extern void gt_pch_nx_tree_statement_list_node (void *);
-
-
-
-extern void gt_pch_nx_var_ann_d (void *);
-
-
-
-extern void gt_pch_nx_lang_decl (void *);
-
-
-
-extern void gt_pch_nx_lang_type (void *);
-
-
-
-extern void gt_pch_nx_die_struct (void *);
-
-
-
-extern void gt_pch_nx_ptr_info_def (void *);
-
-
-
-extern void gt_pch_nx_VEC_constructor_elt_gc (void *);
-
-
-
-extern void gt_pch_nx_VEC_alias_pair_gc (void *);
-
-
-
-extern void gt_pch_nx_function (void *);
-
-
-
-extern void gt_pch_nx_constant_descriptor_rtx (void *);
-
-
-
-extern void gt_pch_nx_fixed_value (void *);
-
-
-
-extern void gt_pch_nx_real_value (void *);
-
-
-
-extern void gt_pch_nx_object_block (void *);
-
-
-
-extern void gt_pch_nx_reg_attrs (void *);
-
-
-
-extern void gt_pch_nx_mem_attrs (void *);
-
-
-
-extern void gt_pch_nx_bitmap_obstack (void *);
-
-
-
-extern void gt_pch_nx_bitmap_element_def (void *);
-
-
-
-extern void gt_pch_nx_machine_function (void *);
-
-
-
-extern void gt_pch_nx_stack_local_entry (void *);
-
-
-
-extern void gt_pch_nx_VEC_rtx_gc (void *);
-
-
-
-extern void gt_pch_nx_VEC_gimple_gc (void *);
-
-
-
-extern void gt_pch_nx_VEC_tree_gc (void *);
-
-
-
-extern void gt_pch_nx_VEC_uchar_gc (void *);
-
-
-
-extern void gt_pch_nx_basic_block_def (void *);
-
-
-
-extern void gt_pch_nx_edge_def (void *);
-
-
-
-extern void gt_pch_nx_gimple_seq_d (void *);
-
-
-
-extern void gt_pch_nx_section (void *);
-
-
-
-extern void gt_pch_nx_gimple_statement_d (void *);
-
-
-
-extern void gt_pch_nx_rtvec_def (void *);
-
-
-
-extern void gt_pch_nx_rtx_def (void *);
-
-
-
-extern void gt_pch_nx_bitmap_head_def (void *);
-
-
-
-
-
-
-
-extern void gt_pch_nx_answer (void *);
-
-
-
-extern void gt_pch_nx_cpp_macro (void *);
-
-
-
-extern void gt_pch_nx_cpp_token (void *);
-
-
-
-extern void gt_pch_nx_line_maps (void *);
-extern void gt_pch_n_II17splay_tree_node_s (void *);
-extern void gt_pch_n_SP9tree_node17splay_tree_node_s (void *);
-extern void gt_pch_n_P9tree_nodeP9tree_node17splay_tree_node_s (void *);
-extern void gt_pch_n_P15interface_tuple4htab (void *);
-extern void gt_pch_n_P17string_descriptor4htab (void *);
-extern void gt_pch_n_P14type_assertion4htab (void *);
-extern void gt_pch_n_P18treetreehash_entry4htab (void *);
-extern void gt_pch_n_P17module_htab_entry4htab (void *);
-extern void gt_pch_n_P21pending_abstract_type4htab (void *);
-extern void gt_pch_n_P14constexpr_call4htab (void *);
-extern void gt_pch_n_P16constexpr_fundef4htab (void *);
-extern void gt_pch_n_P10spec_entry4htab (void *);
-extern void gt_pch_n_P16cxx_int_tree_map4htab (void *);
-extern void gt_pch_n_P17named_label_entry4htab (void *);
-extern void gt_pch_n_P17lto_in_decl_state4htab (void *);
-extern void gt_pch_n_P20lto_symtab_entry_def4htab (void *);
-extern void gt_pch_n_P11heapvar_map4htab (void *);
-extern void gt_pch_n_P8tree_map4htab (void *);
-extern void gt_pch_n_P9tree_nodeP9tree_node12splay_tree_s (void *);
-extern void gt_pch_n_P12varpool_node4htab (void *);
-extern void gt_pch_n_P13scev_info_str4htab (void *);
-extern void gt_pch_n_P12tree_int_map4htab (void *);
-extern void gt_pch_n_P23constant_descriptor_rtx4htab (void *);
-extern void gt_pch_n_P24constant_descriptor_tree4htab (void *);
-extern void gt_pch_n_P12object_block4htab (void *);
-extern void gt_pch_n_P7section4htab (void *);
-extern void gt_pch_n_P17tree_priority_map4htab (void *);
-extern void gt_pch_n_P13tree_decl_map4htab (void *);
-extern void gt_pch_n_P9type_hash4htab (void *);
-extern void gt_pch_n_P23temp_slot_address_entry4htab (void *);
-extern void gt_pch_n_P15throw_stmt_node4htab (void *);
-extern void gt_pch_n_P9reg_attrs4htab (void *);
-extern void gt_pch_n_P9mem_attrs4htab (void *);
-extern void gt_pch_n_P7rtx_def4htab (void *);
-extern void gt_pch_n_SP9tree_node12splay_tree_s (void *);
-extern void gt_pch_n_P10vcall_insn4htab (void *);
-extern void gt_pch_n_P16var_loc_list_def4htab (void *);
-extern void gt_pch_n_P10die_struct4htab (void *);
-extern void gt_pch_n_P15dwarf_file_data4htab (void *);
-extern void gt_pch_n_P20indirect_string_node4htab (void *);
-extern void gt_pch_n_P11cgraph_node4htab (void *);
-extern void gt_pch_n_II12splay_tree_s (void *);
-extern void gt_pch_n_P28varpool_node_set_element_def4htab (void *);
-extern void gt_pch_n_P27cgraph_node_set_element_def4htab (void *);
-extern void gt_pch_n_P11cgraph_edge4htab (void *);
-extern void gt_pch_n_P9loop_exit4htab (void *);
-extern void gt_pch_n_P24types_used_by_vars_entry4htab (void *);
-extern void gt_pch_n_P9tree_node4htab (void *);
-extern void gt_pch_n_P13libfunc_entry4htab (void *);
-
-
-
-
-extern void gt_pch_p_15c_inline_static
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_24VEC_c_goto_bindings_p_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_15c_goto_bindings
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_7c_scope
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_9c_binding
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_12c_label_vars
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_8c_parser
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_20VEC_ivarref_entry_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_22VEC_prot_list_entry_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_19VEC_msgref_entry_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_23VEC_ident_data_tuple_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_15interface_tuple
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_17string_descriptor
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_9imp_entry
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_16hashed_attribute
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_12hashed_entry
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_23VEC_ltrans_partition_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_20ltrans_partition_def
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_19VEC_method_entry_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_14type_assertion
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_18treetreehash_entry
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_5CPool
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_3JCF
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_17module_htab_entry
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_13binding_level
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_9opt_stack
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_27VEC_pending_redefinition_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_19VEC_pending_weak_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_11align_stack
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_18VEC_tree_gc_vec_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_19VEC_const_char_p_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_21pending_abstract_type
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_15VEC_tree_int_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_9cp_parser
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_34VEC_cp_unparsed_functions_entry_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_27VEC_cp_default_arg_entry_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_17cp_parser_context
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_8cp_lexer
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_10tree_check
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_14constexpr_call
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_16constexpr_fundef
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_22VEC_deferred_access_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_10spec_entry
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_16pending_template
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_21VEC_incomplete_var_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_21named_label_use_entry
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_28VEC_deferred_access_check_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_18sorted_fields_type
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_18VEC_tree_pair_s_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_17named_label_entry
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_32VEC_qualified_typedef_usage_t_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_14cp_token_cache
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_11saved_scope
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_16cxx_int_tree_map
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_23VEC_cp_label_binding_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_23VEC_cp_class_binding_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_24VEC_cxx_saved_binding_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_16cp_binding_level
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_11cxx_binding
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_15binding_entry_s
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_15binding_table_s
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_11tinst_level
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_14VEC_tinfo_s_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_18gnat_binding_level
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_9elab_info
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_10stmt_group
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_16VEC_parm_attr_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_11parm_attr_d
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_17lto_in_decl_state
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_22VEC_ipa_edge_args_t_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_20lto_symtab_entry_def
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_11heapvar_map
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_20ssa_operand_memory_d
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_13scev_info_str
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_24VEC_mem_addr_template_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_26gimple_type_leader_entry_s
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_17gimple_seq_node_d
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_9type_hash
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_16string_pool_data
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_23temp_slot_address_entry
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_15throw_stmt_node
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_21VEC_eh_landing_pad_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_16VEC_eh_region_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_10eh_catch_d
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_16eh_landing_pad_d
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_11eh_region_d
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_10vcall_insn
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_18VEC_vcall_entry_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_18VEC_dcall_entry_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_16var_loc_list_def
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_12var_loc_node
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_20VEC_die_arg_entry_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_16limbo_die_struct
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_20VEC_macinfo_entry_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_20VEC_pubname_entry_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_19VEC_dw_attr_node_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_18comdat_type_struct
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_25dw_ranges_by_label_struct
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_16dw_ranges_struct
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_28dw_separate_line_info_struct
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_19dw_line_info_struct
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_25VEC_deferred_locations_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_18dw_loc_list_struct
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_15dwarf_file_data
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_15queued_reg_save
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_20indirect_string_node
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_19dw_loc_descr_struct
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_13dw_fde_struct
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_13dw_cfi_struct
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_8typeinfo
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_22VEC_alias_set_entry_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_17alias_set_entry_d
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_24constant_descriptor_tree
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_15cgraph_asm_node
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_25cgraph_indirect_call_info
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_20varpool_node_set_def
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_28varpool_node_set_element_def
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_23VEC_varpool_node_ptr_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_19cgraph_node_set_def
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_27cgraph_node_set_element_def
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_22VEC_cgraph_node_ptr_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_11cgraph_edge
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_24VEC_ipa_replace_map_p_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_15ipa_replace_map
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_18lto_file_decl_data
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_16VEC_ipa_ref_t_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_12varpool_node
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_11cgraph_node
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_18VEC_basic_block_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_14gimple_bb_info
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_11rtl_bb_info
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_11VEC_edge_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_13VEC_loop_p_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_4loop
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_9loop_exit
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_13nb_iter_bound
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_24types_used_by_vars_entry
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_17language_function
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_5loops
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_18control_flow_graph
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_9eh_status
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_11stack_usage
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_20initial_value_struct
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_11frame_space
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_17rtx_constant_pool
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_18VEC_temp_slot_p_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_9temp_slot
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_9gimple_df
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_23VEC_call_site_record_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_18call_site_record_d
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_14sequence_stack
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_13libfunc_entry
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_17tree_priority_map
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_12tree_int_map
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_13tree_decl_map
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_8tree_map
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_14lang_tree_node
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_24tree_statement_list_node
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_9var_ann_d
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_9lang_decl
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_9lang_type
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_10die_struct
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_12ptr_info_def
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_22VEC_constructor_elt_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_17VEC_alias_pair_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_8function
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_23constant_descriptor_rtx
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_11fixed_value
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_10real_value
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_12object_block
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_9reg_attrs
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_9mem_attrs
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_14bitmap_obstack
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_18bitmap_element_def
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_16machine_function
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_17stack_local_entry
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_10VEC_rtx_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_13VEC_gimple_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_11VEC_tree_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_12VEC_uchar_gc
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_15basic_block_def
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_8edge_def
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_12gimple_seq_d
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_7section
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_18gimple_statement_d
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_9rtvec_def
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_7rtx_def
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_15bitmap_head_def
-    (void *, void *, gt_pointer_operator, void *);
-
-extern void gt_pch_p_6answer
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_9cpp_macro
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_9cpp_token
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_9line_maps
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_II17splay_tree_node_s
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_SP9tree_node17splay_tree_node_s
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P9tree_nodeP9tree_node17splay_tree_node_s
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P15interface_tuple4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P17string_descriptor4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P14type_assertion4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P18treetreehash_entry4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P17module_htab_entry4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P21pending_abstract_type4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P14constexpr_call4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P16constexpr_fundef4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P10spec_entry4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P16cxx_int_tree_map4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P17named_label_entry4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P17lto_in_decl_state4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P20lto_symtab_entry_def4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P11heapvar_map4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P8tree_map4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P9tree_nodeP9tree_node12splay_tree_s
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P12varpool_node4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P13scev_info_str4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P12tree_int_map4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P23constant_descriptor_rtx4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P24constant_descriptor_tree4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P12object_block4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P7section4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P17tree_priority_map4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P13tree_decl_map4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P9type_hash4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P23temp_slot_address_entry4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P15throw_stmt_node4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P9reg_attrs4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P9mem_attrs4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P7rtx_def4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_SP9tree_node12splay_tree_s
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P10vcall_insn4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P16var_loc_list_def4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P10die_struct4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P15dwarf_file_data4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P20indirect_string_node4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P11cgraph_node4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_II12splay_tree_s
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P28varpool_node_set_element_def4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P27cgraph_node_set_element_def4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P11cgraph_edge4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P9loop_exit4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P24types_used_by_vars_entry4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P9tree_node4htab
-    (void *, void *, gt_pointer_operator, void *);
-extern void gt_pch_p_P13libfunc_entry4htab
-    (void *, void *, gt_pointer_operator, void *);
-
-
-extern void * ggc_alloc_splay_tree_scalar_scalar_splay_tree_node_s (int, void *);
-extern void * ggc_alloc_splay_tree_str_tree_node_splay_tree_node_s (int, void *);
-extern void * ggc_alloc_splay_tree_tree_node_tree_node_splay_tree_node_s (int, void *);
-extern void * ggc_alloc_splay_tree_interface_tuple_htab (int, void *);
-extern void * ggc_alloc_splay_tree_string_descriptor_htab (int, void *);
-extern void * ggc_alloc_splay_tree_type_assertion_htab (int, void *);
-extern void * ggc_alloc_splay_tree_treetreehash_entry_htab (int, void *);
-extern void * ggc_alloc_splay_tree_module_htab_entry_htab (int, void *);
-extern void * ggc_alloc_splay_tree_pending_abstract_type_htab (int, void *);
-extern void * ggc_alloc_splay_tree_constexpr_call_htab (int, void *);
-extern void * ggc_alloc_splay_tree_constexpr_fundef_htab (int, void *);
-extern void * ggc_alloc_splay_tree_spec_entry_htab (int, void *);
-extern void * ggc_alloc_splay_tree_cxx_int_tree_map_htab (int, void *);
-extern void * ggc_alloc_splay_tree_named_label_entry_htab (int, void *);
-extern void * ggc_alloc_splay_tree_lto_in_decl_state_htab (int, void *);
-extern void * ggc_alloc_splay_tree_lto_symtab_entry_def_htab (int, void *);
-extern void * ggc_alloc_splay_tree_heapvar_map_htab (int, void *);
-extern void * ggc_alloc_splay_tree_tree_map_htab (int, void *);
-extern void * ggc_alloc_splay_tree_tree_node_tree_node_splay_tree_s (int, void *);
-extern void * ggc_alloc_splay_tree_varpool_node_htab (int, void *);
-extern void * ggc_alloc_splay_tree_scev_info_str_htab (int, void *);
-extern void * ggc_alloc_splay_tree_tree_int_map_htab (int, void *);
-extern void * ggc_alloc_splay_tree_constant_descriptor_rtx_htab (int, void *);
-extern void * ggc_alloc_splay_tree_constant_descriptor_tree_htab (int, void *);
-extern void * ggc_alloc_splay_tree_object_block_htab (int, void *);
-extern void * ggc_alloc_splay_tree_section_htab (int, void *);
-extern void * ggc_alloc_splay_tree_tree_priority_map_htab (int, void *);
-extern void * ggc_alloc_splay_tree_tree_decl_map_htab (int, void *);
-extern void * ggc_alloc_splay_tree_type_hash_htab (int, void *);
-extern void * ggc_alloc_splay_tree_temp_slot_address_entry_htab (int, void *);
-extern void * ggc_alloc_splay_tree_throw_stmt_node_htab (int, void *);
-extern void * ggc_alloc_splay_tree_reg_attrs_htab (int, void *);
-extern void * ggc_alloc_splay_tree_mem_attrs_htab (int, void *);
-extern void * ggc_alloc_splay_tree_rtx_def_htab (int, void *);
-extern void * ggc_alloc_splay_tree_str_tree_node_splay_tree_s (int, void *);
-extern void * ggc_alloc_splay_tree_vcall_insn_htab (int, void *);
-extern void * ggc_alloc_splay_tree_var_loc_list_def_htab (int, void *);
-extern void * ggc_alloc_splay_tree_die_struct_htab (int, void *);
-extern void * ggc_alloc_splay_tree_dwarf_file_data_htab (int, void *);
-extern void * ggc_alloc_splay_tree_indirect_string_node_htab (int, void *);
-extern void * ggc_alloc_splay_tree_cgraph_node_htab (int, void *);
-extern void * ggc_alloc_splay_tree_scalar_scalar_splay_tree_s (int, void *);
-extern void * ggc_alloc_splay_tree_varpool_node_set_element_def_htab (int, void *);
-extern void * ggc_alloc_splay_tree_cgraph_node_set_element_def_htab (int, void *);
-extern void * ggc_alloc_splay_tree_cgraph_edge_htab (int, void *);
-extern void * ggc_alloc_splay_tree_loop_exit_htab (int, void *);
-extern void * ggc_alloc_splay_tree_types_used_by_vars_entry_htab (int, void *);
-extern void * ggc_alloc_splay_tree_tree_node_htab (int, void *);
-extern void * ggc_alloc_splay_tree_libfunc_entry_htab (int, void *);
-# 39 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/ggc.h" 2
-
-
-
-
-typedef void (*gt_note_pointers) (void *, void *, gt_pointer_operator,
-      void *);
-
-
-
-
-
-
-typedef void (*gt_handle_reorder) (void *, void *, gt_pointer_operator,
-       void *);
-
-
-extern int gt_pch_note_object (void *, void *, gt_note_pointers,
-          enum gt_types_enum);
-
-
-
-extern void gt_pch_note_reorder (void *, void *, gt_handle_reorder);
-
-
-typedef void (*gt_pointer_walker) (void *);
-
-
-
-struct ggc_root_tab {
-  void *base;
-  size_t nelt;
-  size_t stride;
-  gt_pointer_walker cb;
-  gt_pointer_walker pchw;
-};
-
-
-extern const struct ggc_root_tab * const gt_ggc_rtab[];
-extern const struct ggc_root_tab * const gt_ggc_deletable_rtab[];
-extern const struct ggc_root_tab * const gt_pch_cache_rtab[];
-extern const struct ggc_root_tab * const gt_pch_scalar_rtab[];
-
-
-struct htab;
-struct ggc_cache_tab {
-  struct htab * *base;
-  size_t nelt;
-  size_t stride;
-  gt_pointer_walker cb;
-  gt_pointer_walker pchw;
-  int (*marked_p) (const void *);
-};
-
-
-extern const struct ggc_cache_tab * const gt_ggc_cache_rtab[];
-# 112 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/ggc.h"
-extern int ggc_set_mark (const void *);
-
-
-
-
-extern int ggc_marked_p (const void *);
-
-
-extern void gt_pch_n_S (const void *);
-extern void gt_ggc_m_S (const void *);
-
-
-
-struct alloc_zone;
-
-
-extern void init_stringpool (void);
-
-
-extern void init_ggc (void);
-
-
-
-
-
-extern unsigned char ggc_protect_identifiers;
-
-
-extern void gt_pch_save (FILE *f);
-
-
-
-
-
-extern void *ggc_internal_alloc_stat (size_t );
-
-
-
-
-extern void *ggc_alloc_typed_stat (enum gt_types_enum, size_t );
-
-
-
-
-extern void *ggc_internal_cleared_alloc_stat (size_t );
-
-
-extern void *ggc_realloc_stat (void *, size_t );
-
-
-extern void ggc_free (void *);
-
-extern void ggc_record_overhead (size_t, size_t, void * );
-extern void ggc_free_overhead (void *);
-extern void ggc_prune_overhead_list (void);
-
-extern void dump_ggc_loc_statistics (unsigned char);
-# 177 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/ggc.h"
-static __inline__ void *
-ggc_internal_vec_alloc_stat (size_t s, size_t c )
-{
-    return ggc_internal_alloc_stat (c * s );
-}
-
-static __inline__ void *
-ggc_internal_cleared_vec_alloc_stat (size_t s, size_t c )
-{
-    return ggc_internal_cleared_alloc_stat (c * s );
-}
-
-
-
-
-static __inline__ void *
-ggc_alloc_atomic_stat (size_t s )
-{
-    return ggc_internal_alloc_stat (s );
-}
-
-
-
-
-
-
-extern void * ggc_cleared_alloc_htab_ignore_args (size_t, size_t);
-
-extern void * ggc_cleared_alloc_ptr_array_two_args (size_t, size_t);
-# 217 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/ggc.h"
-extern void *ggc_splay_alloc (enum gt_types_enum, int, void *);
-
-extern void ggc_splay_dont_free (void *, void *);
-
-
-
-
-extern const char *ggc_alloc_string_stat (const char *contents, int length
-                                          );
-# 234 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/ggc.h"
-extern void ggc_collect (void);
-
-
-
-extern void ggc_register_root_tab (const struct ggc_root_tab *);
-
-
-
-extern void ggc_register_cache_tab (const struct ggc_cache_tab *);
-
-
-extern void gt_pch_restore (FILE *f);
-
-
-
-
-extern void ggc_print_statistics (void);
-
-extern void stringpool_statistics (void);
-
-
-extern void init_ggc_heuristics (void);
-
-
-
-
-extern struct alloc_zone rtl_zone;
-
-
-extern struct alloc_zone tree_zone;
-
-
-extern struct alloc_zone tree_id_zone;
-# 306 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/ggc.h"
-static __inline__ void *
-ggc_internal_zone_alloc_stat (struct alloc_zone * z __attribute__ ((__unused__)),
-                              size_t s )
-{
-    return ggc_internal_alloc_stat (s );
-}
-
-static __inline__ void *
-ggc_internal_zone_cleared_alloc_stat (struct alloc_zone * z __attribute__ ((__unused__)),
-                                      size_t s )
-{
-    return ggc_internal_cleared_alloc_stat (s );
-}
-
-static __inline__ void *
-ggc_internal_zone_vec_alloc_stat (struct alloc_zone * z __attribute__ ((__unused__)),
-                                  size_t s, size_t n )
-{
-    return ggc_internal_vec_alloc_stat (s, n );
-}
-
-
-
-
-
-static __inline__ struct rtx_def *
-ggc_alloc_zone_rtx_def_stat (struct alloc_zone * z, size_t s )
-{
-  return (struct rtx_def *) ggc_internal_zone_alloc_stat (z, s );
-}
-
-static __inline__ union tree_node *
-ggc_alloc_zone_tree_node_stat (struct alloc_zone * z, size_t s )
-{
-  return (union tree_node *) ggc_internal_zone_alloc_stat (z, s );
-}
-
-static __inline__ union tree_node *
-ggc_alloc_zone_cleared_tree_node_stat (struct alloc_zone * z, size_t s
-                                       )
-{
-  return (union tree_node *)
-    ggc_internal_zone_cleared_alloc_stat (z, s );
-}
-
-static __inline__ union gimple_statement_d *
-ggc_alloc_cleared_gimple_statement_d_stat (size_t s )
-{
-  return (union gimple_statement_d *)
-    ggc_internal_cleared_alloc_stat (s );
-}
-# 28 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-common.h" 2
-# 43 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-common.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/diagnostic-core.h" 1
-# 28 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/diagnostic-core.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/bversion.h" 1
-# 29 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/diagnostic-core.h" 2
 
 
 typedef enum
 {
-
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/diagnostic.def" 1
-# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/diagnostic.def"
-DK_UNSPECIFIED,
-
-
-
-
-DK_IGNORED,
-
-
-DK_FATAL,
-DK_ICE,
-DK_ERROR,
-DK_SORRY,
-DK_WARNING,
-DK_ANACHRONISM,
-DK_NOTE,
-DK_DEBUG,
-
-
-DK_PEDWARN,
-DK_PERMERROR,
-# 35 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/diagnostic-core.h" 2
-
-  DK_LAST_DIAGNOSTIC_KIND,
-
-
-  DK_POP
-} diagnostic_t;
-
-extern const char *progname;
-
-extern const char *trim_filename (const char *);
-# 59 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/diagnostic-core.h"
-extern void internal_error (const char *, ...) __attribute__ ((__format__ (__gcc_cdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)))
-     __attribute__ ((__noreturn__));
-
-extern unsigned char warning (int, const char *, ...) __attribute__ ((__format__ (__gcc_cdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
-extern unsigned char warning_at (location_t, int, const char *, ...)
-    __attribute__ ((__format__ (__gcc_cdiag__, 3, 4))) __attribute__ ((__nonnull__ (3)));
-extern void error (const char *, ...) __attribute__ ((__format__ (__gcc_cdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
-extern void error_n (location_t, int, const char *, const char *, ...)
-    __attribute__ ((__format__ (__gcc_cdiag__, 3, 5))) __attribute__ ((__nonnull__ (3))) __attribute__ ((__format__ (__gcc_cdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
-extern void error_at (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_cdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
-extern void fatal_error (const char *, ...) __attribute__ ((__format__ (__gcc_cdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)))
-     __attribute__ ((__noreturn__));
-
-extern unsigned char pedwarn (location_t, int, const char *, ...)
-     __attribute__ ((__format__ (__gcc_cdiag__, 3, 4))) __attribute__ ((__nonnull__ (3)));
-extern unsigned char permerror (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_cdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
-extern void sorry (const char *, ...) __attribute__ ((__format__ (__gcc_cdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
-extern void inform (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_cdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
-extern void inform_n (location_t, int, const char *, const char *, ...)
-    __attribute__ ((__format__ (__gcc_cdiag__, 3, 5))) __attribute__ ((__nonnull__ (3))) __attribute__ ((__format__ (__gcc_cdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
-extern void verbatim (const char *, ...) __attribute__ ((__format__ (__gcc_cdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
-extern unsigned char emit_diagnostic (diagnostic_t, location_t, int,
-        const char *, ...) __attribute__ ((__format__ (__gcc_cdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
-extern unsigned char seen_error (void);
-
-
-
-
-extern void fnotice (FILE *, const char *, ...)
-     __attribute__ ((__format__ (__printf__, 2, 3))) __attribute__ ((__nonnull__ (2)));
-# 44 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-common.h" 2
-# 64 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-common.h"
-enum rid
-{
-
-
-  RID_STATIC = 0,
-  RID_UNSIGNED, RID_LONG, RID_CONST, RID_EXTERN,
-  RID_REGISTER, RID_TYPEDEF, RID_SHORT, RID_INLINE,
-  RID_VOLATILE, RID_SIGNED, RID_AUTO, RID_RESTRICT,
-
-
-  RID_COMPLEX, RID_THREAD, RID_SAT,
-
-
-  RID_FRIEND, RID_VIRTUAL, RID_EXPLICIT, RID_EXPORT, RID_MUTABLE,
-
-
-
-  RID_IN, RID_OUT, RID_INOUT, RID_BYCOPY, RID_BYREF, RID_ONEWAY,
-
-
-
-  RID_GETTER, RID_SETTER,
-  RID_READONLY, RID_READWRITE,
-  RID_ASSIGN, RID_RETAIN, RID_COPY,
-  RID_NONATOMIC,
-
-
-
-  RID_IMAGINARY,
-
-
-  RID_INT, RID_CHAR, RID_FLOAT, RID_DOUBLE, RID_VOID,
-  RID_INT128,
-  RID_ENUM, RID_STRUCT, RID_UNION, RID_IF, RID_ELSE,
-  RID_WHILE, RID_DO, RID_FOR, RID_SWITCH, RID_CASE,
-  RID_DEFAULT, RID_BREAK, RID_CONTINUE, RID_RETURN, RID_GOTO,
-  RID_SIZEOF,
-
-
-  RID_ASM, RID_TYPEOF, RID_ALIGNOF, RID_ATTRIBUTE, RID_VA_ARG,
-  RID_EXTENSION, RID_IMAGPART, RID_REALPART, RID_LABEL, RID_CHOOSE_EXPR,
-  RID_TYPES_COMPATIBLE_P,
-  RID_DFLOAT32, RID_DFLOAT64, RID_DFLOAT128,
-  RID_FRACT, RID_ACCUM,
-
-
-
-  RID_CXX_COMPAT_WARN,
-
-
-  RID_FUNCTION_NAME, RID_PRETTY_FUNCTION_NAME, RID_C99_FUNCTION_NAME,
-
-
-
-  RID_BOOL, RID_WCHAR, RID_CLASS,
-  RID_PUBLIC, RID_PRIVATE, RID_PROTECTED,
-  RID_TEMPLATE, RID_NULL, RID_CATCH,
-  RID_DELETE, RID_FALSE, RID_NAMESPACE,
-  RID_NEW, RID_OFFSETOF, RID_OPERATOR,
-  RID_THIS, RID_THROW, RID_TRUE,
-  RID_TRY, RID_TYPENAME, RID_TYPEID,
-  RID_USING, RID_CHAR16, RID_CHAR32,
-
-
-  RID_CONSTCAST, RID_DYNCAST, RID_REINTCAST, RID_STATCAST,
-
-
-  RID_HAS_NOTHROW_ASSIGN, RID_HAS_NOTHROW_CONSTRUCTOR,
-  RID_HAS_NOTHROW_COPY, RID_HAS_TRIVIAL_ASSIGN,
-  RID_HAS_TRIVIAL_CONSTRUCTOR, RID_HAS_TRIVIAL_COPY,
-  RID_HAS_TRIVIAL_DESTRUCTOR, RID_HAS_VIRTUAL_DESTRUCTOR,
-  RID_IS_ABSTRACT, RID_IS_BASE_OF,
-  RID_IS_CONVERTIBLE_TO, RID_IS_CLASS,
-  RID_IS_EMPTY, RID_IS_ENUM,
-  RID_IS_POD, RID_IS_POLYMORPHIC,
-  RID_IS_STD_LAYOUT, RID_IS_TRIVIAL,
-  RID_IS_UNION, RID_IS_LITERAL_TYPE,
-
-
-  RID_CONSTEXPR, RID_DECLTYPE, RID_NOEXCEPT, RID_NULLPTR, RID_STATIC_ASSERT,
-
-
-
-  RID_AT_ENCODE, RID_AT_END,
-  RID_AT_CLASS, RID_AT_ALIAS, RID_AT_DEFS,
-  RID_AT_PRIVATE, RID_AT_PROTECTED, RID_AT_PUBLIC, RID_AT_PACKAGE,
-  RID_AT_PROTOCOL, RID_AT_SELECTOR,
-  RID_AT_THROW, RID_AT_TRY, RID_AT_CATCH,
-  RID_AT_FINALLY, RID_AT_SYNCHRONIZED,
-  RID_AT_OPTIONAL, RID_AT_REQUIRED, RID_AT_PROPERTY,
-  RID_AT_SYNTHESIZE, RID_AT_DYNAMIC,
-  RID_AT_INTERFACE,
-  RID_AT_IMPLEMENTATION,
-
-
-
-
-
-  RID_ADDR_SPACE_0,
-  RID_ADDR_SPACE_1,
-  RID_ADDR_SPACE_2,
-  RID_ADDR_SPACE_3,
-  RID_ADDR_SPACE_4,
-  RID_ADDR_SPACE_5,
-  RID_ADDR_SPACE_6,
-  RID_ADDR_SPACE_7,
-  RID_ADDR_SPACE_8,
-  RID_ADDR_SPACE_9,
-  RID_ADDR_SPACE_10,
-  RID_ADDR_SPACE_11,
-  RID_ADDR_SPACE_12,
-  RID_ADDR_SPACE_13,
-  RID_ADDR_SPACE_14,
-  RID_ADDR_SPACE_15,
-
-  RID_FIRST_ADDR_SPACE = RID_ADDR_SPACE_0,
-  RID_LAST_ADDR_SPACE = RID_ADDR_SPACE_15,
-
-  RID_MAX,
-
-  RID_FIRST_MODIFIER = RID_STATIC,
-  RID_LAST_MODIFIER = RID_ONEWAY,
-
-  RID_FIRST_CXX0X = RID_CONSTEXPR,
-  RID_LAST_CXX0X = RID_STATIC_ASSERT,
-  RID_FIRST_AT = RID_AT_ENCODE,
-  RID_LAST_AT = RID_AT_IMPLEMENTATION,
-  RID_FIRST_PQ = RID_IN,
-  RID_LAST_PQ = RID_ONEWAY,
-  RID_FIRST_PATTR = RID_GETTER,
-  RID_LAST_PATTR = RID_NONATOMIC
-};
-# 223 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-common.h"
-extern tree *ridpointers;
-
-
-
-enum c_tree_index
-{
-    CTI_CHAR16_TYPE,
-    CTI_CHAR32_TYPE,
-    CTI_WCHAR_TYPE,
-    CTI_UNDERLYING_WCHAR_TYPE,
-    CTI_WINT_TYPE,
-    CTI_SIGNED_SIZE_TYPE,
-    CTI_UNSIGNED_PTRDIFF_TYPE,
-    CTI_INTMAX_TYPE,
-    CTI_UINTMAX_TYPE,
-    CTI_WIDEST_INT_LIT_TYPE,
-    CTI_WIDEST_UINT_LIT_TYPE,
-
-
-
-    CTI_SIG_ATOMIC_TYPE,
-    CTI_INT8_TYPE,
-    CTI_INT16_TYPE,
-    CTI_INT32_TYPE,
-    CTI_INT64_TYPE,
-    CTI_UINT8_TYPE,
-    CTI_UINT16_TYPE,
-    CTI_UINT32_TYPE,
-    CTI_UINT64_TYPE,
-    CTI_INT_LEAST8_TYPE,
-    CTI_INT_LEAST16_TYPE,
-    CTI_INT_LEAST32_TYPE,
-    CTI_INT_LEAST64_TYPE,
-    CTI_UINT_LEAST8_TYPE,
-    CTI_UINT_LEAST16_TYPE,
-    CTI_UINT_LEAST32_TYPE,
-    CTI_UINT_LEAST64_TYPE,
-    CTI_INT_FAST8_TYPE,
-    CTI_INT_FAST16_TYPE,
-    CTI_INT_FAST32_TYPE,
-    CTI_INT_FAST64_TYPE,
-    CTI_UINT_FAST8_TYPE,
-    CTI_UINT_FAST16_TYPE,
-    CTI_UINT_FAST32_TYPE,
-    CTI_UINT_FAST64_TYPE,
-    CTI_INTPTR_TYPE,
-    CTI_UINTPTR_TYPE,
-
-    CTI_CHAR_ARRAY_TYPE,
-    CTI_CHAR16_ARRAY_TYPE,
-    CTI_CHAR32_ARRAY_TYPE,
-    CTI_WCHAR_ARRAY_TYPE,
-    CTI_INT_ARRAY_TYPE,
-    CTI_STRING_TYPE,
-    CTI_CONST_STRING_TYPE,
-
-
-    CTI_TRUTHVALUE_TYPE,
-    CTI_TRUTHVALUE_TRUE,
-    CTI_TRUTHVALUE_FALSE,
-
-    CTI_DEFAULT_FUNCTION_TYPE,
-
-
-    CTI_FUNCTION_NAME_DECL,
-    CTI_PRETTY_FUNCTION_NAME_DECL,
-    CTI_C99_FUNCTION_NAME_DECL,
-    CTI_SAVED_FUNCTION_NAME_DECLS,
-
-    CTI_VOID_ZERO,
-
-    CTI_NULL,
-
-    CTI_MAX
-};
-# 308 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-common.h"
-struct c_common_identifier {
-  struct tree_common common;
-  struct cpp_hashnode node;
-};
-
-
-
-struct c_common_resword
-{
-  const char *const word;
-  __extension__ enum rid const rid : 16;
-  const unsigned int disable : 16;
-};
-# 338 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-common.h"
-extern const struct c_common_resword c_common_reswords[];
-
-
-extern const unsigned int num_c_common_reswords;
-# 408 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-common.h"
-extern tree c_global_trees[CTI_MAX];
-
-
-
-struct sorted_fields_type {
-  int len;
-  tree elts[1];
-};
-
-
-
-
-
-typedef enum c_language_kind
-{
-  clk_c = 0,
-  clk_objc = 1,
-  clk_cxx = 2,
-  clk_objcxx = 3
+  TV_NONE,
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/timevar.def" 1
+# 35 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/timevar.def"
+TV_TOTAL,
+
+
+TV_GC,
+
+
+TV_DUMP,
+
+
+TV_PCH_SAVE,
+TV_PCH_CPP_SAVE,
+TV_PCH_PTR_REALLOC,
+TV_PCH_PTR_SORT,
+TV_PCH_RESTORE,
+TV_PCH_CPP_RESTORE,
+
+TV_CGRAPH,
+TV_CGRAPHOPT,
+TV_VARPOOL,
+TV_IPA_CONSTANT_PROP,
+TV_IPA_FNSPLIT,
+TV_IPA_OPT,
+TV_IPA_LTO_GIMPLE_IN,
+TV_IPA_LTO_GIMPLE_OUT,
+TV_IPA_LTO_DECL_IN,
+TV_IPA_LTO_DECL_OUT,
+TV_IPA_LTO_DECL_INIT_IO,
+TV_IPA_LTO_CGRAPH_IO,
+TV_IPA_LTO_DECL_MERGE,
+TV_IPA_LTO_CGRAPH_MERGE,
+TV_LTO,
+TV_WHOPR_WPA,
+TV_WHOPR_WPA_IO,
+TV_WHOPR_LTRANS,
+TV_WHOPR_WPA_LTRANS_EXEC,
+TV_IPA_REFERENCE,
+TV_IPA_PROFILE,
+TV_IPA_PURE_CONST,
+TV_IPA_TYPE_ESCAPE,
+TV_IPA_PTA,
+TV_IPA_SRA,
+TV_IPA_FREE_LANG_DATA,
+
+TV_CFG,
+
+TV_CLEANUP_CFG,
+TV_CFG_VERIFY,
+TV_DELETE_TRIVIALLY_DEAD,
+
+TV_LIFE,
+TV_LIFE_UPDATE,
+
+
+TV_DF_SCAN,
+TV_DF_MD,
+TV_DF_RD,
+TV_DF_LR,
+TV_DF_LIVE,
+TV_DF_UREC,
+TV_DF_CHAIN,
+TV_DF_WORD_LR,
+TV_DF_NOTE,
+TV_REG_STATS,
+
+TV_ALIAS_ANALYSIS,
+TV_ALIAS_STMT_WALK,
+TV_REG_SCAN,
+TV_REBUILD_JUMP,
+
+TV_CPP,
+TV_LEX,
+TV_PARSE,
+TV_NAME_LOOKUP,
+TV_INLINE_HEURISTICS,
+TV_INTEGRATION,
+TV_TREE_GIMPLIFY,
+TV_TREE_EH,
+TV_TREE_CFG,
+TV_TREE_CLEANUP_CFG,
+TV_TREE_VRP,
+TV_TREE_COPY_PROP,
+TV_FIND_REFERENCED_VARS,
+TV_TREE_PTA,
+TV_TREE_INSERT_PHI_NODES,
+TV_TREE_SSA_REWRITE_BLOCKS,
+TV_TREE_SSA_OTHER,
+TV_TREE_SSA_INCREMENTAL,
+TV_TREE_OPS,
+TV_TREE_SSA_DOMINATOR_OPTS,
+TV_TREE_SRA,
+TV_TREE_CCP,
+TV_TREE_PHI_CPROP,
+TV_TREE_SPLIT_EDGES,
+TV_TREE_REASSOC,
+TV_TREE_PRE,
+TV_TREE_FRE,
+TV_TREE_SINK,
+TV_TREE_PHIOPT,
+TV_TREE_FORWPROP,
+TV_TREE_PHIPROP,
+TV_TREE_DCE,
+TV_TREE_CD_DCE,
+TV_TREE_CALL_CDCE,
+TV_TREE_DSE,
+TV_TREE_MERGE_PHI,
+TV_TREE_LOOP,
+TV_TREE_LOOP_BOUNDS,
+TV_LIM,
+TV_TREE_LOOP_IVCANON,
+TV_SCEV_CONST,
+TV_TREE_LOOP_UNSWITCH,
+TV_COMPLETE_UNROLL,
+TV_TREE_PARALLELIZE_LOOPS,
+TV_TREE_VECTORIZATION,
+TV_TREE_SLP_VECTORIZATION,
+TV_GRAPHITE,
+TV_GRAPHITE_TRANSFORMS,
+TV_GRAPHITE_DATA_DEPS,
+TV_GRAPHITE_CODE_GEN,
+TV_TREE_LINEAR_TRANSFORM,
+TV_TREE_LOOP_DISTRIBUTION,
+TV_CHECK_DATA_DEPS,
+TV_TREE_PREFETCH,
+TV_TREE_LOOP_IVOPTS,
+TV_PREDCOM,
+TV_TREE_LOOP_INIT,
+TV_TREE_LOOP_FINI,
+TV_TREE_CH,
+TV_TREE_SSA_UNCPROP,
+TV_TREE_SSA_TO_NORMAL,
+TV_TREE_NRV,
+TV_TREE_COPY_RENAME,
+TV_TREE_SSA_VERIFY,
+TV_TREE_STMT_VERIFY,
+TV_TREE_SWITCH_CONVERSION,
+TV_CGRAPH_VERIFY,
+TV_DOM_FRONTIERS,
+TV_DOMINANCE,
+TV_CONTROL_DEPENDENCES,
+TV_OVERLOAD,
+TV_TEMPLATE_INSTANTIATION,
+TV_OUT_OF_SSA,
+TV_VAR_EXPAND,
+TV_EXPAND,
+TV_POST_EXPAND,
+TV_VARCONST,
+TV_LOWER_SUBREG,
+TV_JUMP,
+TV_FWPROP,
+TV_CSE,
+TV_DCE,
+TV_DSE1,
+TV_DSE2,
+TV_LOOP,
+TV_LOOP_MOVE_INVARIANTS,
+TV_LOOP_UNSWITCH,
+TV_LOOP_UNROLL,
+TV_LOOP_DOLOOP,
+TV_CPROP,
+TV_PRE,
+TV_HOIST,
+TV_LSM,
+TV_TRACER,
+TV_WEB,
+TV_AUTO_INC_DEC,
+TV_CSE2,
+TV_BRANCH_PROB,
+TV_VPT,
+TV_COMBINE,
+TV_IFCVT,
+TV_REGMOVE,
+TV_MODE_SWITCH,
+TV_SMS,
+TV_SCHED,
+TV_LOCAL_ALLOC,
+TV_GLOBAL_ALLOC,
+TV_IRA,
+TV_RELOAD,
+TV_RELOAD_CSE_REGS,
+TV_SEQABSTR,
+TV_GCSE_AFTER_RELOAD,
+TV_ZEE,
+TV_THREAD_PROLOGUE_AND_EPILOGUE,
+TV_IFCVT2,
+TV_COMBINE_STACK_ADJUST,
+TV_PEEPHOLE2,
+TV_RENAME_REGISTERS,
+TV_CPROP_REGISTERS,
+TV_SCHED2,
+TV_MACH_DEP,
+TV_DBR_SCHED,
+TV_REORDER_BLOCKS,
+TV_SHORTEN_BRANCH,
+TV_REG_STACK,
+TV_FINAL,
+TV_VAROUT,
+TV_SYMOUT,
+TV_VAR_TRACKING,
+TV_VAR_TRACKING_DATAFLOW,
+TV_VAR_TRACKING_EMIT,
+TV_TREE_IFCOMBINE,
+TV_TREE_UNINIT,
+TV_PLUGIN_INIT,
+TV_PLUGIN_RUN,
+
+
+TV_EARLY_LOCAL,
+TV_OPTIMIZE,
+TV_REST_OF_COMPILATION,
+TV_POSTRELOAD,
+TV_REMOVE_UNUSED,
+TV_ADDRESS_TAKEN,
+TV_TODO,
+TV_VERIFY_LOOP_CLOSED,
+TV_VERIFY_RTL_SHARING,
+TV_REBUILD_FREQUENCIES,
+TV_REPAIR_LOOPS,
+# 78 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/timevar.h" 2
+  TIMEVAR_LAST
 }
-c_language_kind;
+timevar_id_t;
 
 
 
-extern c_language_kind c_language;
 
+extern unsigned char timevar_enable;
 
 
+extern size_t timevar_ggc_mem_total;
 
 
-typedef enum ref_operator {
 
-  RO_NULL,
 
-  RO_ARRAY_INDEXING,
+extern void timevar_init (void);
+extern void timevar_push_1 (timevar_id_t);
+extern void timevar_pop_1 (timevar_id_t);
+extern void timevar_start (timevar_id_t);
+extern void timevar_stop (timevar_id_t);
+extern void timevar_print (FILE *);
 
-  RO_UNARY_STAR,
 
-  RO_ARROW,
-
-  RO_IMPLICIT_CONVERSION
-} ref_operator;
-
-
-
-struct stmt_tree_s {
-
-  tree x_cur_stmt_list;
-# 471 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-common.h"
-  int stmts_are_full_exprs_p;
-};
-
-typedef struct stmt_tree_s *stmt_tree;
-
-
-
-
-struct c_language_function {
-
-
-  struct stmt_tree_s x_stmt_tree;
-};
-# 495 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-common.h"
-extern void (*lang_post_pch_load) (void);
-
-extern void push_file_scope (void);
-extern void pop_file_scope (void);
-extern stmt_tree current_stmt_tree (void);
-extern tree push_stmt_list (void);
-extern tree pop_stmt_list (tree);
-extern tree add_stmt (tree);
-extern void push_cleanup (tree, tree, unsigned char);
-extern tree pushdecl_top_level (tree);
-extern tree pushdecl (tree);
-extern tree build_modify_expr (location_t, tree, tree, enum tree_code,
-          location_t, tree, tree);
-extern tree build_indirect_ref (location_t, tree, ref_operator);
-
-extern int c_expand_decl (tree);
-
-extern int field_decl_cmp (const void *, const void *);
-extern void resort_sorted_fields (void *, void *, gt_pointer_operator,
-      void *);
-extern unsigned char has_c_linkage (const_tree decl);
-
-
-
-
-
-extern char flag_no_line_commands;
-
-
-
-
-extern char flag_no_output;
-
-
-
-
-extern char flag_dump_macros;
-
-
-
-extern char flag_dump_includes;
-
-
-
-extern unsigned char flag_pch_preprocess;
-
-
-
-
-extern const char *pch_file;
-
-
-
-
-extern int flag_iso;
-
-
-
-extern int warn_unknown_pragmas;
-
-
-
-
-extern int warn_format;
-# 567 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-common.h"
-extern int flag_cond_mismatch;
-
-
-
-extern int flag_isoc94;
-
-
-
-extern int flag_isoc99;
-
-
-
-extern int flag_isoc1x;
-
-
-
-extern int flag_hosted;
-# 592 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-common.h"
-extern int print_struct_values;
-
-
-
-extern const char *constant_string_class_name;
-# 605 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-common.h"
-extern int flag_use_repository;
-
-
-
-enum cxx_dialect {
-
-  cxx98,
-
-
-  cxx0x
-};
-
-
-extern enum cxx_dialect cxx_dialect;
-
-
-
-
-
-extern int max_tinst_depth;
-
-
-
-
-
-
-
-extern int c_inhibit_evaluation_warnings;
-
-
-
-
-extern unsigned char done_lexing;
-# 655 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-common.h"
-struct visibility_flags
+static __inline__ void
+timevar_push (timevar_id_t tv)
 {
-  unsigned inpragma : 1;
-  unsigned inlines_hidden : 1;
-};
-
-
-extern struct visibility_flags visibility_options;
-
-
-extern const struct attribute_spec c_common_attribute_table[];
-extern const struct attribute_spec c_common_format_attribute_table[];
-
-
-
-
-
-
-extern tree (*make_fname_decl) (location_t, tree, int);
-
-
-extern void c_register_addr_space (const char *str, addr_space_t as);
-
-
-extern unsigned char in_late_binary_op;
-extern const char *c_addr_space_name (addr_space_t as);
-extern tree identifier_global_value (tree);
-extern void record_builtin_type (enum rid, const char *, tree);
-extern tree build_void_list_node (void);
-extern void start_fname_decls (void);
-extern void finish_fname_decls (void);
-extern const char *fname_as_string (int);
-extern tree fname_decl (location_t, unsigned, tree);
-
-extern void check_function_arguments (tree, int, tree *, tree);
-extern void check_function_arguments_recurse (void (*)
-           (void *, tree,
-            unsigned long),
-           void *, tree,
-           unsigned long);
-extern unsigned char check_builtin_function_arguments (tree, int, tree *);
-extern void check_function_format (tree, int, tree *);
-extern void set_Wformat (int);
-extern tree handle_format_attribute (tree *, tree, tree, int, unsigned char *);
-extern tree handle_format_arg_attribute (tree *, tree, tree, int, unsigned char *);
-extern unsigned char attribute_takes_identifier_p (const_tree);
-extern unsigned char c_common_handle_option (size_t, const char *, int, int, location_t,
-        const struct cl_option_handlers *);
-extern tree c_common_type_for_mode (enum machine_mode, int);
-extern tree c_common_type_for_size (unsigned int, int);
-extern tree c_common_fixed_point_type_for_size (unsigned int, unsigned int,
-      int, int);
-extern tree c_common_unsigned_type (tree);
-extern tree c_common_signed_type (tree);
-extern tree c_common_signed_or_unsigned_type (int, tree);
-extern tree c_build_bitfield_integer_type (unsigned long, int);
-extern unsigned char decl_with_nonnull_addr_p (const_tree);
-extern tree c_fully_fold (tree, unsigned char, unsigned char *);
-extern tree decl_constant_value_for_optimization (tree);
-extern tree c_wrap_maybe_const (tree, unsigned char);
-extern tree c_save_expr (tree);
-extern tree c_common_truthvalue_conversion (location_t, tree);
-extern void c_apply_type_quals_to_decl (int, tree);
-extern tree c_sizeof_or_alignof_type (location_t, tree, unsigned char, int);
-extern tree c_alignof_expr (location_t, tree);
-
-
-extern void binary_op_error (location_t, enum tree_code, tree, tree);
-extern tree fix_string_type (tree);
-extern void constant_expression_warning (tree);
-extern void constant_expression_error (tree);
-extern unsigned char strict_aliasing_warning (tree, tree, tree);
-extern void warnings_for_convert_and_check (tree, tree, tree);
-extern tree convert_and_check (tree, tree);
-extern void overflow_warning (location_t, tree);
-extern void warn_logical_operator (location_t, enum tree_code, tree,
-       enum tree_code, tree, enum tree_code, tree);
-extern void check_main_parameter_types (tree decl);
-extern unsigned char c_determine_visibility (tree);
-extern unsigned char same_scalar_type_ignoring_signedness (tree, tree);
-extern void mark_valid_location_for_stdc_pragma (unsigned char);
-extern unsigned char valid_location_for_stdc_pragma_p (void);
-extern void set_float_const_decimal64 (void);
-extern void clear_float_const_decimal64 (void);
-extern unsigned char float_const_decimal64_p (void);
-
-extern unsigned char keyword_begins_type_specifier (enum rid);
-extern unsigned char keyword_is_storage_class_specifier (enum rid);
-extern unsigned char keyword_is_type_qualifier (enum rid);
-extern unsigned char keyword_is_decl_specifier (enum rid);
-
-
-
-
-
-extern tree shorten_binary_op (tree result_type, tree op0, tree op1, unsigned char bitwise);
-
-
-
-
-extern tree shorten_compare (tree *, tree *, tree *, enum tree_code *);
-
-extern tree pointer_int_sum (location_t, enum tree_code, tree, tree);
-
-
-extern tree c_build_qualified_type (tree, int);
-
-
-
-extern void c_common_nodes_and_builtins (void);
-
-extern void disable_builtin_function (const char *);
-
-extern void set_compound_literal_name (tree decl);
-
-extern tree build_va_arg (location_t, tree, tree);
-
-extern const unsigned int c_family_lang_mask;
-extern unsigned int c_common_option_lang_mask (void);
-extern void c_common_initialize_diagnostics (diagnostic_context *);
-extern unsigned char c_common_complain_wrong_lang_p (const struct cl_option *);
-extern void c_common_init_options_struct (struct gcc_options *);
-extern void c_common_init_options (unsigned int, struct cl_decoded_option *);
-extern unsigned char c_common_post_options (const char **);
-extern unsigned char c_common_init (void);
-extern void c_common_finish (void);
-extern void c_common_parse_file (void);
-extern alias_set_type c_common_get_alias_set (tree);
-extern void c_register_builtin_type (tree, const char*);
-extern unsigned char c_promoting_integer_type_p (const_tree);
-extern int self_promoting_args_p (const_tree);
-extern tree strip_pointer_operator (tree);
-extern tree strip_pointer_or_array_types (tree);
-extern long c_common_to_target_charset (long);
-
-
-extern void c_parse_file (void);
-
-extern void warn_for_omitted_condop (location_t, tree);
-# 829 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/c-common.h"
-extern tree do_case (location_t, tree, tree);
-extern tree build_stmt (location_t, enum tree_code, ...);
-extern tree build_case_label (location_t, tree, tree, tree);
-extern tree build_real_imag_expr (location_t, enum tree_code, tree);
-
-
-
-
-extern tree build_unary_op (location_t, enum tree_code, tree, int);
-extern tree build_binary_op (location_t, enum tree_code, tree, tree, int);
-extern tree perform_integral_promotions (tree);
-
-
-
-
-extern tree default_conversion (tree);
-
-
-
-
-extern tree common_type (tree, tree);
-
-extern tree decl_constant_value (tree);
-
-
-extern tree boolean_increment (enum tree_code, tree);
-
-extern int case_compare (splay_tree_key, splay_tree_key);
-
-extern tree c_add_case_label (location_t, splay_tree, tree, tree, tree, tree);
-
-extern void c_do_switch_warnings (splay_tree, location_t, tree, tree);
-
-extern tree build_function_call (location_t, tree, tree);
-
-extern tree build_function_call_vec (location_t, tree,
-             VEC_tree_gc *, VEC_tree_gc *);
-
-extern tree resolve_overloaded_builtin (location_t, tree, VEC_tree_gc *);
-
-extern tree finish_label_address_expr (tree, location_t);
-
-
-
-extern tree lookup_label (tree);
-extern tree lookup_name (tree);
-extern unsigned char lvalue_p (const_tree);
-
-extern unsigned char vector_targets_convertible_p (const_tree t1, const_tree t2);
-extern unsigned char vector_types_convertible_p (const_tree t1, const_tree t2, unsigned char emit_lax_note);
-
-extern rtx c_expand_expr (tree, rtx, enum machine_mode, int, rtx *);
-
-extern void init_c_lex (void);
-
-extern void c_cpp_builtins (cpp_reader *);
-extern void c_cpp_builtins_optimize_pragma (cpp_reader *, tree, tree);
-extern unsigned char c_cpp_error (cpp_reader *, int, int, location_t, unsigned int,
-    const char *, va_list *)
-     __attribute__ ((__format__ (__gcc_cdiag__, 6, 0))) __attribute__ ((__nonnull__ (6)));
-
-extern unsigned char parse_optimize_options (tree, unsigned char);
-
-
-
-extern int pending_lang_change;
-
-
-
-struct c_fileinfo
+  if (timevar_enable)
+    timevar_push_1 (tv);
+}
+
+static __inline__ void
+timevar_pop (timevar_id_t tv)
 {
-  int time;
+  if (timevar_enable)
+    timevar_pop_1 (tv);
+}
+
+extern void print_time (const char *, long);
+# 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/tree-pass.h" 2
 
 
 
+enum tree_dump_index
+{
+  TDI_none,
+  TDI_cgraph,
+  TDI_tu,
+  TDI_class,
+  TDI_original,
+  TDI_generic,
+  TDI_nested,
+  TDI_vcg,
+
+  TDI_ada,
+  TDI_tree_all,
+  TDI_rtl_all,
+  TDI_ipa_all,
+
+  TDI_end
+};
+# 90 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/tree-pass.h"
+extern char *get_dump_file_name (int);
+extern int dump_enabled_p (int);
+extern int dump_initialized_p (int);
+extern FILE *dump_begin (int, int *);
+extern void dump_end (int, FILE *);
+extern void dump_node (const_tree, int, FILE *);
+extern int dump_switch_p (const char *);
+extern const char *dump_flag_name (int);
 
 
+extern FILE *dump_file;
+extern int dump_flags;
+extern const char *dump_file_name;
 
 
-  short interface_only;
-  short interface_unknown;
+extern struct dump_file_info *get_dump_file_info (int);
+
+
+enum opt_pass_type
+{
+  GIMPLE_PASS,
+  RTL_PASS,
+  SIMPLE_IPA_PASS,
+  IPA_PASS
 };
 
-struct c_fileinfo *get_fileinfo (const char *);
-extern void dump_time_statistics (void);
 
-extern unsigned char c_dump_tree (void *, tree);
 
-extern void verify_sequence_points (tree);
+struct opt_pass
+{
 
-extern tree fold_offsetof (tree, tree);
+  enum opt_pass_type type;
 
 
 
+  const char *name;
 
-enum lvalue_use {
-  lv_assign,
-  lv_increment,
-  lv_decrement,
-  lv_addressof,
-  lv_asm
+
+
+  unsigned char (*gate) (void);
+
+
+
+
+  unsigned int (*execute) (void);
+
+
+  struct opt_pass *sub;
+
+
+  struct opt_pass *next;
+
+
+  int static_pass_number;
+
+
+
+  timevar_id_t tv_id;
+
+
+  unsigned int properties_required;
+  unsigned int properties_provided;
+  unsigned int properties_destroyed;
+
+
+  unsigned int todo_flags_start;
+  unsigned int todo_flags_finish;
 };
 
-extern void readonly_error (tree, enum lvalue_use);
-extern void lvalue_error (location_t, enum lvalue_use);
-extern void invalid_indirection_error (location_t, tree, ref_operator);
 
-extern int complete_array_type (tree *, tree, unsigned char);
-
-extern tree builtin_type_for_size (int, unsigned char);
-
-extern void c_common_mark_addressable_vec (tree);
-
-extern void warn_array_subscript_with_type_char (tree);
-extern void warn_about_parentheses (enum tree_code,
-        enum tree_code, tree,
-        enum tree_code, tree);
-extern void warn_for_unused_label (tree label);
-extern void warn_for_div_by_zero (location_t, tree divisor);
-extern void warn_for_sign_compare (location_t,
-       tree orig_op0, tree orig_op1,
-       tree op0, tree op1,
-       tree result_type,
-       enum tree_code resultcode);
-extern void do_warn_double_promotion (tree, tree, tree, const char *,
-          location_t);
-extern void set_underlying_type (tree x);
-extern VEC_tree_gc *make_tree_vector (void);
-extern void release_tree_vector (VEC_tree_gc *);
-extern VEC_tree_gc *make_tree_vector_single (tree);
-extern VEC_tree_gc *make_tree_vector_copy (const VEC_tree_gc *);
+struct gimple_opt_pass
+{
+  struct opt_pass pass;
+};
 
 
-extern void c_genericize (tree);
-extern int c_gimplify_expr (tree *, gimple_seq *, gimple_seq *);
-extern tree c_build_bind_expr (location_t, tree, tree);
+struct rtl_opt_pass
+{
+  struct opt_pass pass;
+};
+
+struct varpool_node;
+struct cgraph_node;
+struct cgraph_node_set_def;
+struct varpool_node_set_def;
 
 
-extern void pch_init (void);
-extern int c_common_valid_pch (cpp_reader *pfile, const char *name, int fd);
-extern void c_common_read_pch (cpp_reader *pfile, const char *name, int fd,
-          const char *orig);
-extern void c_common_write_pch (void);
-extern void c_common_no_more_pch (void);
-extern void c_common_pch_pragma (cpp_reader *pfile, const char *);
-extern void c_common_print_pch_checksum (FILE *f);
+
+struct ipa_opt_pass_d
+{
+  struct opt_pass pass;
 
 
-extern const unsigned char executable_checksum[16];
+
+  void (*generate_summary) (void);
 
 
-extern void builtin_define_std (const char *macro);
-extern void builtin_define_with_value (const char *, const char *, int);
-extern void c_stddef_cpp_builtins (void);
-extern void fe_file_change (const struct line_map *);
-extern void c_parse_error (const char *, enum cpp_ttype, tree, unsigned char);
+  void (*write_summary) (struct cgraph_node_set_def *,
+    struct varpool_node_set_def *);
 
 
-extern void init_pp_output (FILE *);
-extern void preprocess_file (cpp_reader *);
-extern void pp_file_change (const struct line_map *);
-extern void pp_dir_change (cpp_reader *, const char *);
-extern unsigned char check_missing_format_attribute (tree, tree);
+  void (*read_summary) (void);
 
 
-extern tree c_finish_omp_master (location_t, tree);
-extern tree c_finish_omp_critical (location_t, tree, tree);
-extern tree c_finish_omp_ordered (location_t, tree);
-extern void c_finish_omp_barrier (location_t);
-extern tree c_finish_omp_atomic (location_t, enum tree_code, tree, tree);
-extern void c_finish_omp_flush (location_t);
-extern void c_finish_omp_taskwait (location_t);
-extern tree c_finish_omp_for (location_t, tree, tree, tree, tree, tree, tree);
-extern void c_split_parallel_clauses (location_t, tree, tree *, tree *);
-extern enum omp_clause_default_kind c_omp_predetermined_sharing (tree);
+  void (*write_optimization_summary) (struct cgraph_node_set_def *,
+          struct varpool_node_set_def *);
 
 
-extern unsigned char c_omp_sharing_predetermined (tree);
-extern tree c_omp_remap_decl (tree, unsigned char);
-extern void record_types_used_by_current_var_decl (tree);
-# 41 "/opt/gcc-plugins/src/plugin-utils.h" 2
+  void (*read_optimization_summary) (void);
 
+
+
+  void (*stmt_fixup) (struct cgraph_node *, gimple *);
+
+
+
+  unsigned int function_transform_todo_flags_start;
+  unsigned int (*function_transform) (struct cgraph_node *);
+  void (*variable_transform) (struct varpool_node *);
+};
+
+
+
+struct simple_ipa_opt_pass
+{
+  struct opt_pass pass;
+};
+
+
+struct dump_file_info
+{
+  const char *suffix;
+  const char *swtch;
+  const char *glob;
+  int flags;
+  int state;
+  int num;
+};
+# 332 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/tree-pass.h"
+enum pass_positioning_ops
+{
+  PASS_POS_INSERT_AFTER,
+  PASS_POS_INSERT_BEFORE,
+  PASS_POS_REPLACE
+};
+
+struct register_pass_info
+{
+  struct opt_pass *pass;
+  const char *reference_pass_name;
+
+  int ref_pass_instance_number;
+
+
+  enum pass_positioning_ops pos_op;
+};
+
+extern void tree_lowering_passes (tree decl);
+
+extern struct gimple_opt_pass pass_mudflap_1;
+extern struct gimple_opt_pass pass_mudflap_2;
+extern struct gimple_opt_pass pass_lower_cf;
+extern struct gimple_opt_pass pass_refactor_eh;
+extern struct gimple_opt_pass pass_lower_eh;
+extern struct gimple_opt_pass pass_lower_eh_dispatch;
+extern struct gimple_opt_pass pass_lower_resx;
+extern struct gimple_opt_pass pass_build_cfg;
+extern struct gimple_opt_pass pass_early_tree_profile;
+extern struct gimple_opt_pass pass_referenced_vars;
+extern struct gimple_opt_pass pass_cleanup_eh;
+extern struct gimple_opt_pass pass_sra;
+extern struct gimple_opt_pass pass_sra_early;
+extern struct gimple_opt_pass pass_early_ipa_sra;
+extern struct gimple_opt_pass pass_tail_recursion;
+extern struct gimple_opt_pass pass_tail_calls;
+extern struct gimple_opt_pass pass_tree_loop;
+extern struct gimple_opt_pass pass_tree_loop_init;
+extern struct gimple_opt_pass pass_lim;
+extern struct gimple_opt_pass pass_tree_unswitch;
+extern struct gimple_opt_pass pass_predcom;
+extern struct gimple_opt_pass pass_iv_canon;
+extern struct gimple_opt_pass pass_scev_cprop;
+extern struct gimple_opt_pass pass_empty_loop;
+extern struct gimple_opt_pass pass_record_bounds;
+extern struct gimple_opt_pass pass_graphite;
+extern struct gimple_opt_pass pass_graphite_transforms;
+extern struct gimple_opt_pass pass_if_conversion;
+extern struct gimple_opt_pass pass_loop_distribution;
+extern struct gimple_opt_pass pass_vectorize;
+extern struct gimple_opt_pass pass_slp_vectorize;
+extern struct gimple_opt_pass pass_complete_unroll;
+extern struct gimple_opt_pass pass_complete_unrolli;
+extern struct gimple_opt_pass pass_parallelize_loops;
+extern struct gimple_opt_pass pass_loop_prefetch;
+extern struct gimple_opt_pass pass_iv_optimize;
+extern struct gimple_opt_pass pass_tree_loop_done;
+extern struct gimple_opt_pass pass_ch;
+extern struct gimple_opt_pass pass_ccp;
+extern struct gimple_opt_pass pass_phi_only_cprop;
+extern struct gimple_opt_pass pass_build_ssa;
+extern struct gimple_opt_pass pass_build_alias;
+extern struct gimple_opt_pass pass_build_ealias;
+extern struct gimple_opt_pass pass_dominator;
+extern struct gimple_opt_pass pass_dce;
+extern struct gimple_opt_pass pass_dce_loop;
+extern struct gimple_opt_pass pass_cd_dce;
+extern struct gimple_opt_pass pass_call_cdce;
+extern struct gimple_opt_pass pass_merge_phi;
+extern struct gimple_opt_pass pass_split_crit_edges;
+extern struct gimple_opt_pass pass_pre;
+extern struct gimple_opt_pass pass_profile;
+extern struct gimple_opt_pass pass_strip_predict_hints;
+extern struct gimple_opt_pass pass_lower_complex_O0;
+extern struct gimple_opt_pass pass_lower_complex;
+extern struct gimple_opt_pass pass_lower_vector;
+extern struct gimple_opt_pass pass_lower_vector_ssa;
+extern struct gimple_opt_pass pass_lower_omp;
+extern struct gimple_opt_pass pass_diagnose_omp_blocks;
+extern struct gimple_opt_pass pass_expand_omp;
+extern struct gimple_opt_pass pass_expand_omp_ssa;
+extern struct gimple_opt_pass pass_object_sizes;
+extern struct gimple_opt_pass pass_fold_builtins;
+extern struct gimple_opt_pass pass_stdarg;
+extern struct gimple_opt_pass pass_early_warn_uninitialized;
+extern struct gimple_opt_pass pass_late_warn_uninitialized;
+extern struct gimple_opt_pass pass_cse_reciprocals;
+extern struct gimple_opt_pass pass_cse_sincos;
+extern struct gimple_opt_pass pass_optimize_bswap;
+extern struct gimple_opt_pass pass_optimize_widening_mul;
+extern struct gimple_opt_pass pass_warn_function_return;
+extern struct gimple_opt_pass pass_warn_function_noreturn;
+extern struct gimple_opt_pass pass_cselim;
+extern struct gimple_opt_pass pass_phiopt;
+extern struct gimple_opt_pass pass_forwprop;
+extern struct gimple_opt_pass pass_phiprop;
+extern struct gimple_opt_pass pass_tree_ifcombine;
+extern struct gimple_opt_pass pass_dse;
+extern struct gimple_opt_pass pass_nrv;
+extern struct gimple_opt_pass pass_rename_ssa_copies;
+extern struct gimple_opt_pass pass_rest_of_compilation;
+extern struct gimple_opt_pass pass_sink_code;
+extern struct gimple_opt_pass pass_fre;
+extern struct gimple_opt_pass pass_check_data_deps;
+extern struct gimple_opt_pass pass_copy_prop;
+extern struct gimple_opt_pass pass_vrp;
+extern struct gimple_opt_pass pass_uncprop;
+extern struct gimple_opt_pass pass_return_slot;
+extern struct gimple_opt_pass pass_reassoc;
+extern struct gimple_opt_pass pass_rebuild_cgraph_edges;
+extern struct gimple_opt_pass pass_remove_cgraph_callee_edges;
+extern struct gimple_opt_pass pass_build_cgraph_edges;
+extern struct gimple_opt_pass pass_local_pure_const;
+extern struct gimple_opt_pass pass_tracer;
+extern struct gimple_opt_pass pass_warn_unused_result;
+extern struct gimple_opt_pass pass_split_functions;
+extern struct gimple_opt_pass pass_feedback_split_functions;
+
+
+extern struct simple_ipa_opt_pass pass_ipa_lower_emutls;
+extern struct simple_ipa_opt_pass pass_ipa_function_and_variable_visibility;
+extern struct simple_ipa_opt_pass pass_ipa_tree_profile;
+
+extern struct simple_ipa_opt_pass pass_early_local_passes;
+
+extern struct ipa_opt_pass_d pass_ipa_whole_program_visibility;
+extern struct ipa_opt_pass_d pass_ipa_lto_gimple_out;
+extern struct simple_ipa_opt_pass pass_ipa_increase_alignment;
+extern struct simple_ipa_opt_pass pass_ipa_matrix_reorg;
+extern struct ipa_opt_pass_d pass_ipa_inline;
+extern struct simple_ipa_opt_pass pass_ipa_free_lang_data;
+extern struct ipa_opt_pass_d pass_ipa_cp;
+extern struct ipa_opt_pass_d pass_ipa_reference;
+extern struct ipa_opt_pass_d pass_ipa_pure_const;
+extern struct simple_ipa_opt_pass pass_ipa_type_escape;
+extern struct simple_ipa_opt_pass pass_ipa_pta;
+extern struct simple_ipa_opt_pass pass_ipa_struct_reorg;
+extern struct ipa_opt_pass_d pass_ipa_lto_wpa_fixup;
+extern struct ipa_opt_pass_d pass_ipa_lto_finish_out;
+extern struct ipa_opt_pass_d pass_ipa_profile;
+extern struct ipa_opt_pass_d pass_ipa_cdtor_merge;
+
+extern struct gimple_opt_pass pass_all_optimizations;
+extern struct gimple_opt_pass pass_cleanup_cfg_post_optimizing;
+extern struct gimple_opt_pass pass_init_datastructures;
+extern struct gimple_opt_pass pass_fixup_cfg;
+
+extern struct rtl_opt_pass pass_expand;
+extern struct rtl_opt_pass pass_init_function;
+extern struct rtl_opt_pass pass_jump;
+extern struct rtl_opt_pass pass_rtl_eh;
+extern struct rtl_opt_pass pass_initial_value_sets;
+extern struct rtl_opt_pass pass_unshare_all_rtl;
+extern struct rtl_opt_pass pass_instantiate_virtual_regs;
+extern struct rtl_opt_pass pass_rtl_fwprop;
+extern struct rtl_opt_pass pass_rtl_fwprop_addr;
+extern struct rtl_opt_pass pass_jump2;
+extern struct rtl_opt_pass pass_lower_subreg;
+extern struct rtl_opt_pass pass_cse;
+extern struct rtl_opt_pass pass_fast_rtl_dce;
+extern struct rtl_opt_pass pass_ud_rtl_dce;
+extern struct rtl_opt_pass pass_rtl_dce;
+extern struct rtl_opt_pass pass_rtl_dse1;
+extern struct rtl_opt_pass pass_rtl_dse2;
+extern struct rtl_opt_pass pass_rtl_dse3;
+extern struct rtl_opt_pass pass_rtl_cprop;
+extern struct rtl_opt_pass pass_rtl_pre;
+extern struct rtl_opt_pass pass_rtl_hoist;
+extern struct rtl_opt_pass pass_rtl_store_motion;
+extern struct rtl_opt_pass pass_cse_after_global_opts;
+extern struct rtl_opt_pass pass_rtl_ifcvt;
+
+extern struct rtl_opt_pass pass_into_cfg_layout_mode;
+extern struct rtl_opt_pass pass_outof_cfg_layout_mode;
+
+extern struct rtl_opt_pass pass_loop2;
+extern struct rtl_opt_pass pass_rtl_loop_init;
+extern struct rtl_opt_pass pass_rtl_move_loop_invariants;
+extern struct rtl_opt_pass pass_rtl_unswitch;
+extern struct rtl_opt_pass pass_rtl_unroll_and_peel_loops;
+extern struct rtl_opt_pass pass_rtl_doloop;
+extern struct rtl_opt_pass pass_rtl_loop_done;
+
+extern struct rtl_opt_pass pass_web;
+extern struct rtl_opt_pass pass_cse2;
+extern struct rtl_opt_pass pass_df_initialize_opt;
+extern struct rtl_opt_pass pass_df_initialize_no_opt;
+extern struct rtl_opt_pass pass_reginfo_init;
+extern struct rtl_opt_pass pass_inc_dec;
+extern struct rtl_opt_pass pass_stack_ptr_mod;
+extern struct rtl_opt_pass pass_initialize_regs;
+extern struct rtl_opt_pass pass_combine;
+extern struct rtl_opt_pass pass_if_after_combine;
+extern struct rtl_opt_pass pass_implicit_zee;
+extern struct rtl_opt_pass pass_partition_blocks;
+extern struct rtl_opt_pass pass_match_asm_constraints;
+extern struct rtl_opt_pass pass_regmove;
+extern struct rtl_opt_pass pass_split_all_insns;
+extern struct rtl_opt_pass pass_fast_rtl_byte_dce;
+extern struct rtl_opt_pass pass_lower_subreg2;
+extern struct rtl_opt_pass pass_mode_switching;
+extern struct rtl_opt_pass pass_sms;
+extern struct rtl_opt_pass pass_sched;
+extern struct rtl_opt_pass pass_ira;
+extern struct rtl_opt_pass pass_postreload;
+extern struct rtl_opt_pass pass_clean_state;
+extern struct rtl_opt_pass pass_branch_prob;
+extern struct rtl_opt_pass pass_value_profile_transformations;
+extern struct rtl_opt_pass pass_postreload_cse;
+extern struct rtl_opt_pass pass_gcse2;
+extern struct rtl_opt_pass pass_split_after_reload;
+extern struct rtl_opt_pass pass_branch_target_load_optimize1;
+extern struct rtl_opt_pass pass_thread_prologue_and_epilogue;
+extern struct rtl_opt_pass pass_stack_adjustments;
+extern struct rtl_opt_pass pass_peephole2;
+extern struct rtl_opt_pass pass_if_after_reload;
+extern struct rtl_opt_pass pass_regrename;
+extern struct rtl_opt_pass pass_cprop_hardreg;
+extern struct rtl_opt_pass pass_reorder_blocks;
+extern struct rtl_opt_pass pass_branch_target_load_optimize2;
+extern struct rtl_opt_pass pass_leaf_regs;
+extern struct rtl_opt_pass pass_split_before_sched2;
+extern struct rtl_opt_pass pass_compare_elim_after_reload;
+extern struct rtl_opt_pass pass_sched2;
+extern struct rtl_opt_pass pass_stack_regs;
+extern struct rtl_opt_pass pass_stack_regs_run;
+extern struct rtl_opt_pass pass_df_finish;
+extern struct rtl_opt_pass pass_compute_alignments;
+extern struct rtl_opt_pass pass_duplicate_computed_gotos;
+extern struct rtl_opt_pass pass_variable_tracking;
+extern struct rtl_opt_pass pass_free_cfg;
+extern struct rtl_opt_pass pass_machine_reorg;
+extern struct rtl_opt_pass pass_cleanup_barriers;
+extern struct rtl_opt_pass pass_delay_slots;
+extern struct rtl_opt_pass pass_split_for_shorten_branches;
+extern struct rtl_opt_pass pass_split_before_regstack;
+extern struct rtl_opt_pass pass_convert_to_eh_region_ranges;
+extern struct rtl_opt_pass pass_shorten_branches;
+extern struct rtl_opt_pass pass_set_nothrow_function_flags;
+extern struct rtl_opt_pass pass_final;
+extern struct rtl_opt_pass pass_rtl_seqabstr;
+extern struct gimple_opt_pass pass_release_ssa_names;
+extern struct gimple_opt_pass pass_early_inline;
+extern struct gimple_opt_pass pass_inline_parameters;
+extern struct gimple_opt_pass pass_all_early_optimizations;
+extern struct gimple_opt_pass pass_update_address_taken;
+extern struct gimple_opt_pass pass_convert_switch;
+
+
+extern struct opt_pass *all_passes, *all_small_ipa_passes, *all_lowering_passes,
+                       *all_regular_ipa_passes, *all_lto_gen_passes;
+# 594 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/tree-pass.h"
+enum
+{
+  PASS_LIST_NO_all_lowering_passes, PASS_LIST_NO_all_small_ipa_passes, PASS_LIST_NO_all_regular_ipa_passes, PASS_LIST_NO_all_lto_gen_passes, PASS_LIST_NO_all_passes,
+  PASS_LIST_NUM
+};
+
+
+
+
+extern struct opt_pass **gcc_pass_lists[];
+
+
+extern struct opt_pass *current_pass;
+
+extern struct opt_pass * get_pass_for_id (int);
+extern unsigned char execute_one_pass (struct opt_pass *);
+extern void execute_pass_list (struct opt_pass *);
+extern void execute_ipa_pass_list (struct opt_pass *);
+extern void execute_ipa_summary_passes (struct ipa_opt_pass_d *);
+extern void execute_all_ipa_transforms (void);
+extern void execute_all_ipa_stmt_fixups (struct cgraph_node *, gimple *);
+extern unsigned char pass_init_dump_file (struct opt_pass *);
+extern void pass_fini_dump_file (struct opt_pass *);
+
+extern const char *get_current_pass_name (void);
+extern void print_current_pass (FILE *);
+extern void debug_pass (void);
+extern void ipa_write_summaries (void);
+extern void ipa_write_optimization_summaries (struct cgraph_node_set_def *,
+           struct varpool_node_set_def *);
+extern void ipa_read_summaries (void);
+extern void ipa_read_optimization_summaries (void);
+extern void register_one_dump_file (struct opt_pass *);
+extern unsigned char function_called_by_processed_nodes_p (void);
+extern void register_pass (struct register_pass_info *);
+# 637 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/tree-pass.h"
+extern unsigned char first_pass_instance;
+
+
+extern void do_per_function_toporder (void (*) (void *), void *);
+# 28 "/opt/gcc-plugins/src/acf_plugin.c" 2
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/function.h" 1
 # 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/function.h"
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/tree.h" 1
@@ -28073,3454 +24006,7 @@ extern int get_next_funcdef_no (void);
 
 extern unsigned char optimize_function_for_size_p (struct function *);
 extern unsigned char optimize_function_for_speed_p (struct function *);
-# 43 "/opt/gcc-plugins/src/plugin-utils.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h" 1
-# 47 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-enum rtx_code {
-
-
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.def" 1
-# 82 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.def"
-UNKNOWN ,
-
-
-
-
-
-
-VALUE ,
-
-
-
-DEBUG_EXPR ,
-
-
-
-
-
-
-EXPR_LIST ,
-
-
-
-INSN_LIST ,
-
-
-
-
-
-SEQUENCE ,
-
-
-ADDRESS ,
-# 126 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.def"
-DEBUG_INSN ,
-
-
-INSN ,
-
-
-
-JUMP_INSN ,
-
-
-
-
-
-
-CALL_INSN ,
-
-
-BARRIER ,
-
-
-
-
-
-
-
-CODE_LABEL ,
-
-
-
-
-
-
-NOTE ,
-# 171 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.def"
-COND_EXEC ,
-
-
-PARALLEL ,
-
-
-
-
-
-
-
-ASM_INPUT ,
-# 196 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.def"
-ASM_OPERANDS ,
-# 214 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.def"
-UNSPEC ,
-
-
-UNSPEC_VOLATILE ,
-
-
-
-ADDR_VEC ,
-# 246 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.def"
-ADDR_DIFF_VEC ,
-# 257 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.def"
-PREFETCH ,
-# 269 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.def"
-SET ,
-# 278 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.def"
-USE ,
-# 287 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.def"
-CLOBBER ,
-
-
-
-
-
-CALL ,
-
-
-
-RETURN ,
-
-
-
-EH_RETURN ,
-
-
-
-
-
-TRAP_IF ,
-
-
-
-
-
-
-CONST_INT ,
-
-
-CONST_FIXED ,
-
-
-
-
-CONST_DOUBLE ,
-
-
-CONST_VECTOR ,
-
-
-
-
-CONST_STRING ,
-
-
-
-
-
-CONST ,
-
-
-
-PC ,
-# 350 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.def"
-REG ,
-
-
-
-
-
-
-SCRATCH ,
-
-
-
-SUBREG ,
-# 374 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.def"
-STRICT_LOW_PART ,
-
-
-
-
-
-CONCAT ,
-
-
-
-
-
-CONCATN ,
-
-
-
-
-MEM ,
-
-
-
-LABEL_REF ,
-
-
-
-
-
-
-SYMBOL_REF ,
-
-
-
-
-
-
-CC0 ,
-# 421 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.def"
-IF_THEN_ELSE ,
-
-
-COMPARE ,
-
-
-PLUS ,
-
-
-MINUS ,
-
-
-NEG ,
-
-MULT ,
-
-
-SS_MULT ,
-
-US_MULT ,
-
-
-DIV ,
-
-SS_DIV ,
-
-US_DIV ,
-
-
-MOD ,
-
-
-UDIV ,
-UMOD ,
-
-
-AND ,
-IOR ,
-XOR ,
-NOT ,
-
-
-
-
-ASHIFT ,
-ROTATE ,
-ASHIFTRT ,
-LSHIFTRT ,
-ROTATERT ,
-# 478 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.def"
-SMIN ,
-SMAX ,
-UMIN ,
-UMAX ,
-# 490 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.def"
-PRE_DEC ,
-PRE_INC ,
-POST_DEC ,
-POST_INC ,
-# 507 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.def"
-PRE_MODIFY ,
-POST_MODIFY ,
-
-
-
-NE ,
-EQ ,
-GE ,
-GT ,
-LE ,
-LT ,
-GEU ,
-GTU ,
-LEU ,
-LTU ,
-
-
-UNORDERED ,
-ORDERED ,
-
-
-UNEQ ,
-UNGE ,
-UNGT ,
-UNLE ,
-UNLT ,
-
-
-LTGT ,
-
-
-
-
-SIGN_EXTEND ,
-
-
-ZERO_EXTEND ,
-
-
-TRUNCATE ,
-
-
-FLOAT_EXTEND ,
-FLOAT_TRUNCATE ,
-
-
-FLOAT ,
-
-
-
-
-
-
-
-FIX ,
-
-
-UNSIGNED_FLOAT ,
-
-
-
-
-UNSIGNED_FIX ,
-# 579 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.def"
-FRACT_CONVERT ,
-
-
-
-
-
-
-UNSIGNED_FRACT_CONVERT ,
-
-
-
-
-
-
-
-SAT_FRACT ,
-
-
-
-
-
-UNSIGNED_SAT_FRACT ,
-
-
-ABS ,
-
-
-SQRT ,
-
-
-BSWAP ,
-
-
-
-
-FFS ,
-
-
-CLZ ,
-
-
-CTZ ,
-
-
-POPCOUNT ,
-
-
-PARITY ,
-# 638 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.def"
-SIGN_EXTRACT ,
-
-
-
-ZERO_EXTRACT ,
-
-
-
-
-HIGH ,
-
-
-
-LO_SUM ,
-
-
-
-
-
-
-VEC_MERGE ,
-
-
-
-
-
-VEC_SELECT ,
-
-
-
-
-VEC_CONCAT ,
-
-
-
-
-
-VEC_DUPLICATE ,
-
-
-SS_PLUS ,
-
-
-US_PLUS ,
-
-
-SS_MINUS ,
-
-
-SS_NEG ,
-
-US_NEG ,
-
-
-SS_ABS ,
-
-
-SS_ASHIFT ,
-
-
-US_ASHIFT ,
-
-
-US_MINUS ,
-
-
-SS_TRUNCATE ,
-
-
-US_TRUNCATE ,
-
-
-FMA ,
-
-
-
-
-VAR_LOCATION ,
-
-
-
-DEBUG_IMPLICIT_PTR ,
-# 51 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h" 2
-
-
-  LAST_AND_UNUSED_RTX_CODE};
-# 62 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-enum rtx_class {
-
-
-
-
-  RTX_COMPARE,
-  RTX_COMM_COMPARE,
-  RTX_BIN_ARITH,
-  RTX_COMM_ARITH,
-
-
-  RTX_UNARY,
-
-  RTX_EXTRA,
-  RTX_MATCH,
-  RTX_INSN,
-
-
-  RTX_OBJ,
-  RTX_CONST_OBJ,
-
-  RTX_TERNARY,
-  RTX_BITFIELD_OPS,
-  RTX_AUTOINC
-};
-# 100 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-extern const unsigned char rtx_length[((int) LAST_AND_UNUSED_RTX_CODE)];
-
-
-extern const char * const rtx_name[((int) LAST_AND_UNUSED_RTX_CODE)];
-
-
-extern const char * const rtx_format[((int) LAST_AND_UNUSED_RTX_CODE)];
-
-
-extern const enum rtx_class rtx_class[((int) LAST_AND_UNUSED_RTX_CODE)];
-
-
-extern const unsigned char rtx_code_size[((int) LAST_AND_UNUSED_RTX_CODE)];
-extern const unsigned char rtx_next[((int) LAST_AND_UNUSED_RTX_CODE)];
-
-
-
-typedef struct
-{
-
-  unsigned min_align: 8;
-
-  unsigned base_after_vec: 1;
-  unsigned min_after_vec: 1;
-
-  unsigned max_after_vec: 1;
-
-  unsigned min_after_base: 1;
-
-  unsigned max_after_base: 1;
-
-
-  unsigned offset_unsigned: 1;
-  unsigned : 2;
-  unsigned scale : 8;
-} addr_diff_vec_flags;
-# 144 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-typedef struct mem_attrs
-{
-  tree expr;
-  rtx offset;
-  rtx size;
-  alias_set_type alias;
-  unsigned int align;
-  unsigned char addrspace;
-} mem_attrs;
-# 161 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-typedef struct reg_attrs {
-  tree decl;
-  long offset;
-} reg_attrs;
-
-
-
-union rtunion_def
-{
-  int rt_int;
-  unsigned int rt_uint;
-  const char *rt_str;
-  rtx rt_rtx;
-  rtvec rt_rtvec;
-  enum machine_mode rt_type;
-  addr_diff_vec_flags rt_addr_diff_vec_flags;
-  struct cselib_val_struct *rt_cselib;
-  tree rt_tree;
-  struct basic_block_def *rt_bb;
-  mem_attrs *rt_mem;
-  reg_attrs *rt_reg;
-  struct constant_descriptor_rtx *rt_constant;
-};
-typedef union rtunion_def rtunion;
-
-
-
-
-struct block_symbol {
-
-  rtunion fld[3];
-
-
-  struct object_block *block;
-
-
-
-  long offset;
-};
-
-
-
-struct object_block {
-
-  section *sect;
-
-
-  unsigned int alignment;
-
-
-  long size;
-# 221 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-  VEC_rtx_gc *objects;
-# 231 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-  VEC_rtx_gc *anchors;
-};
-
-
-
-struct
-                                                    rtx_def {
-
-  __extension__ enum rtx_code code: 16;
-
-
-  __extension__ enum machine_mode mode : 8;
-
-
-
-
-
-
-  unsigned int jump : 1;
-
-
-
-
-  unsigned int call : 1;
-
-
-
-
-
-
-
-  unsigned int unchanging : 1;
-# 274 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-  unsigned int volatil : 1;
-# 288 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-  unsigned int in_struct : 1;
-
-
-
-
-
-
-  unsigned int used : 1;
-
-
-
-
-
-
-  unsigned frame_related : 1;
-
-
-
-
-  unsigned return_val : 1;
-
-
-
-
-  union u {
-    rtunion fld[1];
-    long hwint[1];
-    struct block_symbol block_sym;
-    struct real_value rv;
-    struct fixed_value fv;
-  } u;
-};
-# 356 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-struct rtvec_def {
-  int num_elem;
-  rtx elem[1];
-};
-# 836 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-enum reg_note
-{
-
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/reg-notes.def" 1
-# 33 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/reg-notes.def"
-REG_DEP_TRUE,
-
-
-
-
-REG_DEAD,
-
-
-REG_INC,
-# 52 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/reg-notes.def"
-REG_EQUIV,
-
-
-
-
-REG_EQUAL,
-
-
-
-
-
-
-REG_NONNEG,
-
-
-REG_UNUSED,
-# 76 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/reg-notes.def"
-REG_CC_SETTER,
-REG_CC_USER,
-
-
-
-
-REG_LABEL_TARGET,
-
-
-
-
-
-REG_LABEL_OPERAND,
-
-
-
-
-REG_DEP_OUTPUT,
-REG_DEP_ANTI,
-
-
-
-
-
-REG_BR_PROB,
-
-
-
-REG_NOALIAS,
-
-
-
-
-
-REG_BR_PRED,
-
-
-
-
-REG_FRAME_RELATED_EXPR,
-# 125 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/reg-notes.def"
-REG_CFA_DEF_CFA,
-
-
-
-
-
-
-
-REG_CFA_ADJUST_CFA,
-
-
-
-
-
-REG_CFA_OFFSET,
-
-
-
-
-REG_CFA_REGISTER,
-
-
-
-
-
-REG_CFA_EXPRESSION,
-
-
-
-
-
-REG_CFA_RESTORE,
-
-
-
-
-REG_CFA_SET_VDRAP,
-
-
-
-
-REG_EH_CONTEXT,
-
-
-
-
-
-REG_EH_REGION,
-
-
-REG_SAVE_NOTE,
-
-
-REG_NORETURN,
-
-
-
-REG_NON_LOCAL_GOTO,
-
-
-
-
-REG_CROSSING_JUMP,
-
-
-
-REG_SETJMP,
-# 840 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h" 2
-
-  REG_NOTE_MAX
-};
-# 851 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-extern const char * const reg_note_name[];
-# 943 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-enum var_init_status
-{
-  VAR_INIT_STATUS_UNKNOWN,
-  VAR_INIT_STATUS_UNINITIALIZED,
-  VAR_INIT_STATUS_INITIALIZED
-};
-# 959 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-enum insn_note
-{
-
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/insn-notes.def" 1
-# 35 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/insn-notes.def"
-NOTE_INSN_DELETED,
-
-
-NOTE_INSN_DELETED_LABEL,
-
-
-
-NOTE_INSN_BLOCK_BEG,
-NOTE_INSN_BLOCK_END,
-
-
-
-
-NOTE_INSN_FUNCTION_BEG,
-
-
-NOTE_INSN_PROLOGUE_END,
-
-
-NOTE_INSN_EPILOGUE_BEG,
-
-
-
-NOTE_INSN_EH_REGION_BEG,
-NOTE_INSN_EH_REGION_END,
-
-
-NOTE_INSN_VAR_LOCATION,
-
-
-
-
-NOTE_INSN_BASIC_BLOCK,
-
-
-
-NOTE_INSN_SWITCH_TEXT_SECTIONS,
-
-
-
-NOTE_INSN_CFA_RESTORE_STATE,
-# 963 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h" 2
-
-
-  NOTE_INSN_MAX
-};
-
-
-
-extern const char * const note_insn_name[NOTE_INSN_MAX];
-# 985 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-enum label_kind
-{
-  LABEL_NORMAL = 0,
-  LABEL_STATIC_ENTRY,
-  LABEL_GLOBAL_ENTRY,
-  LABEL_WEAK_ENTRY
-};
-# 1054 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-static __inline__ unsigned int
-rhs_regno (const_rtx x)
-{
-  return (((x)->u.fld[0]).rt_uint);
-}
-# 1129 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-struct full_rtx_costs
-{
-  int speed;
-  int size;
-};
-
-
-static __inline__ void
-init_costs_to_max (struct full_rtx_costs *c)
-{
-  c->speed = 2147483647;
-  c->size = 2147483647;
-}
-
-
-static __inline__ void
-init_costs_to_zero (struct full_rtx_costs *c)
-{
-  c->speed = 0;
-  c->size = 0;
-}
-
-
-
-static __inline__ unsigned char
-costs_lt_p (struct full_rtx_costs *a, struct full_rtx_costs *b,
-     unsigned char speed)
-{
-  if (speed)
-    return (a->speed < b->speed
-     || (a->speed == b->speed && a->size < b->size));
-  else
-    return (a->size < b->size
-     || (a->size == b->size && a->speed < b->speed));
-}
-
-
-
-static __inline__ void
-costs_add_n_insns (struct full_rtx_costs *c, int n)
-{
-  c->speed += ((n) * 4);
-  c->size += ((n) * 4);
-}
-
-extern void init_rtlanal (void);
-extern int rtx_cost (rtx, enum rtx_code, unsigned char);
-extern int address_cost (rtx, enum machine_mode, addr_space_t, unsigned char);
-extern void get_full_rtx_cost (rtx, enum rtx_code, struct full_rtx_costs *);
-extern unsigned int subreg_lsb (const_rtx);
-extern unsigned int subreg_lsb_1 (enum machine_mode, enum machine_mode,
-      unsigned int);
-extern unsigned int subreg_regno_offset (unsigned int, enum machine_mode,
-      unsigned int, enum machine_mode);
-extern unsigned char subreg_offset_representable_p (unsigned int, enum machine_mode,
-        unsigned int, enum machine_mode);
-extern unsigned int subreg_regno (const_rtx);
-extern int simplify_subreg_regno (unsigned int, enum machine_mode,
-      unsigned int, enum machine_mode);
-extern unsigned int subreg_nregs (const_rtx);
-extern unsigned int subreg_nregs_with_regno (unsigned int, const_rtx);
-extern unsigned long nonzero_bits (const_rtx, enum machine_mode);
-extern unsigned int num_sign_bit_copies (const_rtx, enum machine_mode);
-extern unsigned char constant_pool_constant_p (rtx);
-extern unsigned char truncated_to_mode (enum machine_mode, const_rtx);
-extern int low_bitmask_len (enum machine_mode, unsigned long);
-# 1576 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-extern int generating_concat_p;
-
-
-extern int currently_expanding_to_rtl;
-
-
-
-
-extern int ceil_log2 (unsigned long);
-
-
-extern long trunc_int_for_mode (long, enum machine_mode);
-extern rtx plus_constant (rtx, long);
-
-
-extern rtx rtx_alloc_stat (enum rtx_code );
-
-
-extern rtvec rtvec_alloc (int);
-extern rtvec shallow_copy_rtvec (rtvec);
-extern unsigned char shared_const_p (const_rtx);
-extern rtx copy_rtx (rtx);
-extern void dump_rtx_statistics (void);
-
-
-extern rtx copy_rtx_if_shared (rtx);
-
-
-extern unsigned int rtx_size (const_rtx);
-extern rtx shallow_copy_rtx_stat (const_rtx );
-
-extern int rtx_equal_p (const_rtx, const_rtx);
-extern hashval_t iterative_hash_rtx (const_rtx, hashval_t);
-
-
-extern rtvec gen_rtvec_v (int, rtx *);
-extern rtx gen_reg_rtx (enum machine_mode);
-extern rtx gen_rtx_REG_offset (rtx, enum machine_mode, unsigned int, int);
-extern rtx gen_reg_rtx_offset (rtx, enum machine_mode, int);
-extern rtx gen_reg_rtx_and_attrs (rtx);
-extern rtx gen_label_rtx (void);
-extern rtx gen_lowpart_common (enum machine_mode, rtx);
-
-
-extern rtx gen_lowpart_if_possible (enum machine_mode, rtx);
-
-
-extern rtx gen_highpart (enum machine_mode, rtx);
-extern rtx gen_highpart_mode (enum machine_mode, enum machine_mode, rtx);
-extern rtx operand_subword (rtx, unsigned int, int, enum machine_mode);
-
-
-extern rtx operand_subword_force (rtx, unsigned int, enum machine_mode);
-extern int subreg_lowpart_p (const_rtx);
-extern unsigned int subreg_lowpart_offset (enum machine_mode,
-        enum machine_mode);
-extern unsigned int subreg_highpart_offset (enum machine_mode,
-         enum machine_mode);
-extern int byte_lowpart_offset (enum machine_mode, enum machine_mode);
-extern rtx make_safe_from (rtx, rtx);
-extern rtx convert_memory_address_addr_space (enum machine_mode, rtx,
-           addr_space_t);
-
-
-extern const char *get_insn_name (int);
-extern rtx get_last_insn_anywhere (void);
-extern rtx get_first_nonnote_insn (void);
-extern rtx get_last_nonnote_insn (void);
-extern void start_sequence (void);
-extern void push_to_sequence (rtx);
-extern void push_to_sequence2 (rtx, rtx);
-extern void end_sequence (void);
-extern double_int rtx_to_double_int (const_rtx);
-extern rtx immed_double_int_const (double_int, enum machine_mode);
-extern rtx immed_double_const (long, long,
-          enum machine_mode);
-
-
-
-extern rtx lowpart_subreg (enum machine_mode, rtx, enum machine_mode);
-
-
-extern rtx force_const_mem (enum machine_mode, rtx);
-
-
-
-struct function;
-extern rtx get_pool_constant (rtx);
-extern rtx get_pool_constant_mark (rtx, unsigned char *);
-extern enum machine_mode get_pool_mode (const_rtx);
-extern rtx simplify_subtraction (rtx);
-
-
-extern rtx assign_stack_local (enum machine_mode, long, int);
-
-
-extern rtx assign_stack_local_1 (enum machine_mode, long, int, int);
-extern rtx assign_stack_temp (enum machine_mode, long, int);
-extern rtx assign_stack_temp_for_type (enum machine_mode,
-           long, int, tree);
-extern rtx assign_temp (tree, int, int, int);
-
-
-extern rtx emit_insn_before (rtx, rtx);
-extern rtx emit_insn_before_noloc (rtx, rtx, struct basic_block_def *);
-extern rtx emit_insn_before_setloc (rtx, rtx, int);
-extern rtx emit_jump_insn_before (rtx, rtx);
-extern rtx emit_jump_insn_before_noloc (rtx, rtx);
-extern rtx emit_jump_insn_before_setloc (rtx, rtx, int);
-extern rtx emit_call_insn_before (rtx, rtx);
-extern rtx emit_call_insn_before_noloc (rtx, rtx);
-extern rtx emit_call_insn_before_setloc (rtx, rtx, int);
-extern rtx emit_debug_insn_before (rtx, rtx);
-extern rtx emit_debug_insn_before_noloc (rtx, rtx);
-extern rtx emit_debug_insn_before_setloc (rtx, rtx, int);
-extern rtx emit_barrier_before (rtx);
-extern rtx emit_label_before (rtx, rtx);
-extern rtx emit_note_before (enum insn_note, rtx);
-extern rtx emit_insn_after (rtx, rtx);
-extern rtx emit_insn_after_noloc (rtx, rtx, struct basic_block_def *);
-extern rtx emit_insn_after_setloc (rtx, rtx, int);
-extern rtx emit_jump_insn_after (rtx, rtx);
-extern rtx emit_jump_insn_after_noloc (rtx, rtx);
-extern rtx emit_jump_insn_after_setloc (rtx, rtx, int);
-extern rtx emit_call_insn_after (rtx, rtx);
-extern rtx emit_call_insn_after_noloc (rtx, rtx);
-extern rtx emit_call_insn_after_setloc (rtx, rtx, int);
-extern rtx emit_debug_insn_after (rtx, rtx);
-extern rtx emit_debug_insn_after_noloc (rtx, rtx);
-extern rtx emit_debug_insn_after_setloc (rtx, rtx, int);
-extern rtx emit_barrier_after (rtx);
-extern rtx emit_label_after (rtx, rtx);
-extern rtx emit_note_after (enum insn_note, rtx);
-extern rtx emit_insn (rtx);
-extern rtx emit_debug_insn (rtx);
-extern rtx emit_jump_insn (rtx);
-extern rtx emit_call_insn (rtx);
-extern rtx emit_label (rtx);
-extern rtx emit_barrier (void);
-extern rtx emit_note (enum insn_note);
-extern rtx emit_note_copy (rtx);
-extern rtx gen_clobber (rtx);
-extern rtx emit_clobber (rtx);
-extern rtx gen_use (rtx);
-extern rtx emit_use (rtx);
-extern rtx make_insn_raw (rtx);
-extern rtx make_debug_insn_raw (rtx);
-extern rtx make_jump_insn_raw (rtx);
-extern void add_function_usage_to (rtx, rtx);
-extern rtx last_call_insn (void);
-extern rtx previous_insn (rtx);
-extern rtx next_insn (rtx);
-extern rtx prev_nonnote_insn (rtx);
-extern rtx prev_nonnote_insn_bb (rtx);
-extern rtx next_nonnote_insn (rtx);
-extern rtx next_nonnote_insn_bb (rtx);
-extern rtx prev_nondebug_insn (rtx);
-extern rtx next_nondebug_insn (rtx);
-extern rtx prev_nonnote_nondebug_insn (rtx);
-extern rtx next_nonnote_nondebug_insn (rtx);
-extern rtx prev_real_insn (rtx);
-extern rtx next_real_insn (rtx);
-extern rtx prev_active_insn (rtx);
-extern rtx next_active_insn (rtx);
-extern int active_insn_p (const_rtx);
-extern rtx prev_label (rtx);
-extern rtx next_label (rtx);
-extern rtx skip_consecutive_labels (rtx);
-extern rtx next_cc0_user (rtx);
-extern rtx prev_cc0_setter (rtx);
-
-
-extern int insn_line (const_rtx);
-extern const char * insn_file (const_rtx);
-extern location_t locator_location (int);
-extern int locator_line (int);
-extern const char * locator_file (int);
-extern unsigned char locator_eq (int, int);
-extern int prologue_locator, epilogue_locator;
-
-
-extern enum rtx_code reverse_condition (enum rtx_code);
-extern enum rtx_code reverse_condition_maybe_unordered (enum rtx_code);
-extern enum rtx_code swap_condition (enum rtx_code);
-extern enum rtx_code unsigned_condition (enum rtx_code);
-extern enum rtx_code signed_condition (enum rtx_code);
-extern void mark_jump_label (rtx, rtx, int);
-extern unsigned int cleanup_barriers (void);
-
-
-extern rtx delete_related_insns (rtx);
-
-
-extern rtx *find_constant_term_loc (rtx *);
-
-
-extern rtx try_split (rtx, rtx, int);
-extern int split_branch_probability;
-
-
-extern rtx split_insns (rtx, rtx);
-
-
-extern rtx simplify_const_unary_operation (enum rtx_code, enum machine_mode,
-        rtx, enum machine_mode);
-extern rtx simplify_unary_operation (enum rtx_code, enum machine_mode, rtx,
-         enum machine_mode);
-extern rtx simplify_const_binary_operation (enum rtx_code, enum machine_mode,
-         rtx, rtx);
-extern rtx simplify_binary_operation (enum rtx_code, enum machine_mode, rtx,
-          rtx);
-extern rtx simplify_ternary_operation (enum rtx_code, enum machine_mode,
-           enum machine_mode, rtx, rtx, rtx);
-extern rtx simplify_const_relational_operation (enum rtx_code,
-      enum machine_mode, rtx, rtx);
-extern rtx simplify_relational_operation (enum rtx_code, enum machine_mode,
-       enum machine_mode, rtx, rtx);
-extern rtx simplify_gen_binary (enum rtx_code, enum machine_mode, rtx, rtx);
-extern rtx simplify_gen_unary (enum rtx_code, enum machine_mode, rtx,
-          enum machine_mode);
-extern rtx simplify_gen_ternary (enum rtx_code, enum machine_mode,
-     enum machine_mode, rtx, rtx, rtx);
-extern rtx simplify_gen_relational (enum rtx_code, enum machine_mode,
-        enum machine_mode, rtx, rtx);
-extern rtx simplify_subreg (enum machine_mode, rtx, enum machine_mode,
-       unsigned int);
-extern rtx simplify_gen_subreg (enum machine_mode, rtx, enum machine_mode,
-    unsigned int);
-extern rtx simplify_replace_fn_rtx (rtx, const_rtx,
-        rtx (*fn) (rtx, const_rtx, void *), void *);
-extern rtx simplify_replace_rtx (rtx, const_rtx, rtx);
-extern rtx simplify_rtx (const_rtx);
-extern rtx avoid_constant_pool_reference (rtx);
-extern rtx delegitimize_mem_from_attrs (rtx);
-extern unsigned char mode_signbit_p (enum machine_mode, const_rtx);
-
-
-extern enum machine_mode choose_hard_reg_mode (unsigned int, unsigned int,
-            unsigned char);
-
-
-extern rtx set_unique_reg_note (rtx, enum reg_note, rtx);
-extern void set_insn_deleted (rtx);
-# 1830 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-typedef struct replace_label_data
-{
-  rtx r1;
-  rtx r2;
-  unsigned char update_label_nuses;
-} replace_label_data;
-
-extern int rtx_addr_can_trap_p (const_rtx);
-extern unsigned char nonzero_address_p (const_rtx);
-extern int rtx_unstable_p (const_rtx);
-extern unsigned char rtx_varies_p (const_rtx, unsigned char);
-extern unsigned char rtx_addr_varies_p (const_rtx, unsigned char);
-extern long get_integer_term (const_rtx);
-extern rtx get_related_value (const_rtx);
-extern unsigned char offset_within_block_p (const_rtx, long);
-extern void split_const (rtx, rtx *, rtx *);
-extern int reg_mentioned_p (const_rtx, const_rtx);
-extern int count_occurrences (const_rtx, const_rtx, int);
-extern int reg_referenced_p (const_rtx, const_rtx);
-extern int reg_used_between_p (const_rtx, const_rtx, const_rtx);
-extern int reg_set_between_p (const_rtx, const_rtx, const_rtx);
-extern int commutative_operand_precedence (rtx);
-extern unsigned char swap_commutative_operands_p (rtx, rtx);
-extern int modified_between_p (const_rtx, const_rtx, const_rtx);
-extern int no_labels_between_p (const_rtx, const_rtx);
-extern int modified_in_p (const_rtx, const_rtx);
-extern int reg_set_p (const_rtx, const_rtx);
-extern rtx single_set_2 (const_rtx, const_rtx);
-extern int multiple_sets (const_rtx);
-extern int set_noop_p (const_rtx);
-extern int noop_move_p (const_rtx);
-extern rtx find_last_value (rtx, rtx *, rtx, int);
-extern int refers_to_regno_p (unsigned int, unsigned int, const_rtx, rtx *);
-extern int reg_overlap_mentioned_p (const_rtx, const_rtx);
-extern const_rtx set_of (const_rtx, const_rtx);
-extern void note_stores (const_rtx, void (*) (rtx, const_rtx, void *), void *);
-extern void note_uses (rtx *, void (*) (rtx *, void *), void *);
-extern int dead_or_set_p (const_rtx, const_rtx);
-extern int dead_or_set_regno_p (const_rtx, unsigned int);
-extern rtx find_reg_note (const_rtx, enum reg_note, const_rtx);
-extern rtx find_regno_note (const_rtx, enum reg_note, unsigned int);
-extern rtx find_reg_equal_equiv_note (const_rtx);
-extern rtx find_constant_src (const_rtx);
-extern int find_reg_fusage (const_rtx, enum rtx_code, const_rtx);
-extern int find_regno_fusage (const_rtx, enum rtx_code, unsigned int);
-extern rtx alloc_reg_note (enum reg_note, rtx, rtx);
-extern void add_reg_note (rtx, enum reg_note, rtx);
-extern void remove_note (rtx, const_rtx);
-extern void remove_reg_equal_equiv_notes (rtx);
-extern void remove_reg_equal_equiv_notes_for_regno (unsigned int);
-extern int side_effects_p (const_rtx);
-extern int volatile_refs_p (const_rtx);
-extern int volatile_insn_p (const_rtx);
-extern int may_trap_p_1 (const_rtx, unsigned);
-extern int may_trap_p (const_rtx);
-extern int may_trap_or_fault_p (const_rtx);
-extern unsigned char can_throw_internal (const_rtx);
-extern unsigned char can_throw_external (const_rtx);
-extern unsigned char insn_could_throw_p (const_rtx);
-extern unsigned char insn_nothrow_p (const_rtx);
-extern unsigned char can_nonlocal_goto (const_rtx);
-extern void copy_reg_eh_region_note_forward (rtx, rtx, rtx);
-extern void copy_reg_eh_region_note_backward(rtx, rtx, rtx);
-extern int inequality_comparisons_p (const_rtx);
-extern rtx replace_rtx (rtx, rtx, rtx);
-extern int replace_label (rtx *, void *);
-extern int rtx_referenced_p (rtx, rtx);
-extern unsigned char tablejump_p (const_rtx, rtx *, rtx *);
-extern int computed_jump_p (const_rtx);
-
-typedef int (*rtx_function) (rtx *, void *);
-extern int for_each_rtx (rtx *, rtx_function, void *);
-# 1910 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-typedef int (*for_each_inc_dec_fn) (rtx mem, rtx op, rtx dest, rtx src,
-        rtx srcoff, void *arg);
-extern int for_each_inc_dec (rtx *, for_each_inc_dec_fn, void *arg);
-
-typedef int (*rtx_equal_p_callback_function) (const_rtx *, const_rtx *,
-                                              rtx *, rtx *);
-extern int rtx_equal_p_cb (const_rtx, const_rtx,
-                           rtx_equal_p_callback_function);
-
-typedef int (*hash_rtx_callback_function) (const_rtx, enum machine_mode, rtx *,
-                                           enum machine_mode *);
-extern unsigned hash_rtx_cb (const_rtx, enum machine_mode, int *, int *,
-                             unsigned char, hash_rtx_callback_function);
-
-extern rtx regno_use_in (unsigned int, rtx);
-extern int auto_inc_p (const_rtx);
-extern int in_expr_list_p (const_rtx, const_rtx);
-extern void remove_node_from_expr_list (const_rtx, rtx *);
-extern int loc_mentioned_in_p (rtx *, const_rtx);
-extern rtx find_first_parameter_load (rtx, rtx);
-extern unsigned char keep_with_call_p (const_rtx);
-extern unsigned char label_is_jump_target_p (const_rtx, const_rtx);
-extern int insn_rtx_cost (rtx, unsigned char);
-
-
-
-extern rtx canonicalize_condition (rtx, rtx, int, rtx *, rtx, int, int);
-
-
-
-extern rtx get_condition (rtx, rtx *, int, int);
-
-
-struct subreg_info
-{
-
-  int offset;
-
-  int nregs;
-
-
-  unsigned char representable_p;
-};
-
-extern void subreg_get_info (unsigned int, enum machine_mode,
-        unsigned int, enum machine_mode,
-        struct subreg_info *);
-
-
-
-extern void free_EXPR_LIST_list (rtx *);
-extern void free_INSN_LIST_list (rtx *);
-extern void free_EXPR_LIST_node (rtx);
-extern void free_INSN_LIST_node (rtx);
-extern rtx alloc_INSN_LIST (rtx, rtx);
-extern rtx alloc_EXPR_LIST (int, rtx, rtx);
-extern void remove_free_INSN_LIST_elem (rtx, rtx *);
-extern rtx remove_list_elem (rtx, rtx *);
-extern rtx remove_free_INSN_LIST_node (rtx *);
-extern rtx remove_free_EXPR_LIST_node (rtx *);
-
-
-
-
-
-extern void init_move_cost (enum machine_mode);
-
-extern unsigned char resize_reg_info (void);
-
-extern void free_reg_info (void);
-extern void init_subregs_of_mode (void);
-extern void finish_subregs_of_mode (void);
-
-
-extern rtx extract_asm_operands (rtx);
-extern int asm_noperands (const_rtx);
-extern const char *decode_asm_operands (rtx, rtx *, rtx **, const char **,
-     enum machine_mode *, location_t *);
-
-extern enum reg_class reg_preferred_class (int);
-extern enum reg_class reg_alternate_class (int);
-extern enum reg_class reg_cover_class (int);
-extern void setup_reg_classes (int, enum reg_class, enum reg_class,
-          enum reg_class);
-
-extern void split_all_insns (void);
-extern unsigned int split_all_insns_noflow (void);
-
-
-extern rtx const_int_rtx[64 * 2 + 1];
-
-
-
-
-
-extern rtx const_true_rtx;
-
-extern rtx const_tiny_rtx[3][(int) MAX_MACHINE_MODE];
-# 2040 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-enum global_rtl_index
-{
-  GR_PC,
-  GR_CC0,
-  GR_STACK_POINTER,
-  GR_FRAME_POINTER,
-# 2055 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-  GR_HARD_FRAME_POINTER,
-
-
-
-
-
-  GR_ARG_POINTER,
-
-
-  GR_VIRTUAL_INCOMING_ARGS,
-  GR_VIRTUAL_STACK_ARGS,
-  GR_VIRTUAL_STACK_DYNAMIC,
-  GR_VIRTUAL_OUTGOING_ARGS,
-  GR_VIRTUAL_CFA,
-  GR_VIRTUAL_PREFERRED_STACK_BOUNDARY,
-
-  GR_MAX
-};
-
-
-struct target_rtl {
-# 2091 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-  rtx x_global_rtl[GR_MAX];
-
-
-  rtx x_pic_offset_table_rtx;
-
-
-
-
-  rtx x_return_address_pointer_rtx;
-
-
-
-
-
-  rtx x_initial_regno_reg_rtx[53];
-
-
-  rtx x_top_of_stack[MAX_MACHINE_MODE];
-
-
-
-  rtx x_static_reg_base_value[53];
-};
-
-extern struct target_rtl default_target_rtl;
-# 2146 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/genrtl.h" 1
-
-
-
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_0_stat (enum rtx_code code, enum machine_mode mode )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_rtx) = (rtx) 0;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_ee_stat (enum rtx_code code, enum machine_mode mode,
- rtx arg0,
- rtx arg1 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_rtx) = arg0;
-  (((rt)->u.fld[1]).rt_rtx) = arg1;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_ue_stat (enum rtx_code code, enum machine_mode mode,
- rtx arg0,
- rtx arg1 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_rtx) = arg0;
-  (((rt)->u.fld[1]).rt_rtx) = arg1;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_E_stat (enum rtx_code code, enum machine_mode mode,
- rtvec arg0 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_rtvec) = arg0;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_e_stat (enum rtx_code code, enum machine_mode mode,
- rtx arg0 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_rtx) = arg0;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_iuuBeiie_stat (enum rtx_code code, enum machine_mode mode,
- int arg0,
- rtx arg1,
- rtx arg2,
- struct basic_block_def *arg3,
- rtx arg4,
- int arg5,
- int arg6,
- rtx arg7 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_int) = arg0;
-  (((rt)->u.fld[1]).rt_rtx) = arg1;
-  (((rt)->u.fld[2]).rt_rtx) = arg2;
-  (((rt)->u.fld[3]).rt_bb) = arg3;
-  (((rt)->u.fld[4]).rt_rtx) = arg4;
-  (((rt)->u.fld[5]).rt_int) = arg5;
-  (((rt)->u.fld[6]).rt_int) = arg6;
-  (((rt)->u.fld[7]).rt_rtx) = arg7;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_iuuBeiie0_stat (enum rtx_code code, enum machine_mode mode,
- int arg0,
- rtx arg1,
- rtx arg2,
- struct basic_block_def *arg3,
- rtx arg4,
- int arg5,
- int arg6,
- rtx arg7 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_int) = arg0;
-  (((rt)->u.fld[1]).rt_rtx) = arg1;
-  (((rt)->u.fld[2]).rt_rtx) = arg2;
-  (((rt)->u.fld[3]).rt_bb) = arg3;
-  (((rt)->u.fld[4]).rt_rtx) = arg4;
-  (((rt)->u.fld[5]).rt_int) = arg5;
-  (((rt)->u.fld[6]).rt_int) = arg6;
-  (((rt)->u.fld[7]).rt_rtx) = arg7;
-  (((rt)->u.fld[8]).rt_rtx) = (rtx) 0;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_iuuBeiiee_stat (enum rtx_code code, enum machine_mode mode,
- int arg0,
- rtx arg1,
- rtx arg2,
- struct basic_block_def *arg3,
- rtx arg4,
- int arg5,
- int arg6,
- rtx arg7,
- rtx arg8 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_int) = arg0;
-  (((rt)->u.fld[1]).rt_rtx) = arg1;
-  (((rt)->u.fld[2]).rt_rtx) = arg2;
-  (((rt)->u.fld[3]).rt_bb) = arg3;
-  (((rt)->u.fld[4]).rt_rtx) = arg4;
-  (((rt)->u.fld[5]).rt_int) = arg5;
-  (((rt)->u.fld[6]).rt_int) = arg6;
-  (((rt)->u.fld[7]).rt_rtx) = arg7;
-  (((rt)->u.fld[8]).rt_rtx) = arg8;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_iuu00000_stat (enum rtx_code code, enum machine_mode mode,
- int arg0,
- rtx arg1,
- rtx arg2 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_int) = arg0;
-  (((rt)->u.fld[1]).rt_rtx) = arg1;
-  (((rt)->u.fld[2]).rt_rtx) = arg2;
-  (((rt)->u.fld[3]).rt_rtx) = (rtx) 0;
-  (((rt)->u.fld[4]).rt_rtx) = (rtx) 0;
-  (((rt)->u.fld[5]).rt_rtx) = (rtx) 0;
-  (((rt)->u.fld[6]).rt_rtx) = (rtx) 0;
-  (((rt)->u.fld[7]).rt_rtx) = (rtx) 0;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_iuuB00is_stat (enum rtx_code code, enum machine_mode mode,
- int arg0,
- rtx arg1,
- rtx arg2,
- struct basic_block_def *arg3,
- int arg4,
- const char *arg5 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_int) = arg0;
-  (((rt)->u.fld[1]).rt_rtx) = arg1;
-  (((rt)->u.fld[2]).rt_rtx) = arg2;
-  (((rt)->u.fld[3]).rt_bb) = arg3;
-  (((rt)->u.fld[4]).rt_rtx) = (rtx) 0;
-  (((rt)->u.fld[5]).rt_rtx) = (rtx) 0;
-  (((rt)->u.fld[6]).rt_int) = arg4;
-  (((rt)->u.fld[7]).rt_str) = arg5;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_si_stat (enum rtx_code code, enum machine_mode mode,
- const char *arg0,
- int arg1 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_str) = arg0;
-  (((rt)->u.fld[1]).rt_int) = arg1;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_ssiEEEi_stat (enum rtx_code code, enum machine_mode mode,
- const char *arg0,
- const char *arg1,
- int arg2,
- rtvec arg3,
- rtvec arg4,
- rtvec arg5,
- int arg6 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_str) = arg0;
-  (((rt)->u.fld[1]).rt_str) = arg1;
-  (((rt)->u.fld[2]).rt_int) = arg2;
-  (((rt)->u.fld[3]).rt_rtvec) = arg3;
-  (((rt)->u.fld[4]).rt_rtvec) = arg4;
-  (((rt)->u.fld[5]).rt_rtvec) = arg5;
-  (((rt)->u.fld[6]).rt_int) = arg6;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_Ei_stat (enum rtx_code code, enum machine_mode mode,
- rtvec arg0,
- int arg1 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_rtvec) = arg0;
-  (((rt)->u.fld[1]).rt_int) = arg1;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_eEee0_stat (enum rtx_code code, enum machine_mode mode,
- rtx arg0,
- rtvec arg1,
- rtx arg2,
- rtx arg3 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_rtx) = arg0;
-  (((rt)->u.fld[1]).rt_rtvec) = arg1;
-  (((rt)->u.fld[2]).rt_rtx) = arg2;
-  (((rt)->u.fld[3]).rt_rtx) = arg3;
-  (((rt)->u.fld[4]).rt_rtx) = (rtx) 0;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_eee_stat (enum rtx_code code, enum machine_mode mode,
- rtx arg0,
- rtx arg1,
- rtx arg2 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_rtx) = arg0;
-  (((rt)->u.fld[1]).rt_rtx) = arg1;
-  (((rt)->u.fld[2]).rt_rtx) = arg2;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt__stat (enum rtx_code code, enum machine_mode mode )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_w_stat (enum rtx_code code, enum machine_mode mode,
- long arg0 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  ((rt)->u.hwint[0]) = arg0;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_www_stat (enum rtx_code code, enum machine_mode mode,
- long arg0,
- long arg1,
- long arg2 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  ((rt)->u.hwint[0]) = arg0;
-  ((rt)->u.hwint[1]) = arg1;
-  ((rt)->u.hwint[2]) = arg2;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_s_stat (enum rtx_code code, enum machine_mode mode,
- const char *arg0 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_str) = arg0;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_i00_stat (enum rtx_code code, enum machine_mode mode,
- int arg0 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_int) = arg0;
-  (((rt)->u.fld[1]).rt_rtx) = (rtx) 0;
-  (((rt)->u.fld[2]).rt_rtx) = (rtx) 0;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_ei_stat (enum rtx_code code, enum machine_mode mode,
- rtx arg0,
- int arg1 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_rtx) = arg0;
-  (((rt)->u.fld[1]).rt_int) = arg1;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_e0_stat (enum rtx_code code, enum machine_mode mode,
- rtx arg0 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_rtx) = arg0;
-  (((rt)->u.fld[1]).rt_rtx) = (rtx) 0;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_u_stat (enum rtx_code code, enum machine_mode mode,
- rtx arg0 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_rtx) = arg0;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_s00_stat (enum rtx_code code, enum machine_mode mode,
- const char *arg0 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_str) = arg0;
-  (((rt)->u.fld[1]).rt_rtx) = (rtx) 0;
-  (((rt)->u.fld[2]).rt_rtx) = (rtx) 0;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_tei_stat (enum rtx_code code, enum machine_mode mode,
- union tree_node *arg0,
- rtx arg1,
- int arg2 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_tree) = arg0;
-  (((rt)->u.fld[1]).rt_rtx) = arg1;
-  (((rt)->u.fld[2]).rt_int) = arg2;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_t_stat (enum rtx_code code, enum machine_mode mode,
- union tree_node *arg0 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_tree) = arg0;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_iss_stat (enum rtx_code code, enum machine_mode mode,
- int arg0,
- const char *arg1,
- const char *arg2 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_int) = arg0;
-  (((rt)->u.fld[1]).rt_str) = arg1;
-  (((rt)->u.fld[2]).rt_str) = arg2;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_is_stat (enum rtx_code code, enum machine_mode mode,
- int arg0,
- const char *arg1 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_int) = arg0;
-  (((rt)->u.fld[1]).rt_str) = arg1;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_isE_stat (enum rtx_code code, enum machine_mode mode,
- int arg0,
- const char *arg1,
- rtvec arg2 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_int) = arg0;
-  (((rt)->u.fld[1]).rt_str) = arg1;
-  (((rt)->u.fld[2]).rt_rtvec) = arg2;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_i_stat (enum rtx_code code, enum machine_mode mode,
- int arg0 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_int) = arg0;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_iE_stat (enum rtx_code code, enum machine_mode mode,
- int arg0,
- rtvec arg1 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_int) = arg0;
-  (((rt)->u.fld[1]).rt_rtvec) = arg1;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_ss_stat (enum rtx_code code, enum machine_mode mode,
- const char *arg0,
- const char *arg1 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_str) = arg0;
-  (((rt)->u.fld[1]).rt_str) = arg1;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_sEss_stat (enum rtx_code code, enum machine_mode mode,
- const char *arg0,
- rtvec arg1,
- const char *arg2,
- const char *arg3 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_str) = arg0;
-  (((rt)->u.fld[1]).rt_rtvec) = arg1;
-  (((rt)->u.fld[2]).rt_str) = arg2;
-  (((rt)->u.fld[3]).rt_str) = arg3;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_eE_stat (enum rtx_code code, enum machine_mode mode,
- rtx arg0,
- rtvec arg1 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_rtx) = arg0;
-  (((rt)->u.fld[1]).rt_rtvec) = arg1;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_Ess_stat (enum rtx_code code, enum machine_mode mode,
- rtvec arg0,
- const char *arg1,
- const char *arg2 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_rtvec) = arg0;
-  (((rt)->u.fld[1]).rt_str) = arg1;
-  (((rt)->u.fld[2]).rt_str) = arg2;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_ses_stat (enum rtx_code code, enum machine_mode mode,
- const char *arg0,
- rtx arg1,
- const char *arg2 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_str) = arg0;
-  (((rt)->u.fld[1]).rt_rtx) = arg1;
-  (((rt)->u.fld[2]).rt_str) = arg2;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_sss_stat (enum rtx_code code, enum machine_mode mode,
- const char *arg0,
- const char *arg1,
- const char *arg2 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_str) = arg0;
-  (((rt)->u.fld[1]).rt_str) = arg1;
-  (((rt)->u.fld[2]).rt_str) = arg2;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_sse_stat (enum rtx_code code, enum machine_mode mode,
- const char *arg0,
- const char *arg1,
- rtx arg2 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_str) = arg0;
-  (((rt)->u.fld[1]).rt_str) = arg1;
-  (((rt)->u.fld[2]).rt_rtx) = arg2;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_sies_stat (enum rtx_code code, enum machine_mode mode,
- const char *arg0,
- int arg1,
- rtx arg2,
- const char *arg3 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_str) = arg0;
-  (((rt)->u.fld[1]).rt_int) = arg1;
-  (((rt)->u.fld[2]).rt_rtx) = arg2;
-  (((rt)->u.fld[3]).rt_str) = arg3;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_sE_stat (enum rtx_code code, enum machine_mode mode,
- const char *arg0,
- rtvec arg1 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_str) = arg0;
-  (((rt)->u.fld[1]).rt_rtvec) = arg1;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_ii_stat (enum rtx_code code, enum machine_mode mode,
- int arg0,
- int arg1 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_int) = arg0;
-  (((rt)->u.fld[1]).rt_int) = arg1;
-
-  return rt;
-}
-
-
-
-
-static __inline__ rtx
-gen_rtx_fmt_Ee_stat (enum rtx_code code, enum machine_mode mode,
- rtvec arg0,
- rtx arg1 )
-{
-  rtx rt;
-  rt = rtx_alloc_stat (code );
-
-  ((rt)->mode = (mode));
-  (((rt)->u.fld[0]).rt_rtvec) = arg0;
-  (((rt)->u.fld[1]).rt_rtx) = arg1;
-
-  return rt;
-}
-# 2147 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h" 2
-# 2158 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-extern rtx gen_rtx_CONST_INT (enum machine_mode, long);
-extern rtx gen_rtx_CONST_VECTOR (enum machine_mode, rtvec);
-extern rtx gen_raw_REG (enum machine_mode, int);
-extern rtx gen_rtx_REG (enum machine_mode, unsigned);
-extern rtx gen_rtx_SUBREG (enum machine_mode, rtx, int);
-extern rtx gen_rtx_MEM (enum machine_mode, rtx);
-# 2242 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-extern rtx output_constant_def (tree, int);
-extern rtx lookup_constant_def (tree);
-
-
-
-
-extern int reload_completed;
-
-
-extern int epilogue_completed;
-
-
-
-
-extern int reload_in_progress;
-# 2266 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-extern int regstack_completed;
-# 2275 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/rtl.h"
-extern int cse_not_expected;
-
-
-
-
-
-extern int rtx_to_tree_code (enum rtx_code);
-
-
-extern int delete_trivially_dead_insns (rtx, int);
-extern int cse_main (rtx, int);
-extern int exp_equiv_p (const_rtx, const_rtx, int, unsigned char);
-extern unsigned hash_rtx (const_rtx x, enum machine_mode, int *, int *, unsigned char);
-
-
-extern void check_for_inc_dec (rtx insn);
-
-
-extern int comparison_dominates_p (enum rtx_code, enum rtx_code);
-extern int condjump_p (const_rtx);
-extern int any_condjump_p (const_rtx);
-extern int any_uncondjump_p (const_rtx);
-extern rtx pc_set (const_rtx);
-extern rtx condjump_label (const_rtx);
-extern int simplejump_p (const_rtx);
-extern int returnjump_p (rtx);
-extern int eh_returnjump_p (rtx);
-extern int onlyjump_p (const_rtx);
-extern int only_sets_cc0_p (const_rtx);
-extern int sets_cc0_p (const_rtx);
-extern int invert_jump_1 (rtx, rtx);
-extern int invert_jump (rtx, rtx, int);
-extern int rtx_renumbered_equal_p (const_rtx, const_rtx);
-extern int true_regnum (const_rtx);
-extern unsigned int reg_or_subregno (const_rtx);
-extern int redirect_jump_1 (rtx, rtx);
-extern void redirect_jump_2 (rtx, rtx, rtx, int, int);
-extern int redirect_jump (rtx, rtx, int);
-extern void rebuild_jump_labels (rtx);
-extern rtx reversed_comparison (const_rtx, enum machine_mode);
-extern enum rtx_code reversed_comparison_code (const_rtx, const_rtx);
-extern enum rtx_code reversed_comparison_code_parts (enum rtx_code, const_rtx,
-           const_rtx, const_rtx);
-extern void delete_for_peephole (rtx, rtx);
-extern int condjump_in_parallel_p (const_rtx);
-
-
-extern int max_reg_num (void);
-extern int max_label_num (void);
-extern int get_first_label_num (void);
-extern void maybe_set_first_label_num (rtx);
-extern void delete_insns_since (rtx);
-extern void mark_reg_pointer (rtx, int);
-extern void mark_user_reg (rtx);
-extern void reset_used_flags (rtx);
-extern void set_used_flags (rtx);
-extern void reorder_insns (rtx, rtx, rtx);
-extern void reorder_insns_nobb (rtx, rtx, rtx);
-extern int get_max_insn_count (void);
-extern int in_sequence_p (void);
-extern void force_next_line_note (void);
-extern void init_emit (void);
-extern void init_emit_regs (void);
-extern void init_emit_once (void);
-extern void push_topmost_sequence (void);
-extern void pop_topmost_sequence (void);
-extern void set_new_first_and_last_insn (rtx, rtx);
-extern unsigned int unshare_all_rtl (void);
-extern void unshare_all_rtl_again (rtx);
-extern void unshare_all_rtl_in_chain (rtx);
-extern void verify_rtl_sharing (void);
-extern void link_cc0_insns (rtx);
-extern void add_insn (rtx);
-extern void add_insn_before (rtx, rtx, struct basic_block_def *);
-extern void add_insn_after (rtx, rtx, struct basic_block_def *);
-extern void remove_insn (rtx);
-extern rtx emit (rtx);
-extern rtx delete_insn (rtx);
-extern rtx entry_of_function (void);
-extern void emit_insn_at_entry (rtx);
-extern void delete_insn_chain (rtx, rtx, unsigned char);
-extern rtx unlink_insn_chain (rtx, rtx);
-extern rtx delete_insn_and_edges (rtx);
-extern rtx gen_lowpart_SUBREG (enum machine_mode, rtx);
-extern rtx gen_const_mem (enum machine_mode, rtx);
-extern rtx gen_frame_mem (enum machine_mode, rtx);
-extern rtx gen_tmp_stack_mem (enum machine_mode, rtx);
-extern unsigned char validate_subreg (enum machine_mode, enum machine_mode,
-        const_rtx, unsigned int);
-
-
-extern unsigned int extended_count (const_rtx, enum machine_mode, int);
-extern rtx remove_death (unsigned int, rtx);
-extern void dump_combine_stats (FILE *);
-extern void dump_combine_total_stats (FILE *);
-
-
-extern void delete_dead_jumptables (void);
-
-
-extern void debug_bb_n_slim (int);
-extern void debug_bb_slim (struct basic_block_def *);
-extern void print_rtl_slim (FILE *, rtx, rtx, int, int);
-extern void print_rtl_slim_with_bb (FILE *, rtx, int);
-extern void dump_insn_slim (FILE *f, rtx x);
-extern void debug_insn_slim (rtx x);
-
-
-extern void schedule_insns (void);
-
-
-extern void schedule_ebbs (void);
-
-
-extern void sel_sched_fix_param (const char *param, const char *val);
-
-
-extern const char *print_rtx_head;
-extern void debug_rtx (const_rtx);
-extern void debug_rtx_list (const_rtx, int);
-extern void debug_rtx_range (const_rtx, const_rtx);
-extern const_rtx debug_rtx_find (const_rtx, int);
-extern void print_mem_expr (FILE *, const_tree);
-extern void print_rtl (FILE *, const_rtx);
-extern void print_simple_rtl (FILE *, const_rtx);
-extern int print_rtl_single (FILE *, const_rtx);
-extern void print_inline_rtx (FILE *, const_rtx, int);
-
-
-extern void reposition_prologue_and_epilogue_notes (void);
-extern int prologue_epilogue_contains (const_rtx);
-extern int sibcall_epilogue_contains (const_rtx);
-extern void mark_temp_addr_taken (rtx);
-extern void update_temp_slot_address (rtx, rtx);
-extern void maybe_copy_prologue_epilogue_insn (rtx, rtx);
-
-
-extern void expand_null_return (void);
-extern void expand_naked_return (void);
-extern void emit_jump (rtx);
-
-
-extern rtx move_by_pieces (rtx, rtx, unsigned long,
-      unsigned int, int);
-
-
-extern void print_rtl_with_bb (FILE *, const_rtx);
-
-
-extern void dump_reg_info (FILE *);
-extern void dump_flow_info (FILE *, int);
-
-
-extern void init_expmed (void);
-extern void expand_inc (rtx, rtx);
-extern void expand_dec (rtx, rtx);
-
-
-extern unsigned char can_copy_p (enum machine_mode);
-extern unsigned char can_assign_to_reg_without_clobbers_p (rtx);
-extern rtx fis_get_condition (rtx);
-
-
-
-extern HARD_REG_ELT_TYPE eliminable_regset;
-
-extern void mark_elimination (int, int);
-
-
-extern int reg_classes_intersect_p (reg_class_t, reg_class_t);
-extern int reg_class_subset_p (reg_class_t, reg_class_t);
-extern void globalize_reg (int);
-extern void init_reg_modes_target (void);
-extern void init_regs (void);
-extern void reinit_regs (void);
-extern void init_fake_stack_mems (void);
-extern void save_register_info (void);
-extern void init_reg_sets (void);
-extern void regclass (rtx, int);
-extern void reg_scan (rtx, unsigned int);
-extern void fix_register (const char *, int, int);
-extern unsigned char invalid_mode_change_p (unsigned int, enum reg_class);
-
-
-extern void dbr_schedule (rtx);
-
-
-extern int function_invariant_p (const_rtx);
-
-
-enum libcall_type
-{
-  LCT_NORMAL = 0,
-  LCT_CONST = 1,
-  LCT_PURE = 2,
-  LCT_NORETURN = 3,
-  LCT_THROW = 4,
-  LCT_RETURNS_TWICE = 5
-};
-
-extern void emit_library_call (rtx, enum libcall_type, enum machine_mode, int,
-          ...);
-extern rtx emit_library_call_value (rtx, rtx, enum libcall_type,
-        enum machine_mode, int, ...);
-
-
-extern void init_varasm_once (void);
-
-extern rtx make_debug_expr_from_rtl (const_rtx);
-
-
-extern unsigned char read_rtx (const char *, rtx *);
-
-
-extern rtx canon_rtx (rtx);
-extern int true_dependence (const_rtx, enum machine_mode, const_rtx, unsigned char (*)(const_rtx, unsigned char));
-extern rtx get_addr (rtx);
-extern int canon_true_dependence (const_rtx, enum machine_mode, rtx, const_rtx,
-      rtx, unsigned char (*)(const_rtx, unsigned char));
-extern int read_dependence (const_rtx, const_rtx);
-extern int anti_dependence (const_rtx, const_rtx);
-extern int output_dependence (const_rtx, const_rtx);
-extern int may_alias_p (const_rtx, const_rtx);
-extern void init_alias_target (void);
-extern void init_alias_analysis (void);
-extern void end_alias_analysis (void);
-extern void vt_equate_reg_base_value (const_rtx, const_rtx);
-extern unsigned char memory_modified_in_insn_p (const_rtx, const_rtx);
-extern rtx find_base_term (rtx);
-extern rtx gen_hard_reg_clobber (enum machine_mode, unsigned int);
-extern rtx get_reg_known_value (unsigned int);
-extern unsigned char get_reg_known_equiv_p (unsigned int);
-extern rtx get_reg_base_value (unsigned int);
-
-
-extern int stack_regs_mentioned (const_rtx insn);
-
-
-
-extern rtx stack_limit_rtx;
-
-
-extern void invert_br_probabilities (rtx);
-extern unsigned char expensive_function_p (int);
-
-
-extern unsigned int variable_tracking_main (void);
-
-
-extern void get_mode_bounds (enum machine_mode, int, enum machine_mode,
-        rtx *, rtx *);
-
-
-extern rtx reversed_condition (rtx);
-extern rtx compare_and_jump_seq (rtx, rtx, enum rtx_code, rtx, int, rtx);
-
-
-extern rtx canon_condition (rtx);
-extern void simplify_using_condition (rtx, rtx *, struct bitmap_head_def *);
-
-
-extern unsigned int compute_alignments (void);
-extern int asm_str_count (const char *templ);
-
-struct rtl_hooks
-{
-  rtx (*gen_lowpart) (enum machine_mode, rtx);
-  rtx (*gen_lowpart_no_emit) (enum machine_mode, rtx);
-  rtx (*reg_nonzero_bits) (const_rtx, enum machine_mode, const_rtx, enum machine_mode,
-      unsigned long, unsigned long *);
-  rtx (*reg_num_sign_bit_copies) (const_rtx, enum machine_mode, const_rtx, enum machine_mode,
-      unsigned int, unsigned int *);
-  unsigned char (*reg_truncated_to_mode) (enum machine_mode, const_rtx);
-
-
-};
-
-
-extern struct rtl_hooks rtl_hooks;
-
-
-extern const struct rtl_hooks general_rtl_hooks;
-
-
-
-
-extern void insn_locators_alloc (void);
-extern void insn_locators_free (void);
-extern void insn_locators_finalize (void);
-extern void set_curr_insn_source_location (location_t);
-extern location_t get_curr_insn_source_location (void);
-extern void set_curr_insn_block (tree);
-extern tree get_curr_insn_block (void);
-extern int curr_insn_locator (void);
-extern unsigned char optimize_insn_for_size_p (void);
-extern unsigned char optimize_insn_for_speed_p (void);
-
-
-extern void _fatal_insn_not_found (const_rtx, const char *, int, const char *)
-     __attribute__ ((__noreturn__));
-extern void _fatal_insn (const char *, const_rtx, const char *, int, const char *)
-     __attribute__ ((__noreturn__));
-# 44 "/opt/gcc-plugins/src/plugin-utils.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/emit-rtl.h" 1
-# 24 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/emit-rtl.h"
-extern void set_mem_alias_set (rtx, alias_set_type);
-
-
-extern void set_mem_align (rtx, unsigned int);
-
-
-extern void set_mem_addr_space (rtx, addr_space_t);
-
-
-extern void set_mem_expr (rtx, tree);
-
-
-extern void set_mem_offset (rtx, rtx);
-
-
-extern void set_mem_size (rtx, rtx);
-
-
-extern void set_mem_attrs_for_spill (rtx);
-extern tree get_spill_slot_decl (unsigned char);
-
-
-
-
-
-extern rtx replace_equiv_address (rtx, rtx);
-
-
-extern rtx replace_equiv_address_nv (rtx, rtx);
-
-extern rtx gen_blockage (void);
-extern rtvec gen_rtvec (int, ...);
-extern rtx copy_insn_1 (rtx);
-extern rtx copy_insn (rtx);
-extern rtx gen_int_mode (long, enum machine_mode);
-extern rtx emit_copy_of_insn_after (rtx, rtx);
-extern void set_reg_attrs_from_value (rtx, rtx);
-extern void set_reg_attrs_for_parm (rtx, rtx);
-extern void set_reg_attrs_for_decl_rtl (tree t, rtx x);
-extern void adjust_reg_mode (rtx, enum machine_mode);
-extern int mem_expr_equal_p (const_tree, const_tree);
-
-
-
-static __inline__ rtx
-get_insns (void)
-{
-  return (&x_rtl)->emit.x_first_insn;
-}
-
-
-
-static __inline__ void
-set_first_insn (rtx insn)
-{
-  ((void)(0 && (!insn || !(((insn)->u.fld[1]).rt_rtx))));
-  (&x_rtl)->emit.x_first_insn = insn;
-}
-
-
-
-static __inline__ rtx
-get_last_insn (void)
-{
-  return (&x_rtl)->emit.x_last_insn;
-}
-
-
-
-static __inline__ void
-set_last_insn (rtx insn)
-{
-  ((void)(0 && (!insn || !(((insn)->u.fld[2]).rt_rtx))));
-  (&x_rtl)->emit.x_last_insn = insn;
-}
-
-
-
-static __inline__ int
-get_max_uid (void)
-{
-  return (&x_rtl)->emit.x_cur_insn_uid;
-}
-# 45 "/opt/gcc-plugins/src/plugin-utils.h" 2
-# 209 "/opt/gcc-plugins/src/plugin-utils.h"
-int is_gcc();
-
-
-int is_gpp();
-
-
-int is_lto();
-
-
-void cpp_include(const char *file);
-
-
-unsigned char is_targetable_decl(tree decl);
-
-
-
-unsigned char is_targetable_type(tree type);
-# 326 "/opt/gcc-plugins/src/plugin-utils.h"
-unsigned char comparison_set_rtx_1(rtx match_input,rtx *cc_op,rtx *op1,rtx *op2);
-# 27 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/tree-pass.h" 1
-# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/tree-pass.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/timevar.h" 1
-# 53 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/timevar.h"
-struct timevar_time_def
-{
-
-  double user;
-
-
-
-  double sys;
-
-
-  double wall;
-
-
-  unsigned ggc_mem;
-};
-
-
-
-
-
-
-typedef enum
-{
-  TV_NONE,
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/timevar.def" 1
-# 35 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/timevar.def"
-TV_TOTAL,
-
-
-TV_GC,
-
-
-TV_DUMP,
-
-
-TV_PCH_SAVE,
-TV_PCH_CPP_SAVE,
-TV_PCH_PTR_REALLOC,
-TV_PCH_PTR_SORT,
-TV_PCH_RESTORE,
-TV_PCH_CPP_RESTORE,
-
-TV_CGRAPH,
-TV_CGRAPHOPT,
-TV_VARPOOL,
-TV_IPA_CONSTANT_PROP,
-TV_IPA_FNSPLIT,
-TV_IPA_OPT,
-TV_IPA_LTO_GIMPLE_IN,
-TV_IPA_LTO_GIMPLE_OUT,
-TV_IPA_LTO_DECL_IN,
-TV_IPA_LTO_DECL_OUT,
-TV_IPA_LTO_DECL_INIT_IO,
-TV_IPA_LTO_CGRAPH_IO,
-TV_IPA_LTO_DECL_MERGE,
-TV_IPA_LTO_CGRAPH_MERGE,
-TV_LTO,
-TV_WHOPR_WPA,
-TV_WHOPR_WPA_IO,
-TV_WHOPR_LTRANS,
-TV_WHOPR_WPA_LTRANS_EXEC,
-TV_IPA_REFERENCE,
-TV_IPA_PROFILE,
-TV_IPA_PURE_CONST,
-TV_IPA_TYPE_ESCAPE,
-TV_IPA_PTA,
-TV_IPA_SRA,
-TV_IPA_FREE_LANG_DATA,
-
-TV_CFG,
-
-TV_CLEANUP_CFG,
-TV_CFG_VERIFY,
-TV_DELETE_TRIVIALLY_DEAD,
-
-TV_LIFE,
-TV_LIFE_UPDATE,
-
-
-TV_DF_SCAN,
-TV_DF_MD,
-TV_DF_RD,
-TV_DF_LR,
-TV_DF_LIVE,
-TV_DF_UREC,
-TV_DF_CHAIN,
-TV_DF_WORD_LR,
-TV_DF_NOTE,
-TV_REG_STATS,
-
-TV_ALIAS_ANALYSIS,
-TV_ALIAS_STMT_WALK,
-TV_REG_SCAN,
-TV_REBUILD_JUMP,
-
-TV_CPP,
-TV_LEX,
-TV_PARSE,
-TV_NAME_LOOKUP,
-TV_INLINE_HEURISTICS,
-TV_INTEGRATION,
-TV_TREE_GIMPLIFY,
-TV_TREE_EH,
-TV_TREE_CFG,
-TV_TREE_CLEANUP_CFG,
-TV_TREE_VRP,
-TV_TREE_COPY_PROP,
-TV_FIND_REFERENCED_VARS,
-TV_TREE_PTA,
-TV_TREE_INSERT_PHI_NODES,
-TV_TREE_SSA_REWRITE_BLOCKS,
-TV_TREE_SSA_OTHER,
-TV_TREE_SSA_INCREMENTAL,
-TV_TREE_OPS,
-TV_TREE_SSA_DOMINATOR_OPTS,
-TV_TREE_SRA,
-TV_TREE_CCP,
-TV_TREE_PHI_CPROP,
-TV_TREE_SPLIT_EDGES,
-TV_TREE_REASSOC,
-TV_TREE_PRE,
-TV_TREE_FRE,
-TV_TREE_SINK,
-TV_TREE_PHIOPT,
-TV_TREE_FORWPROP,
-TV_TREE_PHIPROP,
-TV_TREE_DCE,
-TV_TREE_CD_DCE,
-TV_TREE_CALL_CDCE,
-TV_TREE_DSE,
-TV_TREE_MERGE_PHI,
-TV_TREE_LOOP,
-TV_TREE_LOOP_BOUNDS,
-TV_LIM,
-TV_TREE_LOOP_IVCANON,
-TV_SCEV_CONST,
-TV_TREE_LOOP_UNSWITCH,
-TV_COMPLETE_UNROLL,
-TV_TREE_PARALLELIZE_LOOPS,
-TV_TREE_VECTORIZATION,
-TV_TREE_SLP_VECTORIZATION,
-TV_GRAPHITE,
-TV_GRAPHITE_TRANSFORMS,
-TV_GRAPHITE_DATA_DEPS,
-TV_GRAPHITE_CODE_GEN,
-TV_TREE_LINEAR_TRANSFORM,
-TV_TREE_LOOP_DISTRIBUTION,
-TV_CHECK_DATA_DEPS,
-TV_TREE_PREFETCH,
-TV_TREE_LOOP_IVOPTS,
-TV_PREDCOM,
-TV_TREE_LOOP_INIT,
-TV_TREE_LOOP_FINI,
-TV_TREE_CH,
-TV_TREE_SSA_UNCPROP,
-TV_TREE_SSA_TO_NORMAL,
-TV_TREE_NRV,
-TV_TREE_COPY_RENAME,
-TV_TREE_SSA_VERIFY,
-TV_TREE_STMT_VERIFY,
-TV_TREE_SWITCH_CONVERSION,
-TV_CGRAPH_VERIFY,
-TV_DOM_FRONTIERS,
-TV_DOMINANCE,
-TV_CONTROL_DEPENDENCES,
-TV_OVERLOAD,
-TV_TEMPLATE_INSTANTIATION,
-TV_OUT_OF_SSA,
-TV_VAR_EXPAND,
-TV_EXPAND,
-TV_POST_EXPAND,
-TV_VARCONST,
-TV_LOWER_SUBREG,
-TV_JUMP,
-TV_FWPROP,
-TV_CSE,
-TV_DCE,
-TV_DSE1,
-TV_DSE2,
-TV_LOOP,
-TV_LOOP_MOVE_INVARIANTS,
-TV_LOOP_UNSWITCH,
-TV_LOOP_UNROLL,
-TV_LOOP_DOLOOP,
-TV_CPROP,
-TV_PRE,
-TV_HOIST,
-TV_LSM,
-TV_TRACER,
-TV_WEB,
-TV_AUTO_INC_DEC,
-TV_CSE2,
-TV_BRANCH_PROB,
-TV_VPT,
-TV_COMBINE,
-TV_IFCVT,
-TV_REGMOVE,
-TV_MODE_SWITCH,
-TV_SMS,
-TV_SCHED,
-TV_LOCAL_ALLOC,
-TV_GLOBAL_ALLOC,
-TV_IRA,
-TV_RELOAD,
-TV_RELOAD_CSE_REGS,
-TV_SEQABSTR,
-TV_GCSE_AFTER_RELOAD,
-TV_ZEE,
-TV_THREAD_PROLOGUE_AND_EPILOGUE,
-TV_IFCVT2,
-TV_COMBINE_STACK_ADJUST,
-TV_PEEPHOLE2,
-TV_RENAME_REGISTERS,
-TV_CPROP_REGISTERS,
-TV_SCHED2,
-TV_MACH_DEP,
-TV_DBR_SCHED,
-TV_REORDER_BLOCKS,
-TV_SHORTEN_BRANCH,
-TV_REG_STACK,
-TV_FINAL,
-TV_VAROUT,
-TV_SYMOUT,
-TV_VAR_TRACKING,
-TV_VAR_TRACKING_DATAFLOW,
-TV_VAR_TRACKING_EMIT,
-TV_TREE_IFCOMBINE,
-TV_TREE_UNINIT,
-TV_PLUGIN_INIT,
-TV_PLUGIN_RUN,
-
-
-TV_EARLY_LOCAL,
-TV_OPTIMIZE,
-TV_REST_OF_COMPILATION,
-TV_POSTRELOAD,
-TV_REMOVE_UNUSED,
-TV_ADDRESS_TAKEN,
-TV_TODO,
-TV_VERIFY_LOOP_CLOSED,
-TV_VERIFY_RTL_SHARING,
-TV_REBUILD_FREQUENCIES,
-TV_REPAIR_LOOPS,
-# 78 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/timevar.h" 2
-  TIMEVAR_LAST
-}
-timevar_id_t;
-
-
-
-
-extern unsigned char timevar_enable;
-
-
-extern size_t timevar_ggc_mem_total;
-
-
-
-
-extern void timevar_init (void);
-extern void timevar_push_1 (timevar_id_t);
-extern void timevar_pop_1 (timevar_id_t);
-extern void timevar_start (timevar_id_t);
-extern void timevar_stop (timevar_id_t);
-extern void timevar_print (FILE *);
-
-
-static __inline__ void
-timevar_push (timevar_id_t tv)
-{
-  if (timevar_enable)
-    timevar_push_1 (tv);
-}
-
-static __inline__ void
-timevar_pop (timevar_id_t tv)
-{
-  if (timevar_enable)
-    timevar_pop_1 (tv);
-}
-
-extern void print_time (const char *, long);
-# 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/tree-pass.h" 2
-
-
-
-enum tree_dump_index
-{
-  TDI_none,
-  TDI_cgraph,
-  TDI_tu,
-  TDI_class,
-  TDI_original,
-  TDI_generic,
-  TDI_nested,
-  TDI_vcg,
-
-  TDI_ada,
-  TDI_tree_all,
-  TDI_rtl_all,
-  TDI_ipa_all,
-
-  TDI_end
-};
-# 90 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/tree-pass.h"
-extern char *get_dump_file_name (int);
-extern int dump_enabled_p (int);
-extern int dump_initialized_p (int);
-extern FILE *dump_begin (int, int *);
-extern void dump_end (int, FILE *);
-extern void dump_node (const_tree, int, FILE *);
-extern int dump_switch_p (const char *);
-extern const char *dump_flag_name (int);
-
-
-extern FILE *dump_file;
-extern int dump_flags;
-extern const char *dump_file_name;
-
-
-extern struct dump_file_info *get_dump_file_info (int);
-
-
-enum opt_pass_type
-{
-  GIMPLE_PASS,
-  RTL_PASS,
-  SIMPLE_IPA_PASS,
-  IPA_PASS
-};
-
-
-
-struct opt_pass
-{
-
-  enum opt_pass_type type;
-
-
-
-  const char *name;
-
-
-
-  unsigned char (*gate) (void);
-
-
-
-
-  unsigned int (*execute) (void);
-
-
-  struct opt_pass *sub;
-
-
-  struct opt_pass *next;
-
-
-  int static_pass_number;
-
-
-
-  timevar_id_t tv_id;
-
-
-  unsigned int properties_required;
-  unsigned int properties_provided;
-  unsigned int properties_destroyed;
-
-
-  unsigned int todo_flags_start;
-  unsigned int todo_flags_finish;
-};
-
-
-struct gimple_opt_pass
-{
-  struct opt_pass pass;
-};
-
-
-struct rtl_opt_pass
-{
-  struct opt_pass pass;
-};
-
-struct varpool_node;
-struct cgraph_node;
-struct cgraph_node_set_def;
-struct varpool_node_set_def;
-
-
-
-struct ipa_opt_pass_d
-{
-  struct opt_pass pass;
-
-
-
-  void (*generate_summary) (void);
-
-
-  void (*write_summary) (struct cgraph_node_set_def *,
-    struct varpool_node_set_def *);
-
-
-  void (*read_summary) (void);
-
-
-  void (*write_optimization_summary) (struct cgraph_node_set_def *,
-          struct varpool_node_set_def *);
-
-
-  void (*read_optimization_summary) (void);
-
-
-
-  void (*stmt_fixup) (struct cgraph_node *, gimple *);
-
-
-
-  unsigned int function_transform_todo_flags_start;
-  unsigned int (*function_transform) (struct cgraph_node *);
-  void (*variable_transform) (struct varpool_node *);
-};
-
-
-
-struct simple_ipa_opt_pass
-{
-  struct opt_pass pass;
-};
-
-
-struct dump_file_info
-{
-  const char *suffix;
-  const char *swtch;
-  const char *glob;
-  int flags;
-  int state;
-  int num;
-};
-# 332 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/tree-pass.h"
-enum pass_positioning_ops
-{
-  PASS_POS_INSERT_AFTER,
-  PASS_POS_INSERT_BEFORE,
-  PASS_POS_REPLACE
-};
-
-struct register_pass_info
-{
-  struct opt_pass *pass;
-  const char *reference_pass_name;
-
-  int ref_pass_instance_number;
-
-
-  enum pass_positioning_ops pos_op;
-};
-
-extern void tree_lowering_passes (tree decl);
-
-extern struct gimple_opt_pass pass_mudflap_1;
-extern struct gimple_opt_pass pass_mudflap_2;
-extern struct gimple_opt_pass pass_lower_cf;
-extern struct gimple_opt_pass pass_refactor_eh;
-extern struct gimple_opt_pass pass_lower_eh;
-extern struct gimple_opt_pass pass_lower_eh_dispatch;
-extern struct gimple_opt_pass pass_lower_resx;
-extern struct gimple_opt_pass pass_build_cfg;
-extern struct gimple_opt_pass pass_early_tree_profile;
-extern struct gimple_opt_pass pass_referenced_vars;
-extern struct gimple_opt_pass pass_cleanup_eh;
-extern struct gimple_opt_pass pass_sra;
-extern struct gimple_opt_pass pass_sra_early;
-extern struct gimple_opt_pass pass_early_ipa_sra;
-extern struct gimple_opt_pass pass_tail_recursion;
-extern struct gimple_opt_pass pass_tail_calls;
-extern struct gimple_opt_pass pass_tree_loop;
-extern struct gimple_opt_pass pass_tree_loop_init;
-extern struct gimple_opt_pass pass_lim;
-extern struct gimple_opt_pass pass_tree_unswitch;
-extern struct gimple_opt_pass pass_predcom;
-extern struct gimple_opt_pass pass_iv_canon;
-extern struct gimple_opt_pass pass_scev_cprop;
-extern struct gimple_opt_pass pass_empty_loop;
-extern struct gimple_opt_pass pass_record_bounds;
-extern struct gimple_opt_pass pass_graphite;
-extern struct gimple_opt_pass pass_graphite_transforms;
-extern struct gimple_opt_pass pass_if_conversion;
-extern struct gimple_opt_pass pass_loop_distribution;
-extern struct gimple_opt_pass pass_vectorize;
-extern struct gimple_opt_pass pass_slp_vectorize;
-extern struct gimple_opt_pass pass_complete_unroll;
-extern struct gimple_opt_pass pass_complete_unrolli;
-extern struct gimple_opt_pass pass_parallelize_loops;
-extern struct gimple_opt_pass pass_loop_prefetch;
-extern struct gimple_opt_pass pass_iv_optimize;
-extern struct gimple_opt_pass pass_tree_loop_done;
-extern struct gimple_opt_pass pass_ch;
-extern struct gimple_opt_pass pass_ccp;
-extern struct gimple_opt_pass pass_phi_only_cprop;
-extern struct gimple_opt_pass pass_build_ssa;
-extern struct gimple_opt_pass pass_build_alias;
-extern struct gimple_opt_pass pass_build_ealias;
-extern struct gimple_opt_pass pass_dominator;
-extern struct gimple_opt_pass pass_dce;
-extern struct gimple_opt_pass pass_dce_loop;
-extern struct gimple_opt_pass pass_cd_dce;
-extern struct gimple_opt_pass pass_call_cdce;
-extern struct gimple_opt_pass pass_merge_phi;
-extern struct gimple_opt_pass pass_split_crit_edges;
-extern struct gimple_opt_pass pass_pre;
-extern struct gimple_opt_pass pass_profile;
-extern struct gimple_opt_pass pass_strip_predict_hints;
-extern struct gimple_opt_pass pass_lower_complex_O0;
-extern struct gimple_opt_pass pass_lower_complex;
-extern struct gimple_opt_pass pass_lower_vector;
-extern struct gimple_opt_pass pass_lower_vector_ssa;
-extern struct gimple_opt_pass pass_lower_omp;
-extern struct gimple_opt_pass pass_diagnose_omp_blocks;
-extern struct gimple_opt_pass pass_expand_omp;
-extern struct gimple_opt_pass pass_expand_omp_ssa;
-extern struct gimple_opt_pass pass_object_sizes;
-extern struct gimple_opt_pass pass_fold_builtins;
-extern struct gimple_opt_pass pass_stdarg;
-extern struct gimple_opt_pass pass_early_warn_uninitialized;
-extern struct gimple_opt_pass pass_late_warn_uninitialized;
-extern struct gimple_opt_pass pass_cse_reciprocals;
-extern struct gimple_opt_pass pass_cse_sincos;
-extern struct gimple_opt_pass pass_optimize_bswap;
-extern struct gimple_opt_pass pass_optimize_widening_mul;
-extern struct gimple_opt_pass pass_warn_function_return;
-extern struct gimple_opt_pass pass_warn_function_noreturn;
-extern struct gimple_opt_pass pass_cselim;
-extern struct gimple_opt_pass pass_phiopt;
-extern struct gimple_opt_pass pass_forwprop;
-extern struct gimple_opt_pass pass_phiprop;
-extern struct gimple_opt_pass pass_tree_ifcombine;
-extern struct gimple_opt_pass pass_dse;
-extern struct gimple_opt_pass pass_nrv;
-extern struct gimple_opt_pass pass_rename_ssa_copies;
-extern struct gimple_opt_pass pass_rest_of_compilation;
-extern struct gimple_opt_pass pass_sink_code;
-extern struct gimple_opt_pass pass_fre;
-extern struct gimple_opt_pass pass_check_data_deps;
-extern struct gimple_opt_pass pass_copy_prop;
-extern struct gimple_opt_pass pass_vrp;
-extern struct gimple_opt_pass pass_uncprop;
-extern struct gimple_opt_pass pass_return_slot;
-extern struct gimple_opt_pass pass_reassoc;
-extern struct gimple_opt_pass pass_rebuild_cgraph_edges;
-extern struct gimple_opt_pass pass_remove_cgraph_callee_edges;
-extern struct gimple_opt_pass pass_build_cgraph_edges;
-extern struct gimple_opt_pass pass_local_pure_const;
-extern struct gimple_opt_pass pass_tracer;
-extern struct gimple_opt_pass pass_warn_unused_result;
-extern struct gimple_opt_pass pass_split_functions;
-extern struct gimple_opt_pass pass_feedback_split_functions;
-
-
-extern struct simple_ipa_opt_pass pass_ipa_lower_emutls;
-extern struct simple_ipa_opt_pass pass_ipa_function_and_variable_visibility;
-extern struct simple_ipa_opt_pass pass_ipa_tree_profile;
-
-extern struct simple_ipa_opt_pass pass_early_local_passes;
-
-extern struct ipa_opt_pass_d pass_ipa_whole_program_visibility;
-extern struct ipa_opt_pass_d pass_ipa_lto_gimple_out;
-extern struct simple_ipa_opt_pass pass_ipa_increase_alignment;
-extern struct simple_ipa_opt_pass pass_ipa_matrix_reorg;
-extern struct ipa_opt_pass_d pass_ipa_inline;
-extern struct simple_ipa_opt_pass pass_ipa_free_lang_data;
-extern struct ipa_opt_pass_d pass_ipa_cp;
-extern struct ipa_opt_pass_d pass_ipa_reference;
-extern struct ipa_opt_pass_d pass_ipa_pure_const;
-extern struct simple_ipa_opt_pass pass_ipa_type_escape;
-extern struct simple_ipa_opt_pass pass_ipa_pta;
-extern struct simple_ipa_opt_pass pass_ipa_struct_reorg;
-extern struct ipa_opt_pass_d pass_ipa_lto_wpa_fixup;
-extern struct ipa_opt_pass_d pass_ipa_lto_finish_out;
-extern struct ipa_opt_pass_d pass_ipa_profile;
-extern struct ipa_opt_pass_d pass_ipa_cdtor_merge;
-
-extern struct gimple_opt_pass pass_all_optimizations;
-extern struct gimple_opt_pass pass_cleanup_cfg_post_optimizing;
-extern struct gimple_opt_pass pass_init_datastructures;
-extern struct gimple_opt_pass pass_fixup_cfg;
-
-extern struct rtl_opt_pass pass_expand;
-extern struct rtl_opt_pass pass_init_function;
-extern struct rtl_opt_pass pass_jump;
-extern struct rtl_opt_pass pass_rtl_eh;
-extern struct rtl_opt_pass pass_initial_value_sets;
-extern struct rtl_opt_pass pass_unshare_all_rtl;
-extern struct rtl_opt_pass pass_instantiate_virtual_regs;
-extern struct rtl_opt_pass pass_rtl_fwprop;
-extern struct rtl_opt_pass pass_rtl_fwprop_addr;
-extern struct rtl_opt_pass pass_jump2;
-extern struct rtl_opt_pass pass_lower_subreg;
-extern struct rtl_opt_pass pass_cse;
-extern struct rtl_opt_pass pass_fast_rtl_dce;
-extern struct rtl_opt_pass pass_ud_rtl_dce;
-extern struct rtl_opt_pass pass_rtl_dce;
-extern struct rtl_opt_pass pass_rtl_dse1;
-extern struct rtl_opt_pass pass_rtl_dse2;
-extern struct rtl_opt_pass pass_rtl_dse3;
-extern struct rtl_opt_pass pass_rtl_cprop;
-extern struct rtl_opt_pass pass_rtl_pre;
-extern struct rtl_opt_pass pass_rtl_hoist;
-extern struct rtl_opt_pass pass_rtl_store_motion;
-extern struct rtl_opt_pass pass_cse_after_global_opts;
-extern struct rtl_opt_pass pass_rtl_ifcvt;
-
-extern struct rtl_opt_pass pass_into_cfg_layout_mode;
-extern struct rtl_opt_pass pass_outof_cfg_layout_mode;
-
-extern struct rtl_opt_pass pass_loop2;
-extern struct rtl_opt_pass pass_rtl_loop_init;
-extern struct rtl_opt_pass pass_rtl_move_loop_invariants;
-extern struct rtl_opt_pass pass_rtl_unswitch;
-extern struct rtl_opt_pass pass_rtl_unroll_and_peel_loops;
-extern struct rtl_opt_pass pass_rtl_doloop;
-extern struct rtl_opt_pass pass_rtl_loop_done;
-
-extern struct rtl_opt_pass pass_web;
-extern struct rtl_opt_pass pass_cse2;
-extern struct rtl_opt_pass pass_df_initialize_opt;
-extern struct rtl_opt_pass pass_df_initialize_no_opt;
-extern struct rtl_opt_pass pass_reginfo_init;
-extern struct rtl_opt_pass pass_inc_dec;
-extern struct rtl_opt_pass pass_stack_ptr_mod;
-extern struct rtl_opt_pass pass_initialize_regs;
-extern struct rtl_opt_pass pass_combine;
-extern struct rtl_opt_pass pass_if_after_combine;
-extern struct rtl_opt_pass pass_implicit_zee;
-extern struct rtl_opt_pass pass_partition_blocks;
-extern struct rtl_opt_pass pass_match_asm_constraints;
-extern struct rtl_opt_pass pass_regmove;
-extern struct rtl_opt_pass pass_split_all_insns;
-extern struct rtl_opt_pass pass_fast_rtl_byte_dce;
-extern struct rtl_opt_pass pass_lower_subreg2;
-extern struct rtl_opt_pass pass_mode_switching;
-extern struct rtl_opt_pass pass_sms;
-extern struct rtl_opt_pass pass_sched;
-extern struct rtl_opt_pass pass_ira;
-extern struct rtl_opt_pass pass_postreload;
-extern struct rtl_opt_pass pass_clean_state;
-extern struct rtl_opt_pass pass_branch_prob;
-extern struct rtl_opt_pass pass_value_profile_transformations;
-extern struct rtl_opt_pass pass_postreload_cse;
-extern struct rtl_opt_pass pass_gcse2;
-extern struct rtl_opt_pass pass_split_after_reload;
-extern struct rtl_opt_pass pass_branch_target_load_optimize1;
-extern struct rtl_opt_pass pass_thread_prologue_and_epilogue;
-extern struct rtl_opt_pass pass_stack_adjustments;
-extern struct rtl_opt_pass pass_peephole2;
-extern struct rtl_opt_pass pass_if_after_reload;
-extern struct rtl_opt_pass pass_regrename;
-extern struct rtl_opt_pass pass_cprop_hardreg;
-extern struct rtl_opt_pass pass_reorder_blocks;
-extern struct rtl_opt_pass pass_branch_target_load_optimize2;
-extern struct rtl_opt_pass pass_leaf_regs;
-extern struct rtl_opt_pass pass_split_before_sched2;
-extern struct rtl_opt_pass pass_compare_elim_after_reload;
-extern struct rtl_opt_pass pass_sched2;
-extern struct rtl_opt_pass pass_stack_regs;
-extern struct rtl_opt_pass pass_stack_regs_run;
-extern struct rtl_opt_pass pass_df_finish;
-extern struct rtl_opt_pass pass_compute_alignments;
-extern struct rtl_opt_pass pass_duplicate_computed_gotos;
-extern struct rtl_opt_pass pass_variable_tracking;
-extern struct rtl_opt_pass pass_free_cfg;
-extern struct rtl_opt_pass pass_machine_reorg;
-extern struct rtl_opt_pass pass_cleanup_barriers;
-extern struct rtl_opt_pass pass_delay_slots;
-extern struct rtl_opt_pass pass_split_for_shorten_branches;
-extern struct rtl_opt_pass pass_split_before_regstack;
-extern struct rtl_opt_pass pass_convert_to_eh_region_ranges;
-extern struct rtl_opt_pass pass_shorten_branches;
-extern struct rtl_opt_pass pass_set_nothrow_function_flags;
-extern struct rtl_opt_pass pass_final;
-extern struct rtl_opt_pass pass_rtl_seqabstr;
-extern struct gimple_opt_pass pass_release_ssa_names;
-extern struct gimple_opt_pass pass_early_inline;
-extern struct gimple_opt_pass pass_inline_parameters;
-extern struct gimple_opt_pass pass_all_early_optimizations;
-extern struct gimple_opt_pass pass_update_address_taken;
-extern struct gimple_opt_pass pass_convert_switch;
-
-
-extern struct opt_pass *all_passes, *all_small_ipa_passes, *all_lowering_passes,
-                       *all_regular_ipa_passes, *all_lto_gen_passes;
-# 594 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/tree-pass.h"
-enum
-{
-  PASS_LIST_NO_all_lowering_passes, PASS_LIST_NO_all_small_ipa_passes, PASS_LIST_NO_all_regular_ipa_passes, PASS_LIST_NO_all_lto_gen_passes, PASS_LIST_NO_all_passes,
-  PASS_LIST_NUM
-};
-
-
-
-
-extern struct opt_pass **gcc_pass_lists[];
-
-
-extern struct opt_pass *current_pass;
-
-extern struct opt_pass * get_pass_for_id (int);
-extern unsigned char execute_one_pass (struct opt_pass *);
-extern void execute_pass_list (struct opt_pass *);
-extern void execute_ipa_pass_list (struct opt_pass *);
-extern void execute_ipa_summary_passes (struct ipa_opt_pass_d *);
-extern void execute_all_ipa_transforms (void);
-extern void execute_all_ipa_stmt_fixups (struct cgraph_node *, gimple *);
-extern unsigned char pass_init_dump_file (struct opt_pass *);
-extern void pass_fini_dump_file (struct opt_pass *);
-
-extern const char *get_current_pass_name (void);
-extern void print_current_pass (FILE *);
-extern void debug_pass (void);
-extern void ipa_write_summaries (void);
-extern void ipa_write_optimization_summaries (struct cgraph_node_set_def *,
-           struct varpool_node_set_def *);
-extern void ipa_read_summaries (void);
-extern void ipa_read_optimization_summaries (void);
-extern void register_one_dump_file (struct opt_pass *);
-extern unsigned char function_called_by_processed_nodes_p (void);
-extern void register_pass (struct register_pass_info *);
-# 637 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/tree-pass.h"
-extern unsigned char first_pass_instance;
-
-
-extern void do_per_function_toporder (void (*) (void *), void *);
-# 28 "/opt/gcc-plugins/src/acf_plugin.c" 2
-
+# 29 "/opt/gcc-plugins/src/acf_plugin.c" 2
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/diagnostic.h" 1
 # 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/diagnostic.h"
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/pretty-print.h" 1
@@ -31695,7 +24181,80 @@ extern const char *identifier_to_locale (const char *);
 extern void *(*identifier_to_locale_alloc) (size_t);
 extern void (*identifier_to_locale_free) (void *);
 # 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/diagnostic.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/diagnostic-core.h" 1
+# 28 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/diagnostic-core.h"
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/bversion.h" 1
+# 29 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/diagnostic-core.h" 2
 
+
+typedef enum
+{
+
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/diagnostic.def" 1
+# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/diagnostic.def"
+DK_UNSPECIFIED,
+
+
+
+
+DK_IGNORED,
+
+
+DK_FATAL,
+DK_ICE,
+DK_ERROR,
+DK_SORRY,
+DK_WARNING,
+DK_ANACHRONISM,
+DK_NOTE,
+DK_DEBUG,
+
+
+DK_PEDWARN,
+DK_PERMERROR,
+# 35 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/diagnostic-core.h" 2
+
+  DK_LAST_DIAGNOSTIC_KIND,
+
+
+  DK_POP
+} diagnostic_t;
+
+extern const char *progname;
+
+extern const char *trim_filename (const char *);
+# 59 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/diagnostic-core.h"
+extern void internal_error (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)))
+     __attribute__ ((__noreturn__));
+
+extern unsigned char warning (int, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
+extern unsigned char warning_at (location_t, int, const char *, ...)
+    __attribute__ ((__format__ (__gcc_tdiag__, 3, 4))) __attribute__ ((__nonnull__ (3)));
+extern void error (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
+extern void error_n (location_t, int, const char *, const char *, ...)
+    __attribute__ ((__format__ (__gcc_tdiag__, 3, 5))) __attribute__ ((__nonnull__ (3))) __attribute__ ((__format__ (__gcc_tdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
+extern void error_at (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
+extern void fatal_error (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)))
+     __attribute__ ((__noreturn__));
+
+extern unsigned char pedwarn (location_t, int, const char *, ...)
+     __attribute__ ((__format__ (__gcc_tdiag__, 3, 4))) __attribute__ ((__nonnull__ (3)));
+extern unsigned char permerror (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
+extern void sorry (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
+extern void inform (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
+extern void inform_n (location_t, int, const char *, const char *, ...)
+    __attribute__ ((__format__ (__gcc_tdiag__, 3, 5))) __attribute__ ((__nonnull__ (3))) __attribute__ ((__format__ (__gcc_tdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
+extern void verbatim (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
+extern unsigned char emit_diagnostic (diagnostic_t, location_t, int,
+        const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
+extern unsigned char seen_error (void);
+
+
+
+
+extern void fnotice (FILE *, const char *, ...)
+     __attribute__ ((__format__ (__printf__, 2, 3))) __attribute__ ((__nonnull__ (2)));
+# 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.6.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.6.2/plugin/include/diagnostic.h" 2
 
 
 
@@ -31862,11 +24421,11 @@ extern unsigned char diagnostic_report_diagnostic (diagnostic_context *,
        diagnostic_info *);
 
 extern void diagnostic_set_info (diagnostic_info *, const char *, va_list *,
-     location_t, diagnostic_t) __attribute__ ((__format__ (__gcc_cdiag__, 2, 0))) __attribute__ ((__nonnull__ (2)));
+     location_t, diagnostic_t) __attribute__ ((__format__ (__gcc_tdiag__, 2, 0))) __attribute__ ((__nonnull__ (2)));
 extern void diagnostic_set_info_translated (diagnostic_info *, const char *,
          va_list *, location_t,
          diagnostic_t)
-     __attribute__ ((__format__ (__gcc_cdiag__, 2, 0))) __attribute__ ((__nonnull__ (2)));
+     __attribute__ ((__format__ (__gcc_tdiag__, 2, 0))) __attribute__ ((__nonnull__ (2)));
 
 extern char *diagnostic_build_prefix (diagnostic_context *, diagnostic_info *);
 void default_diagnostic_starter (diagnostic_context *, diagnostic_info *);
@@ -35312,8 +27871,27 @@ extern void set_struct_debug_option (struct gcc_options *opts,
          const char *value);
 # 34 "/opt/gcc-plugins/src/acf_plugin.c" 2
 
+
 # 1 "/opt/gcc-plugins/src/acf_plugin.h" 1
-# 35 "/opt/gcc-plugins/src/acf_plugin.h"
+# 34 "/opt/gcc-plugins/src/acf_plugin.h"
+struct csv_list {
+    struct csv_row *rows;
+    struct csv_row *last_row;
+    int rows_number;
+};
+
+struct csv_row {
+    struct csv_row *next_row;
+    struct csv_column *columns;
+    struct csv_column *last_column;
+    int columns_number;
+};
+
+struct csv_column {
+    struct csv_column *next_column;
+    char *csv_entry;
+};
+
 typedef enum {FUNCNAME, FILENAME, ATTRIBUTE, FIRST_ARG} acf_columns;
 
 typedef enum {
@@ -35341,34 +27919,52 @@ typedef struct acf_ftable_entry {
     int attr_arg_number;
     attr_arg opt_args[10];
 } acf_ftable_entry_t;
-# 74 "/opt/gcc-plugins/src/acf_plugin.h"
-int acf_parse_csv(char *filename, acf_ftable_entry_t **acf_ftable_p, int verbose);
-# 36 "/opt/gcc-plugins/src/acf_plugin.c" 2
+# 94 "/opt/gcc-plugins/src/acf_plugin.h"
+void initCSV(struct csv_list *clist);
+unsigned char readCSV(char *filename, struct csv_list *clist);
+
+int parseCSV(struct csv_list *clist, acf_ftable_entry_t **acf_ftable_p,
+      int verbose);
+# 37 "/opt/gcc-plugins/src/acf_plugin.c" 2
 
 
 
 
 
 extern void error (const char *, ...);
-# 62 "/opt/gcc-plugins/src/acf_plugin.c"
-acf_ftable_entry_t *acf_ftable;
-const char *acf_csv_file_key="csv_file";
-char *acf_csv_file;
+# 54 "/opt/gcc-plugins/src/acf_plugin.c"
+static acf_ftable_entry_t *acf_ftable;
+static const char *acf_csv_file_key="csv_file";
 
-const char *verbose_key="verbose";
-unsigned char verbose = 0;
+static char *acf_csv_files[128];
+static int acf_csv_files_num = 0;
 
+static unsigned char register_acf_file(const char *plugin_name, char * acf_csv_filename) {
+    FILE *fcsv;
 
+    acf_csv_files_num++;
+    if (acf_csv_files_num > 128) {
+ error("%s: too many csv files too register(%d): %s\n", plugin_name, acf_csv_files_num, acf_csv_filename);
+ return 0;
+    }
 
+    if ((fcsv = fopen_unlocked(acf_csv_filename,"r")) == ((void *)0)) {
+ error("%s: csv file not found: %s\n", plugin_name, acf_csv_filename);
+ return 0;
+    }
 
+    fclose(fcsv);
+    acf_csv_files[acf_csv_files_num-1] = acf_csv_filename;
 
+    return 1;
+}
 
+static const char *verbose_key="verbose";
+static unsigned char verbose = 0;
 
 int plugin_is_GPL_compatible;
 static const char *plugin_name;
-
-static unsigned char LTO_clean_optimize = 0;
-# 115 "/opt/gcc-plugins/src/acf_plugin.c"
+# 120 "/opt/gcc-plugins/src/acf_plugin.c"
 static void trace_attached_acf(acf_ftable_entry_t *acf_entry, const char *acf_type,
           const char *func_name, const char *acf_pass_name) {
     const char *sep = "";
@@ -35504,7 +28100,7 @@ static void restore_global_attribute_values() {
  save_options = ((void *)0);
     }
 }
-# 258 "/opt/gcc-plugins/src/acf_plugin.c"
+# 263 "/opt/gcc-plugins/src/acf_plugin.c"
 static void
 add_global_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, const char *acf_pass_name) {
 
@@ -35602,7 +28198,7 @@ add_global_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, c
      (1 << 13), DK_UNSPECIFIED, ((source_location) 0), &handlers, ((void *)0));
      }
  }
-# 371 "/opt/gcc-plugins/src/acf_plugin.c"
+# 376 "/opt/gcc-plugins/src/acf_plugin.c"
     }
 
     // An example for --param max-unroll-times=4
@@ -35645,7 +28241,7 @@ static void save_and_set_param(char *opt_param, int value) {
     csv_param_name[csv_param_index] = opt_param;
     csv_param_value[csv_param_index] = ((int) global_options.x_param_values[(int) param_idx]);
     csv_param_index ++;
-# 421 "/opt/gcc-plugins/src/acf_plugin.c"
+
     // Set new param value
 
     set_param_value(opt_param, value, global_options.x_param_values, csv_param_set);
@@ -35693,20 +28289,6 @@ static void restore_global_param_values() {
 
     }
     csv_param_index = 0;
-}
-
-
-
-
-
-static int parse_ftable_csv_file(acf_ftable_entry_t **acf_ftable_p,
-     char *csv_file, unsigned char verbose)
-{
-  int nb = 0;
-
-  nb = acf_parse_csv(csv_file, acf_ftable_p, verbose);
-
-  return nb;
 }
 
 
@@ -35811,12 +28393,21 @@ static unsigned char fill_csv_options(tree decl, int acf_pass) {
     static unsigned char csv_parsed = 0;
 
     if (!csv_parsed) {
- func_number = parse_ftable_csv_file(&acf_ftable, acf_csv_file, verbose);
+ struct csv_list parsed_csv;
+
+ initCSV(&parsed_csv);
+
+ for (i = 0; i < acf_csv_files_num; i++) {
+     if (!readCSV(acf_csv_files[i], &parsed_csv))
+  return 0;
+ }
+
+ func_number = parseCSV(&parsed_csv, &acf_ftable, verbose);
  csv_parsed = 1;
     }
     if (func_number < 0){
 
- return done;
+ return 0;
     }
 
 
@@ -35846,8 +28437,10 @@ static unsigned char fill_csv_options(tree decl, int acf_pass) {
   add_global_param(cur_func_name, acf_entry, acf_pass_name);
      // Need to handle global_options.x_optimize attribute in backend only in
      // lto mode for versions before 4.7.0
-     else if (is_lto() && LTO_clean_optimize)
+
+     else if (is_lto())
   add_global_attribute(cur_func_name, acf_entry, acf_pass_name);
+
      done = 1;
      break;
  default:
@@ -35864,7 +28457,7 @@ static unsigned char fill_csv_options(tree decl, int acf_pass) {
 
 extern void cplus_decl_attributes(tree *, tree, int) __attribute__((weak));
 
-void attribute_injector_start_unit_callback(void *gcc_data __attribute__ ((__unused__)),
+static void attribute_injector_start_unit_callback(void *gcc_data __attribute__ ((__unused__)),
          void *data __attribute__ ((__unused__))){
     if(is_gcc()){
  decl_attributes_func=(decl_attributes_func_type)(&decl_attributes);
@@ -35877,7 +28470,7 @@ void attribute_injector_start_unit_callback(void *gcc_data __attribute__ ((__unu
 
 static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
     tree decl=(tree)gcc_data;
-# 675 "/opt/gcc-plugins/src/acf_plugin.c"
+# 662 "/opt/gcc-plugins/src/acf_plugin.c"
     fill_csv_options(decl, 1);
 }
 
@@ -35903,7 +28496,7 @@ static void param_injector_end_passes_callback(void *gcc_data,void *data) {
     restore_global_param_values();
     restore_global_attribute_values();
 }
-# 726 "/opt/gcc-plugins/src/acf_plugin.c"
+# 713 "/opt/gcc-plugins/src/acf_plugin.c"
 // Called when entering a sequence of GIMPLE_PASS in IPA lists
 
 static unsigned int ipa_gimple_per_func_callback(void) {
@@ -35937,6 +28530,9 @@ static void ipa_gimple_init_per_func_callback(void *gcc_data,void *data) {
  {
      GIMPLE_PASS,
      "ipa_gimple_per_func",
+
+
+
      ((void *)0),
      &ipa_gimple_per_func_callback,
      ((void *)0),
@@ -36004,6 +28600,7 @@ static void ipa_gimple_passes_end_callback(void *gcc_data,void *data) {
     restore_global_attribute_values();
 }
 
+
 static void lto_clean_optimize_callback(void) {
     struct cgraph_node *node;
 
@@ -36017,6 +28614,7 @@ static void lto_clean_optimize_callback(void) {
  ((decl_node)->function_decl.function_specific_optimization) = ((void *)0);
     }
 }
+
 
 static int pre_genericize=PLUGIN_PRE_GENERICIZE;
 
@@ -36074,17 +28672,7 @@ static int plugin_test(void)
 
 int plugin_init(struct plugin_name_args *plugin_na,
   struct plugin_gcc_version *version){
-
-    plugin_name=plugin_na->base_name;
-    FILE *fcsv;
-    int csv_arg_pos = -1;
-
-
-
-
-
-
-    unsigned char bad = 0;
+    unsigned char bad_arguments;
     int i;
 
 
@@ -36096,7 +28684,9 @@ int plugin_init(struct plugin_name_args *plugin_na,
 
         (void)((void *)0);
     }
-# 931 "/opt/gcc-plugins/src/acf_plugin.c"
+
+    plugin_name = plugin_na->base_name;
+# 915 "/opt/gcc-plugins/src/acf_plugin.c"
     // Check the plugin is used with appropriate compiler version
     // regarding access to PARAM values
 
@@ -36114,76 +28704,52 @@ int plugin_init(struct plugin_name_args *plugin_na,
 
 
 
-    switch (plugin_na->argc) {
-    case 0:
- bad = 1;
- break;
-    case 1:
- if (strcmp(plugin_na->argv[0].key, "test") == 0) {
-   int status = plugin_test();
-   fprintf(stderr, "%s: plugin test.\n", status == 0 ? "PASSED": "FAILED");
-   return status;
- } else if (strcmp(plugin_na->argv[0].key, acf_csv_file_key) == 0) {
-     csv_arg_pos = 0;
- } else {
-     bad = 1;
- }
- break;
-    case 2:
-    case 3:
- for (i = 0; i < plugin_na->argc; i++) {
-     if (strcmp(plugin_na->argv[i].key, verbose_key) == 0) {
-  verbose = 1;
+    bad_arguments = 0;
+    acf_csv_files_num = 0;
+
+    for (i = 0; i < plugin_na->argc; i++) {
+
+ if (strcmp(plugin_na->argv[i].key, "test") == 0) {
+     if ((i > 0) || (plugin_na->argc > 1)) {
+  bad_arguments = 1;
+  break;
      }
+     int status = plugin_test();
+     fprintf(stderr, "%s: plugin test.\n", status == 0 ? "PASSED": "FAILED");
+     return status;
+ }
 
+ else if (strcmp(plugin_na->argv[i].key, verbose_key) == 0) {
+     verbose = 1;
+ }
 
-
-
-
-     if (strcmp(plugin_na->argv[i].key, acf_csv_file_key) == 0) {
-  csv_arg_pos = i;
+ else if (strcmp(plugin_na->argv[i].key, acf_csv_file_key) == 0) {
+     if (!register_acf_file(plugin_name, plugin_na->argv[i].value)) {
+  bad_arguments = 1;
+  break;
      }
  }
- if (!verbose || csv_arg_pos == -1) {
-     bad = 1;
+
+ else {
+     error("%s: Unknown option %s\n", plugin_name, plugin_na->argv[i].key);
+     return 1;
  }
- break;
-    default:
- bad = 1;
- break;
     }
 
-    if (bad) {
+    if ((plugin_na->argc == 0) || (acf_csv_files_num == 0))
+ bad_arguments = 1;
+
+    if (bad_arguments) {
  fprintf(stderr,
   "Usage for %s: -fplugin=<path>/%s.so "
   "-fplugin-arg-%s-%s= <path-to-csv-file> "
-
-
-
   "[-fplugin-arg-%s-%s]\n",
   plugin_name, plugin_name,
   plugin_name, acf_csv_file_key,
-
-
-
   plugin_name, verbose_key);
  return 1;
     }
 
-    if (strcmp(plugin_na->argv[csv_arg_pos].key, acf_csv_file_key) == 0) {
- acf_csv_file = plugin_na->argv[csv_arg_pos].value;
- if ((fcsv = fopen_unlocked(acf_csv_file,"r")) == ((void *)0)) {
-     error("%s: csv file not found: %s\n", plugin_name, acf_csv_file);
-     bad = 1;
- } else {
-     fclose(fcsv);
- }
-    } else {
- error("%s: Unknown option %s\n", plugin_name,
-       plugin_na->argv[csv_arg_pos].key);
- return 1;
-    }
-# 1055 "/opt/gcc-plugins/src/acf_plugin.c"
     // Attach function attributes to function node
     register_callback(plugin_na->base_name,
         PLUGIN_START_UNIT,
@@ -36209,13 +28775,16 @@ int plugin_init(struct plugin_name_args *plugin_na,
         PLUGIN_EARLY_GIMPLE_PASSES_END,
         &ipa_gimple_passes_end_callback, ((void *)0));
 
+
     // For GCC versions earlier than 4.7, remove the optimization node
     // that cannot be emitted as GIMPLE bytecode
-    if ((version->basever[0] < '4') ||
- ((version->basever[0] == '4') && (version->basever[2] < '7')))
- LTO_clean_optimize = 1;
+    if ((version->basever[0] > '4') ||
+ ((version->basever[0] == '4') && (version->basever[2] >= '7'))) {
+        error("%s: build gcc and load gcc versions are incompatible.", plugin_name);
+        return 1;
+    }
 
-    if (global_options.x_flag_generate_lto && LTO_clean_optimize) {
+    if (global_options.x_flag_generate_lto) {
 
  static struct ipa_opt_pass_d lto_clean_optimize_pass = {
      {
@@ -36259,6 +28828,6 @@ int plugin_init(struct plugin_name_args *plugin_na,
       PLUGIN_PASS_MANAGER_SETUP,
       ((void *)0), &lto_clean_optimize_info);
     }
-# 1144 "/opt/gcc-plugins/src/acf_plugin.c"
+# 1071 "/opt/gcc-plugins/src/acf_plugin.c"
     return 0;
 }

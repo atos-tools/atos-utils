@@ -1,13 +1,12 @@
 
 cc1_path=$(shell $(TESTGCC) --print-prog-name=cc1)
-hwi=$(shell objdump -t "$(cc1_path)" | grep target_newline | awk '{print $$5 - 0}')
-ACF_PLUGIN_OPT=-fplugin=./acf_plugin.so -fplugin-arg-acf_plugin-verbose -fplugin-arg-acf_plugin-csv_file=$(testdir)/test.csv -fplugin-arg-acf_plugin-host_wide_int=$(hwi)
+ACF_PLUGIN_OPT=-fplugin=./acf_plugin.so -fplugin-arg-acf_plugin-verbose -fplugin-arg-acf_plugin-csv_file=$(testdir)/test.csv
 
 all: acf_plugin.so
 
 check: test
 
-test: acf-test-c acf-test-cpp acf-test-param acf-test-param-lto
+test: acf-test-c acf-test-cpp acf-test-param acf-test-param-lto acf-test-args
 
 acf_plugin.so: $(SRC)
 	$(COMPILER) $(CFLAGS) $(CPPFLAGS) -fPIC -shared  $(SRC) -o $@
@@ -50,5 +49,36 @@ acf-test-param acf-test-param-lto: $(TESTPARAM) ./acf_plugin.so $(testdir)/test.
 	   echo "$@: SUCCESS"; \
 	fi;
 
+acf-test-arg:
+	-$(TESTGCC) $(TESTCFLAGS) $(ACF_PLUGIN_OPT) $(TESTARGS) -o $@.out > $@.log 2>&1
+	if ! `diff -i -q $@.log $(testdir)/$(TESTNAME).ref` 2>/dev/null; then \
+	    echo "ERROR at $(TESTNAME)" ; \
+	    exit 1 ; \
+        fi ; \
+	echo "$(TESTNAME): SUCCESS"
+
+acf-test-args: $(TESTARGS) ./acf_plugin.so $(testdir)/test.csv
+	$(MAKE) -f $(builddir)/Makefile.plugin acf-test-arg \
+	ACF_PLUGIN_OPT="-fplugin=./acf_plugin.so -fplugin-arg-acf_plugin-test" TESTNAME=test-args1
+
+	$(MAKE) -f $(builddir)/Makefile.plugin acf-test-arg \
+	ACF_PLUGIN_OPT="-fplugin=./acf_plugin.so -fplugin-arg-acf_plugin-verbose" TESTNAME=test-args2
+
+	$(MAKE) -f $(builddir)/Makefile.plugin acf-test-arg \
+	ACF_PLUGIN_OPT="-fplugin=./acf_plugin.so -fplugin-arg-acf_plugin-test -fplugin-arg-acf_plugin-verbose" TESTNAME=test-args3
+
+	$(MAKE) -f $(builddir)/Makefile.plugin acf-test-arg \
+	ACF_PLUGIN_OPT="-fplugin=./acf_plugin.so -fplugin-arg-acf_plugin-verbose -fplugin-arg-acf_plugin-test" TESTNAME=test-args4
+
+	$(MAKE) -f $(builddir)/Makefile.plugin acf-test-arg \
+	ACF_PLUGIN_OPT="-fplugin=./acf_plugin.so -fplugin-arg-acf_plugin-verbose -fplugin-arg-acf_plugin-csv_file=$(testdir)/test-args.csv" TESTNAME=test-args5
+
+	$(MAKE) -f $(builddir)/Makefile.plugin acf-test-arg \
+	ACF_PLUGIN_OPT="-fplugin=./acf_plugin.so -fplugin-arg-acf_plugin-verbose -fplugin-arg-acf_plugin-csv_file=$(testdir)/test-args.csv -fplugin-arg-acf_plugin-csv_file=$(testdir)/test-args.csv" TESTNAME=test-args6
+
+	$(MAKE) -f $(builddir)/Makefile.plugin acf-test-arg \
+	ACF_PLUGIN_OPT="-fplugin=./acf_plugin.so -fplugin-arg-acf_plugin-csv_file=$(testdir)/test-args.csv -fplugin-arg-acf_plugin-csv_file=$(testdir)/test-argsf.csv -fplugin-arg-acf_plugin-verbose" TESTNAME=test-args7
+
+
 clean:
-	\rm -f *.o acf_plugin.so acf-test-c.* acf-test-cpp.* acf-test-param.* acf-test-param-lto.* size.log
+	\rm -f *.o acf_plugin.so acf-test-c.* acf-test-cpp.* acf-test-param.* acf-test-param-lto.* acf-test-arg.* size.log

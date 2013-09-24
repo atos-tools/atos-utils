@@ -32,6 +32,7 @@
 #include "cgraph.h"
 #include "opts.h"
 
+#include "plugin-utils.h"
 #include "acf_plugin.h"
 
 /* ============================================================ */
@@ -46,37 +47,41 @@ extern void error (const char *, ...);
 
 #ifdef param_values
 #define USE_GLOBAL_PARAMS
-
-#ifdef HWI_SHIFT
-#undef param_values
-#define param_values (*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift))
-#undef PARAM_VALUE
-#define PARAM_VALUE(ENUM) \
-    ((int) ((*(int **) (((char *) &(global_options.x_param_values)) + hwi_shift))[(int) ENUM]))
-#endif
-
 #else
 #undef USE_GLOBAL_PARAMS
 #endif
 
-acf_ftable_entry_t *acf_ftable;
-const char *acf_csv_file_key="csv_file";
-char *acf_csv_file;
+static acf_ftable_entry_t *acf_ftable;
+static const char *acf_csv_file_key="csv_file";
+#define ACF_CSV_FILES_MAX 128
+static char *acf_csv_files[ACF_CSV_FILES_MAX];
+static int acf_csv_files_num = 0;
 
-const char *verbose_key="verbose";
-bool verbose = false;
+static bool register_acf_file(const char *plugin_name, char * acf_csv_filename) {
+    FILE *fcsv;
 
-#ifdef HWI_SHIFT
-const char *hwi_size="host_wide_int";
-int gcc_runtime_hwi = 0;
-int hwi_shift = 0;
-#endif
+    acf_csv_files_num++;
+    if (acf_csv_files_num > ACF_CSV_FILES_MAX) {
+	error("%s: too many csv files too register(%d): %s\n", plugin_name, acf_csv_files_num, acf_csv_filename);
+	return false;
+    }
+
+    if ((fcsv = fopen(acf_csv_filename, "r")) == NULL) {
+	error("%s: csv file not found: %s\n", plugin_name, acf_csv_filename);
+	return false;
+    }
+
+    fclose(fcsv);
+    acf_csv_files[acf_csv_files_num-1] = acf_csv_filename;
+
+    return true;
+}
+
+static const char *verbose_key="verbose";
+static bool verbose = false;
 
 int plugin_is_GPL_compatible;
 static const char *plugin_name;
-
-static bool LTO_clean_optimize = false;
-
 #ifdef PRINT_PASS_LIST
 static void do_indent(int tab_number){
     int i;
@@ -411,13 +416,6 @@ static void save_and_set_param(char *opt_param, int value) {
     csv_param_value[csv_param_index] = PARAM_VALUE(param_idx);
     csv_param_index ++;
 
-#if defined(USE_GLOBAL_PARAMS) && defined (HWI_SHIFT) && defined(ACF_DEBUG)
-    if (hwi_shift)
-	DEBUG("Default x_param_value address= %p, \n" \
-	      "Shifted x_param_value= %p\n",
-	      &(global_options.x_param_values), param_values);
-#endif
-
     // Set new param value
 #ifdef USE_GLOBAL_PARAMS
     set_param_value(opt_param, value, param_values, csv_param_set);
@@ -465,20 +463,6 @@ static void restore_global_param_values() {
 #endif
     }
     csv_param_index = 0;
-}
-
-/* ============================================================ */
-/* Read CSV file and set attributes and params */
-/* ============================================================ */
-
-static int parse_ftable_csv_file(acf_ftable_entry_t **acf_ftable_p,
-				 char *csv_file, bool verbose)
-{
-  int nb = 0;
-
-  nb = acf_parse_csv(csv_file, acf_ftable_p, verbose);
-
-  return nb;
 }
 
 #define MATCH_TOKEN(match, tok, tok_len) ((strlen(match) == tok_len) && (strncmp(match, tok, tok_len) == 0))
@@ -583,12 +567,21 @@ static bool fill_csv_options(tree decl, int acf_pass) {
     static bool csv_parsed = false;
 
     if (!csv_parsed) {
-	func_number = parse_ftable_csv_file(&acf_ftable, acf_csv_file, verbose);
+	struct csv_list parsed_csv;
+
+	initCSV(&parsed_csv);
+
+	for (i = 0; i < acf_csv_files_num; i++) {
+	    if (!readCSV(acf_csv_files[i], &parsed_csv))
+		return false;
+	}
+
+	func_number = parseCSV(&parsed_csv, &acf_ftable, verbose);
 	csv_parsed = true;
     }
     if (func_number < 0){
 	/* Error already reported */
-	return done;
+	return false;
     }
 
     /* TBD: Use current_function_decl instead ?? */
@@ -618,8 +611,10 @@ static bool fill_csv_options(tree decl, int acf_pass) {
 		add_global_param(cur_func_name, acf_entry, acf_pass_name);
 	    // Need to handle optimize attribute in backend only in
 	    // lto mode for versions before 4.7.0
-	    else  if (is_lto() && LTO_clean_optimize)  /* !CSV_PARAM */
+#if !defined(GCCPLUGIN_VERSION) || (GCCPLUGIN_VERSION < 4007)
+	    else  if (is_lto())  /* !CSV_PARAM */
 		add_global_attribute(cur_func_name, acf_entry, acf_pass_name);
+#endif
 	    done = true;
 	    break;
 	default:
@@ -636,7 +631,7 @@ static bool fill_csv_options(tree decl, int acf_pass) {
 
 extern void cplus_decl_attributes(tree *, tree, int) __attribute__((weak));
 
-void attribute_injector_start_unit_callback(void *gcc_data ATTRIBUTE_UNUSED,
+static void attribute_injector_start_unit_callback(void *gcc_data ATTRIBUTE_UNUSED,
 					    void *data ATTRIBUTE_UNUSED){
     if(is_gcc()){
 	decl_attributes_func=(decl_attributes_func_type)(&decl_attributes);
@@ -748,6 +743,9 @@ static void ipa_gimple_init_per_func_callback(void *gcc_data,void *data) {
 	{
 	    GIMPLE_PASS,
 	    "ipa_gimple_per_func",		/* name */
+#if defined(GCCPLUGIN_VERSION) && (GCCPLUGIN_VERSION >= 4008)
+	    OPTGROUP_NONE,			/* optinfo_flags */
+#endif
 	    NULL,				/* gate */
 	    &ipa_gimple_per_func_callback,	/* execute */
 	    NULL,				/* sub */
@@ -815,6 +813,7 @@ static void ipa_gimple_passes_end_callback(void *gcc_data,void *data) {
     restore_global_attribute_values();
 }
 
+#if !defined(GCCPLUGIN_VERSION) || (GCCPLUGIN_VERSION < 4007)
 static void lto_clean_optimize_callback(void) {
     struct cgraph_node *node;
 
@@ -828,6 +827,7 @@ static void lto_clean_optimize_callback(void) {
 	DECL_FUNCTION_SPECIFIC_OPTIMIZATION(decl_node) = NULL;
     }
 }
+#endif
 
 static int pre_genericize=PLUGIN_PRE_GENERICIZE;
 
@@ -885,17 +885,7 @@ static int plugin_test(void)
 
 int plugin_init(struct plugin_name_args *plugin_na,
 		struct plugin_gcc_version *version){
-
-    plugin_name=plugin_na->base_name;
-    FILE *fcsv;
-    int csv_arg_pos = -1;
-#ifdef HWI_SHIFT
-    int hwi_arg_pos = -1;
-    HOST_WIDE_INT hwi_size_var;
-    bool hwi_ok;
-    int plugin_buildtime_hwi = 0;
-#endif
-    bool bad = false;
+    bool bad_arguments;
     int i;
 
     /* higly strict version checking : plugin is built by the
@@ -907,6 +897,8 @@ int plugin_init(struct plugin_name_args *plugin_na,
 	/* return 1; */
         (void)NULL;
     }
+
+    plugin_name = plugin_na->base_name;
 
 #ifdef ACF_DEBUG
     DEBUG("---------------------\n");
@@ -937,112 +929,51 @@ int plugin_init(struct plugin_name_args *plugin_na,
 #endif
 
     /* Check options */
-    switch (plugin_na->argc) {
-    case 0:
-	bad = true;
-	break;
-    case 1:
-	if (strcmp(plugin_na->argv[0].key, "test") == 0) {
-	  int status = plugin_test();
-	  PRINTF("%s: plugin test.\n", status == 0 ? "PASSED": "FAILED");
-	  return status;
-	} else if (strcmp(plugin_na->argv[0].key, acf_csv_file_key) == 0) {
-	    csv_arg_pos = 0;
-	} else {
-	    bad = true;
+    bad_arguments = false;
+    acf_csv_files_num = 0;
+
+    for (i = 0; i < plugin_na->argc; i++) {
+
+	if (strcmp(plugin_na->argv[i].key, "test") == 0) {
+	    if ((i > 0) || (plugin_na->argc > 1)) {
+		bad_arguments = true;
+		break;
+	    }
+	    int status = plugin_test();
+	    PRINTF("%s: plugin test.\n", status == 0 ? "PASSED": "FAILED");
+	    return status;
 	}
-	break;
-    case 2:
-    case 3:
-	for (i = 0; i < plugin_na->argc; i++) {
-	    if (strcmp(plugin_na->argv[i].key, verbose_key) == 0) {
-		verbose = true;
-	    }
-#ifdef HWI_SHIFT
-	    if (strcmp(plugin_na->argv[i].key, hwi_size) == 0) {
-		hwi_arg_pos = i;
-	    }
-#endif
-	    if (strcmp(plugin_na->argv[i].key, acf_csv_file_key) == 0) {
-		csv_arg_pos = i;
+
+	else if (strcmp(plugin_na->argv[i].key, verbose_key) == 0) {
+	    verbose = true;
+	}
+
+	else if (strcmp(plugin_na->argv[i].key, acf_csv_file_key) == 0) {
+	    if (!register_acf_file(plugin_name, plugin_na->argv[i].value)) {
+		bad_arguments = true;
+		break;
 	    }
 	}
-	if (!verbose || csv_arg_pos == -1) {
-	    bad = true;
+
+	else {
+	    error("%s: Unknown option %s\n", plugin_name, plugin_na->argv[i].key);
+	    return 1;
 	}
-	break;
-    default:
-	bad = true;
-	break;
     }
 
-    if (bad) {
+    if ((plugin_na->argc == 0) || (acf_csv_files_num == 0))
+	bad_arguments = true;
+	
+    if (bad_arguments) {
 	fprintf(stderr,
 		"Usage for %s: -fplugin=<path>/%s.so "
 		"-fplugin-arg-%s-%s= <path-to-csv-file> "
-#ifdef HWI_SHIFT
-		"[-fplugin-arg-%s-%s= <size_in_bytes>] "
-#endif
 		"[-fplugin-arg-%s-%s]\n",
 		plugin_name, plugin_name,
 		plugin_name, acf_csv_file_key,
-#ifdef HWI_SHIFT
-		plugin_name, hwi_size,
-#endif
 		plugin_name, verbose_key);
 	return 1;
     }
-
-    if (strcmp(plugin_na->argv[csv_arg_pos].key, acf_csv_file_key) == 0) {
-	acf_csv_file = plugin_na->argv[csv_arg_pos].value;
-	if ((fcsv = fopen(acf_csv_file, "r")) == NULL) {
-	    error("%s: csv file not found: %s\n", plugin_name, acf_csv_file);
-	    bad = true;
-	} else {
-	    fclose(fcsv);
-	}
-    } else {
-	error("%s: Unknown option %s\n", plugin_name,
-	      plugin_na->argv[csv_arg_pos].key);
-	return 1;
-    }
-
-#ifdef HWI_SHIFT
-    hwi_ok = false;
-    if (hwi_arg_pos != -1 && strcmp(plugin_na->argv[hwi_arg_pos].key, hwi_size) == 0) {
-	if (plugin_na->argv[hwi_arg_pos].value &&
-	    strcmp(plugin_na->argv[hwi_arg_pos].value, "") != 0) {
-	    errno = 0;
-	    gcc_runtime_hwi = strtol(plugin_na->argv[hwi_arg_pos].value, NULL, 0);
-	    if (!errno) {
-#ifdef ACF_DEBUG
-		DEBUG("gcc HOST_WIDE_INT size from parameters: %d\n", gcc_runtime_hwi);
-#endif
-		hwi_ok = true;
-
-		/* Get plugin HOST_WIDE_INT size */
-		plugin_buildtime_hwi = sizeof(hwi_size_var);
-#ifdef ACF_DEBUG
-		DEBUG("Plugin HOST_WIDE_INT size: %d\n", plugin_buildtime_hwi);
-#endif
-
-		if (gcc_runtime_hwi != plugin_buildtime_hwi) {
-		    /* Correct offset of x_param_values in global_options structure
-		       due to 2 fields of type HOST_WIDE_INT at its begining*/
-		    hwi_shift = (2 * (gcc_runtime_hwi - plugin_buildtime_hwi));
-		}
-#ifdef ACF_DEBUG
-		if (hwi_shift)
-		    DEBUG("HOST_WIDE_INT shift: %d\n", hwi_shift);
-#endif
-	    }
-	}
-    }
-#ifdef ACF_DEBUG
-    if (!hwi_ok)
-	DEBUG("Warning: No HOST_WIDE_TYPE size in parameters\n");
-#endif
-#endif /* HWI_SHIFT */
 
     // Attach function attributes to function node
     register_callback(plugin_na->base_name,
@@ -1069,13 +1000,16 @@ int plugin_init(struct plugin_name_args *plugin_na,
 		      PLUGIN_EARLY_GIMPLE_PASSES_END,
 		      &ipa_gimple_passes_end_callback, NULL);
 
+#if !defined(GCCPLUGIN_VERSION) || (GCCPLUGIN_VERSION < 4007)
     // For GCC versions earlier than 4.7, remove the optimization node
     // that cannot be emitted as GIMPLE bytecode
-    if ((version->basever[0] < '4') ||
-	((version->basever[0] == '4') && (version->basever[2] < '7')))
-	LTO_clean_optimize = true;
+    if ((version->basever[0] > '4') ||
+	((version->basever[0] == '4') && (version->basever[2] >= '7'))) {
+        error("%s: build gcc and load gcc versions are incompatible.", plugin_name);
+        return 1;
+    }
 
-    if (flag_generate_lto && LTO_clean_optimize) {
+    if (flag_generate_lto) {
 
 	static struct ipa_opt_pass_d lto_clean_optimize_pass = {
 	    {
@@ -1119,6 +1053,7 @@ int plugin_init(struct plugin_name_args *plugin_na,
 			   PLUGIN_PASS_MANAGER_SETUP,
 			   NULL, &lto_clean_optimize_info);
     }
+#endif
 
 #ifdef PRINT_PASS_LIST
     PRINTF("\n####### ALL PASSES LIST #######\n");

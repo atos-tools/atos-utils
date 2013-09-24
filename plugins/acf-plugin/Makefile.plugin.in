@@ -27,6 +27,7 @@ SRC= $(wildcard $(prepdir)/prep/*.c)
 TESTC=$(wildcard $(testdir)/hello*.c)
 TESTCPP=$(wildcard $(testdir)/hello*.cpp)
 TESTPARAM=$(wildcard $(testdir)/test-param*.c)
+TESTARGS=$(testdir)/test-args.c
 
 COMPILER=@CC@
 CFLAGS=@CFLAGS@

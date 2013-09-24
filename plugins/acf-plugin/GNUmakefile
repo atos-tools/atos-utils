@@ -71,7 +71,6 @@ compiler_varname=$(shell echo $(call gcc_or_gpp,$1) | sed 's!g++!gpp!')
 plugin_subdir=$(call gcc_or_gpp,$1)-$(call gcc_version,$1)/$(call gcc_target,$1)/$(call gcc_host,$1)
 prebuilt_subdir=$(call gcc_host,$1)/gcc-$(call gcc_version,$1)
 prep_compiler=$(call prebuilt_subdir,$1)/bin/$(PLUGIN_$(call compiler_varname,$1))
-prep_cppflags=$(shell if [ "$(call gcc_target,$1)" = arm -o "$(call gcc_target,$1)" = sh4 ]; then echo "-DNEED_64BIT_HOST_WIDE_INT"; else echo ""; fi)
 prep_cflags=-O2 -Wall
 # Avoid builtins that may vary with compilers versions.
 prep_cflags+=-fno-builtin -ansi

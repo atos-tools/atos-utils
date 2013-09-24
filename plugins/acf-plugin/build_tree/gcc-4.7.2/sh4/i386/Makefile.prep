@@ -23,7 +23,7 @@ prepdir=$(builddir)
 
 COMPILER=/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/gcc
 CFLAGS=-O2 -Wall -fno-builtin -ansi -D__CORRECT_ISO_CPP_STRING_H_PROTO
-CPPFLAGS=-DNEED_64BIT_HOST_WIDE_INT
+CPPFLAGS=
 
 PREP_INCLUDES=-I$(shell $(COMPILER) $(CFLAGS) -print-file-name=plugin)/include
 

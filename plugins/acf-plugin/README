@@ -16,7 +16,6 @@ Full rebuild of all varsions/archs from sources
     make distclean-prep
     make prep   # generate preprocessed files in 'build_tree/gcc-<versions>/<hosts>/' dirs
     make all
-    make check
 
 Note that optionally, make prep will have modified the source tree, it should be commited then.
 

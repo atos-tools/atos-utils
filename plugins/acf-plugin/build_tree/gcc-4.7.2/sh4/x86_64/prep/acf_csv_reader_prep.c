@@ -1,7 +1,7 @@
-# 1 "/opt/gcc-plugins/src/acf_csv_reader.c"
+# 1 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_csv_reader.c"
 # 1 "<command-line>"
-# 1 "/opt/gcc-plugins/src/acf_csv_reader.c"
-# 20 "/opt/gcc-plugins/src/acf_csv_reader.c"
+# 1 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_csv_reader.c"
+# 18 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_csv_reader.c"
 # 1 "/usr/include/stdio.h" 1 3 4
 # 28 "/usr/include/stdio.h" 3 4
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/include-fixed/features.h" 1 3 4
@@ -820,7 +820,7 @@ putchar (int __c)
 # 836 "/usr/include/stdio.h" 2 3 4
 # 844 "/usr/include/stdio.h" 3 4
 
-# 21 "/opt/gcc-plugins/src/acf_csv_reader.c" 2
+# 19 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_csv_reader.c" 2
 # 1 "/usr/include/string.h" 1 3 4
 # 28 "/usr/include/string.h" 3 4
 
@@ -1141,7 +1141,7 @@ __strsep_3c (char **__s, char __reject1, char __reject2, char __reject3)
 # 418 "/usr/include/string.h" 2 3 4
 # 426 "/usr/include/string.h" 3 4
 
-# 22 "/opt/gcc-plugins/src/acf_csv_reader.c" 2
+# 20 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_csv_reader.c" 2
 # 1 "/usr/include/stdlib.h" 1 3 4
 # 33 "/usr/include/stdlib.h" 3 4
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/include/stddef.h" 1 3 4
@@ -1410,7 +1410,7 @@ extern size_t wcstombs (char *__restrict __s,
 
 # 977 "/usr/include/stdlib.h" 3 4
 
-# 23 "/opt/gcc-plugins/src/acf_csv_reader.c" 2
+# 21 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_csv_reader.c" 2
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/gcc-plugin.h" 1
 # 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/gcc-plugin.h"
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config.h" 1
@@ -4446,10 +4446,10 @@ extern int unregister_callback (const char *plugin_name, int event);
 extern const char* default_plugin_dir_name (void);
 # 161 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/gcc-plugin.h"
 extern int plugin_is_GPL_compatible;
-# 24 "/opt/gcc-plugins/src/acf_csv_reader.c" 2
+# 22 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_csv_reader.c" 2
 
-# 1 "/opt/gcc-plugins/src/acf_plugin.h" 1
-# 34 "/opt/gcc-plugins/src/acf_plugin.h"
+# 1 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.h" 1
+# 33 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.h"
 struct csv_list {
     struct csv_row *rows;
     struct csv_row *last_row;
@@ -4495,14 +4495,16 @@ typedef struct acf_ftable_entry {
     int attr_arg_number;
     attr_arg opt_args[10];
 } acf_ftable_entry_t;
-# 94 "/opt/gcc-plugins/src/acf_plugin.h"
+# 95 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.h"
 void initCSV(struct csv_list *clist);
 unsigned char readCSV(char *filename, struct csv_list *clist);
 
+
+
 int parseCSV(struct csv_list *clist, acf_ftable_entry_t **acf_ftable_p,
-      int verbose);
-# 26 "/opt/gcc-plugins/src/acf_csv_reader.c" 2
-extern char *fgets_unlocked (char *, int, FILE *);
+             int verbose);
+# 24 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_csv_reader.c" 2
+extern char *fgets_unlocked(char *, int, FILE *);
 
 // Parse a .csv file of attributes per functions of the form:
 // func_name, filename, attribute_name, attribute_arguments.
@@ -4544,11 +4546,11 @@ static void add_row(struct csv_list *clist) {
     row_entry->columns_number = 0;
 
     if (clist->rows_number == 0) {
- clist->rows = row_entry;
- clist->last_row = row_entry;
+        clist->rows = row_entry;
+        clist->last_row = row_entry;
     } else {
- clist->last_row->next_row = row_entry;
- clist->last_row = row_entry;
+        clist->last_row->next_row = row_entry;
+        clist->last_row = row_entry;
     }
     clist->rows_number++;
 
@@ -4560,15 +4562,14 @@ static void add_column(struct csv_list *clist, char *value) {
 
     col_entry = (struct csv_column *) xmalloc(sizeof(struct csv_column));
     col_entry->next_column = (struct csv_column *) ((void *)0);
-    col_entry->csv_entry = (char *) xmalloc(strlen(value) + 1);
-    strcpy(col_entry->csv_entry, value);
+    col_entry->csv_entry = (char *) xstrdup(value);
 
     if (clist->last_row->columns_number == 0) {
- clist->last_row->columns = col_entry;
- clist->last_row->last_column = col_entry;
+        clist->last_row->columns = col_entry;
+        clist->last_row->last_column = col_entry;
     } else {
- clist->last_row->last_column->next_column = col_entry;
- clist->last_row->last_column = col_entry;
+        clist->last_row->last_column->next_column = col_entry;
+        clist->last_row->last_column = col_entry;
     }
     clist->last_row->columns_number++;
 
@@ -4594,78 +4595,71 @@ unsigned char readCSV(char *filename, struct csv_list *clist) {
 
     if (!(file = fopen_unlocked(filename,"r"))) {
         fprintf(stderr, "acf_plugin error: CSV file not found: %s\n", filename);
- return 0;
+        return 0;
     }
 
 
-    while (fgets_unlocked (line1, sizeof line1, file) != ((void *)0)) {
- lcount = 0;
+    while (fgets_unlocked (line1, sizeof(line1), file) != ((void *)0)) {
+        lcount = 0;
 
 
- if (line1[strlen(line1) - 1] == '\n') {
-     line1[strlen(line1) - 1] = '\0';
- }
-
- strcpy(line2,line1);
- stptr = line2;
-
- add_row(clist);
-
-
- if (line1[0] == '%')
-     continue;
-
-
- while (*stptr != '\0')
-     { lcount++;
-
-  if (*stptr == '"')
-      {
-   int flag = 0;
-   idx = 0;
-   while (flag == 0)
-       {
-    stptr++;
-
-    while (*stptr != '"')
-        { line3[idx] = *stptr;
-     idx++;
-     stptr++;
+        if (line1[strlen(line1) - 1] == '\n') {
+            line1[strlen(line1) - 1] = '\0';
         }
-    stptr++;
-    if (*stptr != '\0' && *stptr == ',')
-        {
-     line3[idx] = '\0';
-     add_column(clist, line3);
-     flag = 1;
+
+        snprintf(line2, sizeof(line2), "%s", line1);
+        stptr = line2;
+
+        add_row(clist);
+
+
+        if (line1[0] == '%')
+            continue;
+
+
+        while (*stptr != '\0') {
+            lcount++;
+
+            if (*stptr == '"') {
+                int flag = 0;
+                idx = 0;
+                while (flag == 0) {
+                    stptr++;
+
+                    while (*stptr != '"') {
+                        line3[idx] = *stptr;
+                        idx++;
+                        stptr++;
+                    }
+                    stptr++;
+                    if (*stptr != '\0' && *stptr == ',') {
+                        line3[idx] = '\0';
+                        add_column(clist, line3);
+                        flag = 1;
+                    } else if (*stptr != '\0' && *stptr == '"') {
+                        line3[idx] = *stptr;
+                        idx++;
+                    } else {
+                        line3[idx] = '\0';
+                        add_column(clist, line3);
+                        flag = 1;
+                    }
+                }
+            } else {
+                idx = 0;
+                while (*stptr != '\0' && *stptr != ',') {
+                    line3[idx] = *stptr;
+                    idx++;
+                    stptr++;
+                }
+                line3[idx] = '\0';
+                add_column(clist, line3);
+            }
+            if (*stptr != '\0' && *stptr == ',')
+                stptr++;
+            memmove(line2, stptr, strlen(stptr)+1);
+            stptr = line2;
         }
-    else if (*stptr != '\0' && *stptr == '"')
-        { line3[idx] = *stptr;
-     idx++;
-        }
-    else
-        {
-     line3[idx] = '\0';
-     add_column(clist, line3);
-     flag = 1;
-        }
-       }
-      }
-  else
-      { idx = 0;
-   while (*stptr != '\0' && *stptr != ',')
-       { line3[idx] = *stptr;
-    idx++;
-    stptr++;
-       }
-   line3[idx] = '\0';
-   add_column(clist, line3);
-      }
-  if (*stptr != '\0' && *stptr == ',')
-      stptr++;
-  memmove(line2, stptr, strlen(stptr)+1);
-  stptr = line2;
-     }
     }
 
     return 1;
@@ -4673,8 +4667,7 @@ unsigned char readCSV(char *filename, struct csv_list *clist) {
 
 // Return number of functions if csv file parsing ok, negative value otherwise
 int parseCSV(struct csv_list *clist, acf_ftable_entry_t **acf_ftable_p,
-      int verbose) {
-
+             int verbose) {
     int cur_line;
     struct csv_row *crow;
     struct csv_column *ccol;
@@ -4685,174 +4678,173 @@ int parseCSV(struct csv_list *clist, acf_ftable_entry_t **acf_ftable_p,
 
     // Populate acf_ftable
     if (clist->rows_number == 0) {
- if (verbose)
-     fprintf(stderr, "acf_plugin warning: No entry found in CSV file\n");
- return -1;
+        if (verbose)
+            fprintf(stderr, "acf_plugin warning: No entry found in CSV file\n");
+        return -1;
     } else {
- int tsize = clist->rows_number * sizeof(acf_ftable_entry_t);
+        int tsize = clist->rows_number * sizeof(acf_ftable_entry_t);
 
- *acf_ftable_p = (acf_ftable_entry_t *) xmalloc(tsize);
- if (*acf_ftable_p == ((void *)0)) {
-     fprintf(stderr, "acf_plugin error: xmalloc() failed: size= %d\n", tsize);
-     return -1;
- }
+        *acf_ftable_p = (acf_ftable_entry_t *) xmalloc(tsize);
     }
 
     acf_ftable = *acf_ftable_p;
-    for(crow = clist->rows, cur_line = 1;
- crow != ((void *)0);
- crow = crow->next_row, cur_line++) {
- int j;
+    for (crow = clist->rows, cur_line = 1;
+         crow != ((void *)0);
+         crow = crow->next_row, cur_line++) {
+        int j;
 
- if(crow->columns_number) {
-     ccol = crow->columns;
-     int table_c = 0;
-
-
-     int discard = 0;
-     int argument_nb = 0;
-     int file_null = 0;
-     size_t len;
-
-     for(;ccol != ((void *)0); ccol = ccol->next_column) {
-  switch (table_c) {
-  case FUNCNAME:
-      if (__extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p ((char *) ccol->csv_entry) && __builtin_constant_p ("") && (__s1_len = strlen ((char *) ccol->csv_entry), __s2_len = strlen (""), (!((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) || __s1_len >= 4) && (!((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) || __s2_len >= 4)) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) && (__s1_len = strlen ((char *) ccol->csv_entry), __s1_len < 4) ? (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s2 = (__const unsigned char *) (__const char *) (""); register int __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) && (__s2_len = strlen (""), __s2_len < 4) ? (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s1 = (__const unsigned char *) (__const char *) ((char *) ccol->csv_entry); register int __result = __s1[0] - ((__const unsigned char *) (__const char *) (""))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((__const unsigned char *) (__const char *) (""))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((__const unsigned char *) (__const char *) (""))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((__const unsigned char *) (__const char *) (""))[3]); } } __result; }))) : __builtin_strcmp ((char *) ccol->csv_entry, "")))); }) == 0) {
-   if (verbose)
-       fprintf(stderr, "acf_plugin warning: discarded line %d: " "function name unspecified\n", cur_line)
-
-                 ;
-   discard = 1;
-      }
-      break;
-  case FILENAME:
-      if (__extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p ((char *) ccol->csv_entry) && __builtin_constant_p ("") && (__s1_len = strlen ((char *) ccol->csv_entry), __s2_len = strlen (""), (!((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) || __s1_len >= 4) && (!((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) || __s2_len >= 4)) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) && (__s1_len = strlen ((char *) ccol->csv_entry), __s1_len < 4) ? (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s2 = (__const unsigned char *) (__const char *) (""); register int __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) && (__s2_len = strlen (""), __s2_len < 4) ? (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s1 = (__const unsigned char *) (__const char *) ((char *) ccol->csv_entry); register int __result = __s1[0] - ((__const unsigned char *) (__const char *) (""))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((__const unsigned char *) (__const char *) (""))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((__const unsigned char *) (__const char *) (""))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((__const unsigned char *) (__const char *) (""))[3]); } } __result; }))) : __builtin_strcmp ((char *) ccol->csv_entry, "")))); }) == 0) {
-   file_null = 1;
-      }
-      break;
-  case ATTRIBUTE:
-      if (__extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p ((char *) ccol->csv_entry) && __builtin_constant_p ("") && (__s1_len = strlen ((char *) ccol->csv_entry), __s2_len = strlen (""), (!((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) || __s1_len >= 4) && (!((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) || __s2_len >= 4)) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) && (__s1_len = strlen ((char *) ccol->csv_entry), __s1_len < 4) ? (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s2 = (__const unsigned char *) (__const char *) (""); register int __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) && (__s2_len = strlen (""), __s2_len < 4) ? (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s1 = (__const unsigned char *) (__const char *) ((char *) ccol->csv_entry); register int __result = __s1[0] - ((__const unsigned char *) (__const char *) (""))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((__const unsigned char *) (__const char *) (""))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((__const unsigned char *) (__const char *) (""))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((__const unsigned char *) (__const char *) (""))[3]); } } __result; }))) : __builtin_strcmp ((char *) ccol->csv_entry, "")))); }) == 0) {
-   if (verbose)
-       fprintf(stderr, "acf_plugin warning: discarded line %d: " "attribute unspecified\n", cur_line)
-
-                 ;
-   discard = 1;
-      }
-      break;
-  case FIRST_ARG:
-      for (j = 0; j < 10 && ccol != ((void *)0); j++, ccol = ccol->next_column) {
-   if (__extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p ((char *) ccol->csv_entry) && __builtin_constant_p ("") && (__s1_len = strlen ((char *) ccol->csv_entry), __s2_len = strlen (""), (!((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) || __s1_len >= 4) && (!((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) || __s2_len >= 4)) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) && (__s1_len = strlen ((char *) ccol->csv_entry), __s1_len < 4) ? (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s2 = (__const unsigned char *) (__const char *) (""); register int __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) && (__s2_len = strlen (""), __s2_len < 4) ? (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s1 = (__const unsigned char *) (__const char *) ((char *) ccol->csv_entry); register int __result = __s1[0] - ((__const unsigned char *) (__const char *) (""))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((__const unsigned char *) (__const char *) (""))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((__const unsigned char *) (__const char *) (""))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((__const unsigned char *) (__const char *) (""))[3]); } } __result; }))) : __builtin_strcmp ((char *) ccol->csv_entry, "")))); }) != 0) {
-       argument_nb++;
-       table_c++;
-   } else {
-
-       break;
-   }
-      }
-      if (ccol && ccol->next_column != ((void *)0)) {
-   if (verbose)
-       fprintf(stderr, "acf_plugin warning: line %d: discarded entries " "after null argument\n", cur_line)
-                                          ;
-      }
-      break;
-  default:
-      break;
-  }
-  table_c++;
-
-  if (ccol == ((void *)0))
-      break;
-     }
-
-     if (discard)
-  continue;
-
-     if (table_c < 3) {
-  if (verbose)
-      fprintf(stderr, "acf_plugin warning: discard icomplete line %d\n", cur_line)
-                ;
-  continue;
-     }
-     if (table_c > (3 + 10)) {
-  if (verbose)
-      fprintf(stderr, "acf_plugin warning: discarded line %d: " "more than %d entries\n", cur_line, (3 + 10))
-
-                                 ;
-  continue;
-     }
-
-     ccol = crow->columns;
-     table_c = 0;
-     for(;ccol != ((void *)0); ccol = ccol->next_column) {
+        if (crow->columns_number) {
+            ccol = crow->columns;
+            int table_c = 0;
 
 
+            int discard = 0;
+            int argument_nb = 0;
+            int file_null = 0;
+            size_t len;
 
-  switch (table_c) {
-  case FUNCNAME:
-      len = strlen(ccol->csv_entry);
+            for (;ccol != ((void *)0); ccol = ccol->next_column) {
+                switch (table_c) {
+                case FUNCNAME:
+                    if (__extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p ((char *) ccol->csv_entry) && __builtin_constant_p ("") && (__s1_len = strlen ((char *) ccol->csv_entry), __s2_len = strlen (""), (!((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) || __s1_len >= 4) && (!((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) || __s2_len >= 4)) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) && (__s1_len = strlen ((char *) ccol->csv_entry), __s1_len < 4) ? (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s2 = (__const unsigned char *) (__const char *) (""); register int __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) && (__s2_len = strlen (""), __s2_len < 4) ? (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s1 = (__const unsigned char *) (__const char *) ((char *) ccol->csv_entry); register int __result = __s1[0] - ((__const unsigned char *) (__const char *) (""))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((__const unsigned char *) (__const char *) (""))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((__const unsigned char *) (__const char *) (""))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((__const unsigned char *) (__const char *) (""))[3]); } } __result; }))) : __builtin_strcmp ((char *) ccol->csv_entry, "")))); }) == 0) {
+                        if (verbose)
+                            fprintf(stderr, "acf_plugin warning: discarded line %d: " "function name unspecified\n", cur_line)
+
+                                             ;
+                        discard = 1;
+                    }
+                    break;
+                case FILENAME:
+                    if (__extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p ((char *) ccol->csv_entry) && __builtin_constant_p ("") && (__s1_len = strlen ((char *) ccol->csv_entry), __s2_len = strlen (""), (!((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) || __s1_len >= 4) && (!((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) || __s2_len >= 4)) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) && (__s1_len = strlen ((char *) ccol->csv_entry), __s1_len < 4) ? (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s2 = (__const unsigned char *) (__const char *) (""); register int __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) && (__s2_len = strlen (""), __s2_len < 4) ? (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s1 = (__const unsigned char *) (__const char *) ((char *) ccol->csv_entry); register int __result = __s1[0] - ((__const unsigned char *) (__const char *) (""))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((__const unsigned char *) (__const char *) (""))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((__const unsigned char *) (__const char *) (""))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((__const unsigned char *) (__const char *) (""))[3]); } } __result; }))) : __builtin_strcmp ((char *) ccol->csv_entry, "")))); }) == 0) {
+                        file_null = 1;
+                    }
+                    break;
+                case ATTRIBUTE:
+                    if (__extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p ((char *) ccol->csv_entry) && __builtin_constant_p ("") && (__s1_len = strlen ((char *) ccol->csv_entry), __s2_len = strlen (""), (!((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) || __s1_len >= 4) && (!((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) || __s2_len >= 4)) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) && (__s1_len = strlen ((char *) ccol->csv_entry), __s1_len < 4) ? (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s2 = (__const unsigned char *) (__const char *) (""); register int __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) && (__s2_len = strlen (""), __s2_len < 4) ? (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s1 = (__const unsigned char *) (__const char *) ((char *) ccol->csv_entry); register int __result = __s1[0] - ((__const unsigned char *) (__const char *) (""))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((__const unsigned char *) (__const char *) (""))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((__const unsigned char *) (__const char *) (""))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((__const unsigned char *) (__const char *) (""))[3]); } } __result; }))) : __builtin_strcmp ((char *) ccol->csv_entry, "")))); }) == 0) {
+                        if (verbose)
+                            fprintf(stderr, "acf_plugin warning: discarded line %d: " "attribute unspecified\n", cur_line)
+
+                                             ;
+                        discard = 1;
+                    }
+                    break;
+                case FIRST_ARG:
+                    for (j = 0;
+                         j < 10 && ccol != ((void *)0);
+                         j++, ccol = ccol->next_column) {
+                        if (__extension__ ({ size_t __s1_len, __s2_len; (__builtin_constant_p ((char *) ccol->csv_entry) && __builtin_constant_p ("") && (__s1_len = strlen ((char *) ccol->csv_entry), __s2_len = strlen (""), (!((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) || __s1_len >= 4) && (!((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) || __s2_len >= 4)) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) && (__s1_len = strlen ((char *) ccol->csv_entry), __s1_len < 4) ? (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s2 = (__const unsigned char *) (__const char *) (""); register int __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[0] - __s2[0]); if (__s1_len > 0 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[1] - __s2[1]); if (__s1_len > 1 && __result == 0) { __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[2] - __s2[2]); if (__s1_len > 2 && __result == 0) __result = (((__const unsigned char *) (__const char *) ((char *) ccol->csv_entry))[3] - __s2[3]); } } __result; }))) : (__builtin_constant_p ("") && ((size_t)(const void *)(("") + 1) - (size_t)(const void *)("") == 1) && (__s2_len = strlen (""), __s2_len < 4) ? (__builtin_constant_p ((char *) ccol->csv_entry) && ((size_t)(const void *)(((char *) ccol->csv_entry) + 1) - (size_t)(const void *)((char *) ccol->csv_entry) == 1) ? __builtin_strcmp ((char *) ccol->csv_entry, "") : (__extension__ ({ __const unsigned char *__s1 = (__const unsigned char *) (__const char *) ((char *) ccol->csv_entry); register int __result = __s1[0] - ((__const unsigned char *) (__const char *) (""))[0]; if (__s2_len > 0 && __result == 0) { __result = (__s1[1] - ((__const unsigned char *) (__const char *) (""))[1]); if (__s2_len > 1 && __result == 0) { __result = (__s1[2] - ((__const unsigned char *) (__const char *) (""))[2]); if (__s2_len > 2 && __result == 0) __result = (__s1[3] - ((__const unsigned char *) (__const char *) (""))[3]); } } __result; }))) : __builtin_strcmp ((char *) ccol->csv_entry, "")))); }) != 0) {
+                            argument_nb++;
+                            table_c++;
+                        } else {
+
+                            break;
+                        }
+                    }
+                    if (ccol && ccol->next_column != ((void *)0)) {
+                        if (verbose)
+                            fprintf(stderr, "acf_plugin warning: line %d: " "discarded entries after null argument\n", cur_line)
+
+                                             ;
+                    }
+                    break;
+                default:
+                    break;
+                }
+                table_c++;
+
+                if (ccol == ((void *)0))
+                    break;
+            }
+
+            if (discard)
+                continue;
+
+            if (table_c < 3) {
+                if (verbose)
+                    fprintf(stderr, "acf_plugin warning: discard icomplete line %d\n", cur_line)
+                                     ;
+                continue;
+            }
+            if (table_c > (3 + 10)) {
+                if (verbose)
+                    fprintf(stderr, "acf_plugin warning: discarded line %d: " "more than %d entries\n", cur_line, (3 + 10))
+
+                                                      ;
+                continue;
+            }
+
+            ccol = crow->columns;
+            table_c = 0;
+            for (;ccol != ((void *)0); ccol = ccol->next_column) {
+
+
+
+                switch (table_c) {
+                case FUNCNAME:
+                    len = strlen(ccol->csv_entry);
                     acf_ftable[acf_ftable_size].func_name_len = len;
-      acf_ftable[acf_ftable_size].func_name = (char *)
-   xmalloc(len + 1);
-      strcpy (acf_ftable[acf_ftable_size].func_name,
-       (char *) ccol->csv_entry);
-      break;
-  case FILENAME:
-      if (file_null) {
-   // Initialize empty source file information
-   acf_ftable[acf_ftable_size].opt_file = (char *) ((void *)0);
-      } else {
-          len = strlen(ccol->csv_entry);
+                    acf_ftable[acf_ftable_size].func_name =
+                        xstrdup(ccol->csv_entry);
+                    break;
+                case FILENAME:
+                    if (file_null) {
+                        // Initialize empty source file information
+                        acf_ftable[acf_ftable_size].opt_file = (char *) ((void *)0);
+                    } else {
+                        len = strlen(ccol->csv_entry);
                         acf_ftable[acf_ftable_size].opt_file_len = len;
-   acf_ftable[acf_ftable_size].opt_file = (char *)
-       xmalloc(len + 1);
-   strcpy (acf_ftable[acf_ftable_size].opt_file,
-    (char *)ccol->csv_entry);
-      }
-      break;
-  case ATTRIBUTE:
-      acf_ftable[acf_ftable_size].opt_attr = (char *)
-   xmalloc(strlen(ccol->csv_entry) + 1);
-      strcpy (acf_ftable[acf_ftable_size].opt_attr,
-       (char *) ccol->csv_entry);
-      break;
-  case FIRST_ARG:
-      if (argument_nb == 0) {
-   // Initialize empty argument
-   acf_ftable[acf_ftable_size].attr_arg_number = 0;
-   acf_ftable[acf_ftable_size].opt_args[0].arg_type = NO_TYPE;
-      } else {
-   acf_ftable[acf_ftable_size].attr_arg_number = argument_nb;
-   for (j = 0; j < argument_nb && ccol != ((void *)0) ; j++, ccol = ccol->next_column) {
+                        acf_ftable[acf_ftable_size].opt_file =
+                            xstrdup(ccol->csv_entry);
+                    }
+                    break;
+                case ATTRIBUTE:
+                    acf_ftable[acf_ftable_size].opt_attr =
+                        xstrdup(ccol->csv_entry);
+                    break;
+                case FIRST_ARG:
+                    if (argument_nb == 0) {
+                        // Initialize empty argument
+                        acf_ftable[acf_ftable_size].attr_arg_number = 0;
+                        acf_ftable[acf_ftable_size].opt_args[0].
+                            arg_type = NO_TYPE;
+                    } else {
+                        acf_ftable[acf_ftable_size].attr_arg_number =
+                            argument_nb;
+                        for (j = 0;
+                             j < argument_nb && ccol != ((void *)0);
+                             j++, ccol = ccol->next_column) {
 
-       if (ccol->csv_entry[0] == '#') {
-    acf_ftable[acf_ftable_size].opt_args[j].arg_type = INT_TYPE;
-    acf_ftable[acf_ftable_size].opt_args[j].av.int_arg = (int)
-        atoi(ccol->csv_entry + 1);
+                            if (ccol->csv_entry[0] == '#') {
 
-       } else {
-    acf_ftable[acf_ftable_size].opt_args[j].arg_type = STR_TYPE;
-    acf_ftable[acf_ftable_size].opt_args[j].av.str_arg = (char *)
-        xmalloc(strlen(ccol->csv_entry) + 1);
-    strcpy (acf_ftable[acf_ftable_size].opt_args[j].av.str_arg,
-     (char *) ccol->csv_entry);
-       }
-       table_c++;
-   }
-      }
-      break;
-  }
-  table_c++;
+                                acf_ftable[acf_ftable_size].opt_args[j].
+                                    arg_type = INT_TYPE;
 
-  if (ccol == ((void *)0))
-      break;
-     }
-     // Initialize empty argument
-     if (table_c == FIRST_ARG) {
-  acf_ftable[acf_ftable_size].attr_arg_number = 0;
-  acf_ftable[acf_ftable_size].opt_args[0].arg_type = NO_TYPE;
-     }
-     acf_ftable_size++;
- }
+                                acf_ftable[acf_ftable_size].opt_args[j].
+                                    av.int_arg = atoi(ccol->csv_entry + 1);
+
+                            } else {
+                                acf_ftable[acf_ftable_size].opt_args[j].
+                                    arg_type = STR_TYPE;
+                                acf_ftable[acf_ftable_size].opt_args[j].
+                                    av.str_arg = xstrdup(ccol->csv_entry);
+                            }
+                            table_c++;
+                        }
+                    }
+                    break;
+                }
+                table_c++;
+
+                if (ccol == ((void *)0))
+                    break;
+            }
+            // Initialize empty argument
+            if (table_c == FIRST_ARG) {
+                acf_ftable[acf_ftable_size].attr_arg_number = 0;
+                acf_ftable[acf_ftable_size].opt_args[0].arg_type = NO_TYPE;
+            }
+            acf_ftable_size++;
+        }
 
 
 

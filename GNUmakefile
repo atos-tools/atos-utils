@@ -38,7 +38,7 @@ SHARED_RSTS_IN=$(addprefix doc/, intro.rst tutorial.rst benchmarks.rst example-s
 SHARED_MANS_IN=$(SHARED_RSTS_IN)
 SHARED_HTMLS_IN=$(SHARED_RSTS_IN)
 SHARED_IMAGES_IN=$(addprefix doc/images/, graph-sha1-first.png graph-sha1-staged.png atos-v2-zlib-sdk7108.png atos-v2-jpeg-sdk7108.png atos-v2-sha1-qemu-x86-64.png atos-v2-bzip2-qemu-x86-64.png atos-v2-164-gzip-qemu-arm-android.png atos-v2-181-mcf-qemu-arm-android.png atos-v2-255-vortex-qemu-arm-android.png atos-v2-401-bzip2-qemu-arm-android.png atos-v2-429-mcf-qemu-arm-android.png atos-v2-470-lbm-qemu-arm-android.png atos-v2-coremark-sdk7108.png atos-v3-jpeg-STIH207.png atos-v3-zlib-STIH207.png)
-PLUGINS_SRCS_IN=acf_csv_reader.c acf_plugin.c plugin-utils.c acf_plugin.h plugin-utils.h GNUmakefile include/README include/gmp.h include/config/vxworks-dummy.h include/config/arm/arm-cores.def
+PLUGINS_SRCS_IN=LICENSE README VERSION common.mk acf-plugin/Makefile acf-plugin/README acf-plugin/plugin/Makefile acf-plugin/plugin/src/acf_csv_reader.c acf-plugin/plugin/src/acf_plugin.c acf-plugin/plugin/src/plugin-utils.c acf-plugin/plugin/src/acf_plugin.h acf-plugin/plugin/src/plugin-utils.h acf-plugin/plugin/include/README acf-plugin/plugin/include/gmp.h acf-plugin/plugin/include/arm-cores.def acf-plugin/plugin/include/config/vxworks-dummy.h acf-plugin/plugin/include/config/arm/arm-cores.def
 
 CONFIG_SCRIPTS_EXE=$(CONFIG_SCRIPTS_EXE_IN:%.in=bin/%)
 CONFIG_SCRIPTS_LIB=$(CONFIG_SCRIPTS_LIB_IN:%.in=lib/atos/%)
@@ -51,7 +51,7 @@ SHARED_RSTS=$(SHARED_RSTS_IN:%=share/atos/%)
 SHARED_MANS=$(SHARED_MANS_IN:doc/%.rst=share/atos/man/man1/atos-%.1)
 SHARED_HTMLS=$(SHARED_HTMLS_IN:doc/%.rst=share/atos/doc/%.html)
 SHARED_IMAGES=$(SHARED_IMAGES_IN:%=share/atos/%)
-PLUGINS_SRCS=$(PLUGINS_SRCS_IN:%=lib/atos/plugins/src/%)
+PLUGINS_SRCS=$(PLUGINS_SRCS_IN:%=lib/atos/gcc-plugins/src/%)
 
 CONFIG_SCRIPTS=$(CONFIG_SCRIPTS_EXE) $(CONFIG_SCRIPTS_LIB) $(PYTHON_LIB_EXE_SCRIPTS) $(PYTHON_SCRIPTS) $(LINKED_SCRIPTS)
 
@@ -76,7 +76,7 @@ all-local: $(ALL_EXES) $(ALL_DATAS) all-shared
 doc: $(ALL_DOCS)
 
 all-plugins:
-	$(QUIET)$(MAKE) $(QUIET_S) -C $(srcdir)plugins/acf-plugin install PLUGIN_PREFIX=$(abspath lib/atos/plugins)
+	$(QUIET)$(MAKE) $(QUIET_S) -C $(srcdir)plugins/acf-plugin install PLUGIN_PREFIX=$(abspath lib/atos/gcc-plugins/acf_plugin)
 
 clean: clean-local clean-doc clean-plugin clean-test
 
@@ -108,7 +108,7 @@ install: install-local install-plugins
 install-local: $(INSTALLED_EXES) $(INSTALLED_DATAS) install-shared
 
 install-plugins:
-	$(QUIET)$(MAKE) $(QUIET_S) -C $(srcdir)plugins/acf-plugin install PLUGIN_PREFIX=$(abspath $(PREFIX)/lib/atos/plugins/)
+	$(QUIET)$(MAKE) $(QUIET_S) -C $(srcdir)plugins/acf-plugin install PLUGIN_PREFIX=$(abspath $(PREFIX)/lib/atos/gcc-plugins/acf_plugin)
 
 install-doc: $(INSTALLED_DOCS)
 
@@ -223,7 +223,7 @@ $(SHARED_HTMLS): share/atos/doc/%.html: $(srcdir)doc/%.rst
 $(SHARED_IMAGES): share/atos/%: $(srcdir)%
 	$(QUIET_CP)install -d $(dir $@) && cp $< $@
 
-$(PLUGINS_SRCS): lib/atos/plugins/src/%: $(srcdir)plugins/acf-plugin/src/%
+$(PLUGINS_SRCS): lib/atos/gcc-plugins/src/%: $(srcdir)plugins/acf-plugin/plugins-src/%
 	$(QUIET_CP)install -d $(dir $@) && cp $< $@
 
 #

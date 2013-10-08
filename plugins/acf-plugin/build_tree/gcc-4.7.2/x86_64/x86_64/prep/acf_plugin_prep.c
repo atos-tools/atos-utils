@@ -1,7 +1,7 @@
-# 1 "/opt/gcc-plugins/src/acf_plugin.c"
+# 1 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
 # 1 "<command-line>"
-# 1 "/opt/gcc-plugins/src/acf_plugin.c"
-# 20 "/opt/gcc-plugins/src/acf_plugin.c"
+# 1 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
+# 18 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/gcc-plugin.h" 1
 # 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/gcc-plugin.h"
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config.h" 1
@@ -7662,7 +7662,7 @@ extern int unregister_callback (const char *plugin_name, int event);
 extern const char* default_plugin_dir_name (void);
 # 161 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/gcc-plugin.h"
 extern int plugin_is_GPL_compatible;
-# 21 "/opt/gcc-plugins/src/acf_plugin.c" 2
+# 19 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c" 2
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/plugin-version.h" 1
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/configargs.h" 1
 
@@ -7690,17 +7690,5191 @@ static char revision[] = "";
 static struct plugin_gcc_version gcc_version = {basever, datestamp,
       devphase, revision,
       configuration_arguments};
-# 22 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/coretypes.h" 1
-# 23 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 1
-# 19 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/options.h" 1
+# 20 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree-pass.h" 1
+# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree-pass.h"
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/timevar.h" 1
+# 53 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/timevar.h"
+struct timevar_time_def
+{
+
+  double user;
+
+
+
+  double sys;
+
+
+  double wall;
+
+
+  unsigned ggc_mem;
+};
 
 
 
 
 
+
+typedef enum
+{
+  TV_NONE,
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/timevar.def" 1
+# 35 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/timevar.def"
+TV_TOTAL,
+TV_PHASE_SETUP,
+TV_PHASE_PARSING,
+TV_PHASE_DEFERRED,
+TV_PHASE_CGRAPH,
+TV_PHASE_DBGINFO,
+TV_PHASE_CHECK_DBGINFO,
+TV_PHASE_GENERATE,
+TV_PHASE_FINALIZE,
+
+
+TV_NAME_LOOKUP,
+TV_OVERLOAD,
+
+
+TV_GC,
+
+
+TV_DUMP,
+
+
+TV_PCH_SAVE,
+TV_PCH_CPP_SAVE,
+TV_PCH_PTR_REALLOC,
+TV_PCH_PTR_SORT,
+TV_PCH_RESTORE,
+TV_PCH_CPP_RESTORE,
+
+TV_CGRAPH,
+TV_CGRAPHOPT,
+TV_VARPOOL,
+TV_IPA_CONSTANT_PROP,
+TV_IPA_FNSPLIT,
+TV_IPA_OPT,
+TV_IPA_LTO_GIMPLE_IN,
+TV_IPA_LTO_GIMPLE_OUT,
+TV_IPA_LTO_DECL_IN,
+TV_IPA_LTO_DECL_OUT,
+TV_IPA_LTO_DECL_INIT_IO,
+TV_IPA_LTO_CGRAPH_IO,
+TV_IPA_LTO_DECL_MERGE,
+TV_IPA_LTO_CGRAPH_MERGE,
+TV_LTO,
+TV_WHOPR_WPA,
+TV_WHOPR_WPA_IO,
+TV_WHOPR_LTRANS,
+TV_WHOPR_WPA_LTRANS_EXEC,
+TV_IPA_REFERENCE,
+TV_IPA_PROFILE,
+TV_IPA_PURE_CONST,
+TV_IPA_PTA,
+TV_IPA_SRA,
+TV_IPA_FREE_LANG_DATA,
+
+TV_CFG,
+
+TV_CLEANUP_CFG,
+TV_CFG_VERIFY,
+TV_DELETE_TRIVIALLY_DEAD,
+
+TV_LIFE,
+TV_LIFE_UPDATE,
+
+
+TV_DF_SCAN,
+TV_DF_MD,
+TV_DF_RD,
+TV_DF_LR,
+TV_DF_LIVE,
+TV_DF_UREC,
+TV_DF_CHAIN,
+TV_DF_WORD_LR,
+TV_DF_NOTE,
+TV_REG_STATS,
+
+TV_ALIAS_ANALYSIS,
+TV_ALIAS_STMT_WALK,
+TV_REG_SCAN,
+TV_REBUILD_JUMP,
+
+TV_CPP,
+TV_LEX,
+TV_PARSE_GLOBAL,
+TV_PARSE_STRUCT,
+TV_PARSE_ENUM,
+TV_PARSE_FUNC,
+TV_PARSE_INLINE,
+TV_PARSE_INMETH,
+TV_TEMPLATE_INST,
+TV_INLINE_HEURISTICS,
+TV_INTEGRATION,
+TV_TREE_GIMPLIFY,
+TV_TREE_EH,
+TV_TREE_CFG,
+TV_TREE_CLEANUP_CFG,
+TV_TREE_TAIL_MERGE,
+TV_TREE_VRP,
+TV_TREE_COPY_PROP,
+TV_FIND_REFERENCED_VARS,
+TV_TREE_PTA,
+TV_TREE_INSERT_PHI_NODES,
+TV_TREE_SSA_REWRITE_BLOCKS,
+TV_TREE_SSA_OTHER,
+TV_TREE_SSA_INCREMENTAL,
+TV_TREE_OPS,
+TV_TREE_SSA_DOMINATOR_OPTS,
+TV_TREE_SRA,
+TV_TREE_CCP,
+TV_TREE_PHI_CPROP,
+TV_TREE_SPLIT_EDGES,
+TV_TREE_REASSOC,
+TV_TREE_PRE,
+TV_TREE_FRE,
+TV_TREE_SINK,
+TV_TREE_PHIOPT,
+TV_TREE_FORWPROP,
+TV_TREE_PHIPROP,
+TV_TREE_DCE,
+TV_TREE_CD_DCE,
+TV_TREE_CALL_CDCE,
+TV_TREE_DSE,
+TV_TREE_MERGE_PHI,
+TV_TREE_LOOP,
+TV_TREE_LOOP_BOUNDS,
+TV_LIM,
+TV_TREE_LOOP_IVCANON,
+TV_SCEV_CONST,
+TV_TREE_LOOP_UNSWITCH,
+TV_COMPLETE_UNROLL,
+TV_TREE_PARALLELIZE_LOOPS,
+TV_TREE_VECTORIZATION,
+TV_TREE_SLP_VECTORIZATION,
+TV_GRAPHITE,
+TV_GRAPHITE_TRANSFORMS,
+TV_GRAPHITE_DATA_DEPS,
+TV_GRAPHITE_CODE_GEN,
+TV_TREE_LINEAR_TRANSFORM,
+TV_TREE_LOOP_DISTRIBUTION,
+TV_CHECK_DATA_DEPS,
+TV_TREE_PREFETCH,
+TV_TREE_LOOP_IVOPTS,
+TV_PREDCOM,
+TV_TREE_LOOP_INIT,
+TV_TREE_LOOP_FINI,
+TV_TREE_CH,
+TV_TREE_SSA_UNCPROP,
+TV_TREE_SSA_TO_NORMAL,
+TV_TREE_NRV,
+TV_TREE_COPY_RENAME,
+TV_TREE_SSA_VERIFY,
+TV_TREE_STMT_VERIFY,
+TV_TREE_SWITCH_CONVERSION,
+TV_TRANS_MEM,
+TV_TREE_STRLEN,
+TV_CGRAPH_VERIFY,
+TV_DOM_FRONTIERS,
+TV_DOMINANCE,
+TV_CONTROL_DEPENDENCES,
+TV_OUT_OF_SSA,
+TV_VAR_EXPAND,
+TV_EXPAND,
+TV_POST_EXPAND,
+TV_VARCONST,
+TV_LOWER_SUBREG,
+TV_JUMP,
+TV_FWPROP,
+TV_CSE,
+TV_DCE,
+TV_DSE1,
+TV_DSE2,
+TV_LOOP,
+TV_LOOP_MOVE_INVARIANTS,
+TV_LOOP_UNSWITCH,
+TV_LOOP_UNROLL,
+TV_LOOP_DOLOOP,
+TV_CPROP,
+TV_PRE,
+TV_HOIST,
+TV_LSM,
+TV_TRACER,
+TV_WEB,
+TV_AUTO_INC_DEC,
+TV_CSE2,
+TV_BRANCH_PROB,
+TV_VPT,
+TV_COMBINE,
+TV_IFCVT,
+TV_REGMOVE,
+TV_MODE_SWITCH,
+TV_SMS,
+TV_SCHED,
+TV_LOCAL_ALLOC,
+TV_GLOBAL_ALLOC,
+TV_IRA,
+TV_RELOAD,
+TV_RELOAD_CSE_REGS,
+TV_SEQABSTR,
+TV_GCSE_AFTER_RELOAD,
+TV_REE,
+TV_THREAD_PROLOGUE_AND_EPILOGUE,
+TV_IFCVT2,
+TV_COMBINE_STACK_ADJUST,
+TV_PEEPHOLE2,
+TV_RENAME_REGISTERS,
+TV_CPROP_REGISTERS,
+TV_SCHED2,
+TV_MACH_DEP,
+TV_DBR_SCHED,
+TV_REORDER_BLOCKS,
+TV_SHORTEN_BRANCH,
+TV_REG_STACK,
+TV_FINAL,
+TV_VAROUT,
+TV_SYMOUT,
+TV_VAR_TRACKING,
+TV_VAR_TRACKING_DATAFLOW,
+TV_VAR_TRACKING_EMIT,
+TV_TREE_IFCOMBINE,
+TV_TREE_UNINIT,
+TV_PLUGIN_INIT,
+TV_PLUGIN_RUN,
+
+
+TV_EARLY_LOCAL,
+TV_OPTIMIZE,
+TV_REST_OF_COMPILATION,
+TV_POSTRELOAD,
+TV_REMOVE_UNUSED,
+TV_ADDRESS_TAKEN,
+TV_TODO,
+TV_VERIFY_LOOP_CLOSED,
+TV_VERIFY_RTL_SHARING,
+TV_REBUILD_FREQUENCIES,
+TV_REPAIR_LOOPS,
+# 78 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/timevar.h" 2
+  TIMEVAR_LAST
+}
+timevar_id_t;
+
+
+
+
+extern unsigned char timevar_enable;
+
+
+extern size_t timevar_ggc_mem_total;
+
+extern void timevar_init (void);
+extern void timevar_push_1 (timevar_id_t);
+extern void timevar_pop_1 (timevar_id_t);
+extern void timevar_start (timevar_id_t);
+extern void timevar_stop (timevar_id_t);
+extern unsigned char timevar_cond_start (timevar_id_t);
+extern void timevar_cond_stop (timevar_id_t, unsigned char);
+extern void timevar_print (FILE *);
+
+
+static __inline__ void
+timevar_push (timevar_id_t tv)
+{
+  if (timevar_enable)
+    timevar_push_1 (tv);
+}
+
+static __inline__ void
+timevar_pop (timevar_id_t tv)
+{
+  if (timevar_enable)
+    timevar_pop_1 (tv);
+}
+
+extern void print_time (const char *, long);
+# 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree-pass.h" 2
+
+
+
+enum tree_dump_index
+{
+  TDI_none,
+  TDI_cgraph,
+  TDI_tu,
+  TDI_class,
+  TDI_original,
+  TDI_generic,
+  TDI_nested,
+  TDI_vcg,
+
+  TDI_ada,
+  TDI_tree_all,
+  TDI_rtl_all,
+  TDI_ipa_all,
+
+  TDI_end
+};
+# 91 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree-pass.h"
+extern char *get_dump_file_name (int);
+extern int dump_enabled_p (int);
+extern int dump_initialized_p (int);
+extern FILE *dump_begin (int, int *);
+extern void dump_end (int, FILE *);
+extern void dump_node (const_tree, int, FILE *);
+extern int dump_switch_p (const char *);
+extern const char *dump_flag_name (int);
+
+
+extern FILE *dump_file;
+extern int dump_flags;
+extern const char *dump_file_name;
+
+
+extern struct dump_file_info *get_dump_file_info (int);
+
+
+enum opt_pass_type
+{
+  GIMPLE_PASS,
+  RTL_PASS,
+  SIMPLE_IPA_PASS,
+  IPA_PASS
+};
+
+
+
+struct opt_pass
+{
+
+  enum opt_pass_type type;
+
+
+
+  const char *name;
+
+
+
+  unsigned char (*gate) (void);
+
+
+
+
+  unsigned int (*execute) (void);
+
+
+  struct opt_pass *sub;
+
+
+  struct opt_pass *next;
+
+
+  int static_pass_number;
+
+
+
+  timevar_id_t tv_id;
+
+
+  unsigned int properties_required;
+  unsigned int properties_provided;
+  unsigned int properties_destroyed;
+
+
+  unsigned int todo_flags_start;
+  unsigned int todo_flags_finish;
+};
+
+
+struct gimple_opt_pass
+{
+  struct opt_pass pass;
+};
+
+
+struct rtl_opt_pass
+{
+  struct opt_pass pass;
+};
+
+struct varpool_node;
+struct cgraph_node;
+struct cgraph_node_set_def;
+struct varpool_node_set_def;
+
+
+
+struct ipa_opt_pass_d
+{
+  struct opt_pass pass;
+
+
+
+  void (*generate_summary) (void);
+
+
+  void (*write_summary) (struct cgraph_node_set_def *,
+    struct varpool_node_set_def *);
+
+
+  void (*read_summary) (void);
+
+
+  void (*write_optimization_summary) (struct cgraph_node_set_def *,
+          struct varpool_node_set_def *);
+
+
+  void (*read_optimization_summary) (void);
+
+
+
+  void (*stmt_fixup) (struct cgraph_node *, gimple *);
+
+
+
+  unsigned int function_transform_todo_flags_start;
+  unsigned int (*function_transform) (struct cgraph_node *);
+  void (*variable_transform) (struct varpool_node *);
+};
+
+
+
+struct simple_ipa_opt_pass
+{
+  struct opt_pass pass;
+};
+
+
+struct dump_file_info
+{
+  const char *suffix;
+  const char *swtch;
+  const char *glob;
+  int flags;
+  int state;
+  int num;
+};
+# 333 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree-pass.h"
+enum pass_positioning_ops
+{
+  PASS_POS_INSERT_AFTER,
+  PASS_POS_INSERT_BEFORE,
+  PASS_POS_REPLACE
+};
+
+struct register_pass_info
+{
+  struct opt_pass *pass;
+  const char *reference_pass_name;
+
+  int ref_pass_instance_number;
+
+
+  enum pass_positioning_ops pos_op;
+};
+
+extern void tree_lowering_passes (tree decl);
+
+extern struct gimple_opt_pass pass_mudflap_1;
+extern struct gimple_opt_pass pass_mudflap_2;
+extern struct gimple_opt_pass pass_lower_cf;
+extern struct gimple_opt_pass pass_refactor_eh;
+extern struct gimple_opt_pass pass_lower_eh;
+extern struct gimple_opt_pass pass_lower_eh_dispatch;
+extern struct gimple_opt_pass pass_lower_resx;
+extern struct gimple_opt_pass pass_build_cfg;
+extern struct gimple_opt_pass pass_early_tree_profile;
+extern struct gimple_opt_pass pass_referenced_vars;
+extern struct gimple_opt_pass pass_cleanup_eh;
+extern struct gimple_opt_pass pass_sra;
+extern struct gimple_opt_pass pass_sra_early;
+extern struct gimple_opt_pass pass_early_ipa_sra;
+extern struct gimple_opt_pass pass_tail_recursion;
+extern struct gimple_opt_pass pass_tail_calls;
+extern struct gimple_opt_pass pass_tree_loop;
+extern struct gimple_opt_pass pass_tree_loop_init;
+extern struct gimple_opt_pass pass_lim;
+extern struct gimple_opt_pass pass_tree_unswitch;
+extern struct gimple_opt_pass pass_predcom;
+extern struct gimple_opt_pass pass_iv_canon;
+extern struct gimple_opt_pass pass_scev_cprop;
+extern struct gimple_opt_pass pass_empty_loop;
+extern struct gimple_opt_pass pass_record_bounds;
+extern struct gimple_opt_pass pass_graphite;
+extern struct gimple_opt_pass pass_graphite_transforms;
+extern struct gimple_opt_pass pass_if_conversion;
+extern struct gimple_opt_pass pass_loop_distribution;
+extern struct gimple_opt_pass pass_vectorize;
+extern struct gimple_opt_pass pass_slp_vectorize;
+extern struct gimple_opt_pass pass_complete_unroll;
+extern struct gimple_opt_pass pass_complete_unrolli;
+extern struct gimple_opt_pass pass_parallelize_loops;
+extern struct gimple_opt_pass pass_loop_prefetch;
+extern struct gimple_opt_pass pass_iv_optimize;
+extern struct gimple_opt_pass pass_tree_loop_done;
+extern struct gimple_opt_pass pass_ch;
+extern struct gimple_opt_pass pass_ccp;
+extern struct gimple_opt_pass pass_phi_only_cprop;
+extern struct gimple_opt_pass pass_build_ssa;
+extern struct gimple_opt_pass pass_build_alias;
+extern struct gimple_opt_pass pass_build_ealias;
+extern struct gimple_opt_pass pass_dominator;
+extern struct gimple_opt_pass pass_dce;
+extern struct gimple_opt_pass pass_dce_loop;
+extern struct gimple_opt_pass pass_cd_dce;
+extern struct gimple_opt_pass pass_call_cdce;
+extern struct gimple_opt_pass pass_merge_phi;
+extern struct gimple_opt_pass pass_split_crit_edges;
+extern struct gimple_opt_pass pass_pre;
+extern unsigned int tail_merge_optimize (unsigned int);
+extern struct gimple_opt_pass pass_profile;
+extern struct gimple_opt_pass pass_strip_predict_hints;
+extern struct gimple_opt_pass pass_lower_complex_O0;
+extern struct gimple_opt_pass pass_lower_complex;
+extern struct gimple_opt_pass pass_lower_vector;
+extern struct gimple_opt_pass pass_lower_vector_ssa;
+extern struct gimple_opt_pass pass_lower_omp;
+extern struct gimple_opt_pass pass_diagnose_omp_blocks;
+extern struct gimple_opt_pass pass_expand_omp;
+extern struct gimple_opt_pass pass_expand_omp_ssa;
+extern struct gimple_opt_pass pass_object_sizes;
+extern struct gimple_opt_pass pass_strlen;
+extern struct gimple_opt_pass pass_fold_builtins;
+extern struct gimple_opt_pass pass_stdarg;
+extern struct gimple_opt_pass pass_early_warn_uninitialized;
+extern struct gimple_opt_pass pass_late_warn_uninitialized;
+extern struct gimple_opt_pass pass_cse_reciprocals;
+extern struct gimple_opt_pass pass_cse_sincos;
+extern struct gimple_opt_pass pass_optimize_bswap;
+extern struct gimple_opt_pass pass_optimize_widening_mul;
+extern struct gimple_opt_pass pass_warn_function_return;
+extern struct gimple_opt_pass pass_warn_function_noreturn;
+extern struct gimple_opt_pass pass_cselim;
+extern struct gimple_opt_pass pass_phiopt;
+extern struct gimple_opt_pass pass_forwprop;
+extern struct gimple_opt_pass pass_phiprop;
+extern struct gimple_opt_pass pass_tree_ifcombine;
+extern struct gimple_opt_pass pass_dse;
+extern struct gimple_opt_pass pass_nrv;
+extern struct gimple_opt_pass pass_rename_ssa_copies;
+extern struct gimple_opt_pass pass_rest_of_compilation;
+extern struct gimple_opt_pass pass_sink_code;
+extern struct gimple_opt_pass pass_fre;
+extern struct gimple_opt_pass pass_check_data_deps;
+extern struct gimple_opt_pass pass_copy_prop;
+extern struct gimple_opt_pass pass_vrp;
+extern struct gimple_opt_pass pass_uncprop;
+extern struct gimple_opt_pass pass_return_slot;
+extern struct gimple_opt_pass pass_reassoc;
+extern struct gimple_opt_pass pass_rebuild_cgraph_edges;
+extern struct gimple_opt_pass pass_remove_cgraph_callee_edges;
+extern struct gimple_opt_pass pass_build_cgraph_edges;
+extern struct gimple_opt_pass pass_local_pure_const;
+extern struct gimple_opt_pass pass_tracer;
+extern struct gimple_opt_pass pass_warn_unused_result;
+extern struct gimple_opt_pass pass_diagnose_tm_blocks;
+extern struct gimple_opt_pass pass_lower_tm;
+extern struct gimple_opt_pass pass_tm_init;
+extern struct gimple_opt_pass pass_tm_mark;
+extern struct gimple_opt_pass pass_tm_memopt;
+extern struct gimple_opt_pass pass_tm_edges;
+extern struct gimple_opt_pass pass_split_functions;
+extern struct gimple_opt_pass pass_feedback_split_functions;
+
+
+extern struct simple_ipa_opt_pass pass_ipa_lower_emutls;
+extern struct simple_ipa_opt_pass pass_ipa_function_and_variable_visibility;
+extern struct simple_ipa_opt_pass pass_ipa_tree_profile;
+
+extern struct simple_ipa_opt_pass pass_early_local_passes;
+
+extern struct ipa_opt_pass_d pass_ipa_whole_program_visibility;
+extern struct ipa_opt_pass_d pass_ipa_lto_gimple_out;
+extern struct simple_ipa_opt_pass pass_ipa_increase_alignment;
+extern struct simple_ipa_opt_pass pass_ipa_matrix_reorg;
+extern struct ipa_opt_pass_d pass_ipa_inline;
+extern struct simple_ipa_opt_pass pass_ipa_free_lang_data;
+extern struct ipa_opt_pass_d pass_ipa_cp;
+extern struct ipa_opt_pass_d pass_ipa_reference;
+extern struct ipa_opt_pass_d pass_ipa_pure_const;
+extern struct simple_ipa_opt_pass pass_ipa_pta;
+extern struct ipa_opt_pass_d pass_ipa_lto_wpa_fixup;
+extern struct ipa_opt_pass_d pass_ipa_lto_finish_out;
+extern struct simple_ipa_opt_pass pass_ipa_tm;
+extern struct ipa_opt_pass_d pass_ipa_profile;
+extern struct ipa_opt_pass_d pass_ipa_cdtor_merge;
+
+extern struct gimple_opt_pass pass_all_optimizations;
+extern struct gimple_opt_pass pass_cleanup_cfg_post_optimizing;
+extern struct gimple_opt_pass pass_init_datastructures;
+extern struct gimple_opt_pass pass_fixup_cfg;
+
+extern struct rtl_opt_pass pass_expand;
+extern struct rtl_opt_pass pass_init_function;
+extern struct rtl_opt_pass pass_jump;
+extern struct rtl_opt_pass pass_rtl_eh;
+extern struct rtl_opt_pass pass_initial_value_sets;
+extern struct rtl_opt_pass pass_unshare_all_rtl;
+extern struct rtl_opt_pass pass_instantiate_virtual_regs;
+extern struct rtl_opt_pass pass_rtl_fwprop;
+extern struct rtl_opt_pass pass_rtl_fwprop_addr;
+extern struct rtl_opt_pass pass_jump2;
+extern struct rtl_opt_pass pass_lower_subreg;
+extern struct rtl_opt_pass pass_cse;
+extern struct rtl_opt_pass pass_fast_rtl_dce;
+extern struct rtl_opt_pass pass_ud_rtl_dce;
+extern struct rtl_opt_pass pass_rtl_dce;
+extern struct rtl_opt_pass pass_rtl_dse1;
+extern struct rtl_opt_pass pass_rtl_dse2;
+extern struct rtl_opt_pass pass_rtl_dse3;
+extern struct rtl_opt_pass pass_rtl_cprop;
+extern struct rtl_opt_pass pass_rtl_pre;
+extern struct rtl_opt_pass pass_rtl_hoist;
+extern struct rtl_opt_pass pass_rtl_store_motion;
+extern struct rtl_opt_pass pass_cse_after_global_opts;
+extern struct rtl_opt_pass pass_rtl_ifcvt;
+
+extern struct rtl_opt_pass pass_into_cfg_layout_mode;
+extern struct rtl_opt_pass pass_outof_cfg_layout_mode;
+
+extern struct rtl_opt_pass pass_loop2;
+extern struct rtl_opt_pass pass_rtl_loop_init;
+extern struct rtl_opt_pass pass_rtl_move_loop_invariants;
+extern struct rtl_opt_pass pass_rtl_unswitch;
+extern struct rtl_opt_pass pass_rtl_unroll_and_peel_loops;
+extern struct rtl_opt_pass pass_rtl_doloop;
+extern struct rtl_opt_pass pass_rtl_loop_done;
+
+extern struct rtl_opt_pass pass_web;
+extern struct rtl_opt_pass pass_cse2;
+extern struct rtl_opt_pass pass_df_initialize_opt;
+extern struct rtl_opt_pass pass_df_initialize_no_opt;
+extern struct rtl_opt_pass pass_reginfo_init;
+extern struct rtl_opt_pass pass_inc_dec;
+extern struct rtl_opt_pass pass_stack_ptr_mod;
+extern struct rtl_opt_pass pass_initialize_regs;
+extern struct rtl_opt_pass pass_combine;
+extern struct rtl_opt_pass pass_if_after_combine;
+extern struct rtl_opt_pass pass_ree;
+extern struct rtl_opt_pass pass_partition_blocks;
+extern struct rtl_opt_pass pass_match_asm_constraints;
+extern struct rtl_opt_pass pass_regmove;
+extern struct rtl_opt_pass pass_split_all_insns;
+extern struct rtl_opt_pass pass_fast_rtl_byte_dce;
+extern struct rtl_opt_pass pass_lower_subreg2;
+extern struct rtl_opt_pass pass_mode_switching;
+extern struct rtl_opt_pass pass_sms;
+extern struct rtl_opt_pass pass_sched;
+extern struct rtl_opt_pass pass_ira;
+extern struct rtl_opt_pass pass_reload;
+extern struct rtl_opt_pass pass_postreload;
+extern struct rtl_opt_pass pass_clean_state;
+extern struct rtl_opt_pass pass_branch_prob;
+extern struct rtl_opt_pass pass_value_profile_transformations;
+extern struct rtl_opt_pass pass_postreload_cse;
+extern struct rtl_opt_pass pass_gcse2;
+extern struct rtl_opt_pass pass_split_after_reload;
+extern struct rtl_opt_pass pass_branch_target_load_optimize1;
+extern struct rtl_opt_pass pass_thread_prologue_and_epilogue;
+extern struct rtl_opt_pass pass_stack_adjustments;
+extern struct rtl_opt_pass pass_peephole2;
+extern struct rtl_opt_pass pass_if_after_reload;
+extern struct rtl_opt_pass pass_regrename;
+extern struct rtl_opt_pass pass_cprop_hardreg;
+extern struct rtl_opt_pass pass_reorder_blocks;
+extern struct rtl_opt_pass pass_branch_target_load_optimize2;
+extern struct rtl_opt_pass pass_leaf_regs;
+extern struct rtl_opt_pass pass_split_before_sched2;
+extern struct rtl_opt_pass pass_compare_elim_after_reload;
+extern struct rtl_opt_pass pass_sched2;
+extern struct rtl_opt_pass pass_stack_regs;
+extern struct rtl_opt_pass pass_stack_regs_run;
+extern struct rtl_opt_pass pass_df_finish;
+extern struct rtl_opt_pass pass_compute_alignments;
+extern struct rtl_opt_pass pass_duplicate_computed_gotos;
+extern struct rtl_opt_pass pass_variable_tracking;
+extern struct rtl_opt_pass pass_free_cfg;
+extern struct rtl_opt_pass pass_machine_reorg;
+extern struct rtl_opt_pass pass_cleanup_barriers;
+extern struct rtl_opt_pass pass_delay_slots;
+extern struct rtl_opt_pass pass_split_for_shorten_branches;
+extern struct rtl_opt_pass pass_split_before_regstack;
+extern struct rtl_opt_pass pass_convert_to_eh_region_ranges;
+extern struct rtl_opt_pass pass_shorten_branches;
+extern struct rtl_opt_pass pass_set_nothrow_function_flags;
+extern struct rtl_opt_pass pass_dwarf2_frame;
+extern struct rtl_opt_pass pass_final;
+extern struct rtl_opt_pass pass_rtl_seqabstr;
+extern struct gimple_opt_pass pass_release_ssa_names;
+extern struct gimple_opt_pass pass_early_inline;
+extern struct gimple_opt_pass pass_inline_parameters;
+extern struct gimple_opt_pass pass_all_early_optimizations;
+extern struct gimple_opt_pass pass_update_address_taken;
+extern struct gimple_opt_pass pass_convert_switch;
+
+
+extern struct opt_pass *all_passes, *all_small_ipa_passes, *all_lowering_passes,
+                       *all_regular_ipa_passes, *all_lto_gen_passes, *all_late_ipa_passes;
+# 604 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree-pass.h"
+enum
+{
+  PASS_LIST_NO_all_lowering_passes, PASS_LIST_NO_all_small_ipa_passes, PASS_LIST_NO_all_regular_ipa_passes, PASS_LIST_NO_all_lto_gen_passes, PASS_LIST_NO_all_passes,
+  PASS_LIST_NUM
+};
+
+
+
+
+extern struct opt_pass **gcc_pass_lists[];
+
+
+extern struct opt_pass *current_pass;
+
+extern struct opt_pass * get_pass_for_id (int);
+extern unsigned char execute_one_pass (struct opt_pass *);
+extern void execute_pass_list (struct opt_pass *);
+extern void execute_ipa_pass_list (struct opt_pass *);
+extern void execute_ipa_summary_passes (struct ipa_opt_pass_d *);
+extern void execute_all_ipa_transforms (void);
+extern void execute_all_ipa_stmt_fixups (struct cgraph_node *, gimple *);
+extern unsigned char pass_init_dump_file (struct opt_pass *);
+extern void pass_fini_dump_file (struct opt_pass *);
+
+extern const char *get_current_pass_name (void);
+extern void print_current_pass (FILE *);
+extern void debug_pass (void);
+extern void ipa_write_summaries (void);
+extern void ipa_write_optimization_summaries (struct cgraph_node_set_def *,
+           struct varpool_node_set_def *);
+extern void ipa_read_summaries (void);
+extern void ipa_read_optimization_summaries (void);
+extern void register_one_dump_file (struct opt_pass *);
+extern unsigned char function_called_by_processed_nodes_p (void);
+extern void register_pass (struct register_pass_info *);
+# 647 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree-pass.h"
+extern unsigned char first_pass_instance;
+
+
+extern void do_per_function_toporder (void (*) (void *), void *);
+
+extern void disable_pass (const char *);
+extern void enable_pass (const char *);
+extern void dump_passes (void);
+# 21 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic.h" 1
+# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic.h"
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/pretty-print.h" 1
+# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/pretty-print.h"
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/obstack.h" 1
+# 157 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/obstack.h"
+struct _obstack_chunk
+{
+  char *limit;
+  struct _obstack_chunk *prev;
+  char contents[4];
+};
+
+struct obstack
+{
+  long chunk_size;
+  struct _obstack_chunk *chunk;
+  char *object_base;
+  char *next_free;
+  char *chunk_limit;
+  long int temp;
+  int alignment_mask;
+
+
+
+  struct _obstack_chunk *(*chunkfun) (void *, long);
+  void (*freefun) (void *, struct _obstack_chunk *);
+  void *extra_arg;
+  unsigned use_extra_arg:1;
+  unsigned maybe_empty_object:1;
+
+
+
+  unsigned alloc_failed:1;
+
+
+};
+
+
+
+extern void _obstack_newchunk (struct obstack *, int);
+extern void _obstack_free (struct obstack *, void *);
+extern int _obstack_begin (struct obstack *, int, int,
+       void *(*) (long), void (*) (void *));
+extern int _obstack_begin_1 (struct obstack *, int, int,
+        void *(*) (void *, long),
+        void (*) (void *, void *), void *);
+extern int _obstack_memory_used (struct obstack *);
+
+
+
+
+void obstack_init (struct obstack *obstack);
+
+void * obstack_alloc (struct obstack *obstack, int size);
+
+void * obstack_copy (struct obstack *obstack, void *address, int size);
+void * obstack_copy0 (struct obstack *obstack, void *address, int size);
+
+void obstack_free (struct obstack *obstack, void *block);
+
+void obstack_blank (struct obstack *obstack, int size);
+
+void obstack_grow (struct obstack *obstack, void *data, int size);
+void obstack_grow0 (struct obstack *obstack, void *data, int size);
+
+void obstack_1grow (struct obstack *obstack, int data_char);
+void obstack_ptr_grow (struct obstack *obstack, void *data);
+void obstack_int_grow (struct obstack *obstack, int data);
+
+void * obstack_finish (struct obstack *obstack);
+
+int obstack_object_size (struct obstack *obstack);
+
+int obstack_room (struct obstack *obstack);
+void obstack_make_room (struct obstack *obstack, int size);
+void obstack_1grow_fast (struct obstack *obstack, int data_char);
+void obstack_ptr_grow_fast (struct obstack *obstack, void *data);
+void obstack_int_grow_fast (struct obstack *obstack, int data);
+void obstack_blank_fast (struct obstack *obstack, int size);
+
+void * obstack_base (struct obstack *obstack);
+void * obstack_next_free (struct obstack *obstack);
+int obstack_alignment_mask (struct obstack *obstack);
+int obstack_chunk_size (struct obstack *obstack);
+int obstack_memory_used (struct obstack *obstack);
+
+
+
+
+extern void (*obstack_alloc_failed_handler) (void);
+
+
+extern int obstack_exit_failure;
+# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/pretty-print.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/input.h" 1
+# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/input.h"
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h" 1
+# 37 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
+enum lc_reason
+{
+  LC_ENTER = 0,
+  LC_LEAVE,
+  LC_RENAME,
+  LC_RENAME_VERBATIM,
+  LC_ENTER_MACRO
+
+};
+
+
+typedef unsigned int linenum_type;
+
+
+typedef unsigned int source_location;
+
+
+typedef void *(*line_map_realloc) (void *, size_t);
+
+
+
+typedef size_t (*line_map_round_alloc_size_func) (size_t);
+# 71 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
+struct line_map_ordinary {
+  const char *to_file;
+  linenum_type to_line;
+
+
+
+
+  int included_from;
+
+
+
+
+
+  unsigned char sysp;
+
+
+  unsigned int column_bits : 8;
+};
+
+
+
+
+
+struct cpp_hashnode;
+# 105 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
+struct line_map_macro {
+
+  struct cpp_hashnode *
+
+
+    macro;
+
+
+  unsigned int n_tokens;
+# 168 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
+  source_location * macro_locations;
+
+
+
+
+
+
+  source_location expansion;
+};
+# 204 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
+struct line_map {
+  source_location start_location;
+
+
+  __extension__ enum lc_reason reason : 8;
+
+  union map_u {
+    struct line_map_ordinary ordinary;
+    struct line_map_macro macro;
+  } d;
+};
+# 244 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
+struct maps_info {
+
+
+
+
+
+  struct line_map * maps;
+
+
+  unsigned int allocated;
+
+
+
+  unsigned int used;
+
+  unsigned int cache;
+};
+
+
+struct line_maps {
+
+  struct maps_info info_ordinary;
+
+  struct maps_info info_macro;
+
+
+  unsigned int depth;
+
+
+  unsigned char trace_includes;
+
+
+  source_location highest_location;
+
+
+  source_location highest_line;
+
+
+
+  unsigned int max_column_hint;
+
+
+
+  line_map_realloc reallocator;
+
+
+
+  line_map_round_alloc_size_func round_alloc_size;
+};
+# 412 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
+extern void linemap_init (struct line_maps *);
+
+
+
+extern void linemap_check_files_exited (struct line_maps *);
+
+
+
+
+
+
+
+extern source_location linemap_line_start
+(struct line_maps *set, linenum_type to_line, unsigned int max_column_hint);
+# 440 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
+extern const struct line_map *linemap_add
+  (struct line_maps *, enum lc_reason, unsigned int sysp,
+   const char *to_file, linenum_type to_line);
+
+
+
+
+
+
+
+extern const struct line_map *linemap_lookup
+  (struct line_maps *, source_location);
+
+
+
+unsigned char linemap_tracks_macro_expansion_locs_p (struct line_maps *);
+
+
+
+unsigned char linemap_macro_expansion_map_p (const struct line_map *);
+
+
+const char* linemap_map_get_macro_name (const struct line_map*);
+# 473 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
+int linemap_location_in_system_header_p (struct line_maps *,
+      source_location);
+
+
+
+
+unsigned char linemap_location_from_macro_expansion_p (struct line_maps *,
+           source_location);
+# 550 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
+extern source_location
+linemap_position_for_column (struct line_maps *, unsigned int);
+
+
+
+source_location linemap_position_for_line_and_column (struct line_map *,
+            linenum_type,
+            unsigned int);
+# 577 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
+int linemap_compare_locations (struct line_maps *set,
+          source_location pre,
+          source_location post);
+
+
+
+
+
+
+
+typedef struct
+{
+
+  const char *file;
+
+
+  int line;
+
+  int column;
+
+
+  unsigned char sysp;
+} expanded_location;
+
+
+
+
+enum location_resolution_kind
+{
+  LRK_MACRO_EXPANSION_POINT,
+  LRK_SPELLING_LOCATION,
+  LRK_MACRO_DEFINITION_LOCATION
+};
+# 659 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
+source_location linemap_resolve_location (struct line_maps *,
+       source_location loc,
+       enum location_resolution_kind lrk,
+       const struct line_map **loc_map);
+# 671 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
+source_location linemap_unwind_toward_expansion (struct line_maps *,
+       source_location loc,
+       const struct line_map **loc_map);
+
+
+
+
+
+expanded_location linemap_expand_location (struct line_maps *,
+        const struct line_map *,
+        source_location loc);
+
+
+
+struct linemap_stats
+{
+  long num_ordinary_maps_allocated;
+  long num_ordinary_maps_used;
+  long ordinary_maps_allocated_size;
+  long ordinary_maps_used_size;
+  long num_expanded_macros;
+  long num_macro_tokens;
+  long num_macro_maps_used;
+  long macro_maps_allocated_size;
+  long macro_maps_used_size;
+  long macro_maps_locations_size;
+  long duplicated_macro_maps_locations_size;
+};
+
+
+
+void linemap_get_statistics (struct line_maps *, struct linemap_stats *);
+
+
+
+void linemap_dump_location (struct line_maps *, source_location, FILE *);
+
+
+
+
+void linemap_dump (FILE *, struct line_maps *, unsigned, unsigned char);
+
+
+
+
+void line_table_dump (FILE *, struct line_maps *, unsigned int, unsigned int);
+# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/input.h" 2
+
+extern struct line_maps *line_table;
+# 37 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/input.h"
+extern char builtins_location_check[(((source_location) 1)
+         < 2) ? 1 : -1];
+
+extern expanded_location expand_location (source_location);
+
+
+
+typedef source_location location_t;
+
+extern location_t input_location;
+# 58 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/input.h"
+void dump_line_table_statistics (void);
+# 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/pretty-print.h" 2
+
+
+
+
+
+
+typedef struct
+{
+  const char *format_spec;
+  va_list *args_ptr;
+  int err_no;
+  location_t *locus;
+  void **x_data;
+} text_info;
+
+
+
+
+
+
+typedef enum
+{
+  DIAGNOSTICS_SHOW_PREFIX_ONCE = 0x0,
+  DIAGNOSTICS_SHOW_PREFIX_NEVER = 0x1,
+  DIAGNOSTICS_SHOW_PREFIX_EVERY_LINE = 0x2
+} diagnostic_prefixing_rule_t;
+
+
+
+
+
+
+struct chunk_info
+{
+
+  struct chunk_info *prev;
+
+
+
+
+
+
+
+  const char *args[30 * 2];
+};
+
+
+
+typedef struct
+{
+
+  struct obstack formatted_obstack;
+
+
+
+  struct obstack chunk_obstack;
+
+
+
+  struct obstack *obstack;
+
+
+  struct chunk_info *cur_chunk_array;
+
+
+  FILE *stream;
+
+
+  int line_length;
+
+
+
+  char digit_buffer[128];
+} output_buffer;
+
+
+typedef unsigned int pp_flags;
+
+typedef enum
+{
+  pp_none, pp_before, pp_after
+} pp_padding;
+
+
+
+typedef struct
+{
+
+  diagnostic_prefixing_rule_t rule;
+
+
+
+  int line_cutoff;
+} pp_wrapping_mode_t;
+# 135 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/pretty-print.h"
+typedef struct pretty_print_info pretty_printer;
+typedef unsigned char (*printer_fn) (pretty_printer *, text_info *, const char *,
+       int, unsigned char, unsigned char, unsigned char);
+# 159 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/pretty-print.h"
+struct pretty_print_info
+{
+
+  output_buffer *buffer;
+
+
+  const char *prefix;
+
+
+  pp_padding padding;
+
+
+
+  int maximum_length;
+
+
+  int indent_skip;
+
+
+  pp_wrapping_mode_t wrapping;
+# 188 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/pretty-print.h"
+  printer_fn format_decoder;
+
+
+  unsigned char emitted_prefix;
+
+
+  unsigned char need_newline;
+
+
+
+  unsigned char translate_identifiers;
+};
+# 297 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/pretty-print.h"
+extern void pp_construct (pretty_printer *, const char *, int);
+extern void pp_base_set_line_maximum_length (pretty_printer *, int);
+extern void pp_base_set_prefix (pretty_printer *, const char *);
+extern void pp_base_destroy_prefix (pretty_printer *);
+extern int pp_base_remaining_character_count_for_line (pretty_printer *);
+extern void pp_base_clear_output_area (pretty_printer *);
+extern const char *pp_base_formatted_text (pretty_printer *);
+extern const char *pp_base_last_position_in_text (const pretty_printer *);
+extern void pp_base_emit_prefix (pretty_printer *);
+extern void pp_base_append_text (pretty_printer *, const char *, const char *);
+# 323 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/pretty-print.h"
+extern void pp_printf (pretty_printer *, const char *, ...)
+     __attribute__ ((__format__ (__gcc_diag__, 2 ,3))) __attribute__ ((__nonnull__ (2)));
+
+extern void pp_verbatim (pretty_printer *, const char *, ...)
+     __attribute__ ((__format__ (__gcc_diag__, 2 ,3))) __attribute__ ((__nonnull__ (2)));
+extern void pp_base_flush (pretty_printer *);
+extern void pp_base_format (pretty_printer *, text_info *);
+extern void pp_base_output_formatted_text (pretty_printer *);
+extern void pp_base_format_verbatim (pretty_printer *, text_info *);
+
+extern void pp_base_indent (pretty_printer *);
+extern void pp_base_newline (pretty_printer *);
+extern void pp_base_character (pretty_printer *, int);
+extern void pp_base_string (pretty_printer *, const char *);
+extern void pp_write_text_to_stream (pretty_printer *pp);
+extern void pp_base_maybe_space (pretty_printer *);
+
+
+static __inline__ pp_wrapping_mode_t
+pp_set_verbatim_wrapping_ (pretty_printer *pp)
+{
+  pp_wrapping_mode_t oldmode = (pp)->wrapping;
+  (pp)->wrapping.line_cutoff = 0;
+  (pp)->wrapping.rule = DIAGNOSTICS_SHOW_PREFIX_NEVER;
+  return oldmode;
+}
+
+
+extern const char *identifier_to_locale (const char *);
+extern void *(*identifier_to_locale_alloc) (size_t);
+extern void (*identifier_to_locale_free) (void *);
+# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic-core.h" 1
+# 28 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic-core.h"
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/bversion.h" 1
+# 29 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic-core.h" 2
+
+
+typedef enum
+{
+
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic.def" 1
+# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic.def"
+DK_UNSPECIFIED,
+
+
+
+
+DK_IGNORED,
+
+
+DK_FATAL,
+DK_ICE,
+DK_ERROR,
+DK_SORRY,
+DK_WARNING,
+DK_ANACHRONISM,
+DK_NOTE,
+DK_DEBUG,
+
+
+DK_PEDWARN,
+DK_PERMERROR,
+# 35 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic-core.h" 2
+
+  DK_LAST_DIAGNOSTIC_KIND,
+
+
+  DK_POP
+} diagnostic_t;
+
+extern const char *progname;
+
+extern const char *trim_filename (const char *);
+# 59 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic-core.h"
+extern void internal_error (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)))
+     __attribute__ ((__noreturn__));
+
+extern unsigned char warning (int, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
+extern unsigned char warning_at (location_t, int, const char *, ...)
+    __attribute__ ((__format__ (__gcc_tdiag__, 3, 4))) __attribute__ ((__nonnull__ (3)));
+extern void error (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
+extern void error_n (location_t, int, const char *, const char *, ...)
+    __attribute__ ((__format__ (__gcc_tdiag__, 3, 5))) __attribute__ ((__nonnull__ (3))) __attribute__ ((__format__ (__gcc_tdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
+extern void error_at (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
+extern void fatal_error (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)))
+     __attribute__ ((__noreturn__));
+
+extern unsigned char pedwarn (location_t, int, const char *, ...)
+     __attribute__ ((__format__ (__gcc_tdiag__, 3, 4))) __attribute__ ((__nonnull__ (3)));
+extern unsigned char permerror (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
+extern void sorry (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
+extern void inform (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
+extern void inform_n (location_t, int, const char *, const char *, ...)
+    __attribute__ ((__format__ (__gcc_tdiag__, 3, 5))) __attribute__ ((__nonnull__ (3))) __attribute__ ((__format__ (__gcc_tdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
+extern void verbatim (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
+extern unsigned char emit_diagnostic (diagnostic_t, location_t, int,
+        const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
+extern unsigned char seen_error (void);
+
+
+
+
+extern void fnotice (FILE *, const char *, ...)
+     __attribute__ ((__format__ (__printf__, 2, 3))) __attribute__ ((__nonnull__ (2)));
+# 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic.h" 2
+
+
+
+
+typedef struct diagnostic_info
+{
+  text_info message;
+  location_t location;
+  unsigned int override_column;
+
+  void *x_data;
+
+  diagnostic_t kind;
+
+  int option_index;
+} diagnostic_info;
+
+
+
+
+typedef struct diagnostic_classification_change_t
+{
+  location_t location;
+  int option;
+  diagnostic_t kind;
+} diagnostic_classification_change_t;
+
+
+typedef void (*diagnostic_starter_fn) (diagnostic_context *,
+           diagnostic_info *);
+typedef diagnostic_starter_fn diagnostic_finalizer_fn;
+
+
+
+struct diagnostic_context
+{
+
+  pretty_printer *printer;
+
+
+  int diagnostic_count[DK_LAST_DIAGNOSTIC_KIND];
+
+
+
+  unsigned char some_warnings_are_errors;
+
+
+  unsigned char warning_as_error_requested;
+
+
+
+  int n_opts;
+
+
+
+
+
+
+
+  diagnostic_t *classify_diagnostic;
+
+
+
+
+
+
+  diagnostic_classification_change_t *classification_history;
+
+
+  int n_classification_history;
+
+
+  int *push_list;
+  int n_push;
+
+
+
+  unsigned char show_option_requested;
+
+
+  unsigned char abort_on_error;
+
+
+  unsigned char show_column;
+
+
+  unsigned char pedantic_errors;
+
+
+  unsigned char permissive;
+
+
+
+  int opt_permissive;
+
+
+  unsigned char fatal_errors;
+
+
+  unsigned char dc_inhibit_warnings;
+
+
+  unsigned char dc_warn_system_headers;
+
+
+  unsigned int max_errors;
+# 141 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic.h"
+  diagnostic_starter_fn begin_diagnostic;
+
+
+  diagnostic_finalizer_fn end_diagnostic;
+
+
+  void (*internal_error) (diagnostic_context *, const char *, va_list *);
+
+
+
+  int (*option_enabled) (int, void *);
+
+
+
+  void *option_state;
+
+
+
+
+
+
+
+  char *(*option_name) (diagnostic_context *, int, diagnostic_t, diagnostic_t);
+
+
+  void *x_data;
+
+
+
+  const struct line_map *last_module;
+
+  int lock;
+
+  unsigned char inhibit_notes_p;
+};
+
+static __inline__ void
+diagnostic_inhibit_notes (diagnostic_context * context)
+{
+  context->inhibit_notes_p = 1;
+}
+# 224 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic.h"
+extern diagnostic_context *global_dc;
+# 254 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic.h"
+extern void diagnostic_initialize (diagnostic_context *, int);
+extern void diagnostic_finish (diagnostic_context *);
+extern void diagnostic_report_current_module (diagnostic_context *, location_t);
+
+
+extern diagnostic_t diagnostic_classify_diagnostic (diagnostic_context *,
+          int ,
+          diagnostic_t ,
+          location_t);
+extern void diagnostic_push_diagnostics (diagnostic_context *, location_t);
+extern void diagnostic_pop_diagnostics (diagnostic_context *, location_t);
+extern unsigned char diagnostic_report_diagnostic (diagnostic_context *,
+       diagnostic_info *);
+
+extern void diagnostic_set_info (diagnostic_info *, const char *, va_list *,
+     location_t, diagnostic_t) __attribute__ ((__format__ (__gcc_tdiag__, 2, 0))) __attribute__ ((__nonnull__ (2)));
+extern void diagnostic_set_info_translated (diagnostic_info *, const char *,
+         va_list *, location_t,
+         diagnostic_t)
+     __attribute__ ((__format__ (__gcc_tdiag__, 2, 0))) __attribute__ ((__nonnull__ (2)));
+
+extern char *diagnostic_build_prefix (diagnostic_context *, diagnostic_info *);
+void default_diagnostic_starter (diagnostic_context *, diagnostic_info *);
+void default_diagnostic_finalizer (diagnostic_context *, diagnostic_info *);
+
+
+extern char *file_name_as_prefix (const char *);
+# 22 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.h" 1
+# 42 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.h"
+typedef struct param_info
+{
+
+
+  const char *const option;
+
+
+  int default_value;
+
+
+  int min_value;
+
+
+  int max_value;
+
+
+  const char *const help;
+} param_info;
+
+
+
+
+extern param_info *compiler_params;
+
+
+extern size_t get_num_compiler_params (void);
+
+
+
+extern void add_params (const param_info params[], size_t n);
+
+
+
+
+
+extern void set_param_value (const char *name, int value,
+        int *params, int *params_set);
+
+
+
+
+typedef enum compiler_param
+{
+
+
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def" 1
+# 44 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
+PARAM_PREDICTABLE_BRANCH_OUTCOME,
+# 61 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
+PARAM_MAX_INLINE_INSNS_SINGLE,
+# 73 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
+PARAM_MAX_INLINE_INSNS_AUTO,
+
+
+
+
+PARAM_MAX_INLINE_INSNS_RECURSIVE,
+
+
+
+
+PARAM_MAX_INLINE_INSNS_RECURSIVE_AUTO,
+
+
+
+
+PARAM_MAX_INLINE_RECURSIVE_DEPTH,
+
+
+
+
+PARAM_MAX_INLINE_RECURSIVE_DEPTH_AUTO,
+
+
+
+
+PARAM_MIN_INLINE_RECURSIVE_PROBABILITY,
+
+
+
+
+
+
+
+PARAM_EARLY_INLINER_MAX_ITERATIONS,
+
+
+
+
+
+PARAM_COMDAT_SHARING_PROBABILITY,
+
+
+
+
+
+PARAM_PARTIAL_INLINING_ENTRY_PROBABILITY,
+
+
+
+
+
+
+PARAM_MAX_VARIABLE_EXPANSIONS,
+
+
+
+
+
+PARAM_MIN_VECT_LOOP_BOUND,
+# 142 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
+PARAM_MAX_DELAY_SLOT_INSN_SEARCH,
+# 153 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
+PARAM_MAX_DELAY_SLOT_LIVE_SEARCH,
+# 163 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
+PARAM_MAX_PENDING_LIST_LENGTH,
+
+
+
+
+
+
+PARAM_MAX_MODULO_BACKTRACK_ATTEMPTS,
+
+
+
+
+PARAM_LARGE_FUNCTION_INSNS,
+
+
+
+PARAM_LARGE_FUNCTION_GROWTH,
+
+
+
+PARAM_LARGE_UNIT_INSNS,
+
+
+
+PARAM_INLINE_UNIT_GROWTH,
+
+
+
+PARAM_IPCP_UNIT_GROWTH,
+
+
+
+PARAM_EARLY_INLINING_INSNS,
+
+
+
+PARAM_LARGE_STACK_FRAME,
+
+
+
+PARAM_STACK_FRAME_GROWTH,
+
+
+
+
+
+
+PARAM_MAX_GCSE_MEMORY,
+
+
+
+
+
+
+PARAM_MAX_GCSE_INSERTION_RATIO,
+# 228 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
+PARAM_GCSE_AFTER_RELOAD_PARTIAL_FRACTION,
+
+
+
+
+
+
+PARAM_GCSE_AFTER_RELOAD_CRITICAL_FRACTION,
+
+
+
+
+
+
+
+PARAM_GCSE_COST_DISTANCE_RATIO,
+
+
+
+
+
+PARAM_GCSE_UNRESTRICTED_COST,
+
+
+
+
+
+
+
+PARAM_MAX_HOIST_DEPTH,
+# 269 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
+PARAM_MAX_UNROLLED_INSNS,
+
+
+
+
+
+PARAM_MAX_AVERAGE_UNROLLED_INSNS,
+
+
+
+
+PARAM_MAX_UNROLL_TIMES,
+
+
+
+
+PARAM_MAX_PEELED_INSNS,
+
+
+
+
+PARAM_MAX_PEEL_TIMES,
+
+
+
+
+PARAM_MAX_COMPLETELY_PEELED_INSNS,
+
+
+
+
+PARAM_MAX_COMPLETELY_PEEL_TIMES,
+
+
+
+
+PARAM_MAX_ONCE_PEELED_INSNS,
+
+
+
+
+PARAM_MAX_UNROLL_ITERATIONS,
+
+
+
+
+
+PARAM_MAX_UNSWITCH_INSNS,
+
+
+
+
+PARAM_MAX_UNSWITCH_LEVEL,
+
+
+
+
+
+
+PARAM_MAX_ITERATIONS_TO_TRACK,
+
+
+
+
+
+PARAM_MAX_ITERATIONS_COMPUTATION_COST,
+
+
+
+
+
+PARAM_SMS_MAX_II_FACTOR,
+
+
+
+
+PARAM_SMS_MIN_SC,
+
+
+
+PARAM_SMS_DFA_HISTORY,
+
+
+
+PARAM_SMS_LOOP_AVERAGE_COUNT_THRESHOLD,
+
+
+
+
+HOT_BB_COUNT_FRACTION,
+
+
+
+HOT_BB_FREQUENCY_FRACTION,
+
+
+
+
+PARAM_ALIGN_THRESHOLD,
+
+
+
+
+PARAM_ALIGN_LOOP_ITERATIONS,
+# 388 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
+PARAM_MAX_PREDICTED_ITERATIONS,
+
+
+
+TRACER_DYNAMIC_COVERAGE_FEEDBACK,
+
+
+
+TRACER_DYNAMIC_COVERAGE,
+
+
+
+TRACER_MAX_CODE_GROWTH,
+
+
+
+TRACER_MIN_BRANCH_RATIO,
+
+
+
+TRACER_MIN_BRANCH_PROBABILITY_FEEDBACK,
+
+
+
+TRACER_MIN_BRANCH_PROBABILITY,
+
+
+
+
+
+PARAM_MAX_CROSSJUMP_EDGES,
+
+
+
+
+
+PARAM_MIN_CROSSJUMP_INSNS,
+
+
+
+
+
+PARAM_MAX_GROW_COPY_BB_INSNS,
+
+
+
+
+
+PARAM_MAX_GOTO_DUPLICATION_INSNS,
+
+
+
+
+
+PARAM_MAX_CSE_PATH_LENGTH,
+
+
+
+PARAM_MAX_CSE_INSNS,
+
+
+
+
+
+
+PARAM_LIM_EXPENSIVE,
+# 462 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
+PARAM_IV_CONSIDER_ALL_CANDIDATES_BOUND,
+
+
+
+
+
+
+
+PARAM_IV_MAX_CONSIDERED_USES,
+
+
+
+
+
+
+
+PARAM_IV_ALWAYS_PRUNE_CAND_SET_BOUND,
+
+
+
+
+PARAM_SCEV_MAX_EXPR_SIZE,
+
+
+
+
+PARAM_SCEV_MAX_EXPR_COMPLEXITY,
+
+
+
+
+PARAM_OMEGA_MAX_VARS,
+
+
+
+
+PARAM_OMEGA_MAX_GEQS,
+
+
+
+
+PARAM_OMEGA_MAX_EQS,
+
+
+
+
+PARAM_OMEGA_MAX_WILD_CARDS,
+
+
+
+
+PARAM_OMEGA_HASH_TABLE_SIZE,
+
+
+
+
+PARAM_OMEGA_MAX_KEYS,
+
+
+
+
+PARAM_OMEGA_ELIMINATE_REDUNDANT_CONSTRAINTS,
+
+
+
+
+PARAM_VECT_MAX_VERSION_FOR_ALIGNMENT_CHECKS,
+
+
+
+
+PARAM_VECT_MAX_VERSION_FOR_ALIAS_CHECKS,
+
+
+
+
+PARAM_MAX_CSELIB_MEMORY_LOCATIONS,
+# 551 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
+GGC_MIN_EXPAND,
+
+
+
+
+GGC_MIN_HEAPSIZE,
+
+
+
+
+
+
+
+PARAM_MAX_RELOAD_SEARCH_INSNS,
+
+
+
+
+PARAM_SINK_FREQUENCY_THRESHOLD,
+
+
+
+
+PARAM_MAX_SCHED_REGION_BLOCKS,
+
+
+
+
+PARAM_MAX_SCHED_REGION_INSNS,
+
+
+
+
+PARAM_MAX_PIPELINE_REGION_BLOCKS,
+
+
+
+
+PARAM_MAX_PIPELINE_REGION_INSNS,
+
+
+
+
+PARAM_MIN_SPEC_PROB,
+
+
+
+
+PARAM_MAX_SCHED_EXTEND_REGIONS_ITERS,
+
+
+
+
+PARAM_MAX_SCHED_INSN_CONFLICT_DELAY,
+
+
+
+
+PARAM_SCHED_SPEC_PROB_CUTOFF,
+
+
+
+
+PARAM_SELSCHED_MAX_LOOKAHEAD,
+
+
+
+
+PARAM_SELSCHED_MAX_SCHED_TIMES,
+
+
+
+
+PARAM_SELSCHED_INSNS_TO_RENAME,
+
+
+
+
+PARAM_SCHED_MEM_TRUE_DEP_COST,
+
+
+
+
+PARAM_MAX_LAST_VALUE_RTL,
+# 643 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
+PARAM_INTEGER_SHARE_LIMIT,
+# 662 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
+PARAM_MIN_VIRTUAL_MAPPINGS,
+
+
+
+
+PARAM_VIRTUAL_MAPPINGS_TO_SYMS_RATIO,
+
+
+
+
+PARAM_SSP_BUFFER_SIZE,
+# 690 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
+PARAM_MAX_JUMP_THREAD_DUPLICATION_STMTS,
+# 699 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
+PARAM_MAX_FIELDS_FOR_FIELD_SENSITIVE,
+
+
+
+
+PARAM_MAX_SCHED_READY_INSNS,
+
+
+
+
+
+PARAM_MAX_DSE_ACTIVE_LOCAL_STORES,
+# 720 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
+PARAM_PREFETCH_LATENCY,
+
+
+
+
+
+
+PARAM_SIMULTANEOUS_PREFETCHES,
+
+
+
+
+
+
+PARAM_L1_CACHE_SIZE,
+
+
+
+
+
+
+PARAM_L1_CACHE_LINE_SIZE,
+
+
+
+
+
+
+PARAM_L2_CACHE_SIZE,
+# 759 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
+PARAM_USE_CANONICAL_TYPES,
+
+
+
+
+PARAM_MAX_PARTIAL_ANTIC_LENGTH,
+# 774 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
+PARAM_SCCVN_MAX_SCC_SIZE,
+
+
+
+
+PARAM_IRA_MAX_LOOPS_NUM,
+
+
+
+
+PARAM_IRA_MAX_CONFLICT_TABLE_SIZE,
+
+
+
+
+PARAM_IRA_LOOP_RESERVED_REGS,
+
+
+
+
+
+
+
+PARAM_SWITCH_CONVERSION_BRANCH_RATIO,
+
+
+
+
+
+
+
+PARAM_LOOP_BLOCK_TILE_SIZE,
+
+
+
+
+
+
+PARAM_GRAPHITE_MAX_NB_SCOP_PARAMS,
+
+
+
+
+
+
+PARAM_GRAPHITE_MAX_BBS_PER_FUNCTION,
+
+
+
+
+
+PARAM_LOOP_MAX_DATAREFS_FOR_DATADEPS,
+
+
+
+
+
+
+PARAM_LOOP_INVARIANT_MAX_BBS_IN_LOOP,
+
+
+
+
+
+PARAM_SLP_MAX_INSNS_IN_BB,
+
+
+
+
+PARAM_MIN_INSN_TO_PREFETCH_RATIO,
+
+
+
+
+
+PARAM_PREFETCH_MIN_INSN_TO_MEM_RATIO,
+
+
+
+
+
+
+PARAM_MAX_VARTRACK_SIZE,
+
+
+
+
+
+
+
+PARAM_MAX_VARTRACK_EXPR_DEPTH,
+
+
+
+
+
+
+PARAM_MIN_NONDEBUG_INSN_UID,
+
+
+
+
+PARAM_IPA_SRA_PTR_GROWTH_FACTOR,
+
+
+
+
+
+PARAM_TM_MAX_AGGREGATE_SIZE,
+
+
+
+
+
+
+PARAM_IPA_CP_VALUE_LIST_SIZE,
+
+
+
+
+
+PARAM_IPA_CP_EVAL_THRESHOLD,
+
+
+
+
+
+
+
+PARAM_LTO_PARTITIONS,
+
+
+
+
+MIN_PARTITION_SIZE,
+
+
+
+
+
+
+CXX_MAX_NAMESPACES_FOR_DIAGNOSTIC_HELP,
+
+
+
+
+
+
+PARAM_MAX_STORES_TO_SINK,
+
+
+
+
+
+
+
+PARAM_CASE_VALUES_THRESHOLD,
+
+
+
+
+
+
+
+PARAM_ALLOW_LOAD_DATA_RACES,
+
+
+
+
+PARAM_ALLOW_STORE_DATA_RACES,
+
+
+
+
+PARAM_ALLOW_PACKED_LOAD_DATA_RACES,
+
+
+
+
+PARAM_ALLOW_PACKED_STORE_DATA_RACES,
+
+
+
+
+
+PARAM_TREE_REASSOC_WIDTH,
+
+
+
+
+
+PARAM_MAX_TAIL_MERGE_COMPARISONS,
+
+
+
+
+PARAM_MAX_TAIL_MERGE_ITERATIONS,
+
+
+
+
+
+
+PARAM_MAX_TRACKED_STRLENS,
+# 88 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.h" 2
+
+  LAST_PARAM
+} compiler_param;
+# 100 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.h"
+extern void maybe_set_param_value (compiler_param num, int value,
+       int *params, int *params_set);
+
+
+
+
+extern void set_default_param_value (compiler_param num, int value);
+
+
+
+
+extern void global_init_params (void);
+
+
+
+extern void finish_params (void);
+
+
+
+extern int default_param_value (compiler_param num);
+
+
+
+extern void init_param_values (int *params);
+# 23 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/cgraph.h" 1
+# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/cgraph.h"
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/plugin-api.h" 1
+# 47 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/plugin-api.h"
+enum ld_plugin_status
+{
+  LDPS_OK = 0,
+  LDPS_NO_SYMS,
+  LDPS_BAD_HANDLE,
+  LDPS_ERR
+
+};
+
+
+
+enum ld_plugin_api_version
+{
+  LD_PLUGIN_API_VERSION = 1
+};
+
+
+
+enum ld_plugin_output_file_type
+{
+  LDPO_REL,
+  LDPO_EXEC,
+  LDPO_DYN
+};
+
+
+
+struct ld_plugin_input_file
+{
+  const char *name;
+  int fd;
+  off_t offset;
+  off_t filesize;
+  void *handle;
+};
+
+
+
+struct ld_plugin_symbol
+{
+  char *name;
+  char *version;
+  int def;
+  int visibility;
+  uint64_t size;
+  char *comdat_key;
+  int resolution;
+};
+
+
+
+struct ld_plugin_section
+{
+  const void* handle;
+  unsigned int shndx;
+};
+
+
+
+enum ld_plugin_symbol_kind
+{
+  LDPK_DEF,
+  LDPK_WEAKDEF,
+  LDPK_UNDEF,
+  LDPK_WEAKUNDEF,
+  LDPK_COMMON
+};
+
+
+
+enum ld_plugin_symbol_visibility
+{
+  LDPV_DEFAULT,
+  LDPV_PROTECTED,
+  LDPV_INTERNAL,
+  LDPV_HIDDEN
+};
+
+
+
+enum ld_plugin_symbol_resolution
+{
+  LDPR_UNKNOWN = 0,
+
+
+  LDPR_UNDEF,
+
+
+
+  LDPR_PREVAILING_DEF,
+
+
+
+
+  LDPR_PREVAILING_DEF_IRONLY,
+
+
+
+  LDPR_PREEMPTED_REG,
+
+
+  LDPR_PREEMPTED_IR,
+
+
+  LDPR_RESOLVED_IR,
+
+
+
+  LDPR_RESOLVED_EXEC,
+
+
+  LDPR_RESOLVED_DYN,
+
+
+
+
+
+  LDPR_PREVAILING_DEF_IRONLY_EXP
+};
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_claim_file_handler) (
+  const struct ld_plugin_input_file *file, int *claimed);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_all_symbols_read_handler) (void);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_cleanup_handler) (void);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_register_claim_file) (ld_plugin_claim_file_handler handler);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_register_all_symbols_read) (
+  ld_plugin_all_symbols_read_handler handler);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_register_cleanup) (ld_plugin_cleanup_handler handler);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_add_symbols) (void *handle, int nsyms,
+                          const struct ld_plugin_symbol *syms);
+
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_get_input_file) (const void *handle,
+                             struct ld_plugin_input_file *file);
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_get_view) (const void *handle, const void **viewp);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_release_input_file) (const void *handle);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_get_symbols) (const void *handle, int nsyms,
+                          struct ld_plugin_symbol *syms);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_add_input_file) (const char *pathname);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_add_input_library) (const char *libname);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_set_extra_library_path) (const char *path);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_message) (int level, const char *format, ...);
+
+
+
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_get_input_section_count) (const void* handle, unsigned int *count);
+
+
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_get_input_section_type) (const struct ld_plugin_section section,
+                                     unsigned int *type);
+
+
+
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_get_input_section_name) (const struct ld_plugin_section section,
+                                     char **section_name_ptr);
+
+
+
+
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_get_input_section_contents) (const struct ld_plugin_section section,
+                                         const unsigned char **section_contents,
+                                         size_t* len);
+
+
+
+
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_update_section_order) (const struct ld_plugin_section *section_list,
+       unsigned int num_sections);
+
+
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_allow_section_ordering) (void);
+
+enum ld_plugin_level
+{
+  LDPL_INFO,
+  LDPL_WARNING,
+  LDPL_ERROR,
+  LDPL_FATAL
+};
+
+
+
+enum ld_plugin_tag
+{
+  LDPT_NULL = 0,
+  LDPT_API_VERSION,
+  LDPT_GOLD_VERSION,
+  LDPT_LINKER_OUTPUT,
+  LDPT_OPTION,
+  LDPT_REGISTER_CLAIM_FILE_HOOK,
+  LDPT_REGISTER_ALL_SYMBOLS_READ_HOOK,
+  LDPT_REGISTER_CLEANUP_HOOK,
+  LDPT_ADD_SYMBOLS,
+  LDPT_GET_SYMBOLS,
+  LDPT_ADD_INPUT_FILE,
+  LDPT_MESSAGE,
+  LDPT_GET_INPUT_FILE,
+  LDPT_RELEASE_INPUT_FILE,
+  LDPT_ADD_INPUT_LIBRARY,
+  LDPT_OUTPUT_NAME,
+  LDPT_SET_EXTRA_LIBRARY_PATH,
+  LDPT_GNU_LD_VERSION,
+  LDPT_GET_VIEW,
+  LDPT_GET_INPUT_SECTION_COUNT,
+  LDPT_GET_INPUT_SECTION_TYPE,
+  LDPT_GET_INPUT_SECTION_NAME,
+  LDPT_GET_INPUT_SECTION_CONTENTS,
+  LDPT_UPDATE_SECTION_ORDER,
+  LDPT_ALLOW_SECTION_ORDERING,
+  LDPT_GET_SYMBOLS_V2
+};
+
+
+
+struct ld_plugin_tv
+{
+  enum ld_plugin_tag tv_tag;
+  union
+  {
+    int tv_val;
+    const char *tv_string;
+    ld_plugin_register_claim_file tv_register_claim_file;
+    ld_plugin_register_all_symbols_read tv_register_all_symbols_read;
+    ld_plugin_register_cleanup tv_register_cleanup;
+    ld_plugin_add_symbols tv_add_symbols;
+    ld_plugin_get_symbols tv_get_symbols;
+    ld_plugin_add_input_file tv_add_input_file;
+    ld_plugin_message tv_message;
+    ld_plugin_get_input_file tv_get_input_file;
+    ld_plugin_get_view tv_get_view;
+    ld_plugin_release_input_file tv_release_input_file;
+    ld_plugin_add_input_library tv_add_input_library;
+    ld_plugin_set_extra_library_path tv_set_extra_library_path;
+    ld_plugin_get_input_section_count tv_get_input_section_count;
+    ld_plugin_get_input_section_type tv_get_input_section_type;
+    ld_plugin_get_input_section_name tv_get_input_section_name;
+    ld_plugin_get_input_section_contents tv_get_input_section_contents;
+    ld_plugin_update_section_order tv_update_section_order;
+    ld_plugin_allow_section_ordering tv_allow_section_ordering;
+  } tv_u;
+};
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_onload) (struct ld_plugin_tv *tv);
+# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/cgraph.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/vec.h" 1
+# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/vec.h"
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/statistics.h" 1
+# 41 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/statistics.h"
+struct function;
+
+
+extern void statistics_early_init (void);
+extern void statistics_init (void);
+extern void statistics_fini (void);
+extern void statistics_fini_pass (void);
+extern void statistics_counter_event (struct function *, const char *, int);
+extern void statistics_histogram_event (struct function *, const char *, int);
+# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/vec.h" 2
+# 472 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/vec.h"
+extern void *vec_gc_p_reserve (void *, int );
+extern void *vec_gc_p_reserve_exact (void *, int );
+extern void *vec_gc_o_reserve (void *, int, size_t, size_t );
+extern void *vec_gc_o_reserve_exact (void *, int, size_t, size_t
+         );
+extern void ggc_free (void *);
+
+extern void *vec_heap_p_reserve (void *, int );
+extern void *vec_heap_p_reserve_exact (void *, int );
+extern void *vec_heap_o_reserve (void *, int, size_t, size_t );
+extern void *vec_heap_o_reserve_exact (void *, int, size_t, size_t
+           );
+extern void dump_vec_loc_statistics (void);
+# 514 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/vec.h"
+typedef struct vec_prefix
+{
+  unsigned num;
+  unsigned alloc;
+} vec_prefix;
+# 1351 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/vec.h"
+extern void *vec_stack_p_reserve (void *, int );
+extern void *vec_stack_p_reserve_exact (void *, int );
+extern void *vec_stack_p_reserve_exact_1 (int, void *);
+extern void *vec_stack_o_reserve (void *, int, size_t, size_t );
+extern void *vec_stack_o_reserve_exact (void *, int, size_t, size_t
+      );
+extern void vec_stack_free (void *);
+# 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/cgraph.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h" 1
+# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h"
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/machmode.h" 1
+# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/machmode.h"
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/insn-modes.h" 1
+
+
+
+
+
+
+enum machine_mode
+{
+  VOIDmode,
+  BLKmode,
+  CCmode,
+  CCGCmode,
+  CCGOCmode,
+  CCNOmode,
+  CCAmode,
+  CCCmode,
+  CCOmode,
+  CCSmode,
+  CCZmode,
+  CCFPmode,
+  CCFPUmode,
+  BImode,
+  QImode,
+  HImode,
+  SImode,
+  DImode,
+  TImode,
+  OImode,
+  QQmode,
+  HQmode,
+  SQmode,
+  DQmode,
+  TQmode,
+  UQQmode,
+  UHQmode,
+  USQmode,
+  UDQmode,
+  UTQmode,
+  HAmode,
+  SAmode,
+  DAmode,
+  TAmode,
+  UHAmode,
+  USAmode,
+  UDAmode,
+  UTAmode,
+  SFmode,
+  DFmode,
+  XFmode,
+  TFmode,
+  SDmode,
+  DDmode,
+  TDmode,
+  CQImode,
+  CHImode,
+  CSImode,
+  CDImode,
+  CTImode,
+  COImode,
+  SCmode,
+  DCmode,
+  XCmode,
+  TCmode,
+  V2QImode,
+  V4QImode,
+  V2HImode,
+  V1SImode,
+  V8QImode,
+  V4HImode,
+  V2SImode,
+  V1DImode,
+  V16QImode,
+  V8HImode,
+  V4SImode,
+  V2DImode,
+  V1TImode,
+  V32QImode,
+  V16HImode,
+  V8SImode,
+  V4DImode,
+  V2TImode,
+  V64QImode,
+  V32HImode,
+  V16SImode,
+  V8DImode,
+  V4TImode,
+  V2SFmode,
+  V4SFmode,
+  V2DFmode,
+  V8SFmode,
+  V4DFmode,
+  V2TFmode,
+  V16SFmode,
+  V8DFmode,
+  V4TFmode,
+  MAX_MACHINE_MODE,
+
+  MIN_MODE_RANDOM = VOIDmode,
+  MAX_MODE_RANDOM = BLKmode,
+
+  MIN_MODE_CC = CCmode,
+  MAX_MODE_CC = CCFPUmode,
+
+  MIN_MODE_INT = QImode,
+  MAX_MODE_INT = OImode,
+
+  MIN_MODE_PARTIAL_INT = VOIDmode,
+  MAX_MODE_PARTIAL_INT = VOIDmode,
+
+  MIN_MODE_FRACT = QQmode,
+  MAX_MODE_FRACT = TQmode,
+
+  MIN_MODE_UFRACT = UQQmode,
+  MAX_MODE_UFRACT = UTQmode,
+
+  MIN_MODE_ACCUM = HAmode,
+  MAX_MODE_ACCUM = TAmode,
+
+  MIN_MODE_UACCUM = UHAmode,
+  MAX_MODE_UACCUM = UTAmode,
+
+  MIN_MODE_FLOAT = SFmode,
+  MAX_MODE_FLOAT = TFmode,
+
+  MIN_MODE_DECIMAL_FLOAT = SDmode,
+  MAX_MODE_DECIMAL_FLOAT = TDmode,
+
+  MIN_MODE_COMPLEX_INT = CQImode,
+  MAX_MODE_COMPLEX_INT = COImode,
+
+  MIN_MODE_COMPLEX_FLOAT = SCmode,
+  MAX_MODE_COMPLEX_FLOAT = TCmode,
+
+  MIN_MODE_VECTOR_INT = V2QImode,
+  MAX_MODE_VECTOR_INT = V4TImode,
+
+  MIN_MODE_VECTOR_FRACT = VOIDmode,
+  MAX_MODE_VECTOR_FRACT = VOIDmode,
+
+  MIN_MODE_VECTOR_UFRACT = VOIDmode,
+  MAX_MODE_VECTOR_UFRACT = VOIDmode,
+
+  MIN_MODE_VECTOR_ACCUM = VOIDmode,
+  MAX_MODE_VECTOR_ACCUM = VOIDmode,
+
+  MIN_MODE_VECTOR_UACCUM = VOIDmode,
+  MAX_MODE_VECTOR_UACCUM = VOIDmode,
+
+  MIN_MODE_VECTOR_FLOAT = V2SFmode,
+  MAX_MODE_VECTOR_FLOAT = V4TFmode,
+
+  NUM_MACHINE_MODES = MAX_MACHINE_MODE
+};
+# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/machmode.h" 2
+
+
+
+extern const char * const mode_name[NUM_MACHINE_MODES];
+
+
+
+
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/mode-classes.def" 1
+# 35 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/machmode.h" 2
+
+enum mode_class { MODE_RANDOM, MODE_CC, MODE_INT, MODE_PARTIAL_INT, MODE_FRACT, MODE_UFRACT, MODE_ACCUM, MODE_UACCUM, MODE_FLOAT, MODE_DECIMAL_FLOAT, MODE_COMPLEX_INT, MODE_COMPLEX_FLOAT, MODE_VECTOR_INT, MODE_VECTOR_FRACT, MODE_VECTOR_UFRACT, MODE_VECTOR_ACCUM, MODE_VECTOR_UACCUM, MODE_VECTOR_FLOAT, MAX_MODE_CLASS };
+
+
+
+
+
+
+extern const unsigned char mode_class[NUM_MACHINE_MODES];
+# 179 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/machmode.h"
+extern unsigned char mode_size[NUM_MACHINE_MODES];
+
+
+
+
+extern const unsigned short mode_precision[NUM_MACHINE_MODES];
+
+
+
+extern const unsigned char mode_ibit[NUM_MACHINE_MODES];
+
+
+
+extern const unsigned char mode_fbit[NUM_MACHINE_MODES];
+
+
+
+
+
+extern const unsigned long mode_mask_array[NUM_MACHINE_MODES];
+
+
+
+
+
+extern const unsigned char mode_inner[NUM_MACHINE_MODES];
+# 216 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/machmode.h"
+extern const unsigned char mode_nunits[NUM_MACHINE_MODES];
+
+
+
+
+extern const unsigned char mode_wider[NUM_MACHINE_MODES];
+
+
+
+
+extern const unsigned char mode_2xwider[NUM_MACHINE_MODES];
+
+
+
+
+
+
+extern enum machine_mode mode_for_size (unsigned int, enum mode_class, int);
+
+
+
+extern enum machine_mode smallest_mode_for_size (unsigned int,
+       enum mode_class);
+
+
+
+
+
+extern enum machine_mode int_mode_for_mode (enum machine_mode);
+
+
+
+
+extern enum machine_mode mode_for_vector (enum machine_mode, unsigned);
+
+
+
+extern enum machine_mode get_best_mode (int, int,
+     unsigned long,
+     unsigned long,
+     unsigned int,
+     enum machine_mode, int);
+
+
+
+extern unsigned char mode_base_align[NUM_MACHINE_MODES];
+
+extern unsigned get_mode_alignment (enum machine_mode);
+
+
+
+
+
+extern const unsigned char class_narrowest_mode[MAX_MODE_CLASS];
+
+
+
+
+
+
+extern enum machine_mode byte_mode;
+extern enum machine_mode word_mode;
+extern enum machine_mode ptr_mode;
+
+
+extern void init_adjust_machine_modes (void);
+# 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h" 2
+
+
+
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/vecir.h" 1
+# 28 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/vecir.h"
+static __inline__ void VEC_tree_must_be_pointer_type (void) { (void)((tree)1 == (void *)1); } typedef struct VEC_tree_base { struct vec_prefix prefix; tree vec[1]; } VEC_tree_base; typedef struct VEC_tree_none { VEC_tree_base base; } VEC_tree_none; static __inline__ unsigned VEC_tree_base_length (const VEC_tree_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ tree VEC_tree_base_last (const VEC_tree_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ tree VEC_tree_base_index (const VEC_tree_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_tree_base_iterate (const VEC_tree_base *vec_, unsigned ix_, tree *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (tree) 0; return 0; } } static __inline__ size_t VEC_tree_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_tree_base, vec) + alloc_ * sizeof(tree); } static __inline__ void VEC_tree_base_embedded_init (VEC_tree_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_tree_base_space (VEC_tree_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_tree_base_splice (VEC_tree_base *dst_, VEC_tree_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (tree)); dst_->prefix.num += len_; } } static __inline__ tree *VEC_tree_base_quick_push (VEC_tree_base *vec_, tree obj_ ) { tree *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ tree VEC_tree_base_pop (VEC_tree_base *vec_ ) { tree obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_tree_base_truncate (VEC_tree_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ tree VEC_tree_base_replace (VEC_tree_base *vec_, unsigned ix_, tree obj_ ) { tree old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ tree *VEC_tree_base_quick_insert (VEC_tree_base *vec_, unsigned ix_, tree obj_ ) { tree *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (tree)); *slot_ = obj_; return slot_; } static __inline__ tree VEC_tree_base_ordered_remove (VEC_tree_base *vec_, unsigned ix_ ) { tree *slot_; tree obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (tree)); return obj_; } static __inline__ tree VEC_tree_base_unordered_remove (VEC_tree_base *vec_, unsigned ix_ ) { tree *slot_; tree obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_tree_base_block_remove (VEC_tree_base *vec_, unsigned ix_, unsigned len_ ) { tree *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (tree)); } static __inline__ tree *VEC_tree_base_address (VEC_tree_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_tree_base_lower_bound (VEC_tree_base *vec_, const tree obj_, unsigned char (*lessthan_)(const tree, const tree) ) { unsigned int len_ = VEC_tree_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { tree middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_tree_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_tree_gc { VEC_tree_base base; } VEC_tree_gc; static __inline__ VEC_tree_gc *VEC_tree_gc_alloc (int alloc_ ) { return (VEC_tree_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_tree_gc_free (VEC_tree_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_tree_gc *VEC_tree_gc_copy (VEC_tree_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_tree_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_tree_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (tree) * len_); } return new_vec_; } static __inline__ int VEC_tree_gc_reserve (VEC_tree_gc **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_tree_gc_reserve_exact (VEC_tree_gc **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_tree_gc_safe_grow (VEC_tree_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_tree_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_tree_gc_safe_grow_cleared (VEC_tree_gc **vec_, int size_ ) { int oldsize = VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_tree_gc_safe_grow (vec_, size_ ); memset (&(VEC_tree_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (tree) * (size_ - oldsize)); } static __inline__ void VEC_tree_gc_safe_splice (VEC_tree_gc **dst_, VEC_tree_base *src_ ) { if (src_) { VEC_tree_gc_reserve_exact (dst_, src_->prefix.num ); VEC_tree_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ tree *VEC_tree_gc_safe_push (VEC_tree_gc **vec_, tree obj_ ) { VEC_tree_gc_reserve (vec_, 1 ); return VEC_tree_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ tree *VEC_tree_gc_safe_insert (VEC_tree_gc **vec_, unsigned ix_, tree obj_ ) { VEC_tree_gc_reserve (vec_, 1 ); return VEC_tree_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_tree_heap { VEC_tree_base base; } VEC_tree_heap; static __inline__ VEC_tree_heap *VEC_tree_heap_alloc (int alloc_ ) { return (VEC_tree_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_tree_heap_free (VEC_tree_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_tree_heap *VEC_tree_heap_copy (VEC_tree_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_tree_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_tree_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (tree) * len_); } return new_vec_; } static __inline__ int VEC_tree_heap_reserve (VEC_tree_heap **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_tree_heap_reserve_exact (VEC_tree_heap **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_tree_heap_safe_grow (VEC_tree_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_tree_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_tree_heap_safe_grow_cleared (VEC_tree_heap **vec_, int size_ ) { int oldsize = VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_tree_heap_safe_grow (vec_, size_ ); memset (&(VEC_tree_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (tree) * (size_ - oldsize)); } static __inline__ void VEC_tree_heap_safe_splice (VEC_tree_heap **dst_, VEC_tree_base *src_ ) { if (src_) { VEC_tree_heap_reserve_exact (dst_, src_->prefix.num ); VEC_tree_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ tree *VEC_tree_heap_safe_push (VEC_tree_heap **vec_, tree obj_ ) { VEC_tree_heap_reserve (vec_, 1 ); return VEC_tree_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ tree *VEC_tree_heap_safe_insert (VEC_tree_heap **vec_, unsigned ix_, tree obj_ ) { VEC_tree_heap_reserve (vec_, 1 ); return VEC_tree_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+
+static __inline__ void VEC_gimple_must_be_pointer_type (void) { (void)((gimple)1 == (void *)1); } typedef struct VEC_gimple_base { struct vec_prefix prefix; gimple vec[1]; } VEC_gimple_base; typedef struct VEC_gimple_none { VEC_gimple_base base; } VEC_gimple_none; static __inline__ unsigned VEC_gimple_base_length (const VEC_gimple_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ gimple VEC_gimple_base_last (const VEC_gimple_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ gimple VEC_gimple_base_index (const VEC_gimple_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_gimple_base_iterate (const VEC_gimple_base *vec_, unsigned ix_, gimple *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (gimple) 0; return 0; } } static __inline__ size_t VEC_gimple_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_gimple_base, vec) + alloc_ * sizeof(gimple); } static __inline__ void VEC_gimple_base_embedded_init (VEC_gimple_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_gimple_base_space (VEC_gimple_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_gimple_base_splice (VEC_gimple_base *dst_, VEC_gimple_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (gimple)); dst_->prefix.num += len_; } } static __inline__ gimple *VEC_gimple_base_quick_push (VEC_gimple_base *vec_, gimple obj_ ) { gimple *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ gimple VEC_gimple_base_pop (VEC_gimple_base *vec_ ) { gimple obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_gimple_base_truncate (VEC_gimple_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ gimple VEC_gimple_base_replace (VEC_gimple_base *vec_, unsigned ix_, gimple obj_ ) { gimple old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ gimple *VEC_gimple_base_quick_insert (VEC_gimple_base *vec_, unsigned ix_, gimple obj_ ) { gimple *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (gimple)); *slot_ = obj_; return slot_; } static __inline__ gimple VEC_gimple_base_ordered_remove (VEC_gimple_base *vec_, unsigned ix_ ) { gimple *slot_; gimple obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (gimple)); return obj_; } static __inline__ gimple VEC_gimple_base_unordered_remove (VEC_gimple_base *vec_, unsigned ix_ ) { gimple *slot_; gimple obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_gimple_base_block_remove (VEC_gimple_base *vec_, unsigned ix_, unsigned len_ ) { gimple *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (gimple)); } static __inline__ gimple *VEC_gimple_base_address (VEC_gimple_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_gimple_base_lower_bound (VEC_gimple_base *vec_, const gimple obj_, unsigned char (*lessthan_)(const gimple, const gimple) ) { unsigned int len_ = VEC_gimple_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { gimple middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_gimple_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_gimple_heap { VEC_gimple_base base; } VEC_gimple_heap; static __inline__ VEC_gimple_heap *VEC_gimple_heap_alloc (int alloc_ ) { return (VEC_gimple_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_heap_free (VEC_gimple_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_heap *VEC_gimple_heap_copy (VEC_gimple_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple) * len_); } return new_vec_; } static __inline__ int VEC_gimple_heap_reserve (VEC_gimple_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_heap_reserve_exact (VEC_gimple_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_heap_safe_grow (VEC_gimple_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_gimple_heap_safe_grow_cleared (VEC_gimple_heap **vec_, int size_ ) { int oldsize = VEC_gimple_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_heap_safe_grow (vec_, size_ ); memset (&(VEC_gimple_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple) * (size_ - oldsize)); } static __inline__ void VEC_gimple_heap_safe_splice (VEC_gimple_heap **dst_, VEC_gimple_base *src_ ) { if (src_) { VEC_gimple_heap_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple *VEC_gimple_heap_safe_push (VEC_gimple_heap **vec_, gimple obj_ ) { VEC_gimple_heap_reserve (vec_, 1 ); return VEC_gimple_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple *VEC_gimple_heap_safe_insert (VEC_gimple_heap **vec_, unsigned ix_, gimple obj_ ) { VEC_gimple_heap_reserve (vec_, 1 ); return VEC_gimple_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_gimple_gc { VEC_gimple_base base; } VEC_gimple_gc; static __inline__ VEC_gimple_gc *VEC_gimple_gc_alloc (int alloc_ ) { return (VEC_gimple_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_gc_free (VEC_gimple_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_gc *VEC_gimple_gc_copy (VEC_gimple_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple) * len_); } return new_vec_; } static __inline__ int VEC_gimple_gc_reserve (VEC_gimple_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_gc_reserve_exact (VEC_gimple_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_gc_safe_grow (VEC_gimple_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_gimple_gc_safe_grow_cleared (VEC_gimple_gc **vec_, int size_ ) { int oldsize = VEC_gimple_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_gc_safe_grow (vec_, size_ ); memset (&(VEC_gimple_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple) * (size_ - oldsize)); } static __inline__ void VEC_gimple_gc_safe_splice (VEC_gimple_gc **dst_, VEC_gimple_base *src_ ) { if (src_) { VEC_gimple_gc_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple *VEC_gimple_gc_safe_push (VEC_gimple_gc **vec_, gimple obj_ ) { VEC_gimple_gc_reserve (vec_, 1 ); return VEC_gimple_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple *VEC_gimple_gc_safe_insert (VEC_gimple_gc **vec_, unsigned ix_, gimple obj_ ) { VEC_gimple_gc_reserve (vec_, 1 ); return VEC_gimple_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+
+typedef gimple *gimple_p;
+static __inline__ void VEC_gimple_p_must_be_pointer_type (void) { (void)((gimple_p)1 == (void *)1); } typedef struct VEC_gimple_p_base { struct vec_prefix prefix; gimple_p vec[1]; } VEC_gimple_p_base; typedef struct VEC_gimple_p_none { VEC_gimple_p_base base; } VEC_gimple_p_none; static __inline__ unsigned VEC_gimple_p_base_length (const VEC_gimple_p_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ gimple_p VEC_gimple_p_base_last (const VEC_gimple_p_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ gimple_p VEC_gimple_p_base_index (const VEC_gimple_p_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_gimple_p_base_iterate (const VEC_gimple_p_base *vec_, unsigned ix_, gimple_p *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (gimple_p) 0; return 0; } } static __inline__ size_t VEC_gimple_p_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_gimple_p_base, vec) + alloc_ * sizeof(gimple_p); } static __inline__ void VEC_gimple_p_base_embedded_init (VEC_gimple_p_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_gimple_p_base_space (VEC_gimple_p_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_gimple_p_base_splice (VEC_gimple_p_base *dst_, VEC_gimple_p_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (gimple_p)); dst_->prefix.num += len_; } } static __inline__ gimple_p *VEC_gimple_p_base_quick_push (VEC_gimple_p_base *vec_, gimple_p obj_ ) { gimple_p *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ gimple_p VEC_gimple_p_base_pop (VEC_gimple_p_base *vec_ ) { gimple_p obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_gimple_p_base_truncate (VEC_gimple_p_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ gimple_p VEC_gimple_p_base_replace (VEC_gimple_p_base *vec_, unsigned ix_, gimple_p obj_ ) { gimple_p old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ gimple_p *VEC_gimple_p_base_quick_insert (VEC_gimple_p_base *vec_, unsigned ix_, gimple_p obj_ ) { gimple_p *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (gimple_p)); *slot_ = obj_; return slot_; } static __inline__ gimple_p VEC_gimple_p_base_ordered_remove (VEC_gimple_p_base *vec_, unsigned ix_ ) { gimple_p *slot_; gimple_p obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (gimple_p)); return obj_; } static __inline__ gimple_p VEC_gimple_p_base_unordered_remove (VEC_gimple_p_base *vec_, unsigned ix_ ) { gimple_p *slot_; gimple_p obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_gimple_p_base_block_remove (VEC_gimple_p_base *vec_, unsigned ix_, unsigned len_ ) { gimple_p *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (gimple_p)); } static __inline__ gimple_p *VEC_gimple_p_base_address (VEC_gimple_p_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_gimple_p_base_lower_bound (VEC_gimple_p_base *vec_, const gimple_p obj_, unsigned char (*lessthan_)(const gimple_p, const gimple_p) ) { unsigned int len_ = VEC_gimple_p_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { gimple_p middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_gimple_p_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_gimple_p_heap { VEC_gimple_p_base base; } VEC_gimple_p_heap; static __inline__ VEC_gimple_p_heap *VEC_gimple_p_heap_alloc (int alloc_ ) { return (VEC_gimple_p_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_p_heap_free (VEC_gimple_p_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_p_heap *VEC_gimple_p_heap_copy (VEC_gimple_p_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_p_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_p_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple_p) * len_); } return new_vec_; } static __inline__ int VEC_gimple_p_heap_reserve (VEC_gimple_p_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_p_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_p_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_p_heap_reserve_exact (VEC_gimple_p_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_p_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_p_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_p_heap_safe_grow (VEC_gimple_p_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_p_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_p_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_gimple_p_heap_safe_grow_cleared (VEC_gimple_p_heap **vec_, int size_ ) { int oldsize = VEC_gimple_p_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_p_heap_safe_grow (vec_, size_ ); memset (&(VEC_gimple_p_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple_p) * (size_ - oldsize)); } static __inline__ void VEC_gimple_p_heap_safe_splice (VEC_gimple_p_heap **dst_, VEC_gimple_p_base *src_ ) { if (src_) { VEC_gimple_p_heap_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_p_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple_p *VEC_gimple_p_heap_safe_push (VEC_gimple_p_heap **vec_, gimple_p obj_ ) { VEC_gimple_p_heap_reserve (vec_, 1 ); return VEC_gimple_p_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple_p *VEC_gimple_p_heap_safe_insert (VEC_gimple_p_heap **vec_, unsigned ix_, gimple_p obj_ ) { VEC_gimple_p_heap_reserve (vec_, 1 ); return VEC_gimple_p_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+
+static __inline__ void VEC_gimple_seq_must_be_pointer_type (void) { (void)((gimple_seq)1 == (void *)1); } typedef struct VEC_gimple_seq_base { struct vec_prefix prefix; gimple_seq vec[1]; } VEC_gimple_seq_base; typedef struct VEC_gimple_seq_none { VEC_gimple_seq_base base; } VEC_gimple_seq_none; static __inline__ unsigned VEC_gimple_seq_base_length (const VEC_gimple_seq_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ gimple_seq VEC_gimple_seq_base_last (const VEC_gimple_seq_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ gimple_seq VEC_gimple_seq_base_index (const VEC_gimple_seq_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_gimple_seq_base_iterate (const VEC_gimple_seq_base *vec_, unsigned ix_, gimple_seq *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (gimple_seq) 0; return 0; } } static __inline__ size_t VEC_gimple_seq_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_gimple_seq_base, vec) + alloc_ * sizeof(gimple_seq); } static __inline__ void VEC_gimple_seq_base_embedded_init (VEC_gimple_seq_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_gimple_seq_base_space (VEC_gimple_seq_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_gimple_seq_base_splice (VEC_gimple_seq_base *dst_, VEC_gimple_seq_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (gimple_seq)); dst_->prefix.num += len_; } } static __inline__ gimple_seq *VEC_gimple_seq_base_quick_push (VEC_gimple_seq_base *vec_, gimple_seq obj_ ) { gimple_seq *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ gimple_seq VEC_gimple_seq_base_pop (VEC_gimple_seq_base *vec_ ) { gimple_seq obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_gimple_seq_base_truncate (VEC_gimple_seq_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ gimple_seq VEC_gimple_seq_base_replace (VEC_gimple_seq_base *vec_, unsigned ix_, gimple_seq obj_ ) { gimple_seq old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ gimple_seq *VEC_gimple_seq_base_quick_insert (VEC_gimple_seq_base *vec_, unsigned ix_, gimple_seq obj_ ) { gimple_seq *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (gimple_seq)); *slot_ = obj_; return slot_; } static __inline__ gimple_seq VEC_gimple_seq_base_ordered_remove (VEC_gimple_seq_base *vec_, unsigned ix_ ) { gimple_seq *slot_; gimple_seq obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (gimple_seq)); return obj_; } static __inline__ gimple_seq VEC_gimple_seq_base_unordered_remove (VEC_gimple_seq_base *vec_, unsigned ix_ ) { gimple_seq *slot_; gimple_seq obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_gimple_seq_base_block_remove (VEC_gimple_seq_base *vec_, unsigned ix_, unsigned len_ ) { gimple_seq *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (gimple_seq)); } static __inline__ gimple_seq *VEC_gimple_seq_base_address (VEC_gimple_seq_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_gimple_seq_base_lower_bound (VEC_gimple_seq_base *vec_, const gimple_seq obj_, unsigned char (*lessthan_)(const gimple_seq, const gimple_seq) ) { unsigned int len_ = VEC_gimple_seq_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { gimple_seq middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_gimple_seq_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_gimple_seq_gc { VEC_gimple_seq_base base; } VEC_gimple_seq_gc; static __inline__ VEC_gimple_seq_gc *VEC_gimple_seq_gc_alloc (int alloc_ ) { return (VEC_gimple_seq_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_seq_gc_free (VEC_gimple_seq_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_seq_gc *VEC_gimple_seq_gc_copy (VEC_gimple_seq_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_seq_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_seq_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple_seq) * len_); } return new_vec_; } static __inline__ int VEC_gimple_seq_gc_reserve (VEC_gimple_seq_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_seq_gc_reserve_exact (VEC_gimple_seq_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_seq_gc_safe_grow (VEC_gimple_seq_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_seq_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_seq_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_gimple_seq_gc_safe_grow_cleared (VEC_gimple_seq_gc **vec_, int size_ ) { int oldsize = VEC_gimple_seq_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_seq_gc_safe_grow (vec_, size_ ); memset (&(VEC_gimple_seq_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple_seq) * (size_ - oldsize)); } static __inline__ void VEC_gimple_seq_gc_safe_splice (VEC_gimple_seq_gc **dst_, VEC_gimple_seq_base *src_ ) { if (src_) { VEC_gimple_seq_gc_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_seq_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple_seq *VEC_gimple_seq_gc_safe_push (VEC_gimple_seq_gc **vec_, gimple_seq obj_ ) { VEC_gimple_seq_gc_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple_seq *VEC_gimple_seq_gc_safe_insert (VEC_gimple_seq_gc **vec_, unsigned ix_, gimple_seq obj_ ) { VEC_gimple_seq_gc_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_gimple_seq_heap { VEC_gimple_seq_base base; } VEC_gimple_seq_heap; static __inline__ VEC_gimple_seq_heap *VEC_gimple_seq_heap_alloc (int alloc_ ) { return (VEC_gimple_seq_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_seq_heap_free (VEC_gimple_seq_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_seq_heap *VEC_gimple_seq_heap_copy (VEC_gimple_seq_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_seq_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_seq_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple_seq) * len_); } return new_vec_; } static __inline__ int VEC_gimple_seq_heap_reserve (VEC_gimple_seq_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_seq_heap_reserve_exact (VEC_gimple_seq_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_seq_heap_safe_grow (VEC_gimple_seq_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_seq_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_seq_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_gimple_seq_heap_safe_grow_cleared (VEC_gimple_seq_heap **vec_, int size_ ) { int oldsize = VEC_gimple_seq_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_seq_heap_safe_grow (vec_, size_ ); memset (&(VEC_gimple_seq_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple_seq) * (size_ - oldsize)); } static __inline__ void VEC_gimple_seq_heap_safe_splice (VEC_gimple_seq_heap **dst_, VEC_gimple_seq_base *src_ ) { if (src_) { VEC_gimple_seq_heap_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_seq_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple_seq *VEC_gimple_seq_heap_safe_push (VEC_gimple_seq_heap **vec_, gimple_seq obj_ ) { VEC_gimple_seq_heap_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple_seq *VEC_gimple_seq_heap_safe_insert (VEC_gimple_seq_heap **vec_, unsigned ix_, gimple_seq obj_ ) { VEC_gimple_seq_heap_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+
+static __inline__ void VEC_rtx_must_be_pointer_type (void) { (void)((rtx)1 == (void *)1); } typedef struct VEC_rtx_base { struct vec_prefix prefix; rtx vec[1]; } VEC_rtx_base; typedef struct VEC_rtx_none { VEC_rtx_base base; } VEC_rtx_none; static __inline__ unsigned VEC_rtx_base_length (const VEC_rtx_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ rtx VEC_rtx_base_last (const VEC_rtx_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ rtx VEC_rtx_base_index (const VEC_rtx_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_rtx_base_iterate (const VEC_rtx_base *vec_, unsigned ix_, rtx *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (rtx) 0; return 0; } } static __inline__ size_t VEC_rtx_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_rtx_base, vec) + alloc_ * sizeof(rtx); } static __inline__ void VEC_rtx_base_embedded_init (VEC_rtx_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_rtx_base_space (VEC_rtx_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_rtx_base_splice (VEC_rtx_base *dst_, VEC_rtx_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (rtx)); dst_->prefix.num += len_; } } static __inline__ rtx *VEC_rtx_base_quick_push (VEC_rtx_base *vec_, rtx obj_ ) { rtx *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ rtx VEC_rtx_base_pop (VEC_rtx_base *vec_ ) { rtx obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_rtx_base_truncate (VEC_rtx_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ rtx VEC_rtx_base_replace (VEC_rtx_base *vec_, unsigned ix_, rtx obj_ ) { rtx old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ rtx *VEC_rtx_base_quick_insert (VEC_rtx_base *vec_, unsigned ix_, rtx obj_ ) { rtx *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (rtx)); *slot_ = obj_; return slot_; } static __inline__ rtx VEC_rtx_base_ordered_remove (VEC_rtx_base *vec_, unsigned ix_ ) { rtx *slot_; rtx obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (rtx)); return obj_; } static __inline__ rtx VEC_rtx_base_unordered_remove (VEC_rtx_base *vec_, unsigned ix_ ) { rtx *slot_; rtx obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_rtx_base_block_remove (VEC_rtx_base *vec_, unsigned ix_, unsigned len_ ) { rtx *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (rtx)); } static __inline__ rtx *VEC_rtx_base_address (VEC_rtx_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_rtx_base_lower_bound (VEC_rtx_base *vec_, const rtx obj_, unsigned char (*lessthan_)(const rtx, const rtx) ) { unsigned int len_ = VEC_rtx_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { rtx middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_rtx_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_rtx_heap { VEC_rtx_base base; } VEC_rtx_heap; static __inline__ VEC_rtx_heap *VEC_rtx_heap_alloc (int alloc_ ) { return (VEC_rtx_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_rtx_heap_free (VEC_rtx_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_rtx_heap *VEC_rtx_heap_copy (VEC_rtx_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_rtx_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_rtx_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (rtx) * len_); } return new_vec_; } static __inline__ int VEC_rtx_heap_reserve (VEC_rtx_heap **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_rtx_heap_reserve_exact (VEC_rtx_heap **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_rtx_heap_safe_grow (VEC_rtx_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_rtx_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_rtx_heap_safe_grow_cleared (VEC_rtx_heap **vec_, int size_ ) { int oldsize = VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_rtx_heap_safe_grow (vec_, size_ ); memset (&(VEC_rtx_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (rtx) * (size_ - oldsize)); } static __inline__ void VEC_rtx_heap_safe_splice (VEC_rtx_heap **dst_, VEC_rtx_base *src_ ) { if (src_) { VEC_rtx_heap_reserve_exact (dst_, src_->prefix.num ); VEC_rtx_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ rtx *VEC_rtx_heap_safe_push (VEC_rtx_heap **vec_, rtx obj_ ) { VEC_rtx_heap_reserve (vec_, 1 ); return VEC_rtx_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ rtx *VEC_rtx_heap_safe_insert (VEC_rtx_heap **vec_, unsigned ix_, rtx obj_ ) { VEC_rtx_heap_reserve (vec_, 1 ); return VEC_rtx_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_rtx_gc { VEC_rtx_base base; } VEC_rtx_gc; static __inline__ VEC_rtx_gc *VEC_rtx_gc_alloc (int alloc_ ) { return (VEC_rtx_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_rtx_gc_free (VEC_rtx_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_rtx_gc *VEC_rtx_gc_copy (VEC_rtx_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_rtx_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_rtx_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (rtx) * len_); } return new_vec_; } static __inline__ int VEC_rtx_gc_reserve (VEC_rtx_gc **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_rtx_gc_reserve_exact (VEC_rtx_gc **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_rtx_gc_safe_grow (VEC_rtx_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_rtx_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_rtx_gc_safe_grow_cleared (VEC_rtx_gc **vec_, int size_ ) { int oldsize = VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_rtx_gc_safe_grow (vec_, size_ ); memset (&(VEC_rtx_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (rtx) * (size_ - oldsize)); } static __inline__ void VEC_rtx_gc_safe_splice (VEC_rtx_gc **dst_, VEC_rtx_base *src_ ) { if (src_) { VEC_rtx_gc_reserve_exact (dst_, src_->prefix.num ); VEC_rtx_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ rtx *VEC_rtx_gc_safe_push (VEC_rtx_gc **vec_, rtx obj_ ) { VEC_rtx_gc_reserve (vec_, 1 ); return VEC_rtx_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ rtx *VEC_rtx_gc_safe_insert (VEC_rtx_gc **vec_, unsigned ix_, rtx obj_ ) { VEC_rtx_gc_reserve (vec_, 1 ); return VEC_rtx_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+# 31 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/double-int.h" 1
+# 24 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/double-int.h"
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 1 3
+# 53 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 3
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/include/stddef.h" 1 3 4
+# 54 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 2 3
+# 191 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 3
+typedef unsigned long int mp_limb_t;
+typedef long int mp_limb_signed_t;
+
+
+typedef unsigned long int mp_bitcnt_t;
+
+
+
+
+typedef struct
+{
+  int _mp_alloc;
+
+  int _mp_size;
+
+
+  mp_limb_t *_mp_d;
+} __mpz_struct;
+
+
+
+
+typedef __mpz_struct MP_INT;
+typedef __mpz_struct mpz_t[1];
+
+typedef mp_limb_t * mp_ptr;
+typedef const mp_limb_t * mp_srcptr;
+
+
+
+
+
+
+
+typedef long int mp_size_t;
+typedef long int mp_exp_t;
+
+
+typedef struct
+{
+  __mpz_struct _mp_num;
+  __mpz_struct _mp_den;
+} __mpq_struct;
+
+typedef __mpq_struct MP_RAT;
+typedef __mpq_struct mpq_t[1];
+
+typedef struct
+{
+  int _mp_prec;
+
+
+
+  int _mp_size;
+
+
+  mp_exp_t _mp_exp;
+  mp_limb_t *_mp_d;
+} __mpf_struct;
+
+
+typedef __mpf_struct mpf_t[1];
+
+
+typedef enum
+{
+  GMP_RAND_ALG_DEFAULT = 0,
+  GMP_RAND_ALG_LC = GMP_RAND_ALG_DEFAULT
+} gmp_randalg_t;
+
+
+typedef struct
+{
+  mpz_t _mp_seed;
+  gmp_randalg_t _mp_alg;
+  union {
+    void *_mp_lc;
+  } _mp_algdata;
+} __gmp_randstate_struct;
+typedef __gmp_randstate_struct gmp_randstate_t[1];
+
+
+
+typedef const __mpz_struct *mpz_srcptr;
+typedef __mpz_struct *mpz_ptr;
+typedef const __mpf_struct *mpf_srcptr;
+typedef __mpf_struct *mpf_ptr;
+typedef const __mpq_struct *mpq_srcptr;
+typedef __mpq_struct *mpq_ptr;
+# 541 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 3
+ void __gmp_set_memory_functions (void *(*) (size_t), void *(*) (void *, size_t, size_t), void (*) (void *, size_t))
+
+                                                   ;
+
+
+ void __gmp_get_memory_functions (void *(**) (size_t), void *(**) (void *, size_t, size_t), void (**) (void *, size_t))
+
+                                                                                ;
+
+
+ extern const int __gmp_bits_per_limb;
+
+
+ extern int __gmp_errno;
+
+
+ extern const char * const __gmp_version;
+
+
+
+
+
+
+ void __gmp_randinit (gmp_randstate_t, gmp_randalg_t, ...);
+
+
+ void __gmp_randinit_default (gmp_randstate_t);
+
+
+ void __gmp_randinit_lc_2exp (gmp_randstate_t, mpz_srcptr, unsigned long int, mp_bitcnt_t)
+
+                          ;
+
+
+ int __gmp_randinit_lc_2exp_size (gmp_randstate_t, mp_bitcnt_t);
+
+
+ void __gmp_randinit_mt (gmp_randstate_t);
+
+
+ void __gmp_randinit_set (gmp_randstate_t, const __gmp_randstate_struct *);
+
+
+ void __gmp_randseed (gmp_randstate_t, mpz_srcptr);
+
+
+ void __gmp_randseed_ui (gmp_randstate_t, unsigned long int);
+
+
+ void __gmp_randclear (gmp_randstate_t);
+
+
+ unsigned long __gmp_urandomb_ui (gmp_randstate_t, unsigned long);
+
+
+ unsigned long __gmp_urandomm_ui (gmp_randstate_t, unsigned long);
+
+
+
+
+
+ int __gmp_asprintf (char **, const char *, ...);
+
+
+
+ int __gmp_fprintf (FILE *, const char *, ...);
+
+
+
+
+ int __gmp_obstack_printf (struct obstack *, const char *, ...);
+
+
+
+
+ int __gmp_obstack_vprintf (struct obstack *, const char *, va_list);
+
+
+
+ int __gmp_printf (const char *, ...);
+
+
+ int __gmp_snprintf (char *, size_t, const char *, ...);
+
+
+ int __gmp_sprintf (char *, const char *, ...);
+
+
+
+ int __gmp_vasprintf (char **, const char *, va_list);
+
+
+
+
+ int __gmp_vfprintf (FILE *, const char *, va_list);
+
+
+
+
+ int __gmp_vprintf (const char *, va_list);
+
+
+
+
+ int __gmp_vsnprintf (char *, size_t, const char *, va_list);
+
+
+
+
+ int __gmp_vsprintf (char *, const char *, va_list);
+
+
+
+
+
+
+
+ int __gmp_fscanf (FILE *, const char *, ...);
+
+
+
+ int __gmp_scanf (const char *, ...);
+
+
+ int __gmp_sscanf (const char *, const char *, ...);
+
+
+
+ int __gmp_vfscanf (FILE *, const char *, va_list);
+
+
+
+
+ int __gmp_vscanf (const char *, va_list);
+
+
+
+
+ int __gmp_vsscanf (const char *, const char *, va_list);
+
+
+
+
+
+
+
+ void *__gmpz_realloc (mpz_ptr, mp_size_t);
+
+
+
+ void __gmpz_abs (mpz_ptr, mpz_srcptr);
+
+
+
+ void __gmpz_add (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_add_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_addmul (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_addmul_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_and (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_array_init (mpz_ptr, mp_size_t, mp_size_t);
+
+
+ void __gmpz_bin_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_bin_uiui (mpz_ptr, unsigned long int, unsigned long int);
+
+
+ void __gmpz_cdiv_q (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_cdiv_q_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
+
+
+ unsigned long int __gmpz_cdiv_q_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_cdiv_qr (mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ unsigned long int __gmpz_cdiv_qr_ui (mpz_ptr, mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_cdiv_r (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_cdiv_r_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
+
+
+ unsigned long int __gmpz_cdiv_r_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ unsigned long int __gmpz_cdiv_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
+ void __gmpz_clear (mpz_ptr);
+
+
+ void __gmpz_clears (mpz_ptr, ...);
+
+
+ void __gmpz_clrbit (mpz_ptr, mp_bitcnt_t);
+
+
+ int __gmpz_cmp (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpz_cmp_d (mpz_srcptr, double) __attribute__ ((__pure__));
+
+
+ int __gmpz_cmp_si (mpz_srcptr, signed long int) __attribute__ ((__pure__));
+
+
+ int __gmpz_cmp_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
+ int __gmpz_cmpabs (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpz_cmpabs_d (mpz_srcptr, double) __attribute__ ((__pure__));
+
+
+ int __gmpz_cmpabs_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
+ void __gmpz_com (mpz_ptr, mpz_srcptr);
+
+
+ void __gmpz_combit (mpz_ptr, mp_bitcnt_t);
+
+
+ int __gmpz_congruent_p (mpz_srcptr, mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpz_congruent_2exp_p (mpz_srcptr, mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
+
+
+ int __gmpz_congruent_ui_p (mpz_srcptr, unsigned long, unsigned long) __attribute__ ((__pure__));
+
+
+ void __gmpz_divexact (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_divexact_ui (mpz_ptr, mpz_srcptr, unsigned long);
+
+
+ int __gmpz_divisible_p (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpz_divisible_ui_p (mpz_srcptr, unsigned long) __attribute__ ((__pure__));
+
+
+ int __gmpz_divisible_2exp_p (mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
+
+
+ void __gmpz_dump (mpz_srcptr);
+
+
+ void *__gmpz_export (void *, size_t *, int, size_t, int, size_t, mpz_srcptr);
+
+
+ void __gmpz_fac_ui (mpz_ptr, unsigned long int);
+
+
+ void __gmpz_fdiv_q (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_fdiv_q_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
+
+
+ unsigned long int __gmpz_fdiv_q_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_fdiv_qr (mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ unsigned long int __gmpz_fdiv_qr_ui (mpz_ptr, mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_fdiv_r (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_fdiv_r_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
+
+
+ unsigned long int __gmpz_fdiv_r_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ unsigned long int __gmpz_fdiv_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
+ void __gmpz_fib_ui (mpz_ptr, unsigned long int);
+
+
+ void __gmpz_fib2_ui (mpz_ptr, mpz_ptr, unsigned long int);
+
+
+ int __gmpz_fits_sint_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpz_fits_slong_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpz_fits_sshort_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+ int __gmpz_fits_uint_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+
+ int __gmpz_fits_ulong_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+
+ int __gmpz_fits_ushort_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+ void __gmpz_gcd (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ unsigned long int __gmpz_gcd_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_gcdext (mpz_ptr, mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ double __gmpz_get_d (mpz_srcptr) __attribute__ ((__pure__));
+
+
+ double __gmpz_get_d_2exp (signed long int *, mpz_srcptr);
+
+
+ long int __gmpz_get_si (mpz_srcptr) __attribute__ ((__pure__));
+
+
+ char *__gmpz_get_str (char *, int, mpz_srcptr);
+
+
+
+ unsigned long int __gmpz_get_ui (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+
+ mp_limb_t __gmpz_getlimbn (mpz_srcptr, mp_size_t) __attribute__ ((__pure__));
+
+
+
+ mp_bitcnt_t __gmpz_hamdist (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+
+
+ void __gmpz_import (mpz_ptr, size_t, int, size_t, int, size_t, const void *);
+
+
+ void __gmpz_init (mpz_ptr);
+
+
+ void __gmpz_init2 (mpz_ptr, mp_bitcnt_t);
+
+
+ void __gmpz_inits (mpz_ptr, ...);
+
+
+ void __gmpz_init_set (mpz_ptr, mpz_srcptr);
+
+
+ void __gmpz_init_set_d (mpz_ptr, double);
+
+
+ void __gmpz_init_set_si (mpz_ptr, signed long int);
+
+
+ int __gmpz_init_set_str (mpz_ptr, const char *, int);
+
+
+ void __gmpz_init_set_ui (mpz_ptr, unsigned long int);
+
+
+
+ size_t __gmpz_inp_raw (mpz_ptr, FILE *);
+
+
+
+
+ size_t __gmpz_inp_str (mpz_ptr, FILE *, int);
+
+
+
+ int __gmpz_invert (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_ior (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ int __gmpz_jacobi (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+
+ int __gmpz_kronecker_si (mpz_srcptr, long) __attribute__ ((__pure__));
+
+
+ int __gmpz_kronecker_ui (mpz_srcptr, unsigned long) __attribute__ ((__pure__));
+
+
+ int __gmpz_si_kronecker (long, mpz_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpz_ui_kronecker (unsigned long, mpz_srcptr) __attribute__ ((__pure__));
+
+
+ void __gmpz_lcm (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_lcm_ui (mpz_ptr, mpz_srcptr, unsigned long);
+
+
+
+
+ void __gmpz_lucnum_ui (mpz_ptr, unsigned long int);
+
+
+ void __gmpz_lucnum2_ui (mpz_ptr, mpz_ptr, unsigned long int);
+
+
+ int __gmpz_millerrabin (mpz_srcptr, int) __attribute__ ((__pure__));
+
+
+ void __gmpz_mod (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+
+
+ void __gmpz_mul (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_mul_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
+
+
+ void __gmpz_mul_si (mpz_ptr, mpz_srcptr, long int);
+
+
+ void __gmpz_mul_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+
+ void __gmpz_neg (mpz_ptr, mpz_srcptr);
+
+
+
+ void __gmpz_nextprime (mpz_ptr, mpz_srcptr);
+
+
+
+ size_t __gmpz_out_raw (FILE *, mpz_srcptr);
+
+
+
+
+ size_t __gmpz_out_str (FILE *, int, mpz_srcptr);
+
+
+
+ int __gmpz_perfect_power_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+ int __gmpz_perfect_square_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+
+ mp_bitcnt_t __gmpz_popcount (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+ void __gmpz_pow_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_powm (mpz_ptr, mpz_srcptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_powm_sec (mpz_ptr, mpz_srcptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_powm_ui (mpz_ptr, mpz_srcptr, unsigned long int, mpz_srcptr);
+
+
+ int __gmpz_probab_prime_p (mpz_srcptr, int) __attribute__ ((__pure__));
+
+
+ void __gmpz_random (mpz_ptr, mp_size_t);
+
+
+ void __gmpz_random2 (mpz_ptr, mp_size_t);
+
+
+ void __gmpz_realloc2 (mpz_ptr, mp_bitcnt_t);
+
+
+ mp_bitcnt_t __gmpz_remove (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ int __gmpz_root (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_rootrem (mpz_ptr,mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_rrandomb (mpz_ptr, gmp_randstate_t, mp_bitcnt_t);
+
+
+ mp_bitcnt_t __gmpz_scan0 (mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
+
+
+ mp_bitcnt_t __gmpz_scan1 (mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
+
+
+ void __gmpz_set (mpz_ptr, mpz_srcptr);
+
+
+ void __gmpz_set_d (mpz_ptr, double);
+
+
+ void __gmpz_set_f (mpz_ptr, mpf_srcptr);
+
+
+
+ void __gmpz_set_q (mpz_ptr, mpq_srcptr);
+
+
+
+ void __gmpz_set_si (mpz_ptr, signed long int);
+
+
+ int __gmpz_set_str (mpz_ptr, const char *, int);
+
+
+ void __gmpz_set_ui (mpz_ptr, unsigned long int);
+
+
+ void __gmpz_setbit (mpz_ptr, mp_bitcnt_t);
+
+
+
+ size_t __gmpz_size (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+ size_t __gmpz_sizeinbase (mpz_srcptr, int) __attribute__ ((__pure__));
+
+
+ void __gmpz_sqrt (mpz_ptr, mpz_srcptr);
+
+
+ void __gmpz_sqrtrem (mpz_ptr, mpz_ptr, mpz_srcptr);
+
+
+ void __gmpz_sub (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_sub_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_ui_sub (mpz_ptr, unsigned long int, mpz_srcptr);
+
+
+ void __gmpz_submul (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_submul_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_swap (mpz_ptr, mpz_ptr) ;
+
+
+ unsigned long int __gmpz_tdiv_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
+ void __gmpz_tdiv_q (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_tdiv_q_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
+
+
+ unsigned long int __gmpz_tdiv_q_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_tdiv_qr (mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ unsigned long int __gmpz_tdiv_qr_ui (mpz_ptr, mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_tdiv_r (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_tdiv_r_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
+
+
+ unsigned long int __gmpz_tdiv_r_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ int __gmpz_tstbit (mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
+
+
+ void __gmpz_ui_pow_ui (mpz_ptr, unsigned long int, unsigned long int);
+
+
+ void __gmpz_urandomb (mpz_ptr, gmp_randstate_t, mp_bitcnt_t);
+
+
+ void __gmpz_urandomm (mpz_ptr, gmp_randstate_t, mpz_srcptr);
+
+
+
+ void __gmpz_xor (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+
+
+
+
+ void __gmpq_abs (mpq_ptr, mpq_srcptr);
+
+
+
+ void __gmpq_add (mpq_ptr, mpq_srcptr, mpq_srcptr);
+
+
+ void __gmpq_canonicalize (mpq_ptr);
+
+
+ void __gmpq_clear (mpq_ptr);
+
+
+ void __gmpq_clears (mpq_ptr, ...);
+
+
+ int __gmpq_cmp (mpq_srcptr, mpq_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpq_cmp_si (mpq_srcptr, long, unsigned long) __attribute__ ((__pure__));
+
+
+ int __gmpq_cmp_ui (mpq_srcptr, unsigned long int, unsigned long int) __attribute__ ((__pure__));
+
+
+ void __gmpq_div (mpq_ptr, mpq_srcptr, mpq_srcptr);
+
+
+ void __gmpq_div_2exp (mpq_ptr, mpq_srcptr, mp_bitcnt_t);
+
+
+ int __gmpq_equal (mpq_srcptr, mpq_srcptr) __attribute__ ((__pure__));
+
+
+ void __gmpq_get_num (mpz_ptr, mpq_srcptr);
+
+
+ void __gmpq_get_den (mpz_ptr, mpq_srcptr);
+
+
+ double __gmpq_get_d (mpq_srcptr) __attribute__ ((__pure__));
+
+
+ char *__gmpq_get_str (char *, int, mpq_srcptr);
+
+
+ void __gmpq_init (mpq_ptr);
+
+
+ void __gmpq_inits (mpq_ptr, ...);
+
+
+
+ size_t __gmpq_inp_str (mpq_ptr, FILE *, int);
+
+
+
+ void __gmpq_inv (mpq_ptr, mpq_srcptr);
+
+
+ void __gmpq_mul (mpq_ptr, mpq_srcptr, mpq_srcptr);
+
+
+ void __gmpq_mul_2exp (mpq_ptr, mpq_srcptr, mp_bitcnt_t);
+
+
+
+ void __gmpq_neg (mpq_ptr, mpq_srcptr);
+
+
+
+
+ size_t __gmpq_out_str (FILE *, int, mpq_srcptr);
+
+
+
+ void __gmpq_set (mpq_ptr, mpq_srcptr);
+
+
+ void __gmpq_set_d (mpq_ptr, double);
+
+
+ void __gmpq_set_den (mpq_ptr, mpz_srcptr);
+
+
+ void __gmpq_set_f (mpq_ptr, mpf_srcptr);
+
+
+ void __gmpq_set_num (mpq_ptr, mpz_srcptr);
+
+
+ void __gmpq_set_si (mpq_ptr, signed long int, unsigned long int);
+
+
+ int __gmpq_set_str (mpq_ptr, const char *, int);
+
+
+ void __gmpq_set_ui (mpq_ptr, unsigned long int, unsigned long int);
+
+
+ void __gmpq_set_z (mpq_ptr, mpz_srcptr);
+
+
+ void __gmpq_sub (mpq_ptr, mpq_srcptr, mpq_srcptr);
+
+
+ void __gmpq_swap (mpq_ptr, mpq_ptr) ;
+
+
+
+
+
+ void __gmpf_abs (mpf_ptr, mpf_srcptr);
+
+
+ void __gmpf_add (mpf_ptr, mpf_srcptr, mpf_srcptr);
+
+
+ void __gmpf_add_ui (mpf_ptr, mpf_srcptr, unsigned long int);
+
+ void __gmpf_ceil (mpf_ptr, mpf_srcptr);
+
+
+ void __gmpf_clear (mpf_ptr);
+
+
+ void __gmpf_clears (mpf_ptr, ...);
+
+
+ int __gmpf_cmp (mpf_srcptr, mpf_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpf_cmp_d (mpf_srcptr, double) __attribute__ ((__pure__));
+
+
+ int __gmpf_cmp_si (mpf_srcptr, signed long int) __attribute__ ((__pure__));
+
+
+ int __gmpf_cmp_ui (mpf_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
+ void __gmpf_div (mpf_ptr, mpf_srcptr, mpf_srcptr);
+
+
+ void __gmpf_div_2exp (mpf_ptr, mpf_srcptr, mp_bitcnt_t);
+
+
+ void __gmpf_div_ui (mpf_ptr, mpf_srcptr, unsigned long int);
+
+
+ void __gmpf_dump (mpf_srcptr);
+
+
+ int __gmpf_eq (mpf_srcptr, mpf_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
+
+
+ int __gmpf_fits_sint_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpf_fits_slong_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpf_fits_sshort_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpf_fits_uint_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpf_fits_ulong_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpf_fits_ushort_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ void __gmpf_floor (mpf_ptr, mpf_srcptr);
+
+
+ double __gmpf_get_d (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ double __gmpf_get_d_2exp (signed long int *, mpf_srcptr);
+
+
+ mp_bitcnt_t __gmpf_get_default_prec (void) __attribute__ ((__pure__));
+
+
+ mp_bitcnt_t __gmpf_get_prec (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ long __gmpf_get_si (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ char *__gmpf_get_str (char *, mp_exp_t *, int, size_t, mpf_srcptr);
+
+
+ unsigned long __gmpf_get_ui (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ void __gmpf_init (mpf_ptr);
+
+
+ void __gmpf_init2 (mpf_ptr, mp_bitcnt_t);
+
+
+ void __gmpf_inits (mpf_ptr, ...);
+
+
+ void __gmpf_init_set (mpf_ptr, mpf_srcptr);
+
+
+ void __gmpf_init_set_d (mpf_ptr, double);
+
+
+ void __gmpf_init_set_si (mpf_ptr, signed long int);
+
+
+ int __gmpf_init_set_str (mpf_ptr, const char *, int);
+
+
+ void __gmpf_init_set_ui (mpf_ptr, unsigned long int);
+
+
+
+ size_t __gmpf_inp_str (mpf_ptr, FILE *, int);
+
+
+
+ int __gmpf_integer_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ void __gmpf_mul (mpf_ptr, mpf_srcptr, mpf_srcptr);
+
+
+ void __gmpf_mul_2exp (mpf_ptr, mpf_srcptr, mp_bitcnt_t);
+
+
+ void __gmpf_mul_ui (mpf_ptr, mpf_srcptr, unsigned long int);
+
+
+ void __gmpf_neg (mpf_ptr, mpf_srcptr);
+
+
+
+ size_t __gmpf_out_str (FILE *, int, size_t, mpf_srcptr);
+
+
+
+ void __gmpf_pow_ui (mpf_ptr, mpf_srcptr, unsigned long int);
+
+
+ void __gmpf_random2 (mpf_ptr, mp_size_t, mp_exp_t);
+
+
+ void __gmpf_reldiff (mpf_ptr, mpf_srcptr, mpf_srcptr);
+
+
+ void __gmpf_set (mpf_ptr, mpf_srcptr);
+
+
+ void __gmpf_set_d (mpf_ptr, double);
+
+
+ void __gmpf_set_default_prec (mp_bitcnt_t) ;
+
+
+ void __gmpf_set_prec (mpf_ptr, mp_bitcnt_t);
+
+
+ void __gmpf_set_prec_raw (mpf_ptr, mp_bitcnt_t) ;
+
+
+ void __gmpf_set_q (mpf_ptr, mpq_srcptr);
+
+
+ void __gmpf_set_si (mpf_ptr, signed long int);
+
+
+ int __gmpf_set_str (mpf_ptr, const char *, int);
+
+
+ void __gmpf_set_ui (mpf_ptr, unsigned long int);
+
+
+ void __gmpf_set_z (mpf_ptr, mpz_srcptr);
+
+
+ size_t __gmpf_size (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ void __gmpf_sqrt (mpf_ptr, mpf_srcptr);
+
+
+ void __gmpf_sqrt_ui (mpf_ptr, unsigned long int);
+
+
+ void __gmpf_sub (mpf_ptr, mpf_srcptr, mpf_srcptr);
+
+
+ void __gmpf_sub_ui (mpf_ptr, mpf_srcptr, unsigned long int);
+
+
+ void __gmpf_swap (mpf_ptr, mpf_ptr) ;
+
+
+ void __gmpf_trunc (mpf_ptr, mpf_srcptr);
+
+
+ void __gmpf_ui_div (mpf_ptr, unsigned long int, mpf_srcptr);
+
+
+ void __gmpf_ui_sub (mpf_ptr, unsigned long int, mpf_srcptr);
+
+
+ void __gmpf_urandomb (mpf_t, gmp_randstate_t, mp_bitcnt_t);
+# 1500 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 3
+ mp_limb_t __gmpn_add (mp_ptr, mp_srcptr, mp_size_t, mp_srcptr,mp_size_t);
+
+
+
+
+ mp_limb_t __gmpn_add_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t) ;
+
+
+
+ mp_limb_t __gmpn_add_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+
+ mp_limb_t __gmpn_addmul_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
+
+
+
+ int __gmpn_cmp (mp_srcptr, mp_srcptr, mp_size_t) __attribute__ ((__pure__));
+
+
+
+
+
+
+ mp_limb_t __gmpn_divexact_by3c (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
+
+
+
+
+
+ mp_limb_t __gmpn_divrem (mp_ptr, mp_size_t, mp_ptr, mp_size_t, mp_srcptr, mp_size_t);
+
+
+ mp_limb_t __gmpn_divrem_1 (mp_ptr, mp_size_t, mp_srcptr, mp_size_t, mp_limb_t);
+
+
+ mp_limb_t __gmpn_divrem_2 (mp_ptr, mp_size_t, mp_ptr, mp_size_t, mp_srcptr);
+
+
+ mp_size_t __gmpn_gcd (mp_ptr, mp_ptr, mp_size_t, mp_ptr, mp_size_t);
+
+
+ mp_limb_t __gmpn_gcd_1 (mp_srcptr, mp_size_t, mp_limb_t) __attribute__ ((__pure__));
+
+
+ mp_limb_t __gmpn_gcdext_1 (mp_limb_signed_t *, mp_limb_signed_t *, mp_limb_t, mp_limb_t);
+
+
+ mp_size_t __gmpn_gcdext (mp_ptr, mp_ptr, mp_size_t *, mp_ptr, mp_size_t, mp_ptr, mp_size_t);
+
+
+ size_t __gmpn_get_str (unsigned char *, int, mp_ptr, mp_size_t);
+
+
+ mp_bitcnt_t __gmpn_hamdist (mp_srcptr, mp_srcptr, mp_size_t) __attribute__ ((__pure__));
+
+
+ mp_limb_t __gmpn_lshift (mp_ptr, mp_srcptr, mp_size_t, unsigned int);
+
+
+ mp_limb_t __gmpn_mod_1 (mp_srcptr, mp_size_t, mp_limb_t) __attribute__ ((__pure__));
+
+
+ mp_limb_t __gmpn_mul (mp_ptr, mp_srcptr, mp_size_t, mp_srcptr, mp_size_t);
+
+
+ mp_limb_t __gmpn_mul_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
+
+
+ void __gmpn_mul_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+
+ void __gmpn_sqr (mp_ptr, mp_srcptr, mp_size_t);
+
+
+
+ mp_limb_t __gmpn_neg (mp_ptr, mp_srcptr, mp_size_t);
+
+
+
+
+ void __gmpn_com (mp_ptr, mp_srcptr, mp_size_t);
+
+
+
+ int __gmpn_perfect_square_p (mp_srcptr, mp_size_t) __attribute__ ((__pure__));
+
+
+ int __gmpn_perfect_power_p (mp_srcptr, mp_size_t) __attribute__ ((__pure__));
+
+
+ mp_bitcnt_t __gmpn_popcount (mp_srcptr, mp_size_t) __attribute__ ((__pure__));
+
+
+ mp_size_t __gmpn_pow_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t, mp_ptr);
+
+
+
+ mp_limb_t __gmpn_preinv_mod_1 (mp_srcptr, mp_size_t, mp_limb_t, mp_limb_t) __attribute__ ((__pure__));
+
+
+ void __gmpn_random (mp_ptr, mp_size_t);
+
+
+ void __gmpn_random2 (mp_ptr, mp_size_t);
+
+
+ mp_limb_t __gmpn_rshift (mp_ptr, mp_srcptr, mp_size_t, unsigned int);
+
+
+ mp_bitcnt_t __gmpn_scan0 (mp_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
+
+
+ mp_bitcnt_t __gmpn_scan1 (mp_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
+
+
+ mp_size_t __gmpn_set_str (mp_ptr, const unsigned char *, size_t, int);
+
+
+ mp_size_t __gmpn_sqrtrem (mp_ptr, mp_ptr, mp_srcptr, mp_size_t);
+
+
+
+ mp_limb_t __gmpn_sub (mp_ptr, mp_srcptr, mp_size_t, mp_srcptr,mp_size_t);
+
+
+
+
+ mp_limb_t __gmpn_sub_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t) ;
+
+
+
+ mp_limb_t __gmpn_sub_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+
+ mp_limb_t __gmpn_submul_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
+
+
+ void __gmpn_tdiv_qr (mp_ptr, mp_ptr, mp_size_t, mp_srcptr, mp_size_t, mp_srcptr, mp_size_t);
+
+
+ void __gmpn_and_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+ void __gmpn_andn_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+ void __gmpn_nand_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+ void __gmpn_ior_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+ void __gmpn_iorn_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+ void __gmpn_nior_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+ void __gmpn_xor_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+ void __gmpn_xnor_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+
+ void __gmpn_copyi (mp_ptr, mp_srcptr, mp_size_t);
+
+ void __gmpn_copyd (mp_ptr, mp_srcptr, mp_size_t);
+
+ void __gmpn_zero (mp_ptr, mp_size_t);
+# 1680 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 3
+extern __inline__ void
+__gmpz_abs (mpz_ptr __gmp_w, mpz_srcptr __gmp_u)
+{
+  if (__gmp_w != __gmp_u)
+    __gmpz_set (__gmp_w, __gmp_u);
+  __gmp_w->_mp_size = ((__gmp_w->_mp_size) >= 0 ? (__gmp_w->_mp_size) : -(__gmp_w->_mp_size));
+}
+# 1704 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 3
+extern __inline__
+
+int
+__gmpz_fits_uint_p (mpz_srcptr __gmp_z)
+{
+  mp_size_t __gmp_n = __gmp_z->_mp_size; mp_ptr __gmp_p = __gmp_z->_mp_d; return (__gmp_n == 0 || (__gmp_n == 1 && __gmp_p[0] <= (~ (unsigned) 0)));;
+}
+
+
+
+
+extern __inline__
+
+int
+__gmpz_fits_ulong_p (mpz_srcptr __gmp_z)
+{
+  mp_size_t __gmp_n = __gmp_z->_mp_size; mp_ptr __gmp_p = __gmp_z->_mp_d; return (__gmp_n == 0 || (__gmp_n == 1 && __gmp_p[0] <= (~ (unsigned long) 0)));;
+}
+
+
+
+
+extern __inline__
+
+int
+__gmpz_fits_ushort_p (mpz_srcptr __gmp_z)
+{
+  mp_size_t __gmp_n = __gmp_z->_mp_size; mp_ptr __gmp_p = __gmp_z->_mp_d; return (__gmp_n == 0 || (__gmp_n == 1 && __gmp_p[0] <= ((unsigned short) ~0)));;
+}
+
+
+
+
+extern __inline__
+
+unsigned long
+__gmpz_get_ui (mpz_srcptr __gmp_z)
+{
+  mp_ptr __gmp_p = __gmp_z->_mp_d;
+  mp_size_t __gmp_n = __gmp_z->_mp_size;
+  mp_limb_t __gmp_l = __gmp_p[0];
+
+
+
+
+
+
+  return (__gmp_n != 0 ? __gmp_l : 0);
+# 1760 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 3
+}
+
+
+
+
+extern __inline__
+
+mp_limb_t
+__gmpz_getlimbn (mpz_srcptr __gmp_z, mp_size_t __gmp_n)
+{
+  mp_limb_t __gmp_result = 0;
+  if (__builtin_expect ((__gmp_n >= 0 && __gmp_n < ((__gmp_z->_mp_size) >= 0 ? (__gmp_z->_mp_size) : -(__gmp_z->_mp_size))) != 0, 1))
+    __gmp_result = __gmp_z->_mp_d[__gmp_n];
+  return __gmp_result;
+}
+
+
+
+extern __inline__ void
+__gmpz_neg (mpz_ptr __gmp_w, mpz_srcptr __gmp_u)
+{
+  if (__gmp_w != __gmp_u)
+    __gmpz_set (__gmp_w, __gmp_u);
+  __gmp_w->_mp_size = - __gmp_w->_mp_size;
+}
+
+
+
+
+extern __inline__
+
+int
+__gmpz_perfect_square_p (mpz_srcptr __gmp_a)
+{
+  mp_size_t __gmp_asize;
+  int __gmp_result;
+
+  __gmp_asize = __gmp_a->_mp_size;
+  __gmp_result = (__gmp_asize >= 0);
+  if (__builtin_expect ((__gmp_asize > 0) != 0, 1))
+    __gmp_result = __gmpn_perfect_square_p (__gmp_a->_mp_d, __gmp_asize);
+  return __gmp_result;
+}
+
+
+
+
+extern __inline__
+
+mp_bitcnt_t
+__gmpz_popcount (mpz_srcptr __gmp_u)
+{
+  mp_size_t __gmp_usize;
+  mp_bitcnt_t __gmp_result;
+
+  __gmp_usize = __gmp_u->_mp_size;
+  __gmp_result = (__gmp_usize < 0 ? (~ (unsigned long) 0) : 0);
+  if (__builtin_expect ((__gmp_usize > 0) != 0, 1))
+    __gmp_result = __gmpn_popcount (__gmp_u->_mp_d, __gmp_usize);
+  return __gmp_result;
+}
+
+
+
+
+extern __inline__
+
+void
+__gmpz_set_q (mpz_ptr __gmp_w, mpq_srcptr __gmp_u)
+{
+  __gmpz_tdiv_q (__gmp_w, (&((__gmp_u)->_mp_num)), (&((__gmp_u)->_mp_den)));
+}
+
+
+
+
+extern __inline__
+
+size_t
+__gmpz_size (mpz_srcptr __gmp_z)
+{
+  return ((__gmp_z->_mp_size) >= 0 ? (__gmp_z->_mp_size) : -(__gmp_z->_mp_size));
+}
+
+
+
+
+
+
+extern __inline__ void
+__gmpq_abs (mpq_ptr __gmp_w, mpq_srcptr __gmp_u)
+{
+  if (__gmp_w != __gmp_u)
+    __gmpq_set (__gmp_w, __gmp_u);
+  __gmp_w->_mp_num._mp_size = ((__gmp_w->_mp_num._mp_size) >= 0 ? (__gmp_w->_mp_num._mp_size) : -(__gmp_w->_mp_num._mp_size));
+}
+
+
+
+extern __inline__ void
+__gmpq_neg (mpq_ptr __gmp_w, mpq_srcptr __gmp_u)
+{
+  if (__gmp_w != __gmp_u)
+    __gmpq_set (__gmp_w, __gmp_u);
+  __gmp_w->_mp_num._mp_size = - __gmp_w->_mp_num._mp_size;
+}
+# 2102 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 3
+extern __inline__
+
+mp_limb_t
+__gmpn_add (mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize)
+{
+  mp_limb_t __gmp_c;
+  do { mp_size_t __gmp_i; mp_limb_t __gmp_x; __gmp_i = (__gmp_ysize); if (__gmp_i != 0) { if (__gmpn_add_n (__gmp_wp, __gmp_xp, __gmp_yp, __gmp_i)) { do { if (__gmp_i >= (__gmp_xsize)) { (__gmp_c) = 1; goto __gmp_done; } __gmp_x = (__gmp_xp)[__gmp_i]; } while ((((__gmp_wp)[__gmp_i++] = (__gmp_x + 1) & ((~ ((mp_limb_t) (0))) >> 0)) == 0)); } } if ((__gmp_wp) != (__gmp_xp)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_xsize); __gmp_j++) (__gmp_wp)[__gmp_j] = (__gmp_xp)[__gmp_j]; } while (0); (__gmp_c) = 0; __gmp_done: ; } while (0);
+  return __gmp_c;
+}
+
+
+
+
+extern __inline__
+
+mp_limb_t
+__gmpn_add_1 (mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n)
+{
+  mp_limb_t __gmp_c;
+  do { mp_size_t __gmp_i; mp_limb_t __gmp_x, __gmp_r; __gmp_x = (__gmp_src)[0]; __gmp_r = __gmp_x + (__gmp_n); (__gmp_dst)[0] = __gmp_r; if (((__gmp_r) < ((__gmp_n)))) { (__gmp_c) = 1; for (__gmp_i = 1; __gmp_i < (__gmp_size);) { __gmp_x = (__gmp_src)[__gmp_i]; __gmp_r = __gmp_x + 1; (__gmp_dst)[__gmp_i] = __gmp_r; ++__gmp_i; if (!((__gmp_r) < (1))) { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; break; } } } else { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (1); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; } } while (0);
+  return __gmp_c;
+}
+
+
+
+
+extern __inline__
+
+int
+__gmpn_cmp (mp_srcptr __gmp_xp, mp_srcptr __gmp_yp, mp_size_t __gmp_size)
+{
+  int __gmp_result;
+  do { mp_size_t __gmp_i; mp_limb_t __gmp_x, __gmp_y; (__gmp_result) = 0; __gmp_i = (__gmp_size); while (--__gmp_i >= 0) { __gmp_x = (__gmp_xp)[__gmp_i]; __gmp_y = (__gmp_yp)[__gmp_i]; if (__gmp_x != __gmp_y) { (__gmp_result) = (__gmp_x > __gmp_y ? 1 : -1); break; } } } while (0);
+  return __gmp_result;
+}
+
+
+
+
+extern __inline__
+
+mp_limb_t
+__gmpn_sub (mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize)
+{
+  mp_limb_t __gmp_c;
+  do { mp_size_t __gmp_i; mp_limb_t __gmp_x; __gmp_i = (__gmp_ysize); if (__gmp_i != 0) { if (__gmpn_sub_n (__gmp_wp, __gmp_xp, __gmp_yp, __gmp_i)) { do { if (__gmp_i >= (__gmp_xsize)) { (__gmp_c) = 1; goto __gmp_done; } __gmp_x = (__gmp_xp)[__gmp_i]; } while ((((__gmp_wp)[__gmp_i++] = (__gmp_x - 1) & ((~ ((mp_limb_t) (0))) >> 0)), __gmp_x == 0)); } } if ((__gmp_wp) != (__gmp_xp)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_xsize); __gmp_j++) (__gmp_wp)[__gmp_j] = (__gmp_xp)[__gmp_j]; } while (0); (__gmp_c) = 0; __gmp_done: ; } while (0);
+  return __gmp_c;
+}
+
+
+
+
+extern __inline__
+
+mp_limb_t
+__gmpn_sub_1 (mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n)
+{
+  mp_limb_t __gmp_c;
+  do { mp_size_t __gmp_i; mp_limb_t __gmp_x, __gmp_r; __gmp_x = (__gmp_src)[0]; __gmp_r = __gmp_x - (__gmp_n); (__gmp_dst)[0] = __gmp_r; if (((__gmp_x) < ((__gmp_n)))) { (__gmp_c) = 1; for (__gmp_i = 1; __gmp_i < (__gmp_size);) { __gmp_x = (__gmp_src)[__gmp_i]; __gmp_r = __gmp_x - 1; (__gmp_dst)[__gmp_i] = __gmp_r; ++__gmp_i; if (!((__gmp_x) < (1))) { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; break; } } } else { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (1); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; } } while (0);
+  return __gmp_c;
+}
+
+
+
+
+extern __inline__
+
+mp_limb_t
+__gmpn_neg (mp_ptr __gmp_rp, mp_srcptr __gmp_up, mp_size_t __gmp_n)
+{
+  mp_limb_t __gmp_ul, __gmp_cy;
+  __gmp_cy = 0;
+  do {
+      __gmp_ul = *__gmp_up++;
+      *__gmp_rp++ = -__gmp_ul - __gmp_cy;
+      __gmp_cy |= __gmp_ul != 0;
+  } while (--__gmp_n != 0);
+  return __gmp_cy;
+}
+# 2259 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 3
+enum
+{
+  GMP_ERROR_NONE = 0,
+  GMP_ERROR_UNSUPPORTED_ARGUMENT = 1,
+  GMP_ERROR_DIVISION_BY_ZERO = 2,
+  GMP_ERROR_SQRT_OF_NEGATIVE = 4,
+  GMP_ERROR_INVALID_ARGUMENT = 8
+};
+# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/double-int.h" 2
+# 54 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/double-int.h"
+typedef struct
+{
+  unsigned long low;
+  long high;
+} double_int;
+# 67 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/double-int.h"
+static __inline__ double_int
+shwi_to_double_int (long cst)
+{
+  double_int r;
+
+  r.low = (unsigned long) cst;
+  r.high = cst < 0 ? -1 : 0;
+
+  return r;
+}
+# 89 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/double-int.h"
+static __inline__ double_int
+uhwi_to_double_int (unsigned long cst)
+{
+  double_int r;
+
+  r.low = cst;
+  r.high = 0;
+
+  return r;
+}
+
+
+
+
+static __inline__ long
+double_int_to_shwi (double_int cst)
+{
+  return (long) cst.low;
+}
+
+
+
+
+static __inline__ unsigned long
+double_int_to_uhwi (double_int cst)
+{
+  return cst.low;
+}
+
+unsigned char double_int_fits_in_hwi_p (double_int, unsigned char);
+unsigned char double_int_fits_in_shwi_p (double_int);
+
+
+
+static __inline__ unsigned char
+double_int_fits_in_uhwi_p (double_int cst)
+{
+  return cst.high == 0;
+}
+
+
+
+
+
+
+double_int double_int_mul (double_int, double_int);
+double_int double_int_mul_with_sign (double_int, double_int, unsigned char, int *);
+double_int double_int_add (double_int, double_int);
+double_int double_int_sub (double_int, double_int);
+double_int double_int_neg (double_int);
+
+
+
+
+double_int double_int_div (double_int, double_int, unsigned char, unsigned);
+double_int double_int_sdiv (double_int, double_int, unsigned);
+double_int double_int_udiv (double_int, double_int, unsigned);
+double_int double_int_mod (double_int, double_int, unsigned char, unsigned);
+double_int double_int_smod (double_int, double_int, unsigned);
+double_int double_int_umod (double_int, double_int, unsigned);
+double_int double_int_divmod (double_int, double_int, unsigned char, unsigned, double_int *);
+double_int double_int_sdivmod (double_int, double_int, unsigned, double_int *);
+double_int double_int_udivmod (double_int, double_int, unsigned, double_int *);
+
+double_int double_int_setbit (double_int, unsigned);
+int double_int_ctz (double_int);
+
+
+
+
+
+static __inline__ double_int
+double_int_not (double_int a)
+{
+  a.low = ~a.low;
+  a.high = ~a.high;
+  return a;
+}
+
+
+
+static __inline__ double_int
+double_int_ior (double_int a, double_int b)
+{
+  a.low |= b.low;
+  a.high |= b.high;
+  return a;
+}
+
+
+
+static __inline__ double_int
+double_int_and (double_int a, double_int b)
+{
+  a.low &= b.low;
+  a.high &= b.high;
+  return a;
+}
+
+
+
+static __inline__ double_int
+double_int_and_not (double_int a, double_int b)
+{
+  a.low &= ~b.low;
+  a.high &= ~b.high;
+  return a;
+}
+
+
+
+static __inline__ double_int
+double_int_xor (double_int a, double_int b)
+{
+  a.low ^= b.low;
+  a.high ^= b.high;
+  return a;
+}
+
+
+
+double_int double_int_lshift (double_int, long, unsigned int, unsigned char);
+double_int double_int_rshift (double_int, long, unsigned int, unsigned char);
+double_int double_int_lrotate (double_int, long, unsigned int);
+double_int double_int_rrotate (double_int, long, unsigned int);
+
+
+
+
+static __inline__ unsigned char
+double_int_negative_p (double_int cst)
+{
+  return cst.high < 0;
+}
+
+int double_int_cmp (double_int, double_int, unsigned char);
+int double_int_scmp (double_int, double_int);
+int double_int_ucmp (double_int, double_int);
+
+double_int double_int_max (double_int, double_int, unsigned char);
+double_int double_int_smax (double_int, double_int);
+double_int double_int_umax (double_int, double_int);
+
+double_int double_int_min (double_int, double_int, unsigned char);
+double_int double_int_smin (double_int, double_int);
+double_int double_int_umin (double_int, double_int);
+
+void dump_double_int (FILE *, double_int, unsigned char);
+
+
+
+double_int double_int_ext (double_int, unsigned, unsigned char);
+double_int double_int_sext (double_int, unsigned);
+double_int double_int_zext (double_int, unsigned);
+double_int double_int_mask (unsigned);
+# 253 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/double-int.h"
+static __inline__ unsigned char
+double_int_zero_p (double_int cst)
+{
+  return cst.low == 0 && cst.high == 0;
+}
+
+
+
+static __inline__ unsigned char
+double_int_one_p (double_int cst)
+{
+  return cst.low == 1 && cst.high == 0;
+}
+
+
+
+static __inline__ unsigned char
+double_int_minus_one_p (double_int cst)
+{
+  return (cst.low == (~((unsigned long) 0)) && cst.high == -1);
+}
+
+
+
+static __inline__ unsigned char
+double_int_equal_p (double_int cst1, double_int cst2)
+{
+  return cst1.low == cst2.low && cst1.high == cst2.high;
+}
+
+
+
+
+extern int add_double_with_sign (unsigned long, long,
+     unsigned long, long,
+     unsigned long *, long *,
+     unsigned char);
+
+
+extern int neg_double (unsigned long, long,
+         unsigned long *, long *);
+extern int mul_double_with_sign (unsigned long, long,
+     unsigned long, long,
+     unsigned long *, long *,
+     unsigned char);
+
+
+extern void lshift_double (unsigned long, long,
+      long, unsigned int,
+      unsigned long *, long *, unsigned char);
+extern int div_and_round_double (unsigned, int, unsigned long,
+     long, unsigned long,
+     long, unsigned long *,
+     long *, unsigned long *,
+     long *);
+
+
+
+
+
+void mpz_set_double_int (mpz_t, double_int, unsigned char);
+double_int mpz_get_double_int (const_tree, mpz_t, unsigned char);
+# 32 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/real.h" 1
+# 30 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/real.h"
+enum real_value_class {
+  rvc_zero,
+  rvc_normal,
+  rvc_inf,
+  rvc_nan
+};
+
+
+
+
+
+
+
+struct real_value {
+
+
+
+  unsigned int cl : 2;
+  unsigned int decimal : 1;
+  unsigned int sign : 1;
+  unsigned int signalling : 1;
+  unsigned int canonical : 1;
+  unsigned int uexp : (32 - 6);
+  unsigned long sig[((128 + (8 * 8)) / (8 * 8))];
+};
+# 77 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/real.h"
+extern char test_real_width
+  [sizeof(struct real_value) <= (((128 + (8 * 8)) + 32)/(8 * 8) + (((128 + (8 * 8)) + 32)%(8 * 8) ? 1 : 0))*sizeof(long) ? 1 : -1];
+# 115 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/real.h"
+struct real_format
+{
+
+  void (*encode) (const struct real_format *, long *,
+    const struct real_value *);
+  void (*decode) (const struct real_format *, struct real_value *,
+    const long *);
+
+
+  int b;
+
+
+  int p;
+
+
+  int pnan;
+
+
+  int emin;
+
+
+  int emax;
+
+
+
+  int signbit_ro;
+
+
+
+  int signbit_rw;
+
+
+  unsigned char round_towards_zero;
+  unsigned char has_sign_dependent_rounding;
+
+
+  unsigned char has_nans;
+  unsigned char has_inf;
+  unsigned char has_denorm;
+  unsigned char has_signed_zero;
+  unsigned char qnan_msb_set;
+  unsigned char canonical_nan_lsbs_set;
+};
+
+
+
+
+
+
+
+extern const struct real_format *
+  real_format_for_mode[MAX_MODE_FLOAT - MIN_MODE_FLOAT + 1
+         + MAX_MODE_DECIMAL_FLOAT - MIN_MODE_DECIMAL_FLOAT + 1];
+# 226 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/real.h"
+extern unsigned char real_arithmetic (struct real_value *, int, const struct real_value *,
+        const struct real_value *);
+
+
+extern unsigned char real_compare (int, const struct real_value *, const struct real_value *);
+
+
+extern unsigned char real_isinf (const struct real_value *);
+
+
+extern unsigned char real_isnan (const struct real_value *);
+
+
+extern unsigned char real_isfinite (const struct real_value *);
+
+
+extern unsigned char real_isneg (const struct real_value *);
+
+
+extern unsigned char real_isnegzero (const struct real_value *);
+
+
+extern unsigned char real_identical (const struct real_value *, const struct real_value *);
+
+
+extern void real_convert (struct real_value *, enum machine_mode,
+     const struct real_value *);
+
+
+extern unsigned char exact_real_truncate (enum machine_mode, const struct real_value *);
+
+
+extern void real_to_decimal (char *, const struct real_value *, size_t,
+        size_t, int);
+
+
+
+extern void real_to_decimal_for_mode (char *, const struct real_value *, size_t,
+          size_t, int, enum machine_mode);
+
+
+extern void real_to_hexadecimal (char *, const struct real_value *,
+     size_t, size_t, int);
+
+
+extern long real_to_integer (const struct real_value *);
+extern void real_to_integer2 (long *, long *,
+         const struct real_value *);
+
+
+
+extern int real_from_string (struct real_value *, const char *);
+
+extern void real_from_string3 (struct real_value *, const char *, enum machine_mode);
+
+
+extern void real_from_integer (struct real_value *, enum machine_mode,
+          unsigned long, long, int);
+
+extern long real_to_target_fmt (long *, const struct real_value *,
+    const struct real_format *);
+extern long real_to_target (long *, const struct real_value *, enum machine_mode);
+
+extern void real_from_target_fmt (struct real_value *, const long *,
+      const struct real_format *);
+extern void real_from_target (struct real_value *, const long *,
+         enum machine_mode);
+
+extern void real_inf (struct real_value *);
+
+extern unsigned char real_nan (struct real_value *, const char *, int, enum machine_mode);
+
+extern void real_maxval (struct real_value *, int, enum machine_mode);
+
+extern void real_2expN (struct real_value *, int, enum machine_mode);
+
+extern unsigned int real_hash (const struct real_value *);
+
+
+
+extern const struct real_format ieee_single_format;
+extern const struct real_format mips_single_format;
+extern const struct real_format motorola_single_format;
+extern const struct real_format spu_single_format;
+extern const struct real_format ieee_double_format;
+extern const struct real_format mips_double_format;
+extern const struct real_format motorola_double_format;
+extern const struct real_format ieee_extended_motorola_format;
+extern const struct real_format ieee_extended_intel_96_format;
+extern const struct real_format ieee_extended_intel_96_round_53_format;
+extern const struct real_format ieee_extended_intel_128_format;
+extern const struct real_format ibm_extended_format;
+extern const struct real_format mips_extended_format;
+extern const struct real_format ieee_quad_format;
+extern const struct real_format mips_quad_format;
+extern const struct real_format vax_f_format;
+extern const struct real_format vax_d_format;
+extern const struct real_format vax_g_format;
+extern const struct real_format real_internal_format;
+extern const struct real_format decimal_single_format;
+extern const struct real_format decimal_double_format;
+extern const struct real_format decimal_quad_format;
+extern const struct real_format ieee_half_format;
+extern const struct real_format arm_half_format;
+# 385 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/real.h"
+extern struct real_value real_value_truncate (enum machine_mode,
+         struct real_value);
+
+
+
+
+extern struct real_value real_value_negate (const struct real_value *);
+extern struct real_value real_value_abs (const struct real_value *);
+
+extern int significand_size (enum machine_mode);
+
+extern struct real_value real_from_string2 (const char *, enum machine_mode);
+# 414 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/real.h"
+extern int real_exponent (const struct real_value *);
+
+
+extern void real_ldexp (struct real_value *, const struct real_value *, int);
+
+
+
+
+
+extern struct real_value dconst0;
+extern struct real_value dconst1;
+extern struct real_value dconst2;
+extern struct real_value dconstm1;
+extern struct real_value dconsthalf;
+
+
+
+
+
+
+extern const struct real_value * dconst_e_ptr (void);
+
+
+extern const struct real_value * dconst_third_ptr (void);
+
+
+extern const struct real_value * dconst_sqrt2_ptr (void);
+
+
+
+struct real_value real_value_from_int_cst (const_tree, const_tree);
+# 453 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/real.h"
+extern rtx const_double_from_real_value (struct real_value, enum machine_mode);
+
+
+extern unsigned char exact_real_inverse (enum machine_mode, struct real_value *);
+
+
+
+
+unsigned char real_can_shorten_arithmetic (enum machine_mode, enum machine_mode);
+
+
+extern tree build_real (tree, struct real_value);
+
+
+extern unsigned char real_sqrt (struct real_value *, enum machine_mode,
+         const struct real_value *);
+
+
+extern unsigned char real_powi (struct real_value *, enum machine_mode,
+         const struct real_value *, long);
+
+
+extern void real_trunc (struct real_value *, enum machine_mode,
+   const struct real_value *);
+extern void real_floor (struct real_value *, enum machine_mode,
+   const struct real_value *);
+extern void real_ceil (struct real_value *, enum machine_mode,
+         const struct real_value *);
+extern void real_round (struct real_value *, enum machine_mode,
+   const struct real_value *);
+
+
+extern void real_copysign (struct real_value *, const struct real_value *);
+
+
+extern unsigned char real_isinteger (const struct real_value *c, enum machine_mode mode);
+
+
+
+
+extern void get_max_float (const struct real_format *, char *, size_t);
+# 33 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/fixed-value.h" 1
+# 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/fixed-value.h"
+struct fixed_value
+{
+  double_int data;
+  enum machine_mode mode;
+};
+# 40 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/fixed-value.h"
+extern struct fixed_value fconst0[18];
+extern struct fixed_value fconst1[8];
+# 50 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/fixed-value.h"
+extern rtx const_fixed_from_fixed_value (struct fixed_value, enum machine_mode);
+
+
+extern void fixed_from_string (struct fixed_value *, const char *,
+          enum machine_mode);
+
+
+extern tree build_fixed (tree, struct fixed_value);
+
+
+extern unsigned char fixed_convert (struct fixed_value *, enum machine_mode,
+      const struct fixed_value *, unsigned char);
+
+
+extern unsigned char fixed_convert_from_int (struct fixed_value *, enum machine_mode,
+        double_int, unsigned char, unsigned char);
+
+
+extern unsigned char fixed_convert_from_real (struct fixed_value *, enum machine_mode,
+         const struct real_value *, unsigned char);
+
+
+extern void real_convert_from_fixed (struct real_value *, enum machine_mode,
+         const struct fixed_value *);
+
+
+extern unsigned char fixed_identical (const struct fixed_value *, const struct fixed_value *);
+
+
+extern unsigned int fixed_hash (const struct fixed_value *);
+
+
+
+
+
+
+
+extern void fixed_to_decimal (char *str, const struct fixed_value *, size_t);
+
+
+extern unsigned char fixed_arithmetic (struct fixed_value *, int, const struct fixed_value *,
+         const struct fixed_value *, unsigned char);
+
+
+extern unsigned char fixed_compare (int, const struct fixed_value *,
+      const struct fixed_value *);
+
+
+extern unsigned char fixed_isneg (const struct fixed_value *);
+# 34 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/alias.h" 1
+# 31 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/alias.h"
+typedef int alias_set_type;
+
+extern alias_set_type new_alias_set (void);
+extern alias_set_type get_alias_set (tree);
+extern alias_set_type get_deref_alias_set (tree);
+extern alias_set_type get_varargs_alias_set (void);
+extern alias_set_type get_frame_alias_set (void);
+extern unsigned char component_uses_parent_alias_set (const_tree);
+extern unsigned char alias_set_subset_of (alias_set_type, alias_set_type);
+extern void record_alias_subset (alias_set_type, alias_set_type);
+extern void record_component_aliases (tree);
+extern int alias_sets_conflict_p (alias_set_type, alias_set_type);
+extern int alias_sets_must_conflict_p (alias_set_type, alias_set_type);
+extern int objects_must_conflict_p (tree, tree);
+extern int nonoverlapping_memrefs_p (const_rtx, const_rtx, unsigned char);
+# 35 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/flags.h" 1
+# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/flags.h"
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/flag-types.h" 1
 # 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/flag-types.h"
 enum debug_info_type
@@ -7855,7 +13029,14 @@ enum vect_verbosity_levels {
 
   MAX_VERBOSITY_LEVEL
 };
-# 7 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/options.h" 2
+# 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/flags.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/options.h" 1
+
+
+
+
+
+
 
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386-opts.h" 1
 # 31 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386-opts.h"
@@ -12672,5416 +17853,11 @@ enum opt_code
   OPT_SPECIAL_program_name,
   OPT_SPECIAL_input_file
 };
-# 20 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/insn-constants.h" 1
-# 78 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/insn-constants.h"
-enum unspec {
-  UNSPEC_GOT = 0,
-  UNSPEC_GOTOFF = 1,
-  UNSPEC_GOTPCREL = 2,
-  UNSPEC_GOTTPOFF = 3,
-  UNSPEC_TPOFF = 4,
-  UNSPEC_NTPOFF = 5,
-  UNSPEC_DTPOFF = 6,
-  UNSPEC_GOTNTPOFF = 7,
-  UNSPEC_INDNTPOFF = 8,
-  UNSPEC_PLTOFF = 9,
-  UNSPEC_MACHOPIC_OFFSET = 10,
-  UNSPEC_PCREL = 11,
-  UNSPEC_STACK_ALLOC = 12,
-  UNSPEC_SET_GOT = 13,
-  UNSPEC_SET_RIP = 14,
-  UNSPEC_SET_GOT_OFFSET = 15,
-  UNSPEC_MEMORY_BLOCKAGE = 16,
-  UNSPEC_STACK_CHECK = 17,
-  UNSPEC_TP = 18,
-  UNSPEC_TLS_GD = 19,
-  UNSPEC_TLS_LD_BASE = 20,
-  UNSPEC_TLSDESC = 21,
-  UNSPEC_TLS_IE_SUN = 22,
-  UNSPEC_SCAS = 23,
-  UNSPEC_FNSTSW = 24,
-  UNSPEC_SAHF = 25,
-  UNSPEC_PARITY = 26,
-  UNSPEC_FSTCW = 27,
-  UNSPEC_ADD_CARRY = 28,
-  UNSPEC_FLDCW = 29,
-  UNSPEC_REP = 30,
-  UNSPEC_LD_MPIC = 31,
-  UNSPEC_TRUNC_NOOP = 32,
-  UNSPEC_DIV_ALREADY_SPLIT = 33,
-  UNSPEC_MS_TO_SYSV_CALL = 34,
-  UNSPEC_CALL_NEEDS_VZEROUPPER = 35,
-  UNSPEC_PAUSE = 36,
-  UNSPEC_LEA_ADDR = 37,
-  UNSPEC_FIX_NOTRUNC = 38,
-  UNSPEC_MASKMOV = 39,
-  UNSPEC_MOVMSK = 40,
-  UNSPEC_RCP = 41,
-  UNSPEC_RSQRT = 42,
-  UNSPEC_PSADBW = 43,
-  UNSPEC_COPYSIGN = 44,
-  UNSPEC_IEEE_MIN = 45,
-  UNSPEC_IEEE_MAX = 46,
-  UNSPEC_SIN = 47,
-  UNSPEC_COS = 48,
-  UNSPEC_FPATAN = 49,
-  UNSPEC_FYL2X = 50,
-  UNSPEC_FYL2XP1 = 51,
-  UNSPEC_FRNDINT = 52,
-  UNSPEC_FIST = 53,
-  UNSPEC_F2XM1 = 54,
-  UNSPEC_TAN = 55,
-  UNSPEC_FXAM = 56,
-  UNSPEC_FRNDINT_FLOOR = 57,
-  UNSPEC_FRNDINT_CEIL = 58,
-  UNSPEC_FRNDINT_TRUNC = 59,
-  UNSPEC_FRNDINT_MASK_PM = 60,
-  UNSPEC_FIST_FLOOR = 61,
-  UNSPEC_FIST_CEIL = 62,
-  UNSPEC_SINCOS_COS = 63,
-  UNSPEC_SINCOS_SIN = 64,
-  UNSPEC_XTRACT_FRACT = 65,
-  UNSPEC_XTRACT_EXP = 66,
-  UNSPEC_FSCALE_FRACT = 67,
-  UNSPEC_FSCALE_EXP = 68,
-  UNSPEC_FPREM_F = 69,
-  UNSPEC_FPREM_U = 70,
-  UNSPEC_FPREM1_F = 71,
-  UNSPEC_FPREM1_U = 72,
-  UNSPEC_C2_FLAG = 73,
-  UNSPEC_FXAM_MEM = 74,
-  UNSPEC_SP_SET = 75,
-  UNSPEC_SP_TEST = 76,
-  UNSPEC_SP_TLS_SET = 77,
-  UNSPEC_SP_TLS_TEST = 78,
-  UNSPEC_ROUND = 79,
-  UNSPEC_CRC32 = 80,
-  UNSPEC_BEXTR = 81,
-  UNSPEC_PDEP = 82,
-  UNSPEC_PEXT = 83,
-  UNSPEC_MOVNTQ = 84,
-  UNSPEC_PFRCP = 85,
-  UNSPEC_PFRCPIT1 = 86,
-  UNSPEC_PFRCPIT2 = 87,
-  UNSPEC_PFRSQRT = 88,
-  UNSPEC_PFRSQIT1 = 89,
-  UNSPEC_MOVNT = 90,
-  UNSPEC_MOVU = 91,
-  UNSPEC_LDDQU = 92,
-  UNSPEC_PSHUFB = 93,
-  UNSPEC_PSIGN = 94,
-  UNSPEC_PALIGNR = 95,
-  UNSPEC_EXTRQI = 96,
-  UNSPEC_EXTRQ = 97,
-  UNSPEC_INSERTQI = 98,
-  UNSPEC_INSERTQ = 99,
-  UNSPEC_BLENDV = 100,
-  UNSPEC_INSERTPS = 101,
-  UNSPEC_DP = 102,
-  UNSPEC_MOVNTDQA = 103,
-  UNSPEC_MPSADBW = 104,
-  UNSPEC_PHMINPOSUW = 105,
-  UNSPEC_PTEST = 106,
-  UNSPEC_PCMPESTR = 107,
-  UNSPEC_PCMPISTR = 108,
-  UNSPEC_FMADDSUB = 109,
-  UNSPEC_XOP_UNSIGNED_CMP = 110,
-  UNSPEC_XOP_TRUEFALSE = 111,
-  UNSPEC_XOP_PERMUTE = 112,
-  UNSPEC_FRCZ = 113,
-  UNSPEC_AESENC = 114,
-  UNSPEC_AESENCLAST = 115,
-  UNSPEC_AESDEC = 116,
-  UNSPEC_AESDECLAST = 117,
-  UNSPEC_AESIMC = 118,
-  UNSPEC_AESKEYGENASSIST = 119,
-  UNSPEC_PCLMUL = 120,
-  UNSPEC_PCMP = 121,
-  UNSPEC_VPERMIL = 122,
-  UNSPEC_VPERMIL2 = 123,
-  UNSPEC_VPERMIL2F128 = 124,
-  UNSPEC_CAST = 125,
-  UNSPEC_VTESTP = 126,
-  UNSPEC_VCVTPH2PS = 127,
-  UNSPEC_VCVTPS2PH = 128,
-  UNSPEC_VPERMSI = 129,
-  UNSPEC_VPERMDF = 130,
-  UNSPEC_VPERMSF = 131,
-  UNSPEC_VPERMTI = 132,
-  UNSPEC_GATHER = 133,
-  UNSPEC_VSIBADDR = 134,
-  UNSPEC_LFENCE = 135,
-  UNSPEC_SFENCE = 136,
-  UNSPEC_MFENCE = 137,
-  UNSPEC_MOVA = 138,
-  UNSPEC_LDA = 139,
-  UNSPEC_STA = 140
-};
+# 28 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/flags.h" 2
 
-extern const char *const unspec_strings[];
 
-enum unspecv {
-  UNSPECV_BLOCKAGE = 0,
-  UNSPECV_STACK_PROBE = 1,
-  UNSPECV_PROBE_STACK_RANGE = 2,
-  UNSPECV_ALIGN = 3,
-  UNSPECV_PROLOGUE_USE = 4,
-  UNSPECV_SPLIT_STACK_RETURN = 5,
-  UNSPECV_CLD = 6,
-  UNSPECV_NOPS = 7,
-  UNSPECV_RDTSC = 8,
-  UNSPECV_RDTSCP = 9,
-  UNSPECV_RDPMC = 10,
-  UNSPECV_LLWP_INTRINSIC = 11,
-  UNSPECV_SLWP_INTRINSIC = 12,
-  UNSPECV_LWPVAL_INTRINSIC = 13,
-  UNSPECV_LWPINS_INTRINSIC = 14,
-  UNSPECV_RDFSBASE = 15,
-  UNSPECV_RDGSBASE = 16,
-  UNSPECV_WRFSBASE = 17,
-  UNSPECV_WRGSBASE = 18,
-  UNSPECV_RDRAND = 19,
-  UNSPECV_EMMS = 20,
-  UNSPECV_FEMMS = 21,
-  UNSPECV_LDMXCSR = 22,
-  UNSPECV_STMXCSR = 23,
-  UNSPECV_CLFLUSH = 24,
-  UNSPECV_MONITOR = 25,
-  UNSPECV_MWAIT = 26,
-  UNSPECV_VZEROALL = 27,
-  UNSPECV_VZEROUPPER = 28,
-  UNSPECV_CMPXCHG = 29,
-  UNSPECV_XCHG = 30,
-  UNSPECV_LOCK = 31
-};
 
-extern const char *const unspecv_strings[];
-# 21 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/vxworks-dummy.h" 1
-# 22 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/biarch64.h" 1
-# 23 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h" 1
-# 85 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/vxworks-dummy.h" 1
-# 86 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h" 2
 
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386-opts.h" 1
-# 88 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h" 2
-# 100 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
-struct stringop_algs
-{
-  const enum stringop_alg unknown_size;
-  const struct stringop_strategy {
-    const int max;
-    const enum stringop_alg alg;
-  } size [4];
-};
-
-
-
-struct processor_costs {
-  const int add;
-  const int lea;
-  const int shift_var;
-  const int shift_const;
-  const int mult_init[5];
-
-  const int mult_bit;
-  const int divide[5];
-
-  int movsx;
-  int movzx;
-  const int large_insn;
-  const int move_ratio;
-
-  const int movzbl_load;
-  const int int_load[3];
-
-
-  const int int_store[3];
-
-  const int fp_move;
-  const int fp_load[3];
-
-  const int fp_store[3];
-
-  const int mmx_move;
-  const int mmx_load[2];
-
-  const int mmx_store[2];
-
-  const int sse_move;
-  const int sse_load[3];
-
-  const int sse_store[3];
-
-  const int mmxsse_to_integer;
-
-  const int l1_cache_size;
-  const int l2_cache_size;
-  const int prefetch_block;
-  const int simultaneous_prefetches;
-
-  const int branch_cost;
-  const int fadd;
-  const int fmul;
-  const int fdiv;
-  const int fabs;
-  const int fchs;
-  const int fsqrt;
-
-
-  struct stringop_algs memcpy[2], memset[2];
-  const int scalar_stmt_cost;
-
-  const int scalar_load_cost;
-  const int scalar_store_cost;
-  const int vec_stmt_cost;
-
-
-  const int vec_to_scalar_cost;
-  const int scalar_to_vec_cost;
-  const int vec_align_load_cost;
-  const int vec_unalign_load_cost;
-  const int vec_store_cost;
-  const int cond_taken_branch_cost;
-
-  const int cond_not_taken_branch_cost;
-
-};
-
-extern const struct processor_costs *ix86_cost;
-extern const struct processor_costs ix86_size_cost;
-# 253 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
-enum ix86_tune_indices {
-  X86_TUNE_USE_LEAVE,
-  X86_TUNE_PUSH_MEMORY,
-  X86_TUNE_ZERO_EXTEND_WITH_AND,
-  X86_TUNE_UNROLL_STRLEN,
-  X86_TUNE_BRANCH_PREDICTION_HINTS,
-  X86_TUNE_DOUBLE_WITH_ADD,
-  X86_TUNE_USE_SAHF,
-  X86_TUNE_MOVX,
-  X86_TUNE_PARTIAL_REG_STALL,
-  X86_TUNE_PARTIAL_FLAG_REG_STALL,
-  X86_TUNE_USE_HIMODE_FIOP,
-  X86_TUNE_USE_SIMODE_FIOP,
-  X86_TUNE_USE_MOV0,
-  X86_TUNE_USE_CLTD,
-  X86_TUNE_USE_XCHGB,
-  X86_TUNE_SPLIT_LONG_MOVES,
-  X86_TUNE_READ_MODIFY_WRITE,
-  X86_TUNE_READ_MODIFY,
-  X86_TUNE_PROMOTE_QIMODE,
-  X86_TUNE_FAST_PREFIX,
-  X86_TUNE_SINGLE_STRINGOP,
-  X86_TUNE_QIMODE_MATH,
-  X86_TUNE_HIMODE_MATH,
-  X86_TUNE_PROMOTE_QI_REGS,
-  X86_TUNE_PROMOTE_HI_REGS,
-  X86_TUNE_SINGLE_POP,
-  X86_TUNE_DOUBLE_POP,
-  X86_TUNE_SINGLE_PUSH,
-  X86_TUNE_DOUBLE_PUSH,
-  X86_TUNE_INTEGER_DFMODE_MOVES,
-  X86_TUNE_PARTIAL_REG_DEPENDENCY,
-  X86_TUNE_SSE_PARTIAL_REG_DEPENDENCY,
-  X86_TUNE_SSE_UNALIGNED_LOAD_OPTIMAL,
-  X86_TUNE_SSE_UNALIGNED_STORE_OPTIMAL,
-  X86_TUNE_SSE_PACKED_SINGLE_INSN_OPTIMAL,
-  X86_TUNE_SSE_SPLIT_REGS,
-  X86_TUNE_SSE_TYPELESS_STORES,
-  X86_TUNE_SSE_LOAD0_BY_PXOR,
-  X86_TUNE_MEMORY_MISMATCH_STALL,
-  X86_TUNE_PROLOGUE_USING_MOVE,
-  X86_TUNE_EPILOGUE_USING_MOVE,
-  X86_TUNE_SHIFT1,
-  X86_TUNE_USE_FFREEP,
-  X86_TUNE_INTER_UNIT_MOVES,
-  X86_TUNE_INTER_UNIT_CONVERSIONS,
-  X86_TUNE_FOUR_JUMP_LIMIT,
-  X86_TUNE_SCHEDULE,
-  X86_TUNE_USE_BT,
-  X86_TUNE_USE_INCDEC,
-  X86_TUNE_PAD_RETURNS,
-  X86_TUNE_PAD_SHORT_FUNCTION,
-  X86_TUNE_EXT_80387_CONSTANTS,
-  X86_TUNE_SHORTEN_X87_SSE,
-  X86_TUNE_AVOID_VECTOR_DECODE,
-  X86_TUNE_PROMOTE_HIMODE_IMUL,
-  X86_TUNE_SLOW_IMUL_IMM32_MEM,
-  X86_TUNE_SLOW_IMUL_IMM8,
-  X86_TUNE_MOVE_M1_VIA_OR,
-  X86_TUNE_NOT_UNPAIRABLE,
-  X86_TUNE_NOT_VECTORMODE,
-  X86_TUNE_USE_VECTOR_FP_CONVERTS,
-  X86_TUNE_USE_VECTOR_CONVERTS,
-  X86_TUNE_FUSE_CMP_AND_BRANCH,
-  X86_TUNE_OPT_AGU,
-  X86_TUNE_VECTORIZE_DOUBLE,
-  X86_TUNE_SOFTWARE_PREFETCHING_BENEFICIAL,
-  X86_TUNE_AVX128_OPTIMAL,
-  X86_TUNE_REASSOC_INT_TO_PARALLEL,
-  X86_TUNE_REASSOC_FP_TO_PARALLEL,
-
-  X86_TUNE_LAST
-};
-
-extern unsigned char ix86_tune_features[X86_TUNE_LAST];
-# 427 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
-enum ix86_arch_indices {
-  X86_ARCH_CMOV,
-  X86_ARCH_CMPXCHG,
-  X86_ARCH_CMPXCHG8B,
-  X86_ARCH_XADD,
-  X86_ARCH_BSWAP,
-
-  X86_ARCH_LAST
-};
-
-extern unsigned char ix86_arch_features[X86_ARCH_LAST];
-# 452 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
-extern int x86_prefetch_sse;
-
-
-extern int x86_prefetchw;
-# 478 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
-extern tree x86_mfence;
-# 529 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
-extern const char *host_detect_local_cpu (int argc, const char **argv);
-# 578 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
-enum target_cpu_default
-{
-  TARGET_CPU_DEFAULT_generic = 0,
-
-  TARGET_CPU_DEFAULT_i386,
-  TARGET_CPU_DEFAULT_i486,
-  TARGET_CPU_DEFAULT_pentium,
-  TARGET_CPU_DEFAULT_pentium_mmx,
-  TARGET_CPU_DEFAULT_pentiumpro,
-  TARGET_CPU_DEFAULT_pentium2,
-  TARGET_CPU_DEFAULT_pentium3,
-  TARGET_CPU_DEFAULT_pentium4,
-  TARGET_CPU_DEFAULT_pentium_m,
-  TARGET_CPU_DEFAULT_prescott,
-  TARGET_CPU_DEFAULT_nocona,
-  TARGET_CPU_DEFAULT_core2,
-  TARGET_CPU_DEFAULT_corei7,
-  TARGET_CPU_DEFAULT_atom,
-
-  TARGET_CPU_DEFAULT_geode,
-  TARGET_CPU_DEFAULT_k6,
-  TARGET_CPU_DEFAULT_k6_2,
-  TARGET_CPU_DEFAULT_k6_3,
-  TARGET_CPU_DEFAULT_athlon,
-  TARGET_CPU_DEFAULT_athlon_sse,
-  TARGET_CPU_DEFAULT_k8,
-  TARGET_CPU_DEFAULT_amdfam10,
-  TARGET_CPU_DEFAULT_bdver1,
-  TARGET_CPU_DEFAULT_bdver2,
-  TARGET_CPU_DEFAULT_btver1,
-
-  TARGET_CPU_DEFAULT_max
-};
-# 1193 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
-enum reg_class
-{
-  NO_REGS,
-  AREG, DREG, CREG, BREG, SIREG, DIREG,
-  AD_REGS,
-  CLOBBERED_REGS,
-  Q_REGS,
-  NON_Q_REGS,
-  INDEX_REGS,
-  LEGACY_REGS,
-  GENERAL_REGS,
-
-  FP_TOP_REG, FP_SECOND_REG,
-  FLOAT_REGS,
-  SSE_FIRST_REG,
-  SSE_REGS,
-  MMX_REGS,
-  FP_TOP_SSE_REGS,
-  FP_SECOND_SSE_REGS,
-  FLOAT_SSE_REGS,
-  FLOAT_INT_REGS,
-  INT_SSE_REGS,
-  FLOAT_INT_SSE_REGS,
-  ALL_REGS, LIM_REG_CLASSES
-};
-# 1483 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
-typedef struct ix86_args {
-  int words;
-  int nregs;
-  int regno;
-  int fastcall;
-
-  int sse_words;
-  int sse_nregs;
-  int warn_avx;
-  int warn_sse;
-  int warn_mmx;
-  int sse_regno;
-  int mmx_words;
-  int mmx_nregs;
-  int mmx_regno;
-  int maybe_vaarg;
-  int caller;
-  int float_in_sse;
-
-
-  enum calling_abi call_abi;
-
-} CUMULATIVE_ARGS;
-# 1913 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
-extern int const dbx_register_map[53];
-extern int const dbx64_register_map[53];
-extern int const svr4_dbx_register_map[53];
-# 2044 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
-enum processor_type
-{
-  PROCESSOR_I386 = 0,
-  PROCESSOR_I486,
-  PROCESSOR_PENTIUM,
-  PROCESSOR_PENTIUMPRO,
-  PROCESSOR_GEODE,
-  PROCESSOR_K6,
-  PROCESSOR_ATHLON,
-  PROCESSOR_PENTIUM4,
-  PROCESSOR_K8,
-  PROCESSOR_NOCONA,
-  PROCESSOR_CORE2_32,
-  PROCESSOR_CORE2_64,
-  PROCESSOR_COREI7_32,
-  PROCESSOR_COREI7_64,
-  PROCESSOR_GENERIC32,
-  PROCESSOR_GENERIC64,
-  PROCESSOR_AMDFAM10,
-  PROCESSOR_BDVER1,
-  PROCESSOR_BDVER2,
-  PROCESSOR_BTVER1,
-  PROCESSOR_ATOM,
-  PROCESSOR_max
-};
-
-extern enum processor_type ix86_tune;
-extern enum processor_type ix86_arch;
-
-
-
-
-
-
-extern unsigned int ix86_preferred_stack_boundary;
-extern unsigned int ix86_incoming_stack_boundary;
-
-
-extern enum reg_class const regclass_map[53];
-
-enum ix86_fpcmp_strategy {
-  IX86_FPCMP_SAHF,
-  IX86_FPCMP_COMI,
-  IX86_FPCMP_ARITH
-};
-# 2105 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
-enum ix86_entity
-{
-  I387_TRUNC = 0,
-  I387_FLOOR,
-  I387_CEIL,
-  I387_MASK_PM,
-  MAX_386_ENTITIES
-};
-
-enum ix86_stack_slot
-{
-  SLOT_VIRTUAL = 0,
-  SLOT_TEMP,
-  SLOT_CW_STORED,
-  SLOT_CW_TRUNC,
-  SLOT_CW_FLOOR,
-  SLOT_CW_CEIL,
-  SLOT_CW_MASK_PM,
-  MAX_386_STACK_LOCALS
-};
-# 2181 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
-struct machine_frame_state
-{
-
-
-
-  rtx cfa_reg;
-  long cfa_offset;
-
-
-
-
-
-  long sp_offset;
-  long fp_offset;
-
-
-
-
-
-  int red_zone_offset;
-
-
-
-
-
-  unsigned int sp_valid : 1;
-  unsigned int fp_valid : 1;
-  unsigned int drap_valid : 1;
-
-
-
-
-  unsigned int realigned : 1;
-};
-
-
-struct seh_frame_state;
-
-struct machine_function {
-  struct stack_local_entry *stack_locals;
-  const char *some_ld_name;
-  int varargs_gpr_size;
-  int varargs_fpr_size;
-  int optimize_mode_switching[MAX_386_ENTITIES];
-
-
-
-  int use_fast_prologue_epilogue_nregs;
-
-
-
-
-
-
-  rtx split_stack_varargs_pointer;
-
-
-
-  __extension__ enum calling_abi call_abi : 8;
-
-
-  unsigned int accesses_prev_frame : 1;
-
-
-  unsigned int needs_cld : 1;
-
-
-
-  unsigned int use_fast_prologue_epilogue : 1;
-# 2260 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
-  unsigned int tls_descriptor_call_expanded_p : 1;
-
-
-
-  unsigned int static_chain_on_stack : 1;
-
-
-  unsigned int caller_pass_avx256_p : 1;
-
-
-  unsigned int caller_return_avx256_p : 1;
-
-
-  unsigned int callee_pass_avx256_p : 1;
-
-
-  unsigned int callee_return_avx256_p : 1;
-
-
-  unsigned int rescan_vzeroupper_p : 1;
-
-
-
-  struct machine_frame_state fs;
-
-
-  struct seh_frame_state * seh;
-};
-# 2325 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
-extern void debug_ready_dispatch (void);
-extern void debug_dispatch_window (int);
-# 24 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/linux-android.h" 1
-# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/unix.h" 1
-# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/att.h" 1
-# 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/dbxelf.h" 1
-# 28 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/elfos.h" 1
-# 29 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/gnu-user.h" 1
-# 30 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/glibc-stdint.h" 1
-# 31 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/x86-64.h" 1
-# 32 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/gnu-user64.h" 1
-# 33 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/linux.h" 1
-# 34 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/linux64.h" 1
-# 35 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/initfini-array.h" 1
-# 36 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
-
-
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/insn-flags.h" 1
-# 2778 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/insn-flags.h"
-extern rtx gen_x86_fnstsw_1 (rtx);
-extern rtx gen_x86_sahf_1 (rtx);
-extern rtx gen_swapxf (rtx, rtx);
-extern rtx gen_zero_extendsidi2_1 (rtx, rtx);
-extern rtx gen_zero_extendqidi2 (rtx, rtx);
-extern rtx gen_zero_extendhidi2 (rtx, rtx);
-extern rtx gen_zero_extendhisi2_and (rtx, rtx);
-extern rtx gen_extendsidi2_1 (rtx, rtx);
-extern rtx gen_extendqidi2 (rtx, rtx);
-extern rtx gen_extendhidi2 (rtx, rtx);
-extern rtx gen_extendhisi2 (rtx, rtx);
-extern rtx gen_extendqisi2 (rtx, rtx);
-extern rtx gen_extendqihi2 (rtx, rtx);
-extern rtx gen_truncxfsf2_i387_noop (rtx, rtx);
-extern rtx gen_truncxfdf2_i387_noop (rtx, rtx);
-extern rtx gen_fix_truncsfdi_sse (rtx, rtx);
-extern rtx gen_fix_truncdfdi_sse (rtx, rtx);
-extern rtx gen_fix_truncsfsi_sse (rtx, rtx);
-extern rtx gen_fix_truncdfsi_sse (rtx, rtx);
-extern rtx gen_fix_trunchi_fisttp_i387_1 (rtx, rtx);
-extern rtx gen_fix_truncsi_fisttp_i387_1 (rtx, rtx);
-extern rtx gen_fix_truncdi_fisttp_i387_1 (rtx, rtx);
-extern rtx gen_fix_trunchi_i387_fisttp (rtx, rtx);
-extern rtx gen_fix_truncsi_i387_fisttp (rtx, rtx);
-extern rtx gen_fix_truncdi_i387_fisttp (rtx, rtx);
-extern rtx gen_fix_trunchi_i387_fisttp_with_temp (rtx, rtx, rtx);
-extern rtx gen_fix_truncsi_i387_fisttp_with_temp (rtx, rtx, rtx);
-extern rtx gen_fix_truncdi_i387_fisttp_with_temp (rtx, rtx, rtx);
-extern rtx gen_fix_truncdi_i387 (rtx, rtx, rtx, rtx);
-extern rtx gen_fix_truncdi_i387_with_temp (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_fix_trunchi_i387 (rtx, rtx, rtx, rtx);
-extern rtx gen_fix_truncsi_i387 (rtx, rtx, rtx, rtx);
-extern rtx gen_fix_trunchi_i387_with_temp (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_fix_truncsi_i387_with_temp (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_x86_fnstcw_1 (rtx);
-extern rtx gen_x86_fldcw_1 (rtx);
-extern rtx gen_floatdisf2_i387_with_xmm (rtx, rtx, rtx);
-extern rtx gen_floatdidf2_i387_with_xmm (rtx, rtx, rtx);
-extern rtx gen_floatdixf2_i387_with_xmm (rtx, rtx, rtx);
-extern rtx gen_addqi3_cc (rtx, rtx, rtx);
-extern rtx gen_addsi_1_zext (rtx, rtx, rtx);
-extern rtx gen_addqi_ext_1 (rtx, rtx, rtx);
-extern rtx gen_divmodsi4_1 (rtx, rtx, rtx, rtx);
-extern rtx gen_divmoddi4_1 (rtx, rtx, rtx, rtx);
-extern rtx gen_divmodhiqi3 (rtx, rtx, rtx);
-extern rtx gen_udivmodsi4_1 (rtx, rtx, rtx, rtx);
-extern rtx gen_udivmoddi4_1 (rtx, rtx, rtx, rtx);
-extern rtx gen_udivmodhiqi3 (rtx, rtx, rtx);
-extern rtx gen_andqi_ext_0 (rtx, rtx, rtx);
-extern rtx gen_copysignsf3_const (rtx, rtx, rtx, rtx);
-extern rtx gen_copysigndf3_const (rtx, rtx, rtx, rtx);
-extern rtx gen_copysigntf3_const (rtx, rtx, rtx, rtx);
-extern rtx gen_copysignsf3_var (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_copysigndf3_var (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_copysigntf3_var (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_x86_64_shld (rtx, rtx, rtx);
-extern rtx gen_x86_shld (rtx, rtx, rtx);
-extern rtx gen_x86_64_shrd (rtx, rtx, rtx);
-extern rtx gen_x86_shrd (rtx, rtx, rtx);
-extern rtx gen_ashrdi3_cvt (rtx, rtx, rtx);
-extern rtx gen_ashrsi3_cvt (rtx, rtx, rtx);
-extern rtx gen_ix86_rotldi3_doubleword (rtx, rtx, rtx);
-extern rtx gen_ix86_rotlti3_doubleword (rtx, rtx, rtx);
-extern rtx gen_ix86_rotrdi3_doubleword (rtx, rtx, rtx);
-extern rtx gen_ix86_rotrti3_doubleword (rtx, rtx, rtx);
-extern rtx gen_setcc_sf_sse (rtx, rtx, rtx, rtx);
-extern rtx gen_setcc_df_sse (rtx, rtx, rtx, rtx);
-extern rtx gen_jump (rtx);
-extern rtx gen_blockage (void);
-extern rtx gen_prologue_use (rtx);
-extern rtx gen_simple_return_internal (void);
-extern rtx gen_simple_return_internal_long (void);
-extern rtx gen_simple_return_pop_internal (rtx);
-extern rtx gen_simple_return_indirect_internal (rtx);
-extern rtx gen_nop (void);
-extern rtx gen_nops (rtx);
-extern rtx gen_pad (rtx);
-extern rtx gen_set_got (rtx);
-extern rtx gen_set_got_labelled (rtx, rtx);
-extern rtx gen_set_got_rex64 (rtx);
-extern rtx gen_set_rip_rex64 (rtx, rtx);
-extern rtx gen_set_got_offset_rex64 (rtx, rtx);
-extern rtx gen_eh_return_internal (void);
-extern rtx gen_leave (void);
-extern rtx gen_leave_rex64 (void);
-extern rtx gen_split_stack_return (rtx);
-extern rtx gen_ffssi2_no_cmove (rtx, rtx);
-extern rtx gen_ctzhi2 (rtx, rtx);
-extern rtx gen_ctzsi2 (rtx, rtx);
-extern rtx gen_ctzdi2 (rtx, rtx);
-extern rtx gen_clzhi2_lzcnt (rtx, rtx);
-extern rtx gen_clzsi2_lzcnt (rtx, rtx);
-extern rtx gen_clzdi2_lzcnt (rtx, rtx);
-extern rtx gen_bmi_bextr_si (rtx, rtx, rtx);
-extern rtx gen_bmi_bextr_di (rtx, rtx, rtx);
-extern rtx gen_bmi2_bzhi_si3 (rtx, rtx, rtx);
-extern rtx gen_bmi2_bzhi_di3 (rtx, rtx, rtx);
-extern rtx gen_bmi2_pdep_si3 (rtx, rtx, rtx);
-extern rtx gen_bmi2_pdep_di3 (rtx, rtx, rtx);
-extern rtx gen_bmi2_pext_si3 (rtx, rtx, rtx);
-extern rtx gen_bmi2_pext_di3 (rtx, rtx, rtx);
-extern rtx gen_tbm_bextri_si (rtx, rtx, rtx, rtx);
-extern rtx gen_tbm_bextri_di (rtx, rtx, rtx, rtx);
-extern rtx gen_bsr_rex64 (rtx, rtx);
-extern rtx gen_bsr (rtx, rtx);
-extern rtx gen_popcounthi2 (rtx, rtx);
-extern rtx gen_popcountsi2 (rtx, rtx);
-extern rtx gen_popcountdi2 (rtx, rtx);
-extern rtx gen_bswaphi_lowpart (rtx);
-extern rtx gen_paritydi2_cmp (rtx, rtx, rtx, rtx);
-extern rtx gen_paritysi2_cmp (rtx, rtx, rtx);
-static __inline__ rtx gen_tls_initial_exec_64_sun (rtx, rtx);
-static __inline__ rtx
-gen_tls_initial_exec_64_sun(rtx a __attribute__ ((__unused__)), rtx b __attribute__ ((__unused__)))
-{
-  return 0;
-}
-extern rtx gen_truncxfsf2_i387_noop_unspec (rtx, rtx);
-extern rtx gen_truncxfdf2_i387_noop_unspec (rtx, rtx);
-extern rtx gen_sqrtxf2 (rtx, rtx);
-extern rtx gen_sqrt_extendsfxf2_i387 (rtx, rtx);
-extern rtx gen_sqrt_extenddfxf2_i387 (rtx, rtx);
-extern rtx gen_fpremxf4_i387 (rtx, rtx, rtx, rtx);
-extern rtx gen_fprem1xf4_i387 (rtx, rtx, rtx, rtx);
-extern rtx gen_sincosxf3 (rtx, rtx, rtx);
-extern rtx gen_sincos_extendsfxf3_i387 (rtx, rtx, rtx);
-extern rtx gen_sincos_extenddfxf3_i387 (rtx, rtx, rtx);
-extern rtx gen_fptanxf4_i387 (rtx, rtx, rtx, rtx);
-extern rtx gen_fptan_extendsfxf4_i387 (rtx, rtx, rtx, rtx);
-extern rtx gen_fptan_extenddfxf4_i387 (rtx, rtx, rtx, rtx);
-extern rtx gen_fpatan_extendsfxf3_i387 (rtx, rtx, rtx);
-extern rtx gen_fpatan_extenddfxf3_i387 (rtx, rtx, rtx);
-extern rtx gen_fyl2xxf3_i387 (rtx, rtx, rtx);
-extern rtx gen_fyl2x_extendsfxf3_i387 (rtx, rtx, rtx);
-extern rtx gen_fyl2x_extenddfxf3_i387 (rtx, rtx, rtx);
-extern rtx gen_fyl2xp1xf3_i387 (rtx, rtx, rtx);
-extern rtx gen_fyl2xp1_extendsfxf3_i387 (rtx, rtx, rtx);
-extern rtx gen_fyl2xp1_extenddfxf3_i387 (rtx, rtx, rtx);
-extern rtx gen_fxtractxf3_i387 (rtx, rtx, rtx);
-extern rtx gen_fxtract_extendsfxf3_i387 (rtx, rtx, rtx);
-extern rtx gen_fxtract_extenddfxf3_i387 (rtx, rtx, rtx);
-extern rtx gen_sse4_1_roundsf2 (rtx, rtx, rtx);
-extern rtx gen_sse4_1_rounddf2 (rtx, rtx, rtx);
-extern rtx gen_rintxf2 (rtx, rtx);
-extern rtx gen_fistdi2 (rtx, rtx);
-extern rtx gen_fistdi2_with_temp (rtx, rtx, rtx);
-extern rtx gen_fisthi2 (rtx, rtx);
-extern rtx gen_fistsi2 (rtx, rtx);
-extern rtx gen_fisthi2_with_temp (rtx, rtx, rtx);
-extern rtx gen_fistsi2_with_temp (rtx, rtx, rtx);
-extern rtx gen_frndintxf2_floor (rtx, rtx);
-extern rtx gen_frndintxf2_floor_i387 (rtx, rtx, rtx, rtx);
-extern rtx gen_fistdi2_floor (rtx, rtx, rtx, rtx);
-extern rtx gen_fistdi2_floor_with_temp (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_fisthi2_floor (rtx, rtx, rtx, rtx);
-extern rtx gen_fistsi2_floor (rtx, rtx, rtx, rtx);
-extern rtx gen_fisthi2_floor_with_temp (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_fistsi2_floor_with_temp (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_frndintxf2_ceil (rtx, rtx);
-extern rtx gen_frndintxf2_ceil_i387 (rtx, rtx, rtx, rtx);
-extern rtx gen_fistdi2_ceil (rtx, rtx, rtx, rtx);
-extern rtx gen_fistdi2_ceil_with_temp (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_fisthi2_ceil (rtx, rtx, rtx, rtx);
-extern rtx gen_fistsi2_ceil (rtx, rtx, rtx, rtx);
-extern rtx gen_fisthi2_ceil_with_temp (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_fistsi2_ceil_with_temp (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_frndintxf2_trunc (rtx, rtx);
-extern rtx gen_frndintxf2_trunc_i387 (rtx, rtx, rtx, rtx);
-extern rtx gen_frndintxf2_mask_pm (rtx, rtx);
-extern rtx gen_frndintxf2_mask_pm_i387 (rtx, rtx, rtx, rtx);
-extern rtx gen_fxamsf2_i387 (rtx, rtx);
-extern rtx gen_fxamdf2_i387 (rtx, rtx);
-extern rtx gen_fxamxf2_i387 (rtx, rtx);
-extern rtx gen_fxamsf2_i387_with_temp (rtx, rtx);
-extern rtx gen_fxamdf2_i387_with_temp (rtx, rtx);
-extern rtx gen_movmsk_df (rtx, rtx);
-extern rtx gen_cld (void);
-extern rtx gen_smaxsf3 (rtx, rtx, rtx);
-extern rtx gen_sminsf3 (rtx, rtx, rtx);
-extern rtx gen_smaxdf3 (rtx, rtx, rtx);
-extern rtx gen_smindf3 (rtx, rtx, rtx);
-extern rtx gen_pro_epilogue_adjust_stack_si_add (rtx, rtx, rtx);
-extern rtx gen_pro_epilogue_adjust_stack_di_add (rtx, rtx, rtx);
-extern rtx gen_pro_epilogue_adjust_stack_si_sub (rtx, rtx, rtx);
-extern rtx gen_pro_epilogue_adjust_stack_di_sub (rtx, rtx, rtx);
-extern rtx gen_allocate_stack_worker_probe_si (rtx, rtx);
-extern rtx gen_allocate_stack_worker_probe_di (rtx, rtx);
-extern rtx gen_adjust_stack_and_probesi (rtx, rtx, rtx);
-extern rtx gen_adjust_stack_and_probedi (rtx, rtx, rtx);
-extern rtx gen_probe_stack_rangesi (rtx, rtx, rtx);
-extern rtx gen_probe_stack_rangedi (rtx, rtx, rtx);
-extern rtx gen_trap (void);
-extern rtx gen_stack_protect_set_si (rtx, rtx);
-extern rtx gen_stack_protect_set_di (rtx, rtx);
-extern rtx gen_stack_tls_protect_set_si (rtx, rtx);
-extern rtx gen_stack_tls_protect_set_di (rtx, rtx);
-extern rtx gen_stack_protect_test_si (rtx, rtx, rtx);
-extern rtx gen_stack_protect_test_di (rtx, rtx, rtx);
-extern rtx gen_stack_tls_protect_test_si (rtx, rtx, rtx);
-extern rtx gen_stack_tls_protect_test_di (rtx, rtx, rtx);
-extern rtx gen_sse4_2_crc32qi (rtx, rtx, rtx);
-extern rtx gen_sse4_2_crc32hi (rtx, rtx, rtx);
-extern rtx gen_sse4_2_crc32si (rtx, rtx, rtx);
-extern rtx gen_sse4_2_crc32di (rtx, rtx, rtx);
-extern rtx gen_lwp_slwpcbsi (rtx);
-extern rtx gen_lwp_slwpcbdi (rtx);
-extern rtx gen_rdfsbasesi (rtx);
-extern rtx gen_rdfsbasedi (rtx);
-extern rtx gen_rdgsbasesi (rtx);
-extern rtx gen_rdgsbasedi (rtx);
-extern rtx gen_wrfsbasesi (rtx);
-extern rtx gen_wrfsbasedi (rtx);
-extern rtx gen_wrgsbasesi (rtx);
-extern rtx gen_wrgsbasedi (rtx);
-extern rtx gen_rdrandhi_1 (rtx);
-extern rtx gen_rdrandsi_1 (rtx);
-extern rtx gen_rdranddi_1 (rtx);
-extern rtx gen_sse_movntq (rtx, rtx);
-extern rtx gen_mmx_rcpv2sf2 (rtx, rtx);
-extern rtx gen_mmx_rcpit1v2sf3 (rtx, rtx, rtx);
-extern rtx gen_mmx_rcpit2v2sf3 (rtx, rtx, rtx);
-extern rtx gen_mmx_rsqrtv2sf2 (rtx, rtx);
-extern rtx gen_mmx_rsqit1v2sf3 (rtx, rtx, rtx);
-extern rtx gen_mmx_haddv2sf3 (rtx, rtx, rtx);
-extern rtx gen_mmx_hsubv2sf3 (rtx, rtx, rtx);
-extern rtx gen_mmx_addsubv2sf3 (rtx, rtx, rtx);
-extern rtx gen_mmx_gtv2sf3 (rtx, rtx, rtx);
-extern rtx gen_mmx_gev2sf3 (rtx, rtx, rtx);
-extern rtx gen_mmx_pf2id (rtx, rtx);
-extern rtx gen_mmx_pf2iw (rtx, rtx);
-extern rtx gen_mmx_pi2fw (rtx, rtx);
-extern rtx gen_mmx_floatv2si2 (rtx, rtx);
-extern rtx gen_mmx_pswapdv2sf2 (rtx, rtx);
-extern rtx gen_mmx_ashrv4hi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_ashrv2si3 (rtx, rtx, rtx);
-extern rtx gen_mmx_ashlv4hi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_lshrv4hi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_ashlv2si3 (rtx, rtx, rtx);
-extern rtx gen_mmx_lshrv2si3 (rtx, rtx, rtx);
-extern rtx gen_mmx_ashlv1di3 (rtx, rtx, rtx);
-extern rtx gen_mmx_lshrv1di3 (rtx, rtx, rtx);
-extern rtx gen_mmx_gtv8qi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_gtv4hi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_gtv2si3 (rtx, rtx, rtx);
-extern rtx gen_mmx_andnotv8qi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_andnotv4hi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_andnotv2si3 (rtx, rtx, rtx);
-extern rtx gen_mmx_packsswb (rtx, rtx, rtx);
-extern rtx gen_mmx_packssdw (rtx, rtx, rtx);
-extern rtx gen_mmx_packuswb (rtx, rtx, rtx);
-extern rtx gen_mmx_punpckhbw (rtx, rtx, rtx);
-extern rtx gen_mmx_punpcklbw (rtx, rtx, rtx);
-extern rtx gen_mmx_punpckhwd (rtx, rtx, rtx);
-extern rtx gen_mmx_punpcklwd (rtx, rtx, rtx);
-extern rtx gen_mmx_punpckhdq (rtx, rtx, rtx);
-extern rtx gen_mmx_punpckldq (rtx, rtx, rtx);
-extern rtx gen_mmx_pextrw (rtx, rtx, rtx);
-extern rtx gen_mmx_pshufw_1 (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_mmx_pswapdv2si2 (rtx, rtx);
-extern rtx gen_mmx_psadbw (rtx, rtx, rtx);
-extern rtx gen_mmx_pmovmskb (rtx, rtx);
-extern rtx gen_sse2_movq128 (rtx, rtx);
-extern rtx gen_movdi_to_sse (rtx, rtx);
-extern rtx gen_avx_movups256 (rtx, rtx);
-extern rtx gen_sse_movups (rtx, rtx);
-extern rtx gen_avx_movupd256 (rtx, rtx);
-extern rtx gen_sse2_movupd (rtx, rtx);
-extern rtx gen_avx_movdqu256 (rtx, rtx);
-extern rtx gen_sse2_movdqu (rtx, rtx);
-extern rtx gen_avx_lddqu256 (rtx, rtx);
-extern rtx gen_sse3_lddqu (rtx, rtx);
-extern rtx gen_sse2_movntisi (rtx, rtx);
-extern rtx gen_sse2_movntidi (rtx, rtx);
-extern rtx gen_avx_movntv8sf (rtx, rtx);
-extern rtx gen_sse_movntv4sf (rtx, rtx);
-extern rtx gen_avx_movntv4df (rtx, rtx);
-extern rtx gen_sse2_movntv2df (rtx, rtx);
-extern rtx gen_avx_movntv4di (rtx, rtx);
-extern rtx gen_sse2_movntv2di (rtx, rtx);
-extern rtx gen_sse_vmaddv4sf3 (rtx, rtx, rtx);
-extern rtx gen_sse_vmsubv4sf3 (rtx, rtx, rtx);
-extern rtx gen_sse2_vmaddv2df3 (rtx, rtx, rtx);
-extern rtx gen_sse2_vmsubv2df3 (rtx, rtx, rtx);
-extern rtx gen_sse_vmmulv4sf3 (rtx, rtx, rtx);
-extern rtx gen_sse2_vmmulv2df3 (rtx, rtx, rtx);
-extern rtx gen_avx_divv8sf3 (rtx, rtx, rtx);
-extern rtx gen_sse_divv4sf3 (rtx, rtx, rtx);
-extern rtx gen_avx_divv4df3 (rtx, rtx, rtx);
-extern rtx gen_sse2_divv2df3 (rtx, rtx, rtx);
-extern rtx gen_sse_vmdivv4sf3 (rtx, rtx, rtx);
-extern rtx gen_sse2_vmdivv2df3 (rtx, rtx, rtx);
-extern rtx gen_avx_rcpv8sf2 (rtx, rtx);
-extern rtx gen_sse_rcpv4sf2 (rtx, rtx);
-extern rtx gen_sse_vmrcpv4sf2 (rtx, rtx, rtx);
-extern rtx gen_avx_sqrtv8sf2 (rtx, rtx);
-extern rtx gen_sse_sqrtv4sf2 (rtx, rtx);
-extern rtx gen_avx_sqrtv4df2 (rtx, rtx);
-extern rtx gen_sse2_sqrtv2df2 (rtx, rtx);
-extern rtx gen_sse_vmsqrtv4sf2 (rtx, rtx, rtx);
-extern rtx gen_sse2_vmsqrtv2df2 (rtx, rtx, rtx);
-extern rtx gen_avx_rsqrtv8sf2 (rtx, rtx);
-extern rtx gen_sse_rsqrtv4sf2 (rtx, rtx);
-extern rtx gen_sse_vmrsqrtv4sf2 (rtx, rtx, rtx);
-extern rtx gen_sse_vmsmaxv4sf3 (rtx, rtx, rtx);
-extern rtx gen_sse_vmsminv4sf3 (rtx, rtx, rtx);
-extern rtx gen_sse2_vmsmaxv2df3 (rtx, rtx, rtx);
-extern rtx gen_sse2_vmsminv2df3 (rtx, rtx, rtx);
-extern rtx gen_avx_addsubv4df3 (rtx, rtx, rtx);
-extern rtx gen_sse3_addsubv2df3 (rtx, rtx, rtx);
-extern rtx gen_avx_addsubv8sf3 (rtx, rtx, rtx);
-extern rtx gen_sse3_addsubv4sf3 (rtx, rtx, rtx);
-extern rtx gen_avx_haddv4df3 (rtx, rtx, rtx);
-extern rtx gen_avx_hsubv4df3 (rtx, rtx, rtx);
-extern rtx gen_sse3_haddv2df3 (rtx, rtx, rtx);
-extern rtx gen_sse3_hsubv2df3 (rtx, rtx, rtx);
-extern rtx gen_avx_haddv8sf3 (rtx, rtx, rtx);
-extern rtx gen_avx_hsubv8sf3 (rtx, rtx, rtx);
-extern rtx gen_sse3_haddv4sf3 (rtx, rtx, rtx);
-extern rtx gen_sse3_hsubv4sf3 (rtx, rtx, rtx);
-extern rtx gen_avx_cmpv8sf3 (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_cmpv4sf3 (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_cmpv4df3 (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_cmpv2df3 (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_vmcmpv4sf3 (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_vmcmpv2df3 (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_maskcmpv8sf3 (rtx, rtx, rtx, rtx);
-extern rtx gen_sse_maskcmpv4sf3 (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_maskcmpv4df3 (rtx, rtx, rtx, rtx);
-extern rtx gen_sse2_maskcmpv2df3 (rtx, rtx, rtx, rtx);
-extern rtx gen_sse_vmmaskcmpv4sf3 (rtx, rtx, rtx, rtx);
-extern rtx gen_sse2_vmmaskcmpv2df3 (rtx, rtx, rtx, rtx);
-extern rtx gen_sse_comi (rtx, rtx);
-extern rtx gen_sse2_comi (rtx, rtx);
-extern rtx gen_sse_ucomi (rtx, rtx);
-extern rtx gen_sse2_ucomi (rtx, rtx);
-extern rtx gen_avx_andnotv8sf3 (rtx, rtx, rtx);
-extern rtx gen_sse_andnotv4sf3 (rtx, rtx, rtx);
-extern rtx gen_avx_andnotv4df3 (rtx, rtx, rtx);
-extern rtx gen_sse2_andnotv2df3 (rtx, rtx, rtx);
-extern rtx gen_sse_cvtpi2ps (rtx, rtx, rtx);
-extern rtx gen_sse_cvtps2pi (rtx, rtx);
-extern rtx gen_sse_cvttps2pi (rtx, rtx);
-extern rtx gen_sse_cvtsi2ss (rtx, rtx, rtx);
-extern rtx gen_sse_cvtsi2ssq (rtx, rtx, rtx);
-extern rtx gen_sse_cvtss2si (rtx, rtx);
-extern rtx gen_sse_cvtss2si_2 (rtx, rtx);
-extern rtx gen_sse_cvtss2siq (rtx, rtx);
-extern rtx gen_sse_cvtss2siq_2 (rtx, rtx);
-extern rtx gen_sse_cvttss2si (rtx, rtx);
-extern rtx gen_sse_cvttss2siq (rtx, rtx);
-extern rtx gen_floatv8siv8sf2 (rtx, rtx);
-extern rtx gen_floatv4siv4sf2 (rtx, rtx);
-extern rtx gen_avx_cvtps2dq256 (rtx, rtx);
-extern rtx gen_sse2_cvtps2dq (rtx, rtx);
-extern rtx gen_fix_truncv8sfv8si2 (rtx, rtx);
-extern rtx gen_fix_truncv4sfv4si2 (rtx, rtx);
-extern rtx gen_sse2_cvtpi2pd (rtx, rtx);
-extern rtx gen_sse2_cvtpd2pi (rtx, rtx);
-extern rtx gen_sse2_cvttpd2pi (rtx, rtx);
-extern rtx gen_sse2_cvtsi2sd (rtx, rtx, rtx);
-extern rtx gen_sse2_cvtsi2sdq (rtx, rtx, rtx);
-extern rtx gen_sse2_cvtsd2si (rtx, rtx);
-extern rtx gen_sse2_cvtsd2si_2 (rtx, rtx);
-extern rtx gen_sse2_cvtsd2siq (rtx, rtx);
-extern rtx gen_sse2_cvtsd2siq_2 (rtx, rtx);
-extern rtx gen_sse2_cvttsd2si (rtx, rtx);
-extern rtx gen_sse2_cvttsd2siq (rtx, rtx);
-extern rtx gen_floatv4siv4df2 (rtx, rtx);
-extern rtx gen_avx_cvtdq2pd256_2 (rtx, rtx);
-extern rtx gen_sse2_cvtdq2pd (rtx, rtx);
-extern rtx gen_avx_cvtpd2dq256 (rtx, rtx);
-extern rtx gen_fix_truncv4dfv4si2 (rtx, rtx);
-extern rtx gen_sse2_cvtsd2ss (rtx, rtx, rtx);
-extern rtx gen_sse2_cvtss2sd (rtx, rtx, rtx);
-extern rtx gen_avx_cvtpd2ps256 (rtx, rtx);
-extern rtx gen_avx_cvtps2pd256 (rtx, rtx);
-extern rtx gen_sse2_cvtps2pd (rtx, rtx);
-extern rtx gen_sse_movhlps (rtx, rtx, rtx);
-extern rtx gen_sse_movlhps (rtx, rtx, rtx);
-extern rtx gen_avx_unpckhps256 (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_highv4sf (rtx, rtx, rtx);
-extern rtx gen_avx_unpcklps256 (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_lowv4sf (rtx, rtx, rtx);
-extern rtx gen_avx_movshdup256 (rtx, rtx);
-extern rtx gen_sse3_movshdup (rtx, rtx);
-extern rtx gen_avx_movsldup256 (rtx, rtx);
-extern rtx gen_sse3_movsldup (rtx, rtx);
-extern rtx gen_avx_shufps256_1 (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_sse_shufps_v4si (rtx, rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_sse_shufps_v4sf (rtx, rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_sse_storehps (rtx, rtx);
-extern rtx gen_sse_loadhps (rtx, rtx, rtx);
-extern rtx gen_sse_storelps (rtx, rtx);
-extern rtx gen_sse_loadlps (rtx, rtx, rtx);
-extern rtx gen_sse_movss (rtx, rtx, rtx);
-extern rtx gen_avx2_vec_dupv8sf (rtx, rtx);
-extern rtx gen_avx2_vec_dupv4sf (rtx, rtx);
-extern rtx gen_vec_dupv4sf (rtx, rtx);
-extern rtx gen_vec_setv4si_0 (rtx, rtx, rtx);
-extern rtx gen_vec_setv4sf_0 (rtx, rtx, rtx);
-extern rtx gen_sse4_1_insertps (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_extract_lo_v4di (rtx, rtx);
-extern rtx gen_vec_extract_lo_v4df (rtx, rtx);
-extern rtx gen_vec_extract_hi_v4di (rtx, rtx);
-extern rtx gen_vec_extract_hi_v4df (rtx, rtx);
-extern rtx gen_vec_extract_lo_v8si (rtx, rtx);
-extern rtx gen_vec_extract_lo_v8sf (rtx, rtx);
-extern rtx gen_vec_extract_hi_v8si (rtx, rtx);
-extern rtx gen_vec_extract_hi_v8sf (rtx, rtx);
-extern rtx gen_vec_extract_lo_v16hi (rtx, rtx);
-extern rtx gen_vec_extract_hi_v16hi (rtx, rtx);
-extern rtx gen_vec_extract_lo_v32qi (rtx, rtx);
-extern rtx gen_vec_extract_hi_v32qi (rtx, rtx);
-extern rtx gen_avx_unpckhpd256 (rtx, rtx, rtx);
-extern rtx gen_avx_shufpd256_1 (rtx, rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_interleave_highv4di (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_highv2di (rtx, rtx, rtx);
-extern rtx gen_avx2_interleave_lowv4di (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_lowv2di (rtx, rtx, rtx);
-extern rtx gen_sse2_shufpd_v2di (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_sse2_shufpd_v2df (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_sse2_storehpd (rtx, rtx);
-extern rtx gen_sse2_storelpd (rtx, rtx);
-extern rtx gen_sse2_loadhpd (rtx, rtx, rtx);
-extern rtx gen_sse2_loadlpd (rtx, rtx, rtx);
-extern rtx gen_sse2_movsd (rtx, rtx, rtx);
-extern rtx gen_vec_dupv2df (rtx, rtx);
-extern rtx gen_mulv32qi3 (rtx, rtx, rtx);
-extern rtx gen_mulv16qi3 (rtx, rtx, rtx);
-extern rtx gen_mulv4di3 (rtx, rtx, rtx);
-extern rtx gen_mulv2di3 (rtx, rtx, rtx);
-extern rtx gen_ashrv16hi3 (rtx, rtx, rtx);
-extern rtx gen_ashrv8hi3 (rtx, rtx, rtx);
-extern rtx gen_ashrv8si3 (rtx, rtx, rtx);
-extern rtx gen_ashrv4si3 (rtx, rtx, rtx);
-extern rtx gen_ashlv16hi3 (rtx, rtx, rtx);
-extern rtx gen_lshrv16hi3 (rtx, rtx, rtx);
-extern rtx gen_ashlv8hi3 (rtx, rtx, rtx);
-extern rtx gen_lshrv8hi3 (rtx, rtx, rtx);
-extern rtx gen_ashlv8si3 (rtx, rtx, rtx);
-extern rtx gen_lshrv8si3 (rtx, rtx, rtx);
-extern rtx gen_ashlv4si3 (rtx, rtx, rtx);
-extern rtx gen_lshrv4si3 (rtx, rtx, rtx);
-extern rtx gen_ashlv4di3 (rtx, rtx, rtx);
-extern rtx gen_lshrv4di3 (rtx, rtx, rtx);
-extern rtx gen_ashlv2di3 (rtx, rtx, rtx);
-extern rtx gen_lshrv2di3 (rtx, rtx, rtx);
-extern rtx gen_avx2_ashlv2ti3 (rtx, rtx, rtx);
-extern rtx gen_sse2_ashlv1ti3 (rtx, rtx, rtx);
-extern rtx gen_avx2_lshrv2ti3 (rtx, rtx, rtx);
-extern rtx gen_sse2_lshrv1ti3 (rtx, rtx, rtx);
-extern rtx gen_sse4_2_gtv2di3 (rtx, rtx, rtx);
-extern rtx gen_avx2_gtv32qi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_gtv16hi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_gtv8si3 (rtx, rtx, rtx);
-extern rtx gen_avx2_gtv4di3 (rtx, rtx, rtx);
-extern rtx gen_sse2_gtv16qi3 (rtx, rtx, rtx);
-extern rtx gen_sse2_gtv8hi3 (rtx, rtx, rtx);
-extern rtx gen_sse2_gtv4si3 (rtx, rtx, rtx);
-extern rtx gen_avx2_packsswb (rtx, rtx, rtx);
-extern rtx gen_sse2_packsswb (rtx, rtx, rtx);
-extern rtx gen_avx2_packssdw (rtx, rtx, rtx);
-extern rtx gen_sse2_packssdw (rtx, rtx, rtx);
-extern rtx gen_avx2_packuswb (rtx, rtx, rtx);
-extern rtx gen_sse2_packuswb (rtx, rtx, rtx);
-extern rtx gen_avx2_interleave_highv32qi (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_highv16qi (rtx, rtx, rtx);
-extern rtx gen_avx2_interleave_lowv32qi (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_lowv16qi (rtx, rtx, rtx);
-extern rtx gen_avx2_interleave_highv16hi (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_highv8hi (rtx, rtx, rtx);
-extern rtx gen_avx2_interleave_lowv16hi (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_lowv8hi (rtx, rtx, rtx);
-extern rtx gen_avx2_interleave_highv8si (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_highv4si (rtx, rtx, rtx);
-extern rtx gen_avx2_interleave_lowv8si (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_lowv4si (rtx, rtx, rtx);
-extern rtx gen_sse4_1_pinsrb (rtx, rtx, rtx, rtx);
-extern rtx gen_sse2_pinsrw (rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_1_pinsrd (rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_1_pinsrq (rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_pshufd_1 (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_sse2_pshufd_1 (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_pshuflw_1 (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_sse2_pshuflw_1 (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_pshufhw_1 (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_sse2_pshufhw_1 (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_sse2_loadld (rtx, rtx, rtx);
-extern rtx gen_sse2_stored (rtx, rtx);
-extern rtx gen_vec_concatv2di (rtx, rtx, rtx);
-extern rtx gen_avx2_psadbw (rtx, rtx, rtx);
-extern rtx gen_sse2_psadbw (rtx, rtx, rtx);
-extern rtx gen_avx_movmskps256 (rtx, rtx);
-extern rtx gen_sse_movmskps (rtx, rtx);
-extern rtx gen_avx_movmskpd256 (rtx, rtx);
-extern rtx gen_sse2_movmskpd (rtx, rtx);
-extern rtx gen_avx2_pmovmskb (rtx, rtx);
-extern rtx gen_sse2_pmovmskb (rtx, rtx);
-extern rtx gen_sse_ldmxcsr (rtx);
-extern rtx gen_sse_stmxcsr (rtx);
-extern rtx gen_sse2_clflush (rtx);
-extern rtx gen_sse3_mwait (rtx, rtx);
-extern rtx gen_sse3_monitor (rtx, rtx, rtx);
-extern rtx gen_sse3_monitor64 (rtx, rtx, rtx);
-extern rtx gen_avx2_phaddwv16hi3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_phaddwv8hi3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_phaddwv4hi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_phadddv8si3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_phadddv4si3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_phadddv2si3 (rtx, rtx, rtx);
-extern rtx gen_avx2_phaddswv16hi3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_phaddswv8hi3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_phaddswv4hi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_phsubwv16hi3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_phsubwv8hi3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_phsubwv4hi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_phsubdv8si3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_phsubdv4si3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_phsubdv2si3 (rtx, rtx, rtx);
-extern rtx gen_avx2_phsubswv16hi3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_phsubswv8hi3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_phsubswv4hi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_pmaddubsw256 (rtx, rtx, rtx);
-extern rtx gen_ssse3_pmaddubsw128 (rtx, rtx, rtx);
-extern rtx gen_ssse3_pmaddubsw (rtx, rtx, rtx);
-extern rtx gen_avx2_pshufbv32qi3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_pshufbv16qi3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_pshufbv8qi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_psignv32qi3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_psignv16qi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_psignv16hi3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_psignv8hi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_psignv8si3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_psignv4si3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_psignv8qi3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_psignv4hi3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_psignv2si3 (rtx, rtx, rtx);
-extern rtx gen_avx2_palignrv2ti (rtx, rtx, rtx, rtx);
-extern rtx gen_ssse3_palignrti (rtx, rtx, rtx, rtx);
-extern rtx gen_ssse3_palignrdi (rtx, rtx, rtx, rtx);
-extern rtx gen_absv32qi2 (rtx, rtx);
-extern rtx gen_absv16qi2 (rtx, rtx);
-extern rtx gen_absv16hi2 (rtx, rtx);
-extern rtx gen_absv8hi2 (rtx, rtx);
-extern rtx gen_absv8si2 (rtx, rtx);
-extern rtx gen_absv4si2 (rtx, rtx);
-extern rtx gen_absv8qi2 (rtx, rtx);
-extern rtx gen_absv4hi2 (rtx, rtx);
-extern rtx gen_absv2si2 (rtx, rtx);
-extern rtx gen_sse4a_movntsf (rtx, rtx);
-extern rtx gen_sse4a_movntdf (rtx, rtx);
-extern rtx gen_sse4a_vmmovntv4sf (rtx, rtx);
-extern rtx gen_sse4a_vmmovntv2df (rtx, rtx);
-extern rtx gen_sse4a_extrqi (rtx, rtx, rtx, rtx);
-extern rtx gen_sse4a_extrq (rtx, rtx, rtx);
-extern rtx gen_sse4a_insertqi (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_sse4a_insertq (rtx, rtx, rtx);
-extern rtx gen_avx_blendps256 (rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_1_blendps (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_blendpd256 (rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_1_blendpd (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_blendvps256 (rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_1_blendvps (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_blendvpd256 (rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_1_blendvpd (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_dpps256 (rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_1_dpps (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_dppd256 (rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_1_dppd (rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_movntdqa (rtx, rtx);
-extern rtx gen_sse4_1_movntdqa (rtx, rtx);
-extern rtx gen_avx2_mpsadbw (rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_1_mpsadbw (rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_packusdw (rtx, rtx, rtx);
-extern rtx gen_sse4_1_packusdw (rtx, rtx, rtx);
-extern rtx gen_avx2_pblendvb (rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_1_pblendvb (rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_1_pblendw (rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_pblenddv8si (rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_pblenddv4si (rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_1_phminposuw (rtx, rtx);
-extern rtx gen_avx2_sign_extendv16qiv16hi2 (rtx, rtx);
-extern rtx gen_avx2_zero_extendv16qiv16hi2 (rtx, rtx);
-extern rtx gen_sse4_1_sign_extendv8qiv8hi2 (rtx, rtx);
-extern rtx gen_sse4_1_zero_extendv8qiv8hi2 (rtx, rtx);
-extern rtx gen_avx2_sign_extendv8qiv8si2 (rtx, rtx);
-extern rtx gen_avx2_zero_extendv8qiv8si2 (rtx, rtx);
-extern rtx gen_sse4_1_sign_extendv4qiv4si2 (rtx, rtx);
-extern rtx gen_sse4_1_zero_extendv4qiv4si2 (rtx, rtx);
-extern rtx gen_avx2_sign_extendv8hiv8si2 (rtx, rtx);
-extern rtx gen_avx2_zero_extendv8hiv8si2 (rtx, rtx);
-extern rtx gen_sse4_1_sign_extendv4hiv4si2 (rtx, rtx);
-extern rtx gen_sse4_1_zero_extendv4hiv4si2 (rtx, rtx);
-extern rtx gen_avx2_sign_extendv4qiv4di2 (rtx, rtx);
-extern rtx gen_avx2_zero_extendv4qiv4di2 (rtx, rtx);
-extern rtx gen_sse4_1_sign_extendv2qiv2di2 (rtx, rtx);
-extern rtx gen_sse4_1_zero_extendv2qiv2di2 (rtx, rtx);
-extern rtx gen_avx2_sign_extendv4hiv4di2 (rtx, rtx);
-extern rtx gen_avx2_zero_extendv4hiv4di2 (rtx, rtx);
-extern rtx gen_sse4_1_sign_extendv2hiv2di2 (rtx, rtx);
-extern rtx gen_sse4_1_zero_extendv2hiv2di2 (rtx, rtx);
-extern rtx gen_avx2_sign_extendv4siv4di2 (rtx, rtx);
-extern rtx gen_avx2_zero_extendv4siv4di2 (rtx, rtx);
-extern rtx gen_sse4_1_sign_extendv2siv2di2 (rtx, rtx);
-extern rtx gen_sse4_1_zero_extendv2siv2di2 (rtx, rtx);
-extern rtx gen_avx_vtestps256 (rtx, rtx);
-extern rtx gen_avx_vtestps (rtx, rtx);
-extern rtx gen_avx_vtestpd256 (rtx, rtx);
-extern rtx gen_avx_vtestpd (rtx, rtx);
-extern rtx gen_avx_ptest256 (rtx, rtx);
-extern rtx gen_sse4_1_ptest (rtx, rtx);
-extern rtx gen_avx_roundps256 (rtx, rtx, rtx);
-extern rtx gen_sse4_1_roundps (rtx, rtx, rtx);
-extern rtx gen_avx_roundpd256 (rtx, rtx, rtx);
-extern rtx gen_sse4_1_roundpd (rtx, rtx, rtx);
-extern rtx gen_sse4_1_roundss (rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_1_roundsd (rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_2_pcmpestr (rtx, rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_2_pcmpestri (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_2_pcmpestrm (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_2_pcmpestr_cconly (rtx, rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_2_pcmpistr (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_2_pcmpistri (rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_2_pcmpistrm (rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_2_pcmpistr_cconly (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pmacsww (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pmacssww (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pmacsdd (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pmacssdd (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pmacssdql (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pmacssdqh (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pmacsdql (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pmacsdqh (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pmacsswd (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pmacswd (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pmadcsswd (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pmadcswd (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pcmov_v32qi256 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pcmov_v16qi (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pcmov_v16hi256 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pcmov_v8hi (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pcmov_v8si256 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pcmov_v4si (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pcmov_v4di256 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pcmov_v2di (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pcmov_v8sf256 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pcmov_v4sf (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pcmov_v4df256 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pcmov_v2df (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_phaddbw (rtx, rtx);
-extern rtx gen_xop_phaddbd (rtx, rtx);
-extern rtx gen_xop_phaddbq (rtx, rtx);
-extern rtx gen_xop_phaddwd (rtx, rtx);
-extern rtx gen_xop_phaddwq (rtx, rtx);
-extern rtx gen_xop_phadddq (rtx, rtx);
-extern rtx gen_xop_phaddubw (rtx, rtx);
-extern rtx gen_xop_phaddubd (rtx, rtx);
-extern rtx gen_xop_phaddubq (rtx, rtx);
-extern rtx gen_xop_phadduwd (rtx, rtx);
-extern rtx gen_xop_phadduwq (rtx, rtx);
-extern rtx gen_xop_phaddudq (rtx, rtx);
-extern rtx gen_xop_phsubbw (rtx, rtx);
-extern rtx gen_xop_phsubwd (rtx, rtx);
-extern rtx gen_xop_phsubdq (rtx, rtx);
-extern rtx gen_xop_pperm (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pperm_pack_v2di_v4si (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pperm_pack_v4si_v8hi (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pperm_pack_v8hi_v16qi (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_rotlv16qi3 (rtx, rtx, rtx);
-extern rtx gen_xop_rotlv8hi3 (rtx, rtx, rtx);
-extern rtx gen_xop_rotlv4si3 (rtx, rtx, rtx);
-extern rtx gen_xop_rotlv2di3 (rtx, rtx, rtx);
-extern rtx gen_xop_rotrv16qi3 (rtx, rtx, rtx);
-extern rtx gen_xop_rotrv8hi3 (rtx, rtx, rtx);
-extern rtx gen_xop_rotrv4si3 (rtx, rtx, rtx);
-extern rtx gen_xop_rotrv2di3 (rtx, rtx, rtx);
-extern rtx gen_xop_vrotlv16qi3 (rtx, rtx, rtx);
-extern rtx gen_xop_vrotlv8hi3 (rtx, rtx, rtx);
-extern rtx gen_xop_vrotlv4si3 (rtx, rtx, rtx);
-extern rtx gen_xop_vrotlv2di3 (rtx, rtx, rtx);
-extern rtx gen_xop_shav16qi3 (rtx, rtx, rtx);
-extern rtx gen_xop_shav8hi3 (rtx, rtx, rtx);
-extern rtx gen_xop_shav4si3 (rtx, rtx, rtx);
-extern rtx gen_xop_shav2di3 (rtx, rtx, rtx);
-extern rtx gen_xop_shlv16qi3 (rtx, rtx, rtx);
-extern rtx gen_xop_shlv8hi3 (rtx, rtx, rtx);
-extern rtx gen_xop_shlv4si3 (rtx, rtx, rtx);
-extern rtx gen_xop_shlv2di3 (rtx, rtx, rtx);
-extern rtx gen_xop_frczsf2 (rtx, rtx);
-extern rtx gen_xop_frczdf2 (rtx, rtx);
-extern rtx gen_xop_frczv4sf2 (rtx, rtx);
-extern rtx gen_xop_frczv2df2 (rtx, rtx);
-extern rtx gen_xop_frczv8sf2 (rtx, rtx);
-extern rtx gen_xop_frczv4df2 (rtx, rtx);
-extern rtx gen_xop_maskcmpv16qi3 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_maskcmpv8hi3 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_maskcmpv4si3 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_maskcmpv2di3 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_maskcmp_unsv16qi3 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_maskcmp_unsv8hi3 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_maskcmp_unsv4si3 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_maskcmp_unsv2di3 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_maskcmp_uns2v16qi3 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_maskcmp_uns2v8hi3 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_maskcmp_uns2v4si3 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_maskcmp_uns2v2di3 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pcom_tfv16qi3 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pcom_tfv8hi3 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pcom_tfv4si3 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_pcom_tfv2di3 (rtx, rtx, rtx, rtx);
-extern rtx gen_xop_vpermil2v8sf3 (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_xop_vpermil2v4sf3 (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_xop_vpermil2v4df3 (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_xop_vpermil2v2df3 (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_aesenc (rtx, rtx, rtx);
-extern rtx gen_aesenclast (rtx, rtx, rtx);
-extern rtx gen_aesdec (rtx, rtx, rtx);
-extern rtx gen_aesdeclast (rtx, rtx, rtx);
-extern rtx gen_aesimc (rtx, rtx);
-extern rtx gen_aeskeygenassist (rtx, rtx, rtx);
-extern rtx gen_pclmulqdq (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_vzeroupper (rtx);
-extern rtx gen_avx2_pbroadcastv32qi (rtx, rtx);
-extern rtx gen_avx2_pbroadcastv16qi (rtx, rtx);
-extern rtx gen_avx2_pbroadcastv16hi (rtx, rtx);
-extern rtx gen_avx2_pbroadcastv8hi (rtx, rtx);
-extern rtx gen_avx2_pbroadcastv8si (rtx, rtx);
-extern rtx gen_avx2_pbroadcastv4si (rtx, rtx);
-extern rtx gen_avx2_pbroadcastv4di (rtx, rtx);
-extern rtx gen_avx2_pbroadcastv2di (rtx, rtx);
-extern rtx gen_avx2_permvarv8si (rtx, rtx, rtx);
-extern rtx gen_avx2_permv4df (rtx, rtx, rtx);
-extern rtx gen_avx2_permvarv8sf (rtx, rtx, rtx);
-extern rtx gen_avx2_permv4di_1 (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_permv2ti (rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_vec_dupv4df (rtx, rtx);
-extern rtx gen_vec_dupv8si (rtx, rtx);
-extern rtx gen_vec_dupv8sf (rtx, rtx);
-extern rtx gen_vec_dupv4di (rtx, rtx);
-extern rtx gen_vec_dupv4df (rtx, rtx);
-extern rtx gen_avx2_vbroadcasti128_v32qi (rtx, rtx);
-extern rtx gen_avx2_vbroadcasti128_v16hi (rtx, rtx);
-extern rtx gen_avx2_vbroadcasti128_v8si (rtx, rtx);
-extern rtx gen_avx2_vbroadcasti128_v4di (rtx, rtx);
-extern rtx gen_avx_vbroadcastf128_v32qi (rtx, rtx);
-extern rtx gen_avx_vbroadcastf128_v16hi (rtx, rtx);
-extern rtx gen_avx_vbroadcastf128_v8si (rtx, rtx);
-extern rtx gen_avx_vbroadcastf128_v4di (rtx, rtx);
-extern rtx gen_avx_vbroadcastf128_v8sf (rtx, rtx);
-extern rtx gen_avx_vbroadcastf128_v4df (rtx, rtx);
-extern rtx gen_avx_vpermilvarv8sf3 (rtx, rtx, rtx);
-extern rtx gen_avx_vpermilvarv4sf3 (rtx, rtx, rtx);
-extern rtx gen_avx_vpermilvarv4df3 (rtx, rtx, rtx);
-extern rtx gen_avx_vpermilvarv2df3 (rtx, rtx, rtx);
-extern rtx gen_avx2_vec_set_lo_v4di (rtx, rtx, rtx);
-extern rtx gen_avx2_vec_set_hi_v4di (rtx, rtx, rtx);
-extern rtx gen_vec_set_lo_v4di (rtx, rtx, rtx);
-extern rtx gen_vec_set_lo_v4df (rtx, rtx, rtx);
-extern rtx gen_vec_set_hi_v4di (rtx, rtx, rtx);
-extern rtx gen_vec_set_hi_v4df (rtx, rtx, rtx);
-extern rtx gen_vec_set_lo_v8si (rtx, rtx, rtx);
-extern rtx gen_vec_set_lo_v8sf (rtx, rtx, rtx);
-extern rtx gen_vec_set_hi_v8si (rtx, rtx, rtx);
-extern rtx gen_vec_set_hi_v8sf (rtx, rtx, rtx);
-extern rtx gen_vec_set_lo_v16hi (rtx, rtx, rtx);
-extern rtx gen_vec_set_hi_v16hi (rtx, rtx, rtx);
-extern rtx gen_vec_set_lo_v32qi (rtx, rtx, rtx);
-extern rtx gen_vec_set_hi_v32qi (rtx, rtx, rtx);
-extern rtx gen_avx_maskloadps (rtx, rtx, rtx);
-extern rtx gen_avx_maskloadpd (rtx, rtx, rtx);
-extern rtx gen_avx_maskloadps256 (rtx, rtx, rtx);
-extern rtx gen_avx_maskloadpd256 (rtx, rtx, rtx);
-extern rtx gen_avx2_maskloadd (rtx, rtx, rtx);
-extern rtx gen_avx2_maskloadq (rtx, rtx, rtx);
-extern rtx gen_avx2_maskloadd256 (rtx, rtx, rtx);
-extern rtx gen_avx2_maskloadq256 (rtx, rtx, rtx);
-extern rtx gen_avx_maskstoreps (rtx, rtx, rtx);
-extern rtx gen_avx_maskstorepd (rtx, rtx, rtx);
-extern rtx gen_avx_maskstoreps256 (rtx, rtx, rtx);
-extern rtx gen_avx_maskstorepd256 (rtx, rtx, rtx);
-extern rtx gen_avx2_maskstored (rtx, rtx, rtx);
-extern rtx gen_avx2_maskstoreq (rtx, rtx, rtx);
-extern rtx gen_avx2_maskstored256 (rtx, rtx, rtx);
-extern rtx gen_avx2_maskstoreq256 (rtx, rtx, rtx);
-extern rtx gen_avx_si256_si (rtx, rtx);
-extern rtx gen_avx_ps256_ps (rtx, rtx);
-extern rtx gen_avx_pd256_pd (rtx, rtx);
-extern rtx gen_avx2_ashrvv8si (rtx, rtx, rtx);
-extern rtx gen_avx2_ashrvv4si (rtx, rtx, rtx);
-extern rtx gen_avx2_ashlvv8si (rtx, rtx, rtx);
-extern rtx gen_avx2_lshrvv8si (rtx, rtx, rtx);
-extern rtx gen_avx2_ashlvv4si (rtx, rtx, rtx);
-extern rtx gen_avx2_lshrvv4si (rtx, rtx, rtx);
-extern rtx gen_avx2_ashlvv4di (rtx, rtx, rtx);
-extern rtx gen_avx2_lshrvv4di (rtx, rtx, rtx);
-extern rtx gen_avx2_ashlvv2di (rtx, rtx, rtx);
-extern rtx gen_avx2_lshrvv2di (rtx, rtx, rtx);
-extern rtx gen_avx_vec_concatv32qi (rtx, rtx, rtx);
-extern rtx gen_avx_vec_concatv16hi (rtx, rtx, rtx);
-extern rtx gen_avx_vec_concatv8si (rtx, rtx, rtx);
-extern rtx gen_avx_vec_concatv4di (rtx, rtx, rtx);
-extern rtx gen_avx_vec_concatv8sf (rtx, rtx, rtx);
-extern rtx gen_avx_vec_concatv4df (rtx, rtx, rtx);
-extern rtx gen_vcvtph2ps (rtx, rtx);
-extern rtx gen_vcvtph2ps256 (rtx, rtx);
-extern rtx gen_vcvtps2ph256 (rtx, rtx, rtx);
-extern rtx gen_mfence_sse2 (rtx);
-extern rtx gen_mfence_nosse (rtx);
-extern rtx gen_atomic_loaddi_fpu (rtx, rtx, rtx);
-extern rtx gen_atomic_storedi_fpu (rtx, rtx, rtx);
-extern rtx gen_loaddi_via_fpu (rtx, rtx);
-extern rtx gen_storedi_via_fpu (rtx, rtx);
-extern rtx gen_atomic_compare_and_swapqi_1 (rtx, rtx, rtx, rtx);
-extern rtx gen_atomic_compare_and_swaphi_1 (rtx, rtx, rtx, rtx);
-extern rtx gen_atomic_compare_and_swapsi_1 (rtx, rtx, rtx, rtx);
-extern rtx gen_atomic_compare_and_swapdi_1 (rtx, rtx, rtx, rtx);
-extern rtx gen_atomic_compare_and_swapdi_doubleword (rtx, rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_atomic_compare_and_swapti_doubleword (rtx, rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_atomic_fetch_addqi (rtx, rtx, rtx, rtx);
-extern rtx gen_atomic_fetch_addhi (rtx, rtx, rtx, rtx);
-extern rtx gen_atomic_fetch_addsi (rtx, rtx, rtx, rtx);
-extern rtx gen_atomic_fetch_adddi (rtx, rtx, rtx, rtx);
-extern rtx gen_atomic_exchangeqi (rtx, rtx, rtx, rtx);
-extern rtx gen_atomic_exchangehi (rtx, rtx, rtx, rtx);
-extern rtx gen_atomic_exchangesi (rtx, rtx, rtx, rtx);
-extern rtx gen_atomic_exchangedi (rtx, rtx, rtx, rtx);
-extern rtx gen_atomic_addqi (rtx, rtx, rtx);
-extern rtx gen_atomic_addhi (rtx, rtx, rtx);
-extern rtx gen_atomic_addsi (rtx, rtx, rtx);
-extern rtx gen_atomic_adddi (rtx, rtx, rtx);
-extern rtx gen_atomic_subqi (rtx, rtx, rtx);
-extern rtx gen_atomic_subhi (rtx, rtx, rtx);
-extern rtx gen_atomic_subsi (rtx, rtx, rtx);
-extern rtx gen_atomic_subdi (rtx, rtx, rtx);
-extern rtx gen_atomic_andqi (rtx, rtx, rtx);
-extern rtx gen_atomic_orqi (rtx, rtx, rtx);
-extern rtx gen_atomic_xorqi (rtx, rtx, rtx);
-extern rtx gen_atomic_andhi (rtx, rtx, rtx);
-extern rtx gen_atomic_orhi (rtx, rtx, rtx);
-extern rtx gen_atomic_xorhi (rtx, rtx, rtx);
-extern rtx gen_atomic_andsi (rtx, rtx, rtx);
-extern rtx gen_atomic_orsi (rtx, rtx, rtx);
-extern rtx gen_atomic_xorsi (rtx, rtx, rtx);
-extern rtx gen_atomic_anddi (rtx, rtx, rtx);
-extern rtx gen_atomic_ordi (rtx, rtx, rtx);
-extern rtx gen_atomic_xordi (rtx, rtx, rtx);
-extern rtx gen_cbranchqi4 (rtx, rtx, rtx, rtx);
-extern rtx gen_cbranchhi4 (rtx, rtx, rtx, rtx);
-extern rtx gen_cbranchsi4 (rtx, rtx, rtx, rtx);
-extern rtx gen_cbranchdi4 (rtx, rtx, rtx, rtx);
-extern rtx gen_cbranchti4 (rtx, rtx, rtx, rtx);
-extern rtx gen_cstoreqi4 (rtx, rtx, rtx, rtx);
-extern rtx gen_cstorehi4 (rtx, rtx, rtx, rtx);
-extern rtx gen_cstoresi4 (rtx, rtx, rtx, rtx);
-extern rtx gen_cstoredi4 (rtx, rtx, rtx, rtx);
-extern rtx gen_cmpsi_1 (rtx, rtx);
-extern rtx gen_cmpdi_1 (rtx, rtx);
-extern rtx gen_cmpqi_ext_3 (rtx, rtx);
-extern rtx gen_cbranchxf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_cstorexf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_cbranchsf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_cbranchdf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_cstoresf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_cstoredf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_cbranchcc4 (rtx, rtx, rtx, rtx);
-extern rtx gen_cstorecc4 (rtx, rtx, rtx, rtx);
-extern rtx gen_movoi (rtx, rtx);
-extern rtx gen_movti (rtx, rtx);
-extern rtx gen_movcdi (rtx, rtx);
-extern rtx gen_movqi (rtx, rtx);
-extern rtx gen_movhi (rtx, rtx);
-extern rtx gen_movsi (rtx, rtx);
-extern rtx gen_movdi (rtx, rtx);
-extern rtx gen_reload_noff_store (rtx, rtx, rtx);
-extern rtx gen_reload_noff_load (rtx, rtx, rtx);
-extern rtx gen_movstrictqi (rtx, rtx);
-extern rtx gen_movstricthi (rtx, rtx);
-extern rtx gen_movsi_insv_1 (rtx, rtx);
-extern rtx gen_movdi_insv_1 (rtx, rtx);
-extern rtx gen_movtf (rtx, rtx);
-extern rtx gen_movsf (rtx, rtx);
-extern rtx gen_movdf (rtx, rtx);
-extern rtx gen_movxf (rtx, rtx);
-extern rtx gen_zero_extendsidi2 (rtx, rtx);
-extern rtx gen_zero_extendhisi2 (rtx, rtx);
-extern rtx gen_zero_extendqihi2 (rtx, rtx);
-extern rtx gen_zero_extendqisi2 (rtx, rtx);
-extern rtx gen_extendsidi2 (rtx, rtx);
-extern rtx gen_extendsfdf2 (rtx, rtx);
-extern rtx gen_extendsfxf2 (rtx, rtx);
-extern rtx gen_extenddfxf2 (rtx, rtx);
-extern rtx gen_truncdfsf2 (rtx, rtx);
-extern rtx gen_truncdfsf2_with_temp (rtx, rtx, rtx);
-extern rtx gen_truncxfsf2 (rtx, rtx);
-extern rtx gen_truncxfdf2 (rtx, rtx);
-extern rtx gen_fix_truncxfdi2 (rtx, rtx);
-extern rtx gen_fix_truncsfdi2 (rtx, rtx);
-extern rtx gen_fix_truncdfdi2 (rtx, rtx);
-extern rtx gen_fix_truncxfsi2 (rtx, rtx);
-extern rtx gen_fix_truncsfsi2 (rtx, rtx);
-extern rtx gen_fix_truncdfsi2 (rtx, rtx);
-extern rtx gen_fix_truncsfhi2 (rtx, rtx);
-extern rtx gen_fix_truncdfhi2 (rtx, rtx);
-extern rtx gen_fix_truncxfhi2 (rtx, rtx);
-extern rtx gen_fixuns_truncsfsi2 (rtx, rtx);
-extern rtx gen_fixuns_truncdfsi2 (rtx, rtx);
-extern rtx gen_fixuns_truncsfhi2 (rtx, rtx);
-extern rtx gen_fixuns_truncdfhi2 (rtx, rtx);
-extern rtx gen_floathisf2 (rtx, rtx);
-extern rtx gen_floathidf2 (rtx, rtx);
-extern rtx gen_floathixf2 (rtx, rtx);
-extern rtx gen_floatsisf2 (rtx, rtx);
-extern rtx gen_floatsidf2 (rtx, rtx);
-extern rtx gen_floatsixf2 (rtx, rtx);
-extern rtx gen_floatdisf2 (rtx, rtx);
-extern rtx gen_floatdidf2 (rtx, rtx);
-extern rtx gen_floatdixf2 (rtx, rtx);
-extern rtx gen_floatunssisf2 (rtx, rtx);
-extern rtx gen_floatunssidf2 (rtx, rtx);
-extern rtx gen_floatunssixf2 (rtx, rtx);
-extern rtx gen_floatunsdisf2 (rtx, rtx);
-extern rtx gen_floatunsdidf2 (rtx, rtx);
-extern rtx gen_addqi3 (rtx, rtx, rtx);
-extern rtx gen_addhi3 (rtx, rtx, rtx);
-extern rtx gen_addsi3 (rtx, rtx, rtx);
-extern rtx gen_adddi3 (rtx, rtx, rtx);
-extern rtx gen_addti3 (rtx, rtx, rtx);
-extern rtx gen_subqi3 (rtx, rtx, rtx);
-extern rtx gen_subhi3 (rtx, rtx, rtx);
-extern rtx gen_subsi3 (rtx, rtx, rtx);
-extern rtx gen_subdi3 (rtx, rtx, rtx);
-extern rtx gen_subti3 (rtx, rtx, rtx);
-extern rtx gen_addqi3_carry (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_subqi3_carry (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_addhi3_carry (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_subhi3_carry (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_addsi3_carry (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_subsi3_carry (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_adddi3_carry (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_subdi3_carry (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_addxf3 (rtx, rtx, rtx);
-extern rtx gen_subxf3 (rtx, rtx, rtx);
-extern rtx gen_addsf3 (rtx, rtx, rtx);
-extern rtx gen_subsf3 (rtx, rtx, rtx);
-extern rtx gen_adddf3 (rtx, rtx, rtx);
-extern rtx gen_subdf3 (rtx, rtx, rtx);
-extern rtx gen_mulhi3 (rtx, rtx, rtx);
-extern rtx gen_mulsi3 (rtx, rtx, rtx);
-extern rtx gen_muldi3 (rtx, rtx, rtx);
-extern rtx gen_mulqi3 (rtx, rtx, rtx);
-extern rtx gen_mulsidi3 (rtx, rtx, rtx);
-extern rtx gen_umulsidi3 (rtx, rtx, rtx);
-extern rtx gen_mulditi3 (rtx, rtx, rtx);
-extern rtx gen_umulditi3 (rtx, rtx, rtx);
-extern rtx gen_mulqihi3 (rtx, rtx, rtx);
-extern rtx gen_umulqihi3 (rtx, rtx, rtx);
-extern rtx gen_smulsi3_highpart (rtx, rtx, rtx);
-extern rtx gen_umulsi3_highpart (rtx, rtx, rtx);
-extern rtx gen_smuldi3_highpart (rtx, rtx, rtx);
-extern rtx gen_umuldi3_highpart (rtx, rtx, rtx);
-extern rtx gen_mulxf3 (rtx, rtx, rtx);
-extern rtx gen_mulsf3 (rtx, rtx, rtx);
-extern rtx gen_muldf3 (rtx, rtx, rtx);
-extern rtx gen_divxf3 (rtx, rtx, rtx);
-extern rtx gen_divdf3 (rtx, rtx, rtx);
-extern rtx gen_divsf3 (rtx, rtx, rtx);
-extern rtx gen_divmodhi4 (rtx, rtx, rtx, rtx);
-extern rtx gen_divmodsi4 (rtx, rtx, rtx, rtx);
-extern rtx gen_divmoddi4 (rtx, rtx, rtx, rtx);
-extern rtx gen_divmodqi4 (rtx, rtx, rtx, rtx);
-extern rtx gen_udivmodhi4 (rtx, rtx, rtx, rtx);
-extern rtx gen_udivmodsi4 (rtx, rtx, rtx, rtx);
-extern rtx gen_udivmoddi4 (rtx, rtx, rtx, rtx);
-extern rtx gen_udivmodqi4 (rtx, rtx, rtx, rtx);
-extern rtx gen_testsi_ccno_1 (rtx, rtx);
-extern rtx gen_testqi_ccz_1 (rtx, rtx);
-extern rtx gen_testdi_ccno_1 (rtx, rtx);
-extern rtx gen_testqi_ext_ccno_0 (rtx, rtx);
-extern rtx gen_andqi3 (rtx, rtx, rtx);
-extern rtx gen_andhi3 (rtx, rtx, rtx);
-extern rtx gen_andsi3 (rtx, rtx, rtx);
-extern rtx gen_anddi3 (rtx, rtx, rtx);
-extern rtx gen_iorqi3 (rtx, rtx, rtx);
-extern rtx gen_xorqi3 (rtx, rtx, rtx);
-extern rtx gen_iorhi3 (rtx, rtx, rtx);
-extern rtx gen_xorhi3 (rtx, rtx, rtx);
-extern rtx gen_iorsi3 (rtx, rtx, rtx);
-extern rtx gen_xorsi3 (rtx, rtx, rtx);
-extern rtx gen_iordi3 (rtx, rtx, rtx);
-extern rtx gen_xordi3 (rtx, rtx, rtx);
-extern rtx gen_xorqi_cc_ext_1 (rtx, rtx, rtx);
-extern rtx gen_negqi2 (rtx, rtx);
-extern rtx gen_neghi2 (rtx, rtx);
-extern rtx gen_negsi2 (rtx, rtx);
-extern rtx gen_negdi2 (rtx, rtx);
-extern rtx gen_negti2 (rtx, rtx);
-extern rtx gen_abssf2 (rtx, rtx);
-extern rtx gen_negsf2 (rtx, rtx);
-extern rtx gen_absdf2 (rtx, rtx);
-extern rtx gen_negdf2 (rtx, rtx);
-extern rtx gen_absxf2 (rtx, rtx);
-extern rtx gen_negxf2 (rtx, rtx);
-extern rtx gen_abstf2 (rtx, rtx);
-extern rtx gen_negtf2 (rtx, rtx);
-extern rtx gen_copysignsf3 (rtx, rtx, rtx);
-extern rtx gen_copysigndf3 (rtx, rtx, rtx);
-extern rtx gen_copysigntf3 (rtx, rtx, rtx);
-extern rtx gen_one_cmplqi2 (rtx, rtx);
-extern rtx gen_one_cmplhi2 (rtx, rtx);
-extern rtx gen_one_cmplsi2 (rtx, rtx);
-extern rtx gen_one_cmpldi2 (rtx, rtx);
-extern rtx gen_ashlqi3 (rtx, rtx, rtx);
-extern rtx gen_ashlhi3 (rtx, rtx, rtx);
-extern rtx gen_ashlsi3 (rtx, rtx, rtx);
-extern rtx gen_ashldi3 (rtx, rtx, rtx);
-extern rtx gen_ashlti3 (rtx, rtx, rtx);
-extern rtx gen_x86_shiftsi_adj_1 (rtx, rtx, rtx, rtx);
-extern rtx gen_x86_shiftdi_adj_1 (rtx, rtx, rtx, rtx);
-extern rtx gen_x86_shiftsi_adj_2 (rtx, rtx, rtx);
-extern rtx gen_x86_shiftdi_adj_2 (rtx, rtx, rtx);
-extern rtx gen_lshrqi3 (rtx, rtx, rtx);
-extern rtx gen_ashrqi3 (rtx, rtx, rtx);
-extern rtx gen_lshrhi3 (rtx, rtx, rtx);
-extern rtx gen_ashrhi3 (rtx, rtx, rtx);
-extern rtx gen_lshrsi3 (rtx, rtx, rtx);
-extern rtx gen_ashrsi3 (rtx, rtx, rtx);
-extern rtx gen_lshrdi3 (rtx, rtx, rtx);
-extern rtx gen_ashrdi3 (rtx, rtx, rtx);
-extern rtx gen_lshrti3 (rtx, rtx, rtx);
-extern rtx gen_ashrti3 (rtx, rtx, rtx);
-extern rtx gen_x86_shiftsi_adj_3 (rtx, rtx, rtx);
-extern rtx gen_x86_shiftdi_adj_3 (rtx, rtx, rtx);
-extern rtx gen_rotlti3 (rtx, rtx, rtx);
-extern rtx gen_rotrti3 (rtx, rtx, rtx);
-extern rtx gen_rotldi3 (rtx, rtx, rtx);
-extern rtx gen_rotrdi3 (rtx, rtx, rtx);
-extern rtx gen_rotlqi3 (rtx, rtx, rtx);
-extern rtx gen_rotrqi3 (rtx, rtx, rtx);
-extern rtx gen_rotlhi3 (rtx, rtx, rtx);
-extern rtx gen_rotrhi3 (rtx, rtx, rtx);
-extern rtx gen_rotlsi3 (rtx, rtx, rtx);
-extern rtx gen_rotrsi3 (rtx, rtx, rtx);
-extern rtx gen_extv (rtx, rtx, rtx, rtx);
-extern rtx gen_extzv (rtx, rtx, rtx, rtx);
-extern rtx gen_insv (rtx, rtx, rtx, rtx);
-extern rtx gen_indirect_jump (rtx);
-extern rtx gen_tablejump (rtx, rtx);
-
-extern rtx gen_call (rtx, rtx, rtx);
-
-extern rtx gen_sibcall (rtx, rtx, rtx);
-
-extern rtx gen_call_pop (rtx, rtx, rtx, rtx);
-
-extern rtx gen_call_value (rtx, rtx, rtx, rtx);
-
-extern rtx gen_sibcall_value (rtx, rtx, rtx, rtx);
-
-extern rtx gen_call_value_pop (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_untyped_call (rtx, rtx, rtx);
-extern rtx gen_memory_blockage (void);
-extern rtx gen_return (void);
-extern rtx gen_simple_return (void);
-extern rtx gen_prologue (void);
-extern rtx gen_epilogue (void);
-extern rtx gen_sibcall_epilogue (void);
-extern rtx gen_eh_return (rtx);
-extern rtx gen_split_stack_prologue (void);
-extern rtx gen_split_stack_space_check (rtx, rtx);
-extern rtx gen_ffssi2 (rtx, rtx);
-extern rtx gen_ffsdi2 (rtx, rtx);
-extern rtx gen_clzhi2 (rtx, rtx);
-extern rtx gen_clzsi2 (rtx, rtx);
-extern rtx gen_clzdi2 (rtx, rtx);
-extern rtx gen_bswapsi2 (rtx, rtx);
-extern rtx gen_bswapdi2 (rtx, rtx);
-extern rtx gen_paritydi2 (rtx, rtx);
-extern rtx gen_paritysi2 (rtx, rtx);
-extern rtx gen_tls_global_dynamic_32 (rtx, rtx, rtx, rtx);
-extern rtx gen_tls_global_dynamic_64 (rtx, rtx, rtx);
-extern rtx gen_tls_local_dynamic_base_32 (rtx, rtx, rtx);
-extern rtx gen_tls_local_dynamic_base_64 (rtx, rtx);
-extern rtx gen_tls_dynamic_gnu2_32 (rtx, rtx, rtx);
-extern rtx gen_tls_dynamic_gnu2_64 (rtx, rtx);
-extern rtx gen_rsqrtsf2 (rtx, rtx);
-extern rtx gen_sqrtsf2 (rtx, rtx);
-extern rtx gen_sqrtdf2 (rtx, rtx);
-extern rtx gen_fmodxf3 (rtx, rtx, rtx);
-extern rtx gen_fmodsf3 (rtx, rtx, rtx);
-extern rtx gen_fmoddf3 (rtx, rtx, rtx);
-extern rtx gen_remainderxf3 (rtx, rtx, rtx);
-extern rtx gen_remaindersf3 (rtx, rtx, rtx);
-extern rtx gen_remainderdf3 (rtx, rtx, rtx);
-extern rtx gen_sincossf3 (rtx, rtx, rtx);
-extern rtx gen_sincosdf3 (rtx, rtx, rtx);
-extern rtx gen_tanxf2 (rtx, rtx);
-extern rtx gen_tansf2 (rtx, rtx);
-extern rtx gen_tandf2 (rtx, rtx);
-extern rtx gen_atan2xf3 (rtx, rtx, rtx);
-extern rtx gen_atan2sf3 (rtx, rtx, rtx);
-extern rtx gen_atan2df3 (rtx, rtx, rtx);
-extern rtx gen_atanxf2 (rtx, rtx);
-extern rtx gen_atansf2 (rtx, rtx);
-extern rtx gen_atandf2 (rtx, rtx);
-extern rtx gen_asinxf2 (rtx, rtx);
-extern rtx gen_asinsf2 (rtx, rtx);
-extern rtx gen_asindf2 (rtx, rtx);
-extern rtx gen_acosxf2 (rtx, rtx);
-extern rtx gen_acossf2 (rtx, rtx);
-extern rtx gen_acosdf2 (rtx, rtx);
-extern rtx gen_logxf2 (rtx, rtx);
-extern rtx gen_logsf2 (rtx, rtx);
-extern rtx gen_logdf2 (rtx, rtx);
-extern rtx gen_log10xf2 (rtx, rtx);
-extern rtx gen_log10sf2 (rtx, rtx);
-extern rtx gen_log10df2 (rtx, rtx);
-extern rtx gen_log2xf2 (rtx, rtx);
-extern rtx gen_log2sf2 (rtx, rtx);
-extern rtx gen_log2df2 (rtx, rtx);
-extern rtx gen_log1pxf2 (rtx, rtx);
-extern rtx gen_log1psf2 (rtx, rtx);
-extern rtx gen_log1pdf2 (rtx, rtx);
-extern rtx gen_logbxf2 (rtx, rtx);
-extern rtx gen_logbsf2 (rtx, rtx);
-extern rtx gen_logbdf2 (rtx, rtx);
-extern rtx gen_ilogbxf2 (rtx, rtx);
-extern rtx gen_ilogbsf2 (rtx, rtx);
-extern rtx gen_ilogbdf2 (rtx, rtx);
-extern rtx gen_expNcorexf3 (rtx, rtx, rtx);
-extern rtx gen_expxf2 (rtx, rtx);
-extern rtx gen_expsf2 (rtx, rtx);
-extern rtx gen_expdf2 (rtx, rtx);
-extern rtx gen_exp10xf2 (rtx, rtx);
-extern rtx gen_exp10sf2 (rtx, rtx);
-extern rtx gen_exp10df2 (rtx, rtx);
-extern rtx gen_exp2xf2 (rtx, rtx);
-extern rtx gen_exp2sf2 (rtx, rtx);
-extern rtx gen_exp2df2 (rtx, rtx);
-extern rtx gen_expm1xf2 (rtx, rtx);
-extern rtx gen_expm1sf2 (rtx, rtx);
-extern rtx gen_expm1df2 (rtx, rtx);
-extern rtx gen_ldexpxf3 (rtx, rtx, rtx);
-extern rtx gen_ldexpsf3 (rtx, rtx, rtx);
-extern rtx gen_ldexpdf3 (rtx, rtx, rtx);
-extern rtx gen_scalbxf3 (rtx, rtx, rtx);
-extern rtx gen_scalbsf3 (rtx, rtx, rtx);
-extern rtx gen_scalbdf3 (rtx, rtx, rtx);
-extern rtx gen_significandxf2 (rtx, rtx);
-extern rtx gen_significandsf2 (rtx, rtx);
-extern rtx gen_significanddf2 (rtx, rtx);
-extern rtx gen_rintsf2 (rtx, rtx);
-extern rtx gen_rintdf2 (rtx, rtx);
-extern rtx gen_roundsf2 (rtx, rtx);
-extern rtx gen_rounddf2 (rtx, rtx);
-extern rtx gen_roundxf2 (rtx, rtx);
-extern rtx gen_lrintxfhi2 (rtx, rtx);
-extern rtx gen_lrintxfsi2 (rtx, rtx);
-extern rtx gen_lrintxfdi2 (rtx, rtx);
-extern rtx gen_lrintsfsi2 (rtx, rtx);
-extern rtx gen_lrintdfsi2 (rtx, rtx);
-extern rtx gen_lrintsfdi2 (rtx, rtx);
-extern rtx gen_lrintdfdi2 (rtx, rtx);
-extern rtx gen_lroundsfhi2 (rtx, rtx);
-extern rtx gen_lrounddfhi2 (rtx, rtx);
-extern rtx gen_lroundxfhi2 (rtx, rtx);
-extern rtx gen_lroundsfsi2 (rtx, rtx);
-extern rtx gen_lrounddfsi2 (rtx, rtx);
-extern rtx gen_lroundxfsi2 (rtx, rtx);
-extern rtx gen_lroundsfdi2 (rtx, rtx);
-extern rtx gen_lrounddfdi2 (rtx, rtx);
-extern rtx gen_lroundxfdi2 (rtx, rtx);
-extern rtx gen_floorxf2 (rtx, rtx);
-extern rtx gen_floorsf2 (rtx, rtx);
-extern rtx gen_floordf2 (rtx, rtx);
-extern rtx gen_lfloorxfhi2 (rtx, rtx);
-extern rtx gen_lfloorxfsi2 (rtx, rtx);
-extern rtx gen_lfloorxfdi2 (rtx, rtx);
-extern rtx gen_lfloorsfsi2 (rtx, rtx);
-extern rtx gen_lfloorsfdi2 (rtx, rtx);
-extern rtx gen_lfloordfsi2 (rtx, rtx);
-extern rtx gen_lfloordfdi2 (rtx, rtx);
-extern rtx gen_ceilxf2 (rtx, rtx);
-extern rtx gen_ceilsf2 (rtx, rtx);
-extern rtx gen_ceildf2 (rtx, rtx);
-extern rtx gen_lceilxfhi2 (rtx, rtx);
-extern rtx gen_lceilxfsi2 (rtx, rtx);
-extern rtx gen_lceilxfdi2 (rtx, rtx);
-extern rtx gen_lceilsfsi2 (rtx, rtx);
-extern rtx gen_lceilsfdi2 (rtx, rtx);
-extern rtx gen_lceildfsi2 (rtx, rtx);
-extern rtx gen_lceildfdi2 (rtx, rtx);
-extern rtx gen_btruncxf2 (rtx, rtx);
-extern rtx gen_btruncsf2 (rtx, rtx);
-extern rtx gen_btruncdf2 (rtx, rtx);
-extern rtx gen_nearbyintxf2 (rtx, rtx);
-extern rtx gen_nearbyintsf2 (rtx, rtx);
-extern rtx gen_nearbyintdf2 (rtx, rtx);
-extern rtx gen_isinfxf2 (rtx, rtx);
-extern rtx gen_isinfsf2 (rtx, rtx);
-extern rtx gen_isinfdf2 (rtx, rtx);
-extern rtx gen_signbitxf2 (rtx, rtx);
-extern rtx gen_signbitdf2 (rtx, rtx);
-extern rtx gen_signbitsf2 (rtx, rtx);
-extern rtx gen_movmemsi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_movmemdi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_strmov (rtx, rtx, rtx, rtx);
-extern rtx gen_strmov_singleop (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_rep_mov (rtx, rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_setmemsi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_setmemdi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_strset (rtx, rtx, rtx);
-extern rtx gen_strset_singleop (rtx, rtx, rtx, rtx);
-extern rtx gen_rep_stos (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_cmpstrnsi (rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_cmpintqi (rtx);
-extern rtx gen_cmpstrnqi_nz_1 (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_cmpstrnqi_1 (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_strlensi (rtx, rtx, rtx, rtx);
-extern rtx gen_strlendi (rtx, rtx, rtx, rtx);
-extern rtx gen_strlenqi_1 (rtx, rtx, rtx);
-extern rtx gen_movqicc (rtx, rtx, rtx, rtx);
-extern rtx gen_movhicc (rtx, rtx, rtx, rtx);
-extern rtx gen_movsicc (rtx, rtx, rtx, rtx);
-extern rtx gen_movdicc (rtx, rtx, rtx, rtx);
-extern rtx gen_x86_movsicc_0_m1 (rtx, rtx, rtx);
-extern rtx gen_x86_movdicc_0_m1 (rtx, rtx, rtx);
-extern rtx gen_movsfcc (rtx, rtx, rtx, rtx);
-extern rtx gen_movdfcc (rtx, rtx, rtx, rtx);
-extern rtx gen_movxfcc (rtx, rtx, rtx, rtx);
-extern rtx gen_addqicc (rtx, rtx, rtx, rtx);
-extern rtx gen_addhicc (rtx, rtx, rtx, rtx);
-extern rtx gen_addsicc (rtx, rtx, rtx, rtx);
-extern rtx gen_adddicc (rtx, rtx, rtx, rtx);
-extern rtx gen_allocate_stack (rtx, rtx);
-extern rtx gen_probe_stack (rtx);
-extern rtx gen_builtin_setjmp_receiver (rtx);
-extern rtx gen_prefetch (rtx, rtx, rtx);
-extern rtx gen_stack_protect_set (rtx, rtx);
-extern rtx gen_stack_protect_test (rtx, rtx, rtx);
-extern rtx gen_rdpmc (rtx, rtx);
-extern rtx gen_rdtsc (rtx);
-extern rtx gen_rdtscp (rtx, rtx);
-extern rtx gen_lwp_llwpcb (rtx);
-extern rtx gen_lwp_slwpcb (rtx);
-extern rtx gen_lwp_lwpvalsi3 (rtx, rtx, rtx, rtx);
-extern rtx gen_lwp_lwpvaldi3 (rtx, rtx, rtx, rtx);
-extern rtx gen_lwp_lwpinssi3 (rtx, rtx, rtx, rtx);
-extern rtx gen_lwp_lwpinsdi3 (rtx, rtx, rtx, rtx);
-extern rtx gen_pause (void);
-extern rtx gen_movv8qi (rtx, rtx);
-extern rtx gen_movv4hi (rtx, rtx);
-extern rtx gen_movv2si (rtx, rtx);
-extern rtx gen_movv1di (rtx, rtx);
-extern rtx gen_movv2sf (rtx, rtx);
-extern rtx gen_pushv8qi1 (rtx);
-extern rtx gen_pushv4hi1 (rtx);
-extern rtx gen_pushv2si1 (rtx);
-extern rtx gen_pushv1di1 (rtx);
-extern rtx gen_pushv2sf1 (rtx);
-extern rtx gen_movmisalignv8qi (rtx, rtx);
-extern rtx gen_movmisalignv4hi (rtx, rtx);
-extern rtx gen_movmisalignv2si (rtx, rtx);
-extern rtx gen_movmisalignv1di (rtx, rtx);
-extern rtx gen_movmisalignv2sf (rtx, rtx);
-extern rtx gen_mmx_addv2sf3 (rtx, rtx, rtx);
-extern rtx gen_mmx_subv2sf3 (rtx, rtx, rtx);
-extern rtx gen_mmx_subrv2sf3 (rtx, rtx, rtx);
-extern rtx gen_mmx_mulv2sf3 (rtx, rtx, rtx);
-extern rtx gen_mmx_smaxv2sf3 (rtx, rtx, rtx);
-extern rtx gen_mmx_sminv2sf3 (rtx, rtx, rtx);
-extern rtx gen_mmx_eqv2sf3 (rtx, rtx, rtx);
-extern rtx gen_vec_setv2sf (rtx, rtx, rtx);
-extern rtx gen_vec_extractv2sf (rtx, rtx, rtx);
-extern rtx gen_vec_initv2sf (rtx, rtx);
-extern rtx gen_mmx_addv8qi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_subv8qi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_addv4hi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_subv4hi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_addv2si3 (rtx, rtx, rtx);
-extern rtx gen_mmx_subv2si3 (rtx, rtx, rtx);
-extern rtx gen_mmx_addv1di3 (rtx, rtx, rtx);
-extern rtx gen_mmx_subv1di3 (rtx, rtx, rtx);
-extern rtx gen_mmx_ssaddv8qi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_usaddv8qi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_sssubv8qi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_ussubv8qi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_ssaddv4hi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_usaddv4hi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_sssubv4hi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_ussubv4hi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_mulv4hi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_smulv4hi3_highpart (rtx, rtx, rtx);
-extern rtx gen_mmx_umulv4hi3_highpart (rtx, rtx, rtx);
-extern rtx gen_mmx_pmaddwd (rtx, rtx, rtx);
-extern rtx gen_mmx_pmulhrwv4hi3 (rtx, rtx, rtx);
-extern rtx gen_sse2_umulv1siv1di3 (rtx, rtx, rtx);
-extern rtx gen_mmx_smaxv4hi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_sminv4hi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_umaxv8qi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_uminv8qi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_eqv8qi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_eqv4hi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_eqv2si3 (rtx, rtx, rtx);
-extern rtx gen_mmx_andv8qi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_iorv8qi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_xorv8qi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_andv4hi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_iorv4hi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_xorv4hi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_andv2si3 (rtx, rtx, rtx);
-extern rtx gen_mmx_iorv2si3 (rtx, rtx, rtx);
-extern rtx gen_mmx_xorv2si3 (rtx, rtx, rtx);
-extern rtx gen_mmx_pinsrw (rtx, rtx, rtx, rtx);
-extern rtx gen_mmx_pshufw (rtx, rtx, rtx);
-extern rtx gen_vec_setv2si (rtx, rtx, rtx);
-extern rtx gen_vec_extractv2si (rtx, rtx, rtx);
-extern rtx gen_vec_initv2si (rtx, rtx);
-extern rtx gen_vec_setv4hi (rtx, rtx, rtx);
-extern rtx gen_vec_extractv4hi (rtx, rtx, rtx);
-extern rtx gen_vec_initv4hi (rtx, rtx);
-extern rtx gen_vec_setv8qi (rtx, rtx, rtx);
-extern rtx gen_vec_extractv8qi (rtx, rtx, rtx);
-extern rtx gen_vec_initv8qi (rtx, rtx);
-extern rtx gen_mmx_uavgv8qi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_uavgv4hi3 (rtx, rtx, rtx);
-extern rtx gen_mmx_maskmovq (rtx, rtx, rtx);
-extern rtx gen_mmx_emms (void);
-extern rtx gen_mmx_femms (void);
-extern rtx gen_movv32qi (rtx, rtx);
-extern rtx gen_movv16qi (rtx, rtx);
-extern rtx gen_movv16hi (rtx, rtx);
-extern rtx gen_movv8hi (rtx, rtx);
-extern rtx gen_movv8si (rtx, rtx);
-extern rtx gen_movv4si (rtx, rtx);
-extern rtx gen_movv4di (rtx, rtx);
-extern rtx gen_movv2di (rtx, rtx);
-extern rtx gen_movv2ti (rtx, rtx);
-extern rtx gen_movv1ti (rtx, rtx);
-extern rtx gen_movv8sf (rtx, rtx);
-extern rtx gen_movv4sf (rtx, rtx);
-extern rtx gen_movv4df (rtx, rtx);
-extern rtx gen_movv2df (rtx, rtx);
-extern rtx gen_pushv32qi1 (rtx);
-extern rtx gen_pushv16qi1 (rtx);
-extern rtx gen_pushv16hi1 (rtx);
-extern rtx gen_pushv8hi1 (rtx);
-extern rtx gen_pushv8si1 (rtx);
-extern rtx gen_pushv4si1 (rtx);
-extern rtx gen_pushv4di1 (rtx);
-extern rtx gen_pushv2di1 (rtx);
-extern rtx gen_pushv2ti1 (rtx);
-extern rtx gen_pushv1ti1 (rtx);
-extern rtx gen_pushv8sf1 (rtx);
-extern rtx gen_pushv4sf1 (rtx);
-extern rtx gen_pushv4df1 (rtx);
-extern rtx gen_pushv2df1 (rtx);
-extern rtx gen_movmisalignv32qi (rtx, rtx);
-extern rtx gen_movmisalignv16qi (rtx, rtx);
-extern rtx gen_movmisalignv16hi (rtx, rtx);
-extern rtx gen_movmisalignv8hi (rtx, rtx);
-extern rtx gen_movmisalignv8si (rtx, rtx);
-extern rtx gen_movmisalignv4si (rtx, rtx);
-extern rtx gen_movmisalignv4di (rtx, rtx);
-extern rtx gen_movmisalignv2di (rtx, rtx);
-extern rtx gen_movmisalignv2ti (rtx, rtx);
-extern rtx gen_movmisalignv1ti (rtx, rtx);
-extern rtx gen_movmisalignv8sf (rtx, rtx);
-extern rtx gen_movmisalignv4sf (rtx, rtx);
-extern rtx gen_movmisalignv4df (rtx, rtx);
-extern rtx gen_movmisalignv2df (rtx, rtx);
-extern rtx gen_storentdi (rtx, rtx);
-extern rtx gen_storentsi (rtx, rtx);
-extern rtx gen_storentsf (rtx, rtx);
-extern rtx gen_storentdf (rtx, rtx);
-extern rtx gen_storentv4di (rtx, rtx);
-extern rtx gen_storentv2di (rtx, rtx);
-extern rtx gen_storentv8sf (rtx, rtx);
-extern rtx gen_storentv4sf (rtx, rtx);
-extern rtx gen_storentv4df (rtx, rtx);
-extern rtx gen_storentv2df (rtx, rtx);
-extern rtx gen_absv8sf2 (rtx, rtx);
-extern rtx gen_negv8sf2 (rtx, rtx);
-extern rtx gen_absv4sf2 (rtx, rtx);
-extern rtx gen_negv4sf2 (rtx, rtx);
-extern rtx gen_absv4df2 (rtx, rtx);
-extern rtx gen_negv4df2 (rtx, rtx);
-extern rtx gen_absv2df2 (rtx, rtx);
-extern rtx gen_negv2df2 (rtx, rtx);
-extern rtx gen_addv8sf3 (rtx, rtx, rtx);
-extern rtx gen_subv8sf3 (rtx, rtx, rtx);
-extern rtx gen_addv4sf3 (rtx, rtx, rtx);
-extern rtx gen_subv4sf3 (rtx, rtx, rtx);
-extern rtx gen_addv4df3 (rtx, rtx, rtx);
-extern rtx gen_subv4df3 (rtx, rtx, rtx);
-extern rtx gen_addv2df3 (rtx, rtx, rtx);
-extern rtx gen_subv2df3 (rtx, rtx, rtx);
-extern rtx gen_mulv8sf3 (rtx, rtx, rtx);
-extern rtx gen_mulv4sf3 (rtx, rtx, rtx);
-extern rtx gen_mulv4df3 (rtx, rtx, rtx);
-extern rtx gen_mulv2df3 (rtx, rtx, rtx);
-extern rtx gen_divv4df3 (rtx, rtx, rtx);
-extern rtx gen_divv2df3 (rtx, rtx, rtx);
-extern rtx gen_divv8sf3 (rtx, rtx, rtx);
-extern rtx gen_divv4sf3 (rtx, rtx, rtx);
-extern rtx gen_sqrtv4df2 (rtx, rtx);
-extern rtx gen_sqrtv2df2 (rtx, rtx);
-extern rtx gen_sqrtv8sf2 (rtx, rtx);
-extern rtx gen_sqrtv4sf2 (rtx, rtx);
-extern rtx gen_rsqrtv8sf2 (rtx, rtx);
-extern rtx gen_rsqrtv4sf2 (rtx, rtx);
-extern rtx gen_smaxv8sf3 (rtx, rtx, rtx);
-extern rtx gen_sminv8sf3 (rtx, rtx, rtx);
-extern rtx gen_smaxv4sf3 (rtx, rtx, rtx);
-extern rtx gen_sminv4sf3 (rtx, rtx, rtx);
-extern rtx gen_smaxv4df3 (rtx, rtx, rtx);
-extern rtx gen_sminv4df3 (rtx, rtx, rtx);
-extern rtx gen_smaxv2df3 (rtx, rtx, rtx);
-extern rtx gen_sminv2df3 (rtx, rtx, rtx);
-extern rtx gen_reduc_splus_v4df (rtx, rtx);
-extern rtx gen_reduc_splus_v2df (rtx, rtx);
-extern rtx gen_reduc_splus_v8sf (rtx, rtx);
-extern rtx gen_reduc_splus_v4sf (rtx, rtx);
-extern rtx gen_reduc_smax_v32qi (rtx, rtx);
-extern rtx gen_reduc_smin_v32qi (rtx, rtx);
-extern rtx gen_reduc_smax_v16hi (rtx, rtx);
-extern rtx gen_reduc_smin_v16hi (rtx, rtx);
-extern rtx gen_reduc_smax_v8si (rtx, rtx);
-extern rtx gen_reduc_smin_v8si (rtx, rtx);
-extern rtx gen_reduc_smax_v4di (rtx, rtx);
-extern rtx gen_reduc_smin_v4di (rtx, rtx);
-extern rtx gen_reduc_smax_v8sf (rtx, rtx);
-extern rtx gen_reduc_smin_v8sf (rtx, rtx);
-extern rtx gen_reduc_smax_v4df (rtx, rtx);
-extern rtx gen_reduc_smin_v4df (rtx, rtx);
-extern rtx gen_reduc_smax_v4sf (rtx, rtx);
-extern rtx gen_reduc_smin_v4sf (rtx, rtx);
-extern rtx gen_reduc_umax_v32qi (rtx, rtx);
-extern rtx gen_reduc_umin_v32qi (rtx, rtx);
-extern rtx gen_reduc_umax_v16hi (rtx, rtx);
-extern rtx gen_reduc_umin_v16hi (rtx, rtx);
-extern rtx gen_reduc_umax_v8si (rtx, rtx);
-extern rtx gen_reduc_umin_v8si (rtx, rtx);
-extern rtx gen_reduc_umax_v4di (rtx, rtx);
-extern rtx gen_reduc_umin_v4di (rtx, rtx);
-extern rtx gen_reduc_umin_v8hi (rtx, rtx);
-extern rtx gen_vcondv32qiv8sf (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv16hiv8sf (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv8siv8sf (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4div8sf (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv8sfv8sf (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4dfv8sf (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv32qiv4df (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv16hiv4df (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv8siv4df (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4div4df (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv8sfv4df (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4dfv4df (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv16qiv4sf (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv8hiv4sf (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4siv4sf (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv2div4sf (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4sfv4sf (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv2dfv4sf (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv16qiv2df (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv8hiv2df (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4siv2df (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv2div2df (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4sfv2df (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv2dfv2df (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_andv8sf3 (rtx, rtx, rtx);
-extern rtx gen_iorv8sf3 (rtx, rtx, rtx);
-extern rtx gen_xorv8sf3 (rtx, rtx, rtx);
-extern rtx gen_andv4sf3 (rtx, rtx, rtx);
-extern rtx gen_iorv4sf3 (rtx, rtx, rtx);
-extern rtx gen_xorv4sf3 (rtx, rtx, rtx);
-extern rtx gen_andv4df3 (rtx, rtx, rtx);
-extern rtx gen_iorv4df3 (rtx, rtx, rtx);
-extern rtx gen_xorv4df3 (rtx, rtx, rtx);
-extern rtx gen_andv2df3 (rtx, rtx, rtx);
-extern rtx gen_iorv2df3 (rtx, rtx, rtx);
-extern rtx gen_xorv2df3 (rtx, rtx, rtx);
-extern rtx gen_copysignv8sf3 (rtx, rtx, rtx);
-extern rtx gen_copysignv4sf3 (rtx, rtx, rtx);
-extern rtx gen_copysignv4df3 (rtx, rtx, rtx);
-extern rtx gen_copysignv2df3 (rtx, rtx, rtx);
-extern rtx gen_fmasf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fmadf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fmav4sf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fmav2df4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fmav8sf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fmav4df4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fmssf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fmsdf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fmsv4sf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fmsv2df4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fmsv8sf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fmsv4df4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fnmasf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fnmadf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fnmav4sf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fnmav2df4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fnmav8sf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fnmav4df4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fnmssf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fnmsdf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fnmsv4sf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fnmsv2df4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fnmsv8sf4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fnmsv4df4 (rtx, rtx, rtx, rtx);
-extern rtx gen_fma4i_fmadd_sf (rtx, rtx, rtx, rtx);
-extern rtx gen_fma4i_fmadd_df (rtx, rtx, rtx, rtx);
-extern rtx gen_fma4i_fmadd_v4sf (rtx, rtx, rtx, rtx);
-extern rtx gen_fma4i_fmadd_v2df (rtx, rtx, rtx, rtx);
-extern rtx gen_fma4i_fmadd_v8sf (rtx, rtx, rtx, rtx);
-extern rtx gen_fma4i_fmadd_v4df (rtx, rtx, rtx, rtx);
-extern rtx gen_fmaddsub_v8sf (rtx, rtx, rtx, rtx);
-extern rtx gen_fmaddsub_v4sf (rtx, rtx, rtx, rtx);
-extern rtx gen_fmaddsub_v4df (rtx, rtx, rtx, rtx);
-extern rtx gen_fmaddsub_v2df (rtx, rtx, rtx, rtx);
-extern rtx gen_fmai_vmfmadd_v4sf (rtx, rtx, rtx, rtx);
-extern rtx gen_fmai_vmfmadd_v2df (rtx, rtx, rtx, rtx);
-extern rtx gen_fma4i_vmfmadd_v4sf (rtx, rtx, rtx, rtx);
-extern rtx gen_fma4i_vmfmadd_v2df (rtx, rtx, rtx, rtx);
-extern rtx gen_floatunsv8siv8sf2 (rtx, rtx);
-extern rtx gen_floatunsv4siv4sf2 (rtx, rtx);
-extern rtx gen_fixuns_truncv8sfv8si2 (rtx, rtx);
-extern rtx gen_fixuns_truncv4sfv4si2 (rtx, rtx);
-extern rtx gen_avx_cvtpd2dq256_2 (rtx, rtx);
-extern rtx gen_sse2_cvtpd2dq (rtx, rtx);
-extern rtx gen_avx_cvttpd2dq256_2 (rtx, rtx);
-extern rtx gen_sse2_cvttpd2dq (rtx, rtx);
-extern rtx gen_sse2_cvtpd2ps (rtx, rtx);
-extern rtx gen_vec_unpacks_hi_v4sf (rtx, rtx);
-extern rtx gen_vec_unpacks_hi_v8sf (rtx, rtx);
-extern rtx gen_vec_unpacks_lo_v4sf (rtx, rtx);
-extern rtx gen_vec_unpacks_lo_v8sf (rtx, rtx);
-extern rtx gen_vec_unpacks_float_hi_v16hi (rtx, rtx);
-extern rtx gen_vec_unpacks_float_hi_v8hi (rtx, rtx);
-extern rtx gen_vec_unpacks_float_lo_v16hi (rtx, rtx);
-extern rtx gen_vec_unpacks_float_lo_v8hi (rtx, rtx);
-extern rtx gen_vec_unpacku_float_hi_v16hi (rtx, rtx);
-extern rtx gen_vec_unpacku_float_hi_v8hi (rtx, rtx);
-extern rtx gen_vec_unpacku_float_lo_v16hi (rtx, rtx);
-extern rtx gen_vec_unpacku_float_lo_v8hi (rtx, rtx);
-extern rtx gen_vec_unpacks_float_hi_v4si (rtx, rtx);
-extern rtx gen_vec_unpacks_float_lo_v4si (rtx, rtx);
-extern rtx gen_vec_unpacks_float_hi_v8si (rtx, rtx);
-extern rtx gen_vec_unpacks_float_lo_v8si (rtx, rtx);
-extern rtx gen_vec_unpacku_float_hi_v4si (rtx, rtx);
-extern rtx gen_vec_unpacku_float_lo_v4si (rtx, rtx);
-extern rtx gen_vec_unpacku_float_hi_v8si (rtx, rtx);
-extern rtx gen_vec_unpacku_float_lo_v8si (rtx, rtx);
-extern rtx gen_vec_pack_trunc_v4df (rtx, rtx, rtx);
-extern rtx gen_vec_pack_trunc_v2df (rtx, rtx, rtx);
-extern rtx gen_vec_pack_sfix_trunc_v4df (rtx, rtx, rtx);
-extern rtx gen_vec_pack_sfix_trunc_v2df (rtx, rtx, rtx);
-extern rtx gen_vec_pack_ufix_trunc_v4df (rtx, rtx, rtx);
-extern rtx gen_vec_pack_ufix_trunc_v2df (rtx, rtx, rtx);
-extern rtx gen_vec_pack_sfix_v4df (rtx, rtx, rtx);
-extern rtx gen_vec_pack_sfix_v2df (rtx, rtx, rtx);
-extern rtx gen_sse_movhlps_exp (rtx, rtx, rtx);
-extern rtx gen_sse_movlhps_exp (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_highv8sf (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_lowv8sf (rtx, rtx, rtx);
-extern rtx gen_avx_shufps256 (rtx, rtx, rtx, rtx);
-extern rtx gen_sse_shufps (rtx, rtx, rtx, rtx);
-extern rtx gen_sse_loadhps_exp (rtx, rtx, rtx);
-extern rtx gen_sse_loadlps_exp (rtx, rtx, rtx);
-extern rtx gen_vec_initv16qi (rtx, rtx);
-extern rtx gen_vec_initv8hi (rtx, rtx);
-extern rtx gen_vec_initv4si (rtx, rtx);
-extern rtx gen_vec_initv2di (rtx, rtx);
-extern rtx gen_vec_initv4sf (rtx, rtx);
-extern rtx gen_vec_initv2df (rtx, rtx);
-extern rtx gen_vec_setv32qi (rtx, rtx, rtx);
-extern rtx gen_vec_setv16qi (rtx, rtx, rtx);
-extern rtx gen_vec_setv16hi (rtx, rtx, rtx);
-extern rtx gen_vec_setv8hi (rtx, rtx, rtx);
-extern rtx gen_vec_setv8si (rtx, rtx, rtx);
-extern rtx gen_vec_setv4si (rtx, rtx, rtx);
-extern rtx gen_vec_setv4di (rtx, rtx, rtx);
-extern rtx gen_vec_setv2di (rtx, rtx, rtx);
-extern rtx gen_vec_setv8sf (rtx, rtx, rtx);
-extern rtx gen_vec_setv4sf (rtx, rtx, rtx);
-extern rtx gen_vec_setv4df (rtx, rtx, rtx);
-extern rtx gen_vec_setv2df (rtx, rtx, rtx);
-extern rtx gen_avx_vextractf128v32qi (rtx, rtx, rtx);
-extern rtx gen_avx_vextractf128v16hi (rtx, rtx, rtx);
-extern rtx gen_avx_vextractf128v8si (rtx, rtx, rtx);
-extern rtx gen_avx_vextractf128v4di (rtx, rtx, rtx);
-extern rtx gen_avx_vextractf128v8sf (rtx, rtx, rtx);
-extern rtx gen_avx_vextractf128v4df (rtx, rtx, rtx);
-extern rtx gen_vec_extractv32qi (rtx, rtx, rtx);
-extern rtx gen_vec_extractv16qi (rtx, rtx, rtx);
-extern rtx gen_vec_extractv16hi (rtx, rtx, rtx);
-extern rtx gen_vec_extractv8hi (rtx, rtx, rtx);
-extern rtx gen_vec_extractv8si (rtx, rtx, rtx);
-extern rtx gen_vec_extractv4si (rtx, rtx, rtx);
-extern rtx gen_vec_extractv4di (rtx, rtx, rtx);
-extern rtx gen_vec_extractv2di (rtx, rtx, rtx);
-extern rtx gen_vec_extractv8sf (rtx, rtx, rtx);
-extern rtx gen_vec_extractv4sf (rtx, rtx, rtx);
-extern rtx gen_vec_extractv4df (rtx, rtx, rtx);
-extern rtx gen_vec_extractv2df (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_highv4df (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_highv2df (rtx, rtx, rtx);
-extern rtx gen_avx_movddup256 (rtx, rtx);
-extern rtx gen_avx_unpcklpd256 (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_lowv4df (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_lowv2df (rtx, rtx, rtx);
-extern rtx gen_avx_shufpd256 (rtx, rtx, rtx, rtx);
-extern rtx gen_sse2_shufpd (rtx, rtx, rtx, rtx);
-extern rtx gen_sse2_loadhpd_exp (rtx, rtx, rtx);
-extern rtx gen_sse2_loadlpd_exp (rtx, rtx, rtx);
-extern rtx gen_negv32qi2 (rtx, rtx);
-extern rtx gen_negv16qi2 (rtx, rtx);
-extern rtx gen_negv16hi2 (rtx, rtx);
-extern rtx gen_negv8hi2 (rtx, rtx);
-extern rtx gen_negv8si2 (rtx, rtx);
-extern rtx gen_negv4si2 (rtx, rtx);
-extern rtx gen_negv4di2 (rtx, rtx);
-extern rtx gen_negv2di2 (rtx, rtx);
-extern rtx gen_addv32qi3 (rtx, rtx, rtx);
-extern rtx gen_subv32qi3 (rtx, rtx, rtx);
-extern rtx gen_addv16qi3 (rtx, rtx, rtx);
-extern rtx gen_subv16qi3 (rtx, rtx, rtx);
-extern rtx gen_addv16hi3 (rtx, rtx, rtx);
-extern rtx gen_subv16hi3 (rtx, rtx, rtx);
-extern rtx gen_addv8hi3 (rtx, rtx, rtx);
-extern rtx gen_subv8hi3 (rtx, rtx, rtx);
-extern rtx gen_addv8si3 (rtx, rtx, rtx);
-extern rtx gen_subv8si3 (rtx, rtx, rtx);
-extern rtx gen_addv4si3 (rtx, rtx, rtx);
-extern rtx gen_subv4si3 (rtx, rtx, rtx);
-extern rtx gen_addv4di3 (rtx, rtx, rtx);
-extern rtx gen_subv4di3 (rtx, rtx, rtx);
-extern rtx gen_addv2di3 (rtx, rtx, rtx);
-extern rtx gen_subv2di3 (rtx, rtx, rtx);
-extern rtx gen_avx2_ssaddv32qi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_usaddv32qi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_sssubv32qi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_ussubv32qi3 (rtx, rtx, rtx);
-extern rtx gen_sse2_ssaddv16qi3 (rtx, rtx, rtx);
-extern rtx gen_sse2_usaddv16qi3 (rtx, rtx, rtx);
-extern rtx gen_sse2_sssubv16qi3 (rtx, rtx, rtx);
-extern rtx gen_sse2_ussubv16qi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_ssaddv16hi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_usaddv16hi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_sssubv16hi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_ussubv16hi3 (rtx, rtx, rtx);
-extern rtx gen_sse2_ssaddv8hi3 (rtx, rtx, rtx);
-extern rtx gen_sse2_usaddv8hi3 (rtx, rtx, rtx);
-extern rtx gen_sse2_sssubv8hi3 (rtx, rtx, rtx);
-extern rtx gen_sse2_ussubv8hi3 (rtx, rtx, rtx);
-extern rtx gen_mulv16hi3 (rtx, rtx, rtx);
-extern rtx gen_mulv8hi3 (rtx, rtx, rtx);
-extern rtx gen_smulv16hi3_highpart (rtx, rtx, rtx);
-extern rtx gen_umulv16hi3_highpart (rtx, rtx, rtx);
-extern rtx gen_smulv8hi3_highpart (rtx, rtx, rtx);
-extern rtx gen_umulv8hi3_highpart (rtx, rtx, rtx);
-extern rtx gen_avx2_umulv4siv4di3 (rtx, rtx, rtx);
-extern rtx gen_sse2_umulv2siv2di3 (rtx, rtx, rtx);
-extern rtx gen_avx2_mulv4siv4di3 (rtx, rtx, rtx);
-extern rtx gen_sse4_1_mulv2siv2di3 (rtx, rtx, rtx);
-extern rtx gen_avx2_pmaddwd (rtx, rtx, rtx);
-extern rtx gen_sse2_pmaddwd (rtx, rtx, rtx);
-extern rtx gen_mulv8si3 (rtx, rtx, rtx);
-extern rtx gen_mulv4si3 (rtx, rtx, rtx);
-extern rtx gen_vec_widen_smult_hi_v16hi (rtx, rtx, rtx);
-extern rtx gen_vec_widen_umult_hi_v16hi (rtx, rtx, rtx);
-extern rtx gen_vec_widen_smult_hi_v8hi (rtx, rtx, rtx);
-extern rtx gen_vec_widen_umult_hi_v8hi (rtx, rtx, rtx);
-extern rtx gen_vec_widen_smult_lo_v16hi (rtx, rtx, rtx);
-extern rtx gen_vec_widen_umult_lo_v16hi (rtx, rtx, rtx);
-extern rtx gen_vec_widen_smult_lo_v8hi (rtx, rtx, rtx);
-extern rtx gen_vec_widen_umult_lo_v8hi (rtx, rtx, rtx);
-extern rtx gen_vec_widen_smult_hi_v8si (rtx, rtx, rtx);
-extern rtx gen_vec_widen_umult_hi_v8si (rtx, rtx, rtx);
-extern rtx gen_vec_widen_smult_lo_v8si (rtx, rtx, rtx);
-extern rtx gen_vec_widen_umult_lo_v8si (rtx, rtx, rtx);
-extern rtx gen_vec_widen_smult_hi_v4si (rtx, rtx, rtx);
-extern rtx gen_vec_widen_smult_lo_v4si (rtx, rtx, rtx);
-extern rtx gen_vec_widen_umult_hi_v4si (rtx, rtx, rtx);
-extern rtx gen_vec_widen_umult_lo_v4si (rtx, rtx, rtx);
-extern rtx gen_sdot_prodv16hi (rtx, rtx, rtx, rtx);
-extern rtx gen_sdot_prodv8hi (rtx, rtx, rtx, rtx);
-extern rtx gen_sdot_prodv4si (rtx, rtx, rtx, rtx);
-extern rtx gen_udot_prodv4si (rtx, rtx, rtx, rtx);
-extern rtx gen_sdot_prodv8si (rtx, rtx, rtx, rtx);
-extern rtx gen_udot_prodv8si (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_shl_v16qi (rtx, rtx, rtx);
-extern rtx gen_vec_shl_v8hi (rtx, rtx, rtx);
-extern rtx gen_vec_shl_v4si (rtx, rtx, rtx);
-extern rtx gen_vec_shl_v2di (rtx, rtx, rtx);
-extern rtx gen_vec_shr_v16qi (rtx, rtx, rtx);
-extern rtx gen_vec_shr_v8hi (rtx, rtx, rtx);
-extern rtx gen_vec_shr_v4si (rtx, rtx, rtx);
-extern rtx gen_vec_shr_v2di (rtx, rtx, rtx);
-extern rtx gen_smaxv32qi3 (rtx, rtx, rtx);
-extern rtx gen_sminv32qi3 (rtx, rtx, rtx);
-extern rtx gen_umaxv32qi3 (rtx, rtx, rtx);
-extern rtx gen_uminv32qi3 (rtx, rtx, rtx);
-extern rtx gen_smaxv16hi3 (rtx, rtx, rtx);
-extern rtx gen_sminv16hi3 (rtx, rtx, rtx);
-extern rtx gen_umaxv16hi3 (rtx, rtx, rtx);
-extern rtx gen_uminv16hi3 (rtx, rtx, rtx);
-extern rtx gen_smaxv8si3 (rtx, rtx, rtx);
-extern rtx gen_sminv8si3 (rtx, rtx, rtx);
-extern rtx gen_umaxv8si3 (rtx, rtx, rtx);
-extern rtx gen_uminv8si3 (rtx, rtx, rtx);
-extern rtx gen_smaxv4di3 (rtx, rtx, rtx);
-extern rtx gen_sminv4di3 (rtx, rtx, rtx);
-extern rtx gen_umaxv4di3 (rtx, rtx, rtx);
-extern rtx gen_uminv4di3 (rtx, rtx, rtx);
-extern rtx gen_smaxv2di3 (rtx, rtx, rtx);
-extern rtx gen_sminv2di3 (rtx, rtx, rtx);
-extern rtx gen_umaxv2di3 (rtx, rtx, rtx);
-extern rtx gen_uminv2di3 (rtx, rtx, rtx);
-extern rtx gen_smaxv16qi3 (rtx, rtx, rtx);
-extern rtx gen_sminv16qi3 (rtx, rtx, rtx);
-extern rtx gen_smaxv8hi3 (rtx, rtx, rtx);
-extern rtx gen_sminv8hi3 (rtx, rtx, rtx);
-extern rtx gen_smaxv4si3 (rtx, rtx, rtx);
-extern rtx gen_sminv4si3 (rtx, rtx, rtx);
-extern rtx gen_umaxv16qi3 (rtx, rtx, rtx);
-extern rtx gen_uminv16qi3 (rtx, rtx, rtx);
-extern rtx gen_umaxv8hi3 (rtx, rtx, rtx);
-extern rtx gen_uminv8hi3 (rtx, rtx, rtx);
-extern rtx gen_umaxv4si3 (rtx, rtx, rtx);
-extern rtx gen_uminv4si3 (rtx, rtx, rtx);
-extern rtx gen_avx2_eqv32qi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_eqv16hi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_eqv8si3 (rtx, rtx, rtx);
-extern rtx gen_avx2_eqv4di3 (rtx, rtx, rtx);
-extern rtx gen_sse2_eqv16qi3 (rtx, rtx, rtx);
-extern rtx gen_sse2_eqv8hi3 (rtx, rtx, rtx);
-extern rtx gen_sse2_eqv4si3 (rtx, rtx, rtx);
-extern rtx gen_sse4_1_eqv2di3 (rtx, rtx, rtx);
-extern rtx gen_vcondv32qiv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv16hiv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv8siv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4div32qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv8sfv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4dfv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv32qiv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv16hiv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv8siv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4div16hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv8sfv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4dfv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv32qiv8si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv16hiv8si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv8siv8si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4div8si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv8sfv8si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4dfv8si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv32qiv4di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv16hiv4di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv8siv4di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4div4di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv8sfv4di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4dfv4di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv16qiv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv8hiv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4siv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv2div16qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4sfv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv2dfv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv16qiv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv8hiv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4siv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv2div8hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4sfv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv2dfv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv16qiv4si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv8hiv4si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4siv4si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv2div4si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv4sfv4si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv2dfv4si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv2div2di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vcondv2dfv2di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv32qiv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv16hiv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv8siv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv4div32qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv8sfv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv4dfv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv32qiv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv16hiv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv8siv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv4div16hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv8sfv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv4dfv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv32qiv8si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv16hiv8si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv8siv8si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv4div8si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv8sfv8si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv4dfv8si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv32qiv4di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv16hiv4di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv8siv4di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv4div4di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv8sfv4di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv4dfv4di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv16qiv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv8hiv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv4siv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv2div16qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv4sfv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv2dfv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv16qiv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv8hiv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv4siv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv2div8hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv4sfv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv2dfv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv16qiv4si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv8hiv4si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv4siv4si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv2div4si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv4sfv4si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv2dfv4si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv2div2di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vconduv2dfv2di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_vec_permv16qi (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_permv8hi (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_permv4si (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_permv2di (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_permv4sf (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_permv2df (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_permv32qi (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_permv16hi (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_permv8si (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_permv4di (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_permv8sf (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_permv4df (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_perm_constv4sf (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_perm_constv4si (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_perm_constv2df (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_perm_constv2di (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_perm_constv16qi (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_perm_constv8hi (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_perm_constv8sf (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_perm_constv4df (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_perm_constv8si (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_perm_constv4di (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_perm_constv32qi (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_perm_constv16hi (rtx, rtx, rtx, rtx);
-extern rtx gen_one_cmplv32qi2 (rtx, rtx);
-extern rtx gen_one_cmplv16qi2 (rtx, rtx);
-extern rtx gen_one_cmplv16hi2 (rtx, rtx);
-extern rtx gen_one_cmplv8hi2 (rtx, rtx);
-extern rtx gen_one_cmplv8si2 (rtx, rtx);
-extern rtx gen_one_cmplv4si2 (rtx, rtx);
-extern rtx gen_one_cmplv4di2 (rtx, rtx);
-extern rtx gen_one_cmplv2di2 (rtx, rtx);
-extern rtx gen_avx2_andnotv32qi3 (rtx, rtx, rtx);
-extern rtx gen_sse2_andnotv16qi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_andnotv16hi3 (rtx, rtx, rtx);
-extern rtx gen_sse2_andnotv8hi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_andnotv8si3 (rtx, rtx, rtx);
-extern rtx gen_sse2_andnotv4si3 (rtx, rtx, rtx);
-extern rtx gen_avx2_andnotv4di3 (rtx, rtx, rtx);
-extern rtx gen_sse2_andnotv2di3 (rtx, rtx, rtx);
-extern rtx gen_andv32qi3 (rtx, rtx, rtx);
-extern rtx gen_iorv32qi3 (rtx, rtx, rtx);
-extern rtx gen_xorv32qi3 (rtx, rtx, rtx);
-extern rtx gen_andv16qi3 (rtx, rtx, rtx);
-extern rtx gen_iorv16qi3 (rtx, rtx, rtx);
-extern rtx gen_xorv16qi3 (rtx, rtx, rtx);
-extern rtx gen_andv16hi3 (rtx, rtx, rtx);
-extern rtx gen_iorv16hi3 (rtx, rtx, rtx);
-extern rtx gen_xorv16hi3 (rtx, rtx, rtx);
-extern rtx gen_andv8hi3 (rtx, rtx, rtx);
-extern rtx gen_iorv8hi3 (rtx, rtx, rtx);
-extern rtx gen_xorv8hi3 (rtx, rtx, rtx);
-extern rtx gen_andv8si3 (rtx, rtx, rtx);
-extern rtx gen_iorv8si3 (rtx, rtx, rtx);
-extern rtx gen_xorv8si3 (rtx, rtx, rtx);
-extern rtx gen_andv4si3 (rtx, rtx, rtx);
-extern rtx gen_iorv4si3 (rtx, rtx, rtx);
-extern rtx gen_xorv4si3 (rtx, rtx, rtx);
-extern rtx gen_andv4di3 (rtx, rtx, rtx);
-extern rtx gen_iorv4di3 (rtx, rtx, rtx);
-extern rtx gen_xorv4di3 (rtx, rtx, rtx);
-extern rtx gen_andv2di3 (rtx, rtx, rtx);
-extern rtx gen_iorv2di3 (rtx, rtx, rtx);
-extern rtx gen_xorv2di3 (rtx, rtx, rtx);
-extern rtx gen_andtf3 (rtx, rtx, rtx);
-extern rtx gen_iortf3 (rtx, rtx, rtx);
-extern rtx gen_xortf3 (rtx, rtx, rtx);
-extern rtx gen_vec_pack_trunc_v16hi (rtx, rtx, rtx);
-extern rtx gen_vec_pack_trunc_v8hi (rtx, rtx, rtx);
-extern rtx gen_vec_pack_trunc_v8si (rtx, rtx, rtx);
-extern rtx gen_vec_pack_trunc_v4si (rtx, rtx, rtx);
-extern rtx gen_vec_pack_trunc_v4di (rtx, rtx, rtx);
-extern rtx gen_vec_pack_trunc_v2di (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_highv32qi (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_highv16hi (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_highv8si (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_highv4di (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_lowv32qi (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_lowv16hi (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_lowv8si (rtx, rtx, rtx);
-extern rtx gen_vec_interleave_lowv4di (rtx, rtx, rtx);
-extern rtx gen_avx2_pshufdv3 (rtx, rtx, rtx);
-extern rtx gen_sse2_pshufd (rtx, rtx, rtx);
-extern rtx gen_avx2_pshuflwv3 (rtx, rtx, rtx);
-extern rtx gen_sse2_pshuflw (rtx, rtx, rtx);
-extern rtx gen_avx2_pshufhwv3 (rtx, rtx, rtx);
-extern rtx gen_sse2_pshufhw (rtx, rtx, rtx);
-extern rtx gen_sse2_loadd (rtx, rtx);
-extern rtx gen_sse_storeq (rtx, rtx);
-extern rtx gen_vec_unpacks_lo_v32qi (rtx, rtx);
-extern rtx gen_vec_unpacks_lo_v16qi (rtx, rtx);
-extern rtx gen_vec_unpacks_lo_v16hi (rtx, rtx);
-extern rtx gen_vec_unpacks_lo_v8hi (rtx, rtx);
-extern rtx gen_vec_unpacks_lo_v8si (rtx, rtx);
-extern rtx gen_vec_unpacks_lo_v4si (rtx, rtx);
-extern rtx gen_vec_unpacks_hi_v32qi (rtx, rtx);
-extern rtx gen_vec_unpacks_hi_v16qi (rtx, rtx);
-extern rtx gen_vec_unpacks_hi_v16hi (rtx, rtx);
-extern rtx gen_vec_unpacks_hi_v8hi (rtx, rtx);
-extern rtx gen_vec_unpacks_hi_v8si (rtx, rtx);
-extern rtx gen_vec_unpacks_hi_v4si (rtx, rtx);
-extern rtx gen_vec_unpacku_lo_v32qi (rtx, rtx);
-extern rtx gen_vec_unpacku_lo_v16qi (rtx, rtx);
-extern rtx gen_vec_unpacku_lo_v16hi (rtx, rtx);
-extern rtx gen_vec_unpacku_lo_v8hi (rtx, rtx);
-extern rtx gen_vec_unpacku_lo_v8si (rtx, rtx);
-extern rtx gen_vec_unpacku_lo_v4si (rtx, rtx);
-extern rtx gen_vec_unpacku_hi_v32qi (rtx, rtx);
-extern rtx gen_vec_unpacku_hi_v16qi (rtx, rtx);
-extern rtx gen_vec_unpacku_hi_v16hi (rtx, rtx);
-extern rtx gen_vec_unpacku_hi_v8hi (rtx, rtx);
-extern rtx gen_vec_unpacku_hi_v8si (rtx, rtx);
-extern rtx gen_vec_unpacku_hi_v4si (rtx, rtx);
-extern rtx gen_avx2_uavgv32qi3 (rtx, rtx, rtx);
-extern rtx gen_sse2_uavgv16qi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_uavgv16hi3 (rtx, rtx, rtx);
-extern rtx gen_sse2_uavgv8hi3 (rtx, rtx, rtx);
-extern rtx gen_sse2_maskmovdqu (rtx, rtx, rtx);
-extern rtx gen_avx2_umulhrswv16hi3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_pmulhrswv8hi3 (rtx, rtx, rtx);
-extern rtx gen_ssse3_pmulhrswv4hi3 (rtx, rtx, rtx);
-extern rtx gen_avx2_pblendw (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_roundps_sfix256 (rtx, rtx, rtx);
-extern rtx gen_sse4_1_roundps_sfix (rtx, rtx, rtx);
-extern rtx gen_avx_roundpd_vec_pack_sfix256 (rtx, rtx, rtx, rtx);
-extern rtx gen_sse4_1_roundpd_vec_pack_sfix (rtx, rtx, rtx, rtx);
-extern rtx gen_roundv8sf2 (rtx, rtx);
-extern rtx gen_roundv4sf2 (rtx, rtx);
-extern rtx gen_roundv4df2 (rtx, rtx);
-extern rtx gen_roundv2df2 (rtx, rtx);
-extern rtx gen_roundv8sf2_sfix (rtx, rtx);
-extern rtx gen_roundv4sf2_sfix (rtx, rtx);
-extern rtx gen_roundv4df2_vec_pack_sfix (rtx, rtx, rtx);
-extern rtx gen_roundv2df2_vec_pack_sfix (rtx, rtx, rtx);
-extern rtx gen_rotlv16qi3 (rtx, rtx, rtx);
-extern rtx gen_rotlv8hi3 (rtx, rtx, rtx);
-extern rtx gen_rotlv4si3 (rtx, rtx, rtx);
-extern rtx gen_rotlv2di3 (rtx, rtx, rtx);
-extern rtx gen_rotrv16qi3 (rtx, rtx, rtx);
-extern rtx gen_rotrv8hi3 (rtx, rtx, rtx);
-extern rtx gen_rotrv4si3 (rtx, rtx, rtx);
-extern rtx gen_rotrv2di3 (rtx, rtx, rtx);
-extern rtx gen_vrotrv16qi3 (rtx, rtx, rtx);
-extern rtx gen_vrotrv8hi3 (rtx, rtx, rtx);
-extern rtx gen_vrotrv4si3 (rtx, rtx, rtx);
-extern rtx gen_vrotrv2di3 (rtx, rtx, rtx);
-extern rtx gen_vrotlv16qi3 (rtx, rtx, rtx);
-extern rtx gen_vrotlv8hi3 (rtx, rtx, rtx);
-extern rtx gen_vrotlv4si3 (rtx, rtx, rtx);
-extern rtx gen_vrotlv2di3 (rtx, rtx, rtx);
-extern rtx gen_vlshrv16qi3 (rtx, rtx, rtx);
-extern rtx gen_vlshrv8hi3 (rtx, rtx, rtx);
-extern rtx gen_vlshrv4si3 (rtx, rtx, rtx);
-extern rtx gen_vlshrv2di3 (rtx, rtx, rtx);
-extern rtx gen_vlshrv8si3 (rtx, rtx, rtx);
-extern rtx gen_vlshrv4di3 (rtx, rtx, rtx);
-extern rtx gen_vashrv16qi3 (rtx, rtx, rtx);
-extern rtx gen_vashrv8hi3 (rtx, rtx, rtx);
-extern rtx gen_vashrv2di3 (rtx, rtx, rtx);
-extern rtx gen_vashrv4si3 (rtx, rtx, rtx);
-extern rtx gen_vashrv8si3 (rtx, rtx, rtx);
-extern rtx gen_vashlv16qi3 (rtx, rtx, rtx);
-extern rtx gen_vashlv8hi3 (rtx, rtx, rtx);
-extern rtx gen_vashlv4si3 (rtx, rtx, rtx);
-extern rtx gen_vashlv2di3 (rtx, rtx, rtx);
-extern rtx gen_vashlv8si3 (rtx, rtx, rtx);
-extern rtx gen_vashlv4di3 (rtx, rtx, rtx);
-extern rtx gen_ashlv16qi3 (rtx, rtx, rtx);
-extern rtx gen_lshrv16qi3 (rtx, rtx, rtx);
-extern rtx gen_ashrv16qi3 (rtx, rtx, rtx);
-extern rtx gen_ashrv2di3 (rtx, rtx, rtx);
-extern rtx gen_xop_vmfrczv4sf2 (rtx, rtx);
-extern rtx gen_xop_vmfrczv2df2 (rtx, rtx);
-extern rtx gen_avx_vzeroall (void);
-extern rtx gen_avx2_permv4di (rtx, rtx, rtx);
-extern rtx gen_avx_vpermilv4df (rtx, rtx, rtx);
-extern rtx gen_avx_vpermilv2df (rtx, rtx, rtx);
-extern rtx gen_avx_vpermilv8sf (rtx, rtx, rtx);
-extern rtx gen_avx_vpermilv4sf (rtx, rtx, rtx);
-extern rtx gen_avx_vperm2f128v8si3 (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_vperm2f128v8sf3 (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_vperm2f128v4df3 (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_vinsertf128v32qi (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_vinsertf128v16hi (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_vinsertf128v8si (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_vinsertf128v4di (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_vinsertf128v8sf (rtx, rtx, rtx, rtx);
-extern rtx gen_avx_vinsertf128v4df (rtx, rtx, rtx, rtx);
-extern rtx gen_vec_initv32qi (rtx, rtx);
-extern rtx gen_vec_initv16hi (rtx, rtx);
-extern rtx gen_vec_initv8si (rtx, rtx);
-extern rtx gen_vec_initv4di (rtx, rtx);
-extern rtx gen_vec_initv8sf (rtx, rtx);
-extern rtx gen_vec_initv4df (rtx, rtx);
-extern rtx gen_avx2_extracti128 (rtx, rtx, rtx);
-extern rtx gen_avx2_inserti128 (rtx, rtx, rtx, rtx);
-extern rtx gen_vcvtps2ph (rtx, rtx, rtx);
-extern rtx gen_avx2_gathersiv2di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_gathersiv2df (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_gathersiv4di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_gathersiv4df (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_gathersiv4si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_gathersiv4sf (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_gathersiv8si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_gathersiv8sf (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_gatherdiv2di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_gatherdiv2df (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_gatherdiv4di (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_gatherdiv4df (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_gatherdiv4si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_gatherdiv4sf (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_gatherdiv8si (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_avx2_gatherdiv8sf (rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_sse2_lfence (void);
-extern rtx gen_sse_sfence (void);
-extern rtx gen_sse2_mfence (void);
-extern rtx gen_mem_thread_fence (rtx);
-extern rtx gen_atomic_loadqi (rtx, rtx, rtx);
-extern rtx gen_atomic_loadhi (rtx, rtx, rtx);
-extern rtx gen_atomic_loadsi (rtx, rtx, rtx);
-extern rtx gen_atomic_loaddi (rtx, rtx, rtx);
-extern rtx gen_atomic_storeqi (rtx, rtx, rtx);
-extern rtx gen_atomic_storehi (rtx, rtx, rtx);
-extern rtx gen_atomic_storesi (rtx, rtx, rtx);
-extern rtx gen_atomic_storedi (rtx, rtx, rtx);
-extern rtx gen_atomic_compare_and_swapqi (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_atomic_compare_and_swaphi (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_atomic_compare_and_swapsi (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_atomic_compare_and_swapdi (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
-extern rtx gen_atomic_compare_and_swapti (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
-# 39 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
-
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/defaults.h" 1
-# 1007 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/defaults.h"
-       
-# 41 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
-# 24 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h" 1
-# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/machmode.h" 1
-# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/machmode.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/insn-modes.h" 1
-
-
-
-
-
-
-enum machine_mode
-{
-  VOIDmode,
-  BLKmode,
-  CCmode,
-  CCGCmode,
-  CCGOCmode,
-  CCNOmode,
-  CCAmode,
-  CCCmode,
-  CCOmode,
-  CCSmode,
-  CCZmode,
-  CCFPmode,
-  CCFPUmode,
-  BImode,
-  QImode,
-  HImode,
-  SImode,
-  DImode,
-  TImode,
-  OImode,
-  QQmode,
-  HQmode,
-  SQmode,
-  DQmode,
-  TQmode,
-  UQQmode,
-  UHQmode,
-  USQmode,
-  UDQmode,
-  UTQmode,
-  HAmode,
-  SAmode,
-  DAmode,
-  TAmode,
-  UHAmode,
-  USAmode,
-  UDAmode,
-  UTAmode,
-  SFmode,
-  DFmode,
-  XFmode,
-  TFmode,
-  SDmode,
-  DDmode,
-  TDmode,
-  CQImode,
-  CHImode,
-  CSImode,
-  CDImode,
-  CTImode,
-  COImode,
-  SCmode,
-  DCmode,
-  XCmode,
-  TCmode,
-  V2QImode,
-  V4QImode,
-  V2HImode,
-  V1SImode,
-  V8QImode,
-  V4HImode,
-  V2SImode,
-  V1DImode,
-  V16QImode,
-  V8HImode,
-  V4SImode,
-  V2DImode,
-  V1TImode,
-  V32QImode,
-  V16HImode,
-  V8SImode,
-  V4DImode,
-  V2TImode,
-  V64QImode,
-  V32HImode,
-  V16SImode,
-  V8DImode,
-  V4TImode,
-  V2SFmode,
-  V4SFmode,
-  V2DFmode,
-  V8SFmode,
-  V4DFmode,
-  V2TFmode,
-  V16SFmode,
-  V8DFmode,
-  V4TFmode,
-  MAX_MACHINE_MODE,
-
-  MIN_MODE_RANDOM = VOIDmode,
-  MAX_MODE_RANDOM = BLKmode,
-
-  MIN_MODE_CC = CCmode,
-  MAX_MODE_CC = CCFPUmode,
-
-  MIN_MODE_INT = QImode,
-  MAX_MODE_INT = OImode,
-
-  MIN_MODE_PARTIAL_INT = VOIDmode,
-  MAX_MODE_PARTIAL_INT = VOIDmode,
-
-  MIN_MODE_FRACT = QQmode,
-  MAX_MODE_FRACT = TQmode,
-
-  MIN_MODE_UFRACT = UQQmode,
-  MAX_MODE_UFRACT = UTQmode,
-
-  MIN_MODE_ACCUM = HAmode,
-  MAX_MODE_ACCUM = TAmode,
-
-  MIN_MODE_UACCUM = UHAmode,
-  MAX_MODE_UACCUM = UTAmode,
-
-  MIN_MODE_FLOAT = SFmode,
-  MAX_MODE_FLOAT = TFmode,
-
-  MIN_MODE_DECIMAL_FLOAT = SDmode,
-  MAX_MODE_DECIMAL_FLOAT = TDmode,
-
-  MIN_MODE_COMPLEX_INT = CQImode,
-  MAX_MODE_COMPLEX_INT = COImode,
-
-  MIN_MODE_COMPLEX_FLOAT = SCmode,
-  MAX_MODE_COMPLEX_FLOAT = TCmode,
-
-  MIN_MODE_VECTOR_INT = V2QImode,
-  MAX_MODE_VECTOR_INT = V4TImode,
-
-  MIN_MODE_VECTOR_FRACT = VOIDmode,
-  MAX_MODE_VECTOR_FRACT = VOIDmode,
-
-  MIN_MODE_VECTOR_UFRACT = VOIDmode,
-  MAX_MODE_VECTOR_UFRACT = VOIDmode,
-
-  MIN_MODE_VECTOR_ACCUM = VOIDmode,
-  MAX_MODE_VECTOR_ACCUM = VOIDmode,
-
-  MIN_MODE_VECTOR_UACCUM = VOIDmode,
-  MAX_MODE_VECTOR_UACCUM = VOIDmode,
-
-  MIN_MODE_VECTOR_FLOAT = V2SFmode,
-  MAX_MODE_VECTOR_FLOAT = V4TFmode,
-
-  NUM_MACHINE_MODES = MAX_MACHINE_MODE
-};
-# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/machmode.h" 2
-
-
-
-extern const char * const mode_name[NUM_MACHINE_MODES];
-
-
-
-
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/mode-classes.def" 1
-# 35 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/machmode.h" 2
-
-enum mode_class { MODE_RANDOM, MODE_CC, MODE_INT, MODE_PARTIAL_INT, MODE_FRACT, MODE_UFRACT, MODE_ACCUM, MODE_UACCUM, MODE_FLOAT, MODE_DECIMAL_FLOAT, MODE_COMPLEX_INT, MODE_COMPLEX_FLOAT, MODE_VECTOR_INT, MODE_VECTOR_FRACT, MODE_VECTOR_UFRACT, MODE_VECTOR_ACCUM, MODE_VECTOR_UACCUM, MODE_VECTOR_FLOAT, MAX_MODE_CLASS };
-
-
-
-
-
-
-extern const unsigned char mode_class[NUM_MACHINE_MODES];
-# 179 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/machmode.h"
-extern unsigned char mode_size[NUM_MACHINE_MODES];
-
-
-
-
-extern const unsigned short mode_precision[NUM_MACHINE_MODES];
-
-
-
-extern const unsigned char mode_ibit[NUM_MACHINE_MODES];
-
-
-
-extern const unsigned char mode_fbit[NUM_MACHINE_MODES];
-
-
-
-
-
-extern const unsigned long mode_mask_array[NUM_MACHINE_MODES];
-
-
-
-
-
-extern const unsigned char mode_inner[NUM_MACHINE_MODES];
-# 216 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/machmode.h"
-extern const unsigned char mode_nunits[NUM_MACHINE_MODES];
-
-
-
-
-extern const unsigned char mode_wider[NUM_MACHINE_MODES];
-
-
-
-
-extern const unsigned char mode_2xwider[NUM_MACHINE_MODES];
-
-
-
-
-
-
-extern enum machine_mode mode_for_size (unsigned int, enum mode_class, int);
-
-
-
-extern enum machine_mode smallest_mode_for_size (unsigned int,
-       enum mode_class);
-
-
-
-
-
-extern enum machine_mode int_mode_for_mode (enum machine_mode);
-
-
-
-
-extern enum machine_mode mode_for_vector (enum machine_mode, unsigned);
-
-
-
-extern enum machine_mode get_best_mode (int, int,
-     unsigned long,
-     unsigned long,
-     unsigned int,
-     enum machine_mode, int);
-
-
-
-extern unsigned char mode_base_align[NUM_MACHINE_MODES];
-
-extern unsigned get_mode_alignment (enum machine_mode);
-
-
-
-
-
-extern const unsigned char class_narrowest_mode[MAX_MODE_CLASS];
-
-
-
-
-
-
-extern enum machine_mode byte_mode;
-extern enum machine_mode word_mode;
-extern enum machine_mode ptr_mode;
-
-
-extern void init_adjust_machine_modes (void);
-# 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/input.h" 1
-# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/input.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h" 1
-# 37 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
-enum lc_reason
-{
-  LC_ENTER = 0,
-  LC_LEAVE,
-  LC_RENAME,
-  LC_RENAME_VERBATIM,
-  LC_ENTER_MACRO
-
-};
-
-
-typedef unsigned int linenum_type;
-
-
-typedef unsigned int source_location;
-
-
-typedef void *(*line_map_realloc) (void *, size_t);
-
-
-
-typedef size_t (*line_map_round_alloc_size_func) (size_t);
-# 71 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
-struct line_map_ordinary {
-  const char *to_file;
-  linenum_type to_line;
-
-
-
-
-  int included_from;
-
-
-
-
-
-  unsigned char sysp;
-
-
-  unsigned int column_bits : 8;
-};
-
-
-
-
-
-struct cpp_hashnode;
-# 105 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
-struct line_map_macro {
-
-  struct cpp_hashnode *
-
-
-    macro;
-
-
-  unsigned int n_tokens;
-# 168 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
-  source_location * macro_locations;
-
-
-
-
-
-
-  source_location expansion;
-};
-# 204 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
-struct line_map {
-  source_location start_location;
-
-
-  __extension__ enum lc_reason reason : 8;
-
-  union map_u {
-    struct line_map_ordinary ordinary;
-    struct line_map_macro macro;
-  } d;
-};
-# 244 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
-struct maps_info {
-
-
-
-
-
-  struct line_map * maps;
-
-
-  unsigned int allocated;
-
-
-
-  unsigned int used;
-
-  unsigned int cache;
-};
-
-
-struct line_maps {
-
-  struct maps_info info_ordinary;
-
-  struct maps_info info_macro;
-
-
-  unsigned int depth;
-
-
-  unsigned char trace_includes;
-
-
-  source_location highest_location;
-
-
-  source_location highest_line;
-
-
-
-  unsigned int max_column_hint;
-
-
-
-  line_map_realloc reallocator;
-
-
-
-  line_map_round_alloc_size_func round_alloc_size;
-};
-# 412 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
-extern void linemap_init (struct line_maps *);
-
-
-
-extern void linemap_check_files_exited (struct line_maps *);
-
-
-
-
-
-
-
-extern source_location linemap_line_start
-(struct line_maps *set, linenum_type to_line, unsigned int max_column_hint);
-# 440 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
-extern const struct line_map *linemap_add
-  (struct line_maps *, enum lc_reason, unsigned int sysp,
-   const char *to_file, linenum_type to_line);
-
-
-
-
-
-
-
-extern const struct line_map *linemap_lookup
-  (struct line_maps *, source_location);
-
-
-
-unsigned char linemap_tracks_macro_expansion_locs_p (struct line_maps *);
-
-
-
-unsigned char linemap_macro_expansion_map_p (const struct line_map *);
-
-
-const char* linemap_map_get_macro_name (const struct line_map*);
-# 473 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
-int linemap_location_in_system_header_p (struct line_maps *,
-      source_location);
-
-
-
-
-unsigned char linemap_location_from_macro_expansion_p (struct line_maps *,
-           source_location);
-# 550 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
-extern source_location
-linemap_position_for_column (struct line_maps *, unsigned int);
-
-
-
-source_location linemap_position_for_line_and_column (struct line_map *,
-            linenum_type,
-            unsigned int);
-# 577 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
-int linemap_compare_locations (struct line_maps *set,
-          source_location pre,
-          source_location post);
-
-
-
-
-
-
-
-typedef struct
-{
-
-  const char *file;
-
-
-  int line;
-
-  int column;
-
-
-  unsigned char sysp;
-} expanded_location;
-
-
-
-
-enum location_resolution_kind
-{
-  LRK_MACRO_EXPANSION_POINT,
-  LRK_SPELLING_LOCATION,
-  LRK_MACRO_DEFINITION_LOCATION
-};
-# 659 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
-source_location linemap_resolve_location (struct line_maps *,
-       source_location loc,
-       enum location_resolution_kind lrk,
-       const struct line_map **loc_map);
-# 671 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/line-map.h"
-source_location linemap_unwind_toward_expansion (struct line_maps *,
-       source_location loc,
-       const struct line_map **loc_map);
-
-
-
-
-
-expanded_location linemap_expand_location (struct line_maps *,
-        const struct line_map *,
-        source_location loc);
-
-
-
-struct linemap_stats
-{
-  long num_ordinary_maps_allocated;
-  long num_ordinary_maps_used;
-  long ordinary_maps_allocated_size;
-  long ordinary_maps_used_size;
-  long num_expanded_macros;
-  long num_macro_tokens;
-  long num_macro_maps_used;
-  long macro_maps_allocated_size;
-  long macro_maps_used_size;
-  long macro_maps_locations_size;
-  long duplicated_macro_maps_locations_size;
-};
-
-
-
-void linemap_get_statistics (struct line_maps *, struct linemap_stats *);
-
-
-
-void linemap_dump_location (struct line_maps *, source_location, FILE *);
-
-
-
-
-void linemap_dump (FILE *, struct line_maps *, unsigned, unsigned char);
-
-
-
-
-void line_table_dump (FILE *, struct line_maps *, unsigned int, unsigned int);
-# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/input.h" 2
-
-extern struct line_maps *line_table;
-# 37 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/input.h"
-extern char builtins_location_check[(((source_location) 1)
-         < 2) ? 1 : -1];
-
-extern expanded_location expand_location (source_location);
-
-
-
-typedef source_location location_t;
-
-extern location_t input_location;
-# 58 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/input.h"
-void dump_line_table_statistics (void);
-# 28 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/statistics.h" 1
-# 41 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/statistics.h"
-struct function;
-
-
-extern void statistics_early_init (void);
-extern void statistics_init (void);
-extern void statistics_fini (void);
-extern void statistics_fini_pass (void);
-extern void statistics_counter_event (struct function *, const char *, int);
-extern void statistics_histogram_event (struct function *, const char *, int);
-# 29 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/vec.h" 1
-# 472 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/vec.h"
-extern void *vec_gc_p_reserve (void *, int );
-extern void *vec_gc_p_reserve_exact (void *, int );
-extern void *vec_gc_o_reserve (void *, int, size_t, size_t );
-extern void *vec_gc_o_reserve_exact (void *, int, size_t, size_t
-         );
-extern void ggc_free (void *);
-
-extern void *vec_heap_p_reserve (void *, int );
-extern void *vec_heap_p_reserve_exact (void *, int );
-extern void *vec_heap_o_reserve (void *, int, size_t, size_t );
-extern void *vec_heap_o_reserve_exact (void *, int, size_t, size_t
-           );
-extern void dump_vec_loc_statistics (void);
-# 514 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/vec.h"
-typedef struct vec_prefix
-{
-  unsigned num;
-  unsigned alloc;
-} vec_prefix;
-# 1351 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/vec.h"
-extern void *vec_stack_p_reserve (void *, int );
-extern void *vec_stack_p_reserve_exact (void *, int );
-extern void *vec_stack_p_reserve_exact_1 (int, void *);
-extern void *vec_stack_o_reserve (void *, int, size_t, size_t );
-extern void *vec_stack_o_reserve_exact (void *, int, size_t, size_t
-      );
-extern void vec_stack_free (void *);
-# 30 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/vecir.h" 1
-# 28 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/vecir.h"
-static __inline__ void VEC_tree_must_be_pointer_type (void) { (void)((tree)1 == (void *)1); } typedef struct VEC_tree_base { struct vec_prefix prefix; tree vec[1]; } VEC_tree_base; typedef struct VEC_tree_none { VEC_tree_base base; } VEC_tree_none; static __inline__ unsigned VEC_tree_base_length (const VEC_tree_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ tree VEC_tree_base_last (const VEC_tree_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ tree VEC_tree_base_index (const VEC_tree_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_tree_base_iterate (const VEC_tree_base *vec_, unsigned ix_, tree *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (tree) 0; return 0; } } static __inline__ size_t VEC_tree_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_tree_base, vec) + alloc_ * sizeof(tree); } static __inline__ void VEC_tree_base_embedded_init (VEC_tree_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_tree_base_space (VEC_tree_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_tree_base_splice (VEC_tree_base *dst_, VEC_tree_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (tree)); dst_->prefix.num += len_; } } static __inline__ tree *VEC_tree_base_quick_push (VEC_tree_base *vec_, tree obj_ ) { tree *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ tree VEC_tree_base_pop (VEC_tree_base *vec_ ) { tree obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_tree_base_truncate (VEC_tree_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ tree VEC_tree_base_replace (VEC_tree_base *vec_, unsigned ix_, tree obj_ ) { tree old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ tree *VEC_tree_base_quick_insert (VEC_tree_base *vec_, unsigned ix_, tree obj_ ) { tree *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (tree)); *slot_ = obj_; return slot_; } static __inline__ tree VEC_tree_base_ordered_remove (VEC_tree_base *vec_, unsigned ix_ ) { tree *slot_; tree obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (tree)); return obj_; } static __inline__ tree VEC_tree_base_unordered_remove (VEC_tree_base *vec_, unsigned ix_ ) { tree *slot_; tree obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_tree_base_block_remove (VEC_tree_base *vec_, unsigned ix_, unsigned len_ ) { tree *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (tree)); } static __inline__ tree *VEC_tree_base_address (VEC_tree_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_tree_base_lower_bound (VEC_tree_base *vec_, const tree obj_, unsigned char (*lessthan_)(const tree, const tree) ) { unsigned int len_ = VEC_tree_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { tree middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_tree_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_tree_gc { VEC_tree_base base; } VEC_tree_gc; static __inline__ VEC_tree_gc *VEC_tree_gc_alloc (int alloc_ ) { return (VEC_tree_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_tree_gc_free (VEC_tree_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_tree_gc *VEC_tree_gc_copy (VEC_tree_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_tree_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_tree_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (tree) * len_); } return new_vec_; } static __inline__ int VEC_tree_gc_reserve (VEC_tree_gc **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_tree_gc_reserve_exact (VEC_tree_gc **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_tree_gc_safe_grow (VEC_tree_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_tree_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_tree_gc_safe_grow_cleared (VEC_tree_gc **vec_, int size_ ) { int oldsize = VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_tree_gc_safe_grow (vec_, size_ ); memset (&(VEC_tree_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (tree) * (size_ - oldsize)); } static __inline__ void VEC_tree_gc_safe_splice (VEC_tree_gc **dst_, VEC_tree_base *src_ ) { if (src_) { VEC_tree_gc_reserve_exact (dst_, src_->prefix.num ); VEC_tree_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ tree *VEC_tree_gc_safe_push (VEC_tree_gc **vec_, tree obj_ ) { VEC_tree_gc_reserve (vec_, 1 ); return VEC_tree_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ tree *VEC_tree_gc_safe_insert (VEC_tree_gc **vec_, unsigned ix_, tree obj_ ) { VEC_tree_gc_reserve (vec_, 1 ); return VEC_tree_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-typedef struct VEC_tree_heap { VEC_tree_base base; } VEC_tree_heap; static __inline__ VEC_tree_heap *VEC_tree_heap_alloc (int alloc_ ) { return (VEC_tree_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_tree_heap_free (VEC_tree_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_tree_heap *VEC_tree_heap_copy (VEC_tree_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_tree_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_tree_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (tree) * len_); } return new_vec_; } static __inline__ int VEC_tree_heap_reserve (VEC_tree_heap **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_tree_heap_reserve_exact (VEC_tree_heap **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_tree_heap_safe_grow (VEC_tree_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_tree_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_tree_heap_safe_grow_cleared (VEC_tree_heap **vec_, int size_ ) { int oldsize = VEC_tree_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_tree_heap_safe_grow (vec_, size_ ); memset (&(VEC_tree_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (tree) * (size_ - oldsize)); } static __inline__ void VEC_tree_heap_safe_splice (VEC_tree_heap **dst_, VEC_tree_base *src_ ) { if (src_) { VEC_tree_heap_reserve_exact (dst_, src_->prefix.num ); VEC_tree_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ tree *VEC_tree_heap_safe_push (VEC_tree_heap **vec_, tree obj_ ) { VEC_tree_heap_reserve (vec_, 1 ); return VEC_tree_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ tree *VEC_tree_heap_safe_insert (VEC_tree_heap **vec_, unsigned ix_, tree obj_ ) { VEC_tree_heap_reserve (vec_, 1 ); return VEC_tree_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-
-
-static __inline__ void VEC_gimple_must_be_pointer_type (void) { (void)((gimple)1 == (void *)1); } typedef struct VEC_gimple_base { struct vec_prefix prefix; gimple vec[1]; } VEC_gimple_base; typedef struct VEC_gimple_none { VEC_gimple_base base; } VEC_gimple_none; static __inline__ unsigned VEC_gimple_base_length (const VEC_gimple_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ gimple VEC_gimple_base_last (const VEC_gimple_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ gimple VEC_gimple_base_index (const VEC_gimple_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_gimple_base_iterate (const VEC_gimple_base *vec_, unsigned ix_, gimple *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (gimple) 0; return 0; } } static __inline__ size_t VEC_gimple_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_gimple_base, vec) + alloc_ * sizeof(gimple); } static __inline__ void VEC_gimple_base_embedded_init (VEC_gimple_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_gimple_base_space (VEC_gimple_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_gimple_base_splice (VEC_gimple_base *dst_, VEC_gimple_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (gimple)); dst_->prefix.num += len_; } } static __inline__ gimple *VEC_gimple_base_quick_push (VEC_gimple_base *vec_, gimple obj_ ) { gimple *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ gimple VEC_gimple_base_pop (VEC_gimple_base *vec_ ) { gimple obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_gimple_base_truncate (VEC_gimple_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ gimple VEC_gimple_base_replace (VEC_gimple_base *vec_, unsigned ix_, gimple obj_ ) { gimple old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ gimple *VEC_gimple_base_quick_insert (VEC_gimple_base *vec_, unsigned ix_, gimple obj_ ) { gimple *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (gimple)); *slot_ = obj_; return slot_; } static __inline__ gimple VEC_gimple_base_ordered_remove (VEC_gimple_base *vec_, unsigned ix_ ) { gimple *slot_; gimple obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (gimple)); return obj_; } static __inline__ gimple VEC_gimple_base_unordered_remove (VEC_gimple_base *vec_, unsigned ix_ ) { gimple *slot_; gimple obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_gimple_base_block_remove (VEC_gimple_base *vec_, unsigned ix_, unsigned len_ ) { gimple *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (gimple)); } static __inline__ gimple *VEC_gimple_base_address (VEC_gimple_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_gimple_base_lower_bound (VEC_gimple_base *vec_, const gimple obj_, unsigned char (*lessthan_)(const gimple, const gimple) ) { unsigned int len_ = VEC_gimple_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { gimple middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_gimple_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_gimple_heap { VEC_gimple_base base; } VEC_gimple_heap; static __inline__ VEC_gimple_heap *VEC_gimple_heap_alloc (int alloc_ ) { return (VEC_gimple_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_heap_free (VEC_gimple_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_heap *VEC_gimple_heap_copy (VEC_gimple_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple) * len_); } return new_vec_; } static __inline__ int VEC_gimple_heap_reserve (VEC_gimple_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_heap_reserve_exact (VEC_gimple_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_heap_safe_grow (VEC_gimple_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_gimple_heap_safe_grow_cleared (VEC_gimple_heap **vec_, int size_ ) { int oldsize = VEC_gimple_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_heap_safe_grow (vec_, size_ ); memset (&(VEC_gimple_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple) * (size_ - oldsize)); } static __inline__ void VEC_gimple_heap_safe_splice (VEC_gimple_heap **dst_, VEC_gimple_base *src_ ) { if (src_) { VEC_gimple_heap_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple *VEC_gimple_heap_safe_push (VEC_gimple_heap **vec_, gimple obj_ ) { VEC_gimple_heap_reserve (vec_, 1 ); return VEC_gimple_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple *VEC_gimple_heap_safe_insert (VEC_gimple_heap **vec_, unsigned ix_, gimple obj_ ) { VEC_gimple_heap_reserve (vec_, 1 ); return VEC_gimple_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-typedef struct VEC_gimple_gc { VEC_gimple_base base; } VEC_gimple_gc; static __inline__ VEC_gimple_gc *VEC_gimple_gc_alloc (int alloc_ ) { return (VEC_gimple_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_gc_free (VEC_gimple_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_gc *VEC_gimple_gc_copy (VEC_gimple_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple) * len_); } return new_vec_; } static __inline__ int VEC_gimple_gc_reserve (VEC_gimple_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_gc_reserve_exact (VEC_gimple_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_gc_safe_grow (VEC_gimple_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_gimple_gc_safe_grow_cleared (VEC_gimple_gc **vec_, int size_ ) { int oldsize = VEC_gimple_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_gc_safe_grow (vec_, size_ ); memset (&(VEC_gimple_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple) * (size_ - oldsize)); } static __inline__ void VEC_gimple_gc_safe_splice (VEC_gimple_gc **dst_, VEC_gimple_base *src_ ) { if (src_) { VEC_gimple_gc_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple *VEC_gimple_gc_safe_push (VEC_gimple_gc **vec_, gimple obj_ ) { VEC_gimple_gc_reserve (vec_, 1 ); return VEC_gimple_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple *VEC_gimple_gc_safe_insert (VEC_gimple_gc **vec_, unsigned ix_, gimple obj_ ) { VEC_gimple_gc_reserve (vec_, 1 ); return VEC_gimple_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-
-
-typedef gimple *gimple_p;
-static __inline__ void VEC_gimple_p_must_be_pointer_type (void) { (void)((gimple_p)1 == (void *)1); } typedef struct VEC_gimple_p_base { struct vec_prefix prefix; gimple_p vec[1]; } VEC_gimple_p_base; typedef struct VEC_gimple_p_none { VEC_gimple_p_base base; } VEC_gimple_p_none; static __inline__ unsigned VEC_gimple_p_base_length (const VEC_gimple_p_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ gimple_p VEC_gimple_p_base_last (const VEC_gimple_p_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ gimple_p VEC_gimple_p_base_index (const VEC_gimple_p_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_gimple_p_base_iterate (const VEC_gimple_p_base *vec_, unsigned ix_, gimple_p *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (gimple_p) 0; return 0; } } static __inline__ size_t VEC_gimple_p_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_gimple_p_base, vec) + alloc_ * sizeof(gimple_p); } static __inline__ void VEC_gimple_p_base_embedded_init (VEC_gimple_p_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_gimple_p_base_space (VEC_gimple_p_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_gimple_p_base_splice (VEC_gimple_p_base *dst_, VEC_gimple_p_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (gimple_p)); dst_->prefix.num += len_; } } static __inline__ gimple_p *VEC_gimple_p_base_quick_push (VEC_gimple_p_base *vec_, gimple_p obj_ ) { gimple_p *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ gimple_p VEC_gimple_p_base_pop (VEC_gimple_p_base *vec_ ) { gimple_p obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_gimple_p_base_truncate (VEC_gimple_p_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ gimple_p VEC_gimple_p_base_replace (VEC_gimple_p_base *vec_, unsigned ix_, gimple_p obj_ ) { gimple_p old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ gimple_p *VEC_gimple_p_base_quick_insert (VEC_gimple_p_base *vec_, unsigned ix_, gimple_p obj_ ) { gimple_p *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (gimple_p)); *slot_ = obj_; return slot_; } static __inline__ gimple_p VEC_gimple_p_base_ordered_remove (VEC_gimple_p_base *vec_, unsigned ix_ ) { gimple_p *slot_; gimple_p obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (gimple_p)); return obj_; } static __inline__ gimple_p VEC_gimple_p_base_unordered_remove (VEC_gimple_p_base *vec_, unsigned ix_ ) { gimple_p *slot_; gimple_p obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_gimple_p_base_block_remove (VEC_gimple_p_base *vec_, unsigned ix_, unsigned len_ ) { gimple_p *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (gimple_p)); } static __inline__ gimple_p *VEC_gimple_p_base_address (VEC_gimple_p_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_gimple_p_base_lower_bound (VEC_gimple_p_base *vec_, const gimple_p obj_, unsigned char (*lessthan_)(const gimple_p, const gimple_p) ) { unsigned int len_ = VEC_gimple_p_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { gimple_p middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_gimple_p_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_gimple_p_heap { VEC_gimple_p_base base; } VEC_gimple_p_heap; static __inline__ VEC_gimple_p_heap *VEC_gimple_p_heap_alloc (int alloc_ ) { return (VEC_gimple_p_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_p_heap_free (VEC_gimple_p_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_p_heap *VEC_gimple_p_heap_copy (VEC_gimple_p_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_p_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_p_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple_p) * len_); } return new_vec_; } static __inline__ int VEC_gimple_p_heap_reserve (VEC_gimple_p_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_p_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_p_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_p_heap_reserve_exact (VEC_gimple_p_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_p_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_p_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_p_heap_safe_grow (VEC_gimple_p_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_p_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_p_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_gimple_p_heap_safe_grow_cleared (VEC_gimple_p_heap **vec_, int size_ ) { int oldsize = VEC_gimple_p_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_p_heap_safe_grow (vec_, size_ ); memset (&(VEC_gimple_p_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple_p) * (size_ - oldsize)); } static __inline__ void VEC_gimple_p_heap_safe_splice (VEC_gimple_p_heap **dst_, VEC_gimple_p_base *src_ ) { if (src_) { VEC_gimple_p_heap_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_p_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple_p *VEC_gimple_p_heap_safe_push (VEC_gimple_p_heap **vec_, gimple_p obj_ ) { VEC_gimple_p_heap_reserve (vec_, 1 ); return VEC_gimple_p_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple_p *VEC_gimple_p_heap_safe_insert (VEC_gimple_p_heap **vec_, unsigned ix_, gimple_p obj_ ) { VEC_gimple_p_heap_reserve (vec_, 1 ); return VEC_gimple_p_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-
-
-static __inline__ void VEC_gimple_seq_must_be_pointer_type (void) { (void)((gimple_seq)1 == (void *)1); } typedef struct VEC_gimple_seq_base { struct vec_prefix prefix; gimple_seq vec[1]; } VEC_gimple_seq_base; typedef struct VEC_gimple_seq_none { VEC_gimple_seq_base base; } VEC_gimple_seq_none; static __inline__ unsigned VEC_gimple_seq_base_length (const VEC_gimple_seq_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ gimple_seq VEC_gimple_seq_base_last (const VEC_gimple_seq_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ gimple_seq VEC_gimple_seq_base_index (const VEC_gimple_seq_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_gimple_seq_base_iterate (const VEC_gimple_seq_base *vec_, unsigned ix_, gimple_seq *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (gimple_seq) 0; return 0; } } static __inline__ size_t VEC_gimple_seq_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_gimple_seq_base, vec) + alloc_ * sizeof(gimple_seq); } static __inline__ void VEC_gimple_seq_base_embedded_init (VEC_gimple_seq_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_gimple_seq_base_space (VEC_gimple_seq_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_gimple_seq_base_splice (VEC_gimple_seq_base *dst_, VEC_gimple_seq_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (gimple_seq)); dst_->prefix.num += len_; } } static __inline__ gimple_seq *VEC_gimple_seq_base_quick_push (VEC_gimple_seq_base *vec_, gimple_seq obj_ ) { gimple_seq *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ gimple_seq VEC_gimple_seq_base_pop (VEC_gimple_seq_base *vec_ ) { gimple_seq obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_gimple_seq_base_truncate (VEC_gimple_seq_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ gimple_seq VEC_gimple_seq_base_replace (VEC_gimple_seq_base *vec_, unsigned ix_, gimple_seq obj_ ) { gimple_seq old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ gimple_seq *VEC_gimple_seq_base_quick_insert (VEC_gimple_seq_base *vec_, unsigned ix_, gimple_seq obj_ ) { gimple_seq *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (gimple_seq)); *slot_ = obj_; return slot_; } static __inline__ gimple_seq VEC_gimple_seq_base_ordered_remove (VEC_gimple_seq_base *vec_, unsigned ix_ ) { gimple_seq *slot_; gimple_seq obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (gimple_seq)); return obj_; } static __inline__ gimple_seq VEC_gimple_seq_base_unordered_remove (VEC_gimple_seq_base *vec_, unsigned ix_ ) { gimple_seq *slot_; gimple_seq obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_gimple_seq_base_block_remove (VEC_gimple_seq_base *vec_, unsigned ix_, unsigned len_ ) { gimple_seq *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (gimple_seq)); } static __inline__ gimple_seq *VEC_gimple_seq_base_address (VEC_gimple_seq_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_gimple_seq_base_lower_bound (VEC_gimple_seq_base *vec_, const gimple_seq obj_, unsigned char (*lessthan_)(const gimple_seq, const gimple_seq) ) { unsigned int len_ = VEC_gimple_seq_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { gimple_seq middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_gimple_seq_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_gimple_seq_gc { VEC_gimple_seq_base base; } VEC_gimple_seq_gc; static __inline__ VEC_gimple_seq_gc *VEC_gimple_seq_gc_alloc (int alloc_ ) { return (VEC_gimple_seq_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_seq_gc_free (VEC_gimple_seq_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_seq_gc *VEC_gimple_seq_gc_copy (VEC_gimple_seq_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_seq_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_seq_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple_seq) * len_); } return new_vec_; } static __inline__ int VEC_gimple_seq_gc_reserve (VEC_gimple_seq_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_seq_gc_reserve_exact (VEC_gimple_seq_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_seq_gc_safe_grow (VEC_gimple_seq_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_seq_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_seq_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_gimple_seq_gc_safe_grow_cleared (VEC_gimple_seq_gc **vec_, int size_ ) { int oldsize = VEC_gimple_seq_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_seq_gc_safe_grow (vec_, size_ ); memset (&(VEC_gimple_seq_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple_seq) * (size_ - oldsize)); } static __inline__ void VEC_gimple_seq_gc_safe_splice (VEC_gimple_seq_gc **dst_, VEC_gimple_seq_base *src_ ) { if (src_) { VEC_gimple_seq_gc_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_seq_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple_seq *VEC_gimple_seq_gc_safe_push (VEC_gimple_seq_gc **vec_, gimple_seq obj_ ) { VEC_gimple_seq_gc_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple_seq *VEC_gimple_seq_gc_safe_insert (VEC_gimple_seq_gc **vec_, unsigned ix_, gimple_seq obj_ ) { VEC_gimple_seq_gc_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-typedef struct VEC_gimple_seq_heap { VEC_gimple_seq_base base; } VEC_gimple_seq_heap; static __inline__ VEC_gimple_seq_heap *VEC_gimple_seq_heap_alloc (int alloc_ ) { return (VEC_gimple_seq_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_seq_heap_free (VEC_gimple_seq_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_seq_heap *VEC_gimple_seq_heap_copy (VEC_gimple_seq_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_gimple_seq_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_seq_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple_seq) * len_); } return new_vec_; } static __inline__ int VEC_gimple_seq_heap_reserve (VEC_gimple_seq_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_seq_heap_reserve_exact (VEC_gimple_seq_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_seq_heap_safe_grow (VEC_gimple_seq_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_seq_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_seq_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_gimple_seq_heap_safe_grow_cleared (VEC_gimple_seq_heap **vec_, int size_ ) { int oldsize = VEC_gimple_seq_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_gimple_seq_heap_safe_grow (vec_, size_ ); memset (&(VEC_gimple_seq_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple_seq) * (size_ - oldsize)); } static __inline__ void VEC_gimple_seq_heap_safe_splice (VEC_gimple_seq_heap **dst_, VEC_gimple_seq_base *src_ ) { if (src_) { VEC_gimple_seq_heap_reserve_exact (dst_, src_->prefix.num ); VEC_gimple_seq_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple_seq *VEC_gimple_seq_heap_safe_push (VEC_gimple_seq_heap **vec_, gimple_seq obj_ ) { VEC_gimple_seq_heap_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple_seq *VEC_gimple_seq_heap_safe_insert (VEC_gimple_seq_heap **vec_, unsigned ix_, gimple_seq obj_ ) { VEC_gimple_seq_heap_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-
-
-static __inline__ void VEC_rtx_must_be_pointer_type (void) { (void)((rtx)1 == (void *)1); } typedef struct VEC_rtx_base { struct vec_prefix prefix; rtx vec[1]; } VEC_rtx_base; typedef struct VEC_rtx_none { VEC_rtx_base base; } VEC_rtx_none; static __inline__ unsigned VEC_rtx_base_length (const VEC_rtx_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ rtx VEC_rtx_base_last (const VEC_rtx_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ rtx VEC_rtx_base_index (const VEC_rtx_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_rtx_base_iterate (const VEC_rtx_base *vec_, unsigned ix_, rtx *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (rtx) 0; return 0; } } static __inline__ size_t VEC_rtx_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_rtx_base, vec) + alloc_ * sizeof(rtx); } static __inline__ void VEC_rtx_base_embedded_init (VEC_rtx_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_rtx_base_space (VEC_rtx_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_rtx_base_splice (VEC_rtx_base *dst_, VEC_rtx_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (rtx)); dst_->prefix.num += len_; } } static __inline__ rtx *VEC_rtx_base_quick_push (VEC_rtx_base *vec_, rtx obj_ ) { rtx *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ rtx VEC_rtx_base_pop (VEC_rtx_base *vec_ ) { rtx obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_rtx_base_truncate (VEC_rtx_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ rtx VEC_rtx_base_replace (VEC_rtx_base *vec_, unsigned ix_, rtx obj_ ) { rtx old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ rtx *VEC_rtx_base_quick_insert (VEC_rtx_base *vec_, unsigned ix_, rtx obj_ ) { rtx *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (rtx)); *slot_ = obj_; return slot_; } static __inline__ rtx VEC_rtx_base_ordered_remove (VEC_rtx_base *vec_, unsigned ix_ ) { rtx *slot_; rtx obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (rtx)); return obj_; } static __inline__ rtx VEC_rtx_base_unordered_remove (VEC_rtx_base *vec_, unsigned ix_ ) { rtx *slot_; rtx obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_rtx_base_block_remove (VEC_rtx_base *vec_, unsigned ix_, unsigned len_ ) { rtx *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (rtx)); } static __inline__ rtx *VEC_rtx_base_address (VEC_rtx_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_rtx_base_lower_bound (VEC_rtx_base *vec_, const rtx obj_, unsigned char (*lessthan_)(const rtx, const rtx) ) { unsigned int len_ = VEC_rtx_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { rtx middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_rtx_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_rtx_heap { VEC_rtx_base base; } VEC_rtx_heap; static __inline__ VEC_rtx_heap *VEC_rtx_heap_alloc (int alloc_ ) { return (VEC_rtx_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_rtx_heap_free (VEC_rtx_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_rtx_heap *VEC_rtx_heap_copy (VEC_rtx_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_rtx_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_rtx_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (rtx) * len_); } return new_vec_; } static __inline__ int VEC_rtx_heap_reserve (VEC_rtx_heap **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_rtx_heap_reserve_exact (VEC_rtx_heap **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_rtx_heap_safe_grow (VEC_rtx_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_rtx_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_rtx_heap_safe_grow_cleared (VEC_rtx_heap **vec_, int size_ ) { int oldsize = VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_rtx_heap_safe_grow (vec_, size_ ); memset (&(VEC_rtx_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (rtx) * (size_ - oldsize)); } static __inline__ void VEC_rtx_heap_safe_splice (VEC_rtx_heap **dst_, VEC_rtx_base *src_ ) { if (src_) { VEC_rtx_heap_reserve_exact (dst_, src_->prefix.num ); VEC_rtx_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ rtx *VEC_rtx_heap_safe_push (VEC_rtx_heap **vec_, rtx obj_ ) { VEC_rtx_heap_reserve (vec_, 1 ); return VEC_rtx_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ rtx *VEC_rtx_heap_safe_insert (VEC_rtx_heap **vec_, unsigned ix_, rtx obj_ ) { VEC_rtx_heap_reserve (vec_, 1 ); return VEC_rtx_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-typedef struct VEC_rtx_gc { VEC_rtx_base base; } VEC_rtx_gc; static __inline__ VEC_rtx_gc *VEC_rtx_gc_alloc (int alloc_ ) { return (VEC_rtx_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_rtx_gc_free (VEC_rtx_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_rtx_gc *VEC_rtx_gc_copy (VEC_rtx_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_rtx_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_rtx_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (rtx) * len_); } return new_vec_; } static __inline__ int VEC_rtx_gc_reserve (VEC_rtx_gc **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_rtx_gc_reserve_exact (VEC_rtx_gc **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_rtx_gc_safe_grow (VEC_rtx_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_rtx_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_rtx_gc_safe_grow_cleared (VEC_rtx_gc **vec_, int size_ ) { int oldsize = VEC_rtx_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_rtx_gc_safe_grow (vec_, size_ ); memset (&(VEC_rtx_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (rtx) * (size_ - oldsize)); } static __inline__ void VEC_rtx_gc_safe_splice (VEC_rtx_gc **dst_, VEC_rtx_base *src_ ) { if (src_) { VEC_rtx_gc_reserve_exact (dst_, src_->prefix.num ); VEC_rtx_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ rtx *VEC_rtx_gc_safe_push (VEC_rtx_gc **vec_, rtx obj_ ) { VEC_rtx_gc_reserve (vec_, 1 ); return VEC_rtx_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ rtx *VEC_rtx_gc_safe_insert (VEC_rtx_gc **vec_, unsigned ix_, rtx obj_ ) { VEC_rtx_gc_reserve (vec_, 1 ); return VEC_rtx_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-# 31 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/double-int.h" 1
-# 24 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/double-int.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 1 3
-# 53 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 3
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/include/stddef.h" 1 3 4
-# 54 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 2 3
-# 191 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 3
-typedef unsigned long int mp_limb_t;
-typedef long int mp_limb_signed_t;
-
-
-typedef unsigned long int mp_bitcnt_t;
-
-
-
-
-typedef struct
-{
-  int _mp_alloc;
-
-  int _mp_size;
-
-
-  mp_limb_t *_mp_d;
-} __mpz_struct;
-
-
-
-
-typedef __mpz_struct MP_INT;
-typedef __mpz_struct mpz_t[1];
-
-typedef mp_limb_t * mp_ptr;
-typedef const mp_limb_t * mp_srcptr;
-
-
-
-
-
-
-
-typedef long int mp_size_t;
-typedef long int mp_exp_t;
-
-
-typedef struct
-{
-  __mpz_struct _mp_num;
-  __mpz_struct _mp_den;
-} __mpq_struct;
-
-typedef __mpq_struct MP_RAT;
-typedef __mpq_struct mpq_t[1];
-
-typedef struct
-{
-  int _mp_prec;
-
-
-
-  int _mp_size;
-
-
-  mp_exp_t _mp_exp;
-  mp_limb_t *_mp_d;
-} __mpf_struct;
-
-
-typedef __mpf_struct mpf_t[1];
-
-
-typedef enum
-{
-  GMP_RAND_ALG_DEFAULT = 0,
-  GMP_RAND_ALG_LC = GMP_RAND_ALG_DEFAULT
-} gmp_randalg_t;
-
-
-typedef struct
-{
-  mpz_t _mp_seed;
-  gmp_randalg_t _mp_alg;
-  union {
-    void *_mp_lc;
-  } _mp_algdata;
-} __gmp_randstate_struct;
-typedef __gmp_randstate_struct gmp_randstate_t[1];
-
-
-
-typedef const __mpz_struct *mpz_srcptr;
-typedef __mpz_struct *mpz_ptr;
-typedef const __mpf_struct *mpf_srcptr;
-typedef __mpf_struct *mpf_ptr;
-typedef const __mpq_struct *mpq_srcptr;
-typedef __mpq_struct *mpq_ptr;
-# 541 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 3
- void __gmp_set_memory_functions (void *(*) (size_t), void *(*) (void *, size_t, size_t), void (*) (void *, size_t))
-
-                                                   ;
-
-
- void __gmp_get_memory_functions (void *(**) (size_t), void *(**) (void *, size_t, size_t), void (**) (void *, size_t))
-
-                                                                                ;
-
-
- extern const int __gmp_bits_per_limb;
-
-
- extern int __gmp_errno;
-
-
- extern const char * const __gmp_version;
-
-
-
-
-
-
- void __gmp_randinit (gmp_randstate_t, gmp_randalg_t, ...);
-
-
- void __gmp_randinit_default (gmp_randstate_t);
-
-
- void __gmp_randinit_lc_2exp (gmp_randstate_t, mpz_srcptr, unsigned long int, mp_bitcnt_t)
-
-                          ;
-
-
- int __gmp_randinit_lc_2exp_size (gmp_randstate_t, mp_bitcnt_t);
-
-
- void __gmp_randinit_mt (gmp_randstate_t);
-
-
- void __gmp_randinit_set (gmp_randstate_t, const __gmp_randstate_struct *);
-
-
- void __gmp_randseed (gmp_randstate_t, mpz_srcptr);
-
-
- void __gmp_randseed_ui (gmp_randstate_t, unsigned long int);
-
-
- void __gmp_randclear (gmp_randstate_t);
-
-
- unsigned long __gmp_urandomb_ui (gmp_randstate_t, unsigned long);
-
-
- unsigned long __gmp_urandomm_ui (gmp_randstate_t, unsigned long);
-
-
-
-
-
- int __gmp_asprintf (char **, const char *, ...);
-
-
-
- int __gmp_fprintf (FILE *, const char *, ...);
-# 620 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 3
- int __gmp_printf (const char *, ...);
-
-
- int __gmp_snprintf (char *, size_t, const char *, ...);
-
-
- int __gmp_sprintf (char *, const char *, ...);
-
-
-
- int __gmp_vasprintf (char **, const char *, va_list);
-
-
-
-
- int __gmp_vfprintf (FILE *, const char *, va_list);
-
-
-
-
- int __gmp_vprintf (const char *, va_list);
-
-
-
-
- int __gmp_vsnprintf (char *, size_t, const char *, va_list);
-
-
-
-
- int __gmp_vsprintf (char *, const char *, va_list);
-
-
-
-
-
-
-
- int __gmp_fscanf (FILE *, const char *, ...);
-
-
-
- int __gmp_scanf (const char *, ...);
-
-
- int __gmp_sscanf (const char *, const char *, ...);
-
-
-
- int __gmp_vfscanf (FILE *, const char *, va_list);
-
-
-
-
- int __gmp_vscanf (const char *, va_list);
-
-
-
-
- int __gmp_vsscanf (const char *, const char *, va_list);
-
-
-
-
-
-
-
- void *__gmpz_realloc (mpz_ptr, mp_size_t);
-
-
-
- void __gmpz_abs (mpz_ptr, mpz_srcptr);
-
-
-
- void __gmpz_add (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_add_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_addmul (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_addmul_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_and (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_array_init (mpz_ptr, mp_size_t, mp_size_t);
-
-
- void __gmpz_bin_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_bin_uiui (mpz_ptr, unsigned long int, unsigned long int);
-
-
- void __gmpz_cdiv_q (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_cdiv_q_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
-
-
- unsigned long int __gmpz_cdiv_q_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_cdiv_qr (mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- unsigned long int __gmpz_cdiv_qr_ui (mpz_ptr, mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_cdiv_r (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_cdiv_r_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
-
-
- unsigned long int __gmpz_cdiv_r_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- unsigned long int __gmpz_cdiv_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
-
-
- void __gmpz_clear (mpz_ptr);
-
-
- void __gmpz_clears (mpz_ptr, ...);
-
-
- void __gmpz_clrbit (mpz_ptr, mp_bitcnt_t);
-
-
- int __gmpz_cmp (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpz_cmp_d (mpz_srcptr, double) __attribute__ ((__pure__));
-
-
- int __gmpz_cmp_si (mpz_srcptr, signed long int) __attribute__ ((__pure__));
-
-
- int __gmpz_cmp_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
-
-
- int __gmpz_cmpabs (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpz_cmpabs_d (mpz_srcptr, double) __attribute__ ((__pure__));
-
-
- int __gmpz_cmpabs_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
-
-
- void __gmpz_com (mpz_ptr, mpz_srcptr);
-
-
- void __gmpz_combit (mpz_ptr, mp_bitcnt_t);
-
-
- int __gmpz_congruent_p (mpz_srcptr, mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpz_congruent_2exp_p (mpz_srcptr, mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
-
-
- int __gmpz_congruent_ui_p (mpz_srcptr, unsigned long, unsigned long) __attribute__ ((__pure__));
-
-
- void __gmpz_divexact (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_divexact_ui (mpz_ptr, mpz_srcptr, unsigned long);
-
-
- int __gmpz_divisible_p (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpz_divisible_ui_p (mpz_srcptr, unsigned long) __attribute__ ((__pure__));
-
-
- int __gmpz_divisible_2exp_p (mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
-
-
- void __gmpz_dump (mpz_srcptr);
-
-
- void *__gmpz_export (void *, size_t *, int, size_t, int, size_t, mpz_srcptr);
-
-
- void __gmpz_fac_ui (mpz_ptr, unsigned long int);
-
-
- void __gmpz_fdiv_q (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_fdiv_q_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
-
-
- unsigned long int __gmpz_fdiv_q_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_fdiv_qr (mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- unsigned long int __gmpz_fdiv_qr_ui (mpz_ptr, mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_fdiv_r (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_fdiv_r_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
-
-
- unsigned long int __gmpz_fdiv_r_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- unsigned long int __gmpz_fdiv_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
-
-
- void __gmpz_fib_ui (mpz_ptr, unsigned long int);
-
-
- void __gmpz_fib2_ui (mpz_ptr, mpz_ptr, unsigned long int);
-
-
- int __gmpz_fits_sint_p (mpz_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpz_fits_slong_p (mpz_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpz_fits_sshort_p (mpz_srcptr) __attribute__ ((__pure__));
-
-
-
- int __gmpz_fits_uint_p (mpz_srcptr) __attribute__ ((__pure__));
-
-
-
-
- int __gmpz_fits_ulong_p (mpz_srcptr) __attribute__ ((__pure__));
-
-
-
-
- int __gmpz_fits_ushort_p (mpz_srcptr) __attribute__ ((__pure__));
-
-
-
- void __gmpz_gcd (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- unsigned long int __gmpz_gcd_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_gcdext (mpz_ptr, mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- double __gmpz_get_d (mpz_srcptr) __attribute__ ((__pure__));
-
-
- double __gmpz_get_d_2exp (signed long int *, mpz_srcptr);
-
-
- long int __gmpz_get_si (mpz_srcptr) __attribute__ ((__pure__));
-
-
- char *__gmpz_get_str (char *, int, mpz_srcptr);
-
-
-
- unsigned long int __gmpz_get_ui (mpz_srcptr) __attribute__ ((__pure__));
-
-
-
-
- mp_limb_t __gmpz_getlimbn (mpz_srcptr, mp_size_t) __attribute__ ((__pure__));
-
-
-
- mp_bitcnt_t __gmpz_hamdist (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
-
-
- void __gmpz_import (mpz_ptr, size_t, int, size_t, int, size_t, const void *);
-
-
- void __gmpz_init (mpz_ptr);
-
-
- void __gmpz_init2 (mpz_ptr, mp_bitcnt_t);
-
-
- void __gmpz_inits (mpz_ptr, ...);
-
-
- void __gmpz_init_set (mpz_ptr, mpz_srcptr);
-
-
- void __gmpz_init_set_d (mpz_ptr, double);
-
-
- void __gmpz_init_set_si (mpz_ptr, signed long int);
-
-
- int __gmpz_init_set_str (mpz_ptr, const char *, int);
-
-
- void __gmpz_init_set_ui (mpz_ptr, unsigned long int);
-
-
-
- size_t __gmpz_inp_raw (mpz_ptr, FILE *);
-
-
-
-
- size_t __gmpz_inp_str (mpz_ptr, FILE *, int);
-
-
-
- int __gmpz_invert (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_ior (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- int __gmpz_jacobi (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
-
-
-
-
- int __gmpz_kronecker_si (mpz_srcptr, long) __attribute__ ((__pure__));
-
-
- int __gmpz_kronecker_ui (mpz_srcptr, unsigned long) __attribute__ ((__pure__));
-
-
- int __gmpz_si_kronecker (long, mpz_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpz_ui_kronecker (unsigned long, mpz_srcptr) __attribute__ ((__pure__));
-
-
- void __gmpz_lcm (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_lcm_ui (mpz_ptr, mpz_srcptr, unsigned long);
-
-
-
-
- void __gmpz_lucnum_ui (mpz_ptr, unsigned long int);
-
-
- void __gmpz_lucnum2_ui (mpz_ptr, mpz_ptr, unsigned long int);
-
-
- int __gmpz_millerrabin (mpz_srcptr, int) __attribute__ ((__pure__));
-
-
- void __gmpz_mod (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
-
-
- void __gmpz_mul (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_mul_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
-
-
- void __gmpz_mul_si (mpz_ptr, mpz_srcptr, long int);
-
-
- void __gmpz_mul_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
-
- void __gmpz_neg (mpz_ptr, mpz_srcptr);
-
-
-
- void __gmpz_nextprime (mpz_ptr, mpz_srcptr);
-
-
-
- size_t __gmpz_out_raw (FILE *, mpz_srcptr);
-
-
-
-
- size_t __gmpz_out_str (FILE *, int, mpz_srcptr);
-
-
-
- int __gmpz_perfect_power_p (mpz_srcptr) __attribute__ ((__pure__));
-
-
-
- int __gmpz_perfect_square_p (mpz_srcptr) __attribute__ ((__pure__));
-
-
-
-
- mp_bitcnt_t __gmpz_popcount (mpz_srcptr) __attribute__ ((__pure__));
-
-
-
- void __gmpz_pow_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_powm (mpz_ptr, mpz_srcptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_powm_sec (mpz_ptr, mpz_srcptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_powm_ui (mpz_ptr, mpz_srcptr, unsigned long int, mpz_srcptr);
-
-
- int __gmpz_probab_prime_p (mpz_srcptr, int) __attribute__ ((__pure__));
-
-
- void __gmpz_random (mpz_ptr, mp_size_t);
-
-
- void __gmpz_random2 (mpz_ptr, mp_size_t);
-
-
- void __gmpz_realloc2 (mpz_ptr, mp_bitcnt_t);
-
-
- mp_bitcnt_t __gmpz_remove (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- int __gmpz_root (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_rootrem (mpz_ptr,mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_rrandomb (mpz_ptr, gmp_randstate_t, mp_bitcnt_t);
-
-
- mp_bitcnt_t __gmpz_scan0 (mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
-
-
- mp_bitcnt_t __gmpz_scan1 (mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
-
-
- void __gmpz_set (mpz_ptr, mpz_srcptr);
-
-
- void __gmpz_set_d (mpz_ptr, double);
-
-
- void __gmpz_set_f (mpz_ptr, mpf_srcptr);
-
-
-
- void __gmpz_set_q (mpz_ptr, mpq_srcptr);
-
-
-
- void __gmpz_set_si (mpz_ptr, signed long int);
-
-
- int __gmpz_set_str (mpz_ptr, const char *, int);
-
-
- void __gmpz_set_ui (mpz_ptr, unsigned long int);
-
-
- void __gmpz_setbit (mpz_ptr, mp_bitcnt_t);
-
-
-
- size_t __gmpz_size (mpz_srcptr) __attribute__ ((__pure__));
-
-
-
- size_t __gmpz_sizeinbase (mpz_srcptr, int) __attribute__ ((__pure__));
-
-
- void __gmpz_sqrt (mpz_ptr, mpz_srcptr);
-
-
- void __gmpz_sqrtrem (mpz_ptr, mpz_ptr, mpz_srcptr);
-
-
- void __gmpz_sub (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_sub_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_ui_sub (mpz_ptr, unsigned long int, mpz_srcptr);
-
-
- void __gmpz_submul (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_submul_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_swap (mpz_ptr, mpz_ptr) ;
-
-
- unsigned long int __gmpz_tdiv_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
-
-
- void __gmpz_tdiv_q (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_tdiv_q_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
-
-
- unsigned long int __gmpz_tdiv_q_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_tdiv_qr (mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- unsigned long int __gmpz_tdiv_qr_ui (mpz_ptr, mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_tdiv_r (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_tdiv_r_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
-
-
- unsigned long int __gmpz_tdiv_r_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- int __gmpz_tstbit (mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
-
-
- void __gmpz_ui_pow_ui (mpz_ptr, unsigned long int, unsigned long int);
-
-
- void __gmpz_urandomb (mpz_ptr, gmp_randstate_t, mp_bitcnt_t);
-
-
- void __gmpz_urandomm (mpz_ptr, gmp_randstate_t, mpz_srcptr);
-
-
-
- void __gmpz_xor (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
-
-
-
-
- void __gmpq_abs (mpq_ptr, mpq_srcptr);
-
-
-
- void __gmpq_add (mpq_ptr, mpq_srcptr, mpq_srcptr);
-
-
- void __gmpq_canonicalize (mpq_ptr);
-
-
- void __gmpq_clear (mpq_ptr);
-
-
- void __gmpq_clears (mpq_ptr, ...);
-
-
- int __gmpq_cmp (mpq_srcptr, mpq_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpq_cmp_si (mpq_srcptr, long, unsigned long) __attribute__ ((__pure__));
-
-
- int __gmpq_cmp_ui (mpq_srcptr, unsigned long int, unsigned long int) __attribute__ ((__pure__));
-
-
- void __gmpq_div (mpq_ptr, mpq_srcptr, mpq_srcptr);
-
-
- void __gmpq_div_2exp (mpq_ptr, mpq_srcptr, mp_bitcnt_t);
-
-
- int __gmpq_equal (mpq_srcptr, mpq_srcptr) __attribute__ ((__pure__));
-
-
- void __gmpq_get_num (mpz_ptr, mpq_srcptr);
-
-
- void __gmpq_get_den (mpz_ptr, mpq_srcptr);
-
-
- double __gmpq_get_d (mpq_srcptr) __attribute__ ((__pure__));
-
-
- char *__gmpq_get_str (char *, int, mpq_srcptr);
-
-
- void __gmpq_init (mpq_ptr);
-
-
- void __gmpq_inits (mpq_ptr, ...);
-
-
-
- size_t __gmpq_inp_str (mpq_ptr, FILE *, int);
-
-
-
- void __gmpq_inv (mpq_ptr, mpq_srcptr);
-
-
- void __gmpq_mul (mpq_ptr, mpq_srcptr, mpq_srcptr);
-
-
- void __gmpq_mul_2exp (mpq_ptr, mpq_srcptr, mp_bitcnt_t);
-
-
-
- void __gmpq_neg (mpq_ptr, mpq_srcptr);
-
-
-
-
- size_t __gmpq_out_str (FILE *, int, mpq_srcptr);
-
-
-
- void __gmpq_set (mpq_ptr, mpq_srcptr);
-
-
- void __gmpq_set_d (mpq_ptr, double);
-
-
- void __gmpq_set_den (mpq_ptr, mpz_srcptr);
-
-
- void __gmpq_set_f (mpq_ptr, mpf_srcptr);
-
-
- void __gmpq_set_num (mpq_ptr, mpz_srcptr);
-
-
- void __gmpq_set_si (mpq_ptr, signed long int, unsigned long int);
-
-
- int __gmpq_set_str (mpq_ptr, const char *, int);
-
-
- void __gmpq_set_ui (mpq_ptr, unsigned long int, unsigned long int);
-
-
- void __gmpq_set_z (mpq_ptr, mpz_srcptr);
-
-
- void __gmpq_sub (mpq_ptr, mpq_srcptr, mpq_srcptr);
-
-
- void __gmpq_swap (mpq_ptr, mpq_ptr) ;
-
-
-
-
-
- void __gmpf_abs (mpf_ptr, mpf_srcptr);
-
-
- void __gmpf_add (mpf_ptr, mpf_srcptr, mpf_srcptr);
-
-
- void __gmpf_add_ui (mpf_ptr, mpf_srcptr, unsigned long int);
-
- void __gmpf_ceil (mpf_ptr, mpf_srcptr);
-
-
- void __gmpf_clear (mpf_ptr);
-
-
- void __gmpf_clears (mpf_ptr, ...);
-
-
- int __gmpf_cmp (mpf_srcptr, mpf_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpf_cmp_d (mpf_srcptr, double) __attribute__ ((__pure__));
-
-
- int __gmpf_cmp_si (mpf_srcptr, signed long int) __attribute__ ((__pure__));
-
-
- int __gmpf_cmp_ui (mpf_srcptr, unsigned long int) __attribute__ ((__pure__));
-
-
- void __gmpf_div (mpf_ptr, mpf_srcptr, mpf_srcptr);
-
-
- void __gmpf_div_2exp (mpf_ptr, mpf_srcptr, mp_bitcnt_t);
-
-
- void __gmpf_div_ui (mpf_ptr, mpf_srcptr, unsigned long int);
-
-
- void __gmpf_dump (mpf_srcptr);
-
-
- int __gmpf_eq (mpf_srcptr, mpf_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
-
-
- int __gmpf_fits_sint_p (mpf_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpf_fits_slong_p (mpf_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpf_fits_sshort_p (mpf_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpf_fits_uint_p (mpf_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpf_fits_ulong_p (mpf_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpf_fits_ushort_p (mpf_srcptr) __attribute__ ((__pure__));
-
-
- void __gmpf_floor (mpf_ptr, mpf_srcptr);
-
-
- double __gmpf_get_d (mpf_srcptr) __attribute__ ((__pure__));
-
-
- double __gmpf_get_d_2exp (signed long int *, mpf_srcptr);
-
-
- mp_bitcnt_t __gmpf_get_default_prec (void) __attribute__ ((__pure__));
-
-
- mp_bitcnt_t __gmpf_get_prec (mpf_srcptr) __attribute__ ((__pure__));
-
-
- long __gmpf_get_si (mpf_srcptr) __attribute__ ((__pure__));
-
-
- char *__gmpf_get_str (char *, mp_exp_t *, int, size_t, mpf_srcptr);
-
-
- unsigned long __gmpf_get_ui (mpf_srcptr) __attribute__ ((__pure__));
-
-
- void __gmpf_init (mpf_ptr);
-
-
- void __gmpf_init2 (mpf_ptr, mp_bitcnt_t);
-
-
- void __gmpf_inits (mpf_ptr, ...);
-
-
- void __gmpf_init_set (mpf_ptr, mpf_srcptr);
-
-
- void __gmpf_init_set_d (mpf_ptr, double);
-
-
- void __gmpf_init_set_si (mpf_ptr, signed long int);
-
-
- int __gmpf_init_set_str (mpf_ptr, const char *, int);
-
-
- void __gmpf_init_set_ui (mpf_ptr, unsigned long int);
-
-
-
- size_t __gmpf_inp_str (mpf_ptr, FILE *, int);
-
-
-
- int __gmpf_integer_p (mpf_srcptr) __attribute__ ((__pure__));
-
-
- void __gmpf_mul (mpf_ptr, mpf_srcptr, mpf_srcptr);
-
-
- void __gmpf_mul_2exp (mpf_ptr, mpf_srcptr, mp_bitcnt_t);
-
-
- void __gmpf_mul_ui (mpf_ptr, mpf_srcptr, unsigned long int);
-
-
- void __gmpf_neg (mpf_ptr, mpf_srcptr);
-
-
-
- size_t __gmpf_out_str (FILE *, int, size_t, mpf_srcptr);
-
-
-
- void __gmpf_pow_ui (mpf_ptr, mpf_srcptr, unsigned long int);
-
-
- void __gmpf_random2 (mpf_ptr, mp_size_t, mp_exp_t);
-
-
- void __gmpf_reldiff (mpf_ptr, mpf_srcptr, mpf_srcptr);
-
-
- void __gmpf_set (mpf_ptr, mpf_srcptr);
-
-
- void __gmpf_set_d (mpf_ptr, double);
-
-
- void __gmpf_set_default_prec (mp_bitcnt_t) ;
-
-
- void __gmpf_set_prec (mpf_ptr, mp_bitcnt_t);
-
-
- void __gmpf_set_prec_raw (mpf_ptr, mp_bitcnt_t) ;
-
-
- void __gmpf_set_q (mpf_ptr, mpq_srcptr);
-
-
- void __gmpf_set_si (mpf_ptr, signed long int);
-
-
- int __gmpf_set_str (mpf_ptr, const char *, int);
-
-
- void __gmpf_set_ui (mpf_ptr, unsigned long int);
-
-
- void __gmpf_set_z (mpf_ptr, mpz_srcptr);
-
-
- size_t __gmpf_size (mpf_srcptr) __attribute__ ((__pure__));
-
-
- void __gmpf_sqrt (mpf_ptr, mpf_srcptr);
-
-
- void __gmpf_sqrt_ui (mpf_ptr, unsigned long int);
-
-
- void __gmpf_sub (mpf_ptr, mpf_srcptr, mpf_srcptr);
-
-
- void __gmpf_sub_ui (mpf_ptr, mpf_srcptr, unsigned long int);
-
-
- void __gmpf_swap (mpf_ptr, mpf_ptr) ;
-
-
- void __gmpf_trunc (mpf_ptr, mpf_srcptr);
-
-
- void __gmpf_ui_div (mpf_ptr, unsigned long int, mpf_srcptr);
-
-
- void __gmpf_ui_sub (mpf_ptr, unsigned long int, mpf_srcptr);
-
-
- void __gmpf_urandomb (mpf_t, gmp_randstate_t, mp_bitcnt_t);
-# 1500 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 3
- mp_limb_t __gmpn_add (mp_ptr, mp_srcptr, mp_size_t, mp_srcptr,mp_size_t);
-
-
-
-
- mp_limb_t __gmpn_add_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t) ;
-
-
-
- mp_limb_t __gmpn_add_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
-
- mp_limb_t __gmpn_addmul_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
-
-
-
- int __gmpn_cmp (mp_srcptr, mp_srcptr, mp_size_t) __attribute__ ((__pure__));
-
-
-
-
-
-
- mp_limb_t __gmpn_divexact_by3c (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
-
-
-
-
-
- mp_limb_t __gmpn_divrem (mp_ptr, mp_size_t, mp_ptr, mp_size_t, mp_srcptr, mp_size_t);
-
-
- mp_limb_t __gmpn_divrem_1 (mp_ptr, mp_size_t, mp_srcptr, mp_size_t, mp_limb_t);
-
-
- mp_limb_t __gmpn_divrem_2 (mp_ptr, mp_size_t, mp_ptr, mp_size_t, mp_srcptr);
-
-
- mp_size_t __gmpn_gcd (mp_ptr, mp_ptr, mp_size_t, mp_ptr, mp_size_t);
-
-
- mp_limb_t __gmpn_gcd_1 (mp_srcptr, mp_size_t, mp_limb_t) __attribute__ ((__pure__));
-
-
- mp_limb_t __gmpn_gcdext_1 (mp_limb_signed_t *, mp_limb_signed_t *, mp_limb_t, mp_limb_t);
-
-
- mp_size_t __gmpn_gcdext (mp_ptr, mp_ptr, mp_size_t *, mp_ptr, mp_size_t, mp_ptr, mp_size_t);
-
-
- size_t __gmpn_get_str (unsigned char *, int, mp_ptr, mp_size_t);
-
-
- mp_bitcnt_t __gmpn_hamdist (mp_srcptr, mp_srcptr, mp_size_t) __attribute__ ((__pure__));
-
-
- mp_limb_t __gmpn_lshift (mp_ptr, mp_srcptr, mp_size_t, unsigned int);
-
-
- mp_limb_t __gmpn_mod_1 (mp_srcptr, mp_size_t, mp_limb_t) __attribute__ ((__pure__));
-
-
- mp_limb_t __gmpn_mul (mp_ptr, mp_srcptr, mp_size_t, mp_srcptr, mp_size_t);
-
-
- mp_limb_t __gmpn_mul_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
-
-
- void __gmpn_mul_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
-
- void __gmpn_sqr (mp_ptr, mp_srcptr, mp_size_t);
-
-
-
- mp_limb_t __gmpn_neg (mp_ptr, mp_srcptr, mp_size_t);
-
-
-
-
- void __gmpn_com (mp_ptr, mp_srcptr, mp_size_t);
-
-
-
- int __gmpn_perfect_square_p (mp_srcptr, mp_size_t) __attribute__ ((__pure__));
-
-
- int __gmpn_perfect_power_p (mp_srcptr, mp_size_t) __attribute__ ((__pure__));
-
-
- mp_bitcnt_t __gmpn_popcount (mp_srcptr, mp_size_t) __attribute__ ((__pure__));
-
-
- mp_size_t __gmpn_pow_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t, mp_ptr);
-
-
-
- mp_limb_t __gmpn_preinv_mod_1 (mp_srcptr, mp_size_t, mp_limb_t, mp_limb_t) __attribute__ ((__pure__));
-
-
- void __gmpn_random (mp_ptr, mp_size_t);
-
-
- void __gmpn_random2 (mp_ptr, mp_size_t);
-
-
- mp_limb_t __gmpn_rshift (mp_ptr, mp_srcptr, mp_size_t, unsigned int);
-
-
- mp_bitcnt_t __gmpn_scan0 (mp_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
-
-
- mp_bitcnt_t __gmpn_scan1 (mp_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
-
-
- mp_size_t __gmpn_set_str (mp_ptr, const unsigned char *, size_t, int);
-
-
- mp_size_t __gmpn_sqrtrem (mp_ptr, mp_ptr, mp_srcptr, mp_size_t);
-
-
-
- mp_limb_t __gmpn_sub (mp_ptr, mp_srcptr, mp_size_t, mp_srcptr,mp_size_t);
-
-
-
-
- mp_limb_t __gmpn_sub_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t) ;
-
-
-
- mp_limb_t __gmpn_sub_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
-
- mp_limb_t __gmpn_submul_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
-
-
- void __gmpn_tdiv_qr (mp_ptr, mp_ptr, mp_size_t, mp_srcptr, mp_size_t, mp_srcptr, mp_size_t);
-
-
- void __gmpn_and_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
- void __gmpn_andn_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
- void __gmpn_nand_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
- void __gmpn_ior_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
- void __gmpn_iorn_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
- void __gmpn_nior_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
- void __gmpn_xor_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
- void __gmpn_xnor_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
-
- void __gmpn_copyi (mp_ptr, mp_srcptr, mp_size_t);
-
- void __gmpn_copyd (mp_ptr, mp_srcptr, mp_size_t);
-
- void __gmpn_zero (mp_ptr, mp_size_t);
-# 1680 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 3
-extern __inline__ void
-__gmpz_abs (mpz_ptr __gmp_w, mpz_srcptr __gmp_u)
-{
-  if (__gmp_w != __gmp_u)
-    __gmpz_set (__gmp_w, __gmp_u);
-  __gmp_w->_mp_size = ((__gmp_w->_mp_size) >= 0 ? (__gmp_w->_mp_size) : -(__gmp_w->_mp_size));
-}
-# 1704 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 3
-extern __inline__
-
-int
-__gmpz_fits_uint_p (mpz_srcptr __gmp_z)
-{
-  mp_size_t __gmp_n = __gmp_z->_mp_size; mp_ptr __gmp_p = __gmp_z->_mp_d; return (__gmp_n == 0 || (__gmp_n == 1 && __gmp_p[0] <= (~ (unsigned) 0)));;
-}
-
-
-
-
-extern __inline__
-
-int
-__gmpz_fits_ulong_p (mpz_srcptr __gmp_z)
-{
-  mp_size_t __gmp_n = __gmp_z->_mp_size; mp_ptr __gmp_p = __gmp_z->_mp_d; return (__gmp_n == 0 || (__gmp_n == 1 && __gmp_p[0] <= (~ (unsigned long) 0)));;
-}
-
-
-
-
-extern __inline__
-
-int
-__gmpz_fits_ushort_p (mpz_srcptr __gmp_z)
-{
-  mp_size_t __gmp_n = __gmp_z->_mp_size; mp_ptr __gmp_p = __gmp_z->_mp_d; return (__gmp_n == 0 || (__gmp_n == 1 && __gmp_p[0] <= ((unsigned short) ~0)));;
-}
-
-
-
-
-extern __inline__
-
-unsigned long
-__gmpz_get_ui (mpz_srcptr __gmp_z)
-{
-  mp_ptr __gmp_p = __gmp_z->_mp_d;
-  mp_size_t __gmp_n = __gmp_z->_mp_size;
-  mp_limb_t __gmp_l = __gmp_p[0];
-
-
-
-
-
-
-  return (__gmp_n != 0 ? __gmp_l : 0);
-# 1760 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 3
-}
-
-
-
-
-extern __inline__
-
-mp_limb_t
-__gmpz_getlimbn (mpz_srcptr __gmp_z, mp_size_t __gmp_n)
-{
-  mp_limb_t __gmp_result = 0;
-  if (__builtin_expect ((__gmp_n >= 0 && __gmp_n < ((__gmp_z->_mp_size) >= 0 ? (__gmp_z->_mp_size) : -(__gmp_z->_mp_size))) != 0, 1))
-    __gmp_result = __gmp_z->_mp_d[__gmp_n];
-  return __gmp_result;
-}
-
-
-
-extern __inline__ void
-__gmpz_neg (mpz_ptr __gmp_w, mpz_srcptr __gmp_u)
-{
-  if (__gmp_w != __gmp_u)
-    __gmpz_set (__gmp_w, __gmp_u);
-  __gmp_w->_mp_size = - __gmp_w->_mp_size;
-}
-
-
-
-
-extern __inline__
-
-int
-__gmpz_perfect_square_p (mpz_srcptr __gmp_a)
-{
-  mp_size_t __gmp_asize;
-  int __gmp_result;
-
-  __gmp_asize = __gmp_a->_mp_size;
-  __gmp_result = (__gmp_asize >= 0);
-  if (__builtin_expect ((__gmp_asize > 0) != 0, 1))
-    __gmp_result = __gmpn_perfect_square_p (__gmp_a->_mp_d, __gmp_asize);
-  return __gmp_result;
-}
-
-
-
-
-extern __inline__
-
-mp_bitcnt_t
-__gmpz_popcount (mpz_srcptr __gmp_u)
-{
-  mp_size_t __gmp_usize;
-  mp_bitcnt_t __gmp_result;
-
-  __gmp_usize = __gmp_u->_mp_size;
-  __gmp_result = (__gmp_usize < 0 ? (~ (unsigned long) 0) : 0);
-  if (__builtin_expect ((__gmp_usize > 0) != 0, 1))
-    __gmp_result = __gmpn_popcount (__gmp_u->_mp_d, __gmp_usize);
-  return __gmp_result;
-}
-
-
-
-
-extern __inline__
-
-void
-__gmpz_set_q (mpz_ptr __gmp_w, mpq_srcptr __gmp_u)
-{
-  __gmpz_tdiv_q (__gmp_w, (&((__gmp_u)->_mp_num)), (&((__gmp_u)->_mp_den)));
-}
-
-
-
-
-extern __inline__
-
-size_t
-__gmpz_size (mpz_srcptr __gmp_z)
-{
-  return ((__gmp_z->_mp_size) >= 0 ? (__gmp_z->_mp_size) : -(__gmp_z->_mp_size));
-}
-
-
-
-
-
-
-extern __inline__ void
-__gmpq_abs (mpq_ptr __gmp_w, mpq_srcptr __gmp_u)
-{
-  if (__gmp_w != __gmp_u)
-    __gmpq_set (__gmp_w, __gmp_u);
-  __gmp_w->_mp_num._mp_size = ((__gmp_w->_mp_num._mp_size) >= 0 ? (__gmp_w->_mp_num._mp_size) : -(__gmp_w->_mp_num._mp_size));
-}
-
-
-
-extern __inline__ void
-__gmpq_neg (mpq_ptr __gmp_w, mpq_srcptr __gmp_u)
-{
-  if (__gmp_w != __gmp_u)
-    __gmpq_set (__gmp_w, __gmp_u);
-  __gmp_w->_mp_num._mp_size = - __gmp_w->_mp_num._mp_size;
-}
-# 2102 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 3
-extern __inline__
-
-mp_limb_t
-__gmpn_add (mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize)
-{
-  mp_limb_t __gmp_c;
-  do { mp_size_t __gmp_i; mp_limb_t __gmp_x; __gmp_i = (__gmp_ysize); if (__gmp_i != 0) { if (__gmpn_add_n (__gmp_wp, __gmp_xp, __gmp_yp, __gmp_i)) { do { if (__gmp_i >= (__gmp_xsize)) { (__gmp_c) = 1; goto __gmp_done; } __gmp_x = (__gmp_xp)[__gmp_i]; } while ((((__gmp_wp)[__gmp_i++] = (__gmp_x + 1) & ((~ ((mp_limb_t) (0))) >> 0)) == 0)); } } if ((__gmp_wp) != (__gmp_xp)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_xsize); __gmp_j++) (__gmp_wp)[__gmp_j] = (__gmp_xp)[__gmp_j]; } while (0); (__gmp_c) = 0; __gmp_done: ; } while (0);
-  return __gmp_c;
-}
-
-
-
-
-extern __inline__
-
-mp_limb_t
-__gmpn_add_1 (mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n)
-{
-  mp_limb_t __gmp_c;
-  do { mp_size_t __gmp_i; mp_limb_t __gmp_x, __gmp_r; __gmp_x = (__gmp_src)[0]; __gmp_r = __gmp_x + (__gmp_n); (__gmp_dst)[0] = __gmp_r; if (((__gmp_r) < ((__gmp_n)))) { (__gmp_c) = 1; for (__gmp_i = 1; __gmp_i < (__gmp_size);) { __gmp_x = (__gmp_src)[__gmp_i]; __gmp_r = __gmp_x + 1; (__gmp_dst)[__gmp_i] = __gmp_r; ++__gmp_i; if (!((__gmp_r) < (1))) { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; break; } } } else { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (1); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; } } while (0);
-  return __gmp_c;
-}
-
-
-
-
-extern __inline__
-
-int
-__gmpn_cmp (mp_srcptr __gmp_xp, mp_srcptr __gmp_yp, mp_size_t __gmp_size)
-{
-  int __gmp_result;
-  do { mp_size_t __gmp_i; mp_limb_t __gmp_x, __gmp_y; (__gmp_result) = 0; __gmp_i = (__gmp_size); while (--__gmp_i >= 0) { __gmp_x = (__gmp_xp)[__gmp_i]; __gmp_y = (__gmp_yp)[__gmp_i]; if (__gmp_x != __gmp_y) { (__gmp_result) = (__gmp_x > __gmp_y ? 1 : -1); break; } } } while (0);
-  return __gmp_result;
-}
-
-
-
-
-extern __inline__
-
-mp_limb_t
-__gmpn_sub (mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize)
-{
-  mp_limb_t __gmp_c;
-  do { mp_size_t __gmp_i; mp_limb_t __gmp_x; __gmp_i = (__gmp_ysize); if (__gmp_i != 0) { if (__gmpn_sub_n (__gmp_wp, __gmp_xp, __gmp_yp, __gmp_i)) { do { if (__gmp_i >= (__gmp_xsize)) { (__gmp_c) = 1; goto __gmp_done; } __gmp_x = (__gmp_xp)[__gmp_i]; } while ((((__gmp_wp)[__gmp_i++] = (__gmp_x - 1) & ((~ ((mp_limb_t) (0))) >> 0)), __gmp_x == 0)); } } if ((__gmp_wp) != (__gmp_xp)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_xsize); __gmp_j++) (__gmp_wp)[__gmp_j] = (__gmp_xp)[__gmp_j]; } while (0); (__gmp_c) = 0; __gmp_done: ; } while (0);
-  return __gmp_c;
-}
-
-
-
-
-extern __inline__
-
-mp_limb_t
-__gmpn_sub_1 (mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n)
-{
-  mp_limb_t __gmp_c;
-  do { mp_size_t __gmp_i; mp_limb_t __gmp_x, __gmp_r; __gmp_x = (__gmp_src)[0]; __gmp_r = __gmp_x - (__gmp_n); (__gmp_dst)[0] = __gmp_r; if (((__gmp_x) < ((__gmp_n)))) { (__gmp_c) = 1; for (__gmp_i = 1; __gmp_i < (__gmp_size);) { __gmp_x = (__gmp_src)[__gmp_i]; __gmp_r = __gmp_x - 1; (__gmp_dst)[__gmp_i] = __gmp_r; ++__gmp_i; if (!((__gmp_x) < (1))) { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; break; } } } else { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (1); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; } } while (0);
-  return __gmp_c;
-}
-
-
-
-
-extern __inline__
-
-mp_limb_t
-__gmpn_neg (mp_ptr __gmp_rp, mp_srcptr __gmp_up, mp_size_t __gmp_n)
-{
-  mp_limb_t __gmp_ul, __gmp_cy;
-  __gmp_cy = 0;
-  do {
-      __gmp_ul = *__gmp_up++;
-      *__gmp_rp++ = -__gmp_ul - __gmp_cy;
-      __gmp_cy |= __gmp_ul != 0;
-  } while (--__gmp_n != 0);
-  return __gmp_cy;
-}
-# 2259 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/../../include/gmp.h" 3
-enum
-{
-  GMP_ERROR_NONE = 0,
-  GMP_ERROR_UNSUPPORTED_ARGUMENT = 1,
-  GMP_ERROR_DIVISION_BY_ZERO = 2,
-  GMP_ERROR_SQRT_OF_NEGATIVE = 4,
-  GMP_ERROR_INVALID_ARGUMENT = 8
-};
-# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/double-int.h" 2
-# 54 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/double-int.h"
-typedef struct
-{
-  unsigned long low;
-  long high;
-} double_int;
-# 67 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/double-int.h"
-static __inline__ double_int
-shwi_to_double_int (long cst)
-{
-  double_int r;
-
-  r.low = (unsigned long) cst;
-  r.high = cst < 0 ? -1 : 0;
-
-  return r;
-}
-# 89 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/double-int.h"
-static __inline__ double_int
-uhwi_to_double_int (unsigned long cst)
-{
-  double_int r;
-
-  r.low = cst;
-  r.high = 0;
-
-  return r;
-}
-
-
-
-
-static __inline__ long
-double_int_to_shwi (double_int cst)
-{
-  return (long) cst.low;
-}
-
-
-
-
-static __inline__ unsigned long
-double_int_to_uhwi (double_int cst)
-{
-  return cst.low;
-}
-
-unsigned char double_int_fits_in_hwi_p (double_int, unsigned char);
-unsigned char double_int_fits_in_shwi_p (double_int);
-
-
-
-static __inline__ unsigned char
-double_int_fits_in_uhwi_p (double_int cst)
-{
-  return cst.high == 0;
-}
-
-
-
-
-
-
-double_int double_int_mul (double_int, double_int);
-double_int double_int_mul_with_sign (double_int, double_int, unsigned char, int *);
-double_int double_int_add (double_int, double_int);
-double_int double_int_sub (double_int, double_int);
-double_int double_int_neg (double_int);
-
-
-
-
-double_int double_int_div (double_int, double_int, unsigned char, unsigned);
-double_int double_int_sdiv (double_int, double_int, unsigned);
-double_int double_int_udiv (double_int, double_int, unsigned);
-double_int double_int_mod (double_int, double_int, unsigned char, unsigned);
-double_int double_int_smod (double_int, double_int, unsigned);
-double_int double_int_umod (double_int, double_int, unsigned);
-double_int double_int_divmod (double_int, double_int, unsigned char, unsigned, double_int *);
-double_int double_int_sdivmod (double_int, double_int, unsigned, double_int *);
-double_int double_int_udivmod (double_int, double_int, unsigned, double_int *);
-
-double_int double_int_setbit (double_int, unsigned);
-int double_int_ctz (double_int);
-
-
-
-
-
-static __inline__ double_int
-double_int_not (double_int a)
-{
-  a.low = ~a.low;
-  a.high = ~a.high;
-  return a;
-}
-
-
-
-static __inline__ double_int
-double_int_ior (double_int a, double_int b)
-{
-  a.low |= b.low;
-  a.high |= b.high;
-  return a;
-}
-
-
-
-static __inline__ double_int
-double_int_and (double_int a, double_int b)
-{
-  a.low &= b.low;
-  a.high &= b.high;
-  return a;
-}
-
-
-
-static __inline__ double_int
-double_int_and_not (double_int a, double_int b)
-{
-  a.low &= ~b.low;
-  a.high &= ~b.high;
-  return a;
-}
-
-
-
-static __inline__ double_int
-double_int_xor (double_int a, double_int b)
-{
-  a.low ^= b.low;
-  a.high ^= b.high;
-  return a;
-}
-
-
-
-double_int double_int_lshift (double_int, long, unsigned int, unsigned char);
-double_int double_int_rshift (double_int, long, unsigned int, unsigned char);
-double_int double_int_lrotate (double_int, long, unsigned int);
-double_int double_int_rrotate (double_int, long, unsigned int);
-
-
-
-
-static __inline__ unsigned char
-double_int_negative_p (double_int cst)
-{
-  return cst.high < 0;
-}
-
-int double_int_cmp (double_int, double_int, unsigned char);
-int double_int_scmp (double_int, double_int);
-int double_int_ucmp (double_int, double_int);
-
-double_int double_int_max (double_int, double_int, unsigned char);
-double_int double_int_smax (double_int, double_int);
-double_int double_int_umax (double_int, double_int);
-
-double_int double_int_min (double_int, double_int, unsigned char);
-double_int double_int_smin (double_int, double_int);
-double_int double_int_umin (double_int, double_int);
-
-void dump_double_int (FILE *, double_int, unsigned char);
-
-
-
-double_int double_int_ext (double_int, unsigned, unsigned char);
-double_int double_int_sext (double_int, unsigned);
-double_int double_int_zext (double_int, unsigned);
-double_int double_int_mask (unsigned);
-# 253 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/double-int.h"
-static __inline__ unsigned char
-double_int_zero_p (double_int cst)
-{
-  return cst.low == 0 && cst.high == 0;
-}
-
-
-
-static __inline__ unsigned char
-double_int_one_p (double_int cst)
-{
-  return cst.low == 1 && cst.high == 0;
-}
-
-
-
-static __inline__ unsigned char
-double_int_minus_one_p (double_int cst)
-{
-  return (cst.low == (~((unsigned long) 0)) && cst.high == -1);
-}
-
-
-
-static __inline__ unsigned char
-double_int_equal_p (double_int cst1, double_int cst2)
-{
-  return cst1.low == cst2.low && cst1.high == cst2.high;
-}
-
-
-
-
-extern int add_double_with_sign (unsigned long, long,
-     unsigned long, long,
-     unsigned long *, long *,
-     unsigned char);
-
-
-extern int neg_double (unsigned long, long,
-         unsigned long *, long *);
-extern int mul_double_with_sign (unsigned long, long,
-     unsigned long, long,
-     unsigned long *, long *,
-     unsigned char);
-
-
-extern void lshift_double (unsigned long, long,
-      long, unsigned int,
-      unsigned long *, long *, unsigned char);
-extern int div_and_round_double (unsigned, int, unsigned long,
-     long, unsigned long,
-     long, unsigned long *,
-     long *, unsigned long *,
-     long *);
-
-
-
-
-
-void mpz_set_double_int (mpz_t, double_int, unsigned char);
-double_int mpz_get_double_int (const_tree, mpz_t, unsigned char);
-# 32 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/real.h" 1
-# 30 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/real.h"
-enum real_value_class {
-  rvc_zero,
-  rvc_normal,
-  rvc_inf,
-  rvc_nan
-};
-
-
-
-
-
-
-
-struct real_value {
-
-
-
-  unsigned int cl : 2;
-  unsigned int decimal : 1;
-  unsigned int sign : 1;
-  unsigned int signalling : 1;
-  unsigned int canonical : 1;
-  unsigned int uexp : (32 - 6);
-  unsigned long sig[((128 + (8 * 8)) / (8 * 8))];
-};
-# 77 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/real.h"
-extern char test_real_width
-  [sizeof(struct real_value) <= (((128 + (8 * 8)) + 32)/(8 * 8) + (((128 + (8 * 8)) + 32)%(8 * 8) ? 1 : 0))*sizeof(long) ? 1 : -1];
-# 115 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/real.h"
-struct real_format
-{
-
-  void (*encode) (const struct real_format *, long *,
-    const struct real_value *);
-  void (*decode) (const struct real_format *, struct real_value *,
-    const long *);
-
-
-  int b;
-
-
-  int p;
-
-
-  int pnan;
-
-
-  int emin;
-
-
-  int emax;
-
-
-
-  int signbit_ro;
-
-
-
-  int signbit_rw;
-
-
-  unsigned char round_towards_zero;
-  unsigned char has_sign_dependent_rounding;
-
-
-  unsigned char has_nans;
-  unsigned char has_inf;
-  unsigned char has_denorm;
-  unsigned char has_signed_zero;
-  unsigned char qnan_msb_set;
-  unsigned char canonical_nan_lsbs_set;
-};
-
-
-
-
-
-
-
-extern const struct real_format *
-  real_format_for_mode[MAX_MODE_FLOAT - MIN_MODE_FLOAT + 1
-         + MAX_MODE_DECIMAL_FLOAT - MIN_MODE_DECIMAL_FLOAT + 1];
-# 226 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/real.h"
-extern unsigned char real_arithmetic (struct real_value *, int, const struct real_value *,
-        const struct real_value *);
-
-
-extern unsigned char real_compare (int, const struct real_value *, const struct real_value *);
-
-
-extern unsigned char real_isinf (const struct real_value *);
-
-
-extern unsigned char real_isnan (const struct real_value *);
-
-
-extern unsigned char real_isfinite (const struct real_value *);
-
-
-extern unsigned char real_isneg (const struct real_value *);
-
-
-extern unsigned char real_isnegzero (const struct real_value *);
-
-
-extern unsigned char real_identical (const struct real_value *, const struct real_value *);
-
-
-extern void real_convert (struct real_value *, enum machine_mode,
-     const struct real_value *);
-
-
-extern unsigned char exact_real_truncate (enum machine_mode, const struct real_value *);
-
-
-extern void real_to_decimal (char *, const struct real_value *, size_t,
-        size_t, int);
-
-
-
-extern void real_to_decimal_for_mode (char *, const struct real_value *, size_t,
-          size_t, int, enum machine_mode);
-
-
-extern void real_to_hexadecimal (char *, const struct real_value *,
-     size_t, size_t, int);
-
-
-extern long real_to_integer (const struct real_value *);
-extern void real_to_integer2 (long *, long *,
-         const struct real_value *);
-
-
-
-extern int real_from_string (struct real_value *, const char *);
-
-extern void real_from_string3 (struct real_value *, const char *, enum machine_mode);
-
-
-extern void real_from_integer (struct real_value *, enum machine_mode,
-          unsigned long, long, int);
-
-extern long real_to_target_fmt (long *, const struct real_value *,
-    const struct real_format *);
-extern long real_to_target (long *, const struct real_value *, enum machine_mode);
-
-extern void real_from_target_fmt (struct real_value *, const long *,
-      const struct real_format *);
-extern void real_from_target (struct real_value *, const long *,
-         enum machine_mode);
-
-extern void real_inf (struct real_value *);
-
-extern unsigned char real_nan (struct real_value *, const char *, int, enum machine_mode);
-
-extern void real_maxval (struct real_value *, int, enum machine_mode);
-
-extern void real_2expN (struct real_value *, int, enum machine_mode);
-
-extern unsigned int real_hash (const struct real_value *);
-
-
-
-extern const struct real_format ieee_single_format;
-extern const struct real_format mips_single_format;
-extern const struct real_format motorola_single_format;
-extern const struct real_format spu_single_format;
-extern const struct real_format ieee_double_format;
-extern const struct real_format mips_double_format;
-extern const struct real_format motorola_double_format;
-extern const struct real_format ieee_extended_motorola_format;
-extern const struct real_format ieee_extended_intel_96_format;
-extern const struct real_format ieee_extended_intel_96_round_53_format;
-extern const struct real_format ieee_extended_intel_128_format;
-extern const struct real_format ibm_extended_format;
-extern const struct real_format mips_extended_format;
-extern const struct real_format ieee_quad_format;
-extern const struct real_format mips_quad_format;
-extern const struct real_format vax_f_format;
-extern const struct real_format vax_d_format;
-extern const struct real_format vax_g_format;
-extern const struct real_format real_internal_format;
-extern const struct real_format decimal_single_format;
-extern const struct real_format decimal_double_format;
-extern const struct real_format decimal_quad_format;
-extern const struct real_format ieee_half_format;
-extern const struct real_format arm_half_format;
-# 385 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/real.h"
-extern struct real_value real_value_truncate (enum machine_mode,
-         struct real_value);
-
-
-
-
-extern struct real_value real_value_negate (const struct real_value *);
-extern struct real_value real_value_abs (const struct real_value *);
-
-extern int significand_size (enum machine_mode);
-
-extern struct real_value real_from_string2 (const char *, enum machine_mode);
-# 414 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/real.h"
-extern int real_exponent (const struct real_value *);
-
-
-extern void real_ldexp (struct real_value *, const struct real_value *, int);
-
-
-
-
-
-extern struct real_value dconst0;
-extern struct real_value dconst1;
-extern struct real_value dconst2;
-extern struct real_value dconstm1;
-extern struct real_value dconsthalf;
-
-
-
-
-
-
-extern const struct real_value * dconst_e_ptr (void);
-
-
-extern const struct real_value * dconst_third_ptr (void);
-
-
-extern const struct real_value * dconst_sqrt2_ptr (void);
-
-
-
-struct real_value real_value_from_int_cst (const_tree, const_tree);
-# 453 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/real.h"
-extern rtx const_double_from_real_value (struct real_value, enum machine_mode);
-
-
-extern unsigned char exact_real_inverse (enum machine_mode, struct real_value *);
-
-
-
-
-unsigned char real_can_shorten_arithmetic (enum machine_mode, enum machine_mode);
-
-
-extern tree build_real (tree, struct real_value);
-
-
-extern unsigned char real_sqrt (struct real_value *, enum machine_mode,
-         const struct real_value *);
-
-
-extern unsigned char real_powi (struct real_value *, enum machine_mode,
-         const struct real_value *, long);
-
-
-extern void real_trunc (struct real_value *, enum machine_mode,
-   const struct real_value *);
-extern void real_floor (struct real_value *, enum machine_mode,
-   const struct real_value *);
-extern void real_ceil (struct real_value *, enum machine_mode,
-         const struct real_value *);
-extern void real_round (struct real_value *, enum machine_mode,
-   const struct real_value *);
-
-
-extern void real_copysign (struct real_value *, const struct real_value *);
-
-
-extern unsigned char real_isinteger (const struct real_value *c, enum machine_mode mode);
-
-
-
-
-extern void get_max_float (const struct real_format *, char *, size_t);
-# 33 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/fixed-value.h" 1
-# 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/fixed-value.h"
-struct fixed_value
-{
-  double_int data;
-  enum machine_mode mode;
-};
-# 40 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/fixed-value.h"
-extern struct fixed_value fconst0[18];
-extern struct fixed_value fconst1[8];
-# 50 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/fixed-value.h"
-extern rtx const_fixed_from_fixed_value (struct fixed_value, enum machine_mode);
-
-
-extern void fixed_from_string (struct fixed_value *, const char *,
-          enum machine_mode);
-
-
-extern tree build_fixed (tree, struct fixed_value);
-
-
-extern unsigned char fixed_convert (struct fixed_value *, enum machine_mode,
-      const struct fixed_value *, unsigned char);
-
-
-extern unsigned char fixed_convert_from_int (struct fixed_value *, enum machine_mode,
-        double_int, unsigned char, unsigned char);
-
-
-extern unsigned char fixed_convert_from_real (struct fixed_value *, enum machine_mode,
-         const struct real_value *, unsigned char);
-
-
-extern void real_convert_from_fixed (struct real_value *, enum machine_mode,
-         const struct fixed_value *);
-
-
-extern unsigned char fixed_identical (const struct fixed_value *, const struct fixed_value *);
-
-
-extern unsigned int fixed_hash (const struct fixed_value *);
-
-
-
-
-
-
-
-extern void fixed_to_decimal (char *str, const struct fixed_value *, size_t);
-
-
-extern unsigned char fixed_arithmetic (struct fixed_value *, int, const struct fixed_value *,
-         const struct fixed_value *, unsigned char);
-
-
-extern unsigned char fixed_compare (int, const struct fixed_value *,
-      const struct fixed_value *);
-
-
-extern unsigned char fixed_isneg (const struct fixed_value *);
-# 34 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/alias.h" 1
-# 31 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/alias.h"
-typedef int alias_set_type;
-
-extern alias_set_type new_alias_set (void);
-extern alias_set_type get_alias_set (tree);
-extern alias_set_type get_deref_alias_set (tree);
-extern alias_set_type get_varargs_alias_set (void);
-extern alias_set_type get_frame_alias_set (void);
-extern unsigned char component_uses_parent_alias_set (const_tree);
-extern unsigned char alias_set_subset_of (alias_set_type, alias_set_type);
-extern void record_alias_subset (alias_set_type, alias_set_type);
-extern void record_component_aliases (tree);
-extern int alias_sets_conflict_p (alias_set_type, alias_set_type);
-extern int alias_sets_must_conflict_p (alias_set_type, alias_set_type);
-extern int objects_must_conflict_p (tree, tree);
-extern int nonoverlapping_memrefs_p (const_rtx, const_rtx, unsigned char);
-# 35 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/flags.h" 1
-# 32 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/flags.h"
 extern const char *const debug_type_names[];
 
 extern void strip_off_ending (char *, int);
@@ -21051,105 +20827,7 @@ struct tree_vector {
 };
 
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/symtab.h" 1
-# 22 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/symtab.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/obstack.h" 1
-# 157 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/obstack.h"
-struct _obstack_chunk
-{
-  char *limit;
-  struct _obstack_chunk *prev;
-  char contents[4];
-};
-
-struct obstack
-{
-  long chunk_size;
-  struct _obstack_chunk *chunk;
-  char *object_base;
-  char *next_free;
-  char *chunk_limit;
-  long int temp;
-  int alignment_mask;
-
-
-
-  struct _obstack_chunk *(*chunkfun) (void *, long);
-  void (*freefun) (void *, struct _obstack_chunk *);
-  void *extra_arg;
-  unsigned use_extra_arg:1;
-  unsigned maybe_empty_object:1;
-
-
-
-  unsigned alloc_failed:1;
-
-
-};
-
-
-
-extern void _obstack_newchunk (struct obstack *, int);
-extern void _obstack_free (struct obstack *, void *);
-extern int _obstack_begin (struct obstack *, int, int,
-       void *(*) (long), void (*) (void *));
-extern int _obstack_begin_1 (struct obstack *, int, int,
-        void *(*) (void *, long),
-        void (*) (void *, void *), void *);
-extern int _obstack_memory_used (struct obstack *);
-
-
-
-
-void obstack_init (struct obstack *obstack);
-
-void * obstack_alloc (struct obstack *obstack, int size);
-
-void * obstack_copy (struct obstack *obstack, void *address, int size);
-void * obstack_copy0 (struct obstack *obstack, void *address, int size);
-
-void obstack_free (struct obstack *obstack, void *block);
-
-void obstack_blank (struct obstack *obstack, int size);
-
-void obstack_grow (struct obstack *obstack, void *data, int size);
-void obstack_grow0 (struct obstack *obstack, void *data, int size);
-
-void obstack_1grow (struct obstack *obstack, int data_char);
-void obstack_ptr_grow (struct obstack *obstack, void *data);
-void obstack_int_grow (struct obstack *obstack, int data);
-
-void * obstack_finish (struct obstack *obstack);
-
-int obstack_object_size (struct obstack *obstack);
-
-int obstack_room (struct obstack *obstack);
-void obstack_make_room (struct obstack *obstack, int size);
-void obstack_1grow_fast (struct obstack *obstack, int data_char);
-void obstack_ptr_grow_fast (struct obstack *obstack, void *data);
-void obstack_int_grow_fast (struct obstack *obstack, int data);
-void obstack_blank_fast (struct obstack *obstack, int size);
-
-void * obstack_base (struct obstack *obstack);
-void * obstack_next_free (struct obstack *obstack);
-int obstack_alignment_mask (struct obstack *obstack);
-int obstack_chunk_size (struct obstack *obstack);
-int obstack_memory_used (struct obstack *obstack);
-
-
-
-
-extern void (*obstack_alloc_failed_handler) (void);
-
-
-extern int obstack_exit_failure;
-# 23 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/symtab.h" 2
-
-
-
-
-
-
-
+# 30 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/symtab.h"
 typedef struct ht_identifier ht_identifier;
 typedef struct ht_identifier *ht_identifier_ptr;
 struct ht_identifier {
@@ -23675,1224 +23353,120 @@ builtin_decl_implicit_p (enum built_in_function fncode)
   return (builtin_info.decl[uns_fncode] != (tree) ((void *)0)
    && builtin_info.implicit_p[uns_fncode]);
 }
-# 25 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/flags.h" 1
-# 26 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 1 "/opt/gcc-plugins/src/plugin-utils.h" 1
-# 25 "/opt/gcc-plugins/src/plugin-utils.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/langhooks.h" 1
-# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/langhooks.h"
-struct diagnostic_info;
-
-struct gimplify_omp_ctx;
-
-struct array_descr_info;
-
-
-typedef void (*lang_print_tree_hook) (FILE *, tree, int indent);
-
-enum classify_record
-  { RECORD_IS_STRUCT, RECORD_IS_CLASS, RECORD_IS_INTERFACE };
-
-
-
-
-struct lang_hooks_for_tree_inlining
+# 28 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/cgraph.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/basic-block.h" 1
+# 24 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/basic-block.h"
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/predict.h" 1
+# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/predict.h"
+enum br_predictor
 {
-  unsigned char (*var_mod_type_p) (tree, tree);
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/predict.def" 1
+# 38 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/predict.def"
+PRED_COMBINED,
+
+
+PRED_DS_THEORY,
+
+
+
+PRED_FIRST_MATCH,
+
+
+PRED_NO_PREDICTION,
+
+
+PRED_UNCONDITIONAL,
+
+
+
+
+
+PRED_LOOP_ITERATIONS,
+
+
+
+PRED_BUILTIN_EXPECT,
+
+
+
+PRED_LOOP_ITERATIONS_GUESSED,
+
+
+
+PRED_CONTINUE,
+
+
+PRED_NORETURN,
+
+
+
+PRED_COLD_FUNCTION,
+
+
+
+PRED_LOOP_BRANCH,
+
+
+
+PRED_LOOP_EXIT,
+
+
+
+PRED_POINTER,
+PRED_TREE_POINTER,
+
+
+PRED_OPCODE_POSITIVE,
+PRED_OPCODE_NONEQUAL,
+PRED_FPOPCODE,
+PRED_TREE_OPCODE_POSITIVE,
+PRED_TREE_OPCODE_NONEQUAL,
+PRED_TREE_FPOPCODE,
+
+
+PRED_CALL,
+
+
+PRED_TREE_EARLY_RETURN,
+
+
+PRED_GOTO,
+
+
+PRED_CONST_RETURN,
+
+
+PRED_NEGATIVE_RETURN,
+
+
+PRED_NULL_RETURN,
+
+
+PRED_MUDFLAP,
+# 28 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/predict.h" 2
+
+
+  END_PREDICTORS
 };
 
-struct lang_hooks_for_callgraph
+enum prediction
 {
-
-
-  tree (*analyze_expr) (tree *, int *);
+   NOT_TAKEN,
+   TAKEN
 };
 
+extern void predict_insn_def (rtx, enum br_predictor, enum prediction);
+extern int counts_to_freqs (void);
+extern void estimate_bb_frequencies (void);
+extern const char *predictor_name (enum br_predictor);
+extern tree build_predict_expr (enum br_predictor, enum prediction);
+extern void tree_estimate_probability (void);
+extern void compute_function_frequency (void);
+extern void rebuild_frequencies (void);
+# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/basic-block.h" 2
 
-
-struct lang_hooks_for_tree_dump
-{
-
-
-  unsigned char (*dump_tree) (void *, tree);
-
-
-  int (*type_quals) (const_tree);
-};
-
-
-
-struct lang_hooks_for_types
-{
-
-
-  tree (*make_type) (enum tree_code);
-
-
-
-
-  enum classify_record (*classify_record) (tree);
-
-
-
-  tree (*type_for_mode) (enum machine_mode, int);
-
-
-
-  tree (*type_for_size) (unsigned, int);
-
-
-
-  unsigned char (*generic_p) (const_tree);
-
-
-  tree (*get_argument_pack_elems) (const_tree);
-
-
-
-
-
-  tree (*type_promotes_to) (tree);
-# 106 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/langhooks.h"
-  void (*register_builtin_type) (tree, const char *);
-
-
-
-
-
-  void (*incomplete_type_error) (const_tree value, const_tree type);
-
-
-
-  tree (*max_size) (const_tree);
-
-
-
-  void (*omp_firstprivatize_type_sizes) (struct gimplify_omp_ctx *, tree);
-
-
-
-
-
-  unsigned char (*type_hash_eq) (const_tree, const_tree);
-
-
-
-  unsigned char (*get_array_descr_info) (const_tree, struct array_descr_info *);
-
-
-  void (*get_subrange_bounds) (const_tree, tree *, tree *);
-
-
-
-
-  tree (*descriptive_type) (const_tree);
-
-
-
-
-
-  tree (*reconstruct_complex_type) (tree, tree);
-};
-
-
-
-struct lang_hooks_for_decls
-{
-
-
-
-  unsigned char (*global_bindings_p) (void);
-
-
-
-
-
-  tree (*pushdecl) (tree);
-
-
-  tree (*getdecls) (void);
-
-
-  unsigned char (*function_decl_explicit_p) (tree);
-
-
-
-  unsigned char (*generic_generic_parameter_decl_p) (const_tree);
-
-
-
-  unsigned char (*function_parm_expanded_from_pack_p) (tree, tree);
-
-
-  tree (*get_generic_function_decl) (const_tree);
-
-
-
-  unsigned char (*warn_unused_global) (const_tree);
-
-
-
-  void (*final_write_globals) (void);
-
-
-  unsigned char (*ok_for_sibcall) (const_tree);
-
-
-
-  unsigned char (*omp_privatize_by_reference) (const_tree);
-
-
-
-  enum omp_clause_default_kind (*omp_predetermined_sharing) (tree);
-
-
-
-  tree (*omp_report_decl) (tree);
-
-
-
-
-
-  unsigned char (*omp_disregard_value_expr) (tree, unsigned char);
-
-
-
-  unsigned char (*omp_private_debug_clause) (tree, unsigned char);
-
-
-
-  unsigned char (*omp_private_outer_ref) (tree);
-
-
-
-
-  tree (*omp_clause_default_ctor) (tree clause, tree decl, tree outer);
-
-
-  tree (*omp_clause_copy_ctor) (tree clause, tree dst, tree src);
-
-
-  tree (*omp_clause_assign_op) (tree clause, tree dst, tree src);
-
-
-
-  tree (*omp_clause_dtor) (tree clause, tree decl);
-
-
-  void (*omp_finish_clause) (tree clause);
-};
-
-
-
-struct lang_hooks_for_lto
-{
-
-  void (*begin_section) (const char *name);
-
-
-
-
-
-  void (*append_data) (const void *data, size_t len, void *block);
-
-
-  void (*end_section) (void);
-};
-
-
-
-struct lang_hooks
-{
-
-  const char *name;
-
-
-
-  size_t identifier_size;
-
-
-  void (*free_lang_data) (tree);
-
-
-
-
-
-  size_t (*tree_size) (enum tree_code);
-
-
-
-  unsigned int (*option_lang_mask) (void);
-
-
-  void (*init_options_struct) (struct gcc_options *opts);
-
-
-
-
-  void (*init_options) (unsigned int decoded_options_count,
-   struct cl_decoded_option *decoded_options);
-
-
-
-  void (*initialize_diagnostics) (diagnostic_context *);
-
-
-
-
-  unsigned char (*complain_wrong_lang_p) (const struct cl_option *option);
-# 304 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/langhooks.h"
-  unsigned char (*handle_option) (size_t code, const char *arg, int value, int kind,
-    location_t loc,
-    const struct cl_option_handlers *handlers);
-# 316 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/langhooks.h"
-  unsigned char (*post_options) (const char **);
-
-
-
-
-  unsigned char (*init) (void);
-
-
-  void (*finish) (void);
-
-
-  void (*parse_file) (void);
-
-
-  unsigned char (*missing_noreturn_ok_p) (tree);
-
-
-
-  alias_set_type (*get_alias_set) (tree);
-
-
-
-  void (*finish_incomplete_decl) (tree);
-
-
-
-  void (*dup_lang_specific_decl) (tree);
-
-
-
-
-
-
-  void (*set_decl_assembler_name) (tree);
-
-
-
-  void (*print_statistics) (void);
-
-
-
-  lang_print_tree_hook print_xnode;
-
-
-
-  lang_print_tree_hook print_decl;
-  lang_print_tree_hook print_type;
-  lang_print_tree_hook print_identifier;
-# 374 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/langhooks.h"
-  const char *(*decl_printable_name) (tree decl, int verbosity);
-
-
-
-
-  const char *(*dwarf_name) (tree, int verbosity);
-
-
-
-
-  int (*types_compatible_p) (tree x, tree y);
-
-
-  void (*print_error_function) (diagnostic_context *, const char *,
-    struct diagnostic_info *);
-# 397 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/langhooks.h"
-  long (*to_target_charset) (long);
-
-
-
-
-
-
-  const struct attribute_spec *attribute_table;
-  const struct attribute_spec *common_attribute_table;
-  const struct attribute_spec *format_attribute_table;
-
-  struct lang_hooks_for_tree_inlining tree_inlining;
-
-  struct lang_hooks_for_callgraph callgraph;
-
-  struct lang_hooks_for_tree_dump tree_dump;
-
-  struct lang_hooks_for_decls decls;
-
-  struct lang_hooks_for_types types;
-
-  struct lang_hooks_for_lto lto;
-
-
-
-  tree (*get_innermost_generic_parms) (const_tree);
-
-
-
-  tree (*get_innermost_generic_args) (const_tree);
-
-
-  unsigned char (*function_parameter_pack_p) (const_tree);
-
-
-
-  int (*gimplify_expr) (tree *, gimple_seq *, gimple_seq *);
-
-
-  tree (*builtin_function) (tree decl);
-
-
-
-
-
-
-
-  tree (*builtin_function_ext_scope) (tree decl);
-
-
-  void (*init_ts) (void);
-
-
-
-
-  tree (*expr_to_decl) (tree expr, unsigned char *tc, unsigned char *se);
-
-
-  tree (*eh_personality) (void);
-
-
-  tree (*eh_runtime_type) (tree);
-
-
-
-
-
-
-
-  tree (*eh_protect_cleanup_actions) (void);
-
-
-
-  unsigned char eh_use_cxa_end_cleanup;
-
-
-
-  unsigned char deep_unsharing;
-
-
-
-};
-
-
-extern struct lang_hooks lang_hooks;
-extern tree add_builtin_function (const char *name, tree type,
-      int function_code, enum built_in_class cl,
-      const char *library_name,
-      tree attrs);
-
-extern tree add_builtin_function_ext_scope (const char *name, tree type,
-         int function_code,
-         enum built_in_class cl,
-         const char *library_name,
-         tree attrs);
-# 26 "/opt/gcc-plugins/src/plugin-utils.h" 2
-
-
-int is_gcc();
-
-
-int is_gpp();
-
-
-int is_lto();
-# 27 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree-pass.h" 1
-# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree-pass.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/timevar.h" 1
-# 53 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/timevar.h"
-struct timevar_time_def
-{
-
-  double user;
-
-
-
-  double sys;
-
-
-  double wall;
-
-
-  unsigned ggc_mem;
-};
-
-
-
-
-
-
-typedef enum
-{
-  TV_NONE,
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/timevar.def" 1
-# 35 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/timevar.def"
-TV_TOTAL,
-TV_PHASE_SETUP,
-TV_PHASE_PARSING,
-TV_PHASE_DEFERRED,
-TV_PHASE_CGRAPH,
-TV_PHASE_DBGINFO,
-TV_PHASE_CHECK_DBGINFO,
-TV_PHASE_GENERATE,
-TV_PHASE_FINALIZE,
-
-
-TV_NAME_LOOKUP,
-TV_OVERLOAD,
-
-
-TV_GC,
-
-
-TV_DUMP,
-
-
-TV_PCH_SAVE,
-TV_PCH_CPP_SAVE,
-TV_PCH_PTR_REALLOC,
-TV_PCH_PTR_SORT,
-TV_PCH_RESTORE,
-TV_PCH_CPP_RESTORE,
-
-TV_CGRAPH,
-TV_CGRAPHOPT,
-TV_VARPOOL,
-TV_IPA_CONSTANT_PROP,
-TV_IPA_FNSPLIT,
-TV_IPA_OPT,
-TV_IPA_LTO_GIMPLE_IN,
-TV_IPA_LTO_GIMPLE_OUT,
-TV_IPA_LTO_DECL_IN,
-TV_IPA_LTO_DECL_OUT,
-TV_IPA_LTO_DECL_INIT_IO,
-TV_IPA_LTO_CGRAPH_IO,
-TV_IPA_LTO_DECL_MERGE,
-TV_IPA_LTO_CGRAPH_MERGE,
-TV_LTO,
-TV_WHOPR_WPA,
-TV_WHOPR_WPA_IO,
-TV_WHOPR_LTRANS,
-TV_WHOPR_WPA_LTRANS_EXEC,
-TV_IPA_REFERENCE,
-TV_IPA_PROFILE,
-TV_IPA_PURE_CONST,
-TV_IPA_PTA,
-TV_IPA_SRA,
-TV_IPA_FREE_LANG_DATA,
-
-TV_CFG,
-
-TV_CLEANUP_CFG,
-TV_CFG_VERIFY,
-TV_DELETE_TRIVIALLY_DEAD,
-
-TV_LIFE,
-TV_LIFE_UPDATE,
-
-
-TV_DF_SCAN,
-TV_DF_MD,
-TV_DF_RD,
-TV_DF_LR,
-TV_DF_LIVE,
-TV_DF_UREC,
-TV_DF_CHAIN,
-TV_DF_WORD_LR,
-TV_DF_NOTE,
-TV_REG_STATS,
-
-TV_ALIAS_ANALYSIS,
-TV_ALIAS_STMT_WALK,
-TV_REG_SCAN,
-TV_REBUILD_JUMP,
-
-TV_CPP,
-TV_LEX,
-TV_PARSE_GLOBAL,
-TV_PARSE_STRUCT,
-TV_PARSE_ENUM,
-TV_PARSE_FUNC,
-TV_PARSE_INLINE,
-TV_PARSE_INMETH,
-TV_TEMPLATE_INST,
-TV_INLINE_HEURISTICS,
-TV_INTEGRATION,
-TV_TREE_GIMPLIFY,
-TV_TREE_EH,
-TV_TREE_CFG,
-TV_TREE_CLEANUP_CFG,
-TV_TREE_TAIL_MERGE,
-TV_TREE_VRP,
-TV_TREE_COPY_PROP,
-TV_FIND_REFERENCED_VARS,
-TV_TREE_PTA,
-TV_TREE_INSERT_PHI_NODES,
-TV_TREE_SSA_REWRITE_BLOCKS,
-TV_TREE_SSA_OTHER,
-TV_TREE_SSA_INCREMENTAL,
-TV_TREE_OPS,
-TV_TREE_SSA_DOMINATOR_OPTS,
-TV_TREE_SRA,
-TV_TREE_CCP,
-TV_TREE_PHI_CPROP,
-TV_TREE_SPLIT_EDGES,
-TV_TREE_REASSOC,
-TV_TREE_PRE,
-TV_TREE_FRE,
-TV_TREE_SINK,
-TV_TREE_PHIOPT,
-TV_TREE_FORWPROP,
-TV_TREE_PHIPROP,
-TV_TREE_DCE,
-TV_TREE_CD_DCE,
-TV_TREE_CALL_CDCE,
-TV_TREE_DSE,
-TV_TREE_MERGE_PHI,
-TV_TREE_LOOP,
-TV_TREE_LOOP_BOUNDS,
-TV_LIM,
-TV_TREE_LOOP_IVCANON,
-TV_SCEV_CONST,
-TV_TREE_LOOP_UNSWITCH,
-TV_COMPLETE_UNROLL,
-TV_TREE_PARALLELIZE_LOOPS,
-TV_TREE_VECTORIZATION,
-TV_TREE_SLP_VECTORIZATION,
-TV_GRAPHITE,
-TV_GRAPHITE_TRANSFORMS,
-TV_GRAPHITE_DATA_DEPS,
-TV_GRAPHITE_CODE_GEN,
-TV_TREE_LINEAR_TRANSFORM,
-TV_TREE_LOOP_DISTRIBUTION,
-TV_CHECK_DATA_DEPS,
-TV_TREE_PREFETCH,
-TV_TREE_LOOP_IVOPTS,
-TV_PREDCOM,
-TV_TREE_LOOP_INIT,
-TV_TREE_LOOP_FINI,
-TV_TREE_CH,
-TV_TREE_SSA_UNCPROP,
-TV_TREE_SSA_TO_NORMAL,
-TV_TREE_NRV,
-TV_TREE_COPY_RENAME,
-TV_TREE_SSA_VERIFY,
-TV_TREE_STMT_VERIFY,
-TV_TREE_SWITCH_CONVERSION,
-TV_TRANS_MEM,
-TV_TREE_STRLEN,
-TV_CGRAPH_VERIFY,
-TV_DOM_FRONTIERS,
-TV_DOMINANCE,
-TV_CONTROL_DEPENDENCES,
-TV_OUT_OF_SSA,
-TV_VAR_EXPAND,
-TV_EXPAND,
-TV_POST_EXPAND,
-TV_VARCONST,
-TV_LOWER_SUBREG,
-TV_JUMP,
-TV_FWPROP,
-TV_CSE,
-TV_DCE,
-TV_DSE1,
-TV_DSE2,
-TV_LOOP,
-TV_LOOP_MOVE_INVARIANTS,
-TV_LOOP_UNSWITCH,
-TV_LOOP_UNROLL,
-TV_LOOP_DOLOOP,
-TV_CPROP,
-TV_PRE,
-TV_HOIST,
-TV_LSM,
-TV_TRACER,
-TV_WEB,
-TV_AUTO_INC_DEC,
-TV_CSE2,
-TV_BRANCH_PROB,
-TV_VPT,
-TV_COMBINE,
-TV_IFCVT,
-TV_REGMOVE,
-TV_MODE_SWITCH,
-TV_SMS,
-TV_SCHED,
-TV_LOCAL_ALLOC,
-TV_GLOBAL_ALLOC,
-TV_IRA,
-TV_RELOAD,
-TV_RELOAD_CSE_REGS,
-TV_SEQABSTR,
-TV_GCSE_AFTER_RELOAD,
-TV_REE,
-TV_THREAD_PROLOGUE_AND_EPILOGUE,
-TV_IFCVT2,
-TV_COMBINE_STACK_ADJUST,
-TV_PEEPHOLE2,
-TV_RENAME_REGISTERS,
-TV_CPROP_REGISTERS,
-TV_SCHED2,
-TV_MACH_DEP,
-TV_DBR_SCHED,
-TV_REORDER_BLOCKS,
-TV_SHORTEN_BRANCH,
-TV_REG_STACK,
-TV_FINAL,
-TV_VAROUT,
-TV_SYMOUT,
-TV_VAR_TRACKING,
-TV_VAR_TRACKING_DATAFLOW,
-TV_VAR_TRACKING_EMIT,
-TV_TREE_IFCOMBINE,
-TV_TREE_UNINIT,
-TV_PLUGIN_INIT,
-TV_PLUGIN_RUN,
-
-
-TV_EARLY_LOCAL,
-TV_OPTIMIZE,
-TV_REST_OF_COMPILATION,
-TV_POSTRELOAD,
-TV_REMOVE_UNUSED,
-TV_ADDRESS_TAKEN,
-TV_TODO,
-TV_VERIFY_LOOP_CLOSED,
-TV_VERIFY_RTL_SHARING,
-TV_REBUILD_FREQUENCIES,
-TV_REPAIR_LOOPS,
-# 78 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/timevar.h" 2
-  TIMEVAR_LAST
-}
-timevar_id_t;
-
-
-
-
-extern unsigned char timevar_enable;
-
-
-extern size_t timevar_ggc_mem_total;
-
-extern void timevar_init (void);
-extern void timevar_push_1 (timevar_id_t);
-extern void timevar_pop_1 (timevar_id_t);
-extern void timevar_start (timevar_id_t);
-extern void timevar_stop (timevar_id_t);
-extern unsigned char timevar_cond_start (timevar_id_t);
-extern void timevar_cond_stop (timevar_id_t, unsigned char);
-extern void timevar_print (FILE *);
-
-
-static __inline__ void
-timevar_push (timevar_id_t tv)
-{
-  if (timevar_enable)
-    timevar_push_1 (tv);
-}
-
-static __inline__ void
-timevar_pop (timevar_id_t tv)
-{
-  if (timevar_enable)
-    timevar_pop_1 (tv);
-}
-
-extern void print_time (const char *, long);
-# 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree-pass.h" 2
-
-
-
-enum tree_dump_index
-{
-  TDI_none,
-  TDI_cgraph,
-  TDI_tu,
-  TDI_class,
-  TDI_original,
-  TDI_generic,
-  TDI_nested,
-  TDI_vcg,
-
-  TDI_ada,
-  TDI_tree_all,
-  TDI_rtl_all,
-  TDI_ipa_all,
-
-  TDI_end
-};
-# 91 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree-pass.h"
-extern char *get_dump_file_name (int);
-extern int dump_enabled_p (int);
-extern int dump_initialized_p (int);
-extern FILE *dump_begin (int, int *);
-extern void dump_end (int, FILE *);
-extern void dump_node (const_tree, int, FILE *);
-extern int dump_switch_p (const char *);
-extern const char *dump_flag_name (int);
-
-
-extern FILE *dump_file;
-extern int dump_flags;
-extern const char *dump_file_name;
-
-
-extern struct dump_file_info *get_dump_file_info (int);
-
-
-enum opt_pass_type
-{
-  GIMPLE_PASS,
-  RTL_PASS,
-  SIMPLE_IPA_PASS,
-  IPA_PASS
-};
-
-
-
-struct opt_pass
-{
-
-  enum opt_pass_type type;
-
-
-
-  const char *name;
-
-
-
-  unsigned char (*gate) (void);
-
-
-
-
-  unsigned int (*execute) (void);
-
-
-  struct opt_pass *sub;
-
-
-  struct opt_pass *next;
-
-
-  int static_pass_number;
-
-
-
-  timevar_id_t tv_id;
-
-
-  unsigned int properties_required;
-  unsigned int properties_provided;
-  unsigned int properties_destroyed;
-
-
-  unsigned int todo_flags_start;
-  unsigned int todo_flags_finish;
-};
-
-
-struct gimple_opt_pass
-{
-  struct opt_pass pass;
-};
-
-
-struct rtl_opt_pass
-{
-  struct opt_pass pass;
-};
-
-struct varpool_node;
-struct cgraph_node;
-struct cgraph_node_set_def;
-struct varpool_node_set_def;
-
-
-
-struct ipa_opt_pass_d
-{
-  struct opt_pass pass;
-
-
-
-  void (*generate_summary) (void);
-
-
-  void (*write_summary) (struct cgraph_node_set_def *,
-    struct varpool_node_set_def *);
-
-
-  void (*read_summary) (void);
-
-
-  void (*write_optimization_summary) (struct cgraph_node_set_def *,
-          struct varpool_node_set_def *);
-
-
-  void (*read_optimization_summary) (void);
-
-
-
-  void (*stmt_fixup) (struct cgraph_node *, gimple *);
-
-
-
-  unsigned int function_transform_todo_flags_start;
-  unsigned int (*function_transform) (struct cgraph_node *);
-  void (*variable_transform) (struct varpool_node *);
-};
-
-
-
-struct simple_ipa_opt_pass
-{
-  struct opt_pass pass;
-};
-
-
-struct dump_file_info
-{
-  const char *suffix;
-  const char *swtch;
-  const char *glob;
-  int flags;
-  int state;
-  int num;
-};
-# 333 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree-pass.h"
-enum pass_positioning_ops
-{
-  PASS_POS_INSERT_AFTER,
-  PASS_POS_INSERT_BEFORE,
-  PASS_POS_REPLACE
-};
-
-struct register_pass_info
-{
-  struct opt_pass *pass;
-  const char *reference_pass_name;
-
-  int ref_pass_instance_number;
-
-
-  enum pass_positioning_ops pos_op;
-};
-
-extern void tree_lowering_passes (tree decl);
-
-extern struct gimple_opt_pass pass_mudflap_1;
-extern struct gimple_opt_pass pass_mudflap_2;
-extern struct gimple_opt_pass pass_lower_cf;
-extern struct gimple_opt_pass pass_refactor_eh;
-extern struct gimple_opt_pass pass_lower_eh;
-extern struct gimple_opt_pass pass_lower_eh_dispatch;
-extern struct gimple_opt_pass pass_lower_resx;
-extern struct gimple_opt_pass pass_build_cfg;
-extern struct gimple_opt_pass pass_early_tree_profile;
-extern struct gimple_opt_pass pass_referenced_vars;
-extern struct gimple_opt_pass pass_cleanup_eh;
-extern struct gimple_opt_pass pass_sra;
-extern struct gimple_opt_pass pass_sra_early;
-extern struct gimple_opt_pass pass_early_ipa_sra;
-extern struct gimple_opt_pass pass_tail_recursion;
-extern struct gimple_opt_pass pass_tail_calls;
-extern struct gimple_opt_pass pass_tree_loop;
-extern struct gimple_opt_pass pass_tree_loop_init;
-extern struct gimple_opt_pass pass_lim;
-extern struct gimple_opt_pass pass_tree_unswitch;
-extern struct gimple_opt_pass pass_predcom;
-extern struct gimple_opt_pass pass_iv_canon;
-extern struct gimple_opt_pass pass_scev_cprop;
-extern struct gimple_opt_pass pass_empty_loop;
-extern struct gimple_opt_pass pass_record_bounds;
-extern struct gimple_opt_pass pass_graphite;
-extern struct gimple_opt_pass pass_graphite_transforms;
-extern struct gimple_opt_pass pass_if_conversion;
-extern struct gimple_opt_pass pass_loop_distribution;
-extern struct gimple_opt_pass pass_vectorize;
-extern struct gimple_opt_pass pass_slp_vectorize;
-extern struct gimple_opt_pass pass_complete_unroll;
-extern struct gimple_opt_pass pass_complete_unrolli;
-extern struct gimple_opt_pass pass_parallelize_loops;
-extern struct gimple_opt_pass pass_loop_prefetch;
-extern struct gimple_opt_pass pass_iv_optimize;
-extern struct gimple_opt_pass pass_tree_loop_done;
-extern struct gimple_opt_pass pass_ch;
-extern struct gimple_opt_pass pass_ccp;
-extern struct gimple_opt_pass pass_phi_only_cprop;
-extern struct gimple_opt_pass pass_build_ssa;
-extern struct gimple_opt_pass pass_build_alias;
-extern struct gimple_opt_pass pass_build_ealias;
-extern struct gimple_opt_pass pass_dominator;
-extern struct gimple_opt_pass pass_dce;
-extern struct gimple_opt_pass pass_dce_loop;
-extern struct gimple_opt_pass pass_cd_dce;
-extern struct gimple_opt_pass pass_call_cdce;
-extern struct gimple_opt_pass pass_merge_phi;
-extern struct gimple_opt_pass pass_split_crit_edges;
-extern struct gimple_opt_pass pass_pre;
-extern unsigned int tail_merge_optimize (unsigned int);
-extern struct gimple_opt_pass pass_profile;
-extern struct gimple_opt_pass pass_strip_predict_hints;
-extern struct gimple_opt_pass pass_lower_complex_O0;
-extern struct gimple_opt_pass pass_lower_complex;
-extern struct gimple_opt_pass pass_lower_vector;
-extern struct gimple_opt_pass pass_lower_vector_ssa;
-extern struct gimple_opt_pass pass_lower_omp;
-extern struct gimple_opt_pass pass_diagnose_omp_blocks;
-extern struct gimple_opt_pass pass_expand_omp;
-extern struct gimple_opt_pass pass_expand_omp_ssa;
-extern struct gimple_opt_pass pass_object_sizes;
-extern struct gimple_opt_pass pass_strlen;
-extern struct gimple_opt_pass pass_fold_builtins;
-extern struct gimple_opt_pass pass_stdarg;
-extern struct gimple_opt_pass pass_early_warn_uninitialized;
-extern struct gimple_opt_pass pass_late_warn_uninitialized;
-extern struct gimple_opt_pass pass_cse_reciprocals;
-extern struct gimple_opt_pass pass_cse_sincos;
-extern struct gimple_opt_pass pass_optimize_bswap;
-extern struct gimple_opt_pass pass_optimize_widening_mul;
-extern struct gimple_opt_pass pass_warn_function_return;
-extern struct gimple_opt_pass pass_warn_function_noreturn;
-extern struct gimple_opt_pass pass_cselim;
-extern struct gimple_opt_pass pass_phiopt;
-extern struct gimple_opt_pass pass_forwprop;
-extern struct gimple_opt_pass pass_phiprop;
-extern struct gimple_opt_pass pass_tree_ifcombine;
-extern struct gimple_opt_pass pass_dse;
-extern struct gimple_opt_pass pass_nrv;
-extern struct gimple_opt_pass pass_rename_ssa_copies;
-extern struct gimple_opt_pass pass_rest_of_compilation;
-extern struct gimple_opt_pass pass_sink_code;
-extern struct gimple_opt_pass pass_fre;
-extern struct gimple_opt_pass pass_check_data_deps;
-extern struct gimple_opt_pass pass_copy_prop;
-extern struct gimple_opt_pass pass_vrp;
-extern struct gimple_opt_pass pass_uncprop;
-extern struct gimple_opt_pass pass_return_slot;
-extern struct gimple_opt_pass pass_reassoc;
-extern struct gimple_opt_pass pass_rebuild_cgraph_edges;
-extern struct gimple_opt_pass pass_remove_cgraph_callee_edges;
-extern struct gimple_opt_pass pass_build_cgraph_edges;
-extern struct gimple_opt_pass pass_local_pure_const;
-extern struct gimple_opt_pass pass_tracer;
-extern struct gimple_opt_pass pass_warn_unused_result;
-extern struct gimple_opt_pass pass_diagnose_tm_blocks;
-extern struct gimple_opt_pass pass_lower_tm;
-extern struct gimple_opt_pass pass_tm_init;
-extern struct gimple_opt_pass pass_tm_mark;
-extern struct gimple_opt_pass pass_tm_memopt;
-extern struct gimple_opt_pass pass_tm_edges;
-extern struct gimple_opt_pass pass_split_functions;
-extern struct gimple_opt_pass pass_feedback_split_functions;
-
-
-extern struct simple_ipa_opt_pass pass_ipa_lower_emutls;
-extern struct simple_ipa_opt_pass pass_ipa_function_and_variable_visibility;
-extern struct simple_ipa_opt_pass pass_ipa_tree_profile;
-
-extern struct simple_ipa_opt_pass pass_early_local_passes;
-
-extern struct ipa_opt_pass_d pass_ipa_whole_program_visibility;
-extern struct ipa_opt_pass_d pass_ipa_lto_gimple_out;
-extern struct simple_ipa_opt_pass pass_ipa_increase_alignment;
-extern struct simple_ipa_opt_pass pass_ipa_matrix_reorg;
-extern struct ipa_opt_pass_d pass_ipa_inline;
-extern struct simple_ipa_opt_pass pass_ipa_free_lang_data;
-extern struct ipa_opt_pass_d pass_ipa_cp;
-extern struct ipa_opt_pass_d pass_ipa_reference;
-extern struct ipa_opt_pass_d pass_ipa_pure_const;
-extern struct simple_ipa_opt_pass pass_ipa_pta;
-extern struct ipa_opt_pass_d pass_ipa_lto_wpa_fixup;
-extern struct ipa_opt_pass_d pass_ipa_lto_finish_out;
-extern struct simple_ipa_opt_pass pass_ipa_tm;
-extern struct ipa_opt_pass_d pass_ipa_profile;
-extern struct ipa_opt_pass_d pass_ipa_cdtor_merge;
-
-extern struct gimple_opt_pass pass_all_optimizations;
-extern struct gimple_opt_pass pass_cleanup_cfg_post_optimizing;
-extern struct gimple_opt_pass pass_init_datastructures;
-extern struct gimple_opt_pass pass_fixup_cfg;
-
-extern struct rtl_opt_pass pass_expand;
-extern struct rtl_opt_pass pass_init_function;
-extern struct rtl_opt_pass pass_jump;
-extern struct rtl_opt_pass pass_rtl_eh;
-extern struct rtl_opt_pass pass_initial_value_sets;
-extern struct rtl_opt_pass pass_unshare_all_rtl;
-extern struct rtl_opt_pass pass_instantiate_virtual_regs;
-extern struct rtl_opt_pass pass_rtl_fwprop;
-extern struct rtl_opt_pass pass_rtl_fwprop_addr;
-extern struct rtl_opt_pass pass_jump2;
-extern struct rtl_opt_pass pass_lower_subreg;
-extern struct rtl_opt_pass pass_cse;
-extern struct rtl_opt_pass pass_fast_rtl_dce;
-extern struct rtl_opt_pass pass_ud_rtl_dce;
-extern struct rtl_opt_pass pass_rtl_dce;
-extern struct rtl_opt_pass pass_rtl_dse1;
-extern struct rtl_opt_pass pass_rtl_dse2;
-extern struct rtl_opt_pass pass_rtl_dse3;
-extern struct rtl_opt_pass pass_rtl_cprop;
-extern struct rtl_opt_pass pass_rtl_pre;
-extern struct rtl_opt_pass pass_rtl_hoist;
-extern struct rtl_opt_pass pass_rtl_store_motion;
-extern struct rtl_opt_pass pass_cse_after_global_opts;
-extern struct rtl_opt_pass pass_rtl_ifcvt;
-
-extern struct rtl_opt_pass pass_into_cfg_layout_mode;
-extern struct rtl_opt_pass pass_outof_cfg_layout_mode;
-
-extern struct rtl_opt_pass pass_loop2;
-extern struct rtl_opt_pass pass_rtl_loop_init;
-extern struct rtl_opt_pass pass_rtl_move_loop_invariants;
-extern struct rtl_opt_pass pass_rtl_unswitch;
-extern struct rtl_opt_pass pass_rtl_unroll_and_peel_loops;
-extern struct rtl_opt_pass pass_rtl_doloop;
-extern struct rtl_opt_pass pass_rtl_loop_done;
-
-extern struct rtl_opt_pass pass_web;
-extern struct rtl_opt_pass pass_cse2;
-extern struct rtl_opt_pass pass_df_initialize_opt;
-extern struct rtl_opt_pass pass_df_initialize_no_opt;
-extern struct rtl_opt_pass pass_reginfo_init;
-extern struct rtl_opt_pass pass_inc_dec;
-extern struct rtl_opt_pass pass_stack_ptr_mod;
-extern struct rtl_opt_pass pass_initialize_regs;
-extern struct rtl_opt_pass pass_combine;
-extern struct rtl_opt_pass pass_if_after_combine;
-extern struct rtl_opt_pass pass_ree;
-extern struct rtl_opt_pass pass_partition_blocks;
-extern struct rtl_opt_pass pass_match_asm_constraints;
-extern struct rtl_opt_pass pass_regmove;
-extern struct rtl_opt_pass pass_split_all_insns;
-extern struct rtl_opt_pass pass_fast_rtl_byte_dce;
-extern struct rtl_opt_pass pass_lower_subreg2;
-extern struct rtl_opt_pass pass_mode_switching;
-extern struct rtl_opt_pass pass_sms;
-extern struct rtl_opt_pass pass_sched;
-extern struct rtl_opt_pass pass_ira;
-extern struct rtl_opt_pass pass_reload;
-extern struct rtl_opt_pass pass_postreload;
-extern struct rtl_opt_pass pass_clean_state;
-extern struct rtl_opt_pass pass_branch_prob;
-extern struct rtl_opt_pass pass_value_profile_transformations;
-extern struct rtl_opt_pass pass_postreload_cse;
-extern struct rtl_opt_pass pass_gcse2;
-extern struct rtl_opt_pass pass_split_after_reload;
-extern struct rtl_opt_pass pass_branch_target_load_optimize1;
-extern struct rtl_opt_pass pass_thread_prologue_and_epilogue;
-extern struct rtl_opt_pass pass_stack_adjustments;
-extern struct rtl_opt_pass pass_peephole2;
-extern struct rtl_opt_pass pass_if_after_reload;
-extern struct rtl_opt_pass pass_regrename;
-extern struct rtl_opt_pass pass_cprop_hardreg;
-extern struct rtl_opt_pass pass_reorder_blocks;
-extern struct rtl_opt_pass pass_branch_target_load_optimize2;
-extern struct rtl_opt_pass pass_leaf_regs;
-extern struct rtl_opt_pass pass_split_before_sched2;
-extern struct rtl_opt_pass pass_compare_elim_after_reload;
-extern struct rtl_opt_pass pass_sched2;
-extern struct rtl_opt_pass pass_stack_regs;
-extern struct rtl_opt_pass pass_stack_regs_run;
-extern struct rtl_opt_pass pass_df_finish;
-extern struct rtl_opt_pass pass_compute_alignments;
-extern struct rtl_opt_pass pass_duplicate_computed_gotos;
-extern struct rtl_opt_pass pass_variable_tracking;
-extern struct rtl_opt_pass pass_free_cfg;
-extern struct rtl_opt_pass pass_machine_reorg;
-extern struct rtl_opt_pass pass_cleanup_barriers;
-extern struct rtl_opt_pass pass_delay_slots;
-extern struct rtl_opt_pass pass_split_for_shorten_branches;
-extern struct rtl_opt_pass pass_split_before_regstack;
-extern struct rtl_opt_pass pass_convert_to_eh_region_ranges;
-extern struct rtl_opt_pass pass_shorten_branches;
-extern struct rtl_opt_pass pass_set_nothrow_function_flags;
-extern struct rtl_opt_pass pass_dwarf2_frame;
-extern struct rtl_opt_pass pass_final;
-extern struct rtl_opt_pass pass_rtl_seqabstr;
-extern struct gimple_opt_pass pass_release_ssa_names;
-extern struct gimple_opt_pass pass_early_inline;
-extern struct gimple_opt_pass pass_inline_parameters;
-extern struct gimple_opt_pass pass_all_early_optimizations;
-extern struct gimple_opt_pass pass_update_address_taken;
-extern struct gimple_opt_pass pass_convert_switch;
-
-
-extern struct opt_pass *all_passes, *all_small_ipa_passes, *all_lowering_passes,
-                       *all_regular_ipa_passes, *all_lto_gen_passes, *all_late_ipa_passes;
-# 604 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree-pass.h"
-enum
-{
-  PASS_LIST_NO_all_lowering_passes, PASS_LIST_NO_all_small_ipa_passes, PASS_LIST_NO_all_regular_ipa_passes, PASS_LIST_NO_all_lto_gen_passes, PASS_LIST_NO_all_passes,
-  PASS_LIST_NUM
-};
-
-
-
-
-extern struct opt_pass **gcc_pass_lists[];
-
-
-extern struct opt_pass *current_pass;
-
-extern struct opt_pass * get_pass_for_id (int);
-extern unsigned char execute_one_pass (struct opt_pass *);
-extern void execute_pass_list (struct opt_pass *);
-extern void execute_ipa_pass_list (struct opt_pass *);
-extern void execute_ipa_summary_passes (struct ipa_opt_pass_d *);
-extern void execute_all_ipa_transforms (void);
-extern void execute_all_ipa_stmt_fixups (struct cgraph_node *, gimple *);
-extern unsigned char pass_init_dump_file (struct opt_pass *);
-extern void pass_fini_dump_file (struct opt_pass *);
-
-extern const char *get_current_pass_name (void);
-extern void print_current_pass (FILE *);
-extern void debug_pass (void);
-extern void ipa_write_summaries (void);
-extern void ipa_write_optimization_summaries (struct cgraph_node_set_def *,
-           struct varpool_node_set_def *);
-extern void ipa_read_summaries (void);
-extern void ipa_read_optimization_summaries (void);
-extern void register_one_dump_file (struct opt_pass *);
-extern unsigned char function_called_by_processed_nodes_p (void);
-extern void register_pass (struct register_pass_info *);
-# 647 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree-pass.h"
-extern unsigned char first_pass_instance;
-
-
-extern void do_per_function_toporder (void (*) (void *), void *);
-
-extern void disable_pass (const char *);
-extern void enable_pass (const char *);
-extern void dump_passes (void);
-# 28 "/opt/gcc-plugins/src/acf_plugin.c" 2
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/function.h" 1
-# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/function.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h" 1
-# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/function.h" 2
-
+# 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/function.h"
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/vecprim.h" 1
 # 23 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/vecprim.h"
 static __inline__ void VEC_char_must_be_integral_type (void) { (void)~(char)0; } typedef struct VEC_char_base { struct vec_prefix prefix; char vec[1]; } VEC_char_base; typedef struct VEC_char_none { VEC_char_base base; } VEC_char_none; static __inline__ unsigned VEC_char_base_length (const VEC_char_base *vec_) { return vec_ ? vec_->prefix.num : 0; } static __inline__ char VEC_char_base_last (const VEC_char_base *vec_ ) { (void)(vec_ && vec_->prefix.num); return vec_->vec[vec_->prefix.num - 1]; } static __inline__ char VEC_char_base_index (const VEC_char_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->prefix.num); return vec_->vec[ix_]; } static __inline__ int VEC_char_base_iterate (const VEC_char_base *vec_, unsigned ix_, char *ptr) { if (vec_ && ix_ < vec_->prefix.num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (char) 0; return 0; } } static __inline__ size_t VEC_char_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_char_base, vec) + alloc_ * sizeof(char); } static __inline__ void VEC_char_base_embedded_init (VEC_char_base *vec_, int alloc_) { vec_->prefix.num = 0; vec_->prefix.alloc = alloc_; } static __inline__ int VEC_char_base_space (VEC_char_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->prefix.alloc - vec_->prefix.num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_char_base_splice (VEC_char_base *dst_, VEC_char_base *src_ ) { if (src_) { unsigned len_ = src_->prefix.num; (void)(dst_->prefix.num + len_ <= dst_->prefix.alloc); memcpy (&dst_->vec[dst_->prefix.num], &src_->vec[0], len_ * sizeof (char)); dst_->prefix.num += len_; } } static __inline__ char *VEC_char_base_quick_push (VEC_char_base *vec_, char obj_ ) { char *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); slot_ = &vec_->vec[vec_->prefix.num++]; *slot_ = obj_; return slot_; } static __inline__ char VEC_char_base_pop (VEC_char_base *vec_ ) { char obj_; (void)(vec_->prefix.num); obj_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_char_base_truncate (VEC_char_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->prefix.num >= size_ : !size_); if (vec_) vec_->prefix.num = size_; } static __inline__ char VEC_char_base_replace (VEC_char_base *vec_, unsigned ix_, char obj_ ) { char old_obj_; (void)(ix_ < vec_->prefix.num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ char *VEC_char_base_quick_insert (VEC_char_base *vec_, unsigned ix_, char obj_ ) { char *slot_; (void)(vec_->prefix.num < vec_->prefix.alloc); (void)(ix_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->prefix.num++ - ix_) * sizeof (char)); *slot_ = obj_; return slot_; } static __inline__ char VEC_char_base_ordered_remove (VEC_char_base *vec_, unsigned ix_ ) { char *slot_; char obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->prefix.num - ix_) * sizeof (char)); return obj_; } static __inline__ char VEC_char_base_unordered_remove (VEC_char_base *vec_, unsigned ix_ ) { char *slot_; char obj_; (void)(ix_ < vec_->prefix.num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->prefix.num]; return obj_; } static __inline__ void VEC_char_base_block_remove (VEC_char_base *vec_, unsigned ix_, unsigned len_ ) { char *slot_; (void)(ix_ + len_ <= vec_->prefix.num); slot_ = &vec_->vec[ix_]; vec_->prefix.num -= len_; memmove (slot_, slot_ + len_, (vec_->prefix.num - ix_) * sizeof (char)); } static __inline__ char *VEC_char_base_address (VEC_char_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_char_base_lower_bound (VEC_char_base *vec_, const char obj_, unsigned char (*lessthan_)(const char, const char) ) { unsigned int len_ = VEC_char_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { char middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_char_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
@@ -24910,6 +23484,2733 @@ static __inline__ void VEC_unsigned_must_be_integral_type (void) { (void)~(unsig
 typedef struct VEC_unsigned_heap { VEC_unsigned_base base; } VEC_unsigned_heap; static __inline__ VEC_unsigned_heap *VEC_unsigned_heap_alloc (int alloc_ ) { return (VEC_unsigned_heap *) vec_heap_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); } static __inline__ VEC_unsigned_heap *VEC_unsigned_heap_copy (VEC_unsigned_base *vec_ ) { size_t len_ = vec_ ? vec_->prefix.num : 0; VEC_unsigned_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_unsigned_heap *)(vec_heap_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) )); new_vec_->base.prefix.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (unsigned) * len_); } return new_vec_; } static __inline__ void VEC_unsigned_heap_free (VEC_unsigned_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_unsigned_heap_reserve (VEC_unsigned_heap **vec_, int alloc_ ) { int extend = !VEC_unsigned_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_unsigned_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); return extend; } static __inline__ int VEC_unsigned_heap_reserve_exact (VEC_unsigned_heap **vec_, int alloc_ ) { int extend = !VEC_unsigned_base_space (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_unsigned_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); return extend; } static __inline__ void VEC_unsigned_heap_safe_grow (VEC_unsigned_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_unsigned_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_unsigned_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num : 0) ); ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0)->prefix.num = size_; } static __inline__ void VEC_unsigned_heap_safe_grow_cleared (VEC_unsigned_heap **vec_, int size_ ) { int oldsize = VEC_unsigned_base_length ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0); VEC_unsigned_heap_safe_grow (vec_, size_ ); memset (&(VEC_unsigned_base_address ((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (unsigned) * (size_ - oldsize)); } static __inline__ void VEC_unsigned_heap_safe_splice (VEC_unsigned_heap **dst_, VEC_unsigned_base *src_ ) { if (src_) { VEC_unsigned_heap_reserve_exact (dst_, src_->prefix.num ); VEC_unsigned_base_splice (((__builtin_offsetof (__typeof (**dst_), base) == 0 || (*dst_)) ? &(*dst_)->base : 0), src_ ); } } static __inline__ unsigned *VEC_unsigned_heap_safe_push (VEC_unsigned_heap **vec_, const unsigned obj_ ) { VEC_unsigned_heap_reserve (vec_, 1 ); return VEC_unsigned_base_quick_push (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), obj_ ); } static __inline__ unsigned *VEC_unsigned_heap_safe_insert (VEC_unsigned_heap **vec_, unsigned ix_, const unsigned obj_ ) { VEC_unsigned_heap_reserve (vec_, 1 ); return VEC_unsigned_base_quick_insert (((__builtin_offsetof (__typeof (**vec_), base) == 0 || (*vec_)) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
 # 28 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/function.h" 2
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 1
+# 20 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h"
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/insn-constants.h" 1
+# 78 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/insn-constants.h"
+enum unspec {
+  UNSPEC_GOT = 0,
+  UNSPEC_GOTOFF = 1,
+  UNSPEC_GOTPCREL = 2,
+  UNSPEC_GOTTPOFF = 3,
+  UNSPEC_TPOFF = 4,
+  UNSPEC_NTPOFF = 5,
+  UNSPEC_DTPOFF = 6,
+  UNSPEC_GOTNTPOFF = 7,
+  UNSPEC_INDNTPOFF = 8,
+  UNSPEC_PLTOFF = 9,
+  UNSPEC_MACHOPIC_OFFSET = 10,
+  UNSPEC_PCREL = 11,
+  UNSPEC_STACK_ALLOC = 12,
+  UNSPEC_SET_GOT = 13,
+  UNSPEC_SET_RIP = 14,
+  UNSPEC_SET_GOT_OFFSET = 15,
+  UNSPEC_MEMORY_BLOCKAGE = 16,
+  UNSPEC_STACK_CHECK = 17,
+  UNSPEC_TP = 18,
+  UNSPEC_TLS_GD = 19,
+  UNSPEC_TLS_LD_BASE = 20,
+  UNSPEC_TLSDESC = 21,
+  UNSPEC_TLS_IE_SUN = 22,
+  UNSPEC_SCAS = 23,
+  UNSPEC_FNSTSW = 24,
+  UNSPEC_SAHF = 25,
+  UNSPEC_PARITY = 26,
+  UNSPEC_FSTCW = 27,
+  UNSPEC_ADD_CARRY = 28,
+  UNSPEC_FLDCW = 29,
+  UNSPEC_REP = 30,
+  UNSPEC_LD_MPIC = 31,
+  UNSPEC_TRUNC_NOOP = 32,
+  UNSPEC_DIV_ALREADY_SPLIT = 33,
+  UNSPEC_MS_TO_SYSV_CALL = 34,
+  UNSPEC_CALL_NEEDS_VZEROUPPER = 35,
+  UNSPEC_PAUSE = 36,
+  UNSPEC_LEA_ADDR = 37,
+  UNSPEC_FIX_NOTRUNC = 38,
+  UNSPEC_MASKMOV = 39,
+  UNSPEC_MOVMSK = 40,
+  UNSPEC_RCP = 41,
+  UNSPEC_RSQRT = 42,
+  UNSPEC_PSADBW = 43,
+  UNSPEC_COPYSIGN = 44,
+  UNSPEC_IEEE_MIN = 45,
+  UNSPEC_IEEE_MAX = 46,
+  UNSPEC_SIN = 47,
+  UNSPEC_COS = 48,
+  UNSPEC_FPATAN = 49,
+  UNSPEC_FYL2X = 50,
+  UNSPEC_FYL2XP1 = 51,
+  UNSPEC_FRNDINT = 52,
+  UNSPEC_FIST = 53,
+  UNSPEC_F2XM1 = 54,
+  UNSPEC_TAN = 55,
+  UNSPEC_FXAM = 56,
+  UNSPEC_FRNDINT_FLOOR = 57,
+  UNSPEC_FRNDINT_CEIL = 58,
+  UNSPEC_FRNDINT_TRUNC = 59,
+  UNSPEC_FRNDINT_MASK_PM = 60,
+  UNSPEC_FIST_FLOOR = 61,
+  UNSPEC_FIST_CEIL = 62,
+  UNSPEC_SINCOS_COS = 63,
+  UNSPEC_SINCOS_SIN = 64,
+  UNSPEC_XTRACT_FRACT = 65,
+  UNSPEC_XTRACT_EXP = 66,
+  UNSPEC_FSCALE_FRACT = 67,
+  UNSPEC_FSCALE_EXP = 68,
+  UNSPEC_FPREM_F = 69,
+  UNSPEC_FPREM_U = 70,
+  UNSPEC_FPREM1_F = 71,
+  UNSPEC_FPREM1_U = 72,
+  UNSPEC_C2_FLAG = 73,
+  UNSPEC_FXAM_MEM = 74,
+  UNSPEC_SP_SET = 75,
+  UNSPEC_SP_TEST = 76,
+  UNSPEC_SP_TLS_SET = 77,
+  UNSPEC_SP_TLS_TEST = 78,
+  UNSPEC_ROUND = 79,
+  UNSPEC_CRC32 = 80,
+  UNSPEC_BEXTR = 81,
+  UNSPEC_PDEP = 82,
+  UNSPEC_PEXT = 83,
+  UNSPEC_MOVNTQ = 84,
+  UNSPEC_PFRCP = 85,
+  UNSPEC_PFRCPIT1 = 86,
+  UNSPEC_PFRCPIT2 = 87,
+  UNSPEC_PFRSQRT = 88,
+  UNSPEC_PFRSQIT1 = 89,
+  UNSPEC_MOVNT = 90,
+  UNSPEC_MOVU = 91,
+  UNSPEC_LDDQU = 92,
+  UNSPEC_PSHUFB = 93,
+  UNSPEC_PSIGN = 94,
+  UNSPEC_PALIGNR = 95,
+  UNSPEC_EXTRQI = 96,
+  UNSPEC_EXTRQ = 97,
+  UNSPEC_INSERTQI = 98,
+  UNSPEC_INSERTQ = 99,
+  UNSPEC_BLENDV = 100,
+  UNSPEC_INSERTPS = 101,
+  UNSPEC_DP = 102,
+  UNSPEC_MOVNTDQA = 103,
+  UNSPEC_MPSADBW = 104,
+  UNSPEC_PHMINPOSUW = 105,
+  UNSPEC_PTEST = 106,
+  UNSPEC_PCMPESTR = 107,
+  UNSPEC_PCMPISTR = 108,
+  UNSPEC_FMADDSUB = 109,
+  UNSPEC_XOP_UNSIGNED_CMP = 110,
+  UNSPEC_XOP_TRUEFALSE = 111,
+  UNSPEC_XOP_PERMUTE = 112,
+  UNSPEC_FRCZ = 113,
+  UNSPEC_AESENC = 114,
+  UNSPEC_AESENCLAST = 115,
+  UNSPEC_AESDEC = 116,
+  UNSPEC_AESDECLAST = 117,
+  UNSPEC_AESIMC = 118,
+  UNSPEC_AESKEYGENASSIST = 119,
+  UNSPEC_PCLMUL = 120,
+  UNSPEC_PCMP = 121,
+  UNSPEC_VPERMIL = 122,
+  UNSPEC_VPERMIL2 = 123,
+  UNSPEC_VPERMIL2F128 = 124,
+  UNSPEC_CAST = 125,
+  UNSPEC_VTESTP = 126,
+  UNSPEC_VCVTPH2PS = 127,
+  UNSPEC_VCVTPS2PH = 128,
+  UNSPEC_VPERMSI = 129,
+  UNSPEC_VPERMDF = 130,
+  UNSPEC_VPERMSF = 131,
+  UNSPEC_VPERMTI = 132,
+  UNSPEC_GATHER = 133,
+  UNSPEC_VSIBADDR = 134,
+  UNSPEC_LFENCE = 135,
+  UNSPEC_SFENCE = 136,
+  UNSPEC_MFENCE = 137,
+  UNSPEC_MOVA = 138,
+  UNSPEC_LDA = 139,
+  UNSPEC_STA = 140
+};
+
+extern const char *const unspec_strings[];
+
+enum unspecv {
+  UNSPECV_BLOCKAGE = 0,
+  UNSPECV_STACK_PROBE = 1,
+  UNSPECV_PROBE_STACK_RANGE = 2,
+  UNSPECV_ALIGN = 3,
+  UNSPECV_PROLOGUE_USE = 4,
+  UNSPECV_SPLIT_STACK_RETURN = 5,
+  UNSPECV_CLD = 6,
+  UNSPECV_NOPS = 7,
+  UNSPECV_RDTSC = 8,
+  UNSPECV_RDTSCP = 9,
+  UNSPECV_RDPMC = 10,
+  UNSPECV_LLWP_INTRINSIC = 11,
+  UNSPECV_SLWP_INTRINSIC = 12,
+  UNSPECV_LWPVAL_INTRINSIC = 13,
+  UNSPECV_LWPINS_INTRINSIC = 14,
+  UNSPECV_RDFSBASE = 15,
+  UNSPECV_RDGSBASE = 16,
+  UNSPECV_WRFSBASE = 17,
+  UNSPECV_WRGSBASE = 18,
+  UNSPECV_RDRAND = 19,
+  UNSPECV_EMMS = 20,
+  UNSPECV_FEMMS = 21,
+  UNSPECV_LDMXCSR = 22,
+  UNSPECV_STMXCSR = 23,
+  UNSPECV_CLFLUSH = 24,
+  UNSPECV_MONITOR = 25,
+  UNSPECV_MWAIT = 26,
+  UNSPECV_VZEROALL = 27,
+  UNSPECV_VZEROUPPER = 28,
+  UNSPECV_CMPXCHG = 29,
+  UNSPECV_XCHG = 30,
+  UNSPECV_LOCK = 31
+};
+
+extern const char *const unspecv_strings[];
+# 21 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/vxworks-dummy.h" 1
+# 22 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/biarch64.h" 1
+# 23 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h" 1
+# 85 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/vxworks-dummy.h" 1
+# 86 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h" 2
+
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386-opts.h" 1
+# 88 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h" 2
+# 100 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
+struct stringop_algs
+{
+  const enum stringop_alg unknown_size;
+  const struct stringop_strategy {
+    const int max;
+    const enum stringop_alg alg;
+  } size [4];
+};
+
+
+
+struct processor_costs {
+  const int add;
+  const int lea;
+  const int shift_var;
+  const int shift_const;
+  const int mult_init[5];
+
+  const int mult_bit;
+  const int divide[5];
+
+  int movsx;
+  int movzx;
+  const int large_insn;
+  const int move_ratio;
+
+  const int movzbl_load;
+  const int int_load[3];
+
+
+  const int int_store[3];
+
+  const int fp_move;
+  const int fp_load[3];
+
+  const int fp_store[3];
+
+  const int mmx_move;
+  const int mmx_load[2];
+
+  const int mmx_store[2];
+
+  const int sse_move;
+  const int sse_load[3];
+
+  const int sse_store[3];
+
+  const int mmxsse_to_integer;
+
+  const int l1_cache_size;
+  const int l2_cache_size;
+  const int prefetch_block;
+  const int simultaneous_prefetches;
+
+  const int branch_cost;
+  const int fadd;
+  const int fmul;
+  const int fdiv;
+  const int fabs;
+  const int fchs;
+  const int fsqrt;
+
+
+  struct stringop_algs memcpy[2], memset[2];
+  const int scalar_stmt_cost;
+
+  const int scalar_load_cost;
+  const int scalar_store_cost;
+  const int vec_stmt_cost;
+
+
+  const int vec_to_scalar_cost;
+  const int scalar_to_vec_cost;
+  const int vec_align_load_cost;
+  const int vec_unalign_load_cost;
+  const int vec_store_cost;
+  const int cond_taken_branch_cost;
+
+  const int cond_not_taken_branch_cost;
+
+};
+
+extern const struct processor_costs *ix86_cost;
+extern const struct processor_costs ix86_size_cost;
+# 253 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
+enum ix86_tune_indices {
+  X86_TUNE_USE_LEAVE,
+  X86_TUNE_PUSH_MEMORY,
+  X86_TUNE_ZERO_EXTEND_WITH_AND,
+  X86_TUNE_UNROLL_STRLEN,
+  X86_TUNE_BRANCH_PREDICTION_HINTS,
+  X86_TUNE_DOUBLE_WITH_ADD,
+  X86_TUNE_USE_SAHF,
+  X86_TUNE_MOVX,
+  X86_TUNE_PARTIAL_REG_STALL,
+  X86_TUNE_PARTIAL_FLAG_REG_STALL,
+  X86_TUNE_USE_HIMODE_FIOP,
+  X86_TUNE_USE_SIMODE_FIOP,
+  X86_TUNE_USE_MOV0,
+  X86_TUNE_USE_CLTD,
+  X86_TUNE_USE_XCHGB,
+  X86_TUNE_SPLIT_LONG_MOVES,
+  X86_TUNE_READ_MODIFY_WRITE,
+  X86_TUNE_READ_MODIFY,
+  X86_TUNE_PROMOTE_QIMODE,
+  X86_TUNE_FAST_PREFIX,
+  X86_TUNE_SINGLE_STRINGOP,
+  X86_TUNE_QIMODE_MATH,
+  X86_TUNE_HIMODE_MATH,
+  X86_TUNE_PROMOTE_QI_REGS,
+  X86_TUNE_PROMOTE_HI_REGS,
+  X86_TUNE_SINGLE_POP,
+  X86_TUNE_DOUBLE_POP,
+  X86_TUNE_SINGLE_PUSH,
+  X86_TUNE_DOUBLE_PUSH,
+  X86_TUNE_INTEGER_DFMODE_MOVES,
+  X86_TUNE_PARTIAL_REG_DEPENDENCY,
+  X86_TUNE_SSE_PARTIAL_REG_DEPENDENCY,
+  X86_TUNE_SSE_UNALIGNED_LOAD_OPTIMAL,
+  X86_TUNE_SSE_UNALIGNED_STORE_OPTIMAL,
+  X86_TUNE_SSE_PACKED_SINGLE_INSN_OPTIMAL,
+  X86_TUNE_SSE_SPLIT_REGS,
+  X86_TUNE_SSE_TYPELESS_STORES,
+  X86_TUNE_SSE_LOAD0_BY_PXOR,
+  X86_TUNE_MEMORY_MISMATCH_STALL,
+  X86_TUNE_PROLOGUE_USING_MOVE,
+  X86_TUNE_EPILOGUE_USING_MOVE,
+  X86_TUNE_SHIFT1,
+  X86_TUNE_USE_FFREEP,
+  X86_TUNE_INTER_UNIT_MOVES,
+  X86_TUNE_INTER_UNIT_CONVERSIONS,
+  X86_TUNE_FOUR_JUMP_LIMIT,
+  X86_TUNE_SCHEDULE,
+  X86_TUNE_USE_BT,
+  X86_TUNE_USE_INCDEC,
+  X86_TUNE_PAD_RETURNS,
+  X86_TUNE_PAD_SHORT_FUNCTION,
+  X86_TUNE_EXT_80387_CONSTANTS,
+  X86_TUNE_SHORTEN_X87_SSE,
+  X86_TUNE_AVOID_VECTOR_DECODE,
+  X86_TUNE_PROMOTE_HIMODE_IMUL,
+  X86_TUNE_SLOW_IMUL_IMM32_MEM,
+  X86_TUNE_SLOW_IMUL_IMM8,
+  X86_TUNE_MOVE_M1_VIA_OR,
+  X86_TUNE_NOT_UNPAIRABLE,
+  X86_TUNE_NOT_VECTORMODE,
+  X86_TUNE_USE_VECTOR_FP_CONVERTS,
+  X86_TUNE_USE_VECTOR_CONVERTS,
+  X86_TUNE_FUSE_CMP_AND_BRANCH,
+  X86_TUNE_OPT_AGU,
+  X86_TUNE_VECTORIZE_DOUBLE,
+  X86_TUNE_SOFTWARE_PREFETCHING_BENEFICIAL,
+  X86_TUNE_AVX128_OPTIMAL,
+  X86_TUNE_REASSOC_INT_TO_PARALLEL,
+  X86_TUNE_REASSOC_FP_TO_PARALLEL,
+
+  X86_TUNE_LAST
+};
+
+extern unsigned char ix86_tune_features[X86_TUNE_LAST];
+# 427 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
+enum ix86_arch_indices {
+  X86_ARCH_CMOV,
+  X86_ARCH_CMPXCHG,
+  X86_ARCH_CMPXCHG8B,
+  X86_ARCH_XADD,
+  X86_ARCH_BSWAP,
+
+  X86_ARCH_LAST
+};
+
+extern unsigned char ix86_arch_features[X86_ARCH_LAST];
+# 452 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
+extern int x86_prefetch_sse;
+
+
+extern int x86_prefetchw;
+# 478 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
+extern tree x86_mfence;
+# 529 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
+extern const char *host_detect_local_cpu (int argc, const char **argv);
+# 578 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
+enum target_cpu_default
+{
+  TARGET_CPU_DEFAULT_generic = 0,
+
+  TARGET_CPU_DEFAULT_i386,
+  TARGET_CPU_DEFAULT_i486,
+  TARGET_CPU_DEFAULT_pentium,
+  TARGET_CPU_DEFAULT_pentium_mmx,
+  TARGET_CPU_DEFAULT_pentiumpro,
+  TARGET_CPU_DEFAULT_pentium2,
+  TARGET_CPU_DEFAULT_pentium3,
+  TARGET_CPU_DEFAULT_pentium4,
+  TARGET_CPU_DEFAULT_pentium_m,
+  TARGET_CPU_DEFAULT_prescott,
+  TARGET_CPU_DEFAULT_nocona,
+  TARGET_CPU_DEFAULT_core2,
+  TARGET_CPU_DEFAULT_corei7,
+  TARGET_CPU_DEFAULT_atom,
+
+  TARGET_CPU_DEFAULT_geode,
+  TARGET_CPU_DEFAULT_k6,
+  TARGET_CPU_DEFAULT_k6_2,
+  TARGET_CPU_DEFAULT_k6_3,
+  TARGET_CPU_DEFAULT_athlon,
+  TARGET_CPU_DEFAULT_athlon_sse,
+  TARGET_CPU_DEFAULT_k8,
+  TARGET_CPU_DEFAULT_amdfam10,
+  TARGET_CPU_DEFAULT_bdver1,
+  TARGET_CPU_DEFAULT_bdver2,
+  TARGET_CPU_DEFAULT_btver1,
+
+  TARGET_CPU_DEFAULT_max
+};
+# 1193 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
+enum reg_class
+{
+  NO_REGS,
+  AREG, DREG, CREG, BREG, SIREG, DIREG,
+  AD_REGS,
+  CLOBBERED_REGS,
+  Q_REGS,
+  NON_Q_REGS,
+  INDEX_REGS,
+  LEGACY_REGS,
+  GENERAL_REGS,
+
+  FP_TOP_REG, FP_SECOND_REG,
+  FLOAT_REGS,
+  SSE_FIRST_REG,
+  SSE_REGS,
+  MMX_REGS,
+  FP_TOP_SSE_REGS,
+  FP_SECOND_SSE_REGS,
+  FLOAT_SSE_REGS,
+  FLOAT_INT_REGS,
+  INT_SSE_REGS,
+  FLOAT_INT_SSE_REGS,
+  ALL_REGS, LIM_REG_CLASSES
+};
+# 1483 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
+typedef struct ix86_args {
+  int words;
+  int nregs;
+  int regno;
+  int fastcall;
+
+  int sse_words;
+  int sse_nregs;
+  int warn_avx;
+  int warn_sse;
+  int warn_mmx;
+  int sse_regno;
+  int mmx_words;
+  int mmx_nregs;
+  int mmx_regno;
+  int maybe_vaarg;
+  int caller;
+  int float_in_sse;
+
+
+  enum calling_abi call_abi;
+
+} CUMULATIVE_ARGS;
+# 1913 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
+extern int const dbx_register_map[53];
+extern int const dbx64_register_map[53];
+extern int const svr4_dbx_register_map[53];
+# 2044 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
+enum processor_type
+{
+  PROCESSOR_I386 = 0,
+  PROCESSOR_I486,
+  PROCESSOR_PENTIUM,
+  PROCESSOR_PENTIUMPRO,
+  PROCESSOR_GEODE,
+  PROCESSOR_K6,
+  PROCESSOR_ATHLON,
+  PROCESSOR_PENTIUM4,
+  PROCESSOR_K8,
+  PROCESSOR_NOCONA,
+  PROCESSOR_CORE2_32,
+  PROCESSOR_CORE2_64,
+  PROCESSOR_COREI7_32,
+  PROCESSOR_COREI7_64,
+  PROCESSOR_GENERIC32,
+  PROCESSOR_GENERIC64,
+  PROCESSOR_AMDFAM10,
+  PROCESSOR_BDVER1,
+  PROCESSOR_BDVER2,
+  PROCESSOR_BTVER1,
+  PROCESSOR_ATOM,
+  PROCESSOR_max
+};
+
+extern enum processor_type ix86_tune;
+extern enum processor_type ix86_arch;
+
+
+
+
+
+
+extern unsigned int ix86_preferred_stack_boundary;
+extern unsigned int ix86_incoming_stack_boundary;
+
+
+extern enum reg_class const regclass_map[53];
+
+enum ix86_fpcmp_strategy {
+  IX86_FPCMP_SAHF,
+  IX86_FPCMP_COMI,
+  IX86_FPCMP_ARITH
+};
+# 2105 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
+enum ix86_entity
+{
+  I387_TRUNC = 0,
+  I387_FLOOR,
+  I387_CEIL,
+  I387_MASK_PM,
+  MAX_386_ENTITIES
+};
+
+enum ix86_stack_slot
+{
+  SLOT_VIRTUAL = 0,
+  SLOT_TEMP,
+  SLOT_CW_STORED,
+  SLOT_CW_TRUNC,
+  SLOT_CW_FLOOR,
+  SLOT_CW_CEIL,
+  SLOT_CW_MASK_PM,
+  MAX_386_STACK_LOCALS
+};
+# 2181 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
+struct machine_frame_state
+{
+
+
+
+  rtx cfa_reg;
+  long cfa_offset;
+
+
+
+
+
+  long sp_offset;
+  long fp_offset;
+
+
+
+
+
+  int red_zone_offset;
+
+
+
+
+
+  unsigned int sp_valid : 1;
+  unsigned int fp_valid : 1;
+  unsigned int drap_valid : 1;
+
+
+
+
+  unsigned int realigned : 1;
+};
+
+
+struct seh_frame_state;
+
+struct machine_function {
+  struct stack_local_entry *stack_locals;
+  const char *some_ld_name;
+  int varargs_gpr_size;
+  int varargs_fpr_size;
+  int optimize_mode_switching[MAX_386_ENTITIES];
+
+
+
+  int use_fast_prologue_epilogue_nregs;
+
+
+
+
+
+
+  rtx split_stack_varargs_pointer;
+
+
+
+  __extension__ enum calling_abi call_abi : 8;
+
+
+  unsigned int accesses_prev_frame : 1;
+
+
+  unsigned int needs_cld : 1;
+
+
+
+  unsigned int use_fast_prologue_epilogue : 1;
+# 2260 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
+  unsigned int tls_descriptor_call_expanded_p : 1;
+
+
+
+  unsigned int static_chain_on_stack : 1;
+
+
+  unsigned int caller_pass_avx256_p : 1;
+
+
+  unsigned int caller_return_avx256_p : 1;
+
+
+  unsigned int callee_pass_avx256_p : 1;
+
+
+  unsigned int callee_return_avx256_p : 1;
+
+
+  unsigned int rescan_vzeroupper_p : 1;
+
+
+
+  struct machine_frame_state fs;
+
+
+  struct seh_frame_state * seh;
+};
+# 2325 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/i386.h"
+extern void debug_ready_dispatch (void);
+extern void debug_dispatch_window (int);
+# 24 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/linux-android.h" 1
+# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/unix.h" 1
+# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/att.h" 1
+# 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/dbxelf.h" 1
+# 28 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/elfos.h" 1
+# 29 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/gnu-user.h" 1
+# 30 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/glibc-stdint.h" 1
+# 31 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/x86-64.h" 1
+# 32 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/gnu-user64.h" 1
+# 33 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/linux.h" 1
+# 34 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/i386/linux64.h" 1
+# 35 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/config/initfini-array.h" 1
+# 36 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
+
+
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/insn-flags.h" 1
+# 2778 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/insn-flags.h"
+extern rtx gen_x86_fnstsw_1 (rtx);
+extern rtx gen_x86_sahf_1 (rtx);
+extern rtx gen_swapxf (rtx, rtx);
+extern rtx gen_zero_extendsidi2_1 (rtx, rtx);
+extern rtx gen_zero_extendqidi2 (rtx, rtx);
+extern rtx gen_zero_extendhidi2 (rtx, rtx);
+extern rtx gen_zero_extendhisi2_and (rtx, rtx);
+extern rtx gen_extendsidi2_1 (rtx, rtx);
+extern rtx gen_extendqidi2 (rtx, rtx);
+extern rtx gen_extendhidi2 (rtx, rtx);
+extern rtx gen_extendhisi2 (rtx, rtx);
+extern rtx gen_extendqisi2 (rtx, rtx);
+extern rtx gen_extendqihi2 (rtx, rtx);
+extern rtx gen_truncxfsf2_i387_noop (rtx, rtx);
+extern rtx gen_truncxfdf2_i387_noop (rtx, rtx);
+extern rtx gen_fix_truncsfdi_sse (rtx, rtx);
+extern rtx gen_fix_truncdfdi_sse (rtx, rtx);
+extern rtx gen_fix_truncsfsi_sse (rtx, rtx);
+extern rtx gen_fix_truncdfsi_sse (rtx, rtx);
+extern rtx gen_fix_trunchi_fisttp_i387_1 (rtx, rtx);
+extern rtx gen_fix_truncsi_fisttp_i387_1 (rtx, rtx);
+extern rtx gen_fix_truncdi_fisttp_i387_1 (rtx, rtx);
+extern rtx gen_fix_trunchi_i387_fisttp (rtx, rtx);
+extern rtx gen_fix_truncsi_i387_fisttp (rtx, rtx);
+extern rtx gen_fix_truncdi_i387_fisttp (rtx, rtx);
+extern rtx gen_fix_trunchi_i387_fisttp_with_temp (rtx, rtx, rtx);
+extern rtx gen_fix_truncsi_i387_fisttp_with_temp (rtx, rtx, rtx);
+extern rtx gen_fix_truncdi_i387_fisttp_with_temp (rtx, rtx, rtx);
+extern rtx gen_fix_truncdi_i387 (rtx, rtx, rtx, rtx);
+extern rtx gen_fix_truncdi_i387_with_temp (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_fix_trunchi_i387 (rtx, rtx, rtx, rtx);
+extern rtx gen_fix_truncsi_i387 (rtx, rtx, rtx, rtx);
+extern rtx gen_fix_trunchi_i387_with_temp (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_fix_truncsi_i387_with_temp (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_x86_fnstcw_1 (rtx);
+extern rtx gen_x86_fldcw_1 (rtx);
+extern rtx gen_floatdisf2_i387_with_xmm (rtx, rtx, rtx);
+extern rtx gen_floatdidf2_i387_with_xmm (rtx, rtx, rtx);
+extern rtx gen_floatdixf2_i387_with_xmm (rtx, rtx, rtx);
+extern rtx gen_addqi3_cc (rtx, rtx, rtx);
+extern rtx gen_addsi_1_zext (rtx, rtx, rtx);
+extern rtx gen_addqi_ext_1 (rtx, rtx, rtx);
+extern rtx gen_divmodsi4_1 (rtx, rtx, rtx, rtx);
+extern rtx gen_divmoddi4_1 (rtx, rtx, rtx, rtx);
+extern rtx gen_divmodhiqi3 (rtx, rtx, rtx);
+extern rtx gen_udivmodsi4_1 (rtx, rtx, rtx, rtx);
+extern rtx gen_udivmoddi4_1 (rtx, rtx, rtx, rtx);
+extern rtx gen_udivmodhiqi3 (rtx, rtx, rtx);
+extern rtx gen_andqi_ext_0 (rtx, rtx, rtx);
+extern rtx gen_copysignsf3_const (rtx, rtx, rtx, rtx);
+extern rtx gen_copysigndf3_const (rtx, rtx, rtx, rtx);
+extern rtx gen_copysigntf3_const (rtx, rtx, rtx, rtx);
+extern rtx gen_copysignsf3_var (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_copysigndf3_var (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_copysigntf3_var (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_x86_64_shld (rtx, rtx, rtx);
+extern rtx gen_x86_shld (rtx, rtx, rtx);
+extern rtx gen_x86_64_shrd (rtx, rtx, rtx);
+extern rtx gen_x86_shrd (rtx, rtx, rtx);
+extern rtx gen_ashrdi3_cvt (rtx, rtx, rtx);
+extern rtx gen_ashrsi3_cvt (rtx, rtx, rtx);
+extern rtx gen_ix86_rotldi3_doubleword (rtx, rtx, rtx);
+extern rtx gen_ix86_rotlti3_doubleword (rtx, rtx, rtx);
+extern rtx gen_ix86_rotrdi3_doubleword (rtx, rtx, rtx);
+extern rtx gen_ix86_rotrti3_doubleword (rtx, rtx, rtx);
+extern rtx gen_setcc_sf_sse (rtx, rtx, rtx, rtx);
+extern rtx gen_setcc_df_sse (rtx, rtx, rtx, rtx);
+extern rtx gen_jump (rtx);
+extern rtx gen_blockage (void);
+extern rtx gen_prologue_use (rtx);
+extern rtx gen_simple_return_internal (void);
+extern rtx gen_simple_return_internal_long (void);
+extern rtx gen_simple_return_pop_internal (rtx);
+extern rtx gen_simple_return_indirect_internal (rtx);
+extern rtx gen_nop (void);
+extern rtx gen_nops (rtx);
+extern rtx gen_pad (rtx);
+extern rtx gen_set_got (rtx);
+extern rtx gen_set_got_labelled (rtx, rtx);
+extern rtx gen_set_got_rex64 (rtx);
+extern rtx gen_set_rip_rex64 (rtx, rtx);
+extern rtx gen_set_got_offset_rex64 (rtx, rtx);
+extern rtx gen_eh_return_internal (void);
+extern rtx gen_leave (void);
+extern rtx gen_leave_rex64 (void);
+extern rtx gen_split_stack_return (rtx);
+extern rtx gen_ffssi2_no_cmove (rtx, rtx);
+extern rtx gen_ctzhi2 (rtx, rtx);
+extern rtx gen_ctzsi2 (rtx, rtx);
+extern rtx gen_ctzdi2 (rtx, rtx);
+extern rtx gen_clzhi2_lzcnt (rtx, rtx);
+extern rtx gen_clzsi2_lzcnt (rtx, rtx);
+extern rtx gen_clzdi2_lzcnt (rtx, rtx);
+extern rtx gen_bmi_bextr_si (rtx, rtx, rtx);
+extern rtx gen_bmi_bextr_di (rtx, rtx, rtx);
+extern rtx gen_bmi2_bzhi_si3 (rtx, rtx, rtx);
+extern rtx gen_bmi2_bzhi_di3 (rtx, rtx, rtx);
+extern rtx gen_bmi2_pdep_si3 (rtx, rtx, rtx);
+extern rtx gen_bmi2_pdep_di3 (rtx, rtx, rtx);
+extern rtx gen_bmi2_pext_si3 (rtx, rtx, rtx);
+extern rtx gen_bmi2_pext_di3 (rtx, rtx, rtx);
+extern rtx gen_tbm_bextri_si (rtx, rtx, rtx, rtx);
+extern rtx gen_tbm_bextri_di (rtx, rtx, rtx, rtx);
+extern rtx gen_bsr_rex64 (rtx, rtx);
+extern rtx gen_bsr (rtx, rtx);
+extern rtx gen_popcounthi2 (rtx, rtx);
+extern rtx gen_popcountsi2 (rtx, rtx);
+extern rtx gen_popcountdi2 (rtx, rtx);
+extern rtx gen_bswaphi_lowpart (rtx);
+extern rtx gen_paritydi2_cmp (rtx, rtx, rtx, rtx);
+extern rtx gen_paritysi2_cmp (rtx, rtx, rtx);
+static __inline__ rtx gen_tls_initial_exec_64_sun (rtx, rtx);
+static __inline__ rtx
+gen_tls_initial_exec_64_sun(rtx a __attribute__ ((__unused__)), rtx b __attribute__ ((__unused__)))
+{
+  return 0;
+}
+extern rtx gen_truncxfsf2_i387_noop_unspec (rtx, rtx);
+extern rtx gen_truncxfdf2_i387_noop_unspec (rtx, rtx);
+extern rtx gen_sqrtxf2 (rtx, rtx);
+extern rtx gen_sqrt_extendsfxf2_i387 (rtx, rtx);
+extern rtx gen_sqrt_extenddfxf2_i387 (rtx, rtx);
+extern rtx gen_fpremxf4_i387 (rtx, rtx, rtx, rtx);
+extern rtx gen_fprem1xf4_i387 (rtx, rtx, rtx, rtx);
+extern rtx gen_sincosxf3 (rtx, rtx, rtx);
+extern rtx gen_sincos_extendsfxf3_i387 (rtx, rtx, rtx);
+extern rtx gen_sincos_extenddfxf3_i387 (rtx, rtx, rtx);
+extern rtx gen_fptanxf4_i387 (rtx, rtx, rtx, rtx);
+extern rtx gen_fptan_extendsfxf4_i387 (rtx, rtx, rtx, rtx);
+extern rtx gen_fptan_extenddfxf4_i387 (rtx, rtx, rtx, rtx);
+extern rtx gen_fpatan_extendsfxf3_i387 (rtx, rtx, rtx);
+extern rtx gen_fpatan_extenddfxf3_i387 (rtx, rtx, rtx);
+extern rtx gen_fyl2xxf3_i387 (rtx, rtx, rtx);
+extern rtx gen_fyl2x_extendsfxf3_i387 (rtx, rtx, rtx);
+extern rtx gen_fyl2x_extenddfxf3_i387 (rtx, rtx, rtx);
+extern rtx gen_fyl2xp1xf3_i387 (rtx, rtx, rtx);
+extern rtx gen_fyl2xp1_extendsfxf3_i387 (rtx, rtx, rtx);
+extern rtx gen_fyl2xp1_extenddfxf3_i387 (rtx, rtx, rtx);
+extern rtx gen_fxtractxf3_i387 (rtx, rtx, rtx);
+extern rtx gen_fxtract_extendsfxf3_i387 (rtx, rtx, rtx);
+extern rtx gen_fxtract_extenddfxf3_i387 (rtx, rtx, rtx);
+extern rtx gen_sse4_1_roundsf2 (rtx, rtx, rtx);
+extern rtx gen_sse4_1_rounddf2 (rtx, rtx, rtx);
+extern rtx gen_rintxf2 (rtx, rtx);
+extern rtx gen_fistdi2 (rtx, rtx);
+extern rtx gen_fistdi2_with_temp (rtx, rtx, rtx);
+extern rtx gen_fisthi2 (rtx, rtx);
+extern rtx gen_fistsi2 (rtx, rtx);
+extern rtx gen_fisthi2_with_temp (rtx, rtx, rtx);
+extern rtx gen_fistsi2_with_temp (rtx, rtx, rtx);
+extern rtx gen_frndintxf2_floor (rtx, rtx);
+extern rtx gen_frndintxf2_floor_i387 (rtx, rtx, rtx, rtx);
+extern rtx gen_fistdi2_floor (rtx, rtx, rtx, rtx);
+extern rtx gen_fistdi2_floor_with_temp (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_fisthi2_floor (rtx, rtx, rtx, rtx);
+extern rtx gen_fistsi2_floor (rtx, rtx, rtx, rtx);
+extern rtx gen_fisthi2_floor_with_temp (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_fistsi2_floor_with_temp (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_frndintxf2_ceil (rtx, rtx);
+extern rtx gen_frndintxf2_ceil_i387 (rtx, rtx, rtx, rtx);
+extern rtx gen_fistdi2_ceil (rtx, rtx, rtx, rtx);
+extern rtx gen_fistdi2_ceil_with_temp (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_fisthi2_ceil (rtx, rtx, rtx, rtx);
+extern rtx gen_fistsi2_ceil (rtx, rtx, rtx, rtx);
+extern rtx gen_fisthi2_ceil_with_temp (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_fistsi2_ceil_with_temp (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_frndintxf2_trunc (rtx, rtx);
+extern rtx gen_frndintxf2_trunc_i387 (rtx, rtx, rtx, rtx);
+extern rtx gen_frndintxf2_mask_pm (rtx, rtx);
+extern rtx gen_frndintxf2_mask_pm_i387 (rtx, rtx, rtx, rtx);
+extern rtx gen_fxamsf2_i387 (rtx, rtx);
+extern rtx gen_fxamdf2_i387 (rtx, rtx);
+extern rtx gen_fxamxf2_i387 (rtx, rtx);
+extern rtx gen_fxamsf2_i387_with_temp (rtx, rtx);
+extern rtx gen_fxamdf2_i387_with_temp (rtx, rtx);
+extern rtx gen_movmsk_df (rtx, rtx);
+extern rtx gen_cld (void);
+extern rtx gen_smaxsf3 (rtx, rtx, rtx);
+extern rtx gen_sminsf3 (rtx, rtx, rtx);
+extern rtx gen_smaxdf3 (rtx, rtx, rtx);
+extern rtx gen_smindf3 (rtx, rtx, rtx);
+extern rtx gen_pro_epilogue_adjust_stack_si_add (rtx, rtx, rtx);
+extern rtx gen_pro_epilogue_adjust_stack_di_add (rtx, rtx, rtx);
+extern rtx gen_pro_epilogue_adjust_stack_si_sub (rtx, rtx, rtx);
+extern rtx gen_pro_epilogue_adjust_stack_di_sub (rtx, rtx, rtx);
+extern rtx gen_allocate_stack_worker_probe_si (rtx, rtx);
+extern rtx gen_allocate_stack_worker_probe_di (rtx, rtx);
+extern rtx gen_adjust_stack_and_probesi (rtx, rtx, rtx);
+extern rtx gen_adjust_stack_and_probedi (rtx, rtx, rtx);
+extern rtx gen_probe_stack_rangesi (rtx, rtx, rtx);
+extern rtx gen_probe_stack_rangedi (rtx, rtx, rtx);
+extern rtx gen_trap (void);
+extern rtx gen_stack_protect_set_si (rtx, rtx);
+extern rtx gen_stack_protect_set_di (rtx, rtx);
+extern rtx gen_stack_tls_protect_set_si (rtx, rtx);
+extern rtx gen_stack_tls_protect_set_di (rtx, rtx);
+extern rtx gen_stack_protect_test_si (rtx, rtx, rtx);
+extern rtx gen_stack_protect_test_di (rtx, rtx, rtx);
+extern rtx gen_stack_tls_protect_test_si (rtx, rtx, rtx);
+extern rtx gen_stack_tls_protect_test_di (rtx, rtx, rtx);
+extern rtx gen_sse4_2_crc32qi (rtx, rtx, rtx);
+extern rtx gen_sse4_2_crc32hi (rtx, rtx, rtx);
+extern rtx gen_sse4_2_crc32si (rtx, rtx, rtx);
+extern rtx gen_sse4_2_crc32di (rtx, rtx, rtx);
+extern rtx gen_lwp_slwpcbsi (rtx);
+extern rtx gen_lwp_slwpcbdi (rtx);
+extern rtx gen_rdfsbasesi (rtx);
+extern rtx gen_rdfsbasedi (rtx);
+extern rtx gen_rdgsbasesi (rtx);
+extern rtx gen_rdgsbasedi (rtx);
+extern rtx gen_wrfsbasesi (rtx);
+extern rtx gen_wrfsbasedi (rtx);
+extern rtx gen_wrgsbasesi (rtx);
+extern rtx gen_wrgsbasedi (rtx);
+extern rtx gen_rdrandhi_1 (rtx);
+extern rtx gen_rdrandsi_1 (rtx);
+extern rtx gen_rdranddi_1 (rtx);
+extern rtx gen_sse_movntq (rtx, rtx);
+extern rtx gen_mmx_rcpv2sf2 (rtx, rtx);
+extern rtx gen_mmx_rcpit1v2sf3 (rtx, rtx, rtx);
+extern rtx gen_mmx_rcpit2v2sf3 (rtx, rtx, rtx);
+extern rtx gen_mmx_rsqrtv2sf2 (rtx, rtx);
+extern rtx gen_mmx_rsqit1v2sf3 (rtx, rtx, rtx);
+extern rtx gen_mmx_haddv2sf3 (rtx, rtx, rtx);
+extern rtx gen_mmx_hsubv2sf3 (rtx, rtx, rtx);
+extern rtx gen_mmx_addsubv2sf3 (rtx, rtx, rtx);
+extern rtx gen_mmx_gtv2sf3 (rtx, rtx, rtx);
+extern rtx gen_mmx_gev2sf3 (rtx, rtx, rtx);
+extern rtx gen_mmx_pf2id (rtx, rtx);
+extern rtx gen_mmx_pf2iw (rtx, rtx);
+extern rtx gen_mmx_pi2fw (rtx, rtx);
+extern rtx gen_mmx_floatv2si2 (rtx, rtx);
+extern rtx gen_mmx_pswapdv2sf2 (rtx, rtx);
+extern rtx gen_mmx_ashrv4hi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_ashrv2si3 (rtx, rtx, rtx);
+extern rtx gen_mmx_ashlv4hi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_lshrv4hi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_ashlv2si3 (rtx, rtx, rtx);
+extern rtx gen_mmx_lshrv2si3 (rtx, rtx, rtx);
+extern rtx gen_mmx_ashlv1di3 (rtx, rtx, rtx);
+extern rtx gen_mmx_lshrv1di3 (rtx, rtx, rtx);
+extern rtx gen_mmx_gtv8qi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_gtv4hi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_gtv2si3 (rtx, rtx, rtx);
+extern rtx gen_mmx_andnotv8qi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_andnotv4hi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_andnotv2si3 (rtx, rtx, rtx);
+extern rtx gen_mmx_packsswb (rtx, rtx, rtx);
+extern rtx gen_mmx_packssdw (rtx, rtx, rtx);
+extern rtx gen_mmx_packuswb (rtx, rtx, rtx);
+extern rtx gen_mmx_punpckhbw (rtx, rtx, rtx);
+extern rtx gen_mmx_punpcklbw (rtx, rtx, rtx);
+extern rtx gen_mmx_punpckhwd (rtx, rtx, rtx);
+extern rtx gen_mmx_punpcklwd (rtx, rtx, rtx);
+extern rtx gen_mmx_punpckhdq (rtx, rtx, rtx);
+extern rtx gen_mmx_punpckldq (rtx, rtx, rtx);
+extern rtx gen_mmx_pextrw (rtx, rtx, rtx);
+extern rtx gen_mmx_pshufw_1 (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_mmx_pswapdv2si2 (rtx, rtx);
+extern rtx gen_mmx_psadbw (rtx, rtx, rtx);
+extern rtx gen_mmx_pmovmskb (rtx, rtx);
+extern rtx gen_sse2_movq128 (rtx, rtx);
+extern rtx gen_movdi_to_sse (rtx, rtx);
+extern rtx gen_avx_movups256 (rtx, rtx);
+extern rtx gen_sse_movups (rtx, rtx);
+extern rtx gen_avx_movupd256 (rtx, rtx);
+extern rtx gen_sse2_movupd (rtx, rtx);
+extern rtx gen_avx_movdqu256 (rtx, rtx);
+extern rtx gen_sse2_movdqu (rtx, rtx);
+extern rtx gen_avx_lddqu256 (rtx, rtx);
+extern rtx gen_sse3_lddqu (rtx, rtx);
+extern rtx gen_sse2_movntisi (rtx, rtx);
+extern rtx gen_sse2_movntidi (rtx, rtx);
+extern rtx gen_avx_movntv8sf (rtx, rtx);
+extern rtx gen_sse_movntv4sf (rtx, rtx);
+extern rtx gen_avx_movntv4df (rtx, rtx);
+extern rtx gen_sse2_movntv2df (rtx, rtx);
+extern rtx gen_avx_movntv4di (rtx, rtx);
+extern rtx gen_sse2_movntv2di (rtx, rtx);
+extern rtx gen_sse_vmaddv4sf3 (rtx, rtx, rtx);
+extern rtx gen_sse_vmsubv4sf3 (rtx, rtx, rtx);
+extern rtx gen_sse2_vmaddv2df3 (rtx, rtx, rtx);
+extern rtx gen_sse2_vmsubv2df3 (rtx, rtx, rtx);
+extern rtx gen_sse_vmmulv4sf3 (rtx, rtx, rtx);
+extern rtx gen_sse2_vmmulv2df3 (rtx, rtx, rtx);
+extern rtx gen_avx_divv8sf3 (rtx, rtx, rtx);
+extern rtx gen_sse_divv4sf3 (rtx, rtx, rtx);
+extern rtx gen_avx_divv4df3 (rtx, rtx, rtx);
+extern rtx gen_sse2_divv2df3 (rtx, rtx, rtx);
+extern rtx gen_sse_vmdivv4sf3 (rtx, rtx, rtx);
+extern rtx gen_sse2_vmdivv2df3 (rtx, rtx, rtx);
+extern rtx gen_avx_rcpv8sf2 (rtx, rtx);
+extern rtx gen_sse_rcpv4sf2 (rtx, rtx);
+extern rtx gen_sse_vmrcpv4sf2 (rtx, rtx, rtx);
+extern rtx gen_avx_sqrtv8sf2 (rtx, rtx);
+extern rtx gen_sse_sqrtv4sf2 (rtx, rtx);
+extern rtx gen_avx_sqrtv4df2 (rtx, rtx);
+extern rtx gen_sse2_sqrtv2df2 (rtx, rtx);
+extern rtx gen_sse_vmsqrtv4sf2 (rtx, rtx, rtx);
+extern rtx gen_sse2_vmsqrtv2df2 (rtx, rtx, rtx);
+extern rtx gen_avx_rsqrtv8sf2 (rtx, rtx);
+extern rtx gen_sse_rsqrtv4sf2 (rtx, rtx);
+extern rtx gen_sse_vmrsqrtv4sf2 (rtx, rtx, rtx);
+extern rtx gen_sse_vmsmaxv4sf3 (rtx, rtx, rtx);
+extern rtx gen_sse_vmsminv4sf3 (rtx, rtx, rtx);
+extern rtx gen_sse2_vmsmaxv2df3 (rtx, rtx, rtx);
+extern rtx gen_sse2_vmsminv2df3 (rtx, rtx, rtx);
+extern rtx gen_avx_addsubv4df3 (rtx, rtx, rtx);
+extern rtx gen_sse3_addsubv2df3 (rtx, rtx, rtx);
+extern rtx gen_avx_addsubv8sf3 (rtx, rtx, rtx);
+extern rtx gen_sse3_addsubv4sf3 (rtx, rtx, rtx);
+extern rtx gen_avx_haddv4df3 (rtx, rtx, rtx);
+extern rtx gen_avx_hsubv4df3 (rtx, rtx, rtx);
+extern rtx gen_sse3_haddv2df3 (rtx, rtx, rtx);
+extern rtx gen_sse3_hsubv2df3 (rtx, rtx, rtx);
+extern rtx gen_avx_haddv8sf3 (rtx, rtx, rtx);
+extern rtx gen_avx_hsubv8sf3 (rtx, rtx, rtx);
+extern rtx gen_sse3_haddv4sf3 (rtx, rtx, rtx);
+extern rtx gen_sse3_hsubv4sf3 (rtx, rtx, rtx);
+extern rtx gen_avx_cmpv8sf3 (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_cmpv4sf3 (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_cmpv4df3 (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_cmpv2df3 (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_vmcmpv4sf3 (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_vmcmpv2df3 (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_maskcmpv8sf3 (rtx, rtx, rtx, rtx);
+extern rtx gen_sse_maskcmpv4sf3 (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_maskcmpv4df3 (rtx, rtx, rtx, rtx);
+extern rtx gen_sse2_maskcmpv2df3 (rtx, rtx, rtx, rtx);
+extern rtx gen_sse_vmmaskcmpv4sf3 (rtx, rtx, rtx, rtx);
+extern rtx gen_sse2_vmmaskcmpv2df3 (rtx, rtx, rtx, rtx);
+extern rtx gen_sse_comi (rtx, rtx);
+extern rtx gen_sse2_comi (rtx, rtx);
+extern rtx gen_sse_ucomi (rtx, rtx);
+extern rtx gen_sse2_ucomi (rtx, rtx);
+extern rtx gen_avx_andnotv8sf3 (rtx, rtx, rtx);
+extern rtx gen_sse_andnotv4sf3 (rtx, rtx, rtx);
+extern rtx gen_avx_andnotv4df3 (rtx, rtx, rtx);
+extern rtx gen_sse2_andnotv2df3 (rtx, rtx, rtx);
+extern rtx gen_sse_cvtpi2ps (rtx, rtx, rtx);
+extern rtx gen_sse_cvtps2pi (rtx, rtx);
+extern rtx gen_sse_cvttps2pi (rtx, rtx);
+extern rtx gen_sse_cvtsi2ss (rtx, rtx, rtx);
+extern rtx gen_sse_cvtsi2ssq (rtx, rtx, rtx);
+extern rtx gen_sse_cvtss2si (rtx, rtx);
+extern rtx gen_sse_cvtss2si_2 (rtx, rtx);
+extern rtx gen_sse_cvtss2siq (rtx, rtx);
+extern rtx gen_sse_cvtss2siq_2 (rtx, rtx);
+extern rtx gen_sse_cvttss2si (rtx, rtx);
+extern rtx gen_sse_cvttss2siq (rtx, rtx);
+extern rtx gen_floatv8siv8sf2 (rtx, rtx);
+extern rtx gen_floatv4siv4sf2 (rtx, rtx);
+extern rtx gen_avx_cvtps2dq256 (rtx, rtx);
+extern rtx gen_sse2_cvtps2dq (rtx, rtx);
+extern rtx gen_fix_truncv8sfv8si2 (rtx, rtx);
+extern rtx gen_fix_truncv4sfv4si2 (rtx, rtx);
+extern rtx gen_sse2_cvtpi2pd (rtx, rtx);
+extern rtx gen_sse2_cvtpd2pi (rtx, rtx);
+extern rtx gen_sse2_cvttpd2pi (rtx, rtx);
+extern rtx gen_sse2_cvtsi2sd (rtx, rtx, rtx);
+extern rtx gen_sse2_cvtsi2sdq (rtx, rtx, rtx);
+extern rtx gen_sse2_cvtsd2si (rtx, rtx);
+extern rtx gen_sse2_cvtsd2si_2 (rtx, rtx);
+extern rtx gen_sse2_cvtsd2siq (rtx, rtx);
+extern rtx gen_sse2_cvtsd2siq_2 (rtx, rtx);
+extern rtx gen_sse2_cvttsd2si (rtx, rtx);
+extern rtx gen_sse2_cvttsd2siq (rtx, rtx);
+extern rtx gen_floatv4siv4df2 (rtx, rtx);
+extern rtx gen_avx_cvtdq2pd256_2 (rtx, rtx);
+extern rtx gen_sse2_cvtdq2pd (rtx, rtx);
+extern rtx gen_avx_cvtpd2dq256 (rtx, rtx);
+extern rtx gen_fix_truncv4dfv4si2 (rtx, rtx);
+extern rtx gen_sse2_cvtsd2ss (rtx, rtx, rtx);
+extern rtx gen_sse2_cvtss2sd (rtx, rtx, rtx);
+extern rtx gen_avx_cvtpd2ps256 (rtx, rtx);
+extern rtx gen_avx_cvtps2pd256 (rtx, rtx);
+extern rtx gen_sse2_cvtps2pd (rtx, rtx);
+extern rtx gen_sse_movhlps (rtx, rtx, rtx);
+extern rtx gen_sse_movlhps (rtx, rtx, rtx);
+extern rtx gen_avx_unpckhps256 (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_highv4sf (rtx, rtx, rtx);
+extern rtx gen_avx_unpcklps256 (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_lowv4sf (rtx, rtx, rtx);
+extern rtx gen_avx_movshdup256 (rtx, rtx);
+extern rtx gen_sse3_movshdup (rtx, rtx);
+extern rtx gen_avx_movsldup256 (rtx, rtx);
+extern rtx gen_sse3_movsldup (rtx, rtx);
+extern rtx gen_avx_shufps256_1 (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_sse_shufps_v4si (rtx, rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_sse_shufps_v4sf (rtx, rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_sse_storehps (rtx, rtx);
+extern rtx gen_sse_loadhps (rtx, rtx, rtx);
+extern rtx gen_sse_storelps (rtx, rtx);
+extern rtx gen_sse_loadlps (rtx, rtx, rtx);
+extern rtx gen_sse_movss (rtx, rtx, rtx);
+extern rtx gen_avx2_vec_dupv8sf (rtx, rtx);
+extern rtx gen_avx2_vec_dupv4sf (rtx, rtx);
+extern rtx gen_vec_dupv4sf (rtx, rtx);
+extern rtx gen_vec_setv4si_0 (rtx, rtx, rtx);
+extern rtx gen_vec_setv4sf_0 (rtx, rtx, rtx);
+extern rtx gen_sse4_1_insertps (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_extract_lo_v4di (rtx, rtx);
+extern rtx gen_vec_extract_lo_v4df (rtx, rtx);
+extern rtx gen_vec_extract_hi_v4di (rtx, rtx);
+extern rtx gen_vec_extract_hi_v4df (rtx, rtx);
+extern rtx gen_vec_extract_lo_v8si (rtx, rtx);
+extern rtx gen_vec_extract_lo_v8sf (rtx, rtx);
+extern rtx gen_vec_extract_hi_v8si (rtx, rtx);
+extern rtx gen_vec_extract_hi_v8sf (rtx, rtx);
+extern rtx gen_vec_extract_lo_v16hi (rtx, rtx);
+extern rtx gen_vec_extract_hi_v16hi (rtx, rtx);
+extern rtx gen_vec_extract_lo_v32qi (rtx, rtx);
+extern rtx gen_vec_extract_hi_v32qi (rtx, rtx);
+extern rtx gen_avx_unpckhpd256 (rtx, rtx, rtx);
+extern rtx gen_avx_shufpd256_1 (rtx, rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_interleave_highv4di (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_highv2di (rtx, rtx, rtx);
+extern rtx gen_avx2_interleave_lowv4di (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_lowv2di (rtx, rtx, rtx);
+extern rtx gen_sse2_shufpd_v2di (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_sse2_shufpd_v2df (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_sse2_storehpd (rtx, rtx);
+extern rtx gen_sse2_storelpd (rtx, rtx);
+extern rtx gen_sse2_loadhpd (rtx, rtx, rtx);
+extern rtx gen_sse2_loadlpd (rtx, rtx, rtx);
+extern rtx gen_sse2_movsd (rtx, rtx, rtx);
+extern rtx gen_vec_dupv2df (rtx, rtx);
+extern rtx gen_mulv32qi3 (rtx, rtx, rtx);
+extern rtx gen_mulv16qi3 (rtx, rtx, rtx);
+extern rtx gen_mulv4di3 (rtx, rtx, rtx);
+extern rtx gen_mulv2di3 (rtx, rtx, rtx);
+extern rtx gen_ashrv16hi3 (rtx, rtx, rtx);
+extern rtx gen_ashrv8hi3 (rtx, rtx, rtx);
+extern rtx gen_ashrv8si3 (rtx, rtx, rtx);
+extern rtx gen_ashrv4si3 (rtx, rtx, rtx);
+extern rtx gen_ashlv16hi3 (rtx, rtx, rtx);
+extern rtx gen_lshrv16hi3 (rtx, rtx, rtx);
+extern rtx gen_ashlv8hi3 (rtx, rtx, rtx);
+extern rtx gen_lshrv8hi3 (rtx, rtx, rtx);
+extern rtx gen_ashlv8si3 (rtx, rtx, rtx);
+extern rtx gen_lshrv8si3 (rtx, rtx, rtx);
+extern rtx gen_ashlv4si3 (rtx, rtx, rtx);
+extern rtx gen_lshrv4si3 (rtx, rtx, rtx);
+extern rtx gen_ashlv4di3 (rtx, rtx, rtx);
+extern rtx gen_lshrv4di3 (rtx, rtx, rtx);
+extern rtx gen_ashlv2di3 (rtx, rtx, rtx);
+extern rtx gen_lshrv2di3 (rtx, rtx, rtx);
+extern rtx gen_avx2_ashlv2ti3 (rtx, rtx, rtx);
+extern rtx gen_sse2_ashlv1ti3 (rtx, rtx, rtx);
+extern rtx gen_avx2_lshrv2ti3 (rtx, rtx, rtx);
+extern rtx gen_sse2_lshrv1ti3 (rtx, rtx, rtx);
+extern rtx gen_sse4_2_gtv2di3 (rtx, rtx, rtx);
+extern rtx gen_avx2_gtv32qi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_gtv16hi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_gtv8si3 (rtx, rtx, rtx);
+extern rtx gen_avx2_gtv4di3 (rtx, rtx, rtx);
+extern rtx gen_sse2_gtv16qi3 (rtx, rtx, rtx);
+extern rtx gen_sse2_gtv8hi3 (rtx, rtx, rtx);
+extern rtx gen_sse2_gtv4si3 (rtx, rtx, rtx);
+extern rtx gen_avx2_packsswb (rtx, rtx, rtx);
+extern rtx gen_sse2_packsswb (rtx, rtx, rtx);
+extern rtx gen_avx2_packssdw (rtx, rtx, rtx);
+extern rtx gen_sse2_packssdw (rtx, rtx, rtx);
+extern rtx gen_avx2_packuswb (rtx, rtx, rtx);
+extern rtx gen_sse2_packuswb (rtx, rtx, rtx);
+extern rtx gen_avx2_interleave_highv32qi (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_highv16qi (rtx, rtx, rtx);
+extern rtx gen_avx2_interleave_lowv32qi (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_lowv16qi (rtx, rtx, rtx);
+extern rtx gen_avx2_interleave_highv16hi (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_highv8hi (rtx, rtx, rtx);
+extern rtx gen_avx2_interleave_lowv16hi (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_lowv8hi (rtx, rtx, rtx);
+extern rtx gen_avx2_interleave_highv8si (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_highv4si (rtx, rtx, rtx);
+extern rtx gen_avx2_interleave_lowv8si (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_lowv4si (rtx, rtx, rtx);
+extern rtx gen_sse4_1_pinsrb (rtx, rtx, rtx, rtx);
+extern rtx gen_sse2_pinsrw (rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_1_pinsrd (rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_1_pinsrq (rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_pshufd_1 (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_sse2_pshufd_1 (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_pshuflw_1 (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_sse2_pshuflw_1 (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_pshufhw_1 (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_sse2_pshufhw_1 (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_sse2_loadld (rtx, rtx, rtx);
+extern rtx gen_sse2_stored (rtx, rtx);
+extern rtx gen_vec_concatv2di (rtx, rtx, rtx);
+extern rtx gen_avx2_psadbw (rtx, rtx, rtx);
+extern rtx gen_sse2_psadbw (rtx, rtx, rtx);
+extern rtx gen_avx_movmskps256 (rtx, rtx);
+extern rtx gen_sse_movmskps (rtx, rtx);
+extern rtx gen_avx_movmskpd256 (rtx, rtx);
+extern rtx gen_sse2_movmskpd (rtx, rtx);
+extern rtx gen_avx2_pmovmskb (rtx, rtx);
+extern rtx gen_sse2_pmovmskb (rtx, rtx);
+extern rtx gen_sse_ldmxcsr (rtx);
+extern rtx gen_sse_stmxcsr (rtx);
+extern rtx gen_sse2_clflush (rtx);
+extern rtx gen_sse3_mwait (rtx, rtx);
+extern rtx gen_sse3_monitor (rtx, rtx, rtx);
+extern rtx gen_sse3_monitor64 (rtx, rtx, rtx);
+extern rtx gen_avx2_phaddwv16hi3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_phaddwv8hi3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_phaddwv4hi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_phadddv8si3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_phadddv4si3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_phadddv2si3 (rtx, rtx, rtx);
+extern rtx gen_avx2_phaddswv16hi3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_phaddswv8hi3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_phaddswv4hi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_phsubwv16hi3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_phsubwv8hi3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_phsubwv4hi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_phsubdv8si3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_phsubdv4si3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_phsubdv2si3 (rtx, rtx, rtx);
+extern rtx gen_avx2_phsubswv16hi3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_phsubswv8hi3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_phsubswv4hi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_pmaddubsw256 (rtx, rtx, rtx);
+extern rtx gen_ssse3_pmaddubsw128 (rtx, rtx, rtx);
+extern rtx gen_ssse3_pmaddubsw (rtx, rtx, rtx);
+extern rtx gen_avx2_pshufbv32qi3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_pshufbv16qi3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_pshufbv8qi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_psignv32qi3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_psignv16qi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_psignv16hi3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_psignv8hi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_psignv8si3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_psignv4si3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_psignv8qi3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_psignv4hi3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_psignv2si3 (rtx, rtx, rtx);
+extern rtx gen_avx2_palignrv2ti (rtx, rtx, rtx, rtx);
+extern rtx gen_ssse3_palignrti (rtx, rtx, rtx, rtx);
+extern rtx gen_ssse3_palignrdi (rtx, rtx, rtx, rtx);
+extern rtx gen_absv32qi2 (rtx, rtx);
+extern rtx gen_absv16qi2 (rtx, rtx);
+extern rtx gen_absv16hi2 (rtx, rtx);
+extern rtx gen_absv8hi2 (rtx, rtx);
+extern rtx gen_absv8si2 (rtx, rtx);
+extern rtx gen_absv4si2 (rtx, rtx);
+extern rtx gen_absv8qi2 (rtx, rtx);
+extern rtx gen_absv4hi2 (rtx, rtx);
+extern rtx gen_absv2si2 (rtx, rtx);
+extern rtx gen_sse4a_movntsf (rtx, rtx);
+extern rtx gen_sse4a_movntdf (rtx, rtx);
+extern rtx gen_sse4a_vmmovntv4sf (rtx, rtx);
+extern rtx gen_sse4a_vmmovntv2df (rtx, rtx);
+extern rtx gen_sse4a_extrqi (rtx, rtx, rtx, rtx);
+extern rtx gen_sse4a_extrq (rtx, rtx, rtx);
+extern rtx gen_sse4a_insertqi (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_sse4a_insertq (rtx, rtx, rtx);
+extern rtx gen_avx_blendps256 (rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_1_blendps (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_blendpd256 (rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_1_blendpd (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_blendvps256 (rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_1_blendvps (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_blendvpd256 (rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_1_blendvpd (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_dpps256 (rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_1_dpps (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_dppd256 (rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_1_dppd (rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_movntdqa (rtx, rtx);
+extern rtx gen_sse4_1_movntdqa (rtx, rtx);
+extern rtx gen_avx2_mpsadbw (rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_1_mpsadbw (rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_packusdw (rtx, rtx, rtx);
+extern rtx gen_sse4_1_packusdw (rtx, rtx, rtx);
+extern rtx gen_avx2_pblendvb (rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_1_pblendvb (rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_1_pblendw (rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_pblenddv8si (rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_pblenddv4si (rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_1_phminposuw (rtx, rtx);
+extern rtx gen_avx2_sign_extendv16qiv16hi2 (rtx, rtx);
+extern rtx gen_avx2_zero_extendv16qiv16hi2 (rtx, rtx);
+extern rtx gen_sse4_1_sign_extendv8qiv8hi2 (rtx, rtx);
+extern rtx gen_sse4_1_zero_extendv8qiv8hi2 (rtx, rtx);
+extern rtx gen_avx2_sign_extendv8qiv8si2 (rtx, rtx);
+extern rtx gen_avx2_zero_extendv8qiv8si2 (rtx, rtx);
+extern rtx gen_sse4_1_sign_extendv4qiv4si2 (rtx, rtx);
+extern rtx gen_sse4_1_zero_extendv4qiv4si2 (rtx, rtx);
+extern rtx gen_avx2_sign_extendv8hiv8si2 (rtx, rtx);
+extern rtx gen_avx2_zero_extendv8hiv8si2 (rtx, rtx);
+extern rtx gen_sse4_1_sign_extendv4hiv4si2 (rtx, rtx);
+extern rtx gen_sse4_1_zero_extendv4hiv4si2 (rtx, rtx);
+extern rtx gen_avx2_sign_extendv4qiv4di2 (rtx, rtx);
+extern rtx gen_avx2_zero_extendv4qiv4di2 (rtx, rtx);
+extern rtx gen_sse4_1_sign_extendv2qiv2di2 (rtx, rtx);
+extern rtx gen_sse4_1_zero_extendv2qiv2di2 (rtx, rtx);
+extern rtx gen_avx2_sign_extendv4hiv4di2 (rtx, rtx);
+extern rtx gen_avx2_zero_extendv4hiv4di2 (rtx, rtx);
+extern rtx gen_sse4_1_sign_extendv2hiv2di2 (rtx, rtx);
+extern rtx gen_sse4_1_zero_extendv2hiv2di2 (rtx, rtx);
+extern rtx gen_avx2_sign_extendv4siv4di2 (rtx, rtx);
+extern rtx gen_avx2_zero_extendv4siv4di2 (rtx, rtx);
+extern rtx gen_sse4_1_sign_extendv2siv2di2 (rtx, rtx);
+extern rtx gen_sse4_1_zero_extendv2siv2di2 (rtx, rtx);
+extern rtx gen_avx_vtestps256 (rtx, rtx);
+extern rtx gen_avx_vtestps (rtx, rtx);
+extern rtx gen_avx_vtestpd256 (rtx, rtx);
+extern rtx gen_avx_vtestpd (rtx, rtx);
+extern rtx gen_avx_ptest256 (rtx, rtx);
+extern rtx gen_sse4_1_ptest (rtx, rtx);
+extern rtx gen_avx_roundps256 (rtx, rtx, rtx);
+extern rtx gen_sse4_1_roundps (rtx, rtx, rtx);
+extern rtx gen_avx_roundpd256 (rtx, rtx, rtx);
+extern rtx gen_sse4_1_roundpd (rtx, rtx, rtx);
+extern rtx gen_sse4_1_roundss (rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_1_roundsd (rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_2_pcmpestr (rtx, rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_2_pcmpestri (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_2_pcmpestrm (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_2_pcmpestr_cconly (rtx, rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_2_pcmpistr (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_2_pcmpistri (rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_2_pcmpistrm (rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_2_pcmpistr_cconly (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pmacsww (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pmacssww (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pmacsdd (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pmacssdd (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pmacssdql (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pmacssdqh (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pmacsdql (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pmacsdqh (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pmacsswd (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pmacswd (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pmadcsswd (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pmadcswd (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pcmov_v32qi256 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pcmov_v16qi (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pcmov_v16hi256 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pcmov_v8hi (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pcmov_v8si256 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pcmov_v4si (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pcmov_v4di256 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pcmov_v2di (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pcmov_v8sf256 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pcmov_v4sf (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pcmov_v4df256 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pcmov_v2df (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_phaddbw (rtx, rtx);
+extern rtx gen_xop_phaddbd (rtx, rtx);
+extern rtx gen_xop_phaddbq (rtx, rtx);
+extern rtx gen_xop_phaddwd (rtx, rtx);
+extern rtx gen_xop_phaddwq (rtx, rtx);
+extern rtx gen_xop_phadddq (rtx, rtx);
+extern rtx gen_xop_phaddubw (rtx, rtx);
+extern rtx gen_xop_phaddubd (rtx, rtx);
+extern rtx gen_xop_phaddubq (rtx, rtx);
+extern rtx gen_xop_phadduwd (rtx, rtx);
+extern rtx gen_xop_phadduwq (rtx, rtx);
+extern rtx gen_xop_phaddudq (rtx, rtx);
+extern rtx gen_xop_phsubbw (rtx, rtx);
+extern rtx gen_xop_phsubwd (rtx, rtx);
+extern rtx gen_xop_phsubdq (rtx, rtx);
+extern rtx gen_xop_pperm (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pperm_pack_v2di_v4si (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pperm_pack_v4si_v8hi (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pperm_pack_v8hi_v16qi (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_rotlv16qi3 (rtx, rtx, rtx);
+extern rtx gen_xop_rotlv8hi3 (rtx, rtx, rtx);
+extern rtx gen_xop_rotlv4si3 (rtx, rtx, rtx);
+extern rtx gen_xop_rotlv2di3 (rtx, rtx, rtx);
+extern rtx gen_xop_rotrv16qi3 (rtx, rtx, rtx);
+extern rtx gen_xop_rotrv8hi3 (rtx, rtx, rtx);
+extern rtx gen_xop_rotrv4si3 (rtx, rtx, rtx);
+extern rtx gen_xop_rotrv2di3 (rtx, rtx, rtx);
+extern rtx gen_xop_vrotlv16qi3 (rtx, rtx, rtx);
+extern rtx gen_xop_vrotlv8hi3 (rtx, rtx, rtx);
+extern rtx gen_xop_vrotlv4si3 (rtx, rtx, rtx);
+extern rtx gen_xop_vrotlv2di3 (rtx, rtx, rtx);
+extern rtx gen_xop_shav16qi3 (rtx, rtx, rtx);
+extern rtx gen_xop_shav8hi3 (rtx, rtx, rtx);
+extern rtx gen_xop_shav4si3 (rtx, rtx, rtx);
+extern rtx gen_xop_shav2di3 (rtx, rtx, rtx);
+extern rtx gen_xop_shlv16qi3 (rtx, rtx, rtx);
+extern rtx gen_xop_shlv8hi3 (rtx, rtx, rtx);
+extern rtx gen_xop_shlv4si3 (rtx, rtx, rtx);
+extern rtx gen_xop_shlv2di3 (rtx, rtx, rtx);
+extern rtx gen_xop_frczsf2 (rtx, rtx);
+extern rtx gen_xop_frczdf2 (rtx, rtx);
+extern rtx gen_xop_frczv4sf2 (rtx, rtx);
+extern rtx gen_xop_frczv2df2 (rtx, rtx);
+extern rtx gen_xop_frczv8sf2 (rtx, rtx);
+extern rtx gen_xop_frczv4df2 (rtx, rtx);
+extern rtx gen_xop_maskcmpv16qi3 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_maskcmpv8hi3 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_maskcmpv4si3 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_maskcmpv2di3 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_maskcmp_unsv16qi3 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_maskcmp_unsv8hi3 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_maskcmp_unsv4si3 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_maskcmp_unsv2di3 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_maskcmp_uns2v16qi3 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_maskcmp_uns2v8hi3 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_maskcmp_uns2v4si3 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_maskcmp_uns2v2di3 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pcom_tfv16qi3 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pcom_tfv8hi3 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pcom_tfv4si3 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_pcom_tfv2di3 (rtx, rtx, rtx, rtx);
+extern rtx gen_xop_vpermil2v8sf3 (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_xop_vpermil2v4sf3 (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_xop_vpermil2v4df3 (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_xop_vpermil2v2df3 (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_aesenc (rtx, rtx, rtx);
+extern rtx gen_aesenclast (rtx, rtx, rtx);
+extern rtx gen_aesdec (rtx, rtx, rtx);
+extern rtx gen_aesdeclast (rtx, rtx, rtx);
+extern rtx gen_aesimc (rtx, rtx);
+extern rtx gen_aeskeygenassist (rtx, rtx, rtx);
+extern rtx gen_pclmulqdq (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_vzeroupper (rtx);
+extern rtx gen_avx2_pbroadcastv32qi (rtx, rtx);
+extern rtx gen_avx2_pbroadcastv16qi (rtx, rtx);
+extern rtx gen_avx2_pbroadcastv16hi (rtx, rtx);
+extern rtx gen_avx2_pbroadcastv8hi (rtx, rtx);
+extern rtx gen_avx2_pbroadcastv8si (rtx, rtx);
+extern rtx gen_avx2_pbroadcastv4si (rtx, rtx);
+extern rtx gen_avx2_pbroadcastv4di (rtx, rtx);
+extern rtx gen_avx2_pbroadcastv2di (rtx, rtx);
+extern rtx gen_avx2_permvarv8si (rtx, rtx, rtx);
+extern rtx gen_avx2_permv4df (rtx, rtx, rtx);
+extern rtx gen_avx2_permvarv8sf (rtx, rtx, rtx);
+extern rtx gen_avx2_permv4di_1 (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_permv2ti (rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_vec_dupv4df (rtx, rtx);
+extern rtx gen_vec_dupv8si (rtx, rtx);
+extern rtx gen_vec_dupv8sf (rtx, rtx);
+extern rtx gen_vec_dupv4di (rtx, rtx);
+extern rtx gen_vec_dupv4df (rtx, rtx);
+extern rtx gen_avx2_vbroadcasti128_v32qi (rtx, rtx);
+extern rtx gen_avx2_vbroadcasti128_v16hi (rtx, rtx);
+extern rtx gen_avx2_vbroadcasti128_v8si (rtx, rtx);
+extern rtx gen_avx2_vbroadcasti128_v4di (rtx, rtx);
+extern rtx gen_avx_vbroadcastf128_v32qi (rtx, rtx);
+extern rtx gen_avx_vbroadcastf128_v16hi (rtx, rtx);
+extern rtx gen_avx_vbroadcastf128_v8si (rtx, rtx);
+extern rtx gen_avx_vbroadcastf128_v4di (rtx, rtx);
+extern rtx gen_avx_vbroadcastf128_v8sf (rtx, rtx);
+extern rtx gen_avx_vbroadcastf128_v4df (rtx, rtx);
+extern rtx gen_avx_vpermilvarv8sf3 (rtx, rtx, rtx);
+extern rtx gen_avx_vpermilvarv4sf3 (rtx, rtx, rtx);
+extern rtx gen_avx_vpermilvarv4df3 (rtx, rtx, rtx);
+extern rtx gen_avx_vpermilvarv2df3 (rtx, rtx, rtx);
+extern rtx gen_avx2_vec_set_lo_v4di (rtx, rtx, rtx);
+extern rtx gen_avx2_vec_set_hi_v4di (rtx, rtx, rtx);
+extern rtx gen_vec_set_lo_v4di (rtx, rtx, rtx);
+extern rtx gen_vec_set_lo_v4df (rtx, rtx, rtx);
+extern rtx gen_vec_set_hi_v4di (rtx, rtx, rtx);
+extern rtx gen_vec_set_hi_v4df (rtx, rtx, rtx);
+extern rtx gen_vec_set_lo_v8si (rtx, rtx, rtx);
+extern rtx gen_vec_set_lo_v8sf (rtx, rtx, rtx);
+extern rtx gen_vec_set_hi_v8si (rtx, rtx, rtx);
+extern rtx gen_vec_set_hi_v8sf (rtx, rtx, rtx);
+extern rtx gen_vec_set_lo_v16hi (rtx, rtx, rtx);
+extern rtx gen_vec_set_hi_v16hi (rtx, rtx, rtx);
+extern rtx gen_vec_set_lo_v32qi (rtx, rtx, rtx);
+extern rtx gen_vec_set_hi_v32qi (rtx, rtx, rtx);
+extern rtx gen_avx_maskloadps (rtx, rtx, rtx);
+extern rtx gen_avx_maskloadpd (rtx, rtx, rtx);
+extern rtx gen_avx_maskloadps256 (rtx, rtx, rtx);
+extern rtx gen_avx_maskloadpd256 (rtx, rtx, rtx);
+extern rtx gen_avx2_maskloadd (rtx, rtx, rtx);
+extern rtx gen_avx2_maskloadq (rtx, rtx, rtx);
+extern rtx gen_avx2_maskloadd256 (rtx, rtx, rtx);
+extern rtx gen_avx2_maskloadq256 (rtx, rtx, rtx);
+extern rtx gen_avx_maskstoreps (rtx, rtx, rtx);
+extern rtx gen_avx_maskstorepd (rtx, rtx, rtx);
+extern rtx gen_avx_maskstoreps256 (rtx, rtx, rtx);
+extern rtx gen_avx_maskstorepd256 (rtx, rtx, rtx);
+extern rtx gen_avx2_maskstored (rtx, rtx, rtx);
+extern rtx gen_avx2_maskstoreq (rtx, rtx, rtx);
+extern rtx gen_avx2_maskstored256 (rtx, rtx, rtx);
+extern rtx gen_avx2_maskstoreq256 (rtx, rtx, rtx);
+extern rtx gen_avx_si256_si (rtx, rtx);
+extern rtx gen_avx_ps256_ps (rtx, rtx);
+extern rtx gen_avx_pd256_pd (rtx, rtx);
+extern rtx gen_avx2_ashrvv8si (rtx, rtx, rtx);
+extern rtx gen_avx2_ashrvv4si (rtx, rtx, rtx);
+extern rtx gen_avx2_ashlvv8si (rtx, rtx, rtx);
+extern rtx gen_avx2_lshrvv8si (rtx, rtx, rtx);
+extern rtx gen_avx2_ashlvv4si (rtx, rtx, rtx);
+extern rtx gen_avx2_lshrvv4si (rtx, rtx, rtx);
+extern rtx gen_avx2_ashlvv4di (rtx, rtx, rtx);
+extern rtx gen_avx2_lshrvv4di (rtx, rtx, rtx);
+extern rtx gen_avx2_ashlvv2di (rtx, rtx, rtx);
+extern rtx gen_avx2_lshrvv2di (rtx, rtx, rtx);
+extern rtx gen_avx_vec_concatv32qi (rtx, rtx, rtx);
+extern rtx gen_avx_vec_concatv16hi (rtx, rtx, rtx);
+extern rtx gen_avx_vec_concatv8si (rtx, rtx, rtx);
+extern rtx gen_avx_vec_concatv4di (rtx, rtx, rtx);
+extern rtx gen_avx_vec_concatv8sf (rtx, rtx, rtx);
+extern rtx gen_avx_vec_concatv4df (rtx, rtx, rtx);
+extern rtx gen_vcvtph2ps (rtx, rtx);
+extern rtx gen_vcvtph2ps256 (rtx, rtx);
+extern rtx gen_vcvtps2ph256 (rtx, rtx, rtx);
+extern rtx gen_mfence_sse2 (rtx);
+extern rtx gen_mfence_nosse (rtx);
+extern rtx gen_atomic_loaddi_fpu (rtx, rtx, rtx);
+extern rtx gen_atomic_storedi_fpu (rtx, rtx, rtx);
+extern rtx gen_loaddi_via_fpu (rtx, rtx);
+extern rtx gen_storedi_via_fpu (rtx, rtx);
+extern rtx gen_atomic_compare_and_swapqi_1 (rtx, rtx, rtx, rtx);
+extern rtx gen_atomic_compare_and_swaphi_1 (rtx, rtx, rtx, rtx);
+extern rtx gen_atomic_compare_and_swapsi_1 (rtx, rtx, rtx, rtx);
+extern rtx gen_atomic_compare_and_swapdi_1 (rtx, rtx, rtx, rtx);
+extern rtx gen_atomic_compare_and_swapdi_doubleword (rtx, rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_atomic_compare_and_swapti_doubleword (rtx, rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_atomic_fetch_addqi (rtx, rtx, rtx, rtx);
+extern rtx gen_atomic_fetch_addhi (rtx, rtx, rtx, rtx);
+extern rtx gen_atomic_fetch_addsi (rtx, rtx, rtx, rtx);
+extern rtx gen_atomic_fetch_adddi (rtx, rtx, rtx, rtx);
+extern rtx gen_atomic_exchangeqi (rtx, rtx, rtx, rtx);
+extern rtx gen_atomic_exchangehi (rtx, rtx, rtx, rtx);
+extern rtx gen_atomic_exchangesi (rtx, rtx, rtx, rtx);
+extern rtx gen_atomic_exchangedi (rtx, rtx, rtx, rtx);
+extern rtx gen_atomic_addqi (rtx, rtx, rtx);
+extern rtx gen_atomic_addhi (rtx, rtx, rtx);
+extern rtx gen_atomic_addsi (rtx, rtx, rtx);
+extern rtx gen_atomic_adddi (rtx, rtx, rtx);
+extern rtx gen_atomic_subqi (rtx, rtx, rtx);
+extern rtx gen_atomic_subhi (rtx, rtx, rtx);
+extern rtx gen_atomic_subsi (rtx, rtx, rtx);
+extern rtx gen_atomic_subdi (rtx, rtx, rtx);
+extern rtx gen_atomic_andqi (rtx, rtx, rtx);
+extern rtx gen_atomic_orqi (rtx, rtx, rtx);
+extern rtx gen_atomic_xorqi (rtx, rtx, rtx);
+extern rtx gen_atomic_andhi (rtx, rtx, rtx);
+extern rtx gen_atomic_orhi (rtx, rtx, rtx);
+extern rtx gen_atomic_xorhi (rtx, rtx, rtx);
+extern rtx gen_atomic_andsi (rtx, rtx, rtx);
+extern rtx gen_atomic_orsi (rtx, rtx, rtx);
+extern rtx gen_atomic_xorsi (rtx, rtx, rtx);
+extern rtx gen_atomic_anddi (rtx, rtx, rtx);
+extern rtx gen_atomic_ordi (rtx, rtx, rtx);
+extern rtx gen_atomic_xordi (rtx, rtx, rtx);
+extern rtx gen_cbranchqi4 (rtx, rtx, rtx, rtx);
+extern rtx gen_cbranchhi4 (rtx, rtx, rtx, rtx);
+extern rtx gen_cbranchsi4 (rtx, rtx, rtx, rtx);
+extern rtx gen_cbranchdi4 (rtx, rtx, rtx, rtx);
+extern rtx gen_cbranchti4 (rtx, rtx, rtx, rtx);
+extern rtx gen_cstoreqi4 (rtx, rtx, rtx, rtx);
+extern rtx gen_cstorehi4 (rtx, rtx, rtx, rtx);
+extern rtx gen_cstoresi4 (rtx, rtx, rtx, rtx);
+extern rtx gen_cstoredi4 (rtx, rtx, rtx, rtx);
+extern rtx gen_cmpsi_1 (rtx, rtx);
+extern rtx gen_cmpdi_1 (rtx, rtx);
+extern rtx gen_cmpqi_ext_3 (rtx, rtx);
+extern rtx gen_cbranchxf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_cstorexf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_cbranchsf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_cbranchdf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_cstoresf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_cstoredf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_cbranchcc4 (rtx, rtx, rtx, rtx);
+extern rtx gen_cstorecc4 (rtx, rtx, rtx, rtx);
+extern rtx gen_movoi (rtx, rtx);
+extern rtx gen_movti (rtx, rtx);
+extern rtx gen_movcdi (rtx, rtx);
+extern rtx gen_movqi (rtx, rtx);
+extern rtx gen_movhi (rtx, rtx);
+extern rtx gen_movsi (rtx, rtx);
+extern rtx gen_movdi (rtx, rtx);
+extern rtx gen_reload_noff_store (rtx, rtx, rtx);
+extern rtx gen_reload_noff_load (rtx, rtx, rtx);
+extern rtx gen_movstrictqi (rtx, rtx);
+extern rtx gen_movstricthi (rtx, rtx);
+extern rtx gen_movsi_insv_1 (rtx, rtx);
+extern rtx gen_movdi_insv_1 (rtx, rtx);
+extern rtx gen_movtf (rtx, rtx);
+extern rtx gen_movsf (rtx, rtx);
+extern rtx gen_movdf (rtx, rtx);
+extern rtx gen_movxf (rtx, rtx);
+extern rtx gen_zero_extendsidi2 (rtx, rtx);
+extern rtx gen_zero_extendhisi2 (rtx, rtx);
+extern rtx gen_zero_extendqihi2 (rtx, rtx);
+extern rtx gen_zero_extendqisi2 (rtx, rtx);
+extern rtx gen_extendsidi2 (rtx, rtx);
+extern rtx gen_extendsfdf2 (rtx, rtx);
+extern rtx gen_extendsfxf2 (rtx, rtx);
+extern rtx gen_extenddfxf2 (rtx, rtx);
+extern rtx gen_truncdfsf2 (rtx, rtx);
+extern rtx gen_truncdfsf2_with_temp (rtx, rtx, rtx);
+extern rtx gen_truncxfsf2 (rtx, rtx);
+extern rtx gen_truncxfdf2 (rtx, rtx);
+extern rtx gen_fix_truncxfdi2 (rtx, rtx);
+extern rtx gen_fix_truncsfdi2 (rtx, rtx);
+extern rtx gen_fix_truncdfdi2 (rtx, rtx);
+extern rtx gen_fix_truncxfsi2 (rtx, rtx);
+extern rtx gen_fix_truncsfsi2 (rtx, rtx);
+extern rtx gen_fix_truncdfsi2 (rtx, rtx);
+extern rtx gen_fix_truncsfhi2 (rtx, rtx);
+extern rtx gen_fix_truncdfhi2 (rtx, rtx);
+extern rtx gen_fix_truncxfhi2 (rtx, rtx);
+extern rtx gen_fixuns_truncsfsi2 (rtx, rtx);
+extern rtx gen_fixuns_truncdfsi2 (rtx, rtx);
+extern rtx gen_fixuns_truncsfhi2 (rtx, rtx);
+extern rtx gen_fixuns_truncdfhi2 (rtx, rtx);
+extern rtx gen_floathisf2 (rtx, rtx);
+extern rtx gen_floathidf2 (rtx, rtx);
+extern rtx gen_floathixf2 (rtx, rtx);
+extern rtx gen_floatsisf2 (rtx, rtx);
+extern rtx gen_floatsidf2 (rtx, rtx);
+extern rtx gen_floatsixf2 (rtx, rtx);
+extern rtx gen_floatdisf2 (rtx, rtx);
+extern rtx gen_floatdidf2 (rtx, rtx);
+extern rtx gen_floatdixf2 (rtx, rtx);
+extern rtx gen_floatunssisf2 (rtx, rtx);
+extern rtx gen_floatunssidf2 (rtx, rtx);
+extern rtx gen_floatunssixf2 (rtx, rtx);
+extern rtx gen_floatunsdisf2 (rtx, rtx);
+extern rtx gen_floatunsdidf2 (rtx, rtx);
+extern rtx gen_addqi3 (rtx, rtx, rtx);
+extern rtx gen_addhi3 (rtx, rtx, rtx);
+extern rtx gen_addsi3 (rtx, rtx, rtx);
+extern rtx gen_adddi3 (rtx, rtx, rtx);
+extern rtx gen_addti3 (rtx, rtx, rtx);
+extern rtx gen_subqi3 (rtx, rtx, rtx);
+extern rtx gen_subhi3 (rtx, rtx, rtx);
+extern rtx gen_subsi3 (rtx, rtx, rtx);
+extern rtx gen_subdi3 (rtx, rtx, rtx);
+extern rtx gen_subti3 (rtx, rtx, rtx);
+extern rtx gen_addqi3_carry (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_subqi3_carry (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_addhi3_carry (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_subhi3_carry (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_addsi3_carry (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_subsi3_carry (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_adddi3_carry (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_subdi3_carry (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_addxf3 (rtx, rtx, rtx);
+extern rtx gen_subxf3 (rtx, rtx, rtx);
+extern rtx gen_addsf3 (rtx, rtx, rtx);
+extern rtx gen_subsf3 (rtx, rtx, rtx);
+extern rtx gen_adddf3 (rtx, rtx, rtx);
+extern rtx gen_subdf3 (rtx, rtx, rtx);
+extern rtx gen_mulhi3 (rtx, rtx, rtx);
+extern rtx gen_mulsi3 (rtx, rtx, rtx);
+extern rtx gen_muldi3 (rtx, rtx, rtx);
+extern rtx gen_mulqi3 (rtx, rtx, rtx);
+extern rtx gen_mulsidi3 (rtx, rtx, rtx);
+extern rtx gen_umulsidi3 (rtx, rtx, rtx);
+extern rtx gen_mulditi3 (rtx, rtx, rtx);
+extern rtx gen_umulditi3 (rtx, rtx, rtx);
+extern rtx gen_mulqihi3 (rtx, rtx, rtx);
+extern rtx gen_umulqihi3 (rtx, rtx, rtx);
+extern rtx gen_smulsi3_highpart (rtx, rtx, rtx);
+extern rtx gen_umulsi3_highpart (rtx, rtx, rtx);
+extern rtx gen_smuldi3_highpart (rtx, rtx, rtx);
+extern rtx gen_umuldi3_highpart (rtx, rtx, rtx);
+extern rtx gen_mulxf3 (rtx, rtx, rtx);
+extern rtx gen_mulsf3 (rtx, rtx, rtx);
+extern rtx gen_muldf3 (rtx, rtx, rtx);
+extern rtx gen_divxf3 (rtx, rtx, rtx);
+extern rtx gen_divdf3 (rtx, rtx, rtx);
+extern rtx gen_divsf3 (rtx, rtx, rtx);
+extern rtx gen_divmodhi4 (rtx, rtx, rtx, rtx);
+extern rtx gen_divmodsi4 (rtx, rtx, rtx, rtx);
+extern rtx gen_divmoddi4 (rtx, rtx, rtx, rtx);
+extern rtx gen_divmodqi4 (rtx, rtx, rtx, rtx);
+extern rtx gen_udivmodhi4 (rtx, rtx, rtx, rtx);
+extern rtx gen_udivmodsi4 (rtx, rtx, rtx, rtx);
+extern rtx gen_udivmoddi4 (rtx, rtx, rtx, rtx);
+extern rtx gen_udivmodqi4 (rtx, rtx, rtx, rtx);
+extern rtx gen_testsi_ccno_1 (rtx, rtx);
+extern rtx gen_testqi_ccz_1 (rtx, rtx);
+extern rtx gen_testdi_ccno_1 (rtx, rtx);
+extern rtx gen_testqi_ext_ccno_0 (rtx, rtx);
+extern rtx gen_andqi3 (rtx, rtx, rtx);
+extern rtx gen_andhi3 (rtx, rtx, rtx);
+extern rtx gen_andsi3 (rtx, rtx, rtx);
+extern rtx gen_anddi3 (rtx, rtx, rtx);
+extern rtx gen_iorqi3 (rtx, rtx, rtx);
+extern rtx gen_xorqi3 (rtx, rtx, rtx);
+extern rtx gen_iorhi3 (rtx, rtx, rtx);
+extern rtx gen_xorhi3 (rtx, rtx, rtx);
+extern rtx gen_iorsi3 (rtx, rtx, rtx);
+extern rtx gen_xorsi3 (rtx, rtx, rtx);
+extern rtx gen_iordi3 (rtx, rtx, rtx);
+extern rtx gen_xordi3 (rtx, rtx, rtx);
+extern rtx gen_xorqi_cc_ext_1 (rtx, rtx, rtx);
+extern rtx gen_negqi2 (rtx, rtx);
+extern rtx gen_neghi2 (rtx, rtx);
+extern rtx gen_negsi2 (rtx, rtx);
+extern rtx gen_negdi2 (rtx, rtx);
+extern rtx gen_negti2 (rtx, rtx);
+extern rtx gen_abssf2 (rtx, rtx);
+extern rtx gen_negsf2 (rtx, rtx);
+extern rtx gen_absdf2 (rtx, rtx);
+extern rtx gen_negdf2 (rtx, rtx);
+extern rtx gen_absxf2 (rtx, rtx);
+extern rtx gen_negxf2 (rtx, rtx);
+extern rtx gen_abstf2 (rtx, rtx);
+extern rtx gen_negtf2 (rtx, rtx);
+extern rtx gen_copysignsf3 (rtx, rtx, rtx);
+extern rtx gen_copysigndf3 (rtx, rtx, rtx);
+extern rtx gen_copysigntf3 (rtx, rtx, rtx);
+extern rtx gen_one_cmplqi2 (rtx, rtx);
+extern rtx gen_one_cmplhi2 (rtx, rtx);
+extern rtx gen_one_cmplsi2 (rtx, rtx);
+extern rtx gen_one_cmpldi2 (rtx, rtx);
+extern rtx gen_ashlqi3 (rtx, rtx, rtx);
+extern rtx gen_ashlhi3 (rtx, rtx, rtx);
+extern rtx gen_ashlsi3 (rtx, rtx, rtx);
+extern rtx gen_ashldi3 (rtx, rtx, rtx);
+extern rtx gen_ashlti3 (rtx, rtx, rtx);
+extern rtx gen_x86_shiftsi_adj_1 (rtx, rtx, rtx, rtx);
+extern rtx gen_x86_shiftdi_adj_1 (rtx, rtx, rtx, rtx);
+extern rtx gen_x86_shiftsi_adj_2 (rtx, rtx, rtx);
+extern rtx gen_x86_shiftdi_adj_2 (rtx, rtx, rtx);
+extern rtx gen_lshrqi3 (rtx, rtx, rtx);
+extern rtx gen_ashrqi3 (rtx, rtx, rtx);
+extern rtx gen_lshrhi3 (rtx, rtx, rtx);
+extern rtx gen_ashrhi3 (rtx, rtx, rtx);
+extern rtx gen_lshrsi3 (rtx, rtx, rtx);
+extern rtx gen_ashrsi3 (rtx, rtx, rtx);
+extern rtx gen_lshrdi3 (rtx, rtx, rtx);
+extern rtx gen_ashrdi3 (rtx, rtx, rtx);
+extern rtx gen_lshrti3 (rtx, rtx, rtx);
+extern rtx gen_ashrti3 (rtx, rtx, rtx);
+extern rtx gen_x86_shiftsi_adj_3 (rtx, rtx, rtx);
+extern rtx gen_x86_shiftdi_adj_3 (rtx, rtx, rtx);
+extern rtx gen_rotlti3 (rtx, rtx, rtx);
+extern rtx gen_rotrti3 (rtx, rtx, rtx);
+extern rtx gen_rotldi3 (rtx, rtx, rtx);
+extern rtx gen_rotrdi3 (rtx, rtx, rtx);
+extern rtx gen_rotlqi3 (rtx, rtx, rtx);
+extern rtx gen_rotrqi3 (rtx, rtx, rtx);
+extern rtx gen_rotlhi3 (rtx, rtx, rtx);
+extern rtx gen_rotrhi3 (rtx, rtx, rtx);
+extern rtx gen_rotlsi3 (rtx, rtx, rtx);
+extern rtx gen_rotrsi3 (rtx, rtx, rtx);
+extern rtx gen_extv (rtx, rtx, rtx, rtx);
+extern rtx gen_extzv (rtx, rtx, rtx, rtx);
+extern rtx gen_insv (rtx, rtx, rtx, rtx);
+extern rtx gen_indirect_jump (rtx);
+extern rtx gen_tablejump (rtx, rtx);
+
+extern rtx gen_call (rtx, rtx, rtx);
+
+extern rtx gen_sibcall (rtx, rtx, rtx);
+
+extern rtx gen_call_pop (rtx, rtx, rtx, rtx);
+
+extern rtx gen_call_value (rtx, rtx, rtx, rtx);
+
+extern rtx gen_sibcall_value (rtx, rtx, rtx, rtx);
+
+extern rtx gen_call_value_pop (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_untyped_call (rtx, rtx, rtx);
+extern rtx gen_memory_blockage (void);
+extern rtx gen_return (void);
+extern rtx gen_simple_return (void);
+extern rtx gen_prologue (void);
+extern rtx gen_epilogue (void);
+extern rtx gen_sibcall_epilogue (void);
+extern rtx gen_eh_return (rtx);
+extern rtx gen_split_stack_prologue (void);
+extern rtx gen_split_stack_space_check (rtx, rtx);
+extern rtx gen_ffssi2 (rtx, rtx);
+extern rtx gen_ffsdi2 (rtx, rtx);
+extern rtx gen_clzhi2 (rtx, rtx);
+extern rtx gen_clzsi2 (rtx, rtx);
+extern rtx gen_clzdi2 (rtx, rtx);
+extern rtx gen_bswapsi2 (rtx, rtx);
+extern rtx gen_bswapdi2 (rtx, rtx);
+extern rtx gen_paritydi2 (rtx, rtx);
+extern rtx gen_paritysi2 (rtx, rtx);
+extern rtx gen_tls_global_dynamic_32 (rtx, rtx, rtx, rtx);
+extern rtx gen_tls_global_dynamic_64 (rtx, rtx, rtx);
+extern rtx gen_tls_local_dynamic_base_32 (rtx, rtx, rtx);
+extern rtx gen_tls_local_dynamic_base_64 (rtx, rtx);
+extern rtx gen_tls_dynamic_gnu2_32 (rtx, rtx, rtx);
+extern rtx gen_tls_dynamic_gnu2_64 (rtx, rtx);
+extern rtx gen_rsqrtsf2 (rtx, rtx);
+extern rtx gen_sqrtsf2 (rtx, rtx);
+extern rtx gen_sqrtdf2 (rtx, rtx);
+extern rtx gen_fmodxf3 (rtx, rtx, rtx);
+extern rtx gen_fmodsf3 (rtx, rtx, rtx);
+extern rtx gen_fmoddf3 (rtx, rtx, rtx);
+extern rtx gen_remainderxf3 (rtx, rtx, rtx);
+extern rtx gen_remaindersf3 (rtx, rtx, rtx);
+extern rtx gen_remainderdf3 (rtx, rtx, rtx);
+extern rtx gen_sincossf3 (rtx, rtx, rtx);
+extern rtx gen_sincosdf3 (rtx, rtx, rtx);
+extern rtx gen_tanxf2 (rtx, rtx);
+extern rtx gen_tansf2 (rtx, rtx);
+extern rtx gen_tandf2 (rtx, rtx);
+extern rtx gen_atan2xf3 (rtx, rtx, rtx);
+extern rtx gen_atan2sf3 (rtx, rtx, rtx);
+extern rtx gen_atan2df3 (rtx, rtx, rtx);
+extern rtx gen_atanxf2 (rtx, rtx);
+extern rtx gen_atansf2 (rtx, rtx);
+extern rtx gen_atandf2 (rtx, rtx);
+extern rtx gen_asinxf2 (rtx, rtx);
+extern rtx gen_asinsf2 (rtx, rtx);
+extern rtx gen_asindf2 (rtx, rtx);
+extern rtx gen_acosxf2 (rtx, rtx);
+extern rtx gen_acossf2 (rtx, rtx);
+extern rtx gen_acosdf2 (rtx, rtx);
+extern rtx gen_logxf2 (rtx, rtx);
+extern rtx gen_logsf2 (rtx, rtx);
+extern rtx gen_logdf2 (rtx, rtx);
+extern rtx gen_log10xf2 (rtx, rtx);
+extern rtx gen_log10sf2 (rtx, rtx);
+extern rtx gen_log10df2 (rtx, rtx);
+extern rtx gen_log2xf2 (rtx, rtx);
+extern rtx gen_log2sf2 (rtx, rtx);
+extern rtx gen_log2df2 (rtx, rtx);
+extern rtx gen_log1pxf2 (rtx, rtx);
+extern rtx gen_log1psf2 (rtx, rtx);
+extern rtx gen_log1pdf2 (rtx, rtx);
+extern rtx gen_logbxf2 (rtx, rtx);
+extern rtx gen_logbsf2 (rtx, rtx);
+extern rtx gen_logbdf2 (rtx, rtx);
+extern rtx gen_ilogbxf2 (rtx, rtx);
+extern rtx gen_ilogbsf2 (rtx, rtx);
+extern rtx gen_ilogbdf2 (rtx, rtx);
+extern rtx gen_expNcorexf3 (rtx, rtx, rtx);
+extern rtx gen_expxf2 (rtx, rtx);
+extern rtx gen_expsf2 (rtx, rtx);
+extern rtx gen_expdf2 (rtx, rtx);
+extern rtx gen_exp10xf2 (rtx, rtx);
+extern rtx gen_exp10sf2 (rtx, rtx);
+extern rtx gen_exp10df2 (rtx, rtx);
+extern rtx gen_exp2xf2 (rtx, rtx);
+extern rtx gen_exp2sf2 (rtx, rtx);
+extern rtx gen_exp2df2 (rtx, rtx);
+extern rtx gen_expm1xf2 (rtx, rtx);
+extern rtx gen_expm1sf2 (rtx, rtx);
+extern rtx gen_expm1df2 (rtx, rtx);
+extern rtx gen_ldexpxf3 (rtx, rtx, rtx);
+extern rtx gen_ldexpsf3 (rtx, rtx, rtx);
+extern rtx gen_ldexpdf3 (rtx, rtx, rtx);
+extern rtx gen_scalbxf3 (rtx, rtx, rtx);
+extern rtx gen_scalbsf3 (rtx, rtx, rtx);
+extern rtx gen_scalbdf3 (rtx, rtx, rtx);
+extern rtx gen_significandxf2 (rtx, rtx);
+extern rtx gen_significandsf2 (rtx, rtx);
+extern rtx gen_significanddf2 (rtx, rtx);
+extern rtx gen_rintsf2 (rtx, rtx);
+extern rtx gen_rintdf2 (rtx, rtx);
+extern rtx gen_roundsf2 (rtx, rtx);
+extern rtx gen_rounddf2 (rtx, rtx);
+extern rtx gen_roundxf2 (rtx, rtx);
+extern rtx gen_lrintxfhi2 (rtx, rtx);
+extern rtx gen_lrintxfsi2 (rtx, rtx);
+extern rtx gen_lrintxfdi2 (rtx, rtx);
+extern rtx gen_lrintsfsi2 (rtx, rtx);
+extern rtx gen_lrintdfsi2 (rtx, rtx);
+extern rtx gen_lrintsfdi2 (rtx, rtx);
+extern rtx gen_lrintdfdi2 (rtx, rtx);
+extern rtx gen_lroundsfhi2 (rtx, rtx);
+extern rtx gen_lrounddfhi2 (rtx, rtx);
+extern rtx gen_lroundxfhi2 (rtx, rtx);
+extern rtx gen_lroundsfsi2 (rtx, rtx);
+extern rtx gen_lrounddfsi2 (rtx, rtx);
+extern rtx gen_lroundxfsi2 (rtx, rtx);
+extern rtx gen_lroundsfdi2 (rtx, rtx);
+extern rtx gen_lrounddfdi2 (rtx, rtx);
+extern rtx gen_lroundxfdi2 (rtx, rtx);
+extern rtx gen_floorxf2 (rtx, rtx);
+extern rtx gen_floorsf2 (rtx, rtx);
+extern rtx gen_floordf2 (rtx, rtx);
+extern rtx gen_lfloorxfhi2 (rtx, rtx);
+extern rtx gen_lfloorxfsi2 (rtx, rtx);
+extern rtx gen_lfloorxfdi2 (rtx, rtx);
+extern rtx gen_lfloorsfsi2 (rtx, rtx);
+extern rtx gen_lfloorsfdi2 (rtx, rtx);
+extern rtx gen_lfloordfsi2 (rtx, rtx);
+extern rtx gen_lfloordfdi2 (rtx, rtx);
+extern rtx gen_ceilxf2 (rtx, rtx);
+extern rtx gen_ceilsf2 (rtx, rtx);
+extern rtx gen_ceildf2 (rtx, rtx);
+extern rtx gen_lceilxfhi2 (rtx, rtx);
+extern rtx gen_lceilxfsi2 (rtx, rtx);
+extern rtx gen_lceilxfdi2 (rtx, rtx);
+extern rtx gen_lceilsfsi2 (rtx, rtx);
+extern rtx gen_lceilsfdi2 (rtx, rtx);
+extern rtx gen_lceildfsi2 (rtx, rtx);
+extern rtx gen_lceildfdi2 (rtx, rtx);
+extern rtx gen_btruncxf2 (rtx, rtx);
+extern rtx gen_btruncsf2 (rtx, rtx);
+extern rtx gen_btruncdf2 (rtx, rtx);
+extern rtx gen_nearbyintxf2 (rtx, rtx);
+extern rtx gen_nearbyintsf2 (rtx, rtx);
+extern rtx gen_nearbyintdf2 (rtx, rtx);
+extern rtx gen_isinfxf2 (rtx, rtx);
+extern rtx gen_isinfsf2 (rtx, rtx);
+extern rtx gen_isinfdf2 (rtx, rtx);
+extern rtx gen_signbitxf2 (rtx, rtx);
+extern rtx gen_signbitdf2 (rtx, rtx);
+extern rtx gen_signbitsf2 (rtx, rtx);
+extern rtx gen_movmemsi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_movmemdi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_strmov (rtx, rtx, rtx, rtx);
+extern rtx gen_strmov_singleop (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_rep_mov (rtx, rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_setmemsi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_setmemdi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_strset (rtx, rtx, rtx);
+extern rtx gen_strset_singleop (rtx, rtx, rtx, rtx);
+extern rtx gen_rep_stos (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_cmpstrnsi (rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_cmpintqi (rtx);
+extern rtx gen_cmpstrnqi_nz_1 (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_cmpstrnqi_1 (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_strlensi (rtx, rtx, rtx, rtx);
+extern rtx gen_strlendi (rtx, rtx, rtx, rtx);
+extern rtx gen_strlenqi_1 (rtx, rtx, rtx);
+extern rtx gen_movqicc (rtx, rtx, rtx, rtx);
+extern rtx gen_movhicc (rtx, rtx, rtx, rtx);
+extern rtx gen_movsicc (rtx, rtx, rtx, rtx);
+extern rtx gen_movdicc (rtx, rtx, rtx, rtx);
+extern rtx gen_x86_movsicc_0_m1 (rtx, rtx, rtx);
+extern rtx gen_x86_movdicc_0_m1 (rtx, rtx, rtx);
+extern rtx gen_movsfcc (rtx, rtx, rtx, rtx);
+extern rtx gen_movdfcc (rtx, rtx, rtx, rtx);
+extern rtx gen_movxfcc (rtx, rtx, rtx, rtx);
+extern rtx gen_addqicc (rtx, rtx, rtx, rtx);
+extern rtx gen_addhicc (rtx, rtx, rtx, rtx);
+extern rtx gen_addsicc (rtx, rtx, rtx, rtx);
+extern rtx gen_adddicc (rtx, rtx, rtx, rtx);
+extern rtx gen_allocate_stack (rtx, rtx);
+extern rtx gen_probe_stack (rtx);
+extern rtx gen_builtin_setjmp_receiver (rtx);
+extern rtx gen_prefetch (rtx, rtx, rtx);
+extern rtx gen_stack_protect_set (rtx, rtx);
+extern rtx gen_stack_protect_test (rtx, rtx, rtx);
+extern rtx gen_rdpmc (rtx, rtx);
+extern rtx gen_rdtsc (rtx);
+extern rtx gen_rdtscp (rtx, rtx);
+extern rtx gen_lwp_llwpcb (rtx);
+extern rtx gen_lwp_slwpcb (rtx);
+extern rtx gen_lwp_lwpvalsi3 (rtx, rtx, rtx, rtx);
+extern rtx gen_lwp_lwpvaldi3 (rtx, rtx, rtx, rtx);
+extern rtx gen_lwp_lwpinssi3 (rtx, rtx, rtx, rtx);
+extern rtx gen_lwp_lwpinsdi3 (rtx, rtx, rtx, rtx);
+extern rtx gen_pause (void);
+extern rtx gen_movv8qi (rtx, rtx);
+extern rtx gen_movv4hi (rtx, rtx);
+extern rtx gen_movv2si (rtx, rtx);
+extern rtx gen_movv1di (rtx, rtx);
+extern rtx gen_movv2sf (rtx, rtx);
+extern rtx gen_pushv8qi1 (rtx);
+extern rtx gen_pushv4hi1 (rtx);
+extern rtx gen_pushv2si1 (rtx);
+extern rtx gen_pushv1di1 (rtx);
+extern rtx gen_pushv2sf1 (rtx);
+extern rtx gen_movmisalignv8qi (rtx, rtx);
+extern rtx gen_movmisalignv4hi (rtx, rtx);
+extern rtx gen_movmisalignv2si (rtx, rtx);
+extern rtx gen_movmisalignv1di (rtx, rtx);
+extern rtx gen_movmisalignv2sf (rtx, rtx);
+extern rtx gen_mmx_addv2sf3 (rtx, rtx, rtx);
+extern rtx gen_mmx_subv2sf3 (rtx, rtx, rtx);
+extern rtx gen_mmx_subrv2sf3 (rtx, rtx, rtx);
+extern rtx gen_mmx_mulv2sf3 (rtx, rtx, rtx);
+extern rtx gen_mmx_smaxv2sf3 (rtx, rtx, rtx);
+extern rtx gen_mmx_sminv2sf3 (rtx, rtx, rtx);
+extern rtx gen_mmx_eqv2sf3 (rtx, rtx, rtx);
+extern rtx gen_vec_setv2sf (rtx, rtx, rtx);
+extern rtx gen_vec_extractv2sf (rtx, rtx, rtx);
+extern rtx gen_vec_initv2sf (rtx, rtx);
+extern rtx gen_mmx_addv8qi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_subv8qi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_addv4hi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_subv4hi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_addv2si3 (rtx, rtx, rtx);
+extern rtx gen_mmx_subv2si3 (rtx, rtx, rtx);
+extern rtx gen_mmx_addv1di3 (rtx, rtx, rtx);
+extern rtx gen_mmx_subv1di3 (rtx, rtx, rtx);
+extern rtx gen_mmx_ssaddv8qi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_usaddv8qi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_sssubv8qi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_ussubv8qi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_ssaddv4hi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_usaddv4hi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_sssubv4hi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_ussubv4hi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_mulv4hi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_smulv4hi3_highpart (rtx, rtx, rtx);
+extern rtx gen_mmx_umulv4hi3_highpart (rtx, rtx, rtx);
+extern rtx gen_mmx_pmaddwd (rtx, rtx, rtx);
+extern rtx gen_mmx_pmulhrwv4hi3 (rtx, rtx, rtx);
+extern rtx gen_sse2_umulv1siv1di3 (rtx, rtx, rtx);
+extern rtx gen_mmx_smaxv4hi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_sminv4hi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_umaxv8qi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_uminv8qi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_eqv8qi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_eqv4hi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_eqv2si3 (rtx, rtx, rtx);
+extern rtx gen_mmx_andv8qi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_iorv8qi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_xorv8qi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_andv4hi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_iorv4hi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_xorv4hi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_andv2si3 (rtx, rtx, rtx);
+extern rtx gen_mmx_iorv2si3 (rtx, rtx, rtx);
+extern rtx gen_mmx_xorv2si3 (rtx, rtx, rtx);
+extern rtx gen_mmx_pinsrw (rtx, rtx, rtx, rtx);
+extern rtx gen_mmx_pshufw (rtx, rtx, rtx);
+extern rtx gen_vec_setv2si (rtx, rtx, rtx);
+extern rtx gen_vec_extractv2si (rtx, rtx, rtx);
+extern rtx gen_vec_initv2si (rtx, rtx);
+extern rtx gen_vec_setv4hi (rtx, rtx, rtx);
+extern rtx gen_vec_extractv4hi (rtx, rtx, rtx);
+extern rtx gen_vec_initv4hi (rtx, rtx);
+extern rtx gen_vec_setv8qi (rtx, rtx, rtx);
+extern rtx gen_vec_extractv8qi (rtx, rtx, rtx);
+extern rtx gen_vec_initv8qi (rtx, rtx);
+extern rtx gen_mmx_uavgv8qi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_uavgv4hi3 (rtx, rtx, rtx);
+extern rtx gen_mmx_maskmovq (rtx, rtx, rtx);
+extern rtx gen_mmx_emms (void);
+extern rtx gen_mmx_femms (void);
+extern rtx gen_movv32qi (rtx, rtx);
+extern rtx gen_movv16qi (rtx, rtx);
+extern rtx gen_movv16hi (rtx, rtx);
+extern rtx gen_movv8hi (rtx, rtx);
+extern rtx gen_movv8si (rtx, rtx);
+extern rtx gen_movv4si (rtx, rtx);
+extern rtx gen_movv4di (rtx, rtx);
+extern rtx gen_movv2di (rtx, rtx);
+extern rtx gen_movv2ti (rtx, rtx);
+extern rtx gen_movv1ti (rtx, rtx);
+extern rtx gen_movv8sf (rtx, rtx);
+extern rtx gen_movv4sf (rtx, rtx);
+extern rtx gen_movv4df (rtx, rtx);
+extern rtx gen_movv2df (rtx, rtx);
+extern rtx gen_pushv32qi1 (rtx);
+extern rtx gen_pushv16qi1 (rtx);
+extern rtx gen_pushv16hi1 (rtx);
+extern rtx gen_pushv8hi1 (rtx);
+extern rtx gen_pushv8si1 (rtx);
+extern rtx gen_pushv4si1 (rtx);
+extern rtx gen_pushv4di1 (rtx);
+extern rtx gen_pushv2di1 (rtx);
+extern rtx gen_pushv2ti1 (rtx);
+extern rtx gen_pushv1ti1 (rtx);
+extern rtx gen_pushv8sf1 (rtx);
+extern rtx gen_pushv4sf1 (rtx);
+extern rtx gen_pushv4df1 (rtx);
+extern rtx gen_pushv2df1 (rtx);
+extern rtx gen_movmisalignv32qi (rtx, rtx);
+extern rtx gen_movmisalignv16qi (rtx, rtx);
+extern rtx gen_movmisalignv16hi (rtx, rtx);
+extern rtx gen_movmisalignv8hi (rtx, rtx);
+extern rtx gen_movmisalignv8si (rtx, rtx);
+extern rtx gen_movmisalignv4si (rtx, rtx);
+extern rtx gen_movmisalignv4di (rtx, rtx);
+extern rtx gen_movmisalignv2di (rtx, rtx);
+extern rtx gen_movmisalignv2ti (rtx, rtx);
+extern rtx gen_movmisalignv1ti (rtx, rtx);
+extern rtx gen_movmisalignv8sf (rtx, rtx);
+extern rtx gen_movmisalignv4sf (rtx, rtx);
+extern rtx gen_movmisalignv4df (rtx, rtx);
+extern rtx gen_movmisalignv2df (rtx, rtx);
+extern rtx gen_storentdi (rtx, rtx);
+extern rtx gen_storentsi (rtx, rtx);
+extern rtx gen_storentsf (rtx, rtx);
+extern rtx gen_storentdf (rtx, rtx);
+extern rtx gen_storentv4di (rtx, rtx);
+extern rtx gen_storentv2di (rtx, rtx);
+extern rtx gen_storentv8sf (rtx, rtx);
+extern rtx gen_storentv4sf (rtx, rtx);
+extern rtx gen_storentv4df (rtx, rtx);
+extern rtx gen_storentv2df (rtx, rtx);
+extern rtx gen_absv8sf2 (rtx, rtx);
+extern rtx gen_negv8sf2 (rtx, rtx);
+extern rtx gen_absv4sf2 (rtx, rtx);
+extern rtx gen_negv4sf2 (rtx, rtx);
+extern rtx gen_absv4df2 (rtx, rtx);
+extern rtx gen_negv4df2 (rtx, rtx);
+extern rtx gen_absv2df2 (rtx, rtx);
+extern rtx gen_negv2df2 (rtx, rtx);
+extern rtx gen_addv8sf3 (rtx, rtx, rtx);
+extern rtx gen_subv8sf3 (rtx, rtx, rtx);
+extern rtx gen_addv4sf3 (rtx, rtx, rtx);
+extern rtx gen_subv4sf3 (rtx, rtx, rtx);
+extern rtx gen_addv4df3 (rtx, rtx, rtx);
+extern rtx gen_subv4df3 (rtx, rtx, rtx);
+extern rtx gen_addv2df3 (rtx, rtx, rtx);
+extern rtx gen_subv2df3 (rtx, rtx, rtx);
+extern rtx gen_mulv8sf3 (rtx, rtx, rtx);
+extern rtx gen_mulv4sf3 (rtx, rtx, rtx);
+extern rtx gen_mulv4df3 (rtx, rtx, rtx);
+extern rtx gen_mulv2df3 (rtx, rtx, rtx);
+extern rtx gen_divv4df3 (rtx, rtx, rtx);
+extern rtx gen_divv2df3 (rtx, rtx, rtx);
+extern rtx gen_divv8sf3 (rtx, rtx, rtx);
+extern rtx gen_divv4sf3 (rtx, rtx, rtx);
+extern rtx gen_sqrtv4df2 (rtx, rtx);
+extern rtx gen_sqrtv2df2 (rtx, rtx);
+extern rtx gen_sqrtv8sf2 (rtx, rtx);
+extern rtx gen_sqrtv4sf2 (rtx, rtx);
+extern rtx gen_rsqrtv8sf2 (rtx, rtx);
+extern rtx gen_rsqrtv4sf2 (rtx, rtx);
+extern rtx gen_smaxv8sf3 (rtx, rtx, rtx);
+extern rtx gen_sminv8sf3 (rtx, rtx, rtx);
+extern rtx gen_smaxv4sf3 (rtx, rtx, rtx);
+extern rtx gen_sminv4sf3 (rtx, rtx, rtx);
+extern rtx gen_smaxv4df3 (rtx, rtx, rtx);
+extern rtx gen_sminv4df3 (rtx, rtx, rtx);
+extern rtx gen_smaxv2df3 (rtx, rtx, rtx);
+extern rtx gen_sminv2df3 (rtx, rtx, rtx);
+extern rtx gen_reduc_splus_v4df (rtx, rtx);
+extern rtx gen_reduc_splus_v2df (rtx, rtx);
+extern rtx gen_reduc_splus_v8sf (rtx, rtx);
+extern rtx gen_reduc_splus_v4sf (rtx, rtx);
+extern rtx gen_reduc_smax_v32qi (rtx, rtx);
+extern rtx gen_reduc_smin_v32qi (rtx, rtx);
+extern rtx gen_reduc_smax_v16hi (rtx, rtx);
+extern rtx gen_reduc_smin_v16hi (rtx, rtx);
+extern rtx gen_reduc_smax_v8si (rtx, rtx);
+extern rtx gen_reduc_smin_v8si (rtx, rtx);
+extern rtx gen_reduc_smax_v4di (rtx, rtx);
+extern rtx gen_reduc_smin_v4di (rtx, rtx);
+extern rtx gen_reduc_smax_v8sf (rtx, rtx);
+extern rtx gen_reduc_smin_v8sf (rtx, rtx);
+extern rtx gen_reduc_smax_v4df (rtx, rtx);
+extern rtx gen_reduc_smin_v4df (rtx, rtx);
+extern rtx gen_reduc_smax_v4sf (rtx, rtx);
+extern rtx gen_reduc_smin_v4sf (rtx, rtx);
+extern rtx gen_reduc_umax_v32qi (rtx, rtx);
+extern rtx gen_reduc_umin_v32qi (rtx, rtx);
+extern rtx gen_reduc_umax_v16hi (rtx, rtx);
+extern rtx gen_reduc_umin_v16hi (rtx, rtx);
+extern rtx gen_reduc_umax_v8si (rtx, rtx);
+extern rtx gen_reduc_umin_v8si (rtx, rtx);
+extern rtx gen_reduc_umax_v4di (rtx, rtx);
+extern rtx gen_reduc_umin_v4di (rtx, rtx);
+extern rtx gen_reduc_umin_v8hi (rtx, rtx);
+extern rtx gen_vcondv32qiv8sf (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv16hiv8sf (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv8siv8sf (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4div8sf (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv8sfv8sf (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4dfv8sf (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv32qiv4df (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv16hiv4df (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv8siv4df (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4div4df (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv8sfv4df (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4dfv4df (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv16qiv4sf (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv8hiv4sf (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4siv4sf (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv2div4sf (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4sfv4sf (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv2dfv4sf (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv16qiv2df (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv8hiv2df (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4siv2df (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv2div2df (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4sfv2df (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv2dfv2df (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_andv8sf3 (rtx, rtx, rtx);
+extern rtx gen_iorv8sf3 (rtx, rtx, rtx);
+extern rtx gen_xorv8sf3 (rtx, rtx, rtx);
+extern rtx gen_andv4sf3 (rtx, rtx, rtx);
+extern rtx gen_iorv4sf3 (rtx, rtx, rtx);
+extern rtx gen_xorv4sf3 (rtx, rtx, rtx);
+extern rtx gen_andv4df3 (rtx, rtx, rtx);
+extern rtx gen_iorv4df3 (rtx, rtx, rtx);
+extern rtx gen_xorv4df3 (rtx, rtx, rtx);
+extern rtx gen_andv2df3 (rtx, rtx, rtx);
+extern rtx gen_iorv2df3 (rtx, rtx, rtx);
+extern rtx gen_xorv2df3 (rtx, rtx, rtx);
+extern rtx gen_copysignv8sf3 (rtx, rtx, rtx);
+extern rtx gen_copysignv4sf3 (rtx, rtx, rtx);
+extern rtx gen_copysignv4df3 (rtx, rtx, rtx);
+extern rtx gen_copysignv2df3 (rtx, rtx, rtx);
+extern rtx gen_fmasf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fmadf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fmav4sf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fmav2df4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fmav8sf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fmav4df4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fmssf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fmsdf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fmsv4sf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fmsv2df4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fmsv8sf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fmsv4df4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fnmasf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fnmadf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fnmav4sf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fnmav2df4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fnmav8sf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fnmav4df4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fnmssf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fnmsdf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fnmsv4sf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fnmsv2df4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fnmsv8sf4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fnmsv4df4 (rtx, rtx, rtx, rtx);
+extern rtx gen_fma4i_fmadd_sf (rtx, rtx, rtx, rtx);
+extern rtx gen_fma4i_fmadd_df (rtx, rtx, rtx, rtx);
+extern rtx gen_fma4i_fmadd_v4sf (rtx, rtx, rtx, rtx);
+extern rtx gen_fma4i_fmadd_v2df (rtx, rtx, rtx, rtx);
+extern rtx gen_fma4i_fmadd_v8sf (rtx, rtx, rtx, rtx);
+extern rtx gen_fma4i_fmadd_v4df (rtx, rtx, rtx, rtx);
+extern rtx gen_fmaddsub_v8sf (rtx, rtx, rtx, rtx);
+extern rtx gen_fmaddsub_v4sf (rtx, rtx, rtx, rtx);
+extern rtx gen_fmaddsub_v4df (rtx, rtx, rtx, rtx);
+extern rtx gen_fmaddsub_v2df (rtx, rtx, rtx, rtx);
+extern rtx gen_fmai_vmfmadd_v4sf (rtx, rtx, rtx, rtx);
+extern rtx gen_fmai_vmfmadd_v2df (rtx, rtx, rtx, rtx);
+extern rtx gen_fma4i_vmfmadd_v4sf (rtx, rtx, rtx, rtx);
+extern rtx gen_fma4i_vmfmadd_v2df (rtx, rtx, rtx, rtx);
+extern rtx gen_floatunsv8siv8sf2 (rtx, rtx);
+extern rtx gen_floatunsv4siv4sf2 (rtx, rtx);
+extern rtx gen_fixuns_truncv8sfv8si2 (rtx, rtx);
+extern rtx gen_fixuns_truncv4sfv4si2 (rtx, rtx);
+extern rtx gen_avx_cvtpd2dq256_2 (rtx, rtx);
+extern rtx gen_sse2_cvtpd2dq (rtx, rtx);
+extern rtx gen_avx_cvttpd2dq256_2 (rtx, rtx);
+extern rtx gen_sse2_cvttpd2dq (rtx, rtx);
+extern rtx gen_sse2_cvtpd2ps (rtx, rtx);
+extern rtx gen_vec_unpacks_hi_v4sf (rtx, rtx);
+extern rtx gen_vec_unpacks_hi_v8sf (rtx, rtx);
+extern rtx gen_vec_unpacks_lo_v4sf (rtx, rtx);
+extern rtx gen_vec_unpacks_lo_v8sf (rtx, rtx);
+extern rtx gen_vec_unpacks_float_hi_v16hi (rtx, rtx);
+extern rtx gen_vec_unpacks_float_hi_v8hi (rtx, rtx);
+extern rtx gen_vec_unpacks_float_lo_v16hi (rtx, rtx);
+extern rtx gen_vec_unpacks_float_lo_v8hi (rtx, rtx);
+extern rtx gen_vec_unpacku_float_hi_v16hi (rtx, rtx);
+extern rtx gen_vec_unpacku_float_hi_v8hi (rtx, rtx);
+extern rtx gen_vec_unpacku_float_lo_v16hi (rtx, rtx);
+extern rtx gen_vec_unpacku_float_lo_v8hi (rtx, rtx);
+extern rtx gen_vec_unpacks_float_hi_v4si (rtx, rtx);
+extern rtx gen_vec_unpacks_float_lo_v4si (rtx, rtx);
+extern rtx gen_vec_unpacks_float_hi_v8si (rtx, rtx);
+extern rtx gen_vec_unpacks_float_lo_v8si (rtx, rtx);
+extern rtx gen_vec_unpacku_float_hi_v4si (rtx, rtx);
+extern rtx gen_vec_unpacku_float_lo_v4si (rtx, rtx);
+extern rtx gen_vec_unpacku_float_hi_v8si (rtx, rtx);
+extern rtx gen_vec_unpacku_float_lo_v8si (rtx, rtx);
+extern rtx gen_vec_pack_trunc_v4df (rtx, rtx, rtx);
+extern rtx gen_vec_pack_trunc_v2df (rtx, rtx, rtx);
+extern rtx gen_vec_pack_sfix_trunc_v4df (rtx, rtx, rtx);
+extern rtx gen_vec_pack_sfix_trunc_v2df (rtx, rtx, rtx);
+extern rtx gen_vec_pack_ufix_trunc_v4df (rtx, rtx, rtx);
+extern rtx gen_vec_pack_ufix_trunc_v2df (rtx, rtx, rtx);
+extern rtx gen_vec_pack_sfix_v4df (rtx, rtx, rtx);
+extern rtx gen_vec_pack_sfix_v2df (rtx, rtx, rtx);
+extern rtx gen_sse_movhlps_exp (rtx, rtx, rtx);
+extern rtx gen_sse_movlhps_exp (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_highv8sf (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_lowv8sf (rtx, rtx, rtx);
+extern rtx gen_avx_shufps256 (rtx, rtx, rtx, rtx);
+extern rtx gen_sse_shufps (rtx, rtx, rtx, rtx);
+extern rtx gen_sse_loadhps_exp (rtx, rtx, rtx);
+extern rtx gen_sse_loadlps_exp (rtx, rtx, rtx);
+extern rtx gen_vec_initv16qi (rtx, rtx);
+extern rtx gen_vec_initv8hi (rtx, rtx);
+extern rtx gen_vec_initv4si (rtx, rtx);
+extern rtx gen_vec_initv2di (rtx, rtx);
+extern rtx gen_vec_initv4sf (rtx, rtx);
+extern rtx gen_vec_initv2df (rtx, rtx);
+extern rtx gen_vec_setv32qi (rtx, rtx, rtx);
+extern rtx gen_vec_setv16qi (rtx, rtx, rtx);
+extern rtx gen_vec_setv16hi (rtx, rtx, rtx);
+extern rtx gen_vec_setv8hi (rtx, rtx, rtx);
+extern rtx gen_vec_setv8si (rtx, rtx, rtx);
+extern rtx gen_vec_setv4si (rtx, rtx, rtx);
+extern rtx gen_vec_setv4di (rtx, rtx, rtx);
+extern rtx gen_vec_setv2di (rtx, rtx, rtx);
+extern rtx gen_vec_setv8sf (rtx, rtx, rtx);
+extern rtx gen_vec_setv4sf (rtx, rtx, rtx);
+extern rtx gen_vec_setv4df (rtx, rtx, rtx);
+extern rtx gen_vec_setv2df (rtx, rtx, rtx);
+extern rtx gen_avx_vextractf128v32qi (rtx, rtx, rtx);
+extern rtx gen_avx_vextractf128v16hi (rtx, rtx, rtx);
+extern rtx gen_avx_vextractf128v8si (rtx, rtx, rtx);
+extern rtx gen_avx_vextractf128v4di (rtx, rtx, rtx);
+extern rtx gen_avx_vextractf128v8sf (rtx, rtx, rtx);
+extern rtx gen_avx_vextractf128v4df (rtx, rtx, rtx);
+extern rtx gen_vec_extractv32qi (rtx, rtx, rtx);
+extern rtx gen_vec_extractv16qi (rtx, rtx, rtx);
+extern rtx gen_vec_extractv16hi (rtx, rtx, rtx);
+extern rtx gen_vec_extractv8hi (rtx, rtx, rtx);
+extern rtx gen_vec_extractv8si (rtx, rtx, rtx);
+extern rtx gen_vec_extractv4si (rtx, rtx, rtx);
+extern rtx gen_vec_extractv4di (rtx, rtx, rtx);
+extern rtx gen_vec_extractv2di (rtx, rtx, rtx);
+extern rtx gen_vec_extractv8sf (rtx, rtx, rtx);
+extern rtx gen_vec_extractv4sf (rtx, rtx, rtx);
+extern rtx gen_vec_extractv4df (rtx, rtx, rtx);
+extern rtx gen_vec_extractv2df (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_highv4df (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_highv2df (rtx, rtx, rtx);
+extern rtx gen_avx_movddup256 (rtx, rtx);
+extern rtx gen_avx_unpcklpd256 (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_lowv4df (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_lowv2df (rtx, rtx, rtx);
+extern rtx gen_avx_shufpd256 (rtx, rtx, rtx, rtx);
+extern rtx gen_sse2_shufpd (rtx, rtx, rtx, rtx);
+extern rtx gen_sse2_loadhpd_exp (rtx, rtx, rtx);
+extern rtx gen_sse2_loadlpd_exp (rtx, rtx, rtx);
+extern rtx gen_negv32qi2 (rtx, rtx);
+extern rtx gen_negv16qi2 (rtx, rtx);
+extern rtx gen_negv16hi2 (rtx, rtx);
+extern rtx gen_negv8hi2 (rtx, rtx);
+extern rtx gen_negv8si2 (rtx, rtx);
+extern rtx gen_negv4si2 (rtx, rtx);
+extern rtx gen_negv4di2 (rtx, rtx);
+extern rtx gen_negv2di2 (rtx, rtx);
+extern rtx gen_addv32qi3 (rtx, rtx, rtx);
+extern rtx gen_subv32qi3 (rtx, rtx, rtx);
+extern rtx gen_addv16qi3 (rtx, rtx, rtx);
+extern rtx gen_subv16qi3 (rtx, rtx, rtx);
+extern rtx gen_addv16hi3 (rtx, rtx, rtx);
+extern rtx gen_subv16hi3 (rtx, rtx, rtx);
+extern rtx gen_addv8hi3 (rtx, rtx, rtx);
+extern rtx gen_subv8hi3 (rtx, rtx, rtx);
+extern rtx gen_addv8si3 (rtx, rtx, rtx);
+extern rtx gen_subv8si3 (rtx, rtx, rtx);
+extern rtx gen_addv4si3 (rtx, rtx, rtx);
+extern rtx gen_subv4si3 (rtx, rtx, rtx);
+extern rtx gen_addv4di3 (rtx, rtx, rtx);
+extern rtx gen_subv4di3 (rtx, rtx, rtx);
+extern rtx gen_addv2di3 (rtx, rtx, rtx);
+extern rtx gen_subv2di3 (rtx, rtx, rtx);
+extern rtx gen_avx2_ssaddv32qi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_usaddv32qi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_sssubv32qi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_ussubv32qi3 (rtx, rtx, rtx);
+extern rtx gen_sse2_ssaddv16qi3 (rtx, rtx, rtx);
+extern rtx gen_sse2_usaddv16qi3 (rtx, rtx, rtx);
+extern rtx gen_sse2_sssubv16qi3 (rtx, rtx, rtx);
+extern rtx gen_sse2_ussubv16qi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_ssaddv16hi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_usaddv16hi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_sssubv16hi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_ussubv16hi3 (rtx, rtx, rtx);
+extern rtx gen_sse2_ssaddv8hi3 (rtx, rtx, rtx);
+extern rtx gen_sse2_usaddv8hi3 (rtx, rtx, rtx);
+extern rtx gen_sse2_sssubv8hi3 (rtx, rtx, rtx);
+extern rtx gen_sse2_ussubv8hi3 (rtx, rtx, rtx);
+extern rtx gen_mulv16hi3 (rtx, rtx, rtx);
+extern rtx gen_mulv8hi3 (rtx, rtx, rtx);
+extern rtx gen_smulv16hi3_highpart (rtx, rtx, rtx);
+extern rtx gen_umulv16hi3_highpart (rtx, rtx, rtx);
+extern rtx gen_smulv8hi3_highpart (rtx, rtx, rtx);
+extern rtx gen_umulv8hi3_highpart (rtx, rtx, rtx);
+extern rtx gen_avx2_umulv4siv4di3 (rtx, rtx, rtx);
+extern rtx gen_sse2_umulv2siv2di3 (rtx, rtx, rtx);
+extern rtx gen_avx2_mulv4siv4di3 (rtx, rtx, rtx);
+extern rtx gen_sse4_1_mulv2siv2di3 (rtx, rtx, rtx);
+extern rtx gen_avx2_pmaddwd (rtx, rtx, rtx);
+extern rtx gen_sse2_pmaddwd (rtx, rtx, rtx);
+extern rtx gen_mulv8si3 (rtx, rtx, rtx);
+extern rtx gen_mulv4si3 (rtx, rtx, rtx);
+extern rtx gen_vec_widen_smult_hi_v16hi (rtx, rtx, rtx);
+extern rtx gen_vec_widen_umult_hi_v16hi (rtx, rtx, rtx);
+extern rtx gen_vec_widen_smult_hi_v8hi (rtx, rtx, rtx);
+extern rtx gen_vec_widen_umult_hi_v8hi (rtx, rtx, rtx);
+extern rtx gen_vec_widen_smult_lo_v16hi (rtx, rtx, rtx);
+extern rtx gen_vec_widen_umult_lo_v16hi (rtx, rtx, rtx);
+extern rtx gen_vec_widen_smult_lo_v8hi (rtx, rtx, rtx);
+extern rtx gen_vec_widen_umult_lo_v8hi (rtx, rtx, rtx);
+extern rtx gen_vec_widen_smult_hi_v8si (rtx, rtx, rtx);
+extern rtx gen_vec_widen_umult_hi_v8si (rtx, rtx, rtx);
+extern rtx gen_vec_widen_smult_lo_v8si (rtx, rtx, rtx);
+extern rtx gen_vec_widen_umult_lo_v8si (rtx, rtx, rtx);
+extern rtx gen_vec_widen_smult_hi_v4si (rtx, rtx, rtx);
+extern rtx gen_vec_widen_smult_lo_v4si (rtx, rtx, rtx);
+extern rtx gen_vec_widen_umult_hi_v4si (rtx, rtx, rtx);
+extern rtx gen_vec_widen_umult_lo_v4si (rtx, rtx, rtx);
+extern rtx gen_sdot_prodv16hi (rtx, rtx, rtx, rtx);
+extern rtx gen_sdot_prodv8hi (rtx, rtx, rtx, rtx);
+extern rtx gen_sdot_prodv4si (rtx, rtx, rtx, rtx);
+extern rtx gen_udot_prodv4si (rtx, rtx, rtx, rtx);
+extern rtx gen_sdot_prodv8si (rtx, rtx, rtx, rtx);
+extern rtx gen_udot_prodv8si (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_shl_v16qi (rtx, rtx, rtx);
+extern rtx gen_vec_shl_v8hi (rtx, rtx, rtx);
+extern rtx gen_vec_shl_v4si (rtx, rtx, rtx);
+extern rtx gen_vec_shl_v2di (rtx, rtx, rtx);
+extern rtx gen_vec_shr_v16qi (rtx, rtx, rtx);
+extern rtx gen_vec_shr_v8hi (rtx, rtx, rtx);
+extern rtx gen_vec_shr_v4si (rtx, rtx, rtx);
+extern rtx gen_vec_shr_v2di (rtx, rtx, rtx);
+extern rtx gen_smaxv32qi3 (rtx, rtx, rtx);
+extern rtx gen_sminv32qi3 (rtx, rtx, rtx);
+extern rtx gen_umaxv32qi3 (rtx, rtx, rtx);
+extern rtx gen_uminv32qi3 (rtx, rtx, rtx);
+extern rtx gen_smaxv16hi3 (rtx, rtx, rtx);
+extern rtx gen_sminv16hi3 (rtx, rtx, rtx);
+extern rtx gen_umaxv16hi3 (rtx, rtx, rtx);
+extern rtx gen_uminv16hi3 (rtx, rtx, rtx);
+extern rtx gen_smaxv8si3 (rtx, rtx, rtx);
+extern rtx gen_sminv8si3 (rtx, rtx, rtx);
+extern rtx gen_umaxv8si3 (rtx, rtx, rtx);
+extern rtx gen_uminv8si3 (rtx, rtx, rtx);
+extern rtx gen_smaxv4di3 (rtx, rtx, rtx);
+extern rtx gen_sminv4di3 (rtx, rtx, rtx);
+extern rtx gen_umaxv4di3 (rtx, rtx, rtx);
+extern rtx gen_uminv4di3 (rtx, rtx, rtx);
+extern rtx gen_smaxv2di3 (rtx, rtx, rtx);
+extern rtx gen_sminv2di3 (rtx, rtx, rtx);
+extern rtx gen_umaxv2di3 (rtx, rtx, rtx);
+extern rtx gen_uminv2di3 (rtx, rtx, rtx);
+extern rtx gen_smaxv16qi3 (rtx, rtx, rtx);
+extern rtx gen_sminv16qi3 (rtx, rtx, rtx);
+extern rtx gen_smaxv8hi3 (rtx, rtx, rtx);
+extern rtx gen_sminv8hi3 (rtx, rtx, rtx);
+extern rtx gen_smaxv4si3 (rtx, rtx, rtx);
+extern rtx gen_sminv4si3 (rtx, rtx, rtx);
+extern rtx gen_umaxv16qi3 (rtx, rtx, rtx);
+extern rtx gen_uminv16qi3 (rtx, rtx, rtx);
+extern rtx gen_umaxv8hi3 (rtx, rtx, rtx);
+extern rtx gen_uminv8hi3 (rtx, rtx, rtx);
+extern rtx gen_umaxv4si3 (rtx, rtx, rtx);
+extern rtx gen_uminv4si3 (rtx, rtx, rtx);
+extern rtx gen_avx2_eqv32qi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_eqv16hi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_eqv8si3 (rtx, rtx, rtx);
+extern rtx gen_avx2_eqv4di3 (rtx, rtx, rtx);
+extern rtx gen_sse2_eqv16qi3 (rtx, rtx, rtx);
+extern rtx gen_sse2_eqv8hi3 (rtx, rtx, rtx);
+extern rtx gen_sse2_eqv4si3 (rtx, rtx, rtx);
+extern rtx gen_sse4_1_eqv2di3 (rtx, rtx, rtx);
+extern rtx gen_vcondv32qiv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv16hiv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv8siv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4div32qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv8sfv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4dfv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv32qiv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv16hiv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv8siv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4div16hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv8sfv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4dfv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv32qiv8si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv16hiv8si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv8siv8si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4div8si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv8sfv8si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4dfv8si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv32qiv4di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv16hiv4di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv8siv4di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4div4di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv8sfv4di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4dfv4di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv16qiv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv8hiv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4siv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv2div16qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4sfv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv2dfv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv16qiv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv8hiv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4siv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv2div8hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4sfv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv2dfv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv16qiv4si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv8hiv4si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4siv4si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv2div4si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv4sfv4si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv2dfv4si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv2div2di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vcondv2dfv2di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv32qiv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv16hiv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv8siv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv4div32qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv8sfv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv4dfv32qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv32qiv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv16hiv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv8siv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv4div16hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv8sfv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv4dfv16hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv32qiv8si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv16hiv8si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv8siv8si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv4div8si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv8sfv8si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv4dfv8si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv32qiv4di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv16hiv4di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv8siv4di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv4div4di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv8sfv4di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv4dfv4di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv16qiv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv8hiv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv4siv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv2div16qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv4sfv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv2dfv16qi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv16qiv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv8hiv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv4siv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv2div8hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv4sfv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv2dfv8hi (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv16qiv4si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv8hiv4si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv4siv4si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv2div4si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv4sfv4si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv2dfv4si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv2div2di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vconduv2dfv2di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_vec_permv16qi (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_permv8hi (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_permv4si (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_permv2di (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_permv4sf (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_permv2df (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_permv32qi (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_permv16hi (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_permv8si (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_permv4di (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_permv8sf (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_permv4df (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_perm_constv4sf (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_perm_constv4si (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_perm_constv2df (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_perm_constv2di (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_perm_constv16qi (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_perm_constv8hi (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_perm_constv8sf (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_perm_constv4df (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_perm_constv8si (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_perm_constv4di (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_perm_constv32qi (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_perm_constv16hi (rtx, rtx, rtx, rtx);
+extern rtx gen_one_cmplv32qi2 (rtx, rtx);
+extern rtx gen_one_cmplv16qi2 (rtx, rtx);
+extern rtx gen_one_cmplv16hi2 (rtx, rtx);
+extern rtx gen_one_cmplv8hi2 (rtx, rtx);
+extern rtx gen_one_cmplv8si2 (rtx, rtx);
+extern rtx gen_one_cmplv4si2 (rtx, rtx);
+extern rtx gen_one_cmplv4di2 (rtx, rtx);
+extern rtx gen_one_cmplv2di2 (rtx, rtx);
+extern rtx gen_avx2_andnotv32qi3 (rtx, rtx, rtx);
+extern rtx gen_sse2_andnotv16qi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_andnotv16hi3 (rtx, rtx, rtx);
+extern rtx gen_sse2_andnotv8hi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_andnotv8si3 (rtx, rtx, rtx);
+extern rtx gen_sse2_andnotv4si3 (rtx, rtx, rtx);
+extern rtx gen_avx2_andnotv4di3 (rtx, rtx, rtx);
+extern rtx gen_sse2_andnotv2di3 (rtx, rtx, rtx);
+extern rtx gen_andv32qi3 (rtx, rtx, rtx);
+extern rtx gen_iorv32qi3 (rtx, rtx, rtx);
+extern rtx gen_xorv32qi3 (rtx, rtx, rtx);
+extern rtx gen_andv16qi3 (rtx, rtx, rtx);
+extern rtx gen_iorv16qi3 (rtx, rtx, rtx);
+extern rtx gen_xorv16qi3 (rtx, rtx, rtx);
+extern rtx gen_andv16hi3 (rtx, rtx, rtx);
+extern rtx gen_iorv16hi3 (rtx, rtx, rtx);
+extern rtx gen_xorv16hi3 (rtx, rtx, rtx);
+extern rtx gen_andv8hi3 (rtx, rtx, rtx);
+extern rtx gen_iorv8hi3 (rtx, rtx, rtx);
+extern rtx gen_xorv8hi3 (rtx, rtx, rtx);
+extern rtx gen_andv8si3 (rtx, rtx, rtx);
+extern rtx gen_iorv8si3 (rtx, rtx, rtx);
+extern rtx gen_xorv8si3 (rtx, rtx, rtx);
+extern rtx gen_andv4si3 (rtx, rtx, rtx);
+extern rtx gen_iorv4si3 (rtx, rtx, rtx);
+extern rtx gen_xorv4si3 (rtx, rtx, rtx);
+extern rtx gen_andv4di3 (rtx, rtx, rtx);
+extern rtx gen_iorv4di3 (rtx, rtx, rtx);
+extern rtx gen_xorv4di3 (rtx, rtx, rtx);
+extern rtx gen_andv2di3 (rtx, rtx, rtx);
+extern rtx gen_iorv2di3 (rtx, rtx, rtx);
+extern rtx gen_xorv2di3 (rtx, rtx, rtx);
+extern rtx gen_andtf3 (rtx, rtx, rtx);
+extern rtx gen_iortf3 (rtx, rtx, rtx);
+extern rtx gen_xortf3 (rtx, rtx, rtx);
+extern rtx gen_vec_pack_trunc_v16hi (rtx, rtx, rtx);
+extern rtx gen_vec_pack_trunc_v8hi (rtx, rtx, rtx);
+extern rtx gen_vec_pack_trunc_v8si (rtx, rtx, rtx);
+extern rtx gen_vec_pack_trunc_v4si (rtx, rtx, rtx);
+extern rtx gen_vec_pack_trunc_v4di (rtx, rtx, rtx);
+extern rtx gen_vec_pack_trunc_v2di (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_highv32qi (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_highv16hi (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_highv8si (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_highv4di (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_lowv32qi (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_lowv16hi (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_lowv8si (rtx, rtx, rtx);
+extern rtx gen_vec_interleave_lowv4di (rtx, rtx, rtx);
+extern rtx gen_avx2_pshufdv3 (rtx, rtx, rtx);
+extern rtx gen_sse2_pshufd (rtx, rtx, rtx);
+extern rtx gen_avx2_pshuflwv3 (rtx, rtx, rtx);
+extern rtx gen_sse2_pshuflw (rtx, rtx, rtx);
+extern rtx gen_avx2_pshufhwv3 (rtx, rtx, rtx);
+extern rtx gen_sse2_pshufhw (rtx, rtx, rtx);
+extern rtx gen_sse2_loadd (rtx, rtx);
+extern rtx gen_sse_storeq (rtx, rtx);
+extern rtx gen_vec_unpacks_lo_v32qi (rtx, rtx);
+extern rtx gen_vec_unpacks_lo_v16qi (rtx, rtx);
+extern rtx gen_vec_unpacks_lo_v16hi (rtx, rtx);
+extern rtx gen_vec_unpacks_lo_v8hi (rtx, rtx);
+extern rtx gen_vec_unpacks_lo_v8si (rtx, rtx);
+extern rtx gen_vec_unpacks_lo_v4si (rtx, rtx);
+extern rtx gen_vec_unpacks_hi_v32qi (rtx, rtx);
+extern rtx gen_vec_unpacks_hi_v16qi (rtx, rtx);
+extern rtx gen_vec_unpacks_hi_v16hi (rtx, rtx);
+extern rtx gen_vec_unpacks_hi_v8hi (rtx, rtx);
+extern rtx gen_vec_unpacks_hi_v8si (rtx, rtx);
+extern rtx gen_vec_unpacks_hi_v4si (rtx, rtx);
+extern rtx gen_vec_unpacku_lo_v32qi (rtx, rtx);
+extern rtx gen_vec_unpacku_lo_v16qi (rtx, rtx);
+extern rtx gen_vec_unpacku_lo_v16hi (rtx, rtx);
+extern rtx gen_vec_unpacku_lo_v8hi (rtx, rtx);
+extern rtx gen_vec_unpacku_lo_v8si (rtx, rtx);
+extern rtx gen_vec_unpacku_lo_v4si (rtx, rtx);
+extern rtx gen_vec_unpacku_hi_v32qi (rtx, rtx);
+extern rtx gen_vec_unpacku_hi_v16qi (rtx, rtx);
+extern rtx gen_vec_unpacku_hi_v16hi (rtx, rtx);
+extern rtx gen_vec_unpacku_hi_v8hi (rtx, rtx);
+extern rtx gen_vec_unpacku_hi_v8si (rtx, rtx);
+extern rtx gen_vec_unpacku_hi_v4si (rtx, rtx);
+extern rtx gen_avx2_uavgv32qi3 (rtx, rtx, rtx);
+extern rtx gen_sse2_uavgv16qi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_uavgv16hi3 (rtx, rtx, rtx);
+extern rtx gen_sse2_uavgv8hi3 (rtx, rtx, rtx);
+extern rtx gen_sse2_maskmovdqu (rtx, rtx, rtx);
+extern rtx gen_avx2_umulhrswv16hi3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_pmulhrswv8hi3 (rtx, rtx, rtx);
+extern rtx gen_ssse3_pmulhrswv4hi3 (rtx, rtx, rtx);
+extern rtx gen_avx2_pblendw (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_roundps_sfix256 (rtx, rtx, rtx);
+extern rtx gen_sse4_1_roundps_sfix (rtx, rtx, rtx);
+extern rtx gen_avx_roundpd_vec_pack_sfix256 (rtx, rtx, rtx, rtx);
+extern rtx gen_sse4_1_roundpd_vec_pack_sfix (rtx, rtx, rtx, rtx);
+extern rtx gen_roundv8sf2 (rtx, rtx);
+extern rtx gen_roundv4sf2 (rtx, rtx);
+extern rtx gen_roundv4df2 (rtx, rtx);
+extern rtx gen_roundv2df2 (rtx, rtx);
+extern rtx gen_roundv8sf2_sfix (rtx, rtx);
+extern rtx gen_roundv4sf2_sfix (rtx, rtx);
+extern rtx gen_roundv4df2_vec_pack_sfix (rtx, rtx, rtx);
+extern rtx gen_roundv2df2_vec_pack_sfix (rtx, rtx, rtx);
+extern rtx gen_rotlv16qi3 (rtx, rtx, rtx);
+extern rtx gen_rotlv8hi3 (rtx, rtx, rtx);
+extern rtx gen_rotlv4si3 (rtx, rtx, rtx);
+extern rtx gen_rotlv2di3 (rtx, rtx, rtx);
+extern rtx gen_rotrv16qi3 (rtx, rtx, rtx);
+extern rtx gen_rotrv8hi3 (rtx, rtx, rtx);
+extern rtx gen_rotrv4si3 (rtx, rtx, rtx);
+extern rtx gen_rotrv2di3 (rtx, rtx, rtx);
+extern rtx gen_vrotrv16qi3 (rtx, rtx, rtx);
+extern rtx gen_vrotrv8hi3 (rtx, rtx, rtx);
+extern rtx gen_vrotrv4si3 (rtx, rtx, rtx);
+extern rtx gen_vrotrv2di3 (rtx, rtx, rtx);
+extern rtx gen_vrotlv16qi3 (rtx, rtx, rtx);
+extern rtx gen_vrotlv8hi3 (rtx, rtx, rtx);
+extern rtx gen_vrotlv4si3 (rtx, rtx, rtx);
+extern rtx gen_vrotlv2di3 (rtx, rtx, rtx);
+extern rtx gen_vlshrv16qi3 (rtx, rtx, rtx);
+extern rtx gen_vlshrv8hi3 (rtx, rtx, rtx);
+extern rtx gen_vlshrv4si3 (rtx, rtx, rtx);
+extern rtx gen_vlshrv2di3 (rtx, rtx, rtx);
+extern rtx gen_vlshrv8si3 (rtx, rtx, rtx);
+extern rtx gen_vlshrv4di3 (rtx, rtx, rtx);
+extern rtx gen_vashrv16qi3 (rtx, rtx, rtx);
+extern rtx gen_vashrv8hi3 (rtx, rtx, rtx);
+extern rtx gen_vashrv2di3 (rtx, rtx, rtx);
+extern rtx gen_vashrv4si3 (rtx, rtx, rtx);
+extern rtx gen_vashrv8si3 (rtx, rtx, rtx);
+extern rtx gen_vashlv16qi3 (rtx, rtx, rtx);
+extern rtx gen_vashlv8hi3 (rtx, rtx, rtx);
+extern rtx gen_vashlv4si3 (rtx, rtx, rtx);
+extern rtx gen_vashlv2di3 (rtx, rtx, rtx);
+extern rtx gen_vashlv8si3 (rtx, rtx, rtx);
+extern rtx gen_vashlv4di3 (rtx, rtx, rtx);
+extern rtx gen_ashlv16qi3 (rtx, rtx, rtx);
+extern rtx gen_lshrv16qi3 (rtx, rtx, rtx);
+extern rtx gen_ashrv16qi3 (rtx, rtx, rtx);
+extern rtx gen_ashrv2di3 (rtx, rtx, rtx);
+extern rtx gen_xop_vmfrczv4sf2 (rtx, rtx);
+extern rtx gen_xop_vmfrczv2df2 (rtx, rtx);
+extern rtx gen_avx_vzeroall (void);
+extern rtx gen_avx2_permv4di (rtx, rtx, rtx);
+extern rtx gen_avx_vpermilv4df (rtx, rtx, rtx);
+extern rtx gen_avx_vpermilv2df (rtx, rtx, rtx);
+extern rtx gen_avx_vpermilv8sf (rtx, rtx, rtx);
+extern rtx gen_avx_vpermilv4sf (rtx, rtx, rtx);
+extern rtx gen_avx_vperm2f128v8si3 (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_vperm2f128v8sf3 (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_vperm2f128v4df3 (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_vinsertf128v32qi (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_vinsertf128v16hi (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_vinsertf128v8si (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_vinsertf128v4di (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_vinsertf128v8sf (rtx, rtx, rtx, rtx);
+extern rtx gen_avx_vinsertf128v4df (rtx, rtx, rtx, rtx);
+extern rtx gen_vec_initv32qi (rtx, rtx);
+extern rtx gen_vec_initv16hi (rtx, rtx);
+extern rtx gen_vec_initv8si (rtx, rtx);
+extern rtx gen_vec_initv4di (rtx, rtx);
+extern rtx gen_vec_initv8sf (rtx, rtx);
+extern rtx gen_vec_initv4df (rtx, rtx);
+extern rtx gen_avx2_extracti128 (rtx, rtx, rtx);
+extern rtx gen_avx2_inserti128 (rtx, rtx, rtx, rtx);
+extern rtx gen_vcvtps2ph (rtx, rtx, rtx);
+extern rtx gen_avx2_gathersiv2di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_gathersiv2df (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_gathersiv4di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_gathersiv4df (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_gathersiv4si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_gathersiv4sf (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_gathersiv8si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_gathersiv8sf (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_gatherdiv2di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_gatherdiv2df (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_gatherdiv4di (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_gatherdiv4df (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_gatherdiv4si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_gatherdiv4sf (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_gatherdiv8si (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_avx2_gatherdiv8sf (rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_sse2_lfence (void);
+extern rtx gen_sse_sfence (void);
+extern rtx gen_sse2_mfence (void);
+extern rtx gen_mem_thread_fence (rtx);
+extern rtx gen_atomic_loadqi (rtx, rtx, rtx);
+extern rtx gen_atomic_loadhi (rtx, rtx, rtx);
+extern rtx gen_atomic_loadsi (rtx, rtx, rtx);
+extern rtx gen_atomic_loaddi (rtx, rtx, rtx);
+extern rtx gen_atomic_storeqi (rtx, rtx, rtx);
+extern rtx gen_atomic_storehi (rtx, rtx, rtx);
+extern rtx gen_atomic_storesi (rtx, rtx, rtx);
+extern rtx gen_atomic_storedi (rtx, rtx, rtx);
+extern rtx gen_atomic_compare_and_swapqi (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_atomic_compare_and_swaphi (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_atomic_compare_and_swapsi (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_atomic_compare_and_swapdi (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
+extern rtx gen_atomic_compare_and_swapti (rtx, rtx, rtx, rtx, rtx, rtx, rtx, rtx);
+# 39 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
+
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/defaults.h" 1
+# 1007 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/defaults.h"
+       
+# 41 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tm.h" 2
 # 29 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/function.h" 2
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/hard-reg-set.h" 1
 # 42 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/hard-reg-set.h"
@@ -25765,1741 +27066,6 @@ extern unsigned char requires_stack_frame_p (rtx, HARD_REG_ELT_TYPE, HARD_REG_EL
 
 extern unsigned char optimize_function_for_size_p (struct function *);
 extern unsigned char optimize_function_for_speed_p (struct function *);
-# 29 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic.h" 1
-# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/pretty-print.h" 1
-# 33 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/pretty-print.h"
-typedef struct
-{
-  const char *format_spec;
-  va_list *args_ptr;
-  int err_no;
-  location_t *locus;
-  void **x_data;
-} text_info;
-
-
-
-
-
-
-typedef enum
-{
-  DIAGNOSTICS_SHOW_PREFIX_ONCE = 0x0,
-  DIAGNOSTICS_SHOW_PREFIX_NEVER = 0x1,
-  DIAGNOSTICS_SHOW_PREFIX_EVERY_LINE = 0x2
-} diagnostic_prefixing_rule_t;
-
-
-
-
-
-
-struct chunk_info
-{
-
-  struct chunk_info *prev;
-
-
-
-
-
-
-
-  const char *args[30 * 2];
-};
-
-
-
-typedef struct
-{
-
-  struct obstack formatted_obstack;
-
-
-
-  struct obstack chunk_obstack;
-
-
-
-  struct obstack *obstack;
-
-
-  struct chunk_info *cur_chunk_array;
-
-
-  FILE *stream;
-
-
-  int line_length;
-
-
-
-  char digit_buffer[128];
-} output_buffer;
-
-
-typedef unsigned int pp_flags;
-
-typedef enum
-{
-  pp_none, pp_before, pp_after
-} pp_padding;
-
-
-
-typedef struct
-{
-
-  diagnostic_prefixing_rule_t rule;
-
-
-
-  int line_cutoff;
-} pp_wrapping_mode_t;
-# 135 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/pretty-print.h"
-typedef struct pretty_print_info pretty_printer;
-typedef unsigned char (*printer_fn) (pretty_printer *, text_info *, const char *,
-       int, unsigned char, unsigned char, unsigned char);
-# 159 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/pretty-print.h"
-struct pretty_print_info
-{
-
-  output_buffer *buffer;
-
-
-  const char *prefix;
-
-
-  pp_padding padding;
-
-
-
-  int maximum_length;
-
-
-  int indent_skip;
-
-
-  pp_wrapping_mode_t wrapping;
-# 188 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/pretty-print.h"
-  printer_fn format_decoder;
-
-
-  unsigned char emitted_prefix;
-
-
-  unsigned char need_newline;
-
-
-
-  unsigned char translate_identifiers;
-};
-# 297 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/pretty-print.h"
-extern void pp_construct (pretty_printer *, const char *, int);
-extern void pp_base_set_line_maximum_length (pretty_printer *, int);
-extern void pp_base_set_prefix (pretty_printer *, const char *);
-extern void pp_base_destroy_prefix (pretty_printer *);
-extern int pp_base_remaining_character_count_for_line (pretty_printer *);
-extern void pp_base_clear_output_area (pretty_printer *);
-extern const char *pp_base_formatted_text (pretty_printer *);
-extern const char *pp_base_last_position_in_text (const pretty_printer *);
-extern void pp_base_emit_prefix (pretty_printer *);
-extern void pp_base_append_text (pretty_printer *, const char *, const char *);
-# 323 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/pretty-print.h"
-extern void pp_printf (pretty_printer *, const char *, ...)
-     __attribute__ ((__format__ (__gcc_diag__, 2 ,3))) __attribute__ ((__nonnull__ (2)));
-
-extern void pp_verbatim (pretty_printer *, const char *, ...)
-     __attribute__ ((__format__ (__gcc_diag__, 2 ,3))) __attribute__ ((__nonnull__ (2)));
-extern void pp_base_flush (pretty_printer *);
-extern void pp_base_format (pretty_printer *, text_info *);
-extern void pp_base_output_formatted_text (pretty_printer *);
-extern void pp_base_format_verbatim (pretty_printer *, text_info *);
-
-extern void pp_base_indent (pretty_printer *);
-extern void pp_base_newline (pretty_printer *);
-extern void pp_base_character (pretty_printer *, int);
-extern void pp_base_string (pretty_printer *, const char *);
-extern void pp_write_text_to_stream (pretty_printer *pp);
-extern void pp_base_maybe_space (pretty_printer *);
-
-
-static __inline__ pp_wrapping_mode_t
-pp_set_verbatim_wrapping_ (pretty_printer *pp)
-{
-  pp_wrapping_mode_t oldmode = (pp)->wrapping;
-  (pp)->wrapping.line_cutoff = 0;
-  (pp)->wrapping.rule = DIAGNOSTICS_SHOW_PREFIX_NEVER;
-  return oldmode;
-}
-
-
-extern const char *identifier_to_locale (const char *);
-extern void *(*identifier_to_locale_alloc) (size_t);
-extern void (*identifier_to_locale_free) (void *);
-# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic-core.h" 1
-# 28 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic-core.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/bversion.h" 1
-# 29 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic-core.h" 2
-
-
-typedef enum
-{
-
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic.def" 1
-# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic.def"
-DK_UNSPECIFIED,
-
-
-
-
-DK_IGNORED,
-
-
-DK_FATAL,
-DK_ICE,
-DK_ERROR,
-DK_SORRY,
-DK_WARNING,
-DK_ANACHRONISM,
-DK_NOTE,
-DK_DEBUG,
-
-
-DK_PEDWARN,
-DK_PERMERROR,
-# 35 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic-core.h" 2
-
-  DK_LAST_DIAGNOSTIC_KIND,
-
-
-  DK_POP
-} diagnostic_t;
-
-extern const char *progname;
-
-extern const char *trim_filename (const char *);
-# 59 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic-core.h"
-extern void internal_error (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)))
-     __attribute__ ((__noreturn__));
-
-extern unsigned char warning (int, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
-extern unsigned char warning_at (location_t, int, const char *, ...)
-    __attribute__ ((__format__ (__gcc_tdiag__, 3, 4))) __attribute__ ((__nonnull__ (3)));
-extern void error (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
-extern void error_n (location_t, int, const char *, const char *, ...)
-    __attribute__ ((__format__ (__gcc_tdiag__, 3, 5))) __attribute__ ((__nonnull__ (3))) __attribute__ ((__format__ (__gcc_tdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
-extern void error_at (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
-extern void fatal_error (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)))
-     __attribute__ ((__noreturn__));
-
-extern unsigned char pedwarn (location_t, int, const char *, ...)
-     __attribute__ ((__format__ (__gcc_tdiag__, 3, 4))) __attribute__ ((__nonnull__ (3)));
-extern unsigned char permerror (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
-extern void sorry (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
-extern void inform (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
-extern void inform_n (location_t, int, const char *, const char *, ...)
-    __attribute__ ((__format__ (__gcc_tdiag__, 3, 5))) __attribute__ ((__nonnull__ (3))) __attribute__ ((__format__ (__gcc_tdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
-extern void verbatim (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
-extern unsigned char emit_diagnostic (diagnostic_t, location_t, int,
-        const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
-extern unsigned char seen_error (void);
-
-
-
-
-extern void fnotice (FILE *, const char *, ...)
-     __attribute__ ((__format__ (__printf__, 2, 3))) __attribute__ ((__nonnull__ (2)));
-# 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic.h" 2
-
-
-
-
-typedef struct diagnostic_info
-{
-  text_info message;
-  location_t location;
-  unsigned int override_column;
-
-  void *x_data;
-
-  diagnostic_t kind;
-
-  int option_index;
-} diagnostic_info;
-
-
-
-
-typedef struct diagnostic_classification_change_t
-{
-  location_t location;
-  int option;
-  diagnostic_t kind;
-} diagnostic_classification_change_t;
-
-
-typedef void (*diagnostic_starter_fn) (diagnostic_context *,
-           diagnostic_info *);
-typedef diagnostic_starter_fn diagnostic_finalizer_fn;
-
-
-
-struct diagnostic_context
-{
-
-  pretty_printer *printer;
-
-
-  int diagnostic_count[DK_LAST_DIAGNOSTIC_KIND];
-
-
-
-  unsigned char some_warnings_are_errors;
-
-
-  unsigned char warning_as_error_requested;
-
-
-
-  int n_opts;
-
-
-
-
-
-
-
-  diagnostic_t *classify_diagnostic;
-
-
-
-
-
-
-  diagnostic_classification_change_t *classification_history;
-
-
-  int n_classification_history;
-
-
-  int *push_list;
-  int n_push;
-
-
-
-  unsigned char show_option_requested;
-
-
-  unsigned char abort_on_error;
-
-
-  unsigned char show_column;
-
-
-  unsigned char pedantic_errors;
-
-
-  unsigned char permissive;
-
-
-
-  int opt_permissive;
-
-
-  unsigned char fatal_errors;
-
-
-  unsigned char dc_inhibit_warnings;
-
-
-  unsigned char dc_warn_system_headers;
-
-
-  unsigned int max_errors;
-# 141 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic.h"
-  diagnostic_starter_fn begin_diagnostic;
-
-
-  diagnostic_finalizer_fn end_diagnostic;
-
-
-  void (*internal_error) (diagnostic_context *, const char *, va_list *);
-
-
-
-  int (*option_enabled) (int, void *);
-
-
-
-  void *option_state;
-
-
-
-
-
-
-
-  char *(*option_name) (diagnostic_context *, int, diagnostic_t, diagnostic_t);
-
-
-  void *x_data;
-
-
-
-  const struct line_map *last_module;
-
-  int lock;
-
-  unsigned char inhibit_notes_p;
-};
-
-static __inline__ void
-diagnostic_inhibit_notes (diagnostic_context * context)
-{
-  context->inhibit_notes_p = 1;
-}
-# 224 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic.h"
-extern diagnostic_context *global_dc;
-# 254 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/diagnostic.h"
-extern void diagnostic_initialize (diagnostic_context *, int);
-extern void diagnostic_finish (diagnostic_context *);
-extern void diagnostic_report_current_module (diagnostic_context *, location_t);
-
-
-extern diagnostic_t diagnostic_classify_diagnostic (diagnostic_context *,
-          int ,
-          diagnostic_t ,
-          location_t);
-extern void diagnostic_push_diagnostics (diagnostic_context *, location_t);
-extern void diagnostic_pop_diagnostics (diagnostic_context *, location_t);
-extern unsigned char diagnostic_report_diagnostic (diagnostic_context *,
-       diagnostic_info *);
-
-extern void diagnostic_set_info (diagnostic_info *, const char *, va_list *,
-     location_t, diagnostic_t) __attribute__ ((__format__ (__gcc_tdiag__, 2, 0))) __attribute__ ((__nonnull__ (2)));
-extern void diagnostic_set_info_translated (diagnostic_info *, const char *,
-         va_list *, location_t,
-         diagnostic_t)
-     __attribute__ ((__format__ (__gcc_tdiag__, 2, 0))) __attribute__ ((__nonnull__ (2)));
-
-extern char *diagnostic_build_prefix (diagnostic_context *, diagnostic_info *);
-void default_diagnostic_starter (diagnostic_context *, diagnostic_info *);
-void default_diagnostic_finalizer (diagnostic_context *, diagnostic_info *);
-
-
-extern char *file_name_as_prefix (const char *);
-# 30 "/opt/gcc-plugins/src/acf_plugin.c" 2
-
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.h" 1
-# 42 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.h"
-typedef struct param_info
-{
-
-
-  const char *const option;
-
-
-  int default_value;
-
-
-  int min_value;
-
-
-  int max_value;
-
-
-  const char *const help;
-} param_info;
-
-
-
-
-extern param_info *compiler_params;
-
-
-extern size_t get_num_compiler_params (void);
-
-
-
-extern void add_params (const param_info params[], size_t n);
-
-
-
-
-
-extern void set_param_value (const char *name, int value,
-        int *params, int *params_set);
-
-
-
-
-typedef enum compiler_param
-{
-
-
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def" 1
-# 44 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
-PARAM_PREDICTABLE_BRANCH_OUTCOME,
-# 61 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
-PARAM_MAX_INLINE_INSNS_SINGLE,
-# 73 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
-PARAM_MAX_INLINE_INSNS_AUTO,
-
-
-
-
-PARAM_MAX_INLINE_INSNS_RECURSIVE,
-
-
-
-
-PARAM_MAX_INLINE_INSNS_RECURSIVE_AUTO,
-
-
-
-
-PARAM_MAX_INLINE_RECURSIVE_DEPTH,
-
-
-
-
-PARAM_MAX_INLINE_RECURSIVE_DEPTH_AUTO,
-
-
-
-
-PARAM_MIN_INLINE_RECURSIVE_PROBABILITY,
-
-
-
-
-
-
-
-PARAM_EARLY_INLINER_MAX_ITERATIONS,
-
-
-
-
-
-PARAM_COMDAT_SHARING_PROBABILITY,
-
-
-
-
-
-PARAM_PARTIAL_INLINING_ENTRY_PROBABILITY,
-
-
-
-
-
-
-PARAM_MAX_VARIABLE_EXPANSIONS,
-
-
-
-
-
-PARAM_MIN_VECT_LOOP_BOUND,
-# 142 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
-PARAM_MAX_DELAY_SLOT_INSN_SEARCH,
-# 153 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
-PARAM_MAX_DELAY_SLOT_LIVE_SEARCH,
-# 163 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
-PARAM_MAX_PENDING_LIST_LENGTH,
-
-
-
-
-
-
-PARAM_MAX_MODULO_BACKTRACK_ATTEMPTS,
-
-
-
-
-PARAM_LARGE_FUNCTION_INSNS,
-
-
-
-PARAM_LARGE_FUNCTION_GROWTH,
-
-
-
-PARAM_LARGE_UNIT_INSNS,
-
-
-
-PARAM_INLINE_UNIT_GROWTH,
-
-
-
-PARAM_IPCP_UNIT_GROWTH,
-
-
-
-PARAM_EARLY_INLINING_INSNS,
-
-
-
-PARAM_LARGE_STACK_FRAME,
-
-
-
-PARAM_STACK_FRAME_GROWTH,
-
-
-
-
-
-
-PARAM_MAX_GCSE_MEMORY,
-
-
-
-
-
-
-PARAM_MAX_GCSE_INSERTION_RATIO,
-# 228 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
-PARAM_GCSE_AFTER_RELOAD_PARTIAL_FRACTION,
-
-
-
-
-
-
-PARAM_GCSE_AFTER_RELOAD_CRITICAL_FRACTION,
-
-
-
-
-
-
-
-PARAM_GCSE_COST_DISTANCE_RATIO,
-
-
-
-
-
-PARAM_GCSE_UNRESTRICTED_COST,
-
-
-
-
-
-
-
-PARAM_MAX_HOIST_DEPTH,
-# 269 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
-PARAM_MAX_UNROLLED_INSNS,
-
-
-
-
-
-PARAM_MAX_AVERAGE_UNROLLED_INSNS,
-
-
-
-
-PARAM_MAX_UNROLL_TIMES,
-
-
-
-
-PARAM_MAX_PEELED_INSNS,
-
-
-
-
-PARAM_MAX_PEEL_TIMES,
-
-
-
-
-PARAM_MAX_COMPLETELY_PEELED_INSNS,
-
-
-
-
-PARAM_MAX_COMPLETELY_PEEL_TIMES,
-
-
-
-
-PARAM_MAX_ONCE_PEELED_INSNS,
-
-
-
-
-PARAM_MAX_UNROLL_ITERATIONS,
-
-
-
-
-
-PARAM_MAX_UNSWITCH_INSNS,
-
-
-
-
-PARAM_MAX_UNSWITCH_LEVEL,
-
-
-
-
-
-
-PARAM_MAX_ITERATIONS_TO_TRACK,
-
-
-
-
-
-PARAM_MAX_ITERATIONS_COMPUTATION_COST,
-
-
-
-
-
-PARAM_SMS_MAX_II_FACTOR,
-
-
-
-
-PARAM_SMS_MIN_SC,
-
-
-
-PARAM_SMS_DFA_HISTORY,
-
-
-
-PARAM_SMS_LOOP_AVERAGE_COUNT_THRESHOLD,
-
-
-
-
-HOT_BB_COUNT_FRACTION,
-
-
-
-HOT_BB_FREQUENCY_FRACTION,
-
-
-
-
-PARAM_ALIGN_THRESHOLD,
-
-
-
-
-PARAM_ALIGN_LOOP_ITERATIONS,
-# 388 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
-PARAM_MAX_PREDICTED_ITERATIONS,
-
-
-
-TRACER_DYNAMIC_COVERAGE_FEEDBACK,
-
-
-
-TRACER_DYNAMIC_COVERAGE,
-
-
-
-TRACER_MAX_CODE_GROWTH,
-
-
-
-TRACER_MIN_BRANCH_RATIO,
-
-
-
-TRACER_MIN_BRANCH_PROBABILITY_FEEDBACK,
-
-
-
-TRACER_MIN_BRANCH_PROBABILITY,
-
-
-
-
-
-PARAM_MAX_CROSSJUMP_EDGES,
-
-
-
-
-
-PARAM_MIN_CROSSJUMP_INSNS,
-
-
-
-
-
-PARAM_MAX_GROW_COPY_BB_INSNS,
-
-
-
-
-
-PARAM_MAX_GOTO_DUPLICATION_INSNS,
-
-
-
-
-
-PARAM_MAX_CSE_PATH_LENGTH,
-
-
-
-PARAM_MAX_CSE_INSNS,
-
-
-
-
-
-
-PARAM_LIM_EXPENSIVE,
-# 462 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
-PARAM_IV_CONSIDER_ALL_CANDIDATES_BOUND,
-
-
-
-
-
-
-
-PARAM_IV_MAX_CONSIDERED_USES,
-
-
-
-
-
-
-
-PARAM_IV_ALWAYS_PRUNE_CAND_SET_BOUND,
-
-
-
-
-PARAM_SCEV_MAX_EXPR_SIZE,
-
-
-
-
-PARAM_SCEV_MAX_EXPR_COMPLEXITY,
-
-
-
-
-PARAM_OMEGA_MAX_VARS,
-
-
-
-
-PARAM_OMEGA_MAX_GEQS,
-
-
-
-
-PARAM_OMEGA_MAX_EQS,
-
-
-
-
-PARAM_OMEGA_MAX_WILD_CARDS,
-
-
-
-
-PARAM_OMEGA_HASH_TABLE_SIZE,
-
-
-
-
-PARAM_OMEGA_MAX_KEYS,
-
-
-
-
-PARAM_OMEGA_ELIMINATE_REDUNDANT_CONSTRAINTS,
-
-
-
-
-PARAM_VECT_MAX_VERSION_FOR_ALIGNMENT_CHECKS,
-
-
-
-
-PARAM_VECT_MAX_VERSION_FOR_ALIAS_CHECKS,
-
-
-
-
-PARAM_MAX_CSELIB_MEMORY_LOCATIONS,
-# 551 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
-GGC_MIN_EXPAND,
-
-
-
-
-GGC_MIN_HEAPSIZE,
-
-
-
-
-
-
-
-PARAM_MAX_RELOAD_SEARCH_INSNS,
-
-
-
-
-PARAM_SINK_FREQUENCY_THRESHOLD,
-
-
-
-
-PARAM_MAX_SCHED_REGION_BLOCKS,
-
-
-
-
-PARAM_MAX_SCHED_REGION_INSNS,
-
-
-
-
-PARAM_MAX_PIPELINE_REGION_BLOCKS,
-
-
-
-
-PARAM_MAX_PIPELINE_REGION_INSNS,
-
-
-
-
-PARAM_MIN_SPEC_PROB,
-
-
-
-
-PARAM_MAX_SCHED_EXTEND_REGIONS_ITERS,
-
-
-
-
-PARAM_MAX_SCHED_INSN_CONFLICT_DELAY,
-
-
-
-
-PARAM_SCHED_SPEC_PROB_CUTOFF,
-
-
-
-
-PARAM_SELSCHED_MAX_LOOKAHEAD,
-
-
-
-
-PARAM_SELSCHED_MAX_SCHED_TIMES,
-
-
-
-
-PARAM_SELSCHED_INSNS_TO_RENAME,
-
-
-
-
-PARAM_SCHED_MEM_TRUE_DEP_COST,
-
-
-
-
-PARAM_MAX_LAST_VALUE_RTL,
-# 643 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
-PARAM_INTEGER_SHARE_LIMIT,
-# 662 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
-PARAM_MIN_VIRTUAL_MAPPINGS,
-
-
-
-
-PARAM_VIRTUAL_MAPPINGS_TO_SYMS_RATIO,
-
-
-
-
-PARAM_SSP_BUFFER_SIZE,
-# 690 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
-PARAM_MAX_JUMP_THREAD_DUPLICATION_STMTS,
-# 699 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
-PARAM_MAX_FIELDS_FOR_FIELD_SENSITIVE,
-
-
-
-
-PARAM_MAX_SCHED_READY_INSNS,
-
-
-
-
-
-PARAM_MAX_DSE_ACTIVE_LOCAL_STORES,
-# 720 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
-PARAM_PREFETCH_LATENCY,
-
-
-
-
-
-
-PARAM_SIMULTANEOUS_PREFETCHES,
-
-
-
-
-
-
-PARAM_L1_CACHE_SIZE,
-
-
-
-
-
-
-PARAM_L1_CACHE_LINE_SIZE,
-
-
-
-
-
-
-PARAM_L2_CACHE_SIZE,
-# 759 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
-PARAM_USE_CANONICAL_TYPES,
-
-
-
-
-PARAM_MAX_PARTIAL_ANTIC_LENGTH,
-# 774 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.def"
-PARAM_SCCVN_MAX_SCC_SIZE,
-
-
-
-
-PARAM_IRA_MAX_LOOPS_NUM,
-
-
-
-
-PARAM_IRA_MAX_CONFLICT_TABLE_SIZE,
-
-
-
-
-PARAM_IRA_LOOP_RESERVED_REGS,
-
-
-
-
-
-
-
-PARAM_SWITCH_CONVERSION_BRANCH_RATIO,
-
-
-
-
-
-
-
-PARAM_LOOP_BLOCK_TILE_SIZE,
-
-
-
-
-
-
-PARAM_GRAPHITE_MAX_NB_SCOP_PARAMS,
-
-
-
-
-
-
-PARAM_GRAPHITE_MAX_BBS_PER_FUNCTION,
-
-
-
-
-
-PARAM_LOOP_MAX_DATAREFS_FOR_DATADEPS,
-
-
-
-
-
-
-PARAM_LOOP_INVARIANT_MAX_BBS_IN_LOOP,
-
-
-
-
-
-PARAM_SLP_MAX_INSNS_IN_BB,
-
-
-
-
-PARAM_MIN_INSN_TO_PREFETCH_RATIO,
-
-
-
-
-
-PARAM_PREFETCH_MIN_INSN_TO_MEM_RATIO,
-
-
-
-
-
-
-PARAM_MAX_VARTRACK_SIZE,
-
-
-
-
-
-
-
-PARAM_MAX_VARTRACK_EXPR_DEPTH,
-
-
-
-
-
-
-PARAM_MIN_NONDEBUG_INSN_UID,
-
-
-
-
-PARAM_IPA_SRA_PTR_GROWTH_FACTOR,
-
-
-
-
-
-PARAM_TM_MAX_AGGREGATE_SIZE,
-
-
-
-
-
-
-PARAM_IPA_CP_VALUE_LIST_SIZE,
-
-
-
-
-
-PARAM_IPA_CP_EVAL_THRESHOLD,
-
-
-
-
-
-
-
-PARAM_LTO_PARTITIONS,
-
-
-
-
-MIN_PARTITION_SIZE,
-
-
-
-
-
-
-CXX_MAX_NAMESPACES_FOR_DIAGNOSTIC_HELP,
-
-
-
-
-
-
-PARAM_MAX_STORES_TO_SINK,
-
-
-
-
-
-
-
-PARAM_CASE_VALUES_THRESHOLD,
-
-
-
-
-
-
-
-PARAM_ALLOW_LOAD_DATA_RACES,
-
-
-
-
-PARAM_ALLOW_STORE_DATA_RACES,
-
-
-
-
-PARAM_ALLOW_PACKED_LOAD_DATA_RACES,
-
-
-
-
-PARAM_ALLOW_PACKED_STORE_DATA_RACES,
-
-
-
-
-
-PARAM_TREE_REASSOC_WIDTH,
-
-
-
-
-
-PARAM_MAX_TAIL_MERGE_COMPARISONS,
-
-
-
-
-PARAM_MAX_TAIL_MERGE_ITERATIONS,
-
-
-
-
-
-
-PARAM_MAX_TRACKED_STRLENS,
-# 88 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.h" 2
-
-  LAST_PARAM
-} compiler_param;
-# 100 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/params.h"
-extern void maybe_set_param_value (compiler_param num, int value,
-       int *params, int *params_set);
-
-
-
-
-extern void set_default_param_value (compiler_param num, int value);
-
-
-
-
-extern void global_init_params (void);
-
-
-
-extern void finish_params (void);
-
-
-
-extern int default_param_value (compiler_param num);
-
-
-
-extern void init_param_values (int *params);
-# 32 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/cgraph.h" 1
-# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/cgraph.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/plugin-api.h" 1
-# 47 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/plugin-api.h"
-enum ld_plugin_status
-{
-  LDPS_OK = 0,
-  LDPS_NO_SYMS,
-  LDPS_BAD_HANDLE,
-  LDPS_ERR
-
-};
-
-
-
-enum ld_plugin_api_version
-{
-  LD_PLUGIN_API_VERSION = 1
-};
-
-
-
-enum ld_plugin_output_file_type
-{
-  LDPO_REL,
-  LDPO_EXEC,
-  LDPO_DYN
-};
-
-
-
-struct ld_plugin_input_file
-{
-  const char *name;
-  int fd;
-  off_t offset;
-  off_t filesize;
-  void *handle;
-};
-
-
-
-struct ld_plugin_symbol
-{
-  char *name;
-  char *version;
-  int def;
-  int visibility;
-  uint64_t size;
-  char *comdat_key;
-  int resolution;
-};
-
-
-
-struct ld_plugin_section
-{
-  const void* handle;
-  unsigned int shndx;
-};
-
-
-
-enum ld_plugin_symbol_kind
-{
-  LDPK_DEF,
-  LDPK_WEAKDEF,
-  LDPK_UNDEF,
-  LDPK_WEAKUNDEF,
-  LDPK_COMMON
-};
-
-
-
-enum ld_plugin_symbol_visibility
-{
-  LDPV_DEFAULT,
-  LDPV_PROTECTED,
-  LDPV_INTERNAL,
-  LDPV_HIDDEN
-};
-
-
-
-enum ld_plugin_symbol_resolution
-{
-  LDPR_UNKNOWN = 0,
-
-
-  LDPR_UNDEF,
-
-
-
-  LDPR_PREVAILING_DEF,
-
-
-
-
-  LDPR_PREVAILING_DEF_IRONLY,
-
-
-
-  LDPR_PREEMPTED_REG,
-
-
-  LDPR_PREEMPTED_IR,
-
-
-  LDPR_RESOLVED_IR,
-
-
-
-  LDPR_RESOLVED_EXEC,
-
-
-  LDPR_RESOLVED_DYN,
-
-
-
-
-
-  LDPR_PREVAILING_DEF_IRONLY_EXP
-};
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_claim_file_handler) (
-  const struct ld_plugin_input_file *file, int *claimed);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_all_symbols_read_handler) (void);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_cleanup_handler) (void);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_register_claim_file) (ld_plugin_claim_file_handler handler);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_register_all_symbols_read) (
-  ld_plugin_all_symbols_read_handler handler);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_register_cleanup) (ld_plugin_cleanup_handler handler);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_add_symbols) (void *handle, int nsyms,
-                          const struct ld_plugin_symbol *syms);
-
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_get_input_file) (const void *handle,
-                             struct ld_plugin_input_file *file);
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_get_view) (const void *handle, const void **viewp);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_release_input_file) (const void *handle);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_get_symbols) (const void *handle, int nsyms,
-                          struct ld_plugin_symbol *syms);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_add_input_file) (const char *pathname);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_add_input_library) (const char *libname);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_set_extra_library_path) (const char *path);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_message) (int level, const char *format, ...);
-
-
-
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_get_input_section_count) (const void* handle, unsigned int *count);
-
-
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_get_input_section_type) (const struct ld_plugin_section section,
-                                     unsigned int *type);
-
-
-
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_get_input_section_name) (const struct ld_plugin_section section,
-                                     char **section_name_ptr);
-
-
-
-
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_get_input_section_contents) (const struct ld_plugin_section section,
-                                         const unsigned char **section_contents,
-                                         size_t* len);
-
-
-
-
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_update_section_order) (const struct ld_plugin_section *section_list,
-       unsigned int num_sections);
-
-
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_allow_section_ordering) (void);
-
-enum ld_plugin_level
-{
-  LDPL_INFO,
-  LDPL_WARNING,
-  LDPL_ERROR,
-  LDPL_FATAL
-};
-
-
-
-enum ld_plugin_tag
-{
-  LDPT_NULL = 0,
-  LDPT_API_VERSION,
-  LDPT_GOLD_VERSION,
-  LDPT_LINKER_OUTPUT,
-  LDPT_OPTION,
-  LDPT_REGISTER_CLAIM_FILE_HOOK,
-  LDPT_REGISTER_ALL_SYMBOLS_READ_HOOK,
-  LDPT_REGISTER_CLEANUP_HOOK,
-  LDPT_ADD_SYMBOLS,
-  LDPT_GET_SYMBOLS,
-  LDPT_ADD_INPUT_FILE,
-  LDPT_MESSAGE,
-  LDPT_GET_INPUT_FILE,
-  LDPT_RELEASE_INPUT_FILE,
-  LDPT_ADD_INPUT_LIBRARY,
-  LDPT_OUTPUT_NAME,
-  LDPT_SET_EXTRA_LIBRARY_PATH,
-  LDPT_GNU_LD_VERSION,
-  LDPT_GET_VIEW,
-  LDPT_GET_INPUT_SECTION_COUNT,
-  LDPT_GET_INPUT_SECTION_TYPE,
-  LDPT_GET_INPUT_SECTION_NAME,
-  LDPT_GET_INPUT_SECTION_CONTENTS,
-  LDPT_UPDATE_SECTION_ORDER,
-  LDPT_ALLOW_SECTION_ORDERING,
-  LDPT_GET_SYMBOLS_V2
-};
-
-
-
-struct ld_plugin_tv
-{
-  enum ld_plugin_tag tv_tag;
-  union
-  {
-    int tv_val;
-    const char *tv_string;
-    ld_plugin_register_claim_file tv_register_claim_file;
-    ld_plugin_register_all_symbols_read tv_register_all_symbols_read;
-    ld_plugin_register_cleanup tv_register_cleanup;
-    ld_plugin_add_symbols tv_add_symbols;
-    ld_plugin_get_symbols tv_get_symbols;
-    ld_plugin_add_input_file tv_add_input_file;
-    ld_plugin_message tv_message;
-    ld_plugin_get_input_file tv_get_input_file;
-    ld_plugin_get_view tv_get_view;
-    ld_plugin_release_input_file tv_release_input_file;
-    ld_plugin_add_input_library tv_add_input_library;
-    ld_plugin_set_extra_library_path tv_set_extra_library_path;
-    ld_plugin_get_input_section_count tv_get_input_section_count;
-    ld_plugin_get_input_section_type tv_get_input_section_type;
-    ld_plugin_get_input_section_name tv_get_input_section_name;
-    ld_plugin_get_input_section_contents tv_get_input_section_contents;
-    ld_plugin_update_section_order tv_update_section_order;
-    ld_plugin_allow_section_ordering tv_allow_section_ordering;
-  } tv_u;
-};
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_onload) (struct ld_plugin_tv *tv);
-# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/cgraph.h" 2
-
-
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/basic-block.h" 1
-# 24 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/basic-block.h"
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/predict.h" 1
-# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/predict.h"
-enum br_predictor
-{
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/predict.def" 1
-# 38 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/predict.def"
-PRED_COMBINED,
-
-
-PRED_DS_THEORY,
-
-
-
-PRED_FIRST_MATCH,
-
-
-PRED_NO_PREDICTION,
-
-
-PRED_UNCONDITIONAL,
-
-
-
-
-
-PRED_LOOP_ITERATIONS,
-
-
-
-PRED_BUILTIN_EXPECT,
-
-
-
-PRED_LOOP_ITERATIONS_GUESSED,
-
-
-
-PRED_CONTINUE,
-
-
-PRED_NORETURN,
-
-
-
-PRED_COLD_FUNCTION,
-
-
-
-PRED_LOOP_BRANCH,
-
-
-
-PRED_LOOP_EXIT,
-
-
-
-PRED_POINTER,
-PRED_TREE_POINTER,
-
-
-PRED_OPCODE_POSITIVE,
-PRED_OPCODE_NONEQUAL,
-PRED_FPOPCODE,
-PRED_TREE_OPCODE_POSITIVE,
-PRED_TREE_OPCODE_NONEQUAL,
-PRED_TREE_FPOPCODE,
-
-
-PRED_CALL,
-
-
-PRED_TREE_EARLY_RETURN,
-
-
-PRED_GOTO,
-
-
-PRED_CONST_RETURN,
-
-
-PRED_NEGATIVE_RETURN,
-
-
-PRED_NULL_RETURN,
-
-
-PRED_MUDFLAP,
-# 28 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/predict.h" 2
-
-
-  END_PREDICTORS
-};
-
-enum prediction
-{
-   NOT_TAKEN,
-   TAKEN
-};
-
-extern void predict_insn_def (rtx, enum br_predictor, enum prediction);
-extern int counts_to_freqs (void);
-extern void estimate_bb_frequencies (void);
-extern const char *predictor_name (enum br_predictor);
-extern tree build_predict_expr (enum br_predictor, enum prediction);
-extern void tree_estimate_probability (void);
-extern void compute_function_frequency (void);
-extern void rebuild_frequencies (void);
-# 25 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/basic-block.h" 2
-
-# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/function.h" 1
 # 27 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/basic-block.h" 2
 
 
@@ -29692,7 +29258,7 @@ decl_is_tm_clone (const_tree fndecl)
     return n->tm_clone;
   return 0;
 }
-# 33 "/opt/gcc-plugins/src/acf_plugin.c" 2
+# 24 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c" 2
 # 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/opts.h" 1
 # 28 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/opts.h"
 enum cl_var_type {
@@ -30025,11 +29591,452 @@ extern void set_struct_debug_option (struct gcc_options *opts,
          const char *value);
 extern unsigned char opt_enum_arg_to_value (size_t opt_index, const char *arg,
        int *value, unsigned int lang_mask);
-# 34 "/opt/gcc-plugins/src/acf_plugin.c" 2
+# 25 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c" 2
+
+# 1 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/plugin-utils.h" 1
+# 22 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/plugin-utils.h"
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/tree.h" 1
+# 23 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/plugin-utils.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/langhooks.h" 1
+# 26 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/langhooks.h"
+struct diagnostic_info;
+
+struct gimplify_omp_ctx;
+
+struct array_descr_info;
 
 
-# 1 "/opt/gcc-plugins/src/acf_plugin.h" 1
-# 34 "/opt/gcc-plugins/src/acf_plugin.h"
+typedef void (*lang_print_tree_hook) (FILE *, tree, int indent);
+
+enum classify_record
+  { RECORD_IS_STRUCT, RECORD_IS_CLASS, RECORD_IS_INTERFACE };
+
+
+
+
+struct lang_hooks_for_tree_inlining
+{
+  unsigned char (*var_mod_type_p) (tree, tree);
+};
+
+struct lang_hooks_for_callgraph
+{
+
+
+  tree (*analyze_expr) (tree *, int *);
+};
+
+
+
+struct lang_hooks_for_tree_dump
+{
+
+
+  unsigned char (*dump_tree) (void *, tree);
+
+
+  int (*type_quals) (const_tree);
+};
+
+
+
+struct lang_hooks_for_types
+{
+
+
+  tree (*make_type) (enum tree_code);
+
+
+
+
+  enum classify_record (*classify_record) (tree);
+
+
+
+  tree (*type_for_mode) (enum machine_mode, int);
+
+
+
+  tree (*type_for_size) (unsigned, int);
+
+
+
+  unsigned char (*generic_p) (const_tree);
+
+
+  tree (*get_argument_pack_elems) (const_tree);
+
+
+
+
+
+  tree (*type_promotes_to) (tree);
+# 106 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/langhooks.h"
+  void (*register_builtin_type) (tree, const char *);
+
+
+
+
+
+  void (*incomplete_type_error) (const_tree value, const_tree type);
+
+
+
+  tree (*max_size) (const_tree);
+
+
+
+  void (*omp_firstprivatize_type_sizes) (struct gimplify_omp_ctx *, tree);
+
+
+
+
+
+  unsigned char (*type_hash_eq) (const_tree, const_tree);
+
+
+
+  unsigned char (*get_array_descr_info) (const_tree, struct array_descr_info *);
+
+
+  void (*get_subrange_bounds) (const_tree, tree *, tree *);
+
+
+
+
+  tree (*descriptive_type) (const_tree);
+
+
+
+
+
+  tree (*reconstruct_complex_type) (tree, tree);
+};
+
+
+
+struct lang_hooks_for_decls
+{
+
+
+
+  unsigned char (*global_bindings_p) (void);
+
+
+
+
+
+  tree (*pushdecl) (tree);
+
+
+  tree (*getdecls) (void);
+
+
+  unsigned char (*function_decl_explicit_p) (tree);
+
+
+
+  unsigned char (*generic_generic_parameter_decl_p) (const_tree);
+
+
+
+  unsigned char (*function_parm_expanded_from_pack_p) (tree, tree);
+
+
+  tree (*get_generic_function_decl) (const_tree);
+
+
+
+  unsigned char (*warn_unused_global) (const_tree);
+
+
+
+  void (*final_write_globals) (void);
+
+
+  unsigned char (*ok_for_sibcall) (const_tree);
+
+
+
+  unsigned char (*omp_privatize_by_reference) (const_tree);
+
+
+
+  enum omp_clause_default_kind (*omp_predetermined_sharing) (tree);
+
+
+
+  tree (*omp_report_decl) (tree);
+
+
+
+
+
+  unsigned char (*omp_disregard_value_expr) (tree, unsigned char);
+
+
+
+  unsigned char (*omp_private_debug_clause) (tree, unsigned char);
+
+
+
+  unsigned char (*omp_private_outer_ref) (tree);
+
+
+
+
+  tree (*omp_clause_default_ctor) (tree clause, tree decl, tree outer);
+
+
+  tree (*omp_clause_copy_ctor) (tree clause, tree dst, tree src);
+
+
+  tree (*omp_clause_assign_op) (tree clause, tree dst, tree src);
+
+
+
+  tree (*omp_clause_dtor) (tree clause, tree decl);
+
+
+  void (*omp_finish_clause) (tree clause);
+};
+
+
+
+struct lang_hooks_for_lto
+{
+
+  void (*begin_section) (const char *name);
+
+
+
+
+
+  void (*append_data) (const void *data, size_t len, void *block);
+
+
+  void (*end_section) (void);
+};
+
+
+
+struct lang_hooks
+{
+
+  const char *name;
+
+
+
+  size_t identifier_size;
+
+
+  void (*free_lang_data) (tree);
+
+
+
+
+
+  size_t (*tree_size) (enum tree_code);
+
+
+
+  unsigned int (*option_lang_mask) (void);
+
+
+  void (*init_options_struct) (struct gcc_options *opts);
+
+
+
+
+  void (*init_options) (unsigned int decoded_options_count,
+   struct cl_decoded_option *decoded_options);
+
+
+
+  void (*initialize_diagnostics) (diagnostic_context *);
+
+
+
+
+  unsigned char (*complain_wrong_lang_p) (const struct cl_option *option);
+# 304 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/langhooks.h"
+  unsigned char (*handle_option) (size_t code, const char *arg, int value, int kind,
+    location_t loc,
+    const struct cl_option_handlers *handlers);
+# 316 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/langhooks.h"
+  unsigned char (*post_options) (const char **);
+
+
+
+
+  unsigned char (*init) (void);
+
+
+  void (*finish) (void);
+
+
+  void (*parse_file) (void);
+
+
+  unsigned char (*missing_noreturn_ok_p) (tree);
+
+
+
+  alias_set_type (*get_alias_set) (tree);
+
+
+
+  void (*finish_incomplete_decl) (tree);
+
+
+
+  void (*dup_lang_specific_decl) (tree);
+
+
+
+
+
+
+  void (*set_decl_assembler_name) (tree);
+
+
+
+  void (*print_statistics) (void);
+
+
+
+  lang_print_tree_hook print_xnode;
+
+
+
+  lang_print_tree_hook print_decl;
+  lang_print_tree_hook print_type;
+  lang_print_tree_hook print_identifier;
+# 374 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/langhooks.h"
+  const char *(*decl_printable_name) (tree decl, int verbosity);
+
+
+
+
+  const char *(*dwarf_name) (tree, int verbosity);
+
+
+
+
+  int (*types_compatible_p) (tree x, tree y);
+
+
+  void (*print_error_function) (diagnostic_context *, const char *,
+    struct diagnostic_info *);
+# 397 "/opt/gcc-plugins/prebuilt/x86_64/gcc-4.7.2/bin/../lib/gcc/x86_64-unknown-linux-gnu/4.7.2/plugin/include/langhooks.h"
+  long (*to_target_charset) (long);
+
+
+
+
+
+
+  const struct attribute_spec *attribute_table;
+  const struct attribute_spec *common_attribute_table;
+  const struct attribute_spec *format_attribute_table;
+
+  struct lang_hooks_for_tree_inlining tree_inlining;
+
+  struct lang_hooks_for_callgraph callgraph;
+
+  struct lang_hooks_for_tree_dump tree_dump;
+
+  struct lang_hooks_for_decls decls;
+
+  struct lang_hooks_for_types types;
+
+  struct lang_hooks_for_lto lto;
+
+
+
+  tree (*get_innermost_generic_parms) (const_tree);
+
+
+
+  tree (*get_innermost_generic_args) (const_tree);
+
+
+  unsigned char (*function_parameter_pack_p) (const_tree);
+
+
+
+  int (*gimplify_expr) (tree *, gimple_seq *, gimple_seq *);
+
+
+  tree (*builtin_function) (tree decl);
+
+
+
+
+
+
+
+  tree (*builtin_function_ext_scope) (tree decl);
+
+
+  void (*init_ts) (void);
+
+
+
+
+  tree (*expr_to_decl) (tree expr, unsigned char *tc, unsigned char *se);
+
+
+  tree (*eh_personality) (void);
+
+
+  tree (*eh_runtime_type) (tree);
+
+
+
+
+
+
+
+  tree (*eh_protect_cleanup_actions) (void);
+
+
+
+  unsigned char eh_use_cxa_end_cleanup;
+
+
+
+  unsigned char deep_unsharing;
+
+
+
+};
+
+
+extern struct lang_hooks lang_hooks;
+extern tree add_builtin_function (const char *name, tree type,
+      int function_code, enum built_in_class cl,
+      const char *library_name,
+      tree attrs);
+
+extern tree add_builtin_function_ext_scope (const char *name, tree type,
+         int function_code,
+         enum built_in_class cl,
+         const char *library_name,
+         tree attrs);
+# 24 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/plugin-utils.h" 2
+
+
+extern int is_gcc(void);
+
+
+extern int is_gpp(void);
+
+
+extern int is_lto(void);
+# 27 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c" 2
+# 1 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.h" 1
+# 33 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.h"
 struct csv_list {
     struct csv_row *rows;
     struct csv_row *last_row;
@@ -30075,38 +30082,53 @@ typedef struct acf_ftable_entry {
     int attr_arg_number;
     attr_arg opt_args[10];
 } acf_ftable_entry_t;
-# 94 "/opt/gcc-plugins/src/acf_plugin.h"
+# 95 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.h"
 void initCSV(struct csv_list *clist);
 unsigned char readCSV(char *filename, struct csv_list *clist);
 
+
+
 int parseCSV(struct csv_list *clist, acf_ftable_entry_t **acf_ftable_p,
-      int verbose);
-# 37 "/opt/gcc-plugins/src/acf_plugin.c" 2
+             int verbose);
+# 28 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c" 2
+
+
+
+
+static struct plugin_info acf_plugin_info = {
+    version : "Gcc-Plugin-ACF version " "v0.1"
+        " (STMicroelectronics Base - revision " "SHA1_VERSION" ")",
+    help : "ACF Plugin: "
+    "Pass GCC options and parameters at function level through ACF files."
+};
 
 
 
 
 
-extern void error (const char *, ...);
-# 54 "/opt/gcc-plugins/src/acf_plugin.c"
+
+extern void error(const char *, ...);
+# 56 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
 static acf_ftable_entry_t *acf_ftable;
 static const char *acf_csv_file_key="csv_file";
 
 static char *acf_csv_files[128];
 static int acf_csv_files_num = 0;
 
-static unsigned char register_acf_file(const char *plugin_name, char * acf_csv_filename) {
+static unsigned char register_acf_file(const char *plugin_name,
+                              char * acf_csv_filename) {
     FILE *fcsv;
 
     acf_csv_files_num++;
     if (acf_csv_files_num > 128) {
- error("%s: too many csv files too register(%d): %s\n", plugin_name, acf_csv_files_num, acf_csv_filename);
- return 0;
+        error("%s: too many csv files to register(%d): %s\n",
+              plugin_name, acf_csv_files_num, acf_csv_filename);
+        return 0;
     }
 
     if ((fcsv = fopen_unlocked(acf_csv_filename,"r")) == ((void *)0)) {
- error("%s: csv file not found: %s\n", plugin_name, acf_csv_filename);
- return 0;
+        error("%s: csv file not found: %s\n", plugin_name, acf_csv_filename);
+        return 0;
     }
 
     fclose(fcsv);
@@ -30120,103 +30142,108 @@ static unsigned char verbose = 0;
 
 int plugin_is_GPL_compatible;
 static const char *plugin_name;
-# 120 "/opt/gcc-plugins/src/acf_plugin.c"
-static void trace_attached_acf(acf_ftable_entry_t *acf_entry, const char *acf_type,
-          const char *func_name, const char *acf_pass_name) {
+# 124 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
+static void trace_attached_acf(acf_ftable_entry_t *acf_entry,
+                               const char *acf_type,
+                               const char *func_name,
+                               const char *acf_pass_name) {
     const char *sep = "";
     int i;
     fprintf(stderr, "%s: %s for function %s, attaching %s: %s ", plugin_name, acf_pass_name, func_name, acf_type, acf_entry->opt_attr)
-                                                                          ;
+
+                                ;
     for (i = 0; i < acf_entry->attr_arg_number; i++) {
- switch (acf_entry->opt_args[i].arg_type) {
- case NO_TYPE:
-     break;
- case STR_TYPE:
-     fprintf(stderr, "%s%s", sep, (acf_entry->opt_args[i].av.str_arg != ((void *)0) ? acf_entry->opt_args[i].av.str_arg : "(null),"))
-                                                     ;
-     break;
- case INT_TYPE:
-     fprintf(stderr, "%s#%d", sep, acf_entry->opt_args[i].av.int_arg);
-     break;
- }
- sep = ",";
+        switch (acf_entry->opt_args[i].arg_type) {
+        case NO_TYPE:
+            break;
+        case STR_TYPE:
+            fprintf(stderr, "%s%s", sep, (acf_entry->opt_args[i].av.str_arg != ((void *)0) ? acf_entry->opt_args[i].av.str_arg : "(null),"))
+
+                                             ;
+            break;
+        case INT_TYPE:
+            fprintf(stderr, "%s#%d", sep, acf_entry->opt_args[i].av.int_arg);
+            break;
+        }
+        sep = ",";
     }
     if (acf_entry->opt_file == ((void *)0))
- fprintf(stderr, "\n");
+        fprintf(stderr, "\n");
     else
- fprintf(stderr, " (file: %s)\n", acf_entry->opt_file);
+        fprintf(stderr, " (file: %s)\n", acf_entry->opt_file);
 }
 
 
 
 
 
-extern tree maybe_constant_value (tree) __attribute__((weak));
+extern tree maybe_constant_value(tree) __attribute__((weak));
 
 
 
 
-
-static void
-my_cp_check_const_attributes (tree attributes)
-{
-  tree attr;
-  for (attr = attributes; attr; attr = ((attr)->common.chain))
-    {
-      tree arg;
-      for (arg = ((attr)->list.value); arg; arg = ((arg)->common.chain))
- {
-   tree expr = ((arg)->list.value);
-   if (((tree_code_type[(int) (((enum tree_code) (expr)->base.code))]) >= tcc_reference && (tree_code_type[(int) (((enum tree_code) (expr)->base.code))]) <= tcc_expression))
-     ((arg)->list.value) = maybe_constant_value (expr);
- }
+static void my_cp_check_const_attributes(tree attributes) {
+    tree attr;
+    for (attr = attributes; attr; attr = ((attr)->common.chain)) {
+        tree arg;
+        for (arg = ((attr)->list.value); arg; arg = ((arg)->common.chain)) {
+            tree expr = ((arg)->list.value);
+            if (((tree_code_type[(int) (((enum tree_code) (expr)->base.code))]) >= tcc_reference && (tree_code_type[(int) (((enum tree_code) (expr)->base.code))]) <= tcc_expression))
+                ((arg)->list.value) = maybe_constant_value(expr);
+        }
     }
 }
 
 typedef void (*decl_attributes_func_type)
-    (tree *decl,tree attributes,int flags);
+(tree *decl, tree attributes, int flags);
 static decl_attributes_func_type decl_attributes_func;
 
 
 
 static void
-add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tree decl, const char *acf_pass_name) {
-    tree attribute_identifier = (__builtin_constant_p (acf_entry->opt_attr) ? get_identifier_with_length ((acf_entry->opt_attr), strlen (acf_entry->opt_attr)) : get_identifier (acf_entry->opt_attr));;
+add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry,
+                   tree decl, const char *acf_pass_name) {
+    tree attribute_identifier = (__builtin_constant_p (acf_entry->opt_attr) ? get_identifier_with_length ((acf_entry->opt_attr), strlen (acf_entry->opt_attr)) : get_identifier (acf_entry->opt_attr));
     tree attribute_list = (tree) ((void *)0);
     tree argument = (tree) ((void *)0);
     tree argument_list = (tree) ((void *)0);
     int i;
 
     if (verbose)
- trace_attached_acf(acf_entry, "attribute", cur_func_name, acf_pass_name);
+        trace_attached_acf(acf_entry, "attribute",
+                           cur_func_name, acf_pass_name);
 
     if (acf_entry->attr_arg_number != 0) {
- for (i = 0; i < acf_entry->attr_arg_number; i++) {
-     switch (acf_entry->opt_args[i].arg_type) {
-     case NO_TYPE:
-  break;
-     case STR_TYPE:
-  argument = build_string(strlen(acf_entry->opt_args[i].av.str_arg),
-     acf_entry->opt_args[i].av.str_arg);
-  argument_list = tree_cons_stat ((tree) ((void *)0),argument,argument_list );
-  break;
-     case INT_TYPE:
-  argument = build_int_cst ((tree) ((void *)0), acf_entry->opt_args[i].av.int_arg);
-  argument_list = tree_cons_stat ((tree) ((void *)0),argument,argument_list );
-  break;
-     }
- }
+        for (i = 0; i < acf_entry->attr_arg_number; i++) {
+            switch (acf_entry->opt_args[i].arg_type) {
+            case NO_TYPE:
+                break;
+            case STR_TYPE:
+                argument =
+                    build_string(strlen(acf_entry->opt_args[i].av.str_arg),
+                                 acf_entry->opt_args[i].av.str_arg);
+                argument_list =
+                    tree_cons_stat ((tree) ((void *)0),argument,argument_list );
+                break;
+            case INT_TYPE:
+                argument = build_int_cst((tree) ((void *)0),
+                                         acf_entry->opt_args[i].av.int_arg);
+                argument_list = tree_cons_stat ((tree) ((void *)0),argument,argument_list )
+                                                                   ;
+                break;
+            }
+        }
     } else {
- argument_list = (tree) ((void *)0);
+        argument_list = (tree) ((void *)0);
     }
 
     attribute_list = tree_cons_stat (attribute_identifier,argument_list,attribute_list )
-                         ;
+                                              ;
 
-    my_cp_check_const_attributes (attribute_list);
+    my_cp_check_const_attributes(attribute_list);
     if (attribute_list != (tree) ((void *)0)) {
- decl_attributes_func(&decl,attribute_list,
-        ATTR_FLAG_TYPE_IN_PLACE);
+        decl_attributes_func(&decl, attribute_list,
+                             ATTR_FLAG_TYPE_IN_PLACE);
     }
 }
 
@@ -30232,12 +30259,11 @@ static int save_optimize_fast;
 
 
 static void save_global_attribute_values() {
-
     if (save_options == ((void *)0)) {
- save_options = &loc_save_options;
+        save_options = &loc_save_options;
 
- cl_optimization_save(save_options, &global_options);
- save_optimize_fast = global_options.x_optimize_fast;
+        cl_optimization_save(save_options, &global_options);
+        save_optimize_fast = global_options.x_optimize_fast;
 
 
 
@@ -30245,116 +30271,116 @@ static void save_global_attribute_values() {
 }
 
 static void restore_global_attribute_values() {
-
     if (save_options != ((void *)0)) {
 
- cl_optimization_restore(&global_options, save_options);
- global_options.x_optimize_fast = save_optimize_fast;
+        cl_optimization_restore(&global_options, save_options);
+        global_options.x_optimize_fast = save_optimize_fast;
 
 
 
- save_options = ((void *)0);
+        save_options = ((void *)0);
     }
 }
-# 263 "/opt/gcc-plugins/src/acf_plugin.c"
+# 270 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
 static void
-add_global_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, const char *acf_pass_name) {
+add_global_attribute(const char *cur_func_name,
+                     acf_ftable_entry_t *acf_entry,
+                     const char *acf_pass_name) {
+
+    struct cl_option_handlers handlers;
 
     // if starts with "no-", remove it. Then add "f" -->
     // find_opt("fmove-loop-invariants", 1<<13) = 665
     if (!strcmp("optimize", acf_entry->opt_attr)) {
- char opt_name[128];
- int opt_value = 0;
- char *opt_str = ((void *)0);
- size_t opt_index;
+        char opt_name[128];
+        int opt_value = 0;
+        char *opt_str = ((void *)0);
+        size_t opt_index;
 
- // The global_options.x_optimize attribute only accepts the following options :
- // O<num>, <num> => -O<num>
- // Os, Ofast => -Os, -Ofast
- // <option> => -f<option>
- if (acf_entry->opt_args[0].av.str_arg[0] == 'O') {
+        // The global_options.x_optimize attribute only accepts the following options :
+        // O<num>, <num> => -O<num>
+        // Os, Ofast => -Os, -Ofast
+        // <option> => -f<option>
+        if (acf_entry->opt_args[0].av.str_arg[0] == 'O') {
 
-     if ((acf_entry->opt_args[0].av.str_arg[1] >= '0') &&
-  (acf_entry->opt_args[0].av.str_arg[1] <= '9')) {
-  strcpy(opt_name, "O");
-  opt_str = acf_entry->opt_args[0].av.str_arg+1;
-     }
-     else if (acf_entry->opt_args[0].av.str_arg[1] == '\0') {
-  opt_value = 1;
-     }
-     else {
+            if ((acf_entry->opt_args[0].av.str_arg[1] >= '0') &&
+                (acf_entry->opt_args[0].av.str_arg[1] <= '9')) {
+                snprintf(opt_name, sizeof(opt_name), "O");
+                opt_str = acf_entry->opt_args[0].av.str_arg + 1;
+            } else if (acf_entry->opt_args[0].av.str_arg[1] == '\0') {
+                opt_value = 1;
+            } else {
 
-  strcpy(opt_name, acf_entry->opt_args[0].av.str_arg);
-     }
- }
+                snprintf(opt_name, sizeof(opt_name), "%s",
+                         acf_entry->opt_args[0].av.str_arg);
+            }
+        } else if ((acf_entry->opt_args[0].av.str_arg[0] >= '0') &&
+                 (acf_entry->opt_args[0].av.str_arg[0] <= '9')) {
 
+            snprintf(opt_name, sizeof(opt_name), "O");
+            opt_str = acf_entry->opt_args[0].av.str_arg;
+        } else {
 
- else if ((acf_entry->opt_args[0].av.str_arg[0] >= '0') &&
-   (acf_entry->opt_args[0].av.str_arg[0] <= '9')) {
-     strcpy(opt_name, "O");
-     opt_str = acf_entry->opt_args[0].av.str_arg;
- }
+            if (!strncmp("no-", acf_entry->opt_args[0].av.str_arg,
+                         strlen("no-"))) {
+                snprintf(opt_name, sizeof(opt_name), "f%s",
+                         acf_entry->opt_args[0].av.str_arg + strlen("no-"));
+                opt_value = 0;
+            } else {
+                snprintf(opt_name, sizeof(opt_name), "f%s",
+                         acf_entry->opt_args[0].av.str_arg);
+                if ((opt_str = strchr(acf_entry->opt_args[0].av.str_arg, '='))
+                    != ((void *)0))
+                    opt_str++;
+                else
+                    opt_value = 1;
+            }
+        }
 
+        if (opt_str)
+            opt_value = atoi(opt_str);
 
- else {
-     strcpy(opt_name, "f");
-     if (!strncmp("no-", acf_entry->opt_args[0].av.str_arg, strlen("no-"))) {
-  strcat(opt_name, acf_entry->opt_args[0].av.str_arg + strlen("no-"));
-  opt_value = 0;
-     }
-     else {
-  strcat(opt_name, acf_entry->opt_args[0].av.str_arg);
-  if ((opt_str = strchr(acf_entry->opt_args[0].av.str_arg, '=')) != ((void *)0))
-      opt_str ++;
-  else
-      opt_value = 1;
-     }
- }
-
- if (opt_str)
-     opt_value = atoi(opt_str);
-
- opt_index = find_opt(opt_name, (1U << 18));
+        opt_index = find_opt(opt_name, (1U << 18));
 
 
- if ((opt_index >= cl_options_count) ||
-     cl_options[opt_index].alias_target == OPT_SPECIAL_ignore)
-     return;
+        if ((opt_index >= cl_options_count) ||
+            cl_options[opt_index].alias_target == OPT_SPECIAL_ignore)
+            return;
 
 
- if (verbose)
-     trace_attached_acf(acf_entry, "attribute", cur_func_name, acf_pass_name);
+        if (verbose)
+            trace_attached_acf(acf_entry, "attribute",
+                               cur_func_name, acf_pass_name);
 
- save_global_attribute_values();
+        save_global_attribute_values();
 
 
- {
-     struct cl_option_handlers handlers;
-     set_default_handlers (&handlers);
-     switch (opt_index) {
-     case OPT_O:
-  global_options.x_optimize = opt_value;
-  if ((unsigned int) global_options.x_optimize > 255)
-      global_options.x_optimize = 255;
-  global_options.x_optimize_size = 0;
-  global_options.x_optimize_fast = 0;
-  break;
-     case OPT_Os:
-  global_options.x_optimize = 2;
-  global_options.x_optimize_size = 1;
-  global_options.x_optimize_fast = 0;
-  break;
-     case OPT_Ofast:
-  global_options.x_optimize = 3;
-  global_options.x_optimize_size = 0;
-  global_options.x_optimize_fast = 1;
-  break;
-     default:
-  handle_generated_option(&global_options, &global_options_set, opt_index, opt_str, opt_value,
-     (1U << 18), DK_UNSPECIFIED, ((source_location) 0), &handlers, ((void *)0));
-     }
- }
-# 376 "/opt/gcc-plugins/src/acf_plugin.c"
+        set_default_handlers(&handlers);
+        switch (opt_index) {
+        case OPT_O:
+            global_options.x_optimize = opt_value;
+            if ((unsigned int) global_options.x_optimize > 255)
+                global_options.x_optimize = 255;
+            global_options.x_optimize_size = 0;
+            global_options.x_optimize_fast = 0;
+            break;
+        case OPT_Os:
+            global_options.x_optimize = 2;
+            global_options.x_optimize_size = 1;
+            global_options.x_optimize_fast = 0;
+            break;
+        case OPT_Ofast:
+            global_options.x_optimize = 3;
+            global_options.x_optimize_size = 0;
+            global_options.x_optimize_fast = 1;
+            break;
+        default:
+            handle_generated_option(&global_options, &global_options_set,
+                                    opt_index, opt_str, opt_value,
+                                    (1U << 18), DK_UNSPECIFIED,
+                                    ((source_location) 0), &handlers, ((void *)0));
+        }
+# 385 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
     }
 
     // An example for --param max-unroll-times=4
@@ -30379,10 +30405,10 @@ static unsigned char get_param_idx(char *opt_param, size_t *idx) {
     size_t i, num_compiler_params = get_num_compiler_params();
 
     for (i = 0; i < num_compiler_params; ++i) {
- if (strcmp (compiler_params[i].option, opt_param) == 0) {
-     *idx = i;
-     return 1;
- }
+        if (strcmp(compiler_params[i].option, opt_param) == 0) {
+            *idx = i;
+            return 1;
+        }
     }
     return 0;
 }
@@ -30391,12 +30417,12 @@ static void save_and_set_param(char *opt_param, int value) {
     size_t param_idx;
 
     if (!get_param_idx(opt_param, &param_idx))
- return;
+        return;
 
     // Save current param value
     csv_param_name[csv_param_index] = opt_param;
     csv_param_value[csv_param_index] = ((int) global_options.x_param_values[(int) param_idx]);
-    csv_param_index ++;
+    csv_param_index++;
 
     // Set new param value
 
@@ -30407,29 +30433,30 @@ static void save_and_set_param(char *opt_param, int value) {
 }
 
 static void
-add_global_param(const char *cur_func_name, acf_ftable_entry_t *acf_entry, const char *acf_pass_name) {
+add_global_param(const char *cur_func_name, acf_ftable_entry_t *acf_entry,
+                 const char *acf_pass_name) {
     char *opt_param;
     int opt_value;
     unsigned char bad = 0;
 
 
     if (acf_entry->attr_arg_number != 2)
- bad = 1;
+        bad = 1;
     if (acf_entry->opt_args[0].arg_type != STR_TYPE)
- bad = 1;
+        bad = 1;
     if (acf_entry->opt_args[1].arg_type != INT_TYPE)
- bad = 1;
+        bad = 1;
 
     if (bad) {
- fprintf(stderr,"%s: Warning: wrong --param setting.\n", plugin_name);
- return;
+        fprintf(stderr, "%s: Warning: wrong --param setting.\n", plugin_name);
+        return;
     }
 
     opt_param = acf_entry->opt_args[0].av.str_arg;
     opt_value = acf_entry->opt_args[1].av.int_arg;
 
     if (verbose)
- trace_attached_acf(acf_entry, "param", cur_func_name, acf_pass_name);
+        trace_attached_acf(acf_entry, "param", cur_func_name, acf_pass_name);
 
     save_and_set_param(opt_param, opt_value);
 }
@@ -30437,9 +30464,10 @@ add_global_param(const char *cur_func_name, acf_ftable_entry_t *acf_entry, const
 static void restore_global_param_values() {
     size_t i;
 
-    for ( i = 0; i < csv_param_index; i++) {
+    for (i = 0; i < csv_param_index; i++) {
 
- set_param_value(csv_param_name[i], csv_param_value[i], global_options.x_param_values, csv_param_set);
+        set_param_value(csv_param_name[i], csv_param_value[i],
+                        global_options.x_param_values, csv_param_set);
 
 
 
@@ -30449,7 +30477,9 @@ static void restore_global_param_values() {
 
 
 
-static unsigned char func_name_match(const acf_ftable_entry_t *acf_entry, const char *cur_func) {
+
+static unsigned char func_name_match(const acf_ftable_entry_t *acf_entry,
+                            const char *cur_func) {
 
 
 
@@ -30461,8 +30491,8 @@ static unsigned char func_name_match(const acf_ftable_entry_t *acf_entry, const 
     size_t cur_func_len = strlen(cur_func);
 
     if (cur_func_len < acf_func_len ||
- memcmp(cur_func, acf_func, acf_func_len) != 0)
- return 0;
+        memcmp(cur_func, acf_func, acf_func_len) != 0)
+        return 0;
 
     suffix = cur_func+acf_func_len;
 
@@ -30470,7 +30500,7 @@ static unsigned char func_name_match(const acf_ftable_entry_t *acf_entry, const 
 
 
 
- return 1;
+        return 1;
     }
 
     if (*suffix != '.') {
@@ -30478,27 +30508,27 @@ static unsigned char func_name_match(const acf_ftable_entry_t *acf_entry, const 
 
 
 
- return 0;
+        return 0;
     }
 
     next_token = suffix;
     do {
- token = next_token + 1;
- next_token = strchr(token, '.');
- token_len = (next_token == ((void *)0)) ? strlen(token) : next_token-token;
+        token = next_token + 1;
+        next_token = strchr(token, '.');
+        token_len = (next_token == ((void *)0)) ? strlen(token) : next_token-token;
 
- if (!((token_len == 0) ||
-       (strspn(token, "0123456789") == token_len) ||
-       ((strlen("part") == token_len) && (strncmp("part", token, token_len) == 0)) ||
-       ((strlen("isra") == token_len) && (strncmp("isra", token, token_len) == 0)) ||
-       ((strlen("clone") == token_len) && (strncmp("clone", token, token_len) == 0)) ||
-       ((strlen("constprop") == token_len) && (strncmp("constprop", token, token_len) == 0)))) {
-
-
+        if (!((token_len == 0) ||
+              (strspn(token, "0123456789") == token_len) ||
+              ((strlen("part") == token_len) && (strncmp("part", token, token_len) == 0)) ||
+              ((strlen("isra") == token_len) && (strncmp("isra", token, token_len) == 0)) ||
+              ((strlen("clone") == token_len) && (strncmp("clone", token, token_len) == 0)) ||
+              ((strlen("constprop") == token_len) && (strncmp("constprop", token, token_len) == 0)))) {
 
 
-     return 0;
- }
+
+
+            return 0;
+        }
     } while (next_token != ((void *)0));
 
 
@@ -30509,8 +30539,8 @@ static unsigned char func_name_match(const acf_ftable_entry_t *acf_entry, const 
 
 
 
-static unsigned char source_file_match(const acf_ftable_entry_t *acf_entry, const char *input_file)
-{
+static unsigned char source_file_match(const acf_ftable_entry_t *acf_entry,
+                              const char *input_file) {
     unsigned char ret;
     const char *opt_file = acf_entry->opt_file;
 
@@ -30520,15 +30550,15 @@ static unsigned char source_file_match(const acf_ftable_entry_t *acf_entry, cons
 
 
 
- return 1;
+        return 1;
     }
 
 
 
     if (basename(opt_file) == opt_file) {
- ret = !strcmp(opt_file, basename(input_file));
+        ret = !strcmp(opt_file, basename(input_file));
     } else {
- ret = !strcmp(opt_file, input_file);
+        ret = !strcmp(opt_file, input_file);
     }
 
 
@@ -30537,7 +30567,10 @@ static unsigned char source_file_match(const acf_ftable_entry_t *acf_entry, cons
     return ret;
 }
 
-static const char *pass_names[] = {"unknown", "dcl passes", "all_passes", "ipa_passes"};
+static const char *pass_names[] = { "unknown",
+                                    "dcl passes",
+                                    "all_passes",
+                                    "ipa_passes"};
 
 static unsigned char fill_csv_options(tree decl, int acf_pass) {
     const char *cur_func_name = ((void *)0);
@@ -30549,60 +30582,59 @@ static unsigned char fill_csv_options(tree decl, int acf_pass) {
     static unsigned char csv_parsed = 0;
 
     if (!csv_parsed) {
- struct csv_list parsed_csv;
+        struct csv_list parsed_csv;
 
- initCSV(&parsed_csv);
+        initCSV(&parsed_csv);
 
- for (i = 0; i < acf_csv_files_num; i++) {
-     if (!readCSV(acf_csv_files[i], &parsed_csv))
-  return 0;
- }
+        for (i = 0; i < acf_csv_files_num; i++) {
+            if (!readCSV(acf_csv_files[i], &parsed_csv))
+                return 0;
+        }
 
- func_number = parseCSV(&parsed_csv, &acf_ftable, verbose);
- csv_parsed = 1;
+        func_number = parseCSV(&parsed_csv, &acf_ftable, verbose);
+        csv_parsed = 1;
     }
-    if (func_number < 0){
+    if (func_number < 0) {
 
- return 0;
+        return 0;
     }
 
 
     cur_func_name = ((const char *) (decl_assembler_name ((cfun + 0)->decl))->identifier.id.str);
 
-    // fprintf(stderr, "%s: fill_csv_options(%s) for function %s\n", plugin_name, acf_pass_name, cur_func_name);
+    for (i = 0; i < func_number; i++) {
+        acf_ftable_entry_t *acf_entry = &acf_ftable[i];
 
-    for (i = 0; i < func_number; i++){
- acf_ftable_entry_t *acf_entry = &acf_ftable[i];
+        // TBD: Do not match input_file_name if is_lto()
+        if (!func_name_match(acf_entry, cur_func_name) ||
+            !source_file_match(acf_entry, global_options.x_main_input_filename))
+            continue;
 
- // TBD: Do not match input_file_name if is_lto()
- if (!func_name_match(acf_entry, cur_func_name) ||
-     !source_file_match(acf_entry, global_options.x_main_input_filename))
-     continue;
-
- switch (acf_pass) {
- case 1:
-     // Do not handle --param when called on function parsing
-     if (!(strcmp("param", acf_entry->opt_attr) == 0)) {
-  done = 1;
-  add_decl_attribute(cur_func_name, acf_entry, decl, acf_pass_name);
-     }
-     break;
- case 2:
- case 3:
-     if ((strcmp("param", acf_entry->opt_attr) == 0))
-  add_global_param(cur_func_name, acf_entry, acf_pass_name);
-     // Need to handle global_options.x_optimize attribute in backend only in
-     // lto mode for versions before 4.7.0
-
+        switch (acf_pass) {
+        case 1:
+            // Do not handle --param when called on function parsing
+            if (!(strcmp("param", acf_entry->opt_attr) == 0)) {
+                done = 1;
+                add_decl_attribute(cur_func_name, acf_entry, decl,
+                                   acf_pass_name);
+            }
+            break;
+        case 2:
+        case 3:
+            if ((strcmp("param", acf_entry->opt_attr) == 0))
+                add_global_param(cur_func_name, acf_entry, acf_pass_name);
+            // Need to handle global_options.x_optimize attribute in backend only in
+            // lto mode for versions before 4.7.0
 
 
 
-     done = 1;
-     break;
- default:
-     // Unkonwn pass
-     return done;
- }
+
+            done = 1;
+            break;
+        default:
+            // Unkonwn pass
+            return done;
+        }
     }
     return done;
 }
@@ -30613,33 +30645,38 @@ static unsigned char fill_csv_options(tree decl, int acf_pass) {
 
 extern void cplus_decl_attributes(tree *, tree, int) __attribute__((weak));
 
-static void attribute_injector_start_unit_callback(void *gcc_data __attribute__ ((__unused__)),
-         void *data __attribute__ ((__unused__))){
-    if(is_gcc()){
- decl_attributes_func=(decl_attributes_func_type)(&decl_attributes);
-    }else if (is_gpp()){
- decl_attributes_func=&cplus_decl_attributes;
+static void
+attribute_injector_start_unit_callback(void *gcc_data __attribute__ ((__unused__)),
+                                       void *data __attribute__ ((__unused__))) {
+    if (is_gcc()) {
+        decl_attributes_func = (decl_attributes_func_type)&decl_attributes;
+    } else if (is_gpp()) {
+        decl_attributes_func = &cplus_decl_attributes;
+    } else {
+        decl_attributes_func = ((void *)0);
     }
-    else
- decl_attributes_func=((void *)0);
 }
 
-static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
+static void attribute_injector_finish_decl_callback(void *gcc_data,
+                                                    void *data) {
     tree decl=(tree)gcc_data;
-# 662 "/opt/gcc-plugins/src/acf_plugin.c"
+# 679 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
     fill_csv_options(decl, 1);
 }
 
-static void param_injector_start_all_passes_callback(void *gcc_data,void *data) {
-
+static void param_injector_start_all_passes_callback(void *gcc_data,
+                                                     void *data) {
     if (csv_param_name == ((void *)0)) {
- csv_param_name = (char **)xmalloc(sizeof(char *)*get_num_compiler_params());
- csv_param_value = (int *)xmalloc(sizeof(int) *get_num_compiler_params());
+        csv_param_name = (char **)
+            xmalloc(sizeof(*csv_param_name) * get_num_compiler_params());
+        csv_param_value = (int *)
+            xmalloc(sizeof(*csv_param_value) * get_num_compiler_params());
     }
 
 
     if (csv_param_set == ((void *)0))
- csv_param_set = (int *)xmalloc(sizeof(int)*get_num_compiler_params());
+        csv_param_set = (int *)
+            xmalloc(sizeof(*csv_param_set) * get_num_compiler_params());
 
 
     csv_param_index = 0;
@@ -30647,24 +30684,25 @@ static void param_injector_start_all_passes_callback(void *gcc_data,void *data) 
     fill_csv_options(((void *)0), 2);
 }
 
-static void param_injector_end_passes_callback(void *gcc_data,void *data) {
-
+static void param_injector_end_passes_callback(void *gcc_data, void *data) {
     restore_global_param_values();
     restore_global_attribute_values();
 }
-# 713 "/opt/gcc-plugins/src/acf_plugin.c"
+# 732 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
 // Called when entering a sequence of GIMPLE_PASS in IPA lists
 
 static unsigned int ipa_gimple_per_func_callback(void) {
-
     if (csv_param_name == ((void *)0)) {
- csv_param_name = (char **)xmalloc(sizeof(char *)*get_num_compiler_params());
- csv_param_value = (int *)xmalloc(sizeof(int) *get_num_compiler_params());
+        csv_param_name = (char **)
+            xmalloc(sizeof(*csv_param_name) * get_num_compiler_params());
+        csv_param_value = (int *)
+            xmalloc(sizeof(*csv_param_value) * get_num_compiler_params());
     }
 
 
     if (csv_param_set == ((void *)0))
- csv_param_set = (int *)xmalloc(sizeof(int)*get_num_compiler_params());
+        csv_param_set = (int *)
+            xmalloc(sizeof(*csv_param_set) * get_num_compiler_params());
 
 
     restore_global_param_values();
@@ -30678,120 +30716,122 @@ static unsigned int ipa_gimple_per_func_callback(void) {
 // Called on the first pass after PLUGIN_EARLY_GIMPLE_PASSES_START was
 // triggered
 
-static void ipa_gimple_init_per_func_callback(void *gcc_data,void *data) {
-
+static void ipa_gimple_init_per_func_callback(void *gcc_data,
+                                              void *data) {
     // New pass to be inserted before the first GIMPLE_PASS in an IPA list
 
     static struct gimple_opt_pass static_pass_ipa_gimple_per_func = {
- {
-     GIMPLE_PASS,
-     "ipa_gimple_per_func",
+        {
+            GIMPLE_PASS,
+            "ipa_gimple_per_func",
 
 
 
-     ((void *)0),
-     &ipa_gimple_per_func_callback,
-     ((void *)0),
-     ((void *)0),
-     0,
-     TV_NONE,
-     0,
-     0,
-     0,
-     0,
-     0
- }
+            ((void *)0),
+            &ipa_gimple_per_func_callback,
+            ((void *)0),
+            ((void *)0),
+            0,
+            TV_NONE,
+            0,
+            0,
+            0,
+            0,
+            0
+        }
     };
 
     unregister_callback(plugin_name, PLUGIN_PASS_EXECUTION);
 
     // Check if the pass has not already been inserted (is it possible ?)
     if (strcmp(current_pass->name, "ipa_gimple_per_func") != 0) {
- // We cannot insert the new pass before current one since the
- // caller has a pointer on the current pass. So we insert it after, and
- // we permute the first two passes.
- struct gimple_opt_pass *pass_ipa_gimple_per_func;
- struct register_pass_info *ipa_gimple_per_func_info;
+        // We cannot insert the new pass before current one since the
+        // caller has a pointer on the current pass. So we insert it after, and
+        // we permute the first two passes.
+        struct gimple_opt_pass *pass_ipa_gimple_per_func;
+        struct register_pass_info *ipa_gimple_per_func_info;
 
- pass_ipa_gimple_per_func = (struct gimple_opt_pass *)xmalloc(sizeof(struct gimple_opt_pass));
- memcpy(pass_ipa_gimple_per_func, &static_pass_ipa_gimple_per_func, sizeof(struct gimple_opt_pass));
+        pass_ipa_gimple_per_func = (struct gimple_opt_pass *)
+            xmalloc(sizeof(struct gimple_opt_pass));
+        memcpy(pass_ipa_gimple_per_func, &static_pass_ipa_gimple_per_func,
+               sizeof(struct gimple_opt_pass));
 
- ipa_gimple_per_func_info = (struct register_pass_info *)xmalloc(sizeof(struct register_pass_info));
- ipa_gimple_per_func_info->pass = (struct opt_pass *)pass_ipa_gimple_per_func;
- ipa_gimple_per_func_info->reference_pass_name = current_pass->name;
- ipa_gimple_per_func_info->ref_pass_instance_number = current_pass->static_pass_number;
- ipa_gimple_per_func_info->pos_op = PASS_POS_INSERT_AFTER;
+        ipa_gimple_per_func_info = (struct register_pass_info *)
+            xmalloc(sizeof(struct register_pass_info));
+        ipa_gimple_per_func_info->pass = (struct opt_pass *)
+            pass_ipa_gimple_per_func;
+        ipa_gimple_per_func_info->reference_pass_name = current_pass->name;
+        ipa_gimple_per_func_info->ref_pass_instance_number =
+            current_pass->static_pass_number;
+        ipa_gimple_per_func_info->pos_op = PASS_POS_INSERT_AFTER;
 
- register_callback (plugin_name,
-      PLUGIN_PASS_MANAGER_SETUP,
-      ((void *)0), ipa_gimple_per_func_info);
+        register_callback(plugin_name,
+                          PLUGIN_PASS_MANAGER_SETUP,
+                          ((void *)0), ipa_gimple_per_func_info);
 
- // Permute the first two passes
- struct opt_pass copy_current, *next_pass = current_pass->next;
- memcpy(&copy_current, current_pass, sizeof(struct opt_pass));
- memcpy(current_pass, next_pass, sizeof(struct opt_pass));
- memcpy(next_pass, &copy_current, sizeof(struct opt_pass));
- next_pass->next = current_pass->next;
- current_pass->next = next_pass;
+        // Permute the first two passes
+        struct opt_pass copy_current, *next_pass = current_pass->next;
+        memcpy(&copy_current, current_pass, sizeof(struct opt_pass));
+        memcpy(current_pass, next_pass, sizeof(struct opt_pass));
+        memcpy(next_pass, &copy_current, sizeof(struct opt_pass));
+        next_pass->next = current_pass->next;
+        current_pass->next = next_pass;
     }
 }
 
 // Called when PLUGIN_EARLY_GIMPLE_PASSES_START is triggered
 
-static void ipa_gimple_passes_start_callback(void *gcc_data,void *data) {
-
+static void ipa_gimple_passes_start_callback(void *gcc_data, void *data) {
     register_callback(plugin_name,
-        PLUGIN_PASS_EXECUTION,
-        &ipa_gimple_init_per_func_callback, ((void *)0));
+                      PLUGIN_PASS_EXECUTION,
+                      &ipa_gimple_init_per_func_callback, ((void *)0));
 }
 
 // Called when PLUGIN_EARLY_GIMPLE_PASSES_END is triggered
 
-static void ipa_gimple_passes_end_callback(void *gcc_data,void *data) {
-
+static void ipa_gimple_passes_end_callback(void *gcc_data, void *data) {
     // In case ipa_gimple_init_per_func_callback was not called after
     // ipa_gimple_passes_start_callback
     unregister_callback(plugin_name, PLUGIN_PASS_EXECUTION);
     restore_global_param_values();
     restore_global_attribute_values();
 }
-# 832 "/opt/gcc-plugins/src/acf_plugin.c"
-static int pre_genericize=PLUGIN_PRE_GENERICIZE;
+# 853 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
+static int pre_genericize = PLUGIN_PRE_GENERICIZE;
 
 
-static int plugin_test_global_params(void)
-{
+static int plugin_test_global_params(void) {
     // Check that compiler and plugin do see the same gcc_options struct.
 
     // Make sure the plugin do not allocate a struct smaller than the
     // one from the compiler, take twice the siwe of the plugin size.
     struct gcc_options tmp_opt[2], tmp_opt_set[2];
     int i, plugin_offset_param_values, gcc_offset_param_values;
-
     plugin_offset_param_values = (int)__builtin_offsetof (struct gcc_options, x_param_values)
-                           ;
+                                                              ;
 
     gcc_offset_param_values = -1;
     init_options_struct(tmp_opt, tmp_opt_set);
-    for (i = 0; i < (int)(sizeof(struct gcc_options)/sizeof(int *)); i++) {
- if (((int **)tmp_opt_set)[i] != 0) {
-     gcc_offset_param_values = i * sizeof(int *);
-     break;
- }
+    for (i = 0;
+         i < (int)(sizeof(struct gcc_options)/sizeof(int *)); // NOLINT
+         i++) {
+        if (((int **)tmp_opt_set)[i] != 0) {
+            gcc_offset_param_values = i * sizeof(int *); // NOLINT
+            break;
+        }
     }
 
     if (plugin_offset_param_values != gcc_offset_param_values) {
- if (gcc_offset_param_values == -1) {
-     error("%s: unable to check offset of field x_param_values in struct "
-    "gcc_options\n", plugin_name);
- }
- else {
-     error("%s: offset of field x_param_values in struct gcc_options "
-    "does not match between compiler (%d) and plugin (%d).\n",
-    plugin_name,
-    gcc_offset_param_values, plugin_offset_param_values);
- }
- return 1;
+        if (gcc_offset_param_values == -1) {
+            error("%s: unable to check offset of field x_param_values in "
+                  "struct gcc_options\n", plugin_name);
+        } else {
+            error("%s: offset of field x_param_values in struct gcc_options "
+                  "does not match between compiler (%d) and plugin (%d).\n",
+                  plugin_name,
+                  gcc_offset_param_values, plugin_offset_param_values);
+        }
+        return 1;
     }
     return 0;
 }
@@ -30801,45 +30841,38 @@ static int plugin_test_global_params(void)
 
 
 
+static int plugin_test(void) {
+    int status;
 
-static int plugin_test(void)
-{
-  int status;
-
-  status = plugin_test_global_params();
-  return status;
+    status = plugin_test_global_params();
+    return status;
 }
 
 int plugin_init(struct plugin_name_args *plugin_na,
-  struct plugin_gcc_version *version){
+                struct plugin_gcc_version *version) {
     unsigned char bad_arguments;
     int i;
 
 
 
-    if(!plugin_default_version_check(version,&gcc_version)){
+    if (!plugin_default_version_check(version, &gcc_version)) {
 
 
-
-
+        // error("%s: build gcc and load gcc version mismatch.", plugin_name);
+        // return 1;
         (void)((void *)0);
     }
 
     plugin_name = plugin_na->base_name;
-# 915 "/opt/gcc-plugins/src/acf_plugin.c"
+# 933 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
     // Check the plugin is used with appropriate compiler version
     // regarding access to PARAM values
-
-
-
-
-
-
-
+# 943 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
     if ((version->basever[0] < '4') ||
- ((version->basever[0] == '4') && (version->basever[2] < '6'))) {
- error("%s: build gcc and load gcc versions are incompatible.", plugin_name);
- return 1;
+        ((version->basever[0] == '4') && (version->basever[2] < '6'))) {
+        error("%s: build gcc and load gcc versions are incompatible.",
+              plugin_name);
+        return 1;
     }
 
 
@@ -30848,72 +30881,73 @@ int plugin_init(struct plugin_name_args *plugin_na,
     acf_csv_files_num = 0;
 
     for (i = 0; i < plugin_na->argc; i++) {
-
- if (strcmp(plugin_na->argv[i].key, "test") == 0) {
-     if ((i > 0) || (plugin_na->argc > 1)) {
-  bad_arguments = 1;
-  break;
-     }
-     int status = plugin_test();
-     fprintf(stderr, "%s: plugin test.\n", status == 0 ? "PASSED": "FAILED");
-     return status;
- }
-
- else if (strcmp(plugin_na->argv[i].key, verbose_key) == 0) {
-     verbose = 1;
- }
-
- else if (strcmp(plugin_na->argv[i].key, acf_csv_file_key) == 0) {
-     if (!register_acf_file(plugin_name, plugin_na->argv[i].value)) {
-  bad_arguments = 1;
-  break;
-     }
- }
-
- else {
-     error("%s: Unknown option %s\n", plugin_name, plugin_na->argv[i].key);
-     return 1;
- }
+        if (strcmp(plugin_na->argv[i].key, "test") == 0) {
+            if ((i > 0) || (plugin_na->argc > 1)) {
+                bad_arguments = 1;
+                break;
+            }
+            int status = plugin_test();
+            fprintf(stderr, "%s: plugin test.\n", status == 0 ? "PASSED": "FAILED");
+            return status;
+        } else if (strcmp(plugin_na->argv[i].key, "version") == 0) {
+            printf("%s\n", acf_plugin_info.version);
+            return 0;
+        } else if (strcmp(plugin_na->argv[i].key, verbose_key) == 0) {
+            verbose = 1;
+        } else if (strcmp(plugin_na->argv[i].key, acf_csv_file_key) == 0) {
+            if (!register_acf_file(plugin_name, plugin_na->argv[i].value)) {
+                bad_arguments = 1;
+                break;
+            }
+        } else {
+            error("%s: Unknown option %s\n", plugin_name,
+                  plugin_na->argv[i].key);
+            return 1;
+        }
     }
 
     if ((plugin_na->argc == 0) || (acf_csv_files_num == 0))
- bad_arguments = 1;
+        bad_arguments = 1;
 
     if (bad_arguments) {
- fprintf(stderr,
-  "Usage for %s: -fplugin=<path>/%s.so "
-  "-fplugin-arg-%s-%s= <path-to-csv-file> "
-  "[-fplugin-arg-%s-%s]\n",
-  plugin_name, plugin_name,
-  plugin_name, acf_csv_file_key,
-  plugin_name, verbose_key);
- return 1;
+        fprintf(stderr,
+                "Usage for %s: -fplugin=<path>/%s.so "
+                "-fplugin-arg-%s-%s=<path-to-csv-file> "
+                "[-fplugin-arg-%s-%s"
+                " | -fplugin-arg-%s-%s"
+                " | -fplugin-arg-%s-%s]\n",
+                plugin_name, plugin_name,
+                plugin_name, acf_csv_file_key,
+                plugin_name, verbose_key,
+                plugin_name, "version",
+                plugin_name, "test");
+        return 1;
     }
 
     // Attach function attributes to function node
     register_callback(plugin_na->base_name,
-        PLUGIN_START_UNIT,
-        &attribute_injector_start_unit_callback,((void *)0));
+                      PLUGIN_START_UNIT,
+                      &attribute_injector_start_unit_callback, ((void *)0));
     register_callback(plugin_na->base_name,
-        PLUGIN_PRE_GENERICIZE,
-        &attribute_injector_finish_decl_callback,
-        &pre_genericize);
+                      PLUGIN_PRE_GENERICIZE,
+                      &attribute_injector_finish_decl_callback,
+                      &pre_genericize);
 
     // Load function context for all_passes optimizations
     register_callback(plugin_na->base_name,
-        PLUGIN_ALL_PASSES_START,
-        &param_injector_start_all_passes_callback, ((void *)0));
+                      PLUGIN_ALL_PASSES_START,
+                      &param_injector_start_all_passes_callback, ((void *)0));
     register_callback(plugin_na->base_name,
-        PLUGIN_ALL_PASSES_END,
-        &param_injector_end_passes_callback, ((void *)0));
+                      PLUGIN_ALL_PASSES_END,
+                      &param_injector_end_passes_callback, ((void *)0));
 
     // Load function context for the ipa (regular and small_ipa) passes
     register_callback(plugin_na->base_name,
-        PLUGIN_EARLY_GIMPLE_PASSES_START,
-        &ipa_gimple_passes_start_callback, ((void *)0));
+                      PLUGIN_EARLY_GIMPLE_PASSES_START,
+                      &ipa_gimple_passes_start_callback, ((void *)0));
     register_callback(plugin_na->base_name,
-        PLUGIN_EARLY_GIMPLE_PASSES_END,
-        &ipa_gimple_passes_end_callback, ((void *)0));
-# 1071 "/opt/gcc-plugins/src/acf_plugin.c"
+                      PLUGIN_EARLY_GIMPLE_PASSES_END,
+                      &ipa_gimple_passes_end_callback, ((void *)0));
+# 1096 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
     return 0;
 }

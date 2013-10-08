@@ -1,9 +1,9 @@
-# 1 "/opt/gcc-plugins/src/plugin-utils.c"
+# 1 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/plugin-utils.c"
 # 1 "<command-line>"
-# 1 "/opt/gcc-plugins/src/plugin-utils.c"
-# 20 "/opt/gcc-plugins/src/plugin-utils.c"
-# 1 "/opt/gcc-plugins/src/plugin-utils.h" 1
-# 23 "/opt/gcc-plugins/src/plugin-utils.h"
+# 1 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/plugin-utils.c"
+# 18 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/plugin-utils.c"
+# 1 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/plugin-utils.h" 1
+# 21 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/plugin-utils.h"
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/plugin/include/gcc-plugin.h" 1
 # 27 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/plugin/include/gcc-plugin.h"
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/plugin/include/config.h" 1
@@ -7712,7 +7712,7 @@ extern int unregister_callback (const char *plugin_name, int event);
 extern const char* default_plugin_dir_name (void);
 # 161 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/plugin/include/gcc-plugin.h"
 extern int plugin_is_GPL_compatible;
-# 24 "/opt/gcc-plugins/src/plugin-utils.h" 2
+# 22 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/plugin-utils.h" 2
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/plugin/include/tree.h" 1
 # 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/plugin/include/tree.h"
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/plugin/include/machmode.h" 1
@@ -20971,7 +20971,7 @@ builtin_decl_implicit_p (enum built_in_function fncode)
   return (builtin_info.decl[uns_fncode] != (tree) ((void *)0)
    && builtin_info.implicit_p[uns_fncode]);
 }
-# 25 "/opt/gcc-plugins/src/plugin-utils.h" 2
+# 23 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/plugin-utils.h" 2
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/plugin/include/langhooks.h" 1
 # 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/plugin/include/langhooks.h"
 struct diagnostic_info;
@@ -21399,42 +21399,42 @@ extern tree add_builtin_function_ext_scope (const char *name, tree type,
          enum built_in_class cl,
          const char *library_name,
          tree attrs);
-# 26 "/opt/gcc-plugins/src/plugin-utils.h" 2
+# 24 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/plugin-utils.h" 2
 
 
-int is_gcc();
+extern int is_gcc(void);
 
 
-int is_gpp();
+extern int is_gpp(void);
 
 
-int is_lto();
-# 21 "/opt/gcc-plugins/src/plugin-utils.c" 2
+extern int is_lto(void);
+# 19 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/plugin-utils.c" 2
 
 static int is_gcc_cache=-1;
 static int is_gpp_cache=-1;
 static int is_lto_cache=-1;
 
-int is_gcc(){
- if(is_gcc_cache==-1){
-  is_gcc_cache=!strcmp(lang_hooks.name,"GNU C");
- }
+int is_gcc() {
+    if (is_gcc_cache == -1) {
+        is_gcc_cache = !strcmp(lang_hooks.name, "GNU C");
+    }
 
- return is_gcc_cache;
+    return is_gcc_cache;
 }
 
-int is_gpp(){
- if(is_gpp_cache==-1){
-  is_gpp_cache=!strcmp(lang_hooks.name,"GNU C++");
- }
+int is_gpp() {
+    if (is_gpp_cache == -1) {
+        is_gpp_cache = !strcmp(lang_hooks.name, "GNU C++");
+    }
 
- return is_gpp_cache;
+    return is_gpp_cache;
 }
 
-int is_lto(){
- if(is_lto_cache==-1){
-  is_lto_cache=!strcmp(lang_hooks.name,"GNU GIMPLE");
- }
+int is_lto() {
+    if (is_lto_cache == -1) {
+        is_lto_cache = !strcmp(lang_hooks.name, "GNU GIMPLE");
+    }
 
- return is_lto_cache;
+    return is_lto_cache;
 }

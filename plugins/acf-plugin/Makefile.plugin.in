@@ -20,7 +20,7 @@
 builddir=@builddir@
 srcdir=@srcdir@
 prepdir=@prepdir@
-testdir=$(srcdir)/test
+testdir=$(srcdir)/plugins-src/acf-plugin/example
 
 SRC= $(wildcard $(prepdir)/prep/*.c)
 

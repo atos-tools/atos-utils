@@ -30,6 +30,7 @@ GUEST_BUILDDIR=$(GUEST_SRCDIR)
 GUEST_PREBUILT=$(GUEST_SRCDIR)/prebuilt
 
 PREP_BUILDDIR=$(BUILDDIR)/build_tree
+PLUGIN_SRCDIR=$(BUILDDIR)/plugins-src
 PLUGIN_BUILDDIR=$(BUILDDIR)/build
 PROOT32=env PATH=/usr/local/bin:/usr/bin:/bin $(PROOT) -B -w . -r $(DISTROS)/rhlinux-i586-5el-rootfs
 PROOT64=env PATH=/usr/local/bin:/usr/bin:/bin $(PROOT) -B -w . -r $(DISTROS)/rhlinux-x86_64-5el-rootfs
@@ -38,14 +39,14 @@ RUN_x86_64=$(PROOT64) -b $(BUILDDIR)
 PREP_RUN_i386=$(PROOT32) -b $(BUILDDIR):$(GUEST_BUILDDIR) 
 PREP_RUN_x86_64=$(PROOT64) -b $(BUILDDIR):$(GUEST_BUILDDIR) 
 
-GCC_COMPILERS=gcc-4.5.2 gcc-4.6.2 gcc-4.7.2 g++-4.7.2 
+GCC_COMPILERS=gcc-4.6.2 gcc-4.7.2 g++-4.7.2 
 GCC_HOSTS=x86_64 i386
 GCC_NATIVE_TARGETS_HOSTS=$(foreach host, $(GCC_HOSTS), $(host)/$(host))
 GCC_CROSS_TARGETS=arm sh4
 GCC_TARGETS_HOSTS=$(GCC_NATIVE_TARGETS_HOSTS) $(foreach host, $(GCC_HOSTS), $(addsuffix /$(host), $(GCC_CROSS_TARGETS)))
 # Subset of GCC_TARGETS_HOSTS that can be actually tested.
 # For now we are unable to test non native plugins without more effort.
-GCC_CHECK_COMPILERS=gcc-4.5.2 gcc-4.6.2 g++-4.7.2
+GCC_CHECK_COMPILERS=gcc-4.6.2 g++-4.7.2
 GCC_CHECK_TARGETS_HOSTS=$(GCC_NATIVE_TARGETS_HOSTS)
 GCC_CHECK_COMPILER=
 
@@ -92,7 +93,7 @@ INSTALLED_PLUGINS:=$(addsuffix /acf_plugin.so, $(addprefix $(PLUGIN_PREFIX)/, $(
 CHECK_PLUGINS=$(addsuffix /check.phony, $(addprefix $(PLUGIN_BUILDDIR)/, $(GCC_CHECK_SUBDIRS)))
 
 .FORCE:
-.PHONY: all configure clean distclean install check tests prep all-prep clean-prep distclean-prep
+.PHONY: all configure clean distclean install check tests prep all-src all-prep clean-prep distclean-prep
 
 default:
 	echo $(ALL_PREP_PLUGINS)
@@ -131,7 +132,14 @@ $(CHECK_PLUGINS): $(PLUGIN_BUILDDIR)/%/check.phony: $(PLUGIN_BUILDDIR)/%/all.pho
 #
 # Section for preprocessed file
 #
-prep: all-prep
+prep:
+	$(MAKE) all-src
+	$(MAKE) all-prep
+
+all-src:
+	cd $(SRCDIR)/gcc-plugins && git describe --dirty --tags --abbrev=8 --always >VERSION
+	cd $(SRCDIR)/gcc-plugins && tar czf $(BUILDDIR)/acf-plugin.tgz VERSION LICENSE README common.mk acf-plugin
+	mkdir -p $(PLUGIN_SRCDIR) && tar xzf $(BUILDDIR)/acf-plugin.tgz -C $(PLUGIN_SRCDIR)
 
 all-prep: $(ALL_PREP_PLUGINS)
 
@@ -150,6 +158,7 @@ $(ALL_PREP_PLUGINS): $(PREP_BUILDDIR)/%/all.phony: $(PREP_BUILDDIR)/%/Makefile.p
 
 clean-prep:
 	$(QUIET_CLEAN)for dir in $(dir $(ALL_PREP_PLUGINS)); do rm -f $$dir/prep/*.c; done
+	$(QUIET_CLEAN)rm -f $(BUILDDIR)/acf-plugin.tgz
 
 distclean-prep: clean-prep
 	$(QUIET_DISTCLEAN)for dir in $(dir $(ALL_PREP_PLUGINS)); do rm -f $$dir/Makefile.prep $$dir/config.status; done

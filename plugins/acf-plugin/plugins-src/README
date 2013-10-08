@@ -1,0 +1,9 @@
+The aim of these gcc plugins is to perform dedicated checks for STLinux client applications, like SDK2.
+Today the delivered plugins are :
+ 1) The BarrierChecker plugin 
+    The BarrierChecker plugin currently can perform two kinds of checks :
+     - memory barrier static checker (compilation warning when detecting that a MB is missing) 
+     - memory barrier dynamic checker (instrument the code to perform some checks at runtime)
+ 2) The acf-plugin plugin
+    The acf-plugin allows to apply GCC compiler flags and params at function level so as to
+    fine tune the performance of an application.

@@ -709,25 +709,37 @@ class json_config():
             alias = triplet.split("-")[0]
             return repl.get(alias, alias)
 
-        def compile_plugins(plugin_name, install_path,
-                            target_compiler, version,
-                            target_alias, host_alias, compiler_lang):
+        def compile_plugin(plugin_name, install_path,
+                           target_compiler, version,
+                           target_alias, host_alias, compiler_lang):
             assert(host_alias in ['x86_64', 'i386'])
             assert(target_alias in ['x86_64', 'i386', 'sh4', 'arm'])
+            assert(plugin_name in ['acf_plugin'])
 
+            if plugin_name == 'acf_plugin': plugin_path = 'acf-plugin'
+            plugin_so = "%s.so" % plugin_name
+            process.commands.rmtree(install_path)
             tmpdir = tempfile.mkdtemp()
             try:
-                plugin_src = os.path.join(globals.LIBDIR, "plugins", "src")
-                cmd = ['make', '-C%s' % tmpdir,
-                       '-f%s/GNUmakefile' % plugin_src,
-                       'CC=%s' % compiler_lang,
-                       'TARGET_CC=%s' % target_compiler,
-                       'PLUGINS=%s' % plugin_name,
-                       'PLUGINS_PREFIX=%s' % install_path,
-                       'install']
+                plugins_src = os.path.join(globals.LIBDIR,
+                                           "gcc-plugins", "src")
+                tmp_src = os.path.join(tmpdir, "src")
+                process.commands.copytree(plugins_src, tmp_src)
+                build_dir = os.path.join(tmp_src, plugin_path)
+                cmd = ['make', '-C%s' % build_dir,
+                       'PLUGIN_CC=%s' % compiler_lang,
+                       'PLUGGED_ON=%s' % target_compiler,
+                       'PLUGGED_ON_KIND=cross',
+                       'V=1',
+                       'all']
                 (status, output) = process.system(cmd, get_output=True,
                                                   output_stderr=True,
                                                   cwd=tmpdir)
+                if status == 0:
+                    process.commands.mkdir(install_path)
+                    process.commands.copyfile(
+                        os.path.join(build_dir, "plugin", plugin_so),
+                        os.path.join(install_path, plugin_so))
             finally:
                 process.commands.rmtree(tmpdir)
             return True if status == 0 else False
@@ -736,22 +748,24 @@ class json_config():
                         compiler_lang):  # pragma: uncovered
             # This function is called only in the case where the
             # plugin could not be compiled by the host compiler.
-            plugin_name = plugin_name + ".so"
-            # ex: ${libdir}/plugins/gcc-4.4.3/arm/i386/acf_plugin.so
+            plugin_so = plugin_name + ".so"
+            # ex: $lib/gcc-plugins/acf_plugin/gcc-4.4.3/arm/i386/acf_plugin.so
             plugin_path = os.path.join(
-                globals.LIBDIR, "plugins", compiler_lang + "-" + version,
-                target_alias, host_alias, plugin_name)
+                globals.LIBDIR, "gcc-plugins", plugin_name,
+                compiler_lang + "-" + version,
+                target_alias, host_alias, plugin_so)
             if not os.path.isfile(plugin_path):
                 # retry using only major/minor version numbers
                 patchlevels = ".".join(version.split(".")[:2] + ["*"])
                 plugins = glob.glob(
                     os.path.join(
-                        globals.LIBDIR, "plugins",
+                        globals.LIBDIR, "gcc-plugins", plugin_name,
                         compiler_lang + "-" + patchlevels,
-                        target_alias, host_alias, plugin_name))
-                plugin_path = plugins and sorted(plugins)[-1]
-            plugin_path = os.path.isfile(
-                plugin_path or "") and plugin_path or "none"
+                        target_alias, host_alias, plugin_so))
+                if not plugins: return None
+                plugin_path = sorted(plugins)[-1]
+                if not os.path.isfile(plugin_path):
+                    return None
             return plugin_path
 
         def test_plugin(compiler, plugin_name, plugin_path):
@@ -778,21 +792,22 @@ class json_config():
             # distinct path can be taken depending on the host compiler used.
             def configuration_plugin_path(compiler_lang):
                 return os.path.join(os.path.abspath(configuration_path),
-                                    "plugins", compiler_lang + "-" + version,
+                                    "gcc-plugins", plugin_name,
+                                    compiler_lang + "-" + version,
                                     target_alias, host_alias)
             # First compile plugins for both gcc and g++ compiled compiler
             gcc_plugin_path = configuration_plugin_path("gcc")
-            gcc_plugin_ok = compile_plugins(plugin_name,
-                                            gcc_plugin_path,
-                                            compiler, version,
-                                            target_alias, host_alias,
-                                            "gcc")
+            gcc_plugin_ok = compile_plugin(plugin_name,
+                                           gcc_plugin_path,
+                                           compiler, version,
+                                           target_alias, host_alias,
+                                           "gcc")
             gpp_plugin_path = configuration_plugin_path("g++")
-            gpp_plugin_ok = compile_plugins(plugin_name,
-                                            gpp_plugin_path,
-                                            compiler, version,
-                                            target_alias, host_alias,
-                                            "g++")
+            gpp_plugin_ok = compile_plugin(plugin_name,
+                                           gpp_plugin_path,
+                                           compiler, version,
+                                           target_alias, host_alias,
+                                           "g++")
             # Test just compiled plugins
             if (gcc_plugin_ok and
                 test_plugin(compiler, plugin_name, gcc_plugin_path)):
@@ -804,12 +819,12 @@ class json_config():
             # Then fall-back to precompiled plugins
             acf_path = find_plugin(plugin_name, target_alias, host_alias,
                                    "gcc")
-            if (os.path.isfile(acf_path) and
+            if (acf_path != None and
                 test_plugin(compiler, plugin_name, os.path.dirname(acf_path))):
                 return acf_path
             acf_path = find_plugin(plugin_name, target_alias, host_alias,
                                    "g++")
-            if (os.path.isfile(acf_path) and
+            if (acf_path != None and
                 test_plugin(compiler, plugin_name, os.path.dirname(acf_path))):
                 return acf_path
             return None

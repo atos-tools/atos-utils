@@ -1,0 +1,3 @@
+acf_plugin: dcl passes for function f, attaching attribute: optimize O0
+acf_plugin: dcl passes for function main, attaching attribute: cold 
+acf_plugin: dcl passes for function main, attaching attribute: optimize O1

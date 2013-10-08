@@ -1,8 +1,10 @@
 configurations:
-  default: [proot, rhlinux-i586-5el-rootfs, rhlinux-x86_64-5el-rootfs, gcc-prebuilt-linux-x86-gcc-4.5.2,
-    gcc-prebuilt-linux-x86-gcc-4.6.2, gcc-prebuilt-linux-x86-gcc-4.7.2, gcc-prebuilt-linux-x86-64-gcc-4.5.2,
-    gcc-prebuilt-linux-x86-64-gcc-4.6.2, gcc-prebuilt-linux-x86-64-gcc-4.7.2]
+  default: [gcc-plugins, proot, rhlinux-i586-5el-rootfs, rhlinux-x86_64-5el-rootfs,
+    gcc-prebuilt-linux-x86-gcc-4.5.2, gcc-prebuilt-linux-x86-gcc-4.6.2, gcc-prebuilt-linux-x86-gcc-4.7.2,
+    gcc-prebuilt-linux-x86-64-gcc-4.5.2, gcc-prebuilt-linux-x86-64-gcc-4.6.2, gcc-prebuilt-linux-x86-64-gcc-4.7.2]
 repositories:
+  gcc-plugins: {format: git, repos: 'ssh://gitolite@hostname/sh4gcc/gcc-plugins.git',
+    revision: b7496e97fa92bbf103eeb31aa2252bac05b78b6c}
   gcc-prebuilt-linux-x86-64-gcc-4.5.2: {alias: prebuilt/x86_64/gcc-4.5.2, format: git,
     repos: 'ssh://gitolite@hostname/atos/gcc-prebuilt-linux-x86-64-gcc-4.5.2.git',
     revision: 9fc3af105c90923001e0fe70b16eb0da2c7451ae}

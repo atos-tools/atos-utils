@@ -1,0 +1,56 @@
+GCC PLUGINS
+
+Introduction
+============
+
+  With this GCC plugin, specific GCC compiler options or parameters
+  can be applied at a function level during the compilation of a set
+  of GCC files.
+
+Description
+===========
+
+  The acf-plugin plugin reads Attribute Configuration Files. An ACF
+  file contains lines of comma separated values. Each line defines a
+  GCC option or parameter that is to be applied to a particular
+  function during the compilation by GCC.
+
+  Once loaded by GCC, the plugin reads one or several ACF files given
+  as arguments of this plugin. After parsing the files it will apply
+  the appropriate options or parameters to functions, triggered by
+  specific GCC events.
+
+Usage
+=====
+
+  To enable the gcc plugin :
+  gcc [...] -fplugin=<path>/acf_plugin.so ( -fplugin-arg-acf_plugin-<plugin_option> )*
+
+  where <plugin_option> can be :
+  test				# Perform a minimal test to check that the plugin has been loaded
+  verbose			# Enable traces in the plugin
+  csv_file=<ACF file path>      # Specify the path to an ACF file
+
+Example
+=======
+
+  Example of an ACF file: myacf.csf
+
+$ cat myacf.csv
+% This is a comment line
+main,,cold
+func_unroll2,,optimize,O2
+func_unroll2,,optimize,unroll-loops
+func_unroll2,,param,max-unroll-times,#2
+_Z5func1Pi,,optimize,O1
+
+
+  GCC command line:
+
+$ gcc mytest.c -o mytest -fplugin=./acf-plugin/plugin/acf_plugin.so -fplugin-arg-acf_plugin-csv_file=myacf.csv -fplugin-arg-acf_plugin-verbose
+
+acf_plugin: dcl passes for function func_unroll2, attaching attribute: optimize O2
+acf_plugin: dcl passes for function func_unroll2, attaching attribute: optimize unroll-loops
+acf_plugin: ipa_passes for function func_unroll2, attaching param: param max-unroll-times,#2
+acf_plugin: all_passes for function func_unroll2, attaching param: param max-unroll-times,#2
+acf_plugin: dcl passes for function main, attaching attribute: cold

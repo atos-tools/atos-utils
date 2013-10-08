@@ -1,0 +1,2 @@
+Usage for acf_plugin: -fplugin=<path>/acf_plugin.so -fplugin-arg-acf_plugin-csv_file=<path-to-csv-file> [-fplugin-arg-acf_plugin-verbose | -fplugin-arg-acf_plugin-version | -fplugin-arg-acf_plugin-test]
+cc1: error: fail to initialize plugin ../plugin/acf_plugin.so

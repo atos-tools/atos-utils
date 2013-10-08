@@ -1,7 +1,7 @@
-# 1 "/opt/gcc-plugins/src/acf_csv_reader.c"
+# 1 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_csv_reader.c"
 # 1 "<command-line>"
-# 1 "/opt/gcc-plugins/src/acf_csv_reader.c"
-# 20 "/opt/gcc-plugins/src/acf_csv_reader.c"
+# 1 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_csv_reader.c"
+# 18 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_csv_reader.c"
 # 1 "/usr/include/stdio.h" 1 3 4
 # 28 "/usr/include/stdio.h" 3 4
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include-fixed/features.h" 1 3 4
@@ -1219,7 +1219,7 @@ ferror_unlocked (FILE *__stream) throw ()
 # 836 "/usr/include/stdio.h" 2 3 4
 # 844 "/usr/include/stdio.h" 3 4
 }
-# 21 "/opt/gcc-plugins/src/acf_csv_reader.c" 2
+# 19 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_csv_reader.c" 2
 # 1 "/usr/include/string.h" 1 3 4
 # 28 "/usr/include/string.h" 3 4
 extern "C" {
@@ -1554,7 +1554,7 @@ extern void *memfrob (void *__s, size_t __n) throw () __attribute__ ((__nonnull_
 extern char *basename (__const char *__filename) throw () __attribute__ ((__nonnull__ (1)));
 # 426 "/usr/include/string.h" 3 4
 }
-# 22 "/opt/gcc-plugins/src/acf_csv_reader.c" 2
+# 20 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_csv_reader.c" 2
 # 1 "/usr/include/stdlib.h" 1 3 4
 # 33 "/usr/include/stdlib.h" 3 4
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/include/stddef.h" 1 3 4
@@ -2838,7 +2838,7 @@ extern int getloadavg (double __loadavg[], int __nelem)
      throw () __attribute__ ((__nonnull__ (1)));
 # 977 "/usr/include/stdlib.h" 3 4
 }
-# 23 "/opt/gcc-plugins/src/acf_csv_reader.c" 2
+# 21 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_csv_reader.c" 2
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/plugin/include/gcc-plugin.h" 1
 # 27 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/plugin/include/gcc-plugin.h"
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.7.2/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/plugin/include/config.h" 1
@@ -7755,10 +7755,10 @@ extern "C" {
 extern int plugin_is_GPL_compatible;
 
 }
-# 24 "/opt/gcc-plugins/src/acf_csv_reader.c" 2
+# 22 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_csv_reader.c" 2
 
-# 1 "/opt/gcc-plugins/src/acf_plugin.h" 1
-# 34 "/opt/gcc-plugins/src/acf_plugin.h"
+# 1 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.h" 1
+# 33 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.h"
 struct csv_list {
     struct csv_row *rows;
     struct csv_row *last_row;
@@ -7809,24 +7809,20 @@ typedef struct acf_ftable_entry {
 
 
 extern "C" {
-
-
-
-
-
-
-
+# 92 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.h"
 }
 
 
 void initCSV(struct csv_list *clist);
 bool readCSV(char *filename, struct csv_list *clist);
 
+
+
 int parseCSV(struct csv_list *clist, acf_ftable_entry_t **acf_ftable_p,
-      int verbose);
-# 26 "/opt/gcc-plugins/src/acf_csv_reader.c" 2
-extern char *fgets_unlocked (char *, int, FILE *);
-# 58 "/opt/gcc-plugins/src/acf_csv_reader.c"
+             int verbose);
+# 24 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_csv_reader.c" 2
+extern char *fgets_unlocked(char *, int, FILE *);
+# 56 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_csv_reader.c"
 static void add_row(struct csv_list *clist) {
     struct csv_row *row_entry;
 
@@ -7837,11 +7833,11 @@ static void add_row(struct csv_list *clist) {
     row_entry->columns_number = 0;
 
     if (clist->rows_number == 0) {
- clist->rows = row_entry;
- clist->last_row = row_entry;
+        clist->rows = row_entry;
+        clist->last_row = row_entry;
     } else {
- clist->last_row->next_row = row_entry;
- clist->last_row = row_entry;
+        clist->last_row->next_row = row_entry;
+        clist->last_row = row_entry;
     }
     clist->rows_number++;
 
@@ -7853,15 +7849,14 @@ static void add_column(struct csv_list *clist, char *value) {
 
     col_entry = (struct csv_column *) xmalloc(sizeof(struct csv_column));
     col_entry->next_column = (struct csv_column *) __null;
-    col_entry->csv_entry = (char *) xmalloc(strlen(value) + 1);
-    strcpy(col_entry->csv_entry, value);
+    col_entry->csv_entry = (char *) xstrdup(value);
 
     if (clist->last_row->columns_number == 0) {
- clist->last_row->columns = col_entry;
- clist->last_row->last_column = col_entry;
+        clist->last_row->columns = col_entry;
+        clist->last_row->last_column = col_entry;
     } else {
- clist->last_row->last_column->next_column = col_entry;
- clist->last_row->last_column = col_entry;
+        clist->last_row->last_column->next_column = col_entry;
+        clist->last_row->last_column = col_entry;
     }
     clist->last_row->columns_number++;
 
@@ -7887,78 +7882,71 @@ bool readCSV(char *filename, struct csv_list *clist) {
 
     if (!(file = fopen_unlocked(filename,"r"))) {
         fprintf(stderr, "acf_plugin error: CSV file not found: %s\n", filename);
- return false;
+        return false;
     }
 
 
-    while (fgets_unlocked (line1, sizeof line1, file) != __null) {
- lcount = 0;
+    while (fgets_unlocked (line1, sizeof(line1), file) != __null) {
+        lcount = 0;
 
 
- if (line1[strlen(line1) - 1] == '\n') {
-     line1[strlen(line1) - 1] = '\0';
- }
-
- strcpy(line2,line1);
- stptr = line2;
-
- add_row(clist);
-
-
- if (line1[0] == '%')
-     continue;
-
-
- while (*stptr != '\0')
-     { lcount++;
-
-  if (*stptr == '"')
-      {
-   int flag = 0;
-   idx = 0;
-   while (flag == 0)
-       {
-    stptr++;
-
-    while (*stptr != '"')
-        { line3[idx] = *stptr;
-     idx++;
-     stptr++;
+        if (line1[strlen(line1) - 1] == '\n') {
+            line1[strlen(line1) - 1] = '\0';
         }
-    stptr++;
-    if (*stptr != '\0' && *stptr == ',')
-        {
-     line3[idx] = '\0';
-     add_column(clist, line3);
-     flag = 1;
+
+        snprintf(line2, sizeof(line2), "%s", line1);
+        stptr = line2;
+
+        add_row(clist);
+
+
+        if (line1[0] == '%')
+            continue;
+
+
+        while (*stptr != '\0') {
+            lcount++;
+
+            if (*stptr == '"') {
+                int flag = 0;
+                idx = 0;
+                while (flag == 0) {
+                    stptr++;
+
+                    while (*stptr != '"') {
+                        line3[idx] = *stptr;
+                        idx++;
+                        stptr++;
+                    }
+                    stptr++;
+                    if (*stptr != '\0' && *stptr == ',') {
+                        line3[idx] = '\0';
+                        add_column(clist, line3);
+                        flag = 1;
+                    } else if (*stptr != '\0' && *stptr == '"') {
+                        line3[idx] = *stptr;
+                        idx++;
+                    } else {
+                        line3[idx] = '\0';
+                        add_column(clist, line3);
+                        flag = 1;
+                    }
+                }
+            } else {
+                idx = 0;
+                while (*stptr != '\0' && *stptr != ',') {
+                    line3[idx] = *stptr;
+                    idx++;
+                    stptr++;
+                }
+                line3[idx] = '\0';
+                add_column(clist, line3);
+            }
+            if (*stptr != '\0' && *stptr == ',')
+                stptr++;
+            memmove(line2, stptr, strlen(stptr)+1);
+            stptr = line2;
         }
-    else if (*stptr != '\0' && *stptr == '"')
-        { line3[idx] = *stptr;
-     idx++;
-        }
-    else
-        {
-     line3[idx] = '\0';
-     add_column(clist, line3);
-     flag = 1;
-        }
-       }
-      }
-  else
-      { idx = 0;
-   while (*stptr != '\0' && *stptr != ',')
-       { line3[idx] = *stptr;
-    idx++;
-    stptr++;
-       }
-   line3[idx] = '\0';
-   add_column(clist, line3);
-      }
-  if (*stptr != '\0' && *stptr == ',')
-      stptr++;
-  memmove(line2, stptr, strlen(stptr)+1);
-  stptr = line2;
-     }
     }
 
     return true;
@@ -7966,8 +7954,7 @@ bool readCSV(char *filename, struct csv_list *clist) {
 
 
 int parseCSV(struct csv_list *clist, acf_ftable_entry_t **acf_ftable_p,
-      int verbose) {
-
+             int verbose) {
     int cur_line;
     struct csv_row *crow;
     struct csv_column *ccol;
@@ -7978,174 +7965,173 @@ int parseCSV(struct csv_list *clist, acf_ftable_entry_t **acf_ftable_p,
 
 
     if (clist->rows_number == 0) {
- if (verbose)
-     fprintf(stderr, "acf_plugin warning: No entry found in CSV file\n");
- return -1;
+        if (verbose)
+            fprintf(stderr, "acf_plugin warning: No entry found in CSV file\n");
+        return -1;
     } else {
- int tsize = clist->rows_number * sizeof(acf_ftable_entry_t);
+        int tsize = clist->rows_number * sizeof(acf_ftable_entry_t);
 
- *acf_ftable_p = (acf_ftable_entry_t *) xmalloc(tsize);
- if (*acf_ftable_p == __null) {
-     fprintf(stderr, "acf_plugin error: xmalloc() failed: size= %d\n", tsize);
-     return -1;
- }
+        *acf_ftable_p = (acf_ftable_entry_t *) xmalloc(tsize);
     }
 
     acf_ftable = *acf_ftable_p;
-    for(crow = clist->rows, cur_line = 1;
- crow != __null;
- crow = crow->next_row, cur_line++) {
- int j;
+    for (crow = clist->rows, cur_line = 1;
+         crow != __null;
+         crow = crow->next_row, cur_line++) {
+        int j;
 
- if(crow->columns_number) {
-     ccol = crow->columns;
-     int table_c = 0;
-
-
-     int discard = 0;
-     int argument_nb = 0;
-     int file_null = 0;
-     size_t len;
-
-     for(;ccol != __null; ccol = ccol->next_column) {
-  switch (table_c) {
-  case FUNCNAME:
-      if (strcmp ((char *) ccol->csv_entry, "") == 0) {
-   if (verbose)
-       fprintf(stderr, "acf_plugin warning: discarded line %d: " "function name unspecified\n", cur_line)
-
-                 ;
-   discard = 1;
-      }
-      break;
-  case FILENAME:
-      if (strcmp((char *) ccol->csv_entry, "") == 0) {
-   file_null = 1;
-      }
-      break;
-  case ATTRIBUTE:
-      if (strcmp((char *) ccol->csv_entry, "") == 0) {
-   if (verbose)
-       fprintf(stderr, "acf_plugin warning: discarded line %d: " "attribute unspecified\n", cur_line)
-
-                 ;
-   discard = 1;
-      }
-      break;
-  case FIRST_ARG:
-      for (j = 0; j < 10 && ccol != __null; j++, ccol = ccol->next_column) {
-   if (strcmp((char *) ccol->csv_entry, "") != 0) {
-       argument_nb++;
-       table_c++;
-   } else {
-
-       break;
-   }
-      }
-      if (ccol && ccol->next_column != __null) {
-   if (verbose)
-       fprintf(stderr, "acf_plugin warning: line %d: discarded entries " "after null argument\n", cur_line)
-                                          ;
-      }
-      break;
-  default:
-      break;
-  }
-  table_c++;
-
-  if (ccol == __null)
-      break;
-     }
-
-     if (discard)
-  continue;
-
-     if (table_c < 3) {
-  if (verbose)
-      fprintf(stderr, "acf_plugin warning: discard icomplete line %d\n", cur_line)
-                ;
-  continue;
-     }
-     if (table_c > (3 + 10)) {
-  if (verbose)
-      fprintf(stderr, "acf_plugin warning: discarded line %d: " "more than %d entries\n", cur_line, (3 + 10))
-
-                                 ;
-  continue;
-     }
-
-     ccol = crow->columns;
-     table_c = 0;
-     for(;ccol != __null; ccol = ccol->next_column) {
+        if (crow->columns_number) {
+            ccol = crow->columns;
+            int table_c = 0;
 
 
+            int discard = 0;
+            int argument_nb = 0;
+            int file_null = 0;
+            size_t len;
 
-  switch (table_c) {
-  case FUNCNAME:
-      len = strlen(ccol->csv_entry);
+            for (;ccol != __null; ccol = ccol->next_column) {
+                switch (table_c) {
+                case FUNCNAME:
+                    if (strcmp((char *) ccol->csv_entry, "") == 0) {
+                        if (verbose)
+                            fprintf(stderr, "acf_plugin warning: discarded line %d: " "function name unspecified\n", cur_line)
+
+                                             ;
+                        discard = 1;
+                    }
+                    break;
+                case FILENAME:
+                    if (strcmp((char *) ccol->csv_entry, "") == 0) {
+                        file_null = 1;
+                    }
+                    break;
+                case ATTRIBUTE:
+                    if (strcmp((char *) ccol->csv_entry, "") == 0) {
+                        if (verbose)
+                            fprintf(stderr, "acf_plugin warning: discarded line %d: " "attribute unspecified\n", cur_line)
+
+                                             ;
+                        discard = 1;
+                    }
+                    break;
+                case FIRST_ARG:
+                    for (j = 0;
+                         j < 10 && ccol != __null;
+                         j++, ccol = ccol->next_column) {
+                        if (strcmp((char *) ccol->csv_entry, "") != 0) {
+                            argument_nb++;
+                            table_c++;
+                        } else {
+
+                            break;
+                        }
+                    }
+                    if (ccol && ccol->next_column != __null) {
+                        if (verbose)
+                            fprintf(stderr, "acf_plugin warning: line %d: " "discarded entries after null argument\n", cur_line)
+
+                                             ;
+                    }
+                    break;
+                default:
+                    break;
+                }
+                table_c++;
+
+                if (ccol == __null)
+                    break;
+            }
+
+            if (discard)
+                continue;
+
+            if (table_c < 3) {
+                if (verbose)
+                    fprintf(stderr, "acf_plugin warning: discard icomplete line %d\n", cur_line)
+                                     ;
+                continue;
+            }
+            if (table_c > (3 + 10)) {
+                if (verbose)
+                    fprintf(stderr, "acf_plugin warning: discarded line %d: " "more than %d entries\n", cur_line, (3 + 10))
+
+                                                      ;
+                continue;
+            }
+
+            ccol = crow->columns;
+            table_c = 0;
+            for (;ccol != __null; ccol = ccol->next_column) {
+
+
+
+                switch (table_c) {
+                case FUNCNAME:
+                    len = strlen(ccol->csv_entry);
                     acf_ftable[acf_ftable_size].func_name_len = len;
-      acf_ftable[acf_ftable_size].func_name = (char *)
-   xmalloc(len + 1);
-      strcpy (acf_ftable[acf_ftable_size].func_name,
-       (char *) ccol->csv_entry);
-      break;
-  case FILENAME:
-      if (file_null) {
+                    acf_ftable[acf_ftable_size].func_name =
+                        xstrdup(ccol->csv_entry);
+                    break;
+                case FILENAME:
+                    if (file_null) {
 
-   acf_ftable[acf_ftable_size].opt_file = (char *) __null;
-      } else {
-          len = strlen(ccol->csv_entry);
+                        acf_ftable[acf_ftable_size].opt_file = (char *) __null;
+                    } else {
+                        len = strlen(ccol->csv_entry);
                         acf_ftable[acf_ftable_size].opt_file_len = len;
-   acf_ftable[acf_ftable_size].opt_file = (char *)
-       xmalloc(len + 1);
-   strcpy (acf_ftable[acf_ftable_size].opt_file,
-    (char *)ccol->csv_entry);
-      }
-      break;
-  case ATTRIBUTE:
-      acf_ftable[acf_ftable_size].opt_attr = (char *)
-   xmalloc(strlen(ccol->csv_entry) + 1);
-      strcpy (acf_ftable[acf_ftable_size].opt_attr,
-       (char *) ccol->csv_entry);
-      break;
-  case FIRST_ARG:
-      if (argument_nb == 0) {
+                        acf_ftable[acf_ftable_size].opt_file =
+                            xstrdup(ccol->csv_entry);
+                    }
+                    break;
+                case ATTRIBUTE:
+                    acf_ftable[acf_ftable_size].opt_attr =
+                        xstrdup(ccol->csv_entry);
+                    break;
+                case FIRST_ARG:
+                    if (argument_nb == 0) {
 
-   acf_ftable[acf_ftable_size].attr_arg_number = 0;
-   acf_ftable[acf_ftable_size].opt_args[0].arg_type = NO_TYPE;
-      } else {
-   acf_ftable[acf_ftable_size].attr_arg_number = argument_nb;
-   for (j = 0; j < argument_nb && ccol != __null ; j++, ccol = ccol->next_column) {
+                        acf_ftable[acf_ftable_size].attr_arg_number = 0;
+                        acf_ftable[acf_ftable_size].opt_args[0].
+                            arg_type = NO_TYPE;
+                    } else {
+                        acf_ftable[acf_ftable_size].attr_arg_number =
+                            argument_nb;
+                        for (j = 0;
+                             j < argument_nb && ccol != __null;
+                             j++, ccol = ccol->next_column) {
 
-       if (ccol->csv_entry[0] == '#') {
-    acf_ftable[acf_ftable_size].opt_args[j].arg_type = INT_TYPE;
-    acf_ftable[acf_ftable_size].opt_args[j].av.int_arg = (int)
-        atoi(ccol->csv_entry + 1);
+                            if (ccol->csv_entry[0] == '#') {
 
-       } else {
-    acf_ftable[acf_ftable_size].opt_args[j].arg_type = STR_TYPE;
-    acf_ftable[acf_ftable_size].opt_args[j].av.str_arg = (char *)
-        xmalloc(strlen(ccol->csv_entry) + 1);
-    strcpy (acf_ftable[acf_ftable_size].opt_args[j].av.str_arg,
-     (char *) ccol->csv_entry);
-       }
-       table_c++;
-   }
-      }
-      break;
-  }
-  table_c++;
+                                acf_ftable[acf_ftable_size].opt_args[j].
+                                    arg_type = INT_TYPE;
 
-  if (ccol == __null)
-      break;
-     }
+                                acf_ftable[acf_ftable_size].opt_args[j].
+                                    av.int_arg = atoi(ccol->csv_entry + 1);
 
-     if (table_c == FIRST_ARG) {
-  acf_ftable[acf_ftable_size].attr_arg_number = 0;
-  acf_ftable[acf_ftable_size].opt_args[0].arg_type = NO_TYPE;
-     }
-     acf_ftable_size++;
- }
+                            } else {
+                                acf_ftable[acf_ftable_size].opt_args[j].
+                                    arg_type = STR_TYPE;
+                                acf_ftable[acf_ftable_size].opt_args[j].
+                                    av.str_arg = xstrdup(ccol->csv_entry);
+                            }
+                            table_c++;
+                        }
+                    }
+                    break;
+                }
+                table_c++;
+
+                if (ccol == __null)
+                    break;
+            }
+
+            if (table_c == FIRST_ARG) {
+                acf_ftable[acf_ftable_size].attr_arg_number = 0;
+                acf_ftable[acf_ftable_size].opt_args[0].arg_type = NO_TYPE;
+            }
+            acf_ftable_size++;
+        }
 
 
 

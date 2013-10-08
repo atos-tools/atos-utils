@@ -1,8 +1,8 @@
-# 1 "/opt/gcc-plugins/src/acf_plugin.c"
+# 1 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
 # 1 "<built-in>"
 # 1 "<command-line>"
-# 1 "/opt/gcc-plugins/src/acf_plugin.c"
-# 20 "/opt/gcc-plugins/src/acf_plugin.c"
+# 1 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
+# 18 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/gcc-plugin.h" 1
 # 27 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/gcc-plugin.h"
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/config.h" 1
@@ -7688,7 +7688,7 @@ extern int unregister_callback (const char *plugin_name, int event);
 extern const char* default_plugin_dir_name (void);
 # 161 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/gcc-plugin.h"
 extern int plugin_is_GPL_compatible;
-# 21 "/opt/gcc-plugins/src/acf_plugin.c" 2
+# 19 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c" 2
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/plugin-version.h" 1
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/configargs.h" 1
 
@@ -7711,17 +7711,4791 @@ static char revision[] = "";
 static struct plugin_gcc_version gcc_version = {basever, datestamp,
       devphase, revision,
       configuration_arguments};
-# 22 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/coretypes.h" 1
-# 23 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tm.h" 1
-# 19 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tm.h"
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/options.h" 1
+# 20 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree-pass.h" 1
+# 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree-pass.h"
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/timevar.h" 1
+# 53 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/timevar.h"
+struct timevar_time_def
+{
+
+  double user;
+
+
+
+  double sys;
+
+
+  double wall;
+
+
+  unsigned ggc_mem;
+};
 
 
 
 
 
+
+typedef enum
+{
+  TV_NONE,
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/timevar.def" 1
+# 35 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/timevar.def"
+TV_TOTAL,
+
+
+TV_GC,
+
+
+TV_DUMP,
+
+
+TV_PCH_SAVE,
+TV_PCH_CPP_SAVE,
+TV_PCH_PTR_REALLOC,
+TV_PCH_PTR_SORT,
+TV_PCH_RESTORE,
+TV_PCH_CPP_RESTORE,
+
+TV_CGRAPH,
+TV_CGRAPHOPT,
+TV_VARPOOL,
+TV_IPA_CONSTANT_PROP,
+TV_IPA_FNSPLIT,
+TV_IPA_OPT,
+TV_IPA_LTO_GIMPLE_IN,
+TV_IPA_LTO_GIMPLE_OUT,
+TV_IPA_LTO_DECL_IN,
+TV_IPA_LTO_DECL_OUT,
+TV_IPA_LTO_DECL_INIT_IO,
+TV_IPA_LTO_CGRAPH_IO,
+TV_IPA_LTO_DECL_MERGE,
+TV_IPA_LTO_CGRAPH_MERGE,
+TV_LTO,
+TV_WHOPR_WPA,
+TV_WHOPR_WPA_IO,
+TV_WHOPR_LTRANS,
+TV_WHOPR_WPA_LTRANS_EXEC,
+TV_IPA_REFERENCE,
+TV_IPA_PROFILE,
+TV_IPA_PURE_CONST,
+TV_IPA_TYPE_ESCAPE,
+TV_IPA_PTA,
+TV_IPA_SRA,
+TV_IPA_FREE_LANG_DATA,
+
+TV_CFG,
+
+TV_CLEANUP_CFG,
+TV_CFG_VERIFY,
+TV_DELETE_TRIVIALLY_DEAD,
+
+TV_LIFE,
+TV_LIFE_UPDATE,
+
+
+TV_DF_SCAN,
+TV_DF_MD,
+TV_DF_RD,
+TV_DF_LR,
+TV_DF_LIVE,
+TV_DF_UREC,
+TV_DF_CHAIN,
+TV_DF_WORD_LR,
+TV_DF_NOTE,
+TV_REG_STATS,
+
+TV_ALIAS_ANALYSIS,
+TV_ALIAS_STMT_WALK,
+TV_REG_SCAN,
+TV_REBUILD_JUMP,
+
+TV_CPP,
+TV_LEX,
+TV_PARSE,
+TV_NAME_LOOKUP,
+TV_INLINE_HEURISTICS,
+TV_INTEGRATION,
+TV_TREE_GIMPLIFY,
+TV_TREE_EH,
+TV_TREE_CFG,
+TV_TREE_CLEANUP_CFG,
+TV_TREE_VRP,
+TV_TREE_COPY_PROP,
+TV_FIND_REFERENCED_VARS,
+TV_TREE_PTA,
+TV_TREE_INSERT_PHI_NODES,
+TV_TREE_SSA_REWRITE_BLOCKS,
+TV_TREE_SSA_OTHER,
+TV_TREE_SSA_INCREMENTAL,
+TV_TREE_OPS,
+TV_TREE_SSA_DOMINATOR_OPTS,
+TV_TREE_SRA,
+TV_TREE_CCP,
+TV_TREE_PHI_CPROP,
+TV_TREE_SPLIT_EDGES,
+TV_TREE_REASSOC,
+TV_TREE_PRE,
+TV_TREE_FRE,
+TV_TREE_SINK,
+TV_TREE_PHIOPT,
+TV_TREE_FORWPROP,
+TV_TREE_PHIPROP,
+TV_TREE_DCE,
+TV_TREE_CD_DCE,
+TV_TREE_CALL_CDCE,
+TV_TREE_DSE,
+TV_TREE_MERGE_PHI,
+TV_TREE_LOOP,
+TV_TREE_LOOP_BOUNDS,
+TV_LIM,
+TV_TREE_LOOP_IVCANON,
+TV_SCEV_CONST,
+TV_TREE_LOOP_UNSWITCH,
+TV_COMPLETE_UNROLL,
+TV_TREE_PARALLELIZE_LOOPS,
+TV_TREE_VECTORIZATION,
+TV_TREE_SLP_VECTORIZATION,
+TV_GRAPHITE,
+TV_GRAPHITE_TRANSFORMS,
+TV_GRAPHITE_DATA_DEPS,
+TV_GRAPHITE_CODE_GEN,
+TV_TREE_LINEAR_TRANSFORM,
+TV_TREE_LOOP_DISTRIBUTION,
+TV_CHECK_DATA_DEPS,
+TV_TREE_PREFETCH,
+TV_TREE_LOOP_IVOPTS,
+TV_PREDCOM,
+TV_TREE_LOOP_INIT,
+TV_TREE_LOOP_FINI,
+TV_TREE_CH,
+TV_TREE_SSA_UNCPROP,
+TV_TREE_SSA_TO_NORMAL,
+TV_TREE_NRV,
+TV_TREE_COPY_RENAME,
+TV_TREE_SSA_VERIFY,
+TV_TREE_STMT_VERIFY,
+TV_TREE_SWITCH_CONVERSION,
+TV_CGRAPH_VERIFY,
+TV_DOM_FRONTIERS,
+TV_DOMINANCE,
+TV_CONTROL_DEPENDENCES,
+TV_OVERLOAD,
+TV_TEMPLATE_INSTANTIATION,
+TV_OUT_OF_SSA,
+TV_VAR_EXPAND,
+TV_EXPAND,
+TV_POST_EXPAND,
+TV_VARCONST,
+TV_LOWER_SUBREG,
+TV_JUMP,
+TV_FWPROP,
+TV_CSE,
+TV_DCE,
+TV_DSE1,
+TV_DSE2,
+TV_LOOP,
+TV_LOOP_MOVE_INVARIANTS,
+TV_LOOP_UNSWITCH,
+TV_LOOP_UNROLL,
+TV_LOOP_DOLOOP,
+TV_CPROP,
+TV_PRE,
+TV_HOIST,
+TV_LSM,
+TV_TRACER,
+TV_WEB,
+TV_AUTO_INC_DEC,
+TV_CSE2,
+TV_BRANCH_PROB,
+TV_VPT,
+TV_COMBINE,
+TV_IFCVT,
+TV_REGMOVE,
+TV_MODE_SWITCH,
+TV_SMS,
+TV_SCHED,
+TV_LOCAL_ALLOC,
+TV_GLOBAL_ALLOC,
+TV_IRA,
+TV_RELOAD,
+TV_RELOAD_CSE_REGS,
+TV_SEQABSTR,
+TV_GCSE_AFTER_RELOAD,
+TV_ZEE,
+TV_THREAD_PROLOGUE_AND_EPILOGUE,
+TV_IFCVT2,
+TV_COMBINE_STACK_ADJUST,
+TV_PEEPHOLE2,
+TV_RENAME_REGISTERS,
+TV_CPROP_REGISTERS,
+TV_SCHED2,
+TV_MACH_DEP,
+TV_DBR_SCHED,
+TV_REORDER_BLOCKS,
+TV_SHORTEN_BRANCH,
+TV_REG_STACK,
+TV_FINAL,
+TV_VAROUT,
+TV_SYMOUT,
+TV_VAR_TRACKING,
+TV_VAR_TRACKING_DATAFLOW,
+TV_VAR_TRACKING_EMIT,
+TV_TREE_IFCOMBINE,
+TV_TREE_UNINIT,
+TV_PLUGIN_INIT,
+TV_PLUGIN_RUN,
+
+
+TV_EARLY_LOCAL,
+TV_OPTIMIZE,
+TV_REST_OF_COMPILATION,
+TV_POSTRELOAD,
+TV_REMOVE_UNUSED,
+TV_ADDRESS_TAKEN,
+TV_TODO,
+TV_VERIFY_LOOP_CLOSED,
+TV_VERIFY_RTL_SHARING,
+TV_REBUILD_FREQUENCIES,
+TV_REPAIR_LOOPS,
+# 78 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/timevar.h" 2
+  TIMEVAR_LAST
+}
+timevar_id_t;
+
+
+
+
+extern unsigned char timevar_enable;
+
+
+extern size_t timevar_ggc_mem_total;
+
+
+
+
+extern void timevar_init (void);
+extern void timevar_push_1 (timevar_id_t);
+extern void timevar_pop_1 (timevar_id_t);
+extern void timevar_start (timevar_id_t);
+extern void timevar_stop (timevar_id_t);
+extern void timevar_print (FILE *);
+
+
+static __inline__ void
+timevar_push (timevar_id_t tv)
+{
+  if (timevar_enable)
+    timevar_push_1 (tv);
+}
+
+static __inline__ void
+timevar_pop (timevar_id_t tv)
+{
+  if (timevar_enable)
+    timevar_pop_1 (tv);
+}
+
+extern void print_time (const char *, long);
+# 27 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree-pass.h" 2
+
+
+
+enum tree_dump_index
+{
+  TDI_none,
+  TDI_cgraph,
+  TDI_tu,
+  TDI_class,
+  TDI_original,
+  TDI_generic,
+  TDI_nested,
+  TDI_vcg,
+
+  TDI_ada,
+  TDI_tree_all,
+  TDI_rtl_all,
+  TDI_ipa_all,
+
+  TDI_end
+};
+# 90 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree-pass.h"
+extern char *get_dump_file_name (int);
+extern int dump_enabled_p (int);
+extern int dump_initialized_p (int);
+extern FILE *dump_begin (int, int *);
+extern void dump_end (int, FILE *);
+extern void dump_node (const_tree, int, FILE *);
+extern int dump_switch_p (const char *);
+extern const char *dump_flag_name (int);
+
+
+extern FILE *dump_file;
+extern int dump_flags;
+extern const char *dump_file_name;
+
+
+extern struct dump_file_info *get_dump_file_info (int);
+
+
+enum opt_pass_type
+{
+  GIMPLE_PASS,
+  RTL_PASS,
+  SIMPLE_IPA_PASS,
+  IPA_PASS
+};
+
+
+
+struct opt_pass
+{
+
+  enum opt_pass_type type;
+
+
+
+  const char *name;
+
+
+
+  unsigned char (*gate) (void);
+
+
+
+
+  unsigned int (*execute) (void);
+
+
+  struct opt_pass *sub;
+
+
+  struct opt_pass *next;
+
+
+  int static_pass_number;
+
+
+
+  timevar_id_t tv_id;
+
+
+  unsigned int properties_required;
+  unsigned int properties_provided;
+  unsigned int properties_destroyed;
+
+
+  unsigned int todo_flags_start;
+  unsigned int todo_flags_finish;
+};
+
+
+struct gimple_opt_pass
+{
+  struct opt_pass pass;
+};
+
+
+struct rtl_opt_pass
+{
+  struct opt_pass pass;
+};
+
+struct varpool_node;
+struct cgraph_node;
+struct cgraph_node_set_def;
+struct varpool_node_set_def;
+
+
+
+struct ipa_opt_pass_d
+{
+  struct opt_pass pass;
+
+
+
+  void (*generate_summary) (void);
+
+
+  void (*write_summary) (struct cgraph_node_set_def *,
+    struct varpool_node_set_def *);
+
+
+  void (*read_summary) (void);
+
+
+  void (*write_optimization_summary) (struct cgraph_node_set_def *,
+          struct varpool_node_set_def *);
+
+
+  void (*read_optimization_summary) (void);
+
+
+
+  void (*stmt_fixup) (struct cgraph_node *, gimple *);
+
+
+
+  unsigned int function_transform_todo_flags_start;
+  unsigned int (*function_transform) (struct cgraph_node *);
+  void (*variable_transform) (struct varpool_node *);
+};
+
+
+
+struct simple_ipa_opt_pass
+{
+  struct opt_pass pass;
+};
+
+
+struct dump_file_info
+{
+  const char *suffix;
+  const char *swtch;
+  const char *glob;
+  int flags;
+  int state;
+  int num;
+};
+# 332 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree-pass.h"
+enum pass_positioning_ops
+{
+  PASS_POS_INSERT_AFTER,
+  PASS_POS_INSERT_BEFORE,
+  PASS_POS_REPLACE
+};
+
+struct register_pass_info
+{
+  struct opt_pass *pass;
+  const char *reference_pass_name;
+
+  int ref_pass_instance_number;
+
+
+  enum pass_positioning_ops pos_op;
+};
+
+extern void tree_lowering_passes (tree decl);
+
+extern struct gimple_opt_pass pass_mudflap_1;
+extern struct gimple_opt_pass pass_mudflap_2;
+extern struct gimple_opt_pass pass_lower_cf;
+extern struct gimple_opt_pass pass_refactor_eh;
+extern struct gimple_opt_pass pass_lower_eh;
+extern struct gimple_opt_pass pass_lower_eh_dispatch;
+extern struct gimple_opt_pass pass_lower_resx;
+extern struct gimple_opt_pass pass_build_cfg;
+extern struct gimple_opt_pass pass_early_tree_profile;
+extern struct gimple_opt_pass pass_referenced_vars;
+extern struct gimple_opt_pass pass_cleanup_eh;
+extern struct gimple_opt_pass pass_sra;
+extern struct gimple_opt_pass pass_sra_early;
+extern struct gimple_opt_pass pass_early_ipa_sra;
+extern struct gimple_opt_pass pass_tail_recursion;
+extern struct gimple_opt_pass pass_tail_calls;
+extern struct gimple_opt_pass pass_tree_loop;
+extern struct gimple_opt_pass pass_tree_loop_init;
+extern struct gimple_opt_pass pass_lim;
+extern struct gimple_opt_pass pass_tree_unswitch;
+extern struct gimple_opt_pass pass_predcom;
+extern struct gimple_opt_pass pass_iv_canon;
+extern struct gimple_opt_pass pass_scev_cprop;
+extern struct gimple_opt_pass pass_empty_loop;
+extern struct gimple_opt_pass pass_record_bounds;
+extern struct gimple_opt_pass pass_graphite;
+extern struct gimple_opt_pass pass_graphite_transforms;
+extern struct gimple_opt_pass pass_if_conversion;
+extern struct gimple_opt_pass pass_loop_distribution;
+extern struct gimple_opt_pass pass_vectorize;
+extern struct gimple_opt_pass pass_slp_vectorize;
+extern struct gimple_opt_pass pass_complete_unroll;
+extern struct gimple_opt_pass pass_complete_unrolli;
+extern struct gimple_opt_pass pass_parallelize_loops;
+extern struct gimple_opt_pass pass_loop_prefetch;
+extern struct gimple_opt_pass pass_iv_optimize;
+extern struct gimple_opt_pass pass_tree_loop_done;
+extern struct gimple_opt_pass pass_ch;
+extern struct gimple_opt_pass pass_ccp;
+extern struct gimple_opt_pass pass_phi_only_cprop;
+extern struct gimple_opt_pass pass_build_ssa;
+extern struct gimple_opt_pass pass_build_alias;
+extern struct gimple_opt_pass pass_build_ealias;
+extern struct gimple_opt_pass pass_dominator;
+extern struct gimple_opt_pass pass_dce;
+extern struct gimple_opt_pass pass_dce_loop;
+extern struct gimple_opt_pass pass_cd_dce;
+extern struct gimple_opt_pass pass_call_cdce;
+extern struct gimple_opt_pass pass_merge_phi;
+extern struct gimple_opt_pass pass_split_crit_edges;
+extern struct gimple_opt_pass pass_pre;
+extern struct gimple_opt_pass pass_profile;
+extern struct gimple_opt_pass pass_strip_predict_hints;
+extern struct gimple_opt_pass pass_lower_complex_O0;
+extern struct gimple_opt_pass pass_lower_complex;
+extern struct gimple_opt_pass pass_lower_vector;
+extern struct gimple_opt_pass pass_lower_vector_ssa;
+extern struct gimple_opt_pass pass_lower_omp;
+extern struct gimple_opt_pass pass_diagnose_omp_blocks;
+extern struct gimple_opt_pass pass_expand_omp;
+extern struct gimple_opt_pass pass_expand_omp_ssa;
+extern struct gimple_opt_pass pass_object_sizes;
+extern struct gimple_opt_pass pass_fold_builtins;
+extern struct gimple_opt_pass pass_stdarg;
+extern struct gimple_opt_pass pass_early_warn_uninitialized;
+extern struct gimple_opt_pass pass_late_warn_uninitialized;
+extern struct gimple_opt_pass pass_cse_reciprocals;
+extern struct gimple_opt_pass pass_cse_sincos;
+extern struct gimple_opt_pass pass_optimize_bswap;
+extern struct gimple_opt_pass pass_optimize_widening_mul;
+extern struct gimple_opt_pass pass_warn_function_return;
+extern struct gimple_opt_pass pass_warn_function_noreturn;
+extern struct gimple_opt_pass pass_cselim;
+extern struct gimple_opt_pass pass_phiopt;
+extern struct gimple_opt_pass pass_forwprop;
+extern struct gimple_opt_pass pass_phiprop;
+extern struct gimple_opt_pass pass_tree_ifcombine;
+extern struct gimple_opt_pass pass_dse;
+extern struct gimple_opt_pass pass_nrv;
+extern struct gimple_opt_pass pass_rename_ssa_copies;
+extern struct gimple_opt_pass pass_rest_of_compilation;
+extern struct gimple_opt_pass pass_sink_code;
+extern struct gimple_opt_pass pass_fre;
+extern struct gimple_opt_pass pass_check_data_deps;
+extern struct gimple_opt_pass pass_copy_prop;
+extern struct gimple_opt_pass pass_vrp;
+extern struct gimple_opt_pass pass_uncprop;
+extern struct gimple_opt_pass pass_return_slot;
+extern struct gimple_opt_pass pass_reassoc;
+extern struct gimple_opt_pass pass_rebuild_cgraph_edges;
+extern struct gimple_opt_pass pass_remove_cgraph_callee_edges;
+extern struct gimple_opt_pass pass_build_cgraph_edges;
+extern struct gimple_opt_pass pass_local_pure_const;
+extern struct gimple_opt_pass pass_tracer;
+extern struct gimple_opt_pass pass_warn_unused_result;
+extern struct gimple_opt_pass pass_split_functions;
+extern struct gimple_opt_pass pass_feedback_split_functions;
+
+
+extern struct simple_ipa_opt_pass pass_ipa_lower_emutls;
+extern struct simple_ipa_opt_pass pass_ipa_function_and_variable_visibility;
+extern struct simple_ipa_opt_pass pass_ipa_tree_profile;
+
+extern struct simple_ipa_opt_pass pass_early_local_passes;
+
+extern struct ipa_opt_pass_d pass_ipa_whole_program_visibility;
+extern struct ipa_opt_pass_d pass_ipa_lto_gimple_out;
+extern struct simple_ipa_opt_pass pass_ipa_increase_alignment;
+extern struct simple_ipa_opt_pass pass_ipa_matrix_reorg;
+extern struct ipa_opt_pass_d pass_ipa_inline;
+extern struct simple_ipa_opt_pass pass_ipa_free_lang_data;
+extern struct ipa_opt_pass_d pass_ipa_cp;
+extern struct ipa_opt_pass_d pass_ipa_reference;
+extern struct ipa_opt_pass_d pass_ipa_pure_const;
+extern struct simple_ipa_opt_pass pass_ipa_type_escape;
+extern struct simple_ipa_opt_pass pass_ipa_pta;
+extern struct simple_ipa_opt_pass pass_ipa_struct_reorg;
+extern struct ipa_opt_pass_d pass_ipa_lto_wpa_fixup;
+extern struct ipa_opt_pass_d pass_ipa_lto_finish_out;
+extern struct ipa_opt_pass_d pass_ipa_profile;
+extern struct ipa_opt_pass_d pass_ipa_cdtor_merge;
+
+extern struct gimple_opt_pass pass_all_optimizations;
+extern struct gimple_opt_pass pass_cleanup_cfg_post_optimizing;
+extern struct gimple_opt_pass pass_init_datastructures;
+extern struct gimple_opt_pass pass_fixup_cfg;
+
+extern struct rtl_opt_pass pass_expand;
+extern struct rtl_opt_pass pass_init_function;
+extern struct rtl_opt_pass pass_jump;
+extern struct rtl_opt_pass pass_rtl_eh;
+extern struct rtl_opt_pass pass_initial_value_sets;
+extern struct rtl_opt_pass pass_unshare_all_rtl;
+extern struct rtl_opt_pass pass_instantiate_virtual_regs;
+extern struct rtl_opt_pass pass_rtl_fwprop;
+extern struct rtl_opt_pass pass_rtl_fwprop_addr;
+extern struct rtl_opt_pass pass_jump2;
+extern struct rtl_opt_pass pass_lower_subreg;
+extern struct rtl_opt_pass pass_cse;
+extern struct rtl_opt_pass pass_fast_rtl_dce;
+extern struct rtl_opt_pass pass_ud_rtl_dce;
+extern struct rtl_opt_pass pass_rtl_dce;
+extern struct rtl_opt_pass pass_rtl_dse1;
+extern struct rtl_opt_pass pass_rtl_dse2;
+extern struct rtl_opt_pass pass_rtl_dse3;
+extern struct rtl_opt_pass pass_rtl_cprop;
+extern struct rtl_opt_pass pass_rtl_pre;
+extern struct rtl_opt_pass pass_rtl_hoist;
+extern struct rtl_opt_pass pass_rtl_store_motion;
+extern struct rtl_opt_pass pass_cse_after_global_opts;
+extern struct rtl_opt_pass pass_rtl_ifcvt;
+
+extern struct rtl_opt_pass pass_into_cfg_layout_mode;
+extern struct rtl_opt_pass pass_outof_cfg_layout_mode;
+
+extern struct rtl_opt_pass pass_loop2;
+extern struct rtl_opt_pass pass_rtl_loop_init;
+extern struct rtl_opt_pass pass_rtl_move_loop_invariants;
+extern struct rtl_opt_pass pass_rtl_unswitch;
+extern struct rtl_opt_pass pass_rtl_unroll_and_peel_loops;
+extern struct rtl_opt_pass pass_rtl_doloop;
+extern struct rtl_opt_pass pass_rtl_loop_done;
+
+extern struct rtl_opt_pass pass_web;
+extern struct rtl_opt_pass pass_cse2;
+extern struct rtl_opt_pass pass_df_initialize_opt;
+extern struct rtl_opt_pass pass_df_initialize_no_opt;
+extern struct rtl_opt_pass pass_reginfo_init;
+extern struct rtl_opt_pass pass_inc_dec;
+extern struct rtl_opt_pass pass_stack_ptr_mod;
+extern struct rtl_opt_pass pass_initialize_regs;
+extern struct rtl_opt_pass pass_combine;
+extern struct rtl_opt_pass pass_if_after_combine;
+extern struct rtl_opt_pass pass_implicit_zee;
+extern struct rtl_opt_pass pass_partition_blocks;
+extern struct rtl_opt_pass pass_match_asm_constraints;
+extern struct rtl_opt_pass pass_regmove;
+extern struct rtl_opt_pass pass_split_all_insns;
+extern struct rtl_opt_pass pass_fast_rtl_byte_dce;
+extern struct rtl_opt_pass pass_lower_subreg2;
+extern struct rtl_opt_pass pass_mode_switching;
+extern struct rtl_opt_pass pass_sms;
+extern struct rtl_opt_pass pass_sched;
+extern struct rtl_opt_pass pass_ira;
+extern struct rtl_opt_pass pass_postreload;
+extern struct rtl_opt_pass pass_clean_state;
+extern struct rtl_opt_pass pass_branch_prob;
+extern struct rtl_opt_pass pass_value_profile_transformations;
+extern struct rtl_opt_pass pass_postreload_cse;
+extern struct rtl_opt_pass pass_gcse2;
+extern struct rtl_opt_pass pass_split_after_reload;
+extern struct rtl_opt_pass pass_branch_target_load_optimize1;
+extern struct rtl_opt_pass pass_thread_prologue_and_epilogue;
+extern struct rtl_opt_pass pass_stack_adjustments;
+extern struct rtl_opt_pass pass_peephole2;
+extern struct rtl_opt_pass pass_if_after_reload;
+extern struct rtl_opt_pass pass_regrename;
+extern struct rtl_opt_pass pass_cprop_hardreg;
+extern struct rtl_opt_pass pass_reorder_blocks;
+extern struct rtl_opt_pass pass_branch_target_load_optimize2;
+extern struct rtl_opt_pass pass_leaf_regs;
+extern struct rtl_opt_pass pass_split_before_sched2;
+extern struct rtl_opt_pass pass_compare_elim_after_reload;
+extern struct rtl_opt_pass pass_sched2;
+extern struct rtl_opt_pass pass_stack_regs;
+extern struct rtl_opt_pass pass_stack_regs_run;
+extern struct rtl_opt_pass pass_df_finish;
+extern struct rtl_opt_pass pass_compute_alignments;
+extern struct rtl_opt_pass pass_duplicate_computed_gotos;
+extern struct rtl_opt_pass pass_variable_tracking;
+extern struct rtl_opt_pass pass_free_cfg;
+extern struct rtl_opt_pass pass_machine_reorg;
+extern struct rtl_opt_pass pass_cleanup_barriers;
+extern struct rtl_opt_pass pass_delay_slots;
+extern struct rtl_opt_pass pass_split_for_shorten_branches;
+extern struct rtl_opt_pass pass_split_before_regstack;
+extern struct rtl_opt_pass pass_convert_to_eh_region_ranges;
+extern struct rtl_opt_pass pass_shorten_branches;
+extern struct rtl_opt_pass pass_set_nothrow_function_flags;
+extern struct rtl_opt_pass pass_final;
+extern struct rtl_opt_pass pass_rtl_seqabstr;
+extern struct gimple_opt_pass pass_release_ssa_names;
+extern struct gimple_opt_pass pass_early_inline;
+extern struct gimple_opt_pass pass_inline_parameters;
+extern struct gimple_opt_pass pass_all_early_optimizations;
+extern struct gimple_opt_pass pass_update_address_taken;
+extern struct gimple_opt_pass pass_convert_switch;
+
+
+extern struct opt_pass *all_passes, *all_small_ipa_passes, *all_lowering_passes,
+                       *all_regular_ipa_passes, *all_lto_gen_passes;
+# 594 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree-pass.h"
+enum
+{
+  PASS_LIST_NO_all_lowering_passes, PASS_LIST_NO_all_small_ipa_passes, PASS_LIST_NO_all_regular_ipa_passes, PASS_LIST_NO_all_lto_gen_passes, PASS_LIST_NO_all_passes,
+  PASS_LIST_NUM
+};
+
+
+
+
+extern struct opt_pass **gcc_pass_lists[];
+
+
+extern struct opt_pass *current_pass;
+
+extern struct opt_pass * get_pass_for_id (int);
+extern unsigned char execute_one_pass (struct opt_pass *);
+extern void execute_pass_list (struct opt_pass *);
+extern void execute_ipa_pass_list (struct opt_pass *);
+extern void execute_ipa_summary_passes (struct ipa_opt_pass_d *);
+extern void execute_all_ipa_transforms (void);
+extern void execute_all_ipa_stmt_fixups (struct cgraph_node *, gimple *);
+extern unsigned char pass_init_dump_file (struct opt_pass *);
+extern void pass_fini_dump_file (struct opt_pass *);
+
+extern const char *get_current_pass_name (void);
+extern void print_current_pass (FILE *);
+extern void debug_pass (void);
+extern void ipa_write_summaries (void);
+extern void ipa_write_optimization_summaries (struct cgraph_node_set_def *,
+           struct varpool_node_set_def *);
+extern void ipa_read_summaries (void);
+extern void ipa_read_optimization_summaries (void);
+extern void register_one_dump_file (struct opt_pass *);
+extern unsigned char function_called_by_processed_nodes_p (void);
+extern void register_pass (struct register_pass_info *);
+# 637 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree-pass.h"
+extern unsigned char first_pass_instance;
+
+
+extern void do_per_function_toporder (void (*) (void *), void *);
+# 21 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic.h" 1
+# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic.h"
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/pretty-print.h" 1
+# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/pretty-print.h"
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/obstack.h" 1
+# 157 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/obstack.h"
+struct _obstack_chunk
+{
+  char *limit;
+  struct _obstack_chunk *prev;
+  char contents[4];
+};
+
+struct obstack
+{
+  long chunk_size;
+  struct _obstack_chunk *chunk;
+  char *object_base;
+  char *next_free;
+  char *chunk_limit;
+  int temp;
+  int alignment_mask;
+
+
+
+  struct _obstack_chunk *(*chunkfun) (void *, long);
+  void (*freefun) (void *, struct _obstack_chunk *);
+  void *extra_arg;
+  unsigned use_extra_arg:1;
+  unsigned maybe_empty_object:1;
+
+
+
+  unsigned alloc_failed:1;
+
+
+};
+
+
+
+extern void _obstack_newchunk (struct obstack *, int);
+extern void _obstack_free (struct obstack *, void *);
+extern int _obstack_begin (struct obstack *, int, int,
+       void *(*) (long), void (*) (void *));
+extern int _obstack_begin_1 (struct obstack *, int, int,
+        void *(*) (void *, long),
+        void (*) (void *, void *), void *);
+extern int _obstack_memory_used (struct obstack *);
+
+
+
+
+void obstack_init (struct obstack *obstack);
+
+void * obstack_alloc (struct obstack *obstack, int size);
+
+void * obstack_copy (struct obstack *obstack, void *address, int size);
+void * obstack_copy0 (struct obstack *obstack, void *address, int size);
+
+void obstack_free (struct obstack *obstack, void *block);
+
+void obstack_blank (struct obstack *obstack, int size);
+
+void obstack_grow (struct obstack *obstack, void *data, int size);
+void obstack_grow0 (struct obstack *obstack, void *data, int size);
+
+void obstack_1grow (struct obstack *obstack, int data_char);
+void obstack_ptr_grow (struct obstack *obstack, void *data);
+void obstack_int_grow (struct obstack *obstack, int data);
+
+void * obstack_finish (struct obstack *obstack);
+
+int obstack_object_size (struct obstack *obstack);
+
+int obstack_room (struct obstack *obstack);
+void obstack_make_room (struct obstack *obstack, int size);
+void obstack_1grow_fast (struct obstack *obstack, int data_char);
+void obstack_ptr_grow_fast (struct obstack *obstack, void *data);
+void obstack_int_grow_fast (struct obstack *obstack, int data);
+void obstack_blank_fast (struct obstack *obstack, int size);
+
+void * obstack_base (struct obstack *obstack);
+void * obstack_next_free (struct obstack *obstack);
+int obstack_alignment_mask (struct obstack *obstack);
+int obstack_chunk_size (struct obstack *obstack);
+int obstack_memory_used (struct obstack *obstack);
+
+
+
+
+extern void (*obstack_alloc_failed_handler) (void);
+
+
+extern int obstack_exit_failure;
+# 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/pretty-print.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/input.h" 1
+# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/input.h"
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/line-map.h" 1
+# 36 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/line-map.h"
+enum lc_reason {LC_ENTER = 0, LC_LEAVE, LC_RENAME, LC_RENAME_VERBATIM};
+
+
+typedef unsigned int linenum_type;
+
+
+typedef unsigned int source_location;
+
+
+typedef void *(*line_map_realloc) (void *, size_t);
+# 59 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/line-map.h"
+struct line_map {
+  const char *to_file;
+  linenum_type to_line;
+  source_location start_location;
+  int included_from;
+  __extension__ enum lc_reason reason : 8;
+
+  unsigned char sysp;
+
+  unsigned int column_bits : 8;
+};
+
+
+struct line_maps {
+  struct line_map * maps;
+  unsigned int allocated;
+  unsigned int used;
+
+  unsigned int cache;
+
+
+
+
+  int last_listed;
+
+
+  unsigned int depth;
+
+
+  unsigned char trace_includes;
+
+
+  source_location highest_location;
+
+
+  source_location highest_line;
+
+
+
+  unsigned int max_column_hint;
+
+
+
+  line_map_realloc reallocator;
+};
+
+
+extern void linemap_init (struct line_maps *);
+
+
+extern void linemap_free (struct line_maps *);
+
+
+
+extern void linemap_check_files_exited (struct line_maps *);
+
+
+
+
+
+
+
+extern source_location linemap_line_start
+(struct line_maps *set, linenum_type to_line, unsigned int max_column_hint);
+# 135 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/line-map.h"
+extern const struct line_map *linemap_add
+  (struct line_maps *, enum lc_reason, unsigned int sysp,
+   const char *to_file, linenum_type to_line);
+
+
+
+extern const struct line_map *linemap_lookup
+  (struct line_maps *, source_location);
+# 190 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/line-map.h"
+extern source_location
+linemap_position_for_column (struct line_maps *set, unsigned int to_column);
+# 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/input.h" 2
+
+extern struct line_maps *line_table;
+# 37 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/input.h"
+extern char builtins_location_check[(((source_location) 1)
+         < 2) ? 1 : -1];
+
+typedef struct
+{
+
+  const char *file;
+
+
+  int line;
+
+  int column;
+
+
+  unsigned char sysp;
+} expanded_location;
+
+extern expanded_location expand_location (source_location);
+
+
+
+typedef source_location location_t;
+
+extern location_t input_location;
+# 27 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/pretty-print.h" 2
+
+
+
+
+
+
+typedef struct
+{
+  const char *format_spec;
+  va_list *args_ptr;
+  int err_no;
+  location_t *locus;
+  void **x_data;
+} text_info;
+
+
+
+
+
+
+typedef enum
+{
+  DIAGNOSTICS_SHOW_PREFIX_ONCE = 0x0,
+  DIAGNOSTICS_SHOW_PREFIX_NEVER = 0x1,
+  DIAGNOSTICS_SHOW_PREFIX_EVERY_LINE = 0x2
+} diagnostic_prefixing_rule_t;
+
+
+
+
+
+
+struct chunk_info
+{
+
+  struct chunk_info *prev;
+
+
+
+
+
+
+
+  const char *args[30 * 2];
+};
+
+
+
+typedef struct
+{
+
+  struct obstack formatted_obstack;
+
+
+
+  struct obstack chunk_obstack;
+
+
+
+  struct obstack *obstack;
+
+
+  struct chunk_info *cur_chunk_array;
+
+
+  FILE *stream;
+
+
+  int line_length;
+
+
+
+  char digit_buffer[128];
+} output_buffer;
+
+
+typedef unsigned int pp_flags;
+
+typedef enum
+{
+  pp_none, pp_before, pp_after
+} pp_padding;
+
+
+
+typedef struct
+{
+
+  diagnostic_prefixing_rule_t rule;
+
+
+
+  int line_cutoff;
+} pp_wrapping_mode_t;
+# 135 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/pretty-print.h"
+typedef struct pretty_print_info pretty_printer;
+typedef unsigned char (*printer_fn) (pretty_printer *, text_info *, const char *,
+       int, unsigned char, unsigned char, unsigned char);
+# 159 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/pretty-print.h"
+struct pretty_print_info
+{
+
+  output_buffer *buffer;
+
+
+  const char *prefix;
+
+
+  pp_padding padding;
+
+
+
+  int maximum_length;
+
+
+  int indent_skip;
+
+
+  pp_wrapping_mode_t wrapping;
+# 188 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/pretty-print.h"
+  printer_fn format_decoder;
+
+
+  unsigned char emitted_prefix;
+
+
+  unsigned char need_newline;
+
+
+
+  unsigned char translate_identifiers;
+};
+# 295 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/pretty-print.h"
+extern void pp_construct (pretty_printer *, const char *, int);
+extern void pp_base_set_line_maximum_length (pretty_printer *, int);
+extern void pp_base_set_prefix (pretty_printer *, const char *);
+extern void pp_base_destroy_prefix (pretty_printer *);
+extern int pp_base_remaining_character_count_for_line (pretty_printer *);
+extern void pp_base_clear_output_area (pretty_printer *);
+extern const char *pp_base_formatted_text (pretty_printer *);
+extern const char *pp_base_last_position_in_text (const pretty_printer *);
+extern void pp_base_emit_prefix (pretty_printer *);
+extern void pp_base_append_text (pretty_printer *, const char *, const char *);
+# 313 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/pretty-print.h"
+extern void pp_printf (pretty_printer *, const char *, ...)
+     __attribute__ ((__format__ (__gcc_diag__, 2 ,3))) __attribute__ ((__nonnull__ (2)));
+
+extern void pp_verbatim (pretty_printer *, const char *, ...)
+     __attribute__ ((__format__ (__gcc_diag__, 2 ,3))) __attribute__ ((__nonnull__ (2)));
+extern void pp_base_flush (pretty_printer *);
+extern void pp_base_format (pretty_printer *, text_info *);
+extern void pp_base_output_formatted_text (pretty_printer *);
+extern void pp_base_format_verbatim (pretty_printer *, text_info *);
+
+extern void pp_base_indent (pretty_printer *);
+extern void pp_base_newline (pretty_printer *);
+extern void pp_base_character (pretty_printer *, int);
+extern void pp_base_string (pretty_printer *, const char *);
+extern void pp_write_text_to_stream (pretty_printer *pp);
+extern void pp_base_maybe_space (pretty_printer *);
+
+
+static __inline__ pp_wrapping_mode_t
+pp_set_verbatim_wrapping_ (pretty_printer *pp)
+{
+  pp_wrapping_mode_t oldmode = (pp)->wrapping;
+  (pp)->wrapping.line_cutoff = 0;
+  (pp)->wrapping.rule = DIAGNOSTICS_SHOW_PREFIX_NEVER;
+  return oldmode;
+}
+
+
+extern const char *identifier_to_locale (const char *);
+extern void *(*identifier_to_locale_alloc) (size_t);
+extern void (*identifier_to_locale_free) (void *);
+# 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic-core.h" 1
+# 28 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic-core.h"
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/bversion.h" 1
+# 29 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic-core.h" 2
+
+
+typedef enum
+{
+
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic.def" 1
+# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic.def"
+DK_UNSPECIFIED,
+
+
+
+
+DK_IGNORED,
+
+
+DK_FATAL,
+DK_ICE,
+DK_ERROR,
+DK_SORRY,
+DK_WARNING,
+DK_ANACHRONISM,
+DK_NOTE,
+DK_DEBUG,
+
+
+DK_PEDWARN,
+DK_PERMERROR,
+# 35 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic-core.h" 2
+
+  DK_LAST_DIAGNOSTIC_KIND,
+
+
+  DK_POP
+} diagnostic_t;
+
+extern const char *progname;
+
+extern const char *trim_filename (const char *);
+# 59 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic-core.h"
+extern void internal_error (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)))
+     __attribute__ ((__noreturn__));
+
+extern unsigned char warning (int, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
+extern unsigned char warning_at (location_t, int, const char *, ...)
+    __attribute__ ((__format__ (__gcc_tdiag__, 3, 4))) __attribute__ ((__nonnull__ (3)));
+extern void error (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
+extern void error_n (location_t, int, const char *, const char *, ...)
+    __attribute__ ((__format__ (__gcc_tdiag__, 3, 5))) __attribute__ ((__nonnull__ (3))) __attribute__ ((__format__ (__gcc_tdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
+extern void error_at (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
+extern void fatal_error (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)))
+     __attribute__ ((__noreturn__));
+
+extern unsigned char pedwarn (location_t, int, const char *, ...)
+     __attribute__ ((__format__ (__gcc_tdiag__, 3, 4))) __attribute__ ((__nonnull__ (3)));
+extern unsigned char permerror (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
+extern void sorry (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
+extern void inform (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
+extern void inform_n (location_t, int, const char *, const char *, ...)
+    __attribute__ ((__format__ (__gcc_tdiag__, 3, 5))) __attribute__ ((__nonnull__ (3))) __attribute__ ((__format__ (__gcc_tdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
+extern void verbatim (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
+extern unsigned char emit_diagnostic (diagnostic_t, location_t, int,
+        const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
+extern unsigned char seen_error (void);
+
+
+
+
+extern void fnotice (FILE *, const char *, ...)
+     __attribute__ ((__format__ (__printf__, 2, 3))) __attribute__ ((__nonnull__ (2)));
+# 27 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic.h" 2
+
+
+
+
+typedef struct diagnostic_info
+{
+  text_info message;
+  location_t location;
+  unsigned int override_column;
+
+  void *x_data;
+
+  diagnostic_t kind;
+
+  int option_index;
+} diagnostic_info;
+
+
+
+
+typedef struct diagnostic_classification_change_t
+{
+  location_t location;
+  int option;
+  diagnostic_t kind;
+} diagnostic_classification_change_t;
+
+
+typedef void (*diagnostic_starter_fn) (diagnostic_context *,
+           diagnostic_info *);
+typedef diagnostic_starter_fn diagnostic_finalizer_fn;
+
+
+
+struct diagnostic_context
+{
+
+  pretty_printer *printer;
+
+
+  int diagnostic_count[DK_LAST_DIAGNOSTIC_KIND];
+
+
+
+  unsigned char some_warnings_are_errors;
+
+
+  unsigned char warning_as_error_requested;
+
+
+
+  int n_opts;
+
+
+
+
+
+
+
+  diagnostic_t *classify_diagnostic;
+
+
+
+
+
+
+  diagnostic_classification_change_t *classification_history;
+
+
+  int n_classification_history;
+
+
+  int *push_list;
+  int n_push;
+
+
+
+  unsigned char show_option_requested;
+
+
+  unsigned char abort_on_error;
+
+
+  unsigned char show_column;
+
+
+  unsigned char pedantic_errors;
+
+
+  unsigned char permissive;
+
+
+
+  int opt_permissive;
+
+
+  unsigned char fatal_errors;
+
+
+  unsigned char dc_inhibit_warnings;
+
+
+  unsigned char dc_warn_system_headers;
+
+
+  unsigned int max_errors;
+# 141 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic.h"
+  diagnostic_starter_fn begin_diagnostic;
+
+
+  diagnostic_finalizer_fn end_diagnostic;
+
+
+  void (*internal_error) (diagnostic_context *, const char *, va_list *);
+
+
+
+  int (*option_enabled) (int, void *);
+
+
+
+  void *option_state;
+
+
+
+
+
+
+
+  char *(*option_name) (diagnostic_context *, int, diagnostic_t, diagnostic_t);
+
+
+  void *x_data;
+
+
+
+  const struct line_map *last_module;
+
+  int lock;
+
+  unsigned char inhibit_notes_p;
+};
+
+static __inline__ void
+diagnostic_inhibit_notes (diagnostic_context * context)
+{
+  context->inhibit_notes_p = 1;
+}
+# 224 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic.h"
+extern diagnostic_context *global_dc;
+# 254 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic.h"
+extern void diagnostic_initialize (diagnostic_context *, int);
+extern void diagnostic_finish (diagnostic_context *);
+extern void diagnostic_report_current_module (diagnostic_context *);
+
+
+extern diagnostic_t diagnostic_classify_diagnostic (diagnostic_context *,
+          int ,
+          diagnostic_t ,
+          location_t);
+extern void diagnostic_push_diagnostics (diagnostic_context *, location_t);
+extern void diagnostic_pop_diagnostics (diagnostic_context *, location_t);
+extern unsigned char diagnostic_report_diagnostic (diagnostic_context *,
+       diagnostic_info *);
+
+extern void diagnostic_set_info (diagnostic_info *, const char *, va_list *,
+     location_t, diagnostic_t) __attribute__ ((__format__ (__gcc_tdiag__, 2, 0))) __attribute__ ((__nonnull__ (2)));
+extern void diagnostic_set_info_translated (diagnostic_info *, const char *,
+         va_list *, location_t,
+         diagnostic_t)
+     __attribute__ ((__format__ (__gcc_tdiag__, 2, 0))) __attribute__ ((__nonnull__ (2)));
+
+extern char *diagnostic_build_prefix (diagnostic_context *, diagnostic_info *);
+void default_diagnostic_starter (diagnostic_context *, diagnostic_info *);
+void default_diagnostic_finalizer (diagnostic_context *, diagnostic_info *);
+
+
+extern char *file_name_as_prefix (const char *);
+# 22 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.h" 1
+# 42 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.h"
+typedef struct param_info
+{
+
+
+  const char *const option;
+
+
+  int default_value;
+
+
+  int min_value;
+
+
+  int max_value;
+
+
+  const char *const help;
+} param_info;
+
+
+
+
+extern param_info *compiler_params;
+
+
+extern size_t get_num_compiler_params (void);
+
+
+
+extern void add_params (const param_info params[], size_t n);
+
+
+
+
+
+extern void set_param_value (const char *name, int value,
+        int *params, int *params_set);
+
+
+
+
+typedef enum compiler_param
+{
+
+
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def" 1
+# 47 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
+PARAM_STRUCT_REORG_COLD_STRUCT_RATIO,
+
+
+
+
+
+
+PARAM_PREDICTABLE_BRANCH_OUTCOME,
+# 71 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
+PARAM_MAX_INLINE_INSNS_SINGLE,
+# 83 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
+PARAM_MAX_INLINE_INSNS_AUTO,
+
+
+
+
+PARAM_MAX_INLINE_INSNS_RECURSIVE,
+
+
+
+
+PARAM_MAX_INLINE_INSNS_RECURSIVE_AUTO,
+
+
+
+
+PARAM_MAX_INLINE_RECURSIVE_DEPTH,
+
+
+
+
+PARAM_MAX_INLINE_RECURSIVE_DEPTH_AUTO,
+
+
+
+
+PARAM_MIN_INLINE_RECURSIVE_PROBABILITY,
+
+
+
+
+
+
+
+PARAM_EARLY_INLINER_MAX_ITERATIONS,
+
+
+
+
+
+PARAM_COMDAT_SHARING_PROBABILITY,
+
+
+
+
+
+PARAM_PARTIAL_INLINING_ENTRY_PROBABILITY,
+
+
+
+
+
+
+PARAM_MAX_VARIABLE_EXPANSIONS,
+
+
+
+
+
+PARAM_MIN_VECT_LOOP_BOUND,
+# 152 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
+PARAM_MAX_DELAY_SLOT_INSN_SEARCH,
+# 163 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
+PARAM_MAX_DELAY_SLOT_LIVE_SEARCH,
+# 173 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
+PARAM_MAX_PENDING_LIST_LENGTH,
+
+
+
+
+PARAM_LARGE_FUNCTION_INSNS,
+
+
+
+PARAM_LARGE_FUNCTION_GROWTH,
+
+
+
+PARAM_LARGE_UNIT_INSNS,
+
+
+
+PARAM_INLINE_UNIT_GROWTH,
+
+
+
+PARAM_IPCP_UNIT_GROWTH,
+
+
+
+PARAM_EARLY_INLINING_INSNS,
+
+
+
+PARAM_LARGE_STACK_FRAME,
+
+
+
+PARAM_STACK_FRAME_GROWTH,
+
+
+
+
+
+
+PARAM_MAX_GCSE_MEMORY,
+
+
+
+
+
+
+PARAM_MAX_GCSE_INSERTION_RATIO,
+# 231 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
+PARAM_GCSE_AFTER_RELOAD_PARTIAL_FRACTION,
+
+
+
+
+
+
+PARAM_GCSE_AFTER_RELOAD_CRITICAL_FRACTION,
+
+
+
+
+
+
+
+PARAM_GCSE_COST_DISTANCE_RATIO,
+
+
+
+
+
+PARAM_GCSE_UNRESTRICTED_COST,
+
+
+
+
+
+
+
+PARAM_MAX_HOIST_DEPTH,
+# 272 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
+PARAM_MAX_UNROLLED_INSNS,
+
+
+
+
+
+PARAM_MAX_AVERAGE_UNROLLED_INSNS,
+
+
+
+
+PARAM_MAX_UNROLL_TIMES,
+
+
+
+
+PARAM_MAX_PEELED_INSNS,
+
+
+
+
+PARAM_MAX_PEEL_TIMES,
+
+
+
+
+PARAM_MAX_COMPLETELY_PEELED_INSNS,
+
+
+
+
+PARAM_MAX_COMPLETELY_PEEL_TIMES,
+
+
+
+
+PARAM_MAX_ONCE_PEELED_INSNS,
+
+
+
+
+PARAM_MAX_UNROLL_ITERATIONS,
+
+
+
+
+
+PARAM_MAX_UNSWITCH_INSNS,
+
+
+
+
+PARAM_MAX_UNSWITCH_LEVEL,
+
+
+
+
+
+
+PARAM_MAX_ITERATIONS_TO_TRACK,
+
+
+
+
+
+PARAM_MAX_ITERATIONS_COMPUTATION_COST,
+
+
+
+
+
+PARAM_SMS_MAX_II_FACTOR,
+
+
+
+PARAM_SMS_DFA_HISTORY,
+
+
+
+PARAM_SMS_LOOP_AVERAGE_COUNT_THRESHOLD,
+
+
+
+
+HOT_BB_COUNT_FRACTION,
+
+
+
+HOT_BB_FREQUENCY_FRACTION,
+
+
+
+
+PARAM_ALIGN_THRESHOLD,
+
+
+
+
+PARAM_ALIGN_LOOP_ITERATIONS,
+# 386 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
+PARAM_MAX_PREDICTED_ITERATIONS,
+
+
+
+TRACER_DYNAMIC_COVERAGE_FEEDBACK,
+
+
+
+TRACER_DYNAMIC_COVERAGE,
+
+
+
+TRACER_MAX_CODE_GROWTH,
+
+
+
+TRACER_MIN_BRANCH_RATIO,
+
+
+
+TRACER_MIN_BRANCH_PROBABILITY_FEEDBACK,
+
+
+
+TRACER_MIN_BRANCH_PROBABILITY,
+
+
+
+
+
+PARAM_MAX_CROSSJUMP_EDGES,
+
+
+
+
+
+PARAM_MIN_CROSSJUMP_INSNS,
+
+
+
+
+
+PARAM_MAX_GROW_COPY_BB_INSNS,
+
+
+
+
+
+PARAM_MAX_GOTO_DUPLICATION_INSNS,
+
+
+
+
+
+PARAM_MAX_CSE_PATH_LENGTH,
+
+
+
+PARAM_MAX_CSE_INSNS,
+
+
+
+
+
+
+PARAM_LIM_EXPENSIVE,
+# 460 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
+PARAM_IV_CONSIDER_ALL_CANDIDATES_BOUND,
+
+
+
+
+
+
+
+PARAM_IV_MAX_CONSIDERED_USES,
+
+
+
+
+
+
+
+PARAM_IV_ALWAYS_PRUNE_CAND_SET_BOUND,
+
+
+
+
+PARAM_SCEV_MAX_EXPR_SIZE,
+
+
+
+
+PARAM_SCEV_MAX_EXPR_COMPLEXITY,
+
+
+
+
+PARAM_OMEGA_MAX_VARS,
+
+
+
+
+PARAM_OMEGA_MAX_GEQS,
+
+
+
+
+PARAM_OMEGA_MAX_EQS,
+
+
+
+
+PARAM_OMEGA_MAX_WILD_CARDS,
+
+
+
+
+PARAM_OMEGA_HASH_TABLE_SIZE,
+
+
+
+
+PARAM_OMEGA_MAX_KEYS,
+
+
+
+
+PARAM_OMEGA_ELIMINATE_REDUNDANT_CONSTRAINTS,
+
+
+
+
+PARAM_VECT_MAX_VERSION_FOR_ALIGNMENT_CHECKS,
+
+
+
+
+PARAM_VECT_MAX_VERSION_FOR_ALIAS_CHECKS,
+
+
+
+
+PARAM_MAX_CSELIB_MEMORY_LOCATIONS,
+# 549 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
+GGC_MIN_EXPAND,
+
+
+
+
+GGC_MIN_HEAPSIZE,
+
+
+
+
+
+
+
+PARAM_MAX_RELOAD_SEARCH_INSNS,
+
+
+
+
+PARAM_MAX_SCHED_REGION_BLOCKS,
+
+
+
+
+PARAM_MAX_SCHED_REGION_INSNS,
+
+
+
+
+PARAM_MAX_PIPELINE_REGION_BLOCKS,
+
+
+
+
+PARAM_MAX_PIPELINE_REGION_INSNS,
+
+
+
+
+PARAM_MIN_SPEC_PROB,
+
+
+
+
+PARAM_MAX_SCHED_EXTEND_REGIONS_ITERS,
+
+
+
+
+PARAM_MAX_SCHED_INSN_CONFLICT_DELAY,
+
+
+
+
+PARAM_SCHED_SPEC_PROB_CUTOFF,
+
+
+
+
+PARAM_SELSCHED_MAX_LOOKAHEAD,
+
+
+
+
+PARAM_SELSCHED_MAX_SCHED_TIMES,
+
+
+
+
+PARAM_SELSCHED_INSNS_TO_RENAME,
+
+
+
+
+PARAM_SCHED_MEM_TRUE_DEP_COST,
+
+
+
+
+PARAM_MAX_LAST_VALUE_RTL,
+
+
+
+
+
+
+
+PARAM_INTEGER_SHARE_LIMIT,
+# 654 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
+PARAM_MIN_VIRTUAL_MAPPINGS,
+
+
+
+
+PARAM_VIRTUAL_MAPPINGS_TO_SYMS_RATIO,
+
+
+
+
+PARAM_SSP_BUFFER_SIZE,
+# 682 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
+PARAM_MAX_JUMP_THREAD_DUPLICATION_STMTS,
+# 691 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
+PARAM_MAX_FIELDS_FOR_FIELD_SENSITIVE,
+
+
+
+
+PARAM_MAX_SCHED_READY_INSNS,
+
+
+
+
+
+PARAM_MAX_DSE_ACTIVE_LOCAL_STORES,
+# 712 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
+PARAM_PREFETCH_LATENCY,
+
+
+
+
+
+
+PARAM_SIMULTANEOUS_PREFETCHES,
+
+
+
+
+
+
+PARAM_L1_CACHE_SIZE,
+
+
+
+
+
+
+PARAM_L1_CACHE_LINE_SIZE,
+
+
+
+
+
+
+PARAM_L2_CACHE_SIZE,
+# 751 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
+PARAM_USE_CANONICAL_TYPES,
+
+
+
+
+PARAM_MAX_PARTIAL_ANTIC_LENGTH,
+# 766 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
+PARAM_SCCVN_MAX_SCC_SIZE,
+
+
+
+
+PARAM_IRA_MAX_LOOPS_NUM,
+
+
+
+
+PARAM_IRA_MAX_CONFLICT_TABLE_SIZE,
+
+
+
+
+PARAM_IRA_LOOP_RESERVED_REGS,
+
+
+
+
+
+
+
+PARAM_SWITCH_CONVERSION_BRANCH_RATIO,
+
+
+
+
+
+
+
+PARAM_LOOP_BLOCK_TILE_SIZE,
+
+
+
+
+
+
+PARAM_GRAPHITE_MAX_NB_SCOP_PARAMS,
+
+
+
+
+
+
+PARAM_GRAPHITE_MAX_BBS_PER_FUNCTION,
+
+
+
+
+
+
+PARAM_LOOP_INVARIANT_MAX_BBS_IN_LOOP,
+
+
+
+
+
+PARAM_SLP_MAX_INSNS_IN_BB,
+
+
+
+
+PARAM_MIN_INSN_TO_PREFETCH_RATIO,
+
+
+
+
+
+PARAM_PREFETCH_MIN_INSN_TO_MEM_RATIO,
+
+
+
+
+
+
+PARAM_MAX_VARTRACK_SIZE,
+
+
+
+
+
+
+PARAM_MIN_NONDEBUG_INSN_UID,
+
+
+
+
+PARAM_IPA_SRA_PTR_GROWTH_FACTOR,
+
+
+
+
+
+PARAM_DEVIRT_TYPE_LIST_SIZE,
+
+
+
+
+
+
+
+PARAM_LTO_PARTITIONS,
+
+
+
+
+MIN_PARTITION_SIZE,
+
+
+
+
+
+
+CXX_MAX_NAMESPACES_FOR_DIAGNOSTIC_HELP,
+# 88 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.h" 2
+
+  LAST_PARAM
+} compiler_param;
+# 100 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.h"
+extern void maybe_set_param_value (compiler_param num, int value,
+       int *params, int *params_set);
+
+
+
+
+extern void set_default_param_value (compiler_param num, int value);
+
+
+
+extern void finish_params (void);
+
+
+
+extern int default_param_value (compiler_param num);
+
+
+
+extern void init_param_values (int *params);
+# 23 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cgraph.h" 1
+# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cgraph.h"
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/plugin-api.h" 1
+# 47 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/plugin-api.h"
+enum ld_plugin_status
+{
+  LDPS_OK = 0,
+  LDPS_NO_SYMS,
+  LDPS_BAD_HANDLE,
+  LDPS_ERR
+
+};
+
+
+
+enum ld_plugin_api_version
+{
+  LD_PLUGIN_API_VERSION = 1
+};
+
+
+
+enum ld_plugin_output_file_type
+{
+  LDPO_REL,
+  LDPO_EXEC,
+  LDPO_DYN
+};
+
+
+
+struct ld_plugin_input_file
+{
+  const char *name;
+  int fd;
+  off_t offset;
+  off_t filesize;
+  void *handle;
+};
+
+
+
+struct ld_plugin_symbol
+{
+  char *name;
+  char *version;
+  int def;
+  int visibility;
+  uint64_t size;
+  char *comdat_key;
+  int resolution;
+};
+
+
+
+enum ld_plugin_symbol_kind
+{
+  LDPK_DEF,
+  LDPK_WEAKDEF,
+  LDPK_UNDEF,
+  LDPK_WEAKUNDEF,
+  LDPK_COMMON
+};
+
+
+
+enum ld_plugin_symbol_visibility
+{
+  LDPV_DEFAULT,
+  LDPV_PROTECTED,
+  LDPV_INTERNAL,
+  LDPV_HIDDEN
+};
+
+
+
+enum ld_plugin_symbol_resolution
+{
+  LDPR_UNKNOWN = 0,
+
+
+  LDPR_UNDEF,
+
+
+
+  LDPR_PREVAILING_DEF,
+
+
+
+
+  LDPR_PREVAILING_DEF_IRONLY,
+
+
+
+  LDPR_PREEMPTED_REG,
+
+
+  LDPR_PREEMPTED_IR,
+
+
+  LDPR_RESOLVED_IR,
+
+
+
+  LDPR_RESOLVED_EXEC,
+
+
+  LDPR_RESOLVED_DYN
+};
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_claim_file_handler) (
+  const struct ld_plugin_input_file *file, int *claimed);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_all_symbols_read_handler) (void);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_cleanup_handler) (void);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_register_claim_file) (ld_plugin_claim_file_handler handler);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_register_all_symbols_read) (
+  ld_plugin_all_symbols_read_handler handler);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_register_cleanup) (ld_plugin_cleanup_handler handler);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_add_symbols) (void *handle, int nsyms,
+                          const struct ld_plugin_symbol *syms);
+
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_get_input_file) (const void *handle,
+                             struct ld_plugin_input_file *file);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_release_input_file) (const void *handle);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_get_symbols) (const void *handle, int nsyms,
+                          struct ld_plugin_symbol *syms);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_add_input_file) (const char *pathname);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_add_input_library) (const char *libname);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_set_extra_library_path) (const char *path);
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_message) (int level, const char *format, ...);
+
+enum ld_plugin_level
+{
+  LDPL_INFO,
+  LDPL_WARNING,
+  LDPL_ERROR,
+  LDPL_FATAL
+};
+
+
+
+enum ld_plugin_tag
+{
+  LDPT_NULL = 0,
+  LDPT_API_VERSION,
+  LDPT_GOLD_VERSION,
+  LDPT_LINKER_OUTPUT,
+  LDPT_OPTION,
+  LDPT_REGISTER_CLAIM_FILE_HOOK,
+  LDPT_REGISTER_ALL_SYMBOLS_READ_HOOK,
+  LDPT_REGISTER_CLEANUP_HOOK,
+  LDPT_ADD_SYMBOLS,
+  LDPT_GET_SYMBOLS,
+  LDPT_ADD_INPUT_FILE,
+  LDPT_MESSAGE,
+  LDPT_GET_INPUT_FILE,
+  LDPT_RELEASE_INPUT_FILE,
+  LDPT_ADD_INPUT_LIBRARY,
+  LDPT_OUTPUT_NAME,
+  LDPT_SET_EXTRA_LIBRARY_PATH,
+  LDPT_GNU_LD_VERSION
+};
+
+
+
+struct ld_plugin_tv
+{
+  enum ld_plugin_tag tv_tag;
+  union
+  {
+    int tv_val;
+    const char *tv_string;
+    ld_plugin_register_claim_file tv_register_claim_file;
+    ld_plugin_register_all_symbols_read tv_register_all_symbols_read;
+    ld_plugin_register_cleanup tv_register_cleanup;
+    ld_plugin_add_symbols tv_add_symbols;
+    ld_plugin_get_symbols tv_get_symbols;
+    ld_plugin_add_input_file tv_add_input_file;
+    ld_plugin_message tv_message;
+    ld_plugin_get_input_file tv_get_input_file;
+    ld_plugin_release_input_file tv_release_input_file;
+    ld_plugin_add_input_library tv_add_input_library;
+    ld_plugin_set_extra_library_path tv_set_extra_library_path;
+  } tv_u;
+};
+
+
+
+typedef
+enum ld_plugin_status
+(*ld_plugin_onload) (struct ld_plugin_tv *tv);
+# 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cgraph.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/vec.h" 1
+# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/vec.h"
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/statistics.h" 1
+# 41 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/statistics.h"
+struct function;
+
+
+extern void statistics_early_init (void);
+extern void statistics_init (void);
+extern void statistics_fini (void);
+extern void statistics_fini_pass (void);
+extern void statistics_counter_event (struct function *, const char *, int);
+extern void statistics_histogram_event (struct function *, const char *, int);
+# 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/vec.h" 2
+# 467 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/vec.h"
+extern void *vec_gc_p_reserve (void *, int );
+extern void *vec_gc_p_reserve_exact (void *, int );
+extern void *vec_gc_o_reserve (void *, int, size_t, size_t );
+extern void *vec_gc_o_reserve_exact (void *, int, size_t, size_t
+         );
+extern void ggc_free (void *);
+
+extern void *vec_heap_p_reserve (void *, int );
+extern void *vec_heap_p_reserve_exact (void *, int );
+extern void *vec_heap_o_reserve (void *, int, size_t, size_t );
+extern void *vec_heap_o_reserve_exact (void *, int, size_t, size_t
+           );
+extern void dump_vec_loc_statistics (void);
+# 1337 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/vec.h"
+extern void *vec_stack_p_reserve (void *, int );
+extern void *vec_stack_p_reserve_exact (void *, int );
+extern void *vec_stack_p_reserve_exact_1 (int, void *);
+extern void *vec_stack_o_reserve (void *, int, size_t, size_t );
+extern void *vec_stack_o_reserve_exact (void *, int, size_t, size_t
+      );
+extern void vec_stack_free (void *);
+# 27 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cgraph.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 1
+# 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/machmode.h" 1
+# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/machmode.h"
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/insn-modes.h" 1
+
+
+
+
+
+
+enum machine_mode
+{
+  VOIDmode,
+  BLKmode,
+  CCmode,
+  CCGCmode,
+  CCGOCmode,
+  CCNOmode,
+  CCAmode,
+  CCCmode,
+  CCOmode,
+  CCSmode,
+  CCZmode,
+  CCFPmode,
+  CCFPUmode,
+  BImode,
+  QImode,
+  HImode,
+  SImode,
+  DImode,
+  TImode,
+  OImode,
+  QQmode,
+  HQmode,
+  SQmode,
+  DQmode,
+  TQmode,
+  UQQmode,
+  UHQmode,
+  USQmode,
+  UDQmode,
+  UTQmode,
+  HAmode,
+  SAmode,
+  DAmode,
+  TAmode,
+  UHAmode,
+  USAmode,
+  UDAmode,
+  UTAmode,
+  SFmode,
+  DFmode,
+  XFmode,
+  TFmode,
+  SDmode,
+  DDmode,
+  TDmode,
+  CQImode,
+  CHImode,
+  CSImode,
+  CDImode,
+  CTImode,
+  COImode,
+  SCmode,
+  DCmode,
+  XCmode,
+  TCmode,
+  V2QImode,
+  V4QImode,
+  V2HImode,
+  V1SImode,
+  V8QImode,
+  V4HImode,
+  V2SImode,
+  V1DImode,
+  V16QImode,
+  V8HImode,
+  V4SImode,
+  V2DImode,
+  V1TImode,
+  V32QImode,
+  V16HImode,
+  V8SImode,
+  V4DImode,
+  V2TImode,
+  V64QImode,
+  V32HImode,
+  V16SImode,
+  V8DImode,
+  V4TImode,
+  V2SFmode,
+  V4SFmode,
+  V2DFmode,
+  V8SFmode,
+  V4DFmode,
+  V2TFmode,
+  V16SFmode,
+  V8DFmode,
+  V4TFmode,
+  MAX_MACHINE_MODE,
+
+  MIN_MODE_RANDOM = VOIDmode,
+  MAX_MODE_RANDOM = BLKmode,
+
+  MIN_MODE_CC = CCmode,
+  MAX_MODE_CC = CCFPUmode,
+
+  MIN_MODE_INT = QImode,
+  MAX_MODE_INT = OImode,
+
+  MIN_MODE_PARTIAL_INT = VOIDmode,
+  MAX_MODE_PARTIAL_INT = VOIDmode,
+
+  MIN_MODE_FRACT = QQmode,
+  MAX_MODE_FRACT = TQmode,
+
+  MIN_MODE_UFRACT = UQQmode,
+  MAX_MODE_UFRACT = UTQmode,
+
+  MIN_MODE_ACCUM = HAmode,
+  MAX_MODE_ACCUM = TAmode,
+
+  MIN_MODE_UACCUM = UHAmode,
+  MAX_MODE_UACCUM = UTAmode,
+
+  MIN_MODE_FLOAT = SFmode,
+  MAX_MODE_FLOAT = TFmode,
+
+  MIN_MODE_DECIMAL_FLOAT = SDmode,
+  MAX_MODE_DECIMAL_FLOAT = TDmode,
+
+  MIN_MODE_COMPLEX_INT = CQImode,
+  MAX_MODE_COMPLEX_INT = COImode,
+
+  MIN_MODE_COMPLEX_FLOAT = SCmode,
+  MAX_MODE_COMPLEX_FLOAT = TCmode,
+
+  MIN_MODE_VECTOR_INT = V2QImode,
+  MAX_MODE_VECTOR_INT = V4TImode,
+
+  MIN_MODE_VECTOR_FRACT = VOIDmode,
+  MAX_MODE_VECTOR_FRACT = VOIDmode,
+
+  MIN_MODE_VECTOR_UFRACT = VOIDmode,
+  MAX_MODE_VECTOR_UFRACT = VOIDmode,
+
+  MIN_MODE_VECTOR_ACCUM = VOIDmode,
+  MAX_MODE_VECTOR_ACCUM = VOIDmode,
+
+  MIN_MODE_VECTOR_UACCUM = VOIDmode,
+  MAX_MODE_VECTOR_UACCUM = VOIDmode,
+
+  MIN_MODE_VECTOR_FLOAT = V2SFmode,
+  MAX_MODE_VECTOR_FLOAT = V4TFmode,
+
+  NUM_MACHINE_MODES = MAX_MACHINE_MODE
+};
+# 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/machmode.h" 2
+
+
+
+extern const char * const mode_name[NUM_MACHINE_MODES];
+
+
+
+
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/mode-classes.def" 1
+# 35 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/machmode.h" 2
+
+enum mode_class { MODE_RANDOM, MODE_CC, MODE_INT, MODE_PARTIAL_INT, MODE_FRACT, MODE_UFRACT, MODE_ACCUM, MODE_UACCUM, MODE_FLOAT, MODE_DECIMAL_FLOAT, MODE_COMPLEX_INT, MODE_COMPLEX_FLOAT, MODE_VECTOR_INT, MODE_VECTOR_FRACT, MODE_VECTOR_UFRACT, MODE_VECTOR_ACCUM, MODE_VECTOR_UACCUM, MODE_VECTOR_FLOAT, MAX_MODE_CLASS };
+
+
+
+
+
+
+extern const unsigned char mode_class[NUM_MACHINE_MODES];
+# 179 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/machmode.h"
+extern unsigned char mode_size[NUM_MACHINE_MODES];
+
+
+
+
+extern const unsigned short mode_precision[NUM_MACHINE_MODES];
+
+
+
+extern const unsigned char mode_ibit[NUM_MACHINE_MODES];
+
+
+
+extern const unsigned char mode_fbit[NUM_MACHINE_MODES];
+
+
+
+
+
+extern const unsigned long mode_mask_array[NUM_MACHINE_MODES];
+
+
+
+
+
+extern const unsigned char mode_inner[NUM_MACHINE_MODES];
+# 216 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/machmode.h"
+extern const unsigned char mode_nunits[NUM_MACHINE_MODES];
+
+
+
+
+extern const unsigned char mode_wider[NUM_MACHINE_MODES];
+
+
+extern const unsigned char mode_2xwider[NUM_MACHINE_MODES];
+
+
+
+
+
+
+extern enum machine_mode mode_for_size (unsigned int, enum mode_class, int);
+
+
+
+extern enum machine_mode smallest_mode_for_size (unsigned int,
+       enum mode_class);
+
+
+
+
+
+extern enum machine_mode int_mode_for_mode (enum machine_mode);
+
+
+
+
+extern enum machine_mode mode_for_vector (enum machine_mode, unsigned);
+
+
+
+extern enum machine_mode get_best_mode (int, int, unsigned int,
+     enum machine_mode, int);
+
+
+
+extern unsigned char mode_base_align[NUM_MACHINE_MODES];
+
+extern unsigned get_mode_alignment (enum machine_mode);
+
+
+
+
+
+extern const unsigned char class_narrowest_mode[MAX_MODE_CLASS];
+
+
+
+
+
+
+extern enum machine_mode byte_mode;
+extern enum machine_mode word_mode;
+extern enum machine_mode ptr_mode;
+
+
+extern void init_adjust_machine_modes (void);
+# 27 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
+
+
+
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/vecir.h" 1
+# 28 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/vecir.h"
+static __inline__ void VEC_tree_must_be_pointer_type (void) { (void)((tree)1 == (void *)1); } typedef struct VEC_tree_base { unsigned num; unsigned alloc; tree vec[1]; } VEC_tree_base; typedef struct VEC_tree_none { VEC_tree_base base; } VEC_tree_none; static __inline__ unsigned VEC_tree_base_length (const VEC_tree_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ tree VEC_tree_base_last (const VEC_tree_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ tree VEC_tree_base_index (const VEC_tree_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_tree_base_iterate (const VEC_tree_base *vec_, unsigned ix_, tree *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (tree) 0; return 0; } } static __inline__ size_t VEC_tree_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_tree_base, vec) + alloc_ * sizeof(tree); } static __inline__ void VEC_tree_base_embedded_init (VEC_tree_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_tree_base_space (VEC_tree_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_tree_base_splice (VEC_tree_base *dst_, VEC_tree_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (tree)); dst_->num += len_; } } static __inline__ tree *VEC_tree_base_quick_push (VEC_tree_base *vec_, tree obj_ ) { tree *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ tree VEC_tree_base_pop (VEC_tree_base *vec_ ) { tree obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_tree_base_truncate (VEC_tree_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ tree VEC_tree_base_replace (VEC_tree_base *vec_, unsigned ix_, tree obj_ ) { tree old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ tree *VEC_tree_base_quick_insert (VEC_tree_base *vec_, unsigned ix_, tree obj_ ) { tree *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (tree)); *slot_ = obj_; return slot_; } static __inline__ tree VEC_tree_base_ordered_remove (VEC_tree_base *vec_, unsigned ix_ ) { tree *slot_; tree obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (tree)); return obj_; } static __inline__ tree VEC_tree_base_unordered_remove (VEC_tree_base *vec_, unsigned ix_ ) { tree *slot_; tree obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_tree_base_block_remove (VEC_tree_base *vec_, unsigned ix_, unsigned len_ ) { tree *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (tree)); } static __inline__ tree *VEC_tree_base_address (VEC_tree_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_tree_base_lower_bound (VEC_tree_base *vec_, const tree obj_, unsigned char (*lessthan_)(const tree, const tree) ) { unsigned int len_ = VEC_tree_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { tree middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_tree_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_tree_gc { VEC_tree_base base; } VEC_tree_gc; static __inline__ VEC_tree_gc *VEC_tree_gc_alloc (int alloc_ ) { return (VEC_tree_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_tree_gc_free (VEC_tree_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_tree_gc *VEC_tree_gc_copy (VEC_tree_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_tree_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_tree_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (tree) * len_); } return new_vec_; } static __inline__ int VEC_tree_gc_reserve (VEC_tree_gc **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_tree_gc_reserve_exact (VEC_tree_gc **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_tree_gc_safe_grow (VEC_tree_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_tree_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_tree_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_tree_gc_safe_grow_cleared (VEC_tree_gc **vec_, int size_ ) { int oldsize = VEC_tree_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_tree_gc_safe_grow (vec_, size_ ); memset (&(VEC_tree_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (tree) * (size_ - oldsize)); } static __inline__ void VEC_tree_gc_safe_splice (VEC_tree_gc **dst_, VEC_tree_base *src_ ) { if (src_) { VEC_tree_gc_reserve_exact (dst_, src_->num ); VEC_tree_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ tree *VEC_tree_gc_safe_push (VEC_tree_gc **vec_, tree obj_ ) { VEC_tree_gc_reserve (vec_, 1 ); return VEC_tree_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ tree *VEC_tree_gc_safe_insert (VEC_tree_gc **vec_, unsigned ix_, tree obj_ ) { VEC_tree_gc_reserve (vec_, 1 ); return VEC_tree_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_tree_heap { VEC_tree_base base; } VEC_tree_heap; static __inline__ VEC_tree_heap *VEC_tree_heap_alloc (int alloc_ ) { return (VEC_tree_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_tree_heap_free (VEC_tree_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_tree_heap *VEC_tree_heap_copy (VEC_tree_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_tree_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_tree_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (tree) * len_); } return new_vec_; } static __inline__ int VEC_tree_heap_reserve (VEC_tree_heap **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_tree_heap_reserve_exact (VEC_tree_heap **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_tree_heap_safe_grow (VEC_tree_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_tree_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_tree_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_tree_heap_safe_grow_cleared (VEC_tree_heap **vec_, int size_ ) { int oldsize = VEC_tree_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_tree_heap_safe_grow (vec_, size_ ); memset (&(VEC_tree_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (tree) * (size_ - oldsize)); } static __inline__ void VEC_tree_heap_safe_splice (VEC_tree_heap **dst_, VEC_tree_base *src_ ) { if (src_) { VEC_tree_heap_reserve_exact (dst_, src_->num ); VEC_tree_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ tree *VEC_tree_heap_safe_push (VEC_tree_heap **vec_, tree obj_ ) { VEC_tree_heap_reserve (vec_, 1 ); return VEC_tree_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ tree *VEC_tree_heap_safe_insert (VEC_tree_heap **vec_, unsigned ix_, tree obj_ ) { VEC_tree_heap_reserve (vec_, 1 ); return VEC_tree_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+
+static __inline__ void VEC_gimple_must_be_pointer_type (void) { (void)((gimple)1 == (void *)1); } typedef struct VEC_gimple_base { unsigned num; unsigned alloc; gimple vec[1]; } VEC_gimple_base; typedef struct VEC_gimple_none { VEC_gimple_base base; } VEC_gimple_none; static __inline__ unsigned VEC_gimple_base_length (const VEC_gimple_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ gimple VEC_gimple_base_last (const VEC_gimple_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ gimple VEC_gimple_base_index (const VEC_gimple_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_gimple_base_iterate (const VEC_gimple_base *vec_, unsigned ix_, gimple *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (gimple) 0; return 0; } } static __inline__ size_t VEC_gimple_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_gimple_base, vec) + alloc_ * sizeof(gimple); } static __inline__ void VEC_gimple_base_embedded_init (VEC_gimple_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_gimple_base_space (VEC_gimple_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_gimple_base_splice (VEC_gimple_base *dst_, VEC_gimple_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (gimple)); dst_->num += len_; } } static __inline__ gimple *VEC_gimple_base_quick_push (VEC_gimple_base *vec_, gimple obj_ ) { gimple *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ gimple VEC_gimple_base_pop (VEC_gimple_base *vec_ ) { gimple obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_gimple_base_truncate (VEC_gimple_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ gimple VEC_gimple_base_replace (VEC_gimple_base *vec_, unsigned ix_, gimple obj_ ) { gimple old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ gimple *VEC_gimple_base_quick_insert (VEC_gimple_base *vec_, unsigned ix_, gimple obj_ ) { gimple *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (gimple)); *slot_ = obj_; return slot_; } static __inline__ gimple VEC_gimple_base_ordered_remove (VEC_gimple_base *vec_, unsigned ix_ ) { gimple *slot_; gimple obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (gimple)); return obj_; } static __inline__ gimple VEC_gimple_base_unordered_remove (VEC_gimple_base *vec_, unsigned ix_ ) { gimple *slot_; gimple obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_gimple_base_block_remove (VEC_gimple_base *vec_, unsigned ix_, unsigned len_ ) { gimple *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (gimple)); } static __inline__ gimple *VEC_gimple_base_address (VEC_gimple_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_gimple_base_lower_bound (VEC_gimple_base *vec_, const gimple obj_, unsigned char (*lessthan_)(const gimple, const gimple) ) { unsigned int len_ = VEC_gimple_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { gimple middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_gimple_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_gimple_heap { VEC_gimple_base base; } VEC_gimple_heap; static __inline__ VEC_gimple_heap *VEC_gimple_heap_alloc (int alloc_ ) { return (VEC_gimple_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_heap_free (VEC_gimple_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_heap *VEC_gimple_heap_copy (VEC_gimple_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_gimple_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple) * len_); } return new_vec_; } static __inline__ int VEC_gimple_heap_reserve (VEC_gimple_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_heap_reserve_exact (VEC_gimple_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_heap_safe_grow (VEC_gimple_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_gimple_heap_safe_grow_cleared (VEC_gimple_heap **vec_, int size_ ) { int oldsize = VEC_gimple_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_gimple_heap_safe_grow (vec_, size_ ); memset (&(VEC_gimple_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple) * (size_ - oldsize)); } static __inline__ void VEC_gimple_heap_safe_splice (VEC_gimple_heap **dst_, VEC_gimple_base *src_ ) { if (src_) { VEC_gimple_heap_reserve_exact (dst_, src_->num ); VEC_gimple_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple *VEC_gimple_heap_safe_push (VEC_gimple_heap **vec_, gimple obj_ ) { VEC_gimple_heap_reserve (vec_, 1 ); return VEC_gimple_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple *VEC_gimple_heap_safe_insert (VEC_gimple_heap **vec_, unsigned ix_, gimple obj_ ) { VEC_gimple_heap_reserve (vec_, 1 ); return VEC_gimple_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_gimple_gc { VEC_gimple_base base; } VEC_gimple_gc; static __inline__ VEC_gimple_gc *VEC_gimple_gc_alloc (int alloc_ ) { return (VEC_gimple_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_gc_free (VEC_gimple_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_gc *VEC_gimple_gc_copy (VEC_gimple_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_gimple_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple) * len_); } return new_vec_; } static __inline__ int VEC_gimple_gc_reserve (VEC_gimple_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_gc_reserve_exact (VEC_gimple_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_gc_safe_grow (VEC_gimple_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_gimple_gc_safe_grow_cleared (VEC_gimple_gc **vec_, int size_ ) { int oldsize = VEC_gimple_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_gimple_gc_safe_grow (vec_, size_ ); memset (&(VEC_gimple_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple) * (size_ - oldsize)); } static __inline__ void VEC_gimple_gc_safe_splice (VEC_gimple_gc **dst_, VEC_gimple_base *src_ ) { if (src_) { VEC_gimple_gc_reserve_exact (dst_, src_->num ); VEC_gimple_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple *VEC_gimple_gc_safe_push (VEC_gimple_gc **vec_, gimple obj_ ) { VEC_gimple_gc_reserve (vec_, 1 ); return VEC_gimple_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple *VEC_gimple_gc_safe_insert (VEC_gimple_gc **vec_, unsigned ix_, gimple obj_ ) { VEC_gimple_gc_reserve (vec_, 1 ); return VEC_gimple_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+
+typedef gimple *gimple_p;
+static __inline__ void VEC_gimple_p_must_be_pointer_type (void) { (void)((gimple_p)1 == (void *)1); } typedef struct VEC_gimple_p_base { unsigned num; unsigned alloc; gimple_p vec[1]; } VEC_gimple_p_base; typedef struct VEC_gimple_p_none { VEC_gimple_p_base base; } VEC_gimple_p_none; static __inline__ unsigned VEC_gimple_p_base_length (const VEC_gimple_p_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ gimple_p VEC_gimple_p_base_last (const VEC_gimple_p_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ gimple_p VEC_gimple_p_base_index (const VEC_gimple_p_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_gimple_p_base_iterate (const VEC_gimple_p_base *vec_, unsigned ix_, gimple_p *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (gimple_p) 0; return 0; } } static __inline__ size_t VEC_gimple_p_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_gimple_p_base, vec) + alloc_ * sizeof(gimple_p); } static __inline__ void VEC_gimple_p_base_embedded_init (VEC_gimple_p_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_gimple_p_base_space (VEC_gimple_p_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_gimple_p_base_splice (VEC_gimple_p_base *dst_, VEC_gimple_p_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (gimple_p)); dst_->num += len_; } } static __inline__ gimple_p *VEC_gimple_p_base_quick_push (VEC_gimple_p_base *vec_, gimple_p obj_ ) { gimple_p *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ gimple_p VEC_gimple_p_base_pop (VEC_gimple_p_base *vec_ ) { gimple_p obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_gimple_p_base_truncate (VEC_gimple_p_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ gimple_p VEC_gimple_p_base_replace (VEC_gimple_p_base *vec_, unsigned ix_, gimple_p obj_ ) { gimple_p old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ gimple_p *VEC_gimple_p_base_quick_insert (VEC_gimple_p_base *vec_, unsigned ix_, gimple_p obj_ ) { gimple_p *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (gimple_p)); *slot_ = obj_; return slot_; } static __inline__ gimple_p VEC_gimple_p_base_ordered_remove (VEC_gimple_p_base *vec_, unsigned ix_ ) { gimple_p *slot_; gimple_p obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (gimple_p)); return obj_; } static __inline__ gimple_p VEC_gimple_p_base_unordered_remove (VEC_gimple_p_base *vec_, unsigned ix_ ) { gimple_p *slot_; gimple_p obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_gimple_p_base_block_remove (VEC_gimple_p_base *vec_, unsigned ix_, unsigned len_ ) { gimple_p *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (gimple_p)); } static __inline__ gimple_p *VEC_gimple_p_base_address (VEC_gimple_p_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_gimple_p_base_lower_bound (VEC_gimple_p_base *vec_, const gimple_p obj_, unsigned char (*lessthan_)(const gimple_p, const gimple_p) ) { unsigned int len_ = VEC_gimple_p_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { gimple_p middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_gimple_p_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_gimple_p_heap { VEC_gimple_p_base base; } VEC_gimple_p_heap; static __inline__ VEC_gimple_p_heap *VEC_gimple_p_heap_alloc (int alloc_ ) { return (VEC_gimple_p_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_p_heap_free (VEC_gimple_p_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_p_heap *VEC_gimple_p_heap_copy (VEC_gimple_p_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_gimple_p_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_p_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple_p) * len_); } return new_vec_; } static __inline__ int VEC_gimple_p_heap_reserve (VEC_gimple_p_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_p_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_p_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_p_heap_reserve_exact (VEC_gimple_p_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_p_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_p_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_p_heap_safe_grow (VEC_gimple_p_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_p_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_p_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_gimple_p_heap_safe_grow_cleared (VEC_gimple_p_heap **vec_, int size_ ) { int oldsize = VEC_gimple_p_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_gimple_p_heap_safe_grow (vec_, size_ ); memset (&(VEC_gimple_p_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple_p) * (size_ - oldsize)); } static __inline__ void VEC_gimple_p_heap_safe_splice (VEC_gimple_p_heap **dst_, VEC_gimple_p_base *src_ ) { if (src_) { VEC_gimple_p_heap_reserve_exact (dst_, src_->num ); VEC_gimple_p_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple_p *VEC_gimple_p_heap_safe_push (VEC_gimple_p_heap **vec_, gimple_p obj_ ) { VEC_gimple_p_heap_reserve (vec_, 1 ); return VEC_gimple_p_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple_p *VEC_gimple_p_heap_safe_insert (VEC_gimple_p_heap **vec_, unsigned ix_, gimple_p obj_ ) { VEC_gimple_p_heap_reserve (vec_, 1 ); return VEC_gimple_p_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+
+static __inline__ void VEC_gimple_seq_must_be_pointer_type (void) { (void)((gimple_seq)1 == (void *)1); } typedef struct VEC_gimple_seq_base { unsigned num; unsigned alloc; gimple_seq vec[1]; } VEC_gimple_seq_base; typedef struct VEC_gimple_seq_none { VEC_gimple_seq_base base; } VEC_gimple_seq_none; static __inline__ unsigned VEC_gimple_seq_base_length (const VEC_gimple_seq_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ gimple_seq VEC_gimple_seq_base_last (const VEC_gimple_seq_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ gimple_seq VEC_gimple_seq_base_index (const VEC_gimple_seq_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_gimple_seq_base_iterate (const VEC_gimple_seq_base *vec_, unsigned ix_, gimple_seq *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (gimple_seq) 0; return 0; } } static __inline__ size_t VEC_gimple_seq_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_gimple_seq_base, vec) + alloc_ * sizeof(gimple_seq); } static __inline__ void VEC_gimple_seq_base_embedded_init (VEC_gimple_seq_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_gimple_seq_base_space (VEC_gimple_seq_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_gimple_seq_base_splice (VEC_gimple_seq_base *dst_, VEC_gimple_seq_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (gimple_seq)); dst_->num += len_; } } static __inline__ gimple_seq *VEC_gimple_seq_base_quick_push (VEC_gimple_seq_base *vec_, gimple_seq obj_ ) { gimple_seq *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ gimple_seq VEC_gimple_seq_base_pop (VEC_gimple_seq_base *vec_ ) { gimple_seq obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_gimple_seq_base_truncate (VEC_gimple_seq_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ gimple_seq VEC_gimple_seq_base_replace (VEC_gimple_seq_base *vec_, unsigned ix_, gimple_seq obj_ ) { gimple_seq old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ gimple_seq *VEC_gimple_seq_base_quick_insert (VEC_gimple_seq_base *vec_, unsigned ix_, gimple_seq obj_ ) { gimple_seq *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (gimple_seq)); *slot_ = obj_; return slot_; } static __inline__ gimple_seq VEC_gimple_seq_base_ordered_remove (VEC_gimple_seq_base *vec_, unsigned ix_ ) { gimple_seq *slot_; gimple_seq obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (gimple_seq)); return obj_; } static __inline__ gimple_seq VEC_gimple_seq_base_unordered_remove (VEC_gimple_seq_base *vec_, unsigned ix_ ) { gimple_seq *slot_; gimple_seq obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_gimple_seq_base_block_remove (VEC_gimple_seq_base *vec_, unsigned ix_, unsigned len_ ) { gimple_seq *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (gimple_seq)); } static __inline__ gimple_seq *VEC_gimple_seq_base_address (VEC_gimple_seq_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_gimple_seq_base_lower_bound (VEC_gimple_seq_base *vec_, const gimple_seq obj_, unsigned char (*lessthan_)(const gimple_seq, const gimple_seq) ) { unsigned int len_ = VEC_gimple_seq_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { gimple_seq middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_gimple_seq_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_gimple_seq_gc { VEC_gimple_seq_base base; } VEC_gimple_seq_gc; static __inline__ VEC_gimple_seq_gc *VEC_gimple_seq_gc_alloc (int alloc_ ) { return (VEC_gimple_seq_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_seq_gc_free (VEC_gimple_seq_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_seq_gc *VEC_gimple_seq_gc_copy (VEC_gimple_seq_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_gimple_seq_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_seq_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple_seq) * len_); } return new_vec_; } static __inline__ int VEC_gimple_seq_gc_reserve (VEC_gimple_seq_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_seq_gc_reserve_exact (VEC_gimple_seq_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_seq_gc_safe_grow (VEC_gimple_seq_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_seq_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_seq_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_gimple_seq_gc_safe_grow_cleared (VEC_gimple_seq_gc **vec_, int size_ ) { int oldsize = VEC_gimple_seq_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_gimple_seq_gc_safe_grow (vec_, size_ ); memset (&(VEC_gimple_seq_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple_seq) * (size_ - oldsize)); } static __inline__ void VEC_gimple_seq_gc_safe_splice (VEC_gimple_seq_gc **dst_, VEC_gimple_seq_base *src_ ) { if (src_) { VEC_gimple_seq_gc_reserve_exact (dst_, src_->num ); VEC_gimple_seq_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple_seq *VEC_gimple_seq_gc_safe_push (VEC_gimple_seq_gc **vec_, gimple_seq obj_ ) { VEC_gimple_seq_gc_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple_seq *VEC_gimple_seq_gc_safe_insert (VEC_gimple_seq_gc **vec_, unsigned ix_, gimple_seq obj_ ) { VEC_gimple_seq_gc_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_gimple_seq_heap { VEC_gimple_seq_base base; } VEC_gimple_seq_heap; static __inline__ VEC_gimple_seq_heap *VEC_gimple_seq_heap_alloc (int alloc_ ) { return (VEC_gimple_seq_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_seq_heap_free (VEC_gimple_seq_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_seq_heap *VEC_gimple_seq_heap_copy (VEC_gimple_seq_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_gimple_seq_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_seq_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple_seq) * len_); } return new_vec_; } static __inline__ int VEC_gimple_seq_heap_reserve (VEC_gimple_seq_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_seq_heap_reserve_exact (VEC_gimple_seq_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_seq_heap_safe_grow (VEC_gimple_seq_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_seq_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_seq_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_gimple_seq_heap_safe_grow_cleared (VEC_gimple_seq_heap **vec_, int size_ ) { int oldsize = VEC_gimple_seq_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_gimple_seq_heap_safe_grow (vec_, size_ ); memset (&(VEC_gimple_seq_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple_seq) * (size_ - oldsize)); } static __inline__ void VEC_gimple_seq_heap_safe_splice (VEC_gimple_seq_heap **dst_, VEC_gimple_seq_base *src_ ) { if (src_) { VEC_gimple_seq_heap_reserve_exact (dst_, src_->num ); VEC_gimple_seq_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple_seq *VEC_gimple_seq_heap_safe_push (VEC_gimple_seq_heap **vec_, gimple_seq obj_ ) { VEC_gimple_seq_heap_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple_seq *VEC_gimple_seq_heap_safe_insert (VEC_gimple_seq_heap **vec_, unsigned ix_, gimple_seq obj_ ) { VEC_gimple_seq_heap_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+
+static __inline__ void VEC_rtx_must_be_pointer_type (void) { (void)((rtx)1 == (void *)1); } typedef struct VEC_rtx_base { unsigned num; unsigned alloc; rtx vec[1]; } VEC_rtx_base; typedef struct VEC_rtx_none { VEC_rtx_base base; } VEC_rtx_none; static __inline__ unsigned VEC_rtx_base_length (const VEC_rtx_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ rtx VEC_rtx_base_last (const VEC_rtx_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ rtx VEC_rtx_base_index (const VEC_rtx_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_rtx_base_iterate (const VEC_rtx_base *vec_, unsigned ix_, rtx *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (rtx) 0; return 0; } } static __inline__ size_t VEC_rtx_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_rtx_base, vec) + alloc_ * sizeof(rtx); } static __inline__ void VEC_rtx_base_embedded_init (VEC_rtx_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_rtx_base_space (VEC_rtx_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_rtx_base_splice (VEC_rtx_base *dst_, VEC_rtx_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (rtx)); dst_->num += len_; } } static __inline__ rtx *VEC_rtx_base_quick_push (VEC_rtx_base *vec_, rtx obj_ ) { rtx *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ rtx VEC_rtx_base_pop (VEC_rtx_base *vec_ ) { rtx obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_rtx_base_truncate (VEC_rtx_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ rtx VEC_rtx_base_replace (VEC_rtx_base *vec_, unsigned ix_, rtx obj_ ) { rtx old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ rtx *VEC_rtx_base_quick_insert (VEC_rtx_base *vec_, unsigned ix_, rtx obj_ ) { rtx *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (rtx)); *slot_ = obj_; return slot_; } static __inline__ rtx VEC_rtx_base_ordered_remove (VEC_rtx_base *vec_, unsigned ix_ ) { rtx *slot_; rtx obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (rtx)); return obj_; } static __inline__ rtx VEC_rtx_base_unordered_remove (VEC_rtx_base *vec_, unsigned ix_ ) { rtx *slot_; rtx obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_rtx_base_block_remove (VEC_rtx_base *vec_, unsigned ix_, unsigned len_ ) { rtx *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (rtx)); } static __inline__ rtx *VEC_rtx_base_address (VEC_rtx_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_rtx_base_lower_bound (VEC_rtx_base *vec_, const rtx obj_, unsigned char (*lessthan_)(const rtx, const rtx) ) { unsigned int len_ = VEC_rtx_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { rtx middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_rtx_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_rtx_heap { VEC_rtx_base base; } VEC_rtx_heap; static __inline__ VEC_rtx_heap *VEC_rtx_heap_alloc (int alloc_ ) { return (VEC_rtx_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_rtx_heap_free (VEC_rtx_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_rtx_heap *VEC_rtx_heap_copy (VEC_rtx_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_rtx_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_rtx_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (rtx) * len_); } return new_vec_; } static __inline__ int VEC_rtx_heap_reserve (VEC_rtx_heap **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_rtx_heap_reserve_exact (VEC_rtx_heap **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_rtx_heap_safe_grow (VEC_rtx_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_rtx_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_rtx_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_rtx_heap_safe_grow_cleared (VEC_rtx_heap **vec_, int size_ ) { int oldsize = VEC_rtx_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_rtx_heap_safe_grow (vec_, size_ ); memset (&(VEC_rtx_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (rtx) * (size_ - oldsize)); } static __inline__ void VEC_rtx_heap_safe_splice (VEC_rtx_heap **dst_, VEC_rtx_base *src_ ) { if (src_) { VEC_rtx_heap_reserve_exact (dst_, src_->num ); VEC_rtx_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ rtx *VEC_rtx_heap_safe_push (VEC_rtx_heap **vec_, rtx obj_ ) { VEC_rtx_heap_reserve (vec_, 1 ); return VEC_rtx_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ rtx *VEC_rtx_heap_safe_insert (VEC_rtx_heap **vec_, unsigned ix_, rtx obj_ ) { VEC_rtx_heap_reserve (vec_, 1 ); return VEC_rtx_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_rtx_gc { VEC_rtx_base base; } VEC_rtx_gc; static __inline__ VEC_rtx_gc *VEC_rtx_gc_alloc (int alloc_ ) { return (VEC_rtx_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_rtx_gc_free (VEC_rtx_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_rtx_gc *VEC_rtx_gc_copy (VEC_rtx_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_rtx_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_rtx_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (rtx) * len_); } return new_vec_; } static __inline__ int VEC_rtx_gc_reserve (VEC_rtx_gc **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_rtx_gc_reserve_exact (VEC_rtx_gc **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_rtx_gc_safe_grow (VEC_rtx_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_rtx_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_rtx_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_rtx_gc_safe_grow_cleared (VEC_rtx_gc **vec_, int size_ ) { int oldsize = VEC_rtx_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_rtx_gc_safe_grow (vec_, size_ ); memset (&(VEC_rtx_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (rtx) * (size_ - oldsize)); } static __inline__ void VEC_rtx_gc_safe_splice (VEC_rtx_gc **dst_, VEC_rtx_base *src_ ) { if (src_) { VEC_rtx_gc_reserve_exact (dst_, src_->num ); VEC_rtx_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ rtx *VEC_rtx_gc_safe_push (VEC_rtx_gc **vec_, rtx obj_ ) { VEC_rtx_gc_reserve (vec_, 1 ); return VEC_rtx_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ rtx *VEC_rtx_gc_safe_insert (VEC_rtx_gc **vec_, unsigned ix_, rtx obj_ ) { VEC_rtx_gc_reserve (vec_, 1 ); return VEC_rtx_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+# 31 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/double-int.h" 1
+# 24 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/double-int.h"
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 1 3
+# 53 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 3
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/include/stddef.h" 1 3 4
+# 54 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 2 3
+# 191 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 3
+typedef unsigned long int mp_limb_t;
+typedef long int mp_limb_signed_t;
+
+
+typedef unsigned long int mp_bitcnt_t;
+
+
+
+
+typedef struct
+{
+  int _mp_alloc;
+
+  int _mp_size;
+
+
+  mp_limb_t *_mp_d;
+} __mpz_struct;
+
+
+
+
+typedef __mpz_struct MP_INT;
+typedef __mpz_struct mpz_t[1];
+
+typedef mp_limb_t * mp_ptr;
+typedef const mp_limb_t * mp_srcptr;
+
+
+
+
+
+
+
+typedef long int mp_size_t;
+typedef long int mp_exp_t;
+
+
+typedef struct
+{
+  __mpz_struct _mp_num;
+  __mpz_struct _mp_den;
+} __mpq_struct;
+
+typedef __mpq_struct MP_RAT;
+typedef __mpq_struct mpq_t[1];
+
+typedef struct
+{
+  int _mp_prec;
+
+
+
+  int _mp_size;
+
+
+  mp_exp_t _mp_exp;
+  mp_limb_t *_mp_d;
+} __mpf_struct;
+
+
+typedef __mpf_struct mpf_t[1];
+
+
+typedef enum
+{
+  GMP_RAND_ALG_DEFAULT = 0,
+  GMP_RAND_ALG_LC = GMP_RAND_ALG_DEFAULT
+} gmp_randalg_t;
+
+
+typedef struct
+{
+  mpz_t _mp_seed;
+  gmp_randalg_t _mp_alg;
+  union {
+    void *_mp_lc;
+  } _mp_algdata;
+} __gmp_randstate_struct;
+typedef __gmp_randstate_struct gmp_randstate_t[1];
+
+
+
+typedef const __mpz_struct *mpz_srcptr;
+typedef __mpz_struct *mpz_ptr;
+typedef const __mpf_struct *mpf_srcptr;
+typedef __mpf_struct *mpf_ptr;
+typedef const __mpq_struct *mpq_srcptr;
+typedef __mpq_struct *mpq_ptr;
+# 541 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 3
+ void __gmp_set_memory_functions (void *(*) (size_t), void *(*) (void *, size_t, size_t), void (*) (void *, size_t))
+
+                                                   ;
+
+
+ void __gmp_get_memory_functions (void *(**) (size_t), void *(**) (void *, size_t, size_t), void (**) (void *, size_t))
+
+                                                                                ;
+
+
+ extern const int __gmp_bits_per_limb;
+
+
+ extern int __gmp_errno;
+
+
+ extern const char * const __gmp_version;
+
+
+
+
+
+
+ void __gmp_randinit (gmp_randstate_t, gmp_randalg_t, ...);
+
+
+ void __gmp_randinit_default (gmp_randstate_t);
+
+
+ void __gmp_randinit_lc_2exp (gmp_randstate_t, mpz_srcptr, unsigned long int, mp_bitcnt_t)
+
+                          ;
+
+
+ int __gmp_randinit_lc_2exp_size (gmp_randstate_t, mp_bitcnt_t);
+
+
+ void __gmp_randinit_mt (gmp_randstate_t);
+
+
+ void __gmp_randinit_set (gmp_randstate_t, const __gmp_randstate_struct *);
+
+
+ void __gmp_randseed (gmp_randstate_t, mpz_srcptr);
+
+
+ void __gmp_randseed_ui (gmp_randstate_t, unsigned long int);
+
+
+ void __gmp_randclear (gmp_randstate_t);
+
+
+ unsigned long __gmp_urandomb_ui (gmp_randstate_t, unsigned long);
+
+
+ unsigned long __gmp_urandomm_ui (gmp_randstate_t, unsigned long);
+
+
+
+
+
+ int __gmp_asprintf (char **, const char *, ...);
+
+
+
+ int __gmp_fprintf (FILE *, const char *, ...);
+
+
+
+
+ int __gmp_obstack_printf (struct obstack *, const char *, ...);
+
+
+
+
+ int __gmp_obstack_vprintf (struct obstack *, const char *, va_list);
+
+
+
+ int __gmp_printf (const char *, ...);
+
+
+ int __gmp_snprintf (char *, size_t, const char *, ...);
+
+
+ int __gmp_sprintf (char *, const char *, ...);
+
+
+
+ int __gmp_vasprintf (char **, const char *, va_list);
+
+
+
+
+ int __gmp_vfprintf (FILE *, const char *, va_list);
+
+
+
+
+ int __gmp_vprintf (const char *, va_list);
+
+
+
+
+ int __gmp_vsnprintf (char *, size_t, const char *, va_list);
+
+
+
+
+ int __gmp_vsprintf (char *, const char *, va_list);
+
+
+
+
+
+
+
+ int __gmp_fscanf (FILE *, const char *, ...);
+
+
+
+ int __gmp_scanf (const char *, ...);
+
+
+ int __gmp_sscanf (const char *, const char *, ...);
+
+
+
+ int __gmp_vfscanf (FILE *, const char *, va_list);
+
+
+
+
+ int __gmp_vscanf (const char *, va_list);
+
+
+
+
+ int __gmp_vsscanf (const char *, const char *, va_list);
+
+
+
+
+
+
+
+ void *__gmpz_realloc (mpz_ptr, mp_size_t);
+
+
+
+ void __gmpz_abs (mpz_ptr, mpz_srcptr);
+
+
+
+ void __gmpz_add (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_add_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_addmul (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_addmul_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_and (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_array_init (mpz_ptr, mp_size_t, mp_size_t);
+
+
+ void __gmpz_bin_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_bin_uiui (mpz_ptr, unsigned long int, unsigned long int);
+
+
+ void __gmpz_cdiv_q (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_cdiv_q_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
+
+
+ unsigned long int __gmpz_cdiv_q_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_cdiv_qr (mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ unsigned long int __gmpz_cdiv_qr_ui (mpz_ptr, mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_cdiv_r (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_cdiv_r_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
+
+
+ unsigned long int __gmpz_cdiv_r_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ unsigned long int __gmpz_cdiv_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
+ void __gmpz_clear (mpz_ptr);
+
+
+ void __gmpz_clears (mpz_ptr, ...);
+
+
+ void __gmpz_clrbit (mpz_ptr, mp_bitcnt_t);
+
+
+ int __gmpz_cmp (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpz_cmp_d (mpz_srcptr, double) __attribute__ ((__pure__));
+
+
+ int __gmpz_cmp_si (mpz_srcptr, signed long int) __attribute__ ((__pure__));
+
+
+ int __gmpz_cmp_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
+ int __gmpz_cmpabs (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpz_cmpabs_d (mpz_srcptr, double) __attribute__ ((__pure__));
+
+
+ int __gmpz_cmpabs_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
+ void __gmpz_com (mpz_ptr, mpz_srcptr);
+
+
+ void __gmpz_combit (mpz_ptr, mp_bitcnt_t);
+
+
+ int __gmpz_congruent_p (mpz_srcptr, mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpz_congruent_2exp_p (mpz_srcptr, mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
+
+
+ int __gmpz_congruent_ui_p (mpz_srcptr, unsigned long, unsigned long) __attribute__ ((__pure__));
+
+
+ void __gmpz_divexact (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_divexact_ui (mpz_ptr, mpz_srcptr, unsigned long);
+
+
+ int __gmpz_divisible_p (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpz_divisible_ui_p (mpz_srcptr, unsigned long) __attribute__ ((__pure__));
+
+
+ int __gmpz_divisible_2exp_p (mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
+
+
+ void __gmpz_dump (mpz_srcptr);
+
+
+ void *__gmpz_export (void *, size_t *, int, size_t, int, size_t, mpz_srcptr);
+
+
+ void __gmpz_fac_ui (mpz_ptr, unsigned long int);
+
+
+ void __gmpz_fdiv_q (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_fdiv_q_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
+
+
+ unsigned long int __gmpz_fdiv_q_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_fdiv_qr (mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ unsigned long int __gmpz_fdiv_qr_ui (mpz_ptr, mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_fdiv_r (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_fdiv_r_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
+
+
+ unsigned long int __gmpz_fdiv_r_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ unsigned long int __gmpz_fdiv_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
+ void __gmpz_fib_ui (mpz_ptr, unsigned long int);
+
+
+ void __gmpz_fib2_ui (mpz_ptr, mpz_ptr, unsigned long int);
+
+
+ int __gmpz_fits_sint_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpz_fits_slong_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpz_fits_sshort_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+ int __gmpz_fits_uint_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+
+ int __gmpz_fits_ulong_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+
+ int __gmpz_fits_ushort_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+ void __gmpz_gcd (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ unsigned long int __gmpz_gcd_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_gcdext (mpz_ptr, mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ double __gmpz_get_d (mpz_srcptr) __attribute__ ((__pure__));
+
+
+ double __gmpz_get_d_2exp (signed long int *, mpz_srcptr);
+
+
+ long int __gmpz_get_si (mpz_srcptr) __attribute__ ((__pure__));
+
+
+ char *__gmpz_get_str (char *, int, mpz_srcptr);
+
+
+
+ unsigned long int __gmpz_get_ui (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+
+ mp_limb_t __gmpz_getlimbn (mpz_srcptr, mp_size_t) __attribute__ ((__pure__));
+
+
+
+ mp_bitcnt_t __gmpz_hamdist (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+
+
+ void __gmpz_import (mpz_ptr, size_t, int, size_t, int, size_t, const void *);
+
+
+ void __gmpz_init (mpz_ptr);
+
+
+ void __gmpz_init2 (mpz_ptr, mp_bitcnt_t);
+
+
+ void __gmpz_inits (mpz_ptr, ...);
+
+
+ void __gmpz_init_set (mpz_ptr, mpz_srcptr);
+
+
+ void __gmpz_init_set_d (mpz_ptr, double);
+
+
+ void __gmpz_init_set_si (mpz_ptr, signed long int);
+
+
+ int __gmpz_init_set_str (mpz_ptr, const char *, int);
+
+
+ void __gmpz_init_set_ui (mpz_ptr, unsigned long int);
+
+
+
+ size_t __gmpz_inp_raw (mpz_ptr, FILE *);
+
+
+
+
+ size_t __gmpz_inp_str (mpz_ptr, FILE *, int);
+
+
+
+ int __gmpz_invert (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_ior (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ int __gmpz_jacobi (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+
+ int __gmpz_kronecker_si (mpz_srcptr, long) __attribute__ ((__pure__));
+
+
+ int __gmpz_kronecker_ui (mpz_srcptr, unsigned long) __attribute__ ((__pure__));
+
+
+ int __gmpz_si_kronecker (long, mpz_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpz_ui_kronecker (unsigned long, mpz_srcptr) __attribute__ ((__pure__));
+
+
+ void __gmpz_lcm (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_lcm_ui (mpz_ptr, mpz_srcptr, unsigned long);
+
+
+
+
+ void __gmpz_lucnum_ui (mpz_ptr, unsigned long int);
+
+
+ void __gmpz_lucnum2_ui (mpz_ptr, mpz_ptr, unsigned long int);
+
+
+ int __gmpz_millerrabin (mpz_srcptr, int) __attribute__ ((__pure__));
+
+
+ void __gmpz_mod (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+
+
+ void __gmpz_mul (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_mul_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
+
+
+ void __gmpz_mul_si (mpz_ptr, mpz_srcptr, long int);
+
+
+ void __gmpz_mul_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+
+ void __gmpz_neg (mpz_ptr, mpz_srcptr);
+
+
+
+ void __gmpz_nextprime (mpz_ptr, mpz_srcptr);
+
+
+
+ size_t __gmpz_out_raw (FILE *, mpz_srcptr);
+
+
+
+
+ size_t __gmpz_out_str (FILE *, int, mpz_srcptr);
+
+
+
+ int __gmpz_perfect_power_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+ int __gmpz_perfect_square_p (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+
+ mp_bitcnt_t __gmpz_popcount (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+ void __gmpz_pow_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_powm (mpz_ptr, mpz_srcptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_powm_sec (mpz_ptr, mpz_srcptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_powm_ui (mpz_ptr, mpz_srcptr, unsigned long int, mpz_srcptr);
+
+
+ int __gmpz_probab_prime_p (mpz_srcptr, int) __attribute__ ((__pure__));
+
+
+ void __gmpz_random (mpz_ptr, mp_size_t);
+
+
+ void __gmpz_random2 (mpz_ptr, mp_size_t);
+
+
+ void __gmpz_realloc2 (mpz_ptr, mp_bitcnt_t);
+
+
+ mp_bitcnt_t __gmpz_remove (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ int __gmpz_root (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_rootrem (mpz_ptr,mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_rrandomb (mpz_ptr, gmp_randstate_t, mp_bitcnt_t);
+
+
+ mp_bitcnt_t __gmpz_scan0 (mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
+
+
+ mp_bitcnt_t __gmpz_scan1 (mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
+
+
+ void __gmpz_set (mpz_ptr, mpz_srcptr);
+
+
+ void __gmpz_set_d (mpz_ptr, double);
+
+
+ void __gmpz_set_f (mpz_ptr, mpf_srcptr);
+
+
+
+ void __gmpz_set_q (mpz_ptr, mpq_srcptr);
+
+
+
+ void __gmpz_set_si (mpz_ptr, signed long int);
+
+
+ int __gmpz_set_str (mpz_ptr, const char *, int);
+
+
+ void __gmpz_set_ui (mpz_ptr, unsigned long int);
+
+
+ void __gmpz_setbit (mpz_ptr, mp_bitcnt_t);
+
+
+
+ size_t __gmpz_size (mpz_srcptr) __attribute__ ((__pure__));
+
+
+
+ size_t __gmpz_sizeinbase (mpz_srcptr, int) __attribute__ ((__pure__));
+
+
+ void __gmpz_sqrt (mpz_ptr, mpz_srcptr);
+
+
+ void __gmpz_sqrtrem (mpz_ptr, mpz_ptr, mpz_srcptr);
+
+
+ void __gmpz_sub (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_sub_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_ui_sub (mpz_ptr, unsigned long int, mpz_srcptr);
+
+
+ void __gmpz_submul (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_submul_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_swap (mpz_ptr, mpz_ptr) ;
+
+
+ unsigned long int __gmpz_tdiv_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
+ void __gmpz_tdiv_q (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_tdiv_q_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
+
+
+ unsigned long int __gmpz_tdiv_q_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_tdiv_qr (mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ unsigned long int __gmpz_tdiv_qr_ui (mpz_ptr, mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ void __gmpz_tdiv_r (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+ void __gmpz_tdiv_r_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
+
+
+ unsigned long int __gmpz_tdiv_r_ui (mpz_ptr, mpz_srcptr, unsigned long int);
+
+
+ int __gmpz_tstbit (mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
+
+
+ void __gmpz_ui_pow_ui (mpz_ptr, unsigned long int, unsigned long int);
+
+
+ void __gmpz_urandomb (mpz_ptr, gmp_randstate_t, mp_bitcnt_t);
+
+
+ void __gmpz_urandomm (mpz_ptr, gmp_randstate_t, mpz_srcptr);
+
+
+
+ void __gmpz_xor (mpz_ptr, mpz_srcptr, mpz_srcptr);
+
+
+
+
+
+
+ void __gmpq_abs (mpq_ptr, mpq_srcptr);
+
+
+
+ void __gmpq_add (mpq_ptr, mpq_srcptr, mpq_srcptr);
+
+
+ void __gmpq_canonicalize (mpq_ptr);
+
+
+ void __gmpq_clear (mpq_ptr);
+
+
+ void __gmpq_clears (mpq_ptr, ...);
+
+
+ int __gmpq_cmp (mpq_srcptr, mpq_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpq_cmp_si (mpq_srcptr, long, unsigned long) __attribute__ ((__pure__));
+
+
+ int __gmpq_cmp_ui (mpq_srcptr, unsigned long int, unsigned long int) __attribute__ ((__pure__));
+
+
+ void __gmpq_div (mpq_ptr, mpq_srcptr, mpq_srcptr);
+
+
+ void __gmpq_div_2exp (mpq_ptr, mpq_srcptr, mp_bitcnt_t);
+
+
+ int __gmpq_equal (mpq_srcptr, mpq_srcptr) __attribute__ ((__pure__));
+
+
+ void __gmpq_get_num (mpz_ptr, mpq_srcptr);
+
+
+ void __gmpq_get_den (mpz_ptr, mpq_srcptr);
+
+
+ double __gmpq_get_d (mpq_srcptr) __attribute__ ((__pure__));
+
+
+ char *__gmpq_get_str (char *, int, mpq_srcptr);
+
+
+ void __gmpq_init (mpq_ptr);
+
+
+ void __gmpq_inits (mpq_ptr, ...);
+
+
+
+ size_t __gmpq_inp_str (mpq_ptr, FILE *, int);
+
+
+
+ void __gmpq_inv (mpq_ptr, mpq_srcptr);
+
+
+ void __gmpq_mul (mpq_ptr, mpq_srcptr, mpq_srcptr);
+
+
+ void __gmpq_mul_2exp (mpq_ptr, mpq_srcptr, mp_bitcnt_t);
+
+
+
+ void __gmpq_neg (mpq_ptr, mpq_srcptr);
+
+
+
+
+ size_t __gmpq_out_str (FILE *, int, mpq_srcptr);
+
+
+
+ void __gmpq_set (mpq_ptr, mpq_srcptr);
+
+
+ void __gmpq_set_d (mpq_ptr, double);
+
+
+ void __gmpq_set_den (mpq_ptr, mpz_srcptr);
+
+
+ void __gmpq_set_f (mpq_ptr, mpf_srcptr);
+
+
+ void __gmpq_set_num (mpq_ptr, mpz_srcptr);
+
+
+ void __gmpq_set_si (mpq_ptr, signed long int, unsigned long int);
+
+
+ int __gmpq_set_str (mpq_ptr, const char *, int);
+
+
+ void __gmpq_set_ui (mpq_ptr, unsigned long int, unsigned long int);
+
+
+ void __gmpq_set_z (mpq_ptr, mpz_srcptr);
+
+
+ void __gmpq_sub (mpq_ptr, mpq_srcptr, mpq_srcptr);
+
+
+ void __gmpq_swap (mpq_ptr, mpq_ptr) ;
+
+
+
+
+
+ void __gmpf_abs (mpf_ptr, mpf_srcptr);
+
+
+ void __gmpf_add (mpf_ptr, mpf_srcptr, mpf_srcptr);
+
+
+ void __gmpf_add_ui (mpf_ptr, mpf_srcptr, unsigned long int);
+
+ void __gmpf_ceil (mpf_ptr, mpf_srcptr);
+
+
+ void __gmpf_clear (mpf_ptr);
+
+
+ void __gmpf_clears (mpf_ptr, ...);
+
+
+ int __gmpf_cmp (mpf_srcptr, mpf_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpf_cmp_d (mpf_srcptr, double) __attribute__ ((__pure__));
+
+
+ int __gmpf_cmp_si (mpf_srcptr, signed long int) __attribute__ ((__pure__));
+
+
+ int __gmpf_cmp_ui (mpf_srcptr, unsigned long int) __attribute__ ((__pure__));
+
+
+ void __gmpf_div (mpf_ptr, mpf_srcptr, mpf_srcptr);
+
+
+ void __gmpf_div_2exp (mpf_ptr, mpf_srcptr, mp_bitcnt_t);
+
+
+ void __gmpf_div_ui (mpf_ptr, mpf_srcptr, unsigned long int);
+
+
+ void __gmpf_dump (mpf_srcptr);
+
+
+ int __gmpf_eq (mpf_srcptr, mpf_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
+
+
+ int __gmpf_fits_sint_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpf_fits_slong_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpf_fits_sshort_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpf_fits_uint_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpf_fits_ulong_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ int __gmpf_fits_ushort_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ void __gmpf_floor (mpf_ptr, mpf_srcptr);
+
+
+ double __gmpf_get_d (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ double __gmpf_get_d_2exp (signed long int *, mpf_srcptr);
+
+
+ mp_bitcnt_t __gmpf_get_default_prec (void) __attribute__ ((__pure__));
+
+
+ mp_bitcnt_t __gmpf_get_prec (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ long __gmpf_get_si (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ char *__gmpf_get_str (char *, mp_exp_t *, int, size_t, mpf_srcptr);
+
+
+ unsigned long __gmpf_get_ui (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ void __gmpf_init (mpf_ptr);
+
+
+ void __gmpf_init2 (mpf_ptr, mp_bitcnt_t);
+
+
+ void __gmpf_inits (mpf_ptr, ...);
+
+
+ void __gmpf_init_set (mpf_ptr, mpf_srcptr);
+
+
+ void __gmpf_init_set_d (mpf_ptr, double);
+
+
+ void __gmpf_init_set_si (mpf_ptr, signed long int);
+
+
+ int __gmpf_init_set_str (mpf_ptr, const char *, int);
+
+
+ void __gmpf_init_set_ui (mpf_ptr, unsigned long int);
+
+
+
+ size_t __gmpf_inp_str (mpf_ptr, FILE *, int);
+
+
+
+ int __gmpf_integer_p (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ void __gmpf_mul (mpf_ptr, mpf_srcptr, mpf_srcptr);
+
+
+ void __gmpf_mul_2exp (mpf_ptr, mpf_srcptr, mp_bitcnt_t);
+
+
+ void __gmpf_mul_ui (mpf_ptr, mpf_srcptr, unsigned long int);
+
+
+ void __gmpf_neg (mpf_ptr, mpf_srcptr);
+
+
+
+ size_t __gmpf_out_str (FILE *, int, size_t, mpf_srcptr);
+
+
+
+ void __gmpf_pow_ui (mpf_ptr, mpf_srcptr, unsigned long int);
+
+
+ void __gmpf_random2 (mpf_ptr, mp_size_t, mp_exp_t);
+
+
+ void __gmpf_reldiff (mpf_ptr, mpf_srcptr, mpf_srcptr);
+
+
+ void __gmpf_set (mpf_ptr, mpf_srcptr);
+
+
+ void __gmpf_set_d (mpf_ptr, double);
+
+
+ void __gmpf_set_default_prec (mp_bitcnt_t) ;
+
+
+ void __gmpf_set_prec (mpf_ptr, mp_bitcnt_t);
+
+
+ void __gmpf_set_prec_raw (mpf_ptr, mp_bitcnt_t) ;
+
+
+ void __gmpf_set_q (mpf_ptr, mpq_srcptr);
+
+
+ void __gmpf_set_si (mpf_ptr, signed long int);
+
+
+ int __gmpf_set_str (mpf_ptr, const char *, int);
+
+
+ void __gmpf_set_ui (mpf_ptr, unsigned long int);
+
+
+ void __gmpf_set_z (mpf_ptr, mpz_srcptr);
+
+
+ size_t __gmpf_size (mpf_srcptr) __attribute__ ((__pure__));
+
+
+ void __gmpf_sqrt (mpf_ptr, mpf_srcptr);
+
+
+ void __gmpf_sqrt_ui (mpf_ptr, unsigned long int);
+
+
+ void __gmpf_sub (mpf_ptr, mpf_srcptr, mpf_srcptr);
+
+
+ void __gmpf_sub_ui (mpf_ptr, mpf_srcptr, unsigned long int);
+
+
+ void __gmpf_swap (mpf_ptr, mpf_ptr) ;
+
+
+ void __gmpf_trunc (mpf_ptr, mpf_srcptr);
+
+
+ void __gmpf_ui_div (mpf_ptr, unsigned long int, mpf_srcptr);
+
+
+ void __gmpf_ui_sub (mpf_ptr, unsigned long int, mpf_srcptr);
+
+
+ void __gmpf_urandomb (mpf_t, gmp_randstate_t, mp_bitcnt_t);
+# 1500 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 3
+ mp_limb_t __gmpn_add (mp_ptr, mp_srcptr, mp_size_t, mp_srcptr,mp_size_t);
+
+
+
+
+ mp_limb_t __gmpn_add_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t) ;
+
+
+
+ mp_limb_t __gmpn_add_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+
+ mp_limb_t __gmpn_addmul_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
+
+
+
+ int __gmpn_cmp (mp_srcptr, mp_srcptr, mp_size_t) __attribute__ ((__pure__));
+
+
+
+
+
+
+ mp_limb_t __gmpn_divexact_by3c (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
+
+
+
+
+
+ mp_limb_t __gmpn_divrem (mp_ptr, mp_size_t, mp_ptr, mp_size_t, mp_srcptr, mp_size_t);
+
+
+ mp_limb_t __gmpn_divrem_1 (mp_ptr, mp_size_t, mp_srcptr, mp_size_t, mp_limb_t);
+
+
+ mp_limb_t __gmpn_divrem_2 (mp_ptr, mp_size_t, mp_ptr, mp_size_t, mp_srcptr);
+
+
+ mp_size_t __gmpn_gcd (mp_ptr, mp_ptr, mp_size_t, mp_ptr, mp_size_t);
+
+
+ mp_limb_t __gmpn_gcd_1 (mp_srcptr, mp_size_t, mp_limb_t) __attribute__ ((__pure__));
+
+
+ mp_limb_t __gmpn_gcdext_1 (mp_limb_signed_t *, mp_limb_signed_t *, mp_limb_t, mp_limb_t);
+
+
+ mp_size_t __gmpn_gcdext (mp_ptr, mp_ptr, mp_size_t *, mp_ptr, mp_size_t, mp_ptr, mp_size_t);
+
+
+ size_t __gmpn_get_str (unsigned char *, int, mp_ptr, mp_size_t);
+
+
+ mp_bitcnt_t __gmpn_hamdist (mp_srcptr, mp_srcptr, mp_size_t) __attribute__ ((__pure__));
+
+
+ mp_limb_t __gmpn_lshift (mp_ptr, mp_srcptr, mp_size_t, unsigned int);
+
+
+ mp_limb_t __gmpn_mod_1 (mp_srcptr, mp_size_t, mp_limb_t) __attribute__ ((__pure__));
+
+
+ mp_limb_t __gmpn_mul (mp_ptr, mp_srcptr, mp_size_t, mp_srcptr, mp_size_t);
+
+
+ mp_limb_t __gmpn_mul_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
+
+
+ void __gmpn_mul_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+
+ void __gmpn_sqr (mp_ptr, mp_srcptr, mp_size_t);
+
+
+
+ mp_limb_t __gmpn_neg (mp_ptr, mp_srcptr, mp_size_t);
+
+
+
+
+ void __gmpn_com (mp_ptr, mp_srcptr, mp_size_t);
+
+
+
+ int __gmpn_perfect_square_p (mp_srcptr, mp_size_t) __attribute__ ((__pure__));
+
+
+ int __gmpn_perfect_power_p (mp_srcptr, mp_size_t) __attribute__ ((__pure__));
+
+
+ mp_bitcnt_t __gmpn_popcount (mp_srcptr, mp_size_t) __attribute__ ((__pure__));
+
+
+ mp_size_t __gmpn_pow_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t, mp_ptr);
+
+
+
+ mp_limb_t __gmpn_preinv_mod_1 (mp_srcptr, mp_size_t, mp_limb_t, mp_limb_t) __attribute__ ((__pure__));
+
+
+ void __gmpn_random (mp_ptr, mp_size_t);
+
+
+ void __gmpn_random2 (mp_ptr, mp_size_t);
+
+
+ mp_limb_t __gmpn_rshift (mp_ptr, mp_srcptr, mp_size_t, unsigned int);
+
+
+ mp_bitcnt_t __gmpn_scan0 (mp_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
+
+
+ mp_bitcnt_t __gmpn_scan1 (mp_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
+
+
+ mp_size_t __gmpn_set_str (mp_ptr, const unsigned char *, size_t, int);
+
+
+ mp_size_t __gmpn_sqrtrem (mp_ptr, mp_ptr, mp_srcptr, mp_size_t);
+
+
+
+ mp_limb_t __gmpn_sub (mp_ptr, mp_srcptr, mp_size_t, mp_srcptr,mp_size_t);
+
+
+
+
+ mp_limb_t __gmpn_sub_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t) ;
+
+
+
+ mp_limb_t __gmpn_sub_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+
+ mp_limb_t __gmpn_submul_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
+
+
+ void __gmpn_tdiv_qr (mp_ptr, mp_ptr, mp_size_t, mp_srcptr, mp_size_t, mp_srcptr, mp_size_t);
+
+
+ void __gmpn_and_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+ void __gmpn_andn_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+ void __gmpn_nand_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+ void __gmpn_ior_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+ void __gmpn_iorn_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+ void __gmpn_nior_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+ void __gmpn_xor_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+ void __gmpn_xnor_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
+
+
+ void __gmpn_copyi (mp_ptr, mp_srcptr, mp_size_t);
+
+ void __gmpn_copyd (mp_ptr, mp_srcptr, mp_size_t);
+
+ void __gmpn_zero (mp_ptr, mp_size_t);
+# 1680 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 3
+extern __inline__ void
+__gmpz_abs (mpz_ptr __gmp_w, mpz_srcptr __gmp_u)
+{
+  if (__gmp_w != __gmp_u)
+    __gmpz_set (__gmp_w, __gmp_u);
+  __gmp_w->_mp_size = ((__gmp_w->_mp_size) >= 0 ? (__gmp_w->_mp_size) : -(__gmp_w->_mp_size));
+}
+# 1704 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 3
+extern __inline__
+
+int
+__gmpz_fits_uint_p (mpz_srcptr __gmp_z)
+{
+  mp_size_t __gmp_n = __gmp_z->_mp_size; mp_ptr __gmp_p = __gmp_z->_mp_d; return (__gmp_n == 0 || (__gmp_n == 1 && __gmp_p[0] <= (~ (unsigned) 0)));;
+}
+
+
+
+
+extern __inline__
+
+int
+__gmpz_fits_ulong_p (mpz_srcptr __gmp_z)
+{
+  mp_size_t __gmp_n = __gmp_z->_mp_size; mp_ptr __gmp_p = __gmp_z->_mp_d; return (__gmp_n == 0 || (__gmp_n == 1 && __gmp_p[0] <= (~ (unsigned long) 0)));;
+}
+
+
+
+
+extern __inline__
+
+int
+__gmpz_fits_ushort_p (mpz_srcptr __gmp_z)
+{
+  mp_size_t __gmp_n = __gmp_z->_mp_size; mp_ptr __gmp_p = __gmp_z->_mp_d; return (__gmp_n == 0 || (__gmp_n == 1 && __gmp_p[0] <= ((unsigned short) ~0)));;
+}
+
+
+
+
+extern __inline__
+
+unsigned long
+__gmpz_get_ui (mpz_srcptr __gmp_z)
+{
+  mp_ptr __gmp_p = __gmp_z->_mp_d;
+  mp_size_t __gmp_n = __gmp_z->_mp_size;
+  mp_limb_t __gmp_l = __gmp_p[0];
+
+
+
+
+
+
+  return (__gmp_n != 0 ? __gmp_l : 0);
+# 1760 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 3
+}
+
+
+
+
+extern __inline__
+
+mp_limb_t
+__gmpz_getlimbn (mpz_srcptr __gmp_z, mp_size_t __gmp_n)
+{
+  mp_limb_t __gmp_result = 0;
+  if (__builtin_expect ((__gmp_n >= 0 && __gmp_n < ((__gmp_z->_mp_size) >= 0 ? (__gmp_z->_mp_size) : -(__gmp_z->_mp_size))) != 0, 1))
+    __gmp_result = __gmp_z->_mp_d[__gmp_n];
+  return __gmp_result;
+}
+
+
+
+extern __inline__ void
+__gmpz_neg (mpz_ptr __gmp_w, mpz_srcptr __gmp_u)
+{
+  if (__gmp_w != __gmp_u)
+    __gmpz_set (__gmp_w, __gmp_u);
+  __gmp_w->_mp_size = - __gmp_w->_mp_size;
+}
+
+
+
+
+extern __inline__
+
+int
+__gmpz_perfect_square_p (mpz_srcptr __gmp_a)
+{
+  mp_size_t __gmp_asize;
+  int __gmp_result;
+
+  __gmp_asize = __gmp_a->_mp_size;
+  __gmp_result = (__gmp_asize >= 0);
+  if (__builtin_expect ((__gmp_asize > 0) != 0, 1))
+    __gmp_result = __gmpn_perfect_square_p (__gmp_a->_mp_d, __gmp_asize);
+  return __gmp_result;
+}
+
+
+
+
+extern __inline__
+
+mp_bitcnt_t
+__gmpz_popcount (mpz_srcptr __gmp_u)
+{
+  mp_size_t __gmp_usize;
+  mp_bitcnt_t __gmp_result;
+
+  __gmp_usize = __gmp_u->_mp_size;
+  __gmp_result = (__gmp_usize < 0 ? (~ (unsigned long) 0) : 0);
+  if (__builtin_expect ((__gmp_usize > 0) != 0, 1))
+    __gmp_result = __gmpn_popcount (__gmp_u->_mp_d, __gmp_usize);
+  return __gmp_result;
+}
+
+
+
+
+extern __inline__
+
+void
+__gmpz_set_q (mpz_ptr __gmp_w, mpq_srcptr __gmp_u)
+{
+  __gmpz_tdiv_q (__gmp_w, (&((__gmp_u)->_mp_num)), (&((__gmp_u)->_mp_den)));
+}
+
+
+
+
+extern __inline__
+
+size_t
+__gmpz_size (mpz_srcptr __gmp_z)
+{
+  return ((__gmp_z->_mp_size) >= 0 ? (__gmp_z->_mp_size) : -(__gmp_z->_mp_size));
+}
+
+
+
+
+
+
+extern __inline__ void
+__gmpq_abs (mpq_ptr __gmp_w, mpq_srcptr __gmp_u)
+{
+  if (__gmp_w != __gmp_u)
+    __gmpq_set (__gmp_w, __gmp_u);
+  __gmp_w->_mp_num._mp_size = ((__gmp_w->_mp_num._mp_size) >= 0 ? (__gmp_w->_mp_num._mp_size) : -(__gmp_w->_mp_num._mp_size));
+}
+
+
+
+extern __inline__ void
+__gmpq_neg (mpq_ptr __gmp_w, mpq_srcptr __gmp_u)
+{
+  if (__gmp_w != __gmp_u)
+    __gmpq_set (__gmp_w, __gmp_u);
+  __gmp_w->_mp_num._mp_size = - __gmp_w->_mp_num._mp_size;
+}
+# 2102 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 3
+extern __inline__
+
+mp_limb_t
+__gmpn_add (mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize)
+{
+  mp_limb_t __gmp_c;
+  do { mp_size_t __gmp_i; mp_limb_t __gmp_x; __gmp_i = (__gmp_ysize); if (__gmp_i != 0) { if (__gmpn_add_n (__gmp_wp, __gmp_xp, __gmp_yp, __gmp_i)) { do { if (__gmp_i >= (__gmp_xsize)) { (__gmp_c) = 1; goto __gmp_done; } __gmp_x = (__gmp_xp)[__gmp_i]; } while ((((__gmp_wp)[__gmp_i++] = (__gmp_x + 1) & ((~ ((mp_limb_t) (0))) >> 0)) == 0)); } } if ((__gmp_wp) != (__gmp_xp)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_xsize); __gmp_j++) (__gmp_wp)[__gmp_j] = (__gmp_xp)[__gmp_j]; } while (0); (__gmp_c) = 0; __gmp_done: ; } while (0);
+  return __gmp_c;
+}
+
+
+
+
+extern __inline__
+
+mp_limb_t
+__gmpn_add_1 (mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n)
+{
+  mp_limb_t __gmp_c;
+  do { mp_size_t __gmp_i; mp_limb_t __gmp_x, __gmp_r; __gmp_x = (__gmp_src)[0]; __gmp_r = __gmp_x + (__gmp_n); (__gmp_dst)[0] = __gmp_r; if (((__gmp_r) < ((__gmp_n)))) { (__gmp_c) = 1; for (__gmp_i = 1; __gmp_i < (__gmp_size);) { __gmp_x = (__gmp_src)[__gmp_i]; __gmp_r = __gmp_x + 1; (__gmp_dst)[__gmp_i] = __gmp_r; ++__gmp_i; if (!((__gmp_r) < (1))) { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; break; } } } else { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (1); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; } } while (0);
+  return __gmp_c;
+}
+
+
+
+
+extern __inline__
+
+int
+__gmpn_cmp (mp_srcptr __gmp_xp, mp_srcptr __gmp_yp, mp_size_t __gmp_size)
+{
+  int __gmp_result;
+  do { mp_size_t __gmp_i; mp_limb_t __gmp_x, __gmp_y; (__gmp_result) = 0; __gmp_i = (__gmp_size); while (--__gmp_i >= 0) { __gmp_x = (__gmp_xp)[__gmp_i]; __gmp_y = (__gmp_yp)[__gmp_i]; if (__gmp_x != __gmp_y) { (__gmp_result) = (__gmp_x > __gmp_y ? 1 : -1); break; } } } while (0);
+  return __gmp_result;
+}
+
+
+
+
+extern __inline__
+
+mp_limb_t
+__gmpn_sub (mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize)
+{
+  mp_limb_t __gmp_c;
+  do { mp_size_t __gmp_i; mp_limb_t __gmp_x; __gmp_i = (__gmp_ysize); if (__gmp_i != 0) { if (__gmpn_sub_n (__gmp_wp, __gmp_xp, __gmp_yp, __gmp_i)) { do { if (__gmp_i >= (__gmp_xsize)) { (__gmp_c) = 1; goto __gmp_done; } __gmp_x = (__gmp_xp)[__gmp_i]; } while ((((__gmp_wp)[__gmp_i++] = (__gmp_x - 1) & ((~ ((mp_limb_t) (0))) >> 0)), __gmp_x == 0)); } } if ((__gmp_wp) != (__gmp_xp)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_xsize); __gmp_j++) (__gmp_wp)[__gmp_j] = (__gmp_xp)[__gmp_j]; } while (0); (__gmp_c) = 0; __gmp_done: ; } while (0);
+  return __gmp_c;
+}
+
+
+
+
+extern __inline__
+
+mp_limb_t
+__gmpn_sub_1 (mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n)
+{
+  mp_limb_t __gmp_c;
+  do { mp_size_t __gmp_i; mp_limb_t __gmp_x, __gmp_r; __gmp_x = (__gmp_src)[0]; __gmp_r = __gmp_x - (__gmp_n); (__gmp_dst)[0] = __gmp_r; if (((__gmp_x) < ((__gmp_n)))) { (__gmp_c) = 1; for (__gmp_i = 1; __gmp_i < (__gmp_size);) { __gmp_x = (__gmp_src)[__gmp_i]; __gmp_r = __gmp_x - 1; (__gmp_dst)[__gmp_i] = __gmp_r; ++__gmp_i; if (!((__gmp_x) < (1))) { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; break; } } } else { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (1); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; } } while (0);
+  return __gmp_c;
+}
+
+
+
+
+extern __inline__
+
+mp_limb_t
+__gmpn_neg (mp_ptr __gmp_rp, mp_srcptr __gmp_up, mp_size_t __gmp_n)
+{
+  mp_limb_t __gmp_ul, __gmp_cy;
+  __gmp_cy = 0;
+  do {
+      __gmp_ul = *__gmp_up++;
+      *__gmp_rp++ = -__gmp_ul - __gmp_cy;
+      __gmp_cy |= __gmp_ul != 0;
+  } while (--__gmp_n != 0);
+  return __gmp_cy;
+}
+# 2259 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 3
+enum
+{
+  GMP_ERROR_NONE = 0,
+  GMP_ERROR_UNSUPPORTED_ARGUMENT = 1,
+  GMP_ERROR_DIVISION_BY_ZERO = 2,
+  GMP_ERROR_SQRT_OF_NEGATIVE = 4,
+  GMP_ERROR_INVALID_ARGUMENT = 8
+};
+# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/double-int.h" 2
+# 54 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/double-int.h"
+typedef struct
+{
+  unsigned long low;
+  long high;
+} double_int;
+# 67 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/double-int.h"
+static __inline__ double_int
+shwi_to_double_int (long cst)
+{
+  double_int r;
+
+  r.low = (unsigned long) cst;
+  r.high = cst < 0 ? -1 : 0;
+
+  return r;
+}
+# 89 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/double-int.h"
+static __inline__ double_int
+uhwi_to_double_int (unsigned long cst)
+{
+  double_int r;
+
+  r.low = cst;
+  r.high = 0;
+
+  return r;
+}
+
+
+
+
+static __inline__ long
+double_int_to_shwi (double_int cst)
+{
+  return (long) cst.low;
+}
+
+
+
+
+static __inline__ unsigned long
+double_int_to_uhwi (double_int cst)
+{
+  return cst.low;
+}
+
+unsigned char double_int_fits_in_hwi_p (double_int, unsigned char);
+unsigned char double_int_fits_in_shwi_p (double_int);
+
+
+
+static __inline__ unsigned char
+double_int_fits_in_uhwi_p (double_int cst)
+{
+  return cst.high == 0;
+}
+
+
+
+
+
+
+double_int double_int_mul (double_int, double_int);
+double_int double_int_mul_with_sign (double_int, double_int, unsigned char, int *);
+double_int double_int_add (double_int, double_int);
+double_int double_int_sub (double_int, double_int);
+double_int double_int_neg (double_int);
+
+
+
+
+double_int double_int_div (double_int, double_int, unsigned char, unsigned);
+double_int double_int_sdiv (double_int, double_int, unsigned);
+double_int double_int_udiv (double_int, double_int, unsigned);
+double_int double_int_mod (double_int, double_int, unsigned char, unsigned);
+double_int double_int_smod (double_int, double_int, unsigned);
+double_int double_int_umod (double_int, double_int, unsigned);
+double_int double_int_divmod (double_int, double_int, unsigned char, unsigned, double_int *);
+double_int double_int_sdivmod (double_int, double_int, unsigned, double_int *);
+double_int double_int_udivmod (double_int, double_int, unsigned, double_int *);
+
+double_int double_int_setbit (double_int, unsigned);
+int double_int_ctz (double_int);
+
+
+
+
+
+static __inline__ double_int
+double_int_not (double_int a)
+{
+  a.low = ~a.low;
+  a.high = ~a.high;
+  return a;
+}
+
+
+
+static __inline__ double_int
+double_int_ior (double_int a, double_int b)
+{
+  a.low |= b.low;
+  a.high |= b.high;
+  return a;
+}
+
+
+
+static __inline__ double_int
+double_int_and (double_int a, double_int b)
+{
+  a.low &= b.low;
+  a.high &= b.high;
+  return a;
+}
+
+
+
+static __inline__ double_int
+double_int_and_not (double_int a, double_int b)
+{
+  a.low &= ~b.low;
+  a.high &= ~b.high;
+  return a;
+}
+
+
+
+static __inline__ double_int
+double_int_xor (double_int a, double_int b)
+{
+  a.low ^= b.low;
+  a.high ^= b.high;
+  return a;
+}
+
+
+
+double_int double_int_lshift (double_int, long, unsigned int, unsigned char);
+double_int double_int_rshift (double_int, long, unsigned int, unsigned char);
+double_int double_int_lrotate (double_int, long, unsigned int);
+double_int double_int_rrotate (double_int, long, unsigned int);
+
+
+
+
+static __inline__ unsigned char
+double_int_negative_p (double_int cst)
+{
+  return cst.high < 0;
+}
+
+int double_int_cmp (double_int, double_int, unsigned char);
+int double_int_scmp (double_int, double_int);
+int double_int_ucmp (double_int, double_int);
+
+double_int double_int_max (double_int, double_int, unsigned char);
+double_int double_int_smax (double_int, double_int);
+double_int double_int_umax (double_int, double_int);
+
+double_int double_int_min (double_int, double_int, unsigned char);
+double_int double_int_smin (double_int, double_int);
+double_int double_int_umin (double_int, double_int);
+
+void dump_double_int (FILE *, double_int, unsigned char);
+
+
+
+double_int double_int_ext (double_int, unsigned, unsigned char);
+double_int double_int_sext (double_int, unsigned);
+double_int double_int_zext (double_int, unsigned);
+double_int double_int_mask (unsigned);
+# 253 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/double-int.h"
+static __inline__ unsigned char
+double_int_zero_p (double_int cst)
+{
+  return cst.low == 0 && cst.high == 0;
+}
+
+
+
+static __inline__ unsigned char
+double_int_one_p (double_int cst)
+{
+  return cst.low == 1 && cst.high == 0;
+}
+
+
+
+static __inline__ unsigned char
+double_int_minus_one_p (double_int cst)
+{
+  return (cst.low == (~((unsigned long) 0)) && cst.high == -1);
+}
+
+
+
+static __inline__ unsigned char
+double_int_equal_p (double_int cst1, double_int cst2)
+{
+  return cst1.low == cst2.low && cst1.high == cst2.high;
+}
+
+
+
+
+extern int add_double_with_sign (unsigned long, long,
+     unsigned long, long,
+     unsigned long *, long *,
+     unsigned char);
+
+
+extern int neg_double (unsigned long, long,
+         unsigned long *, long *);
+extern int mul_double_with_sign (unsigned long, long,
+     unsigned long, long,
+     unsigned long *, long *,
+     unsigned char);
+
+
+extern void lshift_double (unsigned long, long,
+      long, unsigned int,
+      unsigned long *, long *, unsigned char);
+extern void rshift_double (unsigned long, long,
+      long, unsigned int,
+      unsigned long *, long *, unsigned char);
+extern int div_and_round_double (unsigned, int, unsigned long,
+     long, unsigned long,
+     long, unsigned long *,
+     long *, unsigned long *,
+     long *);
+
+
+
+
+
+void mpz_set_double_int (mpz_t, double_int, unsigned char);
+double_int mpz_get_double_int (const_tree, mpz_t, unsigned char);
+# 32 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/real.h" 1
+# 30 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/real.h"
+enum real_value_class {
+  rvc_zero,
+  rvc_normal,
+  rvc_inf,
+  rvc_nan
+};
+
+
+
+
+
+
+
+struct real_value {
+
+
+
+  unsigned int cl : 2;
+  unsigned int decimal : 1;
+  unsigned int sign : 1;
+  unsigned int signalling : 1;
+  unsigned int canonical : 1;
+  unsigned int uexp : (32 - 6);
+  unsigned long sig[((128 + (8 * 4)) / (8 * 4))];
+};
+# 77 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/real.h"
+extern char test_real_width
+  [sizeof(struct real_value) <= (((128 + (8 * 4)) + 32)/(8 * 4) + (((128 + (8 * 4)) + 32)%(8 * 4) ? 1 : 0))*sizeof(long) ? 1 : -1];
+# 115 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/real.h"
+struct real_format
+{
+
+  void (*encode) (const struct real_format *, long *,
+    const struct real_value *);
+  void (*decode) (const struct real_format *, struct real_value *,
+    const long *);
+
+
+  int b;
+
+
+  int p;
+
+
+  int pnan;
+
+
+  int emin;
+
+
+  int emax;
+
+
+
+  int signbit_ro;
+
+
+
+  int signbit_rw;
+
+
+  unsigned char round_towards_zero;
+  unsigned char has_sign_dependent_rounding;
+
+
+  unsigned char has_nans;
+  unsigned char has_inf;
+  unsigned char has_denorm;
+  unsigned char has_signed_zero;
+  unsigned char qnan_msb_set;
+  unsigned char canonical_nan_lsbs_set;
+};
+
+
+
+
+
+
+
+extern const struct real_format *
+  real_format_for_mode[MAX_MODE_FLOAT - MIN_MODE_FLOAT + 1
+         + MAX_MODE_DECIMAL_FLOAT - MIN_MODE_DECIMAL_FLOAT + 1];
+# 226 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/real.h"
+extern unsigned char real_arithmetic (struct real_value *, int, const struct real_value *,
+        const struct real_value *);
+
+
+extern unsigned char real_compare (int, const struct real_value *, const struct real_value *);
+
+
+extern unsigned char real_isinf (const struct real_value *);
+
+
+extern unsigned char real_isnan (const struct real_value *);
+
+
+extern unsigned char real_isfinite (const struct real_value *);
+
+
+extern unsigned char real_isneg (const struct real_value *);
+
+
+extern unsigned char real_isnegzero (const struct real_value *);
+
+
+extern unsigned char real_identical (const struct real_value *, const struct real_value *);
+
+
+extern void real_convert (struct real_value *, enum machine_mode,
+     const struct real_value *);
+
+
+extern unsigned char exact_real_truncate (enum machine_mode, const struct real_value *);
+
+
+extern void real_to_decimal (char *, const struct real_value *, size_t,
+        size_t, int);
+
+
+
+extern void real_to_decimal_for_mode (char *, const struct real_value *, size_t,
+          size_t, int, enum machine_mode);
+
+
+extern void real_to_hexadecimal (char *, const struct real_value *,
+     size_t, size_t, int);
+
+
+extern long real_to_integer (const struct real_value *);
+extern void real_to_integer2 (long *, long *,
+         const struct real_value *);
+
+
+
+extern int real_from_string (struct real_value *, const char *);
+
+extern void real_from_string3 (struct real_value *, const char *, enum machine_mode);
+
+
+extern void real_from_integer (struct real_value *, enum machine_mode,
+          unsigned long, long, int);
+
+extern long real_to_target_fmt (long *, const struct real_value *,
+    const struct real_format *);
+extern long real_to_target (long *, const struct real_value *, enum machine_mode);
+
+extern void real_from_target_fmt (struct real_value *, const long *,
+      const struct real_format *);
+extern void real_from_target (struct real_value *, const long *,
+         enum machine_mode);
+
+extern void real_inf (struct real_value *);
+
+extern unsigned char real_nan (struct real_value *, const char *, int, enum machine_mode);
+
+extern void real_maxval (struct real_value *, int, enum machine_mode);
+
+extern void real_2expN (struct real_value *, int, enum machine_mode);
+
+extern unsigned int real_hash (const struct real_value *);
+
+
+
+extern const struct real_format ieee_single_format;
+extern const struct real_format mips_single_format;
+extern const struct real_format motorola_single_format;
+extern const struct real_format spu_single_format;
+extern const struct real_format ieee_double_format;
+extern const struct real_format mips_double_format;
+extern const struct real_format motorola_double_format;
+extern const struct real_format ieee_extended_motorola_format;
+extern const struct real_format ieee_extended_intel_96_format;
+extern const struct real_format ieee_extended_intel_96_round_53_format;
+extern const struct real_format ieee_extended_intel_128_format;
+extern const struct real_format ibm_extended_format;
+extern const struct real_format mips_extended_format;
+extern const struct real_format ieee_quad_format;
+extern const struct real_format mips_quad_format;
+extern const struct real_format vax_f_format;
+extern const struct real_format vax_d_format;
+extern const struct real_format vax_g_format;
+extern const struct real_format real_internal_format;
+extern const struct real_format decimal_single_format;
+extern const struct real_format decimal_double_format;
+extern const struct real_format decimal_quad_format;
+extern const struct real_format ieee_half_format;
+extern const struct real_format arm_half_format;
+# 385 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/real.h"
+extern struct real_value real_value_truncate (enum machine_mode,
+         struct real_value);
+
+
+
+
+extern struct real_value real_value_negate (const struct real_value *);
+extern struct real_value real_value_abs (const struct real_value *);
+
+extern int significand_size (enum machine_mode);
+
+extern struct real_value real_from_string2 (const char *, enum machine_mode);
+# 414 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/real.h"
+extern int real_exponent (const struct real_value *);
+
+
+extern void real_ldexp (struct real_value *, const struct real_value *, int);
+
+
+
+
+
+extern struct real_value dconst0;
+extern struct real_value dconst1;
+extern struct real_value dconst2;
+extern struct real_value dconstm1;
+extern struct real_value dconsthalf;
+
+
+
+
+
+
+extern const struct real_value * dconst_e_ptr (void);
+
+
+extern const struct real_value * dconst_third_ptr (void);
+
+
+extern const struct real_value * dconst_sqrt2_ptr (void);
+
+
+
+struct real_value real_value_from_int_cst (const_tree, const_tree);
+# 453 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/real.h"
+extern rtx const_double_from_real_value (struct real_value, enum machine_mode);
+
+
+extern unsigned char exact_real_inverse (enum machine_mode, struct real_value *);
+
+
+
+
+unsigned char real_can_shorten_arithmetic (enum machine_mode, enum machine_mode);
+
+
+extern tree build_real (tree, struct real_value);
+
+
+extern unsigned char real_sqrt (struct real_value *, enum machine_mode,
+         const struct real_value *);
+
+
+extern unsigned char real_powi (struct real_value *, enum machine_mode,
+         const struct real_value *, long);
+
+
+extern void real_trunc (struct real_value *, enum machine_mode,
+   const struct real_value *);
+extern void real_floor (struct real_value *, enum machine_mode,
+   const struct real_value *);
+extern void real_ceil (struct real_value *, enum machine_mode,
+         const struct real_value *);
+extern void real_round (struct real_value *, enum machine_mode,
+   const struct real_value *);
+
+
+extern void real_copysign (struct real_value *, const struct real_value *);
+
+
+extern unsigned char real_isinteger (const struct real_value *c, enum machine_mode mode);
+
+
+
+
+extern void get_max_float (const struct real_format *, char *, size_t);
+# 33 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/fixed-value.h" 1
+# 27 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/fixed-value.h"
+struct fixed_value
+{
+  double_int data;
+  enum machine_mode mode;
+};
+# 40 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/fixed-value.h"
+extern struct fixed_value fconst0[18];
+extern struct fixed_value fconst1[8];
+# 50 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/fixed-value.h"
+extern rtx const_fixed_from_fixed_value (struct fixed_value, enum machine_mode);
+
+
+extern void fixed_from_string (struct fixed_value *, const char *,
+          enum machine_mode);
+
+
+extern tree build_fixed (tree, struct fixed_value);
+
+
+extern unsigned char fixed_convert (struct fixed_value *, enum machine_mode,
+      const struct fixed_value *, unsigned char);
+
+
+extern unsigned char fixed_convert_from_int (struct fixed_value *, enum machine_mode,
+        double_int, unsigned char, unsigned char);
+
+
+extern unsigned char fixed_convert_from_real (struct fixed_value *, enum machine_mode,
+         const struct real_value *, unsigned char);
+
+
+extern void real_convert_from_fixed (struct real_value *, enum machine_mode,
+         const struct fixed_value *);
+
+
+extern unsigned char fixed_identical (const struct fixed_value *, const struct fixed_value *);
+
+
+extern unsigned int fixed_hash (const struct fixed_value *);
+
+
+
+
+
+
+
+extern void fixed_to_decimal (char *str, const struct fixed_value *, size_t);
+
+
+extern unsigned char fixed_arithmetic (struct fixed_value *, int, const struct fixed_value *,
+         const struct fixed_value *, unsigned char);
+
+
+extern unsigned char fixed_compare (int, const struct fixed_value *,
+      const struct fixed_value *);
+
+
+extern unsigned char fixed_isneg (const struct fixed_value *);
+# 34 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/alias.h" 1
+# 31 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/alias.h"
+typedef int alias_set_type;
+
+extern alias_set_type new_alias_set (void);
+extern alias_set_type get_alias_set (tree);
+extern alias_set_type get_deref_alias_set (tree);
+extern alias_set_type get_varargs_alias_set (void);
+extern alias_set_type get_frame_alias_set (void);
+extern unsigned char component_uses_parent_alias_set (const_tree);
+extern unsigned char alias_set_subset_of (alias_set_type, alias_set_type);
+extern void record_alias_subset (alias_set_type, alias_set_type);
+extern void record_component_aliases (tree);
+extern int alias_sets_conflict_p (alias_set_type, alias_set_type);
+extern int alias_sets_must_conflict_p (alias_set_type, alias_set_type);
+extern int objects_must_conflict_p (tree, tree);
+extern int nonoverlapping_memrefs_p (const_rtx, const_rtx, unsigned char);
+# 35 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/flags.h" 1
+# 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/flags.h"
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/flag-types.h" 1
 # 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/flag-types.h"
 enum debug_info_type
@@ -7872,11 +12646,9 @@ enum vect_verbosity_levels {
 
   MAX_VERBOSITY_LEVEL
 };
-# 7 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/options.h" 2
-
-
-
-
+# 27 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/flags.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/options.h" 1
+# 11 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/options.h"
 struct gcc_options
 
 
@@ -12411,7 +17183,4827 @@ enum opt_code
   OPT_SPECIAL_program_name,
   OPT_SPECIAL_input_file
 };
-# 20 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tm.h" 2
+# 28 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/flags.h" 2
+
+
+
+
+extern const char *const debug_type_names[];
+
+extern void strip_off_ending (char *, int);
+extern int base_of_path (const char *path, const char **base_out);
+
+
+
+
+
+
+extern unsigned char in_lto_p;
+
+
+extern unsigned char fast_math_flags_set_p (const struct gcc_options *);
+extern unsigned char fast_math_flags_struct_set_p (struct cl_optimization *);
+# 55 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/flags.h"
+extern void set_Wstrict_aliasing (struct gcc_options *opts, int onoff);
+
+
+
+
+
+extern unsigned char final_insns_dump_p;
+
+
+
+extern int flag_permissive;
+
+
+
+extern int flag_next_runtime;
+
+
+
+
+struct target_flag_state {
+
+
+
+
+  int x_align_loops_log;
+  int x_align_loops_max_skip;
+  int x_align_jumps_log;
+  int x_align_jumps_max_skip;
+  int x_align_labels_log;
+  int x_align_labels_max_skip;
+  int x_align_functions_log;
+
+
+  enum excess_precision x_flag_excess_precision;
+};
+
+extern struct target_flag_state default_target_flag_state;
+# 116 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/flags.h"
+extern int dump_for_graph;
+# 36 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
+
+
+
+
+
+
+enum tree_code {
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/all-tree.def" 1
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def" 1
+# 42 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+ERROR_MARK,
+
+
+
+
+
+IDENTIFIER_NODE,
+
+
+
+
+
+
+TREE_LIST,
+
+
+TREE_VEC,
+# 79 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+BLOCK,
+# 123 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+OFFSET_TYPE,
+# 136 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+ENUMERAL_TYPE,
+
+
+
+BOOLEAN_TYPE,
+# 150 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+INTEGER_TYPE,
+
+
+
+REAL_TYPE,
+# 163 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+POINTER_TYPE,
+
+
+
+REFERENCE_TYPE,
+
+
+NULLPTR_TYPE,
+
+
+
+
+FIXED_POINT_TYPE,
+# 184 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+COMPLEX_TYPE,
+
+
+
+
+VECTOR_TYPE,
+# 205 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+ARRAY_TYPE,
+# 215 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+RECORD_TYPE,
+
+
+
+
+
+UNION_TYPE,
+
+
+
+
+
+QUAL_UNION_TYPE,
+
+
+
+
+
+
+VOID_TYPE,
+
+
+
+
+
+
+
+FUNCTION_TYPE,
+
+
+
+
+
+
+METHOD_TYPE,
+
+
+
+
+
+LANG_TYPE,
+# 268 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+INTEGER_CST,
+
+
+REAL_CST,
+
+
+FIXED_CST,
+
+
+
+COMPLEX_CST,
+
+
+VECTOR_CST,
+
+
+STRING_CST,
+# 344 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+FUNCTION_DECL,
+LABEL_DECL,
+
+
+
+
+FIELD_DECL,
+VAR_DECL,
+CONST_DECL,
+PARM_DECL,
+TYPE_DECL,
+RESULT_DECL,
+
+
+
+DEBUG_EXPR_DECL,
+
+
+
+NAMESPACE_DECL,
+# 374 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+IMPORTED_DECL,
+
+
+
+TRANSLATION_UNIT_DECL,
+# 391 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+COMPONENT_REF,
+# 401 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+BIT_FIELD_REF,
+
+
+
+REALPART_EXPR,
+IMAGPART_EXPR,
+
+
+
+
+
+
+ARRAY_REF,
+
+
+
+
+ARRAY_RANGE_REF,
+
+
+INDIRECT_REF,
+# 430 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+OBJ_TYPE_REF,
+# 446 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+CONSTRUCTOR,
+# 456 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+COMPOUND_EXPR,
+
+
+MODIFY_EXPR,
+
+
+
+
+INIT_EXPR,
+
+
+
+
+
+
+
+TARGET_EXPR,
+# 486 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+COND_EXPR,
+# 498 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+VEC_COND_EXPR,
+# 521 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+BIND_EXPR,
+
+
+
+
+
+
+
+CALL_EXPR,
+
+
+
+
+
+
+WITH_CLEANUP_EXPR,
+# 553 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+CLEANUP_POINT_EXPR,
+# 605 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+PLACEHOLDER_EXPR,
+
+
+PLUS_EXPR,
+MINUS_EXPR,
+MULT_EXPR,
+
+
+
+POINTER_PLUS_EXPR,
+
+
+TRUNC_DIV_EXPR,
+
+
+CEIL_DIV_EXPR,
+
+
+FLOOR_DIV_EXPR,
+
+
+ROUND_DIV_EXPR,
+
+
+TRUNC_MOD_EXPR,
+CEIL_MOD_EXPR,
+FLOOR_MOD_EXPR,
+ROUND_MOD_EXPR,
+
+
+RDIV_EXPR,
+
+
+
+EXACT_DIV_EXPR,
+
+
+FIX_TRUNC_EXPR,
+
+
+FLOAT_EXPR,
+
+
+NEGATE_EXPR,
+
+
+
+
+MIN_EXPR,
+MAX_EXPR,
+
+
+
+
+
+ABS_EXPR,
+# 675 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+LSHIFT_EXPR,
+RSHIFT_EXPR,
+LROTATE_EXPR,
+RROTATE_EXPR,
+
+
+BIT_IOR_EXPR,
+BIT_XOR_EXPR,
+BIT_AND_EXPR,
+BIT_NOT_EXPR,
+# 695 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+TRUTH_ANDIF_EXPR,
+TRUTH_ORIF_EXPR,
+TRUTH_AND_EXPR,
+TRUTH_OR_EXPR,
+TRUTH_XOR_EXPR,
+TRUTH_NOT_EXPR,
+
+
+
+
+
+
+
+LT_EXPR,
+LE_EXPR,
+GT_EXPR,
+GE_EXPR,
+EQ_EXPR,
+NE_EXPR,
+
+
+UNORDERED_EXPR,
+ORDERED_EXPR,
+
+
+UNLT_EXPR,
+UNLE_EXPR,
+UNGT_EXPR,
+UNGE_EXPR,
+UNEQ_EXPR,
+
+
+LTGT_EXPR,
+
+RANGE_EXPR,
+
+
+
+PAREN_EXPR,
+
+
+
+
+CONVERT_EXPR,
+
+
+
+ADDR_SPACE_CONVERT_EXPR,
+
+
+
+
+FIXED_CONVERT_EXPR,
+
+
+NOP_EXPR,
+
+
+NON_LVALUE_EXPR,
+# 765 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+VIEW_CONVERT_EXPR,
+
+
+
+
+
+
+COMPOUND_LITERAL_EXPR,
+
+
+
+
+SAVE_EXPR,
+
+
+
+ADDR_EXPR,
+
+
+
+FDESC_EXPR,
+
+
+
+COMPLEX_EXPR,
+
+
+CONJ_EXPR,
+
+
+
+
+PREDECREMENT_EXPR,
+PREINCREMENT_EXPR,
+POSTDECREMENT_EXPR,
+POSTINCREMENT_EXPR,
+
+
+VA_ARG_EXPR,
+
+
+
+
+
+
+TRY_CATCH_EXPR,
+
+
+
+
+TRY_FINALLY_EXPR,
+
+
+
+
+
+DECL_EXPR,
+
+
+
+
+LABEL_EXPR,
+
+
+
+GOTO_EXPR,
+
+
+
+
+
+
+RETURN_EXPR,
+
+
+
+EXIT_EXPR,
+
+
+
+
+LOOP_EXPR,
+# 860 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+SWITCH_EXPR,
+
+
+
+
+
+CASE_LABEL_EXPR,
+
+
+
+
+
+
+ASM_EXPR,
+
+
+
+
+SSA_NAME,
+
+
+
+CATCH_EXPR,
+
+
+
+
+
+EH_FILTER_EXPR,
+
+
+
+SCEV_KNOWN,
+
+
+
+SCEV_NOT_KNOWN,
+
+
+
+POLYNOMIAL_CHREC,
+
+
+
+STATEMENT_LIST,
+# 923 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+ASSERT_EXPR,
+
+
+
+TREE_BINFO,
+
+
+
+
+
+
+WITH_SIZE_EXPR,
+# 945 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+REALIGN_LOAD_EXPR,
+# 961 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+TARGET_MEM_REF,
+# 971 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+MEM_REF,
+
+
+
+
+
+
+
+OMP_PARALLEL,
+
+
+
+
+
+OMP_TASK,
+# 1006 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+OMP_FOR,
+
+
+
+
+OMP_SECTIONS,
+
+
+
+
+OMP_SINGLE,
+
+
+
+OMP_SECTION,
+
+
+
+OMP_MASTER,
+
+
+
+OMP_ORDERED,
+
+
+
+
+OMP_CRITICAL,
+
+
+
+
+
+
+
+OMP_ATOMIC,
+
+
+OMP_CLAUSE,
+
+
+
+
+
+
+
+REDUC_MAX_EXPR,
+REDUC_MIN_EXPR,
+REDUC_PLUS_EXPR,
+# 1065 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+DOT_PROD_EXPR,
+# 1074 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+WIDEN_SUM_EXPR,
+
+
+
+
+
+
+WIDEN_MULT_EXPR,
+# 1090 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
+WIDEN_MULT_PLUS_EXPR,
+
+
+WIDEN_MULT_MINUS_EXPR,
+
+
+
+
+
+FMA_EXPR,
+
+
+
+
+VEC_LSHIFT_EXPR,
+VEC_RSHIFT_EXPR,
+
+
+
+
+
+
+VEC_WIDEN_MULT_HI_EXPR,
+VEC_WIDEN_MULT_LO_EXPR,
+
+
+
+
+
+VEC_UNPACK_HI_EXPR,
+VEC_UNPACK_LO_EXPR,
+
+
+
+
+
+VEC_UNPACK_FLOAT_HI_EXPR,
+VEC_UNPACK_FLOAT_LO_EXPR,
+
+
+
+
+
+VEC_PACK_TRUNC_EXPR,
+VEC_PACK_SAT_EXPR,
+
+
+
+
+
+VEC_PACK_FIX_TRUNC_EXPR,
+
+
+VEC_EXTRACT_EVEN_EXPR,
+VEC_EXTRACT_ODD_EXPR,
+
+
+VEC_INTERLEAVE_HIGH_EXPR,
+VEC_INTERLEAVE_LOW_EXPR,
+
+
+
+
+
+
+PREDICT_EXPR,
+
+
+OPTIMIZATION_NODE,
+
+
+TARGET_OPTION_NODE,
+# 2 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/all-tree.def" 2
+LAST_AND_UNUSED_TREE_CODE,
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/c-family/c-common.def" 1
+# 41 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/c-family/c-common.def"
+C_MAYBE_CONST_EXPR,
+
+
+
+
+
+
+EXCESS_PRECISION_EXPR,
+# 4 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/all-tree.def" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/ada/gcc-interface/ada-tree.def" 1
+# 29 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/ada/gcc-interface/ada-tree.def"
+UNCONSTRAINED_ARRAY_TYPE,
+
+
+
+
+
+UNCONSTRAINED_ARRAY_REF,
+
+
+
+
+NULL_EXPR,
+
+
+
+PLUS_NOMOD_EXPR,
+
+
+
+MINUS_NOMOD_EXPR,
+
+
+
+
+ATTR_ADDR_EXPR,
+# 62 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/ada/gcc-interface/ada-tree.def"
+STMT_STMT,
+
+
+
+
+
+LOOP_STMT,
+
+
+
+
+
+EXIT_STMT,
+# 5 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/all-tree.def" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def" 1
+# 43 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
+OFFSET_REF,
+
+
+
+
+PTRMEM_CST,
+
+
+
+
+
+NEW_EXPR,
+VEC_NEW_EXPR,
+
+
+
+
+DELETE_EXPR,
+VEC_DELETE_EXPR,
+
+
+
+
+SCOPE_REF,
+
+
+
+
+MEMBER_REF,
+
+
+
+TYPE_EXPR,
+
+
+
+
+
+
+AGGR_INIT_EXPR,
+
+
+
+
+VEC_INIT_EXPR,
+
+
+
+THROW_EXPR,
+
+
+
+EMPTY_CLASS_EXPR,
+# 109 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
+BASELINK,
+# 126 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
+TEMPLATE_DECL,
+# 161 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
+TEMPLATE_PARM_INDEX,
+# 170 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
+TEMPLATE_TEMPLATE_PARM,
+# 179 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
+TEMPLATE_TYPE_PARM,
+
+
+
+
+
+TYPENAME_TYPE,
+
+
+
+TYPEOF_TYPE,
+
+
+
+
+
+BOUND_TEMPLATE_TEMPLATE_PARM,
+
+
+
+
+
+UNBOUND_CLASS_TEMPLATE,
+
+
+
+
+
+USING_DECL,
+
+
+USING_STMT,
+
+
+
+
+DEFAULT_ARG,
+
+
+
+
+
+
+TEMPLATE_ID_EXPR,
+
+
+
+OVERLOAD,
+# 238 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
+PSEUDO_DTOR_EXPR,
+
+
+
+MODOP_EXPR,
+CAST_EXPR,
+REINTERPRET_CAST_EXPR,
+CONST_CAST_EXPR,
+STATIC_CAST_EXPR,
+DYNAMIC_CAST_EXPR,
+DOTSTAR_EXPR,
+TYPEID_EXPR,
+NOEXCEPT_EXPR,
+# 261 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
+NON_DEPENDENT_EXPR,
+
+
+
+CTOR_INITIALIZER,
+
+TRY_BLOCK,
+
+EH_SPEC_BLOCK,
+
+
+
+
+
+HANDLER,
+
+
+
+MUST_NOT_THROW_EXPR,
+
+
+
+
+CLEANUP_STMT,
+
+
+
+
+
+IF_STMT,
+
+
+
+FOR_STMT,
+
+
+
+
+RANGE_FOR_STMT,
+
+
+
+WHILE_STMT,
+
+
+
+DO_STMT,
+
+
+BREAK_STMT,
+
+
+CONTINUE_STMT,
+
+
+
+SWITCH_STMT,
+
+
+
+EXPR_STMT,
+
+TAG_DEFN,
+
+
+OFFSETOF_EXPR,
+
+
+SIZEOF_EXPR,
+
+
+ARROW_EXPR,
+
+
+
+ALIGNOF_EXPR,
+
+
+
+AT_ENCODE_EXPR,
+
+
+
+
+STMT_EXPR,
+
+
+
+UNARY_PLUS_EXPR,
+
+
+
+
+
+
+
+STATIC_ASSERT,
+# 376 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
+TYPE_ARGUMENT_PACK,
+# 385 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
+NONTYPE_ARGUMENT_PACK,
+# 408 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
+TYPE_PACK_EXPANSION,
+
+
+
+
+
+
+EXPR_PACK_EXPANSION,
+# 427 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
+ARGUMENT_PACK_SELECT,
+
+
+
+
+TRAIT_EXPR,
+# 441 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
+LAMBDA_EXPR,
+# 450 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
+DECLTYPE_TYPE,
+# 460 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
+TEMPLATE_INFO,
+# 6 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/all-tree.def" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/java/java-tree.def" 1
+# 23 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/java/java-tree.def"
+URSHIFT_EXPR,
+
+
+
+COMPARE_EXPR,
+
+
+COMPARE_L_EXPR,
+
+COMPARE_G_EXPR,
+# 7 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/all-tree.def" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/objc/objc-tree.def" 1
+# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/objc/objc-tree.def"
+CLASS_INTERFACE_TYPE,
+CLASS_IMPLEMENTATION_TYPE,
+
+CATEGORY_INTERFACE_TYPE,
+CATEGORY_IMPLEMENTATION_TYPE,
+
+PROTOCOL_INTERFACE_TYPE,
+
+
+KEYWORD_DECL,
+INSTANCE_METHOD_DECL,
+CLASS_METHOD_DECL,
+PROPERTY_DECL,
+
+
+MESSAGE_SEND_EXPR,
+CLASS_REFERENCE_EXPR,
+# 71 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/objc/objc-tree.def"
+PROPERTY_REF,
+# 7 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/all-tree.def" 2
+# 44 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
+MAX_TREE_CODES
+};
+
+
+
+
+extern unsigned char tree_contains_struct[MAX_TREE_CODES][64];
+# 61 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+enum tree_code_class {
+  tcc_exceptional,
+  tcc_constant,
+
+  tcc_type,
+  tcc_declaration,
+  tcc_reference,
+  tcc_comparison,
+  tcc_unary,
+  tcc_binary,
+  tcc_statement,
+
+  tcc_vl_exp,
+
+  tcc_expression
+};
+
+
+
+
+extern const char *const tree_code_class_strings[];
+
+
+
+
+
+
+extern const enum tree_code_class tree_code_type[];
+# 175 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern const unsigned char tree_code_length[];
+
+
+
+
+extern const char *const tree_code_name[];
+# 190 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+typedef enum {
+  ALIAS_DIAG_NONE = 0x0,
+  ALIAS_DIAG_TO_UNDEF = 0x1,
+  ALIAS_DIAG_TO_EXTERN = 0x2
+} alias_diag_flags;
+
+typedef struct alias_pair
+{
+  tree decl;
+  tree target;
+  int emitted_diags;
+} alias_pair;
+
+
+typedef struct VEC_alias_pair_base { unsigned num; unsigned alloc; alias_pair vec[1]; } VEC_alias_pair_base; typedef struct VEC_alias_pair_none { VEC_alias_pair_base base; } VEC_alias_pair_none; static __inline__ unsigned VEC_alias_pair_base_length (const VEC_alias_pair_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ alias_pair *VEC_alias_pair_base_last (VEC_alias_pair_base *vec_ ) { (void)(vec_ && vec_->num); return &vec_->vec[vec_->num - 1]; } static __inline__ alias_pair *VEC_alias_pair_base_index (VEC_alias_pair_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return &vec_->vec[ix_]; } static __inline__ int VEC_alias_pair_base_iterate (VEC_alias_pair_base *vec_, unsigned ix_, alias_pair **ptr) { if (vec_ && ix_ < vec_->num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static __inline__ size_t VEC_alias_pair_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_alias_pair_base, vec) + alloc_ * sizeof(alias_pair); } static __inline__ void VEC_alias_pair_base_embedded_init (VEC_alias_pair_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_alias_pair_base_space (VEC_alias_pair_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_alias_pair_base_splice (VEC_alias_pair_base *dst_, VEC_alias_pair_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (alias_pair)); dst_->num += len_; } } static __inline__ alias_pair *VEC_alias_pair_base_quick_push (VEC_alias_pair_base *vec_, const alias_pair *obj_ ) { alias_pair *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_alias_pair_base_pop (VEC_alias_pair_base *vec_ ) { (void)(vec_->num); --vec_->num; } static __inline__ void VEC_alias_pair_base_truncate (VEC_alias_pair_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ alias_pair *VEC_alias_pair_base_replace (VEC_alias_pair_base *vec_, unsigned ix_, const alias_pair *obj_ ) { alias_pair *slot_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ alias_pair *VEC_alias_pair_base_quick_insert (VEC_alias_pair_base *vec_, unsigned ix_, const alias_pair *obj_ ) { alias_pair *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (alias_pair)); if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_alias_pair_base_ordered_remove (VEC_alias_pair_base *vec_, unsigned ix_ ) { alias_pair *slot_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (alias_pair)); } static __inline__ void VEC_alias_pair_base_unordered_remove (VEC_alias_pair_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->num); vec_->vec[ix_] = vec_->vec[--vec_->num]; } static __inline__ void VEC_alias_pair_base_block_remove (VEC_alias_pair_base *vec_, unsigned ix_, unsigned len_ ) { alias_pair *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (alias_pair)); } static __inline__ alias_pair *VEC_alias_pair_base_address (VEC_alias_pair_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_alias_pair_base_lower_bound (VEC_alias_pair_base *vec_, const alias_pair *obj_, unsigned char (*lessthan_)(const alias_pair *, const alias_pair *) ) { unsigned int len_ = VEC_alias_pair_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { alias_pair *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_alias_pair_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_alias_pair_gc { VEC_alias_pair_base base; } VEC_alias_pair_gc; static __inline__ VEC_alias_pair_gc *VEC_alias_pair_gc_alloc (int alloc_ ) { return (VEC_alias_pair_gc *) vec_gc_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) ); } static __inline__ VEC_alias_pair_gc *VEC_alias_pair_gc_copy (VEC_alias_pair_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_alias_pair_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_alias_pair_gc *)(vec_gc_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (alias_pair) * len_); } return new_vec_; } static __inline__ void VEC_alias_pair_gc_free (VEC_alias_pair_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_alias_pair_gc_reserve (VEC_alias_pair_gc **vec_, int alloc_ ) { int extend = !VEC_alias_pair_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_alias_pair_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) ); return extend; } static __inline__ int VEC_alias_pair_gc_reserve_exact (VEC_alias_pair_gc **vec_, int alloc_ ) { int extend = !VEC_alias_pair_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_alias_pair_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) ); return extend; } static __inline__ void VEC_alias_pair_gc_safe_grow (VEC_alias_pair_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_alias_pair_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_alias_pair_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_alias_pair_gc_safe_grow_cleared (VEC_alias_pair_gc **vec_, int size_ ) { int oldsize = VEC_alias_pair_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_alias_pair_gc_safe_grow (vec_, size_ ); memset (&(VEC_alias_pair_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (alias_pair) * (size_ - oldsize)); } static __inline__ void VEC_alias_pair_gc_safe_splice (VEC_alias_pair_gc **dst_, VEC_alias_pair_base *src_ ) { if (src_) { VEC_alias_pair_gc_reserve_exact (dst_, src_->num ); VEC_alias_pair_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ alias_pair *VEC_alias_pair_gc_safe_push (VEC_alias_pair_gc **vec_, const alias_pair *obj_ ) { VEC_alias_pair_gc_reserve (vec_, 1 ); return VEC_alias_pair_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ alias_pair *VEC_alias_pair_gc_safe_insert (VEC_alias_pair_gc **vec_, unsigned ix_, const alias_pair *obj_ ) { VEC_alias_pair_gc_reserve (vec_, 1 ); return VEC_alias_pair_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+extern VEC_alias_pair_gc * alias_pairs;
+
+
+
+
+enum built_in_class
+{
+  NOT_BUILT_IN = 0,
+  BUILT_IN_FRONTEND,
+  BUILT_IN_MD,
+  BUILT_IN_NORMAL
+};
+
+
+extern const char *const built_in_class_names[4];
+
+
+
+
+
+enum built_in_function
+{
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/builtins.def" 1
+# 177 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/builtins.def"
+BUILT_IN_ACOS,
+BUILT_IN_ACOSF,
+BUILT_IN_ACOSH,
+BUILT_IN_ACOSHF,
+BUILT_IN_ACOSHL,
+BUILT_IN_ACOSL,
+BUILT_IN_ASIN,
+BUILT_IN_ASINF,
+BUILT_IN_ASINH,
+BUILT_IN_ASINHF,
+BUILT_IN_ASINHL,
+BUILT_IN_ASINL,
+BUILT_IN_ATAN,
+BUILT_IN_ATAN2,
+BUILT_IN_ATAN2F,
+BUILT_IN_ATAN2L,
+BUILT_IN_ATANF,
+BUILT_IN_ATANH,
+BUILT_IN_ATANHF,
+BUILT_IN_ATANHL,
+BUILT_IN_ATANL,
+BUILT_IN_CBRT,
+BUILT_IN_CBRTF,
+BUILT_IN_CBRTL,
+BUILT_IN_CEIL,
+BUILT_IN_CEILF,
+BUILT_IN_CEILL,
+BUILT_IN_COPYSIGN,
+BUILT_IN_COPYSIGNF,
+BUILT_IN_COPYSIGNL,
+BUILT_IN_COS,
+BUILT_IN_COSF,
+BUILT_IN_COSH,
+BUILT_IN_COSHF,
+BUILT_IN_COSHL,
+BUILT_IN_COSL,
+BUILT_IN_DREM,
+BUILT_IN_DREMF,
+BUILT_IN_DREML,
+BUILT_IN_ERF,
+BUILT_IN_ERFC,
+BUILT_IN_ERFCF,
+BUILT_IN_ERFCL,
+BUILT_IN_ERFF,
+BUILT_IN_ERFL,
+BUILT_IN_EXP,
+BUILT_IN_EXP10,
+BUILT_IN_EXP10F,
+BUILT_IN_EXP10L,
+BUILT_IN_EXP2,
+BUILT_IN_EXP2F,
+BUILT_IN_EXP2L,
+BUILT_IN_EXPF,
+BUILT_IN_EXPL,
+BUILT_IN_EXPM1,
+BUILT_IN_EXPM1F,
+BUILT_IN_EXPM1L,
+BUILT_IN_FABS,
+BUILT_IN_FABSF,
+BUILT_IN_FABSL,
+BUILT_IN_FDIM,
+BUILT_IN_FDIMF,
+BUILT_IN_FDIML,
+BUILT_IN_FLOOR,
+BUILT_IN_FLOORF,
+BUILT_IN_FLOORL,
+BUILT_IN_FMA,
+BUILT_IN_FMAF,
+BUILT_IN_FMAL,
+BUILT_IN_FMAX,
+BUILT_IN_FMAXF,
+BUILT_IN_FMAXL,
+BUILT_IN_FMIN,
+BUILT_IN_FMINF,
+BUILT_IN_FMINL,
+BUILT_IN_FMOD,
+BUILT_IN_FMODF,
+BUILT_IN_FMODL,
+BUILT_IN_FREXP,
+BUILT_IN_FREXPF,
+BUILT_IN_FREXPL,
+BUILT_IN_GAMMA,
+BUILT_IN_GAMMAF,
+BUILT_IN_GAMMAL,
+BUILT_IN_GAMMA_R,
+BUILT_IN_GAMMAF_R,
+BUILT_IN_GAMMAL_R,
+BUILT_IN_HUGE_VAL,
+BUILT_IN_HUGE_VALF,
+BUILT_IN_HUGE_VALL,
+BUILT_IN_HYPOT,
+BUILT_IN_HYPOTF,
+BUILT_IN_HYPOTL,
+BUILT_IN_ILOGB,
+BUILT_IN_ILOGBF,
+BUILT_IN_ILOGBL,
+BUILT_IN_INF,
+BUILT_IN_INFF,
+BUILT_IN_INFL,
+BUILT_IN_INFD32,
+BUILT_IN_INFD64,
+BUILT_IN_INFD128,
+BUILT_IN_J0,
+BUILT_IN_J0F,
+BUILT_IN_J0L,
+BUILT_IN_J1,
+BUILT_IN_J1F,
+BUILT_IN_J1L,
+BUILT_IN_JN,
+BUILT_IN_JNF,
+BUILT_IN_JNL,
+BUILT_IN_LCEIL,
+BUILT_IN_LCEILF,
+BUILT_IN_LCEILL,
+BUILT_IN_LDEXP,
+BUILT_IN_LDEXPF,
+BUILT_IN_LDEXPL,
+BUILT_IN_LFLOOR,
+BUILT_IN_LFLOORF,
+BUILT_IN_LFLOORL,
+BUILT_IN_LGAMMA,
+BUILT_IN_LGAMMAF,
+BUILT_IN_LGAMMAL,
+BUILT_IN_LGAMMA_R,
+BUILT_IN_LGAMMAF_R,
+BUILT_IN_LGAMMAL_R,
+BUILT_IN_LLCEIL,
+BUILT_IN_LLCEILF,
+BUILT_IN_LLCEILL,
+BUILT_IN_LLFLOOR,
+BUILT_IN_LLFLOORF,
+BUILT_IN_LLFLOORL,
+BUILT_IN_LLRINT,
+BUILT_IN_LLRINTF,
+BUILT_IN_LLRINTL,
+BUILT_IN_LLROUND,
+BUILT_IN_LLROUNDF,
+BUILT_IN_LLROUNDL,
+BUILT_IN_LOG,
+BUILT_IN_LOG10,
+BUILT_IN_LOG10F,
+BUILT_IN_LOG10L,
+BUILT_IN_LOG1P,
+BUILT_IN_LOG1PF,
+BUILT_IN_LOG1PL,
+BUILT_IN_LOG2,
+BUILT_IN_LOG2F,
+BUILT_IN_LOG2L,
+BUILT_IN_LOGB,
+BUILT_IN_LOGBF,
+BUILT_IN_LOGBL,
+BUILT_IN_LOGF,
+BUILT_IN_LOGL,
+BUILT_IN_LRINT,
+BUILT_IN_LRINTF,
+BUILT_IN_LRINTL,
+BUILT_IN_LROUND,
+BUILT_IN_LROUNDF,
+BUILT_IN_LROUNDL,
+BUILT_IN_MODF,
+BUILT_IN_MODFF,
+BUILT_IN_MODFL,
+BUILT_IN_NAN,
+BUILT_IN_NANF,
+BUILT_IN_NANL,
+BUILT_IN_NAND32,
+BUILT_IN_NAND64,
+BUILT_IN_NAND128,
+BUILT_IN_NANS,
+BUILT_IN_NANSF,
+BUILT_IN_NANSL,
+BUILT_IN_NEARBYINT,
+BUILT_IN_NEARBYINTF,
+BUILT_IN_NEARBYINTL,
+BUILT_IN_NEXTAFTER,
+BUILT_IN_NEXTAFTERF,
+BUILT_IN_NEXTAFTERL,
+BUILT_IN_NEXTTOWARD,
+BUILT_IN_NEXTTOWARDF,
+BUILT_IN_NEXTTOWARDL,
+BUILT_IN_POW,
+BUILT_IN_POW10,
+BUILT_IN_POW10F,
+BUILT_IN_POW10L,
+BUILT_IN_POWF,
+BUILT_IN_POWI,
+BUILT_IN_POWIF,
+BUILT_IN_POWIL,
+BUILT_IN_POWL,
+BUILT_IN_REMAINDER,
+BUILT_IN_REMAINDERF,
+BUILT_IN_REMAINDERL,
+BUILT_IN_REMQUO,
+BUILT_IN_REMQUOF,
+BUILT_IN_REMQUOL,
+BUILT_IN_RINT,
+BUILT_IN_RINTF,
+BUILT_IN_RINTL,
+BUILT_IN_ROUND,
+BUILT_IN_ROUNDF,
+BUILT_IN_ROUNDL,
+BUILT_IN_SCALB,
+BUILT_IN_SCALBF,
+BUILT_IN_SCALBL,
+BUILT_IN_SCALBLN,
+BUILT_IN_SCALBLNF,
+BUILT_IN_SCALBLNL,
+BUILT_IN_SCALBN,
+BUILT_IN_SCALBNF,
+BUILT_IN_SCALBNL,
+BUILT_IN_SIGNBIT,
+BUILT_IN_SIGNBITF,
+BUILT_IN_SIGNBITL,
+BUILT_IN_SIGNBITD32,
+BUILT_IN_SIGNBITD64,
+BUILT_IN_SIGNBITD128,
+BUILT_IN_SIGNIFICAND,
+BUILT_IN_SIGNIFICANDF,
+BUILT_IN_SIGNIFICANDL,
+BUILT_IN_SIN,
+BUILT_IN_SINCOS,
+BUILT_IN_SINCOSF,
+BUILT_IN_SINCOSL,
+BUILT_IN_SINF,
+BUILT_IN_SINH,
+BUILT_IN_SINHF,
+BUILT_IN_SINHL,
+BUILT_IN_SINL,
+BUILT_IN_SQRT,
+BUILT_IN_SQRTF,
+BUILT_IN_SQRTL,
+BUILT_IN_TAN,
+BUILT_IN_TANF,
+BUILT_IN_TANH,
+BUILT_IN_TANHF,
+BUILT_IN_TANHL,
+BUILT_IN_TANL,
+BUILT_IN_TGAMMA,
+BUILT_IN_TGAMMAF,
+BUILT_IN_TGAMMAL,
+BUILT_IN_TRUNC,
+BUILT_IN_TRUNCF,
+BUILT_IN_TRUNCL,
+BUILT_IN_Y0,
+BUILT_IN_Y0F,
+BUILT_IN_Y0L,
+BUILT_IN_Y1,
+BUILT_IN_Y1F,
+BUILT_IN_Y1L,
+BUILT_IN_YN,
+BUILT_IN_YNF,
+BUILT_IN_YNL,
+
+
+BUILT_IN_CABS,
+BUILT_IN_CABSF,
+BUILT_IN_CABSL,
+BUILT_IN_CACOS,
+BUILT_IN_CACOSF,
+BUILT_IN_CACOSH,
+BUILT_IN_CACOSHF,
+BUILT_IN_CACOSHL,
+BUILT_IN_CACOSL,
+BUILT_IN_CARG,
+BUILT_IN_CARGF,
+BUILT_IN_CARGL,
+BUILT_IN_CASIN,
+BUILT_IN_CASINF,
+BUILT_IN_CASINH,
+BUILT_IN_CASINHF,
+BUILT_IN_CASINHL,
+BUILT_IN_CASINL,
+BUILT_IN_CATAN,
+BUILT_IN_CATANF,
+BUILT_IN_CATANH,
+BUILT_IN_CATANHF,
+BUILT_IN_CATANHL,
+BUILT_IN_CATANL,
+BUILT_IN_CCOS,
+BUILT_IN_CCOSF,
+BUILT_IN_CCOSH,
+BUILT_IN_CCOSHF,
+BUILT_IN_CCOSHL,
+BUILT_IN_CCOSL,
+BUILT_IN_CEXP,
+BUILT_IN_CEXPF,
+BUILT_IN_CEXPL,
+BUILT_IN_CEXPI,
+BUILT_IN_CEXPIF,
+BUILT_IN_CEXPIL,
+BUILT_IN_CIMAG,
+BUILT_IN_CIMAGF,
+BUILT_IN_CIMAGL,
+BUILT_IN_CLOG,
+BUILT_IN_CLOGF,
+BUILT_IN_CLOGL,
+BUILT_IN_CLOG10,
+BUILT_IN_CLOG10F,
+BUILT_IN_CLOG10L,
+BUILT_IN_CONJ,
+BUILT_IN_CONJF,
+BUILT_IN_CONJL,
+BUILT_IN_CPOW,
+BUILT_IN_CPOWF,
+BUILT_IN_CPOWL,
+BUILT_IN_CPROJ,
+BUILT_IN_CPROJF,
+BUILT_IN_CPROJL,
+BUILT_IN_CREAL,
+BUILT_IN_CREALF,
+BUILT_IN_CREALL,
+BUILT_IN_CSIN,
+BUILT_IN_CSINF,
+BUILT_IN_CSINH,
+BUILT_IN_CSINHF,
+BUILT_IN_CSINHL,
+BUILT_IN_CSINL,
+BUILT_IN_CSQRT,
+BUILT_IN_CSQRTF,
+BUILT_IN_CSQRTL,
+BUILT_IN_CTAN,
+BUILT_IN_CTANF,
+BUILT_IN_CTANH,
+BUILT_IN_CTANHF,
+BUILT_IN_CTANHL,
+BUILT_IN_CTANL,
+
+
+
+
+BUILT_IN_BCMP,
+BUILT_IN_BCOPY,
+BUILT_IN_BZERO,
+BUILT_IN_INDEX,
+BUILT_IN_MEMCHR,
+BUILT_IN_MEMCMP,
+BUILT_IN_MEMCPY,
+BUILT_IN_MEMMOVE,
+BUILT_IN_MEMPCPY,
+BUILT_IN_MEMSET,
+BUILT_IN_RINDEX,
+BUILT_IN_STPCPY,
+BUILT_IN_STPNCPY,
+BUILT_IN_STRCASECMP,
+BUILT_IN_STRCAT,
+BUILT_IN_STRCHR,
+BUILT_IN_STRCMP,
+BUILT_IN_STRCPY,
+BUILT_IN_STRCSPN,
+BUILT_IN_STRDUP,
+BUILT_IN_STRNDUP,
+BUILT_IN_STRLEN,
+BUILT_IN_STRNCASECMP,
+BUILT_IN_STRNCAT,
+BUILT_IN_STRNCMP,
+BUILT_IN_STRNCPY,
+BUILT_IN_STRPBRK,
+BUILT_IN_STRRCHR,
+BUILT_IN_STRSPN,
+BUILT_IN_STRSTR,
+
+
+BUILT_IN_FPRINTF,
+BUILT_IN_FPRINTF_UNLOCKED,
+BUILT_IN_PUTC,
+BUILT_IN_PUTC_UNLOCKED,
+BUILT_IN_FPUTC,
+BUILT_IN_FPUTC_UNLOCKED,
+BUILT_IN_FPUTS,
+BUILT_IN_FPUTS_UNLOCKED,
+BUILT_IN_FSCANF,
+BUILT_IN_FWRITE,
+BUILT_IN_FWRITE_UNLOCKED,
+BUILT_IN_PRINTF,
+BUILT_IN_PRINTF_UNLOCKED,
+BUILT_IN_PUTCHAR,
+BUILT_IN_PUTCHAR_UNLOCKED,
+BUILT_IN_PUTS,
+BUILT_IN_PUTS_UNLOCKED,
+BUILT_IN_SCANF,
+BUILT_IN_SNPRINTF,
+BUILT_IN_SPRINTF,
+BUILT_IN_SSCANF,
+BUILT_IN_VFPRINTF,
+BUILT_IN_VFSCANF,
+BUILT_IN_VPRINTF,
+BUILT_IN_VSCANF,
+BUILT_IN_VSNPRINTF,
+BUILT_IN_VSPRINTF,
+BUILT_IN_VSSCANF,
+
+
+BUILT_IN_ISALNUM,
+BUILT_IN_ISALPHA,
+BUILT_IN_ISASCII,
+BUILT_IN_ISBLANK,
+BUILT_IN_ISCNTRL,
+BUILT_IN_ISDIGIT,
+BUILT_IN_ISGRAPH,
+BUILT_IN_ISLOWER,
+BUILT_IN_ISPRINT,
+BUILT_IN_ISPUNCT,
+BUILT_IN_ISSPACE,
+BUILT_IN_ISUPPER,
+BUILT_IN_ISXDIGIT,
+BUILT_IN_TOASCII,
+BUILT_IN_TOLOWER,
+BUILT_IN_TOUPPER,
+
+
+BUILT_IN_ISWALNUM,
+BUILT_IN_ISWALPHA,
+BUILT_IN_ISWBLANK,
+BUILT_IN_ISWCNTRL,
+BUILT_IN_ISWDIGIT,
+BUILT_IN_ISWGRAPH,
+BUILT_IN_ISWLOWER,
+BUILT_IN_ISWPRINT,
+BUILT_IN_ISWPUNCT,
+BUILT_IN_ISWSPACE,
+BUILT_IN_ISWUPPER,
+BUILT_IN_ISWXDIGIT,
+BUILT_IN_TOWLOWER,
+BUILT_IN_TOWUPPER,
+
+
+BUILT_IN_ABORT,
+BUILT_IN_ABS,
+BUILT_IN_AGGREGATE_INCOMING_ADDRESS,
+BUILT_IN_ALLOCA,
+BUILT_IN_APPLY,
+BUILT_IN_APPLY_ARGS,
+BUILT_IN_BSWAP32,
+BUILT_IN_BSWAP64,
+BUILT_IN_CLEAR_CACHE,
+BUILT_IN_CALLOC,
+BUILT_IN_CLASSIFY_TYPE,
+BUILT_IN_CLZ,
+BUILT_IN_CLZIMAX,
+BUILT_IN_CLZL,
+BUILT_IN_CLZLL,
+BUILT_IN_CONSTANT_P,
+BUILT_IN_CTZ,
+BUILT_IN_CTZIMAX,
+BUILT_IN_CTZL,
+BUILT_IN_CTZLL,
+BUILT_IN_DCGETTEXT,
+BUILT_IN_DGETTEXT,
+BUILT_IN_DWARF_CFA,
+BUILT_IN_DWARF_SP_COLUMN,
+BUILT_IN_EH_RETURN,
+BUILT_IN_EH_RETURN_DATA_REGNO,
+BUILT_IN_EXECL,
+BUILT_IN_EXECLP,
+BUILT_IN_EXECLE,
+BUILT_IN_EXECV,
+BUILT_IN_EXECVP,
+BUILT_IN_EXECVE,
+BUILT_IN_EXIT,
+BUILT_IN_EXPECT,
+BUILT_IN_EXTEND_POINTER,
+BUILT_IN_EXTRACT_RETURN_ADDR,
+BUILT_IN_FFS,
+BUILT_IN_FFSIMAX,
+BUILT_IN_FFSL,
+BUILT_IN_FFSLL,
+BUILT_IN_FORK,
+BUILT_IN_FRAME_ADDRESS,
+BUILT_IN_FREE,
+BUILT_IN_FROB_RETURN_ADDR,
+BUILT_IN_GETTEXT,
+BUILT_IN_IMAXABS,
+BUILT_IN_INIT_DWARF_REG_SIZES,
+BUILT_IN_FINITE,
+BUILT_IN_FINITEF,
+BUILT_IN_FINITEL,
+BUILT_IN_FINITED32,
+BUILT_IN_FINITED64,
+BUILT_IN_FINITED128,
+BUILT_IN_FPCLASSIFY,
+BUILT_IN_ISFINITE,
+BUILT_IN_ISINF_SIGN,
+BUILT_IN_ISINF,
+BUILT_IN_ISINFF,
+BUILT_IN_ISINFL,
+BUILT_IN_ISINFD32,
+BUILT_IN_ISINFD64,
+BUILT_IN_ISINFD128,
+BUILT_IN_ISNAN,
+BUILT_IN_ISNANF,
+BUILT_IN_ISNANL,
+BUILT_IN_ISNAND32,
+BUILT_IN_ISNAND64,
+BUILT_IN_ISNAND128,
+BUILT_IN_ISNORMAL,
+BUILT_IN_ISGREATER,
+BUILT_IN_ISGREATEREQUAL,
+BUILT_IN_ISLESS,
+BUILT_IN_ISLESSEQUAL,
+BUILT_IN_ISLESSGREATER,
+BUILT_IN_ISUNORDERED,
+BUILT_IN_LABS,
+BUILT_IN_LLABS,
+BUILT_IN_LONGJMP,
+BUILT_IN_MALLOC,
+BUILT_IN_NEXT_ARG,
+BUILT_IN_PARITY,
+BUILT_IN_PARITYIMAX,
+BUILT_IN_PARITYL,
+BUILT_IN_PARITYLL,
+BUILT_IN_POPCOUNT,
+BUILT_IN_POPCOUNTIMAX,
+BUILT_IN_POPCOUNTL,
+BUILT_IN_POPCOUNTLL,
+BUILT_IN_PREFETCH,
+BUILT_IN_REALLOC,
+BUILT_IN_RETURN,
+BUILT_IN_RETURN_ADDRESS,
+BUILT_IN_SAVEREGS,
+BUILT_IN_SETJMP,
+BUILT_IN_STRFMON,
+BUILT_IN_STRFTIME,
+BUILT_IN_TRAP,
+BUILT_IN_UNREACHABLE,
+BUILT_IN_UNWIND_INIT,
+BUILT_IN_UPDATE_SETJMP_BUF,
+BUILT_IN_VA_COPY,
+BUILT_IN_VA_END,
+BUILT_IN_VA_START,
+BUILT_IN_VA_ARG_PACK,
+BUILT_IN_VA_ARG_PACK_LEN,
+BUILT_IN__EXIT,
+BUILT_IN__EXIT2,
+
+
+BUILT_IN_INIT_TRAMPOLINE,
+BUILT_IN_ADJUST_TRAMPOLINE,
+BUILT_IN_NONLOCAL_GOTO,
+
+
+BUILT_IN_SETJMP_SETUP,
+BUILT_IN_SETJMP_DISPATCHER,
+BUILT_IN_SETJMP_RECEIVER,
+
+
+BUILT_IN_STACK_SAVE,
+BUILT_IN_STACK_RESTORE,
+
+
+BUILT_IN_OBJECT_SIZE,
+BUILT_IN_MEMCPY_CHK,
+BUILT_IN_MEMMOVE_CHK,
+BUILT_IN_MEMPCPY_CHK,
+BUILT_IN_MEMSET_CHK,
+BUILT_IN_STPCPY_CHK,
+BUILT_IN_STRCAT_CHK,
+BUILT_IN_STRCPY_CHK,
+BUILT_IN_STRNCAT_CHK,
+BUILT_IN_STRNCPY_CHK,
+BUILT_IN_SNPRINTF_CHK,
+BUILT_IN_SPRINTF_CHK,
+BUILT_IN_VSNPRINTF_CHK,
+BUILT_IN_VSPRINTF_CHK,
+BUILT_IN_FPRINTF_CHK,
+BUILT_IN_PRINTF_CHK,
+BUILT_IN_VFPRINTF_CHK,
+BUILT_IN_VPRINTF_CHK,
+
+
+BUILT_IN_PROFILE_FUNC_ENTER,
+
+BUILT_IN_PROFILE_FUNC_EXIT,
+
+
+
+BUILT_IN_EMUTLS_GET_ADDRESS,
+
+
+
+
+BUILT_IN_EMUTLS_REGISTER_COMMON,
+
+
+
+
+
+
+BUILT_IN_UNWIND_RESUME,
+BUILT_IN_CXA_END_CLEANUP,
+BUILT_IN_EH_POINTER,
+BUILT_IN_EH_FILTER,
+BUILT_IN_EH_COPY_VALUES,
+
+
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/sync-builtins.def" 1
+# 31 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/sync-builtins.def"
+BUILT_IN_FETCH_AND_ADD_N,
+
+BUILT_IN_FETCH_AND_ADD_1,
+
+BUILT_IN_FETCH_AND_ADD_2,
+
+BUILT_IN_FETCH_AND_ADD_4,
+
+BUILT_IN_FETCH_AND_ADD_8,
+
+BUILT_IN_FETCH_AND_ADD_16,
+
+
+BUILT_IN_FETCH_AND_SUB_N,
+
+BUILT_IN_FETCH_AND_SUB_1,
+
+BUILT_IN_FETCH_AND_SUB_2,
+
+BUILT_IN_FETCH_AND_SUB_4,
+
+BUILT_IN_FETCH_AND_SUB_8,
+
+BUILT_IN_FETCH_AND_SUB_16,
+
+
+BUILT_IN_FETCH_AND_OR_N,
+
+BUILT_IN_FETCH_AND_OR_1,
+
+BUILT_IN_FETCH_AND_OR_2,
+
+BUILT_IN_FETCH_AND_OR_4,
+
+BUILT_IN_FETCH_AND_OR_8,
+
+BUILT_IN_FETCH_AND_OR_16,
+
+
+BUILT_IN_FETCH_AND_AND_N,
+
+BUILT_IN_FETCH_AND_AND_1,
+
+BUILT_IN_FETCH_AND_AND_2,
+
+BUILT_IN_FETCH_AND_AND_4,
+
+BUILT_IN_FETCH_AND_AND_8,
+
+BUILT_IN_FETCH_AND_AND_16,
+
+
+BUILT_IN_FETCH_AND_XOR_N,
+
+BUILT_IN_FETCH_AND_XOR_1,
+
+BUILT_IN_FETCH_AND_XOR_2,
+
+BUILT_IN_FETCH_AND_XOR_4,
+
+BUILT_IN_FETCH_AND_XOR_8,
+
+BUILT_IN_FETCH_AND_XOR_16,
+
+
+BUILT_IN_FETCH_AND_NAND_N,
+
+BUILT_IN_FETCH_AND_NAND_1,
+
+BUILT_IN_FETCH_AND_NAND_2,
+
+BUILT_IN_FETCH_AND_NAND_4,
+
+BUILT_IN_FETCH_AND_NAND_8,
+
+BUILT_IN_FETCH_AND_NAND_16,
+
+
+BUILT_IN_ADD_AND_FETCH_N,
+
+BUILT_IN_ADD_AND_FETCH_1,
+
+BUILT_IN_ADD_AND_FETCH_2,
+
+BUILT_IN_ADD_AND_FETCH_4,
+
+BUILT_IN_ADD_AND_FETCH_8,
+
+BUILT_IN_ADD_AND_FETCH_16,
+
+
+BUILT_IN_SUB_AND_FETCH_N,
+
+BUILT_IN_SUB_AND_FETCH_1,
+
+BUILT_IN_SUB_AND_FETCH_2,
+
+BUILT_IN_SUB_AND_FETCH_4,
+
+BUILT_IN_SUB_AND_FETCH_8,
+
+BUILT_IN_SUB_AND_FETCH_16,
+
+
+BUILT_IN_OR_AND_FETCH_N,
+
+BUILT_IN_OR_AND_FETCH_1,
+
+BUILT_IN_OR_AND_FETCH_2,
+
+BUILT_IN_OR_AND_FETCH_4,
+
+BUILT_IN_OR_AND_FETCH_8,
+
+BUILT_IN_OR_AND_FETCH_16,
+
+
+BUILT_IN_AND_AND_FETCH_N,
+
+BUILT_IN_AND_AND_FETCH_1,
+
+BUILT_IN_AND_AND_FETCH_2,
+
+BUILT_IN_AND_AND_FETCH_4,
+
+BUILT_IN_AND_AND_FETCH_8,
+
+BUILT_IN_AND_AND_FETCH_16,
+
+
+BUILT_IN_XOR_AND_FETCH_N,
+
+BUILT_IN_XOR_AND_FETCH_1,
+
+BUILT_IN_XOR_AND_FETCH_2,
+
+BUILT_IN_XOR_AND_FETCH_4,
+
+BUILT_IN_XOR_AND_FETCH_8,
+
+BUILT_IN_XOR_AND_FETCH_16,
+
+
+BUILT_IN_NAND_AND_FETCH_N,
+
+BUILT_IN_NAND_AND_FETCH_1,
+
+BUILT_IN_NAND_AND_FETCH_2,
+
+BUILT_IN_NAND_AND_FETCH_4,
+
+BUILT_IN_NAND_AND_FETCH_8,
+
+BUILT_IN_NAND_AND_FETCH_16,
+
+
+BUILT_IN_BOOL_COMPARE_AND_SWAP_N,
+
+
+BUILT_IN_BOOL_COMPARE_AND_SWAP_1,
+
+
+BUILT_IN_BOOL_COMPARE_AND_SWAP_2,
+
+
+BUILT_IN_BOOL_COMPARE_AND_SWAP_4,
+
+
+BUILT_IN_BOOL_COMPARE_AND_SWAP_8,
+
+
+BUILT_IN_BOOL_COMPARE_AND_SWAP_16,
+
+
+
+BUILT_IN_VAL_COMPARE_AND_SWAP_N,
+
+
+BUILT_IN_VAL_COMPARE_AND_SWAP_1,
+
+
+BUILT_IN_VAL_COMPARE_AND_SWAP_2,
+
+
+BUILT_IN_VAL_COMPARE_AND_SWAP_4,
+
+
+BUILT_IN_VAL_COMPARE_AND_SWAP_8,
+
+
+BUILT_IN_VAL_COMPARE_AND_SWAP_16,
+
+
+
+BUILT_IN_LOCK_TEST_AND_SET_N,
+
+BUILT_IN_LOCK_TEST_AND_SET_1,
+
+BUILT_IN_LOCK_TEST_AND_SET_2,
+
+BUILT_IN_LOCK_TEST_AND_SET_4,
+
+BUILT_IN_LOCK_TEST_AND_SET_8,
+
+BUILT_IN_LOCK_TEST_AND_SET_16,
+
+
+BUILT_IN_LOCK_RELEASE_N,
+
+BUILT_IN_LOCK_RELEASE_1,
+
+BUILT_IN_LOCK_RELEASE_2,
+
+BUILT_IN_LOCK_RELEASE_4,
+
+BUILT_IN_LOCK_RELEASE_8,
+
+BUILT_IN_LOCK_RELEASE_16,
+
+
+BUILT_IN_SYNCHRONIZE,
+# 772 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/builtins.def" 2
+
+
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/omp-builtins.def" 1
+# 27 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/omp-builtins.def"
+BUILT_IN_OMP_GET_THREAD_NUM,
+
+BUILT_IN_OMP_GET_NUM_THREADS,
+
+
+BUILT_IN_GOMP_ATOMIC_START,
+
+BUILT_IN_GOMP_ATOMIC_END,
+
+BUILT_IN_GOMP_BARRIER,
+
+BUILT_IN_GOMP_TASKWAIT,
+
+BUILT_IN_GOMP_CRITICAL_START,
+
+BUILT_IN_GOMP_CRITICAL_END,
+
+BUILT_IN_GOMP_CRITICAL_NAME_START,
+
+
+BUILT_IN_GOMP_CRITICAL_NAME_END,
+
+
+
+
+
+BUILT_IN_GOMP_LOOP_STATIC_START,
+
+
+
+BUILT_IN_GOMP_LOOP_DYNAMIC_START,
+
+
+
+BUILT_IN_GOMP_LOOP_GUIDED_START,
+
+
+
+BUILT_IN_GOMP_LOOP_RUNTIME_START,
+
+
+
+BUILT_IN_GOMP_LOOP_ORDERED_STATIC_START,
+
+
+
+BUILT_IN_GOMP_LOOP_ORDERED_DYNAMIC_START,
+
+
+
+BUILT_IN_GOMP_LOOP_ORDERED_GUIDED_START,
+
+
+
+BUILT_IN_GOMP_LOOP_ORDERED_RUNTIME_START,
+
+
+
+BUILT_IN_GOMP_LOOP_STATIC_NEXT,
+
+BUILT_IN_GOMP_LOOP_DYNAMIC_NEXT,
+
+BUILT_IN_GOMP_LOOP_GUIDED_NEXT,
+
+BUILT_IN_GOMP_LOOP_RUNTIME_NEXT,
+
+BUILT_IN_GOMP_LOOP_ORDERED_STATIC_NEXT,
+
+
+BUILT_IN_GOMP_LOOP_ORDERED_DYNAMIC_NEXT,
+
+
+BUILT_IN_GOMP_LOOP_ORDERED_GUIDED_NEXT,
+
+
+BUILT_IN_GOMP_LOOP_ORDERED_RUNTIME_NEXT,
+
+
+BUILT_IN_GOMP_LOOP_ULL_STATIC_START,
+
+
+
+BUILT_IN_GOMP_LOOP_ULL_DYNAMIC_START,
+
+
+
+BUILT_IN_GOMP_LOOP_ULL_GUIDED_START,
+
+
+
+BUILT_IN_GOMP_LOOP_ULL_RUNTIME_START,
+
+
+
+BUILT_IN_GOMP_LOOP_ULL_ORDERED_STATIC_START,
+
+
+
+BUILT_IN_GOMP_LOOP_ULL_ORDERED_DYNAMIC_START,
+
+
+
+BUILT_IN_GOMP_LOOP_ULL_ORDERED_GUIDED_START,
+
+
+
+BUILT_IN_GOMP_LOOP_ULL_ORDERED_RUNTIME_START,
+
+
+
+BUILT_IN_GOMP_LOOP_ULL_STATIC_NEXT,
+
+BUILT_IN_GOMP_LOOP_ULL_DYNAMIC_NEXT,
+
+BUILT_IN_GOMP_LOOP_ULL_GUIDED_NEXT,
+
+BUILT_IN_GOMP_LOOP_ULL_RUNTIME_NEXT,
+
+BUILT_IN_GOMP_LOOP_ULL_ORDERED_STATIC_NEXT,
+
+
+BUILT_IN_GOMP_LOOP_ULL_ORDERED_DYNAMIC_NEXT,
+
+
+BUILT_IN_GOMP_LOOP_ULL_ORDERED_GUIDED_NEXT,
+
+
+BUILT_IN_GOMP_LOOP_ULL_ORDERED_RUNTIME_NEXT,
+
+
+
+
+
+BUILT_IN_GOMP_PARALLEL_LOOP_STATIC_START,
+
+
+
+BUILT_IN_GOMP_PARALLEL_LOOP_DYNAMIC_START,
+
+
+
+BUILT_IN_GOMP_PARALLEL_LOOP_GUIDED_START,
+
+
+
+BUILT_IN_GOMP_PARALLEL_LOOP_RUNTIME_START,
+
+
+
+BUILT_IN_GOMP_LOOP_END,
+
+BUILT_IN_GOMP_LOOP_END_NOWAIT,
+
+BUILT_IN_GOMP_ORDERED_START,
+
+BUILT_IN_GOMP_ORDERED_END,
+
+BUILT_IN_GOMP_PARALLEL_START,
+
+BUILT_IN_GOMP_PARALLEL_END,
+
+BUILT_IN_GOMP_TASK,
+
+
+BUILT_IN_GOMP_SECTIONS_START,
+
+BUILT_IN_GOMP_SECTIONS_NEXT,
+
+BUILT_IN_GOMP_PARALLEL_SECTIONS_START,
+
+
+BUILT_IN_GOMP_SECTIONS_END,
+
+BUILT_IN_GOMP_SECTIONS_END_NOWAIT,
+
+
+BUILT_IN_GOMP_SINGLE_START,
+
+BUILT_IN_GOMP_SINGLE_COPY_START,
+
+BUILT_IN_GOMP_SINGLE_COPY_END,
+# 774 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/builtins.def" 2
+# 230 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
+
+
+
+  BUILT_IN_COMPLEX_MUL_MIN,
+  BUILT_IN_COMPLEX_MUL_MAX
+    = BUILT_IN_COMPLEX_MUL_MIN
+      + MAX_MODE_COMPLEX_FLOAT
+      - MIN_MODE_COMPLEX_FLOAT,
+
+  BUILT_IN_COMPLEX_DIV_MIN,
+  BUILT_IN_COMPLEX_DIV_MAX
+    = BUILT_IN_COMPLEX_DIV_MIN
+      + MAX_MODE_COMPLEX_FLOAT
+      - MIN_MODE_COMPLEX_FLOAT,
+
+
+  END_BUILTINS
+};
+
+
+
+extern const char * built_in_names[(int) END_BUILTINS];
+# 276 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern tree built_in_decls[(int) END_BUILTINS];
+extern tree implicit_built_in_decls[(int) END_BUILTINS];
+
+
+
+
+extern unsigned const char omp_clause_num_ops[];
+extern const char * const omp_clause_code_name[];
+
+
+
+enum omp_clause_code
+{
+
+
+  OMP_CLAUSE_ERROR = 0,
+
+
+  OMP_CLAUSE_PRIVATE,
+
+
+  OMP_CLAUSE_SHARED,
+
+
+  OMP_CLAUSE_FIRSTPRIVATE,
+
+
+  OMP_CLAUSE_LASTPRIVATE,
+# 312 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+  OMP_CLAUSE_REDUCTION,
+
+
+  OMP_CLAUSE_COPYIN,
+
+
+  OMP_CLAUSE_COPYPRIVATE,
+
+
+  OMP_CLAUSE_IF,
+
+
+  OMP_CLAUSE_NUM_THREADS,
+
+
+  OMP_CLAUSE_SCHEDULE,
+
+
+  OMP_CLAUSE_NOWAIT,
+
+
+  OMP_CLAUSE_ORDERED,
+
+
+  OMP_CLAUSE_DEFAULT,
+
+
+  OMP_CLAUSE_COLLAPSE,
+
+
+  OMP_CLAUSE_UNTIED
+};
+# 367 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct tree_base {
+  __extension__ enum tree_code code : 16;
+
+  unsigned side_effects_flag : 1;
+  unsigned constant_flag : 1;
+  unsigned addressable_flag : 1;
+  unsigned volatile_flag : 1;
+  unsigned readonly_flag : 1;
+  unsigned unsigned_flag : 1;
+  unsigned asm_written_flag: 1;
+  unsigned nowarning_flag : 1;
+
+  unsigned used_flag : 1;
+  unsigned nothrow_flag : 1;
+  unsigned static_flag : 1;
+  unsigned public_flag : 1;
+  unsigned private_flag : 1;
+  unsigned protected_flag : 1;
+  unsigned deprecated_flag : 1;
+  unsigned saturating_flag : 1;
+
+  unsigned default_def_flag : 1;
+  unsigned lang_flag_0 : 1;
+  unsigned lang_flag_1 : 1;
+  unsigned lang_flag_2 : 1;
+  unsigned lang_flag_3 : 1;
+  unsigned lang_flag_4 : 1;
+  unsigned lang_flag_5 : 1;
+  unsigned lang_flag_6 : 1;
+
+  unsigned visited : 1;
+  unsigned packed_flag : 1;
+  unsigned user_align : 1;
+  unsigned nameless_flag : 1;
+
+  unsigned spare : 12;
+
+
+
+
+  unsigned address_space : 8;
+};
+
+struct tree_common {
+  struct tree_base base;
+  tree chain;
+  tree type;
+};
+# 645 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+enum tree_node_structure_enum {
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/treestruct.def" 1
+# 33 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/treestruct.def"
+TS_BASE,
+TS_COMMON,
+TS_INT_CST,
+TS_REAL_CST,
+TS_FIXED_CST,
+TS_VECTOR,
+TS_STRING,
+TS_COMPLEX,
+TS_IDENTIFIER,
+TS_DECL_MINIMAL,
+TS_DECL_COMMON,
+TS_DECL_WRTL,
+TS_DECL_NON_COMMON,
+TS_DECL_WITH_VIS,
+TS_FIELD_DECL,
+TS_VAR_DECL,
+TS_PARM_DECL,
+TS_LABEL_DECL,
+TS_RESULT_DECL,
+TS_CONST_DECL,
+TS_TYPE_DECL,
+TS_FUNCTION_DECL,
+TS_TRANSLATION_UNIT_DECL,
+TS_TYPE,
+TS_LIST,
+TS_VEC,
+TS_EXP,
+TS_SSA_NAME,
+TS_BLOCK,
+TS_BINFO,
+TS_STATEMENT_LIST,
+TS_CONSTRUCTOR,
+TS_OMP_CLAUSE,
+TS_OPTIMIZATION,
+TS_TARGET_OPTION,
+# 647 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
+  LAST_TS_ENUM
+};
+# 945 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree-check.h" 1
+# 946 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
+# 1409 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct tree_int_cst {
+  struct tree_common common;
+  double_int int_cst;
+};
+
+
+
+
+struct real_value;
+
+
+
+
+struct tree_real_cst {
+  struct tree_common common;
+  struct real_value * real_cst_ptr;
+};
+
+
+struct fixed_value;
+
+
+
+
+
+struct tree_fixed_cst {
+  struct tree_common common;
+  struct fixed_value * fixed_cst_ptr;
+};
+
+
+
+
+
+
+struct tree_string {
+  struct tree_common common;
+  int length;
+  char str[1];
+};
+
+
+
+
+
+struct tree_complex {
+  struct tree_common common;
+  tree real;
+  tree imag;
+};
+
+
+
+
+struct tree_vector {
+  struct tree_common common;
+  tree elements;
+};
+
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/symtab.h" 1
+# 30 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/symtab.h"
+typedef struct ht_identifier ht_identifier;
+typedef struct ht_identifier *ht_identifier_ptr;
+struct ht_identifier {
+  const unsigned char *str;
+  unsigned int len;
+  unsigned int hash_value;
+};
+
+
+
+
+typedef struct ht hash_table;
+typedef struct ht_identifier *hashnode;
+
+enum ht_lookup_option {HT_NO_INSERT = 0, HT_ALLOC};
+
+
+struct ht
+{
+
+  struct obstack stack;
+
+  hashnode *entries;
+
+  hashnode (*alloc_node) (hash_table *);
+
+
+  void * (*alloc_subobject) (size_t);
+
+  unsigned int nslots;
+  unsigned int nelements;
+
+
+  struct cpp_reader *pfile;
+
+
+  unsigned int searches;
+  unsigned int collisions;
+
+
+  unsigned char entries_owned;
+};
+
+
+extern hash_table *ht_create (unsigned int order);
+
+
+extern void ht_destroy (hash_table *);
+
+extern hashnode ht_lookup (hash_table *, const unsigned char *,
+      size_t, enum ht_lookup_option);
+extern hashnode ht_lookup_with_hash (hash_table *, const unsigned char *,
+                                     size_t, unsigned int,
+                                     enum ht_lookup_option);
+
+
+
+
+
+
+typedef int (*ht_cb) (struct cpp_reader *, hashnode, const void *);
+extern void ht_forall (hash_table *, ht_cb, const void *);
+
+
+
+extern void ht_purge (hash_table *, ht_cb, const void *);
+
+
+extern void ht_load (hash_table *ht, hashnode *entries,
+       unsigned int nslots, unsigned int nelements, unsigned char own);
+
+
+extern void ht_dump_statistics (hash_table *);
+# 1469 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
+# 1486 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct tree_identifier {
+  struct tree_common common;
+  struct ht_identifier id;
+};
+
+
+
+
+
+struct tree_list {
+  struct tree_common common;
+  tree purpose;
+  tree value;
+};
+# 1508 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct tree_vec {
+  struct tree_common common;
+  int length;
+  tree a[1];
+};
+# 1559 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+typedef struct constructor_elt_d {
+  tree index;
+  tree value;
+} constructor_elt;
+
+typedef struct VEC_constructor_elt_base { unsigned num; unsigned alloc; constructor_elt vec[1]; } VEC_constructor_elt_base; typedef struct VEC_constructor_elt_none { VEC_constructor_elt_base base; } VEC_constructor_elt_none; static __inline__ unsigned VEC_constructor_elt_base_length (const VEC_constructor_elt_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ constructor_elt *VEC_constructor_elt_base_last (VEC_constructor_elt_base *vec_ ) { (void)(vec_ && vec_->num); return &vec_->vec[vec_->num - 1]; } static __inline__ constructor_elt *VEC_constructor_elt_base_index (VEC_constructor_elt_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return &vec_->vec[ix_]; } static __inline__ int VEC_constructor_elt_base_iterate (VEC_constructor_elt_base *vec_, unsigned ix_, constructor_elt **ptr) { if (vec_ && ix_ < vec_->num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static __inline__ size_t VEC_constructor_elt_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_constructor_elt_base, vec) + alloc_ * sizeof(constructor_elt); } static __inline__ void VEC_constructor_elt_base_embedded_init (VEC_constructor_elt_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_constructor_elt_base_space (VEC_constructor_elt_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_constructor_elt_base_splice (VEC_constructor_elt_base *dst_, VEC_constructor_elt_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (constructor_elt)); dst_->num += len_; } } static __inline__ constructor_elt *VEC_constructor_elt_base_quick_push (VEC_constructor_elt_base *vec_, const constructor_elt *obj_ ) { constructor_elt *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_constructor_elt_base_pop (VEC_constructor_elt_base *vec_ ) { (void)(vec_->num); --vec_->num; } static __inline__ void VEC_constructor_elt_base_truncate (VEC_constructor_elt_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ constructor_elt *VEC_constructor_elt_base_replace (VEC_constructor_elt_base *vec_, unsigned ix_, const constructor_elt *obj_ ) { constructor_elt *slot_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ constructor_elt *VEC_constructor_elt_base_quick_insert (VEC_constructor_elt_base *vec_, unsigned ix_, const constructor_elt *obj_ ) { constructor_elt *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (constructor_elt)); if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_constructor_elt_base_ordered_remove (VEC_constructor_elt_base *vec_, unsigned ix_ ) { constructor_elt *slot_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (constructor_elt)); } static __inline__ void VEC_constructor_elt_base_unordered_remove (VEC_constructor_elt_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->num); vec_->vec[ix_] = vec_->vec[--vec_->num]; } static __inline__ void VEC_constructor_elt_base_block_remove (VEC_constructor_elt_base *vec_, unsigned ix_, unsigned len_ ) { constructor_elt *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (constructor_elt)); } static __inline__ constructor_elt *VEC_constructor_elt_base_address (VEC_constructor_elt_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_constructor_elt_base_lower_bound (VEC_constructor_elt_base *vec_, const constructor_elt *obj_, unsigned char (*lessthan_)(const constructor_elt *, const constructor_elt *) ) { unsigned int len_ = VEC_constructor_elt_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { constructor_elt *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_constructor_elt_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_constructor_elt_gc { VEC_constructor_elt_base base; } VEC_constructor_elt_gc; static __inline__ VEC_constructor_elt_gc *VEC_constructor_elt_gc_alloc (int alloc_ ) { return (VEC_constructor_elt_gc *) vec_gc_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) ); } static __inline__ VEC_constructor_elt_gc *VEC_constructor_elt_gc_copy (VEC_constructor_elt_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_constructor_elt_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_constructor_elt_gc *)(vec_gc_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (constructor_elt) * len_); } return new_vec_; } static __inline__ void VEC_constructor_elt_gc_free (VEC_constructor_elt_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_constructor_elt_gc_reserve (VEC_constructor_elt_gc **vec_, int alloc_ ) { int extend = !VEC_constructor_elt_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_constructor_elt_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) ); return extend; } static __inline__ int VEC_constructor_elt_gc_reserve_exact (VEC_constructor_elt_gc **vec_, int alloc_ ) { int extend = !VEC_constructor_elt_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_constructor_elt_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) ); return extend; } static __inline__ void VEC_constructor_elt_gc_safe_grow (VEC_constructor_elt_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_constructor_elt_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_constructor_elt_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_constructor_elt_gc_safe_grow_cleared (VEC_constructor_elt_gc **vec_, int size_ ) { int oldsize = VEC_constructor_elt_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_constructor_elt_gc_safe_grow (vec_, size_ ); memset (&(VEC_constructor_elt_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (constructor_elt) * (size_ - oldsize)); } static __inline__ void VEC_constructor_elt_gc_safe_splice (VEC_constructor_elt_gc **dst_, VEC_constructor_elt_base *src_ ) { if (src_) { VEC_constructor_elt_gc_reserve_exact (dst_, src_->num ); VEC_constructor_elt_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ constructor_elt *VEC_constructor_elt_gc_safe_push (VEC_constructor_elt_gc **vec_, const constructor_elt *obj_ ) { VEC_constructor_elt_gc_reserve (vec_, 1 ); return VEC_constructor_elt_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ constructor_elt *VEC_constructor_elt_gc_safe_insert (VEC_constructor_elt_gc **vec_, unsigned ix_, const constructor_elt *obj_ ) { VEC_constructor_elt_gc_reserve (vec_, 1 ); return VEC_constructor_elt_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+struct tree_constructor {
+  struct tree_common common;
+  VEC_constructor_elt_gc *elts;
+};
+# 1612 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern void protected_set_expr_location (tree, location_t);
+# 1833 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+enum omp_clause_schedule_kind
+{
+  OMP_CLAUSE_SCHEDULE_STATIC,
+  OMP_CLAUSE_SCHEDULE_DYNAMIC,
+  OMP_CLAUSE_SCHEDULE_GUIDED,
+  OMP_CLAUSE_SCHEDULE_AUTO,
+  OMP_CLAUSE_SCHEDULE_RUNTIME
+};
+
+
+
+
+enum omp_clause_default_kind
+{
+  OMP_CLAUSE_DEFAULT_UNSPECIFIED,
+  OMP_CLAUSE_DEFAULT_SHARED,
+  OMP_CLAUSE_DEFAULT_NONE,
+  OMP_CLAUSE_DEFAULT_PRIVATE,
+  OMP_CLAUSE_DEFAULT_FIRSTPRIVATE
+};
+
+
+
+
+struct tree_exp {
+  struct tree_common common;
+  location_t locus;
+  tree block;
+  tree
+
+    operands[1];
+};
+# 1904 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct ptr_info_def;
+
+
+
+typedef struct ssa_use_operand_d {
+  struct ssa_use_operand_d* prev;
+  struct ssa_use_operand_d* next;
+
+
+
+
+
+  union { gimple stmt; tree ssa_name; } loc;
+  tree * use;
+} ssa_use_operand_t;
+
+
+
+
+struct tree_ssa_name {
+  struct tree_common common;
+
+
+  tree var;
+
+
+  gimple def_stmt;
+
+
+  unsigned int version;
+
+
+  struct ptr_info_def *ptr_info;
+
+
+  struct ssa_use_operand_d imm_uses;
+};
+
+struct phi_arg_d {
+
+
+  struct ssa_use_operand_d imm_use;
+  tree def;
+  location_t locus;
+};
+# 1963 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct tree_omp_clause {
+  struct tree_common common;
+  location_t locus;
+  enum omp_clause_code code;
+  union omp_clause_subcode {
+    enum omp_clause_default_kind default_kind;
+    enum omp_clause_schedule_kind schedule_kind;
+    enum tree_code reduction_code;
+  } subcode;
+
+
+
+  gimple_seq gimple_reduction_init;
+  gimple_seq gimple_reduction_merge;
+
+  tree ops[1];
+};
+# 2034 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct tree_block {
+  struct tree_common common;
+
+  unsigned abstract_flag : 1;
+  unsigned block_num : 31;
+
+  location_t locus;
+
+  tree vars;
+  VEC_tree_gc *nonlocalized_vars;
+
+  tree subblocks;
+  tree supercontext;
+  tree abstract_origin;
+  tree fragment_origin;
+  tree fragment_chain;
+};
+# 2090 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern enum machine_mode vector_type_mode (const_tree);
+# 2330 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct die_struct;
+
+struct tree_type {
+  struct tree_common common;
+  tree values;
+  tree size;
+  tree size_unit;
+  tree attributes;
+  unsigned int uid;
+
+  unsigned int precision : 10;
+  unsigned no_force_blk_flag : 1;
+  unsigned needs_constructing_flag : 1;
+  unsigned transparent_aggr_flag : 1;
+  unsigned restrict_flag : 1;
+  unsigned contains_placeholder_bits : 2;
+
+  __extension__ enum machine_mode mode : 8;
+
+  unsigned string_flag : 1;
+  unsigned lang_flag_0 : 1;
+  unsigned lang_flag_1 : 1;
+  unsigned lang_flag_2 : 1;
+  unsigned lang_flag_3 : 1;
+  unsigned lang_flag_4 : 1;
+  unsigned lang_flag_5 : 1;
+  unsigned lang_flag_6 : 1;
+
+  unsigned int align;
+  alias_set_type alias_set;
+  tree pointer_to;
+  tree reference_to;
+  union tree_type_symtab {
+    int address;
+    const char * pointer;
+    struct die_struct * die;
+  } symtab;
+  tree name;
+  tree minval;
+  tree maxval;
+  tree next_variant;
+  tree main_variant;
+  tree binfo;
+  tree context;
+  tree canonical;
+
+  struct lang_type *lang_specific;
+};
+# 2482 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct tree_binfo {
+  struct tree_common common;
+
+  tree offset;
+  tree vtable;
+  tree virtuals;
+  tree vptr_field;
+  VEC_tree_gc *base_accesses;
+  tree inheritance;
+
+  tree vtt_subvtt;
+  tree vtt_vptr;
+
+  VEC_tree_none base_binfos;
+};
+# 2526 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct function;
+# 2579 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct tree_decl_minimal {
+  struct tree_common common;
+  location_t locus;
+  unsigned int uid;
+  tree name;
+  tree context;
+};
+# 2747 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct tree_decl_common {
+  struct tree_decl_minimal common;
+  tree size;
+
+  __extension__ enum machine_mode mode : 8;
+
+  unsigned nonlocal_flag : 1;
+  unsigned virtual_flag : 1;
+  unsigned ignored_flag : 1;
+  unsigned abstract_flag : 1;
+  unsigned artificial_flag : 1;
+  unsigned preserve_flag: 1;
+  unsigned debug_expr_is_from : 1;
+
+  unsigned lang_flag_0 : 1;
+  unsigned lang_flag_1 : 1;
+  unsigned lang_flag_2 : 1;
+  unsigned lang_flag_3 : 1;
+  unsigned lang_flag_4 : 1;
+  unsigned lang_flag_5 : 1;
+  unsigned lang_flag_6 : 1;
+  unsigned lang_flag_7 : 1;
+  unsigned lang_flag_8 : 1;
+
+
+
+  unsigned decl_flag_0 : 1;
+
+
+
+  unsigned decl_flag_1 : 1;
+
+
+
+  unsigned decl_flag_2 : 1;
+
+
+  unsigned gimple_reg_flag : 1;
+
+  unsigned decl_by_reference_flag : 1;
+
+  unsigned decl_restricted_flag : 1;
+
+
+
+  unsigned decl_read_flag : 1;
+
+
+
+  unsigned decl_nonshareable_flag : 1;
+
+
+  unsigned int off_align : 8;
+
+
+
+
+  unsigned int align;
+
+
+  unsigned int pt_uid;
+
+  tree size_unit;
+  tree initial;
+  tree attributes;
+  tree abstract_origin;
+
+
+  struct lang_decl *lang_specific;
+};
+
+extern tree decl_value_expr_lookup (tree);
+extern void decl_value_expr_insert (tree, tree);
+# 2863 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct tree_decl_with_rtl {
+  struct tree_decl_common common;
+  rtx rtl;
+};
+# 2931 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct tree_field_decl {
+  struct tree_decl_common common;
+
+  tree offset;
+  tree bit_field_type;
+  tree qualifier;
+  tree bit_offset;
+  tree fcontext;
+};
+# 2957 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct tree_label_decl {
+  struct tree_decl_with_rtl common;
+  int label_decl_uid;
+  int eh_landing_pad_nr;
+};
+
+struct var_ann_d;
+struct tree_result_decl {
+  struct tree_decl_with_rtl common;
+  struct var_ann_d *ann;
+};
+
+struct tree_const_decl {
+  struct tree_decl_with_rtl common;
+};
+# 2982 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct tree_parm_decl {
+  struct tree_decl_with_rtl common;
+  rtx incoming_rtl;
+  struct var_ann_d *ann;
+};
+# 3121 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct tree_decl_with_vis {
+ struct tree_decl_with_rtl common;
+ tree assembler_name;
+ tree section_name;
+ tree comdat_group;
+
+
+ unsigned defer_output : 1;
+ unsigned hard_register : 1;
+ unsigned thread_local : 1;
+ unsigned common_flag : 1;
+ unsigned in_text_section : 1;
+ unsigned in_constant_pool : 1;
+ unsigned dllimport_flag : 1;
+
+ unsigned weak_flag : 1;
+
+ unsigned seen_in_bind_expr : 1;
+ unsigned comdat_flag : 1;
+ __extension__ enum symbol_visibility visibility : 2;
+ unsigned visibility_specified : 1;
+
+ __extension__ enum tls_model tls_model : 3;
+
+
+ unsigned init_priority_p : 1;
+
+ unsigned shadowed_for_var_p : 1;
+
+ unsigned implicit_section_name_p : 1;
+
+};
+
+extern tree decl_debug_expr_lookup (tree);
+extern void decl_debug_expr_insert (tree, tree);
+# 3166 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+typedef unsigned short priority_type;
+
+extern priority_type decl_init_priority_lookup (tree);
+extern priority_type decl_fini_priority_lookup (tree);
+extern void decl_init_priority_insert (tree, priority_type);
+extern void decl_fini_priority_insert (tree, priority_type);
+# 3205 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct tree_var_decl {
+  struct tree_decl_with_vis common;
+  struct var_ann_d *ann;
+};
+# 3227 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct
+ tree_decl_non_common {
+  struct tree_decl_with_vis common;
+
+  tree saved_tree;
+
+  tree arguments;
+
+  tree result;
+
+  tree vindex;
+};
+# 3369 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct tree_function_decl {
+  struct tree_decl_non_common common;
+
+  struct function *f;
+
+
+  tree personality;
+
+
+  tree function_specific_target;
+  tree function_specific_optimization;
+
+
+
+
+
+  __extension__ enum built_in_function function_code : 11;
+  __extension__ enum built_in_class built_in_class : 2;
+
+  unsigned static_ctor_flag : 1;
+  unsigned static_dtor_flag : 1;
+  unsigned uninlinable : 1;
+
+  unsigned possibly_inlined : 1;
+  unsigned novops_flag : 1;
+  unsigned returns_twice_flag : 1;
+  unsigned malloc_flag : 1;
+  unsigned operator_new_flag : 1;
+  unsigned declared_inline_flag : 1;
+  unsigned regdecl_flag : 1;
+
+  unsigned no_inline_warning_flag : 1;
+  unsigned no_instrument_function_entry_exit : 1;
+  unsigned no_limit_stack : 1;
+  unsigned disregard_inline_limits : 1;
+  unsigned pure_flag : 1;
+  unsigned looping_const_or_pure_flag : 1;
+
+
+
+};
+
+
+
+
+
+
+
+struct tree_translation_unit_decl {
+  struct tree_decl_common common;
+
+  const char * language;
+
+
+};
+
+
+extern VEC_tree_gc *all_translation_units;
+# 3443 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct tree_type_decl {
+  struct tree_decl_non_common common;
+
+};
+# 3459 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+struct tree_statement_list_node
+ {
+  struct tree_statement_list_node *prev;
+  struct tree_statement_list_node *next;
+  tree stmt;
+};
+
+struct tree_statement_list
+ {
+  struct tree_common common;
+  struct tree_statement_list_node *head;
+  struct tree_statement_list_node *tail;
+};
+
+
+
+
+struct tree_optimization_option {
+  struct tree_common common;
+
+
+  struct cl_optimization opts;
+};
+
+
+
+
+
+extern tree build_optimization_node (void);
+
+
+
+struct tree_target_option {
+  struct tree_common common;
+
+
+  struct cl_target_option opts;
+};
+
+
+
+
+
+extern tree build_target_option_node (void);
+
+
+
+
+
+
+union
+                                                         tree_node {
+  struct tree_base base;
+  struct tree_common common;
+  struct tree_int_cst int_cst;
+  struct tree_real_cst real_cst;
+  struct tree_fixed_cst fixed_cst;
+  struct tree_vector vector;
+  struct tree_string string;
+  struct tree_complex complex;
+  struct tree_identifier identifier;
+  struct tree_decl_minimal decl_minimal;
+  struct tree_decl_common decl_common;
+  struct tree_decl_with_rtl decl_with_rtl;
+  struct tree_decl_non_common decl_non_common;
+  struct tree_parm_decl parm_decl;
+  struct tree_decl_with_vis decl_with_vis;
+  struct tree_var_decl var_decl;
+  struct tree_field_decl field_decl;
+  struct tree_label_decl label_decl;
+  struct tree_result_decl result_decl;
+  struct tree_const_decl const_decl;
+  struct tree_type_decl type_decl;
+  struct tree_function_decl function_decl;
+  struct tree_translation_unit_decl
+    translation_unit_decl;
+  struct tree_type type;
+  struct tree_list list;
+  struct tree_vec vec;
+  struct tree_exp exp;
+  struct tree_ssa_name ssa_name;
+  struct tree_block block;
+  struct tree_binfo binfo;
+  struct tree_statement_list stmt_list;
+  struct tree_constructor constructor;
+  struct tree_omp_clause omp_clause;
+  struct tree_optimization_option optimization;
+  struct tree_target_option target_option;
+};
+
+
+
+enum tree_index
+{
+  TI_ERROR_MARK,
+  TI_INTQI_TYPE,
+  TI_INTHI_TYPE,
+  TI_INTSI_TYPE,
+  TI_INTDI_TYPE,
+  TI_INTTI_TYPE,
+
+  TI_UINTQI_TYPE,
+  TI_UINTHI_TYPE,
+  TI_UINTSI_TYPE,
+  TI_UINTDI_TYPE,
+  TI_UINTTI_TYPE,
+
+  TI_UINT32_TYPE,
+  TI_UINT64_TYPE,
+
+  TI_INTEGER_ZERO,
+  TI_INTEGER_ONE,
+  TI_INTEGER_THREE,
+  TI_INTEGER_MINUS_ONE,
+  TI_NULL_POINTER,
+
+  TI_SIZE_ZERO,
+  TI_SIZE_ONE,
+
+  TI_BITSIZE_ZERO,
+  TI_BITSIZE_ONE,
+  TI_BITSIZE_UNIT,
+
+  TI_PUBLIC,
+  TI_PROTECTED,
+  TI_PRIVATE,
+
+  TI_BOOLEAN_FALSE,
+  TI_BOOLEAN_TRUE,
+
+  TI_COMPLEX_INTEGER_TYPE,
+  TI_COMPLEX_FLOAT_TYPE,
+  TI_COMPLEX_DOUBLE_TYPE,
+  TI_COMPLEX_LONG_DOUBLE_TYPE,
+
+  TI_FLOAT_TYPE,
+  TI_DOUBLE_TYPE,
+  TI_LONG_DOUBLE_TYPE,
+
+  TI_FLOAT_PTR_TYPE,
+  TI_DOUBLE_PTR_TYPE,
+  TI_LONG_DOUBLE_PTR_TYPE,
+  TI_INTEGER_PTR_TYPE,
+
+  TI_VOID_TYPE,
+  TI_PTR_TYPE,
+  TI_CONST_PTR_TYPE,
+  TI_SIZE_TYPE,
+  TI_PID_TYPE,
+  TI_PTRDIFF_TYPE,
+  TI_VA_LIST_TYPE,
+  TI_VA_LIST_GPR_COUNTER_FIELD,
+  TI_VA_LIST_FPR_COUNTER_FIELD,
+  TI_BOOLEAN_TYPE,
+  TI_FILEPTR_TYPE,
+
+  TI_DFLOAT32_TYPE,
+  TI_DFLOAT64_TYPE,
+  TI_DFLOAT128_TYPE,
+  TI_DFLOAT32_PTR_TYPE,
+  TI_DFLOAT64_PTR_TYPE,
+  TI_DFLOAT128_PTR_TYPE,
+
+  TI_VOID_LIST_NODE,
+
+  TI_MAIN_IDENTIFIER,
+
+  TI_SAT_SFRACT_TYPE,
+  TI_SAT_FRACT_TYPE,
+  TI_SAT_LFRACT_TYPE,
+  TI_SAT_LLFRACT_TYPE,
+  TI_SAT_USFRACT_TYPE,
+  TI_SAT_UFRACT_TYPE,
+  TI_SAT_ULFRACT_TYPE,
+  TI_SAT_ULLFRACT_TYPE,
+  TI_SFRACT_TYPE,
+  TI_FRACT_TYPE,
+  TI_LFRACT_TYPE,
+  TI_LLFRACT_TYPE,
+  TI_USFRACT_TYPE,
+  TI_UFRACT_TYPE,
+  TI_ULFRACT_TYPE,
+  TI_ULLFRACT_TYPE,
+  TI_SAT_SACCUM_TYPE,
+  TI_SAT_ACCUM_TYPE,
+  TI_SAT_LACCUM_TYPE,
+  TI_SAT_LLACCUM_TYPE,
+  TI_SAT_USACCUM_TYPE,
+  TI_SAT_UACCUM_TYPE,
+  TI_SAT_ULACCUM_TYPE,
+  TI_SAT_ULLACCUM_TYPE,
+  TI_SACCUM_TYPE,
+  TI_ACCUM_TYPE,
+  TI_LACCUM_TYPE,
+  TI_LLACCUM_TYPE,
+  TI_USACCUM_TYPE,
+  TI_UACCUM_TYPE,
+  TI_ULACCUM_TYPE,
+  TI_ULLACCUM_TYPE,
+  TI_QQ_TYPE,
+  TI_HQ_TYPE,
+  TI_SQ_TYPE,
+  TI_DQ_TYPE,
+  TI_TQ_TYPE,
+  TI_UQQ_TYPE,
+  TI_UHQ_TYPE,
+  TI_USQ_TYPE,
+  TI_UDQ_TYPE,
+  TI_UTQ_TYPE,
+  TI_SAT_QQ_TYPE,
+  TI_SAT_HQ_TYPE,
+  TI_SAT_SQ_TYPE,
+  TI_SAT_DQ_TYPE,
+  TI_SAT_TQ_TYPE,
+  TI_SAT_UQQ_TYPE,
+  TI_SAT_UHQ_TYPE,
+  TI_SAT_USQ_TYPE,
+  TI_SAT_UDQ_TYPE,
+  TI_SAT_UTQ_TYPE,
+  TI_HA_TYPE,
+  TI_SA_TYPE,
+  TI_DA_TYPE,
+  TI_TA_TYPE,
+  TI_UHA_TYPE,
+  TI_USA_TYPE,
+  TI_UDA_TYPE,
+  TI_UTA_TYPE,
+  TI_SAT_HA_TYPE,
+  TI_SAT_SA_TYPE,
+  TI_SAT_DA_TYPE,
+  TI_SAT_TA_TYPE,
+  TI_SAT_UHA_TYPE,
+  TI_SAT_USA_TYPE,
+  TI_SAT_UDA_TYPE,
+  TI_SAT_UTA_TYPE,
+
+  TI_OPTIMIZATION_DEFAULT,
+  TI_OPTIMIZATION_CURRENT,
+  TI_TARGET_OPTION_DEFAULT,
+  TI_TARGET_OPTION_CURRENT,
+  TI_CURRENT_TARGET_PRAGMA,
+  TI_CURRENT_OPTIMIZE_PRAGMA,
+
+  TI_MAX
+};
+
+extern tree global_trees[TI_MAX];
+# 3889 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+enum integer_type_kind
+{
+  itk_char,
+  itk_signed_char,
+  itk_unsigned_char,
+  itk_short,
+  itk_unsigned_short,
+  itk_int,
+  itk_unsigned_int,
+  itk_long,
+  itk_unsigned_long,
+  itk_long_long,
+  itk_unsigned_long_long,
+  itk_int128,
+  itk_unsigned_int128,
+  itk_none
+};
+
+typedef enum integer_type_kind integer_type_kind;
+
+
+
+extern tree integer_types[itk_none];
+# 3948 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+enum ptrmemfunc_vbit_where_t
+{
+  ptrmemfunc_vbit_in_pfn,
+  ptrmemfunc_vbit_in_delta
+};
+
+
+
+extern tree decl_assembler_name (tree);
+extern unsigned char decl_assembler_name_equal (tree decl, const_tree asmname);
+extern hashval_t decl_assembler_name_hash (const_tree asmname);
+
+
+
+
+extern size_t tree_size (const_tree);
+
+
+
+
+extern size_t tree_code_size (enum tree_code);
+
+
+
+
+
+extern tree make_node_stat (enum tree_code );
+
+
+
+
+extern tree copy_node_stat (tree );
+
+
+
+
+extern tree copy_list (tree);
+
+
+extern tree make_tree_binfo_stat (unsigned );
+
+
+
+
+extern tree make_tree_vec_stat (int );
+
+
+
+
+
+extern tree get_identifier (const char *);
+# 4011 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern tree get_identifier_with_length (const char *, size_t);
+
+
+
+
+
+extern tree maybe_get_identifier (const char *);
+
+
+
+extern tree build_nt (enum tree_code, ...);
+extern tree build_nt_call_vec (tree, VEC_tree_gc *);
+
+extern tree build0_stat (enum tree_code, tree );
+
+extern tree build1_stat (enum tree_code, tree, tree );
+
+extern tree build2_stat (enum tree_code, tree, tree, tree );
+
+extern tree build3_stat (enum tree_code, tree, tree, tree, tree );
+
+extern tree build4_stat (enum tree_code, tree, tree, tree, tree,
+    tree );
+
+extern tree build5_stat (enum tree_code, tree, tree, tree, tree, tree,
+    tree );
+
+extern tree build6_stat (enum tree_code, tree, tree, tree, tree, tree,
+    tree, tree );
+
+
+
+
+
+static __inline__ tree
+build1_stat_loc (location_t loc, enum tree_code code, tree type,
+   tree arg1 )
+{
+  tree t = build1_stat (code, type, arg1 );
+  if (((t) && ((tree_code_type[(int) (((enum tree_code) (t)->base.code))]) >= tcc_reference && (tree_code_type[(int) (((enum tree_code) (t)->base.code))]) <= tcc_expression)))
+    ((t))->exp.locus = (loc);
+  return t;
+}
+
+
+static __inline__ tree
+build2_stat_loc (location_t loc, enum tree_code code, tree type, tree arg0,
+   tree arg1 )
+{
+  tree t = build2_stat (code, type, arg0, arg1 );
+  if (((t) && ((tree_code_type[(int) (((enum tree_code) (t)->base.code))]) >= tcc_reference && (tree_code_type[(int) (((enum tree_code) (t)->base.code))]) <= tcc_expression)))
+    ((t))->exp.locus = (loc);
+  return t;
+}
+
+
+static __inline__ tree
+build3_stat_loc (location_t loc, enum tree_code code, tree type, tree arg0,
+   tree arg1, tree arg2 )
+{
+  tree t = build3_stat (code, type, arg0, arg1, arg2 );
+  if (((t) && ((tree_code_type[(int) (((enum tree_code) (t)->base.code))]) >= tcc_reference && (tree_code_type[(int) (((enum tree_code) (t)->base.code))]) <= tcc_expression)))
+    ((t))->exp.locus = (loc);
+  return t;
+}
+
+
+
+static __inline__ tree
+build4_stat_loc (location_t loc, enum tree_code code, tree type, tree arg0,
+   tree arg1, tree arg2, tree arg3 )
+{
+  tree t = build4_stat (code, type, arg0, arg1, arg2, arg3 );
+  if (((t) && ((tree_code_type[(int) (((enum tree_code) (t)->base.code))]) >= tcc_reference && (tree_code_type[(int) (((enum tree_code) (t)->base.code))]) <= tcc_expression)))
+    ((t))->exp.locus = (loc);
+  return t;
+}
+
+
+
+static __inline__ tree
+build5_stat_loc (location_t loc, enum tree_code code, tree type, tree arg0,
+   tree arg1, tree arg2, tree arg3, tree arg4 )
+{
+  tree t = build5_stat (code, type, arg0, arg1, arg2, arg3,
+   arg4 );
+  if (((t) && ((tree_code_type[(int) (((enum tree_code) (t)->base.code))]) >= tcc_reference && (tree_code_type[(int) (((enum tree_code) (t)->base.code))]) <= tcc_expression)))
+    ((t))->exp.locus = (loc);
+  return t;
+}
+
+
+
+static __inline__ tree
+build6_stat_loc (location_t loc, enum tree_code code, tree type, tree arg0,
+   tree arg1, tree arg2, tree arg3, tree arg4,
+   tree arg5 )
+{
+  tree t = build6_stat (code, type, arg0, arg1, arg2, arg3, arg4,
+   arg5 );
+  if (((t) && ((tree_code_type[(int) (((enum tree_code) (t)->base.code))]) >= tcc_reference && (tree_code_type[(int) (((enum tree_code) (t)->base.code))]) <= tcc_expression)))
+    ((t))->exp.locus = (loc);
+  return t;
+}
+
+
+
+extern tree build_var_debug_value_stat (tree, tree );
+
+
+
+
+
+static __inline__ double_int
+tree_to_double_int (const_tree cst)
+{
+  return ((cst)->int_cst.int_cst);
+}
+
+extern tree double_int_to_tree (tree, double_int);
+extern unsigned char double_int_fits_to_tree_p (const_tree, double_int);
+extern tree force_fit_type_double (tree, double_int, int, unsigned char);
+
+
+
+static __inline__ tree
+build_int_cstu (tree type, unsigned long cst)
+{
+  return double_int_to_tree (type, uhwi_to_double_int (cst));
+}
+
+extern tree build_int_cst (tree, long);
+extern tree build_int_cst_type (tree, long);
+extern tree build_int_cst_wide (tree, unsigned long, long);
+extern tree build_vector (tree, tree);
+extern tree build_vector_from_ctor (tree, VEC_constructor_elt_gc *);
+extern tree build_vector_from_val (tree, tree);
+extern tree build_constructor (tree, VEC_constructor_elt_gc *);
+extern tree build_constructor_single (tree, tree, tree);
+extern tree build_constructor_from_list (tree, tree);
+extern tree build_real_from_int_cst (tree, const_tree);
+extern tree build_complex (tree, tree, tree);
+extern tree build_one_cst (tree);
+extern tree build_zero_cst (tree);
+extern tree build_string (int, const char *);
+extern tree build_tree_list_stat (tree, tree );
+
+extern tree build_tree_list_vec_stat (const VEC_tree_gc * );
+
+extern tree build_decl_stat (location_t, enum tree_code,
+        tree, tree );
+extern tree build_fn_decl (const char *, tree);
+
+extern tree build_translation_unit_decl (tree);
+extern tree build_block (tree, tree, tree, tree);
+extern tree build_empty_stmt (location_t);
+extern tree build_omp_clause (location_t, enum omp_clause_code);
+
+extern tree build_vl_exp_stat (enum tree_code, int );
+
+
+extern tree build_call_nary (tree, tree, int, ...);
+extern tree build_call_valist (tree, tree, int, va_list);
+
+
+extern tree build_call_array_loc (location_t, tree, tree, int, const tree *);
+extern tree build_call_vec (tree, tree, VEC_tree_gc *);
+
+
+
+extern tree make_signed_type (int);
+extern tree make_unsigned_type (int);
+extern tree signed_or_unsigned_type_for (int, tree);
+extern tree signed_type_for (tree);
+extern tree unsigned_type_for (tree);
+extern void initialize_sizetypes (void);
+extern void set_sizetype (tree);
+extern void fixup_unsigned_type (tree);
+extern tree build_pointer_type_for_mode (tree, enum machine_mode, unsigned char);
+extern tree build_pointer_type (tree);
+extern tree build_reference_type_for_mode (tree, enum machine_mode, unsigned char);
+extern tree build_reference_type (tree);
+extern tree build_vector_type_for_mode (tree, enum machine_mode);
+extern tree build_vector_type (tree innertype, int nunits);
+extern tree build_opaque_vector_type (tree innertype, int nunits);
+extern tree build_type_no_quals (tree);
+extern tree build_index_type (tree);
+extern tree build_array_type (tree, tree);
+extern tree build_nonshared_array_type (tree, tree);
+extern tree build_function_type (tree, tree);
+extern tree build_function_type_list (tree, ...);
+extern tree build_function_type_skip_args (tree, bitmap);
+extern tree build_function_decl_skip_args (tree, bitmap);
+extern tree build_varargs_function_type_list (tree, ...);
+extern tree build_method_type_directly (tree, tree, tree);
+extern tree build_method_type (tree, tree);
+extern tree build_offset_type (tree, tree);
+extern tree build_complex_type (tree);
+extern tree array_type_nelts (const_tree);
+extern unsigned char in_array_bounds_p (tree);
+extern unsigned char range_in_array_bounds_p (tree);
+
+extern tree value_member (tree, tree);
+extern tree purpose_member (const_tree, tree);
+extern unsigned char vec_member (const_tree, VEC_tree_gc *);
+extern tree chain_index (int, tree);
+
+extern int attribute_list_equal (const_tree, const_tree);
+extern int attribute_list_contained (const_tree, const_tree);
+extern int tree_int_cst_equal (const_tree, const_tree);
+extern int tree_int_cst_lt (const_tree, const_tree);
+extern int tree_int_cst_compare (const_tree, const_tree);
+extern int host_integerp (const_tree, int)
+
+  __attribute__ ((__pure__))
+
+  ;
+extern long tree_low_cst (const_tree, int);
+
+extern __inline__ __attribute__ ((__gnu_inline__)) long
+tree_low_cst (const_tree t, int pos)
+{
+  ((void)(!(host_integerp (t, pos)) ? fancy_abort ("/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h", 4233, __FUNCTION__), 0 : 0));
+  return (((t)->int_cst.int_cst).low);
+}
+
+extern int tree_int_cst_msb (const_tree);
+extern int tree_int_cst_sgn (const_tree);
+extern int tree_int_cst_sign_bit (const_tree);
+extern unsigned int tree_int_cst_min_precision (tree, unsigned char);
+extern unsigned char tree_expr_nonnegative_p (tree);
+extern unsigned char tree_expr_nonnegative_warnv_p (tree, unsigned char *);
+extern unsigned char may_negate_without_overflow_p (const_tree);
+extern tree strip_array_types (tree);
+extern tree excess_precision_type (tree);
+
+
+
+extern tree make_fract_type (int, int, int);
+extern tree make_accum_type (int, int, int);
+# 4282 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern tree make_tree (tree, rtx);
+
+
+
+
+
+
+
+extern tree build_type_attribute_variant (tree, tree);
+extern tree build_decl_attribute_variant (tree, tree);
+extern tree build_type_attribute_qual_variant (tree, tree, int);
+
+
+struct attribute_spec
+{
+
+
+  const char *const name;
+
+  const int min_length;
+
+
+  const int max_length;
+
+
+
+
+
+
+
+  const unsigned char decl_required;
+
+
+  const unsigned char type_required;
+
+
+
+
+  const unsigned char function_type_required;
+# 4335 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+  tree (*const handler) (tree *node, tree name, tree args,
+     int flags, unsigned char *no_add_attrs);
+};
+
+
+
+enum attribute_flags
+{
+
+
+
+  ATTR_FLAG_DECL_NEXT = 1,
+
+
+
+  ATTR_FLAG_FUNCTION_NEXT = 2,
+
+
+
+  ATTR_FLAG_ARRAY_NEXT = 4,
+
+
+  ATTR_FLAG_TYPE_IN_PLACE = 8,
+
+
+
+  ATTR_FLAG_BUILT_IN = 16
+};
+
+
+
+extern tree merge_decl_attributes (tree, tree);
+extern tree merge_type_attributes (tree, tree);
+
+
+
+
+extern int is_attribute_p (const char *, const_tree);
+
+
+
+
+extern tree lookup_attribute (const char *, tree);
+
+
+
+
+extern tree remove_attribute (const char *, tree);
+
+
+
+extern tree merge_attributes (tree, tree);
+# 4400 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern unsigned char check_qualified_type (const_tree, const_tree, int);
+
+
+
+
+
+extern tree get_qualified_type (tree, int);
+
+
+
+
+extern tree build_qualified_type (tree, int);
+
+
+
+extern tree build_aligned_type (tree, unsigned int);
+# 4429 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern tree build_distinct_type_copy (tree);
+extern tree build_variant_type_copy (tree);
+
+
+
+
+extern void finish_builtin_struct (tree, const char *,
+        tree, tree);
+
+
+
+
+
+extern void layout_type (tree);
+# 4451 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+typedef struct record_layout_info_s
+{
+
+  tree t;
+
+
+  tree offset;
+
+  unsigned int offset_align;
+
+  tree bitpos;
+
+  unsigned int record_align;
+
+
+  unsigned int unpacked_align;
+
+  tree prev_field;
+
+
+  VEC_tree_gc *pending_statics;
+
+  int remaining_in_alignment;
+
+
+  int packed_maybe_necessary;
+} *record_layout_info;
+
+extern record_layout_info start_record_layout (tree);
+extern tree bit_from_pos (tree, tree);
+extern tree byte_from_pos (tree, tree);
+extern void pos_from_bit (tree *, tree *, unsigned int, tree);
+extern void normalize_offset (tree *, tree *, unsigned int);
+extern tree rli_size_unit_so_far (record_layout_info);
+extern tree rli_size_so_far (record_layout_info);
+extern void normalize_rli (record_layout_info);
+extern void place_field (record_layout_info, tree);
+extern void compute_record_mode (tree);
+extern void finish_record_layout (record_layout_info, int);
+
+
+
+
+
+
+extern tree type_hash_canon (unsigned int, tree);
+# 4506 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern void layout_decl (tree, unsigned);
+
+
+
+
+extern void relayout_decl (tree);
+
+
+
+
+
+
+extern enum machine_mode mode_for_size_tree (const_tree, enum mode_class, int);
+
+
+
+
+extern tree non_lvalue_loc (location_t, tree);
+
+extern tree convert (tree, tree);
+extern unsigned int expr_align (const_tree);
+extern tree expr_first (tree);
+extern tree expr_last (tree);
+extern tree size_in_bytes (const_tree);
+extern long int_size_in_bytes (const_tree);
+extern long max_int_size_in_bytes (const_tree);
+extern tree tree_expr_size (const_tree);
+extern tree bit_position (const_tree);
+extern long int_bit_position (const_tree);
+extern tree byte_position (const_tree);
+extern long int_byte_position (const_tree);
+
+
+
+
+enum size_type_kind
+{
+  SIZETYPE,
+  SSIZETYPE,
+  BITSIZETYPE,
+  SBITSIZETYPE,
+  TYPE_KIND_LAST};
+
+extern tree sizetype_tab[(int) TYPE_KIND_LAST];
+
+
+
+
+
+
+extern tree size_int_kind (long, enum size_type_kind);
+
+
+extern tree size_binop_loc (location_t, enum tree_code, tree, tree);
+
+
+extern tree size_diffop_loc (location_t, tree, tree);
+
+
+
+
+
+
+
+extern tree round_up_loc (location_t, tree, int);
+
+extern tree round_down_loc (location_t, tree, int);
+extern VEC_tree_gc *get_pending_sizes (void);
+extern void put_pending_size (tree);
+extern void put_pending_sizes (VEC_tree_gc *);
+extern void finalize_size_functions (void);
+# 4586 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern unsigned int maximum_field_alignment;
+
+
+
+
+
+extern tree chainon (tree, tree);
+
+
+
+extern tree tree_cons_stat (tree, tree, tree );
+
+
+
+
+extern tree tree_last (tree);
+
+
+
+extern tree nreverse (tree);
+
+
+
+
+extern int list_length (const_tree);
+
+
+
+extern int fields_length (const_tree);
+
+
+
+extern tree first_field (const_tree);
+
+
+
+
+extern unsigned char initializer_zerop (const_tree);
+
+
+
+extern VEC_tree_gc *ctor_to_vec (tree);
+# 4640 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern unsigned char categorize_ctor_elements (const_tree, long *, long *,
+          unsigned char *);
+
+extern long count_type_elements (const_tree, unsigned char);
+
+
+
+extern int integer_zerop (const_tree);
+
+
+
+extern int integer_onep (const_tree);
+
+
+
+
+extern int integer_all_onesp (const_tree);
+
+
+
+
+extern int integer_pow2p (const_tree);
+
+
+
+
+extern int integer_nonzerop (const_tree);
+
+extern unsigned char cst_and_fits_in_hwi (const_tree);
+extern tree num_ending_zeros (const_tree);
+
+
+
+
+extern int fixed_zerop (const_tree);
+
+
+
+
+extern tree staticp (tree);
+
+
+
+
+
+extern tree save_expr (tree);
+
+
+
+
+extern tree skip_simple_arithmetic (tree);
+
+
+
+enum tree_node_structure_enum tree_node_structure (const_tree);
+
+
+
+
+extern unsigned char contains_placeholder_p (const_tree);
+# 4711 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern unsigned char type_contains_placeholder_p (tree);
+# 4720 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern void find_placeholder_in_expr (tree, VEC_tree_heap **);
+# 4738 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern tree substitute_in_expr (tree, tree, tree);
+# 4749 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern tree substitute_placeholder_in_expr (tree, tree);
+# 4764 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern tree variable_size (tree);
+
+
+
+
+
+extern tree stabilize_reference (tree);
+
+
+
+
+
+extern tree stabilize_reference_1 (tree);
+
+
+
+
+
+
+extern tree get_unwidened (tree, tree);
+
+
+
+
+
+
+extern tree get_narrower (tree, int *);
+
+
+
+static __inline__ unsigned char
+handled_component_p (const_tree t)
+{
+  switch (((enum tree_code) (t)->base.code))
+    {
+    case BIT_FIELD_REF:
+    case COMPONENT_REF:
+    case ARRAY_REF:
+    case ARRAY_RANGE_REF:
+    case VIEW_CONVERT_EXPR:
+    case REALPART_EXPR:
+    case IMAGPART_EXPR:
+      return 1;
+
+    default:
+      return 0;
+    }
+}
+
+
+
+
+
+extern tree get_inner_reference (tree, long *, long *,
+     tree *, enum machine_mode *, int *, int *,
+     unsigned char);
+
+
+
+
+
+extern unsigned char contains_packed_reference (const_tree exp);
+
+
+
+
+extern tree array_ref_element_size (tree);
+
+
+
+
+extern tree array_ref_low_bound (tree);
+
+
+
+
+extern tree array_ref_up_bound (tree);
+
+
+
+
+extern tree component_ref_field_offset (tree);
+
+
+
+
+extern tree get_containing_scope (const_tree);
+
+
+
+extern tree decl_function_context (const_tree);
+
+
+
+extern tree decl_type_context (const_tree);
+
+
+extern int real_zerop (const_tree);
+
+
+
+
+
+
+extern int pedantic_lvalues;
+
+
+
+extern tree current_function_decl;
+
+
+extern const char * current_function_func_begin_label;
+
+
+typedef struct {
+  tree next;
+} function_args_iterator;
+
+
+
+static __inline__ void
+function_args_iter_init (function_args_iterator *i, const_tree fntype)
+{
+  i->next = ((fntype)->type.values);
+}
+
+
+
+
+static __inline__ tree *
+function_args_iter_cond_ptr (function_args_iterator *i)
+{
+  return (i->next) ? &((i->next)->list.value) : ((void *)0);
+}
+
+
+
+
+static __inline__ tree
+function_args_iter_cond (function_args_iterator *i)
+{
+  return (i->next) ? ((i->next)->list.value) : (tree) ((void *)0);
+}
+
+
+static __inline__ void
+function_args_iter_next (function_args_iterator *i)
+{
+  ((void)(!(i->next != (tree) ((void *)0)) ? fancy_abort ("/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h", 4912, __FUNCTION__), 0 : 0));
+  i->next = ((i->next)->common.chain);
+}
+
+
+
+static __inline__ unsigned char
+inlined_function_outer_scope_p (const_tree block)
+{
+ return ((block)->block.locus) != ((source_location) 0);
+}
+# 4943 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern unsigned crc32_string (unsigned, const char *);
+extern void clean_symbol_name (char *);
+extern tree get_file_function_name (const char *);
+extern tree get_callee_fndecl (const_tree);
+extern int type_num_arguments (const_tree);
+extern unsigned char associative_tree_code (enum tree_code);
+extern unsigned char commutative_tree_code (enum tree_code);
+extern unsigned char commutative_ternary_tree_code (enum tree_code);
+extern tree upper_bound_in_type (tree, tree);
+extern tree lower_bound_in_type (tree, tree);
+extern int operand_equal_for_phi_arg_p (const_tree, const_tree);
+extern tree call_expr_arg (tree, int);
+extern tree *call_expr_argp (tree, int);
+extern tree create_artificial_label (location_t);
+extern const char *get_name (tree);
+extern unsigned char stdarg_p (const_tree);
+extern unsigned char prototype_p (tree);
+extern unsigned char is_typedef_decl (tree x);
+extern unsigned char typedef_variant_p (tree);
+extern unsigned char auto_var_in_fn_p (const_tree, const_tree);
+extern tree build_low_bits_mask (tree, unsigned);
+extern tree tree_strip_nop_conversions (tree);
+extern tree tree_strip_sign_nop_conversions (tree);
+extern tree lhd_gcc_personality (void);
+extern void assign_assembler_name_if_neeeded (tree);
+extern void warn_deprecated_use (tree, tree);
+
+
+
+extern void change_decl_assembler_name (tree, tree);
+
+
+extern tree unshare_expr (tree);
+
+
+
+extern void expand_expr_stmt (tree);
+extern int warn_if_unused_value (const_tree, location_t);
+extern void expand_label (tree);
+extern void expand_goto (tree);
+
+extern rtx expand_stack_save (void);
+extern void expand_stack_restore (tree);
+extern void expand_return (tree);
+
+
+extern void using_eh_for_cleanups (void);
+
+
+
+
+
+extern int folding_initializer;
+
+
+extern int native_encode_expr (const_tree, unsigned char *, int);
+extern tree native_interpret_expr (tree, const unsigned char *, int);
+
+
+
+
+
+
+
+extern tree fold (tree);
+
+
+extern tree fold_unary_loc (location_t, enum tree_code, tree, tree);
+
+
+extern tree fold_unary_ignore_overflow_loc (location_t, enum tree_code, tree, tree);
+
+
+extern tree fold_binary_loc (location_t, enum tree_code, tree, tree, tree);
+
+
+extern tree fold_ternary_loc (location_t, enum tree_code, tree, tree, tree, tree);
+
+
+
+
+extern tree fold_build1_stat_loc (location_t, enum tree_code, tree,
+      tree );
+
+
+
+
+extern tree fold_build2_stat_loc (location_t, enum tree_code, tree, tree,
+      tree );
+
+
+
+
+extern tree fold_build3_stat_loc (location_t, enum tree_code, tree, tree, tree,
+      tree );
+extern tree fold_build1_initializer_loc (location_t, enum tree_code, tree, tree);
+extern tree fold_build2_initializer_loc (location_t, enum tree_code, tree, tree, tree);
+extern tree fold_build3_initializer_loc (location_t, enum tree_code, tree, tree, tree, tree);
+
+
+extern tree fold_build_call_array_loc (location_t, tree, tree, int, tree *);
+
+
+extern tree fold_build_call_array_initializer_loc (location_t, tree, tree, int, tree *);
+extern unsigned char fold_convertible_p (const_tree, const_tree);
+
+
+extern tree fold_convert_loc (location_t, tree, tree);
+extern tree fold_single_bit_test (location_t, enum tree_code, tree, tree, tree);
+extern tree fold_ignored_result (tree);
+extern tree fold_abs_const (tree, tree);
+extern tree fold_indirect_ref_1 (location_t, tree, tree);
+extern void fold_defer_overflow_warnings (void);
+extern void fold_undefer_overflow_warnings (unsigned char, const_gimple, int);
+extern void fold_undefer_and_ignore_overflow_warnings (void);
+extern unsigned char fold_deferring_overflow_warnings_p (void);
+extern tree fold_fma (location_t, tree, tree, tree, tree);
+
+enum operand_equal_flag
+{
+  OEP_ONLY_CONST = 1,
+  OEP_PURE_SAME = 2
+};
+
+extern int operand_equal_p (const_tree, const_tree, unsigned int);
+extern int multiple_of_p (tree, const_tree, const_tree);
+
+
+extern tree omit_one_operand_loc (location_t, tree, tree, tree);
+
+
+extern tree omit_two_operands_loc (location_t, tree, tree, tree, tree);
+
+
+extern tree invert_truthvalue_loc (location_t, tree);
+extern tree fold_truth_not_expr (location_t, tree);
+extern tree fold_unary_to_constant (enum tree_code, tree, tree);
+extern tree fold_binary_to_constant (enum tree_code, tree, tree, tree);
+extern tree fold_read_from_constant_string (tree);
+extern tree int_const_binop (enum tree_code, const_tree, const_tree, int);
+
+
+extern tree build_fold_addr_expr_loc (location_t, tree);
+
+
+extern tree build_fold_addr_expr_with_type_loc (location_t, tree, tree);
+extern tree fold_build_cleanup_point_expr (tree type, tree expr);
+extern tree fold_strip_sign_ops (tree);
+
+
+extern tree build_fold_indirect_ref_loc (location_t, tree);
+
+
+extern tree fold_indirect_ref_loc (location_t, tree);
+extern tree build_simple_mem_ref_loc (location_t, tree);
+
+
+extern double_int mem_ref_offset (const_tree);
+extern tree reference_alias_ptr_type (const_tree);
+extern tree constant_boolean_node (int, tree);
+extern tree div_if_zero_remainder (enum tree_code, const_tree, const_tree);
+
+extern unsigned char tree_swap_operands_p (const_tree, const_tree, unsigned char);
+extern enum tree_code swap_tree_comparison (enum tree_code);
+
+extern unsigned char ptr_difference_const (tree, tree, long *);
+extern enum tree_code invert_tree_comparison (enum tree_code, unsigned char);
+
+extern unsigned char tree_expr_nonzero_p (tree);
+extern unsigned char tree_unary_nonzero_warnv_p (enum tree_code, tree, tree, unsigned char *);
+extern unsigned char tree_binary_nonzero_warnv_p (enum tree_code, tree, tree, tree op1,
+                                         unsigned char *);
+extern unsigned char tree_single_nonzero_warnv_p (tree, unsigned char *);
+extern unsigned char tree_unary_nonnegative_warnv_p (enum tree_code, tree, tree, unsigned char *);
+extern unsigned char tree_binary_nonnegative_warnv_p (enum tree_code, tree, tree, tree,
+                                             unsigned char *);
+extern unsigned char tree_single_nonnegative_warnv_p (tree t, unsigned char *strict_overflow_p);
+extern unsigned char tree_invalid_nonnegative_warnv_p (tree t, unsigned char *strict_overflow_p);
+extern unsigned char tree_call_nonnegative_warnv_p (tree, tree, tree, tree, unsigned char *);
+
+extern unsigned char tree_expr_nonzero_warnv_p (tree, unsigned char *);
+
+extern unsigned char fold_real_zero_addition_p (const_tree, const_tree, int);
+extern tree combine_comparisons (location_t, enum tree_code, enum tree_code,
+     enum tree_code, tree, tree, tree);
+extern void debug_fold_checksum (const_tree);
+
+
+static __inline__ unsigned char
+truth_value_p (enum tree_code code)
+{
+  return (tree_code_type[(int) (code)] == tcc_comparison
+   || code == TRUTH_AND_EXPR || code == TRUTH_ANDIF_EXPR
+   || code == TRUTH_OR_EXPR || code == TRUTH_ORIF_EXPR
+   || code == TRUTH_XOR_EXPR || code == TRUTH_NOT_EXPR);
+}
+
+
+
+extern unsigned char avoid_folding_inline_builtin (tree);
+extern tree fold_call_expr (location_t, tree, unsigned char);
+extern tree fold_builtin_fputs (location_t, tree, tree, unsigned char, unsigned char, tree);
+extern tree fold_builtin_strcpy (location_t, tree, tree, tree, tree);
+extern tree fold_builtin_strncpy (location_t, tree, tree, tree, tree, tree);
+extern tree fold_builtin_memory_chk (location_t, tree, tree, tree, tree, tree, tree, unsigned char,
+         enum built_in_function);
+extern tree fold_builtin_stxcpy_chk (location_t, tree, tree, tree, tree, tree, unsigned char,
+         enum built_in_function);
+extern tree fold_builtin_strncpy_chk (location_t, tree, tree, tree, tree, tree);
+extern tree fold_builtin_snprintf_chk (location_t, tree, tree, enum built_in_function);
+extern unsigned char fold_builtin_next_arg (tree, unsigned char);
+extern enum built_in_function builtin_mathfn_code (const_tree);
+extern tree fold_builtin_call_array (location_t, tree, tree, int, tree *);
+extern tree build_call_expr_loc_array (location_t, tree, int, tree *);
+extern tree build_call_expr_loc_vec (location_t, tree, VEC_tree_gc *);
+extern tree build_call_expr_loc (location_t, tree, int, ...);
+extern tree build_call_expr (tree, int, ...);
+extern tree mathfn_built_in (tree, enum built_in_function fn);
+extern tree c_strlen (tree, int);
+extern tree std_gimplify_va_arg_expr (tree, tree, gimple_seq *, gimple_seq *);
+extern tree build_va_arg_indirect_ref (tree);
+extern tree build_string_literal (int, const char *);
+extern unsigned char validate_arglist (const_tree, ...);
+extern rtx builtin_memset_read_str (void *, long, enum machine_mode);
+extern unsigned char can_trust_pointer_alignment (void);
+extern unsigned int get_pointer_alignment (tree, unsigned int);
+extern unsigned char is_builtin_name (const char *);
+extern unsigned char is_builtin_fn (tree);
+extern unsigned int get_object_alignment (tree, unsigned int);
+extern tree fold_call_stmt (gimple, unsigned char);
+extern tree gimple_fold_builtin_snprintf_chk (gimple, tree, enum built_in_function);
+extern tree make_range (tree, int *, tree *, tree *, unsigned char *);
+extern tree build_range_check (location_t, tree, tree, int, tree, tree);
+extern unsigned char merge_ranges (int *, tree *, tree *, int, tree, tree, int,
+     tree, tree);
+extern void set_builtin_user_assembler_name (tree decl, const char *asmspec);
+extern unsigned char is_simple_builtin (tree);
+extern unsigned char is_inexpensive_builtin (tree);
+
+
+extern tree strip_float_extensions (tree);
+
+
+extern int really_constant_p (const_tree);
+extern unsigned char decl_address_invariant_p (const_tree);
+extern unsigned char decl_address_ip_invariant_p (const_tree);
+extern unsigned char int_fits_type_p (const_tree, const_tree);
+
+extern void get_type_static_bounds (const_tree, mpz_t, mpz_t);
+
+extern unsigned char variably_modified_type_p (tree, tree);
+extern int tree_log2 (const_tree);
+extern int tree_floor_log2 (const_tree);
+extern int simple_cst_equal (const_tree, const_tree);
+extern hashval_t iterative_hash_expr (const_tree, hashval_t);
+extern hashval_t iterative_hash_exprs_commutative (const_tree,
+                                                   const_tree, hashval_t);
+extern hashval_t iterative_hash_host_wide_int (long, hashval_t);
+extern hashval_t iterative_hash_hashval_t (hashval_t, hashval_t);
+extern hashval_t iterative_hash_host_wide_int (long, hashval_t);
+extern int compare_tree_int (const_tree, unsigned long);
+extern int type_list_equal (const_tree, const_tree);
+extern int chain_member (const_tree, const_tree);
+extern tree type_hash_lookup (unsigned int, tree);
+extern void type_hash_add (unsigned int, tree);
+extern int simple_cst_list_equal (const_tree, const_tree);
+extern void dump_tree_statistics (void);
+extern void recompute_tree_invariant_for_addr_expr (tree);
+extern unsigned char needs_to_live_in_memory (const_tree);
+extern tree reconstruct_complex_type (tree, tree);
+
+extern int real_onep (const_tree);
+extern int real_twop (const_tree);
+extern int real_minus_onep (const_tree);
+extern void init_ttree (void);
+extern void build_common_tree_nodes (unsigned char);
+extern void build_common_tree_nodes_2 (int);
+extern void build_common_builtin_nodes (void);
+extern tree build_nonstandard_integer_type (unsigned long, int);
+extern tree build_range_type (tree, tree, tree);
+extern tree build_nonshared_range_type (tree, tree, tree);
+extern unsigned char subrange_type_for_debug_p (const_tree, tree *, tree *);
+extern long int_cst_value (const_tree);
+extern long long widest_int_cst_value (const_tree);
+
+extern unsigned char fields_compatible_p (const_tree, const_tree);
+extern tree find_compatible_field (tree, tree);
+
+extern tree *tree_block (tree);
+extern location_t *block_nonartificial_location (tree);
+extern location_t tree_nonartificial_location (tree);
+
+extern tree block_ultimate_origin (const_tree);
+
+extern tree get_binfo_at_offset (tree, long, tree);
+
+
+extern tree build_addr (tree, tree);
+
+
+extern void expand_main_function (void);
+extern void expand_function_end (void);
+extern void expand_function_start (tree);
+extern void stack_protect_prologue (void);
+extern void stack_protect_epilogue (void);
+extern void init_dummy_function_start (void);
+extern void expand_dummy_function_end (void);
+extern unsigned int init_function_for_compilation (void);
+extern void allocate_struct_function (tree, unsigned char);
+extern void push_struct_function (tree fndecl);
+extern void init_function_start (tree);
+extern unsigned char use_register_for_decl (const_tree);
+extern void generate_setjmp_warnings (void);
+extern void init_temp_slots (void);
+extern void free_temp_slots (void);
+extern void pop_temp_slots (void);
+extern void push_temp_slots (void);
+extern void preserve_temp_slots (rtx);
+extern int aggregate_value_p (const_tree, const_tree);
+extern void push_function_context (void);
+extern void pop_function_context (void);
+extern gimple_seq gimplify_parameters (void);
+
+
+
+extern void print_rtl (FILE *, const_rtx);
+
+
+
+extern void debug_tree (tree);
+extern void debug_vec_tree (VEC_tree_gc *);
+
+extern void dump_addr (FILE*, const char *, const void *);
+extern void print_node (FILE *, const char *, tree, int);
+extern void print_vec_tree (FILE *, const char *, VEC_tree_gc *, int);
+extern void print_node_brief (FILE *, const char *, const_tree, int);
+extern void indent_to (FILE *, int);
+
+
+
+extern unsigned char debug_find_tree (tree, tree);
+
+
+extern tree unsave_expr_now (tree);
+extern tree build_duplicate_type (tree);
+# 5322 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern int flags_from_decl_or_type (const_tree);
+extern int call_expr_flags (const_tree);
+# 5349 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern int setjmp_call_p (const_tree);
+extern unsigned char gimple_alloca_call_p (const_gimple);
+extern unsigned char alloca_call_p (const_tree);
+extern unsigned char must_pass_in_stack_var_size (enum machine_mode, const_tree);
+extern unsigned char must_pass_in_stack_var_size_or_pad (enum machine_mode, const_tree);
+
+
+
+extern const struct attribute_spec *lookup_attribute_spec (const_tree);
+# 5367 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern tree decl_attributes (tree *, tree, int);
+
+
+extern void set_decl_abstract_flags (tree, int);
+extern void set_decl_origin_self (tree);
+
+
+extern void set_min_and_max_values_for_integral_type (tree, int, unsigned char);
+extern void fixup_signed_type (tree);
+extern void internal_reference_types (void);
+extern unsigned int update_alignment_for_field (record_layout_info, tree,
+                                                unsigned int);
+
+extern tree tree_output_constant_def (tree);
+extern void make_decl_rtl (tree);
+extern rtx make_decl_rtl_for_debug (tree);
+extern void make_decl_one_only (tree, tree);
+extern int supports_one_only (void);
+extern void resolve_unique_section (tree, int, int);
+extern void mark_referenced (tree);
+extern void mark_decl_referenced (tree);
+extern void notice_global_symbol (tree);
+extern void set_user_assembler_name (tree, const char *);
+extern void process_pending_assemble_externals (void);
+extern void finish_aliases_1 (void);
+extern void finish_aliases_2 (void);
+extern void remove_unreachable_alias_pairs (void);
+extern unsigned char decl_replaceable_p (tree);
+extern unsigned char decl_binds_to_current_def_p (tree);
+
+
+
+
+
+typedef struct pointer_set_t symbol_alias_set_t;
+
+extern void symbol_alias_set_destroy (symbol_alias_set_t *);
+extern int symbol_alias_set_contains (const symbol_alias_set_t *, tree);
+extern symbol_alias_set_t * propagate_aliases_backward (unsigned char (*)
+        (tree, tree, void *),
+       void *);
+
+
+extern void expand_computed_goto (tree);
+extern unsigned char parse_output_constraint (const char **, int, int, int,
+         unsigned char *, unsigned char *, unsigned char *);
+extern unsigned char parse_input_constraint (const char **, int, int, int, int,
+        const char * const *, unsigned char *, unsigned char *);
+extern void expand_asm_stmt (gimple);
+extern tree resolve_asm_operand_names (tree, tree, tree, tree);
+extern unsigned char expand_switch_using_bit_tests_p (tree, tree, unsigned int,
+          unsigned int);
+extern void expand_case (gimple);
+extern void expand_decl (tree);
+# 5432 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern char *dwarf2out_cfi_label (unsigned char);
+
+
+
+extern void dwarf2out_def_cfa (const char *, unsigned, long);
+
+
+
+extern void dwarf2out_window_save (const char *);
+
+
+
+extern void dwarf2out_reg_save (const char *, unsigned, long);
+
+
+
+extern void dwarf2out_return_save (const char *, long);
+
+
+
+extern void dwarf2out_return_reg (const char *, unsigned);
+
+
+
+extern void dwarf2out_reg_save_reg (const char *, rtx, rtx);
+
+
+
+
+
+struct pointer_set_t;
+
+
+
+typedef tree (*walk_tree_fn) (tree *, int *, void *);
+
+
+
+typedef tree (*walk_tree_lh) (tree *, int *, tree (*) (tree *, int *, void *),
+         void *, struct pointer_set_t*);
+
+extern tree walk_tree_1 (tree*, walk_tree_fn, void*, struct pointer_set_t*,
+    walk_tree_lh);
+extern tree walk_tree_without_duplicates_1 (tree*, walk_tree_fn, void*,
+         walk_tree_lh);
+# 5485 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+extern void set_decl_rtl (tree, rtx);
+extern void set_decl_incoming_rtl (tree, rtx, unsigned char);
+
+
+
+typedef enum
+{
+  d_kind,
+  t_kind,
+  b_kind,
+  s_kind,
+  r_kind,
+  e_kind,
+  c_kind,
+  id_kind,
+  vec_kind,
+  binfo_kind,
+  ssa_name_kind,
+  constr_kind,
+  x_kind,
+  lang_decl,
+  lang_type,
+  omp_clause_kind,
+  all_kinds
+} tree_node_kind;
+
+extern int tree_node_counts[];
+extern int tree_node_sizes[];
+
+
+
+
+extern unsigned char in_gimple_form;
+
+
+extern tree get_base_address (tree t);
+extern void mark_addressable (tree);
+
+
+
+struct tree_map_base {
+  tree from;
+};
+
+extern int tree_map_base_eq (const void *, const void *);
+extern unsigned int tree_map_base_hash (const void *);
+extern int tree_map_base_marked_p (const void *);
+extern unsigned char list_equal_p (const_tree, const_tree);
+
+
+
+struct tree_map {
+  struct tree_map_base base;
+  unsigned int hash;
+  tree to;
+};
+
+
+extern unsigned int tree_map_hash (const void *);
+
+
+
+
+struct tree_decl_map {
+  struct tree_map_base base;
+  tree to;
+};
+
+
+extern unsigned int tree_decl_map_hash (const void *);
+
+
+
+
+struct tree_int_map {
+  struct tree_map_base base;
+  unsigned int to;
+};
+
+
+
+
+
+
+
+struct tree_priority_map {
+  struct tree_map_base base;
+  priority_type init;
+  priority_type fini;
+};
+
+
+
+
+
+
+
+tree target_for_debug_bind (tree);
+
+
+extern tree tree_mem_ref_addr (tree, tree);
+extern void copy_mem_ref_info (tree, tree);
+
+
+extern unsigned char ssa_name_nonnegative_p (const_tree);
+
+
+extern void init_object_sizes (void);
+extern void fini_object_sizes (void);
+extern unsigned long compute_builtin_object_size (tree, int);
+
+
+extern unsigned long highest_pow2_factor (const_tree);
+extern tree build_personality_function (const char *);
+
+
+
+void init_inline_once (void);
+
+
+
+
+static __inline__ int
+tree_operand_length (const_tree node)
+{
+  if ((tree_code_type[(int) (((enum tree_code) (node)->base.code))] == tcc_vl_exp))
+    return ((int)((((node)->exp.operands[0])->int_cst.int_cst).low));
+  else
+    return tree_code_length[(int) (((enum tree_code) (node)->base.code))];
+}
+
+
+
+
+
+
+typedef struct call_expr_arg_iterator_d {
+  tree t;
+  int n;
+  int i;
+} call_expr_arg_iterator;
+
+typedef struct const_call_expr_arg_iterator_d {
+  const_tree t;
+  int n;
+  int i;
+} const_call_expr_arg_iterator;
+
+
+
+static __inline__ void
+init_call_expr_arg_iterator (tree exp, call_expr_arg_iterator *iter)
+{
+  iter->t = exp;
+  iter->n = (((int)((((exp)->exp.operands[0])->int_cst.int_cst).low)) - 3);
+  iter->i = 0;
+}
+
+static __inline__ void
+init_const_call_expr_arg_iterator (const_tree exp, const_call_expr_arg_iterator *iter)
+{
+  iter->t = exp;
+  iter->n = (((int)((((exp)->exp.operands[0])->int_cst.int_cst).low)) - 3);
+  iter->i = 0;
+}
+
+
+
+static __inline__ tree
+next_call_expr_arg (call_expr_arg_iterator *iter)
+{
+  tree result;
+  if (iter->i >= iter->n)
+    return (tree) ((void *)0);
+  result = (((iter->t))->exp.operands[(iter->i) + 3]);
+  iter->i++;
+  return result;
+}
+
+static __inline__ const_tree
+next_const_call_expr_arg (const_call_expr_arg_iterator *iter)
+{
+  const_tree result;
+  if (iter->i >= iter->n)
+    return (tree) ((void *)0);
+  result = (((iter->t))->exp.operands[(iter->i) + 3]);
+  iter->i++;
+  return result;
+}
+
+
+
+
+
+static __inline__ tree
+first_call_expr_arg (tree exp, call_expr_arg_iterator *iter)
+{
+  init_call_expr_arg_iterator (exp, iter);
+  return next_call_expr_arg (iter);
+}
+
+static __inline__ const_tree
+first_const_call_expr_arg (const_tree exp, const_call_expr_arg_iterator *iter)
+{
+  init_const_call_expr_arg_iterator (exp, iter);
+  return next_const_call_expr_arg (iter);
+}
+
+
+
+static __inline__ unsigned char
+more_call_expr_args_p (const call_expr_arg_iterator *iter)
+{
+  return (iter->i < iter->n);
+}
+
+static __inline__ unsigned char
+more_const_call_expr_args_p (const const_call_expr_arg_iterator *iter)
+{
+  return (iter->i < iter->n);
+}
+# 5718 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
+static __inline__ unsigned char
+is_lang_specific (tree t)
+{
+  return ((enum tree_code) (t)->base.code) == LANG_TYPE || ((enum tree_code) (t)->base.code) >= ((int) LAST_AND_UNUSED_TREE_CODE);
+}
+
+
+extern unsigned char block_may_fallthru (const_tree);
+# 28 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cgraph.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/basic-block.h" 1
+# 24 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/basic-block.h"
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/predict.h" 1
+# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/predict.h"
+enum br_predictor
+{
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/predict.def" 1
+# 38 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/predict.def"
+PRED_COMBINED,
+
+
+PRED_DS_THEORY,
+
+
+
+PRED_FIRST_MATCH,
+
+
+PRED_NO_PREDICTION,
+
+
+PRED_UNCONDITIONAL,
+
+
+
+
+
+PRED_LOOP_ITERATIONS,
+
+
+
+PRED_BUILTIN_EXPECT,
+
+
+
+PRED_LOOP_ITERATIONS_GUESSED,
+
+
+
+PRED_CONTINUE,
+
+
+PRED_NORETURN,
+
+
+
+PRED_COLD_FUNCTION,
+
+
+
+PRED_LOOP_BRANCH,
+
+
+
+PRED_LOOP_EXIT,
+
+
+
+PRED_POINTER,
+PRED_TREE_POINTER,
+
+
+PRED_OPCODE_POSITIVE,
+PRED_OPCODE_NONEQUAL,
+PRED_FPOPCODE,
+PRED_TREE_OPCODE_POSITIVE,
+PRED_TREE_OPCODE_NONEQUAL,
+PRED_TREE_FPOPCODE,
+
+
+PRED_CALL,
+
+
+PRED_TREE_EARLY_RETURN,
+
+
+PRED_GOTO,
+
+
+PRED_CONST_RETURN,
+
+
+PRED_NEGATIVE_RETURN,
+
+
+PRED_NULL_RETURN,
+
+
+PRED_MUDFLAP,
+# 28 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/predict.h" 2
+
+
+  END_PREDICTORS
+};
+
+enum prediction
+{
+   NOT_TAKEN,
+   TAKEN
+};
+
+extern void predict_insn_def (rtx, enum br_predictor, enum prediction);
+extern int counts_to_freqs (void);
+extern void estimate_bb_frequencies (void);
+extern const char *predictor_name (enum br_predictor);
+extern tree build_predict_expr (enum br_predictor, enum prediction);
+extern void tree_estimate_probability (void);
+extern void compute_function_frequency (void);
+extern void rebuild_frequencies (void);
+# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/basic-block.h" 2
+
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/function.h" 1
+# 27 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/function.h"
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/vecprim.h" 1
+# 23 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/vecprim.h"
+static __inline__ void VEC_char_must_be_integral_type (void) { (void)~(char)0; } typedef struct VEC_char_base { unsigned num; unsigned alloc; char vec[1]; } VEC_char_base; typedef struct VEC_char_none { VEC_char_base base; } VEC_char_none; static __inline__ unsigned VEC_char_base_length (const VEC_char_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ char VEC_char_base_last (const VEC_char_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ char VEC_char_base_index (const VEC_char_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_char_base_iterate (const VEC_char_base *vec_, unsigned ix_, char *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (char) 0; return 0; } } static __inline__ size_t VEC_char_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_char_base, vec) + alloc_ * sizeof(char); } static __inline__ void VEC_char_base_embedded_init (VEC_char_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_char_base_space (VEC_char_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_char_base_splice (VEC_char_base *dst_, VEC_char_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (char)); dst_->num += len_; } } static __inline__ char *VEC_char_base_quick_push (VEC_char_base *vec_, char obj_ ) { char *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ char VEC_char_base_pop (VEC_char_base *vec_ ) { char obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_char_base_truncate (VEC_char_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ char VEC_char_base_replace (VEC_char_base *vec_, unsigned ix_, char obj_ ) { char old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ char *VEC_char_base_quick_insert (VEC_char_base *vec_, unsigned ix_, char obj_ ) { char *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (char)); *slot_ = obj_; return slot_; } static __inline__ char VEC_char_base_ordered_remove (VEC_char_base *vec_, unsigned ix_ ) { char *slot_; char obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (char)); return obj_; } static __inline__ char VEC_char_base_unordered_remove (VEC_char_base *vec_, unsigned ix_ ) { char *slot_; char obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_char_base_block_remove (VEC_char_base *vec_, unsigned ix_, unsigned len_ ) { char *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (char)); } static __inline__ char *VEC_char_base_address (VEC_char_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_char_base_lower_bound (VEC_char_base *vec_, const char obj_, unsigned char (*lessthan_)(const char, const char) ) { unsigned int len_ = VEC_char_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { char middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_char_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_char_heap { VEC_char_base base; } VEC_char_heap; static __inline__ VEC_char_heap *VEC_char_heap_alloc (int alloc_ ) { return (VEC_char_heap *) vec_heap_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) ); } static __inline__ VEC_char_heap *VEC_char_heap_copy (VEC_char_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_char_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_char_heap *)(vec_heap_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (char) * len_); } return new_vec_; } static __inline__ void VEC_char_heap_free (VEC_char_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_char_heap_reserve (VEC_char_heap **vec_, int alloc_ ) { int extend = !VEC_char_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_char_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) ); return extend; } static __inline__ int VEC_char_heap_reserve_exact (VEC_char_heap **vec_, int alloc_ ) { int extend = !VEC_char_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_char_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) ); return extend; } static __inline__ void VEC_char_heap_safe_grow (VEC_char_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_char_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_char_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_char_heap_safe_grow_cleared (VEC_char_heap **vec_, int size_ ) { int oldsize = VEC_char_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_char_heap_safe_grow (vec_, size_ ); memset (&(VEC_char_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (char) * (size_ - oldsize)); } static __inline__ void VEC_char_heap_safe_splice (VEC_char_heap **dst_, VEC_char_base *src_ ) { if (src_) { VEC_char_heap_reserve_exact (dst_, src_->num ); VEC_char_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ char *VEC_char_heap_safe_push (VEC_char_heap **vec_, const char obj_ ) { VEC_char_heap_reserve (vec_, 1 ); return VEC_char_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ char *VEC_char_heap_safe_insert (VEC_char_heap **vec_, unsigned ix_, const char obj_ ) { VEC_char_heap_reserve (vec_, 1 ); return VEC_char_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+typedef unsigned char uchar;
+static __inline__ void VEC_uchar_must_be_integral_type (void) { (void)~(uchar)0; } typedef struct VEC_uchar_base { unsigned num; unsigned alloc; uchar vec[1]; } VEC_uchar_base; typedef struct VEC_uchar_none { VEC_uchar_base base; } VEC_uchar_none; static __inline__ unsigned VEC_uchar_base_length (const VEC_uchar_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ uchar VEC_uchar_base_last (const VEC_uchar_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ uchar VEC_uchar_base_index (const VEC_uchar_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_uchar_base_iterate (const VEC_uchar_base *vec_, unsigned ix_, uchar *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (uchar) 0; return 0; } } static __inline__ size_t VEC_uchar_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_uchar_base, vec) + alloc_ * sizeof(uchar); } static __inline__ void VEC_uchar_base_embedded_init (VEC_uchar_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_uchar_base_space (VEC_uchar_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_uchar_base_splice (VEC_uchar_base *dst_, VEC_uchar_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (uchar)); dst_->num += len_; } } static __inline__ uchar *VEC_uchar_base_quick_push (VEC_uchar_base *vec_, uchar obj_ ) { uchar *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ uchar VEC_uchar_base_pop (VEC_uchar_base *vec_ ) { uchar obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_uchar_base_truncate (VEC_uchar_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ uchar VEC_uchar_base_replace (VEC_uchar_base *vec_, unsigned ix_, uchar obj_ ) { uchar old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ uchar *VEC_uchar_base_quick_insert (VEC_uchar_base *vec_, unsigned ix_, uchar obj_ ) { uchar *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (uchar)); *slot_ = obj_; return slot_; } static __inline__ uchar VEC_uchar_base_ordered_remove (VEC_uchar_base *vec_, unsigned ix_ ) { uchar *slot_; uchar obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (uchar)); return obj_; } static __inline__ uchar VEC_uchar_base_unordered_remove (VEC_uchar_base *vec_, unsigned ix_ ) { uchar *slot_; uchar obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_uchar_base_block_remove (VEC_uchar_base *vec_, unsigned ix_, unsigned len_ ) { uchar *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (uchar)); } static __inline__ uchar *VEC_uchar_base_address (VEC_uchar_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_uchar_base_lower_bound (VEC_uchar_base *vec_, const uchar obj_, unsigned char (*lessthan_)(const uchar, const uchar) ) { unsigned int len_ = VEC_uchar_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { uchar middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_uchar_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_uchar_heap { VEC_uchar_base base; } VEC_uchar_heap; static __inline__ VEC_uchar_heap *VEC_uchar_heap_alloc (int alloc_ ) { return (VEC_uchar_heap *) vec_heap_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) ); } static __inline__ VEC_uchar_heap *VEC_uchar_heap_copy (VEC_uchar_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_uchar_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_uchar_heap *)(vec_heap_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (uchar) * len_); } return new_vec_; } static __inline__ void VEC_uchar_heap_free (VEC_uchar_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_uchar_heap_reserve (VEC_uchar_heap **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) ); return extend; } static __inline__ int VEC_uchar_heap_reserve_exact (VEC_uchar_heap **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) ); return extend; } static __inline__ void VEC_uchar_heap_safe_grow (VEC_uchar_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_uchar_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_uchar_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_uchar_heap_safe_grow_cleared (VEC_uchar_heap **vec_, int size_ ) { int oldsize = VEC_uchar_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_uchar_heap_safe_grow (vec_, size_ ); memset (&(VEC_uchar_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (uchar) * (size_ - oldsize)); } static __inline__ void VEC_uchar_heap_safe_splice (VEC_uchar_heap **dst_, VEC_uchar_base *src_ ) { if (src_) { VEC_uchar_heap_reserve_exact (dst_, src_->num ); VEC_uchar_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ uchar *VEC_uchar_heap_safe_push (VEC_uchar_heap **vec_, const uchar obj_ ) { VEC_uchar_heap_reserve (vec_, 1 ); return VEC_uchar_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ uchar *VEC_uchar_heap_safe_insert (VEC_uchar_heap **vec_, unsigned ix_, const uchar obj_ ) { VEC_uchar_heap_reserve (vec_, 1 ); return VEC_uchar_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+typedef struct VEC_uchar_gc { VEC_uchar_base base; } VEC_uchar_gc; static __inline__ VEC_uchar_gc *VEC_uchar_gc_alloc (int alloc_ ) { return (VEC_uchar_gc *) vec_gc_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) ); } static __inline__ VEC_uchar_gc *VEC_uchar_gc_copy (VEC_uchar_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_uchar_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_uchar_gc *)(vec_gc_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (uchar) * len_); } return new_vec_; } static __inline__ void VEC_uchar_gc_free (VEC_uchar_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_uchar_gc_reserve (VEC_uchar_gc **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) ); return extend; } static __inline__ int VEC_uchar_gc_reserve_exact (VEC_uchar_gc **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) ); return extend; } static __inline__ void VEC_uchar_gc_safe_grow (VEC_uchar_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_uchar_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_uchar_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_uchar_gc_safe_grow_cleared (VEC_uchar_gc **vec_, int size_ ) { int oldsize = VEC_uchar_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_uchar_gc_safe_grow (vec_, size_ ); memset (&(VEC_uchar_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (uchar) * (size_ - oldsize)); } static __inline__ void VEC_uchar_gc_safe_splice (VEC_uchar_gc **dst_, VEC_uchar_base *src_ ) { if (src_) { VEC_uchar_gc_reserve_exact (dst_, src_->num ); VEC_uchar_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ uchar *VEC_uchar_gc_safe_push (VEC_uchar_gc **vec_, const uchar obj_ ) { VEC_uchar_gc_reserve (vec_, 1 ); return VEC_uchar_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ uchar *VEC_uchar_gc_safe_insert (VEC_uchar_gc **vec_, unsigned ix_, const uchar obj_ ) { VEC_uchar_gc_reserve (vec_, 1 ); return VEC_uchar_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+static __inline__ void VEC_int_must_be_integral_type (void) { (void)~(int)0; } typedef struct VEC_int_base { unsigned num; unsigned alloc; int vec[1]; } VEC_int_base; typedef struct VEC_int_none { VEC_int_base base; } VEC_int_none; static __inline__ unsigned VEC_int_base_length (const VEC_int_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ int VEC_int_base_last (const VEC_int_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ int VEC_int_base_index (const VEC_int_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_int_base_iterate (const VEC_int_base *vec_, unsigned ix_, int *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (int) 0; return 0; } } static __inline__ size_t VEC_int_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_int_base, vec) + alloc_ * sizeof(int); } static __inline__ void VEC_int_base_embedded_init (VEC_int_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_int_base_space (VEC_int_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_int_base_splice (VEC_int_base *dst_, VEC_int_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (int)); dst_->num += len_; } } static __inline__ int *VEC_int_base_quick_push (VEC_int_base *vec_, int obj_ ) { int *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ int VEC_int_base_pop (VEC_int_base *vec_ ) { int obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_int_base_truncate (VEC_int_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ int VEC_int_base_replace (VEC_int_base *vec_, unsigned ix_, int obj_ ) { int old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ int *VEC_int_base_quick_insert (VEC_int_base *vec_, unsigned ix_, int obj_ ) { int *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (int)); *slot_ = obj_; return slot_; } static __inline__ int VEC_int_base_ordered_remove (VEC_int_base *vec_, unsigned ix_ ) { int *slot_; int obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (int)); return obj_; } static __inline__ int VEC_int_base_unordered_remove (VEC_int_base *vec_, unsigned ix_ ) { int *slot_; int obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_int_base_block_remove (VEC_int_base *vec_, unsigned ix_, unsigned len_ ) { int *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (int)); } static __inline__ int *VEC_int_base_address (VEC_int_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_int_base_lower_bound (VEC_int_base *vec_, const int obj_, unsigned char (*lessthan_)(const int, const int) ) { unsigned int len_ = VEC_int_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { int middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_int_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_int_heap { VEC_int_base base; } VEC_int_heap; static __inline__ VEC_int_heap *VEC_int_heap_alloc (int alloc_ ) { return (VEC_int_heap *) vec_heap_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) ); } static __inline__ VEC_int_heap *VEC_int_heap_copy (VEC_int_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_int_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_int_heap *)(vec_heap_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (int) * len_); } return new_vec_; } static __inline__ void VEC_int_heap_free (VEC_int_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_int_heap_reserve (VEC_int_heap **vec_, int alloc_ ) { int extend = !VEC_int_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_int_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) ); return extend; } static __inline__ int VEC_int_heap_reserve_exact (VEC_int_heap **vec_, int alloc_ ) { int extend = !VEC_int_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_int_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) ); return extend; } static __inline__ void VEC_int_heap_safe_grow (VEC_int_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_int_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_int_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_int_heap_safe_grow_cleared (VEC_int_heap **vec_, int size_ ) { int oldsize = VEC_int_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_int_heap_safe_grow (vec_, size_ ); memset (&(VEC_int_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (int) * (size_ - oldsize)); } static __inline__ void VEC_int_heap_safe_splice (VEC_int_heap **dst_, VEC_int_base *src_ ) { if (src_) { VEC_int_heap_reserve_exact (dst_, src_->num ); VEC_int_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ int *VEC_int_heap_safe_push (VEC_int_heap **vec_, const int obj_ ) { VEC_int_heap_reserve (vec_, 1 ); return VEC_int_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ int *VEC_int_heap_safe_insert (VEC_int_heap **vec_, unsigned ix_, const int obj_ ) { VEC_int_heap_reserve (vec_, 1 ); return VEC_int_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+
+static __inline__ void VEC_unsigned_must_be_integral_type (void) { (void)~(unsigned)0; } typedef struct VEC_unsigned_base { unsigned num; unsigned alloc; unsigned vec[1]; } VEC_unsigned_base; typedef struct VEC_unsigned_none { VEC_unsigned_base base; } VEC_unsigned_none; static __inline__ unsigned VEC_unsigned_base_length (const VEC_unsigned_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ unsigned VEC_unsigned_base_last (const VEC_unsigned_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ unsigned VEC_unsigned_base_index (const VEC_unsigned_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_unsigned_base_iterate (const VEC_unsigned_base *vec_, unsigned ix_, unsigned *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (unsigned) 0; return 0; } } static __inline__ size_t VEC_unsigned_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_unsigned_base, vec) + alloc_ * sizeof(unsigned); } static __inline__ void VEC_unsigned_base_embedded_init (VEC_unsigned_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_unsigned_base_space (VEC_unsigned_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_unsigned_base_splice (VEC_unsigned_base *dst_, VEC_unsigned_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (unsigned)); dst_->num += len_; } } static __inline__ unsigned *VEC_unsigned_base_quick_push (VEC_unsigned_base *vec_, unsigned obj_ ) { unsigned *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ unsigned VEC_unsigned_base_pop (VEC_unsigned_base *vec_ ) { unsigned obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_unsigned_base_truncate (VEC_unsigned_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ unsigned VEC_unsigned_base_replace (VEC_unsigned_base *vec_, unsigned ix_, unsigned obj_ ) { unsigned old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ unsigned *VEC_unsigned_base_quick_insert (VEC_unsigned_base *vec_, unsigned ix_, unsigned obj_ ) { unsigned *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (unsigned)); *slot_ = obj_; return slot_; } static __inline__ unsigned VEC_unsigned_base_ordered_remove (VEC_unsigned_base *vec_, unsigned ix_ ) { unsigned *slot_; unsigned obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (unsigned)); return obj_; } static __inline__ unsigned VEC_unsigned_base_unordered_remove (VEC_unsigned_base *vec_, unsigned ix_ ) { unsigned *slot_; unsigned obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_unsigned_base_block_remove (VEC_unsigned_base *vec_, unsigned ix_, unsigned len_ ) { unsigned *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (unsigned)); } static __inline__ unsigned *VEC_unsigned_base_address (VEC_unsigned_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_unsigned_base_lower_bound (VEC_unsigned_base *vec_, const unsigned obj_, unsigned char (*lessthan_)(const unsigned, const unsigned) ) { unsigned int len_ = VEC_unsigned_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { unsigned middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_unsigned_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
+typedef struct VEC_unsigned_heap { VEC_unsigned_base base; } VEC_unsigned_heap; static __inline__ VEC_unsigned_heap *VEC_unsigned_heap_alloc (int alloc_ ) { return (VEC_unsigned_heap *) vec_heap_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); } static __inline__ VEC_unsigned_heap *VEC_unsigned_heap_copy (VEC_unsigned_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_unsigned_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_unsigned_heap *)(vec_heap_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (unsigned) * len_); } return new_vec_; } static __inline__ void VEC_unsigned_heap_free (VEC_unsigned_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_unsigned_heap_reserve (VEC_unsigned_heap **vec_, int alloc_ ) { int extend = !VEC_unsigned_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_unsigned_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); return extend; } static __inline__ int VEC_unsigned_heap_reserve_exact (VEC_unsigned_heap **vec_, int alloc_ ) { int extend = !VEC_unsigned_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_unsigned_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); return extend; } static __inline__ void VEC_unsigned_heap_safe_grow (VEC_unsigned_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_unsigned_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_unsigned_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_unsigned_heap_safe_grow_cleared (VEC_unsigned_heap **vec_, int size_ ) { int oldsize = VEC_unsigned_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_unsigned_heap_safe_grow (vec_, size_ ); memset (&(VEC_unsigned_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (unsigned) * (size_ - oldsize)); } static __inline__ void VEC_unsigned_heap_safe_splice (VEC_unsigned_heap **dst_, VEC_unsigned_base *src_ ) { if (src_) { VEC_unsigned_heap_reserve_exact (dst_, src_->num ); VEC_unsigned_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ unsigned *VEC_unsigned_heap_safe_push (VEC_unsigned_heap **vec_, const unsigned obj_ ) { VEC_unsigned_heap_reserve (vec_, 1 ); return VEC_unsigned_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ unsigned *VEC_unsigned_heap_safe_insert (VEC_unsigned_heap **vec_, unsigned ix_, const unsigned obj_ ) { VEC_unsigned_heap_reserve (vec_, 1 ); return VEC_unsigned_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
+# 28 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/function.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tm.h" 1
+# 20 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tm.h"
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/insn-constants.h" 1
 # 73 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/insn-constants.h"
 enum unspec {
@@ -15272,8490 +24864,6 @@ gen_sync_compare_and_swapti(rtx a __attribute__ ((__unused__)), rtx b __attribut
 # 931 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/defaults.h"
        
 # 37 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tm.h" 2
-# 24 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 1
-# 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/machmode.h" 1
-# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/machmode.h"
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/insn-modes.h" 1
-
-
-
-
-
-
-enum machine_mode
-{
-  VOIDmode,
-  BLKmode,
-  CCmode,
-  CCGCmode,
-  CCGOCmode,
-  CCNOmode,
-  CCAmode,
-  CCCmode,
-  CCOmode,
-  CCSmode,
-  CCZmode,
-  CCFPmode,
-  CCFPUmode,
-  BImode,
-  QImode,
-  HImode,
-  SImode,
-  DImode,
-  TImode,
-  OImode,
-  QQmode,
-  HQmode,
-  SQmode,
-  DQmode,
-  TQmode,
-  UQQmode,
-  UHQmode,
-  USQmode,
-  UDQmode,
-  UTQmode,
-  HAmode,
-  SAmode,
-  DAmode,
-  TAmode,
-  UHAmode,
-  USAmode,
-  UDAmode,
-  UTAmode,
-  SFmode,
-  DFmode,
-  XFmode,
-  TFmode,
-  SDmode,
-  DDmode,
-  TDmode,
-  CQImode,
-  CHImode,
-  CSImode,
-  CDImode,
-  CTImode,
-  COImode,
-  SCmode,
-  DCmode,
-  XCmode,
-  TCmode,
-  V2QImode,
-  V4QImode,
-  V2HImode,
-  V1SImode,
-  V8QImode,
-  V4HImode,
-  V2SImode,
-  V1DImode,
-  V16QImode,
-  V8HImode,
-  V4SImode,
-  V2DImode,
-  V1TImode,
-  V32QImode,
-  V16HImode,
-  V8SImode,
-  V4DImode,
-  V2TImode,
-  V64QImode,
-  V32HImode,
-  V16SImode,
-  V8DImode,
-  V4TImode,
-  V2SFmode,
-  V4SFmode,
-  V2DFmode,
-  V8SFmode,
-  V4DFmode,
-  V2TFmode,
-  V16SFmode,
-  V8DFmode,
-  V4TFmode,
-  MAX_MACHINE_MODE,
-
-  MIN_MODE_RANDOM = VOIDmode,
-  MAX_MODE_RANDOM = BLKmode,
-
-  MIN_MODE_CC = CCmode,
-  MAX_MODE_CC = CCFPUmode,
-
-  MIN_MODE_INT = QImode,
-  MAX_MODE_INT = OImode,
-
-  MIN_MODE_PARTIAL_INT = VOIDmode,
-  MAX_MODE_PARTIAL_INT = VOIDmode,
-
-  MIN_MODE_FRACT = QQmode,
-  MAX_MODE_FRACT = TQmode,
-
-  MIN_MODE_UFRACT = UQQmode,
-  MAX_MODE_UFRACT = UTQmode,
-
-  MIN_MODE_ACCUM = HAmode,
-  MAX_MODE_ACCUM = TAmode,
-
-  MIN_MODE_UACCUM = UHAmode,
-  MAX_MODE_UACCUM = UTAmode,
-
-  MIN_MODE_FLOAT = SFmode,
-  MAX_MODE_FLOAT = TFmode,
-
-  MIN_MODE_DECIMAL_FLOAT = SDmode,
-  MAX_MODE_DECIMAL_FLOAT = TDmode,
-
-  MIN_MODE_COMPLEX_INT = CQImode,
-  MAX_MODE_COMPLEX_INT = COImode,
-
-  MIN_MODE_COMPLEX_FLOAT = SCmode,
-  MAX_MODE_COMPLEX_FLOAT = TCmode,
-
-  MIN_MODE_VECTOR_INT = V2QImode,
-  MAX_MODE_VECTOR_INT = V4TImode,
-
-  MIN_MODE_VECTOR_FRACT = VOIDmode,
-  MAX_MODE_VECTOR_FRACT = VOIDmode,
-
-  MIN_MODE_VECTOR_UFRACT = VOIDmode,
-  MAX_MODE_VECTOR_UFRACT = VOIDmode,
-
-  MIN_MODE_VECTOR_ACCUM = VOIDmode,
-  MAX_MODE_VECTOR_ACCUM = VOIDmode,
-
-  MIN_MODE_VECTOR_UACCUM = VOIDmode,
-  MAX_MODE_VECTOR_UACCUM = VOIDmode,
-
-  MIN_MODE_VECTOR_FLOAT = V2SFmode,
-  MAX_MODE_VECTOR_FLOAT = V4TFmode,
-
-  NUM_MACHINE_MODES = MAX_MACHINE_MODE
-};
-# 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/machmode.h" 2
-
-
-
-extern const char * const mode_name[NUM_MACHINE_MODES];
-
-
-
-
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/mode-classes.def" 1
-# 35 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/machmode.h" 2
-
-enum mode_class { MODE_RANDOM, MODE_CC, MODE_INT, MODE_PARTIAL_INT, MODE_FRACT, MODE_UFRACT, MODE_ACCUM, MODE_UACCUM, MODE_FLOAT, MODE_DECIMAL_FLOAT, MODE_COMPLEX_INT, MODE_COMPLEX_FLOAT, MODE_VECTOR_INT, MODE_VECTOR_FRACT, MODE_VECTOR_UFRACT, MODE_VECTOR_ACCUM, MODE_VECTOR_UACCUM, MODE_VECTOR_FLOAT, MAX_MODE_CLASS };
-
-
-
-
-
-
-extern const unsigned char mode_class[NUM_MACHINE_MODES];
-# 179 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/machmode.h"
-extern unsigned char mode_size[NUM_MACHINE_MODES];
-
-
-
-
-extern const unsigned short mode_precision[NUM_MACHINE_MODES];
-
-
-
-extern const unsigned char mode_ibit[NUM_MACHINE_MODES];
-
-
-
-extern const unsigned char mode_fbit[NUM_MACHINE_MODES];
-
-
-
-
-
-extern const unsigned long mode_mask_array[NUM_MACHINE_MODES];
-
-
-
-
-
-extern const unsigned char mode_inner[NUM_MACHINE_MODES];
-# 216 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/machmode.h"
-extern const unsigned char mode_nunits[NUM_MACHINE_MODES];
-
-
-
-
-extern const unsigned char mode_wider[NUM_MACHINE_MODES];
-
-
-extern const unsigned char mode_2xwider[NUM_MACHINE_MODES];
-
-
-
-
-
-
-extern enum machine_mode mode_for_size (unsigned int, enum mode_class, int);
-
-
-
-extern enum machine_mode smallest_mode_for_size (unsigned int,
-       enum mode_class);
-
-
-
-
-
-extern enum machine_mode int_mode_for_mode (enum machine_mode);
-
-
-
-
-extern enum machine_mode mode_for_vector (enum machine_mode, unsigned);
-
-
-
-extern enum machine_mode get_best_mode (int, int, unsigned int,
-     enum machine_mode, int);
-
-
-
-extern unsigned char mode_base_align[NUM_MACHINE_MODES];
-
-extern unsigned get_mode_alignment (enum machine_mode);
-
-
-
-
-
-extern const unsigned char class_narrowest_mode[MAX_MODE_CLASS];
-
-
-
-
-
-
-extern enum machine_mode byte_mode;
-extern enum machine_mode word_mode;
-extern enum machine_mode ptr_mode;
-
-
-extern void init_adjust_machine_modes (void);
-# 27 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/input.h" 1
-# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/input.h"
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/line-map.h" 1
-# 36 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/line-map.h"
-enum lc_reason {LC_ENTER = 0, LC_LEAVE, LC_RENAME, LC_RENAME_VERBATIM};
-
-
-typedef unsigned int linenum_type;
-
-
-typedef unsigned int source_location;
-
-
-typedef void *(*line_map_realloc) (void *, size_t);
-# 59 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/line-map.h"
-struct line_map {
-  const char *to_file;
-  linenum_type to_line;
-  source_location start_location;
-  int included_from;
-  __extension__ enum lc_reason reason : 8;
-
-  unsigned char sysp;
-
-  unsigned int column_bits : 8;
-};
-
-
-struct line_maps {
-  struct line_map * maps;
-  unsigned int allocated;
-  unsigned int used;
-
-  unsigned int cache;
-
-
-
-
-  int last_listed;
-
-
-  unsigned int depth;
-
-
-  unsigned char trace_includes;
-
-
-  source_location highest_location;
-
-
-  source_location highest_line;
-
-
-
-  unsigned int max_column_hint;
-
-
-
-  line_map_realloc reallocator;
-};
-
-
-extern void linemap_init (struct line_maps *);
-
-
-extern void linemap_free (struct line_maps *);
-
-
-
-extern void linemap_check_files_exited (struct line_maps *);
-
-
-
-
-
-
-
-extern source_location linemap_line_start
-(struct line_maps *set, linenum_type to_line, unsigned int max_column_hint);
-# 135 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/line-map.h"
-extern const struct line_map *linemap_add
-  (struct line_maps *, enum lc_reason, unsigned int sysp,
-   const char *to_file, linenum_type to_line);
-
-
-
-extern const struct line_map *linemap_lookup
-  (struct line_maps *, source_location);
-# 190 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/line-map.h"
-extern source_location
-linemap_position_for_column (struct line_maps *set, unsigned int to_column);
-# 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/input.h" 2
-
-extern struct line_maps *line_table;
-# 37 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/input.h"
-extern char builtins_location_check[(((source_location) 1)
-         < 2) ? 1 : -1];
-
-typedef struct
-{
-
-  const char *file;
-
-
-  int line;
-
-  int column;
-
-
-  unsigned char sysp;
-} expanded_location;
-
-extern expanded_location expand_location (source_location);
-
-
-
-typedef source_location location_t;
-
-extern location_t input_location;
-# 28 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/statistics.h" 1
-# 41 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/statistics.h"
-struct function;
-
-
-extern void statistics_early_init (void);
-extern void statistics_init (void);
-extern void statistics_fini (void);
-extern void statistics_fini_pass (void);
-extern void statistics_counter_event (struct function *, const char *, int);
-extern void statistics_histogram_event (struct function *, const char *, int);
-# 29 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/vec.h" 1
-# 467 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/vec.h"
-extern void *vec_gc_p_reserve (void *, int );
-extern void *vec_gc_p_reserve_exact (void *, int );
-extern void *vec_gc_o_reserve (void *, int, size_t, size_t );
-extern void *vec_gc_o_reserve_exact (void *, int, size_t, size_t
-         );
-extern void ggc_free (void *);
-
-extern void *vec_heap_p_reserve (void *, int );
-extern void *vec_heap_p_reserve_exact (void *, int );
-extern void *vec_heap_o_reserve (void *, int, size_t, size_t );
-extern void *vec_heap_o_reserve_exact (void *, int, size_t, size_t
-           );
-extern void dump_vec_loc_statistics (void);
-# 1337 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/vec.h"
-extern void *vec_stack_p_reserve (void *, int );
-extern void *vec_stack_p_reserve_exact (void *, int );
-extern void *vec_stack_p_reserve_exact_1 (int, void *);
-extern void *vec_stack_o_reserve (void *, int, size_t, size_t );
-extern void *vec_stack_o_reserve_exact (void *, int, size_t, size_t
-      );
-extern void vec_stack_free (void *);
-# 30 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/vecir.h" 1
-# 28 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/vecir.h"
-static __inline__ void VEC_tree_must_be_pointer_type (void) { (void)((tree)1 == (void *)1); } typedef struct VEC_tree_base { unsigned num; unsigned alloc; tree vec[1]; } VEC_tree_base; typedef struct VEC_tree_none { VEC_tree_base base; } VEC_tree_none; static __inline__ unsigned VEC_tree_base_length (const VEC_tree_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ tree VEC_tree_base_last (const VEC_tree_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ tree VEC_tree_base_index (const VEC_tree_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_tree_base_iterate (const VEC_tree_base *vec_, unsigned ix_, tree *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (tree) 0; return 0; } } static __inline__ size_t VEC_tree_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_tree_base, vec) + alloc_ * sizeof(tree); } static __inline__ void VEC_tree_base_embedded_init (VEC_tree_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_tree_base_space (VEC_tree_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_tree_base_splice (VEC_tree_base *dst_, VEC_tree_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (tree)); dst_->num += len_; } } static __inline__ tree *VEC_tree_base_quick_push (VEC_tree_base *vec_, tree obj_ ) { tree *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ tree VEC_tree_base_pop (VEC_tree_base *vec_ ) { tree obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_tree_base_truncate (VEC_tree_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ tree VEC_tree_base_replace (VEC_tree_base *vec_, unsigned ix_, tree obj_ ) { tree old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ tree *VEC_tree_base_quick_insert (VEC_tree_base *vec_, unsigned ix_, tree obj_ ) { tree *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (tree)); *slot_ = obj_; return slot_; } static __inline__ tree VEC_tree_base_ordered_remove (VEC_tree_base *vec_, unsigned ix_ ) { tree *slot_; tree obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (tree)); return obj_; } static __inline__ tree VEC_tree_base_unordered_remove (VEC_tree_base *vec_, unsigned ix_ ) { tree *slot_; tree obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_tree_base_block_remove (VEC_tree_base *vec_, unsigned ix_, unsigned len_ ) { tree *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (tree)); } static __inline__ tree *VEC_tree_base_address (VEC_tree_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_tree_base_lower_bound (VEC_tree_base *vec_, const tree obj_, unsigned char (*lessthan_)(const tree, const tree) ) { unsigned int len_ = VEC_tree_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { tree middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_tree_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_tree_gc { VEC_tree_base base; } VEC_tree_gc; static __inline__ VEC_tree_gc *VEC_tree_gc_alloc (int alloc_ ) { return (VEC_tree_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_tree_gc_free (VEC_tree_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_tree_gc *VEC_tree_gc_copy (VEC_tree_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_tree_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_tree_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (tree) * len_); } return new_vec_; } static __inline__ int VEC_tree_gc_reserve (VEC_tree_gc **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_tree_gc_reserve_exact (VEC_tree_gc **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_tree_gc_safe_grow (VEC_tree_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_tree_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_tree_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_tree_gc_safe_grow_cleared (VEC_tree_gc **vec_, int size_ ) { int oldsize = VEC_tree_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_tree_gc_safe_grow (vec_, size_ ); memset (&(VEC_tree_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (tree) * (size_ - oldsize)); } static __inline__ void VEC_tree_gc_safe_splice (VEC_tree_gc **dst_, VEC_tree_base *src_ ) { if (src_) { VEC_tree_gc_reserve_exact (dst_, src_->num ); VEC_tree_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ tree *VEC_tree_gc_safe_push (VEC_tree_gc **vec_, tree obj_ ) { VEC_tree_gc_reserve (vec_, 1 ); return VEC_tree_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ tree *VEC_tree_gc_safe_insert (VEC_tree_gc **vec_, unsigned ix_, tree obj_ ) { VEC_tree_gc_reserve (vec_, 1 ); return VEC_tree_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-typedef struct VEC_tree_heap { VEC_tree_base base; } VEC_tree_heap; static __inline__ VEC_tree_heap *VEC_tree_heap_alloc (int alloc_ ) { return (VEC_tree_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_tree_heap_free (VEC_tree_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_tree_heap *VEC_tree_heap_copy (VEC_tree_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_tree_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_tree_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (tree) * len_); } return new_vec_; } static __inline__ int VEC_tree_heap_reserve (VEC_tree_heap **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_tree_heap_reserve_exact (VEC_tree_heap **vec_, int alloc_ ) { int extend = !VEC_tree_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_tree_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_tree_heap_safe_grow (VEC_tree_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_tree_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_tree_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_tree_heap_safe_grow_cleared (VEC_tree_heap **vec_, int size_ ) { int oldsize = VEC_tree_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_tree_heap_safe_grow (vec_, size_ ); memset (&(VEC_tree_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (tree) * (size_ - oldsize)); } static __inline__ void VEC_tree_heap_safe_splice (VEC_tree_heap **dst_, VEC_tree_base *src_ ) { if (src_) { VEC_tree_heap_reserve_exact (dst_, src_->num ); VEC_tree_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ tree *VEC_tree_heap_safe_push (VEC_tree_heap **vec_, tree obj_ ) { VEC_tree_heap_reserve (vec_, 1 ); return VEC_tree_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ tree *VEC_tree_heap_safe_insert (VEC_tree_heap **vec_, unsigned ix_, tree obj_ ) { VEC_tree_heap_reserve (vec_, 1 ); return VEC_tree_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-
-
-static __inline__ void VEC_gimple_must_be_pointer_type (void) { (void)((gimple)1 == (void *)1); } typedef struct VEC_gimple_base { unsigned num; unsigned alloc; gimple vec[1]; } VEC_gimple_base; typedef struct VEC_gimple_none { VEC_gimple_base base; } VEC_gimple_none; static __inline__ unsigned VEC_gimple_base_length (const VEC_gimple_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ gimple VEC_gimple_base_last (const VEC_gimple_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ gimple VEC_gimple_base_index (const VEC_gimple_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_gimple_base_iterate (const VEC_gimple_base *vec_, unsigned ix_, gimple *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (gimple) 0; return 0; } } static __inline__ size_t VEC_gimple_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_gimple_base, vec) + alloc_ * sizeof(gimple); } static __inline__ void VEC_gimple_base_embedded_init (VEC_gimple_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_gimple_base_space (VEC_gimple_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_gimple_base_splice (VEC_gimple_base *dst_, VEC_gimple_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (gimple)); dst_->num += len_; } } static __inline__ gimple *VEC_gimple_base_quick_push (VEC_gimple_base *vec_, gimple obj_ ) { gimple *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ gimple VEC_gimple_base_pop (VEC_gimple_base *vec_ ) { gimple obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_gimple_base_truncate (VEC_gimple_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ gimple VEC_gimple_base_replace (VEC_gimple_base *vec_, unsigned ix_, gimple obj_ ) { gimple old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ gimple *VEC_gimple_base_quick_insert (VEC_gimple_base *vec_, unsigned ix_, gimple obj_ ) { gimple *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (gimple)); *slot_ = obj_; return slot_; } static __inline__ gimple VEC_gimple_base_ordered_remove (VEC_gimple_base *vec_, unsigned ix_ ) { gimple *slot_; gimple obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (gimple)); return obj_; } static __inline__ gimple VEC_gimple_base_unordered_remove (VEC_gimple_base *vec_, unsigned ix_ ) { gimple *slot_; gimple obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_gimple_base_block_remove (VEC_gimple_base *vec_, unsigned ix_, unsigned len_ ) { gimple *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (gimple)); } static __inline__ gimple *VEC_gimple_base_address (VEC_gimple_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_gimple_base_lower_bound (VEC_gimple_base *vec_, const gimple obj_, unsigned char (*lessthan_)(const gimple, const gimple) ) { unsigned int len_ = VEC_gimple_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { gimple middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_gimple_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_gimple_heap { VEC_gimple_base base; } VEC_gimple_heap; static __inline__ VEC_gimple_heap *VEC_gimple_heap_alloc (int alloc_ ) { return (VEC_gimple_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_heap_free (VEC_gimple_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_heap *VEC_gimple_heap_copy (VEC_gimple_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_gimple_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple) * len_); } return new_vec_; } static __inline__ int VEC_gimple_heap_reserve (VEC_gimple_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_heap_reserve_exact (VEC_gimple_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_heap_safe_grow (VEC_gimple_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_gimple_heap_safe_grow_cleared (VEC_gimple_heap **vec_, int size_ ) { int oldsize = VEC_gimple_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_gimple_heap_safe_grow (vec_, size_ ); memset (&(VEC_gimple_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple) * (size_ - oldsize)); } static __inline__ void VEC_gimple_heap_safe_splice (VEC_gimple_heap **dst_, VEC_gimple_base *src_ ) { if (src_) { VEC_gimple_heap_reserve_exact (dst_, src_->num ); VEC_gimple_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple *VEC_gimple_heap_safe_push (VEC_gimple_heap **vec_, gimple obj_ ) { VEC_gimple_heap_reserve (vec_, 1 ); return VEC_gimple_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple *VEC_gimple_heap_safe_insert (VEC_gimple_heap **vec_, unsigned ix_, gimple obj_ ) { VEC_gimple_heap_reserve (vec_, 1 ); return VEC_gimple_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-typedef struct VEC_gimple_gc { VEC_gimple_base base; } VEC_gimple_gc; static __inline__ VEC_gimple_gc *VEC_gimple_gc_alloc (int alloc_ ) { return (VEC_gimple_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_gc_free (VEC_gimple_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_gc *VEC_gimple_gc_copy (VEC_gimple_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_gimple_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple) * len_); } return new_vec_; } static __inline__ int VEC_gimple_gc_reserve (VEC_gimple_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_gc_reserve_exact (VEC_gimple_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_gc_safe_grow (VEC_gimple_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_gimple_gc_safe_grow_cleared (VEC_gimple_gc **vec_, int size_ ) { int oldsize = VEC_gimple_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_gimple_gc_safe_grow (vec_, size_ ); memset (&(VEC_gimple_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple) * (size_ - oldsize)); } static __inline__ void VEC_gimple_gc_safe_splice (VEC_gimple_gc **dst_, VEC_gimple_base *src_ ) { if (src_) { VEC_gimple_gc_reserve_exact (dst_, src_->num ); VEC_gimple_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple *VEC_gimple_gc_safe_push (VEC_gimple_gc **vec_, gimple obj_ ) { VEC_gimple_gc_reserve (vec_, 1 ); return VEC_gimple_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple *VEC_gimple_gc_safe_insert (VEC_gimple_gc **vec_, unsigned ix_, gimple obj_ ) { VEC_gimple_gc_reserve (vec_, 1 ); return VEC_gimple_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-
-
-typedef gimple *gimple_p;
-static __inline__ void VEC_gimple_p_must_be_pointer_type (void) { (void)((gimple_p)1 == (void *)1); } typedef struct VEC_gimple_p_base { unsigned num; unsigned alloc; gimple_p vec[1]; } VEC_gimple_p_base; typedef struct VEC_gimple_p_none { VEC_gimple_p_base base; } VEC_gimple_p_none; static __inline__ unsigned VEC_gimple_p_base_length (const VEC_gimple_p_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ gimple_p VEC_gimple_p_base_last (const VEC_gimple_p_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ gimple_p VEC_gimple_p_base_index (const VEC_gimple_p_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_gimple_p_base_iterate (const VEC_gimple_p_base *vec_, unsigned ix_, gimple_p *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (gimple_p) 0; return 0; } } static __inline__ size_t VEC_gimple_p_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_gimple_p_base, vec) + alloc_ * sizeof(gimple_p); } static __inline__ void VEC_gimple_p_base_embedded_init (VEC_gimple_p_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_gimple_p_base_space (VEC_gimple_p_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_gimple_p_base_splice (VEC_gimple_p_base *dst_, VEC_gimple_p_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (gimple_p)); dst_->num += len_; } } static __inline__ gimple_p *VEC_gimple_p_base_quick_push (VEC_gimple_p_base *vec_, gimple_p obj_ ) { gimple_p *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ gimple_p VEC_gimple_p_base_pop (VEC_gimple_p_base *vec_ ) { gimple_p obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_gimple_p_base_truncate (VEC_gimple_p_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ gimple_p VEC_gimple_p_base_replace (VEC_gimple_p_base *vec_, unsigned ix_, gimple_p obj_ ) { gimple_p old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ gimple_p *VEC_gimple_p_base_quick_insert (VEC_gimple_p_base *vec_, unsigned ix_, gimple_p obj_ ) { gimple_p *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (gimple_p)); *slot_ = obj_; return slot_; } static __inline__ gimple_p VEC_gimple_p_base_ordered_remove (VEC_gimple_p_base *vec_, unsigned ix_ ) { gimple_p *slot_; gimple_p obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (gimple_p)); return obj_; } static __inline__ gimple_p VEC_gimple_p_base_unordered_remove (VEC_gimple_p_base *vec_, unsigned ix_ ) { gimple_p *slot_; gimple_p obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_gimple_p_base_block_remove (VEC_gimple_p_base *vec_, unsigned ix_, unsigned len_ ) { gimple_p *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (gimple_p)); } static __inline__ gimple_p *VEC_gimple_p_base_address (VEC_gimple_p_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_gimple_p_base_lower_bound (VEC_gimple_p_base *vec_, const gimple_p obj_, unsigned char (*lessthan_)(const gimple_p, const gimple_p) ) { unsigned int len_ = VEC_gimple_p_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { gimple_p middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_gimple_p_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_gimple_p_heap { VEC_gimple_p_base base; } VEC_gimple_p_heap; static __inline__ VEC_gimple_p_heap *VEC_gimple_p_heap_alloc (int alloc_ ) { return (VEC_gimple_p_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_p_heap_free (VEC_gimple_p_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_p_heap *VEC_gimple_p_heap_copy (VEC_gimple_p_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_gimple_p_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_p_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple_p) * len_); } return new_vec_; } static __inline__ int VEC_gimple_p_heap_reserve (VEC_gimple_p_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_p_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_p_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_p_heap_reserve_exact (VEC_gimple_p_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_p_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_p_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_p_heap_safe_grow (VEC_gimple_p_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_p_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_p_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_gimple_p_heap_safe_grow_cleared (VEC_gimple_p_heap **vec_, int size_ ) { int oldsize = VEC_gimple_p_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_gimple_p_heap_safe_grow (vec_, size_ ); memset (&(VEC_gimple_p_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple_p) * (size_ - oldsize)); } static __inline__ void VEC_gimple_p_heap_safe_splice (VEC_gimple_p_heap **dst_, VEC_gimple_p_base *src_ ) { if (src_) { VEC_gimple_p_heap_reserve_exact (dst_, src_->num ); VEC_gimple_p_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple_p *VEC_gimple_p_heap_safe_push (VEC_gimple_p_heap **vec_, gimple_p obj_ ) { VEC_gimple_p_heap_reserve (vec_, 1 ); return VEC_gimple_p_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple_p *VEC_gimple_p_heap_safe_insert (VEC_gimple_p_heap **vec_, unsigned ix_, gimple_p obj_ ) { VEC_gimple_p_heap_reserve (vec_, 1 ); return VEC_gimple_p_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-
-
-static __inline__ void VEC_gimple_seq_must_be_pointer_type (void) { (void)((gimple_seq)1 == (void *)1); } typedef struct VEC_gimple_seq_base { unsigned num; unsigned alloc; gimple_seq vec[1]; } VEC_gimple_seq_base; typedef struct VEC_gimple_seq_none { VEC_gimple_seq_base base; } VEC_gimple_seq_none; static __inline__ unsigned VEC_gimple_seq_base_length (const VEC_gimple_seq_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ gimple_seq VEC_gimple_seq_base_last (const VEC_gimple_seq_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ gimple_seq VEC_gimple_seq_base_index (const VEC_gimple_seq_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_gimple_seq_base_iterate (const VEC_gimple_seq_base *vec_, unsigned ix_, gimple_seq *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (gimple_seq) 0; return 0; } } static __inline__ size_t VEC_gimple_seq_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_gimple_seq_base, vec) + alloc_ * sizeof(gimple_seq); } static __inline__ void VEC_gimple_seq_base_embedded_init (VEC_gimple_seq_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_gimple_seq_base_space (VEC_gimple_seq_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_gimple_seq_base_splice (VEC_gimple_seq_base *dst_, VEC_gimple_seq_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (gimple_seq)); dst_->num += len_; } } static __inline__ gimple_seq *VEC_gimple_seq_base_quick_push (VEC_gimple_seq_base *vec_, gimple_seq obj_ ) { gimple_seq *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ gimple_seq VEC_gimple_seq_base_pop (VEC_gimple_seq_base *vec_ ) { gimple_seq obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_gimple_seq_base_truncate (VEC_gimple_seq_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ gimple_seq VEC_gimple_seq_base_replace (VEC_gimple_seq_base *vec_, unsigned ix_, gimple_seq obj_ ) { gimple_seq old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ gimple_seq *VEC_gimple_seq_base_quick_insert (VEC_gimple_seq_base *vec_, unsigned ix_, gimple_seq obj_ ) { gimple_seq *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (gimple_seq)); *slot_ = obj_; return slot_; } static __inline__ gimple_seq VEC_gimple_seq_base_ordered_remove (VEC_gimple_seq_base *vec_, unsigned ix_ ) { gimple_seq *slot_; gimple_seq obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (gimple_seq)); return obj_; } static __inline__ gimple_seq VEC_gimple_seq_base_unordered_remove (VEC_gimple_seq_base *vec_, unsigned ix_ ) { gimple_seq *slot_; gimple_seq obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_gimple_seq_base_block_remove (VEC_gimple_seq_base *vec_, unsigned ix_, unsigned len_ ) { gimple_seq *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (gimple_seq)); } static __inline__ gimple_seq *VEC_gimple_seq_base_address (VEC_gimple_seq_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_gimple_seq_base_lower_bound (VEC_gimple_seq_base *vec_, const gimple_seq obj_, unsigned char (*lessthan_)(const gimple_seq, const gimple_seq) ) { unsigned int len_ = VEC_gimple_seq_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { gimple_seq middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_gimple_seq_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_gimple_seq_gc { VEC_gimple_seq_base base; } VEC_gimple_seq_gc; static __inline__ VEC_gimple_seq_gc *VEC_gimple_seq_gc_alloc (int alloc_ ) { return (VEC_gimple_seq_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_seq_gc_free (VEC_gimple_seq_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_seq_gc *VEC_gimple_seq_gc_copy (VEC_gimple_seq_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_gimple_seq_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_seq_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple_seq) * len_); } return new_vec_; } static __inline__ int VEC_gimple_seq_gc_reserve (VEC_gimple_seq_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_seq_gc_reserve_exact (VEC_gimple_seq_gc **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_seq_gc_safe_grow (VEC_gimple_seq_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_seq_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_seq_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_gimple_seq_gc_safe_grow_cleared (VEC_gimple_seq_gc **vec_, int size_ ) { int oldsize = VEC_gimple_seq_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_gimple_seq_gc_safe_grow (vec_, size_ ); memset (&(VEC_gimple_seq_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple_seq) * (size_ - oldsize)); } static __inline__ void VEC_gimple_seq_gc_safe_splice (VEC_gimple_seq_gc **dst_, VEC_gimple_seq_base *src_ ) { if (src_) { VEC_gimple_seq_gc_reserve_exact (dst_, src_->num ); VEC_gimple_seq_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple_seq *VEC_gimple_seq_gc_safe_push (VEC_gimple_seq_gc **vec_, gimple_seq obj_ ) { VEC_gimple_seq_gc_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple_seq *VEC_gimple_seq_gc_safe_insert (VEC_gimple_seq_gc **vec_, unsigned ix_, gimple_seq obj_ ) { VEC_gimple_seq_gc_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-typedef struct VEC_gimple_seq_heap { VEC_gimple_seq_base base; } VEC_gimple_seq_heap; static __inline__ VEC_gimple_seq_heap *VEC_gimple_seq_heap_alloc (int alloc_ ) { return (VEC_gimple_seq_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_gimple_seq_heap_free (VEC_gimple_seq_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_gimple_seq_heap *VEC_gimple_seq_heap_copy (VEC_gimple_seq_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_gimple_seq_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_gimple_seq_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (gimple_seq) * len_); } return new_vec_; } static __inline__ int VEC_gimple_seq_heap_reserve (VEC_gimple_seq_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_gimple_seq_heap_reserve_exact (VEC_gimple_seq_heap **vec_, int alloc_ ) { int extend = !VEC_gimple_seq_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_gimple_seq_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_gimple_seq_heap_safe_grow (VEC_gimple_seq_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_gimple_seq_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_gimple_seq_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_gimple_seq_heap_safe_grow_cleared (VEC_gimple_seq_heap **vec_, int size_ ) { int oldsize = VEC_gimple_seq_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_gimple_seq_heap_safe_grow (vec_, size_ ); memset (&(VEC_gimple_seq_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (gimple_seq) * (size_ - oldsize)); } static __inline__ void VEC_gimple_seq_heap_safe_splice (VEC_gimple_seq_heap **dst_, VEC_gimple_seq_base *src_ ) { if (src_) { VEC_gimple_seq_heap_reserve_exact (dst_, src_->num ); VEC_gimple_seq_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ gimple_seq *VEC_gimple_seq_heap_safe_push (VEC_gimple_seq_heap **vec_, gimple_seq obj_ ) { VEC_gimple_seq_heap_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ gimple_seq *VEC_gimple_seq_heap_safe_insert (VEC_gimple_seq_heap **vec_, unsigned ix_, gimple_seq obj_ ) { VEC_gimple_seq_heap_reserve (vec_, 1 ); return VEC_gimple_seq_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-
-
-static __inline__ void VEC_rtx_must_be_pointer_type (void) { (void)((rtx)1 == (void *)1); } typedef struct VEC_rtx_base { unsigned num; unsigned alloc; rtx vec[1]; } VEC_rtx_base; typedef struct VEC_rtx_none { VEC_rtx_base base; } VEC_rtx_none; static __inline__ unsigned VEC_rtx_base_length (const VEC_rtx_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ rtx VEC_rtx_base_last (const VEC_rtx_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ rtx VEC_rtx_base_index (const VEC_rtx_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_rtx_base_iterate (const VEC_rtx_base *vec_, unsigned ix_, rtx *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (rtx) 0; return 0; } } static __inline__ size_t VEC_rtx_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_rtx_base, vec) + alloc_ * sizeof(rtx); } static __inline__ void VEC_rtx_base_embedded_init (VEC_rtx_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_rtx_base_space (VEC_rtx_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_rtx_base_splice (VEC_rtx_base *dst_, VEC_rtx_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (rtx)); dst_->num += len_; } } static __inline__ rtx *VEC_rtx_base_quick_push (VEC_rtx_base *vec_, rtx obj_ ) { rtx *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ rtx VEC_rtx_base_pop (VEC_rtx_base *vec_ ) { rtx obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_rtx_base_truncate (VEC_rtx_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ rtx VEC_rtx_base_replace (VEC_rtx_base *vec_, unsigned ix_, rtx obj_ ) { rtx old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ rtx *VEC_rtx_base_quick_insert (VEC_rtx_base *vec_, unsigned ix_, rtx obj_ ) { rtx *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (rtx)); *slot_ = obj_; return slot_; } static __inline__ rtx VEC_rtx_base_ordered_remove (VEC_rtx_base *vec_, unsigned ix_ ) { rtx *slot_; rtx obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (rtx)); return obj_; } static __inline__ rtx VEC_rtx_base_unordered_remove (VEC_rtx_base *vec_, unsigned ix_ ) { rtx *slot_; rtx obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_rtx_base_block_remove (VEC_rtx_base *vec_, unsigned ix_, unsigned len_ ) { rtx *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (rtx)); } static __inline__ rtx *VEC_rtx_base_address (VEC_rtx_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_rtx_base_lower_bound (VEC_rtx_base *vec_, const rtx obj_, unsigned char (*lessthan_)(const rtx, const rtx) ) { unsigned int len_ = VEC_rtx_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { rtx middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_rtx_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_rtx_heap { VEC_rtx_base base; } VEC_rtx_heap; static __inline__ VEC_rtx_heap *VEC_rtx_heap_alloc (int alloc_ ) { return (VEC_rtx_heap *) vec_heap_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_rtx_heap_free (VEC_rtx_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_rtx_heap *VEC_rtx_heap_copy (VEC_rtx_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_rtx_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_rtx_heap *)(vec_heap_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (rtx) * len_); } return new_vec_; } static __inline__ int VEC_rtx_heap_reserve (VEC_rtx_heap **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_heap *) vec_heap_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_rtx_heap_reserve_exact (VEC_rtx_heap **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_heap *) vec_heap_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_rtx_heap_safe_grow (VEC_rtx_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_rtx_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_rtx_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_rtx_heap_safe_grow_cleared (VEC_rtx_heap **vec_, int size_ ) { int oldsize = VEC_rtx_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_rtx_heap_safe_grow (vec_, size_ ); memset (&(VEC_rtx_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (rtx) * (size_ - oldsize)); } static __inline__ void VEC_rtx_heap_safe_splice (VEC_rtx_heap **dst_, VEC_rtx_base *src_ ) { if (src_) { VEC_rtx_heap_reserve_exact (dst_, src_->num ); VEC_rtx_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ rtx *VEC_rtx_heap_safe_push (VEC_rtx_heap **vec_, rtx obj_ ) { VEC_rtx_heap_reserve (vec_, 1 ); return VEC_rtx_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ rtx *VEC_rtx_heap_safe_insert (VEC_rtx_heap **vec_, unsigned ix_, rtx obj_ ) { VEC_rtx_heap_reserve (vec_, 1 ); return VEC_rtx_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-typedef struct VEC_rtx_gc { VEC_rtx_base base; } VEC_rtx_gc; static __inline__ VEC_rtx_gc *VEC_rtx_gc_alloc (int alloc_ ) { return (VEC_rtx_gc *) vec_gc_p_reserve_exact (((void *)0), alloc_ ); } static __inline__ void VEC_rtx_gc_free (VEC_rtx_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ VEC_rtx_gc *VEC_rtx_gc_copy (VEC_rtx_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_rtx_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_rtx_gc *)(vec_gc_p_reserve_exact (((void *)0), len_ )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (rtx) * len_); } return new_vec_; } static __inline__ int VEC_rtx_gc_reserve (VEC_rtx_gc **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_gc *) vec_gc_p_reserve (*vec_, alloc_ ); return extend; } static __inline__ int VEC_rtx_gc_reserve_exact (VEC_rtx_gc **vec_, int alloc_ ) { int extend = !VEC_rtx_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_rtx_gc *) vec_gc_p_reserve_exact (*vec_, alloc_ ); return extend; } static __inline__ void VEC_rtx_gc_safe_grow (VEC_rtx_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_rtx_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_rtx_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_rtx_gc_safe_grow_cleared (VEC_rtx_gc **vec_, int size_ ) { int oldsize = VEC_rtx_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_rtx_gc_safe_grow (vec_, size_ ); memset (&(VEC_rtx_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (rtx) * (size_ - oldsize)); } static __inline__ void VEC_rtx_gc_safe_splice (VEC_rtx_gc **dst_, VEC_rtx_base *src_ ) { if (src_) { VEC_rtx_gc_reserve_exact (dst_, src_->num ); VEC_rtx_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ rtx *VEC_rtx_gc_safe_push (VEC_rtx_gc **vec_, rtx obj_ ) { VEC_rtx_gc_reserve (vec_, 1 ); return VEC_rtx_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ rtx *VEC_rtx_gc_safe_insert (VEC_rtx_gc **vec_, unsigned ix_, rtx obj_ ) { VEC_rtx_gc_reserve (vec_, 1 ); return VEC_rtx_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-# 31 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/double-int.h" 1
-# 24 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/double-int.h"
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 1 3
-# 53 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 3
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/include/stddef.h" 1 3 4
-# 54 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 2 3
-# 191 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 3
-typedef unsigned long int mp_limb_t;
-typedef long int mp_limb_signed_t;
-
-
-typedef unsigned long int mp_bitcnt_t;
-
-
-
-
-typedef struct
-{
-  int _mp_alloc;
-
-  int _mp_size;
-
-
-  mp_limb_t *_mp_d;
-} __mpz_struct;
-
-
-
-
-typedef __mpz_struct MP_INT;
-typedef __mpz_struct mpz_t[1];
-
-typedef mp_limb_t * mp_ptr;
-typedef const mp_limb_t * mp_srcptr;
-
-
-
-
-
-
-
-typedef long int mp_size_t;
-typedef long int mp_exp_t;
-
-
-typedef struct
-{
-  __mpz_struct _mp_num;
-  __mpz_struct _mp_den;
-} __mpq_struct;
-
-typedef __mpq_struct MP_RAT;
-typedef __mpq_struct mpq_t[1];
-
-typedef struct
-{
-  int _mp_prec;
-
-
-
-  int _mp_size;
-
-
-  mp_exp_t _mp_exp;
-  mp_limb_t *_mp_d;
-} __mpf_struct;
-
-
-typedef __mpf_struct mpf_t[1];
-
-
-typedef enum
-{
-  GMP_RAND_ALG_DEFAULT = 0,
-  GMP_RAND_ALG_LC = GMP_RAND_ALG_DEFAULT
-} gmp_randalg_t;
-
-
-typedef struct
-{
-  mpz_t _mp_seed;
-  gmp_randalg_t _mp_alg;
-  union {
-    void *_mp_lc;
-  } _mp_algdata;
-} __gmp_randstate_struct;
-typedef __gmp_randstate_struct gmp_randstate_t[1];
-
-
-
-typedef const __mpz_struct *mpz_srcptr;
-typedef __mpz_struct *mpz_ptr;
-typedef const __mpf_struct *mpf_srcptr;
-typedef __mpf_struct *mpf_ptr;
-typedef const __mpq_struct *mpq_srcptr;
-typedef __mpq_struct *mpq_ptr;
-# 541 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 3
- void __gmp_set_memory_functions (void *(*) (size_t), void *(*) (void *, size_t, size_t), void (*) (void *, size_t))
-
-                                                   ;
-
-
- void __gmp_get_memory_functions (void *(**) (size_t), void *(**) (void *, size_t, size_t), void (**) (void *, size_t))
-
-                                                                                ;
-
-
- extern const int __gmp_bits_per_limb;
-
-
- extern int __gmp_errno;
-
-
- extern const char * const __gmp_version;
-
-
-
-
-
-
- void __gmp_randinit (gmp_randstate_t, gmp_randalg_t, ...);
-
-
- void __gmp_randinit_default (gmp_randstate_t);
-
-
- void __gmp_randinit_lc_2exp (gmp_randstate_t, mpz_srcptr, unsigned long int, mp_bitcnt_t)
-
-                          ;
-
-
- int __gmp_randinit_lc_2exp_size (gmp_randstate_t, mp_bitcnt_t);
-
-
- void __gmp_randinit_mt (gmp_randstate_t);
-
-
- void __gmp_randinit_set (gmp_randstate_t, const __gmp_randstate_struct *);
-
-
- void __gmp_randseed (gmp_randstate_t, mpz_srcptr);
-
-
- void __gmp_randseed_ui (gmp_randstate_t, unsigned long int);
-
-
- void __gmp_randclear (gmp_randstate_t);
-
-
- unsigned long __gmp_urandomb_ui (gmp_randstate_t, unsigned long);
-
-
- unsigned long __gmp_urandomm_ui (gmp_randstate_t, unsigned long);
-
-
-
-
-
- int __gmp_asprintf (char **, const char *, ...);
-
-
-
- int __gmp_fprintf (FILE *, const char *, ...);
-# 620 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 3
- int __gmp_printf (const char *, ...);
-
-
- int __gmp_snprintf (char *, size_t, const char *, ...);
-
-
- int __gmp_sprintf (char *, const char *, ...);
-
-
-
- int __gmp_vasprintf (char **, const char *, va_list);
-
-
-
-
- int __gmp_vfprintf (FILE *, const char *, va_list);
-
-
-
-
- int __gmp_vprintf (const char *, va_list);
-
-
-
-
- int __gmp_vsnprintf (char *, size_t, const char *, va_list);
-
-
-
-
- int __gmp_vsprintf (char *, const char *, va_list);
-
-
-
-
-
-
-
- int __gmp_fscanf (FILE *, const char *, ...);
-
-
-
- int __gmp_scanf (const char *, ...);
-
-
- int __gmp_sscanf (const char *, const char *, ...);
-
-
-
- int __gmp_vfscanf (FILE *, const char *, va_list);
-
-
-
-
- int __gmp_vscanf (const char *, va_list);
-
-
-
-
- int __gmp_vsscanf (const char *, const char *, va_list);
-
-
-
-
-
-
-
- void *__gmpz_realloc (mpz_ptr, mp_size_t);
-
-
-
- void __gmpz_abs (mpz_ptr, mpz_srcptr);
-
-
-
- void __gmpz_add (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_add_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_addmul (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_addmul_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_and (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_array_init (mpz_ptr, mp_size_t, mp_size_t);
-
-
- void __gmpz_bin_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_bin_uiui (mpz_ptr, unsigned long int, unsigned long int);
-
-
- void __gmpz_cdiv_q (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_cdiv_q_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
-
-
- unsigned long int __gmpz_cdiv_q_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_cdiv_qr (mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- unsigned long int __gmpz_cdiv_qr_ui (mpz_ptr, mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_cdiv_r (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_cdiv_r_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
-
-
- unsigned long int __gmpz_cdiv_r_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- unsigned long int __gmpz_cdiv_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
-
-
- void __gmpz_clear (mpz_ptr);
-
-
- void __gmpz_clears (mpz_ptr, ...);
-
-
- void __gmpz_clrbit (mpz_ptr, mp_bitcnt_t);
-
-
- int __gmpz_cmp (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpz_cmp_d (mpz_srcptr, double) __attribute__ ((__pure__));
-
-
- int __gmpz_cmp_si (mpz_srcptr, signed long int) __attribute__ ((__pure__));
-
-
- int __gmpz_cmp_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
-
-
- int __gmpz_cmpabs (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpz_cmpabs_d (mpz_srcptr, double) __attribute__ ((__pure__));
-
-
- int __gmpz_cmpabs_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
-
-
- void __gmpz_com (mpz_ptr, mpz_srcptr);
-
-
- void __gmpz_combit (mpz_ptr, mp_bitcnt_t);
-
-
- int __gmpz_congruent_p (mpz_srcptr, mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpz_congruent_2exp_p (mpz_srcptr, mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
-
-
- int __gmpz_congruent_ui_p (mpz_srcptr, unsigned long, unsigned long) __attribute__ ((__pure__));
-
-
- void __gmpz_divexact (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_divexact_ui (mpz_ptr, mpz_srcptr, unsigned long);
-
-
- int __gmpz_divisible_p (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpz_divisible_ui_p (mpz_srcptr, unsigned long) __attribute__ ((__pure__));
-
-
- int __gmpz_divisible_2exp_p (mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
-
-
- void __gmpz_dump (mpz_srcptr);
-
-
- void *__gmpz_export (void *, size_t *, int, size_t, int, size_t, mpz_srcptr);
-
-
- void __gmpz_fac_ui (mpz_ptr, unsigned long int);
-
-
- void __gmpz_fdiv_q (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_fdiv_q_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
-
-
- unsigned long int __gmpz_fdiv_q_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_fdiv_qr (mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- unsigned long int __gmpz_fdiv_qr_ui (mpz_ptr, mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_fdiv_r (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_fdiv_r_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
-
-
- unsigned long int __gmpz_fdiv_r_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- unsigned long int __gmpz_fdiv_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
-
-
- void __gmpz_fib_ui (mpz_ptr, unsigned long int);
-
-
- void __gmpz_fib2_ui (mpz_ptr, mpz_ptr, unsigned long int);
-
-
- int __gmpz_fits_sint_p (mpz_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpz_fits_slong_p (mpz_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpz_fits_sshort_p (mpz_srcptr) __attribute__ ((__pure__));
-
-
-
- int __gmpz_fits_uint_p (mpz_srcptr) __attribute__ ((__pure__));
-
-
-
-
- int __gmpz_fits_ulong_p (mpz_srcptr) __attribute__ ((__pure__));
-
-
-
-
- int __gmpz_fits_ushort_p (mpz_srcptr) __attribute__ ((__pure__));
-
-
-
- void __gmpz_gcd (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- unsigned long int __gmpz_gcd_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_gcdext (mpz_ptr, mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- double __gmpz_get_d (mpz_srcptr) __attribute__ ((__pure__));
-
-
- double __gmpz_get_d_2exp (signed long int *, mpz_srcptr);
-
-
- long int __gmpz_get_si (mpz_srcptr) __attribute__ ((__pure__));
-
-
- char *__gmpz_get_str (char *, int, mpz_srcptr);
-
-
-
- unsigned long int __gmpz_get_ui (mpz_srcptr) __attribute__ ((__pure__));
-
-
-
-
- mp_limb_t __gmpz_getlimbn (mpz_srcptr, mp_size_t) __attribute__ ((__pure__));
-
-
-
- mp_bitcnt_t __gmpz_hamdist (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
-
-
- void __gmpz_import (mpz_ptr, size_t, int, size_t, int, size_t, const void *);
-
-
- void __gmpz_init (mpz_ptr);
-
-
- void __gmpz_init2 (mpz_ptr, mp_bitcnt_t);
-
-
- void __gmpz_inits (mpz_ptr, ...);
-
-
- void __gmpz_init_set (mpz_ptr, mpz_srcptr);
-
-
- void __gmpz_init_set_d (mpz_ptr, double);
-
-
- void __gmpz_init_set_si (mpz_ptr, signed long int);
-
-
- int __gmpz_init_set_str (mpz_ptr, const char *, int);
-
-
- void __gmpz_init_set_ui (mpz_ptr, unsigned long int);
-
-
-
- size_t __gmpz_inp_raw (mpz_ptr, FILE *);
-
-
-
-
- size_t __gmpz_inp_str (mpz_ptr, FILE *, int);
-
-
-
- int __gmpz_invert (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_ior (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- int __gmpz_jacobi (mpz_srcptr, mpz_srcptr) __attribute__ ((__pure__));
-
-
-
-
- int __gmpz_kronecker_si (mpz_srcptr, long) __attribute__ ((__pure__));
-
-
- int __gmpz_kronecker_ui (mpz_srcptr, unsigned long) __attribute__ ((__pure__));
-
-
- int __gmpz_si_kronecker (long, mpz_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpz_ui_kronecker (unsigned long, mpz_srcptr) __attribute__ ((__pure__));
-
-
- void __gmpz_lcm (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_lcm_ui (mpz_ptr, mpz_srcptr, unsigned long);
-
-
-
-
- void __gmpz_lucnum_ui (mpz_ptr, unsigned long int);
-
-
- void __gmpz_lucnum2_ui (mpz_ptr, mpz_ptr, unsigned long int);
-
-
- int __gmpz_millerrabin (mpz_srcptr, int) __attribute__ ((__pure__));
-
-
- void __gmpz_mod (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
-
-
- void __gmpz_mul (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_mul_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
-
-
- void __gmpz_mul_si (mpz_ptr, mpz_srcptr, long int);
-
-
- void __gmpz_mul_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
-
- void __gmpz_neg (mpz_ptr, mpz_srcptr);
-
-
-
- void __gmpz_nextprime (mpz_ptr, mpz_srcptr);
-
-
-
- size_t __gmpz_out_raw (FILE *, mpz_srcptr);
-
-
-
-
- size_t __gmpz_out_str (FILE *, int, mpz_srcptr);
-
-
-
- int __gmpz_perfect_power_p (mpz_srcptr) __attribute__ ((__pure__));
-
-
-
- int __gmpz_perfect_square_p (mpz_srcptr) __attribute__ ((__pure__));
-
-
-
-
- mp_bitcnt_t __gmpz_popcount (mpz_srcptr) __attribute__ ((__pure__));
-
-
-
- void __gmpz_pow_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_powm (mpz_ptr, mpz_srcptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_powm_sec (mpz_ptr, mpz_srcptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_powm_ui (mpz_ptr, mpz_srcptr, unsigned long int, mpz_srcptr);
-
-
- int __gmpz_probab_prime_p (mpz_srcptr, int) __attribute__ ((__pure__));
-
-
- void __gmpz_random (mpz_ptr, mp_size_t);
-
-
- void __gmpz_random2 (mpz_ptr, mp_size_t);
-
-
- void __gmpz_realloc2 (mpz_ptr, mp_bitcnt_t);
-
-
- mp_bitcnt_t __gmpz_remove (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- int __gmpz_root (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_rootrem (mpz_ptr,mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_rrandomb (mpz_ptr, gmp_randstate_t, mp_bitcnt_t);
-
-
- mp_bitcnt_t __gmpz_scan0 (mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
-
-
- mp_bitcnt_t __gmpz_scan1 (mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
-
-
- void __gmpz_set (mpz_ptr, mpz_srcptr);
-
-
- void __gmpz_set_d (mpz_ptr, double);
-
-
- void __gmpz_set_f (mpz_ptr, mpf_srcptr);
-
-
-
- void __gmpz_set_q (mpz_ptr, mpq_srcptr);
-
-
-
- void __gmpz_set_si (mpz_ptr, signed long int);
-
-
- int __gmpz_set_str (mpz_ptr, const char *, int);
-
-
- void __gmpz_set_ui (mpz_ptr, unsigned long int);
-
-
- void __gmpz_setbit (mpz_ptr, mp_bitcnt_t);
-
-
-
- size_t __gmpz_size (mpz_srcptr) __attribute__ ((__pure__));
-
-
-
- size_t __gmpz_sizeinbase (mpz_srcptr, int) __attribute__ ((__pure__));
-
-
- void __gmpz_sqrt (mpz_ptr, mpz_srcptr);
-
-
- void __gmpz_sqrtrem (mpz_ptr, mpz_ptr, mpz_srcptr);
-
-
- void __gmpz_sub (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_sub_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_ui_sub (mpz_ptr, unsigned long int, mpz_srcptr);
-
-
- void __gmpz_submul (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_submul_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_swap (mpz_ptr, mpz_ptr) ;
-
-
- unsigned long int __gmpz_tdiv_ui (mpz_srcptr, unsigned long int) __attribute__ ((__pure__));
-
-
- void __gmpz_tdiv_q (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_tdiv_q_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
-
-
- unsigned long int __gmpz_tdiv_q_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_tdiv_qr (mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- unsigned long int __gmpz_tdiv_qr_ui (mpz_ptr, mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- void __gmpz_tdiv_r (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
- void __gmpz_tdiv_r_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
-
-
- unsigned long int __gmpz_tdiv_r_ui (mpz_ptr, mpz_srcptr, unsigned long int);
-
-
- int __gmpz_tstbit (mpz_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
-
-
- void __gmpz_ui_pow_ui (mpz_ptr, unsigned long int, unsigned long int);
-
-
- void __gmpz_urandomb (mpz_ptr, gmp_randstate_t, mp_bitcnt_t);
-
-
- void __gmpz_urandomm (mpz_ptr, gmp_randstate_t, mpz_srcptr);
-
-
-
- void __gmpz_xor (mpz_ptr, mpz_srcptr, mpz_srcptr);
-
-
-
-
-
-
- void __gmpq_abs (mpq_ptr, mpq_srcptr);
-
-
-
- void __gmpq_add (mpq_ptr, mpq_srcptr, mpq_srcptr);
-
-
- void __gmpq_canonicalize (mpq_ptr);
-
-
- void __gmpq_clear (mpq_ptr);
-
-
- void __gmpq_clears (mpq_ptr, ...);
-
-
- int __gmpq_cmp (mpq_srcptr, mpq_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpq_cmp_si (mpq_srcptr, long, unsigned long) __attribute__ ((__pure__));
-
-
- int __gmpq_cmp_ui (mpq_srcptr, unsigned long int, unsigned long int) __attribute__ ((__pure__));
-
-
- void __gmpq_div (mpq_ptr, mpq_srcptr, mpq_srcptr);
-
-
- void __gmpq_div_2exp (mpq_ptr, mpq_srcptr, mp_bitcnt_t);
-
-
- int __gmpq_equal (mpq_srcptr, mpq_srcptr) __attribute__ ((__pure__));
-
-
- void __gmpq_get_num (mpz_ptr, mpq_srcptr);
-
-
- void __gmpq_get_den (mpz_ptr, mpq_srcptr);
-
-
- double __gmpq_get_d (mpq_srcptr) __attribute__ ((__pure__));
-
-
- char *__gmpq_get_str (char *, int, mpq_srcptr);
-
-
- void __gmpq_init (mpq_ptr);
-
-
- void __gmpq_inits (mpq_ptr, ...);
-
-
-
- size_t __gmpq_inp_str (mpq_ptr, FILE *, int);
-
-
-
- void __gmpq_inv (mpq_ptr, mpq_srcptr);
-
-
- void __gmpq_mul (mpq_ptr, mpq_srcptr, mpq_srcptr);
-
-
- void __gmpq_mul_2exp (mpq_ptr, mpq_srcptr, mp_bitcnt_t);
-
-
-
- void __gmpq_neg (mpq_ptr, mpq_srcptr);
-
-
-
-
- size_t __gmpq_out_str (FILE *, int, mpq_srcptr);
-
-
-
- void __gmpq_set (mpq_ptr, mpq_srcptr);
-
-
- void __gmpq_set_d (mpq_ptr, double);
-
-
- void __gmpq_set_den (mpq_ptr, mpz_srcptr);
-
-
- void __gmpq_set_f (mpq_ptr, mpf_srcptr);
-
-
- void __gmpq_set_num (mpq_ptr, mpz_srcptr);
-
-
- void __gmpq_set_si (mpq_ptr, signed long int, unsigned long int);
-
-
- int __gmpq_set_str (mpq_ptr, const char *, int);
-
-
- void __gmpq_set_ui (mpq_ptr, unsigned long int, unsigned long int);
-
-
- void __gmpq_set_z (mpq_ptr, mpz_srcptr);
-
-
- void __gmpq_sub (mpq_ptr, mpq_srcptr, mpq_srcptr);
-
-
- void __gmpq_swap (mpq_ptr, mpq_ptr) ;
-
-
-
-
-
- void __gmpf_abs (mpf_ptr, mpf_srcptr);
-
-
- void __gmpf_add (mpf_ptr, mpf_srcptr, mpf_srcptr);
-
-
- void __gmpf_add_ui (mpf_ptr, mpf_srcptr, unsigned long int);
-
- void __gmpf_ceil (mpf_ptr, mpf_srcptr);
-
-
- void __gmpf_clear (mpf_ptr);
-
-
- void __gmpf_clears (mpf_ptr, ...);
-
-
- int __gmpf_cmp (mpf_srcptr, mpf_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpf_cmp_d (mpf_srcptr, double) __attribute__ ((__pure__));
-
-
- int __gmpf_cmp_si (mpf_srcptr, signed long int) __attribute__ ((__pure__));
-
-
- int __gmpf_cmp_ui (mpf_srcptr, unsigned long int) __attribute__ ((__pure__));
-
-
- void __gmpf_div (mpf_ptr, mpf_srcptr, mpf_srcptr);
-
-
- void __gmpf_div_2exp (mpf_ptr, mpf_srcptr, mp_bitcnt_t);
-
-
- void __gmpf_div_ui (mpf_ptr, mpf_srcptr, unsigned long int);
-
-
- void __gmpf_dump (mpf_srcptr);
-
-
- int __gmpf_eq (mpf_srcptr, mpf_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
-
-
- int __gmpf_fits_sint_p (mpf_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpf_fits_slong_p (mpf_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpf_fits_sshort_p (mpf_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpf_fits_uint_p (mpf_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpf_fits_ulong_p (mpf_srcptr) __attribute__ ((__pure__));
-
-
- int __gmpf_fits_ushort_p (mpf_srcptr) __attribute__ ((__pure__));
-
-
- void __gmpf_floor (mpf_ptr, mpf_srcptr);
-
-
- double __gmpf_get_d (mpf_srcptr) __attribute__ ((__pure__));
-
-
- double __gmpf_get_d_2exp (signed long int *, mpf_srcptr);
-
-
- mp_bitcnt_t __gmpf_get_default_prec (void) __attribute__ ((__pure__));
-
-
- mp_bitcnt_t __gmpf_get_prec (mpf_srcptr) __attribute__ ((__pure__));
-
-
- long __gmpf_get_si (mpf_srcptr) __attribute__ ((__pure__));
-
-
- char *__gmpf_get_str (char *, mp_exp_t *, int, size_t, mpf_srcptr);
-
-
- unsigned long __gmpf_get_ui (mpf_srcptr) __attribute__ ((__pure__));
-
-
- void __gmpf_init (mpf_ptr);
-
-
- void __gmpf_init2 (mpf_ptr, mp_bitcnt_t);
-
-
- void __gmpf_inits (mpf_ptr, ...);
-
-
- void __gmpf_init_set (mpf_ptr, mpf_srcptr);
-
-
- void __gmpf_init_set_d (mpf_ptr, double);
-
-
- void __gmpf_init_set_si (mpf_ptr, signed long int);
-
-
- int __gmpf_init_set_str (mpf_ptr, const char *, int);
-
-
- void __gmpf_init_set_ui (mpf_ptr, unsigned long int);
-
-
-
- size_t __gmpf_inp_str (mpf_ptr, FILE *, int);
-
-
-
- int __gmpf_integer_p (mpf_srcptr) __attribute__ ((__pure__));
-
-
- void __gmpf_mul (mpf_ptr, mpf_srcptr, mpf_srcptr);
-
-
- void __gmpf_mul_2exp (mpf_ptr, mpf_srcptr, mp_bitcnt_t);
-
-
- void __gmpf_mul_ui (mpf_ptr, mpf_srcptr, unsigned long int);
-
-
- void __gmpf_neg (mpf_ptr, mpf_srcptr);
-
-
-
- size_t __gmpf_out_str (FILE *, int, size_t, mpf_srcptr);
-
-
-
- void __gmpf_pow_ui (mpf_ptr, mpf_srcptr, unsigned long int);
-
-
- void __gmpf_random2 (mpf_ptr, mp_size_t, mp_exp_t);
-
-
- void __gmpf_reldiff (mpf_ptr, mpf_srcptr, mpf_srcptr);
-
-
- void __gmpf_set (mpf_ptr, mpf_srcptr);
-
-
- void __gmpf_set_d (mpf_ptr, double);
-
-
- void __gmpf_set_default_prec (mp_bitcnt_t) ;
-
-
- void __gmpf_set_prec (mpf_ptr, mp_bitcnt_t);
-
-
- void __gmpf_set_prec_raw (mpf_ptr, mp_bitcnt_t) ;
-
-
- void __gmpf_set_q (mpf_ptr, mpq_srcptr);
-
-
- void __gmpf_set_si (mpf_ptr, signed long int);
-
-
- int __gmpf_set_str (mpf_ptr, const char *, int);
-
-
- void __gmpf_set_ui (mpf_ptr, unsigned long int);
-
-
- void __gmpf_set_z (mpf_ptr, mpz_srcptr);
-
-
- size_t __gmpf_size (mpf_srcptr) __attribute__ ((__pure__));
-
-
- void __gmpf_sqrt (mpf_ptr, mpf_srcptr);
-
-
- void __gmpf_sqrt_ui (mpf_ptr, unsigned long int);
-
-
- void __gmpf_sub (mpf_ptr, mpf_srcptr, mpf_srcptr);
-
-
- void __gmpf_sub_ui (mpf_ptr, mpf_srcptr, unsigned long int);
-
-
- void __gmpf_swap (mpf_ptr, mpf_ptr) ;
-
-
- void __gmpf_trunc (mpf_ptr, mpf_srcptr);
-
-
- void __gmpf_ui_div (mpf_ptr, unsigned long int, mpf_srcptr);
-
-
- void __gmpf_ui_sub (mpf_ptr, unsigned long int, mpf_srcptr);
-
-
- void __gmpf_urandomb (mpf_t, gmp_randstate_t, mp_bitcnt_t);
-# 1500 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 3
- mp_limb_t __gmpn_add (mp_ptr, mp_srcptr, mp_size_t, mp_srcptr,mp_size_t);
-
-
-
-
- mp_limb_t __gmpn_add_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t) ;
-
-
-
- mp_limb_t __gmpn_add_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
-
- mp_limb_t __gmpn_addmul_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
-
-
-
- int __gmpn_cmp (mp_srcptr, mp_srcptr, mp_size_t) __attribute__ ((__pure__));
-
-
-
-
-
-
- mp_limb_t __gmpn_divexact_by3c (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
-
-
-
-
-
- mp_limb_t __gmpn_divrem (mp_ptr, mp_size_t, mp_ptr, mp_size_t, mp_srcptr, mp_size_t);
-
-
- mp_limb_t __gmpn_divrem_1 (mp_ptr, mp_size_t, mp_srcptr, mp_size_t, mp_limb_t);
-
-
- mp_limb_t __gmpn_divrem_2 (mp_ptr, mp_size_t, mp_ptr, mp_size_t, mp_srcptr);
-
-
- mp_size_t __gmpn_gcd (mp_ptr, mp_ptr, mp_size_t, mp_ptr, mp_size_t);
-
-
- mp_limb_t __gmpn_gcd_1 (mp_srcptr, mp_size_t, mp_limb_t) __attribute__ ((__pure__));
-
-
- mp_limb_t __gmpn_gcdext_1 (mp_limb_signed_t *, mp_limb_signed_t *, mp_limb_t, mp_limb_t);
-
-
- mp_size_t __gmpn_gcdext (mp_ptr, mp_ptr, mp_size_t *, mp_ptr, mp_size_t, mp_ptr, mp_size_t);
-
-
- size_t __gmpn_get_str (unsigned char *, int, mp_ptr, mp_size_t);
-
-
- mp_bitcnt_t __gmpn_hamdist (mp_srcptr, mp_srcptr, mp_size_t) __attribute__ ((__pure__));
-
-
- mp_limb_t __gmpn_lshift (mp_ptr, mp_srcptr, mp_size_t, unsigned int);
-
-
- mp_limb_t __gmpn_mod_1 (mp_srcptr, mp_size_t, mp_limb_t) __attribute__ ((__pure__));
-
-
- mp_limb_t __gmpn_mul (mp_ptr, mp_srcptr, mp_size_t, mp_srcptr, mp_size_t);
-
-
- mp_limb_t __gmpn_mul_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
-
-
- void __gmpn_mul_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
-
- void __gmpn_sqr (mp_ptr, mp_srcptr, mp_size_t);
-
-
-
- mp_limb_t __gmpn_neg (mp_ptr, mp_srcptr, mp_size_t);
-
-
-
-
- void __gmpn_com (mp_ptr, mp_srcptr, mp_size_t);
-
-
-
- int __gmpn_perfect_square_p (mp_srcptr, mp_size_t) __attribute__ ((__pure__));
-
-
- int __gmpn_perfect_power_p (mp_srcptr, mp_size_t) __attribute__ ((__pure__));
-
-
- mp_bitcnt_t __gmpn_popcount (mp_srcptr, mp_size_t) __attribute__ ((__pure__));
-
-
- mp_size_t __gmpn_pow_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t, mp_ptr);
-
-
-
- mp_limb_t __gmpn_preinv_mod_1 (mp_srcptr, mp_size_t, mp_limb_t, mp_limb_t) __attribute__ ((__pure__));
-
-
- void __gmpn_random (mp_ptr, mp_size_t);
-
-
- void __gmpn_random2 (mp_ptr, mp_size_t);
-
-
- mp_limb_t __gmpn_rshift (mp_ptr, mp_srcptr, mp_size_t, unsigned int);
-
-
- mp_bitcnt_t __gmpn_scan0 (mp_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
-
-
- mp_bitcnt_t __gmpn_scan1 (mp_srcptr, mp_bitcnt_t) __attribute__ ((__pure__));
-
-
- mp_size_t __gmpn_set_str (mp_ptr, const unsigned char *, size_t, int);
-
-
- mp_size_t __gmpn_sqrtrem (mp_ptr, mp_ptr, mp_srcptr, mp_size_t);
-
-
-
- mp_limb_t __gmpn_sub (mp_ptr, mp_srcptr, mp_size_t, mp_srcptr,mp_size_t);
-
-
-
-
- mp_limb_t __gmpn_sub_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t) ;
-
-
-
- mp_limb_t __gmpn_sub_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
-
- mp_limb_t __gmpn_submul_1 (mp_ptr, mp_srcptr, mp_size_t, mp_limb_t);
-
-
- void __gmpn_tdiv_qr (mp_ptr, mp_ptr, mp_size_t, mp_srcptr, mp_size_t, mp_srcptr, mp_size_t);
-
-
- void __gmpn_and_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
- void __gmpn_andn_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
- void __gmpn_nand_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
- void __gmpn_ior_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
- void __gmpn_iorn_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
- void __gmpn_nior_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
- void __gmpn_xor_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
- void __gmpn_xnor_n (mp_ptr, mp_srcptr, mp_srcptr, mp_size_t);
-
-
- void __gmpn_copyi (mp_ptr, mp_srcptr, mp_size_t);
-
- void __gmpn_copyd (mp_ptr, mp_srcptr, mp_size_t);
-
- void __gmpn_zero (mp_ptr, mp_size_t);
-# 1680 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 3
-extern __inline__ void
-__gmpz_abs (mpz_ptr __gmp_w, mpz_srcptr __gmp_u)
-{
-  if (__gmp_w != __gmp_u)
-    __gmpz_set (__gmp_w, __gmp_u);
-  __gmp_w->_mp_size = ((__gmp_w->_mp_size) >= 0 ? (__gmp_w->_mp_size) : -(__gmp_w->_mp_size));
-}
-# 1704 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 3
-extern __inline__
-
-int
-__gmpz_fits_uint_p (mpz_srcptr __gmp_z)
-{
-  mp_size_t __gmp_n = __gmp_z->_mp_size; mp_ptr __gmp_p = __gmp_z->_mp_d; return (__gmp_n == 0 || (__gmp_n == 1 && __gmp_p[0] <= (~ (unsigned) 0)));;
-}
-
-
-
-
-extern __inline__
-
-int
-__gmpz_fits_ulong_p (mpz_srcptr __gmp_z)
-{
-  mp_size_t __gmp_n = __gmp_z->_mp_size; mp_ptr __gmp_p = __gmp_z->_mp_d; return (__gmp_n == 0 || (__gmp_n == 1 && __gmp_p[0] <= (~ (unsigned long) 0)));;
-}
-
-
-
-
-extern __inline__
-
-int
-__gmpz_fits_ushort_p (mpz_srcptr __gmp_z)
-{
-  mp_size_t __gmp_n = __gmp_z->_mp_size; mp_ptr __gmp_p = __gmp_z->_mp_d; return (__gmp_n == 0 || (__gmp_n == 1 && __gmp_p[0] <= ((unsigned short) ~0)));;
-}
-
-
-
-
-extern __inline__
-
-unsigned long
-__gmpz_get_ui (mpz_srcptr __gmp_z)
-{
-  mp_ptr __gmp_p = __gmp_z->_mp_d;
-  mp_size_t __gmp_n = __gmp_z->_mp_size;
-  mp_limb_t __gmp_l = __gmp_p[0];
-
-
-
-
-
-
-  return (__gmp_n != 0 ? __gmp_l : 0);
-# 1760 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 3
-}
-
-
-
-
-extern __inline__
-
-mp_limb_t
-__gmpz_getlimbn (mpz_srcptr __gmp_z, mp_size_t __gmp_n)
-{
-  mp_limb_t __gmp_result = 0;
-  if (__builtin_expect ((__gmp_n >= 0 && __gmp_n < ((__gmp_z->_mp_size) >= 0 ? (__gmp_z->_mp_size) : -(__gmp_z->_mp_size))) != 0, 1))
-    __gmp_result = __gmp_z->_mp_d[__gmp_n];
-  return __gmp_result;
-}
-
-
-
-extern __inline__ void
-__gmpz_neg (mpz_ptr __gmp_w, mpz_srcptr __gmp_u)
-{
-  if (__gmp_w != __gmp_u)
-    __gmpz_set (__gmp_w, __gmp_u);
-  __gmp_w->_mp_size = - __gmp_w->_mp_size;
-}
-
-
-
-
-extern __inline__
-
-int
-__gmpz_perfect_square_p (mpz_srcptr __gmp_a)
-{
-  mp_size_t __gmp_asize;
-  int __gmp_result;
-
-  __gmp_asize = __gmp_a->_mp_size;
-  __gmp_result = (__gmp_asize >= 0);
-  if (__builtin_expect ((__gmp_asize > 0) != 0, 1))
-    __gmp_result = __gmpn_perfect_square_p (__gmp_a->_mp_d, __gmp_asize);
-  return __gmp_result;
-}
-
-
-
-
-extern __inline__
-
-mp_bitcnt_t
-__gmpz_popcount (mpz_srcptr __gmp_u)
-{
-  mp_size_t __gmp_usize;
-  mp_bitcnt_t __gmp_result;
-
-  __gmp_usize = __gmp_u->_mp_size;
-  __gmp_result = (__gmp_usize < 0 ? (~ (unsigned long) 0) : 0);
-  if (__builtin_expect ((__gmp_usize > 0) != 0, 1))
-    __gmp_result = __gmpn_popcount (__gmp_u->_mp_d, __gmp_usize);
-  return __gmp_result;
-}
-
-
-
-
-extern __inline__
-
-void
-__gmpz_set_q (mpz_ptr __gmp_w, mpq_srcptr __gmp_u)
-{
-  __gmpz_tdiv_q (__gmp_w, (&((__gmp_u)->_mp_num)), (&((__gmp_u)->_mp_den)));
-}
-
-
-
-
-extern __inline__
-
-size_t
-__gmpz_size (mpz_srcptr __gmp_z)
-{
-  return ((__gmp_z->_mp_size) >= 0 ? (__gmp_z->_mp_size) : -(__gmp_z->_mp_size));
-}
-
-
-
-
-
-
-extern __inline__ void
-__gmpq_abs (mpq_ptr __gmp_w, mpq_srcptr __gmp_u)
-{
-  if (__gmp_w != __gmp_u)
-    __gmpq_set (__gmp_w, __gmp_u);
-  __gmp_w->_mp_num._mp_size = ((__gmp_w->_mp_num._mp_size) >= 0 ? (__gmp_w->_mp_num._mp_size) : -(__gmp_w->_mp_num._mp_size));
-}
-
-
-
-extern __inline__ void
-__gmpq_neg (mpq_ptr __gmp_w, mpq_srcptr __gmp_u)
-{
-  if (__gmp_w != __gmp_u)
-    __gmpq_set (__gmp_w, __gmp_u);
-  __gmp_w->_mp_num._mp_size = - __gmp_w->_mp_num._mp_size;
-}
-# 2102 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 3
-extern __inline__
-
-mp_limb_t
-__gmpn_add (mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize)
-{
-  mp_limb_t __gmp_c;
-  do { mp_size_t __gmp_i; mp_limb_t __gmp_x; __gmp_i = (__gmp_ysize); if (__gmp_i != 0) { if (__gmpn_add_n (__gmp_wp, __gmp_xp, __gmp_yp, __gmp_i)) { do { if (__gmp_i >= (__gmp_xsize)) { (__gmp_c) = 1; goto __gmp_done; } __gmp_x = (__gmp_xp)[__gmp_i]; } while ((((__gmp_wp)[__gmp_i++] = (__gmp_x + 1) & ((~ ((mp_limb_t) (0))) >> 0)) == 0)); } } if ((__gmp_wp) != (__gmp_xp)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_xsize); __gmp_j++) (__gmp_wp)[__gmp_j] = (__gmp_xp)[__gmp_j]; } while (0); (__gmp_c) = 0; __gmp_done: ; } while (0);
-  return __gmp_c;
-}
-
-
-
-
-extern __inline__
-
-mp_limb_t
-__gmpn_add_1 (mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n)
-{
-  mp_limb_t __gmp_c;
-  do { mp_size_t __gmp_i; mp_limb_t __gmp_x, __gmp_r; __gmp_x = (__gmp_src)[0]; __gmp_r = __gmp_x + (__gmp_n); (__gmp_dst)[0] = __gmp_r; if (((__gmp_r) < ((__gmp_n)))) { (__gmp_c) = 1; for (__gmp_i = 1; __gmp_i < (__gmp_size);) { __gmp_x = (__gmp_src)[__gmp_i]; __gmp_r = __gmp_x + 1; (__gmp_dst)[__gmp_i] = __gmp_r; ++__gmp_i; if (!((__gmp_r) < (1))) { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; break; } } } else { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (1); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; } } while (0);
-  return __gmp_c;
-}
-
-
-
-
-extern __inline__
-
-int
-__gmpn_cmp (mp_srcptr __gmp_xp, mp_srcptr __gmp_yp, mp_size_t __gmp_size)
-{
-  int __gmp_result;
-  do { mp_size_t __gmp_i; mp_limb_t __gmp_x, __gmp_y; (__gmp_result) = 0; __gmp_i = (__gmp_size); while (--__gmp_i >= 0) { __gmp_x = (__gmp_xp)[__gmp_i]; __gmp_y = (__gmp_yp)[__gmp_i]; if (__gmp_x != __gmp_y) { (__gmp_result) = (__gmp_x > __gmp_y ? 1 : -1); break; } } } while (0);
-  return __gmp_result;
-}
-
-
-
-
-extern __inline__
-
-mp_limb_t
-__gmpn_sub (mp_ptr __gmp_wp, mp_srcptr __gmp_xp, mp_size_t __gmp_xsize, mp_srcptr __gmp_yp, mp_size_t __gmp_ysize)
-{
-  mp_limb_t __gmp_c;
-  do { mp_size_t __gmp_i; mp_limb_t __gmp_x; __gmp_i = (__gmp_ysize); if (__gmp_i != 0) { if (__gmpn_sub_n (__gmp_wp, __gmp_xp, __gmp_yp, __gmp_i)) { do { if (__gmp_i >= (__gmp_xsize)) { (__gmp_c) = 1; goto __gmp_done; } __gmp_x = (__gmp_xp)[__gmp_i]; } while ((((__gmp_wp)[__gmp_i++] = (__gmp_x - 1) & ((~ ((mp_limb_t) (0))) >> 0)), __gmp_x == 0)); } } if ((__gmp_wp) != (__gmp_xp)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_xsize); __gmp_j++) (__gmp_wp)[__gmp_j] = (__gmp_xp)[__gmp_j]; } while (0); (__gmp_c) = 0; __gmp_done: ; } while (0);
-  return __gmp_c;
-}
-
-
-
-
-extern __inline__
-
-mp_limb_t
-__gmpn_sub_1 (mp_ptr __gmp_dst, mp_srcptr __gmp_src, mp_size_t __gmp_size, mp_limb_t __gmp_n)
-{
-  mp_limb_t __gmp_c;
-  do { mp_size_t __gmp_i; mp_limb_t __gmp_x, __gmp_r; __gmp_x = (__gmp_src)[0]; __gmp_r = __gmp_x - (__gmp_n); (__gmp_dst)[0] = __gmp_r; if (((__gmp_x) < ((__gmp_n)))) { (__gmp_c) = 1; for (__gmp_i = 1; __gmp_i < (__gmp_size);) { __gmp_x = (__gmp_src)[__gmp_i]; __gmp_r = __gmp_x - 1; (__gmp_dst)[__gmp_i] = __gmp_r; ++__gmp_i; if (!((__gmp_x) < (1))) { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (__gmp_i); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; break; } } } else { if ((__gmp_src) != (__gmp_dst)) do { mp_size_t __gmp_j; ; for (__gmp_j = (1); __gmp_j < (__gmp_size); __gmp_j++) (__gmp_dst)[__gmp_j] = (__gmp_src)[__gmp_j]; } while (0); (__gmp_c) = 0; } } while (0);
-  return __gmp_c;
-}
-
-
-
-
-extern __inline__
-
-mp_limb_t
-__gmpn_neg (mp_ptr __gmp_rp, mp_srcptr __gmp_up, mp_size_t __gmp_n)
-{
-  mp_limb_t __gmp_ul, __gmp_cy;
-  __gmp_cy = 0;
-  do {
-      __gmp_ul = *__gmp_up++;
-      *__gmp_rp++ = -__gmp_ul - __gmp_cy;
-      __gmp_cy |= __gmp_ul != 0;
-  } while (--__gmp_n != 0);
-  return __gmp_cy;
-}
-# 2259 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/../../include/gmp.h" 3
-enum
-{
-  GMP_ERROR_NONE = 0,
-  GMP_ERROR_UNSUPPORTED_ARGUMENT = 1,
-  GMP_ERROR_DIVISION_BY_ZERO = 2,
-  GMP_ERROR_SQRT_OF_NEGATIVE = 4,
-  GMP_ERROR_INVALID_ARGUMENT = 8
-};
-# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/double-int.h" 2
-# 54 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/double-int.h"
-typedef struct
-{
-  unsigned long low;
-  long high;
-} double_int;
-# 67 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/double-int.h"
-static __inline__ double_int
-shwi_to_double_int (long cst)
-{
-  double_int r;
-
-  r.low = (unsigned long) cst;
-  r.high = cst < 0 ? -1 : 0;
-
-  return r;
-}
-# 89 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/double-int.h"
-static __inline__ double_int
-uhwi_to_double_int (unsigned long cst)
-{
-  double_int r;
-
-  r.low = cst;
-  r.high = 0;
-
-  return r;
-}
-
-
-
-
-static __inline__ long
-double_int_to_shwi (double_int cst)
-{
-  return (long) cst.low;
-}
-
-
-
-
-static __inline__ unsigned long
-double_int_to_uhwi (double_int cst)
-{
-  return cst.low;
-}
-
-unsigned char double_int_fits_in_hwi_p (double_int, unsigned char);
-unsigned char double_int_fits_in_shwi_p (double_int);
-
-
-
-static __inline__ unsigned char
-double_int_fits_in_uhwi_p (double_int cst)
-{
-  return cst.high == 0;
-}
-
-
-
-
-
-
-double_int double_int_mul (double_int, double_int);
-double_int double_int_mul_with_sign (double_int, double_int, unsigned char, int *);
-double_int double_int_add (double_int, double_int);
-double_int double_int_sub (double_int, double_int);
-double_int double_int_neg (double_int);
-
-
-
-
-double_int double_int_div (double_int, double_int, unsigned char, unsigned);
-double_int double_int_sdiv (double_int, double_int, unsigned);
-double_int double_int_udiv (double_int, double_int, unsigned);
-double_int double_int_mod (double_int, double_int, unsigned char, unsigned);
-double_int double_int_smod (double_int, double_int, unsigned);
-double_int double_int_umod (double_int, double_int, unsigned);
-double_int double_int_divmod (double_int, double_int, unsigned char, unsigned, double_int *);
-double_int double_int_sdivmod (double_int, double_int, unsigned, double_int *);
-double_int double_int_udivmod (double_int, double_int, unsigned, double_int *);
-
-double_int double_int_setbit (double_int, unsigned);
-int double_int_ctz (double_int);
-
-
-
-
-
-static __inline__ double_int
-double_int_not (double_int a)
-{
-  a.low = ~a.low;
-  a.high = ~a.high;
-  return a;
-}
-
-
-
-static __inline__ double_int
-double_int_ior (double_int a, double_int b)
-{
-  a.low |= b.low;
-  a.high |= b.high;
-  return a;
-}
-
-
-
-static __inline__ double_int
-double_int_and (double_int a, double_int b)
-{
-  a.low &= b.low;
-  a.high &= b.high;
-  return a;
-}
-
-
-
-static __inline__ double_int
-double_int_and_not (double_int a, double_int b)
-{
-  a.low &= ~b.low;
-  a.high &= ~b.high;
-  return a;
-}
-
-
-
-static __inline__ double_int
-double_int_xor (double_int a, double_int b)
-{
-  a.low ^= b.low;
-  a.high ^= b.high;
-  return a;
-}
-
-
-
-double_int double_int_lshift (double_int, long, unsigned int, unsigned char);
-double_int double_int_rshift (double_int, long, unsigned int, unsigned char);
-double_int double_int_lrotate (double_int, long, unsigned int);
-double_int double_int_rrotate (double_int, long, unsigned int);
-
-
-
-
-static __inline__ unsigned char
-double_int_negative_p (double_int cst)
-{
-  return cst.high < 0;
-}
-
-int double_int_cmp (double_int, double_int, unsigned char);
-int double_int_scmp (double_int, double_int);
-int double_int_ucmp (double_int, double_int);
-
-double_int double_int_max (double_int, double_int, unsigned char);
-double_int double_int_smax (double_int, double_int);
-double_int double_int_umax (double_int, double_int);
-
-double_int double_int_min (double_int, double_int, unsigned char);
-double_int double_int_smin (double_int, double_int);
-double_int double_int_umin (double_int, double_int);
-
-void dump_double_int (FILE *, double_int, unsigned char);
-
-
-
-double_int double_int_ext (double_int, unsigned, unsigned char);
-double_int double_int_sext (double_int, unsigned);
-double_int double_int_zext (double_int, unsigned);
-double_int double_int_mask (unsigned);
-# 253 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/double-int.h"
-static __inline__ unsigned char
-double_int_zero_p (double_int cst)
-{
-  return cst.low == 0 && cst.high == 0;
-}
-
-
-
-static __inline__ unsigned char
-double_int_one_p (double_int cst)
-{
-  return cst.low == 1 && cst.high == 0;
-}
-
-
-
-static __inline__ unsigned char
-double_int_minus_one_p (double_int cst)
-{
-  return (cst.low == (~((unsigned long) 0)) && cst.high == -1);
-}
-
-
-
-static __inline__ unsigned char
-double_int_equal_p (double_int cst1, double_int cst2)
-{
-  return cst1.low == cst2.low && cst1.high == cst2.high;
-}
-
-
-
-
-extern int add_double_with_sign (unsigned long, long,
-     unsigned long, long,
-     unsigned long *, long *,
-     unsigned char);
-
-
-extern int neg_double (unsigned long, long,
-         unsigned long *, long *);
-extern int mul_double_with_sign (unsigned long, long,
-     unsigned long, long,
-     unsigned long *, long *,
-     unsigned char);
-
-
-extern void lshift_double (unsigned long, long,
-      long, unsigned int,
-      unsigned long *, long *, unsigned char);
-extern void rshift_double (unsigned long, long,
-      long, unsigned int,
-      unsigned long *, long *, unsigned char);
-extern int div_and_round_double (unsigned, int, unsigned long,
-     long, unsigned long,
-     long, unsigned long *,
-     long *, unsigned long *,
-     long *);
-
-
-
-
-
-void mpz_set_double_int (mpz_t, double_int, unsigned char);
-double_int mpz_get_double_int (const_tree, mpz_t, unsigned char);
-# 32 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/real.h" 1
-# 30 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/real.h"
-enum real_value_class {
-  rvc_zero,
-  rvc_normal,
-  rvc_inf,
-  rvc_nan
-};
-
-
-
-
-
-
-
-struct real_value {
-
-
-
-  unsigned int cl : 2;
-  unsigned int decimal : 1;
-  unsigned int sign : 1;
-  unsigned int signalling : 1;
-  unsigned int canonical : 1;
-  unsigned int uexp : (32 - 6);
-  unsigned long sig[((128 + (8 * 4)) / (8 * 4))];
-};
-# 77 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/real.h"
-extern char test_real_width
-  [sizeof(struct real_value) <= (((128 + (8 * 4)) + 32)/(8 * 4) + (((128 + (8 * 4)) + 32)%(8 * 4) ? 1 : 0))*sizeof(long) ? 1 : -1];
-# 115 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/real.h"
-struct real_format
-{
-
-  void (*encode) (const struct real_format *, long *,
-    const struct real_value *);
-  void (*decode) (const struct real_format *, struct real_value *,
-    const long *);
-
-
-  int b;
-
-
-  int p;
-
-
-  int pnan;
-
-
-  int emin;
-
-
-  int emax;
-
-
-
-  int signbit_ro;
-
-
-
-  int signbit_rw;
-
-
-  unsigned char round_towards_zero;
-  unsigned char has_sign_dependent_rounding;
-
-
-  unsigned char has_nans;
-  unsigned char has_inf;
-  unsigned char has_denorm;
-  unsigned char has_signed_zero;
-  unsigned char qnan_msb_set;
-  unsigned char canonical_nan_lsbs_set;
-};
-
-
-
-
-
-
-
-extern const struct real_format *
-  real_format_for_mode[MAX_MODE_FLOAT - MIN_MODE_FLOAT + 1
-         + MAX_MODE_DECIMAL_FLOAT - MIN_MODE_DECIMAL_FLOAT + 1];
-# 226 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/real.h"
-extern unsigned char real_arithmetic (struct real_value *, int, const struct real_value *,
-        const struct real_value *);
-
-
-extern unsigned char real_compare (int, const struct real_value *, const struct real_value *);
-
-
-extern unsigned char real_isinf (const struct real_value *);
-
-
-extern unsigned char real_isnan (const struct real_value *);
-
-
-extern unsigned char real_isfinite (const struct real_value *);
-
-
-extern unsigned char real_isneg (const struct real_value *);
-
-
-extern unsigned char real_isnegzero (const struct real_value *);
-
-
-extern unsigned char real_identical (const struct real_value *, const struct real_value *);
-
-
-extern void real_convert (struct real_value *, enum machine_mode,
-     const struct real_value *);
-
-
-extern unsigned char exact_real_truncate (enum machine_mode, const struct real_value *);
-
-
-extern void real_to_decimal (char *, const struct real_value *, size_t,
-        size_t, int);
-
-
-
-extern void real_to_decimal_for_mode (char *, const struct real_value *, size_t,
-          size_t, int, enum machine_mode);
-
-
-extern void real_to_hexadecimal (char *, const struct real_value *,
-     size_t, size_t, int);
-
-
-extern long real_to_integer (const struct real_value *);
-extern void real_to_integer2 (long *, long *,
-         const struct real_value *);
-
-
-
-extern int real_from_string (struct real_value *, const char *);
-
-extern void real_from_string3 (struct real_value *, const char *, enum machine_mode);
-
-
-extern void real_from_integer (struct real_value *, enum machine_mode,
-          unsigned long, long, int);
-
-extern long real_to_target_fmt (long *, const struct real_value *,
-    const struct real_format *);
-extern long real_to_target (long *, const struct real_value *, enum machine_mode);
-
-extern void real_from_target_fmt (struct real_value *, const long *,
-      const struct real_format *);
-extern void real_from_target (struct real_value *, const long *,
-         enum machine_mode);
-
-extern void real_inf (struct real_value *);
-
-extern unsigned char real_nan (struct real_value *, const char *, int, enum machine_mode);
-
-extern void real_maxval (struct real_value *, int, enum machine_mode);
-
-extern void real_2expN (struct real_value *, int, enum machine_mode);
-
-extern unsigned int real_hash (const struct real_value *);
-
-
-
-extern const struct real_format ieee_single_format;
-extern const struct real_format mips_single_format;
-extern const struct real_format motorola_single_format;
-extern const struct real_format spu_single_format;
-extern const struct real_format ieee_double_format;
-extern const struct real_format mips_double_format;
-extern const struct real_format motorola_double_format;
-extern const struct real_format ieee_extended_motorola_format;
-extern const struct real_format ieee_extended_intel_96_format;
-extern const struct real_format ieee_extended_intel_96_round_53_format;
-extern const struct real_format ieee_extended_intel_128_format;
-extern const struct real_format ibm_extended_format;
-extern const struct real_format mips_extended_format;
-extern const struct real_format ieee_quad_format;
-extern const struct real_format mips_quad_format;
-extern const struct real_format vax_f_format;
-extern const struct real_format vax_d_format;
-extern const struct real_format vax_g_format;
-extern const struct real_format real_internal_format;
-extern const struct real_format decimal_single_format;
-extern const struct real_format decimal_double_format;
-extern const struct real_format decimal_quad_format;
-extern const struct real_format ieee_half_format;
-extern const struct real_format arm_half_format;
-# 385 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/real.h"
-extern struct real_value real_value_truncate (enum machine_mode,
-         struct real_value);
-
-
-
-
-extern struct real_value real_value_negate (const struct real_value *);
-extern struct real_value real_value_abs (const struct real_value *);
-
-extern int significand_size (enum machine_mode);
-
-extern struct real_value real_from_string2 (const char *, enum machine_mode);
-# 414 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/real.h"
-extern int real_exponent (const struct real_value *);
-
-
-extern void real_ldexp (struct real_value *, const struct real_value *, int);
-
-
-
-
-
-extern struct real_value dconst0;
-extern struct real_value dconst1;
-extern struct real_value dconst2;
-extern struct real_value dconstm1;
-extern struct real_value dconsthalf;
-
-
-
-
-
-
-extern const struct real_value * dconst_e_ptr (void);
-
-
-extern const struct real_value * dconst_third_ptr (void);
-
-
-extern const struct real_value * dconst_sqrt2_ptr (void);
-
-
-
-struct real_value real_value_from_int_cst (const_tree, const_tree);
-# 453 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/real.h"
-extern rtx const_double_from_real_value (struct real_value, enum machine_mode);
-
-
-extern unsigned char exact_real_inverse (enum machine_mode, struct real_value *);
-
-
-
-
-unsigned char real_can_shorten_arithmetic (enum machine_mode, enum machine_mode);
-
-
-extern tree build_real (tree, struct real_value);
-
-
-extern unsigned char real_sqrt (struct real_value *, enum machine_mode,
-         const struct real_value *);
-
-
-extern unsigned char real_powi (struct real_value *, enum machine_mode,
-         const struct real_value *, long);
-
-
-extern void real_trunc (struct real_value *, enum machine_mode,
-   const struct real_value *);
-extern void real_floor (struct real_value *, enum machine_mode,
-   const struct real_value *);
-extern void real_ceil (struct real_value *, enum machine_mode,
-         const struct real_value *);
-extern void real_round (struct real_value *, enum machine_mode,
-   const struct real_value *);
-
-
-extern void real_copysign (struct real_value *, const struct real_value *);
-
-
-extern unsigned char real_isinteger (const struct real_value *c, enum machine_mode mode);
-
-
-
-
-extern void get_max_float (const struct real_format *, char *, size_t);
-# 33 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/fixed-value.h" 1
-# 27 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/fixed-value.h"
-struct fixed_value
-{
-  double_int data;
-  enum machine_mode mode;
-};
-# 40 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/fixed-value.h"
-extern struct fixed_value fconst0[18];
-extern struct fixed_value fconst1[8];
-# 50 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/fixed-value.h"
-extern rtx const_fixed_from_fixed_value (struct fixed_value, enum machine_mode);
-
-
-extern void fixed_from_string (struct fixed_value *, const char *,
-          enum machine_mode);
-
-
-extern tree build_fixed (tree, struct fixed_value);
-
-
-extern unsigned char fixed_convert (struct fixed_value *, enum machine_mode,
-      const struct fixed_value *, unsigned char);
-
-
-extern unsigned char fixed_convert_from_int (struct fixed_value *, enum machine_mode,
-        double_int, unsigned char, unsigned char);
-
-
-extern unsigned char fixed_convert_from_real (struct fixed_value *, enum machine_mode,
-         const struct real_value *, unsigned char);
-
-
-extern void real_convert_from_fixed (struct real_value *, enum machine_mode,
-         const struct fixed_value *);
-
-
-extern unsigned char fixed_identical (const struct fixed_value *, const struct fixed_value *);
-
-
-extern unsigned int fixed_hash (const struct fixed_value *);
-
-
-
-
-
-
-
-extern void fixed_to_decimal (char *str, const struct fixed_value *, size_t);
-
-
-extern unsigned char fixed_arithmetic (struct fixed_value *, int, const struct fixed_value *,
-         const struct fixed_value *, unsigned char);
-
-
-extern unsigned char fixed_compare (int, const struct fixed_value *,
-      const struct fixed_value *);
-
-
-extern unsigned char fixed_isneg (const struct fixed_value *);
-# 34 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/alias.h" 1
-# 31 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/alias.h"
-typedef int alias_set_type;
-
-extern alias_set_type new_alias_set (void);
-extern alias_set_type get_alias_set (tree);
-extern alias_set_type get_deref_alias_set (tree);
-extern alias_set_type get_varargs_alias_set (void);
-extern alias_set_type get_frame_alias_set (void);
-extern unsigned char component_uses_parent_alias_set (const_tree);
-extern unsigned char alias_set_subset_of (alias_set_type, alias_set_type);
-extern void record_alias_subset (alias_set_type, alias_set_type);
-extern void record_component_aliases (tree);
-extern int alias_sets_conflict_p (alias_set_type, alias_set_type);
-extern int alias_sets_must_conflict_p (alias_set_type, alias_set_type);
-extern int objects_must_conflict_p (tree, tree);
-extern int nonoverlapping_memrefs_p (const_rtx, const_rtx, unsigned char);
-# 35 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/flags.h" 1
-# 32 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/flags.h"
-extern const char *const debug_type_names[];
-
-extern void strip_off_ending (char *, int);
-extern int base_of_path (const char *path, const char **base_out);
-
-
-
-
-
-
-extern unsigned char in_lto_p;
-
-
-extern unsigned char fast_math_flags_set_p (const struct gcc_options *);
-extern unsigned char fast_math_flags_struct_set_p (struct cl_optimization *);
-# 55 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/flags.h"
-extern void set_Wstrict_aliasing (struct gcc_options *opts, int onoff);
-
-
-
-
-
-extern unsigned char final_insns_dump_p;
-
-
-
-extern int flag_permissive;
-
-
-
-extern int flag_next_runtime;
-
-
-
-
-struct target_flag_state {
-
-
-
-
-  int x_align_loops_log;
-  int x_align_loops_max_skip;
-  int x_align_jumps_log;
-  int x_align_jumps_max_skip;
-  int x_align_labels_log;
-  int x_align_labels_max_skip;
-  int x_align_functions_log;
-
-
-  enum excess_precision x_flag_excess_precision;
-};
-
-extern struct target_flag_state default_target_flag_state;
-# 116 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/flags.h"
-extern int dump_for_graph;
-# 36 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
-
-
-
-
-
-
-enum tree_code {
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/all-tree.def" 1
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def" 1
-# 42 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-ERROR_MARK,
-
-
-
-
-
-IDENTIFIER_NODE,
-
-
-
-
-
-
-TREE_LIST,
-
-
-TREE_VEC,
-# 79 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-BLOCK,
-# 123 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-OFFSET_TYPE,
-# 136 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-ENUMERAL_TYPE,
-
-
-
-BOOLEAN_TYPE,
-# 150 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-INTEGER_TYPE,
-
-
-
-REAL_TYPE,
-# 163 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-POINTER_TYPE,
-
-
-
-REFERENCE_TYPE,
-
-
-NULLPTR_TYPE,
-
-
-
-
-FIXED_POINT_TYPE,
-# 184 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-COMPLEX_TYPE,
-
-
-
-
-VECTOR_TYPE,
-# 205 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-ARRAY_TYPE,
-# 215 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-RECORD_TYPE,
-
-
-
-
-
-UNION_TYPE,
-
-
-
-
-
-QUAL_UNION_TYPE,
-
-
-
-
-
-
-VOID_TYPE,
-
-
-
-
-
-
-
-FUNCTION_TYPE,
-
-
-
-
-
-
-METHOD_TYPE,
-
-
-
-
-
-LANG_TYPE,
-# 268 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-INTEGER_CST,
-
-
-REAL_CST,
-
-
-FIXED_CST,
-
-
-
-COMPLEX_CST,
-
-
-VECTOR_CST,
-
-
-STRING_CST,
-# 344 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-FUNCTION_DECL,
-LABEL_DECL,
-
-
-
-
-FIELD_DECL,
-VAR_DECL,
-CONST_DECL,
-PARM_DECL,
-TYPE_DECL,
-RESULT_DECL,
-
-
-
-DEBUG_EXPR_DECL,
-
-
-
-NAMESPACE_DECL,
-# 374 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-IMPORTED_DECL,
-
-
-
-TRANSLATION_UNIT_DECL,
-# 391 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-COMPONENT_REF,
-# 401 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-BIT_FIELD_REF,
-
-
-
-REALPART_EXPR,
-IMAGPART_EXPR,
-
-
-
-
-
-
-ARRAY_REF,
-
-
-
-
-ARRAY_RANGE_REF,
-
-
-INDIRECT_REF,
-# 430 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-OBJ_TYPE_REF,
-# 446 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-CONSTRUCTOR,
-# 456 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-COMPOUND_EXPR,
-
-
-MODIFY_EXPR,
-
-
-
-
-INIT_EXPR,
-
-
-
-
-
-
-
-TARGET_EXPR,
-# 486 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-COND_EXPR,
-# 498 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-VEC_COND_EXPR,
-# 521 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-BIND_EXPR,
-
-
-
-
-
-
-
-CALL_EXPR,
-
-
-
-
-
-
-WITH_CLEANUP_EXPR,
-# 553 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-CLEANUP_POINT_EXPR,
-# 605 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-PLACEHOLDER_EXPR,
-
-
-PLUS_EXPR,
-MINUS_EXPR,
-MULT_EXPR,
-
-
-
-POINTER_PLUS_EXPR,
-
-
-TRUNC_DIV_EXPR,
-
-
-CEIL_DIV_EXPR,
-
-
-FLOOR_DIV_EXPR,
-
-
-ROUND_DIV_EXPR,
-
-
-TRUNC_MOD_EXPR,
-CEIL_MOD_EXPR,
-FLOOR_MOD_EXPR,
-ROUND_MOD_EXPR,
-
-
-RDIV_EXPR,
-
-
-
-EXACT_DIV_EXPR,
-
-
-FIX_TRUNC_EXPR,
-
-
-FLOAT_EXPR,
-
-
-NEGATE_EXPR,
-
-
-
-
-MIN_EXPR,
-MAX_EXPR,
-
-
-
-
-
-ABS_EXPR,
-# 675 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-LSHIFT_EXPR,
-RSHIFT_EXPR,
-LROTATE_EXPR,
-RROTATE_EXPR,
-
-
-BIT_IOR_EXPR,
-BIT_XOR_EXPR,
-BIT_AND_EXPR,
-BIT_NOT_EXPR,
-# 695 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-TRUTH_ANDIF_EXPR,
-TRUTH_ORIF_EXPR,
-TRUTH_AND_EXPR,
-TRUTH_OR_EXPR,
-TRUTH_XOR_EXPR,
-TRUTH_NOT_EXPR,
-
-
-
-
-
-
-
-LT_EXPR,
-LE_EXPR,
-GT_EXPR,
-GE_EXPR,
-EQ_EXPR,
-NE_EXPR,
-
-
-UNORDERED_EXPR,
-ORDERED_EXPR,
-
-
-UNLT_EXPR,
-UNLE_EXPR,
-UNGT_EXPR,
-UNGE_EXPR,
-UNEQ_EXPR,
-
-
-LTGT_EXPR,
-
-RANGE_EXPR,
-
-
-
-PAREN_EXPR,
-
-
-
-
-CONVERT_EXPR,
-
-
-
-ADDR_SPACE_CONVERT_EXPR,
-
-
-
-
-FIXED_CONVERT_EXPR,
-
-
-NOP_EXPR,
-
-
-NON_LVALUE_EXPR,
-# 765 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-VIEW_CONVERT_EXPR,
-
-
-
-
-
-
-COMPOUND_LITERAL_EXPR,
-
-
-
-
-SAVE_EXPR,
-
-
-
-ADDR_EXPR,
-
-
-
-FDESC_EXPR,
-
-
-
-COMPLEX_EXPR,
-
-
-CONJ_EXPR,
-
-
-
-
-PREDECREMENT_EXPR,
-PREINCREMENT_EXPR,
-POSTDECREMENT_EXPR,
-POSTINCREMENT_EXPR,
-
-
-VA_ARG_EXPR,
-
-
-
-
-
-
-TRY_CATCH_EXPR,
-
-
-
-
-TRY_FINALLY_EXPR,
-
-
-
-
-
-DECL_EXPR,
-
-
-
-
-LABEL_EXPR,
-
-
-
-GOTO_EXPR,
-
-
-
-
-
-
-RETURN_EXPR,
-
-
-
-EXIT_EXPR,
-
-
-
-
-LOOP_EXPR,
-# 860 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-SWITCH_EXPR,
-
-
-
-
-
-CASE_LABEL_EXPR,
-
-
-
-
-
-
-ASM_EXPR,
-
-
-
-
-SSA_NAME,
-
-
-
-CATCH_EXPR,
-
-
-
-
-
-EH_FILTER_EXPR,
-
-
-
-SCEV_KNOWN,
-
-
-
-SCEV_NOT_KNOWN,
-
-
-
-POLYNOMIAL_CHREC,
-
-
-
-STATEMENT_LIST,
-# 923 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-ASSERT_EXPR,
-
-
-
-TREE_BINFO,
-
-
-
-
-
-
-WITH_SIZE_EXPR,
-# 945 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-REALIGN_LOAD_EXPR,
-# 961 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-TARGET_MEM_REF,
-# 971 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-MEM_REF,
-
-
-
-
-
-
-
-OMP_PARALLEL,
-
-
-
-
-
-OMP_TASK,
-# 1006 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-OMP_FOR,
-
-
-
-
-OMP_SECTIONS,
-
-
-
-
-OMP_SINGLE,
-
-
-
-OMP_SECTION,
-
-
-
-OMP_MASTER,
-
-
-
-OMP_ORDERED,
-
-
-
-
-OMP_CRITICAL,
-
-
-
-
-
-
-
-OMP_ATOMIC,
-
-
-OMP_CLAUSE,
-
-
-
-
-
-
-
-REDUC_MAX_EXPR,
-REDUC_MIN_EXPR,
-REDUC_PLUS_EXPR,
-# 1065 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-DOT_PROD_EXPR,
-# 1074 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-WIDEN_SUM_EXPR,
-
-
-
-
-
-
-WIDEN_MULT_EXPR,
-# 1090 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.def"
-WIDEN_MULT_PLUS_EXPR,
-
-
-WIDEN_MULT_MINUS_EXPR,
-
-
-
-
-
-FMA_EXPR,
-
-
-
-
-VEC_LSHIFT_EXPR,
-VEC_RSHIFT_EXPR,
-
-
-
-
-
-
-VEC_WIDEN_MULT_HI_EXPR,
-VEC_WIDEN_MULT_LO_EXPR,
-
-
-
-
-
-VEC_UNPACK_HI_EXPR,
-VEC_UNPACK_LO_EXPR,
-
-
-
-
-
-VEC_UNPACK_FLOAT_HI_EXPR,
-VEC_UNPACK_FLOAT_LO_EXPR,
-
-
-
-
-
-VEC_PACK_TRUNC_EXPR,
-VEC_PACK_SAT_EXPR,
-
-
-
-
-
-VEC_PACK_FIX_TRUNC_EXPR,
-
-
-VEC_EXTRACT_EVEN_EXPR,
-VEC_EXTRACT_ODD_EXPR,
-
-
-VEC_INTERLEAVE_HIGH_EXPR,
-VEC_INTERLEAVE_LOW_EXPR,
-
-
-
-
-
-
-PREDICT_EXPR,
-
-
-OPTIMIZATION_NODE,
-
-
-TARGET_OPTION_NODE,
-# 2 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/all-tree.def" 2
-LAST_AND_UNUSED_TREE_CODE,
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/c-family/c-common.def" 1
-# 41 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/c-family/c-common.def"
-C_MAYBE_CONST_EXPR,
-
-
-
-
-
-
-EXCESS_PRECISION_EXPR,
-# 4 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/all-tree.def" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/ada/gcc-interface/ada-tree.def" 1
-# 29 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/ada/gcc-interface/ada-tree.def"
-UNCONSTRAINED_ARRAY_TYPE,
-
-
-
-
-
-UNCONSTRAINED_ARRAY_REF,
-
-
-
-
-NULL_EXPR,
-
-
-
-PLUS_NOMOD_EXPR,
-
-
-
-MINUS_NOMOD_EXPR,
-
-
-
-
-ATTR_ADDR_EXPR,
-# 62 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/ada/gcc-interface/ada-tree.def"
-STMT_STMT,
-
-
-
-
-
-LOOP_STMT,
-
-
-
-
-
-EXIT_STMT,
-# 5 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/all-tree.def" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def" 1
-# 43 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
-OFFSET_REF,
-
-
-
-
-PTRMEM_CST,
-
-
-
-
-
-NEW_EXPR,
-VEC_NEW_EXPR,
-
-
-
-
-DELETE_EXPR,
-VEC_DELETE_EXPR,
-
-
-
-
-SCOPE_REF,
-
-
-
-
-MEMBER_REF,
-
-
-
-TYPE_EXPR,
-
-
-
-
-
-
-AGGR_INIT_EXPR,
-
-
-
-
-VEC_INIT_EXPR,
-
-
-
-THROW_EXPR,
-
-
-
-EMPTY_CLASS_EXPR,
-# 109 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
-BASELINK,
-# 126 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
-TEMPLATE_DECL,
-# 161 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
-TEMPLATE_PARM_INDEX,
-# 170 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
-TEMPLATE_TEMPLATE_PARM,
-# 179 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
-TEMPLATE_TYPE_PARM,
-
-
-
-
-
-TYPENAME_TYPE,
-
-
-
-TYPEOF_TYPE,
-
-
-
-
-
-BOUND_TEMPLATE_TEMPLATE_PARM,
-
-
-
-
-
-UNBOUND_CLASS_TEMPLATE,
-
-
-
-
-
-USING_DECL,
-
-
-USING_STMT,
-
-
-
-
-DEFAULT_ARG,
-
-
-
-
-
-
-TEMPLATE_ID_EXPR,
-
-
-
-OVERLOAD,
-# 238 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
-PSEUDO_DTOR_EXPR,
-
-
-
-MODOP_EXPR,
-CAST_EXPR,
-REINTERPRET_CAST_EXPR,
-CONST_CAST_EXPR,
-STATIC_CAST_EXPR,
-DYNAMIC_CAST_EXPR,
-DOTSTAR_EXPR,
-TYPEID_EXPR,
-NOEXCEPT_EXPR,
-# 261 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
-NON_DEPENDENT_EXPR,
-
-
-
-CTOR_INITIALIZER,
-
-TRY_BLOCK,
-
-EH_SPEC_BLOCK,
-
-
-
-
-
-HANDLER,
-
-
-
-MUST_NOT_THROW_EXPR,
-
-
-
-
-CLEANUP_STMT,
-
-
-
-
-
-IF_STMT,
-
-
-
-FOR_STMT,
-
-
-
-
-RANGE_FOR_STMT,
-
-
-
-WHILE_STMT,
-
-
-
-DO_STMT,
-
-
-BREAK_STMT,
-
-
-CONTINUE_STMT,
-
-
-
-SWITCH_STMT,
-
-
-
-EXPR_STMT,
-
-TAG_DEFN,
-
-
-OFFSETOF_EXPR,
-
-
-SIZEOF_EXPR,
-
-
-ARROW_EXPR,
-
-
-
-ALIGNOF_EXPR,
-
-
-
-AT_ENCODE_EXPR,
-
-
-
-
-STMT_EXPR,
-
-
-
-UNARY_PLUS_EXPR,
-
-
-
-
-
-
-
-STATIC_ASSERT,
-# 376 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
-TYPE_ARGUMENT_PACK,
-# 385 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
-NONTYPE_ARGUMENT_PACK,
-# 408 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
-TYPE_PACK_EXPANSION,
-
-
-
-
-
-
-EXPR_PACK_EXPANSION,
-# 427 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
-ARGUMENT_PACK_SELECT,
-
-
-
-
-TRAIT_EXPR,
-# 441 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
-LAMBDA_EXPR,
-# 450 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
-DECLTYPE_TYPE,
-# 460 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cp/cp-tree.def"
-TEMPLATE_INFO,
-# 6 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/all-tree.def" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/java/java-tree.def" 1
-# 23 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/java/java-tree.def"
-URSHIFT_EXPR,
-
-
-
-COMPARE_EXPR,
-
-
-COMPARE_L_EXPR,
-
-COMPARE_G_EXPR,
-# 7 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/all-tree.def" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/objc/objc-tree.def" 1
-# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/objc/objc-tree.def"
-CLASS_INTERFACE_TYPE,
-CLASS_IMPLEMENTATION_TYPE,
-
-CATEGORY_INTERFACE_TYPE,
-CATEGORY_IMPLEMENTATION_TYPE,
-
-PROTOCOL_INTERFACE_TYPE,
-
-
-KEYWORD_DECL,
-INSTANCE_METHOD_DECL,
-CLASS_METHOD_DECL,
-PROPERTY_DECL,
-
-
-MESSAGE_SEND_EXPR,
-CLASS_REFERENCE_EXPR,
-# 71 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/objc/objc-tree.def"
-PROPERTY_REF,
-# 7 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/all-tree.def" 2
-# 44 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
-MAX_TREE_CODES
-};
-
-
-
-
-extern unsigned char tree_contains_struct[MAX_TREE_CODES][64];
-# 61 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-enum tree_code_class {
-  tcc_exceptional,
-  tcc_constant,
-
-  tcc_type,
-  tcc_declaration,
-  tcc_reference,
-  tcc_comparison,
-  tcc_unary,
-  tcc_binary,
-  tcc_statement,
-
-  tcc_vl_exp,
-
-  tcc_expression
-};
-
-
-
-
-extern const char *const tree_code_class_strings[];
-
-
-
-
-
-
-extern const enum tree_code_class tree_code_type[];
-# 175 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern const unsigned char tree_code_length[];
-
-
-
-
-extern const char *const tree_code_name[];
-# 190 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-typedef enum {
-  ALIAS_DIAG_NONE = 0x0,
-  ALIAS_DIAG_TO_UNDEF = 0x1,
-  ALIAS_DIAG_TO_EXTERN = 0x2
-} alias_diag_flags;
-
-typedef struct alias_pair
-{
-  tree decl;
-  tree target;
-  int emitted_diags;
-} alias_pair;
-
-
-typedef struct VEC_alias_pair_base { unsigned num; unsigned alloc; alias_pair vec[1]; } VEC_alias_pair_base; typedef struct VEC_alias_pair_none { VEC_alias_pair_base base; } VEC_alias_pair_none; static __inline__ unsigned VEC_alias_pair_base_length (const VEC_alias_pair_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ alias_pair *VEC_alias_pair_base_last (VEC_alias_pair_base *vec_ ) { (void)(vec_ && vec_->num); return &vec_->vec[vec_->num - 1]; } static __inline__ alias_pair *VEC_alias_pair_base_index (VEC_alias_pair_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return &vec_->vec[ix_]; } static __inline__ int VEC_alias_pair_base_iterate (VEC_alias_pair_base *vec_, unsigned ix_, alias_pair **ptr) { if (vec_ && ix_ < vec_->num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static __inline__ size_t VEC_alias_pair_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_alias_pair_base, vec) + alloc_ * sizeof(alias_pair); } static __inline__ void VEC_alias_pair_base_embedded_init (VEC_alias_pair_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_alias_pair_base_space (VEC_alias_pair_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_alias_pair_base_splice (VEC_alias_pair_base *dst_, VEC_alias_pair_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (alias_pair)); dst_->num += len_; } } static __inline__ alias_pair *VEC_alias_pair_base_quick_push (VEC_alias_pair_base *vec_, const alias_pair *obj_ ) { alias_pair *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_alias_pair_base_pop (VEC_alias_pair_base *vec_ ) { (void)(vec_->num); --vec_->num; } static __inline__ void VEC_alias_pair_base_truncate (VEC_alias_pair_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ alias_pair *VEC_alias_pair_base_replace (VEC_alias_pair_base *vec_, unsigned ix_, const alias_pair *obj_ ) { alias_pair *slot_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ alias_pair *VEC_alias_pair_base_quick_insert (VEC_alias_pair_base *vec_, unsigned ix_, const alias_pair *obj_ ) { alias_pair *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (alias_pair)); if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_alias_pair_base_ordered_remove (VEC_alias_pair_base *vec_, unsigned ix_ ) { alias_pair *slot_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (alias_pair)); } static __inline__ void VEC_alias_pair_base_unordered_remove (VEC_alias_pair_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->num); vec_->vec[ix_] = vec_->vec[--vec_->num]; } static __inline__ void VEC_alias_pair_base_block_remove (VEC_alias_pair_base *vec_, unsigned ix_, unsigned len_ ) { alias_pair *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (alias_pair)); } static __inline__ alias_pair *VEC_alias_pair_base_address (VEC_alias_pair_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_alias_pair_base_lower_bound (VEC_alias_pair_base *vec_, const alias_pair *obj_, unsigned char (*lessthan_)(const alias_pair *, const alias_pair *) ) { unsigned int len_ = VEC_alias_pair_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { alias_pair *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_alias_pair_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_alias_pair_gc { VEC_alias_pair_base base; } VEC_alias_pair_gc; static __inline__ VEC_alias_pair_gc *VEC_alias_pair_gc_alloc (int alloc_ ) { return (VEC_alias_pair_gc *) vec_gc_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) ); } static __inline__ VEC_alias_pair_gc *VEC_alias_pair_gc_copy (VEC_alias_pair_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_alias_pair_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_alias_pair_gc *)(vec_gc_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (alias_pair) * len_); } return new_vec_; } static __inline__ void VEC_alias_pair_gc_free (VEC_alias_pair_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_alias_pair_gc_reserve (VEC_alias_pair_gc **vec_, int alloc_ ) { int extend = !VEC_alias_pair_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_alias_pair_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) ); return extend; } static __inline__ int VEC_alias_pair_gc_reserve_exact (VEC_alias_pair_gc **vec_, int alloc_ ) { int extend = !VEC_alias_pair_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_alias_pair_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_alias_pair_gc, base.vec), sizeof (alias_pair) ); return extend; } static __inline__ void VEC_alias_pair_gc_safe_grow (VEC_alias_pair_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_alias_pair_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_alias_pair_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_alias_pair_gc_safe_grow_cleared (VEC_alias_pair_gc **vec_, int size_ ) { int oldsize = VEC_alias_pair_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_alias_pair_gc_safe_grow (vec_, size_ ); memset (&(VEC_alias_pair_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (alias_pair) * (size_ - oldsize)); } static __inline__ void VEC_alias_pair_gc_safe_splice (VEC_alias_pair_gc **dst_, VEC_alias_pair_base *src_ ) { if (src_) { VEC_alias_pair_gc_reserve_exact (dst_, src_->num ); VEC_alias_pair_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ alias_pair *VEC_alias_pair_gc_safe_push (VEC_alias_pair_gc **vec_, const alias_pair *obj_ ) { VEC_alias_pair_gc_reserve (vec_, 1 ); return VEC_alias_pair_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ alias_pair *VEC_alias_pair_gc_safe_insert (VEC_alias_pair_gc **vec_, unsigned ix_, const alias_pair *obj_ ) { VEC_alias_pair_gc_reserve (vec_, 1 ); return VEC_alias_pair_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-
-extern VEC_alias_pair_gc * alias_pairs;
-
-
-
-
-enum built_in_class
-{
-  NOT_BUILT_IN = 0,
-  BUILT_IN_FRONTEND,
-  BUILT_IN_MD,
-  BUILT_IN_NORMAL
-};
-
-
-extern const char *const built_in_class_names[4];
-
-
-
-
-
-enum built_in_function
-{
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/builtins.def" 1
-# 177 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/builtins.def"
-BUILT_IN_ACOS,
-BUILT_IN_ACOSF,
-BUILT_IN_ACOSH,
-BUILT_IN_ACOSHF,
-BUILT_IN_ACOSHL,
-BUILT_IN_ACOSL,
-BUILT_IN_ASIN,
-BUILT_IN_ASINF,
-BUILT_IN_ASINH,
-BUILT_IN_ASINHF,
-BUILT_IN_ASINHL,
-BUILT_IN_ASINL,
-BUILT_IN_ATAN,
-BUILT_IN_ATAN2,
-BUILT_IN_ATAN2F,
-BUILT_IN_ATAN2L,
-BUILT_IN_ATANF,
-BUILT_IN_ATANH,
-BUILT_IN_ATANHF,
-BUILT_IN_ATANHL,
-BUILT_IN_ATANL,
-BUILT_IN_CBRT,
-BUILT_IN_CBRTF,
-BUILT_IN_CBRTL,
-BUILT_IN_CEIL,
-BUILT_IN_CEILF,
-BUILT_IN_CEILL,
-BUILT_IN_COPYSIGN,
-BUILT_IN_COPYSIGNF,
-BUILT_IN_COPYSIGNL,
-BUILT_IN_COS,
-BUILT_IN_COSF,
-BUILT_IN_COSH,
-BUILT_IN_COSHF,
-BUILT_IN_COSHL,
-BUILT_IN_COSL,
-BUILT_IN_DREM,
-BUILT_IN_DREMF,
-BUILT_IN_DREML,
-BUILT_IN_ERF,
-BUILT_IN_ERFC,
-BUILT_IN_ERFCF,
-BUILT_IN_ERFCL,
-BUILT_IN_ERFF,
-BUILT_IN_ERFL,
-BUILT_IN_EXP,
-BUILT_IN_EXP10,
-BUILT_IN_EXP10F,
-BUILT_IN_EXP10L,
-BUILT_IN_EXP2,
-BUILT_IN_EXP2F,
-BUILT_IN_EXP2L,
-BUILT_IN_EXPF,
-BUILT_IN_EXPL,
-BUILT_IN_EXPM1,
-BUILT_IN_EXPM1F,
-BUILT_IN_EXPM1L,
-BUILT_IN_FABS,
-BUILT_IN_FABSF,
-BUILT_IN_FABSL,
-BUILT_IN_FDIM,
-BUILT_IN_FDIMF,
-BUILT_IN_FDIML,
-BUILT_IN_FLOOR,
-BUILT_IN_FLOORF,
-BUILT_IN_FLOORL,
-BUILT_IN_FMA,
-BUILT_IN_FMAF,
-BUILT_IN_FMAL,
-BUILT_IN_FMAX,
-BUILT_IN_FMAXF,
-BUILT_IN_FMAXL,
-BUILT_IN_FMIN,
-BUILT_IN_FMINF,
-BUILT_IN_FMINL,
-BUILT_IN_FMOD,
-BUILT_IN_FMODF,
-BUILT_IN_FMODL,
-BUILT_IN_FREXP,
-BUILT_IN_FREXPF,
-BUILT_IN_FREXPL,
-BUILT_IN_GAMMA,
-BUILT_IN_GAMMAF,
-BUILT_IN_GAMMAL,
-BUILT_IN_GAMMA_R,
-BUILT_IN_GAMMAF_R,
-BUILT_IN_GAMMAL_R,
-BUILT_IN_HUGE_VAL,
-BUILT_IN_HUGE_VALF,
-BUILT_IN_HUGE_VALL,
-BUILT_IN_HYPOT,
-BUILT_IN_HYPOTF,
-BUILT_IN_HYPOTL,
-BUILT_IN_ILOGB,
-BUILT_IN_ILOGBF,
-BUILT_IN_ILOGBL,
-BUILT_IN_INF,
-BUILT_IN_INFF,
-BUILT_IN_INFL,
-BUILT_IN_INFD32,
-BUILT_IN_INFD64,
-BUILT_IN_INFD128,
-BUILT_IN_J0,
-BUILT_IN_J0F,
-BUILT_IN_J0L,
-BUILT_IN_J1,
-BUILT_IN_J1F,
-BUILT_IN_J1L,
-BUILT_IN_JN,
-BUILT_IN_JNF,
-BUILT_IN_JNL,
-BUILT_IN_LCEIL,
-BUILT_IN_LCEILF,
-BUILT_IN_LCEILL,
-BUILT_IN_LDEXP,
-BUILT_IN_LDEXPF,
-BUILT_IN_LDEXPL,
-BUILT_IN_LFLOOR,
-BUILT_IN_LFLOORF,
-BUILT_IN_LFLOORL,
-BUILT_IN_LGAMMA,
-BUILT_IN_LGAMMAF,
-BUILT_IN_LGAMMAL,
-BUILT_IN_LGAMMA_R,
-BUILT_IN_LGAMMAF_R,
-BUILT_IN_LGAMMAL_R,
-BUILT_IN_LLCEIL,
-BUILT_IN_LLCEILF,
-BUILT_IN_LLCEILL,
-BUILT_IN_LLFLOOR,
-BUILT_IN_LLFLOORF,
-BUILT_IN_LLFLOORL,
-BUILT_IN_LLRINT,
-BUILT_IN_LLRINTF,
-BUILT_IN_LLRINTL,
-BUILT_IN_LLROUND,
-BUILT_IN_LLROUNDF,
-BUILT_IN_LLROUNDL,
-BUILT_IN_LOG,
-BUILT_IN_LOG10,
-BUILT_IN_LOG10F,
-BUILT_IN_LOG10L,
-BUILT_IN_LOG1P,
-BUILT_IN_LOG1PF,
-BUILT_IN_LOG1PL,
-BUILT_IN_LOG2,
-BUILT_IN_LOG2F,
-BUILT_IN_LOG2L,
-BUILT_IN_LOGB,
-BUILT_IN_LOGBF,
-BUILT_IN_LOGBL,
-BUILT_IN_LOGF,
-BUILT_IN_LOGL,
-BUILT_IN_LRINT,
-BUILT_IN_LRINTF,
-BUILT_IN_LRINTL,
-BUILT_IN_LROUND,
-BUILT_IN_LROUNDF,
-BUILT_IN_LROUNDL,
-BUILT_IN_MODF,
-BUILT_IN_MODFF,
-BUILT_IN_MODFL,
-BUILT_IN_NAN,
-BUILT_IN_NANF,
-BUILT_IN_NANL,
-BUILT_IN_NAND32,
-BUILT_IN_NAND64,
-BUILT_IN_NAND128,
-BUILT_IN_NANS,
-BUILT_IN_NANSF,
-BUILT_IN_NANSL,
-BUILT_IN_NEARBYINT,
-BUILT_IN_NEARBYINTF,
-BUILT_IN_NEARBYINTL,
-BUILT_IN_NEXTAFTER,
-BUILT_IN_NEXTAFTERF,
-BUILT_IN_NEXTAFTERL,
-BUILT_IN_NEXTTOWARD,
-BUILT_IN_NEXTTOWARDF,
-BUILT_IN_NEXTTOWARDL,
-BUILT_IN_POW,
-BUILT_IN_POW10,
-BUILT_IN_POW10F,
-BUILT_IN_POW10L,
-BUILT_IN_POWF,
-BUILT_IN_POWI,
-BUILT_IN_POWIF,
-BUILT_IN_POWIL,
-BUILT_IN_POWL,
-BUILT_IN_REMAINDER,
-BUILT_IN_REMAINDERF,
-BUILT_IN_REMAINDERL,
-BUILT_IN_REMQUO,
-BUILT_IN_REMQUOF,
-BUILT_IN_REMQUOL,
-BUILT_IN_RINT,
-BUILT_IN_RINTF,
-BUILT_IN_RINTL,
-BUILT_IN_ROUND,
-BUILT_IN_ROUNDF,
-BUILT_IN_ROUNDL,
-BUILT_IN_SCALB,
-BUILT_IN_SCALBF,
-BUILT_IN_SCALBL,
-BUILT_IN_SCALBLN,
-BUILT_IN_SCALBLNF,
-BUILT_IN_SCALBLNL,
-BUILT_IN_SCALBN,
-BUILT_IN_SCALBNF,
-BUILT_IN_SCALBNL,
-BUILT_IN_SIGNBIT,
-BUILT_IN_SIGNBITF,
-BUILT_IN_SIGNBITL,
-BUILT_IN_SIGNBITD32,
-BUILT_IN_SIGNBITD64,
-BUILT_IN_SIGNBITD128,
-BUILT_IN_SIGNIFICAND,
-BUILT_IN_SIGNIFICANDF,
-BUILT_IN_SIGNIFICANDL,
-BUILT_IN_SIN,
-BUILT_IN_SINCOS,
-BUILT_IN_SINCOSF,
-BUILT_IN_SINCOSL,
-BUILT_IN_SINF,
-BUILT_IN_SINH,
-BUILT_IN_SINHF,
-BUILT_IN_SINHL,
-BUILT_IN_SINL,
-BUILT_IN_SQRT,
-BUILT_IN_SQRTF,
-BUILT_IN_SQRTL,
-BUILT_IN_TAN,
-BUILT_IN_TANF,
-BUILT_IN_TANH,
-BUILT_IN_TANHF,
-BUILT_IN_TANHL,
-BUILT_IN_TANL,
-BUILT_IN_TGAMMA,
-BUILT_IN_TGAMMAF,
-BUILT_IN_TGAMMAL,
-BUILT_IN_TRUNC,
-BUILT_IN_TRUNCF,
-BUILT_IN_TRUNCL,
-BUILT_IN_Y0,
-BUILT_IN_Y0F,
-BUILT_IN_Y0L,
-BUILT_IN_Y1,
-BUILT_IN_Y1F,
-BUILT_IN_Y1L,
-BUILT_IN_YN,
-BUILT_IN_YNF,
-BUILT_IN_YNL,
-
-
-BUILT_IN_CABS,
-BUILT_IN_CABSF,
-BUILT_IN_CABSL,
-BUILT_IN_CACOS,
-BUILT_IN_CACOSF,
-BUILT_IN_CACOSH,
-BUILT_IN_CACOSHF,
-BUILT_IN_CACOSHL,
-BUILT_IN_CACOSL,
-BUILT_IN_CARG,
-BUILT_IN_CARGF,
-BUILT_IN_CARGL,
-BUILT_IN_CASIN,
-BUILT_IN_CASINF,
-BUILT_IN_CASINH,
-BUILT_IN_CASINHF,
-BUILT_IN_CASINHL,
-BUILT_IN_CASINL,
-BUILT_IN_CATAN,
-BUILT_IN_CATANF,
-BUILT_IN_CATANH,
-BUILT_IN_CATANHF,
-BUILT_IN_CATANHL,
-BUILT_IN_CATANL,
-BUILT_IN_CCOS,
-BUILT_IN_CCOSF,
-BUILT_IN_CCOSH,
-BUILT_IN_CCOSHF,
-BUILT_IN_CCOSHL,
-BUILT_IN_CCOSL,
-BUILT_IN_CEXP,
-BUILT_IN_CEXPF,
-BUILT_IN_CEXPL,
-BUILT_IN_CEXPI,
-BUILT_IN_CEXPIF,
-BUILT_IN_CEXPIL,
-BUILT_IN_CIMAG,
-BUILT_IN_CIMAGF,
-BUILT_IN_CIMAGL,
-BUILT_IN_CLOG,
-BUILT_IN_CLOGF,
-BUILT_IN_CLOGL,
-BUILT_IN_CLOG10,
-BUILT_IN_CLOG10F,
-BUILT_IN_CLOG10L,
-BUILT_IN_CONJ,
-BUILT_IN_CONJF,
-BUILT_IN_CONJL,
-BUILT_IN_CPOW,
-BUILT_IN_CPOWF,
-BUILT_IN_CPOWL,
-BUILT_IN_CPROJ,
-BUILT_IN_CPROJF,
-BUILT_IN_CPROJL,
-BUILT_IN_CREAL,
-BUILT_IN_CREALF,
-BUILT_IN_CREALL,
-BUILT_IN_CSIN,
-BUILT_IN_CSINF,
-BUILT_IN_CSINH,
-BUILT_IN_CSINHF,
-BUILT_IN_CSINHL,
-BUILT_IN_CSINL,
-BUILT_IN_CSQRT,
-BUILT_IN_CSQRTF,
-BUILT_IN_CSQRTL,
-BUILT_IN_CTAN,
-BUILT_IN_CTANF,
-BUILT_IN_CTANH,
-BUILT_IN_CTANHF,
-BUILT_IN_CTANHL,
-BUILT_IN_CTANL,
-
-
-
-
-BUILT_IN_BCMP,
-BUILT_IN_BCOPY,
-BUILT_IN_BZERO,
-BUILT_IN_INDEX,
-BUILT_IN_MEMCHR,
-BUILT_IN_MEMCMP,
-BUILT_IN_MEMCPY,
-BUILT_IN_MEMMOVE,
-BUILT_IN_MEMPCPY,
-BUILT_IN_MEMSET,
-BUILT_IN_RINDEX,
-BUILT_IN_STPCPY,
-BUILT_IN_STPNCPY,
-BUILT_IN_STRCASECMP,
-BUILT_IN_STRCAT,
-BUILT_IN_STRCHR,
-BUILT_IN_STRCMP,
-BUILT_IN_STRCPY,
-BUILT_IN_STRCSPN,
-BUILT_IN_STRDUP,
-BUILT_IN_STRNDUP,
-BUILT_IN_STRLEN,
-BUILT_IN_STRNCASECMP,
-BUILT_IN_STRNCAT,
-BUILT_IN_STRNCMP,
-BUILT_IN_STRNCPY,
-BUILT_IN_STRPBRK,
-BUILT_IN_STRRCHR,
-BUILT_IN_STRSPN,
-BUILT_IN_STRSTR,
-
-
-BUILT_IN_FPRINTF,
-BUILT_IN_FPRINTF_UNLOCKED,
-BUILT_IN_PUTC,
-BUILT_IN_PUTC_UNLOCKED,
-BUILT_IN_FPUTC,
-BUILT_IN_FPUTC_UNLOCKED,
-BUILT_IN_FPUTS,
-BUILT_IN_FPUTS_UNLOCKED,
-BUILT_IN_FSCANF,
-BUILT_IN_FWRITE,
-BUILT_IN_FWRITE_UNLOCKED,
-BUILT_IN_PRINTF,
-BUILT_IN_PRINTF_UNLOCKED,
-BUILT_IN_PUTCHAR,
-BUILT_IN_PUTCHAR_UNLOCKED,
-BUILT_IN_PUTS,
-BUILT_IN_PUTS_UNLOCKED,
-BUILT_IN_SCANF,
-BUILT_IN_SNPRINTF,
-BUILT_IN_SPRINTF,
-BUILT_IN_SSCANF,
-BUILT_IN_VFPRINTF,
-BUILT_IN_VFSCANF,
-BUILT_IN_VPRINTF,
-BUILT_IN_VSCANF,
-BUILT_IN_VSNPRINTF,
-BUILT_IN_VSPRINTF,
-BUILT_IN_VSSCANF,
-
-
-BUILT_IN_ISALNUM,
-BUILT_IN_ISALPHA,
-BUILT_IN_ISASCII,
-BUILT_IN_ISBLANK,
-BUILT_IN_ISCNTRL,
-BUILT_IN_ISDIGIT,
-BUILT_IN_ISGRAPH,
-BUILT_IN_ISLOWER,
-BUILT_IN_ISPRINT,
-BUILT_IN_ISPUNCT,
-BUILT_IN_ISSPACE,
-BUILT_IN_ISUPPER,
-BUILT_IN_ISXDIGIT,
-BUILT_IN_TOASCII,
-BUILT_IN_TOLOWER,
-BUILT_IN_TOUPPER,
-
-
-BUILT_IN_ISWALNUM,
-BUILT_IN_ISWALPHA,
-BUILT_IN_ISWBLANK,
-BUILT_IN_ISWCNTRL,
-BUILT_IN_ISWDIGIT,
-BUILT_IN_ISWGRAPH,
-BUILT_IN_ISWLOWER,
-BUILT_IN_ISWPRINT,
-BUILT_IN_ISWPUNCT,
-BUILT_IN_ISWSPACE,
-BUILT_IN_ISWUPPER,
-BUILT_IN_ISWXDIGIT,
-BUILT_IN_TOWLOWER,
-BUILT_IN_TOWUPPER,
-
-
-BUILT_IN_ABORT,
-BUILT_IN_ABS,
-BUILT_IN_AGGREGATE_INCOMING_ADDRESS,
-BUILT_IN_ALLOCA,
-BUILT_IN_APPLY,
-BUILT_IN_APPLY_ARGS,
-BUILT_IN_BSWAP32,
-BUILT_IN_BSWAP64,
-BUILT_IN_CLEAR_CACHE,
-BUILT_IN_CALLOC,
-BUILT_IN_CLASSIFY_TYPE,
-BUILT_IN_CLZ,
-BUILT_IN_CLZIMAX,
-BUILT_IN_CLZL,
-BUILT_IN_CLZLL,
-BUILT_IN_CONSTANT_P,
-BUILT_IN_CTZ,
-BUILT_IN_CTZIMAX,
-BUILT_IN_CTZL,
-BUILT_IN_CTZLL,
-BUILT_IN_DCGETTEXT,
-BUILT_IN_DGETTEXT,
-BUILT_IN_DWARF_CFA,
-BUILT_IN_DWARF_SP_COLUMN,
-BUILT_IN_EH_RETURN,
-BUILT_IN_EH_RETURN_DATA_REGNO,
-BUILT_IN_EXECL,
-BUILT_IN_EXECLP,
-BUILT_IN_EXECLE,
-BUILT_IN_EXECV,
-BUILT_IN_EXECVP,
-BUILT_IN_EXECVE,
-BUILT_IN_EXIT,
-BUILT_IN_EXPECT,
-BUILT_IN_EXTEND_POINTER,
-BUILT_IN_EXTRACT_RETURN_ADDR,
-BUILT_IN_FFS,
-BUILT_IN_FFSIMAX,
-BUILT_IN_FFSL,
-BUILT_IN_FFSLL,
-BUILT_IN_FORK,
-BUILT_IN_FRAME_ADDRESS,
-BUILT_IN_FREE,
-BUILT_IN_FROB_RETURN_ADDR,
-BUILT_IN_GETTEXT,
-BUILT_IN_IMAXABS,
-BUILT_IN_INIT_DWARF_REG_SIZES,
-BUILT_IN_FINITE,
-BUILT_IN_FINITEF,
-BUILT_IN_FINITEL,
-BUILT_IN_FINITED32,
-BUILT_IN_FINITED64,
-BUILT_IN_FINITED128,
-BUILT_IN_FPCLASSIFY,
-BUILT_IN_ISFINITE,
-BUILT_IN_ISINF_SIGN,
-BUILT_IN_ISINF,
-BUILT_IN_ISINFF,
-BUILT_IN_ISINFL,
-BUILT_IN_ISINFD32,
-BUILT_IN_ISINFD64,
-BUILT_IN_ISINFD128,
-BUILT_IN_ISNAN,
-BUILT_IN_ISNANF,
-BUILT_IN_ISNANL,
-BUILT_IN_ISNAND32,
-BUILT_IN_ISNAND64,
-BUILT_IN_ISNAND128,
-BUILT_IN_ISNORMAL,
-BUILT_IN_ISGREATER,
-BUILT_IN_ISGREATEREQUAL,
-BUILT_IN_ISLESS,
-BUILT_IN_ISLESSEQUAL,
-BUILT_IN_ISLESSGREATER,
-BUILT_IN_ISUNORDERED,
-BUILT_IN_LABS,
-BUILT_IN_LLABS,
-BUILT_IN_LONGJMP,
-BUILT_IN_MALLOC,
-BUILT_IN_NEXT_ARG,
-BUILT_IN_PARITY,
-BUILT_IN_PARITYIMAX,
-BUILT_IN_PARITYL,
-BUILT_IN_PARITYLL,
-BUILT_IN_POPCOUNT,
-BUILT_IN_POPCOUNTIMAX,
-BUILT_IN_POPCOUNTL,
-BUILT_IN_POPCOUNTLL,
-BUILT_IN_PREFETCH,
-BUILT_IN_REALLOC,
-BUILT_IN_RETURN,
-BUILT_IN_RETURN_ADDRESS,
-BUILT_IN_SAVEREGS,
-BUILT_IN_SETJMP,
-BUILT_IN_STRFMON,
-BUILT_IN_STRFTIME,
-BUILT_IN_TRAP,
-BUILT_IN_UNREACHABLE,
-BUILT_IN_UNWIND_INIT,
-BUILT_IN_UPDATE_SETJMP_BUF,
-BUILT_IN_VA_COPY,
-BUILT_IN_VA_END,
-BUILT_IN_VA_START,
-BUILT_IN_VA_ARG_PACK,
-BUILT_IN_VA_ARG_PACK_LEN,
-BUILT_IN__EXIT,
-BUILT_IN__EXIT2,
-
-
-BUILT_IN_INIT_TRAMPOLINE,
-BUILT_IN_ADJUST_TRAMPOLINE,
-BUILT_IN_NONLOCAL_GOTO,
-
-
-BUILT_IN_SETJMP_SETUP,
-BUILT_IN_SETJMP_DISPATCHER,
-BUILT_IN_SETJMP_RECEIVER,
-
-
-BUILT_IN_STACK_SAVE,
-BUILT_IN_STACK_RESTORE,
-
-
-BUILT_IN_OBJECT_SIZE,
-BUILT_IN_MEMCPY_CHK,
-BUILT_IN_MEMMOVE_CHK,
-BUILT_IN_MEMPCPY_CHK,
-BUILT_IN_MEMSET_CHK,
-BUILT_IN_STPCPY_CHK,
-BUILT_IN_STRCAT_CHK,
-BUILT_IN_STRCPY_CHK,
-BUILT_IN_STRNCAT_CHK,
-BUILT_IN_STRNCPY_CHK,
-BUILT_IN_SNPRINTF_CHK,
-BUILT_IN_SPRINTF_CHK,
-BUILT_IN_VSNPRINTF_CHK,
-BUILT_IN_VSPRINTF_CHK,
-BUILT_IN_FPRINTF_CHK,
-BUILT_IN_PRINTF_CHK,
-BUILT_IN_VFPRINTF_CHK,
-BUILT_IN_VPRINTF_CHK,
-
-
-BUILT_IN_PROFILE_FUNC_ENTER,
-
-BUILT_IN_PROFILE_FUNC_EXIT,
-
-
-
-BUILT_IN_EMUTLS_GET_ADDRESS,
-
-
-
-
-BUILT_IN_EMUTLS_REGISTER_COMMON,
-
-
-
-
-
-
-BUILT_IN_UNWIND_RESUME,
-BUILT_IN_CXA_END_CLEANUP,
-BUILT_IN_EH_POINTER,
-BUILT_IN_EH_FILTER,
-BUILT_IN_EH_COPY_VALUES,
-
-
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/sync-builtins.def" 1
-# 31 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/sync-builtins.def"
-BUILT_IN_FETCH_AND_ADD_N,
-
-BUILT_IN_FETCH_AND_ADD_1,
-
-BUILT_IN_FETCH_AND_ADD_2,
-
-BUILT_IN_FETCH_AND_ADD_4,
-
-BUILT_IN_FETCH_AND_ADD_8,
-
-BUILT_IN_FETCH_AND_ADD_16,
-
-
-BUILT_IN_FETCH_AND_SUB_N,
-
-BUILT_IN_FETCH_AND_SUB_1,
-
-BUILT_IN_FETCH_AND_SUB_2,
-
-BUILT_IN_FETCH_AND_SUB_4,
-
-BUILT_IN_FETCH_AND_SUB_8,
-
-BUILT_IN_FETCH_AND_SUB_16,
-
-
-BUILT_IN_FETCH_AND_OR_N,
-
-BUILT_IN_FETCH_AND_OR_1,
-
-BUILT_IN_FETCH_AND_OR_2,
-
-BUILT_IN_FETCH_AND_OR_4,
-
-BUILT_IN_FETCH_AND_OR_8,
-
-BUILT_IN_FETCH_AND_OR_16,
-
-
-BUILT_IN_FETCH_AND_AND_N,
-
-BUILT_IN_FETCH_AND_AND_1,
-
-BUILT_IN_FETCH_AND_AND_2,
-
-BUILT_IN_FETCH_AND_AND_4,
-
-BUILT_IN_FETCH_AND_AND_8,
-
-BUILT_IN_FETCH_AND_AND_16,
-
-
-BUILT_IN_FETCH_AND_XOR_N,
-
-BUILT_IN_FETCH_AND_XOR_1,
-
-BUILT_IN_FETCH_AND_XOR_2,
-
-BUILT_IN_FETCH_AND_XOR_4,
-
-BUILT_IN_FETCH_AND_XOR_8,
-
-BUILT_IN_FETCH_AND_XOR_16,
-
-
-BUILT_IN_FETCH_AND_NAND_N,
-
-BUILT_IN_FETCH_AND_NAND_1,
-
-BUILT_IN_FETCH_AND_NAND_2,
-
-BUILT_IN_FETCH_AND_NAND_4,
-
-BUILT_IN_FETCH_AND_NAND_8,
-
-BUILT_IN_FETCH_AND_NAND_16,
-
-
-BUILT_IN_ADD_AND_FETCH_N,
-
-BUILT_IN_ADD_AND_FETCH_1,
-
-BUILT_IN_ADD_AND_FETCH_2,
-
-BUILT_IN_ADD_AND_FETCH_4,
-
-BUILT_IN_ADD_AND_FETCH_8,
-
-BUILT_IN_ADD_AND_FETCH_16,
-
-
-BUILT_IN_SUB_AND_FETCH_N,
-
-BUILT_IN_SUB_AND_FETCH_1,
-
-BUILT_IN_SUB_AND_FETCH_2,
-
-BUILT_IN_SUB_AND_FETCH_4,
-
-BUILT_IN_SUB_AND_FETCH_8,
-
-BUILT_IN_SUB_AND_FETCH_16,
-
-
-BUILT_IN_OR_AND_FETCH_N,
-
-BUILT_IN_OR_AND_FETCH_1,
-
-BUILT_IN_OR_AND_FETCH_2,
-
-BUILT_IN_OR_AND_FETCH_4,
-
-BUILT_IN_OR_AND_FETCH_8,
-
-BUILT_IN_OR_AND_FETCH_16,
-
-
-BUILT_IN_AND_AND_FETCH_N,
-
-BUILT_IN_AND_AND_FETCH_1,
-
-BUILT_IN_AND_AND_FETCH_2,
-
-BUILT_IN_AND_AND_FETCH_4,
-
-BUILT_IN_AND_AND_FETCH_8,
-
-BUILT_IN_AND_AND_FETCH_16,
-
-
-BUILT_IN_XOR_AND_FETCH_N,
-
-BUILT_IN_XOR_AND_FETCH_1,
-
-BUILT_IN_XOR_AND_FETCH_2,
-
-BUILT_IN_XOR_AND_FETCH_4,
-
-BUILT_IN_XOR_AND_FETCH_8,
-
-BUILT_IN_XOR_AND_FETCH_16,
-
-
-BUILT_IN_NAND_AND_FETCH_N,
-
-BUILT_IN_NAND_AND_FETCH_1,
-
-BUILT_IN_NAND_AND_FETCH_2,
-
-BUILT_IN_NAND_AND_FETCH_4,
-
-BUILT_IN_NAND_AND_FETCH_8,
-
-BUILT_IN_NAND_AND_FETCH_16,
-
-
-BUILT_IN_BOOL_COMPARE_AND_SWAP_N,
-
-
-BUILT_IN_BOOL_COMPARE_AND_SWAP_1,
-
-
-BUILT_IN_BOOL_COMPARE_AND_SWAP_2,
-
-
-BUILT_IN_BOOL_COMPARE_AND_SWAP_4,
-
-
-BUILT_IN_BOOL_COMPARE_AND_SWAP_8,
-
-
-BUILT_IN_BOOL_COMPARE_AND_SWAP_16,
-
-
-
-BUILT_IN_VAL_COMPARE_AND_SWAP_N,
-
-
-BUILT_IN_VAL_COMPARE_AND_SWAP_1,
-
-
-BUILT_IN_VAL_COMPARE_AND_SWAP_2,
-
-
-BUILT_IN_VAL_COMPARE_AND_SWAP_4,
-
-
-BUILT_IN_VAL_COMPARE_AND_SWAP_8,
-
-
-BUILT_IN_VAL_COMPARE_AND_SWAP_16,
-
-
-
-BUILT_IN_LOCK_TEST_AND_SET_N,
-
-BUILT_IN_LOCK_TEST_AND_SET_1,
-
-BUILT_IN_LOCK_TEST_AND_SET_2,
-
-BUILT_IN_LOCK_TEST_AND_SET_4,
-
-BUILT_IN_LOCK_TEST_AND_SET_8,
-
-BUILT_IN_LOCK_TEST_AND_SET_16,
-
-
-BUILT_IN_LOCK_RELEASE_N,
-
-BUILT_IN_LOCK_RELEASE_1,
-
-BUILT_IN_LOCK_RELEASE_2,
-
-BUILT_IN_LOCK_RELEASE_4,
-
-BUILT_IN_LOCK_RELEASE_8,
-
-BUILT_IN_LOCK_RELEASE_16,
-
-
-BUILT_IN_SYNCHRONIZE,
-# 772 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/builtins.def" 2
-
-
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/omp-builtins.def" 1
-# 27 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/omp-builtins.def"
-BUILT_IN_OMP_GET_THREAD_NUM,
-
-BUILT_IN_OMP_GET_NUM_THREADS,
-
-
-BUILT_IN_GOMP_ATOMIC_START,
-
-BUILT_IN_GOMP_ATOMIC_END,
-
-BUILT_IN_GOMP_BARRIER,
-
-BUILT_IN_GOMP_TASKWAIT,
-
-BUILT_IN_GOMP_CRITICAL_START,
-
-BUILT_IN_GOMP_CRITICAL_END,
-
-BUILT_IN_GOMP_CRITICAL_NAME_START,
-
-
-BUILT_IN_GOMP_CRITICAL_NAME_END,
-
-
-
-
-
-BUILT_IN_GOMP_LOOP_STATIC_START,
-
-
-
-BUILT_IN_GOMP_LOOP_DYNAMIC_START,
-
-
-
-BUILT_IN_GOMP_LOOP_GUIDED_START,
-
-
-
-BUILT_IN_GOMP_LOOP_RUNTIME_START,
-
-
-
-BUILT_IN_GOMP_LOOP_ORDERED_STATIC_START,
-
-
-
-BUILT_IN_GOMP_LOOP_ORDERED_DYNAMIC_START,
-
-
-
-BUILT_IN_GOMP_LOOP_ORDERED_GUIDED_START,
-
-
-
-BUILT_IN_GOMP_LOOP_ORDERED_RUNTIME_START,
-
-
-
-BUILT_IN_GOMP_LOOP_STATIC_NEXT,
-
-BUILT_IN_GOMP_LOOP_DYNAMIC_NEXT,
-
-BUILT_IN_GOMP_LOOP_GUIDED_NEXT,
-
-BUILT_IN_GOMP_LOOP_RUNTIME_NEXT,
-
-BUILT_IN_GOMP_LOOP_ORDERED_STATIC_NEXT,
-
-
-BUILT_IN_GOMP_LOOP_ORDERED_DYNAMIC_NEXT,
-
-
-BUILT_IN_GOMP_LOOP_ORDERED_GUIDED_NEXT,
-
-
-BUILT_IN_GOMP_LOOP_ORDERED_RUNTIME_NEXT,
-
-
-BUILT_IN_GOMP_LOOP_ULL_STATIC_START,
-
-
-
-BUILT_IN_GOMP_LOOP_ULL_DYNAMIC_START,
-
-
-
-BUILT_IN_GOMP_LOOP_ULL_GUIDED_START,
-
-
-
-BUILT_IN_GOMP_LOOP_ULL_RUNTIME_START,
-
-
-
-BUILT_IN_GOMP_LOOP_ULL_ORDERED_STATIC_START,
-
-
-
-BUILT_IN_GOMP_LOOP_ULL_ORDERED_DYNAMIC_START,
-
-
-
-BUILT_IN_GOMP_LOOP_ULL_ORDERED_GUIDED_START,
-
-
-
-BUILT_IN_GOMP_LOOP_ULL_ORDERED_RUNTIME_START,
-
-
-
-BUILT_IN_GOMP_LOOP_ULL_STATIC_NEXT,
-
-BUILT_IN_GOMP_LOOP_ULL_DYNAMIC_NEXT,
-
-BUILT_IN_GOMP_LOOP_ULL_GUIDED_NEXT,
-
-BUILT_IN_GOMP_LOOP_ULL_RUNTIME_NEXT,
-
-BUILT_IN_GOMP_LOOP_ULL_ORDERED_STATIC_NEXT,
-
-
-BUILT_IN_GOMP_LOOP_ULL_ORDERED_DYNAMIC_NEXT,
-
-
-BUILT_IN_GOMP_LOOP_ULL_ORDERED_GUIDED_NEXT,
-
-
-BUILT_IN_GOMP_LOOP_ULL_ORDERED_RUNTIME_NEXT,
-
-
-
-
-
-BUILT_IN_GOMP_PARALLEL_LOOP_STATIC_START,
-
-
-
-BUILT_IN_GOMP_PARALLEL_LOOP_DYNAMIC_START,
-
-
-
-BUILT_IN_GOMP_PARALLEL_LOOP_GUIDED_START,
-
-
-
-BUILT_IN_GOMP_PARALLEL_LOOP_RUNTIME_START,
-
-
-
-BUILT_IN_GOMP_LOOP_END,
-
-BUILT_IN_GOMP_LOOP_END_NOWAIT,
-
-BUILT_IN_GOMP_ORDERED_START,
-
-BUILT_IN_GOMP_ORDERED_END,
-
-BUILT_IN_GOMP_PARALLEL_START,
-
-BUILT_IN_GOMP_PARALLEL_END,
-
-BUILT_IN_GOMP_TASK,
-
-
-BUILT_IN_GOMP_SECTIONS_START,
-
-BUILT_IN_GOMP_SECTIONS_NEXT,
-
-BUILT_IN_GOMP_PARALLEL_SECTIONS_START,
-
-
-BUILT_IN_GOMP_SECTIONS_END,
-
-BUILT_IN_GOMP_SECTIONS_END_NOWAIT,
-
-
-BUILT_IN_GOMP_SINGLE_START,
-
-BUILT_IN_GOMP_SINGLE_COPY_START,
-
-BUILT_IN_GOMP_SINGLE_COPY_END,
-# 774 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/builtins.def" 2
-# 230 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
-
-
-
-  BUILT_IN_COMPLEX_MUL_MIN,
-  BUILT_IN_COMPLEX_MUL_MAX
-    = BUILT_IN_COMPLEX_MUL_MIN
-      + MAX_MODE_COMPLEX_FLOAT
-      - MIN_MODE_COMPLEX_FLOAT,
-
-  BUILT_IN_COMPLEX_DIV_MIN,
-  BUILT_IN_COMPLEX_DIV_MAX
-    = BUILT_IN_COMPLEX_DIV_MIN
-      + MAX_MODE_COMPLEX_FLOAT
-      - MIN_MODE_COMPLEX_FLOAT,
-
-
-  END_BUILTINS
-};
-
-
-
-extern const char * built_in_names[(int) END_BUILTINS];
-# 276 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern tree built_in_decls[(int) END_BUILTINS];
-extern tree implicit_built_in_decls[(int) END_BUILTINS];
-
-
-
-
-extern unsigned const char omp_clause_num_ops[];
-extern const char * const omp_clause_code_name[];
-
-
-
-enum omp_clause_code
-{
-
-
-  OMP_CLAUSE_ERROR = 0,
-
-
-  OMP_CLAUSE_PRIVATE,
-
-
-  OMP_CLAUSE_SHARED,
-
-
-  OMP_CLAUSE_FIRSTPRIVATE,
-
-
-  OMP_CLAUSE_LASTPRIVATE,
-# 312 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-  OMP_CLAUSE_REDUCTION,
-
-
-  OMP_CLAUSE_COPYIN,
-
-
-  OMP_CLAUSE_COPYPRIVATE,
-
-
-  OMP_CLAUSE_IF,
-
-
-  OMP_CLAUSE_NUM_THREADS,
-
-
-  OMP_CLAUSE_SCHEDULE,
-
-
-  OMP_CLAUSE_NOWAIT,
-
-
-  OMP_CLAUSE_ORDERED,
-
-
-  OMP_CLAUSE_DEFAULT,
-
-
-  OMP_CLAUSE_COLLAPSE,
-
-
-  OMP_CLAUSE_UNTIED
-};
-# 367 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct tree_base {
-  __extension__ enum tree_code code : 16;
-
-  unsigned side_effects_flag : 1;
-  unsigned constant_flag : 1;
-  unsigned addressable_flag : 1;
-  unsigned volatile_flag : 1;
-  unsigned readonly_flag : 1;
-  unsigned unsigned_flag : 1;
-  unsigned asm_written_flag: 1;
-  unsigned nowarning_flag : 1;
-
-  unsigned used_flag : 1;
-  unsigned nothrow_flag : 1;
-  unsigned static_flag : 1;
-  unsigned public_flag : 1;
-  unsigned private_flag : 1;
-  unsigned protected_flag : 1;
-  unsigned deprecated_flag : 1;
-  unsigned saturating_flag : 1;
-
-  unsigned default_def_flag : 1;
-  unsigned lang_flag_0 : 1;
-  unsigned lang_flag_1 : 1;
-  unsigned lang_flag_2 : 1;
-  unsigned lang_flag_3 : 1;
-  unsigned lang_flag_4 : 1;
-  unsigned lang_flag_5 : 1;
-  unsigned lang_flag_6 : 1;
-
-  unsigned visited : 1;
-  unsigned packed_flag : 1;
-  unsigned user_align : 1;
-  unsigned nameless_flag : 1;
-
-  unsigned spare : 12;
-
-
-
-
-  unsigned address_space : 8;
-};
-
-struct tree_common {
-  struct tree_base base;
-  tree chain;
-  tree type;
-};
-# 645 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-enum tree_node_structure_enum {
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/treestruct.def" 1
-# 33 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/treestruct.def"
-TS_BASE,
-TS_COMMON,
-TS_INT_CST,
-TS_REAL_CST,
-TS_FIXED_CST,
-TS_VECTOR,
-TS_STRING,
-TS_COMPLEX,
-TS_IDENTIFIER,
-TS_DECL_MINIMAL,
-TS_DECL_COMMON,
-TS_DECL_WRTL,
-TS_DECL_NON_COMMON,
-TS_DECL_WITH_VIS,
-TS_FIELD_DECL,
-TS_VAR_DECL,
-TS_PARM_DECL,
-TS_LABEL_DECL,
-TS_RESULT_DECL,
-TS_CONST_DECL,
-TS_TYPE_DECL,
-TS_FUNCTION_DECL,
-TS_TRANSLATION_UNIT_DECL,
-TS_TYPE,
-TS_LIST,
-TS_VEC,
-TS_EXP,
-TS_SSA_NAME,
-TS_BLOCK,
-TS_BINFO,
-TS_STATEMENT_LIST,
-TS_CONSTRUCTOR,
-TS_OMP_CLAUSE,
-TS_OPTIMIZATION,
-TS_TARGET_OPTION,
-# 647 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
-  LAST_TS_ENUM
-};
-# 945 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree-check.h" 1
-# 946 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
-# 1409 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct tree_int_cst {
-  struct tree_common common;
-  double_int int_cst;
-};
-
-
-
-
-struct real_value;
-
-
-
-
-struct tree_real_cst {
-  struct tree_common common;
-  struct real_value * real_cst_ptr;
-};
-
-
-struct fixed_value;
-
-
-
-
-
-struct tree_fixed_cst {
-  struct tree_common common;
-  struct fixed_value * fixed_cst_ptr;
-};
-
-
-
-
-
-
-struct tree_string {
-  struct tree_common common;
-  int length;
-  char str[1];
-};
-
-
-
-
-
-struct tree_complex {
-  struct tree_common common;
-  tree real;
-  tree imag;
-};
-
-
-
-
-struct tree_vector {
-  struct tree_common common;
-  tree elements;
-};
-
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/symtab.h" 1
-# 22 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/symtab.h"
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/obstack.h" 1
-# 157 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/obstack.h"
-struct _obstack_chunk
-{
-  char *limit;
-  struct _obstack_chunk *prev;
-  char contents[4];
-};
-
-struct obstack
-{
-  long chunk_size;
-  struct _obstack_chunk *chunk;
-  char *object_base;
-  char *next_free;
-  char *chunk_limit;
-  int temp;
-  int alignment_mask;
-
-
-
-  struct _obstack_chunk *(*chunkfun) (void *, long);
-  void (*freefun) (void *, struct _obstack_chunk *);
-  void *extra_arg;
-  unsigned use_extra_arg:1;
-  unsigned maybe_empty_object:1;
-
-
-
-  unsigned alloc_failed:1;
-
-
-};
-
-
-
-extern void _obstack_newchunk (struct obstack *, int);
-extern void _obstack_free (struct obstack *, void *);
-extern int _obstack_begin (struct obstack *, int, int,
-       void *(*) (long), void (*) (void *));
-extern int _obstack_begin_1 (struct obstack *, int, int,
-        void *(*) (void *, long),
-        void (*) (void *, void *), void *);
-extern int _obstack_memory_used (struct obstack *);
-
-
-
-
-void obstack_init (struct obstack *obstack);
-
-void * obstack_alloc (struct obstack *obstack, int size);
-
-void * obstack_copy (struct obstack *obstack, void *address, int size);
-void * obstack_copy0 (struct obstack *obstack, void *address, int size);
-
-void obstack_free (struct obstack *obstack, void *block);
-
-void obstack_blank (struct obstack *obstack, int size);
-
-void obstack_grow (struct obstack *obstack, void *data, int size);
-void obstack_grow0 (struct obstack *obstack, void *data, int size);
-
-void obstack_1grow (struct obstack *obstack, int data_char);
-void obstack_ptr_grow (struct obstack *obstack, void *data);
-void obstack_int_grow (struct obstack *obstack, int data);
-
-void * obstack_finish (struct obstack *obstack);
-
-int obstack_object_size (struct obstack *obstack);
-
-int obstack_room (struct obstack *obstack);
-void obstack_make_room (struct obstack *obstack, int size);
-void obstack_1grow_fast (struct obstack *obstack, int data_char);
-void obstack_ptr_grow_fast (struct obstack *obstack, void *data);
-void obstack_int_grow_fast (struct obstack *obstack, int data);
-void obstack_blank_fast (struct obstack *obstack, int size);
-
-void * obstack_base (struct obstack *obstack);
-void * obstack_next_free (struct obstack *obstack);
-int obstack_alignment_mask (struct obstack *obstack);
-int obstack_chunk_size (struct obstack *obstack);
-int obstack_memory_used (struct obstack *obstack);
-
-
-
-
-extern void (*obstack_alloc_failed_handler) (void);
-
-
-extern int obstack_exit_failure;
-# 23 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/symtab.h" 2
-
-
-
-
-
-
-
-typedef struct ht_identifier ht_identifier;
-typedef struct ht_identifier *ht_identifier_ptr;
-struct ht_identifier {
-  const unsigned char *str;
-  unsigned int len;
-  unsigned int hash_value;
-};
-
-
-
-
-typedef struct ht hash_table;
-typedef struct ht_identifier *hashnode;
-
-enum ht_lookup_option {HT_NO_INSERT = 0, HT_ALLOC};
-
-
-struct ht
-{
-
-  struct obstack stack;
-
-  hashnode *entries;
-
-  hashnode (*alloc_node) (hash_table *);
-
-
-  void * (*alloc_subobject) (size_t);
-
-  unsigned int nslots;
-  unsigned int nelements;
-
-
-  struct cpp_reader *pfile;
-
-
-  unsigned int searches;
-  unsigned int collisions;
-
-
-  unsigned char entries_owned;
-};
-
-
-extern hash_table *ht_create (unsigned int order);
-
-
-extern void ht_destroy (hash_table *);
-
-extern hashnode ht_lookup (hash_table *, const unsigned char *,
-      size_t, enum ht_lookup_option);
-extern hashnode ht_lookup_with_hash (hash_table *, const unsigned char *,
-                                     size_t, unsigned int,
-                                     enum ht_lookup_option);
-
-
-
-
-
-
-typedef int (*ht_cb) (struct cpp_reader *, hashnode, const void *);
-extern void ht_forall (hash_table *, ht_cb, const void *);
-
-
-
-extern void ht_purge (hash_table *, ht_cb, const void *);
-
-
-extern void ht_load (hash_table *ht, hashnode *entries,
-       unsigned int nslots, unsigned int nelements, unsigned char own);
-
-
-extern void ht_dump_statistics (hash_table *);
-# 1469 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 2
-# 1486 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct tree_identifier {
-  struct tree_common common;
-  struct ht_identifier id;
-};
-
-
-
-
-
-struct tree_list {
-  struct tree_common common;
-  tree purpose;
-  tree value;
-};
-# 1508 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct tree_vec {
-  struct tree_common common;
-  int length;
-  tree a[1];
-};
-# 1559 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-typedef struct constructor_elt_d {
-  tree index;
-  tree value;
-} constructor_elt;
-
-typedef struct VEC_constructor_elt_base { unsigned num; unsigned alloc; constructor_elt vec[1]; } VEC_constructor_elt_base; typedef struct VEC_constructor_elt_none { VEC_constructor_elt_base base; } VEC_constructor_elt_none; static __inline__ unsigned VEC_constructor_elt_base_length (const VEC_constructor_elt_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ constructor_elt *VEC_constructor_elt_base_last (VEC_constructor_elt_base *vec_ ) { (void)(vec_ && vec_->num); return &vec_->vec[vec_->num - 1]; } static __inline__ constructor_elt *VEC_constructor_elt_base_index (VEC_constructor_elt_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return &vec_->vec[ix_]; } static __inline__ int VEC_constructor_elt_base_iterate (VEC_constructor_elt_base *vec_, unsigned ix_, constructor_elt **ptr) { if (vec_ && ix_ < vec_->num) { *ptr = &vec_->vec[ix_]; return 1; } else { *ptr = 0; return 0; } } static __inline__ size_t VEC_constructor_elt_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_constructor_elt_base, vec) + alloc_ * sizeof(constructor_elt); } static __inline__ void VEC_constructor_elt_base_embedded_init (VEC_constructor_elt_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_constructor_elt_base_space (VEC_constructor_elt_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_constructor_elt_base_splice (VEC_constructor_elt_base *dst_, VEC_constructor_elt_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (constructor_elt)); dst_->num += len_; } } static __inline__ constructor_elt *VEC_constructor_elt_base_quick_push (VEC_constructor_elt_base *vec_, const constructor_elt *obj_ ) { constructor_elt *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_constructor_elt_base_pop (VEC_constructor_elt_base *vec_ ) { (void)(vec_->num); --vec_->num; } static __inline__ void VEC_constructor_elt_base_truncate (VEC_constructor_elt_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ constructor_elt *VEC_constructor_elt_base_replace (VEC_constructor_elt_base *vec_, unsigned ix_, const constructor_elt *obj_ ) { constructor_elt *slot_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; if (obj_) *slot_ = *obj_; return slot_; } static __inline__ constructor_elt *VEC_constructor_elt_base_quick_insert (VEC_constructor_elt_base *vec_, unsigned ix_, const constructor_elt *obj_ ) { constructor_elt *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (constructor_elt)); if (obj_) *slot_ = *obj_; return slot_; } static __inline__ void VEC_constructor_elt_base_ordered_remove (VEC_constructor_elt_base *vec_, unsigned ix_ ) { constructor_elt *slot_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (constructor_elt)); } static __inline__ void VEC_constructor_elt_base_unordered_remove (VEC_constructor_elt_base *vec_, unsigned ix_ ) { (void)(ix_ < vec_->num); vec_->vec[ix_] = vec_->vec[--vec_->num]; } static __inline__ void VEC_constructor_elt_base_block_remove (VEC_constructor_elt_base *vec_, unsigned ix_, unsigned len_ ) { constructor_elt *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (constructor_elt)); } static __inline__ constructor_elt *VEC_constructor_elt_base_address (VEC_constructor_elt_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_constructor_elt_base_lower_bound (VEC_constructor_elt_base *vec_, const constructor_elt *obj_, unsigned char (*lessthan_)(const constructor_elt *, const constructor_elt *) ) { unsigned int len_ = VEC_constructor_elt_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { constructor_elt *middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_constructor_elt_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_constructor_elt_gc { VEC_constructor_elt_base base; } VEC_constructor_elt_gc; static __inline__ VEC_constructor_elt_gc *VEC_constructor_elt_gc_alloc (int alloc_ ) { return (VEC_constructor_elt_gc *) vec_gc_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) ); } static __inline__ VEC_constructor_elt_gc *VEC_constructor_elt_gc_copy (VEC_constructor_elt_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_constructor_elt_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_constructor_elt_gc *)(vec_gc_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (constructor_elt) * len_); } return new_vec_; } static __inline__ void VEC_constructor_elt_gc_free (VEC_constructor_elt_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_constructor_elt_gc_reserve (VEC_constructor_elt_gc **vec_, int alloc_ ) { int extend = !VEC_constructor_elt_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_constructor_elt_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) ); return extend; } static __inline__ int VEC_constructor_elt_gc_reserve_exact (VEC_constructor_elt_gc **vec_, int alloc_ ) { int extend = !VEC_constructor_elt_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_constructor_elt_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_constructor_elt_gc, base.vec), sizeof (constructor_elt) ); return extend; } static __inline__ void VEC_constructor_elt_gc_safe_grow (VEC_constructor_elt_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_constructor_elt_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_constructor_elt_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_constructor_elt_gc_safe_grow_cleared (VEC_constructor_elt_gc **vec_, int size_ ) { int oldsize = VEC_constructor_elt_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_constructor_elt_gc_safe_grow (vec_, size_ ); memset (&(VEC_constructor_elt_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (constructor_elt) * (size_ - oldsize)); } static __inline__ void VEC_constructor_elt_gc_safe_splice (VEC_constructor_elt_gc **dst_, VEC_constructor_elt_base *src_ ) { if (src_) { VEC_constructor_elt_gc_reserve_exact (dst_, src_->num ); VEC_constructor_elt_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ constructor_elt *VEC_constructor_elt_gc_safe_push (VEC_constructor_elt_gc **vec_, const constructor_elt *obj_ ) { VEC_constructor_elt_gc_reserve (vec_, 1 ); return VEC_constructor_elt_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ constructor_elt *VEC_constructor_elt_gc_safe_insert (VEC_constructor_elt_gc **vec_, unsigned ix_, const constructor_elt *obj_ ) { VEC_constructor_elt_gc_reserve (vec_, 1 ); return VEC_constructor_elt_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-
-struct tree_constructor {
-  struct tree_common common;
-  VEC_constructor_elt_gc *elts;
-};
-# 1612 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern void protected_set_expr_location (tree, location_t);
-# 1833 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-enum omp_clause_schedule_kind
-{
-  OMP_CLAUSE_SCHEDULE_STATIC,
-  OMP_CLAUSE_SCHEDULE_DYNAMIC,
-  OMP_CLAUSE_SCHEDULE_GUIDED,
-  OMP_CLAUSE_SCHEDULE_AUTO,
-  OMP_CLAUSE_SCHEDULE_RUNTIME
-};
-
-
-
-
-enum omp_clause_default_kind
-{
-  OMP_CLAUSE_DEFAULT_UNSPECIFIED,
-  OMP_CLAUSE_DEFAULT_SHARED,
-  OMP_CLAUSE_DEFAULT_NONE,
-  OMP_CLAUSE_DEFAULT_PRIVATE,
-  OMP_CLAUSE_DEFAULT_FIRSTPRIVATE
-};
-
-
-
-
-struct tree_exp {
-  struct tree_common common;
-  location_t locus;
-  tree block;
-  tree
-
-    operands[1];
-};
-# 1904 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct ptr_info_def;
-
-
-
-typedef struct ssa_use_operand_d {
-  struct ssa_use_operand_d* prev;
-  struct ssa_use_operand_d* next;
-
-
-
-
-
-  union { gimple stmt; tree ssa_name; } loc;
-  tree * use;
-} ssa_use_operand_t;
-
-
-
-
-struct tree_ssa_name {
-  struct tree_common common;
-
-
-  tree var;
-
-
-  gimple def_stmt;
-
-
-  unsigned int version;
-
-
-  struct ptr_info_def *ptr_info;
-
-
-  struct ssa_use_operand_d imm_uses;
-};
-
-struct phi_arg_d {
-
-
-  struct ssa_use_operand_d imm_use;
-  tree def;
-  location_t locus;
-};
-# 1963 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct tree_omp_clause {
-  struct tree_common common;
-  location_t locus;
-  enum omp_clause_code code;
-  union omp_clause_subcode {
-    enum omp_clause_default_kind default_kind;
-    enum omp_clause_schedule_kind schedule_kind;
-    enum tree_code reduction_code;
-  } subcode;
-
-
-
-  gimple_seq gimple_reduction_init;
-  gimple_seq gimple_reduction_merge;
-
-  tree ops[1];
-};
-# 2034 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct tree_block {
-  struct tree_common common;
-
-  unsigned abstract_flag : 1;
-  unsigned block_num : 31;
-
-  location_t locus;
-
-  tree vars;
-  VEC_tree_gc *nonlocalized_vars;
-
-  tree subblocks;
-  tree supercontext;
-  tree abstract_origin;
-  tree fragment_origin;
-  tree fragment_chain;
-};
-# 2090 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern enum machine_mode vector_type_mode (const_tree);
-# 2330 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct die_struct;
-
-struct tree_type {
-  struct tree_common common;
-  tree values;
-  tree size;
-  tree size_unit;
-  tree attributes;
-  unsigned int uid;
-
-  unsigned int precision : 10;
-  unsigned no_force_blk_flag : 1;
-  unsigned needs_constructing_flag : 1;
-  unsigned transparent_aggr_flag : 1;
-  unsigned restrict_flag : 1;
-  unsigned contains_placeholder_bits : 2;
-
-  __extension__ enum machine_mode mode : 8;
-
-  unsigned string_flag : 1;
-  unsigned lang_flag_0 : 1;
-  unsigned lang_flag_1 : 1;
-  unsigned lang_flag_2 : 1;
-  unsigned lang_flag_3 : 1;
-  unsigned lang_flag_4 : 1;
-  unsigned lang_flag_5 : 1;
-  unsigned lang_flag_6 : 1;
-
-  unsigned int align;
-  alias_set_type alias_set;
-  tree pointer_to;
-  tree reference_to;
-  union tree_type_symtab {
-    int address;
-    const char * pointer;
-    struct die_struct * die;
-  } symtab;
-  tree name;
-  tree minval;
-  tree maxval;
-  tree next_variant;
-  tree main_variant;
-  tree binfo;
-  tree context;
-  tree canonical;
-
-  struct lang_type *lang_specific;
-};
-# 2482 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct tree_binfo {
-  struct tree_common common;
-
-  tree offset;
-  tree vtable;
-  tree virtuals;
-  tree vptr_field;
-  VEC_tree_gc *base_accesses;
-  tree inheritance;
-
-  tree vtt_subvtt;
-  tree vtt_vptr;
-
-  VEC_tree_none base_binfos;
-};
-# 2526 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct function;
-# 2579 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct tree_decl_minimal {
-  struct tree_common common;
-  location_t locus;
-  unsigned int uid;
-  tree name;
-  tree context;
-};
-# 2747 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct tree_decl_common {
-  struct tree_decl_minimal common;
-  tree size;
-
-  __extension__ enum machine_mode mode : 8;
-
-  unsigned nonlocal_flag : 1;
-  unsigned virtual_flag : 1;
-  unsigned ignored_flag : 1;
-  unsigned abstract_flag : 1;
-  unsigned artificial_flag : 1;
-  unsigned preserve_flag: 1;
-  unsigned debug_expr_is_from : 1;
-
-  unsigned lang_flag_0 : 1;
-  unsigned lang_flag_1 : 1;
-  unsigned lang_flag_2 : 1;
-  unsigned lang_flag_3 : 1;
-  unsigned lang_flag_4 : 1;
-  unsigned lang_flag_5 : 1;
-  unsigned lang_flag_6 : 1;
-  unsigned lang_flag_7 : 1;
-  unsigned lang_flag_8 : 1;
-
-
-
-  unsigned decl_flag_0 : 1;
-
-
-
-  unsigned decl_flag_1 : 1;
-
-
-
-  unsigned decl_flag_2 : 1;
-
-
-  unsigned gimple_reg_flag : 1;
-
-  unsigned decl_by_reference_flag : 1;
-
-  unsigned decl_restricted_flag : 1;
-
-
-
-  unsigned decl_read_flag : 1;
-
-
-
-  unsigned decl_nonshareable_flag : 1;
-
-
-  unsigned int off_align : 8;
-
-
-
-
-  unsigned int align;
-
-
-  unsigned int pt_uid;
-
-  tree size_unit;
-  tree initial;
-  tree attributes;
-  tree abstract_origin;
-
-
-  struct lang_decl *lang_specific;
-};
-
-extern tree decl_value_expr_lookup (tree);
-extern void decl_value_expr_insert (tree, tree);
-# 2863 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct tree_decl_with_rtl {
-  struct tree_decl_common common;
-  rtx rtl;
-};
-# 2931 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct tree_field_decl {
-  struct tree_decl_common common;
-
-  tree offset;
-  tree bit_field_type;
-  tree qualifier;
-  tree bit_offset;
-  tree fcontext;
-};
-# 2957 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct tree_label_decl {
-  struct tree_decl_with_rtl common;
-  int label_decl_uid;
-  int eh_landing_pad_nr;
-};
-
-struct var_ann_d;
-struct tree_result_decl {
-  struct tree_decl_with_rtl common;
-  struct var_ann_d *ann;
-};
-
-struct tree_const_decl {
-  struct tree_decl_with_rtl common;
-};
-# 2982 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct tree_parm_decl {
-  struct tree_decl_with_rtl common;
-  rtx incoming_rtl;
-  struct var_ann_d *ann;
-};
-# 3121 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct tree_decl_with_vis {
- struct tree_decl_with_rtl common;
- tree assembler_name;
- tree section_name;
- tree comdat_group;
-
-
- unsigned defer_output : 1;
- unsigned hard_register : 1;
- unsigned thread_local : 1;
- unsigned common_flag : 1;
- unsigned in_text_section : 1;
- unsigned in_constant_pool : 1;
- unsigned dllimport_flag : 1;
-
- unsigned weak_flag : 1;
-
- unsigned seen_in_bind_expr : 1;
- unsigned comdat_flag : 1;
- __extension__ enum symbol_visibility visibility : 2;
- unsigned visibility_specified : 1;
-
- __extension__ enum tls_model tls_model : 3;
-
-
- unsigned init_priority_p : 1;
-
- unsigned shadowed_for_var_p : 1;
-
- unsigned implicit_section_name_p : 1;
-
-};
-
-extern tree decl_debug_expr_lookup (tree);
-extern void decl_debug_expr_insert (tree, tree);
-# 3166 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-typedef unsigned short priority_type;
-
-extern priority_type decl_init_priority_lookup (tree);
-extern priority_type decl_fini_priority_lookup (tree);
-extern void decl_init_priority_insert (tree, priority_type);
-extern void decl_fini_priority_insert (tree, priority_type);
-# 3205 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct tree_var_decl {
-  struct tree_decl_with_vis common;
-  struct var_ann_d *ann;
-};
-# 3227 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct
- tree_decl_non_common {
-  struct tree_decl_with_vis common;
-
-  tree saved_tree;
-
-  tree arguments;
-
-  tree result;
-
-  tree vindex;
-};
-# 3369 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct tree_function_decl {
-  struct tree_decl_non_common common;
-
-  struct function *f;
-
-
-  tree personality;
-
-
-  tree function_specific_target;
-  tree function_specific_optimization;
-
-
-
-
-
-  __extension__ enum built_in_function function_code : 11;
-  __extension__ enum built_in_class built_in_class : 2;
-
-  unsigned static_ctor_flag : 1;
-  unsigned static_dtor_flag : 1;
-  unsigned uninlinable : 1;
-
-  unsigned possibly_inlined : 1;
-  unsigned novops_flag : 1;
-  unsigned returns_twice_flag : 1;
-  unsigned malloc_flag : 1;
-  unsigned operator_new_flag : 1;
-  unsigned declared_inline_flag : 1;
-  unsigned regdecl_flag : 1;
-
-  unsigned no_inline_warning_flag : 1;
-  unsigned no_instrument_function_entry_exit : 1;
-  unsigned no_limit_stack : 1;
-  unsigned disregard_inline_limits : 1;
-  unsigned pure_flag : 1;
-  unsigned looping_const_or_pure_flag : 1;
-
-
-
-};
-
-
-
-
-
-
-
-struct tree_translation_unit_decl {
-  struct tree_decl_common common;
-
-  const char * language;
-
-
-};
-
-
-extern VEC_tree_gc *all_translation_units;
-# 3443 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct tree_type_decl {
-  struct tree_decl_non_common common;
-
-};
-# 3459 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-struct tree_statement_list_node
- {
-  struct tree_statement_list_node *prev;
-  struct tree_statement_list_node *next;
-  tree stmt;
-};
-
-struct tree_statement_list
- {
-  struct tree_common common;
-  struct tree_statement_list_node *head;
-  struct tree_statement_list_node *tail;
-};
-
-
-
-
-struct tree_optimization_option {
-  struct tree_common common;
-
-
-  struct cl_optimization opts;
-};
-
-
-
-
-
-extern tree build_optimization_node (void);
-
-
-
-struct tree_target_option {
-  struct tree_common common;
-
-
-  struct cl_target_option opts;
-};
-
-
-
-
-
-extern tree build_target_option_node (void);
-
-
-
-
-
-
-union
-                                                         tree_node {
-  struct tree_base base;
-  struct tree_common common;
-  struct tree_int_cst int_cst;
-  struct tree_real_cst real_cst;
-  struct tree_fixed_cst fixed_cst;
-  struct tree_vector vector;
-  struct tree_string string;
-  struct tree_complex complex;
-  struct tree_identifier identifier;
-  struct tree_decl_minimal decl_minimal;
-  struct tree_decl_common decl_common;
-  struct tree_decl_with_rtl decl_with_rtl;
-  struct tree_decl_non_common decl_non_common;
-  struct tree_parm_decl parm_decl;
-  struct tree_decl_with_vis decl_with_vis;
-  struct tree_var_decl var_decl;
-  struct tree_field_decl field_decl;
-  struct tree_label_decl label_decl;
-  struct tree_result_decl result_decl;
-  struct tree_const_decl const_decl;
-  struct tree_type_decl type_decl;
-  struct tree_function_decl function_decl;
-  struct tree_translation_unit_decl
-    translation_unit_decl;
-  struct tree_type type;
-  struct tree_list list;
-  struct tree_vec vec;
-  struct tree_exp exp;
-  struct tree_ssa_name ssa_name;
-  struct tree_block block;
-  struct tree_binfo binfo;
-  struct tree_statement_list stmt_list;
-  struct tree_constructor constructor;
-  struct tree_omp_clause omp_clause;
-  struct tree_optimization_option optimization;
-  struct tree_target_option target_option;
-};
-
-
-
-enum tree_index
-{
-  TI_ERROR_MARK,
-  TI_INTQI_TYPE,
-  TI_INTHI_TYPE,
-  TI_INTSI_TYPE,
-  TI_INTDI_TYPE,
-  TI_INTTI_TYPE,
-
-  TI_UINTQI_TYPE,
-  TI_UINTHI_TYPE,
-  TI_UINTSI_TYPE,
-  TI_UINTDI_TYPE,
-  TI_UINTTI_TYPE,
-
-  TI_UINT32_TYPE,
-  TI_UINT64_TYPE,
-
-  TI_INTEGER_ZERO,
-  TI_INTEGER_ONE,
-  TI_INTEGER_THREE,
-  TI_INTEGER_MINUS_ONE,
-  TI_NULL_POINTER,
-
-  TI_SIZE_ZERO,
-  TI_SIZE_ONE,
-
-  TI_BITSIZE_ZERO,
-  TI_BITSIZE_ONE,
-  TI_BITSIZE_UNIT,
-
-  TI_PUBLIC,
-  TI_PROTECTED,
-  TI_PRIVATE,
-
-  TI_BOOLEAN_FALSE,
-  TI_BOOLEAN_TRUE,
-
-  TI_COMPLEX_INTEGER_TYPE,
-  TI_COMPLEX_FLOAT_TYPE,
-  TI_COMPLEX_DOUBLE_TYPE,
-  TI_COMPLEX_LONG_DOUBLE_TYPE,
-
-  TI_FLOAT_TYPE,
-  TI_DOUBLE_TYPE,
-  TI_LONG_DOUBLE_TYPE,
-
-  TI_FLOAT_PTR_TYPE,
-  TI_DOUBLE_PTR_TYPE,
-  TI_LONG_DOUBLE_PTR_TYPE,
-  TI_INTEGER_PTR_TYPE,
-
-  TI_VOID_TYPE,
-  TI_PTR_TYPE,
-  TI_CONST_PTR_TYPE,
-  TI_SIZE_TYPE,
-  TI_PID_TYPE,
-  TI_PTRDIFF_TYPE,
-  TI_VA_LIST_TYPE,
-  TI_VA_LIST_GPR_COUNTER_FIELD,
-  TI_VA_LIST_FPR_COUNTER_FIELD,
-  TI_BOOLEAN_TYPE,
-  TI_FILEPTR_TYPE,
-
-  TI_DFLOAT32_TYPE,
-  TI_DFLOAT64_TYPE,
-  TI_DFLOAT128_TYPE,
-  TI_DFLOAT32_PTR_TYPE,
-  TI_DFLOAT64_PTR_TYPE,
-  TI_DFLOAT128_PTR_TYPE,
-
-  TI_VOID_LIST_NODE,
-
-  TI_MAIN_IDENTIFIER,
-
-  TI_SAT_SFRACT_TYPE,
-  TI_SAT_FRACT_TYPE,
-  TI_SAT_LFRACT_TYPE,
-  TI_SAT_LLFRACT_TYPE,
-  TI_SAT_USFRACT_TYPE,
-  TI_SAT_UFRACT_TYPE,
-  TI_SAT_ULFRACT_TYPE,
-  TI_SAT_ULLFRACT_TYPE,
-  TI_SFRACT_TYPE,
-  TI_FRACT_TYPE,
-  TI_LFRACT_TYPE,
-  TI_LLFRACT_TYPE,
-  TI_USFRACT_TYPE,
-  TI_UFRACT_TYPE,
-  TI_ULFRACT_TYPE,
-  TI_ULLFRACT_TYPE,
-  TI_SAT_SACCUM_TYPE,
-  TI_SAT_ACCUM_TYPE,
-  TI_SAT_LACCUM_TYPE,
-  TI_SAT_LLACCUM_TYPE,
-  TI_SAT_USACCUM_TYPE,
-  TI_SAT_UACCUM_TYPE,
-  TI_SAT_ULACCUM_TYPE,
-  TI_SAT_ULLACCUM_TYPE,
-  TI_SACCUM_TYPE,
-  TI_ACCUM_TYPE,
-  TI_LACCUM_TYPE,
-  TI_LLACCUM_TYPE,
-  TI_USACCUM_TYPE,
-  TI_UACCUM_TYPE,
-  TI_ULACCUM_TYPE,
-  TI_ULLACCUM_TYPE,
-  TI_QQ_TYPE,
-  TI_HQ_TYPE,
-  TI_SQ_TYPE,
-  TI_DQ_TYPE,
-  TI_TQ_TYPE,
-  TI_UQQ_TYPE,
-  TI_UHQ_TYPE,
-  TI_USQ_TYPE,
-  TI_UDQ_TYPE,
-  TI_UTQ_TYPE,
-  TI_SAT_QQ_TYPE,
-  TI_SAT_HQ_TYPE,
-  TI_SAT_SQ_TYPE,
-  TI_SAT_DQ_TYPE,
-  TI_SAT_TQ_TYPE,
-  TI_SAT_UQQ_TYPE,
-  TI_SAT_UHQ_TYPE,
-  TI_SAT_USQ_TYPE,
-  TI_SAT_UDQ_TYPE,
-  TI_SAT_UTQ_TYPE,
-  TI_HA_TYPE,
-  TI_SA_TYPE,
-  TI_DA_TYPE,
-  TI_TA_TYPE,
-  TI_UHA_TYPE,
-  TI_USA_TYPE,
-  TI_UDA_TYPE,
-  TI_UTA_TYPE,
-  TI_SAT_HA_TYPE,
-  TI_SAT_SA_TYPE,
-  TI_SAT_DA_TYPE,
-  TI_SAT_TA_TYPE,
-  TI_SAT_UHA_TYPE,
-  TI_SAT_USA_TYPE,
-  TI_SAT_UDA_TYPE,
-  TI_SAT_UTA_TYPE,
-
-  TI_OPTIMIZATION_DEFAULT,
-  TI_OPTIMIZATION_CURRENT,
-  TI_TARGET_OPTION_DEFAULT,
-  TI_TARGET_OPTION_CURRENT,
-  TI_CURRENT_TARGET_PRAGMA,
-  TI_CURRENT_OPTIMIZE_PRAGMA,
-
-  TI_MAX
-};
-
-extern tree global_trees[TI_MAX];
-# 3889 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-enum integer_type_kind
-{
-  itk_char,
-  itk_signed_char,
-  itk_unsigned_char,
-  itk_short,
-  itk_unsigned_short,
-  itk_int,
-  itk_unsigned_int,
-  itk_long,
-  itk_unsigned_long,
-  itk_long_long,
-  itk_unsigned_long_long,
-  itk_int128,
-  itk_unsigned_int128,
-  itk_none
-};
-
-typedef enum integer_type_kind integer_type_kind;
-
-
-
-extern tree integer_types[itk_none];
-# 3948 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-enum ptrmemfunc_vbit_where_t
-{
-  ptrmemfunc_vbit_in_pfn,
-  ptrmemfunc_vbit_in_delta
-};
-
-
-
-extern tree decl_assembler_name (tree);
-extern unsigned char decl_assembler_name_equal (tree decl, const_tree asmname);
-extern hashval_t decl_assembler_name_hash (const_tree asmname);
-
-
-
-
-extern size_t tree_size (const_tree);
-
-
-
-
-extern size_t tree_code_size (enum tree_code);
-
-
-
-
-
-extern tree make_node_stat (enum tree_code );
-
-
-
-
-extern tree copy_node_stat (tree );
-
-
-
-
-extern tree copy_list (tree);
-
-
-extern tree make_tree_binfo_stat (unsigned );
-
-
-
-
-extern tree make_tree_vec_stat (int );
-
-
-
-
-
-extern tree get_identifier (const char *);
-# 4011 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern tree get_identifier_with_length (const char *, size_t);
-
-
-
-
-
-extern tree maybe_get_identifier (const char *);
-
-
-
-extern tree build_nt (enum tree_code, ...);
-extern tree build_nt_call_vec (tree, VEC_tree_gc *);
-
-extern tree build0_stat (enum tree_code, tree );
-
-extern tree build1_stat (enum tree_code, tree, tree );
-
-extern tree build2_stat (enum tree_code, tree, tree, tree );
-
-extern tree build3_stat (enum tree_code, tree, tree, tree, tree );
-
-extern tree build4_stat (enum tree_code, tree, tree, tree, tree,
-    tree );
-
-extern tree build5_stat (enum tree_code, tree, tree, tree, tree, tree,
-    tree );
-
-extern tree build6_stat (enum tree_code, tree, tree, tree, tree, tree,
-    tree, tree );
-
-
-
-
-
-static __inline__ tree
-build1_stat_loc (location_t loc, enum tree_code code, tree type,
-   tree arg1 )
-{
-  tree t = build1_stat (code, type, arg1 );
-  if (((t) && ((tree_code_type[(int) (((enum tree_code) (t)->base.code))]) >= tcc_reference && (tree_code_type[(int) (((enum tree_code) (t)->base.code))]) <= tcc_expression)))
-    ((t))->exp.locus = (loc);
-  return t;
-}
-
-
-static __inline__ tree
-build2_stat_loc (location_t loc, enum tree_code code, tree type, tree arg0,
-   tree arg1 )
-{
-  tree t = build2_stat (code, type, arg0, arg1 );
-  if (((t) && ((tree_code_type[(int) (((enum tree_code) (t)->base.code))]) >= tcc_reference && (tree_code_type[(int) (((enum tree_code) (t)->base.code))]) <= tcc_expression)))
-    ((t))->exp.locus = (loc);
-  return t;
-}
-
-
-static __inline__ tree
-build3_stat_loc (location_t loc, enum tree_code code, tree type, tree arg0,
-   tree arg1, tree arg2 )
-{
-  tree t = build3_stat (code, type, arg0, arg1, arg2 );
-  if (((t) && ((tree_code_type[(int) (((enum tree_code) (t)->base.code))]) >= tcc_reference && (tree_code_type[(int) (((enum tree_code) (t)->base.code))]) <= tcc_expression)))
-    ((t))->exp.locus = (loc);
-  return t;
-}
-
-
-
-static __inline__ tree
-build4_stat_loc (location_t loc, enum tree_code code, tree type, tree arg0,
-   tree arg1, tree arg2, tree arg3 )
-{
-  tree t = build4_stat (code, type, arg0, arg1, arg2, arg3 );
-  if (((t) && ((tree_code_type[(int) (((enum tree_code) (t)->base.code))]) >= tcc_reference && (tree_code_type[(int) (((enum tree_code) (t)->base.code))]) <= tcc_expression)))
-    ((t))->exp.locus = (loc);
-  return t;
-}
-
-
-
-static __inline__ tree
-build5_stat_loc (location_t loc, enum tree_code code, tree type, tree arg0,
-   tree arg1, tree arg2, tree arg3, tree arg4 )
-{
-  tree t = build5_stat (code, type, arg0, arg1, arg2, arg3,
-   arg4 );
-  if (((t) && ((tree_code_type[(int) (((enum tree_code) (t)->base.code))]) >= tcc_reference && (tree_code_type[(int) (((enum tree_code) (t)->base.code))]) <= tcc_expression)))
-    ((t))->exp.locus = (loc);
-  return t;
-}
-
-
-
-static __inline__ tree
-build6_stat_loc (location_t loc, enum tree_code code, tree type, tree arg0,
-   tree arg1, tree arg2, tree arg3, tree arg4,
-   tree arg5 )
-{
-  tree t = build6_stat (code, type, arg0, arg1, arg2, arg3, arg4,
-   arg5 );
-  if (((t) && ((tree_code_type[(int) (((enum tree_code) (t)->base.code))]) >= tcc_reference && (tree_code_type[(int) (((enum tree_code) (t)->base.code))]) <= tcc_expression)))
-    ((t))->exp.locus = (loc);
-  return t;
-}
-
-
-
-extern tree build_var_debug_value_stat (tree, tree );
-
-
-
-
-
-static __inline__ double_int
-tree_to_double_int (const_tree cst)
-{
-  return ((cst)->int_cst.int_cst);
-}
-
-extern tree double_int_to_tree (tree, double_int);
-extern unsigned char double_int_fits_to_tree_p (const_tree, double_int);
-extern tree force_fit_type_double (tree, double_int, int, unsigned char);
-
-
-
-static __inline__ tree
-build_int_cstu (tree type, unsigned long cst)
-{
-  return double_int_to_tree (type, uhwi_to_double_int (cst));
-}
-
-extern tree build_int_cst (tree, long);
-extern tree build_int_cst_type (tree, long);
-extern tree build_int_cst_wide (tree, unsigned long, long);
-extern tree build_vector (tree, tree);
-extern tree build_vector_from_ctor (tree, VEC_constructor_elt_gc *);
-extern tree build_vector_from_val (tree, tree);
-extern tree build_constructor (tree, VEC_constructor_elt_gc *);
-extern tree build_constructor_single (tree, tree, tree);
-extern tree build_constructor_from_list (tree, tree);
-extern tree build_real_from_int_cst (tree, const_tree);
-extern tree build_complex (tree, tree, tree);
-extern tree build_one_cst (tree);
-extern tree build_zero_cst (tree);
-extern tree build_string (int, const char *);
-extern tree build_tree_list_stat (tree, tree );
-
-extern tree build_tree_list_vec_stat (const VEC_tree_gc * );
-
-extern tree build_decl_stat (location_t, enum tree_code,
-        tree, tree );
-extern tree build_fn_decl (const char *, tree);
-
-extern tree build_translation_unit_decl (tree);
-extern tree build_block (tree, tree, tree, tree);
-extern tree build_empty_stmt (location_t);
-extern tree build_omp_clause (location_t, enum omp_clause_code);
-
-extern tree build_vl_exp_stat (enum tree_code, int );
-
-
-extern tree build_call_nary (tree, tree, int, ...);
-extern tree build_call_valist (tree, tree, int, va_list);
-
-
-extern tree build_call_array_loc (location_t, tree, tree, int, const tree *);
-extern tree build_call_vec (tree, tree, VEC_tree_gc *);
-
-
-
-extern tree make_signed_type (int);
-extern tree make_unsigned_type (int);
-extern tree signed_or_unsigned_type_for (int, tree);
-extern tree signed_type_for (tree);
-extern tree unsigned_type_for (tree);
-extern void initialize_sizetypes (void);
-extern void set_sizetype (tree);
-extern void fixup_unsigned_type (tree);
-extern tree build_pointer_type_for_mode (tree, enum machine_mode, unsigned char);
-extern tree build_pointer_type (tree);
-extern tree build_reference_type_for_mode (tree, enum machine_mode, unsigned char);
-extern tree build_reference_type (tree);
-extern tree build_vector_type_for_mode (tree, enum machine_mode);
-extern tree build_vector_type (tree innertype, int nunits);
-extern tree build_opaque_vector_type (tree innertype, int nunits);
-extern tree build_type_no_quals (tree);
-extern tree build_index_type (tree);
-extern tree build_array_type (tree, tree);
-extern tree build_nonshared_array_type (tree, tree);
-extern tree build_function_type (tree, tree);
-extern tree build_function_type_list (tree, ...);
-extern tree build_function_type_skip_args (tree, bitmap);
-extern tree build_function_decl_skip_args (tree, bitmap);
-extern tree build_varargs_function_type_list (tree, ...);
-extern tree build_method_type_directly (tree, tree, tree);
-extern tree build_method_type (tree, tree);
-extern tree build_offset_type (tree, tree);
-extern tree build_complex_type (tree);
-extern tree array_type_nelts (const_tree);
-extern unsigned char in_array_bounds_p (tree);
-extern unsigned char range_in_array_bounds_p (tree);
-
-extern tree value_member (tree, tree);
-extern tree purpose_member (const_tree, tree);
-extern unsigned char vec_member (const_tree, VEC_tree_gc *);
-extern tree chain_index (int, tree);
-
-extern int attribute_list_equal (const_tree, const_tree);
-extern int attribute_list_contained (const_tree, const_tree);
-extern int tree_int_cst_equal (const_tree, const_tree);
-extern int tree_int_cst_lt (const_tree, const_tree);
-extern int tree_int_cst_compare (const_tree, const_tree);
-extern int host_integerp (const_tree, int)
-
-  __attribute__ ((__pure__))
-
-  ;
-extern long tree_low_cst (const_tree, int);
-
-extern __inline__ __attribute__ ((__gnu_inline__)) long
-tree_low_cst (const_tree t, int pos)
-{
-  ((void)(!(host_integerp (t, pos)) ? fancy_abort ("/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h", 4233, __FUNCTION__), 0 : 0));
-  return (((t)->int_cst.int_cst).low);
-}
-
-extern int tree_int_cst_msb (const_tree);
-extern int tree_int_cst_sgn (const_tree);
-extern int tree_int_cst_sign_bit (const_tree);
-extern unsigned int tree_int_cst_min_precision (tree, unsigned char);
-extern unsigned char tree_expr_nonnegative_p (tree);
-extern unsigned char tree_expr_nonnegative_warnv_p (tree, unsigned char *);
-extern unsigned char may_negate_without_overflow_p (const_tree);
-extern tree strip_array_types (tree);
-extern tree excess_precision_type (tree);
-
-
-
-extern tree make_fract_type (int, int, int);
-extern tree make_accum_type (int, int, int);
-# 4282 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern tree make_tree (tree, rtx);
-
-
-
-
-
-
-
-extern tree build_type_attribute_variant (tree, tree);
-extern tree build_decl_attribute_variant (tree, tree);
-extern tree build_type_attribute_qual_variant (tree, tree, int);
-
-
-struct attribute_spec
-{
-
-
-  const char *const name;
-
-  const int min_length;
-
-
-  const int max_length;
-
-
-
-
-
-
-
-  const unsigned char decl_required;
-
-
-  const unsigned char type_required;
-
-
-
-
-  const unsigned char function_type_required;
-# 4335 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-  tree (*const handler) (tree *node, tree name, tree args,
-     int flags, unsigned char *no_add_attrs);
-};
-
-
-
-enum attribute_flags
-{
-
-
-
-  ATTR_FLAG_DECL_NEXT = 1,
-
-
-
-  ATTR_FLAG_FUNCTION_NEXT = 2,
-
-
-
-  ATTR_FLAG_ARRAY_NEXT = 4,
-
-
-  ATTR_FLAG_TYPE_IN_PLACE = 8,
-
-
-
-  ATTR_FLAG_BUILT_IN = 16
-};
-
-
-
-extern tree merge_decl_attributes (tree, tree);
-extern tree merge_type_attributes (tree, tree);
-
-
-
-
-extern int is_attribute_p (const char *, const_tree);
-
-
-
-
-extern tree lookup_attribute (const char *, tree);
-
-
-
-
-extern tree remove_attribute (const char *, tree);
-
-
-
-extern tree merge_attributes (tree, tree);
-# 4400 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern unsigned char check_qualified_type (const_tree, const_tree, int);
-
-
-
-
-
-extern tree get_qualified_type (tree, int);
-
-
-
-
-extern tree build_qualified_type (tree, int);
-
-
-
-extern tree build_aligned_type (tree, unsigned int);
-# 4429 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern tree build_distinct_type_copy (tree);
-extern tree build_variant_type_copy (tree);
-
-
-
-
-extern void finish_builtin_struct (tree, const char *,
-        tree, tree);
-
-
-
-
-
-extern void layout_type (tree);
-# 4451 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-typedef struct record_layout_info_s
-{
-
-  tree t;
-
-
-  tree offset;
-
-  unsigned int offset_align;
-
-  tree bitpos;
-
-  unsigned int record_align;
-
-
-  unsigned int unpacked_align;
-
-  tree prev_field;
-
-
-  VEC_tree_gc *pending_statics;
-
-  int remaining_in_alignment;
-
-
-  int packed_maybe_necessary;
-} *record_layout_info;
-
-extern record_layout_info start_record_layout (tree);
-extern tree bit_from_pos (tree, tree);
-extern tree byte_from_pos (tree, tree);
-extern void pos_from_bit (tree *, tree *, unsigned int, tree);
-extern void normalize_offset (tree *, tree *, unsigned int);
-extern tree rli_size_unit_so_far (record_layout_info);
-extern tree rli_size_so_far (record_layout_info);
-extern void normalize_rli (record_layout_info);
-extern void place_field (record_layout_info, tree);
-extern void compute_record_mode (tree);
-extern void finish_record_layout (record_layout_info, int);
-
-
-
-
-
-
-extern tree type_hash_canon (unsigned int, tree);
-# 4506 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern void layout_decl (tree, unsigned);
-
-
-
-
-extern void relayout_decl (tree);
-
-
-
-
-
-
-extern enum machine_mode mode_for_size_tree (const_tree, enum mode_class, int);
-
-
-
-
-extern tree non_lvalue_loc (location_t, tree);
-
-extern tree convert (tree, tree);
-extern unsigned int expr_align (const_tree);
-extern tree expr_first (tree);
-extern tree expr_last (tree);
-extern tree size_in_bytes (const_tree);
-extern long int_size_in_bytes (const_tree);
-extern long max_int_size_in_bytes (const_tree);
-extern tree tree_expr_size (const_tree);
-extern tree bit_position (const_tree);
-extern long int_bit_position (const_tree);
-extern tree byte_position (const_tree);
-extern long int_byte_position (const_tree);
-
-
-
-
-enum size_type_kind
-{
-  SIZETYPE,
-  SSIZETYPE,
-  BITSIZETYPE,
-  SBITSIZETYPE,
-  TYPE_KIND_LAST};
-
-extern tree sizetype_tab[(int) TYPE_KIND_LAST];
-
-
-
-
-
-
-extern tree size_int_kind (long, enum size_type_kind);
-
-
-extern tree size_binop_loc (location_t, enum tree_code, tree, tree);
-
-
-extern tree size_diffop_loc (location_t, tree, tree);
-
-
-
-
-
-
-
-extern tree round_up_loc (location_t, tree, int);
-
-extern tree round_down_loc (location_t, tree, int);
-extern VEC_tree_gc *get_pending_sizes (void);
-extern void put_pending_size (tree);
-extern void put_pending_sizes (VEC_tree_gc *);
-extern void finalize_size_functions (void);
-# 4586 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern unsigned int maximum_field_alignment;
-
-
-
-
-
-extern tree chainon (tree, tree);
-
-
-
-extern tree tree_cons_stat (tree, tree, tree );
-
-
-
-
-extern tree tree_last (tree);
-
-
-
-extern tree nreverse (tree);
-
-
-
-
-extern int list_length (const_tree);
-
-
-
-extern int fields_length (const_tree);
-
-
-
-extern tree first_field (const_tree);
-
-
-
-
-extern unsigned char initializer_zerop (const_tree);
-
-
-
-extern VEC_tree_gc *ctor_to_vec (tree);
-# 4640 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern unsigned char categorize_ctor_elements (const_tree, long *, long *,
-          unsigned char *);
-
-extern long count_type_elements (const_tree, unsigned char);
-
-
-
-extern int integer_zerop (const_tree);
-
-
-
-extern int integer_onep (const_tree);
-
-
-
-
-extern int integer_all_onesp (const_tree);
-
-
-
-
-extern int integer_pow2p (const_tree);
-
-
-
-
-extern int integer_nonzerop (const_tree);
-
-extern unsigned char cst_and_fits_in_hwi (const_tree);
-extern tree num_ending_zeros (const_tree);
-
-
-
-
-extern int fixed_zerop (const_tree);
-
-
-
-
-extern tree staticp (tree);
-
-
-
-
-
-extern tree save_expr (tree);
-
-
-
-
-extern tree skip_simple_arithmetic (tree);
-
-
-
-enum tree_node_structure_enum tree_node_structure (const_tree);
-
-
-
-
-extern unsigned char contains_placeholder_p (const_tree);
-# 4711 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern unsigned char type_contains_placeholder_p (tree);
-# 4720 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern void find_placeholder_in_expr (tree, VEC_tree_heap **);
-# 4738 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern tree substitute_in_expr (tree, tree, tree);
-# 4749 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern tree substitute_placeholder_in_expr (tree, tree);
-# 4764 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern tree variable_size (tree);
-
-
-
-
-
-extern tree stabilize_reference (tree);
-
-
-
-
-
-extern tree stabilize_reference_1 (tree);
-
-
-
-
-
-
-extern tree get_unwidened (tree, tree);
-
-
-
-
-
-
-extern tree get_narrower (tree, int *);
-
-
-
-static __inline__ unsigned char
-handled_component_p (const_tree t)
-{
-  switch (((enum tree_code) (t)->base.code))
-    {
-    case BIT_FIELD_REF:
-    case COMPONENT_REF:
-    case ARRAY_REF:
-    case ARRAY_RANGE_REF:
-    case VIEW_CONVERT_EXPR:
-    case REALPART_EXPR:
-    case IMAGPART_EXPR:
-      return 1;
-
-    default:
-      return 0;
-    }
-}
-
-
-
-
-
-extern tree get_inner_reference (tree, long *, long *,
-     tree *, enum machine_mode *, int *, int *,
-     unsigned char);
-
-
-
-
-
-extern unsigned char contains_packed_reference (const_tree exp);
-
-
-
-
-extern tree array_ref_element_size (tree);
-
-
-
-
-extern tree array_ref_low_bound (tree);
-
-
-
-
-extern tree array_ref_up_bound (tree);
-
-
-
-
-extern tree component_ref_field_offset (tree);
-
-
-
-
-extern tree get_containing_scope (const_tree);
-
-
-
-extern tree decl_function_context (const_tree);
-
-
-
-extern tree decl_type_context (const_tree);
-
-
-extern int real_zerop (const_tree);
-
-
-
-
-
-
-extern int pedantic_lvalues;
-
-
-
-extern tree current_function_decl;
-
-
-extern const char * current_function_func_begin_label;
-
-
-typedef struct {
-  tree next;
-} function_args_iterator;
-
-
-
-static __inline__ void
-function_args_iter_init (function_args_iterator *i, const_tree fntype)
-{
-  i->next = ((fntype)->type.values);
-}
-
-
-
-
-static __inline__ tree *
-function_args_iter_cond_ptr (function_args_iterator *i)
-{
-  return (i->next) ? &((i->next)->list.value) : ((void *)0);
-}
-
-
-
-
-static __inline__ tree
-function_args_iter_cond (function_args_iterator *i)
-{
-  return (i->next) ? ((i->next)->list.value) : (tree) ((void *)0);
-}
-
-
-static __inline__ void
-function_args_iter_next (function_args_iterator *i)
-{
-  ((void)(!(i->next != (tree) ((void *)0)) ? fancy_abort ("/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h", 4912, __FUNCTION__), 0 : 0));
-  i->next = ((i->next)->common.chain);
-}
-
-
-
-static __inline__ unsigned char
-inlined_function_outer_scope_p (const_tree block)
-{
- return ((block)->block.locus) != ((source_location) 0);
-}
-# 4943 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern unsigned crc32_string (unsigned, const char *);
-extern void clean_symbol_name (char *);
-extern tree get_file_function_name (const char *);
-extern tree get_callee_fndecl (const_tree);
-extern int type_num_arguments (const_tree);
-extern unsigned char associative_tree_code (enum tree_code);
-extern unsigned char commutative_tree_code (enum tree_code);
-extern unsigned char commutative_ternary_tree_code (enum tree_code);
-extern tree upper_bound_in_type (tree, tree);
-extern tree lower_bound_in_type (tree, tree);
-extern int operand_equal_for_phi_arg_p (const_tree, const_tree);
-extern tree call_expr_arg (tree, int);
-extern tree *call_expr_argp (tree, int);
-extern tree create_artificial_label (location_t);
-extern const char *get_name (tree);
-extern unsigned char stdarg_p (const_tree);
-extern unsigned char prototype_p (tree);
-extern unsigned char is_typedef_decl (tree x);
-extern unsigned char typedef_variant_p (tree);
-extern unsigned char auto_var_in_fn_p (const_tree, const_tree);
-extern tree build_low_bits_mask (tree, unsigned);
-extern tree tree_strip_nop_conversions (tree);
-extern tree tree_strip_sign_nop_conversions (tree);
-extern tree lhd_gcc_personality (void);
-extern void assign_assembler_name_if_neeeded (tree);
-extern void warn_deprecated_use (tree, tree);
-
-
-
-extern void change_decl_assembler_name (tree, tree);
-
-
-extern tree unshare_expr (tree);
-
-
-
-extern void expand_expr_stmt (tree);
-extern int warn_if_unused_value (const_tree, location_t);
-extern void expand_label (tree);
-extern void expand_goto (tree);
-
-extern rtx expand_stack_save (void);
-extern void expand_stack_restore (tree);
-extern void expand_return (tree);
-
-
-extern void using_eh_for_cleanups (void);
-
-
-
-
-
-extern int folding_initializer;
-
-
-extern int native_encode_expr (const_tree, unsigned char *, int);
-extern tree native_interpret_expr (tree, const unsigned char *, int);
-
-
-
-
-
-
-
-extern tree fold (tree);
-
-
-extern tree fold_unary_loc (location_t, enum tree_code, tree, tree);
-
-
-extern tree fold_unary_ignore_overflow_loc (location_t, enum tree_code, tree, tree);
-
-
-extern tree fold_binary_loc (location_t, enum tree_code, tree, tree, tree);
-
-
-extern tree fold_ternary_loc (location_t, enum tree_code, tree, tree, tree, tree);
-
-
-
-
-extern tree fold_build1_stat_loc (location_t, enum tree_code, tree,
-      tree );
-
-
-
-
-extern tree fold_build2_stat_loc (location_t, enum tree_code, tree, tree,
-      tree );
-
-
-
-
-extern tree fold_build3_stat_loc (location_t, enum tree_code, tree, tree, tree,
-      tree );
-extern tree fold_build1_initializer_loc (location_t, enum tree_code, tree, tree);
-extern tree fold_build2_initializer_loc (location_t, enum tree_code, tree, tree, tree);
-extern tree fold_build3_initializer_loc (location_t, enum tree_code, tree, tree, tree, tree);
-
-
-extern tree fold_build_call_array_loc (location_t, tree, tree, int, tree *);
-
-
-extern tree fold_build_call_array_initializer_loc (location_t, tree, tree, int, tree *);
-extern unsigned char fold_convertible_p (const_tree, const_tree);
-
-
-extern tree fold_convert_loc (location_t, tree, tree);
-extern tree fold_single_bit_test (location_t, enum tree_code, tree, tree, tree);
-extern tree fold_ignored_result (tree);
-extern tree fold_abs_const (tree, tree);
-extern tree fold_indirect_ref_1 (location_t, tree, tree);
-extern void fold_defer_overflow_warnings (void);
-extern void fold_undefer_overflow_warnings (unsigned char, const_gimple, int);
-extern void fold_undefer_and_ignore_overflow_warnings (void);
-extern unsigned char fold_deferring_overflow_warnings_p (void);
-extern tree fold_fma (location_t, tree, tree, tree, tree);
-
-enum operand_equal_flag
-{
-  OEP_ONLY_CONST = 1,
-  OEP_PURE_SAME = 2
-};
-
-extern int operand_equal_p (const_tree, const_tree, unsigned int);
-extern int multiple_of_p (tree, const_tree, const_tree);
-
-
-extern tree omit_one_operand_loc (location_t, tree, tree, tree);
-
-
-extern tree omit_two_operands_loc (location_t, tree, tree, tree, tree);
-
-
-extern tree invert_truthvalue_loc (location_t, tree);
-extern tree fold_truth_not_expr (location_t, tree);
-extern tree fold_unary_to_constant (enum tree_code, tree, tree);
-extern tree fold_binary_to_constant (enum tree_code, tree, tree, tree);
-extern tree fold_read_from_constant_string (tree);
-extern tree int_const_binop (enum tree_code, const_tree, const_tree, int);
-
-
-extern tree build_fold_addr_expr_loc (location_t, tree);
-
-
-extern tree build_fold_addr_expr_with_type_loc (location_t, tree, tree);
-extern tree fold_build_cleanup_point_expr (tree type, tree expr);
-extern tree fold_strip_sign_ops (tree);
-
-
-extern tree build_fold_indirect_ref_loc (location_t, tree);
-
-
-extern tree fold_indirect_ref_loc (location_t, tree);
-extern tree build_simple_mem_ref_loc (location_t, tree);
-
-
-extern double_int mem_ref_offset (const_tree);
-extern tree reference_alias_ptr_type (const_tree);
-extern tree constant_boolean_node (int, tree);
-extern tree div_if_zero_remainder (enum tree_code, const_tree, const_tree);
-
-extern unsigned char tree_swap_operands_p (const_tree, const_tree, unsigned char);
-extern enum tree_code swap_tree_comparison (enum tree_code);
-
-extern unsigned char ptr_difference_const (tree, tree, long *);
-extern enum tree_code invert_tree_comparison (enum tree_code, unsigned char);
-
-extern unsigned char tree_expr_nonzero_p (tree);
-extern unsigned char tree_unary_nonzero_warnv_p (enum tree_code, tree, tree, unsigned char *);
-extern unsigned char tree_binary_nonzero_warnv_p (enum tree_code, tree, tree, tree op1,
-                                         unsigned char *);
-extern unsigned char tree_single_nonzero_warnv_p (tree, unsigned char *);
-extern unsigned char tree_unary_nonnegative_warnv_p (enum tree_code, tree, tree, unsigned char *);
-extern unsigned char tree_binary_nonnegative_warnv_p (enum tree_code, tree, tree, tree,
-                                             unsigned char *);
-extern unsigned char tree_single_nonnegative_warnv_p (tree t, unsigned char *strict_overflow_p);
-extern unsigned char tree_invalid_nonnegative_warnv_p (tree t, unsigned char *strict_overflow_p);
-extern unsigned char tree_call_nonnegative_warnv_p (tree, tree, tree, tree, unsigned char *);
-
-extern unsigned char tree_expr_nonzero_warnv_p (tree, unsigned char *);
-
-extern unsigned char fold_real_zero_addition_p (const_tree, const_tree, int);
-extern tree combine_comparisons (location_t, enum tree_code, enum tree_code,
-     enum tree_code, tree, tree, tree);
-extern void debug_fold_checksum (const_tree);
-
-
-static __inline__ unsigned char
-truth_value_p (enum tree_code code)
-{
-  return (tree_code_type[(int) (code)] == tcc_comparison
-   || code == TRUTH_AND_EXPR || code == TRUTH_ANDIF_EXPR
-   || code == TRUTH_OR_EXPR || code == TRUTH_ORIF_EXPR
-   || code == TRUTH_XOR_EXPR || code == TRUTH_NOT_EXPR);
-}
-
-
-
-extern unsigned char avoid_folding_inline_builtin (tree);
-extern tree fold_call_expr (location_t, tree, unsigned char);
-extern tree fold_builtin_fputs (location_t, tree, tree, unsigned char, unsigned char, tree);
-extern tree fold_builtin_strcpy (location_t, tree, tree, tree, tree);
-extern tree fold_builtin_strncpy (location_t, tree, tree, tree, tree, tree);
-extern tree fold_builtin_memory_chk (location_t, tree, tree, tree, tree, tree, tree, unsigned char,
-         enum built_in_function);
-extern tree fold_builtin_stxcpy_chk (location_t, tree, tree, tree, tree, tree, unsigned char,
-         enum built_in_function);
-extern tree fold_builtin_strncpy_chk (location_t, tree, tree, tree, tree, tree);
-extern tree fold_builtin_snprintf_chk (location_t, tree, tree, enum built_in_function);
-extern unsigned char fold_builtin_next_arg (tree, unsigned char);
-extern enum built_in_function builtin_mathfn_code (const_tree);
-extern tree fold_builtin_call_array (location_t, tree, tree, int, tree *);
-extern tree build_call_expr_loc_array (location_t, tree, int, tree *);
-extern tree build_call_expr_loc_vec (location_t, tree, VEC_tree_gc *);
-extern tree build_call_expr_loc (location_t, tree, int, ...);
-extern tree build_call_expr (tree, int, ...);
-extern tree mathfn_built_in (tree, enum built_in_function fn);
-extern tree c_strlen (tree, int);
-extern tree std_gimplify_va_arg_expr (tree, tree, gimple_seq *, gimple_seq *);
-extern tree build_va_arg_indirect_ref (tree);
-extern tree build_string_literal (int, const char *);
-extern unsigned char validate_arglist (const_tree, ...);
-extern rtx builtin_memset_read_str (void *, long, enum machine_mode);
-extern unsigned char can_trust_pointer_alignment (void);
-extern unsigned int get_pointer_alignment (tree, unsigned int);
-extern unsigned char is_builtin_name (const char *);
-extern unsigned char is_builtin_fn (tree);
-extern unsigned int get_object_alignment (tree, unsigned int);
-extern tree fold_call_stmt (gimple, unsigned char);
-extern tree gimple_fold_builtin_snprintf_chk (gimple, tree, enum built_in_function);
-extern tree make_range (tree, int *, tree *, tree *, unsigned char *);
-extern tree build_range_check (location_t, tree, tree, int, tree, tree);
-extern unsigned char merge_ranges (int *, tree *, tree *, int, tree, tree, int,
-     tree, tree);
-extern void set_builtin_user_assembler_name (tree decl, const char *asmspec);
-extern unsigned char is_simple_builtin (tree);
-extern unsigned char is_inexpensive_builtin (tree);
-
-
-extern tree strip_float_extensions (tree);
-
-
-extern int really_constant_p (const_tree);
-extern unsigned char decl_address_invariant_p (const_tree);
-extern unsigned char decl_address_ip_invariant_p (const_tree);
-extern unsigned char int_fits_type_p (const_tree, const_tree);
-
-extern void get_type_static_bounds (const_tree, mpz_t, mpz_t);
-
-extern unsigned char variably_modified_type_p (tree, tree);
-extern int tree_log2 (const_tree);
-extern int tree_floor_log2 (const_tree);
-extern int simple_cst_equal (const_tree, const_tree);
-extern hashval_t iterative_hash_expr (const_tree, hashval_t);
-extern hashval_t iterative_hash_exprs_commutative (const_tree,
-                                                   const_tree, hashval_t);
-extern hashval_t iterative_hash_host_wide_int (long, hashval_t);
-extern hashval_t iterative_hash_hashval_t (hashval_t, hashval_t);
-extern hashval_t iterative_hash_host_wide_int (long, hashval_t);
-extern int compare_tree_int (const_tree, unsigned long);
-extern int type_list_equal (const_tree, const_tree);
-extern int chain_member (const_tree, const_tree);
-extern tree type_hash_lookup (unsigned int, tree);
-extern void type_hash_add (unsigned int, tree);
-extern int simple_cst_list_equal (const_tree, const_tree);
-extern void dump_tree_statistics (void);
-extern void recompute_tree_invariant_for_addr_expr (tree);
-extern unsigned char needs_to_live_in_memory (const_tree);
-extern tree reconstruct_complex_type (tree, tree);
-
-extern int real_onep (const_tree);
-extern int real_twop (const_tree);
-extern int real_minus_onep (const_tree);
-extern void init_ttree (void);
-extern void build_common_tree_nodes (unsigned char);
-extern void build_common_tree_nodes_2 (int);
-extern void build_common_builtin_nodes (void);
-extern tree build_nonstandard_integer_type (unsigned long, int);
-extern tree build_range_type (tree, tree, tree);
-extern tree build_nonshared_range_type (tree, tree, tree);
-extern unsigned char subrange_type_for_debug_p (const_tree, tree *, tree *);
-extern long int_cst_value (const_tree);
-extern long long widest_int_cst_value (const_tree);
-
-extern unsigned char fields_compatible_p (const_tree, const_tree);
-extern tree find_compatible_field (tree, tree);
-
-extern tree *tree_block (tree);
-extern location_t *block_nonartificial_location (tree);
-extern location_t tree_nonartificial_location (tree);
-
-extern tree block_ultimate_origin (const_tree);
-
-extern tree get_binfo_at_offset (tree, long, tree);
-
-
-extern tree build_addr (tree, tree);
-
-
-extern void expand_main_function (void);
-extern void expand_function_end (void);
-extern void expand_function_start (tree);
-extern void stack_protect_prologue (void);
-extern void stack_protect_epilogue (void);
-extern void init_dummy_function_start (void);
-extern void expand_dummy_function_end (void);
-extern unsigned int init_function_for_compilation (void);
-extern void allocate_struct_function (tree, unsigned char);
-extern void push_struct_function (tree fndecl);
-extern void init_function_start (tree);
-extern unsigned char use_register_for_decl (const_tree);
-extern void generate_setjmp_warnings (void);
-extern void init_temp_slots (void);
-extern void free_temp_slots (void);
-extern void pop_temp_slots (void);
-extern void push_temp_slots (void);
-extern void preserve_temp_slots (rtx);
-extern int aggregate_value_p (const_tree, const_tree);
-extern void push_function_context (void);
-extern void pop_function_context (void);
-extern gimple_seq gimplify_parameters (void);
-
-
-
-extern void print_rtl (FILE *, const_rtx);
-
-
-
-extern void debug_tree (tree);
-extern void debug_vec_tree (VEC_tree_gc *);
-
-extern void dump_addr (FILE*, const char *, const void *);
-extern void print_node (FILE *, const char *, tree, int);
-extern void print_vec_tree (FILE *, const char *, VEC_tree_gc *, int);
-extern void print_node_brief (FILE *, const char *, const_tree, int);
-extern void indent_to (FILE *, int);
-
-
-
-extern unsigned char debug_find_tree (tree, tree);
-
-
-extern tree unsave_expr_now (tree);
-extern tree build_duplicate_type (tree);
-# 5322 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern int flags_from_decl_or_type (const_tree);
-extern int call_expr_flags (const_tree);
-# 5349 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern int setjmp_call_p (const_tree);
-extern unsigned char gimple_alloca_call_p (const_gimple);
-extern unsigned char alloca_call_p (const_tree);
-extern unsigned char must_pass_in_stack_var_size (enum machine_mode, const_tree);
-extern unsigned char must_pass_in_stack_var_size_or_pad (enum machine_mode, const_tree);
-
-
-
-extern const struct attribute_spec *lookup_attribute_spec (const_tree);
-# 5367 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern tree decl_attributes (tree *, tree, int);
-
-
-extern void set_decl_abstract_flags (tree, int);
-extern void set_decl_origin_self (tree);
-
-
-extern void set_min_and_max_values_for_integral_type (tree, int, unsigned char);
-extern void fixup_signed_type (tree);
-extern void internal_reference_types (void);
-extern unsigned int update_alignment_for_field (record_layout_info, tree,
-                                                unsigned int);
-
-extern tree tree_output_constant_def (tree);
-extern void make_decl_rtl (tree);
-extern rtx make_decl_rtl_for_debug (tree);
-extern void make_decl_one_only (tree, tree);
-extern int supports_one_only (void);
-extern void resolve_unique_section (tree, int, int);
-extern void mark_referenced (tree);
-extern void mark_decl_referenced (tree);
-extern void notice_global_symbol (tree);
-extern void set_user_assembler_name (tree, const char *);
-extern void process_pending_assemble_externals (void);
-extern void finish_aliases_1 (void);
-extern void finish_aliases_2 (void);
-extern void remove_unreachable_alias_pairs (void);
-extern unsigned char decl_replaceable_p (tree);
-extern unsigned char decl_binds_to_current_def_p (tree);
-
-
-
-
-
-typedef struct pointer_set_t symbol_alias_set_t;
-
-extern void symbol_alias_set_destroy (symbol_alias_set_t *);
-extern int symbol_alias_set_contains (const symbol_alias_set_t *, tree);
-extern symbol_alias_set_t * propagate_aliases_backward (unsigned char (*)
-        (tree, tree, void *),
-       void *);
-
-
-extern void expand_computed_goto (tree);
-extern unsigned char parse_output_constraint (const char **, int, int, int,
-         unsigned char *, unsigned char *, unsigned char *);
-extern unsigned char parse_input_constraint (const char **, int, int, int, int,
-        const char * const *, unsigned char *, unsigned char *);
-extern void expand_asm_stmt (gimple);
-extern tree resolve_asm_operand_names (tree, tree, tree, tree);
-extern unsigned char expand_switch_using_bit_tests_p (tree, tree, unsigned int,
-          unsigned int);
-extern void expand_case (gimple);
-extern void expand_decl (tree);
-# 5432 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern char *dwarf2out_cfi_label (unsigned char);
-
-
-
-extern void dwarf2out_def_cfa (const char *, unsigned, long);
-
-
-
-extern void dwarf2out_window_save (const char *);
-
-
-
-extern void dwarf2out_reg_save (const char *, unsigned, long);
-
-
-
-extern void dwarf2out_return_save (const char *, long);
-
-
-
-extern void dwarf2out_return_reg (const char *, unsigned);
-
-
-
-extern void dwarf2out_reg_save_reg (const char *, rtx, rtx);
-
-
-
-
-
-struct pointer_set_t;
-
-
-
-typedef tree (*walk_tree_fn) (tree *, int *, void *);
-
-
-
-typedef tree (*walk_tree_lh) (tree *, int *, tree (*) (tree *, int *, void *),
-         void *, struct pointer_set_t*);
-
-extern tree walk_tree_1 (tree*, walk_tree_fn, void*, struct pointer_set_t*,
-    walk_tree_lh);
-extern tree walk_tree_without_duplicates_1 (tree*, walk_tree_fn, void*,
-         walk_tree_lh);
-# 5485 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-extern void set_decl_rtl (tree, rtx);
-extern void set_decl_incoming_rtl (tree, rtx, unsigned char);
-
-
-
-typedef enum
-{
-  d_kind,
-  t_kind,
-  b_kind,
-  s_kind,
-  r_kind,
-  e_kind,
-  c_kind,
-  id_kind,
-  vec_kind,
-  binfo_kind,
-  ssa_name_kind,
-  constr_kind,
-  x_kind,
-  lang_decl,
-  lang_type,
-  omp_clause_kind,
-  all_kinds
-} tree_node_kind;
-
-extern int tree_node_counts[];
-extern int tree_node_sizes[];
-
-
-
-
-extern unsigned char in_gimple_form;
-
-
-extern tree get_base_address (tree t);
-extern void mark_addressable (tree);
-
-
-
-struct tree_map_base {
-  tree from;
-};
-
-extern int tree_map_base_eq (const void *, const void *);
-extern unsigned int tree_map_base_hash (const void *);
-extern int tree_map_base_marked_p (const void *);
-extern unsigned char list_equal_p (const_tree, const_tree);
-
-
-
-struct tree_map {
-  struct tree_map_base base;
-  unsigned int hash;
-  tree to;
-};
-
-
-extern unsigned int tree_map_hash (const void *);
-
-
-
-
-struct tree_decl_map {
-  struct tree_map_base base;
-  tree to;
-};
-
-
-extern unsigned int tree_decl_map_hash (const void *);
-
-
-
-
-struct tree_int_map {
-  struct tree_map_base base;
-  unsigned int to;
-};
-
-
-
-
-
-
-
-struct tree_priority_map {
-  struct tree_map_base base;
-  priority_type init;
-  priority_type fini;
-};
-
-
-
-
-
-
-
-tree target_for_debug_bind (tree);
-
-
-extern tree tree_mem_ref_addr (tree, tree);
-extern void copy_mem_ref_info (tree, tree);
-
-
-extern unsigned char ssa_name_nonnegative_p (const_tree);
-
-
-extern void init_object_sizes (void);
-extern void fini_object_sizes (void);
-extern unsigned long compute_builtin_object_size (tree, int);
-
-
-extern unsigned long highest_pow2_factor (const_tree);
-extern tree build_personality_function (const char *);
-
-
-
-void init_inline_once (void);
-
-
-
-
-static __inline__ int
-tree_operand_length (const_tree node)
-{
-  if ((tree_code_type[(int) (((enum tree_code) (node)->base.code))] == tcc_vl_exp))
-    return ((int)((((node)->exp.operands[0])->int_cst.int_cst).low));
-  else
-    return tree_code_length[(int) (((enum tree_code) (node)->base.code))];
-}
-
-
-
-
-
-
-typedef struct call_expr_arg_iterator_d {
-  tree t;
-  int n;
-  int i;
-} call_expr_arg_iterator;
-
-typedef struct const_call_expr_arg_iterator_d {
-  const_tree t;
-  int n;
-  int i;
-} const_call_expr_arg_iterator;
-
-
-
-static __inline__ void
-init_call_expr_arg_iterator (tree exp, call_expr_arg_iterator *iter)
-{
-  iter->t = exp;
-  iter->n = (((int)((((exp)->exp.operands[0])->int_cst.int_cst).low)) - 3);
-  iter->i = 0;
-}
-
-static __inline__ void
-init_const_call_expr_arg_iterator (const_tree exp, const_call_expr_arg_iterator *iter)
-{
-  iter->t = exp;
-  iter->n = (((int)((((exp)->exp.operands[0])->int_cst.int_cst).low)) - 3);
-  iter->i = 0;
-}
-
-
-
-static __inline__ tree
-next_call_expr_arg (call_expr_arg_iterator *iter)
-{
-  tree result;
-  if (iter->i >= iter->n)
-    return (tree) ((void *)0);
-  result = (((iter->t))->exp.operands[(iter->i) + 3]);
-  iter->i++;
-  return result;
-}
-
-static __inline__ const_tree
-next_const_call_expr_arg (const_call_expr_arg_iterator *iter)
-{
-  const_tree result;
-  if (iter->i >= iter->n)
-    return (tree) ((void *)0);
-  result = (((iter->t))->exp.operands[(iter->i) + 3]);
-  iter->i++;
-  return result;
-}
-
-
-
-
-
-static __inline__ tree
-first_call_expr_arg (tree exp, call_expr_arg_iterator *iter)
-{
-  init_call_expr_arg_iterator (exp, iter);
-  return next_call_expr_arg (iter);
-}
-
-static __inline__ const_tree
-first_const_call_expr_arg (const_tree exp, const_call_expr_arg_iterator *iter)
-{
-  init_const_call_expr_arg_iterator (exp, iter);
-  return next_const_call_expr_arg (iter);
-}
-
-
-
-static __inline__ unsigned char
-more_call_expr_args_p (const call_expr_arg_iterator *iter)
-{
-  return (iter->i < iter->n);
-}
-
-static __inline__ unsigned char
-more_const_call_expr_args_p (const const_call_expr_arg_iterator *iter)
-{
-  return (iter->i < iter->n);
-}
-# 5718 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h"
-static __inline__ unsigned char
-is_lang_specific (tree t)
-{
-  return ((enum tree_code) (t)->base.code) == LANG_TYPE || ((enum tree_code) (t)->base.code) >= ((int) LAST_AND_UNUSED_TREE_CODE);
-}
-
-
-extern unsigned char block_may_fallthru (const_tree);
-# 25 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/flags.h" 1
-# 26 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 1 "/opt/gcc-plugins/src/plugin-utils.h" 1
-# 25 "/opt/gcc-plugins/src/plugin-utils.h"
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/langhooks.h" 1
-# 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/langhooks.h"
-struct diagnostic_info;
-
-struct gimplify_omp_ctx;
-
-struct array_descr_info;
-
-
-typedef void (*lang_print_tree_hook) (FILE *, tree, int indent);
-
-enum classify_record
-  { RECORD_IS_STRUCT, RECORD_IS_CLASS, RECORD_IS_INTERFACE };
-
-
-
-
-struct lang_hooks_for_tree_inlining
-{
-  unsigned char (*var_mod_type_p) (tree, tree);
-};
-
-struct lang_hooks_for_callgraph
-{
-
-
-  tree (*analyze_expr) (tree *, int *);
-};
-
-
-
-struct lang_hooks_for_tree_dump
-{
-
-
-  unsigned char (*dump_tree) (void *, tree);
-
-
-  int (*type_quals) (const_tree);
-};
-
-
-
-struct lang_hooks_for_types
-{
-
-
-  tree (*make_type) (enum tree_code);
-
-
-
-
-  enum classify_record (*classify_record) (tree);
-
-
-
-  tree (*type_for_mode) (enum machine_mode, int);
-
-
-
-  tree (*type_for_size) (unsigned, int);
-
-
-
-  unsigned char (*generic_p) (const_tree);
-
-
-  tree (*get_argument_pack_elems) (const_tree);
-
-
-
-
-
-  tree (*type_promotes_to) (tree);
-# 106 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/langhooks.h"
-  void (*register_builtin_type) (tree, const char *);
-
-
-
-
-
-  void (*incomplete_type_error) (const_tree value, const_tree type);
-
-
-
-  tree (*max_size) (const_tree);
-
-
-
-  void (*omp_firstprivatize_type_sizes) (struct gimplify_omp_ctx *, tree);
-
-
-
-
-
-  unsigned char (*type_hash_eq) (const_tree, const_tree);
-
-
-
-  unsigned char (*get_array_descr_info) (const_tree, struct array_descr_info *);
-
-
-  void (*get_subrange_bounds) (const_tree, tree *, tree *);
-
-
-
-
-
-  tree (*reconstruct_complex_type) (tree, tree);
-};
-
-
-
-struct lang_hooks_for_decls
-{
-
-
-  int (*global_bindings_p) (void);
-
-
-
-
-
-  tree (*pushdecl) (tree);
-
-
-  tree (*getdecls) (void);
-
-
-  unsigned char (*function_decl_explicit_p) (tree);
-
-
-
-  unsigned char (*generic_generic_parameter_decl_p) (const_tree);
-
-
-
-  unsigned char (*function_parm_expanded_from_pack_p) (tree, tree);
-
-
-  tree (*get_generic_function_decl) (const_tree);
-
-
-
-  unsigned char (*warn_unused_global) (const_tree);
-
-
-
-  void (*final_write_globals) (void);
-
-
-  unsigned char (*ok_for_sibcall) (const_tree);
-
-
-
-  unsigned char (*omp_privatize_by_reference) (const_tree);
-
-
-
-  enum omp_clause_default_kind (*omp_predetermined_sharing) (tree);
-
-
-
-  tree (*omp_report_decl) (tree);
-
-
-
-
-
-  unsigned char (*omp_disregard_value_expr) (tree, unsigned char);
-
-
-
-  unsigned char (*omp_private_debug_clause) (tree, unsigned char);
-
-
-
-  unsigned char (*omp_private_outer_ref) (tree);
-
-
-
-
-  tree (*omp_clause_default_ctor) (tree clause, tree decl, tree outer);
-
-
-  tree (*omp_clause_copy_ctor) (tree clause, tree dst, tree src);
-
-
-  tree (*omp_clause_assign_op) (tree clause, tree dst, tree src);
-
-
-
-  tree (*omp_clause_dtor) (tree clause, tree decl);
-
-
-  void (*omp_finish_clause) (tree clause);
-};
-
-
-
-struct lang_hooks_for_lto
-{
-
-  void (*begin_section) (const char *name);
-
-
-
-
-
-  void (*append_data) (const void *data, size_t len, void *block);
-
-
-  void (*end_section) (void);
-};
-
-
-
-struct lang_hooks
-{
-
-  const char *name;
-
-
-
-  size_t identifier_size;
-
-
-  void (*free_lang_data) (tree);
-
-
-
-
-
-  size_t (*tree_size) (enum tree_code);
-
-
-
-  unsigned int (*option_lang_mask) (void);
-
-
-  void (*init_options_struct) (struct gcc_options *opts);
-
-
-
-
-  void (*init_options) (unsigned int decoded_options_count,
-   struct cl_decoded_option *decoded_options);
-
-
-
-  void (*initialize_diagnostics) (diagnostic_context *);
-
-
-
-
-  unsigned char (*complain_wrong_lang_p) (const struct cl_option *option);
-# 298 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/langhooks.h"
-  unsigned char (*handle_option) (size_t code, const char *arg, int value, int kind,
-    location_t loc,
-    const struct cl_option_handlers *handlers);
-# 310 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/langhooks.h"
-  unsigned char (*post_options) (const char **);
-
-
-
-
-  unsigned char (*init) (void);
-
-
-  void (*finish) (void);
-
-
-  void (*parse_file) (void);
-
-
-  unsigned char (*missing_noreturn_ok_p) (tree);
-
-
-
-  alias_set_type (*get_alias_set) (tree);
-
-
-
-  void (*finish_incomplete_decl) (tree);
-
-
-
-  void (*dup_lang_specific_decl) (tree);
-
-
-
-
-
-
-  void (*set_decl_assembler_name) (tree);
-
-
-
-  void (*print_statistics) (void);
-
-
-
-  lang_print_tree_hook print_xnode;
-
-
-
-  lang_print_tree_hook print_decl;
-  lang_print_tree_hook print_type;
-  lang_print_tree_hook print_identifier;
-# 368 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/langhooks.h"
-  const char *(*decl_printable_name) (tree decl, int verbosity);
-
-
-
-
-  const char *(*dwarf_name) (tree, int verbosity);
-
-
-
-
-  int (*types_compatible_p) (tree x, tree y);
-
-
-  void (*print_error_function) (diagnostic_context *, const char *,
-    struct diagnostic_info *);
-# 391 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/langhooks.h"
-  long (*to_target_charset) (long);
-
-
-
-
-
-
-  const struct attribute_spec *attribute_table;
-  const struct attribute_spec *common_attribute_table;
-  const struct attribute_spec *format_attribute_table;
-
-  struct lang_hooks_for_tree_inlining tree_inlining;
-
-  struct lang_hooks_for_callgraph callgraph;
-
-  struct lang_hooks_for_tree_dump tree_dump;
-
-  struct lang_hooks_for_decls decls;
-
-  struct lang_hooks_for_types types;
-
-  struct lang_hooks_for_lto lto;
-
-
-
-  tree (*get_innermost_generic_parms) (const_tree);
-
-
-
-  tree (*get_innermost_generic_args) (const_tree);
-
-
-  unsigned char (*function_parameter_pack_p) (const_tree);
-
-
-
-  int (*gimplify_expr) (tree *, gimple_seq *, gimple_seq *);
-
-
-  tree (*builtin_function) (tree decl);
-
-
-
-
-
-
-
-  tree (*builtin_function_ext_scope) (tree decl);
-
-
-  void (*init_ts) (void);
-
-
-
-
-  tree (*expr_to_decl) (tree expr, unsigned char *tc, unsigned char *se);
-
-
-  tree (*eh_personality) (void);
-
-
-  tree (*eh_runtime_type) (tree);
-
-
-
-
-
-
-
-  tree (*eh_protect_cleanup_actions) (void);
-
-
-
-  unsigned char eh_use_cxa_end_cleanup;
-
-
-
-  unsigned char deep_unsharing;
-
-
-
-};
-
-
-extern struct lang_hooks lang_hooks;
-extern tree add_builtin_function (const char *name, tree type,
-      int function_code, enum built_in_class cl,
-      const char *library_name,
-      tree attrs);
-
-extern tree add_builtin_function_ext_scope (const char *name, tree type,
-         int function_code,
-         enum built_in_class cl,
-         const char *library_name,
-         tree attrs);
-# 26 "/opt/gcc-plugins/src/plugin-utils.h" 2
-
-
-int is_gcc();
-
-
-int is_gpp();
-
-
-int is_lto();
-# 27 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree-pass.h" 1
-# 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree-pass.h"
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/timevar.h" 1
-# 53 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/timevar.h"
-struct timevar_time_def
-{
-
-  double user;
-
-
-
-  double sys;
-
-
-  double wall;
-
-
-  unsigned ggc_mem;
-};
-
-
-
-
-
-
-typedef enum
-{
-  TV_NONE,
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/timevar.def" 1
-# 35 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/timevar.def"
-TV_TOTAL,
-
-
-TV_GC,
-
-
-TV_DUMP,
-
-
-TV_PCH_SAVE,
-TV_PCH_CPP_SAVE,
-TV_PCH_PTR_REALLOC,
-TV_PCH_PTR_SORT,
-TV_PCH_RESTORE,
-TV_PCH_CPP_RESTORE,
-
-TV_CGRAPH,
-TV_CGRAPHOPT,
-TV_VARPOOL,
-TV_IPA_CONSTANT_PROP,
-TV_IPA_FNSPLIT,
-TV_IPA_OPT,
-TV_IPA_LTO_GIMPLE_IN,
-TV_IPA_LTO_GIMPLE_OUT,
-TV_IPA_LTO_DECL_IN,
-TV_IPA_LTO_DECL_OUT,
-TV_IPA_LTO_DECL_INIT_IO,
-TV_IPA_LTO_CGRAPH_IO,
-TV_IPA_LTO_DECL_MERGE,
-TV_IPA_LTO_CGRAPH_MERGE,
-TV_LTO,
-TV_WHOPR_WPA,
-TV_WHOPR_WPA_IO,
-TV_WHOPR_LTRANS,
-TV_WHOPR_WPA_LTRANS_EXEC,
-TV_IPA_REFERENCE,
-TV_IPA_PROFILE,
-TV_IPA_PURE_CONST,
-TV_IPA_TYPE_ESCAPE,
-TV_IPA_PTA,
-TV_IPA_SRA,
-TV_IPA_FREE_LANG_DATA,
-
-TV_CFG,
-
-TV_CLEANUP_CFG,
-TV_CFG_VERIFY,
-TV_DELETE_TRIVIALLY_DEAD,
-
-TV_LIFE,
-TV_LIFE_UPDATE,
-
-
-TV_DF_SCAN,
-TV_DF_MD,
-TV_DF_RD,
-TV_DF_LR,
-TV_DF_LIVE,
-TV_DF_UREC,
-TV_DF_CHAIN,
-TV_DF_WORD_LR,
-TV_DF_NOTE,
-TV_REG_STATS,
-
-TV_ALIAS_ANALYSIS,
-TV_ALIAS_STMT_WALK,
-TV_REG_SCAN,
-TV_REBUILD_JUMP,
-
-TV_CPP,
-TV_LEX,
-TV_PARSE,
-TV_NAME_LOOKUP,
-TV_INLINE_HEURISTICS,
-TV_INTEGRATION,
-TV_TREE_GIMPLIFY,
-TV_TREE_EH,
-TV_TREE_CFG,
-TV_TREE_CLEANUP_CFG,
-TV_TREE_VRP,
-TV_TREE_COPY_PROP,
-TV_FIND_REFERENCED_VARS,
-TV_TREE_PTA,
-TV_TREE_INSERT_PHI_NODES,
-TV_TREE_SSA_REWRITE_BLOCKS,
-TV_TREE_SSA_OTHER,
-TV_TREE_SSA_INCREMENTAL,
-TV_TREE_OPS,
-TV_TREE_SSA_DOMINATOR_OPTS,
-TV_TREE_SRA,
-TV_TREE_CCP,
-TV_TREE_PHI_CPROP,
-TV_TREE_SPLIT_EDGES,
-TV_TREE_REASSOC,
-TV_TREE_PRE,
-TV_TREE_FRE,
-TV_TREE_SINK,
-TV_TREE_PHIOPT,
-TV_TREE_FORWPROP,
-TV_TREE_PHIPROP,
-TV_TREE_DCE,
-TV_TREE_CD_DCE,
-TV_TREE_CALL_CDCE,
-TV_TREE_DSE,
-TV_TREE_MERGE_PHI,
-TV_TREE_LOOP,
-TV_TREE_LOOP_BOUNDS,
-TV_LIM,
-TV_TREE_LOOP_IVCANON,
-TV_SCEV_CONST,
-TV_TREE_LOOP_UNSWITCH,
-TV_COMPLETE_UNROLL,
-TV_TREE_PARALLELIZE_LOOPS,
-TV_TREE_VECTORIZATION,
-TV_TREE_SLP_VECTORIZATION,
-TV_GRAPHITE,
-TV_GRAPHITE_TRANSFORMS,
-TV_GRAPHITE_DATA_DEPS,
-TV_GRAPHITE_CODE_GEN,
-TV_TREE_LINEAR_TRANSFORM,
-TV_TREE_LOOP_DISTRIBUTION,
-TV_CHECK_DATA_DEPS,
-TV_TREE_PREFETCH,
-TV_TREE_LOOP_IVOPTS,
-TV_PREDCOM,
-TV_TREE_LOOP_INIT,
-TV_TREE_LOOP_FINI,
-TV_TREE_CH,
-TV_TREE_SSA_UNCPROP,
-TV_TREE_SSA_TO_NORMAL,
-TV_TREE_NRV,
-TV_TREE_COPY_RENAME,
-TV_TREE_SSA_VERIFY,
-TV_TREE_STMT_VERIFY,
-TV_TREE_SWITCH_CONVERSION,
-TV_CGRAPH_VERIFY,
-TV_DOM_FRONTIERS,
-TV_DOMINANCE,
-TV_CONTROL_DEPENDENCES,
-TV_OVERLOAD,
-TV_TEMPLATE_INSTANTIATION,
-TV_OUT_OF_SSA,
-TV_VAR_EXPAND,
-TV_EXPAND,
-TV_POST_EXPAND,
-TV_VARCONST,
-TV_LOWER_SUBREG,
-TV_JUMP,
-TV_FWPROP,
-TV_CSE,
-TV_DCE,
-TV_DSE1,
-TV_DSE2,
-TV_LOOP,
-TV_LOOP_MOVE_INVARIANTS,
-TV_LOOP_UNSWITCH,
-TV_LOOP_UNROLL,
-TV_LOOP_DOLOOP,
-TV_CPROP,
-TV_PRE,
-TV_HOIST,
-TV_LSM,
-TV_TRACER,
-TV_WEB,
-TV_AUTO_INC_DEC,
-TV_CSE2,
-TV_BRANCH_PROB,
-TV_VPT,
-TV_COMBINE,
-TV_IFCVT,
-TV_REGMOVE,
-TV_MODE_SWITCH,
-TV_SMS,
-TV_SCHED,
-TV_LOCAL_ALLOC,
-TV_GLOBAL_ALLOC,
-TV_IRA,
-TV_RELOAD,
-TV_RELOAD_CSE_REGS,
-TV_SEQABSTR,
-TV_GCSE_AFTER_RELOAD,
-TV_ZEE,
-TV_THREAD_PROLOGUE_AND_EPILOGUE,
-TV_IFCVT2,
-TV_COMBINE_STACK_ADJUST,
-TV_PEEPHOLE2,
-TV_RENAME_REGISTERS,
-TV_CPROP_REGISTERS,
-TV_SCHED2,
-TV_MACH_DEP,
-TV_DBR_SCHED,
-TV_REORDER_BLOCKS,
-TV_SHORTEN_BRANCH,
-TV_REG_STACK,
-TV_FINAL,
-TV_VAROUT,
-TV_SYMOUT,
-TV_VAR_TRACKING,
-TV_VAR_TRACKING_DATAFLOW,
-TV_VAR_TRACKING_EMIT,
-TV_TREE_IFCOMBINE,
-TV_TREE_UNINIT,
-TV_PLUGIN_INIT,
-TV_PLUGIN_RUN,
-
-
-TV_EARLY_LOCAL,
-TV_OPTIMIZE,
-TV_REST_OF_COMPILATION,
-TV_POSTRELOAD,
-TV_REMOVE_UNUSED,
-TV_ADDRESS_TAKEN,
-TV_TODO,
-TV_VERIFY_LOOP_CLOSED,
-TV_VERIFY_RTL_SHARING,
-TV_REBUILD_FREQUENCIES,
-TV_REPAIR_LOOPS,
-# 78 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/timevar.h" 2
-  TIMEVAR_LAST
-}
-timevar_id_t;
-
-
-
-
-extern unsigned char timevar_enable;
-
-
-extern size_t timevar_ggc_mem_total;
-
-
-
-
-extern void timevar_init (void);
-extern void timevar_push_1 (timevar_id_t);
-extern void timevar_pop_1 (timevar_id_t);
-extern void timevar_start (timevar_id_t);
-extern void timevar_stop (timevar_id_t);
-extern void timevar_print (FILE *);
-
-
-static __inline__ void
-timevar_push (timevar_id_t tv)
-{
-  if (timevar_enable)
-    timevar_push_1 (tv);
-}
-
-static __inline__ void
-timevar_pop (timevar_id_t tv)
-{
-  if (timevar_enable)
-    timevar_pop_1 (tv);
-}
-
-extern void print_time (const char *, long);
-# 27 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree-pass.h" 2
-
-
-
-enum tree_dump_index
-{
-  TDI_none,
-  TDI_cgraph,
-  TDI_tu,
-  TDI_class,
-  TDI_original,
-  TDI_generic,
-  TDI_nested,
-  TDI_vcg,
-
-  TDI_ada,
-  TDI_tree_all,
-  TDI_rtl_all,
-  TDI_ipa_all,
-
-  TDI_end
-};
-# 90 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree-pass.h"
-extern char *get_dump_file_name (int);
-extern int dump_enabled_p (int);
-extern int dump_initialized_p (int);
-extern FILE *dump_begin (int, int *);
-extern void dump_end (int, FILE *);
-extern void dump_node (const_tree, int, FILE *);
-extern int dump_switch_p (const char *);
-extern const char *dump_flag_name (int);
-
-
-extern FILE *dump_file;
-extern int dump_flags;
-extern const char *dump_file_name;
-
-
-extern struct dump_file_info *get_dump_file_info (int);
-
-
-enum opt_pass_type
-{
-  GIMPLE_PASS,
-  RTL_PASS,
-  SIMPLE_IPA_PASS,
-  IPA_PASS
-};
-
-
-
-struct opt_pass
-{
-
-  enum opt_pass_type type;
-
-
-
-  const char *name;
-
-
-
-  unsigned char (*gate) (void);
-
-
-
-
-  unsigned int (*execute) (void);
-
-
-  struct opt_pass *sub;
-
-
-  struct opt_pass *next;
-
-
-  int static_pass_number;
-
-
-
-  timevar_id_t tv_id;
-
-
-  unsigned int properties_required;
-  unsigned int properties_provided;
-  unsigned int properties_destroyed;
-
-
-  unsigned int todo_flags_start;
-  unsigned int todo_flags_finish;
-};
-
-
-struct gimple_opt_pass
-{
-  struct opt_pass pass;
-};
-
-
-struct rtl_opt_pass
-{
-  struct opt_pass pass;
-};
-
-struct varpool_node;
-struct cgraph_node;
-struct cgraph_node_set_def;
-struct varpool_node_set_def;
-
-
-
-struct ipa_opt_pass_d
-{
-  struct opt_pass pass;
-
-
-
-  void (*generate_summary) (void);
-
-
-  void (*write_summary) (struct cgraph_node_set_def *,
-    struct varpool_node_set_def *);
-
-
-  void (*read_summary) (void);
-
-
-  void (*write_optimization_summary) (struct cgraph_node_set_def *,
-          struct varpool_node_set_def *);
-
-
-  void (*read_optimization_summary) (void);
-
-
-
-  void (*stmt_fixup) (struct cgraph_node *, gimple *);
-
-
-
-  unsigned int function_transform_todo_flags_start;
-  unsigned int (*function_transform) (struct cgraph_node *);
-  void (*variable_transform) (struct varpool_node *);
-};
-
-
-
-struct simple_ipa_opt_pass
-{
-  struct opt_pass pass;
-};
-
-
-struct dump_file_info
-{
-  const char *suffix;
-  const char *swtch;
-  const char *glob;
-  int flags;
-  int state;
-  int num;
-};
-# 332 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree-pass.h"
-enum pass_positioning_ops
-{
-  PASS_POS_INSERT_AFTER,
-  PASS_POS_INSERT_BEFORE,
-  PASS_POS_REPLACE
-};
-
-struct register_pass_info
-{
-  struct opt_pass *pass;
-  const char *reference_pass_name;
-
-  int ref_pass_instance_number;
-
-
-  enum pass_positioning_ops pos_op;
-};
-
-extern void tree_lowering_passes (tree decl);
-
-extern struct gimple_opt_pass pass_mudflap_1;
-extern struct gimple_opt_pass pass_mudflap_2;
-extern struct gimple_opt_pass pass_lower_cf;
-extern struct gimple_opt_pass pass_refactor_eh;
-extern struct gimple_opt_pass pass_lower_eh;
-extern struct gimple_opt_pass pass_lower_eh_dispatch;
-extern struct gimple_opt_pass pass_lower_resx;
-extern struct gimple_opt_pass pass_build_cfg;
-extern struct gimple_opt_pass pass_early_tree_profile;
-extern struct gimple_opt_pass pass_referenced_vars;
-extern struct gimple_opt_pass pass_cleanup_eh;
-extern struct gimple_opt_pass pass_sra;
-extern struct gimple_opt_pass pass_sra_early;
-extern struct gimple_opt_pass pass_early_ipa_sra;
-extern struct gimple_opt_pass pass_tail_recursion;
-extern struct gimple_opt_pass pass_tail_calls;
-extern struct gimple_opt_pass pass_tree_loop;
-extern struct gimple_opt_pass pass_tree_loop_init;
-extern struct gimple_opt_pass pass_lim;
-extern struct gimple_opt_pass pass_tree_unswitch;
-extern struct gimple_opt_pass pass_predcom;
-extern struct gimple_opt_pass pass_iv_canon;
-extern struct gimple_opt_pass pass_scev_cprop;
-extern struct gimple_opt_pass pass_empty_loop;
-extern struct gimple_opt_pass pass_record_bounds;
-extern struct gimple_opt_pass pass_graphite;
-extern struct gimple_opt_pass pass_graphite_transforms;
-extern struct gimple_opt_pass pass_if_conversion;
-extern struct gimple_opt_pass pass_loop_distribution;
-extern struct gimple_opt_pass pass_vectorize;
-extern struct gimple_opt_pass pass_slp_vectorize;
-extern struct gimple_opt_pass pass_complete_unroll;
-extern struct gimple_opt_pass pass_complete_unrolli;
-extern struct gimple_opt_pass pass_parallelize_loops;
-extern struct gimple_opt_pass pass_loop_prefetch;
-extern struct gimple_opt_pass pass_iv_optimize;
-extern struct gimple_opt_pass pass_tree_loop_done;
-extern struct gimple_opt_pass pass_ch;
-extern struct gimple_opt_pass pass_ccp;
-extern struct gimple_opt_pass pass_phi_only_cprop;
-extern struct gimple_opt_pass pass_build_ssa;
-extern struct gimple_opt_pass pass_build_alias;
-extern struct gimple_opt_pass pass_build_ealias;
-extern struct gimple_opt_pass pass_dominator;
-extern struct gimple_opt_pass pass_dce;
-extern struct gimple_opt_pass pass_dce_loop;
-extern struct gimple_opt_pass pass_cd_dce;
-extern struct gimple_opt_pass pass_call_cdce;
-extern struct gimple_opt_pass pass_merge_phi;
-extern struct gimple_opt_pass pass_split_crit_edges;
-extern struct gimple_opt_pass pass_pre;
-extern struct gimple_opt_pass pass_profile;
-extern struct gimple_opt_pass pass_strip_predict_hints;
-extern struct gimple_opt_pass pass_lower_complex_O0;
-extern struct gimple_opt_pass pass_lower_complex;
-extern struct gimple_opt_pass pass_lower_vector;
-extern struct gimple_opt_pass pass_lower_vector_ssa;
-extern struct gimple_opt_pass pass_lower_omp;
-extern struct gimple_opt_pass pass_diagnose_omp_blocks;
-extern struct gimple_opt_pass pass_expand_omp;
-extern struct gimple_opt_pass pass_expand_omp_ssa;
-extern struct gimple_opt_pass pass_object_sizes;
-extern struct gimple_opt_pass pass_fold_builtins;
-extern struct gimple_opt_pass pass_stdarg;
-extern struct gimple_opt_pass pass_early_warn_uninitialized;
-extern struct gimple_opt_pass pass_late_warn_uninitialized;
-extern struct gimple_opt_pass pass_cse_reciprocals;
-extern struct gimple_opt_pass pass_cse_sincos;
-extern struct gimple_opt_pass pass_optimize_bswap;
-extern struct gimple_opt_pass pass_optimize_widening_mul;
-extern struct gimple_opt_pass pass_warn_function_return;
-extern struct gimple_opt_pass pass_warn_function_noreturn;
-extern struct gimple_opt_pass pass_cselim;
-extern struct gimple_opt_pass pass_phiopt;
-extern struct gimple_opt_pass pass_forwprop;
-extern struct gimple_opt_pass pass_phiprop;
-extern struct gimple_opt_pass pass_tree_ifcombine;
-extern struct gimple_opt_pass pass_dse;
-extern struct gimple_opt_pass pass_nrv;
-extern struct gimple_opt_pass pass_rename_ssa_copies;
-extern struct gimple_opt_pass pass_rest_of_compilation;
-extern struct gimple_opt_pass pass_sink_code;
-extern struct gimple_opt_pass pass_fre;
-extern struct gimple_opt_pass pass_check_data_deps;
-extern struct gimple_opt_pass pass_copy_prop;
-extern struct gimple_opt_pass pass_vrp;
-extern struct gimple_opt_pass pass_uncprop;
-extern struct gimple_opt_pass pass_return_slot;
-extern struct gimple_opt_pass pass_reassoc;
-extern struct gimple_opt_pass pass_rebuild_cgraph_edges;
-extern struct gimple_opt_pass pass_remove_cgraph_callee_edges;
-extern struct gimple_opt_pass pass_build_cgraph_edges;
-extern struct gimple_opt_pass pass_local_pure_const;
-extern struct gimple_opt_pass pass_tracer;
-extern struct gimple_opt_pass pass_warn_unused_result;
-extern struct gimple_opt_pass pass_split_functions;
-extern struct gimple_opt_pass pass_feedback_split_functions;
-
-
-extern struct simple_ipa_opt_pass pass_ipa_lower_emutls;
-extern struct simple_ipa_opt_pass pass_ipa_function_and_variable_visibility;
-extern struct simple_ipa_opt_pass pass_ipa_tree_profile;
-
-extern struct simple_ipa_opt_pass pass_early_local_passes;
-
-extern struct ipa_opt_pass_d pass_ipa_whole_program_visibility;
-extern struct ipa_opt_pass_d pass_ipa_lto_gimple_out;
-extern struct simple_ipa_opt_pass pass_ipa_increase_alignment;
-extern struct simple_ipa_opt_pass pass_ipa_matrix_reorg;
-extern struct ipa_opt_pass_d pass_ipa_inline;
-extern struct simple_ipa_opt_pass pass_ipa_free_lang_data;
-extern struct ipa_opt_pass_d pass_ipa_cp;
-extern struct ipa_opt_pass_d pass_ipa_reference;
-extern struct ipa_opt_pass_d pass_ipa_pure_const;
-extern struct simple_ipa_opt_pass pass_ipa_type_escape;
-extern struct simple_ipa_opt_pass pass_ipa_pta;
-extern struct simple_ipa_opt_pass pass_ipa_struct_reorg;
-extern struct ipa_opt_pass_d pass_ipa_lto_wpa_fixup;
-extern struct ipa_opt_pass_d pass_ipa_lto_finish_out;
-extern struct ipa_opt_pass_d pass_ipa_profile;
-extern struct ipa_opt_pass_d pass_ipa_cdtor_merge;
-
-extern struct gimple_opt_pass pass_all_optimizations;
-extern struct gimple_opt_pass pass_cleanup_cfg_post_optimizing;
-extern struct gimple_opt_pass pass_init_datastructures;
-extern struct gimple_opt_pass pass_fixup_cfg;
-
-extern struct rtl_opt_pass pass_expand;
-extern struct rtl_opt_pass pass_init_function;
-extern struct rtl_opt_pass pass_jump;
-extern struct rtl_opt_pass pass_rtl_eh;
-extern struct rtl_opt_pass pass_initial_value_sets;
-extern struct rtl_opt_pass pass_unshare_all_rtl;
-extern struct rtl_opt_pass pass_instantiate_virtual_regs;
-extern struct rtl_opt_pass pass_rtl_fwprop;
-extern struct rtl_opt_pass pass_rtl_fwprop_addr;
-extern struct rtl_opt_pass pass_jump2;
-extern struct rtl_opt_pass pass_lower_subreg;
-extern struct rtl_opt_pass pass_cse;
-extern struct rtl_opt_pass pass_fast_rtl_dce;
-extern struct rtl_opt_pass pass_ud_rtl_dce;
-extern struct rtl_opt_pass pass_rtl_dce;
-extern struct rtl_opt_pass pass_rtl_dse1;
-extern struct rtl_opt_pass pass_rtl_dse2;
-extern struct rtl_opt_pass pass_rtl_dse3;
-extern struct rtl_opt_pass pass_rtl_cprop;
-extern struct rtl_opt_pass pass_rtl_pre;
-extern struct rtl_opt_pass pass_rtl_hoist;
-extern struct rtl_opt_pass pass_rtl_store_motion;
-extern struct rtl_opt_pass pass_cse_after_global_opts;
-extern struct rtl_opt_pass pass_rtl_ifcvt;
-
-extern struct rtl_opt_pass pass_into_cfg_layout_mode;
-extern struct rtl_opt_pass pass_outof_cfg_layout_mode;
-
-extern struct rtl_opt_pass pass_loop2;
-extern struct rtl_opt_pass pass_rtl_loop_init;
-extern struct rtl_opt_pass pass_rtl_move_loop_invariants;
-extern struct rtl_opt_pass pass_rtl_unswitch;
-extern struct rtl_opt_pass pass_rtl_unroll_and_peel_loops;
-extern struct rtl_opt_pass pass_rtl_doloop;
-extern struct rtl_opt_pass pass_rtl_loop_done;
-
-extern struct rtl_opt_pass pass_web;
-extern struct rtl_opt_pass pass_cse2;
-extern struct rtl_opt_pass pass_df_initialize_opt;
-extern struct rtl_opt_pass pass_df_initialize_no_opt;
-extern struct rtl_opt_pass pass_reginfo_init;
-extern struct rtl_opt_pass pass_inc_dec;
-extern struct rtl_opt_pass pass_stack_ptr_mod;
-extern struct rtl_opt_pass pass_initialize_regs;
-extern struct rtl_opt_pass pass_combine;
-extern struct rtl_opt_pass pass_if_after_combine;
-extern struct rtl_opt_pass pass_implicit_zee;
-extern struct rtl_opt_pass pass_partition_blocks;
-extern struct rtl_opt_pass pass_match_asm_constraints;
-extern struct rtl_opt_pass pass_regmove;
-extern struct rtl_opt_pass pass_split_all_insns;
-extern struct rtl_opt_pass pass_fast_rtl_byte_dce;
-extern struct rtl_opt_pass pass_lower_subreg2;
-extern struct rtl_opt_pass pass_mode_switching;
-extern struct rtl_opt_pass pass_sms;
-extern struct rtl_opt_pass pass_sched;
-extern struct rtl_opt_pass pass_ira;
-extern struct rtl_opt_pass pass_postreload;
-extern struct rtl_opt_pass pass_clean_state;
-extern struct rtl_opt_pass pass_branch_prob;
-extern struct rtl_opt_pass pass_value_profile_transformations;
-extern struct rtl_opt_pass pass_postreload_cse;
-extern struct rtl_opt_pass pass_gcse2;
-extern struct rtl_opt_pass pass_split_after_reload;
-extern struct rtl_opt_pass pass_branch_target_load_optimize1;
-extern struct rtl_opt_pass pass_thread_prologue_and_epilogue;
-extern struct rtl_opt_pass pass_stack_adjustments;
-extern struct rtl_opt_pass pass_peephole2;
-extern struct rtl_opt_pass pass_if_after_reload;
-extern struct rtl_opt_pass pass_regrename;
-extern struct rtl_opt_pass pass_cprop_hardreg;
-extern struct rtl_opt_pass pass_reorder_blocks;
-extern struct rtl_opt_pass pass_branch_target_load_optimize2;
-extern struct rtl_opt_pass pass_leaf_regs;
-extern struct rtl_opt_pass pass_split_before_sched2;
-extern struct rtl_opt_pass pass_compare_elim_after_reload;
-extern struct rtl_opt_pass pass_sched2;
-extern struct rtl_opt_pass pass_stack_regs;
-extern struct rtl_opt_pass pass_stack_regs_run;
-extern struct rtl_opt_pass pass_df_finish;
-extern struct rtl_opt_pass pass_compute_alignments;
-extern struct rtl_opt_pass pass_duplicate_computed_gotos;
-extern struct rtl_opt_pass pass_variable_tracking;
-extern struct rtl_opt_pass pass_free_cfg;
-extern struct rtl_opt_pass pass_machine_reorg;
-extern struct rtl_opt_pass pass_cleanup_barriers;
-extern struct rtl_opt_pass pass_delay_slots;
-extern struct rtl_opt_pass pass_split_for_shorten_branches;
-extern struct rtl_opt_pass pass_split_before_regstack;
-extern struct rtl_opt_pass pass_convert_to_eh_region_ranges;
-extern struct rtl_opt_pass pass_shorten_branches;
-extern struct rtl_opt_pass pass_set_nothrow_function_flags;
-extern struct rtl_opt_pass pass_final;
-extern struct rtl_opt_pass pass_rtl_seqabstr;
-extern struct gimple_opt_pass pass_release_ssa_names;
-extern struct gimple_opt_pass pass_early_inline;
-extern struct gimple_opt_pass pass_inline_parameters;
-extern struct gimple_opt_pass pass_all_early_optimizations;
-extern struct gimple_opt_pass pass_update_address_taken;
-extern struct gimple_opt_pass pass_convert_switch;
-
-
-extern struct opt_pass *all_passes, *all_small_ipa_passes, *all_lowering_passes,
-                       *all_regular_ipa_passes, *all_lto_gen_passes;
-# 594 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree-pass.h"
-enum
-{
-  PASS_LIST_NO_all_lowering_passes, PASS_LIST_NO_all_small_ipa_passes, PASS_LIST_NO_all_regular_ipa_passes, PASS_LIST_NO_all_lto_gen_passes, PASS_LIST_NO_all_passes,
-  PASS_LIST_NUM
-};
-
-
-
-
-extern struct opt_pass **gcc_pass_lists[];
-
-
-extern struct opt_pass *current_pass;
-
-extern struct opt_pass * get_pass_for_id (int);
-extern unsigned char execute_one_pass (struct opt_pass *);
-extern void execute_pass_list (struct opt_pass *);
-extern void execute_ipa_pass_list (struct opt_pass *);
-extern void execute_ipa_summary_passes (struct ipa_opt_pass_d *);
-extern void execute_all_ipa_transforms (void);
-extern void execute_all_ipa_stmt_fixups (struct cgraph_node *, gimple *);
-extern unsigned char pass_init_dump_file (struct opt_pass *);
-extern void pass_fini_dump_file (struct opt_pass *);
-
-extern const char *get_current_pass_name (void);
-extern void print_current_pass (FILE *);
-extern void debug_pass (void);
-extern void ipa_write_summaries (void);
-extern void ipa_write_optimization_summaries (struct cgraph_node_set_def *,
-           struct varpool_node_set_def *);
-extern void ipa_read_summaries (void);
-extern void ipa_read_optimization_summaries (void);
-extern void register_one_dump_file (struct opt_pass *);
-extern unsigned char function_called_by_processed_nodes_p (void);
-extern void register_pass (struct register_pass_info *);
-# 637 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree-pass.h"
-extern unsigned char first_pass_instance;
-
-
-extern void do_per_function_toporder (void (*) (void *), void *);
-# 28 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/function.h" 1
-# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/function.h"
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 1
-# 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/function.h" 2
-
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/vecprim.h" 1
-# 23 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/vecprim.h"
-static __inline__ void VEC_char_must_be_integral_type (void) { (void)~(char)0; } typedef struct VEC_char_base { unsigned num; unsigned alloc; char vec[1]; } VEC_char_base; typedef struct VEC_char_none { VEC_char_base base; } VEC_char_none; static __inline__ unsigned VEC_char_base_length (const VEC_char_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ char VEC_char_base_last (const VEC_char_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ char VEC_char_base_index (const VEC_char_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_char_base_iterate (const VEC_char_base *vec_, unsigned ix_, char *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (char) 0; return 0; } } static __inline__ size_t VEC_char_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_char_base, vec) + alloc_ * sizeof(char); } static __inline__ void VEC_char_base_embedded_init (VEC_char_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_char_base_space (VEC_char_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_char_base_splice (VEC_char_base *dst_, VEC_char_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (char)); dst_->num += len_; } } static __inline__ char *VEC_char_base_quick_push (VEC_char_base *vec_, char obj_ ) { char *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ char VEC_char_base_pop (VEC_char_base *vec_ ) { char obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_char_base_truncate (VEC_char_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ char VEC_char_base_replace (VEC_char_base *vec_, unsigned ix_, char obj_ ) { char old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ char *VEC_char_base_quick_insert (VEC_char_base *vec_, unsigned ix_, char obj_ ) { char *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (char)); *slot_ = obj_; return slot_; } static __inline__ char VEC_char_base_ordered_remove (VEC_char_base *vec_, unsigned ix_ ) { char *slot_; char obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (char)); return obj_; } static __inline__ char VEC_char_base_unordered_remove (VEC_char_base *vec_, unsigned ix_ ) { char *slot_; char obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_char_base_block_remove (VEC_char_base *vec_, unsigned ix_, unsigned len_ ) { char *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (char)); } static __inline__ char *VEC_char_base_address (VEC_char_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_char_base_lower_bound (VEC_char_base *vec_, const char obj_, unsigned char (*lessthan_)(const char, const char) ) { unsigned int len_ = VEC_char_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { char middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_char_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_char_heap { VEC_char_base base; } VEC_char_heap; static __inline__ VEC_char_heap *VEC_char_heap_alloc (int alloc_ ) { return (VEC_char_heap *) vec_heap_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) ); } static __inline__ VEC_char_heap *VEC_char_heap_copy (VEC_char_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_char_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_char_heap *)(vec_heap_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (char) * len_); } return new_vec_; } static __inline__ void VEC_char_heap_free (VEC_char_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_char_heap_reserve (VEC_char_heap **vec_, int alloc_ ) { int extend = !VEC_char_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_char_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) ); return extend; } static __inline__ int VEC_char_heap_reserve_exact (VEC_char_heap **vec_, int alloc_ ) { int extend = !VEC_char_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_char_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_char_heap, base.vec), sizeof (char) ); return extend; } static __inline__ void VEC_char_heap_safe_grow (VEC_char_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_char_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_char_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_char_heap_safe_grow_cleared (VEC_char_heap **vec_, int size_ ) { int oldsize = VEC_char_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_char_heap_safe_grow (vec_, size_ ); memset (&(VEC_char_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (char) * (size_ - oldsize)); } static __inline__ void VEC_char_heap_safe_splice (VEC_char_heap **dst_, VEC_char_base *src_ ) { if (src_) { VEC_char_heap_reserve_exact (dst_, src_->num ); VEC_char_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ char *VEC_char_heap_safe_push (VEC_char_heap **vec_, const char obj_ ) { VEC_char_heap_reserve (vec_, 1 ); return VEC_char_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ char *VEC_char_heap_safe_insert (VEC_char_heap **vec_, unsigned ix_, const char obj_ ) { VEC_char_heap_reserve (vec_, 1 ); return VEC_char_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-
-typedef unsigned char uchar;
-static __inline__ void VEC_uchar_must_be_integral_type (void) { (void)~(uchar)0; } typedef struct VEC_uchar_base { unsigned num; unsigned alloc; uchar vec[1]; } VEC_uchar_base; typedef struct VEC_uchar_none { VEC_uchar_base base; } VEC_uchar_none; static __inline__ unsigned VEC_uchar_base_length (const VEC_uchar_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ uchar VEC_uchar_base_last (const VEC_uchar_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ uchar VEC_uchar_base_index (const VEC_uchar_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_uchar_base_iterate (const VEC_uchar_base *vec_, unsigned ix_, uchar *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (uchar) 0; return 0; } } static __inline__ size_t VEC_uchar_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_uchar_base, vec) + alloc_ * sizeof(uchar); } static __inline__ void VEC_uchar_base_embedded_init (VEC_uchar_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_uchar_base_space (VEC_uchar_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_uchar_base_splice (VEC_uchar_base *dst_, VEC_uchar_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (uchar)); dst_->num += len_; } } static __inline__ uchar *VEC_uchar_base_quick_push (VEC_uchar_base *vec_, uchar obj_ ) { uchar *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ uchar VEC_uchar_base_pop (VEC_uchar_base *vec_ ) { uchar obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_uchar_base_truncate (VEC_uchar_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ uchar VEC_uchar_base_replace (VEC_uchar_base *vec_, unsigned ix_, uchar obj_ ) { uchar old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ uchar *VEC_uchar_base_quick_insert (VEC_uchar_base *vec_, unsigned ix_, uchar obj_ ) { uchar *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (uchar)); *slot_ = obj_; return slot_; } static __inline__ uchar VEC_uchar_base_ordered_remove (VEC_uchar_base *vec_, unsigned ix_ ) { uchar *slot_; uchar obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (uchar)); return obj_; } static __inline__ uchar VEC_uchar_base_unordered_remove (VEC_uchar_base *vec_, unsigned ix_ ) { uchar *slot_; uchar obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_uchar_base_block_remove (VEC_uchar_base *vec_, unsigned ix_, unsigned len_ ) { uchar *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (uchar)); } static __inline__ uchar *VEC_uchar_base_address (VEC_uchar_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_uchar_base_lower_bound (VEC_uchar_base *vec_, const uchar obj_, unsigned char (*lessthan_)(const uchar, const uchar) ) { unsigned int len_ = VEC_uchar_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { uchar middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_uchar_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_uchar_heap { VEC_uchar_base base; } VEC_uchar_heap; static __inline__ VEC_uchar_heap *VEC_uchar_heap_alloc (int alloc_ ) { return (VEC_uchar_heap *) vec_heap_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) ); } static __inline__ VEC_uchar_heap *VEC_uchar_heap_copy (VEC_uchar_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_uchar_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_uchar_heap *)(vec_heap_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (uchar) * len_); } return new_vec_; } static __inline__ void VEC_uchar_heap_free (VEC_uchar_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_uchar_heap_reserve (VEC_uchar_heap **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) ); return extend; } static __inline__ int VEC_uchar_heap_reserve_exact (VEC_uchar_heap **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_uchar_heap, base.vec), sizeof (uchar) ); return extend; } static __inline__ void VEC_uchar_heap_safe_grow (VEC_uchar_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_uchar_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_uchar_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_uchar_heap_safe_grow_cleared (VEC_uchar_heap **vec_, int size_ ) { int oldsize = VEC_uchar_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_uchar_heap_safe_grow (vec_, size_ ); memset (&(VEC_uchar_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (uchar) * (size_ - oldsize)); } static __inline__ void VEC_uchar_heap_safe_splice (VEC_uchar_heap **dst_, VEC_uchar_base *src_ ) { if (src_) { VEC_uchar_heap_reserve_exact (dst_, src_->num ); VEC_uchar_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ uchar *VEC_uchar_heap_safe_push (VEC_uchar_heap **vec_, const uchar obj_ ) { VEC_uchar_heap_reserve (vec_, 1 ); return VEC_uchar_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ uchar *VEC_uchar_heap_safe_insert (VEC_uchar_heap **vec_, unsigned ix_, const uchar obj_ ) { VEC_uchar_heap_reserve (vec_, 1 ); return VEC_uchar_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-typedef struct VEC_uchar_gc { VEC_uchar_base base; } VEC_uchar_gc; static __inline__ VEC_uchar_gc *VEC_uchar_gc_alloc (int alloc_ ) { return (VEC_uchar_gc *) vec_gc_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) ); } static __inline__ VEC_uchar_gc *VEC_uchar_gc_copy (VEC_uchar_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_uchar_gc *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_uchar_gc *)(vec_gc_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (uchar) * len_); } return new_vec_; } static __inline__ void VEC_uchar_gc_free (VEC_uchar_gc **vec_) { if (*vec_) ggc_free (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_uchar_gc_reserve (VEC_uchar_gc **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_gc *) vec_gc_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) ); return extend; } static __inline__ int VEC_uchar_gc_reserve_exact (VEC_uchar_gc **vec_, int alloc_ ) { int extend = !VEC_uchar_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_uchar_gc *) vec_gc_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_uchar_gc, base.vec), sizeof (uchar) ); return extend; } static __inline__ void VEC_uchar_gc_safe_grow (VEC_uchar_gc **vec_, int size_ ) { (void)(size_ >= 0 && VEC_uchar_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_uchar_gc_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_uchar_gc_safe_grow_cleared (VEC_uchar_gc **vec_, int size_ ) { int oldsize = VEC_uchar_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_uchar_gc_safe_grow (vec_, size_ ); memset (&(VEC_uchar_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (uchar) * (size_ - oldsize)); } static __inline__ void VEC_uchar_gc_safe_splice (VEC_uchar_gc **dst_, VEC_uchar_base *src_ ) { if (src_) { VEC_uchar_gc_reserve_exact (dst_, src_->num ); VEC_uchar_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ uchar *VEC_uchar_gc_safe_push (VEC_uchar_gc **vec_, const uchar obj_ ) { VEC_uchar_gc_reserve (vec_, 1 ); return VEC_uchar_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ uchar *VEC_uchar_gc_safe_insert (VEC_uchar_gc **vec_, unsigned ix_, const uchar obj_ ) { VEC_uchar_gc_reserve (vec_, 1 ); return VEC_uchar_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-
-static __inline__ void VEC_int_must_be_integral_type (void) { (void)~(int)0; } typedef struct VEC_int_base { unsigned num; unsigned alloc; int vec[1]; } VEC_int_base; typedef struct VEC_int_none { VEC_int_base base; } VEC_int_none; static __inline__ unsigned VEC_int_base_length (const VEC_int_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ int VEC_int_base_last (const VEC_int_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ int VEC_int_base_index (const VEC_int_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_int_base_iterate (const VEC_int_base *vec_, unsigned ix_, int *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (int) 0; return 0; } } static __inline__ size_t VEC_int_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_int_base, vec) + alloc_ * sizeof(int); } static __inline__ void VEC_int_base_embedded_init (VEC_int_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_int_base_space (VEC_int_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_int_base_splice (VEC_int_base *dst_, VEC_int_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (int)); dst_->num += len_; } } static __inline__ int *VEC_int_base_quick_push (VEC_int_base *vec_, int obj_ ) { int *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ int VEC_int_base_pop (VEC_int_base *vec_ ) { int obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_int_base_truncate (VEC_int_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ int VEC_int_base_replace (VEC_int_base *vec_, unsigned ix_, int obj_ ) { int old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ int *VEC_int_base_quick_insert (VEC_int_base *vec_, unsigned ix_, int obj_ ) { int *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (int)); *slot_ = obj_; return slot_; } static __inline__ int VEC_int_base_ordered_remove (VEC_int_base *vec_, unsigned ix_ ) { int *slot_; int obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (int)); return obj_; } static __inline__ int VEC_int_base_unordered_remove (VEC_int_base *vec_, unsigned ix_ ) { int *slot_; int obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_int_base_block_remove (VEC_int_base *vec_, unsigned ix_, unsigned len_ ) { int *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (int)); } static __inline__ int *VEC_int_base_address (VEC_int_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_int_base_lower_bound (VEC_int_base *vec_, const int obj_, unsigned char (*lessthan_)(const int, const int) ) { unsigned int len_ = VEC_int_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { int middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_int_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_int_heap { VEC_int_base base; } VEC_int_heap; static __inline__ VEC_int_heap *VEC_int_heap_alloc (int alloc_ ) { return (VEC_int_heap *) vec_heap_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) ); } static __inline__ VEC_int_heap *VEC_int_heap_copy (VEC_int_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_int_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_int_heap *)(vec_heap_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (int) * len_); } return new_vec_; } static __inline__ void VEC_int_heap_free (VEC_int_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_int_heap_reserve (VEC_int_heap **vec_, int alloc_ ) { int extend = !VEC_int_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_int_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) ); return extend; } static __inline__ int VEC_int_heap_reserve_exact (VEC_int_heap **vec_, int alloc_ ) { int extend = !VEC_int_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_int_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_int_heap, base.vec), sizeof (int) ); return extend; } static __inline__ void VEC_int_heap_safe_grow (VEC_int_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_int_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_int_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_int_heap_safe_grow_cleared (VEC_int_heap **vec_, int size_ ) { int oldsize = VEC_int_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_int_heap_safe_grow (vec_, size_ ); memset (&(VEC_int_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (int) * (size_ - oldsize)); } static __inline__ void VEC_int_heap_safe_splice (VEC_int_heap **dst_, VEC_int_base *src_ ) { if (src_) { VEC_int_heap_reserve_exact (dst_, src_->num ); VEC_int_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ int *VEC_int_heap_safe_push (VEC_int_heap **vec_, const int obj_ ) { VEC_int_heap_reserve (vec_, 1 ); return VEC_int_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ int *VEC_int_heap_safe_insert (VEC_int_heap **vec_, unsigned ix_, const int obj_ ) { VEC_int_heap_reserve (vec_, 1 ); return VEC_int_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-
-static __inline__ void VEC_unsigned_must_be_integral_type (void) { (void)~(unsigned)0; } typedef struct VEC_unsigned_base { unsigned num; unsigned alloc; unsigned vec[1]; } VEC_unsigned_base; typedef struct VEC_unsigned_none { VEC_unsigned_base base; } VEC_unsigned_none; static __inline__ unsigned VEC_unsigned_base_length (const VEC_unsigned_base *vec_) { return vec_ ? vec_->num : 0; } static __inline__ unsigned VEC_unsigned_base_last (const VEC_unsigned_base *vec_ ) { (void)(vec_ && vec_->num); return vec_->vec[vec_->num - 1]; } static __inline__ unsigned VEC_unsigned_base_index (const VEC_unsigned_base *vec_, unsigned ix_ ) { (void)(vec_ && ix_ < vec_->num); return vec_->vec[ix_]; } static __inline__ int VEC_unsigned_base_iterate (const VEC_unsigned_base *vec_, unsigned ix_, unsigned *ptr) { if (vec_ && ix_ < vec_->num) { *ptr = vec_->vec[ix_]; return 1; } else { *ptr = (unsigned) 0; return 0; } } static __inline__ size_t VEC_unsigned_base_embedded_size (int alloc_) { return __builtin_offsetof (VEC_unsigned_base, vec) + alloc_ * sizeof(unsigned); } static __inline__ void VEC_unsigned_base_embedded_init (VEC_unsigned_base *vec_, int alloc_) { vec_->num = 0; vec_->alloc = alloc_; } static __inline__ int VEC_unsigned_base_space (VEC_unsigned_base *vec_, int alloc_ ) { (void)(alloc_ >= 0); return vec_ ? vec_->alloc - vec_->num >= (unsigned)alloc_ : !alloc_; } static __inline__ void VEC_unsigned_base_splice (VEC_unsigned_base *dst_, VEC_unsigned_base *src_ ) { if (src_) { unsigned len_ = src_->num; (void)(dst_->num + len_ <= dst_->alloc); memcpy (&dst_->vec[dst_->num], &src_->vec[0], len_ * sizeof (unsigned)); dst_->num += len_; } } static __inline__ unsigned *VEC_unsigned_base_quick_push (VEC_unsigned_base *vec_, unsigned obj_ ) { unsigned *slot_; (void)(vec_->num < vec_->alloc); slot_ = &vec_->vec[vec_->num++]; *slot_ = obj_; return slot_; } static __inline__ unsigned VEC_unsigned_base_pop (VEC_unsigned_base *vec_ ) { unsigned obj_; (void)(vec_->num); obj_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_unsigned_base_truncate (VEC_unsigned_base *vec_, unsigned size_ ) { (void)(vec_ ? vec_->num >= size_ : !size_); if (vec_) vec_->num = size_; } static __inline__ unsigned VEC_unsigned_base_replace (VEC_unsigned_base *vec_, unsigned ix_, unsigned obj_ ) { unsigned old_obj_; (void)(ix_ < vec_->num); old_obj_ = vec_->vec[ix_]; vec_->vec[ix_] = obj_; return old_obj_; } static __inline__ unsigned *VEC_unsigned_base_quick_insert (VEC_unsigned_base *vec_, unsigned ix_, unsigned obj_ ) { unsigned *slot_; (void)(vec_->num < vec_->alloc); (void)(ix_ <= vec_->num); slot_ = &vec_->vec[ix_]; memmove (slot_ + 1, slot_, (vec_->num++ - ix_) * sizeof (unsigned)); *slot_ = obj_; return slot_; } static __inline__ unsigned VEC_unsigned_base_ordered_remove (VEC_unsigned_base *vec_, unsigned ix_ ) { unsigned *slot_; unsigned obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; memmove (slot_, slot_ + 1, (--vec_->num - ix_) * sizeof (unsigned)); return obj_; } static __inline__ unsigned VEC_unsigned_base_unordered_remove (VEC_unsigned_base *vec_, unsigned ix_ ) { unsigned *slot_; unsigned obj_; (void)(ix_ < vec_->num); slot_ = &vec_->vec[ix_]; obj_ = *slot_; *slot_ = vec_->vec[--vec_->num]; return obj_; } static __inline__ void VEC_unsigned_base_block_remove (VEC_unsigned_base *vec_, unsigned ix_, unsigned len_ ) { unsigned *slot_; (void)(ix_ + len_ <= vec_->num); slot_ = &vec_->vec[ix_]; vec_->num -= len_; memmove (slot_, slot_ + len_, (vec_->num - ix_) * sizeof (unsigned)); } static __inline__ unsigned *VEC_unsigned_base_address (VEC_unsigned_base *vec_) { return vec_ ? vec_->vec : 0; } static __inline__ unsigned VEC_unsigned_base_lower_bound (VEC_unsigned_base *vec_, const unsigned obj_, unsigned char (*lessthan_)(const unsigned, const unsigned) ) { unsigned int len_ = VEC_unsigned_base_length (vec_); unsigned int half_, middle_; unsigned int first_ = 0; while (len_ > 0) { unsigned middle_elem_; half_ = len_ >> 1; middle_ = first_; middle_ += half_; middle_elem_ = VEC_unsigned_base_index (vec_, middle_ ); if (lessthan_ (middle_elem_, obj_)) { first_ = middle_; ++first_; len_ = len_ - half_ - 1; } else len_ = half_; } return first_; } struct vec_swallow_trailing_semi;
-typedef struct VEC_unsigned_heap { VEC_unsigned_base base; } VEC_unsigned_heap; static __inline__ VEC_unsigned_heap *VEC_unsigned_heap_alloc (int alloc_ ) { return (VEC_unsigned_heap *) vec_heap_o_reserve_exact (((void *)0), alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); } static __inline__ VEC_unsigned_heap *VEC_unsigned_heap_copy (VEC_unsigned_base *vec_ ) { size_t len_ = vec_ ? vec_->num : 0; VEC_unsigned_heap *new_vec_ = ((void *)0); if (len_) { new_vec_ = (VEC_unsigned_heap *)(vec_heap_o_reserve_exact (((void *)0), len_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) )); new_vec_->base.num = len_; memcpy (new_vec_->base.vec, vec_->vec, sizeof (unsigned) * len_); } return new_vec_; } static __inline__ void VEC_unsigned_heap_free (VEC_unsigned_heap **vec_) { if (*vec_) (free) (*vec_); *vec_ = ((void *)0); } static __inline__ int VEC_unsigned_heap_reserve (VEC_unsigned_heap **vec_, int alloc_ ) { int extend = !VEC_unsigned_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_unsigned_heap *) vec_heap_o_reserve (*vec_, alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); return extend; } static __inline__ int VEC_unsigned_heap_reserve_exact (VEC_unsigned_heap **vec_, int alloc_ ) { int extend = !VEC_unsigned_base_space (((*vec_) ? &(*vec_)->base : 0), alloc_ ); if (extend) *vec_ = (VEC_unsigned_heap *) vec_heap_o_reserve_exact (*vec_, alloc_, __builtin_offsetof (VEC_unsigned_heap, base.vec), sizeof (unsigned) ); return extend; } static __inline__ void VEC_unsigned_heap_safe_grow (VEC_unsigned_heap **vec_, int size_ ) { (void)(size_ >= 0 && VEC_unsigned_base_length ((*vec_) ? &(*vec_)->base : 0) <= (unsigned)size_); VEC_unsigned_heap_reserve_exact (vec_, size_ - (int)(*vec_ ? ((*vec_) ? &(*vec_)->base : 0)->num : 0) ); ((*vec_) ? &(*vec_)->base : 0)->num = size_; } static __inline__ void VEC_unsigned_heap_safe_grow_cleared (VEC_unsigned_heap **vec_, int size_ ) { int oldsize = VEC_unsigned_base_length ((*vec_) ? &(*vec_)->base : 0); VEC_unsigned_heap_safe_grow (vec_, size_ ); memset (&(VEC_unsigned_base_address ((*vec_) ? &(*vec_)->base : 0))[oldsize], 0, sizeof (unsigned) * (size_ - oldsize)); } static __inline__ void VEC_unsigned_heap_safe_splice (VEC_unsigned_heap **dst_, VEC_unsigned_base *src_ ) { if (src_) { VEC_unsigned_heap_reserve_exact (dst_, src_->num ); VEC_unsigned_base_splice (((*dst_) ? &(*dst_)->base : 0), src_ ); } } static __inline__ unsigned *VEC_unsigned_heap_safe_push (VEC_unsigned_heap **vec_, const unsigned obj_ ) { VEC_unsigned_heap_reserve (vec_, 1 ); return VEC_unsigned_base_quick_push (((*vec_) ? &(*vec_)->base : 0), obj_ ); } static __inline__ unsigned *VEC_unsigned_heap_safe_insert (VEC_unsigned_heap **vec_, unsigned ix_, const unsigned obj_ ) { VEC_unsigned_heap_reserve (vec_, 1 ); return VEC_unsigned_base_quick_insert (((*vec_) ? &(*vec_)->base : 0), ix_, obj_ ); } struct vec_swallow_trailing_semi;
-# 28 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/function.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tm.h" 1
 # 29 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/function.h" 2
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/hard-reg-set.h" 1
 # 42 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/hard-reg-set.h"
@@ -24597,1551 +25705,6 @@ extern int get_next_funcdef_no (void);
 
 extern unsigned char optimize_function_for_size_p (struct function *);
 extern unsigned char optimize_function_for_speed_p (struct function *);
-# 29 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic.h" 1
-# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic.h"
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/pretty-print.h" 1
-# 33 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/pretty-print.h"
-typedef struct
-{
-  const char *format_spec;
-  va_list *args_ptr;
-  int err_no;
-  location_t *locus;
-  void **x_data;
-} text_info;
-
-
-
-
-
-
-typedef enum
-{
-  DIAGNOSTICS_SHOW_PREFIX_ONCE = 0x0,
-  DIAGNOSTICS_SHOW_PREFIX_NEVER = 0x1,
-  DIAGNOSTICS_SHOW_PREFIX_EVERY_LINE = 0x2
-} diagnostic_prefixing_rule_t;
-
-
-
-
-
-
-struct chunk_info
-{
-
-  struct chunk_info *prev;
-
-
-
-
-
-
-
-  const char *args[30 * 2];
-};
-
-
-
-typedef struct
-{
-
-  struct obstack formatted_obstack;
-
-
-
-  struct obstack chunk_obstack;
-
-
-
-  struct obstack *obstack;
-
-
-  struct chunk_info *cur_chunk_array;
-
-
-  FILE *stream;
-
-
-  int line_length;
-
-
-
-  char digit_buffer[128];
-} output_buffer;
-
-
-typedef unsigned int pp_flags;
-
-typedef enum
-{
-  pp_none, pp_before, pp_after
-} pp_padding;
-
-
-
-typedef struct
-{
-
-  diagnostic_prefixing_rule_t rule;
-
-
-
-  int line_cutoff;
-} pp_wrapping_mode_t;
-# 135 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/pretty-print.h"
-typedef struct pretty_print_info pretty_printer;
-typedef unsigned char (*printer_fn) (pretty_printer *, text_info *, const char *,
-       int, unsigned char, unsigned char, unsigned char);
-# 159 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/pretty-print.h"
-struct pretty_print_info
-{
-
-  output_buffer *buffer;
-
-
-  const char *prefix;
-
-
-  pp_padding padding;
-
-
-
-  int maximum_length;
-
-
-  int indent_skip;
-
-
-  pp_wrapping_mode_t wrapping;
-# 188 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/pretty-print.h"
-  printer_fn format_decoder;
-
-
-  unsigned char emitted_prefix;
-
-
-  unsigned char need_newline;
-
-
-
-  unsigned char translate_identifiers;
-};
-# 295 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/pretty-print.h"
-extern void pp_construct (pretty_printer *, const char *, int);
-extern void pp_base_set_line_maximum_length (pretty_printer *, int);
-extern void pp_base_set_prefix (pretty_printer *, const char *);
-extern void pp_base_destroy_prefix (pretty_printer *);
-extern int pp_base_remaining_character_count_for_line (pretty_printer *);
-extern void pp_base_clear_output_area (pretty_printer *);
-extern const char *pp_base_formatted_text (pretty_printer *);
-extern const char *pp_base_last_position_in_text (const pretty_printer *);
-extern void pp_base_emit_prefix (pretty_printer *);
-extern void pp_base_append_text (pretty_printer *, const char *, const char *);
-# 313 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/pretty-print.h"
-extern void pp_printf (pretty_printer *, const char *, ...)
-     __attribute__ ((__format__ (__gcc_diag__, 2 ,3))) __attribute__ ((__nonnull__ (2)));
-
-extern void pp_verbatim (pretty_printer *, const char *, ...)
-     __attribute__ ((__format__ (__gcc_diag__, 2 ,3))) __attribute__ ((__nonnull__ (2)));
-extern void pp_base_flush (pretty_printer *);
-extern void pp_base_format (pretty_printer *, text_info *);
-extern void pp_base_output_formatted_text (pretty_printer *);
-extern void pp_base_format_verbatim (pretty_printer *, text_info *);
-
-extern void pp_base_indent (pretty_printer *);
-extern void pp_base_newline (pretty_printer *);
-extern void pp_base_character (pretty_printer *, int);
-extern void pp_base_string (pretty_printer *, const char *);
-extern void pp_write_text_to_stream (pretty_printer *pp);
-extern void pp_base_maybe_space (pretty_printer *);
-
-
-static __inline__ pp_wrapping_mode_t
-pp_set_verbatim_wrapping_ (pretty_printer *pp)
-{
-  pp_wrapping_mode_t oldmode = (pp)->wrapping;
-  (pp)->wrapping.line_cutoff = 0;
-  (pp)->wrapping.rule = DIAGNOSTICS_SHOW_PREFIX_NEVER;
-  return oldmode;
-}
-
-
-extern const char *identifier_to_locale (const char *);
-extern void *(*identifier_to_locale_alloc) (size_t);
-extern void (*identifier_to_locale_free) (void *);
-# 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic.h" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic-core.h" 1
-# 28 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic-core.h"
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/bversion.h" 1
-# 29 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic-core.h" 2
-
-
-typedef enum
-{
-
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic.def" 1
-# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic.def"
-DK_UNSPECIFIED,
-
-
-
-
-DK_IGNORED,
-
-
-DK_FATAL,
-DK_ICE,
-DK_ERROR,
-DK_SORRY,
-DK_WARNING,
-DK_ANACHRONISM,
-DK_NOTE,
-DK_DEBUG,
-
-
-DK_PEDWARN,
-DK_PERMERROR,
-# 35 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic-core.h" 2
-
-  DK_LAST_DIAGNOSTIC_KIND,
-
-
-  DK_POP
-} diagnostic_t;
-
-extern const char *progname;
-
-extern const char *trim_filename (const char *);
-# 59 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic-core.h"
-extern void internal_error (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)))
-     __attribute__ ((__noreturn__));
-
-extern unsigned char warning (int, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
-extern unsigned char warning_at (location_t, int, const char *, ...)
-    __attribute__ ((__format__ (__gcc_tdiag__, 3, 4))) __attribute__ ((__nonnull__ (3)));
-extern void error (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
-extern void error_n (location_t, int, const char *, const char *, ...)
-    __attribute__ ((__format__ (__gcc_tdiag__, 3, 5))) __attribute__ ((__nonnull__ (3))) __attribute__ ((__format__ (__gcc_tdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
-extern void error_at (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
-extern void fatal_error (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)))
-     __attribute__ ((__noreturn__));
-
-extern unsigned char pedwarn (location_t, int, const char *, ...)
-     __attribute__ ((__format__ (__gcc_tdiag__, 3, 4))) __attribute__ ((__nonnull__ (3)));
-extern unsigned char permerror (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
-extern void sorry (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
-extern void inform (location_t, const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 2, 3))) __attribute__ ((__nonnull__ (2)));
-extern void inform_n (location_t, int, const char *, const char *, ...)
-    __attribute__ ((__format__ (__gcc_tdiag__, 3, 5))) __attribute__ ((__nonnull__ (3))) __attribute__ ((__format__ (__gcc_tdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
-extern void verbatim (const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 1, 2))) __attribute__ ((__nonnull__ (1)));
-extern unsigned char emit_diagnostic (diagnostic_t, location_t, int,
-        const char *, ...) __attribute__ ((__format__ (__gcc_tdiag__, 4, 5))) __attribute__ ((__nonnull__ (4)));
-extern unsigned char seen_error (void);
-
-
-
-
-extern void fnotice (FILE *, const char *, ...)
-     __attribute__ ((__format__ (__printf__, 2, 3))) __attribute__ ((__nonnull__ (2)));
-# 27 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic.h" 2
-
-
-
-
-typedef struct diagnostic_info
-{
-  text_info message;
-  location_t location;
-  unsigned int override_column;
-
-  void *x_data;
-
-  diagnostic_t kind;
-
-  int option_index;
-} diagnostic_info;
-
-
-
-
-typedef struct diagnostic_classification_change_t
-{
-  location_t location;
-  int option;
-  diagnostic_t kind;
-} diagnostic_classification_change_t;
-
-
-typedef void (*diagnostic_starter_fn) (diagnostic_context *,
-           diagnostic_info *);
-typedef diagnostic_starter_fn diagnostic_finalizer_fn;
-
-
-
-struct diagnostic_context
-{
-
-  pretty_printer *printer;
-
-
-  int diagnostic_count[DK_LAST_DIAGNOSTIC_KIND];
-
-
-
-  unsigned char some_warnings_are_errors;
-
-
-  unsigned char warning_as_error_requested;
-
-
-
-  int n_opts;
-
-
-
-
-
-
-
-  diagnostic_t *classify_diagnostic;
-
-
-
-
-
-
-  diagnostic_classification_change_t *classification_history;
-
-
-  int n_classification_history;
-
-
-  int *push_list;
-  int n_push;
-
-
-
-  unsigned char show_option_requested;
-
-
-  unsigned char abort_on_error;
-
-
-  unsigned char show_column;
-
-
-  unsigned char pedantic_errors;
-
-
-  unsigned char permissive;
-
-
-
-  int opt_permissive;
-
-
-  unsigned char fatal_errors;
-
-
-  unsigned char dc_inhibit_warnings;
-
-
-  unsigned char dc_warn_system_headers;
-
-
-  unsigned int max_errors;
-# 141 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic.h"
-  diagnostic_starter_fn begin_diagnostic;
-
-
-  diagnostic_finalizer_fn end_diagnostic;
-
-
-  void (*internal_error) (diagnostic_context *, const char *, va_list *);
-
-
-
-  int (*option_enabled) (int, void *);
-
-
-
-  void *option_state;
-
-
-
-
-
-
-
-  char *(*option_name) (diagnostic_context *, int, diagnostic_t, diagnostic_t);
-
-
-  void *x_data;
-
-
-
-  const struct line_map *last_module;
-
-  int lock;
-
-  unsigned char inhibit_notes_p;
-};
-
-static __inline__ void
-diagnostic_inhibit_notes (diagnostic_context * context)
-{
-  context->inhibit_notes_p = 1;
-}
-# 224 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic.h"
-extern diagnostic_context *global_dc;
-# 254 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/diagnostic.h"
-extern void diagnostic_initialize (diagnostic_context *, int);
-extern void diagnostic_finish (diagnostic_context *);
-extern void diagnostic_report_current_module (diagnostic_context *);
-
-
-extern diagnostic_t diagnostic_classify_diagnostic (diagnostic_context *,
-          int ,
-          diagnostic_t ,
-          location_t);
-extern void diagnostic_push_diagnostics (diagnostic_context *, location_t);
-extern void diagnostic_pop_diagnostics (diagnostic_context *, location_t);
-extern unsigned char diagnostic_report_diagnostic (diagnostic_context *,
-       diagnostic_info *);
-
-extern void diagnostic_set_info (diagnostic_info *, const char *, va_list *,
-     location_t, diagnostic_t) __attribute__ ((__format__ (__gcc_tdiag__, 2, 0))) __attribute__ ((__nonnull__ (2)));
-extern void diagnostic_set_info_translated (diagnostic_info *, const char *,
-         va_list *, location_t,
-         diagnostic_t)
-     __attribute__ ((__format__ (__gcc_tdiag__, 2, 0))) __attribute__ ((__nonnull__ (2)));
-
-extern char *diagnostic_build_prefix (diagnostic_context *, diagnostic_info *);
-void default_diagnostic_starter (diagnostic_context *, diagnostic_info *);
-void default_diagnostic_finalizer (diagnostic_context *, diagnostic_info *);
-
-
-extern char *file_name_as_prefix (const char *);
-# 30 "/opt/gcc-plugins/src/acf_plugin.c" 2
-
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.h" 1
-# 42 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.h"
-typedef struct param_info
-{
-
-
-  const char *const option;
-
-
-  int default_value;
-
-
-  int min_value;
-
-
-  int max_value;
-
-
-  const char *const help;
-} param_info;
-
-
-
-
-extern param_info *compiler_params;
-
-
-extern size_t get_num_compiler_params (void);
-
-
-
-extern void add_params (const param_info params[], size_t n);
-
-
-
-
-
-extern void set_param_value (const char *name, int value,
-        int *params, int *params_set);
-
-
-
-
-typedef enum compiler_param
-{
-
-
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def" 1
-# 47 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
-PARAM_STRUCT_REORG_COLD_STRUCT_RATIO,
-
-
-
-
-
-
-PARAM_PREDICTABLE_BRANCH_OUTCOME,
-# 71 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
-PARAM_MAX_INLINE_INSNS_SINGLE,
-# 83 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
-PARAM_MAX_INLINE_INSNS_AUTO,
-
-
-
-
-PARAM_MAX_INLINE_INSNS_RECURSIVE,
-
-
-
-
-PARAM_MAX_INLINE_INSNS_RECURSIVE_AUTO,
-
-
-
-
-PARAM_MAX_INLINE_RECURSIVE_DEPTH,
-
-
-
-
-PARAM_MAX_INLINE_RECURSIVE_DEPTH_AUTO,
-
-
-
-
-PARAM_MIN_INLINE_RECURSIVE_PROBABILITY,
-
-
-
-
-
-
-
-PARAM_EARLY_INLINER_MAX_ITERATIONS,
-
-
-
-
-
-PARAM_COMDAT_SHARING_PROBABILITY,
-
-
-
-
-
-PARAM_PARTIAL_INLINING_ENTRY_PROBABILITY,
-
-
-
-
-
-
-PARAM_MAX_VARIABLE_EXPANSIONS,
-
-
-
-
-
-PARAM_MIN_VECT_LOOP_BOUND,
-# 152 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
-PARAM_MAX_DELAY_SLOT_INSN_SEARCH,
-# 163 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
-PARAM_MAX_DELAY_SLOT_LIVE_SEARCH,
-# 173 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
-PARAM_MAX_PENDING_LIST_LENGTH,
-
-
-
-
-PARAM_LARGE_FUNCTION_INSNS,
-
-
-
-PARAM_LARGE_FUNCTION_GROWTH,
-
-
-
-PARAM_LARGE_UNIT_INSNS,
-
-
-
-PARAM_INLINE_UNIT_GROWTH,
-
-
-
-PARAM_IPCP_UNIT_GROWTH,
-
-
-
-PARAM_EARLY_INLINING_INSNS,
-
-
-
-PARAM_LARGE_STACK_FRAME,
-
-
-
-PARAM_STACK_FRAME_GROWTH,
-
-
-
-
-
-
-PARAM_MAX_GCSE_MEMORY,
-
-
-
-
-
-
-PARAM_MAX_GCSE_INSERTION_RATIO,
-# 231 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
-PARAM_GCSE_AFTER_RELOAD_PARTIAL_FRACTION,
-
-
-
-
-
-
-PARAM_GCSE_AFTER_RELOAD_CRITICAL_FRACTION,
-
-
-
-
-
-
-
-PARAM_GCSE_COST_DISTANCE_RATIO,
-
-
-
-
-
-PARAM_GCSE_UNRESTRICTED_COST,
-
-
-
-
-
-
-
-PARAM_MAX_HOIST_DEPTH,
-# 272 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
-PARAM_MAX_UNROLLED_INSNS,
-
-
-
-
-
-PARAM_MAX_AVERAGE_UNROLLED_INSNS,
-
-
-
-
-PARAM_MAX_UNROLL_TIMES,
-
-
-
-
-PARAM_MAX_PEELED_INSNS,
-
-
-
-
-PARAM_MAX_PEEL_TIMES,
-
-
-
-
-PARAM_MAX_COMPLETELY_PEELED_INSNS,
-
-
-
-
-PARAM_MAX_COMPLETELY_PEEL_TIMES,
-
-
-
-
-PARAM_MAX_ONCE_PEELED_INSNS,
-
-
-
-
-PARAM_MAX_UNROLL_ITERATIONS,
-
-
-
-
-
-PARAM_MAX_UNSWITCH_INSNS,
-
-
-
-
-PARAM_MAX_UNSWITCH_LEVEL,
-
-
-
-
-
-
-PARAM_MAX_ITERATIONS_TO_TRACK,
-
-
-
-
-
-PARAM_MAX_ITERATIONS_COMPUTATION_COST,
-
-
-
-
-
-PARAM_SMS_MAX_II_FACTOR,
-
-
-
-PARAM_SMS_DFA_HISTORY,
-
-
-
-PARAM_SMS_LOOP_AVERAGE_COUNT_THRESHOLD,
-
-
-
-
-HOT_BB_COUNT_FRACTION,
-
-
-
-HOT_BB_FREQUENCY_FRACTION,
-
-
-
-
-PARAM_ALIGN_THRESHOLD,
-
-
-
-
-PARAM_ALIGN_LOOP_ITERATIONS,
-# 386 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
-PARAM_MAX_PREDICTED_ITERATIONS,
-
-
-
-TRACER_DYNAMIC_COVERAGE_FEEDBACK,
-
-
-
-TRACER_DYNAMIC_COVERAGE,
-
-
-
-TRACER_MAX_CODE_GROWTH,
-
-
-
-TRACER_MIN_BRANCH_RATIO,
-
-
-
-TRACER_MIN_BRANCH_PROBABILITY_FEEDBACK,
-
-
-
-TRACER_MIN_BRANCH_PROBABILITY,
-
-
-
-
-
-PARAM_MAX_CROSSJUMP_EDGES,
-
-
-
-
-
-PARAM_MIN_CROSSJUMP_INSNS,
-
-
-
-
-
-PARAM_MAX_GROW_COPY_BB_INSNS,
-
-
-
-
-
-PARAM_MAX_GOTO_DUPLICATION_INSNS,
-
-
-
-
-
-PARAM_MAX_CSE_PATH_LENGTH,
-
-
-
-PARAM_MAX_CSE_INSNS,
-
-
-
-
-
-
-PARAM_LIM_EXPENSIVE,
-# 460 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
-PARAM_IV_CONSIDER_ALL_CANDIDATES_BOUND,
-
-
-
-
-
-
-
-PARAM_IV_MAX_CONSIDERED_USES,
-
-
-
-
-
-
-
-PARAM_IV_ALWAYS_PRUNE_CAND_SET_BOUND,
-
-
-
-
-PARAM_SCEV_MAX_EXPR_SIZE,
-
-
-
-
-PARAM_SCEV_MAX_EXPR_COMPLEXITY,
-
-
-
-
-PARAM_OMEGA_MAX_VARS,
-
-
-
-
-PARAM_OMEGA_MAX_GEQS,
-
-
-
-
-PARAM_OMEGA_MAX_EQS,
-
-
-
-
-PARAM_OMEGA_MAX_WILD_CARDS,
-
-
-
-
-PARAM_OMEGA_HASH_TABLE_SIZE,
-
-
-
-
-PARAM_OMEGA_MAX_KEYS,
-
-
-
-
-PARAM_OMEGA_ELIMINATE_REDUNDANT_CONSTRAINTS,
-
-
-
-
-PARAM_VECT_MAX_VERSION_FOR_ALIGNMENT_CHECKS,
-
-
-
-
-PARAM_VECT_MAX_VERSION_FOR_ALIAS_CHECKS,
-
-
-
-
-PARAM_MAX_CSELIB_MEMORY_LOCATIONS,
-# 549 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
-GGC_MIN_EXPAND,
-
-
-
-
-GGC_MIN_HEAPSIZE,
-
-
-
-
-
-
-
-PARAM_MAX_RELOAD_SEARCH_INSNS,
-
-
-
-
-PARAM_MAX_SCHED_REGION_BLOCKS,
-
-
-
-
-PARAM_MAX_SCHED_REGION_INSNS,
-
-
-
-
-PARAM_MAX_PIPELINE_REGION_BLOCKS,
-
-
-
-
-PARAM_MAX_PIPELINE_REGION_INSNS,
-
-
-
-
-PARAM_MIN_SPEC_PROB,
-
-
-
-
-PARAM_MAX_SCHED_EXTEND_REGIONS_ITERS,
-
-
-
-
-PARAM_MAX_SCHED_INSN_CONFLICT_DELAY,
-
-
-
-
-PARAM_SCHED_SPEC_PROB_CUTOFF,
-
-
-
-
-PARAM_SELSCHED_MAX_LOOKAHEAD,
-
-
-
-
-PARAM_SELSCHED_MAX_SCHED_TIMES,
-
-
-
-
-PARAM_SELSCHED_INSNS_TO_RENAME,
-
-
-
-
-PARAM_SCHED_MEM_TRUE_DEP_COST,
-
-
-
-
-PARAM_MAX_LAST_VALUE_RTL,
-
-
-
-
-
-
-
-PARAM_INTEGER_SHARE_LIMIT,
-# 654 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
-PARAM_MIN_VIRTUAL_MAPPINGS,
-
-
-
-
-PARAM_VIRTUAL_MAPPINGS_TO_SYMS_RATIO,
-
-
-
-
-PARAM_SSP_BUFFER_SIZE,
-# 682 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
-PARAM_MAX_JUMP_THREAD_DUPLICATION_STMTS,
-# 691 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
-PARAM_MAX_FIELDS_FOR_FIELD_SENSITIVE,
-
-
-
-
-PARAM_MAX_SCHED_READY_INSNS,
-
-
-
-
-
-PARAM_MAX_DSE_ACTIVE_LOCAL_STORES,
-# 712 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
-PARAM_PREFETCH_LATENCY,
-
-
-
-
-
-
-PARAM_SIMULTANEOUS_PREFETCHES,
-
-
-
-
-
-
-PARAM_L1_CACHE_SIZE,
-
-
-
-
-
-
-PARAM_L1_CACHE_LINE_SIZE,
-
-
-
-
-
-
-PARAM_L2_CACHE_SIZE,
-# 751 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
-PARAM_USE_CANONICAL_TYPES,
-
-
-
-
-PARAM_MAX_PARTIAL_ANTIC_LENGTH,
-# 766 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.def"
-PARAM_SCCVN_MAX_SCC_SIZE,
-
-
-
-
-PARAM_IRA_MAX_LOOPS_NUM,
-
-
-
-
-PARAM_IRA_MAX_CONFLICT_TABLE_SIZE,
-
-
-
-
-PARAM_IRA_LOOP_RESERVED_REGS,
-
-
-
-
-
-
-
-PARAM_SWITCH_CONVERSION_BRANCH_RATIO,
-
-
-
-
-
-
-
-PARAM_LOOP_BLOCK_TILE_SIZE,
-
-
-
-
-
-
-PARAM_GRAPHITE_MAX_NB_SCOP_PARAMS,
-
-
-
-
-
-
-PARAM_GRAPHITE_MAX_BBS_PER_FUNCTION,
-
-
-
-
-
-
-PARAM_LOOP_INVARIANT_MAX_BBS_IN_LOOP,
-
-
-
-
-
-PARAM_SLP_MAX_INSNS_IN_BB,
-
-
-
-
-PARAM_MIN_INSN_TO_PREFETCH_RATIO,
-
-
-
-
-
-PARAM_PREFETCH_MIN_INSN_TO_MEM_RATIO,
-
-
-
-
-
-
-PARAM_MAX_VARTRACK_SIZE,
-
-
-
-
-
-
-PARAM_MIN_NONDEBUG_INSN_UID,
-
-
-
-
-PARAM_IPA_SRA_PTR_GROWTH_FACTOR,
-
-
-
-
-
-PARAM_DEVIRT_TYPE_LIST_SIZE,
-
-
-
-
-
-
-
-PARAM_LTO_PARTITIONS,
-
-
-
-
-MIN_PARTITION_SIZE,
-
-
-
-
-
-
-CXX_MAX_NAMESPACES_FOR_DIAGNOSTIC_HELP,
-# 88 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.h" 2
-
-  LAST_PARAM
-} compiler_param;
-# 100 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/params.h"
-extern void maybe_set_param_value (compiler_param num, int value,
-       int *params, int *params_set);
-
-
-
-
-extern void set_default_param_value (compiler_param num, int value);
-
-
-
-extern void finish_params (void);
-
-
-
-extern int default_param_value (compiler_param num);
-
-
-
-extern void init_param_values (int *params);
-# 32 "/opt/gcc-plugins/src/acf_plugin.c" 2
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cgraph.h" 1
-# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cgraph.h"
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/plugin-api.h" 1
-# 47 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/plugin-api.h"
-enum ld_plugin_status
-{
-  LDPS_OK = 0,
-  LDPS_NO_SYMS,
-  LDPS_BAD_HANDLE,
-  LDPS_ERR
-
-};
-
-
-
-enum ld_plugin_api_version
-{
-  LD_PLUGIN_API_VERSION = 1
-};
-
-
-
-enum ld_plugin_output_file_type
-{
-  LDPO_REL,
-  LDPO_EXEC,
-  LDPO_DYN
-};
-
-
-
-struct ld_plugin_input_file
-{
-  const char *name;
-  int fd;
-  off_t offset;
-  off_t filesize;
-  void *handle;
-};
-
-
-
-struct ld_plugin_symbol
-{
-  char *name;
-  char *version;
-  int def;
-  int visibility;
-  uint64_t size;
-  char *comdat_key;
-  int resolution;
-};
-
-
-
-enum ld_plugin_symbol_kind
-{
-  LDPK_DEF,
-  LDPK_WEAKDEF,
-  LDPK_UNDEF,
-  LDPK_WEAKUNDEF,
-  LDPK_COMMON
-};
-
-
-
-enum ld_plugin_symbol_visibility
-{
-  LDPV_DEFAULT,
-  LDPV_PROTECTED,
-  LDPV_INTERNAL,
-  LDPV_HIDDEN
-};
-
-
-
-enum ld_plugin_symbol_resolution
-{
-  LDPR_UNKNOWN = 0,
-
-
-  LDPR_UNDEF,
-
-
-
-  LDPR_PREVAILING_DEF,
-
-
-
-
-  LDPR_PREVAILING_DEF_IRONLY,
-
-
-
-  LDPR_PREEMPTED_REG,
-
-
-  LDPR_PREEMPTED_IR,
-
-
-  LDPR_RESOLVED_IR,
-
-
-
-  LDPR_RESOLVED_EXEC,
-
-
-  LDPR_RESOLVED_DYN
-};
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_claim_file_handler) (
-  const struct ld_plugin_input_file *file, int *claimed);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_all_symbols_read_handler) (void);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_cleanup_handler) (void);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_register_claim_file) (ld_plugin_claim_file_handler handler);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_register_all_symbols_read) (
-  ld_plugin_all_symbols_read_handler handler);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_register_cleanup) (ld_plugin_cleanup_handler handler);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_add_symbols) (void *handle, int nsyms,
-                          const struct ld_plugin_symbol *syms);
-
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_get_input_file) (const void *handle,
-                             struct ld_plugin_input_file *file);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_release_input_file) (const void *handle);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_get_symbols) (const void *handle, int nsyms,
-                          struct ld_plugin_symbol *syms);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_add_input_file) (const char *pathname);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_add_input_library) (const char *libname);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_set_extra_library_path) (const char *path);
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_message) (int level, const char *format, ...);
-
-enum ld_plugin_level
-{
-  LDPL_INFO,
-  LDPL_WARNING,
-  LDPL_ERROR,
-  LDPL_FATAL
-};
-
-
-
-enum ld_plugin_tag
-{
-  LDPT_NULL = 0,
-  LDPT_API_VERSION,
-  LDPT_GOLD_VERSION,
-  LDPT_LINKER_OUTPUT,
-  LDPT_OPTION,
-  LDPT_REGISTER_CLAIM_FILE_HOOK,
-  LDPT_REGISTER_ALL_SYMBOLS_READ_HOOK,
-  LDPT_REGISTER_CLEANUP_HOOK,
-  LDPT_ADD_SYMBOLS,
-  LDPT_GET_SYMBOLS,
-  LDPT_ADD_INPUT_FILE,
-  LDPT_MESSAGE,
-  LDPT_GET_INPUT_FILE,
-  LDPT_RELEASE_INPUT_FILE,
-  LDPT_ADD_INPUT_LIBRARY,
-  LDPT_OUTPUT_NAME,
-  LDPT_SET_EXTRA_LIBRARY_PATH,
-  LDPT_GNU_LD_VERSION
-};
-
-
-
-struct ld_plugin_tv
-{
-  enum ld_plugin_tag tv_tag;
-  union
-  {
-    int tv_val;
-    const char *tv_string;
-    ld_plugin_register_claim_file tv_register_claim_file;
-    ld_plugin_register_all_symbols_read tv_register_all_symbols_read;
-    ld_plugin_register_cleanup tv_register_cleanup;
-    ld_plugin_add_symbols tv_add_symbols;
-    ld_plugin_get_symbols tv_get_symbols;
-    ld_plugin_add_input_file tv_add_input_file;
-    ld_plugin_message tv_message;
-    ld_plugin_get_input_file tv_get_input_file;
-    ld_plugin_release_input_file tv_release_input_file;
-    ld_plugin_add_input_library tv_add_input_library;
-    ld_plugin_set_extra_library_path tv_set_extra_library_path;
-  } tv_u;
-};
-
-
-
-typedef
-enum ld_plugin_status
-(*ld_plugin_onload) (struct ld_plugin_tv *tv);
-# 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cgraph.h" 2
-
-
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/basic-block.h" 1
-# 24 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/basic-block.h"
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/predict.h" 1
-# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/predict.h"
-enum br_predictor
-{
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/predict.def" 1
-# 38 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/predict.def"
-PRED_COMBINED,
-
-
-PRED_DS_THEORY,
-
-
-
-PRED_FIRST_MATCH,
-
-
-PRED_NO_PREDICTION,
-
-
-PRED_UNCONDITIONAL,
-
-
-
-
-
-PRED_LOOP_ITERATIONS,
-
-
-
-PRED_BUILTIN_EXPECT,
-
-
-
-PRED_LOOP_ITERATIONS_GUESSED,
-
-
-
-PRED_CONTINUE,
-
-
-PRED_NORETURN,
-
-
-
-PRED_COLD_FUNCTION,
-
-
-
-PRED_LOOP_BRANCH,
-
-
-
-PRED_LOOP_EXIT,
-
-
-
-PRED_POINTER,
-PRED_TREE_POINTER,
-
-
-PRED_OPCODE_POSITIVE,
-PRED_OPCODE_NONEQUAL,
-PRED_FPOPCODE,
-PRED_TREE_OPCODE_POSITIVE,
-PRED_TREE_OPCODE_NONEQUAL,
-PRED_TREE_FPOPCODE,
-
-
-PRED_CALL,
-
-
-PRED_TREE_EARLY_RETURN,
-
-
-PRED_GOTO,
-
-
-PRED_CONST_RETURN,
-
-
-PRED_NEGATIVE_RETURN,
-
-
-PRED_NULL_RETURN,
-
-
-PRED_MUDFLAP,
-# 28 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/predict.h" 2
-
-
-  END_PREDICTORS
-};
-
-enum prediction
-{
-   NOT_TAKEN,
-   TAKEN
-};
-
-extern void predict_insn_def (rtx, enum br_predictor, enum prediction);
-extern int counts_to_freqs (void);
-extern void estimate_bb_frequencies (void);
-extern const char *predictor_name (enum br_predictor);
-extern tree build_predict_expr (enum br_predictor, enum prediction);
-extern void tree_estimate_probability (void);
-extern void compute_function_frequency (void);
-extern void rebuild_frequencies (void);
-# 25 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/basic-block.h" 2
-
-# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/function.h" 1
 # 27 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/basic-block.h" 2
 
 
@@ -28169,7 +27732,7 @@ ipa_ref_list_nreferences (struct ipa_ref_list *list)
   return (VEC_ipa_ref_t_base_length(((list->references) ? &(list->references)->base : 0)));
 }
 # 962 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/cgraph.h" 2
-# 33 "/opt/gcc-plugins/src/acf_plugin.c" 2
+# 24 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c" 2
 # 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/opts.h" 1
 # 28 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/opts.h"
 enum cl_var_type {
@@ -28460,11 +28023,446 @@ extern void default_options_optimization (struct gcc_options *opts,
 extern void set_struct_debug_option (struct gcc_options *opts,
          location_t loc,
          const char *value);
-# 34 "/opt/gcc-plugins/src/acf_plugin.c" 2
+# 25 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c" 2
+
+# 1 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/plugin-utils.h" 1
+# 22 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/plugin-utils.h"
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/tree.h" 1
+# 23 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/plugin-utils.h" 2
+# 1 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/langhooks.h" 1
+# 26 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/langhooks.h"
+struct diagnostic_info;
+
+struct gimplify_omp_ctx;
+
+struct array_descr_info;
 
 
-# 1 "/opt/gcc-plugins/src/acf_plugin.h" 1
-# 34 "/opt/gcc-plugins/src/acf_plugin.h"
+typedef void (*lang_print_tree_hook) (FILE *, tree, int indent);
+
+enum classify_record
+  { RECORD_IS_STRUCT, RECORD_IS_CLASS, RECORD_IS_INTERFACE };
+
+
+
+
+struct lang_hooks_for_tree_inlining
+{
+  unsigned char (*var_mod_type_p) (tree, tree);
+};
+
+struct lang_hooks_for_callgraph
+{
+
+
+  tree (*analyze_expr) (tree *, int *);
+};
+
+
+
+struct lang_hooks_for_tree_dump
+{
+
+
+  unsigned char (*dump_tree) (void *, tree);
+
+
+  int (*type_quals) (const_tree);
+};
+
+
+
+struct lang_hooks_for_types
+{
+
+
+  tree (*make_type) (enum tree_code);
+
+
+
+
+  enum classify_record (*classify_record) (tree);
+
+
+
+  tree (*type_for_mode) (enum machine_mode, int);
+
+
+
+  tree (*type_for_size) (unsigned, int);
+
+
+
+  unsigned char (*generic_p) (const_tree);
+
+
+  tree (*get_argument_pack_elems) (const_tree);
+
+
+
+
+
+  tree (*type_promotes_to) (tree);
+# 106 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/langhooks.h"
+  void (*register_builtin_type) (tree, const char *);
+
+
+
+
+
+  void (*incomplete_type_error) (const_tree value, const_tree type);
+
+
+
+  tree (*max_size) (const_tree);
+
+
+
+  void (*omp_firstprivatize_type_sizes) (struct gimplify_omp_ctx *, tree);
+
+
+
+
+
+  unsigned char (*type_hash_eq) (const_tree, const_tree);
+
+
+
+  unsigned char (*get_array_descr_info) (const_tree, struct array_descr_info *);
+
+
+  void (*get_subrange_bounds) (const_tree, tree *, tree *);
+
+
+
+
+
+  tree (*reconstruct_complex_type) (tree, tree);
+};
+
+
+
+struct lang_hooks_for_decls
+{
+
+
+  int (*global_bindings_p) (void);
+
+
+
+
+
+  tree (*pushdecl) (tree);
+
+
+  tree (*getdecls) (void);
+
+
+  unsigned char (*function_decl_explicit_p) (tree);
+
+
+
+  unsigned char (*generic_generic_parameter_decl_p) (const_tree);
+
+
+
+  unsigned char (*function_parm_expanded_from_pack_p) (tree, tree);
+
+
+  tree (*get_generic_function_decl) (const_tree);
+
+
+
+  unsigned char (*warn_unused_global) (const_tree);
+
+
+
+  void (*final_write_globals) (void);
+
+
+  unsigned char (*ok_for_sibcall) (const_tree);
+
+
+
+  unsigned char (*omp_privatize_by_reference) (const_tree);
+
+
+
+  enum omp_clause_default_kind (*omp_predetermined_sharing) (tree);
+
+
+
+  tree (*omp_report_decl) (tree);
+
+
+
+
+
+  unsigned char (*omp_disregard_value_expr) (tree, unsigned char);
+
+
+
+  unsigned char (*omp_private_debug_clause) (tree, unsigned char);
+
+
+
+  unsigned char (*omp_private_outer_ref) (tree);
+
+
+
+
+  tree (*omp_clause_default_ctor) (tree clause, tree decl, tree outer);
+
+
+  tree (*omp_clause_copy_ctor) (tree clause, tree dst, tree src);
+
+
+  tree (*omp_clause_assign_op) (tree clause, tree dst, tree src);
+
+
+
+  tree (*omp_clause_dtor) (tree clause, tree decl);
+
+
+  void (*omp_finish_clause) (tree clause);
+};
+
+
+
+struct lang_hooks_for_lto
+{
+
+  void (*begin_section) (const char *name);
+
+
+
+
+
+  void (*append_data) (const void *data, size_t len, void *block);
+
+
+  void (*end_section) (void);
+};
+
+
+
+struct lang_hooks
+{
+
+  const char *name;
+
+
+
+  size_t identifier_size;
+
+
+  void (*free_lang_data) (tree);
+
+
+
+
+
+  size_t (*tree_size) (enum tree_code);
+
+
+
+  unsigned int (*option_lang_mask) (void);
+
+
+  void (*init_options_struct) (struct gcc_options *opts);
+
+
+
+
+  void (*init_options) (unsigned int decoded_options_count,
+   struct cl_decoded_option *decoded_options);
+
+
+
+  void (*initialize_diagnostics) (diagnostic_context *);
+
+
+
+
+  unsigned char (*complain_wrong_lang_p) (const struct cl_option *option);
+# 298 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/langhooks.h"
+  unsigned char (*handle_option) (size_t code, const char *arg, int value, int kind,
+    location_t loc,
+    const struct cl_option_handlers *handlers);
+# 310 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/langhooks.h"
+  unsigned char (*post_options) (const char **);
+
+
+
+
+  unsigned char (*init) (void);
+
+
+  void (*finish) (void);
+
+
+  void (*parse_file) (void);
+
+
+  unsigned char (*missing_noreturn_ok_p) (tree);
+
+
+
+  alias_set_type (*get_alias_set) (tree);
+
+
+
+  void (*finish_incomplete_decl) (tree);
+
+
+
+  void (*dup_lang_specific_decl) (tree);
+
+
+
+
+
+
+  void (*set_decl_assembler_name) (tree);
+
+
+
+  void (*print_statistics) (void);
+
+
+
+  lang_print_tree_hook print_xnode;
+
+
+
+  lang_print_tree_hook print_decl;
+  lang_print_tree_hook print_type;
+  lang_print_tree_hook print_identifier;
+# 368 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/langhooks.h"
+  const char *(*decl_printable_name) (tree decl, int verbosity);
+
+
+
+
+  const char *(*dwarf_name) (tree, int verbosity);
+
+
+
+
+  int (*types_compatible_p) (tree x, tree y);
+
+
+  void (*print_error_function) (diagnostic_context *, const char *,
+    struct diagnostic_info *);
+# 391 "/opt/gcc-plugins/prebuilt/i386/gcc-4.6.2/bin/../lib/gcc/i686-pc-linux-gnu/4.6.2/plugin/include/langhooks.h"
+  long (*to_target_charset) (long);
+
+
+
+
+
+
+  const struct attribute_spec *attribute_table;
+  const struct attribute_spec *common_attribute_table;
+  const struct attribute_spec *format_attribute_table;
+
+  struct lang_hooks_for_tree_inlining tree_inlining;
+
+  struct lang_hooks_for_callgraph callgraph;
+
+  struct lang_hooks_for_tree_dump tree_dump;
+
+  struct lang_hooks_for_decls decls;
+
+  struct lang_hooks_for_types types;
+
+  struct lang_hooks_for_lto lto;
+
+
+
+  tree (*get_innermost_generic_parms) (const_tree);
+
+
+
+  tree (*get_innermost_generic_args) (const_tree);
+
+
+  unsigned char (*function_parameter_pack_p) (const_tree);
+
+
+
+  int (*gimplify_expr) (tree *, gimple_seq *, gimple_seq *);
+
+
+  tree (*builtin_function) (tree decl);
+
+
+
+
+
+
+
+  tree (*builtin_function_ext_scope) (tree decl);
+
+
+  void (*init_ts) (void);
+
+
+
+
+  tree (*expr_to_decl) (tree expr, unsigned char *tc, unsigned char *se);
+
+
+  tree (*eh_personality) (void);
+
+
+  tree (*eh_runtime_type) (tree);
+
+
+
+
+
+
+
+  tree (*eh_protect_cleanup_actions) (void);
+
+
+
+  unsigned char eh_use_cxa_end_cleanup;
+
+
+
+  unsigned char deep_unsharing;
+
+
+
+};
+
+
+extern struct lang_hooks lang_hooks;
+extern tree add_builtin_function (const char *name, tree type,
+      int function_code, enum built_in_class cl,
+      const char *library_name,
+      tree attrs);
+
+extern tree add_builtin_function_ext_scope (const char *name, tree type,
+         int function_code,
+         enum built_in_class cl,
+         const char *library_name,
+         tree attrs);
+# 24 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/plugin-utils.h" 2
+
+
+extern int is_gcc(void);
+
+
+extern int is_gpp(void);
+
+
+extern int is_lto(void);
+# 27 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c" 2
+# 1 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.h" 1
+# 33 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.h"
 struct csv_list {
     struct csv_row *rows;
     struct csv_row *last_row;
@@ -28510,38 +28508,53 @@ typedef struct acf_ftable_entry {
     int attr_arg_number;
     attr_arg opt_args[10];
 } acf_ftable_entry_t;
-# 94 "/opt/gcc-plugins/src/acf_plugin.h"
+# 95 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.h"
 void initCSV(struct csv_list *clist);
 unsigned char readCSV(char *filename, struct csv_list *clist);
 
+
+
 int parseCSV(struct csv_list *clist, acf_ftable_entry_t **acf_ftable_p,
-      int verbose);
-# 37 "/opt/gcc-plugins/src/acf_plugin.c" 2
+             int verbose);
+# 28 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c" 2
+
+
+
+
+static struct plugin_info acf_plugin_info = {
+    version : "Gcc-Plugin-ACF version " "v0.1"
+        " (Base - revision " "SHA1_VERSION" ")",
+    help : "ACF Plugin: "
+    "Pass GCC options and parameters at function level through ACF files."
+};
 
 
 
 
 
-extern void error (const char *, ...);
-# 54 "/opt/gcc-plugins/src/acf_plugin.c"
+
+extern void error(const char *, ...);
+# 56 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
 static acf_ftable_entry_t *acf_ftable;
 static const char *acf_csv_file_key="csv_file";
 
 static char *acf_csv_files[128];
 static int acf_csv_files_num = 0;
 
-static unsigned char register_acf_file(const char *plugin_name, char * acf_csv_filename) {
+static unsigned char register_acf_file(const char *plugin_name,
+                              char * acf_csv_filename) {
     FILE *fcsv;
 
     acf_csv_files_num++;
     if (acf_csv_files_num > 128) {
- error("%s: too many csv files too register(%d): %s\n", plugin_name, acf_csv_files_num, acf_csv_filename);
- return 0;
+        error("%s: too many csv files to register(%d): %s\n",
+              plugin_name, acf_csv_files_num, acf_csv_filename);
+        return 0;
     }
 
     if ((fcsv = fopen_unlocked(acf_csv_filename,"r")) == ((void *)0)) {
- error("%s: csv file not found: %s\n", plugin_name, acf_csv_filename);
- return 0;
+        error("%s: csv file not found: %s\n", plugin_name, acf_csv_filename);
+        return 0;
     }
 
     fclose(fcsv);
@@ -28555,103 +28568,108 @@ static unsigned char verbose = 0;
 
 int plugin_is_GPL_compatible;
 static const char *plugin_name;
-# 120 "/opt/gcc-plugins/src/acf_plugin.c"
-static void trace_attached_acf(acf_ftable_entry_t *acf_entry, const char *acf_type,
-          const char *func_name, const char *acf_pass_name) {
+# 124 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
+static void trace_attached_acf(acf_ftable_entry_t *acf_entry,
+                               const char *acf_type,
+                               const char *func_name,
+                               const char *acf_pass_name) {
     const char *sep = "";
     int i;
     fprintf(stderr, "%s: %s for function %s, attaching %s: %s ", plugin_name, acf_pass_name, func_name, acf_type, acf_entry->opt_attr)
-                                                                          ;
+
+                                ;
     for (i = 0; i < acf_entry->attr_arg_number; i++) {
- switch (acf_entry->opt_args[i].arg_type) {
- case NO_TYPE:
-     break;
- case STR_TYPE:
-     fprintf(stderr, "%s%s", sep, (acf_entry->opt_args[i].av.str_arg != ((void *)0) ? acf_entry->opt_args[i].av.str_arg : "(null),"))
-                                                     ;
-     break;
- case INT_TYPE:
-     fprintf(stderr, "%s#%d", sep, acf_entry->opt_args[i].av.int_arg);
-     break;
- }
- sep = ",";
+        switch (acf_entry->opt_args[i].arg_type) {
+        case NO_TYPE:
+            break;
+        case STR_TYPE:
+            fprintf(stderr, "%s%s", sep, (acf_entry->opt_args[i].av.str_arg != ((void *)0) ? acf_entry->opt_args[i].av.str_arg : "(null),"))
+
+                                             ;
+            break;
+        case INT_TYPE:
+            fprintf(stderr, "%s#%d", sep, acf_entry->opt_args[i].av.int_arg);
+            break;
+        }
+        sep = ",";
     }
     if (acf_entry->opt_file == ((void *)0))
- fprintf(stderr, "\n");
+        fprintf(stderr, "\n");
     else
- fprintf(stderr, " (file: %s)\n", acf_entry->opt_file);
+        fprintf(stderr, " (file: %s)\n", acf_entry->opt_file);
 }
 
 
 
 
 
-extern tree maybe_constant_value (tree) __attribute__((weak));
+extern tree maybe_constant_value(tree) __attribute__((weak));
 
 
 
 
-
-static void
-my_cp_check_const_attributes (tree attributes)
-{
-  tree attr;
-  for (attr = attributes; attr; attr = ((attr)->common.chain))
-    {
-      tree arg;
-      for (arg = ((attr)->list.value); arg; arg = ((arg)->common.chain))
- {
-   tree expr = ((arg)->list.value);
-   if (((tree_code_type[(int) (((enum tree_code) (expr)->base.code))]) >= tcc_reference && (tree_code_type[(int) (((enum tree_code) (expr)->base.code))]) <= tcc_expression))
-     ((arg)->list.value) = maybe_constant_value (expr);
- }
+static void my_cp_check_const_attributes(tree attributes) {
+    tree attr;
+    for (attr = attributes; attr; attr = ((attr)->common.chain)) {
+        tree arg;
+        for (arg = ((attr)->list.value); arg; arg = ((arg)->common.chain)) {
+            tree expr = ((arg)->list.value);
+            if (((tree_code_type[(int) (((enum tree_code) (expr)->base.code))]) >= tcc_reference && (tree_code_type[(int) (((enum tree_code) (expr)->base.code))]) <= tcc_expression))
+                ((arg)->list.value) = maybe_constant_value(expr);
+        }
     }
 }
 
 typedef void (*decl_attributes_func_type)
-    (tree *decl,tree attributes,int flags);
+(tree *decl, tree attributes, int flags);
 static decl_attributes_func_type decl_attributes_func;
 
 
 
 static void
-add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, tree decl, const char *acf_pass_name) {
-    tree attribute_identifier = (__builtin_constant_p (acf_entry->opt_attr) ? get_identifier_with_length ((acf_entry->opt_attr), strlen (acf_entry->opt_attr)) : get_identifier (acf_entry->opt_attr));;
+add_decl_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry,
+                   tree decl, const char *acf_pass_name) {
+    tree attribute_identifier = (__builtin_constant_p (acf_entry->opt_attr) ? get_identifier_with_length ((acf_entry->opt_attr), strlen (acf_entry->opt_attr)) : get_identifier (acf_entry->opt_attr));
     tree attribute_list = (tree) ((void *)0);
     tree argument = (tree) ((void *)0);
     tree argument_list = (tree) ((void *)0);
     int i;
 
     if (verbose)
- trace_attached_acf(acf_entry, "attribute", cur_func_name, acf_pass_name);
+        trace_attached_acf(acf_entry, "attribute",
+                           cur_func_name, acf_pass_name);
 
     if (acf_entry->attr_arg_number != 0) {
- for (i = 0; i < acf_entry->attr_arg_number; i++) {
-     switch (acf_entry->opt_args[i].arg_type) {
-     case NO_TYPE:
-  break;
-     case STR_TYPE:
-  argument = build_string(strlen(acf_entry->opt_args[i].av.str_arg),
-     acf_entry->opt_args[i].av.str_arg);
-  argument_list = tree_cons_stat ((tree) ((void *)0),argument,argument_list );
-  break;
-     case INT_TYPE:
-  argument = build_int_cst ((tree) ((void *)0), acf_entry->opt_args[i].av.int_arg);
-  argument_list = tree_cons_stat ((tree) ((void *)0),argument,argument_list );
-  break;
-     }
- }
+        for (i = 0; i < acf_entry->attr_arg_number; i++) {
+            switch (acf_entry->opt_args[i].arg_type) {
+            case NO_TYPE:
+                break;
+            case STR_TYPE:
+                argument =
+                    build_string(strlen(acf_entry->opt_args[i].av.str_arg),
+                                 acf_entry->opt_args[i].av.str_arg);
+                argument_list =
+                    tree_cons_stat ((tree) ((void *)0),argument,argument_list );
+                break;
+            case INT_TYPE:
+                argument = build_int_cst((tree) ((void *)0),
+                                         acf_entry->opt_args[i].av.int_arg);
+                argument_list = tree_cons_stat ((tree) ((void *)0),argument,argument_list )
+                                                                   ;
+                break;
+            }
+        }
     } else {
- argument_list = (tree) ((void *)0);
+        argument_list = (tree) ((void *)0);
     }
 
     attribute_list = tree_cons_stat (attribute_identifier,argument_list,attribute_list )
-                         ;
+                                              ;
 
-    my_cp_check_const_attributes (attribute_list);
+    my_cp_check_const_attributes(attribute_list);
     if (attribute_list != (tree) ((void *)0)) {
- decl_attributes_func(&decl,attribute_list,
-        ATTR_FLAG_TYPE_IN_PLACE);
+        decl_attributes_func(&decl, attribute_list,
+                             ATTR_FLAG_TYPE_IN_PLACE);
     }
 }
 
@@ -28667,12 +28685,11 @@ static int save_optimize_fast;
 
 
 static void save_global_attribute_values() {
-
     if (save_options == ((void *)0)) {
- save_options = &loc_save_options;
+        save_options = &loc_save_options;
 
- cl_optimization_save(save_options, &global_options);
- save_optimize_fast = global_options.x_optimize_fast;
+        cl_optimization_save(save_options, &global_options);
+        save_optimize_fast = global_options.x_optimize_fast;
 
 
 
@@ -28680,116 +28697,116 @@ static void save_global_attribute_values() {
 }
 
 static void restore_global_attribute_values() {
-
     if (save_options != ((void *)0)) {
 
- cl_optimization_restore(&global_options, save_options);
- global_options.x_optimize_fast = save_optimize_fast;
+        cl_optimization_restore(&global_options, save_options);
+        global_options.x_optimize_fast = save_optimize_fast;
 
 
 
- save_options = ((void *)0);
+        save_options = ((void *)0);
     }
 }
-# 263 "/opt/gcc-plugins/src/acf_plugin.c"
+# 270 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
 static void
-add_global_attribute(const char *cur_func_name, acf_ftable_entry_t *acf_entry, const char *acf_pass_name) {
+add_global_attribute(const char *cur_func_name,
+                     acf_ftable_entry_t *acf_entry,
+                     const char *acf_pass_name) {
+
+    struct cl_option_handlers handlers;
 
     // if starts with "no-", remove it. Then add "f" -->
     // find_opt("fmove-loop-invariants", 1<<13) = 665
     if (!strcmp("optimize", acf_entry->opt_attr)) {
- char opt_name[128];
- int opt_value = 0;
- char *opt_str = ((void *)0);
- size_t opt_index;
+        char opt_name[128];
+        int opt_value = 0;
+        char *opt_str = ((void *)0);
+        size_t opt_index;
 
- // The global_options.x_optimize attribute only accepts the following options :
- // O<num>, <num> => -O<num>
- // Os, Ofast => -Os, -Ofast
- // <option> => -f<option>
- if (acf_entry->opt_args[0].av.str_arg[0] == 'O') {
+        // The global_options.x_optimize attribute only accepts the following options :
+        // O<num>, <num> => -O<num>
+        // Os, Ofast => -Os, -Ofast
+        // <option> => -f<option>
+        if (acf_entry->opt_args[0].av.str_arg[0] == 'O') {
 
-     if ((acf_entry->opt_args[0].av.str_arg[1] >= '0') &&
-  (acf_entry->opt_args[0].av.str_arg[1] <= '9')) {
-  strcpy(opt_name, "O");
-  opt_str = acf_entry->opt_args[0].av.str_arg+1;
-     }
-     else if (acf_entry->opt_args[0].av.str_arg[1] == '\0') {
-  opt_value = 1;
-     }
-     else {
+            if ((acf_entry->opt_args[0].av.str_arg[1] >= '0') &&
+                (acf_entry->opt_args[0].av.str_arg[1] <= '9')) {
+                snprintf(opt_name, sizeof(opt_name), "O");
+                opt_str = acf_entry->opt_args[0].av.str_arg + 1;
+            } else if (acf_entry->opt_args[0].av.str_arg[1] == '\0') {
+                opt_value = 1;
+            } else {
 
-  strcpy(opt_name, acf_entry->opt_args[0].av.str_arg);
-     }
- }
+                snprintf(opt_name, sizeof(opt_name), "%s",
+                         acf_entry->opt_args[0].av.str_arg);
+            }
+        } else if ((acf_entry->opt_args[0].av.str_arg[0] >= '0') &&
+                 (acf_entry->opt_args[0].av.str_arg[0] <= '9')) {
 
+            snprintf(opt_name, sizeof(opt_name), "O");
+            opt_str = acf_entry->opt_args[0].av.str_arg;
+        } else {
 
- else if ((acf_entry->opt_args[0].av.str_arg[0] >= '0') &&
-   (acf_entry->opt_args[0].av.str_arg[0] <= '9')) {
-     strcpy(opt_name, "O");
-     opt_str = acf_entry->opt_args[0].av.str_arg;
- }
+            if (!strncmp("no-", acf_entry->opt_args[0].av.str_arg,
+                         strlen("no-"))) {
+                snprintf(opt_name, sizeof(opt_name), "f%s",
+                         acf_entry->opt_args[0].av.str_arg + strlen("no-"));
+                opt_value = 0;
+            } else {
+                snprintf(opt_name, sizeof(opt_name), "f%s",
+                         acf_entry->opt_args[0].av.str_arg);
+                if ((opt_str = strchr(acf_entry->opt_args[0].av.str_arg, '='))
+                    != ((void *)0))
+                    opt_str++;
+                else
+                    opt_value = 1;
+            }
+        }
 
+        if (opt_str)
+            opt_value = atoi(opt_str);
 
- else {
-     strcpy(opt_name, "f");
-     if (!strncmp("no-", acf_entry->opt_args[0].av.str_arg, strlen("no-"))) {
-  strcat(opt_name, acf_entry->opt_args[0].av.str_arg + strlen("no-"));
-  opt_value = 0;
-     }
-     else {
-  strcat(opt_name, acf_entry->opt_args[0].av.str_arg);
-  if ((opt_str = strchr(acf_entry->opt_args[0].av.str_arg, '=')) != ((void *)0))
-      opt_str ++;
-  else
-      opt_value = 1;
-     }
- }
-
- if (opt_str)
-     opt_value = atoi(opt_str);
-
- opt_index = find_opt(opt_name, (1 << 13));
+        opt_index = find_opt(opt_name, (1 << 13));
 
 
- if ((opt_index >= cl_options_count) ||
-     cl_options[opt_index].alias_target == OPT_SPECIAL_ignore)
-     return;
+        if ((opt_index >= cl_options_count) ||
+            cl_options[opt_index].alias_target == OPT_SPECIAL_ignore)
+            return;
 
 
- if (verbose)
-     trace_attached_acf(acf_entry, "attribute", cur_func_name, acf_pass_name);
+        if (verbose)
+            trace_attached_acf(acf_entry, "attribute",
+                               cur_func_name, acf_pass_name);
 
- save_global_attribute_values();
+        save_global_attribute_values();
 
 
- {
-     struct cl_option_handlers handlers;
-     set_default_handlers (&handlers);
-     switch (opt_index) {
-     case OPT_O:
-  global_options.x_optimize = opt_value;
-  if ((unsigned int) global_options.x_optimize > 255)
-      global_options.x_optimize = 255;
-  global_options.x_optimize_size = 0;
-  global_options.x_optimize_fast = 0;
-  break;
-     case OPT_Os:
-  global_options.x_optimize = 2;
-  global_options.x_optimize_size = 1;
-  global_options.x_optimize_fast = 0;
-  break;
-     case OPT_Ofast:
-  global_options.x_optimize = 3;
-  global_options.x_optimize_size = 0;
-  global_options.x_optimize_fast = 1;
-  break;
-     default:
-  handle_generated_option(&global_options, &global_options_set, opt_index, opt_str, opt_value,
-     (1 << 13), DK_UNSPECIFIED, ((source_location) 0), &handlers, ((void *)0));
-     }
- }
-# 376 "/opt/gcc-plugins/src/acf_plugin.c"
+        set_default_handlers(&handlers);
+        switch (opt_index) {
+        case OPT_O:
+            global_options.x_optimize = opt_value;
+            if ((unsigned int) global_options.x_optimize > 255)
+                global_options.x_optimize = 255;
+            global_options.x_optimize_size = 0;
+            global_options.x_optimize_fast = 0;
+            break;
+        case OPT_Os:
+            global_options.x_optimize = 2;
+            global_options.x_optimize_size = 1;
+            global_options.x_optimize_fast = 0;
+            break;
+        case OPT_Ofast:
+            global_options.x_optimize = 3;
+            global_options.x_optimize_size = 0;
+            global_options.x_optimize_fast = 1;
+            break;
+        default:
+            handle_generated_option(&global_options, &global_options_set,
+                                    opt_index, opt_str, opt_value,
+                                    (1 << 13), DK_UNSPECIFIED,
+                                    ((source_location) 0), &handlers, ((void *)0));
+        }
+# 385 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
     }
 
     // An example for --param max-unroll-times=4
@@ -28814,10 +28831,10 @@ static unsigned char get_param_idx(char *opt_param, size_t *idx) {
     size_t i, num_compiler_params = get_num_compiler_params();
 
     for (i = 0; i < num_compiler_params; ++i) {
- if (strcmp (compiler_params[i].option, opt_param) == 0) {
-     *idx = i;
-     return 1;
- }
+        if (strcmp(compiler_params[i].option, opt_param) == 0) {
+            *idx = i;
+            return 1;
+        }
     }
     return 0;
 }
@@ -28826,12 +28843,12 @@ static void save_and_set_param(char *opt_param, int value) {
     size_t param_idx;
 
     if (!get_param_idx(opt_param, &param_idx))
- return;
+        return;
 
     // Save current param value
     csv_param_name[csv_param_index] = opt_param;
     csv_param_value[csv_param_index] = ((int) global_options.x_param_values[(int) param_idx]);
-    csv_param_index ++;
+    csv_param_index++;
 
     // Set new param value
 
@@ -28842,29 +28859,30 @@ static void save_and_set_param(char *opt_param, int value) {
 }
 
 static void
-add_global_param(const char *cur_func_name, acf_ftable_entry_t *acf_entry, const char *acf_pass_name) {
+add_global_param(const char *cur_func_name, acf_ftable_entry_t *acf_entry,
+                 const char *acf_pass_name) {
     char *opt_param;
     int opt_value;
     unsigned char bad = 0;
 
 
     if (acf_entry->attr_arg_number != 2)
- bad = 1;
+        bad = 1;
     if (acf_entry->opt_args[0].arg_type != STR_TYPE)
- bad = 1;
+        bad = 1;
     if (acf_entry->opt_args[1].arg_type != INT_TYPE)
- bad = 1;
+        bad = 1;
 
     if (bad) {
- fprintf(stderr,"%s: Warning: wrong --param setting.\n", plugin_name);
- return;
+        fprintf(stderr, "%s: Warning: wrong --param setting.\n", plugin_name);
+        return;
     }
 
     opt_param = acf_entry->opt_args[0].av.str_arg;
     opt_value = acf_entry->opt_args[1].av.int_arg;
 
     if (verbose)
- trace_attached_acf(acf_entry, "param", cur_func_name, acf_pass_name);
+        trace_attached_acf(acf_entry, "param", cur_func_name, acf_pass_name);
 
     save_and_set_param(opt_param, opt_value);
 }
@@ -28872,9 +28890,10 @@ add_global_param(const char *cur_func_name, acf_ftable_entry_t *acf_entry, const
 static void restore_global_param_values() {
     size_t i;
 
-    for ( i = 0; i < csv_param_index; i++) {
+    for (i = 0; i < csv_param_index; i++) {
 
- set_param_value(csv_param_name[i], csv_param_value[i], global_options.x_param_values, csv_param_set);
+        set_param_value(csv_param_name[i], csv_param_value[i],
+                        global_options.x_param_values, csv_param_set);
 
 
 
@@ -28884,7 +28903,9 @@ static void restore_global_param_values() {
 
 
 
-static unsigned char func_name_match(const acf_ftable_entry_t *acf_entry, const char *cur_func) {
+
+static unsigned char func_name_match(const acf_ftable_entry_t *acf_entry,
+                            const char *cur_func) {
 
 
 
@@ -28896,8 +28917,8 @@ static unsigned char func_name_match(const acf_ftable_entry_t *acf_entry, const 
     size_t cur_func_len = strlen(cur_func);
 
     if (cur_func_len < acf_func_len ||
- memcmp(cur_func, acf_func, acf_func_len) != 0)
- return 0;
+        memcmp(cur_func, acf_func, acf_func_len) != 0)
+        return 0;
 
     suffix = cur_func+acf_func_len;
 
@@ -28905,7 +28926,7 @@ static unsigned char func_name_match(const acf_ftable_entry_t *acf_entry, const 
 
 
 
- return 1;
+        return 1;
     }
 
     if (*suffix != '.') {
@@ -28913,27 +28934,27 @@ static unsigned char func_name_match(const acf_ftable_entry_t *acf_entry, const 
 
 
 
- return 0;
+        return 0;
     }
 
     next_token = suffix;
     do {
- token = next_token + 1;
- next_token = strchr(token, '.');
- token_len = (next_token == ((void *)0)) ? strlen(token) : next_token-token;
+        token = next_token + 1;
+        next_token = strchr(token, '.');
+        token_len = (next_token == ((void *)0)) ? strlen(token) : next_token-token;
 
- if (!((token_len == 0) ||
-       (strspn(token, "0123456789") == token_len) ||
-       ((strlen("part") == token_len) && (strncmp("part", token, token_len) == 0)) ||
-       ((strlen("isra") == token_len) && (strncmp("isra", token, token_len) == 0)) ||
-       ((strlen("clone") == token_len) && (strncmp("clone", token, token_len) == 0)) ||
-       ((strlen("constprop") == token_len) && (strncmp("constprop", token, token_len) == 0)))) {
-
-
+        if (!((token_len == 0) ||
+              (strspn(token, "0123456789") == token_len) ||
+              ((strlen("part") == token_len) && (strncmp("part", token, token_len) == 0)) ||
+              ((strlen("isra") == token_len) && (strncmp("isra", token, token_len) == 0)) ||
+              ((strlen("clone") == token_len) && (strncmp("clone", token, token_len) == 0)) ||
+              ((strlen("constprop") == token_len) && (strncmp("constprop", token, token_len) == 0)))) {
 
 
-     return 0;
- }
+
+
+            return 0;
+        }
     } while (next_token != ((void *)0));
 
 
@@ -28944,8 +28965,8 @@ static unsigned char func_name_match(const acf_ftable_entry_t *acf_entry, const 
 
 
 
-static unsigned char source_file_match(const acf_ftable_entry_t *acf_entry, const char *input_file)
-{
+static unsigned char source_file_match(const acf_ftable_entry_t *acf_entry,
+                              const char *input_file) {
     unsigned char ret;
     const char *opt_file = acf_entry->opt_file;
 
@@ -28955,15 +28976,15 @@ static unsigned char source_file_match(const acf_ftable_entry_t *acf_entry, cons
 
 
 
- return 1;
+        return 1;
     }
 
 
 
     if (basename(opt_file) == opt_file) {
- ret = !strcmp(opt_file, basename(input_file));
+        ret = !strcmp(opt_file, basename(input_file));
     } else {
- ret = !strcmp(opt_file, input_file);
+        ret = !strcmp(opt_file, input_file);
     }
 
 
@@ -28972,7 +28993,10 @@ static unsigned char source_file_match(const acf_ftable_entry_t *acf_entry, cons
     return ret;
 }
 
-static const char *pass_names[] = {"unknown", "dcl passes", "all_passes", "ipa_passes"};
+static const char *pass_names[] = { "unknown",
+                                    "dcl passes",
+                                    "all_passes",
+                                    "ipa_passes"};
 
 static unsigned char fill_csv_options(tree decl, int acf_pass) {
     const char *cur_func_name = ((void *)0);
@@ -28984,60 +29008,59 @@ static unsigned char fill_csv_options(tree decl, int acf_pass) {
     static unsigned char csv_parsed = 0;
 
     if (!csv_parsed) {
- struct csv_list parsed_csv;
+        struct csv_list parsed_csv;
 
- initCSV(&parsed_csv);
+        initCSV(&parsed_csv);
 
- for (i = 0; i < acf_csv_files_num; i++) {
-     if (!readCSV(acf_csv_files[i], &parsed_csv))
-  return 0;
- }
+        for (i = 0; i < acf_csv_files_num; i++) {
+            if (!readCSV(acf_csv_files[i], &parsed_csv))
+                return 0;
+        }
 
- func_number = parseCSV(&parsed_csv, &acf_ftable, verbose);
- csv_parsed = 1;
+        func_number = parseCSV(&parsed_csv, &acf_ftable, verbose);
+        csv_parsed = 1;
     }
-    if (func_number < 0){
+    if (func_number < 0) {
 
- return 0;
+        return 0;
     }
 
 
     cur_func_name = ((const char *) (decl_assembler_name ((cfun + 0)->decl))->identifier.id.str);
 
-    // fprintf(stderr, "%s: fill_csv_options(%s) for function %s\n", plugin_name, acf_pass_name, cur_func_name);
+    for (i = 0; i < func_number; i++) {
+        acf_ftable_entry_t *acf_entry = &acf_ftable[i];
 
-    for (i = 0; i < func_number; i++){
- acf_ftable_entry_t *acf_entry = &acf_ftable[i];
+        // TBD: Do not match input_file_name if is_lto()
+        if (!func_name_match(acf_entry, cur_func_name) ||
+            !source_file_match(acf_entry, global_options.x_main_input_filename))
+            continue;
 
- // TBD: Do not match input_file_name if is_lto()
- if (!func_name_match(acf_entry, cur_func_name) ||
-     !source_file_match(acf_entry, global_options.x_main_input_filename))
-     continue;
+        switch (acf_pass) {
+        case 1:
+            // Do not handle --param when called on function parsing
+            if (!(strcmp("param", acf_entry->opt_attr) == 0)) {
+                done = 1;
+                add_decl_attribute(cur_func_name, acf_entry, decl,
+                                   acf_pass_name);
+            }
+            break;
+        case 2:
+        case 3:
+            if ((strcmp("param", acf_entry->opt_attr) == 0))
+                add_global_param(cur_func_name, acf_entry, acf_pass_name);
+            // Need to handle global_options.x_optimize attribute in backend only in
+            // lto mode for versions before 4.7.0
 
- switch (acf_pass) {
- case 1:
-     // Do not handle --param when called on function parsing
-     if (!(strcmp("param", acf_entry->opt_attr) == 0)) {
-  done = 1;
-  add_decl_attribute(cur_func_name, acf_entry, decl, acf_pass_name);
-     }
-     break;
- case 2:
- case 3:
-     if ((strcmp("param", acf_entry->opt_attr) == 0))
-  add_global_param(cur_func_name, acf_entry, acf_pass_name);
-     // Need to handle global_options.x_optimize attribute in backend only in
-     // lto mode for versions before 4.7.0
+            else if (is_lto())
+                add_global_attribute(cur_func_name, acf_entry, acf_pass_name);
 
-     else if (is_lto())
-  add_global_attribute(cur_func_name, acf_entry, acf_pass_name);
-
-     done = 1;
-     break;
- default:
-     // Unkonwn pass
-     return done;
- }
+            done = 1;
+            break;
+        default:
+            // Unkonwn pass
+            return done;
+        }
     }
     return done;
 }
@@ -29048,33 +29071,38 @@ static unsigned char fill_csv_options(tree decl, int acf_pass) {
 
 extern void cplus_decl_attributes(tree *, tree, int) __attribute__((weak));
 
-static void attribute_injector_start_unit_callback(void *gcc_data __attribute__ ((__unused__)),
-         void *data __attribute__ ((__unused__))){
-    if(is_gcc()){
- decl_attributes_func=(decl_attributes_func_type)(&decl_attributes);
-    }else if (is_gpp()){
- decl_attributes_func=&cplus_decl_attributes;
+static void
+attribute_injector_start_unit_callback(void *gcc_data __attribute__ ((__unused__)),
+                                       void *data __attribute__ ((__unused__))) {
+    if (is_gcc()) {
+        decl_attributes_func = (decl_attributes_func_type)&decl_attributes;
+    } else if (is_gpp()) {
+        decl_attributes_func = &cplus_decl_attributes;
+    } else {
+        decl_attributes_func = ((void *)0);
     }
-    else
- decl_attributes_func=((void *)0);
 }
 
-static void attribute_injector_finish_decl_callback(void *gcc_data,void *data){
+static void attribute_injector_finish_decl_callback(void *gcc_data,
+                                                    void *data) {
     tree decl=(tree)gcc_data;
-# 662 "/opt/gcc-plugins/src/acf_plugin.c"
+# 679 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
     fill_csv_options(decl, 1);
 }
 
-static void param_injector_start_all_passes_callback(void *gcc_data,void *data) {
-
+static void param_injector_start_all_passes_callback(void *gcc_data,
+                                                     void *data) {
     if (csv_param_name == ((void *)0)) {
- csv_param_name = (char **)xmalloc(sizeof(char *)*get_num_compiler_params());
- csv_param_value = (int *)xmalloc(sizeof(int) *get_num_compiler_params());
+        csv_param_name = (char **)
+            xmalloc(sizeof(*csv_param_name) * get_num_compiler_params());
+        csv_param_value = (int *)
+            xmalloc(sizeof(*csv_param_value) * get_num_compiler_params());
     }
 
 
     if (csv_param_set == ((void *)0))
- csv_param_set = (int *)xmalloc(sizeof(int)*get_num_compiler_params());
+        csv_param_set = (int *)
+            xmalloc(sizeof(*csv_param_set) * get_num_compiler_params());
 
 
     csv_param_index = 0;
@@ -29082,24 +29110,25 @@ static void param_injector_start_all_passes_callback(void *gcc_data,void *data) 
     fill_csv_options(((void *)0), 2);
 }
 
-static void param_injector_end_passes_callback(void *gcc_data,void *data) {
-
+static void param_injector_end_passes_callback(void *gcc_data, void *data) {
     restore_global_param_values();
     restore_global_attribute_values();
 }
-# 713 "/opt/gcc-plugins/src/acf_plugin.c"
+# 732 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
 // Called when entering a sequence of GIMPLE_PASS in IPA lists
 
 static unsigned int ipa_gimple_per_func_callback(void) {
-
     if (csv_param_name == ((void *)0)) {
- csv_param_name = (char **)xmalloc(sizeof(char *)*get_num_compiler_params());
- csv_param_value = (int *)xmalloc(sizeof(int) *get_num_compiler_params());
+        csv_param_name = (char **)
+            xmalloc(sizeof(*csv_param_name) * get_num_compiler_params());
+        csv_param_value = (int *)
+            xmalloc(sizeof(*csv_param_value) * get_num_compiler_params());
     }
 
 
     if (csv_param_set == ((void *)0))
- csv_param_set = (int *)xmalloc(sizeof(int)*get_num_compiler_params());
+        csv_param_set = (int *)
+            xmalloc(sizeof(*csv_param_set) * get_num_compiler_params());
 
 
     restore_global_param_values();
@@ -29113,77 +29142,80 @@ static unsigned int ipa_gimple_per_func_callback(void) {
 // Called on the first pass after PLUGIN_EARLY_GIMPLE_PASSES_START was
 // triggered
 
-static void ipa_gimple_init_per_func_callback(void *gcc_data,void *data) {
-
+static void ipa_gimple_init_per_func_callback(void *gcc_data,
+                                              void *data) {
     // New pass to be inserted before the first GIMPLE_PASS in an IPA list
 
     static struct gimple_opt_pass static_pass_ipa_gimple_per_func = {
- {
-     GIMPLE_PASS,
-     "ipa_gimple_per_func",
+        {
+            GIMPLE_PASS,
+            "ipa_gimple_per_func",
 
 
 
-     ((void *)0),
-     &ipa_gimple_per_func_callback,
-     ((void *)0),
-     ((void *)0),
-     0,
-     TV_NONE,
-     0,
-     0,
-     0,
-     0,
-     0
- }
+            ((void *)0),
+            &ipa_gimple_per_func_callback,
+            ((void *)0),
+            ((void *)0),
+            0,
+            TV_NONE,
+            0,
+            0,
+            0,
+            0,
+            0
+        }
     };
 
     unregister_callback(plugin_name, PLUGIN_PASS_EXECUTION);
 
     // Check if the pass has not already been inserted (is it possible ?)
     if (strcmp(current_pass->name, "ipa_gimple_per_func") != 0) {
- // We cannot insert the new pass before current one since the
- // caller has a pointer on the current pass. So we insert it after, and
- // we permute the first two passes.
- struct gimple_opt_pass *pass_ipa_gimple_per_func;
- struct register_pass_info *ipa_gimple_per_func_info;
+        // We cannot insert the new pass before current one since the
+        // caller has a pointer on the current pass. So we insert it after, and
+        // we permute the first two passes.
+        struct gimple_opt_pass *pass_ipa_gimple_per_func;
+        struct register_pass_info *ipa_gimple_per_func_info;
 
- pass_ipa_gimple_per_func = (struct gimple_opt_pass *)xmalloc(sizeof(struct gimple_opt_pass));
- memcpy(pass_ipa_gimple_per_func, &static_pass_ipa_gimple_per_func, sizeof(struct gimple_opt_pass));
+        pass_ipa_gimple_per_func = (struct gimple_opt_pass *)
+            xmalloc(sizeof(struct gimple_opt_pass));
+        memcpy(pass_ipa_gimple_per_func, &static_pass_ipa_gimple_per_func,
+               sizeof(struct gimple_opt_pass));
 
- ipa_gimple_per_func_info = (struct register_pass_info *)xmalloc(sizeof(struct register_pass_info));
- ipa_gimple_per_func_info->pass = (struct opt_pass *)pass_ipa_gimple_per_func;
- ipa_gimple_per_func_info->reference_pass_name = current_pass->name;
- ipa_gimple_per_func_info->ref_pass_instance_number = current_pass->static_pass_number;
- ipa_gimple_per_func_info->pos_op = PASS_POS_INSERT_AFTER;
+        ipa_gimple_per_func_info = (struct register_pass_info *)
+            xmalloc(sizeof(struct register_pass_info));
+        ipa_gimple_per_func_info->pass = (struct opt_pass *)
+            pass_ipa_gimple_per_func;
+        ipa_gimple_per_func_info->reference_pass_name = current_pass->name;
+        ipa_gimple_per_func_info->ref_pass_instance_number =
+            current_pass->static_pass_number;
+        ipa_gimple_per_func_info->pos_op = PASS_POS_INSERT_AFTER;
 
- register_callback (plugin_name,
-      PLUGIN_PASS_MANAGER_SETUP,
-      ((void *)0), ipa_gimple_per_func_info);
+        register_callback(plugin_name,
+                          PLUGIN_PASS_MANAGER_SETUP,
+                          ((void *)0), ipa_gimple_per_func_info);
 
- // Permute the first two passes
- struct opt_pass copy_current, *next_pass = current_pass->next;
- memcpy(&copy_current, current_pass, sizeof(struct opt_pass));
- memcpy(current_pass, next_pass, sizeof(struct opt_pass));
- memcpy(next_pass, &copy_current, sizeof(struct opt_pass));
- next_pass->next = current_pass->next;
- current_pass->next = next_pass;
+        // Permute the first two passes
+        struct opt_pass copy_current, *next_pass = current_pass->next;
+        memcpy(&copy_current, current_pass, sizeof(struct opt_pass));
+        memcpy(current_pass, next_pass, sizeof(struct opt_pass));
+        memcpy(next_pass, &copy_current, sizeof(struct opt_pass));
+        next_pass->next = current_pass->next;
+        current_pass->next = next_pass;
     }
 }
 
 // Called when PLUGIN_EARLY_GIMPLE_PASSES_START is triggered
 
-static void ipa_gimple_passes_start_callback(void *gcc_data,void *data) {
-
+static void ipa_gimple_passes_start_callback(void *gcc_data, void *data) {
     register_callback(plugin_name,
-        PLUGIN_PASS_EXECUTION,
-        &ipa_gimple_init_per_func_callback, ((void *)0));
+                      PLUGIN_PASS_EXECUTION,
+                      &ipa_gimple_init_per_func_callback, ((void *)0));
 }
 
 // Called when PLUGIN_EARLY_GIMPLE_PASSES_END is triggered
 
-static void ipa_gimple_passes_end_callback(void *gcc_data,void *data) {
-
+static void ipa_gimple_passes_end_callback(void *gcc_data, void *data) {
     // In case ipa_gimple_init_per_func_callback was not called after
     // ipa_gimple_passes_start_callback
     unregister_callback(plugin_name, PLUGIN_PASS_EXECUTION);
@@ -29195,54 +29227,50 @@ static void ipa_gimple_passes_end_callback(void *gcc_data,void *data) {
 static void lto_clean_optimize_callback(void) {
     struct cgraph_node *node;
 
-    // if (verbose)
-    // fprintf(stderr, "New pass lto_clean_optimize_callback\n");
-
     for (node = cgraph_nodes; node; node = node->next) {
- tree decl_node = node->decl;
- // Remove the optimization node that cannot be emited as
- // GIMPLE bytecode for gcc < 4.7
- ((decl_node)->function_decl.function_specific_optimization) = ((void *)0);
+        tree decl_node = node->decl;
+        // Remove the optimization node that cannot be emited as
+        // GIMPLE bytecode for gcc < 4.7
+        ((decl_node)->function_decl.function_specific_optimization) = ((void *)0);
     }
 }
 
 
-static int pre_genericize=PLUGIN_PRE_GENERICIZE;
+static int pre_genericize = PLUGIN_PRE_GENERICIZE;
 
 
-static int plugin_test_global_params(void)
-{
+static int plugin_test_global_params(void) {
     // Check that compiler and plugin do see the same gcc_options struct.
 
     // Make sure the plugin do not allocate a struct smaller than the
     // one from the compiler, take twice the siwe of the plugin size.
     struct gcc_options tmp_opt[2], tmp_opt_set[2];
     int i, plugin_offset_param_values, gcc_offset_param_values;
-
     plugin_offset_param_values = (int)__builtin_offsetof (struct gcc_options, x_param_values)
-                           ;
+                                                              ;
 
     gcc_offset_param_values = -1;
     init_options_struct(tmp_opt, tmp_opt_set);
-    for (i = 0; i < (int)(sizeof(struct gcc_options)/sizeof(int *)); i++) {
- if (((int **)tmp_opt_set)[i] != 0) {
-     gcc_offset_param_values = i * sizeof(int *);
-     break;
- }
+    for (i = 0;
+         i < (int)(sizeof(struct gcc_options)/sizeof(int *)); // NOLINT
+         i++) {
+        if (((int **)tmp_opt_set)[i] != 0) {
+            gcc_offset_param_values = i * sizeof(int *); // NOLINT
+            break;
+        }
     }
 
     if (plugin_offset_param_values != gcc_offset_param_values) {
- if (gcc_offset_param_values == -1) {
-     error("%s: unable to check offset of field x_param_values in struct "
-    "gcc_options\n", plugin_name);
- }
- else {
-     error("%s: offset of field x_param_values in struct gcc_options "
-    "does not match between compiler (%d) and plugin (%d).\n",
-    plugin_name,
-    gcc_offset_param_values, plugin_offset_param_values);
- }
- return 1;
+        if (gcc_offset_param_values == -1) {
+            error("%s: unable to check offset of field x_param_values in "
+                  "struct gcc_options\n", plugin_name);
+        } else {
+            error("%s: offset of field x_param_values in struct gcc_options "
+                  "does not match between compiler (%d) and plugin (%d).\n",
+                  plugin_name,
+                  gcc_offset_param_values, plugin_offset_param_values);
+        }
+        return 1;
     }
     return 0;
 }
@@ -29252,45 +29280,38 @@ static int plugin_test_global_params(void)
 
 
 
+static int plugin_test(void) {
+    int status;
 
-static int plugin_test(void)
-{
-  int status;
-
-  status = plugin_test_global_params();
-  return status;
+    status = plugin_test_global_params();
+    return status;
 }
 
 int plugin_init(struct plugin_name_args *plugin_na,
-  struct plugin_gcc_version *version){
+                struct plugin_gcc_version *version) {
     unsigned char bad_arguments;
     int i;
 
 
 
-    if(!plugin_default_version_check(version,&gcc_version)){
+    if (!plugin_default_version_check(version, &gcc_version)) {
 
 
-
-
+        // error("%s: build gcc and load gcc version mismatch.", plugin_name);
+        // return 1;
         (void)((void *)0);
     }
 
     plugin_name = plugin_na->base_name;
-# 915 "/opt/gcc-plugins/src/acf_plugin.c"
+# 933 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
     // Check the plugin is used with appropriate compiler version
     // regarding access to PARAM values
-
-
-
-
-
-
-
+# 943 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
     if ((version->basever[0] < '4') ||
- ((version->basever[0] == '4') && (version->basever[2] < '6'))) {
- error("%s: build gcc and load gcc versions are incompatible.", plugin_name);
- return 1;
+        ((version->basever[0] == '4') && (version->basever[2] < '6'))) {
+        error("%s: build gcc and load gcc versions are incompatible.",
+              plugin_name);
+        return 1;
     }
 
 
@@ -29299,126 +29320,131 @@ int plugin_init(struct plugin_name_args *plugin_na,
     acf_csv_files_num = 0;
 
     for (i = 0; i < plugin_na->argc; i++) {
-
- if (strcmp(plugin_na->argv[i].key, "test") == 0) {
-     if ((i > 0) || (plugin_na->argc > 1)) {
-  bad_arguments = 1;
-  break;
-     }
-     int status = plugin_test();
-     fprintf(stderr, "%s: plugin test.\n", status == 0 ? "PASSED": "FAILED");
-     return status;
- }
-
- else if (strcmp(plugin_na->argv[i].key, verbose_key) == 0) {
-     verbose = 1;
- }
-
- else if (strcmp(plugin_na->argv[i].key, acf_csv_file_key) == 0) {
-     if (!register_acf_file(plugin_name, plugin_na->argv[i].value)) {
-  bad_arguments = 1;
-  break;
-     }
- }
-
- else {
-     error("%s: Unknown option %s\n", plugin_name, plugin_na->argv[i].key);
-     return 1;
- }
+        if (strcmp(plugin_na->argv[i].key, "test") == 0) {
+            if ((i > 0) || (plugin_na->argc > 1)) {
+                bad_arguments = 1;
+                break;
+            }
+            int status = plugin_test();
+            fprintf(stderr, "%s: plugin test.\n", status == 0 ? "PASSED": "FAILED");
+            return status;
+        } else if (strcmp(plugin_na->argv[i].key, "version") == 0) {
+            printf("%s\n", acf_plugin_info.version);
+            return 0;
+        } else if (strcmp(plugin_na->argv[i].key, verbose_key) == 0) {
+            verbose = 1;
+        } else if (strcmp(plugin_na->argv[i].key, acf_csv_file_key) == 0) {
+            if (!register_acf_file(plugin_name, plugin_na->argv[i].value)) {
+                bad_arguments = 1;
+                break;
+            }
+        } else {
+            error("%s: Unknown option %s\n", plugin_name,
+                  plugin_na->argv[i].key);
+            return 1;
+        }
     }
 
     if ((plugin_na->argc == 0) || (acf_csv_files_num == 0))
- bad_arguments = 1;
+        bad_arguments = 1;
 
     if (bad_arguments) {
- fprintf(stderr,
-  "Usage for %s: -fplugin=<path>/%s.so "
-  "-fplugin-arg-%s-%s= <path-to-csv-file> "
-  "[-fplugin-arg-%s-%s]\n",
-  plugin_name, plugin_name,
-  plugin_name, acf_csv_file_key,
-  plugin_name, verbose_key);
- return 1;
+        fprintf(stderr,
+                "Usage for %s: -fplugin=<path>/%s.so "
+                "-fplugin-arg-%s-%s=<path-to-csv-file> "
+                "[-fplugin-arg-%s-%s"
+                " | -fplugin-arg-%s-%s"
+                " | -fplugin-arg-%s-%s]\n",
+                plugin_name, plugin_name,
+                plugin_name, acf_csv_file_key,
+                plugin_name, verbose_key,
+                plugin_name, "version",
+                plugin_name, "test");
+        return 1;
     }
 
     // Attach function attributes to function node
     register_callback(plugin_na->base_name,
-        PLUGIN_START_UNIT,
-        &attribute_injector_start_unit_callback,((void *)0));
+                      PLUGIN_START_UNIT,
+                      &attribute_injector_start_unit_callback, ((void *)0));
     register_callback(plugin_na->base_name,
-        PLUGIN_PRE_GENERICIZE,
-        &attribute_injector_finish_decl_callback,
-        &pre_genericize);
+                      PLUGIN_PRE_GENERICIZE,
+                      &attribute_injector_finish_decl_callback,
+                      &pre_genericize);
 
     // Load function context for all_passes optimizations
     register_callback(plugin_na->base_name,
-        PLUGIN_ALL_PASSES_START,
-        &param_injector_start_all_passes_callback, ((void *)0));
+                      PLUGIN_ALL_PASSES_START,
+                      &param_injector_start_all_passes_callback, ((void *)0));
     register_callback(plugin_na->base_name,
-        PLUGIN_ALL_PASSES_END,
-        &param_injector_end_passes_callback, ((void *)0));
+                      PLUGIN_ALL_PASSES_END,
+                      &param_injector_end_passes_callback, ((void *)0));
 
     // Load function context for the ipa (regular and small_ipa) passes
     register_callback(plugin_na->base_name,
-        PLUGIN_EARLY_GIMPLE_PASSES_START,
-        &ipa_gimple_passes_start_callback, ((void *)0));
+                      PLUGIN_EARLY_GIMPLE_PASSES_START,
+                      &ipa_gimple_passes_start_callback, ((void *)0));
     register_callback(plugin_na->base_name,
-        PLUGIN_EARLY_GIMPLE_PASSES_END,
-        &ipa_gimple_passes_end_callback, ((void *)0));
+                      PLUGIN_EARLY_GIMPLE_PASSES_END,
+                      &ipa_gimple_passes_end_callback, ((void *)0));
 
 
     // For GCC versions earlier than 4.7, remove the optimization node
     // that cannot be emitted as GIMPLE bytecode
     if ((version->basever[0] > '4') ||
- ((version->basever[0] == '4') && (version->basever[2] >= '7'))) {
-        error("%s: build gcc and load gcc versions are incompatible.", plugin_name);
+        ((version->basever[0] == '4') && (version->basever[2] >= '7'))) {
+        error("%s: build gcc and load gcc versions are incompatible.",
+              plugin_name);
         return 1;
     }
 
     if (global_options.x_flag_generate_lto) {
+        static struct ipa_opt_pass_d lto_clean_optimize_pass = {
+            {
+                IPA_PASS,
+                "lto_clean_optimize",
+                ((void *)0),
+                ((void *)0),
+                ((void *)0),
+                ((void *)0),
+                0,
+                TV_NONE,
+                0,
+                0,
+                0,
+                0,
+                0
+            },
+            &lto_clean_optimize_callback,
+            ((void *)0),
+            ((void *)0),
 
- static struct ipa_opt_pass_d lto_clean_optimize_pass = {
-     {
-  IPA_PASS,
-  "lto_clean_optimize",
-  ((void *)0),
-  ((void *)0),
-  ((void *)0),
-  ((void *)0),
-  0,
-  TV_NONE,
-  0,
-  0,
-  0,
-  0,
-  0
-     },
-     &lto_clean_optimize_callback,
-     ((void *)0),
-     ((void *)0),
-
-     ((void *)0),
-     ((void *)0),
-
+            ((void *)0),
+            ((void *)0),
 
 
-     ((void *)0),
-     0,
-     ((void *)0),
-     ((void *)0)
- };
 
- static struct register_pass_info lto_clean_optimize_info = {
-     (struct opt_pass *)&lto_clean_optimize_pass,
-     "lto_decls_out",
-     0,
-     PASS_POS_INSERT_BEFORE
- };
+            ((void *)0),
+            0,
+            ((void *)0),
+            ((void *)0)
+        };
 
- register_callback (plugin_na->base_name,
-      PLUGIN_PASS_MANAGER_SETUP,
-      ((void *)0), &lto_clean_optimize_info);
+        static struct register_pass_info lto_clean_optimize_info = {
+            (struct opt_pass *)&lto_clean_optimize_pass,
+            "lto_decls_out",
+            0,
+            PASS_POS_INSERT_BEFORE
+        };
+
+        register_callback(plugin_na->base_name,
+                          PLUGIN_PASS_MANAGER_SETUP,
+                          ((void *)0), &lto_clean_optimize_info);
+
+        register_callback(plugin_na->base_name,
+                          PLUGIN_INFO,
+                          ((void *)0), &acf_plugin_info);
     }
-# 1071 "/opt/gcc-plugins/src/acf_plugin.c"
+# 1096 "/opt/gcc-plugins/plugins-src/acf-plugin/plugin/src/acf_plugin.c"
     return 0;
 }

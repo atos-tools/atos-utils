@@ -66,6 +66,8 @@ def setup(**kwargs):
     # Utilitary regexp fragments
     #   supported compiler drivers base names
     cc_bases = "(clang|gcc|g\+\+|cc|c\+\+)"
+    #   supported ld linker base names
+    ld_bases = "(ld|link)"
     #   supported archivers base names
     ar_bases = "(ar)"
     #   target names that may be direct prefix of base names
@@ -73,7 +75,7 @@ def setup(**kwargs):
     #   otherwise generic optional prefixes, typically '.*-'
     generic_pfx = "(.*-)?"
     #   generic optional suffixes, typically '-.*'
-    generic_sfx = "([-\.].*)?"
+    generic_sfx = "([-].*)?([\.].*)?"
 
     # Default compiler basename regexp
     # Either the bare cc basenames (ex: gcc) or
@@ -92,7 +94,9 @@ def setup(**kwargs):
     # ARM RVCT is an exception where link is done with armlink.
     DEFAULT_LDREGEXP = kwargs.get(
         'DEFAULT_LDREGEXP',
-        "(armlink)")
+        "(%s)|(%s%s)|(%s%s)" % (ld_bases,
+                                cross_target_pfx, ld_bases,
+                                generic_pfx, ld_bases))
 
     # Default archiver basename regexp
     # Same scheme as for CCREGEXP.

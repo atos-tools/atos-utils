@@ -36,4 +36,10 @@ cd sha1
 $ROOT/bin/atos-audit make clean sha
 [ -d atos-configurations/build.stg ]
 [ `wc -l <atos-configurations/build.stg/recipes` == 5 ]
+
+# Failures tests when cc/ar/ld regexps are invalid
+$ROOT/bin/atos-audit --ccregexp "" make clean sha 2>&1 | grep "malformed" >/dev/null
+$ROOT/bin/atos-audit --ldregexp "" make clean sha 2>&1 | grep "malformed" >/dev/null
+$ROOT/bin/atos-audit --arregexp "" make clean sha 2>&1 | grep "malformed" >/dev/null
+
 cd ..

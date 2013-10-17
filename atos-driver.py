@@ -49,11 +49,12 @@ def set_interpreter(opts, args):
         # Ignore unknnow command kind or malformed commands
         interpreter = None
     elif not (interpreter.get_kind() == "AR" or
+              interpreter.get_kind() == "LD" or
               interpreter.get_kind() == "CC" and
-              (interpreter.cc_interpreter().has_cc_phase("CC") or
-               interpreter.cc_interpreter().has_cc_phase("LD"))):
-        # Ignore commands which are not AR or a CC driver
-        # running either CC or LD phase
+              (interpreter.ccld_interpreter().has_cc_phase("CC") or
+               interpreter.ccld_interpreter().has_cc_phase("LD"))):
+        # Ignore commands which are not AR or LD or
+        # a CC driver running either CC or LD phase
         interpreter = None
     command_interpreter_ = interpreter
     return interpreter
@@ -76,11 +77,11 @@ def update_cc_function_map(opts, args):
     interpreter = get_interpreter()
     assert(interpreter != None)
     if (interpreter.get_kind() != "CC" or
-        not interpreter.cc_interpreter().has_cc_phase("CC") or
-        interpreter.cc_interpreter().last_cc_phase() != "AS"):
+        not interpreter.ccld_interpreter().has_cc_phase("CC") or
+        interpreter.ccld_interpreter().last_cc_phase() != "AS"):
         # TODO: handle function map in LD phase also
         return
-    outputs = interpreter.cc_interpreter().all_cc_outputs()
+    outputs = interpreter.ccld_interpreter().all_cc_outputs()
     if len(outputs) != 1:  # pragma: uncovered
         # TODO: handle multiple outputs
         return
@@ -101,9 +102,9 @@ def get_cc_command_additional_flags(opts, args):
         obj, flags = line.strip().split(',', 1)
         obj_opts[obj] = flags
     def_opts = obj_opts.get('*', '')
-    if not interpreter.cc_interpreter().has_cc_phase("CC"):
+    if not interpreter.ccld_interpreter().has_cc_phase("CC"):
         return shlex.split(def_opts)
-    outputs = interpreter.cc_interpreter().all_cc_outputs()
+    outputs = interpreter.ccld_interpreter().all_cc_outputs()
     if len(outputs) != 1:  # pragma: uncovered
         # TODO: handle multiple input files
         return shlex.split(def_opts)
@@ -259,14 +260,14 @@ def invoque_compile_command(opts, args):
     interpreter = set_interpreter(opts, args)
 
     has_final_link = (interpreter and interpreter.get_kind() == "CC" and
-                      interpreter.cc_interpreter().has_cc_phase("LD") and
-                      (interpreter.cc_interpreter().is_ld_kind("program") or
-                       interpreter.cc_interpreter().is_ld_kind("shared")))
+                      interpreter.ccld_interpreter().has_cc_phase("LD") and
+                      (interpreter.ccld_interpreter().is_ld_kind("program") or
+                       interpreter.ccld_interpreter().is_ld_kind("shared")))
     has_cc = (interpreter and interpreter.get_kind() == "CC" and
-              interpreter.cc_interpreter().has_cc_phase("CC"))
+              interpreter.ccld_interpreter().has_cc_phase("CC"))
 
     cc_outputs = ((has_final_link or has_cc) and
-                  interpreter.cc_interpreter().all_cc_outputs())
+                  interpreter.ccld_interpreter().all_cc_outputs())
 
     if has_final_link:
         cc_output_pathes = map(os.path.abspath, map(
@@ -307,11 +308,11 @@ def invoque_compile_command(opts, args):
     if has_final_link:
         env_ALDSOFLAGS = os.environ.get("ALDSOFLAGS")
         if (env_ALDSOFLAGS and
-            interpreter.cc_interpreter().is_ld_kind("shared")):
+            interpreter.ccld_interpreter().is_ld_kind("shared")):
             args.extend(process.cmdline2list(env_ALDSOFLAGS))
 
         env_ALDMAINFLAGS = os.environ.get("ALDMAINFLAGS")
-        if (env_ALDMAINFLAGS and interpreter.cc_interpreter().is_ld_kind(
+        if (env_ALDMAINFLAGS and interpreter.ccld_interpreter().is_ld_kind(
                 "program")):  # pragma: uncovered
             args.extend(process.cmdline2list(env_ALDMAINFLAGS))
 

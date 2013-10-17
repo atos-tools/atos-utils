@@ -219,6 +219,13 @@ class CCArgumentInterpreter:
         return self.has_cc_phase("LD") and (self.is_ld_kind("program") or
                                             self.is_ld_kind("shared"))
 
+    def has_reloc_link(self):
+        """
+        Returns true is the compiler is doing a relocatable link phase,
+        i.e. running LD and generating a relocatable object.
+        """
+        return self.has_cc_phase("LD") and self.is_ld_kind("relocatable")
+
 class CCArgumentProcessor:
     def __init__(self, namespace, cwd=".", desc=cc_arguments.CCArgumentsDesc):
         self.ns_ = namespace
@@ -261,7 +268,7 @@ class CCArgumentProcessor:
         self.ns_.outputs = [args[1]]
 
     def opt_x(self, args):
-        # If "none" or another unknown language, fall bask to default
+        # If "none" or another unknown language, fall back to default
         self.ns_.current_src_kind = self.desc_.language_kind.get(args[1], None)
 
     def opt_preprocessor(self, args):
@@ -391,6 +398,8 @@ class CCArgumentParser:
         deep_eq(interp.all_cc_inputs(), [], _assert=True)
         deep_eq(interp.all_cc_outputs(), [], _assert=True)
         deep_eq(interp.is_ld_kind("program"), False, _assert=True)
+        deep_eq(interp.has_final_link(), False, _assert=True)
+        deep_eq(interp.has_reloc_link(), False, _assert=True)
 
         ns = parser.parse_args(shlex.split(
                 "-o out.o -c in.c -print-search-dirs"),
@@ -509,6 +518,8 @@ class CCArgumentParser:
         deep_eq(ns.output_kind, "executable", _assert=True)
         interp = CCArgumentInterpreter(ns)
         deep_eq(interp.is_ld_kind("program"), True, _assert=True)
+        deep_eq(interp.has_final_link(), True, _assert=True)
+        deep_eq(interp.has_reloc_link(), False, _assert=True)
         deep_eq(interp.has_cc_phase("AS"), True, _assert=True)
         deep_eq(interp.has_cc_phase("CC"), True, _assert=True)
         deep_eq(interp.has_cc_phase("CPP"), True, _assert=True)
@@ -537,6 +548,8 @@ class CCArgumentParser:
         deep_eq(ns.output_kind, 'relocatable', _assert=True)
         interp = CCArgumentInterpreter(ns)
         deep_eq(interp.is_ld_kind("relocatable"), True, _assert=True)
+        deep_eq(interp.has_final_link(), False, _assert=True)
+        deep_eq(interp.has_reloc_link(), True, _assert=True)
 
         ns = parser.parse_args(shlex.split(
                 "-o out in.c"), TestNameSpace())
@@ -558,6 +571,8 @@ class CCArgumentParser:
         deep_eq(ns.exec_kind, 'shared', _assert=True)
         interp = CCArgumentInterpreter(ns)
         deep_eq(interp.is_ld_kind("shared"), True, _assert=True)
+        deep_eq(interp.has_final_link(), True, _assert=True)
+        deep_eq(interp.has_reloc_link(), False, _assert=True)
 
         ns = parser.parse_args(shlex.split(
                 "-o out.o -c -finline -Wall "

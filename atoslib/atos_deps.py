@@ -59,8 +59,8 @@ class DependencyGraph(DGraph):
                 if attr == "dependency":
                     dep = value
             if (dep and dep.kind() == "CC" and
-                dep.interpreter().cc_interpreter().has_cc_phase("CC") and
-                dep.interpreter().cc_interpreter().last_cc_phase() == "AS"):
+                dep.interpreter().ccld_interpreter().has_cc_phase("CC") and
+                dep.interpreter().ccld_interpreter().last_cc_phase() == "AS"):
                 objects.append(target)
         return objects
 
@@ -74,7 +74,7 @@ class DependencyGraph(DGraph):
         for node in self.nodes():
             for attr, value in self.node_attrs(node):
                 if (attr == 'dependency' and value.kind() == "CC" and
-                    value.interpreter().cc_interpreter().has_cc_phase("CC")):
+                    value.interpreter().ccld_interpreter().has_cc_phase("CC")):
                     optflags += [x for x in
                                  value.interpreter().get_args()[1:]
                                  if is_lto_opt(x) and x not in optflags]
@@ -91,12 +91,12 @@ class DependencyGraph(DGraph):
             for attr, value in self.node_attrs(node):
                 if attr != 'dependency' or value.kind() != "CC":
                     continue
-                if value.interpreter().cc_interpreter().has_cc_phase("CC"):
+                if value.interpreter().ccld_interpreter().has_cc_phase("CC"):
                     # We must use the unmodified output arguments of the
                     # CC command line, not the normalized one returned by
                     # value.outputs() for instance.
                     cc_outputs = \
-                        value.interpreter().cc_interpreter().all_cc_outputs()
+                        value.interpreter().ccld_interpreter().all_cc_outputs()
                     # In case of multiple outputs in CC phases, all outputs are
                     # in the same directory, thus the first one is sufficient
                     # though it's a TODO to handle multiple outputs
@@ -201,9 +201,9 @@ class DependencyGraphBuilder:
             for i in range(len(self.deplist)):
                 dependency = self.deplist[len(self.deplist) - i - 1]
                 if (dependency.kind() == "CC" and
-                    (dependency.interpreter().cc_interpreter().
+                    (dependency.interpreter().ccld_interpreter().
                      is_ld_kind("program") or
-                     dependency.interpreter().cc_interpreter().
+                     dependency.interpreter().ccld_interpreter().
                      is_ld_kind("shared"))):
                     assert(len(dependency.outputs()) == 1)
                     referenced_outputs.add(dependency.outputs()[0])
@@ -378,8 +378,8 @@ class CommandDependencyListFactory:
             # optimized.
             if (interpreter.get_kind() == "AR" or  # pragma: branch_uncovered
                 interpreter.get_kind() == "CC" and
-                (interpreter.cc_interpreter().has_cc_phase("CC") or
-                 interpreter.cc_interpreter().has_cc_phase("LD"))):
+                (interpreter.ccld_interpreter().has_cc_phase("CC") or
+                 interpreter.ccld_interpreter().has_cc_phase("LD"))):
                 self.deps_.add_dependency(command, interpreter)
 
 class CCDEPSParser:

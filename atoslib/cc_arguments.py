@@ -189,7 +189,7 @@ class CCArgumentsDesc:
         {'str': "-fdump-ada-spec"},
         {'str': "-fdump-ada-spec-slim"},
         {'str': "-fdump-go-spec", 'nargs': 1, 'sep': "="},
-        {'re': r"@.*", 'dest': "opt_response_file"},
+        {'re': r"@.*"},  # response file: treated separately
 
         # Options Controlling C Dialect
         # http://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html
@@ -234,7 +234,7 @@ class CCArgumentsDesc:
         {'str': "-fno-implicit-templates"},
         {'str': "-fno-implicit-inline-templates"},
         {'str': "-fno-implement-inlines"},
-        # {'str': "-fms-extensions"}, # Also present in C dialect options
+        # {'str': "-fms-extensions"},  # Also present in C dialect options
         {'str': "-fno-nonansi-builtins"},
         {'str': "-fnothrow-opt"},
         {'str': "-fno-operator-names"},
@@ -410,7 +410,7 @@ class CCArgumentsDesc:
         {'str': "-fpch-deps"},
         {'str': "-fpch-preprocess"},
         {'str': "-nostdinc"},
-        # {'str': "-nostdinc++"}, # Also in C++ dialect options
+        # {'str': "-nostdinc++"},  # Also in C++ dialect options
         # Options with arguments
         {'str': "-include", 'nargs': 1, 'dest': "opt_include"},
         {'str': "-imacros", 'nargs': 1},

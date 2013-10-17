@@ -25,6 +25,7 @@ from process import commands
 from process import list2cmdline
 from cmd_interpreter import CmdInterpreterFactory
 from obj_storage import ObjStorage
+from deep_eq import deep_eq
 
 class RecipeStorage(ObjStorage):
 
@@ -139,16 +140,24 @@ class RecipeStorage(ObjStorage):
         return rnod_digest in self.blacklist_recipes()
 
 class RecipeManager():
-
+    """
+    A recipe manager class that return a recipe graph from
+    a given recipe storage.
+    The public interface for this class is:
+    - recipe_graph(): returns the recipe graph with an optional targets list
+    """
     def __init__(self, storage):
+        assert(isinstance(storage, RecipeStorage))
         self.stg = storage
 
-    def recipe_graph(self, targets=None):
+    def recipe_graph(self, targets="all"):
+        assert(isinstance(targets, list) or
+               targets == "last" or
+               targets == "all")
         return RecipeGraph(self.stg, self.load_recipes_file_(),
                            targets)
 
     def load_recipes_file_(self):
-        assert(isinstance(self.stg, RecipeStorage))
         with open(self.stg.recipes_path()) as f:
             return [x.strip() for x in f.readlines()]
 
@@ -189,23 +198,41 @@ class RecipeNode():
                 path)
 
 class RecipeGraph():
+    """
+    A recipe graph class that holds all recipes and dependencies for a
+    given recipe storage, recipes list, and expected targets list.
+    The public interface for this class is:
+    - write_makefile() : outputs a makefile for rebuilding the targets
+    - get_targets() : get the list of inferred final targets
+    - get_objects() : get the list of inferred objects
+    - get_compilers() : get the list of involved compilers
+    - get_lto_opts() : get the list of collected options to be passed to LTO
+    - common_relative_profdir_prefix() : get the prefix path for profiling
+    """
     def __init__(self, storage, recipes, expected_targets="all",
                  cwd=os.getcwd()):
+        assert(isinstance(storage, RecipeStorage))
+        assert(isinstance(recipes, list))
+        assert(isinstance(expected_targets, list) or
+               expected_targets == "last" or
+               expected_targets == "all")
+        assert(isinstance(cwd, str))
         self.stg = storage
         self.recipes = recipes
         self.cwd = cwd
         self.expected_targets = expected_targets
-        self.filtered_targets_cache = None
-        self.filtered_objects_cache = None
+        self.final_targets_cache_ = None
+        self.final_objects_cache_ = None
+        self.final_compilers_cache_ = None
         self.build_deps_()
 
     def build_deps_(self):
         """
         Build the dependecy graph of recipes.
         The graph includes edges for input/output of commands in recipes_deps.
-        It also include additional edges used for serialization of targets
-        in recipe_xdeps.
-        It also includes additional edges used for seerialisation of outputs
+        It also includes additional edges used for serialization of executables
+        and shared objects in recipe_xdeps.
+        It also includes additional edges used for serialisation of outputs
         that share a common path (anti and output deps) in recipe_pdeps.
         """
         assert(isinstance(self.recipes, list))
@@ -240,16 +267,16 @@ class RecipeGraph():
                 inpref_recipes[inpref].append(recipe)
             recipe_deps[recipe] = []
 
-        # We add extra deps between shared objects and targets as it
+        # We add extra deps between shared objects and programs as it
         # may cause issue if the shared objects dependencies are not correctly
         # tracked.
         recipe_xdeps = {'.ROOT': [], '.TAIL': []}
-        last_target = None
+        last_exec = None
         for recipe in reversed(self.recipes):
-            if self.is_target(recipe):
-                if last_target != None:
-                    recipe_xdeps[last_target].append(recipe)
-                last_target = recipe
+            if self.is_exec_or_shared_(recipe):
+                if last_exec != None:
+                    recipe_xdeps[last_exec].append(recipe)
+                last_exec = recipe
             recipe_xdeps[recipe] = []
 
         # We add additional deps between outputs that share the same path.
@@ -277,14 +304,18 @@ class RecipeGraph():
         self.recipe_xdeps = recipe_xdeps
         self.recipe_pdeps = recipe_pdeps
 
-    def get_dfs_recipes(self, root=".ROOT", xdeps=True):
+    def get_recipe_deps_(self, node, xdeps=True):
+        if xdeps: deps = (self.recipe_deps[node] +
+                          self.recipe_xdeps[node] +
+                          self.recipe_pdeps[node])
+        else: deps = self.recipe_deps[node]
+        return deps
+
+    def get_dfs_recipes_(self, root=".ROOT", xdeps=True):
         def dfs_(current, seen, out):
             if current in seen: return
             seen.add(current)
-            if xdeps: deps = (self.recipe_deps[current] +
-                              self.recipe_xdeps[current] +
-                              self.recipe_pdeps[current])
-            else: deps = self.recipe_deps[current]
+            deps = self.get_recipe_deps_(current, xdeps)
             for recipe in deps:
                 dfs_(recipe, seen, out)
             if current not in [".ROOT", ".TAIL"]:
@@ -300,7 +331,7 @@ class RecipeGraph():
         It does a reverse dfs walk such that we have a topological sort
         of targets which makes the build more readable.
         For root targets, we only emit recipes that are actually
-        final link targets.
+        final link or relocatable link targets.
         We explicitly serialize final link targets as the actual
         dependency between shared objects and executables for
         instance may not be always caught by the audit.
@@ -313,26 +344,26 @@ class RecipeGraph():
         # way. This only affect cases where we add .c files to a
         # pure link command, though this feature is not used in
         # current tools.
-        targets = self.get_targets_recipes()
+        final_targets = self.get_targets_recipes_()
         target_path_seen = set()
         f.write("SHELL=/bin/sh\n")
         f.write("QUIET=@\n")
         f.write("XDEPS=1\n")
         f.write("TARGET_XDEPS=0\n")
         f.write("FORCE=.FORCE\n")
-        f.write("TARGETS=%s\n" % " ".join(targets))
+        f.write("TARGETS=%s\n" % " ".join(final_targets))
         f.write(".SUFFIXES:\n")
         f.write(".PHONY: %s .ROOT .TAIL\n" % root)
         f.write("%s: .ROOT\n\n" % root)
         f.write(".ROOT: $(TARGETS)\n\n")
-        for recipe in reversed(self.get_dfs_recipes()):
+        for recipe in reversed(self.get_dfs_recipes_()):
             rnode = self.stg.load_recipe_node(recipe)
             deps = self.recipe_deps[recipe]
             pdeps = self.recipe_pdeps[recipe]
             xdeps = self.recipe_xdeps[recipe]
-            if self.is_target(recipe):
+            if recipe in final_targets:
                 # We add an explicit target for the last built target path
-                # when it's a final link (shared object, executables).
+                # when it's a link (relocatable, shared object, executables).
                 # The topological order including xdeps ensures that the
                 # first we see is actually the last built when several
                 # targets are built at the same path.
@@ -361,9 +392,9 @@ class RecipeGraph():
         f.write(".TAIL:\n")
         f.write(".FORCE:\n")
 
-    def is_target(self, recipe):
+    def is_exec_or_shared_(self, recipe):
         """
-        Returns True is the output of the recipe is a shared object
+        Returns True is the output of the recipe is a linked shared object
         or an executable program.
         """
         if recipe in [".ROOT", ".TAIL"]:  # pragma: uncovered
@@ -373,13 +404,42 @@ class RecipeGraph():
         interpreter = \
             CmdInterpreterFactory().get_interpreter(cmd, cmd['kind'])
         assert(interpreter != None)
-        has_final_link = (interpreter.get_kind() == "CC" and
-                          interpreter.cc_interpreter().has_final_link())
-        assert(not has_final_link or
-               len(interpreter.cc_interpreter().all_cc_outputs()) == 1)
-        return has_final_link
+        is_exec_or_shared = ((interpreter.get_kind() == "CC" or
+                              interpreter.get_kind() == "LD") and
+                             (interpreter.ccld_interpreter().has_final_link()))
+        assert(not is_exec_or_shared or
+               len(interpreter.ccld_interpreter().all_cc_outputs()) == 1)
+        return is_exec_or_shared
 
-    def target_match(self, target, output_path):
+    def is_reloc_(self, recipe):
+        """
+        Returns True is the output of the recipe is a relocatable object.
+        """
+        if recipe in [".ROOT", ".TAIL"]:  # pragma: uncovered
+            return False
+        rnode = self.stg.load_recipe_node(recipe)
+        cmd = self.stg.load_cmd_node(rnode['command'])
+        interpreter = \
+            CmdInterpreterFactory().get_interpreter(cmd, cmd['kind'])
+        assert(interpreter != None)
+        is_reloc = ((interpreter.get_kind() == "CC" or
+                     interpreter.get_kind() == "LD") and
+                    (interpreter.ccld_interpreter().has_reloc_link()))
+        assert(not is_reloc or
+               len(interpreter.ccld_interpreter().all_cc_outputs()) == 1)
+        return is_reloc
+
+    def is_candidate_target_(self, recipe):
+        """
+        Returns True is the output of the recipe is a candidate target, i.e.
+        a shared object, an executable or a relocatable object.
+        The final target set is a subset of the candidate targets set.
+        """
+        has_link = (self.is_exec_or_shared_(recipe) or
+                    self.is_reloc_(recipe))
+        return has_link
+
+    def target_match_(self, target, output_path):
         """
         Check if the output_path matches a target specification.
         There is a match as soon as target is a suffix of output_path.
@@ -391,12 +451,15 @@ class RecipeGraph():
         idx = output_path.rfind(target)
         return idx >= 0 and idx + len(target) == len(output_path)
 
-    def get_all_target_recipes(self):
+    def get_candidate_target_recipes_(self):
         """
-        Returns all the targets recipes in a valid order of construction.
+        Returns all candidate targets recipes in a valid order of construction.
+        The returned list is not yet filtered and may contain targets that
+        are not final targets and are not in the expected targets list.
+        The final target set is a subset of the candidate targets set.
         """
-        return filter(self.is_target,
-                      self.get_dfs_recipes())
+        return filter(self.is_candidate_target_,
+                      self.get_dfs_recipes_())
 
     def get_targets(self):
         """
@@ -405,40 +468,47 @@ class RecipeGraph():
         more than once.
         If expected_targets is given in the constructor,
         it filters out all targets output paths not in this list.
-        Ref to target_match() method.
+        Ref to target_match_() method called from get_targets_recipes_pair_().
         """
-        return map(lambda x: x[0], self.get_targets_recipes_())
-
-    def get_targets_recipes(self):
-        """
-        Returns the list of selected targets recipes.
-        """
-        return map(lambda x: x[1], self.get_targets_recipes_())
+        return map(lambda x: x[0], self.get_targets_recipes_pairs_())
 
     def get_targets_recipes_(self):
         """
-        Build a filtered list of (output_path, target_recipe) pairs.
+        Returns the list of selected targets recipes.
         """
-        if self.filtered_targets_cache != None:
-            return self.filtered_targets_cache
+        return map(lambda x: x[1], self.get_targets_recipes_pairs_())
+
+    def get_targets_recipes_pairs_(self):
+        """
+        Build a filtered list of (output_path, target_recipe) pairs.
+        The candidate targets (shared, exec, relocatables) are filtered
+        to get the final targets list:
+        - relocatable targets that are not leaf of the graph are filtered out
+        - targets that do not match the expected target list are filtered out
+        """
+        if self.final_targets_cache_ != None:
+            return self.final_targets_cache_
         last_target_pair = None
         targets_pairs = []
-        for recipe in self.get_all_target_recipes():
+        root_recipes = self.get_recipe_deps_(".ROOT")
+        for recipe in self.get_candidate_target_recipes_():
             rnode = self.stg.load_recipe_node(recipe)
             outrefs = self.stg.load_path_ref_list(rnode['outputs'])
             assert(len(outrefs) == 1)
+            if self.is_reloc_(recipe) and recipe not in root_recipes:
+                continue
             output_path = self.stg.load_path_ref(outrefs[0])['path']
             last_target_pair = (output_path, recipe)
             if isinstance(self.expected_targets, list):
-                matches = filter(lambda x: self.target_match(x, output_path),
+                matches = filter(lambda x: self.target_match_(x, output_path),
                                  self.expected_targets)
             if (self.expected_targets == "all" or
                 isinstance(self.expected_targets, list) and matches):
                 targets_pairs.append(last_target_pair)
         if self.expected_targets == "last" and last_target_pair:
             targets_pairs.append(last_target_pair)
-        self.filtered_targets_cache = targets_pairs
-        return targets_pairs
+        self.final_targets_cache_ = targets_pairs
+        return self.final_targets_cache_
 
     def get_objects(self):
         """
@@ -446,23 +516,23 @@ class RecipeGraph():
         Note that there may be duplicate paths if an object path is built
         more than once.
         """
-        return map(lambda x: x[0], self.get_objects_recipes_())
-
-    def get_objects_recipes(self):
-        """
-        Returns the list of selected objects recipes.
-        """
-        return map(lambda x: x[1], self.get_objects_recipes_())
+        return map(lambda x: x[0], self.get_objects_recipes_triplets_())
 
     def get_objects_recipes_(self):
         """
+        Returns the list of selected objects recipes.
+        """
+        return map(lambda x: x[1], self.get_objects_recipes_triplets_())
+
+    def get_objects_recipes_triplets_(self):
+        """
         Returns a list of triplets (output_path, recipe, target_recipe).
         """
-        if self.filtered_objects_cache != None:
-            return self.filtered_objects_cache
+        if self.final_objects_cache_ != None:
+            return self.final_objects_cache_
         objects_triplets = []
-        for target_recipe in self.get_targets_recipes():
-            for recipe in self.get_dfs_recipes(root=target_recipe,
+        for target_recipe in self.get_targets_recipes_():
+            for recipe in self.get_dfs_recipes_(root=target_recipe,
                                                xdeps=False):
                 rnode = self.stg.load_recipe_node(recipe)
                 cmd = self.stg.load_cmd_node(rnode['command'])
@@ -470,9 +540,10 @@ class RecipeGraph():
                     CmdInterpreterFactory().get_interpreter(cmd, cmd['kind'])
                 assert(interpreter != None)
                 if interpreter.get_kind() != "CC": continue
-                has_cc = interpreter.cc_interpreter().has_cc_phase("CC")
-                has_final_link = interpreter.cc_interpreter().has_final_link()
-                if has_cc and not has_final_link:
+                has_cc = interpreter.ccld_interpreter().has_cc_phase("CC")
+                has_link = (interpreter.ccld_interpreter().has_final_link() or
+                            interpreter.ccld_interpreter().has_reloc_link())
+                if has_cc and not has_link:
                     outrefs = self.stg.load_path_ref_list(rnode['outputs'])
                     for x in outrefs:
                         triplet = (self.stg.load_path_ref(x)['path'],
@@ -480,15 +551,22 @@ class RecipeGraph():
                         if (triplet not in  # pragma: branch_uncovered
                             objects_triplets):
                             objects_triplets.append(triplet)
-        self.filtered_objects_cache = objects_triplets
-        return objects_triplets
+        self.final_objects_cache_ = objects_triplets
+        return self.final_objects_cache_
 
     def get_compilers(self):
         """
-        Returns the list of compilers used in targets and objects construction.
+        Returns the list of compilers used in recipes that are compiler
+        drivers (i.e. CC interpreters) and have a CC phase or a final
+        link phase.
+        TODO: check whether we really need to filter phase ot just need
+        to get all CC interpreters.
         """
+        if self.final_compilers_cache_ != None:
+            return self.final_compilers_cache_
         compilers = []
-        for recipe in self.get_objects_recipes() + self.get_targets_recipes():
+        for recipe in (self.get_objects_recipes_() +
+                       self.get_targets_recipes_()):
             rnode = self.stg.load_recipe_node(recipe)
             cmd = self.stg.load_cmd_node(rnode['command'])
             interpreter = \
@@ -496,12 +574,13 @@ class RecipeGraph():
             assert(interpreter != None)
             if interpreter.get_kind() != "CC":  # pragma: uncovered
                 continue
-            has_cc = interpreter.cc_interpreter().has_cc_phase("CC")
-            has_final_link = interpreter.cc_interpreter().has_final_link()
+            has_cc = interpreter.ccld_interpreter().has_cc_phase("CC")
+            has_final_link = interpreter.ccld_interpreter().has_final_link()
             if has_cc or has_final_link:  # pragma: branch_uncovered
                 compiler = cmd['arg0']
                 if not compiler in compilers: compilers.append(compiler)
-        return compilers
+        self.final_compilers_cache_ = compilers
+        return self.final_compilers_cache_
 
     def get_lto_opts(self):
         """
@@ -516,12 +595,12 @@ class RecipeGraph():
                     or arg.startswith('-O'))
 
         optflags = {}
-        for target_recipe in self.get_targets_recipes():
+        for target_recipe in self.get_targets_recipes_():
             rnode_target = self.stg.load_recipe_node(target_recipe)
             target_path = self.stg.load_path_ref(
                 self.stg.load_path_ref_list(
                     rnode_target['outputs'])[0])['path']
-            for recipe in self.get_dfs_recipes(root=target_recipe,
+            for recipe in self.get_dfs_recipes_(root=target_recipe,
                                                xdeps=False):
                 rnode = self.stg.load_recipe_node(recipe)
                 cmd = self.stg.load_cmd_node(rnode['command'])
@@ -529,7 +608,7 @@ class RecipeGraph():
                     CmdInterpreterFactory().get_interpreter(cmd, cmd['kind'])
                 assert(interpreter != None)
                 if interpreter.get_kind() != "CC": continue
-                if interpreter.cc_interpreter().has_cc_phase("CC"):
+                if interpreter.ccld_interpreter().has_cc_phase("CC"):
                     optflags.setdefault(target_path, [])
                     optflags[target_path].extend(
                         [x for x in interpreter.get_args()[1:]
@@ -545,7 +624,8 @@ class RecipeGraph():
         the CCInterpreter class.
         """
         outputs = []
-        for recipe in self.get_objects_recipes() + self.get_targets_recipes():
+        for recipe in (self.get_objects_recipes_() +
+                       self.get_targets_recipes_()):
             rnode = self.stg.load_recipe_node(recipe)
             cmd = self.stg.load_cmd_node(rnode['command'])
             interpreter = \
@@ -553,11 +633,11 @@ class RecipeGraph():
             assert(interpreter != None)
             if interpreter.get_kind() != "CC":  # pragma: uncovered
                 continue
-            if interpreter.cc_interpreter().has_cc_phase("CC"):
+            if interpreter.ccld_interpreter().has_cc_phase("CC"):
                 # We must use the unmodified output arguments of the
                 # CC command line, not the normalized one returned by
                 # value.outputs() for instance.
-                cc_outputs = interpreter.cc_interpreter().all_cc_outputs()
+                cc_outputs = interpreter.ccld_interpreter().all_cc_outputs()
                 # In case of multiple outputs in CC phases, all outputs are
                 # in the same directory, thus the first one is sufficient
                 # though it's a TODO to handle multiple outputs
@@ -632,6 +712,25 @@ class RecipeGraph():
                 stg.append_recipes_file(rnod_digest)
 
             graph = RecipeManager(stg).recipe_graph()
+            # Test compilers (2 times for testing cache)
+            for i in range(2):
+                deep_eq(graph.get_compilers(), ['/usr/bin/gcc'],
+                        _assert=True)
+            # Test targets (2 times for testing cache)
+            for i in range(2):
+                deep_eq(graph.get_targets(),
+                        map(lambda x: '%s/%s' % (tmpdir, x),
+                            ['main.exe', 'main2.exe']),
+                        _assert=True)
+            # Test objects (2 times for testing cache)
+            for i in range(2):
+                deep_eq(graph.get_objects(),
+                        map(lambda x: '%s/%s' % (tmpdir, x),
+                            ['a.o', 'b.o',
+                             'a.o', 'c.o']),
+                        _assert=True)
+            deep_eq(graph.get_compilers(), ['/usr/bin/gcc'], _assert=True)
+
             mkfile = os.path.join(tmpdir, "Makefile")
             with open(mkfile, "w") as f:
                 graph.write_makefile(f)

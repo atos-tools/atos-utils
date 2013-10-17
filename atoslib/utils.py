@@ -223,17 +223,17 @@ def run_atos_audit(args):
 
     ccregexp = (args.ccname and re.escape(args.ccname)
                 or args.ccregexp)
-    if not regexp.re_utils.re_check(ccregexp):  # pragma: uncovered (error)
+    if not ccregexp or not regexp.re_utils.re_check(ccregexp):
         error("malformed compiler regexp: %s" % ccregexp)
         return 1
     ldregexp = (args.ldname and re.escape(args.ldname)
                 or args.ldregexp)
-    if not regexp.re_utils.re_check(ldregexp):  # pragma: uncovered (error)
+    if not ldregexp or not regexp.re_utils.re_check(ldregexp):
         error("malformed linker regexp: %s" % ldregexp)
         return 1
     arregexp = (args.arname and re.escape(args.arname)
                 or args.arregexp)
-    if not regexp.re_utils.re_check(arregexp):  # pragma: uncovered (error)
+    if not arregexp or not regexp.re_utils.re_check(arregexp):
         error("malformed archiver regexp: %s" % arregexp)
         return 1
     binregexp = ("(%s)" % "|".join(
@@ -732,17 +732,17 @@ def run_atos_deps(args):
             print >>f, "# Targets list that will be rebuilt by ATOS"
             print >>f, "# Prefix with '#' or remove useless targets"
             if targets:  # pragma: branch_always
-                print >>f, "\n".join(targets)
+                print >>f, "".join(map(lambda x: x + "\n", targets)),
             else:  # pragma: uncovered (error)
-                print >>f, "# ERROR: empty target list, audit failed.\n"
+                print >>f, "# ERROR: empty target list, audit failed."
 
     with open(os.path.join(args.configuration_path, "objects"), "w") as f:
         objects = graph.get_objects()
-        if objects: print >>f, "\n".join(objects),
+        if objects: print >>f, "".join(map(lambda x: x + "\n", objects)),
 
     with open(os.path.join(args.configuration_path, "compilers"), "w") as f:
         compilers = graph.get_compilers()
-        if compilers: print >>f, "\n".join(compilers),
+        if compilers: print >>f, "".join(map(lambda x: x + "\n", compilers)),
 
     config_file = os.path.join(args.configuration_path, 'config.json')
     json_config = atos_lib.json_config(config_file)

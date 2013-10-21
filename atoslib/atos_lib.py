@@ -25,6 +25,7 @@ import tempfile
 import glob
 import threading
 import atexit
+import functools
 
 import globals
 import jsonlib
@@ -1071,6 +1072,104 @@ def variant_id(options=None, gopts=None, uopts=None):
 def target_id(executables):
     """ Returns the target id given the list of executables. """
     return "-".join(map(os.path.basename, executables))
+
+def store_configured_targets(configuration_path, targets):
+    """
+    Stores the configured targets into the targets file
+    storage.
+    Note that this file may be modified by the user, hence
+    we add some comments there.
+    The targets list may be None or empty.
+    """
+    targets_file = os.path.join(configuration_path, "targets")
+    with open(targets_file, "w") as f:
+        print >>f, "# Targets list that will be rebuilt by ATOS"
+        print >>f, "# Prefix with '#' or remove useless targets"
+        if targets:  # pragma: branch_always
+            print >>f, "".join(map(lambda x: x + "\n", targets)),
+        else:  # pragma: uncovered (error)
+            print >>f, "# ERROR: empty target list, audit failed."
+
+def get_configured_targets(configuration_path):
+    """
+    Returns the list of compilation targets pathes.
+    The returned pathes are absolute.
+    Return None if the targets file does not exist.
+    """
+    targets_file = os.path.join(
+        configuration_path, "targets")
+    if not os.path.exists(targets_file): return None
+    with open(targets_file) as f:
+        targets = filter(
+            lambda x: x != "" and not x.startswith("#"),
+            map(lambda x: x.strip(), f.readlines()))
+    return targets
+
+def is_configured_target(configuration_path, target):
+    """
+    Returns true if the given target path is a configured target.
+    The target path must be an absolute and  normailized path.
+    """
+    assert(os.path.isabs(target) and os.path.normpath(target) == target)
+    targets = get_configured_targets(configuration_path)
+    if targets == None: return False
+    return target in targets
+
+def store_configured_objects(configuration_path, objects):
+    """
+    Stores the configured objects into the objects file
+    storage.
+    The objects list may be None or empty.
+    """
+    objects_file = os.path.join(configuration_path, "objects")
+    with open(objects_file, "w") as f:
+        if objects: print >>f, "".join(map(lambda x: x + "\n", objects)),
+
+def get_configured_objects(configuration_path):    # pragma: uncovered
+    """
+    Returns the list of compilation objects pathes.
+    The returned pathes are absolute.
+    Return None if the objects file does not exist.
+    """
+    objects_file = os.path.join(
+        configuration_path, "objects")
+    if not os.path.exists(objects_file): return None
+    with open(objects_file) as f:
+        objects = filter(
+            lambda x: x != "" and not x.startswith("#"),
+            map(lambda x: x.strip(), f.readlines()))
+    return objects
+
+def is_configured_object(configuration_path, obj_path):    # pragma: uncovered
+    """
+    Returns true if the given object path is a configured object.
+    The object path must be an absolute and  normailized path.
+    """
+    assert(os.path.isabs(obj_path) and os.path.normpath(obj_path) == obj_path)
+    objects = get_configured_objects(configuration_path)
+    if objects == None: return False
+    return obj_path in objects
+
+def store_configured_compilers(configuration_path, compilers):
+    """
+    Stores the configured compilers into the compilers file
+    storage.
+    The compilers list may be None or empty.
+    """
+    compilers_file = os.path.join(configuration_path, "compilers")
+    with open(compilers_file, "w") as f:
+        if compilers: print >>f, "".join(map(lambda x: x + "\n", compilers)),
+
+def absolute_norm_pathes(pathes, cwd=None):
+    """
+    Normalize the given pathes list into an absolute canonical path list.
+    If cwd is not given, takes the current working dir.
+    """
+    if cwd == None: cwd = os.getcwd()
+    return map(os.path.normpath,
+               map(os.path.abspath,
+                   map(functools.partial(os.path.join, cwd),
+                       pathes)))
 
 def get_profile_path(configuration_path, variant):
     """ Returns the local profile path for the given variant. """

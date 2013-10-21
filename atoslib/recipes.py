@@ -431,7 +431,7 @@ class RecipeGraph():
 
     def is_candidate_target_(self, recipe):
         """
-        Returns True is the output of the recipe is a candidate target, i.e.
+        Returns True if the output of the recipe is a candidate target, i.e.
         a shared object, an executable or a relocatable object.
         The final target set is a subset of the candidate targets set.
         """

@@ -52,6 +52,7 @@ class LDArgumentInterpreter:
         if not namespace.outputs:
             ld_outputs = ["a.out"]
         else:
+            assert(len(namespace.outputs) == 1)
             ld_outputs = namespace.outputs[:]
 
         self.ld_inputs_ = ld_inputs

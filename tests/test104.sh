@@ -19,8 +19,6 @@ $ROOT/bin/atos-init \
     -b "sh ./build.sh"
 
 
-export ATOS_DEBUG=1
-
 $ROOT/bin/atos-opt -r -a "-O2 -fno-strict-aliasing" 2>&1 | tee log1
 
 [ `cat log1 | grep command | grep gcc | grep fstrict-aliasing | grep no-strict-aliasing | wc -l` -eq 0 ]

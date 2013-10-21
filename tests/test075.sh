@@ -31,7 +31,7 @@ ATOS_DEBUG_FILE=log.txt \
 
 # Test in force mode
 $ROOT/bin/atos-init -c -b "sh ./build.sh" \
-    -r "$SRCDIR/examples/sha1/run.sh" --force -e sha
+    -r "$SRCDIR/examples/sha1/run.sh" --force -e "sha sha.so"
 
 rm -f log.txt
 ATOS_DEBUG_FILE=log.txt \

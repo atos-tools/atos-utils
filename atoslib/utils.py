@@ -568,6 +568,32 @@ def run_atos_build_local(args):
     driver_env.update({"ALDSOFLAGS": " ".join(shared_link_options)})
     driver_env.update({"ALDMAINFLAGS": " ".join(main_link_options)})
 
+    config_file = os.path.join(args.configuration_path, 'config.json')
+    json_config = atos_lib.json_config(config_file)
+    if len(json_config.config.get('compilers', [])):
+        collect_gcc = collect_lto_wrapper = lto_plugin = ""
+        compiler = json_config.config.get('compilers', [])[0]
+        driver_vers = compiler["driver_version"]
+        reobj = re.search('COLLECT_GCC=(.*)\n', driver_vers)
+        if reobj:  # pragma: branch_always
+            collect_gcc = reobj.group(1)
+            reobj = re.search('COLLECT_LTO_WRAPPER=(.*)\n', driver_vers)
+            if reobj:  # pragma: branch_always
+                collect_lto_wrapper = reobj.group(1)
+                lto_plugin = os.path.join(
+                    os.path.dirname(collect_lto_wrapper), 'liblto_plugin.so')
+
+        if (collect_gcc and os.path.exists(collect_gcc) and
+            collect_lto_wrapper and os.path.exists(collect_lto_wrapper) and
+            lto_plugin and
+            os.path.exists(lto_plugin)):  # pragma: branch_always
+            driver_env.update({"ACOLLECT_GCC": collect_gcc})
+            driver_env.update({"ACOLLECT_LTO_WRAPPER": collect_lto_wrapper})
+            driver_env.update({"ALTO_PLUGIN": lto_plugin})
+
+    debug("build env: %s\n" %
+          ' '.join(map(lambda (k, v): '%s=%s' % (k, v), driver_env.items())))
+
     if not args.command and not opt_rebuild:
         # if the configuration path contains a build.mk execute it
         build_mk = os.path.join(args.configuration_path, "build.mk")
@@ -685,18 +711,12 @@ def run_atos_deps(args):
     if args.all:
         targets = "all"
 
-    targets_file = os.path.join(args.configuration_path, "targets")
     if targets == None and not opt_rebuild:  # pragma: uncovered
-        if os.path.exists(targets_file):
-            with open(targets_file) as f:
-                targets = filter(
-                    lambda x: x != "" and not x.startswith("#"),
-                    map(lambda x: x.strip(), f.readlines()))
-            targets_file_used = True
+        targets = atos_lib.get_configured_targets(args.configuration_path)
+        if targets != None: targets_file_used = True
 
     if targets == None or len(targets) == 0:  # pragma: uncovered (error)
-        error("targets list not specified or "
-              "targets file empty (%s)" % targets_file)
+        error("targets list not specified or empty")
         return 1
 
     message("Computing build dependencies...")
@@ -726,23 +746,14 @@ def run_atos_deps(args):
     if not os.path.isdir(args.configuration_path):  # pragma: uncovered
         return 0
 
-    if not targets_file_used:  # pragma: branch_uncovered
-        with open(targets_file, "w") as f:
-            targets = executables if opt_rebuild else graph.get_targets()
-            print >>f, "# Targets list that will be rebuilt by ATOS"
-            print >>f, "# Prefix with '#' or remove useless targets"
-            if targets:  # pragma: branch_always
-                print >>f, "".join(map(lambda x: x + "\n", targets)),
-            else:  # pragma: uncovered (error)
-                print >>f, "# ERROR: empty target list, audit failed."
+    targets = graph.get_targets()
+    atos_lib.store_configured_targets(args.configuration_path, targets)
 
-    with open(os.path.join(args.configuration_path, "objects"), "w") as f:
-        objects = graph.get_objects()
-        if objects: print >>f, "".join(map(lambda x: x + "\n", objects)),
+    objects = graph.get_objects()
+    atos_lib.store_configured_objects(args.configuration_path, objects)
 
-    with open(os.path.join(args.configuration_path, "compilers"), "w") as f:
-        compilers = graph.get_compilers()
-        if compilers: print >>f, "".join(map(lambda x: x + "\n", compilers)),
+    compilers = graph.get_compilers()
+    atos_lib.store_configured_compilers(args.configuration_path, compilers)
 
     config_file = os.path.join(args.configuration_path, 'config.json')
     json_config = atos_lib.json_config(config_file)
@@ -1581,8 +1592,6 @@ def run_atos_one_run_remote(args):
     run_number = args.__dict__.get('run_number', 0)
     logs_dir = os.path.join(
         args.configuration_path, "logs")
-    targets_file = os.path.join(
-        args.configuration_path, "targets")
     care_archive_dir = os.path.join(
         args.configuration_path, "archives")
 
@@ -1599,10 +1608,8 @@ def run_atos_one_run_remote(args):
     # add targets
     care_file = tarfile.open(care_archive_copy, mode="a")
     reloc_dir_prefix = args.__dict__.get("reloc_dir", "")
-    targets = filter(
-        lambda x: x != "" and not x.startswith("#"),
-        map(lambda x: x.strip(), open(targets_file).readlines()))
-    targets = map(os.path.abspath, targets)
+    targets = atos_lib.get_configured_targets(args.configuration_path)
+    assert(targets != None and len(targets) > 0)
     map(lambda f: care_file.add(
             reloc_dir_prefix + f, arcname="run.care/rootfs" + f), targets)
 
@@ -1851,13 +1858,9 @@ def run_atos_one_run_local(args):
     if results_script:
         executables, target_id = None, None
     else:
-        try:
-            with open(os.path.join(
-                    args.configuration_path, "targets")) as targetf:
-                executables = filter(  # pragma: branch_uncovered
-                    lambda x: x != "" and not x.startswith("#"),
-                    map(lambda x: x.strip(), targetf.readlines()))
-        except:
+        executables = atos_lib.get_configured_targets(args.configuration_path)
+        if (executables == None or
+            len(executables) == 0):   # pragma: uncovered (error)
             error('no target executable available in configuration')
             return 1
         target_id = args.id or atos_lib.target_id(executables)

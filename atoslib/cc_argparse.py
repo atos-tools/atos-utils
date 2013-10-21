@@ -85,6 +85,7 @@ class CCArgumentInterpreter:
             if not namespace.outputs:
                 cc_outputs = ["a.out"]
             else:
+                assert(len(namespace.outputs) == 1)
                 cc_outputs = namespace.outputs
         elif len(cc_inputs) == 1 and len(namespace.outputs) == 1:
             cc_outputs = namespace.outputs

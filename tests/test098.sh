@@ -17,7 +17,7 @@ rm -f log*
 $ROOT/bin/atos-driver --atos-debug gcc 2>log2 || true
 head -1 log2 | grep "DEBUG:" >/dev/null
 [ $? = 0 ] || exit 1
-head -2 log2 | tail -1 | grep "no input file" >/dev/null
+cat log2 | grep "no input file" >/dev/null
 [ $? = 0 ] || exit 1
 
 rm -f log*

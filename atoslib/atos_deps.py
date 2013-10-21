@@ -89,7 +89,8 @@ class DependencyGraph(DGraph):
         outputs = []
         for node in self.nodes():
             for attr, value in self.node_attrs(node):
-                if attr != 'dependency' or value.kind() != "CC":
+                if (attr != 'dependency' or
+                    value.kind() != "CC"):  # pragma: uncovered
                     continue
                 if value.interpreter().ccld_interpreter().has_cc_phase("CC"):
                     # We must use the unmodified output arguments of the
@@ -114,7 +115,7 @@ class DependencyGraph(DGraph):
         for node in self.nodes():
             for attr, value in self.node_attrs(node):
                 if (attr != 'dependency' or
-                    value.kind() != "CC"):
+                    value.kind() != "CC"):  # pragma: uncovered
                     continue
                 compilers.add(value.command()['arg0'])
         return list(compilers)

@@ -30,7 +30,8 @@ from atoslib import logger
 from atoslib import globals
 from atoslib import cmd_interpreter
 from atoslib.recipes import RecipeStorage, RecipeNode
-import re, shlex, argparse, functools
+import re, shlex, argparse
+import tempfile
 
 command_interpreter_ = None
 
@@ -137,6 +138,9 @@ def legacy_audit_compile_command(opts, args):
     return status
 
 def audit_compile_command(opts, args):
+
+    logger.debug("audit: %s" % process.list2cmdline(args))
+
     if opts.legacy:
         return legacy_audit_compile_command(opts, args)
 
@@ -233,7 +237,10 @@ def audit_compile_command(opts, args):
 
 def invoque_compile_command(opts, args):
 
+    logger.debug("invoque: %s" % process.list2cmdline(args))
+
     cwd = os.path.abspath(os.getcwd())
+    tempfiles = []
 
     stg, recipe_node = None, None
     if not opts.legacy and opts.recipe_digest:
@@ -246,8 +253,8 @@ def invoque_compile_command(opts, args):
     if recipe_node and stg.blacklist_contains(
         opts.recipe_digest):  # pragma: uncovered
         # If blacklisted, do not run the command at all
-        logger.debug("skip compilation for blacklisted command: %s" %
-                     opts.recipe_digest)
+        logger.debug("atos-driver: skip compilation of blacklisted recipe: %s"
+                     % opts.recipe_digest)
         recipe_node.get_output_files()
         return 0
 
@@ -259,30 +266,61 @@ def invoque_compile_command(opts, args):
 
     interpreter = set_interpreter(opts, args)
 
-    has_final_link = (interpreter and interpreter.get_kind() == "CC" and
-                      interpreter.ccld_interpreter().has_cc_phase("LD") and
-                      (interpreter.ccld_interpreter().is_ld_kind("program") or
-                       interpreter.ccld_interpreter().is_ld_kind("shared")))
-    has_cc = (interpreter and interpreter.get_kind() == "CC" and
-              interpreter.ccld_interpreter().has_cc_phase("CC"))
+    is_cc = interpreter and interpreter.get_kind() == "CC"
+    is_ld = interpreter and interpreter.get_kind() == "LD"
+    has_link_phase = (
+        (is_cc and interpreter.ccld_interpreter().has_cc_phase("LD")) or
+        (is_ld and (len(interpreter.ccld_interpreter().all_cc_outputs()) > 0)))
+    generates_prog = (
+        has_link_phase and interpreter.ccld_interpreter().is_ld_kind(
+            "program"))
+    generates_shared = (
+        has_link_phase and interpreter.ccld_interpreter().is_ld_kind(
+            "shared"))
+    generates_reloc = (
+        has_link_phase and interpreter.ccld_interpreter().is_ld_kind(
+            "relocatable"))
 
-    cc_outputs = ((has_final_link or has_cc) and
-                  interpreter.ccld_interpreter().all_cc_outputs())
+    # TODO: handle case of CC reloc link
+    has_cc_final_link = is_cc and (generates_prog or generates_shared)
+    has_ld_reloc_link = is_ld and generates_reloc
+    has_cc_compile = (
+        is_cc and interpreter.ccld_interpreter().has_cc_phase("CC"))
 
-    if has_final_link:
-        cc_output_pathes = map(os.path.abspath, map(
-                functools.partial(os.path.join, os.getcwd()), cc_outputs))
-        cc_output_sums = map(atos_lib.sha1sum, cc_output_pathes)
-        for output_sum in cc_output_sums:
-            env_ALDLTOFLAGS = os.environ.get("ALDLTOFLAGS_" + output_sum)
-            if env_ALDLTOFLAGS: args.extend(
-                process.cmdline2list(env_ALDLTOFLAGS))
+    all_outputs = []
+    if is_cc or is_ld:
+        all_outputs = interpreter.ccld_interpreter().all_cc_outputs()
+    all_outputs_pathes = atos_lib.absolute_norm_pathes(all_outputs)
 
-    if has_cc or has_final_link:
+    assert(not has_link_phase or len(all_outputs) == 1)
+    assert(not has_cc_compile or len(all_outputs) >= 1)
+
+    in_targets = (
+        (has_cc_final_link or has_ld_reloc_link) and
+        atos_lib.is_configured_target(
+            opts.configuration_path, all_outputs_pathes[0]))
+
+    # TODO, ensure that recipe is in objects recipes
+    in_objects = True
+
+    is_configured_final_link = in_targets and has_cc_final_link
+    is_configured_reloc_link = in_targets and has_ld_reloc_link
+    is_configured_compile = in_objects and has_cc_compile
+
+    is_configured = (
+        is_configured_final_link or is_configured_reloc_link or
+        is_configured_compile)
+
+    if is_configured_final_link:
+        output_sum = atos_lib.sha1sum(all_outputs_pathes[0])
+        env_ALDLTOFLAGS = os.environ.get("ALDLTOFLAGS_%s" % output_sum)
+        if env_ALDLTOFLAGS: args.extend(process.cmdline2list(env_ALDLTOFLAGS))
+
+    if is_configured_final_link or is_configured_compile:
         env_ACFLAGS = os.environ.get("ACFLAGS")
         if env_ACFLAGS: args.extend(process.cmdline2list(env_ACFLAGS))
 
-    if has_final_link:
+    if is_configured_final_link:
         env_ALDFLAGS = os.environ.get("ALDFLAGS")
         if env_ALDFLAGS: args.extend(process.cmdline2list(env_ALDFLAGS))
 
@@ -291,41 +329,95 @@ def invoque_compile_command(opts, args):
         os.environ.get("COMMON_PROFILE_DIR_PREFIX", "")) or 0
     env_PROFILE_DIR_OPT = os.environ.get("PROFILE_DIR_OPT")
 
-    if has_cc:
-        assert(len(cc_outputs) >= 1)
+    if is_configured_compile:
         if env_PROFILE_DIR and env_PROFILE_DIR_OPT:
-            abs_output_dir = os.path.isabs(cc_outputs[0])
+            abs_output_dir = os.path.isabs(all_outputs[0])
             suffix = '' if abs_output_dir else cwd[profdir_common_len:]
             args.append("%s=%s/%s" % (
                     env_PROFILE_DIR_OPT, env_PROFILE_DIR, suffix))
 
-    elif has_final_link:
+    elif is_configured_final_link:
         if env_PROFILE_DIR and env_PROFILE_DIR_OPT:
             suffix = cwd[profdir_common_len:]
             args.append("%s=%s/%s" % (
                     env_PROFILE_DIR_OPT, env_PROFILE_DIR, suffix))
 
-    if has_final_link:
-        env_ALDSOFLAGS = os.environ.get("ALDSOFLAGS")
-        if (env_ALDSOFLAGS and
-            interpreter.ccld_interpreter().is_ld_kind("shared")):
-            args.extend(process.cmdline2list(env_ALDSOFLAGS))
+    if is_configured_final_link:
+        if generates_shared:
+            env_ALDSOFLAGS = os.environ.get("ALDSOFLAGS")
+            if env_ALDSOFLAGS:
+                args.extend(process.cmdline2list(env_ALDSOFLAGS))
+        if generates_prog:
+            env_ALDMAINFLAGS = os.environ.get("ALDMAINFLAGS")
+            if env_ALDMAINFLAGS:  # pragma: uncovered
+                args.extend(process.cmdline2list(env_ALDMAINFLAGS))
 
-        env_ALDMAINFLAGS = os.environ.get("ALDMAINFLAGS")
-        if (env_ALDMAINFLAGS and interpreter.ccld_interpreter().is_ld_kind(
-                "program")):  # pragma: uncovered
-            args.extend(process.cmdline2list(env_ALDMAINFLAGS))
+    if is_configured_reloc_link:
+        # Add all lto options directly to linker command and
+        # set required environment variables
+
+        env_ACFLAGS = os.environ.get("ACFLAGS")
+        if (env_ACFLAGS and
+            env_ACFLAGS.find('-flto') != -1):  # pragma: uncovered (lto)
+            # get input files CFLAGS
+            output_sum = atos_lib.sha1sum(all_outputs_pathes[0])
+            env_ALDLTOFLAGS = os.environ.get("ALDLTOFLAGS_%s" % output_sum)
+            if env_ALDLTOFLAGS:
+                cg_args = (
+                    "" + env_ALDLTOFLAGS + " " + os.environ.get("ACFLAGS"))
+            else:
+                cg_args = os.environ.get("ACFLAGS")
+
+            # GCC expects the options to be quoted: '-O2'
+            cg_args_quoted = ""
+            cg_args_list = cg_args.split(' ')
+            for cg_arg in cg_args_list:
+                cg_args_quoted = cg_args_quoted + '\'' + cg_arg + '\' '
+
+            os.environ["COLLECT_GCC_OPTIONS"] = cg_args_quoted
+
+            # Get path of gcc lto plugins
+            env_ACOLLECT_GCC = os.environ.get("ACOLLECT_GCC")
+            env_ACOLLECT_LTO_WRAPPER = os.environ.get("ACOLLECT_LTO_WRAPPER")
+            env_ALTO_PLUGIN = os.environ.get("ALTO_PLUGIN")
+            if (env_ACOLLECT_GCC and  # pragma: branch_always
+                os.path.exists(env_ACOLLECT_GCC)):
+                collect_gcc = env_ACOLLECT_GCC
+            if (env_ACOLLECT_LTO_WRAPPER and  # pragma: branch_always
+                os.path.exists(env_ACOLLECT_LTO_WRAPPER)):
+                collect_lto_wrapper = env_ACOLLECT_LTO_WRAPPER
+            if (env_ALTO_PLUGIN and  # pragma: branch_always
+                os.path.exists(env_ALTO_PLUGIN)):
+                lto_plugin = env_ALTO_PLUGIN
+
+            tempfiles.append(tempfile.NamedTemporaryFile(suffix=".res"))
+
+            if (collect_gcc and  # pragma: branch_always
+                collect_lto_wrapper and
+                lto_plugin):
+                os.environ["COLLECT_GCC"] = collect_gcc
+                os.environ["COLLECT_LTO_WRAPPER"] = collect_lto_wrapper
+                args.extend(process.cmdline2list(
+                    "--build-id -flto -plugin" + lto_plugin +
+                    " -plugin-opt=" + collect_lto_wrapper +
+                    " -plugin-opt=-fresolution=" + tempfiles[-1].name))
+                logger.debug("COLLECT_GCC_OPTIONS=%s" %
+                             os.environ["COLLECT_GCC_OPTIONS"])
+                logger.debug("ld command with LTO: args %s\n" % args)
 
     (new_opts, args) = parser.parse_known_args(args)
     opts.__dict__.update(vars(new_opts))
 
-    if (has_cc or has_final_link) and opts.optfile:
+    # TODO: should be passed also to reloc link
+    if (is_configured_compile or is_configured_final_link) and opts.optfile:
         args.extend(get_cc_command_additional_flags(opts, args))
 
     if recipe_node:
         recipe_node.fetch_input_files()
 
     args = atos_lib.replace_incompatible_options(args)
+
+    logger.debug("executing command: %s" % process.list2cmdline(args))
     status = process.system(args, print_output=True)
 
     if (recipe_node and status != 0
@@ -336,7 +428,7 @@ def invoque_compile_command(opts, args):
         recipe_node.get_output_files()
         return 0
 
-    if (has_cc or has_final_link) and opts.fctmap:
+    if (is_configured_compile or is_configured_final_link) and opts.fctmap:
         update_cc_function_map(opts, args)
 
     return status

@@ -876,4 +876,11 @@
 -funroll-all-loops => -funroll-loops
 -funroll-loops => -frerun-cse-after-loop
 
+WOs 80% 80% -ftree-loop-optimize, -fivopts
+
+WO2 80% 80% -funroll-loops, -funroll-all-loops
+WO2 80% 50% -ftree-loop-optimize, -fivopts
+
+WO3 80% 50% -ftree-loop-optimize, -funroll-all-loops, -fivopts, -funroll-loops
+
 #endif // GCC_VERSION >= 40400

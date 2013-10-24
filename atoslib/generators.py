@@ -46,6 +46,7 @@ class optim_flag_list():
         def __init__(self, frange=None, fchoice=None):
             assert bool(frange) ^ bool(fchoice)
             self.range, self.choice = None, None
+            self.prob_select = self.prob_choice = 0.5
             if frange:
                 flag, min, max, step = frange
                 self.range = (flag, int(min), int(max), int(step or 1))
@@ -64,6 +65,8 @@ class optim_flag_list():
                 val = min + random.randint(0, (max - min) / step) * step
                 return '%s%d' % (flag, val)
             elif self.choice:  # pragma: branch_always
+                if len(self.choice) == 2:
+                    return self.choice[random.random() >= self.prob_choice]
                 return random.choice(self.choice)
             else: assert 0  # pragma: unreachable
 
@@ -105,10 +108,11 @@ class optim_flag_list():
                 s = '-O'
             return s
 
-    def __init__(self, *filenames):
+    def __init__(self, filenames, weight_class=None):
         self.flag_list = []
         self.dependencies = {}
         self.aliases = {}
+        self.weight_class = weight_class
         for filename in filenames:
             self.load_from_file(filename)
 
@@ -173,6 +177,7 @@ class optim_flag_list():
 
     def load_from_file(self, filename):
         flag_list, rev_dependencies = [], {}
+        flags_weights = {}
         # parse flags file
         for line in open(filename):
             line = line.split('#', 1)[0].strip()
@@ -200,6 +205,15 @@ class optim_flag_list():
                 flag_list.extend(
                     [optim_flag_list.optim_flag(frange=reobj.groups())])
                 continue
+            # probability
+            reobj = re.match('^(W.*)  *(\d*)%  *(\d*)%(.*)', line)
+            if reobj:
+                if reobj.group(1) != self.weight_class: continue
+                prob_select = int(reobj.group(2)) / 100.0
+                prob_choice = int(reobj.group(3)) / 100.0
+                for flag in reobj.group(4).split(','):
+                    flags_weights[flag.strip()] = (prob_select, prob_choice)
+                continue
             # choice flag
             choices = [w.strip() for w in line.split('|')]
             flag_list += [optim_flag_list.optim_flag(fchoice=choices)]
@@ -207,6 +221,9 @@ class optim_flag_list():
         for flag in flag_list:
             for dep_parent in rev_dependencies.get(flag.optname(), ['']):
                 self.dependencies.setdefault(dep_parent, []).append(flag)
+            if flag.optname() in flags_weights:
+                flag.prob_select, flag.prob_choice = \
+                    flags_weights[flag.optname()]
         self.flag_list.extend(flag_list)
 
 class config(atos_lib.default_obj):
@@ -475,7 +492,8 @@ class gen_rnd_uniform_deps(config_generator):
     Generate random meaningful combination of flags using dependencies.
     """
     def __init__(self, parent=None, flags_files=None, optim_levels=None,
-                 configuration_path=None, **ignored_kwargs):
+                 configuration_path=None, weight_class=None,
+                 **ignored_kwargs):
         self.parent_ = parent or gen_config(configuration_path)
         assert(isinstance(self.parent_, config_generator) or isinstance(
                 self.parent_, types.GeneratorType))
@@ -486,7 +504,8 @@ class gen_rnd_uniform_deps(config_generator):
         assert all(map(os.path.isfile, self.flags_files_))
         self.optim_levels_ = optim_flag_list.optim_flag(
             fchoice=(optim_levels or '').split(','))
-        self.flag_list_ = optim_flag_list(*self.flags_files_)
+        self.flag_list_ = optim_flag_list(
+            self.flags_files_, weight_class=weight_class)
 
     def estimate_exploration_size(self):
         if not self.flag_list_.flag_list:
@@ -510,7 +529,7 @@ class gen_rnd_uniform_deps(config_generator):
                     flags = base_flags or self.optim_levels_.rand()
                     while True:
                         for f in sorted(list(available_flags), key=str):
-                            if random.randint(0, 1): continue
+                            if random.random() >= f.prob_select: continue
                             flags += ' ' + f.rand()
                         handled_flags |= available_flags
                         available_flags = (
@@ -1293,7 +1312,8 @@ class gen_flag_values(config_generator):
     def __init__(
         self, variant_id=None, config_flags=None, config_variant=None,
         nbvalues=None, try_removing=None, tradeoffs=None, keys=None,
-        expl_cookie=None, configuration_path=None, **kwargs):
+        expl_cookie=None, configuration_path=None, weight_class=None,
+        **kwargs):
         self.configuration_path = configuration_path
         self.nbvalues = int(nbvalues or 10)
         self.try_removing = int(try_removing or 0)
@@ -1310,7 +1330,8 @@ class gen_flag_values(config_generator):
         file_flags_lists = filter(os.path.isfile, map(
             functools.partial(os.path.join, self.configuration_path),
             file_flags_lists))
-        self.all_flags_list = optim_flag_list(*file_flags_lists)
+        self.all_flags_list = optim_flag_list(
+            file_flags_lists, weight_class=weight_class)
 
     def generate(self):
 
@@ -1897,7 +1918,7 @@ class gen_genetic_deps(config_generator):
 
     def __init__(self, parent=None, flags_files=None, optim_levels=None,
                  mutate_prob=None, mutate_rate=None, mutate_remove=None,
-                 evolve_rate=None, configuration_path=None,
+                 evolve_rate=None, configuration_path=None, weight_class=None,
                  **ignored_kwargs):
         assert flags_files
         assert configuration_path
@@ -1909,7 +1930,8 @@ class gen_genetic_deps(config_generator):
         self.parent_ = parent or gen_config()
         assert(isinstance(self.parent_, config_generator) or isinstance(
                 self.parent_, types.GeneratorType))
-        self.flag_list_ = optim_flag_list(*self.flags_files_)
+        self.flag_list_ = optim_flag_list(
+            self.flags_files_, weight_class=weight_class)
         self.mutate_prob = float(
             mutate_prob) if (mutate_prob is not None) else 0.3
         self.mutate_rate = float(

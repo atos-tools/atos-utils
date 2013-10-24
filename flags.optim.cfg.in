@@ -1924,3 +1924,15 @@
 -CG:ifc_heuristic=1|-CG:ifc_heuristic=2|-CG:ifc_heuristic=4|-CG:ifc_heuristic=8|-CG:ifc_heuristic=16|-CG:ifc_heuristic=32|-CG:ifc_heuristic=64|-CG:ifc_heuristic=256|-CG:ifc_heuristic=512|-CG:ifc_heuristic=1024
 
 #endif // STXP70CC
+
+WOs 80% 80% -ftree-forwprop
+WOs 80% 20% -fselective-scheduling2, -fschedule-insns
+
+WO2 80% 80% -fguess-branch-probability, -fira-loop-pressure, -ftree-sra
+WO2 80% 50% -fgcse
+WO2 80% 20% -ftree-ch, -ftree-pre, -fselective-scheduling2, -ftree-vrp, -fforward-propagate, -fschedule-insns
+
+WO3 80% 80% -fguess-branch-probability, -ftree-forwprop, -fcaller-saves, -fschedule-insns, -freorder-blocks, -fsched-critical-path-heuristic
+WO3 80% 80% -ftree-ccp, -ftree-sra
+WO3 80% 50% -ftree-ch, -ftree-pre
+WO3 80% 20% -fforward-propagate, -fselective-scheduling2

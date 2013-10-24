@@ -398,4 +398,8 @@
 -Ofast => -fpartial-inlining, -finline-functions
 #endif
 
+WO2 80% 80% -finline-small-functions, -finline-functions, -fearly-inlining
+
+WO3 80% 80% -finline-small-functions, -finline-functions, -fpartial-inlining
+
 #endif // GCC_VERSION >= 40400

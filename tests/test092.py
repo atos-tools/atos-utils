@@ -194,7 +194,7 @@ try:
     tmpf.write("=> -O2\n")
     tmpf.write("-O2 => -finline\n")
     tmpf.close()
-    fl = generators.optim_flag_list(tmpname)
+    fl = generators.optim_flag_list([tmpname])
     print fl.flag_list
     for flag in fl.flag_list:
         print flag.values()

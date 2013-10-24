@@ -534,6 +534,7 @@ class parsers:
         args.optim_levels(group)
         args.optim_variants(group)
         args.seed(group, hidden=True)
+        args.atos_explore.weight_class(group)
         args.flags(group, hidden=True)
         args.extra_arguments(group, hidden=True)
         # build and run options
@@ -577,6 +578,7 @@ class parsers:
         args.optim_levels(group)
         args.optim_variants(group)
         args.seed(group, hidden=True)
+        args.atos_explore.weight_class(group)
         args.flags(group, hidden=True)
         args.atos_explore.pruning(group)
         args.atos_explore.update_ref(group, hidden=True)
@@ -642,6 +644,7 @@ class parsers:
         args.atos_explore.mutate_remove(group)
         args.atos_explore.evolve_rate(group)
         args.atos_explore.nbpoints(group)
+        args.atos_explore.weight_class(group)
         args.atos_explore.flags(group, hidden=True)
         args.seed(group, hidden=True)
         args.atos_explore.pruning(group)
@@ -2434,6 +2437,14 @@ class args:
                  dest="nbpoints",
                  type=int, default=None,
                  help="number of selected points for each tradeoff")
+
+        @staticmethod
+        def weight_class(parser, args=("--weight-class",)):
+            parser.add_argument(
+                *args,
+                 dest="weight_class",
+                 default=None,
+                 help="weight class to use for weighting flags")
 
         @staticmethod
         def variant_id(parser, args=("--variant-id", "--variant_id")):

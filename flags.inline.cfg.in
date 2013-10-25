@@ -30,7 +30,12 @@
 //     pass_early_inline(NULL)
 //     --> cgraph_early_inlining*
 // only if (optimize && !-fno-inline && -fearly-inlining
+#if GCC_VERSION < 40800
 --param max-early-inliner-iterations=[4..20,2]
+#else
+// Default value was changed from 10 to 1
+--param max-early-inliner-iterations=[1..19,2]
+#endif // GCC_VERSION < 40800
 
 #endif // GCC_VERSION >= 40500
 
@@ -305,6 +310,29 @@
 
 #endif
 
+#if GCC_VERSION >= 40800
+//  pass_ipa_inline (optimize || flags_lto || flag_wpa)
+//  --> ipa_inline
+//      --> inline_small_functions
+//          --> want_inline_small_function_p
+//              --> big_speedup_p*
+//          --> update_caller_keys
+//              --> want_inline_small_function_p
+//                  --> big_speedup_p*
+//          --> update_callee_keys
+//              --> want_inline_small_function_p
+//                  --> big_speedup_p*
+//          --> add_new_edges_to_heap
+//              --> want_inline_small_function_p
+//                  --> big_speedup_p*
+--param inline-min-speedup=[0..100,5]
+
+// pass_early_inline
+// --> early_inliner*
+--param max-early-inliner-iterations
+
+#endif // GCC_VERSION >= 40800
+
 #if CLANG_VERSION > 0
 // Control the amount of inlining to perform (default = 225)
 -mllvm -inline-threshold=[100..500]
@@ -373,12 +401,19 @@
 -finline :: --param large-function-insns=
 -finline :: --param large-stack-frame=
 -finline :: --param large-unit-insns=
+#if GCC_VERSION < 40800
 -fguess-branch-probability :: --param hot-bb-frequency-fraction=
 -fguess-branch-probability :: --param hot-bb-count-fraction=
 #if GCC_VERSION >= 40600
 -fprofile-use :: --param hot-bb-frequency-fraction=
 -fprofile-use :: --param hot-bb-count-fraction=
 #endif
+#else
+-fguess-branch-probability :: --param hot-bb-frequency-fraction=
+-fguess-branch-probability :: --param hot-bb-count-ws-permille
+-fprofile-use :: --param hot-bb-frequency-fraction=
+-fprofile-use :: --param hot-bb-count-ws-permille
+#endif // GCC_VERSION < 40800
 // flag default values (useful for dep roots)
 
 => -O0

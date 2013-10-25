@@ -349,7 +349,7 @@
 //              --> unroll_and_peel_loops
 //                  --> decide_unrolling_and_peeling
 //                      --> decide_peel_simple*
---param max-peeled-insns=[20..2000,20]
+--param max-peeled-insns=[0..2000,100]
 
 // The maximum number of peelings of a single loop.
 // The default value is 16.
@@ -386,7 +386,7 @@
 //                  --> tree_unroll_loops_completely
 //                      --> canonicalize_loop_induction_variables
 //                          --> try_unroll_loop_completely*
---param max-completely-peeled-insns=[200..4000,200]
+--param max-completely-peeled-insns=[0..2000,100]
 
 // The maximum number of iterations of a loop to be suitable for complete
 // peeling. The default value is 16.
@@ -405,6 +405,25 @@
 //                  --> canonicalize_loop_induction_variables
 //                      --> try_unroll_loop_completely*
 --param max-completely-peel-times=[8..128,8]
+
+#if GCC_VERSION >= 40800
+// pass_iv_canon(flag_tree_loop_ivcanon)
+// --> canonicalize_induction_variables
+//     --> canonicalize_loop_induction_variables
+//         --> try_unroll_loop_completely*
+// pass_complete_unroll
+// --> tree_unroll_loops_completely
+//     --> tree_unroll_loops_completely_1
+//         --> canonicalize_loop_induction_variables
+//             --> try_unroll_loop_completely*
+// pass_complete_unrolli(optimize>=2)
+// --> tree_complete_unroll_inner
+//     --> tree_unroll_loops_completely
+//         --> tree_unroll_loops_completely_1
+//             --> canonicalize_loop_induction_variables
+//                 --> try_unroll_loop_completely*
+--param max-peel-branches=[8..128,8]
+#endif
 
 // The maximum number of insns of an unswitched loop.
 // The default value is 50.
@@ -712,6 +731,7 @@
 --param max-completely-peel-loop-nest-depth=[4..64,4]
 
 #if defined(GRAPHITE_ENABLED)
+#if GCC_VERSION < 40800
 
 // Removes the loop nesting structure: transforms the loop nest into a
 // single loop. This transformation can be useful to vectorize all the
@@ -724,6 +744,7 @@
 //                  --> graphite_transform_loops
 //                      --> apply_poly_transforms*
 -floop-flatten|-fno-loop-flatten
+#endif // GCC_VERSION < 40800
 
 // To avoid exponential effects in the Graphite loop transforms, the
 // number of parameters in a Static Control Part (SCoP) is bounded. The
@@ -771,6 +792,39 @@
 
 #endif // GCC_VERSION >= 40500
 
+#if GCC_VERSION >= 40800
+//  <too many>
+//  estimated_loop_iterations_int
+//  --> estimated_loop_iterations
+//      --> estimate_numbers_of_iterations_loop*
+//  estimated_stmt_executions
+//  --> estimated_loop_iterations
+//      --> estimate_numbers_of_iterations_loop*
+//  finite_loop_p
+//  --> max_loop_iterations
+//      --> estimate_numbers_of_iterations_loop*
+//  max_loop_iterations_int
+//  --> max_loop_iterations
+//      --> estimate_numbers_of_iterations_loop*
+//  max_stmt_executions
+//  --> max_loop_iterations
+//      --> estimate_numbers_of_iterations_loop*
+//  tree_ssa_loop_bounds
+//  --> estimate_numbers_of_iterations
+//      --> estimate_numbers_of_iterations_loop*
+//  canonicalize_induction_variables
+//  --> estimate_numbers_of_iterations
+//      --> estimate_numbers_of_iterations_loop*
+//  tree_unroll_loops_completely
+//  --> estimate_numbers_of_iterations
+//      --> estimate_numbers_of_iterations_loop*
+//  scev_probably_wraps_p
+//  --> estimate_numbers_of_iterations_loop*
+//  --> max_loop_iterations
+//      --> estimate_numbers_of_iterations_loop*
+-faggressive-loop-optimizations|-fno-aggressive-loop-optimizations
+
+#endif // GCC_VERSION >= 40800
 
 #if 0
 

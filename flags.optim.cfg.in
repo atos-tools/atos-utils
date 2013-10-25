@@ -442,6 +442,7 @@
 // This flag is enabled by default at -O3.
 -fipa-cp-clone|-fno-ipa-cp-clone
 
+#if GCC_VERSION < 40800
 // Perform matrix flattening and transposing. Matrix flattening tries to
 // replace an m-dimensional matrix with its equivalent n-dimensional
 // matrix, where n < m. This reduces the level of indirection needed for
@@ -451,6 +452,7 @@
 // the -fwhole-program flag. Transposing is enabled only if profiling
 // information is available.
 -fipa-matrix-reorg|-fno-ipa-matrix-reorg
+#endif // GCC_VERSION < 40800
 
 // Perform forward store motion on trees. This flag is enabled by default
 // at -O and higher.
@@ -736,8 +738,9 @@
 //      --> try_optimize_cfg
 //          --> try_crossjump_bb
 //              --> try_crossjump_to_edge*
---param min-crossjump-insns=[2..20,2]
+--param min-crossjump-insns=[1..19,2]
 
+#if GCC_VERSION < 40800
 // Select fraction of the maximal count of repetitions of basic block in
 // program given basic block needs to have to be considered hot.
 //  <too many>
@@ -777,6 +780,16 @@
 //             --> cgraph_decide_inlining_incrementally
 //                 --> cgraph_maybe_hot_edge_p*
 --param hot-bb-count-fraction=[5000..100000,5000]
+#else
+//  <too many>
+// --> maybe_hot_bb_p
+//     --> maybe_hot_count_p*
+// --> cgraph_maybe_hot_edge_p
+//     --> maybe_hot_count_p*
+// --> maybe_hot_edge_p
+//     --> maybe_hot_count_p*
+--param hot-bb-count-ws-permille=[0..1000,50]
+#endif // GCC_VERSION < 40800
 
 // Select fraction of the entry block frequency of executions of basic
 // block in function given basic block needs to have to be considered hot
@@ -1429,6 +1442,82 @@
 
 #endif // GCC_VERSION >= 40600
 
+#if GCC_VERSION >= 40800
+
+// Only for ADA
+// -fdelete-dead-exceptions|-fno-delete-dead-exceptions
+
+//  pass_cse_sincos(!-O0)
+//  --> execute_cse_sincos(!TARGET_HAS_SINCOS && !TARGET_C99_FUNCTIONS)*
+-fcse-sincos|-fno-cse-sincos
+
+//  pass_phiopt
+//  --> tree_ssa_phiopt_worker*
+-fhoist-adjacent-loads|-fno-hoist-adjacent-loads
+
+//  pass_rtl_hoist
+//  --> execute_rtl_hoist
+//      --> one_code_hoisting_pass
+//          --> hoist_code*
+//              --> should_hoist_expr_to_dom*
+-fira-hoist-pressure|-fno-ira-hoist-pressure
+
+//  pass_pre
+//  --> do_pre
+-ftree-partial-pre|-fno-tree-partial-pre
+
+//  pass_strength_reduction*
+-ftree-slsr|-fno-tree-slsr
+
+//  pass_rename_ssa_copies(flag_tree_copyrename)
+//  --> rename_ssa_copies
+//      --> copy_rename_partition_coalesce*
+-ftree-coalesce-inlined-vars|-fno-tree-coalesce-inlined-vars
+
+//  pass_rename_ssa_copies(flag_tree_copyrename)
+//  --> rename_ssa_copies
+//      --> copy_rename_partition_coalesce*
+-ftree-coalesce-vars|-fno-tree-coalesce-vars
+
+//  <too many>
+//  --> schedule_insns
+//      --> schedule_region*
+--param sched-state-edge-prob-cutoff=[0..100,10]
+
+//  schedule_insns
+//  --> haifa_sched_init
+//      --> sched_init*
+//  pass_sms (optimize && -fmodulo-sched)
+//  --> rest_of_handle_sms
+//      --> sms_schedule
+//          --> haifa_sched_init
+//              --> sched_init*
+//  pass_sched2 (optimize && -fschedule-insns2)
+//  --> rest_of_handle_sched2 (-fsched2-use-superblocks)
+//      --> schedule_ebbs
+//          --> schedule_ebbs_init
+//              --> haifa_sched_init
+//                  --> sched_init*
+//  pass_sched (optimize && -fschedule-insns)
+//  --> rest_of_handle_sched
+//      --> run_selective_scheduling
+//          --> sel_global_init
+//              --> sched_init*
+//  pass_sched2 (optimize && -fschedule-insns2)
+//  --> rest_of_handle_sched2 (-fselective-scheduling2)
+//      --> run_selective_scheduling
+//          --> sel_global_init
+//              --> sched_init*
+--param sched-pressure-algorithm=[1..2]
+
+//  pass_strength_reduction(-ftree-slsr)
+//  ....
+//      --> alloc_cand_and_find_basis
+//          --> find_basis_for_candidate*
+--param max-slsr-cand-scan=[25..500,25]
+
+#endif  // GCC_VERSION >= 40800
+
 #ifdef UNSAFE_OPTIMS
 
 #if GCC_VERSION >= 40400
@@ -1817,12 +1906,21 @@
 -fipa-cp :: --param devirt-type-list-size=
 -ftree-pre :: --param max-partial-antic-length=
 -fipa-sra :: --param ipa-sra-ptr-growth-factor=
+#if GCC_VERSION < 40800
 -fguess-branch-probability :: --param hot-bb-frequency-fraction=
 -fguess-branch-probability :: --param hot-bb-count-fraction=
 #if GCC_VERSION >= 40600
 -fprofile-use :: --param hot-bb-frequency-fraction=
 -fprofile-use :: --param hot-bb-count-fraction=
 #endif
+#else
+-fguess-branch-probability :: --param hot-bb-frequency-fraction=
+-fguess-branch-probability :: --param hot-bb-count-ws-permille
+-fprofile-use :: --param hot-bb-frequency-fraction=
+-fprofile-use :: --param hot-bb-count-ws-permille
+-ftree-copyrename :: -ftree-coalesce-vars, -ftree-coalesce-inlined-vars
+-ftree-slsr :: --param max-slsr-cand-scan
+#endif // GCC_VERSION < 40800
 
 // flag default values (useful for dep roots)
 

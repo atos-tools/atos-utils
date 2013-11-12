@@ -1674,9 +1674,19 @@ def run_atos_config(args):
             args.configuration_path, compiler_list, args.flags)
         # print compiler config
         logger.message("Compilers found:")
-        for compiler in json_config.config.get('compilers', []):
+        compilers = json_config.config.get('compilers', [])
+        for compiler in compilers:
             logger.message(
                 "  " + atos_lib.json_config.compiler_entry_str(compiler))
+        # forbid multiple compilers
+        compiler_ids = set(
+            filter(bool, map(lambda c: c.get('id', False), compilers)))
+        if (len(compiler_ids) > 1
+            and not os.getenv("ATOS_ALLOW_MULTIPLE_COMPILERS", "")
+            ):  # pragma: uncovered (error)
+            error("multiple compilers are not allowed. "
+                  "Compiler name can be specified with --ccname option.")
+            return 1
 
     return 0
 

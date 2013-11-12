@@ -71,17 +71,20 @@ def setup(**kwargs):
     #   target names that may be direct prefix of base names
     cross_target_pfx = "(sh4|st40|arm|st200|stxp70)"
     #   otherwise generic optional prefixes, typically '.*-'
-    generic_pfx = "(.*-)"
+    generic_pfx = "(.*-)?"
+    #   generic optional suffixes, typically '-.*'
+    generic_sfx = "([-\.].*)?"
 
     # Default compiler basename regexp
     # Either the bare cc basenames (ex: gcc) or
     # prefixed a cross target prefix (ex: armcc) or
     # prefixed by a generic prefix (ex: .*-gcc).
+    # sufixed by a generic sufix (ex: gcc).
     DEFAULT_CCREGEXP = kwargs.get(
         'DEFAULT_CCREGEXP',
-        "(%s)|(%s%s)|(%s%s)" % (cc_bases,
+        "(%s)|(%s%s)|(%s%s%s)" % (cc_bases,
                                 cross_target_pfx, cc_bases,
-                                generic_pfx, cc_bases))
+                                generic_pfx, cc_bases, generic_sfx))
 
     # Default linker basename regexp
     # This is for particular cases, we currently support invocation

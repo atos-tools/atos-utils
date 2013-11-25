@@ -426,7 +426,8 @@ def run_atos_build(args):
             " ".join([atos_driver] + atos_driver_options)]
     else:
         # else use proot cc_opts addon (force mode)
-        build_sh = os.path.join(args.configuration_path, "build.sh")
+        build_sh = os.path.abspath(
+            os.path.join(args.configuration_path, "build.sh"))
         if not args.command:
             if not os.path.isfile(build_sh):  # pragma: uncovered (error)
                 error("build script missing: %s" % build_sh)
@@ -1251,7 +1252,8 @@ def run_atos_run_profile(args):
         args) and args.prof_script:  # pragma: branch_uncovered
         prof_script = process.cmdline2list(args.prof_script)
     else:  # pragma: uncovered
-        prof_script = [os.path.join(args.configuration_path, "profile.sh")]
+        prof_script = [os.path.abspath(
+                os.path.join(args.configuration_path, "profile.sh"))]
 
     status, output = process.system(
         atos_lib.timeout_command() + atos_lib.proot_reloc_command(args)
@@ -1345,7 +1347,8 @@ def run_atos_one_run(args):
 
         run_env.update(
             {"RUN_SLOT": args.__dict__.get('run_slot', '')})
-        run_script = os.path.join(args.configuration_path, "run.sh")
+        run_script = os.path.abspath(
+            os.path.join(args.configuration_path, "run.sh"))
         run_script = args.command or [run_script]
 
         run_progress = progress.timer_progress(
@@ -1450,7 +1453,8 @@ def run_atos_one_run(args):
 
     results_script = args.results_script
     if not results_script:
-        get_res_sh = os.path.join(args.configuration_path, "get_res.sh")
+        get_res_sh = os.path.abspath(
+            os.path.join(args.configuration_path, "get_res.sh"))
         results_script = os.path.isfile(get_res_sh) and get_res_sh
 
     remote_profile_path = atos_lib.get_remote_profile_path(args, variant)

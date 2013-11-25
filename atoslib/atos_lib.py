@@ -1346,7 +1346,6 @@ def proot_command(**kwargs):
         if value is None: continue  # pragma: uncovered
         command.append("%s=%s" % (str(key), str(value)))
     command.append(proot_bin)
-    command.extend(["-w", os.getcwd(), "/"])
     return command
 
 def timeout_command():
@@ -1671,7 +1670,7 @@ def proot_reloc_command(args):
 def env_command(*args, **kwargs):
     env_dict = {}
     map(env_dict.update, args)
-    map(env_dict.update, kwargs)
+    env_dict.update(kwargs)
     return ["/usr/bin/env"] + map(
         lambda (k, v): "%s=%s" % (str(k), str(v)), env_dict.items())
 

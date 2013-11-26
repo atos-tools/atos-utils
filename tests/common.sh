@@ -13,6 +13,7 @@ test_cleanup() {
 
 cleanup() {
     local exit=$?
+    set +x
     trap - INT QUIT TERM EXIT
     test_cleanup
     cd $TMPDIR # ensure not in TMPTEST before cleaning
@@ -38,15 +39,16 @@ success() {
 }
 
 skip() {
+    set +x
     local reason=${1+": $1"}
     echo "---SKIP: $TEST: $TEST_CASE$reason" >&2
     _skipped=1
     exit 0
 }
 
-[ "$DEBUG" = "" ] || set -x
-
 [ "$KEEPTEST" != 0 ] || TMPTEST=`mktemp -d $TMPDIR/atos-test.XXXXXX`
 [ "$KEEPTEST" = 0 ] || TMPTEST=`rm -rf $TEST.dir && mkdir -p $TEST.dir && echo $TEST.dir`
 [ "$KEEPTEST" = 0 ] || echo "Keeping test directory in: $TMPTEST"
 cd $TMPTEST
+[ "$DEBUG" = "" ] || export PS4='+ $0: ${FUNCNAME+$FUNCNAME :}$LINENO: '
+[ "$DEBUG" = "" ] || set -x

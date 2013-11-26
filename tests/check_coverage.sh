@@ -5,8 +5,8 @@
 set -e
 
 SRCDIR=`cd \`dirname $0\`; pwd`
-COV_INCLUDE='/*/bin/*,/*/lib/atos/python/atoslib/*,/*/lib/atos/atos-*'
-COV_EXCLUDE='/*/atos-graph'
+COV_INCLUDE='/*/bin/atos,/*/bin/atos-driver,/*/bin/atos-timeout,/*/lib/atos/python/atoslib/*'
+COV_EXCLUDE=''
 STRICT_COVERAGE=${STRICT_COVERAGE-0}
 
 [ -d $COVERAGE_DIR ]
@@ -16,13 +16,13 @@ cd $COVERAGE_DIR
 coverage combine
 
 # print coverage ratio (ignoring #pragma uncovered)
-coverage report --include=$COV_INCLUDE --omit $COV_EXCLUDE \
+coverage report --include=$COV_INCLUDE --omit=$COV_EXCLUDE \
     --rcfile=$SRCDIR/coverage_uncov.rc \
     | tail -1 \
     | awk '{print "COVERAGE", $6 , ":", ($2 + $4) - ($3 + $5), "/", ($2 + $4)}'
 
 # look at uncovered code (not ignoring #pragma uncovered)
-coverage report --include=$COV_INCLUDE --omit $COV_EXCLUDE \
+coverage report --include=$COV_INCLUDE --omit=$COV_EXCLUDE \
     --rcfile=$SRCDIR/coverage.rc > coverage.txt
 
 uncovered=`cat coverage.txt | tail -1 | awk '{print ($3 + $5)}'`

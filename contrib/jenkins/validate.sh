@@ -109,14 +109,9 @@ make -f $GITROOT/GNUmakefile -j 4 all doc
 #
 PATH=$WORKSPACE/prebuilt/gcc-4.7.2/bin:$PATH
 echo "Checking atos-utils..."
-make COVERAGE_DIR=$WORKSPACE/coverage -f $GITROOT/GNUmakefile -j 4 coverage
+make -f $GITROOT/GNUmakefile -j 4 all install install-doc PREFIX=$DEVIMAGE/usr/local
+make ROOT=$DEVIMAGE/usr/local COVERAGE_DIR=$WORKSPACE/coverage -f $GITROOT/GNUmakefile -j 4 coverage
 make -f $GITROOT/GNUmakefile examples-nograph
-
-echo "Installing atos-utils..."
-make -f $GITROOT/GNUmakefile -j 4 install install-doc PREFIX=$DEVIMAGE/usr/local
-
-echo "Checking installed version of atos-utils with long tests..."
-ROOT=$DEVIMAGE/usr/local make -f $GITROOT/GNUmakefile -j 4 check
 
 echo "Archiving atos-utils..."
 cd $DEVIMAGE

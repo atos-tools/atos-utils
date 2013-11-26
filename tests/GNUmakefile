@@ -52,8 +52,10 @@ clean-coverage:
 
 distclean: clean
 
-tests_report: $(srcdir)report.sh $(ERRS)
-	$(V_RUN)$(srcdir)report.sh $(ERRS) >tests_report.txt; \
+tests_report: $(srcdir)report.sh
+	$(V_RUN)/usr/bin/time -f 'real %E (%Uu, %Ss)' \
+	    $(MAKE) -f $(firstword $(MAKEFILE_LIST)) KEEPTEST=1 DEBUG=1 $(ERRS); \
+	$(srcdir)report.sh $(ERRS) >tests_report.txt; \
 	res=$$?; cat tests_report.txt; exit $$res
 
 $(CHKS): %.chk: %.err
@@ -61,4 +63,10 @@ $(CHKS): %.chk: %.err
 # Force MAKEFLAGS= as we may run make in tests
 # and we do not want to inherit -jxx option
 $(ERRS): %.err: $(srcdir)% $(FORCE)
-	$(V_RUN)env MAKEFLAGS= ROOT=$${ROOT:-$(abspath ..)} SRCDIR=$${SRCDIR:-$(abspath $(srcdir)..)} $(COVERAGE_OPTS) $(srcdir)$* 2>&1 >$*.out | tee $*.err
+	$(V_RUN)/usr/bin/time -f '%e' -o $*.time.out \
+	env MAKEFLAGS= ROOT=$${ROOT:-$(abspath ..)} \
+	    SRCDIR=$${SRCDIR:-$(abspath $(srcdir)..)} \
+	    $(COVERAGE_OPTS) $(srcdir)$* 2>$*.err >$*.out; \
+	status=$$?; printf '(%03.0fs) ' $$(tail -1 $*.time.out); \
+	tail -1 $*.err | grep -e SUCCESS -e FAIL -e SKIP -e INTERRUPTED || echo "****BAD: $(basename $*)"; \
+	[ $$status -eq 0 ] || ( cat $*.err | sed "s/^/  $*.err: /"; cat $*.out | sed "s/^/  $*.out: /"; true )

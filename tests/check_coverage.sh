@@ -43,12 +43,12 @@ if [ $uncovered -ne 0 ]; then
     done < coverage.txt
     # some non-documented uncovered code: classic report
     # (not ignoring "pragma uncovered" lines)
-    coverage html  -d html --include=$COV_INCLUDE --omit $COV_EXCLUDE \
+    coverage html  -d html --include=$COV_INCLUDE --omit=$COV_EXCLUDE \
 	--rcfile=$SRCDIR/coverage.rc
 else
     # no non-documented uncovered code: strict report
     # (ignoring "pragma uncovered" lines)
-    coverage html  -d html --include=$COV_INCLUDE --omit $COV_EXCLUDE \
+    coverage html  -d html --include=$COV_INCLUDE --omit=$COV_EXCLUDE \
 	--rcfile=$SRCDIR/coverage_uncov.rc
 fi
 

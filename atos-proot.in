@@ -36,13 +36,20 @@
 # - proot (searched in PATH).
 #
 
-[ -n "$ATOS_PROOT" ] && exec "$ATOS_PROOT" $ATOS_PROOT_ARGS ${1+"$@"}
+if [ -z "$ATOS_PROOT" ]; then
+    ATOS_PROOT=proot
+    dir=`dirname $0`
+    arch=`uname -m`
+    case "$arch" in
+	i[456]86) arch=i386
+    esac
+    [ ! -x "$dir/../lib/atos/$arch/bin/proot" ] || \
+	ATOS_PROOT="$dir/../lib/atos/$arch/bin/proot"
+fi
 
-dir=`dirname $0`
-arch=`uname -m`
-case "$arch" in
-     i[456]86) arch=i386
-esac
-proot=proot
-[ -x "$dir/../lib/atos/$arch/bin/proot" ] && proot="$dir/../lib/atos/$arch/bin/proot"
-exec "$proot" $ATOS_PROOT_ARGS ${1+"$@"}
+if [ ! -z "$ATOS_CARE" ]; then
+    ATOS_PROOT=`echo $ATOS_PROOT | sed 's/proot$/care/'`
+    unset ATOS_CARE
+fi
+
+exec "$ATOS_PROOT" $ATOS_PROOT_ARGS ${1+"$@"}

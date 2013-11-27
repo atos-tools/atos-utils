@@ -20,6 +20,9 @@ import sys, os
 import re
 import traceback
 import json
+import tempfile
+import tarfile
+import functools
 
 import globals
 import arguments
@@ -75,60 +78,56 @@ def invoque(tool, args, **kwargs):
         "atos-web": run_atos_web,
         }
 
-    def tool_args(tool, args, **kwargs):
-        """ Returns the args arguments modified by kwargs. """
-        tool_args = arguments.argparse.Namespace()
-        for action in arguments.parser(tool)._actions:
-            if action.dest is None: continue  # pragma: uncovered (impossible?)
-            tool_args.__dict__[action.dest] = action.default
-        tool_args.__dict__.update(vars(args))
-        tool_args.__dict__.update(kwargs)
-        return tool_args
-
-    def dryrun_tool(tool, args, **kwargs):
-        """ Does not run the tool, outputs the tool command line. """
-        dest_to_opt = dict(map(
-                lambda x: (x.dest, x),
-                arguments.parser(tool)._actions))
-        arg_list, remainder = [tool], []
-        for key, value in tool_args(tool, args, **kwargs).__dict__.items():
-            if key == 'dryrun' or key not in dest_to_opt.keys():
-                continue
-            default = dest_to_opt[key].default
-            if value == default: continue
-            # default can be False while action.default is None
-            if default is False and not bool(value): continue
-            if not dest_to_opt[key].option_strings:
-                remainder.extend(value)
-                continue
-            option_string = dest_to_opt[key].option_strings[-1]
-            if isinstance(value, list):
-                map(lambda x: arg_list.extend([option_string, x]), value)
-            else:
-                arg_list.append(option_string)
-                if dest_to_opt[key].nargs != 0: arg_list.append(str(value))
-
-        process.debug(process.list2cmdline(arg_list + remainder))
-        return 0
-
-    def run_tool(tool, args, **kwargs):
-        """ Runs the tool, given the top level args and kwargs modifier. """
-        func_tool_args = tool_args(tool, args, **kwargs)
-        return run_tool_func(functions[tool], func_tool_args)
-
     global _at_toplevel
     assert(_at_toplevel != None)
     # local dryrun setting is not supported as the process module
     # depends upon the global setting
     assert(kwargs.get('dryrun') == None)
-
     dryrun = 'dryrun' in vars(args) and args.dryrun and not _at_toplevel
     _at_toplevel = False
+
     if dryrun:
-        status = dryrun_tool(tool, args, **kwargs)
-    else:
-        status = run_tool(tool, args, **kwargs)
-    return status
+        process.debug(process.list2cmdline(
+                atos_tool_cmdline(tool, args, **kwargs)))
+        return 0
+
+    return run_tool_func(
+        functions[tool], atos_tool_args(tool, args, **kwargs))
+
+def atos_tool_args(tool, args, **kwargs):
+    """ Returns the args arguments modified by kwargs. """
+    tool_args = arguments.argparse.Namespace()
+    for action in arguments.parser(tool)._actions:
+        if action.dest is None: continue  # pragma: uncovered (impossible?)
+        tool_args.__dict__[action.dest] = action.default
+    tool_args.__dict__.update(vars(args))
+    tool_args.__dict__.update(kwargs)
+    return tool_args
+
+def atos_tool_cmdline(tool, args, **kwargs):
+    dest_to_opt = dict(map(
+            lambda x: (x.dest, x),
+            arguments.parser(tool)._actions))
+    atos_bin = os.path.join(
+        os.path.abspath(os.path.dirname(sys.argv[0])), "atos")
+    arg_list, remainder = [atos_bin, tool[len("atos-"):]], []
+    for key, value in atos_tool_args(tool, args, **kwargs).__dict__.items():
+        if key == 'dryrun' or key not in dest_to_opt.keys():
+            continue
+        default = dest_to_opt[key].default
+        if value == default: continue
+        # default can be False while action.default is None
+        if default is False and not bool(value): continue
+        if not dest_to_opt[key].option_strings:
+            remainder.extend(value)
+            continue
+        option_string = dest_to_opt[key].option_strings[-1]
+        if isinstance(value, list):
+            map(lambda x: arg_list.extend([option_string, x]), value)
+        else:
+            arg_list.append(option_string)
+            if dest_to_opt[key].nargs != 0: arg_list.append(str(value))
+    return arg_list + remainder
 
 def run_tool_func(func_tool, func_tool_args):
     """ Runs the tool, given the processed arguments. """
@@ -301,7 +300,153 @@ def run_atos_audit(args):
     os.close(debug_fd)
     return status
 
+def run_atos_build_archive(args):
+    """ preparation of build care archive. """
+    message("Preparing build archive...")
+
+    care_archive_dir = os.path.join(
+        args.configuration_path, "archives")
+    care_output = os.path.join(
+        care_archive_dir, "build.care.tar")
+    process.commands.mkdir(care_archive_dir)
+
+    atos_commands = []
+    available_optim_variants = atos_lib.get_available_optim_variants(
+        args.configuration_path)
+
+    #  - atos-config --print-cfg (for plugins)
+    atos_commands.append(process.list2cmdline(
+            atos_tool_cmdline("atos-config", args, print_cfg=True)))
+
+    #  - atos-build -O2 + available variants (fdo, lto)
+    build_opts, genpr_opts = ["-O2"], None
+    if "lto" in available_optim_variants:  # pragma: uncovered
+        build_opts.extend(atos_lib.config_compiler_flags(
+                "lto_flags", default="-flto",
+                config_path=args.configuration_path))
+    if "fdo" in available_optim_variants:  # pragma: branch_always
+        genpr_opts = ["-O2"]
+    build_opts = process.list2cmdline(build_opts)
+    genpr_opts = process.list2cmdline(genpr_opts)
+    atos_commands.append(process.list2cmdline(atos_tool_cmdline(
+                "atos-build", args, local=True,
+                options=build_opts, gopts=genpr_opts)))
+    atos_commands = ["/bin/sh", "-c", " && ".join(atos_commands)]
+
+    # execute care command
+    status, output = process.system(
+        atos_lib.proot_command(ATOS_CARE=1) + [
+            "--output=%s" % care_output] + atos_commands,
+        get_output=True, output_stderr=True)
+    if status:  # pragma: uncovered (error)
+        error("failure during build archive creation")
+
+    return status
+
 def run_atos_build(args):
+    """ dispatcher for atos-build (local/remote). """
+    remote_build = int(atos_lib.get_config_value(
+            args.configuration_path, "default_values.remote_build", "0"))
+    if remote_build and not args.local:
+        status = run_atos_build_remote(args)
+    else:
+        status = run_atos_build_local(args)
+    return status
+
+def run_atos_build_remote(args):
+    """ remote build implementation. """
+    variant_id = atos_lib.hashid(
+        atos_lib.variant_id(args.options, args.gopts, args.uopts))
+    logs_dir = os.path.join(
+        args.configuration_path, "logs")
+    care_archive_dir = os.path.join(
+        args.configuration_path, "archives")
+
+    # copy care archive (build.care.tar -> build.care.id.tar)
+    care_archive_init = os.path.join(
+        care_archive_dir, "build.care.tar")
+    care_archive_copy = os.path.join(
+        care_archive_dir, "build.care.%s.tar" % variant_id)
+    care_archive_dest = os.path.join(
+        care_archive_dir, "build.care.%s.mod.tar.gz" % variant_id)
+    process.commands.copyfile(care_archive_init, care_archive_copy)
+
+    # add profile directory if needed
+    care_file = tarfile.open(care_archive_copy, mode="a")
+    if args.uopts:
+        profile_path = atos_lib.get_profile_path(
+            args.configuration_path, atos_lib.variant_id(gopts=args.uopts))
+        for root, dirnames, filenames in os.walk(profile_path):
+            filenames = map(
+                functools.partial(os.path.join, root), filenames)
+            archnames = map(
+                functools.partial(str.format, "build.care/rootfs{0}"),
+                filenames)
+            map(lambda (f, a): care_file.add(f, a), zip(filenames, archnames))
+
+    # add re-build.sh script (local build & re-archive)
+    rearchive_prefix = os.getcwd()  # same limit as relocation (TODO: doc)
+    rebuild_cmdline = process.list2cmdline(
+        atos_tool_cmdline("atos-build", args, local=True))
+    with tempfile.NamedTemporaryFile() as tmpfile:
+        print >>tmpfile, "#!/bin/sh"
+        print >>tmpfile, "set -ex"
+        print >>tmpfile, "cd `dirname $0`"
+        print >>tmpfile, "# execute atos-build-local command"
+        print >>tmpfile, "/bin/sh -e -x build.care/re-execute.sh \\"
+        print >>tmpfile, "  " + rebuild_cmdline
+        print >>tmpfile, "# rebuild archive"
+        print >>tmpfile, "tar czvf build.tar.gz -C %s . || true" % (
+            "build.care/rootfs" + rearchive_prefix)
+        tmpfile.flush()
+        process.commands.chmod(tmpfile.name, 0755)
+        care_file.add(tmpfile.name, arcname="build.sh")
+    care_file.close()
+
+    # compress modified archive (gzip module seems slower)
+    process.system(["gzip", "--force", "--fast", care_archive_copy])
+    care_archive_copy = care_archive_copy + ".gz"
+
+    # call remote-build command
+    remote_build_sh = os.path.abspath(
+        os.path.join(args.configuration_path, "build.remote.sh"))
+    status, output = process.system(
+        atos_lib.env_command(
+            ATOS_BUILD_SRC=os.path.abspath(care_archive_copy),
+            ATOS_BUILD_DST=os.path.abspath(care_archive_dest))
+        + [remote_build_sh],
+        get_output=True, output_stderr=True)
+    if status or not os.path.exists(
+        care_archive_dest):  # pragma: uncovered (error)
+        error("remote build failure")
+        return status or 1
+
+    # extract needed files from resulting archive
+    reloc_dir_prefix = args.__dict__.get("reloc_dir", "")
+    if reloc_dir_prefix: process.commands.mkdir(
+        args.reloc_dir + rearchive_prefix)
+    care_file = tarfile.open(care_archive_dest, "r:*")
+    # - built files in reloc_dir
+    members_cwd = filter(
+        lambda x: args.configuration_path not in x.name,
+        care_file.getmembers())
+    care_file.extractall(
+        path=(reloc_dir_prefix + rearchive_prefix), members=members_cwd)
+    #  - log files in atos-config path
+    members_log = filter(
+        lambda x: logs_dir in x.name, care_file.getmembers())
+    care_file.extractall(
+        path=rearchive_prefix, members=members_log)
+
+    care_file.close()
+    # remove archives
+    if not int(os.getenv("ATOS_KEEP_RELOC", "0")):  # pragma: uncovered
+        process.commands.unlink(care_archive_copy)
+        process.commands.unlink(care_archive_dest)
+
+    return 0
+
+def run_atos_build_local(args):
     """ ATOS build tool implementation. """
 
     variant = args.variant or atos_lib.variant_id(
@@ -643,6 +788,13 @@ def run_atos_init(args):
             error("in time command, '%s' executable not found "
                   "and not in PATH" % time_command[0])
             return 1
+    if args.remote_build_script:
+        rbuild_command = process.cmdline2list(args.remote_build_script)
+        if not process.commands.which(rbuild_command[0]):  # pragma: uncovered
+            error("in remote build command, "
+                  "'%s' executable not found and not in PATH"
+                  % rbuild_command[0])
+            return 1
 
     process.commands.mkdir(args.configuration_path)
 
@@ -659,6 +811,8 @@ def run_atos_init(args):
         process.commands.rmtree('%s/build.stg' % args.configuration_path)
         process.commands.rmtree('%s/plugins' % args.configuration_path)
         process.commands.unlink('%s/config.json' % args.configuration_path)
+        process.commands.rmtree('%s/reloc' % args.configuration_path)
+        process.commands.rmtree('%s/archives' % args.configuration_path)
     if args.clean or args.run_script:
         if args.clean: message("Cleaning run audit...")
         process.commands.unlink('%s/run.sh' % args.configuration_path)
@@ -716,6 +870,14 @@ def run_atos_init(args):
         atos_lib.json_config(config_file).add_value(
             "default_values.run_jobs", str(args.run_jobs))
 
+    if args.remote_build_script:
+        atos_lib.json_config(config_file).add_value(
+            "default_values.remote_build", str(1))
+        remote_build_sh = os.path.join(
+            args.configuration_path, "build.remote.sh")
+        atos_lib.generate_script(
+            remote_build_sh, args.remote_build_script + " $*")
+
     # should be enabled by default in the future if working correctly
     if args.build_script or args.run_script:
         atos_lib.json_config(config_file).add_value(
@@ -760,7 +922,7 @@ def run_atos_init(args):
     # Record the reference if necessary
     if (args.clean or args.build_script or args.run_script) and \
             not args.no_run:
-        status = invoque("atos-build", args, blacklist=True)
+        status = invoque("atos-build", args, blacklist=True, local=True)
         if status != 0:  # pragma: uncovered (error)
             error("unable to compile the reference build. "
                   "Refer to the log file; %s/logs/build-%s.log." %
@@ -772,6 +934,11 @@ def run_atos_init(args):
                   "Refer to the log file: %s/logs/run-%s.log." %
                   (args.configuration_path, atos_lib.hashid("REF")))
             return status
+
+    # Prepare care archive for remote build
+    if args.remote_build_script:
+        status = run_tool_func(run_atos_build_archive, args)
+        if status != 0: return status  # pragma: uncovered (error)
 
     return 0
 

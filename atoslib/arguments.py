@@ -259,6 +259,7 @@ class parsers:
         args.results_script(group)
         args.prof_script(group)
         args.nbruns(group)
+        args.remote_build_script(group, hidden=True)
         args.remote_path(group, hidden=True)
         args.atos_init.no_run(group)
         args.cookie(group, hidden=True)
@@ -365,6 +366,7 @@ class parsers:
         args.results_script(group)
         args.prof_script(group)
         args.nbruns(group)
+        args.remote_build_script(group, hidden=True)
         args.remote_path(group, hidden=True)
         args.size_cmd(group, hidden=True)
         args.time_cmd(group, hidden=True)
@@ -985,6 +987,7 @@ class parsers:
         # other options
         args.command(parser)
         args.variant(parser, hidden=True)
+        args.local(parser)
         return parser
 
     @staticmethod
@@ -1977,6 +1980,20 @@ class args:
              dest="run_jobs",
              type=int,
              help=help_msg)
+
+    @staticmethod
+    def remote_build_script(
+        parser, args=("--remote-build-script",), hidden=False):
+        help_msg = parsers.help_message(
+            "script used to build remotely", hidden)
+        parser.add_argument(
+            *args, dest="remote_build_script", help=help_msg)
+
+    @staticmethod
+    def local(parser, args=("--local",)):
+        parser.add_argument(
+            *args, action="store_true", dest="local",
+             help=argparse.SUPPRESS)  # always hidden
 
     @staticmethod
     def targets(parser, args=("-t", "--targets")):

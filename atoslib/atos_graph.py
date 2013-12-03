@@ -148,6 +148,8 @@ def draw_graph(getgraph, opts):
                 graph_plots.append(new_points)
 
         # redraw legend and figure
+        if opts.xlim: pl.xlim([float(l) for l in opts.xlim.split(",")])
+        if opts.ylim: pl.ylim([float(l) for l in opts.ylim.split(",")])
         ax.legend(loc='lower left')
         fg.canvas.draw()
 
@@ -336,7 +338,8 @@ def getoptcases(dbpath, opts):
     variant_results = atos_lib.get_results(dbpath, opts)
     atos_lib.atos_client_results.set_frontier_field(variant_results)
     frontier = filter(lambda x: x.on_frontier, variant_results)
-    print '%d points, %d on frontier' % (len(variant_results), len(frontier))
+    if not opts.follow: print '%d points, %d on frontier' % (
+        len(variant_results), len(frontier))
     return variant_results
 
 

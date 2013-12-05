@@ -136,10 +136,11 @@ class atos_db_file(atos_db):
         with process.open_locked(self.db_file, 'a') as db_file:
             db_file.write(entries_str)
 
-    def _read_results(self):
-        if not os.path.exists(self.db_file): return  # pragma: uncovered
+    @staticmethod
+    def _read_results_lines(results_lines):
+        results = []
         curdict, size, time = {}, None, None
-        for line in process.open_locked(self.db_file):
+        for line in results_lines:
             words = line.split(':', 4)
             if len(words) < 4: continue  # pragma: uncovered
             # ATOS: target: variant_id: key: value
@@ -151,12 +152,22 @@ class atos_db_file(atos_db):
             if not (size and time): continue
             curdict['target'] = target
             curdict['variant'] = variant
-            self.results += [result_entry(curdict)]
+            results += [result_entry(curdict)]
             curdict, size, time = {}, None, None
+        return results
+
+    def _read_results(self):
+        with atos_db.lock:
+            if not os.path.exists(self.db_file): return  # pragma: uncovered
+            with open(self.db_file, 'r') as db_file:
+                self.results.extend(atos_db_file._read_results_lines(
+                        db_file.readlines()))
 
     def _create(self):
-        if os.path.exists(self.db_file): return
-        open(self.db_file, 'w').write('')
+        with atos_db.lock:
+            if os.path.exists(self.db_file): return
+            with open(self.db_file, 'w') as db_file:
+                db_file.write('')
 
     @staticmethod
     def entry_str(entry):

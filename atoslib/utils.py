@@ -335,11 +335,13 @@ def run_atos_build_archive(args):
 
     # execute care command
     status, output = process.system(
-        atos_lib.proot_command(ATOS_CARE=1) + [
+        atos_lib.proot_command(
+            ATOS_CARE=1, ATOS_PARALLEL=1,
+            PROOT_IGNORE_ELF_INTERPRETER=1) + [
             "--output=%s" % care_output] + atos_commands,
         get_output=True, output_stderr=True)
     if status:  # pragma: uncovered (error)
-        error("failure during build archive creation")
+        message("FAILURE while creating build archive")
 
     return status
 
@@ -355,8 +357,13 @@ def run_atos_build(args):
 
 def run_atos_build_remote(args):
     """ remote build implementation. """
+    variant = args.variant or atos_lib.variant_id(
+        args.options, args.gopts, args.uopts)
     variant_id = atos_lib.hashid(
         atos_lib.variant_id(args.options, args.gopts, args.uopts))
+
+    message("Building variant %s [%s]..." % (variant, variant_id))
+
     logs_dir = os.path.join(
         args.configuration_path, "logs")
     care_archive_dir = os.path.join(
@@ -384,23 +391,27 @@ def run_atos_build_remote(args):
                 filenames)
             map(lambda (f, a): care_file.add(f, a), zip(filenames, archnames))
 
-    # add re-build.sh script (local build & re-archive)
+    # add exec.sh script (local build & re-archive)
     rearchive_prefix = os.getcwd()  # same limit as relocation (TODO: doc)
     rebuild_cmdline = process.list2cmdline(
         atos_tool_cmdline("atos-build", args, local=True))
     with tempfile.NamedTemporaryFile() as tmpfile:
+        # TODO: configurable commands (bin/sh, tar)
         print >>tmpfile, "#!/bin/sh"
         print >>tmpfile, "set -ex"
         print >>tmpfile, "cd `dirname $0`"
+        print >>tmpfile, "errors=0"
         print >>tmpfile, "# execute atos-build-local command"
         print >>tmpfile, "/bin/sh -e -x build.care/re-execute.sh \\"
-        print >>tmpfile, "  " + rebuild_cmdline
+        print >>tmpfile, "  " + rebuild_cmdline + " || errors=1"
         print >>tmpfile, "# rebuild archive"
-        print >>tmpfile, "tar czvf build.tar.gz -C %s . || true" % (
+        print >>tmpfile, "tar czvf atos.tar.gz -C %s . || true" % (
             "build.care/rootfs" + rearchive_prefix)
+        print >>tmpfile, "exit $errors"
+
         tmpfile.flush()
         process.commands.chmod(tmpfile.name, 0755)
-        care_file.add(tmpfile.name, arcname="build.sh")
+        care_file.add(tmpfile.name, arcname="exec.sh")
     care_file.close()
 
     # compress modified archive (gzip module seems slower)
@@ -408,18 +419,23 @@ def run_atos_build_remote(args):
     care_archive_copy = care_archive_copy + ".gz"
 
     # call remote-build command
+    # TODO: remote time estimation
     remote_build_sh = os.path.abspath(
         os.path.join(args.configuration_path, "build.remote.sh"))
+    build_progress = progress.timer_progress(
+        progress_type="build", variant_id=variant,
+        config_path=args.configuration_path)
     status, output = process.system(
         atos_lib.env_command(
-            ATOS_BUILD_SRC=os.path.abspath(care_archive_copy),
-            ATOS_BUILD_DST=os.path.abspath(care_archive_dest))
+            ATOS_CARE_SRC=os.path.abspath(care_archive_copy),
+            ATOS_CARE_DST=os.path.abspath(care_archive_dest))
         + [remote_build_sh],
         get_output=True, output_stderr=True)
+    build_progress.end(status=status)
     if status or not os.path.exists(
         care_archive_dest):  # pragma: uncovered (error)
-        error("remote build failure")
-        return status or 1
+        message("FAILURE while building variant %s" % variant)
+        return 1
 
     # extract needed files from resulting archive
     reloc_dir_prefix = args.__dict__.get("reloc_dir", "")
@@ -463,11 +479,11 @@ def run_atos_build_local(args):
         legacy = int(atos_lib.get_config_value(
                 args.configuration_path, 'default_values.legacy_audit', "0"))
 
-    opt_rebuild = args.force
-    build_force = os.path.join(args.configuration_path, "build.force")
-    if not opt_rebuild and os.path.isfile(build_force):
-        with open(build_force) as f:
-            opt_rebuild = int(f.read().strip())
+    build_force_file = os.path.join(
+        args.configuration_path, "build.force")
+    build_force = os.path.isfile(
+        build_force_file) and int(open(build_force_file).read().strip())
+    opt_rebuild = args.force or build_force
 
     driver_env = {}
 
@@ -620,7 +636,7 @@ def run_atos_build_local(args):
 
     logf.write('%s\n' % output)
     if status:  # pragma: uncovered (error)
-        message("FAILURE while building variant %s... " % (variant))
+        message("FAILURE while building variant %s" % (variant))
         logf.write("FAILURE while building variant %s\n" % (variant))
         logf.close()
         return 2
@@ -788,12 +804,34 @@ def run_atos_init(args):
             error("in time command, '%s' executable not found "
                   "and not in PATH" % time_command[0])
             return 1
+    if args.remote_exec_script:
+        rexec_command = process.cmdline2list(args.remote_exec_script)
+        if not process.commands.which(rexec_command[0]):  # pragma: uncovered
+            error("in remote exec command, "
+                  "'%s' executable not found and not in PATH"
+                  % rexec_command[0])
+            return 1
     if args.remote_build_script:
+        if args.remote_exec_script:  # pragma: uncovered
+            error("flags --remote-exec-script and --remote-build-script"
+                  " cannot be used together")
+            return 1
         rbuild_command = process.cmdline2list(args.remote_build_script)
         if not process.commands.which(rbuild_command[0]):  # pragma: uncovered
             error("in remote build command, "
                   "'%s' executable not found and not in PATH"
                   % rbuild_command[0])
+            return 1
+    if args.remote_run_script:
+        if args.remote_exec_script:  # pragma: uncovered
+            error("flags --remote-exec-script and --remote-build-script"
+                  " cannot be used together")
+            return 1
+        rrun_command = process.cmdline2list(args.remote_run_script)
+        if not process.commands.which(rrun_command[0]):  # pragma: uncovered
+            error("in remote run command, "
+                  "'%s' executable not found and not in PATH"
+                  % rrun_command[0])
             return 1
 
     process.commands.mkdir(args.configuration_path)
@@ -870,13 +908,23 @@ def run_atos_init(args):
         atos_lib.json_config(config_file).add_value(
             "default_values.run_jobs", str(args.run_jobs))
 
-    if args.remote_build_script:
+    if args.remote_build_script or args.remote_exec_script:
         atos_lib.json_config(config_file).add_value(
             "default_values.remote_build", str(1))
         remote_build_sh = os.path.join(
             args.configuration_path, "build.remote.sh")
         atos_lib.generate_script(
-            remote_build_sh, args.remote_build_script + " $*")
+            remote_build_sh,
+            (args.remote_build_script or args.remote_exec_script) + " $*")
+
+    if args.remote_run_script or args.remote_exec_script:
+        atos_lib.json_config(config_file).add_value(
+            "default_values.remote_run", str(1))
+        remote_run_sh = os.path.join(
+            args.configuration_path, "run.remote.sh")
+        atos_lib.generate_script(
+            remote_run_sh,
+            (args.remote_run_script or args.remote_exec_script) + " $*")
 
     # should be enabled by default in the future if working correctly
     if args.build_script or args.run_script:
@@ -928,7 +976,7 @@ def run_atos_init(args):
                   "Refer to the log file; %s/logs/build-%s.log." %
                   (args.configuration_path, atos_lib.hashid("REF")))
             return status
-        status = invoque("atos-run", args, record=True)
+        status = invoque("atos-run", args, record=True, local=True)
         if status != 0:  # pragma: uncovered (error)
             error("run of reference build failed. "
                   "Refer to the log file: %s/logs/run-%s.log." %
@@ -936,8 +984,13 @@ def run_atos_init(args):
             return status
 
     # Prepare care archive for remote build
-    if args.remote_build_script:
+    if args.remote_build_script or args.remote_exec_script:
         status = run_tool_func(run_atos_build_archive, args)
+        if status != 0: return status  # pragma: uncovered (error)
+
+    # Prepare care archive for remote run
+    if args.remote_run_script or args.remote_exec_script:
+        status = run_tool_func(run_atos_run_archive, args)
         if status != 0: return status  # pragma: uncovered (error)
 
     return 0
@@ -1428,7 +1481,7 @@ def run_atos_run_profile(args):
         get_output=True, output_stderr=True)
 
     if status or not os.path.isfile(profile_file):  # pragma: uncovered (error)
-        message("FAILURE while running profile variant %s..." % variant)
+        message("FAILURE while running profile variant %s" % variant)
         return 2
 
     process.commands.mkdir(profile_path)
@@ -1440,6 +1493,36 @@ def run_atos_run_profile(args):
 
     debug("SUCCESS running profile variant %s\n" % variant)
     return 0
+
+def run_atos_run_archive(args):
+    """ preparation of run care archive. """
+    message("Preparing run archive...")
+
+    care_archive_dir = os.path.join(
+        args.configuration_path, "archives")
+    care_output = os.path.join(
+        care_archive_dir, "run.care.tar")
+    process.commands.mkdir(care_archive_dir)
+
+    atos_commands = [process.list2cmdline(
+            atos_tool_cmdline("atos-run", args, local=True))]
+    atos_commands = ["/bin/sh", "-c", " && ".join(atos_commands)]
+
+    # execute care command
+    status, output = process.system(
+        atos_lib.proot_command(
+            ATOS_CARE=1, ATOS_PARALLEL=1,
+            PROOT_IGNORE_ELF_INTERPRETER=1) + [
+            "--concealed-path=%s" % os.path.join(
+                args.configuration_path, "profiles"),
+            "--concealed-path=%s" % os.path.join(
+                args.configuration_path, "logs"),
+            "--output=%s" % care_output] + atos_commands,
+        get_output=True, output_stderr=True)
+    if status:  # pragma: uncovered (error)
+        message("FAILURE while creating run archive")
+
+    return status
 
 def run_atos_run(args):
     """ ATOS run tool implementation. """
@@ -1481,6 +1564,135 @@ def run_atos_run(args):
     return 0
 
 def run_atos_one_run(args):
+    """ dispatcher for atos-one-run (local/remote). """
+    remote_run = int(atos_lib.get_config_value(
+            args.configuration_path, "default_values.remote_run", "0"))
+    if remote_run and not args.local:
+        status = run_atos_one_run_remote(args)
+    else:
+        status = run_atos_one_run_local(args)
+    return status
+
+def run_atos_one_run_remote(args):
+    """ remote run implementation. """
+    variant = args.variant or atos_lib.variant_id(
+        args.options, args.gopts, args.uopts)
+    variant_id = atos_lib.hashid(variant)
+
+    message("Running variant %s [%s]..." % (variant, variant_id))
+
+    run_number = args.__dict__.get('run_number', 0)
+    logs_dir = os.path.join(
+        args.configuration_path, "logs")
+    targets_file = os.path.join(
+        args.configuration_path, "targets")
+    care_archive_dir = os.path.join(
+        args.configuration_path, "archives")
+
+    # copy care archive (run.care.tar -> run.care.id.tar)
+    care_archive_init = os.path.join(
+        care_archive_dir, "run.care.tar")
+    care_archive_copy = os.path.join(
+        care_archive_dir, "run.care.%s.%d.tar" % (variant_id, run_number))
+    care_archive_dest = os.path.join(
+        care_archive_dir, "run.care.%s.%d.mod.tar.gz" % (
+            variant_id, run_number))
+    process.commands.copyfile(care_archive_init, care_archive_copy)
+
+    # add targets
+    care_file = tarfile.open(care_archive_copy, mode="a")
+    reloc_dir_prefix = args.__dict__.get("reloc_dir", "")
+    targets = filter(
+        lambda x: x != "" and not x.startswith("#"),
+        map(lambda x: x.strip(), open(targets_file).readlines()))
+    targets = map(os.path.abspath, targets)
+    map(lambda f: care_file.add(
+            reloc_dir_prefix + f, arcname="run.care/rootfs" + f), targets)
+
+    # add exec.sh script (local build & re-archive)
+    rearchive_prefix = os.getcwd()  # same limit as relocation (TODO: doc)
+    rerun_cmdline = process.list2cmdline(
+        atos_tool_cmdline(
+            "atos-run", args, local=True, record=False, nbruns=1,
+            output_file=os.path.join(rearchive_prefix, "atos_results.out")))
+    with tempfile.NamedTemporaryFile() as tmpfile:
+        # TODO: configurable commands (bin/sh, tar)
+        print >>tmpfile, "#!/bin/sh"
+        print >>tmpfile, "set -ex"
+        print >>tmpfile, "cd `dirname $0`"
+        print >>tmpfile, "errors=0"
+        print >>tmpfile, "# execute atos-run-local command"
+        print >>tmpfile, "/bin/sh -e -x run.care/re-execute.sh \\"
+        print >>tmpfile, "  " + rerun_cmdline + " || errors=1"
+        print >>tmpfile, "# rebuild archive"
+        print >>tmpfile, "tar czvf atos.tar.gz -C %s . || true" % (
+            "run.care/rootfs" + rearchive_prefix)
+        print >>tmpfile, "exit $errors"
+        tmpfile.flush()
+        process.commands.chmod(tmpfile.name, 0755)
+        care_file.add(tmpfile.name, arcname="exec.sh")
+    care_file.close()
+
+    # compress modified archive (gzip module seems slower)
+    process.system(["gzip", "--force", "--fast", care_archive_copy])
+    care_archive_copy = care_archive_copy + ".gz"
+
+    # call remote-run command
+    # TODO: remote time estimation
+    remote_run_sh = os.path.abspath(
+        os.path.join(args.configuration_path, "run.remote.sh"))
+    run_progress = progress.timer_progress(
+        progress_type="run", variant_id=variant,
+        config_path=args.configuration_path)
+    status, output = process.system(
+        atos_lib.env_command(
+            ATOS_CARE_SRC=os.path.abspath(care_archive_copy),
+            ATOS_CARE_DST=os.path.abspath(care_archive_dest))
+        + [remote_run_sh],
+        get_output=True, output_stderr=True)
+    run_progress.end(status=status)
+    if status or not os.path.exists(
+        care_archive_dest):  # pragma: uncovered (error)
+        message("FAILURE while running variant %s" % variant)
+        return 1
+
+    # extract needed files from resulting archive
+    care_file = tarfile.open(care_archive_dest, "r:*")
+    if reloc_dir_prefix: process.commands.mkdir(
+        args.reloc_dir + rearchive_prefix)
+
+    #  - profile files
+    profile_path = args.gopts and atos_lib.get_profile_path(
+        args.configuration_path, atos_lib.variant_id(gopts=args.gopts))
+    members_prf = args.gopts and filter(
+        lambda x: os.path.basename(profile_path) in x.name,
+        care_file.getmembers()) or []  # None means ALL !
+    care_file.extractall(
+        path=rearchive_prefix, members=members_prf)
+
+    #  - log files in atos-config path
+    members_log = filter(
+        lambda x: logs_dir in x.name, care_file.getmembers())
+    care_file.extractall(
+        path=rearchive_prefix, members=members_log)
+
+    #  - results
+    members_err = filter(
+        lambda x: "atos_results.out" in x.name, care_file.getmembers())
+    results_lines = members_err and care_file.extractfile(
+        members_err[0]).readlines() or []
+    results = atos_lib.atos_db_file._read_results_lines(results_lines)
+    atos_lib.atos_db.db(args.configuration_path).add_results(results)
+    care_file.close()
+
+    # remove archives
+    if not int(os.getenv("ATOS_KEEP_RELOC", "0")):  # pragma: uncovered
+        process.commands.unlink(care_archive_copy)
+        process.commands.unlink(care_archive_dest)
+
+    return 0
+
+def run_atos_one_run_local(args):
     """ ATOS run tool implementation. """
 
     def get_size(executables):
@@ -1604,7 +1816,7 @@ def run_atos_one_run(args):
 
     def status_message(logf=None, failure=False):
         if failure:
-            message("FAILURE while running variant %s..." % variant)
+            message("FAILURE while running variant %s" % variant)
             logf.write("FAILURE while running variant %s\n" % variant)
         else:
             logf.write("SUCCESS running variant %s\n" % variant)

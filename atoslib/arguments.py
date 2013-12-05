@@ -259,7 +259,9 @@ class parsers:
         args.results_script(group)
         args.prof_script(group)
         args.nbruns(group)
+        args.remote_exec_script(group, hidden=True)
         args.remote_build_script(group, hidden=True)
+        args.remote_run_script(group, hidden=True)
         args.remote_path(group, hidden=True)
         args.atos_init.no_run(group)
         args.cookie(group, hidden=True)
@@ -366,7 +368,9 @@ class parsers:
         args.results_script(group)
         args.prof_script(group)
         args.nbruns(group)
+        args.remote_exec_script(group, hidden=True)
         args.remote_build_script(group, hidden=True)
+        args.remote_run_script(group, hidden=True)
         args.remote_path(group, hidden=True)
         args.size_cmd(group, hidden=True)
         args.time_cmd(group, hidden=True)
@@ -987,7 +991,7 @@ class parsers:
         # other options
         args.command(parser)
         args.variant(parser, hidden=True)
-        args.local(parser)
+        args.internal_flags.local(parser)
         return parser
 
     @staticmethod
@@ -1031,7 +1035,8 @@ class parsers:
         args.atos_run.silent(parser)
         args.variant(parser, hidden=True)
         args.output(parser, hidden=True)
-        args.id(parser)
+        args.id(parser, hidden=True)
+        args.internal_flags.local(parser)
         return parser
 
     @staticmethod
@@ -1779,11 +1784,13 @@ class args:
              help=help_msg)
 
     @staticmethod
-    def id(parser, args=("-i", "--identifier")):
+    def id(parser, args=("-i", "--identifier"), hidden=False):
+        help_msg = parsers.help_message(
+            "identifier of run [default: executables basename]", hidden)
         parser.add_argument(
             *args,
             dest="id",
-            help="identifier of run [default: executables basename]")
+            help=help_msg)
 
     @staticmethod
     def options(parser, args=("-a", "--options")):
@@ -1982,6 +1989,14 @@ class args:
              help=help_msg)
 
     @staticmethod
+    def remote_exec_script(
+        parser, args=("--remote-exec-script",), hidden=False):
+        help_msg = parsers.help_message(
+            "script used to build/run remotely", hidden)
+        parser.add_argument(
+            *args, dest="remote_exec_script", help=help_msg)
+
+    @staticmethod
     def remote_build_script(
         parser, args=("--remote-build-script",), hidden=False):
         help_msg = parsers.help_message(
@@ -1990,10 +2005,12 @@ class args:
             *args, dest="remote_build_script", help=help_msg)
 
     @staticmethod
-    def local(parser, args=("--local",)):
+    def remote_run_script(
+        parser, args=("--remote-run-script",), hidden=False):
+        help_msg = parsers.help_message(
+            "script used to run remotely", hidden)
         parser.add_argument(
-            *args, action="store_true", dest="local",
-             help=argparse.SUPPRESS)  # always hidden
+            *args, dest="remote_run_script", help=help_msg)
 
     @staticmethod
     def targets(parser, args=("-t", "--targets")):
@@ -2026,6 +2043,15 @@ class args:
              dest="extra_args",
              action='append',
              help=help_msg)
+
+    class internal_flags:
+        """ Namespace for internal atos flags (always hidden). """
+
+        @staticmethod
+        def local(parser, args=("--local",)):
+            parser.add_argument(
+                *args, action="store_true", dest="local",
+                 help=argparse.SUPPRESS)  # always hidden
 
     class atos_help:
         """ Namespace for non common atos help options. """

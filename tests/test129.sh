@@ -19,11 +19,11 @@ mkdir -p \$tmpbase
 tmpdir=\`mktemp -d --tmpdir=\$tmpbase -t tmp.atos.XXXXXXXXXX\`
 # extract archive in temporary dir
 cd \$tmpdir
-tar xzf \$ATOS_BUILD_SRC
+tar xzf \$ATOS_CARE_SRC
 # execute build.sh
-./build.sh
+./exec.sh
 # get build archive back
-cp build.tar.gz \$ATOS_BUILD_DST
+cp atos.tar.gz \$ATOS_CARE_DST
 EOF
 
 $ROOT/bin/atos-init \

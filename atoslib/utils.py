@@ -428,7 +428,8 @@ def run_atos_build_remote(args):
     status, output = process.system(
         atos_lib.env_command(
             ATOS_CARE_SRC=os.path.abspath(care_archive_copy),
-            ATOS_CARE_DST=os.path.abspath(care_archive_dest))
+            ATOS_CARE_DST=os.path.abspath(care_archive_dest),
+            BUILD_SLOT=args.__dict__.get('build_slot', ''))
         + [remote_build_sh],
         get_output=True, output_stderr=True)
     build_progress.end(status=status)
@@ -1647,7 +1648,8 @@ def run_atos_one_run_remote(args):
     status, output = process.system(
         atos_lib.env_command(
             ATOS_CARE_SRC=os.path.abspath(care_archive_copy),
-            ATOS_CARE_DST=os.path.abspath(care_archive_dest))
+            ATOS_CARE_DST=os.path.abspath(care_archive_dest),
+            RUN_SLOT=args.__dict__.get('run_slot', ''))
         + [remote_run_sh],
         get_output=True, output_stderr=True)
     run_progress.end(status=status)

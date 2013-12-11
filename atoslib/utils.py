@@ -336,7 +336,7 @@ def run_atos_build_archive(args):
     # execute care command
     status, output = process.system(
         atos_lib.proot_command(
-            ATOS_CARE=1, ATOS_PARALLEL=1,
+            ATOS_CARE=1, ATOS_PARALLEL=1, ATOS_NO_BUILD_HASH=1,
             PROOT_IGNORE_ELF_INTERPRETER=1) + [
             "--output=%s" % care_output] + atos_commands,
         get_output=True, output_stderr=True)
@@ -1511,7 +1511,7 @@ def run_atos_run_archive(args):
     # execute care command
     status, output = process.system(
         atos_lib.proot_command(
-            ATOS_CARE=1, ATOS_PARALLEL=1,
+            ATOS_CARE=1, ATOS_PARALLEL=1, ATOS_NO_BUILD_HASH=1,
             PROOT_IGNORE_ELF_INTERPRETER=1) + [
             "--concealed-path=%s" % os.path.join(
                 args.configuration_path, "profiles"),

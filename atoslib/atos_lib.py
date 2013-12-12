@@ -1674,9 +1674,7 @@ def proot_reloc_command(args):
     reloc_dir = args.__dict__.get('reloc_dir', None)
     if not reloc_dir:
         return []
-    return proot_command(
-        PROOT_IGNORE_ELF_INTERPRETER=1,  # useless here?
-        **proot_reloc_args(args))
+    return proot_command(**proot_reloc_args(args))
 
 def env_command(*args, **kwargs):
     env_dict = {}

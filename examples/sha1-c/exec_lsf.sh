@@ -29,8 +29,10 @@ TMPDIR=`mktemp -d --tmpdir=/home/compwork/$USER/ -t tmp.atos.XXXXXXXXXX`
 [ -d "$TMPDIR" ]
 [ -f "$ATOS_CARE_SRC" ]
 
+cd $TMPDIR
+
 echo "### Decompressing ATOS-CARE archive"
-( cd $TMPDIR; tar xzvf $ATOS_CARE_SRC )
+tar xzvf $ATOS_CARE_SRC || true
 
 echo "### Submitting JOB $JOB_NAME"
 $JOBTOOLS/job-submit.sh                           \

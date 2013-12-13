@@ -370,38 +370,64 @@ has two drawbacks :
   must be present. For example, if an inlining option brings no
   improvement when used alone, it has little chance to be part of the
   preferred configurations selected at the end of the inline stage. But
-  if this specific inlining option combined with an option from the
-  loop options set for example would result in a better tradeoff, it
-  will not be found by the staged exploration.
+  if this specific inlining option combined with an option from
+  another set would result in a better tradeoff, it will not be found
+  by the staged exploration.
 
 - The stage exploration generates random option configurations from
   within an option set. It means that an option that has been seen to
   improve the tradeoff has an equally probability to be selected as an
-  option which has no, or even negative, impact on the tradeoff.
+  option that has no, or even negative, impact on the tradeoff.
 
-In order to alleviate these two limitations we have implemented a
+In order to alleviate these two limitations, we have implemented a
 genetic algorithm to explore the set of compiler options. A genetic
-algorithm do not split the option set in predefined sets, thus
+algorithm does not split the option set in predefined sets, thus
 alleviating the first problem. A genetic algorithm will repeatedly
 select a set of preferred configurations and will continue explorations
 from these configurations, thus focusing on good options and avoiding
 exploring poor performing options.
 
-A genetic algorithm may find configurations that a staged exploration
-would not have reached, and may find best tradeoffs in less
-explorations, thus in less time. A genetic exploration will be run
-with the following command:
+A genetic exploration uses genetic transformations, i.e. evolution and
+mutation, to evolve a set of option sequences across generations. It
+may find configurations that a staged exploration would not have
+reached, and may find best tradeoffs in fewer explorations, thus in
+less time. A genetic exploration can be run with the following
+command:
 
 ::
 
-  $ atos-explore-genetic -M 50 --generations=20
+  $ atos-explore-genetic
 
-With these options, we configure the genetic algorithm to work on a
-set of 50 option configurations, and to make them evolve over 20
-generations. Genetic transformations, i.e. evolution and mutation, are
-used to explore new option configurations starting from a set of
-preferred configurations in previous generations.
+This will run a genetic exploration with all default values. Here are
+the options to use to modify the default behavior of the genetic
+algorithm.
 
+::
+
+  $ atos-explore-genetic -M 50
+
+The ``-M`` option sets the size of the population, i.e the number of
+option sequences to generate in a single generation of the genetic
+algorithm. The default value is 100.
+
+::
+
+  $ atos-explore-genetic --generations 20
+
+The ``--generations`` option sets the number of generations that the
+genetic algorithm will run to evolve the option sequences. The default
+value is 10.
+
+The tradeoff option ``-s`` already mentioned earlier in this tutorial
+can also be used. A full genetic exploration will be performed for
+each of the selected tradeoffs. By default, the three tradeoffs ``-s 5
+-s 1 -s 0.2`` are defined.
+
+The number of option sequences that a genetic exploration will
+generate is equal to the size of the population ( ``-M`` option )
+times the number of generations ( ``--generations`` option ) times the
+number of selected tradeoffs. If all default values are used, the
+number of sequences will be 100 * 10 * 3 = 3000.
 
 While staged and genetic explorations, as demonstrated above, are
 extensively using the compiler options for finding application wide
@@ -519,14 +545,14 @@ partitioning of the hot and cold files with:
   $ atos-explore-acf -N 50 --file-by-file
 
 By default this tool will select the critical files contributing to 70% of
-the performance and execute an exploration on a file by file basis.
+the performance and execute a staged exploration on a file by file basis.
 The other files, considered cold are optimized for size first.
 
-The expected number of build/run when using this tool is O(72.H.N) in the
-worst case, where N is the number of basic iterations and H is the number of
-hot files detected.
-Thus for this example where the build+run takes 5 seconds, expect an exploration
-time of 3600*5 seconds, i.e. 5 hours in the worst case.
+The expected number of build/run when using this tool with default values is
+O(72.H.N) in the worst case, where N is the number of basic iterations and H
+is the number of hot files detected.  Thus for this example where the
+build+run takes 5 seconds, expect an exploration time of 3600*5 seconds,
+i.e. 5 hours in the worst case.
 
 The same kind of exploration can be executed on a function by function basis
 if the compiler support plugins::
@@ -539,7 +565,21 @@ function by function.
 In this example the number of hot functions is probably 2, thus expect
 an exploration time of 10 hours for this last command.
 
-if ``oprofile`` is not available or user hasn't sudo privileges, the ``perf``
+By default, the file by file and function by function explorations are
+performed with a staged exploration. To use a genetic algorithm instead, use
+the following command line:
+
+  $ atos-explore-acf --genetic -N 10 --generations 5
+
+The ``--generations`` option is used here to reduce the number of
+generations from the default value 10 down to 5.
+
+The expected number of build/run with a genetic exploration is O(T.G.N.H) in
+the worst case, where T is the number of tradeoffs, N is the size of the
+population, G is the number of generations and H is the number of hot files
+or functions detected.
+
+If ``oprofile`` is not available or user hasn't sudo privileges, the ``perf``
 profiling tool can be used instead. ``perf record`` takes a command as argument
 and generates profile information for the execution of the given command.
 The ``-f`` option is required for ATOS in order to overwrite existing data file.
@@ -586,6 +626,30 @@ configuration is displayed at the end of the exploration::
    $ atos-explore-flags-pruning --keep-opt-level --threshold=0.02 --variant_id=`atos-play -P`
    ...
    explore-flags-pruning: best variant: OPT-fprofile-use-O3-fno-align-functions-fno-schedule-insns2--parammax-inline-insns-auto=60-O3-fno-align-functions-fno-schedule-insns2--parammax-inline-insns-auto=60-flto [61f8e8a71e2272c1f1ad58f3d4f1ef56]
+
+Using classes of flags to improve explorations
+----------------------------------------------
+
+In order to improve the efficiency of the exploration algorithms, we also
+defined into ATOS a few classes of flags. These classes define which flags
+are more likely to give good, or bad, results, depending on the optimization
+configuration of the exploration. These classes can be used by the
+exploration algorithms to bias the probability for these flags to be set or
+unset.
+
+There are twelve classes of flags defined into ATOS, each one tuned for a
+specific combination of the optimization level options and the LTO and FDO
+variants. In order to use one of these classes during an exploration, the
+option ``--weight-class <Wclass>`` must be passed on the ATOS command line,
+with ``Wclass`` taking one of the following values:
+
+``WOs``, ``WO2``, ``WO3`` : For basic optimization levels
+
+``WOsf``, ``WO2f``, ``WO3f`` : For FDO optimizations
+
+``WOsl``, ``WO2l``, ``WO3l`` : For LTO optimizations
+
+``WOsfl``, ``WO2fl``, ``WO3fl`` : For combined FDO and LTO optimizations
 
 Full exploration
 ----------------

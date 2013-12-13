@@ -821,6 +821,7 @@ class parsers:
         args.atos_explore.cold_options(group)
         args.atos_explore.cold_attributes(group)
         args.atos_explore.genetic(group)
+        args.atos_explore.generations(group, hidden=True)
         args.atos_explore.random(group)
         args.tradeoffs(group)
         args.optim_levels(group)
@@ -2427,11 +2428,14 @@ class args:
                  help="use random flags exploration")
 
         @staticmethod
-        def generations(parser, args=("--generations",)):
+        def generations(parser, args=("--generations",), hidden=False):
+            help_msg = parsers.help_message(
+                "number of generations",
+                hidden)
             parser.add_argument(
                 *args,
                  dest="generations",
-                 help="number of generations",
+                 help=help_msg,
                  default="10")
 
         @staticmethod

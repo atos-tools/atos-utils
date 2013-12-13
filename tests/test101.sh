@@ -31,7 +31,7 @@ $ROOT/bin/atos-init \
 # func-by-func genetic exploration
 $ROOT/bin/atos-explore-acf \
     --hot-th=50 --tradeoffs=5.0 --optim-variants=base --optim-levels=-O2 \
-    --genetic --per-func-nbiters=1 --log-file=log1
+    --genetic --per-func-nbiters=1 --log-file=log1 --generations=3
 [ `grep gen_genetic_deps log1 | wc -l` -ne 0 ]
 
 # file-by-file genetic exploration

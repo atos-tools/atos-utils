@@ -1,0 +1,21 @@
+This directory contains scripts to analyze the behavior of individual
+GCC flags on some benchmarks and then output a ranking of best and
+worst flags.
+
+The entry point is the shell script "static_flag_ranking.sh". It must
+be called with a list of directories which each contains a benchmark
+to be used to evaluate the flags. Each benchmark directory must
+contain a file "atos-init.sh" that will call "atos init -C $1 ...."
+(see file oneflag.py to look at the use of this script)
+
+This script will evaluate the effect of individual flags at different
+optimization levels and variants, using the list of benchmarks
+provided on the command line
+
+It will then output a set of flags ranking that can be added in the
+*.cfg files for ATOS
+
+example
+
+cd /home/compwork/ferriere/ATOS/atos-ranking
+../ranking.explorations/static_flag_ranking.sh atos-build/atos-utils/examples/bzip2 atos-build/atos-utils/examples/sha1 atos-build/atos-utils/examples/astar

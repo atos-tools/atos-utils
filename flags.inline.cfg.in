@@ -433,8 +433,19 @@
 -Ofast => -fpartial-inlining, -finline-functions
 #endif
 
-WO2 80% 80% -finline-small-functions, -finline-functions, -fearly-inlining
+WO2 50% 80% -finline-functions, -fearly-inlining, -finline-small-functions
 
-WO3 80% 80% -finline-small-functions, -finline-functions, -fpartial-inlining
+WO2f 50% 80% -finline-small-functions
 
+WO2l 50% 80% -finline-functions, -finline-small-functions, -fearly-inlining
+
+WO2fl 50% 80% -finline-small-functions
+
+WO3 50% 80% -finline-small-functions, -finline-functions, -fpartial-inlining
+
+WO3f 50% 80% -finline-small-functions, -finline-functions
+
+WO3l 50% 80% -finline-small-functions, -finline-functions, -fpartial-inlining
+
+WO3fl 50% 80% -finline-small-functions, -finline-functions
 #endif // GCC_VERSION >= 40400

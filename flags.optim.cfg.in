@@ -2023,14 +2023,38 @@
 
 #endif // STXP70CC
 
-WOs 80% 80% -ftree-forwprop
-WOs 80% 20% -fselective-scheduling2, -fschedule-insns
+WOs 50% 80% -ftree-forwprop
+WOs 50% 20% -fschedule-insns, -fselective-scheduling2
 
-WO2 80% 80% -fguess-branch-probability, -fira-loop-pressure, -ftree-sra
-WO2 80% 50% -fgcse
-WO2 80% 20% -ftree-ch, -ftree-pre, -fselective-scheduling2, -ftree-vrp, -fforward-propagate, -fschedule-insns
+WOsf 50% 80% -ftree-forwprop
+WOsf 50% 20% -fschedule-insns
 
-WO3 80% 80% -fguess-branch-probability, -ftree-forwprop, -fcaller-saves, -fschedule-insns, -freorder-blocks, -fsched-critical-path-heuristic
-WO3 80% 80% -ftree-ccp, -ftree-sra
-WO3 80% 50% -ftree-ch, -ftree-pre
-WO3 80% 20% -fforward-propagate, -fselective-scheduling2
+WOsl 50% 80% -ftree-forwprop
+WOsl 50% 20% -fschedule-insns, -fselective-scheduling2
+
+WOsfl 50% 80% -ftree-forwprop
+WOsfl 50% 20% -fschedule-insns
+
+WO2 50% 80% -fguess-branch-probability, -freorder-blocks, -ftree-sra
+WO2 50% 20% -ftree-ch, -ftree-pre, -fselective-scheduling2, -ftree-vrp, -fforward-propagate, -fschedule-insns
+
+WO2f 50% 80% -fweb, -freorder-blocks, -fcaller-saves, -fdce, -ftree-copyrename, -fschedule-insns
+WO2f 50% 20% -ftree-pre, -fforward-propagate, -ftree-ch, -fguess-branch-probability
+
+WO2l 50% 80% -fguess-branch-probability, -ftree-sra
+WO2l 50% 20% -ftree-ch, -ftree-pre, -fselective-scheduling2, -fschedule-insns, -ftree-vrp, -fforward-propagate
+
+WO2fl 50% 80% -fweb, -fguess-branch-probability, -freorder-blocks, -fcaller-saves, -fdce, -ftree-sra, -ftree-copyrename, -fschedule-insns, -fcse-follow-jumps
+WO2fl 50% 20% -ftree-pre, -fforward-propagate, -ftree-ch, -fsched-group-heuristic
+
+WO3 50% 80% -fguess-branch-probability, -ftree-forwprop, -fcaller-saves, -fschedule-insns, -fsched-critical-path-heuristic, -ftree-ccp, -ftree-sra
+WO3 50% 20% -ftree-ch, -fforward-propagate
+
+WO3f 50% 80% -fweb, -freorder-blocks, -fcaller-saves, -ftree-copyrename, -fdce, -fschedule-insns
+WO3f 50% 20% -ftree-pre, -fforward-propagate, -ftree-ch, -fguess-branch-probability
+
+WO3l 50% 80% -fguess-branch-probability, -ftree-forwprop, -fcaller-saves, -fschedule-insns, -freorder-blocks, -ftree-ccp, -ftree-sra, -fsched-critical-path-heuristic
+WO3l 50% 20% -ftree-ch, -fforward-propagate, -fselective-scheduling2
+
+WO3fl 50% 80% -fweb, -fguess-branch-probability, -freorder-blocks, -fcaller-saves, -fdce, -ftree-sra, -fgcse, -ftree-copyrename, -fschedule-insns
+WO3fl 50% 20% -ftree-pre, -fforward-propagate, -ftree-ch, -fsched-group-heuristic

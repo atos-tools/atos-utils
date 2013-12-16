@@ -5,6 +5,7 @@ ROOT=${ROOT:-$SRCDIR}
 TEST=`basename $0 .sh`
 TMPDIR=${TMPDIR:-/tmp}
 KEEPTEST=${KEEPTEST:-0}
+KEEPFAIL=${KEEPFAIL:-0}
 _skipped=0
 
 test_cleanup() {
@@ -17,7 +18,7 @@ cleanup() {
     trap - INT QUIT TERM EXIT
     test_cleanup
     cd $TMPDIR # ensure not in TMPTEST before cleaning
-    [ ! -d "$TMPTEST" -o "$KEEPTEST" != 0 ] || rm -rf $TMPTEST
+    [ -d "$TMPTEST" ] && [ "$KEEPTEST" = 0 ] && [ "$KEEPFAIL" = 0 -o $exit = 0 ] && rm -rf $TMPTEST
     [ $exit != 0 -o $_skipped = 1 ] || success
     [ $exit = 0 -o $exit -ge 128 ] || failure
     [ $exit = 0 -o $exit -lt 128 ] || interrupted && trap - EXIT && exit $exit
@@ -46,9 +47,10 @@ skip() {
     exit 0
 }
 
-[ "$KEEPTEST" != 0 ] || TMPTEST=`mktemp -d $TMPDIR/atos-test.XXXXXX`
-[ "$KEEPTEST" = 0 ] || TMPTEST=`rm -rf $TEST.dir && mkdir -p $TEST.dir && echo $TEST.dir`
-[ "$KEEPTEST" = 0 ] || echo "Keeping test directory in: $TMPTEST"
+rm -rf $TEST.dir
+[ "$KEEPTEST" != 0 -o "$KEEPFAIL" != 0 ] || TMPTEST=`mktemp -d $TMPDIR/atos-test.XXXXXX`
+[ "$KEEPTEST" = 0 -a "$KEEPFAIL" = 0 ] || TMPTEST=`mkdir -p $TEST.dir && echo $PWD/$TEST.dir`
+[ "$KEEPTEST" = 0 -a "$KEEPFAIL" = 0 ] || echo "Keeping test directory in: $TMPTEST"
 cd $TMPTEST
 [ "$DEBUG" = "" ] || export PS4='+ $0: ${FUNCNAME+$FUNCNAME :}$LINENO: '
 [ "$DEBUG" = "" ] || set -x

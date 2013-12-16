@@ -54,7 +54,7 @@ distclean: clean
 
 tests_report: $(srcdir)report.sh
 	$(V_RUN)/usr/bin/time -f 'real %E (%Uu, %Ss)' \
-	    $(MAKE) -f $(firstword $(MAKEFILE_LIST)) KEEPTEST=1 DEBUG=1 $(ERRS); \
+	    $(MAKE) -f $(firstword $(MAKEFILE_LIST)) KEEPFAIL=1 DEBUG=1 $(ERRS); \
 	$(srcdir)report.sh $(ERRS) >tests_report.txt; \
 	res=$$?; cat tests_report.txt; exit $$res
 

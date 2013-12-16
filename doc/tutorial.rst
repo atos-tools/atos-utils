@@ -566,15 +566,26 @@ For our SHA1 C++ example, the perf run script is:
   perf record -f -o perf.data `dirname $0`/run.sh
   perf report -i perf.data -v -n > oprof.out
 
-Fine tuning of existing exploration results
--------------------------------------------
+Fine tuning and Flags pruning of existing exploration results
+-------------------------------------------------------------
 It is sometimes possible to improve the best results found by an exploration
 by trying small variations of that results. This new exploration will try each
 possible value of each flag of a given configuration (Hill climbing algorithm).
 It can be run with the following command, where argument of the variant_id flag
 is the identifier of the configuration to be tuned::
 
-   $ explore-flag-values --variant_id=`atos-play -P`
+   $ atos-explore-flag-values --variant_id=`atos-play -P`
+
+Moreover, it might be interesting after an exploration to determine the minimal
+set of flags which leads to the best result, removing all useless and
+inefficient flags. This can be done using the ``atos-explore-flags-pruning``
+exploration. The ``--threshold`` flag can be used here to set the percentage of
+execution time which can be considered as noise. Identifier of the best pruned
+configuration is displayed at the end of the exploration::
+
+   $ atos-explore-flags-pruning --keep-opt-level --threshold=0.02 --variant_id=`atos-play -P`
+   ...
+   explore-flags-pruning: best variant: OPT-fprofile-use-O3-fno-align-functions-fno-schedule-insns2--parammax-inline-insns-auto=60-O3-fno-align-functions-fno-schedule-insns2--parammax-inline-insns-auto=60-flto [61f8e8a71e2272c1f1ad58f3d4f1ef56]
 
 Full exploration
 ----------------

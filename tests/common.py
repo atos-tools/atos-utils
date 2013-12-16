@@ -26,11 +26,11 @@ def failure(msg='', code=1):
         TEST, test_case, msg and ': ' + msg or '')
     os._exit(code)
 
-def interrupted(code=1):
+def interrupted(code):
     test_case = getattr(__main__, 'TEST_CASE', '?')
     print >>sys.stderr, "***INTERRUPTED: %s: %s" % (
         TEST, test_case)
-    os._exit(code)
+    os._exit(128 + code)
 
 def skip(msg=''):
     test_case = getattr(__main__, 'TEST_CASE', '?')
@@ -49,23 +49,36 @@ def cleanup(*args):
     except: pass
     # run other exit functions before calling os._exit
     atexit._run_exitfuncs()
-    if not keeptest:
-        os.chdir(tmpdir)
-        shutil.rmtree(tstdir)
-    if not args:         # normal exit
-        success()
+    # compute exit msg and code
+    msg=''
+    if not args:
+        code = 0
     elif len(args) == 1: # sys.exit, exit
         code = int(args[0])
-        success() if code == 0 else failure(code=code)
     elif len(args) == 2: # signal catched
-        interrupted(int(args[0]))
+        code = int(args[0])
+    elif len(args) == 3: # exception
+        code = 1
+    else:                # unknown
+        msg = 'unknown'
+        code = 1
+    # Clean tmp dir unless specified
+    if not keeptest and (not keepfail or code == 0):
+        os.chdir(tmpdir)
+        shutil.rmtree(tstdir)
+    # Call exit fuinctions
+    if code == 0:
+        success()
+    elif len(args) == 2: # interrupt
+        interrupted(code=code)
     elif len(args) == 3: # exception
         excname = traceback.format_exception_only(
             args[0], args[1])[-1].strip()
         traceback.print_exception(*args)
-        failure(excname)
-    else:                # unknown
-        failure(msg='unknown')
+        failure(excname, code)
+    else:
+        failure(msg=msg, code=code)
+
     assert 0
 
 
@@ -80,9 +93,10 @@ signal.signal(signal.SIGTERM, cleanup)
 # create and go to new tmp directory
 tmpdir = os.getenv('TMPDIR', '/tmp')
 keeptest = os.getenv('KEEPTEST', False)
-if keeptest:
-    tstdir = TEST + '.dir'
-    shutil.rmtree(tstdir, ignore_errors=True)
+keepfail = os.getenv('KEEPFAIL', False)
+tstdir = os.path.abspath(TEST + '.dir')
+shutil.rmtree(tstdir, ignore_errors=True)
+if keeptest or keepfail:
     os.makedirs(tstdir)
     print "Keeping test directory in:", tstdir
 else:

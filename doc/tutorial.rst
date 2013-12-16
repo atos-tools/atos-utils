@@ -716,6 +716,7 @@ A first level exploration could then be performed with:
 
   $ atos-explore -b "make clean all" -r ./run-remote.sh -B /tmp/profile
 
+
 Custom script for results
 -------------------------
 
@@ -741,6 +742,33 @@ for instance:
 ::
 
   $ atos-explore -b "make clean all" -r ./run.sh -t ./get_results.sh
+
+Accelerating an ATOS exploration
+--------------------------------
+For accelerating an ATOS exploration, build and run tasks can be executed in
+parallel. Flags ``--build-jobs`` and ``--run-jobs`` can be used for that
+purpose::
+
+  $ atos-explore --build-jobs=4 --run-jobs=4
+
+It is also possible to execute build and run scripts on a remote machine. In
+order to do so, a *remote execution* script must be provided. This script must:
+
+- Transfer and decompress the *source* archive ``$ATOS_CARE_SRC`` to the remote
+  machine,
+
+- Execute the ``exec.sh`` script,
+
+- Transfer back the ``atos.tar.gz`` *destination* archive to ``$ATOS_CARE_DST``
+  on the local host.
+
+An example of such a script is given in ``share/atos/examples/sha1-c/exec-lsf.sh``::
+
+  $ atos-explore
+    --build-script="gcc sha1.c sha.c -o sha1-c"
+    --run-script="./run_qemu.sh"
+    --remote-exec-script="./exec_lsf.sh"
+    --build-jobs=25 --run-jobs=25 --reuse
 
 Publishing results
 ------------------

@@ -46,7 +46,7 @@ class optim_flag_list():
         def __init__(self, frange=None, fchoice=None):
             assert bool(frange) ^ bool(fchoice)
             self.range, self.choice = None, None
-            self.prob_select = self.prob_choice = 0.5
+            self.weights = None
             if frange:
                 flag, min, max, step = frange
                 self.range = (flag, int(min), int(max), int(step or 1))
@@ -59,16 +59,32 @@ class optim_flag_list():
         def __str__(self):
             return self.range and self.range[0] or self.choice[0]
 
-        def rand(self):
+        def rand(self, weight_class=None):
             if self.range:
                 flag, min, max, step = self.range
                 val = min + random.randint(0, (max - min) / step) * step
                 return '%s%d' % (flag, val)
             elif self.choice:  # pragma: branch_always
                 if len(self.choice) == 2:
-                    return self.choice[random.random() >= self.prob_choice]
+                    prob_select, prob_choice = self.get_wprob(weight_class)
+                    return self.choice[random.random() >= prob_choice]
                 return random.choice(self.choice)
             else: assert 0  # pragma: unreachable
+
+        def select(self, weight_class):
+            prob_select, prob_choice = self.get_wprob(weight_class)
+            return random.random() < prob_select
+
+        def get_wprob(self, weight_class):
+            prob_select = prob_choice = 0.5
+            if weight_class and self.weights:
+                for wp in self.weights:
+                    if wp[0] == weight_class:
+                        prob_select, prob_choice = wp[1:]
+                        debug('get_wprob: %s with wclass %s' %
+                              (self.optname(), weight_class))
+                        break
+            return (prob_select, prob_choice)
 
         def values(self, nbvalues=3):
             if self.range:
@@ -133,6 +149,24 @@ class optim_flag_list():
                     optim_flag_list.optim_flag.soptname(flag), []))
         # filter options already set ?
         return set(result)
+
+    @staticmethod
+    def weight_class(flags, variants, weight_class=None):
+        if not weight_class is None: return weight_class
+        if not variants or len(variants) > 1: return None
+        if not isinstance(flags, list):
+            flags = optim_flag_list.parse_line(flags)
+        optim_level_flags = filter(
+            lambda x: x.startswith('-O'), flags)
+        optim_level = (
+            optim_level_flags and optim_level_flags[-1])
+        if not optim_level: return None
+        optim_variant = variants[0]
+        weight_class = 'WO%s%s%s' % (
+            optim_level[-1],
+            'f' if 'fdo' in optim_variant else '',
+            'l' if 'lto' in optim_variant else '')
+        return weight_class
 
     @staticmethod
     def parse_line(cmdline):
@@ -208,11 +242,15 @@ class optim_flag_list():
             # probability
             reobj = re.match('^(W.*)  *(\d*)%  *(\d*)%(.*)', line)
             if reobj:
-                if reobj.group(1) != self.weight_class: continue
+                if self.weight_class and \
+                        reobj.group(1) != self.weight_class:
+                    continue
                 prob_select = int(reobj.group(2)) / 100.0
                 prob_choice = int(reobj.group(3)) / 100.0
                 for flag in reobj.group(4).split(','):
-                    flags_weights[flag.strip()] = (prob_select, prob_choice)
+                    flag = flag.strip()
+                    flags_weights.setdefault(flag, []).append(
+                        (reobj.group(1), prob_select, prob_choice))
                 continue
             # choice flag
             choices = [w.strip() for w in line.split('|')]
@@ -221,9 +259,7 @@ class optim_flag_list():
         for flag in flag_list:
             for dep_parent in rev_dependencies.get(flag.optname(), ['']):
                 self.dependencies.setdefault(dep_parent, []).append(flag)
-            if flag.optname() in flags_weights:
-                flag.prob_select, flag.prob_choice = \
-                    flags_weights[flag.optname()]
+            flag.weights = flags_weights.get(flag.optname())
         self.flag_list.extend(flag_list)
 
 class config(atos_lib.default_obj):
@@ -445,6 +481,8 @@ class gen_variants(config_generator):
     def generate(self):
         debug('gen_variants: %s' % str(self.optim_variants_))
         for cfg in self.parent_:
+            if not cfg.variant is None:
+                yield cfg
             if not self.optim_variants_:
                 yield cfg
             else:
@@ -493,7 +531,7 @@ class gen_rnd_uniform_deps(config_generator):
     """
     def __init__(self, parent=None, flags_files=None, optim_levels=None,
                  configuration_path=None, weight_class=None,
-                 **ignored_kwargs):
+                 optim_variants=None, **ignored_kwargs):
         self.parent_ = parent or gen_config(configuration_path)
         assert(isinstance(self.parent_, config_generator) or isinstance(
                 self.parent_, types.GeneratorType))
@@ -506,6 +544,9 @@ class gen_rnd_uniform_deps(config_generator):
             fchoice=(optim_levels or '').split(','))
         self.flag_list_ = optim_flag_list(
             self.flags_files_, weight_class=weight_class)
+        self.optim_variants = (
+            optim_variants and optim_variants.split(',') or [])
+        self.weight_class = weight_class
 
     def estimate_exploration_size(self):
         if not self.flag_list_.flag_list:
@@ -515,29 +556,35 @@ class gen_rnd_uniform_deps(config_generator):
     def generate(self):
         debug('gen_rnd_uniform_deps [%s]' % str(self.flags_files_))
 
-        for cfg in self.parent_:
-            if not self.flag_list_.flag_list:
-                # empty list case
-                yield cfg
-            else:
-                # bug? loops only on the first parent-generated cfg
-                base_flags = cfg.flags or ''
-                while True:
-                    handled_flags = set()
-                    available_flags = self.flag_list_.available_flags(
-                        base_flags)
-                    flags = base_flags or self.optim_levels_.rand()
-                    while True:
-                        for f in sorted(list(available_flags), key=str):
-                            if random.random() >= f.prob_select: continue
-                            flags += ' ' + f.rand()
-                        handled_flags |= available_flags
-                        available_flags = (
-                            self.flag_list_.available_flags(
-                                base_flags + ' ' + flags)
-                            - handled_flags)
-                        if not available_flags: break
-                    yield cfg.copy().update(flags=flags)
+        cfg = self.parent_.next()
+        try:  # allow only one parent cfg
+            self.parent_.next()
+            assert 0  # pragma: unreachable
+        except: pass
+
+        if not self.flag_list_.flag_list:  # empty list case
+            yield cfg
+            return
+
+        base_flags = cfg.flags or ''
+        while True:
+            handled_flags = set()
+            available_flags = self.flag_list_.available_flags(
+                base_flags)
+            flags = base_flags or self.optim_levels_.rand()
+            weight_class = optim_flag_list.weight_class(
+                flags, self.optim_variants, self.weight_class)
+            while True:
+                for f in sorted(list(available_flags), key=str):
+                    if not f.select(weight_class): continue
+                    flags += ' ' + f.rand(weight_class)
+                handled_flags |= available_flags
+                available_flags = (
+                    self.flag_list_.available_flags(
+                        base_flags + ' ' + flags)
+                    - handled_flags)
+                if not available_flags: break
+            yield cfg.copy().update(flags=flags)
 
 class gen_chained_exploration(config_generator):
     """
@@ -654,6 +701,7 @@ class gen_chained_exploration(config_generator):
                     gen_base_ = gen_variants(parent=gen_config(
                             self.configuration_path, flags=flags),
                         optim_variants=variant)
+                    generator_args.update({'optim_variants': variant})
                     generator_ = generator(
                         parent=gen_base_, **generator_args)
                     generator_ = gen_maxiters(
@@ -1941,7 +1989,7 @@ class gen_genetic_deps(config_generator):
     def __init__(self, parent=None, flags_files=None, optim_levels=None,
                  mutate_prob=None, mutate_rate=None, mutate_remove=None,
                  evolve_rate=None, configuration_path=None, weight_class=None,
-                 **ignored_kwargs):
+                 optim_variants=None, **ignored_kwargs):
         assert flags_files
         assert configuration_path
         self.flags_files_ = flags_files.split(',')
@@ -1962,6 +2010,9 @@ class gen_genetic_deps(config_generator):
             evolve_rate) if (evolve_rate is not None) else 0.3
         self.mutate_remove = float(
             mutate_remove) if (mutate_remove is not None) else 0.1
+        self.optim_variants = (
+            optim_variants and optim_variants.split(',') or [])
+        self.weight_class = weight_class
 
     def estimate_exploration_size(self):
         if not self.flag_list_.flag_list:  # pragma: uncovered
@@ -2010,6 +2061,8 @@ class gen_genetic_deps(config_generator):
                 evolve_flag = (random.random() < self.evolve_rate)
                 mutate_flag = (random.random() < self.mutate_rate)
                 remove_flag = (random.random() < self.mutate_remove)
+                weight_class = optim_flag_list.weight_class(
+                    new_flags, self.optim_variants, self.weight_class)
 
                 # MUTATION
                 if mutate_flags:  # pragma: uncovered
@@ -2030,7 +2083,7 @@ class gen_genetic_deps(config_generator):
                                       (flag, new_flag))
                                 continue
                             elif obj_flag:  # pragma: branch_always
-                                new_flag = obj_flag.rand()
+                                new_flag = obj_flag.rand(weight_class)
                                 new_flags.append(new_flag)
                                 debug('gen_genetic_deps: mutate flag=%s->%s' %
                                       (flag, new_flag))
@@ -2054,7 +2107,7 @@ class gen_genetic_deps(config_generator):
                             elif newval > max: newval = max
                             new_flag = opt_name + str(newval)
                         else:
-                            new_flag = obj_flag.rand()
+                            new_flag = obj_flag.rand(weight_class)
                         new_flags.append(new_flag)
                         debug('gen_genetic_deps: evolve flag=%s->%s' % (
                                 flag, new_flag))
@@ -2075,8 +2128,10 @@ class gen_genetic_deps(config_generator):
                     if not available_flags: break
                     for flag in sorted(list(available_flags), key=str):
                         mutate_flag = (random.random() < self.mutate_rate)
+                        weight_class = optim_flag_list.weight_class(
+                            new_flags, self.optim_variants, self.weight_class)
                         if mutate_flag:
-                            new_flag = flag.rand()
+                            new_flag = flag.rand(weight_class)
                             new_flags.append(new_flag)
                             debug('gen_genetic_deps: add flag=%s' % (new_flag))
                     handled_flags |= available_flags
@@ -2190,6 +2245,7 @@ def gen_explore_inline(
                 gen_rnd_uniform_deps(
                     flags_files=flags_file, optim_levels=optim_levels,
                     configuration_path=configuration_path,
+                    optim_variants=optim_variants,
                     **kwargs),
                 optim_variants=optim_variants),
             nbiters),
@@ -2207,6 +2263,7 @@ def gen_explore_loop(
                 gen_rnd_uniform_deps(
                     flags_files=flags_file, optim_levels=optim_levels,
                     configuration_path=configuration_path,
+                    optim_variants=optim_variants,
                     **kwargs),
                 optim_variants=optim_variants),
             nbiters),
@@ -2224,6 +2281,7 @@ def gen_explore_optim(
                 gen_rnd_uniform_deps(
                     flags_files=flags_file, optim_levels=optim_levels,
                     configuration_path=configuration_path,
+                    optim_variants=optim_variants,
                     **kwargs),
                 optim_variants=optim_variants),
             nbiters),
@@ -2245,6 +2303,7 @@ def gen_explore_random(
                 gen_rnd_uniform_deps(
                     flags_files=file_flags_lists, optim_levels=optim_levels,
                     configuration_path=configuration_path,
+                    optim_variants=optim_variants,
                     **kwargs),
                 optim_variants=optim_variants),
             nbiters),

@@ -17,7 +17,7 @@ cat > remote_exec.sh <<EOF
 set -ex
 tmpbase=$PWD/TMPDIR/
 mkdir -p \$tmpbase
-tmpdir=\`mktemp -d --tmpdir=\$tmpbase -t tmp.atos.XXXXXXXXXX\`
+tmpdir=\`mktemp -d --tmpdir=\$tmpbase tmp.atos.XXXXXXXXXX\`
 # extract archive in temporary dir
 cd \$tmpdir
 tar xzvf \$ATOS_CARE_SRC

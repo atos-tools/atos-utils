@@ -18,10 +18,12 @@
 
 import os, sys, atexit, glob
 import threading
+import traceback
 
 import globals
 import atos_lib
 import process
+import logger
 
 def setup(kwargs):
     """
@@ -129,6 +131,19 @@ class mp():
     def new_job_id(): return atos_lib.new_cookie()
 
     @staticmethod
+    def execute(func, *args, **kwargs):
+        # see also utils/execute
+        try:
+            return func(*args, **kwargs)
+        except:
+            # do not print full stacktrace in case of exception
+            logger.debug(traceback.format_exc())
+            logger.internal_error("\n".join(
+                    traceback.format_exception_only(*sys.exc_info()[:2]))[:-1],
+                    exit_status=0)  # do not exit
+            return 1
+
+    @staticmethod
     def reloc_exec_dir(args, job_id):
         """
         Return the directory name for a relocated build.
@@ -163,7 +178,7 @@ class mp():
             # wait until similar configs run end
             wait_for_similar_jobs(args)
             # call the run_atos_opt function
-            status = func(args)
+            status = mp.execute(func, args)
             # wait for all pending runs before exit
             map(lambda thr: thr.join(), mp.run_thread_map.get(args.job_id, []))
             # call given callback if any (progress update, for ex.)
@@ -225,7 +240,7 @@ class mp():
             # handle reloc_exec run dir
             args = atos_lib.namespace(args, reloc_dir=reloc_run_dir(args))
             # call the run_atos_one_run function
-            status = func(atos_lib.namespace(args, run_slot=slot))
+            status = mp.execute(func, atos_lib.namespace(args, run_slot=slot))
             # remove the run directory - unless profile-gen run
             if args.reloc_dir and not mp.keep_reloc_dir and args.gopts is None:
                 process.commands.rmtree(args.reloc_dir)
@@ -271,7 +286,7 @@ class mp():
         reloc_dir = args.__dict__.get(
             'reloc_dir', mp.reloc_exec_dir(args, job_id))
         # call the run_atos_run function
-        status = func(atos_lib.namespace(
+        status = mp.execute(func, atos_lib.namespace(
                 args, reloc_dir=reloc_dir, job_id=job_id))
         # wait for all pending runs before exit
         map(lambda thr: thr.join(), mp.run_thread_map.get(job_id, []))
@@ -286,7 +301,7 @@ class mp():
         # wait for a free slot in the build pool
         slot = mp.build_pool and mp.build_pool.acquire()
         # call the run_atos_build function
-        status = func(atos_lib.namespace(args, build_slot=slot))
+        status = mp.execute(func, atos_lib.namespace(args, build_slot=slot))
         # release the build slot
         mp.build_pool and mp.build_pool.release(slot)
         return status

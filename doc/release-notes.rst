@@ -2,6 +2,123 @@
 ATOS RELEASES
 =============
 
+ATOS 4.0
+========
+
+Restricted to ST internal use.
+
+ATOS is an Auto Tuning Optimization System that is able to find automatically
+the best performance/size tradeoff from a build system and a training
+application.
+
+A recent presentation of ATOS tools can be found here:
+  https://codex.cro.st.com/plugins/docman/?group_id=1806&action=show&id=348353
+
+Refer to the ATOS Codex Project at:
+  http://codex.cro.st.com/projects/atos
+
+For other project resources and links, refer to the release certificate at:
+  http://codex.cro.st.com/wiki/index.php?pagename=SRCATOS400&group_id=2626
+
+The tutorial of ATOS tools is available online at:
+  https://codex.cro.st.com/wiki/?group_id=2626&pagename=ATOS_Tutorial
+
+Release content
+===============
+
+New features and Improvements:
+ * Added kernel build support
+ * Extended GCC compiler support (GCC-4.8)
+ * Accelerated explorations using weighted flags
+ * Accelerated explorations reusing existing results
+ * Parallel and remote execution (build, run) using CARE tools,
+   refer to http://reproducible.io and http://proot.me for details
+ * Added Flags pruning exploration
+
+Installation and Usage
+======================
+
+Download the binary package from:
+  https://codex.cro.st.com/file/showfiles.php?group_id=2626
+
+Install with::
+
+    $sh cd $PREFIX
+    $sh tar xvzf atos-4.0.tgz
+    $sh export PATH=$PREFIX/atos-4.0/bin:$PATH
+
+Read the tutorial::
+
+    $sh atos help
+
+For instance, run a basic exploration with::
+
+    $sh atos-explore -b ./build.sh -r ./run.sh
+
+And get the performance first result with::
+
+    $sh atos-play -T
+
+Or get the size first result with::
+
+    $sh atos-play -T -f size
+
+Results
+=======
+
+* SH4 STLinux 2.4 gcc-4.7.3, STIH207 board
+
+See results in ATOS portal:
+  * lib jpeg: http://gnx5855.gnb.st.com:8001/projects/20/experiments/33
+  * lib zlib: http://gnx5855.gnb.st.com:8001/projects/20/experiments/34
+
++----------------+------------------+--------------+--------------+
+| Library        | trade-off        | speed-up     |size-reduction|
++================+==================+==============+==============+
+| jpeg           | perf driven      |  +29.65%     |   -8.64%     |
++----------------+------------------+--------------+--------------+
+|                | perf-size driven |  +20.92%     |   -1.19%     |
++----------------+------------------+--------------+--------------+
+|                | size driven      |   +7.79%     |   +2.14%     |
++----------------+------------------+--------------+--------------+
+| zlib           | perf driven      |  +11.31%     |   -9.36%     |
++----------------+------------------+--------------+--------------+
+|                | perf-size driven |   +7.18%     |   +1.09%     |
++----------------+------------------+--------------+--------------+
+|                | size driven      |   -0.82%     |  +12.80%     |
++----------------+------------------+--------------+--------------+
+
+* ARM STLinux 2.4 gcc-4.7.3, ORLY2 b2020 board
+
+See results in ATOS portal:
+  * lib jpeg: http://gnx5855.gnb.st.com:8001/projects/20/experiments/35
+  * lib zlib: http://gnx5855.gnb.st.com:8001/projects/20/experiments/36
+
++----------------+------------------+--------------+--------------+
+| Library        | trade-off        | speed-up     |size-reduction|
++================+==================+==============+==============+
+| jpeg           | perf driven      |  +28.00%     |  -10.29%     |
++----------------+------------------+--------------+--------------+
+|                | perf-size driven |  +17.07%     |   -0.27%     |
++----------------+------------------+--------------+--------------+
+|                | size driven      |   +4.35%     |   +1.70%     |
++----------------+------------------+--------------+--------------+
+| zlib           | perf driven      |  +17.53%     |   -7.99%     |
++----------------+------------------+--------------+--------------+
+|                | perf-size driven |  +10.64%     |   -1.10%     |
++----------------+------------------+--------------+--------------+
+|                | size driven      |   -1.15%     |   +8.05%     |
++----------------+------------------+--------------+--------------+
+
+Release Resources
+=================
+
+Refer to the Software Release Certificate for the full release links:
+  http://codex.cro.st.com/wiki/index.php?pagename=SRCATOS400&group_id=2626
+
+No blocking defects known. The list of remaining bugs and enhancements is
+included in the release certificate.
+
 ATOS 3.0
 ========
 

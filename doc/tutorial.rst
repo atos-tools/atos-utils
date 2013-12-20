@@ -627,30 +627,6 @@ configuration is displayed at the end of the exploration::
    ...
    explore-flags-pruning: best variant: OPT-fprofile-use-O3-fno-align-functions-fno-schedule-insns2--parammax-inline-insns-auto=60-O3-fno-align-functions-fno-schedule-insns2--parammax-inline-insns-auto=60-flto [61f8e8a71e2272c1f1ad58f3d4f1ef56]
 
-Using classes of flags to improve explorations
-----------------------------------------------
-
-In order to improve the efficiency of the exploration algorithms, we also
-defined into ATOS a few classes of flags. These classes define which flags
-are more likely to give good, or bad, results, depending on the optimization
-configuration of the exploration. These classes can be used by the
-exploration algorithms to bias the probability for these flags to be set or
-unset.
-
-There are twelve classes of flags defined into ATOS, each one tuned for a
-specific combination of the optimization level options and the LTO and FDO
-variants. In order to use one of these classes during an exploration, the
-option ``--weight-class <Wclass>`` must be passed on the ATOS command line,
-with ``Wclass`` taking one of the following values:
-
-``WOs``, ``WO2``, ``WO3`` : For basic optimization levels
-
-``WOsf``, ``WO2f``, ``WO3f`` : For FDO optimizations
-
-``WOsl``, ``WO2l``, ``WO3l`` : For LTO optimizations
-
-``WOsfl``, ``WO2fl``, ``WO3fl`` : For combined FDO and LTO optimizations
-
 Full exploration
 ----------------
 In the previous section, we've been doing a step by step exploration for
@@ -673,6 +649,34 @@ Then do a a full staged exploration with::
 
 Here we specified 100 basic iterations at global level and 50 basic iterations
 at function per function level.
+
+Using classes of flags to improve explorations
+----------------------------------------------
+
+In order to improve the efficiency of the exploration algorithms, we also
+defined into ATOS a few classes of flags. These classes define which flags
+are more likely to give good, or bad, results, depending on the optimization
+configuration of the exploration. These classes are used by the exploration
+algorithms to bias the probability for these flags to be set or unset.
+
+There are twelve classes of flags defined into ATOS, each one tuned for a
+specific combination of the optimization level options and the LTO and FDO
+variants. These classes of flags are automatically selected by the
+exploration algorithm, but can be forced to a specific value, or simply
+discarded, with the option ``--weight-class <Wclass>``. In order to force the
+use of one specific class, this option must be passed on the ATOS command
+line with ``Wclass`` taking one of the following values:
+
+``WOs``, ``WO2``, ``WO3`` : For basic optimization levels
+
+``WOsf``, ``WO2f``, ``WO3f`` : For FDO optimizations
+
+``WOsl``, ``WO2l``, ``WO3l`` : For LTO optimizations
+
+``WOsfl``, ``WO2fl``, ``WO3fl`` : For combined FDO and LTO optimizations
+
+In order not to use any classes of flags, the option ``--weight-class Wnone``
+can be passed on the command line for an exploration.
 
 Emulation
 ---------

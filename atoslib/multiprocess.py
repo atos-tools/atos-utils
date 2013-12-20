@@ -135,6 +135,10 @@ class mp():
         # see also utils/execute
         try:
             return func(*args, **kwargs)
+        except KeyboardInterrupt:
+            raise
+        except SystemExit:
+            raise
         except:
             # do not print full stacktrace in case of exception
             logger.debug(traceback.format_exc())

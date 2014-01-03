@@ -1779,6 +1779,7 @@ def env_command(*args, **kwargs):
     env_dict = {}
     map(env_dict.update, args)
     env_dict.update(kwargs)
+    if len(env_dict) == 0: return []
     return ["/usr/bin/env"] + map(
         lambda (k, v): "%s=%s" % (str(k), str(v)), env_dict.items())
 

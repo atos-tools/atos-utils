@@ -241,6 +241,7 @@ def invoque_compile_command(opts, args):
 
     cwd = os.path.abspath(os.getcwd())
     tempfiles = []
+    command_env = {}
 
     stg, recipe_node = None, None
     if not opts.legacy and opts.recipe_digest:
@@ -374,7 +375,7 @@ def invoque_compile_command(opts, args):
             for cg_arg in cg_args_list:
                 cg_args_quoted = cg_args_quoted + '\'' + cg_arg + '\' '
 
-            os.environ["COLLECT_GCC_OPTIONS"] = cg_args_quoted
+            command_env["COLLECT_GCC_OPTIONS"] = cg_args_quoted
 
             # Get path of gcc lto plugins
             env_ACOLLECT_GCC = os.environ.get("ACOLLECT_GCC")
@@ -395,15 +396,12 @@ def invoque_compile_command(opts, args):
             if (collect_gcc and  # pragma: branch_always
                 collect_lto_wrapper and
                 lto_plugin):
-                os.environ["COLLECT_GCC"] = collect_gcc
-                os.environ["COLLECT_LTO_WRAPPER"] = collect_lto_wrapper
+                command_env["COLLECT_GCC"] = collect_gcc
+                command_env["COLLECT_LTO_WRAPPER"] = collect_lto_wrapper
                 args.extend(process.cmdline2list(
-                    "--build-id -flto -plugin" + lto_plugin +
-                    " -plugin-opt=" + collect_lto_wrapper +
-                    " -plugin-opt=-fresolution=" + tempfiles[-1].name))
-                logger.debug("COLLECT_GCC_OPTIONS=%s" %
-                             os.environ["COLLECT_GCC_OPTIONS"])
-                logger.debug("ld command with LTO: args %s\n" % args)
+                    "--build-id -flto -plugin=%s -plugin-opt=%s "
+                    "-plugin-opt=-fresolution=%s" %
+                    (lto_plugin, collect_lto_wrapper, tempfiles[-1].name)))
 
     (new_opts, args) = parser.parse_known_args(args)
     opts.__dict__.update(vars(new_opts))
@@ -416,9 +414,10 @@ def invoque_compile_command(opts, args):
         recipe_node.fetch_input_files()
 
     args = atos_lib.replace_incompatible_options(args)
+    command = atos_lib.env_command(command_env) + args
 
-    logger.debug("executing command: %s" % process.list2cmdline(args))
-    status = process.system(args, print_output=True)
+    logger.debug("executing command: %s" % process.list2cmdline(command))
+    status = process.system(command, print_output=True)
 
     if (recipe_node and status != 0
         and opts.update_blacklist):  # pragma: uncovered (error)

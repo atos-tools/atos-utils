@@ -2021,41 +2021,38 @@ def run_atos_replay(args):
 def run_atos_config(args):
     """ ATOS config implementation. """
 
-    compiler_list = args.compilers
+    compilers = args.compilers
+    print_cfg = args.print_cfg
 
-    if not compiler_list:
-        compilers = os.path.join(args.configuration_path, "compilers")
-
-        if not os.path.isfile(compilers):
-            error("compiler file missing: %s" % compilers)
+    if not compilers:
+        compilers = atos_lib.get_configured_compilers(args.configuration_path)
+        if compilers == None:
+            error("no configured compiler, one may use --compiler option")
             return 1
-
-        with open(compilers) as inf:
-            compiler_list = filter(
-                str, map(lambda x: x.strip(), inf.readlines()))
-        if not compiler_list:  # pragma: uncovered (error)
+        if len(compilers) == 0:
             error("no compiler found in configuration, "
                   "audit did not work correctly")
             return 1
+        config_file = os.path.join(args.configuration_path, 'config.json')
+    else:
+        print_cfg = True
 
-    config_file = os.path.join(args.configuration_path, 'config.json')
-
-    for compiler in compiler_list:
+    for compiler in compilers:
         if not os.path.isfile(compiler):
             error("compiler executable not found: %s" % compiler)
             return 1
         compiler_entry = atos_lib.json_config.compiler_config(
             args.configuration_path, compiler)
-        if args.print_cfg:
+        if print_cfg:
             print json.dumps(compiler_entry, sort_keys=True, indent=4)
         else:
             json_config = atos_lib.json_config(config_file)
             json_config.add_compiler_entry(compiler_entry)
 
-    if not args.print_cfg and not args.compilers:
+    if not print_cfg and not args.compilers:
         json_config = atos_lib.json_config(config_file)
         json_config.prepare_flag_files(
-            args.configuration_path, compiler_list, args.flags)
+            args.configuration_path, compilers, args.flags)
         # print compiler config
         logger.message("Compilers found:")
         compilers = json_config.config.get('compilers', [])

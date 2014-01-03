@@ -327,10 +327,6 @@
 //                  --> big_speedup_p*
 --param inline-min-speedup=[0..100,5]
 
-// pass_early_inline
-// --> early_inliner*
---param max-early-inliner-iterations
-
 #endif // GCC_VERSION >= 40800
 
 #if CLANG_VERSION > 0

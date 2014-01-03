@@ -1447,10 +1447,6 @@
 // Only for ADA
 // -fdelete-dead-exceptions|-fno-delete-dead-exceptions
 
-//  pass_cse_sincos(!-O0)
-//  --> execute_cse_sincos(!TARGET_HAS_SINCOS && !TARGET_C99_FUNCTIONS)*
--fcse-sincos|-fno-cse-sincos
-
 //  pass_phiopt
 //  --> tree_ssa_phiopt_worker*
 -fhoist-adjacent-loads|-fno-hoist-adjacent-loads

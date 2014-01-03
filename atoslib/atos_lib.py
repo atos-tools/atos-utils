@@ -1160,6 +1160,21 @@ def store_configured_compilers(configuration_path, compilers):
     with open(compilers_file, "w") as f:
         if compilers: print >>f, "".join(map(lambda x: x + "\n", compilers)),
 
+def get_configured_compilers(configuration_path):
+    """
+    Returns the list of compiler pathes.
+    The returned pathes are absolute.
+    Return None if the compilers file does not exist.
+    """
+    compilers_file = os.path.join(
+        configuration_path, "compilers")
+    if not os.path.exists(compilers_file): return None
+    with open(compilers_file) as f:
+        compilers = filter(
+            lambda x: x != "" and not x.startswith("#"),
+            map(lambda x: x.strip(), f.readlines()))
+    return compilers
+
 def absolute_norm_pathes(pathes, cwd=None):
     """
     Normalize the given pathes list into an absolute canonical path list.

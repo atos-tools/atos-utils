@@ -280,7 +280,7 @@ def run_atos_audit(args):
     debug_fd = os.dup(2)
     audit_flags += ["--atos-debug-fd", "%d" % debug_fd]
     if args.log_file:
-        audit_flags += ["--atos-log-file", args.log_file]
+        audit_flags += ["--atos-log-file", os.path.abspath(args.log_file)]
 
     command = atos_lib.proot_command(
         PROOT_ADDON_CC_OPTS=1,
@@ -504,7 +504,8 @@ def run_atos_build_local(args):
     debug_fd = os.dup(2)
     atos_driver_options += ["--atos-debug-fd", "%d" % debug_fd]
     if args.log_file:
-        atos_driver_options += ["--atos-log-file", args.log_file]
+        atos_driver_options += [
+            "--atos-log-file", os.path.abspath(args.log_file)]
 
     if args.gopts != None or args.uopts != None:
         prof_opts = args.gopts if args.gopts != None else args.uopts

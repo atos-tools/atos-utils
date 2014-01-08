@@ -296,17 +296,25 @@ def invoque_compile_command(opts, args):
     assert(not has_link_phase or len(all_outputs) == 1)
     assert(not has_cc_compile or len(all_outputs) >= 1)
 
-    in_targets = (
+    in_configured_targets = (
         (has_cc_final_link or has_ld_reloc_link) and
         atos_lib.is_configured_target(
             opts.configuration_path, all_outputs_pathes[0]))
 
-    # TODO, ensure that recipe is in objects recipes
-    in_objects = True
+    # TODO: for now we pass optimizations to all compiled
+    # objects and executables or shared libs, even if they
+    # are not in the user specified executable list.
+    # It would cause issues otherwise, ref to test138.sh.
+    in_optimized_objects = True
+    in_optimized_targets = True
 
-    is_configured_final_link = in_targets and has_cc_final_link
-    is_configured_reloc_link = in_targets and has_ld_reloc_link
-    is_configured_compile = in_objects and has_cc_compile
+    # For the case of a relocatable link, the target
+    # is optimized only if it was configured to be.
+    if has_ld_reloc_link: in_optimized_targets = in_configured_targets
+
+    is_configured_final_link = has_cc_final_link and in_optimized_targets
+    is_configured_reloc_link = has_ld_reloc_link and in_optimized_targets
+    is_configured_compile = has_cc_compile and in_optimized_objects
 
     is_configured = (
         is_configured_final_link or is_configured_reloc_link or

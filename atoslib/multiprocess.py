@@ -226,7 +226,7 @@ class mp():
         # wait for the results in case of profiling (oprofile/perf) run
         # (as there will be no get_results/wait_for_results call after
         #  this profiling run)
-        if args.profile: opt_thread.join()
+        if args.profile: return opt_thread.join()  # pragma: uncovered
         return 0
 
     @staticmethod
@@ -275,7 +275,7 @@ class mp():
         # start the run thread activity
         run_thread.start()
         # wait for the results in case of profiling (fdo) run
-        if not args.gopts is None: run_thread.join()
+        if not args.gopts is None: return run_thread.join()
         return 0
 
     @staticmethod
@@ -363,11 +363,23 @@ class SemaphoreSlot(threading._Semaphore):
 
 class IntThread(threading.Thread):
     """
-    Thread with interruptible join.
+    Thread with interruptible join and return value.
     """
+    # return value idea from stackoverflow.com/questions/6893968
+    def __init__(self, group=None, target=None, name=None, args=(), kwargs={}):
+        threading.Thread.__init__(
+            self, group, target, name, args, kwargs)
+        self._return = None
+
+    def run(self):
+        if self._Thread__target is None: return  # pragma: uncovered
+        self._return = self._Thread__target(
+            *self._Thread__args, **self._Thread__kwargs)
+
     def join(self, timeout=None):
         # joining with a timeout, even with big value, can
         # be interrupted, with a Ctrl-C for example
         timeout = (
             sys.maxint if timeout is None else timeout)
-        return threading.Thread.join(self, timeout)
+        threading.Thread.join(self, timeout)
+        return self._return

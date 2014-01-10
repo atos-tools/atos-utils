@@ -1409,13 +1409,19 @@ def run_atos_profile(args):
     if reuse:
         variants = atos_lib.atos_buildhash_db.hashsum_db(
             args.configuration_path).get_variants(hashsum)
+        variants = filter(  # run may not be complete
+            lambda x: os.path.exists(os.path.join(atos_lib.get_profile_path(
+                        args.configuration_path, x), "variant.txt")), variants)
         if variants:
             message("Reusing profiling run for variant %s..." % variant_id)
-            new_profile_path = atos_lib.get_profile_path(
-                args.configuration_path, variants[0])
-            # TODO: reuse new_profile_path directly instead of copying it
+            reused_variant = (  # prefer 'self'-reuse (nothing to do)
+                variant_id in variants and variant_id or variants[0])
+            if reused_variant == variant_id: return 0  # pragma: uncovered
+            reused_profile_path = atos_lib.get_profile_path(
+                args.configuration_path, reused_variant)
+            # TODO: reuse reused_profile_path directly instead of copying it
             process.commands.rmtree(profile_path)
-            process.commands.copytree(new_profile_path, profile_path)
+            process.commands.copytree(reused_profile_path, profile_path)
             atos_lib.atos_buildhash_db.hashsum_db(
                 args.configuration_path).add_hashsum(hashsum, variant_id)
             return 0

@@ -1038,6 +1038,7 @@ class parsers:
         args.output(parser, hidden=True)
         args.id(parser, hidden=True)
         args.internal_flags.local(parser)
+        args.internal_flags.hashsum(parser)
         return parser
 
     @staticmethod
@@ -2052,6 +2053,12 @@ class args:
         def local(parser, args=("--local",)):
             parser.add_argument(
                 *args, action="store_true", dest="local",
+                 help=argparse.SUPPRESS)  # always hidden
+
+        @staticmethod
+        def hashsum(parser, args=("--hashsum",)):
+            parser.add_argument(
+                *args, dest="hashsum",
                  help=argparse.SUPPRESS)  # always hidden
 
     class atos_help:

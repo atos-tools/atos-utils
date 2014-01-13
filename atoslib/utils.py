@@ -1547,7 +1547,8 @@ def run_atos_run(args):
     reuse = args.reuse or bool(
         int(atos_lib.get_config_value(
                 args.configuration_path, "default_values.reuse", 0)))
-    hashsum = atos_lib.target_hash(args, variant=variant_id)
+    hashsum = args.hashsum or atos_lib.target_hash(
+        args, variant=variant_id)
 
     if reuse:
         # use results of another same-hash variant if exising
@@ -1799,7 +1800,7 @@ def run_atos_one_run_local(args):
         if args.cookies:
             entry.update({'cookies': ','.join(
                         atos_lib.list_unique(args.cookies))})
-        hashsum = vars(args).get('hashsum', None) or atos_lib.target_hash(
+        hashsum = args.hashsum or atos_lib.target_hash(
             args, variant=variant)
         if hashsum: entry.update({'hash': str(hashsum)})
         if args.output_file:

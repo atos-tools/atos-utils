@@ -21,4 +21,12 @@ non-covered code:
 - *pragma branch_uncovered*: used for branches partially covered
 - *pragma branch_always*: used for branch always taken
 
+Release
+-------
+
+Internal checks before release:
+- Run qualification tests
+- Run example tests from tutorial
+- Run interactive tests
+- Update Codex documentation
 

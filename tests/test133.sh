@@ -35,7 +35,7 @@ $ROOT/bin/atos-init \
     --force --executables=sha1-c --reuse --nbruns=2
 
 $ROOT/bin/atos-explore \
-    --optim-levels=-O2,-O3 --optim-variants=base,fdo
+    --optim-levels=-O1,-O2 --optim-variants=base,fdo
 
 [ `$ROOT/bin/atos lib query | wc -l` -eq 10 ]
 

@@ -2,6 +2,21 @@
 ATOS RELEASES
 =============
 
+ATOS 4.1
+========
+
+Special release to prepare for ATOS externalization, following the ST FOSS-OUT
+process outcomes (https://hostname/foss-out.php?code=FOSS-OUT-15027).
+The release is directly derived from ATOS 4.0, adding no additional features,
+but applying the following adaptations, to take into account the ST FOSS-OUT
+audit requirements:
+ * Removal of the Atos web interface commands enabling communication with ATOS
+portal, to get rid of the Python requests package usage (Apache2 licensed, not
+compatible with the GPLv2 license)
+ * Modification of all header files for licensing the code as GPLv2 or later
+ * Addition of missing Samuel Sutch copyright in atoslib/deep_eq.py
+
+
 ATOS 4.0
 ========
 

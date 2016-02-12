@@ -52,7 +52,3 @@ atos-utils requires the packages described below to be installed on your system.
     Download and install argparse-1.2.1.tar.gz
     It can be installed with:
     $ python ./setup.py install --home $PREFIX
-
-** Python requests module
-  * requests: http://www.python-requests.org or from your package manager
-    python-requests

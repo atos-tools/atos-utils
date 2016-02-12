@@ -69,10 +69,6 @@ echo "Retrieving binary build of python-argparse package..."
 wget -q -O python-argparse.tgz http://aci-hostname:8000/job/cec-okla-python-argparse/lastStableBuild/artifact/python-argparse.tgz
 tar xvzf python-argparse.tgz -C $DEVIMAGE
 
-echo "Retrieving binary build of python-requests package..."
-wget -q -O python-requests.tgz http://aci-hostname:8000/job/cec-okla-python-requests/lastStableBuild/artifact/python-requests.tgz
-tar xvzf python-requests.tgz -C $DEVIMAGE
-
 echo "Retrieving binary build of python-docutils package..."
 wget -q -O python-docutils.tgz http://aci-hostname:8000/job/cec-okla-python-docutils/lastStableBuild/artifact/python-docutils.tgz
 tar xvzf python-docutils.tgz -C $DEVIMAGE

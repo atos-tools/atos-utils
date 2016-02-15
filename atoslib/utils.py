@@ -76,7 +76,6 @@ def invoque(tool, args, **kwargs):
         "atos-graph": run_atos_graph,
         "atos-lib": run_atos_lib,
         "atos-generator": run_atos_generator,
-        "atos-web": run_atos_web,
         }
 
     global _at_toplevel

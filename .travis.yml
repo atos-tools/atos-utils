@@ -1,0 +1,22 @@
+
+before_install:
+ - sudo apt-get update -qq
+ - sudo apt-get install -qq uthash-dev python-numpy python-scipy python-matplotlib python-argparse
+install:
+ - wget http://www.ultimate.com/phil/python/download/jsonpath-0.53.tar.gz -O /tmp/jsonpath-0.53.tar.gz
+ - tar -xvf /tmp/jsonpath-0.53.tar.gz
+ - cd jsonpath-0.53 && sudo ./setup.py install && cd -
+ - wget https://github.com/guillon/python-jsonlib/archive/master.zip  -O /tmp/jsonlib.zip
+ - unzip /tmp/jsonlib.zip
+ - cd python-jsonlib-master && sudo ./setup.py install && cd -
+ - wget http://www.libarchive.org/downloads/libarchive-3.1.2.tar.gz  -O /tmp/libarchive-3.1.2.tar.gz
+ - tar -xvf /tmp/libarchive-3.1.2.tar.gz
+ - cd libarchive-3.1.2 && ./configure && make && sudo make install && cd -
+ - wget https://www.samba.org/ftp/talloc/talloc-2.0.8.tar.gz  -O /tmp/libtalloc-2.0.8.tar.gz
+ - tar -xvf /tmp/libtalloc-2.0.8.tar.gz
+ - cd talloc-2.0.8 && ./configure --disable-python && make && cd bin/default/ && ar qf libtalloc.a talloc_3.o lib/replace/replace_2.o lib/replace/getpass_2.o && cd - && sudo make install && sudo cp -a bin/default/libtalloc.a /usr/local/lib/ && cd ..
+ - git clone --depth=50 --branch=atos https://github.com/knochelh/PRoot.git knochelh/proot
+ - cd knochelh/proot && make -C src CARE_BUILD_ENV=ok ENABLE_ADDONS="cc_opts reloc_exec" LDFLAGS="-static -L/usr/local/lib -ltalloc -larchive -lz" proot care STATIC_BUILD=1 && sudo make CARE_BUILD_ENV=ok -C src install install-care STATIC_BUILD=1 && cd -
+script:
+  - make all
+  - export HOME= && make -j4 check

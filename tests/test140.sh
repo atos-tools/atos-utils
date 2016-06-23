@@ -27,7 +27,7 @@ echo -n "# test exec getdent... "
   mkdir -p SRCDIR/SHA1C/DATA/A/B/C/D
   dd if=/dev/urandom bs=4K count=1K 2>/dev/null > SRCDIR/SHA1C/DATA/A/B/C/D/rd1
   dd if=/dev/urandom bs=4K count=1K 2>/dev/null > SRCDIR/SHA1C/DATA/A/B/C/D/rd2
-  echo "./sha1-c ./SRCDIR/SHA1C/DATA/A/B/C/D/*" > SRCDIR/run.sh
+  echo "./sha1-c ./SRCDIR/SHA1C/DATA/A/B/C/D/rd1 ./SRCDIR/SHA1C/DATA/A/B/C/D/rd2" > SRCDIR/run.sh
   env \
       PROOT_ADDON_RELOC_EXEC_DIR=$PWD/RELOC/SHA1-c \
       PROOT_ADDON_RELOC_EXEC=1 \

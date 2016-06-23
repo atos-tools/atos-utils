@@ -19,8 +19,8 @@ dd if=/dev/urandom bs=4K count=1K 2>/dev/null > DATA/random
 
 cat > run.sh <<EOF
 set -ex
-./sha1-c DATA/r*
-cat DATA/r* | wc -l
+./sha1-c DATA/random
+cat DATA/random | wc -l
 EOF
 
 $ROOT/bin/atos-init \

@@ -19,4 +19,4 @@ install:
  - cd knochelh/proot && make -C src CARE_BUILD_ENV=ok ENABLE_ADDONS="cc_opts reloc_exec" LDFLAGS="-static -L/usr/local/lib -ltalloc -larchive -lz" proot care STATIC_BUILD=1 && sudo make CARE_BUILD_ENV=ok -C src install install-care STATIC_BUILD=1 && cd -
 script:
   - make all
-  - export HOME= && make -j4 check
+  - make -j4 check

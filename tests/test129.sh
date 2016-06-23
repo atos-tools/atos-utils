@@ -3,6 +3,8 @@
 #
 
 source `dirname $0`/common.sh
+# Workaround for proot failure in case the test is run in a subdirectory of $HOME
+unset HOME
 
 TEST_CASE="ATOS remote build"
 

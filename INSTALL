@@ -22,7 +22,7 @@ that gets dependencies and runs tests.
 atos-utils requires the packages described below to be installed on your system.
 
 ** PRoot with addons support: 
-  Obtain it with: git clone gitolite@codex.cro.st.com:proot/u/christophe_guillon/proot.git
+  Obtain it with: git clone --branch=atos https://github.com/knochelh/PRoot.git
   Build it with:
   $ make -C src ENABLE_ADDONS="cc_deps cc_opts"
   $ sudo make -C src install
